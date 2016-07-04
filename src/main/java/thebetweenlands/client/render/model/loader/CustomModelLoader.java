@@ -36,7 +36,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
 		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(this.isMatching(entry.getKey(), modelLocation))
+			if(this.isMatchingOrVariant(entry.getKey(), modelLocation))
 				return true;
 		}
 		return false;
@@ -45,14 +45,24 @@ public class CustomModelLoader implements ICustomModelLoader {
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
 		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(this.isMatching(entry.getKey(), modelLocation))
+			if(this.isMatchingOrVariant(entry.getKey(), modelLocation))
 				return entry.getValue().apply(modelLocation);
 		}
 		return null;
 	}
 
-	private boolean isMatching(ResourceLocation registeredModel, ResourceLocation modelLocation) {
-		return registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath());
+	private boolean isMatchingOrVariant(ResourceLocation registeredModel, ResourceLocation modelLocation) {
+		if(!registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()))
+			return false;
+		String registeredPath = registeredModel.getResourcePath();
+		String modelPath = modelLocation.getResourcePath();
+		if(modelPath.startsWith(registeredPath)) {
+			String suffix = modelPath.substring(registeredPath.length());
+			//Only accept if path fully matches or is a variant
+			if(suffix.length() == 0 || suffix.startsWith("#"))
+				return true;
+		}
+		return false;
 	}
 
 	@SubscribeEvent

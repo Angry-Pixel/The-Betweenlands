@@ -19,6 +19,7 @@ import thebetweenlands.client.render.model.block.modelbase.ModelFlatHeadMushroom
 import thebetweenlands.client.render.model.block.modelbase.ModelFlatHeadMushroom2;
 import thebetweenlands.client.render.model.block.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.model.block.modelbase.ModelSundew;
+import thebetweenlands.client.render.model.block.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.block.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.block.modelbase.ModelVolarpad;
 import thebetweenlands.client.render.model.block.modelbase.ModelWeepingBlue;
@@ -45,6 +46,7 @@ public class ModelRegistry {
 	public static final IModel VOLARPAD_2 = new ModelFromModelBase(new ModelVolarpad(), new ResourceLocation("thebetweenlands:blocks/volarpad_2"), 256, 256);
 	public static final IModel VOLARPAD_3 = new ModelFromModelBase(new ModelVolarpad(), new ResourceLocation("thebetweenlands:blocks/volarpad_3"), 256, 256);
 	public static final IModel WEEPING_BLUE = new ModelFromModelBase(new ModelWeepingBlue(), new ResourceLocation("thebetweenlands:blocks/weeping_blue"), 64, 64);
+	public static final IModel SWAMP_PLANT = new ModelFromModelBase(new ModelSwampPlant(), new ResourceLocation("thebetweenlands:blocks/swamp_plant"), 64, 64);
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();

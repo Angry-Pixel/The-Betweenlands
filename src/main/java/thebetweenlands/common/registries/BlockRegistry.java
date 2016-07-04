@@ -32,6 +32,7 @@ import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
 import thebetweenlands.common.block.plant.BlockGenericPlant;
+import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
@@ -156,8 +157,15 @@ public class BlockRegistry {
 	public static final Block BLACK_HAT_MUSHROOM = new BlockGenericPlant();
 	public static final Block BULB_CAPPED_MUSHROOM = new BlockGenericPlant();
 	public static final Block FLAT_HEAD_MUSHROOM = new BlockGenericPlant();
-	//public static final Block VENUS_FLY_TRAP = new BlockGenericPlant();
+	public static final Block VENUS_FLY_TRAP = new BlockVenusFlyTrap();
 	public static final Block VOLARPAD = new BlockGenericDoublePlant();
+	public static final Block SWAMP_PLANT = new BlockGenericPlant() {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Block.EnumOffsetType getOffsetType() {
+			return Block.EnumOffsetType.XZ;
+		}
+	};
 
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
