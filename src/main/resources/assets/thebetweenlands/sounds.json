@@ -44,7 +44,7 @@
   "druid_chant": {
     "category": "block",
     "sounds": [
-      "dthebetweenlands:druid_chant"
+      "thebetweenlands:druid_chant"
     ]
   },
   "dark_druid_hit": {

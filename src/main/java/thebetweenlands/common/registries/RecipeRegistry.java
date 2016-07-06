@@ -11,6 +11,7 @@ public class RecipeRegistry {
 	public void init() {
 
 		registerDruidAltarRecipes();
+		registerCompostRecipes();
 	}
 
 	private void registerDruidAltarRecipes() {
