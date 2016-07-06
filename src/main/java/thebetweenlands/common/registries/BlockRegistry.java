@@ -155,7 +155,13 @@ public class BlockRegistry {
 	public static final Block WEEPING_BLUE = new BlockGenericDoublePlant();
 	public static final Block SUNDEW = new BlockGenericDoublePlant();
 	public static final Block BLACK_HAT_MUSHROOM = new BlockGenericPlant();
-	public static final Block BULB_CAPPED_MUSHROOM = new BlockGenericPlant();
+	public static final Block BULB_CAPPED_MUSHROOM = new BlockGenericPlant() {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Block.EnumOffsetType getOffsetType() {
+			return Block.EnumOffsetType.XZ;
+		}
+	};
 	public static final Block FLAT_HEAD_MUSHROOM = new BlockGenericPlant();
 	public static final Block VENUS_FLY_TRAP = new BlockVenusFlyTrap();
 	public static final Block VOLARPAD = new BlockGenericDoublePlant();
