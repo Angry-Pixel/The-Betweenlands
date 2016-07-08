@@ -11,6 +11,7 @@ import thebetweenlands.client.render.model.block.ModelBlank;
 import thebetweenlands.client.render.model.block.ModelCombined;
 import thebetweenlands.client.render.model.block.ModelFromModelBase;
 import thebetweenlands.client.render.model.block.ModelLifeCrystalStalactite;
+import thebetweenlands.client.render.model.block.ModelRoot;
 import thebetweenlands.client.render.model.block.ModelStalactite;
 import thebetweenlands.client.render.model.block.modelbase.ModelBlackHatMushroom1;
 import thebetweenlands.client.render.model.block.modelbase.ModelBlackHatMushroom2;
@@ -52,6 +53,7 @@ public class ModelRegistry {
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
 	public static final IModel STALACTITE = new ModelStalactite();
+	public static final IModel ROOT = new ModelRoot();
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

@@ -72,7 +72,7 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		TAR_BEAST_HEART_ANIMATED(25),
 		TAR_DRIP(26),
 		LIMESTONE_FLUX(27),
-		SWAMP_KELP(28),
+		SWAMP_KELP_ITEM(28),
 		INANIMATE_TARMINION(29),
 		POISON_GLAND(30),
 		ASPECTRUS_FRUIT(31),

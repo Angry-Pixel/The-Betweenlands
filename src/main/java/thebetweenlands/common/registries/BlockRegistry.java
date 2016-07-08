@@ -33,6 +33,7 @@ import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
 import thebetweenlands.common.block.plant.BlockGenericPlant;
+import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -46,6 +47,8 @@ import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockRoot;
+import thebetweenlands.common.block.terrain.BlockRootUnderwater;
 import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
@@ -180,6 +183,7 @@ public class BlockRegistry {
 			return Block.EnumOffsetType.XZ;
 		}
 	};
+	public static final Block SWAMP_KELP = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
 
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
@@ -190,6 +194,8 @@ public class BlockRegistry {
 	public static final Block PURIFIER = new BlockPurifier();
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
 	public static final Block COMPOST_BIN = new BlockCompostBin();
+	public static final Block ROOT = new BlockRoot();
+	public static final Block ROOT_UNDERWATER = new BlockRootUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
 
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 
