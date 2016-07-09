@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.model.ModelLoader;
@@ -32,6 +33,7 @@ import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
 import thebetweenlands.common.block.plant.BlockGenericPlant;
+import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -45,9 +47,12 @@ import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockRoot;
+import thebetweenlands.common.block.terrain.BlockRootUnderwater;
 import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
+import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
@@ -124,6 +129,7 @@ public class BlockRegistry {
 	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
 	public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
+	public static final Block STALACTITE = new BlockStalactite();
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
 
@@ -155,7 +161,18 @@ public class BlockRegistry {
 	public static final Block WEEPING_BLUE = new BlockGenericDoublePlant();
 	public static final Block SUNDEW = new BlockGenericDoublePlant();
 	public static final Block BLACK_HAT_MUSHROOM = new BlockGenericPlant();
-	public static final Block BULB_CAPPED_MUSHROOM = new BlockGenericPlant();
+	public static final Block BULB_CAPPED_MUSHROOM = new BlockGenericPlant() {
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Block.EnumOffsetType getOffsetType() {
+			return Block.EnumOffsetType.XZ;
+		}
+		@Override
+		@SideOnly(Side.CLIENT)
+		public BlockRenderLayer getBlockLayer() {
+			return BlockRenderLayer.TRANSLUCENT;
+		}
+	};
 	public static final Block FLAT_HEAD_MUSHROOM = new BlockGenericPlant();
 	public static final Block VENUS_FLY_TRAP = new BlockVenusFlyTrap();
 	public static final Block VOLARPAD = new BlockGenericDoublePlant();
@@ -166,6 +183,7 @@ public class BlockRegistry {
 			return Block.EnumOffsetType.XZ;
 		}
 	};
+	public static final Block SWAMP_KELP = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
 
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
@@ -176,6 +194,8 @@ public class BlockRegistry {
 	public static final Block PURIFIER = new BlockPurifier();
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
 	public static final Block COMPOST_BIN = new BlockCompostBin();
+	public static final Block ROOT = new BlockRoot();
+	public static final Block ROOT_UNDERWATER = new BlockRootUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
 
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 

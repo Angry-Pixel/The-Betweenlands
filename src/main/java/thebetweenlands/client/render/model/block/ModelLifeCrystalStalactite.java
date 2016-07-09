@@ -69,9 +69,6 @@ public class ModelLifeCrystalStalactite implements IModel {
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
 			IExtendedBlockState state = (IExtendedBlockState) stateOld;
 
-			if(state == null || side != null)
-				return new ArrayList<BakedQuad>();
-
 			List<BakedQuad> quads = new ArrayList<>();
 
 			try {

@@ -141,12 +141,6 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-		return super.shouldSideBeRendered(blockState, worldIn, pos, side);
-	}
-
-	@Override
 	public boolean isBlockNormalCube(IBlockState blockState) {
 		return false;
 	}

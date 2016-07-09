@@ -283,15 +283,15 @@ public class QuadBuilder {
 					matrix.transpose();
 					matrix.transform(vec);
 					vec.get(normalData);
-					float dx = normalData[0];
-					float dy = normalData[1];
-					float dz = normalData[2];
-					float len = (float) Math.sqrt(dx*dx+dy*dy+dz*dz);
-					normalData[0] = dx / len;
-					normalData[1] = dy / len;
-					normalData[2] = dz / len;
-					normalData[3] = 0f;
 				}
+				float dx = normalData[0];
+				float dy = normalData[1];
+				float dz = normalData[2];
+				float len = (float) Math.sqrt(dx*dx+dy*dy+dz*dz);
+				normalData[0] = dx / len;
+				normalData[1] = dy / len;
+				normalData[2] = dz / len;
+				normalData[3] = 0f;
 				builder.put(e, normalData);
 				break;
 			case UV:
