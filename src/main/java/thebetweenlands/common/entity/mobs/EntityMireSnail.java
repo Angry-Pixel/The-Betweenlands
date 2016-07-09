@@ -22,6 +22,7 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	private static final DataParameter<Boolean> HAS_MATED = EntityDataManager.createKey(EntityMireSnail.class, DataSerializers.BOOLEAN);
@@ -77,22 +78,19 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		return !hasMated();
 	}
 
-	//TODO add snailLiving sound
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundRegistry.SNAIL_LIVING;
 	}
 
-	//TODO add snailHurt sound
 	@Override
 	protected SoundEvent getHurtSound() {
-		return super.getHurtSound();
+		return SoundRegistry.SNAIL_HURT;
 	}
 
-	//TODO add snailDeath sound
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundRegistry.SNAIL_DEATH;
 	}
 
 	@Override

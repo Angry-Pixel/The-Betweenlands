@@ -1,10 +1,13 @@
 package thebetweenlands.client.render.render.item;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelShield;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.render.model.shields.ModelBoneShield;
+import thebetweenlands.client.render.model.shields.ModelWeedwoodShield;
 
 public class RenderBLShield extends TileEntitySpecialRenderer<TileEntityShield> {
 
@@ -12,7 +15,6 @@ public class RenderBLShield extends TileEntitySpecialRenderer<TileEntityShield> 
     //private ResourceLocation VALONITE_SHIELD_TEXTURE = new ResourceLocation("thebetweenlands", "textures/items/valonite_shield.png");
     //private ResourceLocation WEEDWOOD_SHIELD_TEXTURE = new ResourceLocation("thebetweenlands", "textures/items/weedwood_shield.png");
     //private ResourceLocation SYMORiTE_SHIELD_TEXTURE = new ResourceLocation("thebetweenlands", "textures/items/symorite_shield.png");
-    private ModelShield MODEL_SHIELD = new ModelShield();
     public Shieldtype type;
 
     public RenderBLShield(Shieldtype type) {
@@ -24,19 +26,26 @@ public class RenderBLShield extends TileEntitySpecialRenderer<TileEntityShield> 
         Minecraft.getMinecraft().getTextureManager().bindTexture(type.resloc);
         GlStateManager.pushMatrix();
         GlStateManager.scale(1.0F, -1.0F, -1.0F);
-        this.MODEL_SHIELD.render();
+        if (!(type.shieldModel instanceof ModelShield))
+            type.shieldModel.render(null, 0, 0, 0, 0, 0, 0.0625F);
+        else
+            ((ModelShield) type.shieldModel).render();
         GlStateManager.popMatrix();
     }
 
-    public enum Shieldtype{
-        OCTINE(new ResourceLocation("thebetweenlands", "textures/items/octine_shield.png")),
-        VALONITE(new ResourceLocation("thebetweenlands", "textures/items/valonite_shield.png")),
-        WEEDWOOD(new ResourceLocation("thebetweenlands", "textures/items/weedwood_shield.png")),
-        SYMORITE(new ResourceLocation("thebetweenlands", "textures/items/symorite_shield.png"));
+    public enum Shieldtype {
+        OCTINE(new ResourceLocation("thebetweenlands", "textures/items/octine_shield.png"), new ModelShield()),
+        VALONITE(new ResourceLocation("thebetweenlands", "textures/items/valonite_shield.png"), new ModelShield()),
+        WEEDWOOD(new ResourceLocation("thebetweenlands", "textures/items/weedwood_shield.png"), new ModelWeedwoodShield()),
+        BONE(new ResourceLocation("thebetweenlands", "textures/items/bone_shield.png"), new ModelBoneShield()),
+        SYMORITE(new ResourceLocation("thebetweenlands", "textures/items/symorite_shield.png"), new ModelShield());
 
         public ResourceLocation resloc;
-        Shieldtype(ResourceLocation loc){
+        public ModelBase shieldModel;
+
+        Shieldtype(ResourceLocation loc, ModelBase shieldModel) {
             this.resloc = loc;
+            this.shieldModel = shieldModel;
         }
 
     }

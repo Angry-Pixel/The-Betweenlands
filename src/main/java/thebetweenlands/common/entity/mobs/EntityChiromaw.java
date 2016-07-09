@@ -18,6 +18,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
     private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityChiromaw.class, DataSerializers.BOOLEAN);
@@ -73,13 +74,11 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
         if (getIsHanging()) {
             if (!worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ))).isNormalCube()) {
                 setIsHanging(false);
-                //TODO add fix when sounds are added
-                //worldObj.playSound(null, 1015, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
+                this.worldObj.playEvent((EntityPlayer)null, 1025, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
             } else {
                 if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null) {
                     setIsHanging(false);
-                    //TODO add fix when sounds are added
-                    //worldObj.playSound(null, 1015, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
+                    this.worldObj.playEvent((EntityPlayer)null, 1025, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
                 }
             }
         } else {
@@ -178,22 +177,19 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
         entityDropItem(new ItemStack(ItemRegistry.CHIROMAW_WING, 1, 0), 0.0F);
     }
 
-    //TODO add flyingFiendLiving sound
     @Override
     protected SoundEvent getAmbientSound() {
-        return super.getAmbientSound();
+        return SoundRegistry.FLYING_FIEND_LIVING;
     }
 
-    //TODO add flyingFiendHurt sound
     @Override
     protected SoundEvent getHurtSound() {
-        return super.getHurtSound();
+        return SoundRegistry.FLYING_FIEND_HURT;
     }
 
-    //TODO add flyingFiendDeath sound
     @Override
     protected SoundEvent getDeathSound() {
-        return super.getDeathSound();
+        return SoundRegistry.FLYING_FIEND_DEATH;
     }
 
     @Override

@@ -9,6 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
 
@@ -93,22 +94,19 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
         return 1;
     }
 
-    //TODO add sporelingLiving sound
     @Override
     protected SoundEvent getAmbientSound() {
-        return super.getAmbientSound();
+        return SoundRegistry.SPORELING_LIVING;
     }
 
-    //TODO add sporelingHurt sound
     @Override
     protected SoundEvent getHurtSound() {
-        return super.getHurtSound();
+        return SoundRegistry.SPORELING_HURT;
     }
 
-    //TODO add sporelingDeath sound
     @Override
     protected SoundEvent getDeathSound() {
-        return super.getDeathSound();
+        return SoundRegistry.SPORELING_DEATH;
     }
 
     @Override

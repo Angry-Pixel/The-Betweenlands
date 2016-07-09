@@ -26,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityFrog extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityFrog.class, DataSerializers.BYTE);
@@ -196,22 +197,19 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 			setSkin(rand.nextInt(5));
 	}
 
-	//TODO add frogLiving sound
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundRegistry.FROG_LIVING;
 	}
 
-	//TODO add frogHurt sound
 	@Override
 	protected SoundEvent getHurtSound() {
-		return super.getHurtSound();
+		return SoundRegistry.FROG_HURT;
 	}
 
-	//TODO add frogDeath sound
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundRegistry.FROG_DEATH;
 	}
 
 	@Override

@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
@@ -56,7 +57,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundRegistry.ANGLER_DEATH;
 	}
 
 	@Override

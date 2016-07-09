@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	private static final DataParameter<Integer> RANGE_ATTACK_TIMER = EntityDataManager.createKey(EntityBloodSnail.class, DataSerializers.VARINT);
@@ -82,22 +83,19 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		return false;
 	}
 
-	//TODO add snailLiving sound
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundRegistry.SNAIL_LIVING;
 	}
 
-	//TODO add snailHurt sound
 	@Override
 	protected SoundEvent getHurtSound() {
-		return super.getHurtSound();
+		return SoundRegistry.SNAIL_HURT;
 	}
 
-	//TODO add snailDeath sound
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundRegistry.SNAIL_DEATH;
 	}
 
 	@Override

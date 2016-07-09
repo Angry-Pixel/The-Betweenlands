@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.AnimationMathHelper;
 
@@ -38,16 +39,16 @@ public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IM
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
     }
 
-    //TODO add anglerAttack sound
+
     @Override
     protected SoundEvent getHurtSound() {
-        return super.getHurtSound();
+        return SoundRegistry.ANGLER_ATTACK;
     }
 
-    //TODO add anglerDeath sound
+
     @Override
     protected SoundEvent getDeathSound() {
-        return super.getDeathSound();
+        return SoundRegistry.ANGLER_DEATH;
     }
 
     @Override

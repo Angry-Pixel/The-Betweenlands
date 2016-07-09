@@ -126,6 +126,7 @@ public class ItemRegistry {
 	public static final Item VALONITE_SHIELD = new ItemBLShield(BLMaterial.TOOL_VALONITE);
 	public static final Item WEEDWOOD_SHIELD = new ItemBLShield(BLMaterial.TOOL_WEEDWOOD);
 	public static final Item SYMORITE_SHIELD = new ItemBLShield(BLMaterial.TOOL_SYMORITE);
+	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterial.TOOL_BONE);
 
 	public static final Item TEST_ITEM = new TestItem();
 	public static final Item RANDOM_SOUND = new ItemRandomSound();

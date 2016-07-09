@@ -23,6 +23,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 
 public class EntityLurker extends EntityMob implements IEntityBL {
@@ -441,25 +442,20 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         return tailPitch * partialRenderTicks + prevTailPitch * (1 - partialRenderTicks);
     }
 
-    //TODO add lurkerLiving sound
     @Override
     protected SoundEvent getAmbientSound() {
-        return super.getAmbientSound();
+        return SoundRegistry.LURKER_LIVING;
     }
 
-
-    //TODO add lurkerHurt sound
     @Override
     protected SoundEvent getHurtSound() {
         setShouldMouthBeOpen(true);
         ticksUntilBiteDamage = 10;
-        return super.getHurtSound();
+        return SoundRegistry.LURKER_HURT;
     }
-
-    //TODO add lurkerDeath sound
     @Override
     protected SoundEvent getDeathSound() {
-        return super.getDeathSound();
+        return SoundRegistry.LURKER_DEATH;
     }
 
     @Override

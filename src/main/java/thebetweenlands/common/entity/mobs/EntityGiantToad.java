@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BYTE);
@@ -274,22 +275,19 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		return waterStanceAnim.getAnimationProgressSinSqrt(partialRenderTicks);
 	}
 
-	//TODO add giantToadLiving sound
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundRegistry.GIANT_TOAD_LIVING;
 	}
-	//TODO add giantToadHurt sound
 
 	@Override
 	protected SoundEvent getHurtSound() {
-		return super.getHurtSound();
+		return SoundRegistry.GIANT_TOAD_HURT;
 	}
 
-	//TODO add giantToadDeath sound
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundRegistry.GIANT_TOAD_DEATH;
 	}
 
 

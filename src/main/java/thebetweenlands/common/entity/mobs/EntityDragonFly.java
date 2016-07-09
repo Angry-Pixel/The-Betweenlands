@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
 	public BlockPos currentFlightTarget;
@@ -60,16 +61,14 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	public void fall(float distance, float damageMultiplier) {
 	}
 
-	//TODO add dragonfly sound
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return super.getAmbientSound();
+		return SoundRegistry.DRAGONFLY;
 	}
 
-	//TODO add squish sound
 	@Override
 	protected SoundEvent getDeathSound() {
-		return super.getDeathSound();
+		return SoundRegistry.SQUISH;
 	}
 
 	@Override

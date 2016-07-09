@@ -45,9 +45,9 @@ public class SoundRegistry {
     public static SoundEvent DRUID_CHANT = new BLSoundEvent("druid_chant");
     public static SoundEvent DRUID_TELEPORT = new BLSoundEvent("druid_teleport");
     public static SoundEvent FIG = new BLSoundEvent("fig");
-    public static SoundEvent FLYING_FRIEND_DEATH = new BLSoundEvent("flying_fiend_death");
-    public static SoundEvent FLYING_FRIEND_HURT = new BLSoundEvent("flying_fiend_hurt");
-    public static SoundEvent FLYING_FRIEND_LIVING = new BLSoundEvent("flying_fiend_living");
+    public static SoundEvent FLYING_FIEND_DEATH = new BLSoundEvent("flying_fiend_death");
+    public static SoundEvent FLYING_FIEND_HURT = new BLSoundEvent("flying_fiend_hurt");
+    public static SoundEvent FLYING_FIEND_LIVING = new BLSoundEvent("flying_fiend_living");
     public static SoundEvent FORTRESS_BOSS_DEATH = new BLSoundEvent("fortress_boss_death");
     public static SoundEvent FORTRESS_BOSS_HURT = new BLSoundEvent("fortress_boss_hurt");
     public static SoundEvent FORTRESS_BOSS_LIVING = new BLSoundEvent("fortress_boss_living");
@@ -76,6 +76,7 @@ public class SoundRegistry {
     public static SoundEvent LONELY_FIRE = new BLSoundEvent("lonely_fire");
     public static SoundEvent LURKER_HURT = new BLSoundEvent("lurker_hurt");
     public static SoundEvent LURKER_LIVING = new BLSoundEvent("lurker_living");
+    public static SoundEvent LURKER_DEATH = new BLSoundEvent("lurker_death");
     public static SoundEvent ONWARD = new BLSoundEvent("onwards");
     public static SoundEvent PEAT_MUMMY_CHARGE = new BLSoundEvent("peat_mummy_charge");
     public static SoundEvent PEAT_MUMMY_DEATH = new BLSoundEvent("peat_mummy_death");
