@@ -5,7 +5,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -14,24 +13,22 @@ public class BlockVenusFlyTrap extends BlockGenericPlant {
 
 	public BlockVenusFlyTrap() {
 		super();
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(BLOOMING, false));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {FACING, BLOOMING});
+		return new BlockStateContainer(this, new IProperty[] {BLOOMING});
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int facing = (meta >> 1) & 4;
 		boolean blooming = (meta & 1) == 1;
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(facing)).withProperty(BLOOMING, blooming);
+		return this.getDefaultState().withProperty(BLOOMING, blooming);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		int meta = ((EnumFacing)state.getValue(FACING)).getHorizontalIndex() << 1;
+		int meta = 0;
 		if(state.getValue(BLOOMING))
 			meta |= 1;
 		return meta;

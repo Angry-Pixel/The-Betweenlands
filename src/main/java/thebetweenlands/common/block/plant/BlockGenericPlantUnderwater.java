@@ -1,15 +1,11 @@
 package thebetweenlands.common.block.plant;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Random;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -25,34 +21,18 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
 public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock {
-	public static final PropertyBool IS_TOP = PropertyBool.create("is_top");
-	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
-	public static final PropertyEnum<EnumFacing> FACING = BlockHorizontal.FACING;
-
 	public BlockGenericPlantUnderwater(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0).withProperty(FACING, EnumFacing.NORTH).withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
-	}
-
-	@Override
-	protected BlockStateContainer createBlockState() {
-		ExtendedBlockState state = (ExtendedBlockState) super.createBlockState();
-		Collection<IProperty> properties = new ArrayList<IProperty>();
-		properties.addAll(state.getProperties());
-		properties.add(FACING);
-		properties.add(IS_TOP);
-		properties.add(IS_BOTTOM);
-		Collection<IUnlistedProperty> unlistedProperties = new ArrayList<IUnlistedProperty>();
-		unlistedProperties.addAll(state.getUnlistedProperties());
-		return new ExtendedBlockState(this, properties.toArray(new IProperty[0]), unlistedProperties.toArray(new IUnlistedProperty[0]));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
 	}
 
 	@Override
@@ -69,23 +49,6 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
-	}
-
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
-	}
-
-	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		boolean isTop = worldIn.getBlockState(pos.up()).getBlock() != this;
-		boolean isBottom = worldIn.getBlockState(pos.down()).getBlock() != this;
-		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
 	}
 
 	@Override
@@ -114,7 +77,8 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(StateMap.Builder builder) {
-		builder.ignore(FACING).ignore(LEVEL);
+		super.setStateMapper(builder);
+		builder.ignore(LEVEL);
 	}
 
 	@Override
@@ -146,7 +110,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	}
 
 	protected boolean canSustainPlant(IBlockState state) {
-		return SoilHelper.canSustainPlant(state) || state.getBlock() == this;
+		return SoilHelper.canSustainUnderwaterPlant(state);
 	}
 
 	@Override

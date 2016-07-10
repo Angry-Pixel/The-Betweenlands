@@ -43,7 +43,7 @@ public class ModelRoot implements IModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new ModelBakedStalactite(format, bakedTextureGetter.apply(TEXTURE_TOP), bakedTextureGetter.apply(TEXTURE_MIDDLE), bakedTextureGetter.apply(TEXTURE_BOTTOM));
+		return new ModelBakedRoot(format, bakedTextureGetter.apply(TEXTURE_TOP), bakedTextureGetter.apply(TEXTURE_MIDDLE), bakedTextureGetter.apply(TEXTURE_BOTTOM));
 	}
 
 	@Override
@@ -51,13 +51,13 @@ public class ModelRoot implements IModel {
 		return TRSRTransformation.identity();
 	}
 
-	public static class ModelBakedStalactite implements IBakedModel {
+	public static class ModelBakedRoot implements IBakedModel {
 		private final VertexFormat format;
 		private final TextureAtlasSprite textureTop;
 		private final TextureAtlasSprite textureMiddle;
 		private final TextureAtlasSprite textureBottom;
 
-		private ModelBakedStalactite(VertexFormat format, TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom) {
+		private ModelBakedRoot(VertexFormat format, TextureAtlasSprite textureTop, TextureAtlasSprite textureMiddle, TextureAtlasSprite textureBottom) {
 			this.format = format;
 			this.textureTop = textureTop;
 			this.textureMiddle = textureMiddle;

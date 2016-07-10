@@ -4,7 +4,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.util.EnumFacing;
@@ -13,7 +12,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
@@ -162,23 +160,27 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 			}
 
 			BlockPos pos2 = new BlockPos(x2, pos.getY(), z2);
-			int otherDecay = quantaPerBlock - getQuantaValue(world, pos2);
-			if (otherDecay >= quantaPerBlock)
-			{
-				if (!world.getBlockState(pos2).getMaterial().blocksMovement())
+			boolean isUnderwaterBlock = world.getBlockState(pos).getBlock() instanceof BlockSwampWater && ((BlockSwampWater)world.getBlockState(pos).getBlock()).isUnderwaterBlock;
+			boolean isOtherUnderwaterBlock = world.getBlockState(pos2).getBlock() instanceof BlockSwampWater && ((BlockSwampWater)world.getBlockState(pos2).getBlock()).isUnderwaterBlock;
+			if(!isUnderwaterBlock && !isOtherUnderwaterBlock) {
+				int otherDecay = quantaPerBlock - getQuantaValue(world, pos2);
+				if (otherDecay >= quantaPerBlock)
 				{
-					otherDecay = quantaPerBlock - getQuantaValue(world, pos2.down());
-					if (otherDecay >= 0)
+					if (!world.getBlockState(pos2).getMaterial().blocksMovement())
 					{
-						int power = otherDecay - (decay - quantaPerBlock);
-						vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+						otherDecay = quantaPerBlock - getQuantaValue(world, pos2.down());
+						if (otherDecay >= 0)
+						{
+							int power = otherDecay - (decay - quantaPerBlock);
+							vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+						}
 					}
 				}
-			}
-			else if (otherDecay >= 0)
-			{
-				int power = otherDecay - decay;
-				vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+				else if (otherDecay >= 0)
+				{
+					int power = otherDecay - decay;
+					vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
+				}
 			}
 		}
 
@@ -428,5 +430,10 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(StateMap.Builder builder) {
 		builder.ignore(BlockSwampWater.LEVEL);
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		return super.canPlaceBlockAt(worldIn, pos) && (!this.isUnderwaterBlock || worldIn.getBlockState(pos).getMaterial() == Material.WATER);
 	}
 }

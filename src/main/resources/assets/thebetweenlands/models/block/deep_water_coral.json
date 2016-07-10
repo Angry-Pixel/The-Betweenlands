@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "thebetweenlands:blocks/deep_water_coral"
+    }
+}

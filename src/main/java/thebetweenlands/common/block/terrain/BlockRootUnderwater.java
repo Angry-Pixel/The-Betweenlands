@@ -17,6 +17,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockRootUnderwater extends BlockSwampWater {
 	public BlockRootUnderwater(Fluid fluid, Material materialIn) {
@@ -73,7 +74,7 @@ public class BlockRootUnderwater extends BlockSwampWater {
 		//Block block;
 		for(distUp = 0; distUp < maxLength; distUp++) {
 			blockState = worldIn.getBlockState(pos.add(0, 1 + distUp, 0));
-			if(blockState.getBlock() == this)
+			if(blockState.getBlock() == this || blockState.getBlock() == BlockRegistry.ROOT)
 				continue;
 			if(blockState.getBlock() == Blocks.AIR || !blockState.isOpaqueCube())
 				noTop = true;
@@ -82,7 +83,7 @@ public class BlockRootUnderwater extends BlockSwampWater {
 		for(distDown = 0; distDown < maxLength; distDown++)
 		{
 			blockState = worldIn.getBlockState(pos.add(0, -(1 + distDown), 0));
-			if(blockState.getBlock() == this)
+			if(blockState.getBlock() == this || blockState.getBlock() == BlockRegistry.ROOT)
 				continue;
 			if(blockState.getBlock() == Blocks.AIR || !blockState.isOpaqueCube())
 				noBottom = true;

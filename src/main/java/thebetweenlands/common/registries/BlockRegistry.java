@@ -34,6 +34,7 @@ import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
 import thebetweenlands.common.block.plant.BlockGenericPlant;
 import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
+import thebetweenlands.common.block.plant.BlockGenericStackablePlantUnderwater;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -183,8 +184,11 @@ public class BlockRegistry {
 			return Block.EnumOffsetType.XZ;
 		}
 	};
-	public static final Block SWAMP_KELP = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
-
+	public static final Block SWAMP_KELP = new BlockGenericStackablePlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER).setLightLevel(0.2F);
+	public static final Block MIRE_CORAL = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER).setLightLevel(1F);
+	public static final Block DEEP_WATER_CORAL = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER).setLightLevel(1F);
+	public static final Block WATER_WEEDS = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
+	
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();

@@ -13,6 +13,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockRoot extends BasicBlock {
 	public static final PropertyBoolUnlisted NO_BOTTOM = new PropertyBoolUnlisted("no_bottom");
@@ -58,7 +59,7 @@ public class BlockRoot extends BasicBlock {
 		//Block block;
 		for(distUp = 0; distUp < maxLength; distUp++) {
 			blockState = worldIn.getBlockState(pos.add(0, 1 + distUp, 0));
-			if(blockState.getBlock() == this)
+			if(blockState.getBlock() == this || blockState.getBlock() == BlockRegistry.ROOT_UNDERWATER)
 				continue;
 			if(blockState.getBlock() == Blocks.AIR || !blockState.isOpaqueCube())
 				noTop = true;
@@ -67,7 +68,7 @@ public class BlockRoot extends BasicBlock {
 		for(distDown = 0; distDown < maxLength; distDown++)
 		{
 			blockState = worldIn.getBlockState(pos.add(0, -(1 + distDown), 0));
-			if(blockState.getBlock() == this)
+			if(blockState.getBlock() == this || blockState.getBlock() == BlockRegistry.ROOT_UNDERWATER)
 				continue;
 			if(blockState.getBlock() == Blocks.AIR || !blockState.isOpaqueCube())
 				noBottom = true;
