@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -15,7 +16,9 @@ import cpw.mods.fml.common.gameevent.TickEvent.ServerTickEvent;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.IExtendedEntityProperties;
@@ -23,6 +26,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.EntityEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
 import thebetweenlands.TheBetweenlands;
@@ -262,6 +266,28 @@ public class EntityPropertiesHandler {
 			return (T) entity.getExtendedProperties(this.propertiesIDMap.get(props));
 		}
 		return null;
+	}
+
+	@SubscribeEvent
+	public void onPlayerClone(PlayerEvent.Clone event) {
+		//Clone persistent properties
+		EntityPlayer oldPlayer = event.original;
+		EntityPlayer newPlayer = event.entityPlayer;
+		Set<Class<? extends EntityProperties>> applicableProperties = this.propertiesIDMap.keySet();
+		if(applicableProperties != null) {
+			for(Class<? extends EntityProperties> applicableProperty : applicableProperties) {
+				String propertyID = this.propertiesIDMap.get(applicableProperty);
+				EntityProperties property = (EntityProperties) oldPlayer.getExtendedProperties(propertyID);
+				if(property == null || !property.getEntityClass().isAssignableFrom(EntityPlayer.class) || !property.isPersistent())
+					continue;
+				NBTTagCompound propertyNBT = new NBTTagCompound();
+				property.saveNBTData(propertyNBT);
+				EntityProperties newProperty = (EntityProperties) newPlayer.getExtendedProperties(propertyID);
+				if(newProperty == null)
+					continue;
+				newProperty.loadNBTData(propertyNBT);
+			}
+		}
 	}
 
 	//Some unused code that lets you hook into the pipeline and intercept vanilla packets, might be useful for something else

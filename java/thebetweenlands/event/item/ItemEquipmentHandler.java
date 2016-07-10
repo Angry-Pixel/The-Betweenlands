@@ -124,7 +124,7 @@ public class ItemEquipmentHandler {
 	@SubscribeEvent
 	public void onDeathDrops(LivingDropsEvent event) {
 		EntityLivingBase entity = event.entityLiving;
-		if(entity != null && !entity.worldObj.isRemote) {
+		if(entity != null && !entity.worldObj.isRemote && !entity.worldObj.getGameRules().getGameRuleBooleanValue("keepInventory")) {
 			EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(event.entity);
 			if(equipmentInventory != null) {
 				for(Equipment equipment : equipmentInventory.getEquipment()) {

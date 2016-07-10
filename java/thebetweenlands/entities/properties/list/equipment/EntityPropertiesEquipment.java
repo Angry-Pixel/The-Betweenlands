@@ -58,4 +58,9 @@ public class EntityPropertiesEquipment extends EntityProperties<Entity> {
 	public EquipmentInventory getEquipmentInventory() {
 		return this.equipment;
 	}
+
+	@Override
+	protected boolean isPersistent() {
+		return this.getWorld().getGameRules().getGameRuleBooleanValue("keepInventory");
+	}
 }

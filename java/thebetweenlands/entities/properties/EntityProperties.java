@@ -223,4 +223,12 @@ public abstract class EntityProperties<E extends Entity> implements IExtendedEnt
 		this.trackers.add(tracker);
 		return tracker;
 	}
+	
+	/**
+	 * Returns whether this property is persistent (only for players)
+	 * @return
+	 */
+	protected boolean isPersistent() {
+		return false;
+	}
 }

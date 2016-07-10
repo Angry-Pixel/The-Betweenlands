@@ -99,4 +99,9 @@ public class EntityPropertiesCircleGem extends EntityProperties<Entity> {
 	public void setAmuletSlots(int slots) {
 		this.amuletSlots = slots;
 	}
+
+	@Override
+	protected boolean isPersistent() {
+		return this.getWorld().getGameRules().getGameRuleBooleanValue("keepInventory");
+	}
 }
