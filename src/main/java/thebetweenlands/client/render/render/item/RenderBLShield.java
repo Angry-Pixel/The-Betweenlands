@@ -6,8 +6,7 @@ import net.minecraft.client.model.ModelShield;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.render.model.shields.ModelBoneShield;
-import thebetweenlands.client.render.model.shields.ModelWeedwoodShield;
+import thebetweenlands.client.render.model.shields.*;
 
 public class RenderBLShield extends TileEntitySpecialRenderer<TileEntityShield> {
 
@@ -34,11 +33,11 @@ public class RenderBLShield extends TileEntitySpecialRenderer<TileEntityShield> 
     }
 
     public enum Shieldtype {
-        OCTINE(new ResourceLocation("thebetweenlands", "textures/items/octine_shield.png"), new ModelShield()),
-        VALONITE(new ResourceLocation("thebetweenlands", "textures/items/valonite_shield.png"), new ModelShield()),
-        WEEDWOOD(new ResourceLocation("thebetweenlands", "textures/items/weedwood_shield.png"), new ModelWeedwoodShield()),
-        BONE(new ResourceLocation("thebetweenlands", "textures/items/bone_shield.png"), new ModelBoneShield()),
-        SYMORITE(new ResourceLocation("thebetweenlands", "textures/items/symorite_shield.png"), new ModelShield());
+        OCTINE(new ResourceLocation("thebetweenlands", "textures/items/shields/octine_shield.png"), new ModelOctineShield()),
+        VALONITE(new ResourceLocation("thebetweenlands", "textures/items/shields/valonite_shield.png"), new ModelValoniteShield()),
+        WEEDWOOD(new ResourceLocation("thebetweenlands", "textures/items/shields/weedwood_shield.png"), new ModelWeedwoodShield()),
+        BONE(new ResourceLocation("thebetweenlands", "textures/items/shields/bone_shield.png"), new ModelBoneShield()),
+        SYMORITE(new ResourceLocation("thebetweenlands", "textures/items/shields/symorite_shield.png"), new ModelSymoriteShield());
 
         public ResourceLocation resloc;
         public ModelBase shieldModel;
