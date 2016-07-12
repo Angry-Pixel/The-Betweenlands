@@ -20,7 +20,7 @@ import thebetweenlands.client.sound.BLSoundEvent;
 public class ItemBLRecord extends ItemRecord {
     private String name;
 
-    protected ItemBLRecord(BLSoundEvent soundIn) {
+    public ItemBLRecord(BLSoundEvent soundIn) {
         super(soundIn.soundName, soundIn);
         name = soundIn.soundName;
     }

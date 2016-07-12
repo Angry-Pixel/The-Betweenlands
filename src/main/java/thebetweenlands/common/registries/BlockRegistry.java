@@ -27,10 +27,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
-import thebetweenlands.common.block.container.BlockCompostBin;
-import thebetweenlands.common.block.container.BlockDruidAltar;
-import thebetweenlands.common.block.container.BlockPurifier;
-import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.container.*;
 import thebetweenlands.common.block.plant.*;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -198,6 +195,7 @@ public class BlockRegistry {
 	public static final Block COMPOST_BIN = new BlockCompostBin();
 	public static final Block ROOT = new BlockRoot();
 	public static final Block ROOT_UNDERWATER = new BlockRootUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
+	public static final Block WEEDWOOD_JUKEBOX = new BlockWeedwoodJukebox();
 
 	private static final List<Block> BLOCKS = new ArrayList<Block>();
 
