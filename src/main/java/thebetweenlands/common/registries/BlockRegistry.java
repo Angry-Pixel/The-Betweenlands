@@ -31,11 +31,7 @@ import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
-import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
-import thebetweenlands.common.block.plant.BlockGenericPlant;
-import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
-import thebetweenlands.common.block.plant.BlockGenericStackablePlantUnderwater;
-import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
+import thebetweenlands.common.block.plant.*;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
@@ -188,6 +184,8 @@ public class BlockRegistry {
 	public static final Block MIRE_CORAL = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER).setLightLevel(1F);
 	public static final Block DEEP_WATER_CORAL = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER).setLightLevel(1F);
 	public static final Block WATER_WEEDS = new BlockGenericPlantUnderwater(FluidRegistry.SWAMP_WATER, Material.WATER);
+	public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
+	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
