@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.sound.BLSoundEvent;
+import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 
 public class ItemBLRecord extends ItemRecord {
     private String name;
@@ -29,7 +30,7 @@ public class ItemBLRecord extends ItemRecord {
     public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         IBlockState iblockstate = worldIn.getBlockState(pos);
 
-        if (iblockstate.getBlock() instanceof BlockJukebox && !iblockstate.getValue(BlockJukebox.HAS_RECORD).booleanValue()) {
+        if (iblockstate.getBlock() instanceof BlockWeedwoodJukebox && !iblockstate.getValue(BlockJukebox.HAS_RECORD)) {
             if (!worldIn.isRemote) {
                 ((BlockJukebox) iblockstate.getBlock()).insertRecord(worldIn, pos, iblockstate, stack);
                 worldIn.playEvent(null, 1010, pos, Item.getIdFromItem(this));
