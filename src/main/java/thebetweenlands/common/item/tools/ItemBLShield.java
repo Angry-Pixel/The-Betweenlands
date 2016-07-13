@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.BLMaterial;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -71,14 +71,14 @@ public class ItemBLShield extends ItemShield {
 
 
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
-		/*if (material == BLMaterial.TOOL_WEEDWOOD) {
+		/*if (material == BLMaterialRegistry.TOOL_WEEDWOOD) {
             return repair.getItem() == Item.getItemFromBlock(BlockRegistry.WEEDWOOD);
         } else */
-		if (material == BLMaterial.TOOL_BONE) {
+		if (material == BLMaterialRegistry.TOOL_BONE) {
 			return repair.getItem() == Item.getItemFromBlock(BlockRegistry.BETWEENSTONE);
-		} else if (material == BLMaterial.TOOL_OCTINE) {
+		} else if (material == BLMaterialRegistry.TOOL_OCTINE) {
 			return EnumItemMisc.OCTINE_INGOT.isItemOf(repair);
-		} else if (material == BLMaterial.TOOL_VALONITE) {
+		} else if (material == BLMaterialRegistry.TOOL_VALONITE) {
 			return EnumItemMisc.VALONITE_SHARD.isItemOf(repair);
 		}
 		return false;

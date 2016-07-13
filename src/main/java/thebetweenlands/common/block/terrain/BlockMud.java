@@ -15,7 +15,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.IEntityBL;
-import thebetweenlands.common.item.BLMaterial;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -25,7 +25,7 @@ import java.util.List;
 
 public class BlockMud extends Block {
     public BlockMud() {
-        super(BLMaterial.MUD);
+        super(BLMaterialRegistry.MUD);
         setHardness(0.5F);
         setSoundType(SoundType.GROUND);
         setHarvestLevel("shovel", 0);
@@ -66,7 +66,7 @@ public class BlockMud extends Block {
                 entity.motionY *= 0.02D;
             }
             entity.onGround = true;
-            if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterial.MUD)) {
+            if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterialRegistry.MUD)) {
                 entity.attackEntityFrom(DamageSource.inWall, 2.0F);
             }
         }

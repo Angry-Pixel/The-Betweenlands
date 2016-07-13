@@ -40,23 +40,7 @@ import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
-import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.common.block.terrain.BlockCragrock;
-import thebetweenlands.common.block.terrain.BlockDeadGrass;
-import thebetweenlands.common.block.terrain.BlockGenericOre;
-import thebetweenlands.common.block.terrain.BlockGenericStone;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
-import thebetweenlands.common.block.terrain.BlockMud;
-import thebetweenlands.common.block.terrain.BlockPeat;
-import thebetweenlands.common.block.terrain.BlockRoot;
-import thebetweenlands.common.block.terrain.BlockRootUnderwater;
-import thebetweenlands.common.block.terrain.BlockSilt;
-import thebetweenlands.common.block.terrain.BlockSlimyGrass;
-import thebetweenlands.common.block.terrain.BlockSludgyDirt;
-import thebetweenlands.common.block.terrain.BlockStalactite;
-import thebetweenlands.common.block.terrain.BlockSwampDirt;
-import thebetweenlands.common.block.terrain.BlockSwampGrass;
-import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.block.terrain.*;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -95,6 +79,7 @@ public class BlockRegistry {
 			.setResistance(8.0F);
 	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
 	public static final Block SWAMP_GRASS = new BlockSwampGrass();
+	public static final Block WISP = new BlockWisp();
 	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.875F);
 	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override

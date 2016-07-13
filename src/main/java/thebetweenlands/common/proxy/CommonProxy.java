@@ -14,6 +14,7 @@ import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityWisp;
 
 public class CommonProxy implements IGuiHandler {
     public static final int GUI_DRUID_ALTAR = 1;
@@ -104,4 +105,7 @@ public class CommonProxy implements IGuiHandler {
     public void setCustomStateMap(Block block, StateMap stateMap) {
 
     }
+    public void updateWispParticles(TileEntityWisp te) {
+    }
+
 }

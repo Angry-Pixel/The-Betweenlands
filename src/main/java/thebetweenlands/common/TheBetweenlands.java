@@ -21,6 +21,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import thebetweenlands.api.BetweenlandsAPI;
 import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
 import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.lib.ModInfo;
@@ -63,6 +64,8 @@ public class TheBetweenlands {
 		ConfigHandler.INSTANCE.loadConfig(event);
 		configDir = event.getModConfigurationDirectory();
 		sourceFile = event.getSourceFile();
+
+		BetweenlandsAPI.init(new BetweenlandsAPIImp());
 
 		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
 

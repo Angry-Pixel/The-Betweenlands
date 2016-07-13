@@ -1,10 +1,12 @@
 package thebetweenlands.client.proxy;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +23,7 @@ import thebetweenlands.client.event.CorrosionTextureStitchHandler;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
@@ -61,6 +64,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -236,5 +240,18 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerEventHandlers() {
     	MinecraftForge.EVENT_BUS.register(new CorrosionTextureStitchHandler());
+    }
+
+    @Override
+    public void updateWispParticles(TileEntityWisp te) {
+        Iterator<Object> i = te.particleList.iterator();
+        while (i.hasNext()) {
+            if (!((ParticleWisp) i.next()).isAlive()) {
+                i.remove();
+            }
+        }
+        for (Object particle : te.particleList) {
+            ((ParticleWisp) particle).onUpdate();
+        }
     }
 }

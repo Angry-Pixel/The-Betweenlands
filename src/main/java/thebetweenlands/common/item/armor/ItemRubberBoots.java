@@ -2,7 +2,7 @@ package thebetweenlands.common.item.armor;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.common.item.BLMaterial;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
 
@@ -10,7 +10,7 @@ public class ItemRubberBoots extends ItemBLArmor /*implements IManualEntryItem*/
 	private static final int MAX_WALK_TICKS = 40;
 
 	public ItemRubberBoots() {
-		super(BLMaterial.ARMOR_RUBBER, 2, EntityEquipmentSlot.FEET, "rubber_boots");
+		super(BLMaterialRegistry.ARMOR_RUBBER, 2, EntityEquipmentSlot.FEET, "rubber_boots");
 	}
 
 	@Override
