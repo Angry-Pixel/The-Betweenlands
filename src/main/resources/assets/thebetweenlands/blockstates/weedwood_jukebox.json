@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "has_record=false": {
+      "model": "thebetweenlands:weedwood_jukebox"
+    },
+    "has_record=true": {
+      "model": "thebetweenlands:weedwood_jukebox"
+    }
+  }
+}

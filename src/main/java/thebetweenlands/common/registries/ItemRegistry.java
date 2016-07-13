@@ -30,10 +30,7 @@ import thebetweenlands.common.item.food.ItemWeepingBluePetal;
 import thebetweenlands.common.item.food.ItemWightHeart;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
-import thebetweenlands.common.item.misc.ItemMisc;
-import thebetweenlands.common.item.misc.ItemRandomSound;
-import thebetweenlands.common.item.misc.ItemSwampTalisman;
-import thebetweenlands.common.item.misc.TestItem;
+import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
@@ -128,6 +125,22 @@ public class ItemRegistry {
 	public static final Item SYMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYMORITE);
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
 
+
+	//RECORDS
+	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
+	public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);
+	public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH);
+	public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER);
+	public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE);
+	public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE);
+	public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612);
+	public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ACIENT);
+	public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY);
+	public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE);
+	public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD);
+	public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD);
+	public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS);
+	public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
 
 	public static final Item TEST_ITEM = new TestItem();
 	public static final Item RANDOM_SOUND = new ItemRandomSound();

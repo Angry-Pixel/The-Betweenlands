@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/weedwood_jukebox_side",
+    "down": "thebetweenlands:blocks/weedwood_jukebox_side",
+    "up": "thebetweenlands:blocks/weedwood_jukebox_top",
+    "north": "thebetweenlands:blocks/weedwood_jukebox_side",
+    "east": "thebetweenlands:blocks/weedwood_jukebox_side",
+    "south": "thebetweenlands:blocks/weedwood_jukebox_side",
+    "west": "thebetweenlands:blocks/weedwood_jukebox_side"
+  }
+}
