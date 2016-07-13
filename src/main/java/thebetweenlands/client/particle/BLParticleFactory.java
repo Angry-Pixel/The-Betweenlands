@@ -250,7 +250,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	public final Particle getParticle(ImmutableParticleArgs args) {
 		Particle particle = this.createParticle(args);
 		if(IParticleSpriteReceiver.class.isAssignableFrom(particle.getClass())) {
-			((IParticleSpriteReceiver)particle).setStitchedSprite(this.getStitcher().getSprite());
+			((IParticleSpriteReceiver)particle).setStitchedSprites(this.getStitcher().getSprites());
 		}
 		return particle;
 	}

@@ -80,7 +80,12 @@ public class TextureStitchHandler {
 		for(BLParticles particle : particles) {
 			ParticleTextureStitcher stitcher = particle.getFactory().getStitcher();
 			if(stitcher != null) {
-				stitcher.setSprite(e.getMap().registerSprite(stitcher.getTexture()));
+				ResourceLocation[] textures = stitcher.getTextures();
+				TextureAtlasSprite[] sprites = new TextureAtlasSprite[textures.length];
+				for(int i = 0; i < textures.length; i++) {
+					sprites[i] = e.getMap().registerSprite(textures[i]);
+				}
+				stitcher.setSprites(sprites);
 			}
 		}
 	}

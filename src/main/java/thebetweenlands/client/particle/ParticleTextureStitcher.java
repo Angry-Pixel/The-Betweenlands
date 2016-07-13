@@ -6,45 +6,45 @@ import net.minecraft.util.ResourceLocation;
 
 public final class ParticleTextureStitcher<T> {
 	/**
-	 * Creates a new particle texture stitcher for the specified type and texture.
+	 * Creates a new particle texture stitcher for the specified type and textures.
 	 * The particle class must implement {@link IParticleSpriteReceiver}
 	 * @param cls
-	 * @param texture
+	 * @param textures
 	 * @return
 	 */
-	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher create(Class<T> cls, ResourceLocation texture) {
-		return new ParticleTextureStitcher<T>(texture);
+	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher create(Class<T> cls, ResourceLocation[] textures) {
+		return new ParticleTextureStitcher<T>(textures);
 	}
 
-	private final ResourceLocation texture;
-	private TextureAtlasSprite loadedSprite;
+	private final ResourceLocation[] textures;
+	private TextureAtlasSprite[] loadedSprites;
 
-	private ParticleTextureStitcher(ResourceLocation texture) {
-		this.texture = texture;
+	private ParticleTextureStitcher(ResourceLocation[] textures) {
+		this.textures = textures;
 	}
 
 	/**
-	 * Returns the particle texture
+	 * Returns the particle textures
 	 * @return
 	 */
-	public ResourceLocation getTexture() {
-		return this.texture;
+	public ResourceLocation[] getTextures() {
+		return this.textures;
 	}
 
 	/**
-	 * Sets the particle sprite
-	 * @param sprite
+	 * Sets the particle sprites
+	 * @param sprites
 	 */
-	public void setSprite(TextureAtlasSprite sprite) {
-		this.loadedSprite = sprite;
+	public void setSprites(TextureAtlasSprite[] sprites) {
+		this.loadedSprites = sprites;
 	}
 
 	/**
-	 * Returns the particle sprite
+	 * Returns the particle sprites
 	 * @return
 	 */
-	public TextureAtlasSprite getSprite() {
-		return this.loadedSprite;
+	public TextureAtlasSprite[] getSprites() {
+		return this.loadedSprites;
 	}
 
 	/**
@@ -53,8 +53,8 @@ public final class ParticleTextureStitcher<T> {
 	public static interface IParticleSpriteReceiver {
 		/**
 		 * Sets the stitched particle sprites
-		 * @param sprite
+		 * @param sprites
 		 */
-		void setStitchedSprite(TextureAtlasSprite sprite);
+		void setStitchedSprites(TextureAtlasSprite[] sprites);
 	}
 }
