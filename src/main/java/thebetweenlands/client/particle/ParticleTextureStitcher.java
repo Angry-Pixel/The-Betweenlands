@@ -16,6 +16,17 @@ public final class ParticleTextureStitcher<T> {
 		return new ParticleTextureStitcher<T>(textures);
 	}
 
+	/**
+	 * Creates a new particle texture stitcher for the specified type and texture.
+	 * The particle class must implement {@link IParticleSpriteReceiver}
+	 * @param cls
+	 * @param texture
+	 * @return
+	 */
+	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher create(Class<T> cls, ResourceLocation texture) {
+		return create(cls, new ResourceLocation[]{texture});
+	}
+
 	private final ResourceLocation[] textures;
 	private TextureAtlasSprite[] loadedSprites;
 

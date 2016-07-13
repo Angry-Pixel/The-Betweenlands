@@ -36,7 +36,7 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 
 	public static final class Factory extends BLParticleFactory {
 		public Factory() {
-			super(ParticlePortalBL.class, ParticleTextureStitcher.create(ParticlePortalBL.class, new ResourceLocation[]{new ResourceLocation("thebetweenlands:particle/portal")}));
+			super(ParticlePortalBL.class, ParticleTextureStitcher.create(ParticlePortalBL.class, new ResourceLocation("thebetweenlands:particle/portal")));
 		}
 
 		@Override
