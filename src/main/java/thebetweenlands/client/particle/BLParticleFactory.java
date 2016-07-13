@@ -8,7 +8,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	/**
 	 * Immutable particle arguments
 	 */
-	static class ImmutableParticleArgs {
+	public static class ImmutableParticleArgs {
 		public final World world;
 		public final double x, y, z, motionX, motionY, motionZ;
 		public final float scale;
@@ -250,7 +250,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	public final Particle getParticle(ImmutableParticleArgs args) {
 		Particle particle = this.createParticle(args);
 		if(IParticleSpriteReceiver.class.isAssignableFrom(particle.getClass())) {
-			((IParticleSpriteReceiver)particle).setSprite(this.getStitcher().getSprite());
+			((IParticleSpriteReceiver)particle).setStitchedSprite(this.getStitcher().getSprite());
 		}
 		return particle;
 	}

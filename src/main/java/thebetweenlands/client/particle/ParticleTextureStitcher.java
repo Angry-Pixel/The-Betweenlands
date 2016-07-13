@@ -55,6 +55,6 @@ public final class ParticleTextureStitcher<T> {
 		 * Sets the stitched particle sprites
 		 * @param sprite
 		 */
-		void setSprite(TextureAtlasSprite sprite);
+		void setStitchedSprite(TextureAtlasSprite sprite);
 	}
 }
