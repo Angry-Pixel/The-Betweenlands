@@ -1,12 +1,13 @@
 package thebetweenlands.client.particle.entity;
 
+import javax.vecmath.Vector3d;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
-
-import javax.vecmath.Vector3d;
 
 public class ParticleAltarCrafting extends Particle {
 	private TileEntityDruidAltar target;
@@ -21,34 +22,50 @@ public class ParticleAltarCrafting extends Particle {
 		BlockPos pos = target.getPos();
 		this.endPoint = new Vector3d(pos.getX() + 0.5D, pos.getY() + TileEntityDruidAltar.FINAL_HEIGHT + 1.05D, pos.getZ() + 0.5D);
 		float colorMulti = this.rand.nextFloat() * 0.3F;
-        this.particleScale = 1.0f;
-        this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;
-        this.particleMaxAge = TileEntityDruidAltar.CRAFTING_TIME + 200000;
-        this.setParticleTextureIndex((int) (Math.random() * 26.0D + 1.0D + 224.0D));
+		this.particleScale = 1.0f;
+		this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;
+		this.particleMaxAge = TileEntityDruidAltar.CRAFTING_TIME + 200000;
+		this.setParticleTextureIndex((int) (Math.random() * 26.0D + 1.0D + 224.0D));
 	}
 
-    @Override
-    public void onUpdate() {
-    	TileEntity tileEntity = this.worldObj.getTileEntity(this.target.getPos());
-    	double craftingProgress = 0;
-    	if(tileEntity instanceof TileEntityDruidAltar) {
-    		craftingProgress = ((TileEntityDruidAltar) tileEntity).craftingProgress;
-    	}
-    	if(this.particleAge++ >= this.particleMaxAge || craftingProgress == 0) {
-    		this.setExpired();
-    	}
-    	craftingProgress /= TileEntityDruidAltar.CRAFTING_TIME;
-    	Vector3d xzDiff = new Vector3d(this.endPoint.x, this.endPoint.y, this.endPoint.z);
-    	xzDiff.sub(new Vector3d(this.startPoint.x, this.endPoint.y, this.startPoint.z));
-    	Vector3d yDiff = new Vector3d(this.endPoint.x, this.endPoint.y, this.endPoint.z);
-    	yDiff.sub(new Vector3d(this.endPoint.x, this.startPoint.y, this.endPoint.z));
-    	xzDiff.scale(craftingProgress);
-    	yDiff.scale(Math.pow(craftingProgress, 6));
-        this.prevPosX = this.posX;
-        this.prevPosY = this.posY;
-        this.prevPosZ = this.posZ;
-    	this.setPosition(this.startPoint.x + xzDiff.x, this.startPoint.y + yDiff.y, this.startPoint.z + xzDiff.z);
-    	particleGreen = (float) (1F - craftingProgress);
-    	particleBlue = (float) (1F - craftingProgress);
-    }
+	@Override
+	public void onUpdate() {
+		TileEntity tileEntity = this.worldObj.getTileEntity(this.target.getPos());
+		double craftingProgress = 0;
+		if(tileEntity instanceof TileEntityDruidAltar) {
+			craftingProgress = ((TileEntityDruidAltar) tileEntity).craftingProgress;
+		}
+		if(this.particleAge++ >= this.particleMaxAge || craftingProgress == 0) {
+			this.setExpired();
+		}
+		craftingProgress /= TileEntityDruidAltar.CRAFTING_TIME;
+		Vector3d xzDiff = new Vector3d(this.endPoint.x, this.endPoint.y, this.endPoint.z);
+		xzDiff.sub(new Vector3d(this.startPoint.x, this.endPoint.y, this.startPoint.z));
+		Vector3d yDiff = new Vector3d(this.endPoint.x, this.endPoint.y, this.endPoint.z);
+		yDiff.sub(new Vector3d(this.endPoint.x, this.startPoint.y, this.endPoint.z));
+		xzDiff.scale(craftingProgress);
+		yDiff.scale(Math.pow(craftingProgress, 6));
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+		this.setPosition(this.startPoint.x + xzDiff.x, this.startPoint.y + yDiff.y, this.startPoint.z + xzDiff.z);
+		particleGreen = (float) (1F - craftingProgress);
+		particleBlue = (float) (1F - craftingProgress);
+	}
+
+	public static final class Factory extends ParticleFactory<ParticleAltarCrafting> {
+		public Factory() {
+			super(ParticleAltarCrafting.class);
+		}
+
+		@Override
+		public ParticleAltarCrafting createParticle(ImmutableParticleArgs args) {
+			return new ParticleAltarCrafting(args.world, args.x, args.y, args.z, args.scale, (TileEntityDruidAltar)args.data[0]);
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs args) {
+			args.withData((TileEntityDruidAltar)null);
+		}
+	}
 }

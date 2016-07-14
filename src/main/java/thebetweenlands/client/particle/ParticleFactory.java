@@ -1,5 +1,8 @@
 package thebetweenlands.client.particle;
 
+import java.util.Arrays;
+import java.util.function.Consumer;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
@@ -36,12 +39,18 @@ public abstract class ParticleFactory<T extends Particle> {
 	/**
 	 * Particle arguments
 	 */
-	public static final class ParticleArgs {
-		public static final class ArgumentDataBuilder {
+	public static class ParticleArgs<T extends ParticleArgs> {
+		public static final class ArgumentDataBuilder<T extends ParticleArgs> {
 			private final Object[] data;
-			private final ParticleArgs args;
+			private final T args;
 
-			private ArgumentDataBuilder(int size, ParticleArgs args) {
+			/**
+			 * Creates a new argument data builder.
+			 * Must not be longer than the additional arguments of the underlying default.
+			 * @param size
+			 * @param args
+			 */
+			private ArgumentDataBuilder(int size, T args) {
 				this.data = new Object[size];
 				this.args = args;
 			}
@@ -83,9 +92,9 @@ public abstract class ParticleFactory<T extends Particle> {
 			 * Builds the additional arguments and adds them
 			 * @return
 			 */
-			public ParticleArgs build() {
+			public T build() {
 				this.args.withData(this.data);
-				return this.args;
+				return (T) this.args;
 			}
 		}
 
@@ -106,7 +115,10 @@ public abstract class ParticleFactory<T extends Particle> {
 			this.reset();
 		}
 
-		private void reset() {
+		/**
+		 * Resets all values
+		 */
+		public void reset() {
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;
@@ -126,12 +138,12 @@ public abstract class ParticleFactory<T extends Particle> {
 		 * @param motionZ
 		 * @return
 		 */
-		public ParticleArgs withMotion(double motionX, double motionY, double motionZ) {
+		public T withMotion(double motionX, double motionY, double motionZ) {
 			this.motionX = motionX;
 			this.motionY = motionY;
 			this.motionZ = motionZ;
 			this.motionSet = true;
-			return this;
+			return (T) this;
 		}
 
 		/**
@@ -139,10 +151,10 @@ public abstract class ParticleFactory<T extends Particle> {
 		 * @param scale
 		 * @return
 		 */
-		public ParticleArgs withScale(float scale) {
+		public T withScale(float scale) {
 			this.scale = scale;
 			this.scaleSet = true;
-			return this;
+			return (T) this;
 		}
 
 		/**
@@ -150,23 +162,24 @@ public abstract class ParticleFactory<T extends Particle> {
 		 * @param color
 		 * @return
 		 */
-		public ParticleArgs withColor(int color) {
+		public T withColor(int color) {
 			this.color = color;
 			this.colorSet = true;
-			return this;
+			return (T) this;
 		}
 
 		/**
-		 * Sets the additional data
+		 * Sets the additional data.
+		 * Must not be longer than the additional arguments of the underlying default.
 		 * @param data
 		 * @return
 		 */
-		public ParticleArgs withData(Object... data) {
+		public T withData(Object... data) {
 			if(data == null) 
 				data = NO_DATA;
 			this.data = data;
 			this.dataSet = true;
-			return this;
+			return (T) this;
 		}
 
 		/**
@@ -174,8 +187,8 @@ public abstract class ParticleFactory<T extends Particle> {
 		 * @param size
 		 * @return
 		 */
-		public ArgumentDataBuilder withDataBuilder(int size) {
-			return new ArgumentDataBuilder(size, this);
+		public ArgumentDataBuilder<T> withDataBuilder(int size) {
+			return new ArgumentDataBuilder<T>(size, (T) this);
 		}
 
 		/**
@@ -266,11 +279,55 @@ public abstract class ParticleFactory<T extends Particle> {
 			BUILDER.reset();
 			return BUILDER;
 		}
+
+		/**
+		 * Populates the specified {@link ParticleArgs} with the composed particle arguments where this {@link ParticleArgs} is the underlying default.
+		 * The additional data of the specified {@link ParticleArgs} must have a length equal or smaller than the length of the additional data of this {@link ParticleArgs}.
+		 * @param container Arguments to be populated with default arguments if necessary
+		 * @return
+		 */
+		public final ParticleArgs getArguments(ParticleArgs container) {
+			if(!container.isMotionSet()) {
+				container.withMotion(this.getMotionX(), this.getMotionY(), this.getMotionZ());
+			}
+			if(!container.isColorSet()) {
+				container.withColor(this.getColor());
+			}
+			if(!container.isScaleSet()) {
+				container.withScale(this.getScale());
+			}
+			if(this.isDataSet()) {
+				Object[] initialAdditionalArgs = container.getData();
+				Object[] defaultArgs = this.getData();
+				Object[] additionalArgs = container.getData();
+				if(defaultArgs.length > initialAdditionalArgs.length) {
+					container.withData(additionalArgs = new Object[defaultArgs.length]);
+				}
+				for(int i = 0; i < additionalArgs.length; i++) {
+					if(i < initialAdditionalArgs.length) {
+						if(initialAdditionalArgs[i] == EMPTY_ARG) {
+							if(i >= defaultArgs.length)
+								throw new IndexOutOfBoundsException(String.format("The length of the additional arguments of "
+										+ "the specified ParticleArgs must be equal or smaller than "
+										+ "the underlying default additional arguments. Index: %s, Length: %s", i, defaultArgs.length));
+							additionalArgs[i] = defaultArgs[i];
+						} else {
+							additionalArgs[i] = initialAdditionalArgs[i];
+						}
+					} else if(i < defaultArgs.length) {
+						additionalArgs[i] = defaultArgs[i];
+					}
+				}
+			}
+			return container;
+		}
+
 	}
 
 	private final ParticleTextureStitcher<T> stitcher;
 	private final Class<T> type;
-	private ParticleArgs defaults;
+	private final ParticleArgs baseArgs;
+	private final ParticleArgs defaultArgs;
 
 	/**
 	 * Creates a new particle factory for the specified particle type
@@ -285,9 +342,12 @@ public abstract class ParticleFactory<T extends Particle> {
 	 * @param type
 	 * @param stitcher
 	 */
-	public ParticleFactory(Class<T> type, ParticleTextureStitcher<T> stitcher) {
+	public ParticleFactory(Class<T> type, @Nullable ParticleTextureStitcher<T> stitcher) {
 		this.stitcher = stitcher;
 		this.type = type;
+		this.baseArgs = new ParticleArgs();
+		this.setBaseArguments(this.baseArgs);
+		this.defaultArgs = new ParticleArgs();
 	}
 
 	/**
@@ -307,15 +367,26 @@ public abstract class ParticleFactory<T extends Particle> {
 	}
 
 	/**
+	 * Sets the color of the specified particle
+	 * @param particle
+	 * @param color
+	 */
+	public static final void setParticleColor(Particle particle, int color) {
+		particle.setRBGColorF((float)(color >> 16 & 0xff) / 255F, (float)(color >> 8 & 0xff) / 255F, (float)(color & 0xff) / 255F);
+		particle.setAlphaF((float)(color >> 24 & 0xff) / 255F);
+	}
+
+	/**
 	 * Creates a new particle from the immutable particle args and sets the sprites
 	 * @param args
 	 * @return
 	 */
 	protected final T getParticle(ImmutableParticleArgs args) {
 		T particle = this.createParticle(args);
-		if(IParticleSpriteReceiver.class.isAssignableFrom(particle.getClass())) {
+		if(this.getStitcher() != null) {
 			((IParticleSpriteReceiver)particle).setStitchedSprites(this.getStitcher().getSprites());
 		}
+		setParticleColor(particle, args.color);
 		return particle;
 	}
 
@@ -328,62 +399,79 @@ public abstract class ParticleFactory<T extends Particle> {
 
 	/**
 	 * Specifies an additional argument as empty. Any empty argument will be replaced by the 
-	 * default argument or null if a default argument is not available.
+	 * underlying default argument or null if an underlying default argument is not available. Using this in 
+	 * {@link ParticleFactory#setBaseArguments(ParticleArgs)} has no effect. If this is used in 
+	 * {@link ParticleFactory#setDefaultArguments(World, ParticleArgs)} the underlying default is
+	 * from {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
 	 */
 	public static final Object EMPTY_ARG = new Object();
 
 	/**
-	 * Sets the default arguments
+	 * Sets the base arguments.
+	 * Using {@link ParticleFactory#EMPTY_ARG} has no effect.
 	 * @param args
 	 */
-	protected void setDefaultArguments(ParticleArgs args) { }
+	protected void setBaseArguments(ParticleArgs args) { }
 
 	/**
-	 * Returns the composed particle arguments
-	 * @param custom
-	 * @return
+	 * Sets the default arguments based on the world the particle is being spawned in.
+	 * The underlying default arguments are set by {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
+	 * Overrides arguments set by {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
+	 * @param world
+	 * @param args
 	 */
-	public final ParticleArgs getArguments(ParticleArgs custom) {
-		if(this.defaults == null) {
-			this.defaults = new ParticleArgs();
-			this.setDefaultArguments(this.defaults);
+	protected void setDefaultArguments(World world, ParticleArgs args) { }
+
+	public static final class BaseArgsBuilder extends ParticleArgs<BaseArgsBuilder> {
+		private final ParticleFactory factory;
+
+		private BaseArgsBuilder(ParticleFactory factory) {
+			super();
+			this.factory = factory;
 		}
 
-		if(!custom.isMotionSet()) {
-			custom.withMotion(this.defaults.getMotionX(), this.defaults.getMotionY(), this.defaults.getMotionZ());
+		/**
+		 * Runs a {@link Consumer} over this {@link ParticleArgs}
+		 * @param consumer
+		 * @return
+		 */
+		public BaseArgsBuilder accept(Consumer<ParticleArgs> consumer) {
+			consumer.accept(this);
+			return this;
 		}
-		if(!custom.isColorSet()) {
-			custom.withColor(this.defaults.getColor());
+
+		/**
+		 * Builds the arguments and sets the base arguments of the factory if overwritten
+		 * @return
+		 */
+		public ParticleFactory build() {
+			if(this.isMotionSet())
+				this.factory.baseArgs.withMotion(this.getMotionX(), this.getMotionY(), this.getMotionZ());
+			if(this.isColorSet())
+				this.factory.baseArgs.withColor(this.getColor());
+			if(this.isScaleSet())
+				this.factory.baseArgs.withScale(this.getScale());
+			if(this.isDataSet())
+				this.factory.baseArgs.withData(this.getData());
+			return this.factory;
 		}
-		if(!custom.isScaleSet()) {
-			custom.withScale(this.defaults.getScale());
-		}
-		if(this.defaults.isDataSet()) {
-			Object[] customAdditionalArgs = custom.getData();
-			Object[] defaultArgs = this.defaults.getData();
-			if(defaultArgs.length > customAdditionalArgs.length) {
-				custom.withData(new Object[defaultArgs.length]);
-			}
-			Object[] additionalArgs = custom.getData();
-			if(additionalArgs.length == this.defaults.getData().length) {
-				for(int i = 0; i < additionalArgs.length; i++) {
-					if(i < customAdditionalArgs.length) {
-						if(customAdditionalArgs[i] == EMPTY_ARG) {
-							additionalArgs[i] = defaultArgs[i];
-						} else {
-							additionalArgs[i] = customAdditionalArgs[i];
-						}
-					} else if(i < defaultArgs.length) {
-						additionalArgs[i] = defaultArgs[i];
-					}
-				}
-			}
-		}
-		return custom;
+	}
+
+	private final BaseArgsBuilder baseArgsBuilder = new BaseArgsBuilder(this);
+
+	/**
+	 * Returns the base arguments builder.
+	 * Used to override base arguments set by {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
+	 * @return
+	 */
+	public BaseArgsBuilder getBaseArgsBuilder(){
+		this.baseArgsBuilder.reset();
+		return this.baseArgsBuilder;
 	}
 
 	/**
-	 * Creates an instance of a particle
+	 * Creates an instance of a particle.
+	 * The specified {@link ParticleArgs} overrides the default arguments set by {@link ParticleFactory#setDefaultArguments(World, ParticleArgs)}
 	 * @param type
 	 * @param world
 	 * @param x
@@ -395,11 +483,20 @@ public abstract class ParticleFactory<T extends Particle> {
 	public final T create(World world, double x, double y, double z, @Nullable ParticleArgs args) {
 		if(args == null)
 			args = ParticleArgs.get();
-		return this.getParticle(new ImmutableParticleArgs(world, x, y, z, this.getArguments(args)));
+		this.defaultArgs.reset();
+		this.setDefaultArguments(world, this.defaultArgs);
+		boolean hasActualDefaults = this.defaultArgs.isColorSet() || this.defaultArgs.isMotionSet() || this.defaultArgs.isScaleSet() || this.defaultArgs.isDataSet();
+		if(hasActualDefaults) {
+			args = this.baseArgs.getArguments(this.defaultArgs).getArguments(args);
+		} else {
+			args = this.baseArgs.getArguments(args);
+		}
+		return this.getParticle(new ImmutableParticleArgs(world, x, y, z, args));
 	}
 
 	/**
-	 * Spawns a particle
+	 * Spawns a particle.
+	 * The specified {@link ParticleArgs} overrides the default arguments set by {@link ParticleFactory#setDefaultArguments(World, ParticleArgs)}
 	 * @param type
 	 * @param world
 	 * @param x
