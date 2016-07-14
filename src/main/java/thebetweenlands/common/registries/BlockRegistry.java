@@ -206,6 +206,7 @@ public class BlockRegistry {
 	public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
 	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
+	public static final Block HANGER = new BlockBasicHanger();
 	
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();

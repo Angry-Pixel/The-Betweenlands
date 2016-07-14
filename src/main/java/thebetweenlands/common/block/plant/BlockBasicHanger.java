@@ -6,7 +6,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -54,5 +56,10 @@ public class BlockBasicHanger extends BlockBush {
 
     protected boolean isValidBlock(IBlockState block) {
         return block.getMaterial().blocksMovement() || block.getBlock() == BlockRegistry.LEAVES_WEEDWOOD || block.getBlock() instanceof BlockBasicHanger;
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+        return new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
     }
 }
