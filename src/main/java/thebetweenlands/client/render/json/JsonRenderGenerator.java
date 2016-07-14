@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class JsonRenderGenerator {
@@ -132,9 +133,9 @@ public class JsonRenderGenerator {
 
     public static void createJSONForBlock(Block block, String blockName) {
         (new File(assetsFolder, "models")).mkdir();
-        createBlockStateJSON(block, blockName);
-        createBlockModelJSON(block, blockName);
-        createBlockItemJSON(block, blockName);
+        createBlockStateJSON(block, blockName.toLowerCase(Locale.ENGLISH));
+        createBlockModelJSON(block, blockName.toLowerCase(Locale.ENGLISH));
+        createBlockItemJSON(block, blockName.toLowerCase(Locale.ENGLISH));
     }
 
 
