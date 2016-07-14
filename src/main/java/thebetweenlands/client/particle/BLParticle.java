@@ -43,14 +43,15 @@ public enum BLParticle {
 			return new Object[]{400, 0.05F, 0.025F, 0.06F * world.rand.nextFloat(), 0xFFFFFFFF, false, texture, 2};
 		}
 	},
-	PORTAL(ParticlePortalBL.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
+	//TODO: This is broken for now until the particles are rewritten using the new system
+	/*PORTAL(ParticlePortalBL.class, ParticleArgs.VX_VY_VZ, int.class, float.class, int.class, ResourceLocation.class, int.class) {
 		private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/particle/portal.png");
 
 		@Override
 		protected Object[] getAdditionalArgs(World world, Object... data) {
 			return new Object[] { 20, 0.18F * world.rand.nextFloat(), 0xFFFFFFFF, texture, 6 };
 		}
-	},
+	},*/
 	SULFUR_ORE(ParticleSpell.class, 1, 0.9294F, 0);
 
 	private static final int REGULAR_ARG_NUM = 4;
