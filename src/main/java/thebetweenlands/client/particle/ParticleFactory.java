@@ -1,10 +1,13 @@
 package thebetweenlands.client.particle;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 
-public abstract class BLParticleFactory<T extends Particle> {
+public abstract class ParticleFactory<T extends Particle> {
 	/**
 	 * Immutable particle arguments
 	 */
@@ -34,6 +37,58 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * Particle arguments
 	 */
 	public static final class ParticleArgs {
+		public static final class ArgumentDataBuilder {
+			private final Object[] data;
+			private final ParticleArgs args;
+
+			private ArgumentDataBuilder(int size, ParticleArgs args) {
+				this.data = new Object[size];
+				this.args = args;
+			}
+
+			/**
+			 * Sets the data at the specified index
+			 * @param index
+			 * @param data
+			 * @return
+			 */
+			public ArgumentDataBuilder setData(int index, Object data) {
+				this.data[index] = data;
+				return this;
+			}
+
+			/**
+			 * Sets the object at the specified index to {@link ParticleFactory#EMPTY_ARG}
+			 * @param index
+			 * @return
+			 */
+			public ArgumentDataBuilder setEmpty(int index) {
+				this.data[index] = EMPTY_ARG;
+				return this;
+			}
+
+			/**
+			 * Replaces all null objects in the data array with {@link ParticleFactory#EMPTY_ARG}
+			 * @return
+			 */
+			public ArgumentDataBuilder fillEmpty() {
+				for(int i = 0; i < this.data.length; i++) {
+					if(this.data[i] == null)
+						this.data[i] = EMPTY_ARG;
+				}
+				return this;
+			}
+
+			/**
+			 * Builds the additional arguments and adds them
+			 * @return
+			 */
+			public ParticleArgs build() {
+				this.args.withData(this.data);
+				return this.args;
+			}
+		}
+
 		private static final ParticleArgs BUILDER = new ParticleArgs();
 
 		private static final Object[] NO_DATA = new Object[0];
@@ -112,6 +167,15 @@ public abstract class BLParticleFactory<T extends Particle> {
 			this.data = data;
 			this.dataSet = true;
 			return this;
+		}
+
+		/**
+		 * Returns an arguments builder
+		 * @param size
+		 * @return
+		 */
+		public ArgumentDataBuilder withDataBuilder(int size) {
+			return new ArgumentDataBuilder(size, this);
 		}
 
 		/**
@@ -212,7 +276,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * Creates a new particle factory for the specified particle type
 	 * @param type
 	 */
-	public BLParticleFactory(Class<T> type) {
+	public ParticleFactory(Class<T> type) {
 		this(type, null);
 	}
 
@@ -221,7 +285,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * @param type
 	 * @param stitcher
 	 */
-	public BLParticleFactory(Class<T> type, ParticleTextureStitcher<T> stitcher) {
+	public ParticleFactory(Class<T> type, ParticleTextureStitcher<T> stitcher) {
 		this.stitcher = stitcher;
 		this.type = type;
 	}
@@ -230,7 +294,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * Returns the particle texture stitcher
 	 * @return
 	 */
-	public ParticleTextureStitcher<? extends Particle> getStitcher() {
+	public final ParticleTextureStitcher<? extends Particle> getStitcher() {
 		return this.stitcher;
 	}
 
@@ -238,7 +302,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * Returns the particle type
 	 * @return
 	 */
-	public Class<T> getType() {
+	public final Class<T> getType() {
 		return this.type;
 	}
 
@@ -247,8 +311,8 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * @param args
 	 * @return
 	 */
-	public final Particle getParticle(ImmutableParticleArgs args) {
-		Particle particle = this.createParticle(args);
+	protected final T getParticle(ImmutableParticleArgs args) {
+		T particle = this.createParticle(args);
 		if(IParticleSpriteReceiver.class.isAssignableFrom(particle.getClass())) {
 			((IParticleSpriteReceiver)particle).setStitchedSprites(this.getStitcher().getSprites());
 		}
@@ -260,7 +324,7 @@ public abstract class BLParticleFactory<T extends Particle> {
 	 * @param args
 	 * @return
 	 */
-	protected abstract Particle createParticle(ImmutableParticleArgs args);
+	protected abstract T createParticle(ImmutableParticleArgs args);
 
 	/**
 	 * Specifies an additional argument as empty. Any empty argument will be replaced by the 
@@ -316,5 +380,38 @@ public abstract class BLParticleFactory<T extends Particle> {
 			}
 		}
 		return custom;
+	}
+
+	/**
+	 * Creates an instance of a particle
+	 * @param type
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param args
+	 * @return
+	 */
+	public final T create(World world, double x, double y, double z, @Nullable ParticleArgs args) {
+		if(args == null)
+			args = ParticleArgs.get();
+		return this.getParticle(new ImmutableParticleArgs(world, x, y, z, this.getArguments(args)));
+	}
+
+	/**
+	 * Spawns a particle
+	 * @param type
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param args
+	 * @return
+	 */
+	public final T spawn(World world, double x, double y, double z, @Nullable ParticleArgs args) {
+		T particle = this.create(world, x, y, z, args);
+		if(particle != null)
+			Minecraft.getMinecraft().effectRenderer.addEffect(particle);
+		return particle;
 	}
 }

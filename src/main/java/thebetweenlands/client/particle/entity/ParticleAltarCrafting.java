@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle;
+package thebetweenlands.client.particle.entity;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.tileentity.TileEntity;

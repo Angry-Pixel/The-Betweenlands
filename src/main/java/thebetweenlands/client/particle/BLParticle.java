@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.particle.entity.ParticleBug;
 import thebetweenlands.client.particle.entity.ParticlePortalBL;
 import thebetweenlands.common.tile.TileEntityDruidAltar;

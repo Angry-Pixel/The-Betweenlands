@@ -1,10 +1,9 @@
 package thebetweenlands.client.particle.entity;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.BLParticleFactory;
+import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.ParticleHelper;
 import thebetweenlands.client.particle.ParticleTextureStitcher;
 import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
@@ -25,16 +24,11 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 	}
 
 	@Override
-	public void setStitchedSprites(TextureAtlasSprite[] sprites) {
-		this.setParticleTexture(sprites[0]);
-	}
-
-	@Override
 	public int getFXLayer() {
 		return 1;
 	}
 
-	public static final class Factory extends BLParticleFactory {
+	public static final class Factory extends ParticleFactory {
 		public Factory() {
 			super(ParticlePortalBL.class, ParticleTextureStitcher.create(ParticlePortalBL.class, new ResourceLocation("thebetweenlands:particle/portal")));
 		}
@@ -46,7 +40,7 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 
 		@Override
 		protected void setDefaultArguments(ParticleArgs args) {
-			args.withData(new Object[]{ 40 });
+			args.withData(40);
 		}
 	}
 }

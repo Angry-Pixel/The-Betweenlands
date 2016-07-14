@@ -22,7 +22,6 @@ import thebetweenlands.client.event.TextureStitchHandler;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
-import thebetweenlands.client.particle.BLParticleManager;
 import thebetweenlands.client.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
@@ -219,8 +218,6 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFactoryFrog());
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
-
-		BLParticleManager.INSTANCE.registerParticles();
 	}
 
 	@Override
