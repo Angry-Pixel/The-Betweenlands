@@ -18,12 +18,12 @@ public enum BLParticles {
 	PORTAL(new ParticlePortalBL.Factory()),
 	ALTAR_CRAFTING(new ParticleAltarCrafting.Factory()),
 	SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
-	SWAMP_SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFF2D4231).build()),
+	SWAMP_SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFF2D4231).buildBaseArgs()),
 	FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory())),
-	GREEN_FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory()).getBaseArgsBuilder().withColor(0xFF2C4231).build()),
-	SULFUR_TORCH(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
-	PURIFIER_STEAM(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFFFFFFF).build()),
-	SULFUR_ORE(VanillaParticleFactory.create(ParticleSpell.class, new ParticleSpell.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
+	GREEN_FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory()).getBaseArgsBuilder().withColor(0xFF2C4231).buildBaseArgs()),
+	SULFUR_TORCH(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).buildBaseArgs()),
+	PURIFIER_STEAM(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFFFFFFF).buildBaseArgs()),
+	SULFUR_ORE(VanillaParticleFactory.create(ParticleSpell.class, new ParticleSpell.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).buildBaseArgs()),
 	FLY(new ParticleBug.FlyFactory()),
 	WISP(new ParticleWisp.Factory());
 

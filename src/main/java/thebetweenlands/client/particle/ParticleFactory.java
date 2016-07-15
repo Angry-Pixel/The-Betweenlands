@@ -63,10 +63,11 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			 * @param data
 			 * @return
 			 */
-			public ArgumentDataBuilder<T> setData(int index, Object data) {
-				if(index > this.highestIndex)
-					this.highestIndex = index;
-				this.setArgs.put(index, data);
+			public ArgumentDataBuilder<T> setData(int index, Object... data) {
+				if(index + data.length - 1 > this.highestIndex)
+					this.highestIndex = index + data.length - 1;
+				for(int i = 0; i < data.length; i++)
+					this.setArgs.put(index + i, data[i]);
 				return this;
 			}
 
@@ -83,7 +84,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			 * Builds the additional arguments and adds them
 			 * @return
 			 */
-			public T build() {
+			public T buildData() {
 				Object[] data = new Object[this.highestIndex + 1];
 				for(int i = 0; i < data.length; i++) {
 					data[i] = EMPTY_ARG;
@@ -119,7 +120,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		/**
 		 * Resets all values
 		 */
-		public void reset() {
+		public final void reset() {
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;
@@ -137,7 +138,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param consumer
 		 * @return
 		 */
-		public T accept(Consumer<ParticleArgs> consumer) {
+		public final T accept(Consumer<ParticleArgs> consumer) {
 			consumer.accept(this);
 			return (T) this;
 		}
@@ -149,7 +150,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param motionZ
 		 * @return
 		 */
-		public T withMotion(double motionX, double motionY, double motionZ) {
+		public final T withMotion(double motionX, double motionY, double motionZ) {
 			this.motionX = motionX;
 			this.motionY = motionY;
 			this.motionZ = motionZ;
@@ -162,7 +163,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param scale
 		 * @return
 		 */
-		public T withScale(float scale) {
+		public final T withScale(float scale) {
 			this.scale = scale;
 			this.scaleSet = true;
 			return (T) this;
@@ -173,7 +174,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param color
 		 * @return
 		 */
-		public T withColor(int color) {
+		public final T withColor(int color) {
 			this.color = color;
 			this.colorSet = true;
 			return (T) this;
@@ -185,7 +186,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param data
 		 * @return
 		 */
-		public T withData(Object... data) {
+		public final T withData(Object... data) {
 			if(data == null) 
 				data = NO_DATA;
 			this.data = data;
@@ -198,7 +199,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param size
 		 * @return
 		 */
-		public ArgumentDataBuilder<T> withDataBuilder() {
+		public final ArgumentDataBuilder<T> withDataBuilder() {
 			return new ArgumentDataBuilder<T>((T) this);
 		}
 
@@ -206,7 +207,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the motion X
 		 * @return
 		 */
-		public double getMotionX() {
+		public final double getMotionX() {
 			return this.motionX;
 		}
 
@@ -214,7 +215,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the motion Y
 		 * @return
 		 */
-		public double getMotionY() {
+		public final double getMotionY() {
 			return this.motionY;
 		}
 
@@ -222,7 +223,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the motion Z
 		 * @return
 		 */
-		public double getMotionZ() {
+		public final double getMotionZ() {
 			return this.motionZ;
 		}
 
@@ -230,7 +231,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns whether the motion was set
 		 * @return
 		 */
-		public boolean isMotionSet() {
+		public final boolean isMotionSet() {
 			return this.motionSet;
 		}
 
@@ -238,7 +239,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the scale
 		 * @return
 		 */
-		public float getScale() {
+		public final float getScale() {
 			return this.scale;
 		}
 
@@ -246,7 +247,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns whether the scale was set
 		 * @return
 		 */
-		public boolean isScaleSet() {
+		public final boolean isScaleSet() {
 			return this.scaleSet;
 		}
 
@@ -254,7 +255,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the color
 		 * @return
 		 */
-		public int getColor() {
+		public final int getColor() {
 			return this.color;
 		}
 
@@ -262,7 +263,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns whether the color was set
 		 * @return
 		 */
-		public boolean isColorSet() {
+		public final boolean isColorSet() {
 			return this.colorSet;
 		}
 
@@ -270,7 +271,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the additional data
 		 * @return
 		 */
-		public Object[] getData() {
+		public final Object[] getData() {
 			return this.data;
 		}
 
@@ -278,7 +279,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns whether the additional data was set
 		 * @return
 		 */
-		public boolean isDataSet() {
+		public final boolean isDataSet() {
 			return this.dataSet;
 		}
 
@@ -335,7 +336,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Populates this {@link ParticleArgs} with the specified default arguments.
 		 */
 		@Override
-		public void accept(ParticleArgs defaultArgs) {
+		public final void accept(ParticleArgs defaultArgs) {
 			defaultArgs.populateEmptyArgs(this);
 		}
 	}
@@ -446,26 +447,25 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.factory = factory;
 		}
 
-		@Override
-		public ArgumentDataBuilder<B> withDataBuilder() {
-			return (ArgumentDataBuilder<B>) super.withDataBuilder();
-		}
-
 		/**
 		 * Builds the arguments and sets the base arguments of the factory if overwritten
 		 * @return
 		 */
-		public final F build() {
+		public final F buildBaseArgs() {
 			ParticleArgs container = new ParticleArgs();
+			//Fill with arguments from the builder
 			this.populateEmptyArgs(container);
+			//Fill with base arguments from factory
+			this.factory.baseArgs.populateEmptyArgs(container);
 			if(container.isMotionSet())
 				this.factory.baseArgs.withMotion(container.getMotionX(), container.getMotionY(), container.getMotionZ());
 			if(container.isColorSet())
 				this.factory.baseArgs.withColor(container.getColor());
 			if(container.isScaleSet())
 				this.factory.baseArgs.withScale(container.getScale());
-			if(container.isDataSet())
+			if(container.isDataSet()) {
 				this.factory.baseArgs.withData(container.getData());
+			}
 			return (F) this.factory;
 		}
 	}
