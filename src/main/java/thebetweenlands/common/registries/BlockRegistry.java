@@ -22,19 +22,49 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.client.render.json.JsonRenderGenerator;
+import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
-import thebetweenlands.common.block.container.*;
-import thebetweenlands.common.block.plant.*;
+import thebetweenlands.common.block.container.BlockCompostBin;
+import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
+import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.plant.BlockBasicVine;
+import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
+import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
+import thebetweenlands.common.block.plant.BlockGenericDoublePlant;
+import thebetweenlands.common.block.plant.BlockGenericPlant;
+import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
+import thebetweenlands.common.block.plant.BlockGenericStackablePlantUnderwater;
+import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockTreePortal;
-import thebetweenlands.common.block.terrain.*;
+import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.common.block.terrain.BlockCragrock;
+import thebetweenlands.common.block.terrain.BlockDeadGrass;
+import thebetweenlands.common.block.terrain.BlockDentrothyst;
+import thebetweenlands.common.block.terrain.BlockGenericCollapsing;
+import thebetweenlands.common.block.terrain.BlockGenericMirage;
+import thebetweenlands.common.block.terrain.BlockGenericOre;
+import thebetweenlands.common.block.terrain.BlockGenericStone;
+import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
+import thebetweenlands.common.block.terrain.BlockMud;
+import thebetweenlands.common.block.terrain.BlockPeat;
+import thebetweenlands.common.block.terrain.BlockRoot;
+import thebetweenlands.common.block.terrain.BlockRootUnderwater;
+import thebetweenlands.common.block.terrain.BlockSilt;
+import thebetweenlands.common.block.terrain.BlockSlimyGrass;
+import thebetweenlands.common.block.terrain.BlockSludgyDirt;
+import thebetweenlands.common.block.terrain.BlockStalactite;
+import thebetweenlands.common.block.terrain.BlockSwampDirt;
+import thebetweenlands.common.block.terrain.BlockSwampGrass;
+import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -89,7 +119,7 @@ public class BlockRegistry {
 		@SideOnly(Side.CLIENT)
 		@Override
 		public void spawnParticle(World world, double x, double y, double z) {
-			BLParticle.SULFUR_ORE.spawn(world, x, y, z, 0, 0, 0, 0);
+			BLParticles.SULFUR_ORE.spawn(world, x, y, z);
 		}
 	}.setXP(2, 5);
 	public static final Block SLIMY_BONE_ORE = new BlockGenericOre(Material.ROCK) {
@@ -206,8 +236,7 @@ public class BlockRegistry {
 	public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
 	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
-	public static final Block HANGER = new BlockBasicHanger();
-	
+
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();

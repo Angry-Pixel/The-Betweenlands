@@ -3,16 +3,37 @@ package thebetweenlands.client.particle;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.client.particle.ParticleSmokeNormal;
+import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.BLParticleFactory.ParticleArgs;
+import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.particle.entity.ParticleAltarCrafting;
+import thebetweenlands.client.particle.entity.ParticleBug;
 import thebetweenlands.client.particle.entity.ParticlePortalBL;
+import thebetweenlands.client.particle.entity.ParticleWisp;
 
 public enum BLParticles {
-	PORTAL(new ParticlePortalBL.Factory());
 
-	private BLParticleFactory factory;
+	PORTAL(new ParticlePortalBL.Factory()),
+	ALTAR_CRAFTING(new ParticleAltarCrafting.Factory()),
+	SMOKE(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
+	SWAMP_SMOKE(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFF2D4231).build()),
+	FLAME(new VanillaParticleFactory(ParticleFlame.class, new ParticleFlame.Factory())),
+	GREEN_FLAME(new VanillaParticleFactory(ParticleFlame.class, new ParticleFlame.Factory()) .getBaseArgsBuilder().withColor(0xFF2C4231).build()),
+	SULFUR_TORCH(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
+	PURIFIER_STEAM(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFFFFFFF).build()),
+	SULFUR_ORE(new VanillaParticleFactory(ParticleSpell.class, new ParticleSpell.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
+	FLY(new ParticleBug.FlyFactory()),
+	WISP(new ParticleWisp.Factory());
 
-	private BLParticles(BLParticleFactory factory) {
+
+
+
+
+	private ParticleFactory factory;
+
+	private BLParticles(ParticleFactory factory) {
 		this.factory = factory;
 	}
 
@@ -20,23 +41,57 @@ public enum BLParticles {
 		return this.factory.getType();
 	}
 
-	public BLParticleFactory getFactory() {
+	public ParticleFactory getFactory() {
 		return this.factory;
 	}
 
+	/**
+	 * Creates a new instance of this particle
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param args
+	 * @return
+	 */
 	public Particle create(World world, double x, double y, double z, @Nullable ParticleArgs args) {
-		return BLParticleManager.INSTANCE.create(this.getType(), world, x, y, z, args);
+		return this.getFactory().create(world, x, y, z, args);
 	}
 
+	/**
+	 * Spawns this particle
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param args
+	 * @return
+	 */
 	public Particle spawn(World world, double x, double y, double z, @Nullable ParticleArgs args) {
-		return BLParticleManager.INSTANCE.spawn(this.getType(), world, x, y, z, args);
+		return this.getFactory().spawn(world, x, y, z, args);
 	}
 
+	/**
+	 * Creates a new instance of this particle
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public Particle create(World world, double x, double y, double z) {
-		return BLParticleManager.INSTANCE.create(this.getType(), world, x, y, z, null);
+		return this.getFactory().create(world, x, y, z, null);
 	}
 
+	/**
+	 * Spawns this particle
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
 	public Particle spawn(World world, double x, double y, double z) {
-		return BLParticleManager.INSTANCE.spawn(this.getType(), world, x, y, z, null);
+		return this.getFactory().spawn(world, x, y, z, null);
 	}
 }

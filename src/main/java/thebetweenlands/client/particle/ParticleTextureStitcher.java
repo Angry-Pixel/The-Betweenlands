@@ -59,13 +59,16 @@ public final class ParticleTextureStitcher<T> {
 	}
 
 	/**
-	 * Any particle that uses stitched textures must implement this interface
+	 * Any particle that uses stitched textures must implement this interface.
+	 * {@link Particle#getFXLayer()} must return 1 in order for this to work.
 	 */
 	public static interface IParticleSpriteReceiver {
 		/**
-		 * Sets the stitched particle sprites
+		 * Sets the stitched particle sprites.
 		 * @param sprites
 		 */
-		void setStitchedSprites(TextureAtlasSprite[] sprites);
+		default void setStitchedSprites(TextureAtlasSprite[] sprites) {
+			((Particle)this).setParticleTexture(sprites[0]);
+		}
 	}
 }
