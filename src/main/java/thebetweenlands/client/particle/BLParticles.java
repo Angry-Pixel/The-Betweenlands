@@ -24,7 +24,7 @@ public enum BLParticles {
 	SULFUR_TORCH(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
 	PURIFIER_STEAM(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFFFFFFF).build()),
 	SULFUR_ORE(VanillaParticleFactory.create(ParticleSpell.class, new ParticleSpell.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
-	FLY(new ParticleBug.FlyFactory().getBaseArgsBuilder().withDataBuilder().setData(3, true).build().build()),
+	FLY(new ParticleBug.FlyFactory()),
 	WISP(new ParticleWisp.Factory());
 
 
