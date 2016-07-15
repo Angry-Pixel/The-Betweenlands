@@ -17,14 +17,14 @@ public enum BLParticles {
 
 	PORTAL(new ParticlePortalBL.Factory()),
 	ALTAR_CRAFTING(new ParticleAltarCrafting.Factory()),
-	SMOKE(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
-	SWAMP_SMOKE(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFF2D4231).build()),
-	FLAME(new VanillaParticleFactory(ParticleFlame.class, new ParticleFlame.Factory())),
-	GREEN_FLAME(new VanillaParticleFactory(ParticleFlame.class, new ParticleFlame.Factory()) .getBaseArgsBuilder().withColor(0xFF2C4231).build()),
-	SULFUR_TORCH(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
-	PURIFIER_STEAM(new VanillaParticleFactory(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFFFFFFF).build()),
-	SULFUR_ORE(new VanillaParticleFactory(ParticleSpell.class, new ParticleSpell.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
-	FLY(new ParticleBug.FlyFactory()),
+	SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
+	SWAMP_SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFF2D4231).build()),
+	FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory())),
+	GREEN_FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory()).getBaseArgsBuilder().withColor(0xFF2C4231).build()),
+	SULFUR_TORCH(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
+	PURIFIER_STEAM(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()).getBaseArgsBuilder().withColor(0xFFFFFFFF).build()),
+	SULFUR_ORE(VanillaParticleFactory.create(ParticleSpell.class, new ParticleSpell.Factory()).getBaseArgsBuilder().withColor(0xFFE7f70E).build()),
+	FLY(new ParticleBug.FlyFactory().getBaseArgsBuilder().withDataBuilder().setData(3, true).build().build()),
 	WISP(new ParticleWisp.Factory());
 
 

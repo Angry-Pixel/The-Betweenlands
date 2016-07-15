@@ -57,7 +57,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		}
 	}
 
-	public static final class FlyFactory extends ParticleFactory<ParticleBug> {
+	public static final class FlyFactory extends ParticleFactory<FlyFactory, ParticleBug> {
 		public FlyFactory() {
 			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/fly")));
 		}

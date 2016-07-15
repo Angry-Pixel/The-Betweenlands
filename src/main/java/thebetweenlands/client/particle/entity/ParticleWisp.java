@@ -94,7 +94,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		moveEntity(this.motionX, this.motionY, this.motionZ);
 	}
 
-	public static final class Factory extends ParticleFactory<ParticleWisp> {
+	public static final class Factory extends ParticleFactory<Factory, ParticleWisp> {
 		public Factory() {
 			super(ParticleWisp.class, ParticleTextureStitcher.create(ParticleWisp.class, new ResourceLocation("thebetweenlands:particle/wisp")));
 		}

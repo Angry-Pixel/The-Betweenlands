@@ -53,7 +53,7 @@ public class ParticleAltarCrafting extends Particle {
 		particleBlue = (float) (1F - craftingProgress);
 	}
 
-	public static final class Factory extends ParticleFactory<ParticleAltarCrafting> {
+	public static final class Factory extends ParticleFactory<Factory, ParticleAltarCrafting> {
 		public Factory() {
 			super(ParticleAltarCrafting.class);
 		}

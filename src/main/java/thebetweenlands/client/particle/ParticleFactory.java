@@ -1,6 +1,9 @@
 package thebetweenlands.client.particle;
 
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
@@ -10,7 +13,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 
-public abstract class ParticleFactory<T extends Particle> {
+public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends Particle> {
 	/**
 	 * Immutable particle arguments
 	 */
@@ -39,19 +42,18 @@ public abstract class ParticleFactory<T extends Particle> {
 	/**
 	 * Particle arguments
 	 */
-	public static class ParticleArgs<T extends ParticleArgs> {
+	public static class ParticleArgs<T extends ParticleArgs> implements Consumer<ParticleArgs> {
 		public static final class ArgumentDataBuilder<T extends ParticleArgs> {
-			private final Object[] data;
+			private int highestIndex = 0;
+			private final Map<Integer, Object> setArgs;
 			private final T args;
 
 			/**
 			 * Creates a new argument data builder.
-			 * Must not be longer than the additional arguments of the underlying default.
-			 * @param size
 			 * @param args
 			 */
-			private ArgumentDataBuilder(int size, T args) {
-				this.data = new Object[size];
+			private ArgumentDataBuilder(T args) {
+				this.setArgs = new HashMap<Integer, Object>();
 				this.args = args;
 			}
 
@@ -61,31 +63,20 @@ public abstract class ParticleFactory<T extends Particle> {
 			 * @param data
 			 * @return
 			 */
-			public ArgumentDataBuilder setData(int index, Object data) {
-				this.data[index] = data;
+			public ArgumentDataBuilder<T> setData(int index, Object data) {
+				if(index > this.highestIndex)
+					this.highestIndex = index;
+				this.setArgs.put(index, data);
 				return this;
 			}
 
 			/**
-			 * Sets the object at the specified index to {@link ParticleFactory#EMPTY_ARG}
+			 * Sets the argument at the specified index to {@link ParticleFactory#EMPTY_ARG}
 			 * @param index
 			 * @return
 			 */
-			public ArgumentDataBuilder setEmpty(int index) {
-				this.data[index] = EMPTY_ARG;
-				return this;
-			}
-
-			/**
-			 * Replaces all null objects in the data array with {@link ParticleFactory#EMPTY_ARG}
-			 * @return
-			 */
-			public ArgumentDataBuilder fillEmpty() {
-				for(int i = 0; i < this.data.length; i++) {
-					if(this.data[i] == null)
-						this.data[i] = EMPTY_ARG;
-				}
-				return this;
+			public ArgumentDataBuilder<T> setEmpty(int index) {
+				return this.setData(index, EMPTY_ARG);
 			}
 
 			/**
@@ -93,7 +84,17 @@ public abstract class ParticleFactory<T extends Particle> {
 			 * @return
 			 */
 			public T build() {
-				this.args.withData(this.data);
+				Object[] data = new Object[this.highestIndex + 1];
+				for(int i = 0; i < data.length; i++) {
+					data[i] = EMPTY_ARG;
+				}
+				Iterator<Entry<Integer, Object>> dataIT = this.setArgs.entrySet().iterator();
+				Entry<Integer, Object> entry;
+				while(dataIT.hasNext()) {
+					entry = dataIT.next();
+					data[entry.getKey()] = entry.getValue();
+				}
+				this.args.withData(data);
 				return (T) this.args;
 			}
 		}
@@ -129,6 +130,16 @@ public abstract class ParticleFactory<T extends Particle> {
 			this.motionSet = false;
 			this.scaleSet = false;
 			this.colorSet = false;
+		}
+
+		/**
+		 * Runs a {@link Consumer} over this {@link ParticleArgs}
+		 * @param consumer
+		 * @return
+		 */
+		public T accept(Consumer<ParticleArgs> consumer) {
+			consumer.accept(this);
+			return (T) this;
 		}
 
 		/**
@@ -187,8 +198,8 @@ public abstract class ParticleFactory<T extends Particle> {
 		 * @param size
 		 * @return
 		 */
-		public ArgumentDataBuilder<T> withDataBuilder(int size) {
-			return new ArgumentDataBuilder<T>(size, (T) this);
+		public ArgumentDataBuilder<T> withDataBuilder() {
+			return new ArgumentDataBuilder<T>((T) this);
 		}
 
 		/**
@@ -286,7 +297,7 @@ public abstract class ParticleFactory<T extends Particle> {
 		 * @param container Arguments to be populated with default arguments if necessary
 		 * @return
 		 */
-		public final ParticleArgs getArguments(ParticleArgs container) {
+		public final ParticleArgs populateEmptyArgs(ParticleArgs container) {
 			if(!container.isMotionSet()) {
 				container.withMotion(this.getMotionX(), this.getMotionY(), this.getMotionZ());
 			}
@@ -307,13 +318,11 @@ public abstract class ParticleFactory<T extends Particle> {
 					if(i < initialAdditionalArgs.length) {
 						if(initialAdditionalArgs[i] == EMPTY_ARG) {
 							if(i >= defaultArgs.length)
-								throw new IndexOutOfBoundsException(String.format("The length of the additional arguments of "
-										+ "the specified ParticleArgs must be equal or smaller than "
-										+ "the underlying default additional arguments. Index: %s, Length: %s", i, defaultArgs.length));
-							additionalArgs[i] = defaultArgs[i];
-						} else {
+								additionalArgs[i] = null;
+							else
+								additionalArgs[i] = defaultArgs[i];
+						} else
 							additionalArgs[i] = initialAdditionalArgs[i];
-						}
 					} else if(i < defaultArgs.length) {
 						additionalArgs[i] = defaultArgs[i];
 					}
@@ -322,6 +331,13 @@ public abstract class ParticleFactory<T extends Particle> {
 			return container;
 		}
 
+		/**
+		 * Populates this {@link ParticleArgs} with the specified default arguments.
+		 */
+		@Override
+		public void accept(ParticleArgs defaultArgs) {
+			defaultArgs.populateEmptyArgs(this);
+		}
 	}
 
 	private final ParticleTextureStitcher<T> stitcher;
@@ -422,7 +438,7 @@ public abstract class ParticleFactory<T extends Particle> {
 	 */
 	protected void setDefaultArguments(World world, ParticleArgs args) { }
 
-	public static final class BaseArgsBuilder extends ParticleArgs<BaseArgsBuilder> {
+	public static final class BaseArgsBuilder<F extends ParticleFactory, B extends BaseArgsBuilder, C extends Particle> extends ParticleArgs<B> {
 		private final ParticleFactory factory;
 
 		private BaseArgsBuilder(ParticleFactory factory) {
@@ -430,30 +446,27 @@ public abstract class ParticleFactory<T extends Particle> {
 			this.factory = factory;
 		}
 
-		/**
-		 * Runs a {@link Consumer} over this {@link ParticleArgs}
-		 * @param consumer
-		 * @return
-		 */
-		public BaseArgsBuilder accept(Consumer<ParticleArgs> consumer) {
-			consumer.accept(this);
-			return this;
+		@Override
+		public ArgumentDataBuilder<B> withDataBuilder() {
+			return (ArgumentDataBuilder<B>) super.withDataBuilder();
 		}
 
 		/**
 		 * Builds the arguments and sets the base arguments of the factory if overwritten
 		 * @return
 		 */
-		public ParticleFactory build() {
-			if(this.isMotionSet())
-				this.factory.baseArgs.withMotion(this.getMotionX(), this.getMotionY(), this.getMotionZ());
-			if(this.isColorSet())
-				this.factory.baseArgs.withColor(this.getColor());
-			if(this.isScaleSet())
-				this.factory.baseArgs.withScale(this.getScale());
-			if(this.isDataSet())
-				this.factory.baseArgs.withData(this.getData());
-			return this.factory;
+		public final F build() {
+			ParticleArgs container = new ParticleArgs();
+			this.populateEmptyArgs(container);
+			if(container.isMotionSet())
+				this.factory.baseArgs.withMotion(container.getMotionX(), container.getMotionY(), container.getMotionZ());
+			if(container.isColorSet())
+				this.factory.baseArgs.withColor(container.getColor());
+			if(container.isScaleSet())
+				this.factory.baseArgs.withScale(container.getScale());
+			if(container.isDataSet())
+				this.factory.baseArgs.withData(container.getData());
+			return (F) this.factory;
 		}
 	}
 
@@ -464,7 +477,7 @@ public abstract class ParticleFactory<T extends Particle> {
 	 * Used to override base arguments set by {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
 	 * @return
 	 */
-	public BaseArgsBuilder getBaseArgsBuilder(){
+	public BaseArgsBuilder<F, BaseArgsBuilder<F, ?, T>, T> getBaseArgsBuilder(){
 		this.baseArgsBuilder.reset();
 		return this.baseArgsBuilder;
 	}
@@ -487,9 +500,9 @@ public abstract class ParticleFactory<T extends Particle> {
 		this.setDefaultArguments(world, this.defaultArgs);
 		boolean hasActualDefaults = this.defaultArgs.isColorSet() || this.defaultArgs.isMotionSet() || this.defaultArgs.isScaleSet() || this.defaultArgs.isDataSet();
 		if(hasActualDefaults) {
-			args = this.baseArgs.getArguments(this.defaultArgs).getArguments(args);
+			args = this.baseArgs.populateEmptyArgs(this.defaultArgs).populateEmptyArgs(args);
 		} else {
-			args = this.baseArgs.getArguments(args);
+			args = this.baseArgs.populateEmptyArgs(args);
 		}
 		return this.getParticle(new ImmutableParticleArgs(world, x, y, z, args));
 	}
