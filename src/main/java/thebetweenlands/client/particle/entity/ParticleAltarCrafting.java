@@ -60,7 +60,7 @@ public class ParticleAltarCrafting extends Particle {
 
 		@Override
 		public ParticleAltarCrafting createParticle(ImmutableParticleArgs args) {
-			return new ParticleAltarCrafting(args.world, args.x, args.y, args.z, args.scale, (TileEntityDruidAltar)args.data[0]);
+			return new ParticleAltarCrafting(args.world, args.x, args.y, args.z, args.scale, args.data.getObject(TileEntityDruidAltar.class, 0));
 		}
 
 		@Override

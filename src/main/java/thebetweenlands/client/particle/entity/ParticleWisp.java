@@ -101,7 +101,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 		@Override
 		public ParticleWisp createParticle(ImmutableParticleArgs args) {
-			return new ParticleWisp(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale, (int)args.data[0]);
+			return new ParticleWisp(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale, args.data.getInt(0));
 		}
 
 		@Override

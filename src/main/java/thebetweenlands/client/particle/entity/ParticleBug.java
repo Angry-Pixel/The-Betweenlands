@@ -64,7 +64,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 		@Override
 		public ParticleBug createParticle(ImmutableParticleArgs args) {
-			return new ParticleBug(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, (int)args.data[0], (float)args.data[1], (float)args.data[2], args.scale, (boolean)args.data[3]);
+			return new ParticleBug(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3));
 		}
 
 		@Override

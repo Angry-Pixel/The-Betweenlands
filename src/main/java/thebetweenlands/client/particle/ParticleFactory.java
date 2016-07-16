@@ -15,6 +15,214 @@ import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteRe
 
 public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends Particle> {
 	/**
+	 * Data helper for additional data of Particles
+	 */
+	public static final class DataHelper {
+		private final Object[] data;
+
+		private DataHelper(Object[] data) {
+			this.data = data;
+		}
+
+		/**
+		 * Returns all data in a copy of the array
+		 * @return
+		 */
+		public Object[] getAll() {
+			Object[] arr = new Object[this.data.length];
+			for(int i = 0; i < arr.length; i++)
+				arr[i] = this.data[i];
+			return arr;
+		}
+
+		/**
+		 * Returns the object at the specified index.
+		 * <p><b>Do note that using primitives will not work.
+		 * Use their respective helper methods instead.</b>
+		 * @param type Type of the object
+		 * @param index
+		 * @return
+		 */
+		public <T> T getObject(Class<T> type, int index) {
+			return (T)this.data[index];
+		}
+
+		/**
+		 * Returns the object array at the specified index.
+		 * <p><b>Do note that using primitives will not work. 
+		 * Use their respective helper methods instead.</b>
+		 * @param type Type of the object array
+		 * @param index
+		 * @return
+		 */
+		public <T> T[] getObjectArray(Class<T> type, int index) {
+			return (T[])this.data[index];
+		}
+
+		/**
+		 * Returns the object at the specified index
+		 * @param index
+		 * @return
+		 */
+		public Object getObject(int index) {
+			return this.getObject(Object.class, index);
+		}
+
+		/**
+		 * Returns the object array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public Object[] getObjectArray(int index) {
+			return this.getObjectArray(Object.class, index);
+		}
+
+		/**
+		 * Returns the byte at the specified index
+		 * @param index
+		 * @return
+		 */
+		public byte getByte(int index) {
+			return this.getObject(Number.class, index).byteValue();
+		}
+
+		/**
+		 * Returns the short at the specified index
+		 * @param index
+		 * @return
+		 */
+		public short getShort(int index) {
+			return this.getObject(Number.class, index).shortValue();
+		}
+
+		/**
+		 * Returns the int at the specified index
+		 * @param index
+		 * @return
+		 */
+		public int getInt(int index) {
+			return this.getObject(Number.class, index).intValue();
+		}
+
+		/**
+		 * Returns the long at the specified index
+		 * @param index
+		 * @return
+		 */
+		public long getLong(int index) {
+			return this.getObject(Number.class, index).longValue();
+		}
+
+		/**
+		 * Returns the float at the specified index
+		 * @param index
+		 * @return
+		 */
+		public float getFloat(int index) {
+			return this.getObject(Number.class, index).floatValue();
+		}
+
+		/**
+		 * Returns the double at the specified index
+		 * @param index
+		 * @return
+		 */
+		public double getDouble(int index) {
+			return this.getObject(Number.class, index).doubleValue();
+		}
+
+		/**
+		 * Returns the boolean at the specified index
+		 * @param index
+		 * @return
+		 */
+		public boolean getBool(int index) {
+			return this.getObject(Boolean.class, index).booleanValue();
+		}
+
+		/**
+		 * Returns the char at the specified index
+		 * @param index
+		 * @return
+		 */
+		public char getChar(int index) {
+			return this.getObject(Character.class, index).charValue();
+		}
+
+		/**
+		 * Returns the byte array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public byte[] getByteArray(int index) {
+			return (byte[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the short array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public short[] getShortArray(int index) {
+			return (short[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the int array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public int[] getIntArray(int index) {
+			return (int[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the long array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public long[] getLongArray(int index) {
+			return (long[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the float array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public float[] getFloatArray(int index) {
+			return (float[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the double array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public double[] getDoubleArray(int index) {
+			return (double[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the boolean array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public boolean[] getBoolArray(int index) {
+			return (boolean[])this.getObject(index);
+		}
+
+		/**
+		 * Returns the char array at the specified index
+		 * @param index
+		 * @return
+		 */
+		public char[] getCharArray(int index) {
+			return (char[])this.getObject(index);
+		}
+	}
+
+	/**
 	 * Immutable particle arguments
 	 */
 	public static class ImmutableParticleArgs {
@@ -22,7 +230,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		public final double x, y, z, motionX, motionY, motionZ;
 		public final float scale;
 		public final int color;
-		public final Object[] data;
+		public final DataHelper data;
 
 		public ImmutableParticleArgs(World world, double x, double y, double z, ParticleArgs builder) {
 			this.world = world;
@@ -34,7 +242,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.motionZ = builder.motionZ;
 			this.scale = builder.scale;
 			this.color = builder.color;
-			this.data = builder.data;
+			this.data = new DataHelper(builder.data);
 			builder.reset();
 		}
 	}
@@ -271,8 +479,8 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns the additional data
 		 * @return
 		 */
-		public final Object[] getData() {
-			return this.data;
+		public final DataHelper getData() {
+			return new DataHelper(this.data);
 		}
 
 		/**
@@ -309,9 +517,9 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 				container.withScale(this.getScale());
 			}
 			if(this.isDataSet()) {
-				Object[] initialAdditionalArgs = container.getData();
-				Object[] defaultArgs = this.getData();
-				Object[] additionalArgs = container.getData();
+				Object[] initialAdditionalArgs = container.data;
+				Object[] defaultArgs = this.data;
+				Object[] additionalArgs = container.data;
 				if(defaultArgs.length > initialAdditionalArgs.length) {
 					container.withData(additionalArgs = new Object[defaultArgs.length]);
 				}
@@ -439,7 +647,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	 */
 	protected void setDefaultArguments(World world, ParticleArgs args) { }
 
-	public static final class BaseArgsBuilder<F extends ParticleFactory, B extends BaseArgsBuilder, C extends Particle> extends ParticleArgs<B> {
+	public static final class BaseArgsBuilder<F extends ParticleFactory, B extends BaseArgsBuilder<F, ?, C>, C extends Particle> extends ParticleArgs<B> {
 		private final ParticleFactory factory;
 
 		private BaseArgsBuilder(ParticleFactory factory) {
@@ -464,7 +672,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			if(container.isScaleSet())
 				this.factory.baseArgs.withScale(container.getScale());
 			if(container.isDataSet()) {
-				this.factory.baseArgs.withData(container.getData());
+				this.factory.baseArgs.withData(container.data);
 			}
 			return (F) this.factory;
 		}

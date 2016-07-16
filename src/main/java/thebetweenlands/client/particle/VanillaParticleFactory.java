@@ -27,7 +27,7 @@ public final class VanillaParticleFactory<T extends Particle> extends ParticleFa
 
 	@Override
 	protected T createParticle(ImmutableParticleArgs args) {
-		Object[] data = args.data;
+		Object[] data = args.data.getAll();
 		if(data.length > 1) {
 			int[] additionalArgs = ArrayUtils.toPrimitive(Arrays.copyOfRange(data, 1, data.length - 1, Integer[].class));
 			return (T) this.factory.getEntityFX((int)data[0], args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, additionalArgs);

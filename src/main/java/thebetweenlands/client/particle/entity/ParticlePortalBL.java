@@ -33,7 +33,7 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 
 		@Override
 		public ParticlePortalBL createParticle(ImmutableParticleArgs args) {
-			return new ParticlePortalBL(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, (int)args.data[0], args.scale);
+			return new ParticlePortalBL(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale);
 		}
 
 		@Override
