@@ -229,7 +229,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		public final World world;
 		public final double x, y, z, motionX, motionY, motionZ;
 		public final float scale;
-		public final int color;
+		public final float r, g, b, a;
 		public final DataHelper data;
 
 		public ImmutableParticleArgs(World world, double x, double y, double z, ParticleArgs builder) {
@@ -241,7 +241,10 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.motionY = builder.motionY;
 			this.motionZ = builder.motionZ;
 			this.scale = builder.scale;
-			this.color = builder.color;
+			this.r = builder.r;
+			this.g = builder.g;
+			this.b = builder.b;
+			this.a = builder.a;
 			this.data = new DataHelper(builder.data);
 			builder.reset();
 		}
@@ -317,7 +320,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		private boolean scaleSet = false;
 		private float scale;
 		private boolean colorSet = false;
-		private int color;
+		private float r, g, b, a;
 		private Object[] data;
 		private boolean dataSet = false;
 
@@ -333,7 +336,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.motionY = 0;
 			this.motionZ = 0;
 			this.scale = 1;
-			this.color = 0xFFFFFFFF;
+			this.r = this.g = this.b = this.a = 1.0F;
 			this.data = NO_DATA;
 			this.dataSet = false;
 			this.motionSet = false;
@@ -378,14 +381,42 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		/**
-		 * Sets the color
+		 * Sets the RGBA color
 		 * @param color
 		 * @return
 		 */
 		public final T withColor(int color) {
-			this.color = color;
+			this.r = (color >> 16 & 0xff) / 255F;
+			this.g = (color >> 8 & 0xff) / 255F;
+			this.b = (color & 0xff) / 255F;
+			this.a = (color >> 24 & 0xff) / 255F;
 			this.colorSet = true;
 			return (T) this;
+		}
+
+		/**
+		 * Sets the RGBA color
+		 * @param r
+		 * @param g
+		 * @param b
+		 * @param a
+		 * @return
+		 */
+		public final T withColor(float r, float g, float b, float a) {
+			this.r = r;
+			this.g = g;
+			this.b = b;
+			this.a = a;
+			return (T) this;
+		}
+
+		/**
+		 * Sets the RGBA color
+		 * @param color
+		 * @return
+		 */
+		public final T withColor(float[] color) {
+			return this.withColor(color[0], color[1], color[2], color[3]);
 		}
 
 		/**
@@ -460,11 +491,11 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		/**
-		 * Returns the color
+		 * Returns the RGBA color
 		 * @return
 		 */
-		public final int getColor() {
-			return this.color;
+		public final float[] getColor() {
+			return new float[]{this.r, this.g, this.b, this.a};
 		}
 
 		/**
@@ -592,16 +623,6 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	}
 
 	/**
-	 * Sets the color of the specified particle
-	 * @param particle
-	 * @param color
-	 */
-	public static final void setParticleColor(Particle particle, int color) {
-		particle.setRBGColorF((float)(color >> 16 & 0xff) / 255F, (float)(color >> 8 & 0xff) / 255F, (float)(color & 0xff) / 255F);
-		particle.setAlphaF((float)(color >> 24 & 0xff) / 255F);
-	}
-
-	/**
 	 * Creates a new particle from the immutable particle args and sets the sprites
 	 * @param args
 	 * @return
@@ -611,7 +632,8 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		if(this.getStitcher() != null) {
 			((IParticleSpriteReceiver)particle).setStitchedSprites(this.getStitcher().getSprites());
 		}
-		setParticleColor(particle, args.color);
+		particle.setRBGColorF(args.r, args.g, args.b);
+		particle.setAlphaF(args.a);
 		return particle;
 	}
 
