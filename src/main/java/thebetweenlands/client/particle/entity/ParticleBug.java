@@ -30,6 +30,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		this.scale = scale;
 		this.jitter = jitter;
 		this.speed = speed;
+		this.underwater = underwater;
 	}
 
 	@Override
@@ -42,18 +43,28 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		super.onUpdate();
 		this.moveEntity(this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter);
 		double distToTarget = Math.sqrt((this.tx-this.posX)*(this.tx-this.posX)+(this.ty-this.posY)*(this.ty-this.posY)+(this.tz-this.posZ)*(this.tz-this.posZ));
-		if(distToTarget <= this.speed + this.jitter) {
-			this.tx = this.posX + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-			this.ty = this.posY + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-			this.tz = this.posZ + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-			Block targetBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.tx), (int)Math.floor(this.ty), (int)Math.floor(this.tz))).getBlock();
-			if(this.underwater == (targetBlock instanceof BlockSwampWater == false)) {
-				this.tx = this.posX;
-				this.ty = this.posY;
-				this.tz = this.posZ;
-			}
+		Block currBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getBlock();
+		if(this.underwater == (currBlock instanceof BlockSwampWater == false)) {
+			this.motionY -= 0.08D;
+			if(this.isCollided)
+				this.motionY += 0.25D;
+			this.tx = this.posX;
+			this.ty = this.posY;
+			this.tz = this.posZ;
 		} else {
-			this.moveEntity(-(this.posX-this.tx)/distToTarget*this.speed, -(this.posY-this.ty)/distToTarget*this.speed, -(this.posZ-this.tz)/distToTarget*this.speed);
+			if(distToTarget <= this.speed + this.jitter) {
+				this.tx = this.posX + this.worldObj.rand.nextFloat()*2.0F-1.0F;
+				this.ty = this.posY + this.worldObj.rand.nextFloat()*2.0F-1.0F;
+				this.tz = this.posZ + this.worldObj.rand.nextFloat()*2.0F-1.0F;
+				Block targetBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.tx), (int)Math.floor(this.ty + 0.5D), (int)Math.floor(this.tz))).getBlock();
+				if(this.underwater == (targetBlock instanceof BlockSwampWater == false)) {
+					this.tx = this.posX;
+					this.ty = this.posY;
+					this.tz = this.posZ;
+				}
+			} else {
+				this.moveEntity(-(this.posX-this.tx)/distToTarget*this.speed, -(this.posY-this.ty)/distToTarget*this.speed, -(this.posZ-this.tz)/distToTarget*this.speed);
+			}
 		}
 	}
 
@@ -75,6 +86,48 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		@Override
 		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
 			args.withScale(0.06F * world.rand.nextFloat());
+		}
+	}
+
+	public static final class MosquitoFactory extends ParticleFactory<MosquitoFactory, ParticleBug> {
+		public MosquitoFactory() {
+			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/mosquito")));
+		}
+
+		@Override
+		public ParticleBug createParticle(ImmutableParticleArgs args) {
+			return new ParticleBug(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs args) {
+			args.withScale(0.1F).withData(400, 0.05F, 0.025F, false);
+		}
+
+		@Override
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
+			args.withScale(0.1F * world.rand.nextFloat());
+		}
+	}
+
+	public static final class WaterBugFactory extends ParticleFactory<WaterBugFactory, ParticleBug> {
+		public WaterBugFactory() {
+			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/water_bug")));
+		}
+
+		@Override
+		public ParticleBug createParticle(ImmutableParticleArgs args) {
+			return new ParticleBug(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.data.getFloat(1), args.data.getFloat(2), args.scale, args.data.getBool(3));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs args) {
+			args.withScale(0.2F).withData(400, 0.03F, 0.002F, true);
+		}
+
+		@Override
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
+			args.withScale(0.2F * world.rand.nextFloat());
 		}
 	}
 }

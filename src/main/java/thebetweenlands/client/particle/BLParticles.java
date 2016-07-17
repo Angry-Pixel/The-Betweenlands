@@ -13,6 +13,8 @@ import thebetweenlands.client.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.particle.entity.ParticleBug;
 import thebetweenlands.client.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.particle.entity.ParticleFish;
+import thebetweenlands.client.particle.entity.ParticleMoth;
 import thebetweenlands.client.particle.entity.ParticlePortalBL;
 import thebetweenlands.client.particle.entity.ParticleWisp;
 
@@ -48,6 +50,10 @@ public enum BLParticles {
 			.withColor(0xFFFFFFFF)
 			.buildBaseArgs()),
 	FLY(new ParticleBug.FlyFactory()),
+	MOTH(new ParticleMoth.Factory()),
+	MOSQUITO(new ParticleBug.MosquitoFactory()),
+	WATER_BUG(new ParticleBug.WaterBugFactory()),
+	FISH(new ParticleFish.Factory()),
 	WISP(new ParticleWisp.Factory()),
 	DRUID_CASTING(new ParticleDruidCasting.Factory()),
 	DRUID_CASTING_BIG(new ParticleDruidCasting.Factory()
