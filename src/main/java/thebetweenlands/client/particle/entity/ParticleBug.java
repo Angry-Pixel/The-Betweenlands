@@ -73,7 +73,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		}
 
 		@Override
-		protected void setDefaultArguments(World world, ParticleArgs args) {
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
 			args.withScale(0.06F * world.rand.nextFloat());
 		}
 	}

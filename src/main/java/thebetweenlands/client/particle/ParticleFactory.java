@@ -246,7 +246,6 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.b = builder.b;
 			this.a = builder.a;
 			this.data = new DataHelper(builder.data);
-			builder.reset();
 		}
 	}
 
@@ -324,8 +323,38 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		private Object[] data;
 		private boolean dataSet = false;
 
+		private ParticleArgs container;
+
 		private ParticleArgs() {
 			this.reset();
+		}
+
+		/**
+		 * Creates a copy of the specified particle args
+		 * @param args
+		 */
+		public ParticleArgs(ParticleArgs args) {
+			if(args == null)
+				throw new NullPointerException("Particle args to copy must not be null");
+			this.motionSet = args.motionSet;
+			this.motionX = args.motionX;
+			this.motionY = args.motionY;
+			this.motionZ = args.motionZ;
+			this.scaleSet = args.scaleSet;
+			this.scale = args.scale;
+			this.colorSet = args.colorSet;
+			this.r = args.r;
+			this.g = args.g;
+			this.b = args.b;
+			this.a = args.a;
+			if(args.data == NO_DATA || args.data.length == 0) {
+				this.data = NO_DATA;
+			} else {
+				this.data = new Object[args.data.length];
+				for(int i = 0; i < this.data.length; i++)
+					this.data[i] = args.data[i];
+			}
+			this.dataSet = args.dataSet;
 		}
 
 		/**
@@ -342,6 +371,28 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.motionSet = false;
 			this.scaleSet = false;
 			this.colorSet = false;
+			this.resetContainer();
+		}
+
+		/**
+		 * Resets the container values
+		 */
+		protected final void resetContainer() {
+			if(this.container != null) {
+				this.container.motionX = this.motionX;
+				this.container.motionY = this.motionY;
+				this.container.motionZ = this.motionZ;
+				this.container.scale = this.scale;
+				this.container.r = this.r;
+				this.container.g = this.g;
+				this.container.b = this.b;
+				this.container.a = this.a;
+				this.container.data = this.data;
+				this.container.dataSet = this.dataSet;
+				this.container.motionSet = this.motionSet;
+				this.container.scaleSet = this.scaleSet;
+				this.container.colorSet = this.colorSet;
+			}
 		}
 
 		/**
@@ -382,20 +433,6 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 
 		/**
 		 * Sets the RGBA color
-		 * @param color
-		 * @return
-		 */
-		public final T withColor(int color) {
-			this.r = (color >> 16 & 0xff) / 255F;
-			this.g = (color >> 8 & 0xff) / 255F;
-			this.b = (color & 0xff) / 255F;
-			this.a = (color >> 24 & 0xff) / 255F;
-			this.colorSet = true;
-			return (T) this;
-		}
-
-		/**
-		 * Sets the RGBA color
 		 * @param r
 		 * @param g
 		 * @param b
@@ -407,7 +444,17 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			this.g = g;
 			this.b = b;
 			this.a = a;
+			this.colorSet = true;
 			return (T) this;
+		}
+
+		/**
+		 * Sets the RGBA color
+		 * @param color
+		 * @return
+		 */
+		public final T withColor(int color) {
+			return this.withColor((color >> 16 & 0xff) / 255F, (color >> 8 & 0xff) / 255F, (color & 0xff) / 255F, (color >> 24 & 0xff) / 255F);
 		}
 
 		/**
@@ -426,7 +473,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @return
 		 */
 		public final T withData(Object... data) {
-			if(data == null) 
+			if(data == null || data.length == 0) 
 				data = NO_DATA;
 			this.data = data;
 			this.dataSet = true;
@@ -532,12 +579,15 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		/**
-		 * Populates the specified {@link ParticleArgs} with the composed particle arguments where this {@link ParticleArgs} is the underlying default.
+		 * Populates the container of the specified {@link ParticleArgs} with the composed particle arguments where this {@link ParticleArgs} is the underlying default.
 		 * The additional data of the specified {@link ParticleArgs} must have a length equal or smaller than the length of the additional data of this {@link ParticleArgs}.
-		 * @param container Arguments to be populated with default arguments if necessary
-		 * @return
+		 * @param container Arguments to combine with
+		 * @return The container with the combined args
 		 */
-		public final ParticleArgs populateEmptyArgs(ParticleArgs container) {
+		protected final ParticleArgs combineArgs(ParticleArgs args) {
+			ParticleArgs container = args.container;
+			if(container == null)
+				container = args.container = new ParticleArgs(args);
 			if(!container.isMotionSet()) {
 				container.withMotion(this.getMotionX(), this.getMotionY(), this.getMotionZ());
 			}
@@ -572,11 +622,12 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 
 		/**
-		 * Populates this {@link ParticleArgs} with the specified default arguments.
+		 * Populates the container of this {@link ParticleArgs} with the specified default arguments.
+		 * See {@link #combineArgs(ParticleArgs)}.
 		 */
 		@Override
 		public final void accept(ParticleArgs defaultArgs) {
-			defaultArgs.populateEmptyArgs(this);
+			defaultArgs.combineArgs(this);
 		}
 	}
 
@@ -661,13 +712,16 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	protected void setBaseArguments(ParticleArgs args) { }
 
 	/**
-	 * Sets the default arguments based on the world the particle is being spawned in.
+	 * Sets the default arguments based on the world and position the particle is being spawned at.
 	 * The underlying default arguments are set by {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
 	 * Overrides arguments set by {@link ParticleFactory#setBaseArguments(ParticleArgs)}.
 	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
 	 * @param args
 	 */
-	protected void setDefaultArguments(World world, ParticleArgs args) { }
+	protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) { }
 
 	public static final class BaseArgsBuilder<F extends ParticleFactory, B extends BaseArgsBuilder<F, ?, C>, C extends Particle> extends ParticleArgs<B> {
 		private final ParticleFactory factory;
@@ -684,9 +738,9 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		public final F buildBaseArgs() {
 			ParticleArgs container = new ParticleArgs();
 			//Fill with arguments from the builder
-			this.populateEmptyArgs(container);
+			container = this.combineArgs(container);
 			//Fill with base arguments from factory
-			this.factory.baseArgs.populateEmptyArgs(container);
+			container = this.factory.baseArgs.combineArgs(container);
 			if(container.isMotionSet())
 				this.factory.baseArgs.withMotion(container.getMotionX(), container.getMotionY(), container.getMotionZ());
 			if(container.isColorSet())
@@ -727,12 +781,14 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		if(args == null)
 			args = ParticleArgs.get();
 		this.defaultArgs.reset();
-		this.setDefaultArguments(world, this.defaultArgs);
+		this.setDefaultArguments(world, x, y, z, this.defaultArgs);
+		args.resetContainer();
+		this.defaultArgs.resetContainer();
 		boolean hasActualDefaults = this.defaultArgs.isColorSet() || this.defaultArgs.isMotionSet() || this.defaultArgs.isScaleSet() || this.defaultArgs.isDataSet();
 		if(hasActualDefaults) {
-			args = this.baseArgs.populateEmptyArgs(this.defaultArgs).populateEmptyArgs(args);
+			args = this.baseArgs.combineArgs(this.defaultArgs).combineArgs(args);
 		} else {
-			args = this.baseArgs.populateEmptyArgs(args);
+			args = this.baseArgs.combineArgs(args);
 		}
 		return this.getParticle(new ImmutableParticleArgs(world, x, y, z, args));
 	}
