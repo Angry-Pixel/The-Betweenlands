@@ -19,17 +19,18 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	public double waypointY;
 	public double waypointZ;
 	private EntityLivingBase targetedEntity;
+	private int targetObstructedTicks = 0;
 
 	public EntityChiromaw(World world) {
 		super(world);
-	    setSize(0.8F, 0.9F);
-	    setIsHanging(false);
+		setSize(0.8F, 0.9F);
+		setIsHanging(false);
 	}
 
-    protected void entityInit() {
-        super.entityInit();
-        dataWatcher.addObject(16, new Byte((byte)0));
-    }
+	protected void entityInit() {
+		super.entityInit();
+		dataWatcher.addObject(16, new Byte((byte)0));
+	}
 
 	@Override
 	public void onUpdate() {
@@ -42,15 +43,20 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			}
 			if (targetedEntity != null) {
 				if (targetedEntity instanceof EntityPlayer)
-					if (((EntityPlayer) targetedEntity).capabilities.isCreativeMode || !getEntitySenses().canSee((EntityPlayer) targetedEntity)) {
-						targetedEntity = null;
-						return;
-					}
-				double standOffX = targetedEntity.posX;
-				double standOffZ = targetedEntity.posZ;
-				waypointX = standOffX;
-				waypointY = targetedEntity.posY + 1 - rand.nextFloat() * 0.3F;
-				waypointZ = standOffZ;
+					if(!getEntitySenses().canSee(targetedEntity)) {
+						this.targetObstructedTicks++;
+					} else 
+						this.targetObstructedTicks = 0;
+				if (((EntityPlayer) targetedEntity).capabilities.isCreativeMode || this.targetObstructedTicks > 100) {
+					this.targetObstructedTicks = 0;
+					targetedEntity = null;
+				} else {
+					double standOffX = targetedEntity.posX;
+					double standOffZ = targetedEntity.posZ;
+					waypointX = standOffX;
+					waypointY = targetedEntity.posY + 1 - rand.nextFloat() * 0.3F;
+					waypointZ = standOffZ;
+				}
 			}
 			if (getIsHanging()) {
 				motionX = motionY = motionZ = 0.0D;
@@ -109,8 +115,11 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			if (targetedEntity != null && targetedEntity.isDead)
 				targetedEntity = null;
 
+			//Necessary because not using new AI!
+			this.getEntitySenses().clearSensingCache();
+
 			if (targetedEntity == null)
-				targetedEntity = worldObj.getClosestVulnerablePlayerToEntity(this, 32D);
+				targetedEntity = this.getClosestVulnerableVisiblePlayer(24D);
 
 			if (targetedEntity != null) {
 				distanceX = targetedEntity.posX - posX;
@@ -123,6 +132,48 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			if (targetedEntity == null && rand.nextInt(20) == 0 && worldObj.getBlock(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ)).isNormalCube())
 				setIsHanging(true);
 		}
+	}
+
+	public EntityPlayer getClosestVulnerableVisiblePlayer(double p_72846_7_)
+	{
+		double d4 = -1.0D;
+		EntityPlayer entityplayer = null;
+
+		for (int i = 0; i < this.worldObj.playerEntities.size(); ++i)
+		{
+			EntityPlayer entityplayer1 = (EntityPlayer)this.worldObj.playerEntities.get(i);
+
+			if (!entityplayer1.capabilities.disableDamage && entityplayer1.isEntityAlive() && this.getEntitySenses().canSee(entityplayer1))
+			{
+				double d5 = entityplayer1.getDistanceSq(this.posX, this.posY, this.posZ);
+				double d6 = p_72846_7_;
+
+				if (entityplayer1.isSneaking())
+				{
+					d6 = p_72846_7_ * 0.800000011920929D;
+				}
+
+				if (entityplayer1.isInvisible())
+				{
+					float f = entityplayer1.getArmorVisibility();
+
+					if (f < 0.1F)
+					{
+						f = 0.1F;
+					}
+
+					d6 *= (double)(0.7F * f);
+				}
+
+				if ((p_72846_7_ < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4))
+				{
+					d4 = d5;
+					entityplayer = entityplayer1;
+				}
+			}
+		}
+
+		return entityplayer;
 	}
 
 	private boolean isCourseTraversable(double x, double y, double z, double distance) {
@@ -145,7 +196,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player))
 			if (getDistanceToEntity(player) <= 1.5F)
 				if (player.boundingBox.maxY >= boundingBox.minY && player.boundingBox.minY <= boundingBox.maxY)
-						player.attackEntityFrom(DamageSource.causeMobDamage(this), 2F);
+					player.attackEntityFrom(DamageSource.causeMobDamage(this), 2F);
 	}
 
 	@Override
@@ -156,17 +207,17 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	protected void updateFallState(double distanceFallenThisTick, boolean onGround) {
 	}
 
-    public boolean getIsHanging() {
-        return (dataWatcher.getWatchableObjectByte(16) & 1) != 0;
-    }
+	public boolean getIsHanging() {
+		return (dataWatcher.getWatchableObjectByte(16) & 1) != 0;
+	}
 
-    public void setIsHanging(boolean hanging) {
-        byte b0 = dataWatcher.getWatchableObjectByte(16);
-        if (hanging)
-            dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 1)));
-        else
-            dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & -2)));
-    }
+	public void setIsHanging(boolean hanging) {
+		byte b0 = dataWatcher.getWatchableObjectByte(16);
+		if (hanging)
+			dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 | 1)));
+		else
+			dataWatcher.updateObject(16, Byte.valueOf((byte)(b0 & -2)));
+	}
 
 	@Override
 	protected void dropFewItems(boolean recentlyHit, int looting) {
@@ -187,7 +238,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	protected String getDeathSound() {
 		return "thebetweenlands:flyingFiendDeath";
 	}
-	
+
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();

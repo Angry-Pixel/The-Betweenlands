@@ -11,6 +11,7 @@ import thebetweenlands.blocks.BLBlockRegistry;
 import thebetweenlands.blocks.BlockBLSpawner;
 import thebetweenlands.tileentities.TileEntityLootPot1;
 import thebetweenlands.tileentities.TileEntityWeedWoodChest;
+import thebetweenlands.tileentities.spawner.MobSpawnerBaseLogicBL;
 import thebetweenlands.world.biomes.decorators.data.SurfaceType;
 import thebetweenlands.world.loot.LootTables;
 import thebetweenlands.world.loot.LootUtil;
@@ -206,7 +207,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		rotatedCubeVolume(world, x, y, z, 8, 3, 12, smoothCragrockStairs, getMetaFromDirection(1, direction, upsideDownStairSequence), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 3, 13, smoothCragrockStairs, getMetaFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 1, 14, smoothCragrock, 0, 1, 3, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 2, 13, direction, "thebetweenlands.termite");
+		rotatedSpawner(world, x, y, z, 8, 2, 13, direction, "thebetweenlands.termite").setMaxEntities(6).setDelay(120, 300);
 		rotatedCubeVolume(world, x, y, z, 9, 1, 11, root, 0, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 4, 1, 10, root, 0, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 1, 14, root, 0, 1, 1 + random.nextInt(2), 1, direction);
@@ -439,7 +440,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 15, 10, cragrockBrickWall, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 16, 10, cragrockBrickSlab, 0, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 17, 10, direction, "thebetweenlands.chiromaw");
+		rotatedSpawner(world, x, y, z, 8, 17, 10, direction, "thebetweenlands.chiromaw").setMaxEntities(4).setCheckRange(16.0D).setDelay(180, 500);
 		rotatedCubeVolume(world, x, y, z, 6, 15, 8, smoothCragrockSlab, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 15, 8, smoothCragrock, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 15, 8, smoothCragrockSlab, 8, 1, 1, 1, direction);
@@ -543,7 +544,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 24, 10, cragrockBrickWall, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 25, 10, cragrockBrickSlab, 0, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 26, 10, direction, "thebetweenlands.swampHag");
+		rotatedSpawner(world, x, y, z, 8, 26, 10, direction, "thebetweenlands.swampHag").setMaxEntities(3).setCheckRange(16.0D).setDelay(180, 500);
 		rotatedCubeVolume(world, x, y, z, 10, 24, 8, smoothCragrockSlab, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 24, 9, smoothCragrock, 0, 2, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 24, 10, smoothCragrockSlab, 8, 2, 1, 1, direction);
@@ -598,7 +599,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 33, 10, cragrockBrickWall, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 34, 10, cragrockBrickSlab, 0, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands.pyrad");
+		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands.pyrad").setMaxEntities(3).setCheckRange(16.0D).setDelay(180, 500);
 		rotatedCubeVolume(world, x, y, z, 10, 33, 12, smoothCragrockSlab, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 9, 33, 12, smoothCragrock, 0, 1, 1, 2, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 33, 12, smoothCragrockSlab, 8, 1, 1, 2, direction);
@@ -652,7 +653,7 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 42, 10, cragrockBrickWall, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 43, 10, cragrockBrickSlab, 0, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 44, 10, direction, "thebetweenlands.wight");
+		rotatedSpawner(world, x, y, z, 8, 44, 10, direction, "thebetweenlands.wight").setMaxEntities(2).setCheckRange(24.0D).setDelay(300, 600);
 		rotatedCubeVolume(world, x, y, z, 6, 42, 12, smoothCragrockSlab, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 42, 11, smoothCragrock, 0, 2, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 42, 10, smoothCragrockSlab, 8, 2, 1, 1, direction);
@@ -830,10 +831,10 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		rotatedCubeVolume(world, x, y, z, 13, 57, 11, wisp, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 52, 5, cragrockBrickWall, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 53, 5, cragrockBrickSlab, 0, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 54, 5, direction, "thebetweenlands.swampHag");
+		rotatedSpawner(world, x, y, z, 8, 54, 5, direction, "thebetweenlands.swampHag").setMaxEntities(3).setCheckRange(10.0D).setDelay(150, 500);
 		rotatedCubeVolume(world, x, y, z, 8, 52, 15, cragrockBrickWall, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 53, 15, cragrockBrickSlab, 0, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands.wight");
+		rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands.wight").setMaxEntities(2).setCheckRange(24.0D).setDelay(300, 600);
 		rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1);
 		rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1);
 		rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3);
@@ -1341,26 +1342,27 @@ public class WorldGenCragrockTower extends WorldGenerator {
 		}
 	}
 
-	private void rotatedSpawner(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, String mob) {
+	private MobSpawnerBaseLogicBL rotatedSpawner(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int direction, String mob) {
 		x -= width / 2;
 		z -= depth / 2;
 		switch (direction) {
+		default:
 		case 0:
 			world.setBlock(x + offsetA, y + offsetB, z + offsetC, spawner);
 			BlockBLSpawner.setMob(world, x + offsetA, y + offsetB, z + offsetC, mob);
-			break;
+			return BlockBLSpawner.getLogic(world, x + offsetA, y + offsetB, z + offsetC);
 		case 1:
 			world.setBlock(x + offsetC, y + offsetB, z + depth - offsetA - 1, spawner);
 			BlockBLSpawner.setMob(world, x + offsetC, y + offsetB, z + depth - offsetA - 1, mob);
-			break;
+			return BlockBLSpawner.getLogic(world, x + offsetC, y + offsetB, z + depth - offsetA - 1);
 		case 2:
 			world.setBlock(x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, spawner);
 			BlockBLSpawner.setMob(world, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1, mob);
-			break;
+			return BlockBLSpawner.getLogic(world, x + width - offsetA - 1, y + offsetB, z + depth - offsetC - 1);
 		case 3:
 			world.setBlock(x + width - offsetC - 1, y + offsetB, z + offsetA, spawner);
 			BlockBLSpawner.setMob(world, x + width - offsetC - 1, y + offsetB, z + offsetA, mob);
-			break;
+			return BlockBLSpawner.getLogic(world, x + width - offsetC - 1, y + offsetB, z + offsetA);
 		}
 	}
 
