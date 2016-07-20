@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import com.google.common.base.Throwables;
@@ -23,6 +24,18 @@ public class SuperbSoundRegistry extends SoundRegistry {
 	private static final Field VOLUME_FIELD = ReflectionHelper.findField(SoundEventAccessorComposite.class, "eventVolume", "field_148731_f", "f");
 
 	private static final Field PITCH_FIELD = ReflectionHelper.findField(SoundEventAccessorComposite.class, "eventPitch", "field_148733_e", "e");
+
+	/*
+	 * So Pixelmon doesn't look up the class hierarchy to find a particular field...
+	 * The ReflectionHelper should have really been used to reduce the amount of
+	 * code on their part.
+	 */
+	private Map heresTheFieldYoureLookingForPixelmon;
+
+	@Override
+	protected Map createUnderlyingMap() {
+		return heresTheFieldYoureLookingForPixelmon = super.createUnderlyingMap();
+	}
 
 	@Override
 	public void registerSound(SoundEventAccessorComposite sound) {
