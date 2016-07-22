@@ -27,11 +27,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
-import thebetweenlands.common.block.container.BlockCompostBin;
-import thebetweenlands.common.block.container.BlockDruidAltar;
-import thebetweenlands.common.block.container.BlockPurifier;
-import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
-import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.container.*;
 import thebetweenlands.common.block.plant.BlockBasicVine;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
@@ -200,7 +196,7 @@ public class BlockRegistry {
 	public static final Block WEAK_POLISHED_LIMESTONE = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_MOSSY_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block DENTROTHYST = new BlockDentrothyst(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-
+	public static final Block LOOT_POT = new BlockLootPot();
 
 	//Plants
 	public static final Block PITCHER_PLANT = new BlockGenericDoublePlant();
