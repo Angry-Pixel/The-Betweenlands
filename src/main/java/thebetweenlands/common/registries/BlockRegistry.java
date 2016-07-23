@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
@@ -27,7 +28,13 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
-import thebetweenlands.common.block.container.*;
+import thebetweenlands.common.block.BlockSaplingBetweenlands;
+import thebetweenlands.common.block.container.BlockCompostBin;
+import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.container.BlockLootPot;
+import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
+import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockBasicVine;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
@@ -143,24 +150,26 @@ public class BlockRegistry {
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
 	public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
 	public static final Block LOG_SAP = new BlockLogBetweenlands();
+	public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
+	public static final Block SAPLING_SAP = new BlockSaplingBetweenlands("SAP");
+	public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands("RUBBER");
 	public static final Block LEAVES_WEEDWOOD = new BlockLeavesBetweenlands() {
-
-		/*	@Override
-			public Item getItemDropped(int meta, Random rand, int fortune) {
-				return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
-			}*/
+		@Override
+		public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+			return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
+		}
 	};
 	public static final Block LEAVES_SAP_TREE = new BlockLeavesBetweenlands() {
-		/*	@Override
-			public Item getItemDropped(int meta, Random rand, int fortune) {
-				return Item.getItemFromBlock(BlockRegistry.SAPLING_SAP_TREE);
-			}*/
+		@Override
+		public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+			return Item.getItemFromBlock(BlockRegistry.SAPLING_SAP);
+		}
 	};
 	public static final Block LEAVES_RUBBER_TREE = new BlockLeavesBetweenlands() {
-		/*	@Override
-			public Item getItemDropped(int meta, Random rand, int fortune) {
-				return Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER_TREE);
-			}*/
+		@Override
+		public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+			return Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER);
+		}
 	};
 
 	//STRUCTURE

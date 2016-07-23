@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.feature.tree.WorldGenSapTree;
+import thebetweenlands.common.world.feature.tree.WorldGenWeedWoodTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -21,7 +21,7 @@ public class TestItem extends Item {
      /*   WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
         worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.getX(), pos.getY() + 1, pos.getZ());*/
     	if(!world.isRemote) {
-    		WorldGenSapTree tree = new WorldGenSapTree();
+    		WorldGenWeedWoodTree tree = new WorldGenWeedWoodTree();
     		tree.generate(world, itemRand, pos.up());
     		return EnumActionResult.SUCCESS;
     	}
