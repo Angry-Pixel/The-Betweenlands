@@ -1,10 +1,15 @@
 package thebetweenlands.common.world.feature;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.container.BlockLootPot;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.world.feature.loot.LootTables;
+import thebetweenlands.common.world.feature.loot.LootUtil;
 
 import java.util.Random;
 
@@ -32,9 +37,10 @@ public abstract class WorldGenHelper extends WorldGenerator {
 
     /**
      * A constructor to make you not need to put in the width, height, depth  every time
-     * @param width the width of the structure (x axis)
+     *
+     * @param width  the width of the structure (x axis)
      * @param height the height of the structure (not always necessary)
-     * @param depth the depth of the structure (z axis)
+     * @param depth  the depth of the structure (z axis)
      */
     public WorldGenHelper(int width, int height, int depth) {
         this.width = width;
@@ -45,18 +51,19 @@ public abstract class WorldGenHelper extends WorldGenerator {
 
     /**
      * Generates cube volumes and rotates them depending on the given rotatiopn
-     * @param world The world
-     * @param x x to generate relative from
-     * @param y y to generate relative from
-     * @param z z to generate relative from
-     * @param offsetX Where to generate relative from the x
-     * @param offsetY Where to generate relative from the y
-     * @param offsetZ Where to generate relative from the z
+     *
+     * @param world      The world
+     * @param x          x to generate relative from
+     * @param y          y to generate relative from
+     * @param z          z to generate relative from
+     * @param offsetX    Where to generate relative from the x
+     * @param offsetY    Where to generate relative from the y
+     * @param offsetZ    Where to generate relative from the z
      * @param blockState The block to generate
-     * @param sizeWidth The width of the cube volume
+     * @param sizeWidth  The width of the cube volume
      * @param sizeHeight The height of the cube volume
-     * @param sizeDepth The depth of the cube volume
-     * @param rotation The rotation for the cube volume (0 to 3)
+     * @param sizeDepth  The depth of the cube volume
+     * @param rotation   The rotation for the cube volume (0 to 3)
      */
     public void rotatedCubeVolume(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation) {
         x -= width / 2;
@@ -91,17 +98,18 @@ public abstract class WorldGenHelper extends WorldGenerator {
 
     /**
      * Generates a loot pot taking the rotation of a structure into a count
-     * @param world The workd
-     * @param rand a random
-     * @param x x to generate relative from
-     * @param y y to generate relative from
-     * @param z z to generate relative from
+     *
+     * @param world   The workd
+     * @param rand    a random
+     * @param x       x to generate relative from
+     * @param y       y to generate relative from
+     * @param z       z to generate relative from
      * @param offsetX Where to generate relative from the x
      * @param offsetY Where to generate relative from the y
      * @param offsetZ Where to generate relative from the z
-     * @param min The minimum amount of items
-     * @param max The maximum amount of items
-     * @param chance The chance of it actually generating
+     * @param min     The minimum amount of items
+     * @param max     The maximum amount of items
+     * @param chance  The chance of it actually generating
      */
     public void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance) {
         x -= width / 2;
@@ -124,15 +132,17 @@ public abstract class WorldGenHelper extends WorldGenerator {
         }
     }
 
-    /** TODO fix when spawners are added
+    /**
+     * TODO fix when spawners are added
      * Generates a spawner taking the rotation into a count
-     * @param world the world
-     * @param pos the position to generate relative from
-     * @param offsetX Where to generate relative from the x
-     * @param offsetY Where to generate relative from the y
-     * @param offsetZ Where to generate relative from the z
+     *
+     * @param world    the world
+     * @param pos      the position to generate relative from
+     * @param offsetX  Where to generate relative from the x
+     * @param offsetY  Where to generate relative from the y
+     * @param offsetZ  Where to generate relative from the z
      * @param rotation the rotation
-     * @param mob the mob that should be in the spawner
+     * @param mob      the mob that should be in the spawner
      */
     public void rotatedSpawner(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation, String mob) {
         /*pos.add(-( width / 2), 0, -(depth / 2));
@@ -160,24 +170,26 @@ public abstract class WorldGenHelper extends WorldGenerator {
 
     /**
      * Generates a loot pot at a location
-     * @param world The world
+     *
+     * @param world  The world
      * @param random A Random
-     * @param pos The pos to generate at
-     * @param min The minimum amount of items
-     * @param max The maximum amount of items
+     * @param pos    The pos to generate at
+     * @param min    The minimum amount of items
+     * @param max    The maximum amount of items
      */
     public void generateLoot(World world, Random random, BlockPos pos, int min, int max) {
         world.setBlockState(pos, getRandomLootPot(random), 3);
-        /*TileEntityLootPot1 lootPot = (TileEntityLootPot1) world.getTileEntity(x, y, z);
+        TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
         if (lootPot != null)
-            LootUtil.generateLoot(lootPot, random, LootTables.DUNGEON_POT_LOOT, min, max);*/
+            LootUtil.generateLoot(lootPot, random, LootTables.DUNGEON_POT_LOOT, min, max);
     }
 
 
     /**
      * Gets the meta from a sequence depending on the rotation
-     * @param start where to start in the sequence
-     * @param rotation the rotation
+     *
+     * @param start                where to start in the sequence
+     * @param rotation             the rotation
      * @param enumRotationSequence which sequence to use
      * @return the meta of corresponding to the rotation
      */
@@ -188,27 +200,27 @@ public abstract class WorldGenHelper extends WorldGenerator {
 
     /**
      * Gives one of 3 different styles of loot post with a random rotation
+     *
      * @param random a random
      * @return the blockstate of one of the loot pots
      */
     public IBlockState getRandomLootPot(Random random) {
         int randDirection = random.nextInt(4) + 2;
-        /* TODO add when loot pots are added
-        * switch(random.nextInt(3)){
-        * case 0:
-        *   return BlockRegistry.LOOT_POT_1;
-        * case 1:
-        *   return BlockRegistry.LOOT_POT_2;
-        * default:
-        *   return BlockRegistry.LOOT_POT_3;
-        * }
-        * */
-        return null;
+
+        switch (random.nextInt(3)) {
+            case 0:
+                return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, BlockLootPot.EnumLootPot.POT_1).withProperty(BlockLootPot.FACING, EnumFacing.getFront(randDirection));
+            case 1:
+                return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, BlockLootPot.EnumLootPot.POT_2).withProperty(BlockLootPot.FACING, EnumFacing.getFront(randDirection));
+            default:
+                return BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, BlockLootPot.EnumLootPot.POT_3).withProperty(BlockLootPot.FACING, EnumFacing.getFront(randDirection));
+        }
     }
 
     /**
      * Checks if the list contains the block state (usefull for blacklists)
-     * @param list the list of blockstates
+     *
+     * @param list  the list of blockstates
      * @param block a blockstate
      * @return if the list contains the block
      */
