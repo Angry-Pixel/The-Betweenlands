@@ -17,11 +17,14 @@ public class TestItem extends Item {
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
      /*   WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
         worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.getX(), pos.getY() + 1, pos.getZ());*/
-    	WorldGenSapTree tree = new WorldGenSapTree();
-    	tree.generate(worldIn, itemRand, pos.up());
-        return super.onItemUse(stack, playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ);
+    	if(!world.isRemote) {
+    		WorldGenSapTree tree = new WorldGenSapTree();
+    		tree.generate(world, itemRand, pos.up());
+    		return EnumActionResult.SUCCESS;
+    	}
+        return super.onItemUse(stack, playerIn, world, pos, hand, facing, hitX, hitY, hitZ);
     }
 }
