@@ -45,6 +45,7 @@ import thebetweenlands.client.render.render.item.TileEntitySymoriteShield;
 import thebetweenlands.client.render.render.item.TileEntityValoniteShield;
 import thebetweenlands.client.render.render.item.TileEntityWeedwoodShield;
 import thebetweenlands.client.render.render.tile.DruidAltarRenderer;
+import thebetweenlands.client.render.render.tile.LootPotRenderer;
 import thebetweenlands.client.render.render.tile.PurifierRenderer;
 import thebetweenlands.client.render.render.tile.WeedwoodWorkbenchRenderer;
 import thebetweenlands.common.TheBetweenlands;
@@ -65,10 +66,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tile.TileEntityDruidAltar;
-import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.common.tile.*;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -226,6 +224,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new PurifierRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new DruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodWorkbench.class, new WeedwoodWorkbenchRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot.class, new LootPotRenderer());
 		//shield rendering
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield(RenderBLShield.Shieldtype.OCTINE));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.SYMORITE));
