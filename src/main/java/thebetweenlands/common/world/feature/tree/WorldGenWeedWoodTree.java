@@ -116,35 +116,35 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 
 			switch (dir) {
 			case 1:
-				world.setBlockState(pos.east(i).up(y), branchBend ? logY : logX);
+				world.setBlockState(pos.east(i).up(y), branchBend ? logY : logX, 2);
 				break;
 
 			case 2:
-				world.setBlockState(pos.west(i).up(y),  branchBend ? logY : logX);
+				world.setBlockState(pos.west(i).up(y),  branchBend ? logY : logX, 2);
 				break;
 
 			case 3:
-				world.setBlockState(pos.south(i).up(y),  branchBend ? logY : logZ);
+				world.setBlockState(pos.south(i).up(y),  branchBend ? logY : logZ, 2);
 				break;
 
 			case 4:
-				world.setBlockState(pos.north(i).up(y),  branchBend ? logY : logZ);
+				world.setBlockState(pos.north(i).up(y),  branchBend ? logY : logZ, 2);
 				break;
 
 			case 5:
-				world.setBlockState(pos.east(i).up(y).south(i), branchBend ? logY : logX);
+				world.setBlockState(pos.east(i).up(y).south(i), branchBend ? logY : logX, 2);
 				break;
 
 			case 6:
-				world.setBlockState(pos.west(i).up(y).north(i), branchBend ? logY : logX);
+				world.setBlockState(pos.west(i).up(y).north(i), branchBend ? logY : logX, 2);
 				break;
 
 			case 7:
-				world.setBlockState(pos.west(i).up(y).south(i), branchBend ? logY : logZ);
+				world.setBlockState(pos.west(i).up(y).south(i), branchBend ? logY : logZ, 2);
 				break;
 
 			case 8:
-				world.setBlockState(pos.east(i).up(y).north(i), branchBend ? logY : logZ);
+				world.setBlockState(pos.east(i).up(y).north(i), branchBend ? logY : logZ, 2);
 				break;
 			}
 		}
@@ -186,97 +186,97 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 			case 1:
 				
 				if (!root) {
-					world.setBlockState(pos.east(i).up(y), branchBend ? logY : logX);
+					world.setBlockState(pos.east(i).up(y), branchBend ? logY : logX, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.east(i).up(y - 1), EnumFacing.EAST);
 				}
 				else {
-					world.setBlockState(pos.east(i).down(y), bark);
-					world.setBlockState(pos.east(i).down(y - 1), bark);
+					world.setBlockState(pos.east(i).down(y), bark, 2);
+					world.setBlockState(pos.east(i).down(y - 1), bark, 2);
 				}
 				break;
 
 			case 2:
 				if (!root) {
-					world.setBlockState(pos.west(i).up(y), branchBend ? logY : logX);
+					world.setBlockState(pos.west(i).up(y), branchBend ? logY : logX, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.west(i).up(y - 1), EnumFacing.WEST);
 				}
 				else {
-					world.setBlockState(pos.west(i).down(y), bark);
-					world.setBlockState(pos.west(i).down(y - 1), bark);
+					world.setBlockState(pos.west(i).down(y), bark, 2);
+					world.setBlockState(pos.west(i).down(y - 1), bark, 2);
 				}
 				break;
 
 			case 3:
 				if (!root) {
-					world.setBlockState(pos.south(i).up(y), branchBend ? logY : logZ);
+					world.setBlockState(pos.south(i).up(y), branchBend ? logY : logZ, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.south(i).up(y - 1), EnumFacing.SOUTH);
 				}
 				else {
-					world.setBlockState(pos.south(i).down(y), bark);
-					world.setBlockState(pos.south(i).down(y - 1), bark);
+					world.setBlockState(pos.south(i).down(y), bark, 2);
+					world.setBlockState(pos.south(i).down(y - 1), bark, 2);
 				}
 				break;
 
 			case 4:
 				if (!root) {
-					world.setBlockState(pos.north(i).up(y), branchBend ? logY : logZ);
+					world.setBlockState(pos.north(i).up(y), branchBend ? logY : logZ, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.north(i).up(y - 1), EnumFacing.NORTH);
 				}
 				else {
-					world.setBlockState(pos.north(i).down(y), bark);
-					world.setBlockState(pos.north(i).down(y - 1), bark);
+					world.setBlockState(pos.north(i).down(y), bark, 2);
+					world.setBlockState(pos.north(i).down(y - 1), bark, 2);
 				}
 				break;
 
 			case 5:
 				if (!root) {
-					world.setBlockState(pos.east(i - 1).up(y).south(i - 1), branchBend ? logY : logX);
+					world.setBlockState(pos.east(i - 1).up(y).south(i - 1), branchBend ? logY : logX, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.east(i - 1).up(y - 1).south(i - 1), EnumFacing.EAST);
 				}
 				else {
-					world.setBlockState(pos.east(i - 1).down(y).south(i - 1), bark);
-					world.setBlockState(pos.east(i - 1).down(y - 1).south(i - 1), bark);
+					world.setBlockState(pos.east(i - 1).down(y).south(i - 1), bark, 2);
+					world.setBlockState(pos.east(i - 1).down(y - 1).south(i - 1), bark, 2);
 				}
 				break;
 
 			case 6:
 				if (!root) {
-					world.setBlockState(pos.west(i - 1).up(y).north(i - 1), branchBend ? logY : logX);
+					world.setBlockState(pos.west(i - 1).up(y).north(i - 1), branchBend ? logY : logX, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.west(i - 1).up(y - 1).north(i - 1), EnumFacing.WEST);
 				}
 				else {
-					world.setBlockState(pos.west(i - 1).down(y).north(i - 1), bark);
-					world.setBlockState(pos.west(i - 1).down(y - 1).north(i - 1), bark);
+					world.setBlockState(pos.west(i - 1).down(y).north(i - 1), bark, 2);
+					world.setBlockState(pos.west(i - 1).down(y - 1).north(i - 1), bark, 2);
 				}
 				break;
 
 			case 7:
 				if (!root) {
-					world.setBlockState(pos.west(i - 1).up(y).south(i - 1), branchBend ? logY : logZ);
+					world.setBlockState(pos.west(i - 1).up(y).south(i - 1), branchBend ? logY : logZ, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.west(i - 1).up(y - 1).south(i - 1), EnumFacing.SOUTH);
 				}
 				else {
-					world.setBlockState(pos.west(i - 1).down(y).south(i - 1), bark);
-					world.setBlockState(pos.west(i - 1).down(y - 1).south(i - 1), bark);
+					world.setBlockState(pos.west(i - 1).down(y).south(i - 1), bark, 2);
+					world.setBlockState(pos.west(i - 1).down(y - 1).south(i - 1), bark, 2);
 				}
 				break;
 
 			case 8:
 				if (!root) {
-					world.setBlockState(pos.east(i - 1).up(y).north(i - 1), branchBend ? logY : logZ);
+					world.setBlockState(pos.east(i - 1).up(y).north(i - 1), branchBend ? logY : logZ, 2);
 					if (i <= branchLength)
 						addVines(world, rand, pos.east(i - 1).up(y - 1).north(i - 1), EnumFacing.NORTH);
 				}
 				else {
-					world.setBlockState(pos.east(i - 1).down(y).north(i - 1), bark);
-					world.setBlockState(pos.east(i - 1).down(y - 1).north(i - 1), bark);
+					world.setBlockState(pos.east(i - 1).down(y).north(i - 1), bark, 2);
+					world.setBlockState(pos.east(i - 1).down(y - 1).north(i - 1), bark, 2);
 				}
 				break;
 			}
