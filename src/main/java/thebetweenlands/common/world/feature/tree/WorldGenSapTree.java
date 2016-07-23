@@ -41,36 +41,36 @@ public class WorldGenSapTree extends WorldGenerator {
 
 			if (yy == height - 8 || yy == height - 12) {
 				if (rand.nextBoolean()) {
-					createlBranch(world, rand, pos.add(1, yy - rand.nextInt(2), 0), 1, 2);
-					createlBranch(world, rand, pos.add(- 1, yy - rand.nextInt(2), 0), 2, 2);
-					createlBranch(world, rand, pos.add(0, yy - rand.nextInt(2), 1), 3, 2);
-					createlBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - 1), 4, 2);
+					createBranch(world, rand, pos.add(1, yy - rand.nextInt(2), 0), 1, 2);
+					createBranch(world, rand, pos.add(- 1, yy - rand.nextInt(2), 0), 2, 2);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), 1), 3, 2);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - 1), 4, 2);
 				} else {
-					createlBranch(world, rand, pos.add(2, yy - rand.nextInt(2), 2), 5, 2);
-					createlBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), - 2), 6, 2);
-					createlBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), 2), 7, 2);
-					createlBranch(world, rand, pos.add(2, yy - rand.nextInt(2), - 2), 8, 2);
+					createBranch(world, rand, pos.add(2, yy - rand.nextInt(2), 2), 5, 2);
+					createBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), - 2), 6, 2);
+					createBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), 2), 7, 2);
+					createBranch(world, rand, pos.add(2, yy - rand.nextInt(2), - 2), 8, 2);
 				}
 			}
 
 			if (yy == height - 4) {
 				if (rand.nextBoolean()) {
-					createlBranch(world, rand, pos.add(1, yy - rand.nextInt(2), 0), 1, 1);
-					createlBranch(world, rand, pos.add(- 1, yy - rand.nextInt(2), 0), 2, 1);
-					createlBranch(world, rand, pos.add(0, yy - rand.nextInt(2), 1), 3, 1);
-					createlBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - 1), 4, 1);
+					createBranch(world, rand, pos.add(1, yy - rand.nextInt(2), 0), 1, 1);
+					createBranch(world, rand, pos.add(- 1, yy - rand.nextInt(2), 0), 2, 1);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), 1), 3, 1);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - 1), 4, 1);
 				} else {
-					createlBranch(world, rand, pos.add(2, yy - rand.nextInt(2), 2), 5, 1);
-					createlBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), - 2), 6, 1);
-					createlBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), 2), 7, 1);
-					createlBranch(world, rand, pos.add(2, yy - rand.nextInt(2), - 2), 8, 1);
+					createBranch(world, rand, pos.add(2, yy - rand.nextInt(2), 2), 5, 1);
+					createBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), - 2), 6, 1);
+					createBranch(world, rand, pos.add(- 2, yy - rand.nextInt(2), 2), 7, 1);
+					createBranch(world, rand, pos.add(2, yy - rand.nextInt(2), - 2), 8, 1);
 				}
 			}
 		}
 		return true;
 	}
 
-	private void createlBranch(World world, Random rand, BlockPos pos, int dir, int branchLength) {
+	private void createBranch(World world, Random rand, BlockPos pos, int dir, int branchLength) {
 		boolean branchBend = false;
 		int y = 0;
 		for (int i = 0; i <= branchLength; ++i) {
