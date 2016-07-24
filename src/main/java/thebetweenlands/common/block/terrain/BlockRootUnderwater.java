@@ -17,6 +17,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockRootUnderwater extends BlockSwampWater {
@@ -25,6 +26,7 @@ public class BlockRootUnderwater extends BlockSwampWater {
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
+		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
 	@Override

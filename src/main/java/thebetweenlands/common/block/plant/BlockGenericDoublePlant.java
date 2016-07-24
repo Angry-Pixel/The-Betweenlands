@@ -28,6 +28,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
 public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBlock {
@@ -39,6 +40,7 @@ public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBl
 		this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockGenericDoublePlant.EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.NORTH));
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.PLANT);
+		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
 	@Override

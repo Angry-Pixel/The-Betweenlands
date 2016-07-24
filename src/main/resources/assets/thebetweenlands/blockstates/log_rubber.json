@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:rubber_log_center"
+    "model": "thebetweenlands:log_rubber_center"
   },
   "variants": {
     "natural": {
@@ -10,7 +10,7 @@
     },
     "north": {
       "true": {
-        "submodel": "thebetweenlands:rubber_log_connection",
+        "submodel": "thebetweenlands:log_rubber_connection",
         "x": 90,
         "uvlock": "false"
       },
@@ -18,7 +18,7 @@
     },
     "east": {
       "true": {
-        "submodel": "thebetweenlands:rubber_log_connection",
+        "submodel": "thebetweenlands:log_rubber_connection",
         "x": 90,
         "y": 90,
         "uvlock": "false"
@@ -27,7 +27,7 @@
     },
     "south": {
       "true": {
-        "submodel": "thebetweenlands:rubber_log_connection",
+        "submodel": "thebetweenlands:log_rubber_connection",
         "x": 90,
         "y": 180,
         "uvlock": "false"
@@ -36,7 +36,7 @@
     },
     "west": {
       "true": {
-        "submodel": "thebetweenlands:rubber_log_connection",
+        "submodel": "thebetweenlands:log_rubber_connection",
         "x": 90,
         "y": 270,
         "uvlock": "false"
@@ -45,60 +45,60 @@
     },
     "up": {
       "true": {
-        "submodel": "thebetweenlands:rubber_log_connection",
+        "submodel": "thebetweenlands:log_rubber_connection",
         "uvlock": "false"
       },
       "false": { }
     },
     "down": {
       "true": {
-        "submodel": "thebetweenlands:rubber_log_connection",
+        "submodel": "thebetweenlands:log_rubber_connection",
         "x": 180,
         "uvlock": "false"
       },
       "false": { }
     },
     "down=false,east=true,natural=false,north=false,south=false,up=false,west=false": {
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "west": "thebetweenlands:blocks/rubber_log_top"
+        "west": "thebetweenlands:blocks/log_rubber_top"
       }
     },
     "down=false,east=false,natural=false,north=false,south=false,up=false,west=true": {
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "east": "thebetweenlands:blocks/rubber_log_top"
+        "east": "thebetweenlands:blocks/log_rubber_top"
       }
     },
     "down=false,east=false,natural=false,north=true,south=false,up=false,west=false": {
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "south": "thebetweenlands:blocks/rubber_log_top"
+        "south": "thebetweenlands:blocks/log_rubber_top"
       }
     },
     "down=false,east=false,natural=false,north=false,south=true,up=false,west=false": {
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "north": "thebetweenlands:blocks/rubber_log_top"
+        "north": "thebetweenlands:blocks/log_rubber_top"
       }
     },
     "down=true,east=false,natural=false,north=false,south=false,up=false,west=false": {
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "up": "thebetweenlands:blocks/rubber_log_top"
+        "up": "thebetweenlands:blocks/log_rubber_top"
       }
     },
     "down=false,east=false,natural=false,north=false,south=false,up=true,west=false": {
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "down": "thebetweenlands:blocks/rubber_log_top"
+        "down": "thebetweenlands:blocks/log_rubber_top"
       }
     },
     "inventory": { 
-      "model": "thebetweenlands:rubber_log_center",
+      "model": "thebetweenlands:log_rubber_center",
       "textures": {
-        "up": "thebetweenlands:blocks/rubber_log_top",
-        "down": "thebetweenlands:blocks/rubber_log_top"
+        "up": "thebetweenlands:blocks/log_rubber_top",
+        "down": "thebetweenlands:blocks/log_rubber_top"
       },
       "transform": "forge:default-block"
     }

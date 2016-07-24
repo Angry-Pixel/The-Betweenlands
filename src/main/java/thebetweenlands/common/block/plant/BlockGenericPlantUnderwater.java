@@ -21,6 +21,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
@@ -33,6 +34,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0));
+		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
 	@Override
