@@ -36,9 +36,9 @@ public class TextureCorrosion extends TextureAtlasSprite {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Random RANDOM = new Random(0);
 
-	private static int[] corrosionPixels;
-	private static int corrosionWidth;
-	private static int corrosionHeight;
+	private int[] corrosionPixels;
+	private int corrosionWidth;
+	private int corrosionHeight;
 
 	private AnimationMetadataSection animationMetadata;
 	private long seed;
@@ -244,6 +244,10 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	@Override
 	public void updateAnimation() {
+		//TODO: This should always stay in sync with the parent's tickCounter and frameCounter. 
+		//That's usually the case, but if something calls updateAnimation from somewhere else 
+		//than TextureMap#updateAnimations it'll desync
+		
 		++this.tickCounter;
 
 		if (this.tickCounter >= this.animationMetadata.getFrameTimeSingle(this.frameCounter)) {

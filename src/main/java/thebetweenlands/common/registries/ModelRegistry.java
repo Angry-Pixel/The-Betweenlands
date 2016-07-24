@@ -7,24 +7,24 @@ import java.util.Locale;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import thebetweenlands.client.render.model.block.ModelBlank;
-import thebetweenlands.client.render.model.block.ModelCombined;
-import thebetweenlands.client.render.model.block.ModelFromModelBase;
-import thebetweenlands.client.render.model.block.ModelLifeCrystalStalactite;
-import thebetweenlands.client.render.model.block.ModelRoot;
-import thebetweenlands.client.render.model.block.ModelStalactite;
-import thebetweenlands.client.render.model.block.modelbase.ModelBlackHatMushroom1;
-import thebetweenlands.client.render.model.block.modelbase.ModelBlackHatMushroom2;
-import thebetweenlands.client.render.model.block.modelbase.ModelBlackHatMushroom3;
-import thebetweenlands.client.render.model.block.modelbase.ModelBulbCappedMushroom;
-import thebetweenlands.client.render.model.block.modelbase.ModelFlatHeadMushroom1;
-import thebetweenlands.client.render.model.block.modelbase.ModelFlatHeadMushroom2;
-import thebetweenlands.client.render.model.block.modelbase.ModelPitcherPlant;
-import thebetweenlands.client.render.model.block.modelbase.ModelSundew;
-import thebetweenlands.client.render.model.block.modelbase.ModelSwampPlant;
-import thebetweenlands.client.render.model.block.modelbase.ModelVenusFlyTrap;
-import thebetweenlands.client.render.model.block.modelbase.ModelVolarpad;
-import thebetweenlands.client.render.model.block.modelbase.ModelWeepingBlue;
+import thebetweenlands.client.render.model.baked.ModelBlank;
+import thebetweenlands.client.render.model.baked.ModelCombined;
+import thebetweenlands.client.render.model.baked.ModelFromModelBase;
+import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
+import thebetweenlands.client.render.model.baked.ModelRoot;
+import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelBulbCappedMushroom;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
+import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
+import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
+import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -57,18 +57,56 @@ public class ModelRegistry {
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
+	private final ICustomRegistrar defaultRegistrar = new DefaultRegistrar(CustomModelManager.INSTANCE);
+
+	public static interface ICustomRegistrar {
+		/**
+		 * Called when this model is registered.
+		 * Can be used to register additional models or
+		 * to override the default registering.
+		 * @param model Model to register
+		 * @param location Resource location of the model
+		 * @return Return true to cancel default registering
+		 */
+		default boolean registerModel(IModel model, ResourceLocation location) {
+			return false;
+		}
+	}
+
+	public static final class DefaultRegistrar implements ICustomRegistrar {
+		private CustomModelManager manager;
+
+		private DefaultRegistrar(CustomModelManager manager) {
+			this.manager = manager;
+		}
+
+		@Override
+		public boolean registerModel(IModel model, ResourceLocation location) {
+			this.manager.registerModel(location, model);
+			return true;
+		}
+	}
+
 	public void preInit() {
 		try {
 			for (Field field : this.getClass().getDeclaredFields()) {
 				if (field.getType().isAssignableFrom(IModel.class)) {
 					IModel model = (IModel) field.get(this);
 					MODELS.add(model);
-					CustomModelManager.INSTANCE.registerModel(new ResourceLocation(ModInfo.ID, "models/block/internal/" + field.getName().toLowerCase(Locale.ENGLISH)), model);
-					CustomModelManager.INSTANCE.registerModel(new ResourceLocation(ModInfo.ID, "models/item/internal/" + field.getName().toLowerCase(Locale.ENGLISH)), model);
+					ResourceLocation blockLocation = new ResourceLocation(ModInfo.ID, "models/block/internal/" + field.getName().toLowerCase(Locale.ENGLISH));
+					ResourceLocation itemLocation = new ResourceLocation(ModInfo.ID, "models/item/internal/" + field.getName().toLowerCase(Locale.ENGLISH));
+					this.registerModel(model, blockLocation);
+					this.registerModel(model, itemLocation);
 				}
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+	}
+
+	private void registerModel(IModel model, ResourceLocation location) {
+		if(model instanceof ICustomRegistrar == false || !((ICustomRegistrar)model).registerModel(model, location)) {
+			this.defaultRegistrar.registerModel(model, location);
 		}
 	}
 }

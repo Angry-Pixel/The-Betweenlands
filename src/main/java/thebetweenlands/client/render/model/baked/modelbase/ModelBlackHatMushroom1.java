@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.model.block.modelbase;
+package thebetweenlands.client.render.model.baked.modelbase;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;

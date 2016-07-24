@@ -2,7 +2,8 @@ package thebetweenlands.client.render.model.loader;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Function;
+
+import com.google.common.base.Function;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
@@ -27,7 +28,7 @@ public class CustomModelManager {
 	 * @param modelLocation
 	 * @param modelGetter
 	 */
-	public void registerModel(ResourceLocation modelLocation, Function<ResourceLocation, IModel> modelGetter) {
+	private void registerModel(ResourceLocation modelLocation, Function<ResourceLocation, IModel> modelGetter) {
 		this.registeredModels.put(modelLocation, modelGetter);
 	}
 
@@ -37,6 +38,9 @@ public class CustomModelManager {
 	 * @param model
 	 */
 	public void registerModel(ResourceLocation modelLocation, IModel model) {
-		this.registerModel(modelLocation, (location) -> (model));
+		if(model instanceof IModelVariantProvider)
+			this.registerModel(modelLocation, (location) -> (((IModelVariantProvider)model).getModelVariant(location)));
+		else 
+			this.registerModel(modelLocation, (location) -> (model));
 	}
 }

@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.model.block;
+package thebetweenlands.client.render.model.baked;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,7 +90,7 @@ public class ModelFromModelBase implements IModel {
 		private final TextureAtlasSprite texture;
 		private final List<BakedQuad> quads;
 
-		private ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, int width, int height) {
+		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, int width, int height) {
 			this.transformation = transformation.isPresent() ? transformation.get() : null;
 			this.transforms = transforms;
 			this.format = format;

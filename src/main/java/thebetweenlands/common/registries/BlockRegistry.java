@@ -28,6 +28,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
+import thebetweenlands.common.block.BlockRubberLog;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
@@ -148,6 +149,7 @@ public class BlockRegistry {
 
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
+	public static final Block RUBBER_LOG = new BlockRubberLog();
 	public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
 	public static final Block LOG_SAP = new BlockLogBetweenlands();
 	public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
