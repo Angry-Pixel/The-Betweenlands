@@ -306,17 +306,22 @@ public class BlockRegistry {
 
 		GameRegistry.register(block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
 
-		ItemBlock item;
-		if (block instanceof ICustomItemBlock)
-			item = ((ICustomItemBlock) block).getItemBlock();
-		else
-			item = new ItemBlock(block);
+		ItemBlock item = getBlockItem(block);
 
 		//Allows ICustomItemBlock to return null if no item block is required
 		if(item != null)
 			GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
 	}
 
+	public static ItemBlock getBlockItem(Block block) {
+		ItemBlock item;
+		if (block instanceof ICustomItemBlock)
+			item = ((ICustomItemBlock) block).getItemBlock();
+		else
+			item = new ItemBlock(block);
+		return item;
+	}
+	
 	public interface ICustomItemBlock {
 		/**
 		 * Returns a custom item for this block

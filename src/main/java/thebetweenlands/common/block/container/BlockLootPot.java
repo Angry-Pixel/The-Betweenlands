@@ -5,7 +5,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -20,6 +19,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -32,11 +32,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.item.ItemBlockEnum;
+import thebetweenlands.common.item.ItemBlockEnum.IGenericMetaSelector;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.tile.TileEntityLootPot;
 
-public class BlockLootPot extends BasicBlock implements ITileEntityProvider, BlockRegistry.ISubtypeBlock {
-	public static final PropertyDirection FACING = BlockHorizontal.FACING;
+public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICustomItemBlock, ISubtypeBlock {
+	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyEnum<EnumLootPot> VARIANT = PropertyEnum.create("type", EnumLootPot.class);
 
 	public BlockLootPot() {
@@ -70,6 +73,11 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, Blo
 	}
 
 	@Override
+	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+		return new ItemStack(this, 1, ((EnumLootPot)state.getValue(VARIANT)).getMetadata(EnumFacing.NORTH));
+	}
+
+	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, EnumLootPot.byMetadata(meta)).withProperty(FACING, EnumFacing.getHorizontal(meta & 3));
 	}
@@ -82,17 +90,6 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, Blo
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[]{VARIANT, FACING});
-	}
-
-	@Override
-	public int damageDropped(IBlockState state) {
-		return getMetaFromState(state.withProperty(FACING, EnumFacing.NORTH));
-	}
-
-	@Nullable
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return null;
 	}
 
 	@Override
@@ -124,7 +121,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, Blo
 				ItemStack toAdd = item.copy();
 				toAdd.stackSize = 1;
 				for (int i = 0; i < 3; i++) {
-					if (tile != null && tile.getStackInSlot(i) == null) {
+					if (tile.getStackInSlot(i) == null) {
 						if (!worldIn.isRemote) {
 							tile.setInventorySlotContents(i, toAdd);
 							if (!playerIn.capabilities.isCreativeMode)
@@ -183,7 +180,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, Blo
 		super.onBlockDestroyedByPlayer(worldIn, pos, state);
 	}
 
-	public enum EnumLootPot implements IStringSerializable {
+	public enum EnumLootPot implements IStringSerializable, IGenericMetaSelector {
 		POT_1(0, "1"),
 		POT_2(1, "2"),
 		POT_3(2, "3");
@@ -222,6 +219,11 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, Blo
 				METADATA_LOOKUP[type.metadata] = type;
 			}
 		}
+
+		@Override
+		public boolean isMetadataMatching(int meta) {
+			return byMetadata(meta) == this;
+		}
 	}
 
 	@Override
@@ -237,5 +239,10 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, Blo
 	@Override
 	public String getSubtypeName(int meta) {
 		return "%s_" + EnumLootPot.byMetadata(meta).getName();
+	}
+
+	@Override
+	public ItemBlock getItemBlock() {
+		return ItemBlockEnum.create(this, EnumLootPot.class);
 	}
 }

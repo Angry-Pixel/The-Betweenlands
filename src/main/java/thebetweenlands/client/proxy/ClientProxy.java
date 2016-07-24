@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -49,6 +50,7 @@ import thebetweenlands.client.render.render.tile.LootPotRenderer;
 import thebetweenlands.client.render.render.tile.PurifierRenderer;
 import thebetweenlands.client.render.render.tile.WeedwoodWorkbenchRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -66,7 +68,11 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tile.*;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -238,6 +244,9 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(ItemRegistry.WEEDWOOD_SHIELD, 0, TileEntityWeedwoodShield.class);
 		ForgeHooksClient.registerTESRItemStack(ItemRegistry.SYMORITE_SHIELD, 0, TileEntitySymoriteShield.class);
 		ForgeHooksClient.registerTESRItemStack(ItemRegistry.BONE_SHIELD, 0, TileEntityBoneShield.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_1.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_2.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_3.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
 	}
 
 	@Override
