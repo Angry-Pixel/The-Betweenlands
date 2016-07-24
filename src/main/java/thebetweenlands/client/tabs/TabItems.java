@@ -1,8 +1,8 @@
 package thebetweenlands.client.tabs;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import thebetweenlands.client.tab.CreativeTabBetweenlands;
+import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 
 public class TabItems extends CreativeTabBetweenlands {
 	public TabItems() {
@@ -10,7 +10,7 @@ public class TabItems extends CreativeTabBetweenlands {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return /*BLItemRegistry.SWAMP_TALISMAN*/Item.getItemFromBlock(Blocks.STONE);
-	}
+	public ItemStack getIconItemStack() {  
+		return EnumTalisman.SWAMP_TALISMAN_0.create(1);  
+	}  
 }
