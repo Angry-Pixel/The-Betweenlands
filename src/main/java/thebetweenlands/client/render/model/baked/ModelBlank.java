@@ -102,7 +102,8 @@ public class ModelBlank implements IModelCustomData {
 
 	@Override
 	public IModel process(ImmutableMap<String, String> customData) {
-		if(!customData.containsKey("particle_texture")) return this;
+		if(!customData.containsKey("particle_texture")) 
+			throw new RuntimeException("No particle texture specified!");
 		JsonParser parser = new JsonParser();
 		ResourceLocation particleTextureLocation = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
 		return new ModelBlank(particleTextureLocation);

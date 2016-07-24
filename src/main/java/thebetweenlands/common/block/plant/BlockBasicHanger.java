@@ -55,7 +55,7 @@ public class BlockBasicHanger extends BlockBush {
     }
 
     protected boolean isValidBlock(IBlockState block) {
-        return block.getMaterial().blocksMovement() || block.getBlock() == BlockRegistry.LEAVES_WEEDWOOD || block.getBlock() instanceof BlockBasicHanger;
+        return block.getMaterial().blocksMovement() || block.getBlock() == BlockRegistry.LEAVES_WEEDWOOD_TREE || block.getBlock() instanceof BlockBasicHanger;
     }
 
     @Override

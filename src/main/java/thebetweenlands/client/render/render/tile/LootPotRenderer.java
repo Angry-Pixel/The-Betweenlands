@@ -14,13 +14,13 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 
 public class LootPotRenderer extends TileEntitySpecialRenderer<TileEntityLootPot> {
 
-	private final ModelLootPot1 LOOT_POT = new ModelLootPot1();
-	private final ModelLootPot2 LOOT_POT_2 = new ModelLootPot2();
-	private final ModelLootPot3 LOOT_POT_3 = new ModelLootPot3();
+	private static final ModelLootPot1 LOOT_POT = new ModelLootPot1();
+	private static final ModelLootPot2 LOOT_POT_2 = new ModelLootPot2();
+	private static final ModelLootPot3 LOOT_POT_3 = new ModelLootPot3();
 
-	private final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_1.png");
-	private final ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_2.png");
-	private final ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_3.png");
+	private static final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_1.png");
+	private static final ResourceLocation TEXTURE_2 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_2.png");
+	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_3.png");
 
 	@Override
 	public void renderTileEntityAt(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage) {

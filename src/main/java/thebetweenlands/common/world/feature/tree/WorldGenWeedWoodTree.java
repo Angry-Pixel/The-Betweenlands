@@ -28,7 +28,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 		this.logZ = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z);
 		this.bark = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.WEEDWOOD.getDefaultState();
-		this.leaves = BlockRegistry.LEAVES_WEEDWOOD.getDefaultState();
+		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 		this.ivy = BlockRegistry.POISON_IVY.getDefaultState();
 
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)

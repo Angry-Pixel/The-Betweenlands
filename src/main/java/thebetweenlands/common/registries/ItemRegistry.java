@@ -143,7 +143,6 @@ public class ItemRegistry {
 	public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
 
 	public static final Item TEST_ITEM = new TestItem();
-	public static final Item RANDOM_SOUND = new ItemRandomSound();
 
 	public final static List<Item> ITEMS = new ArrayList<Item>();
 

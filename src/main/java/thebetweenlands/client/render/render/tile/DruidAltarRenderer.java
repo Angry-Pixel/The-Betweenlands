@@ -29,10 +29,10 @@ public class DruidAltarRenderer extends TileEntitySpecialRenderer<TileEntityDrui
 	public static DruidAltarRenderer instance;
 	private final ModelDruidAltar model = new ModelDruidAltar();
 	private final ModelStone stone = new ModelStone();
-	private final ResourceLocation ACTIVE = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarActive.png");
-	private final ResourceLocation ACTIVEGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarActiveGlow.png");
-	private final ResourceLocation NORMAL = new ResourceLocation("thebetweenlands:textures/tiles/druidAltar.png");
-	private final ResourceLocation NORMALGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druidAltarGlow.png");
+	private final ResourceLocation ACTIVE = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_active.png");
+	private final ResourceLocation ACTIVEGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_active_glow.png");
+	private final ResourceLocation NORMAL = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar.png");
+	private final ResourceLocation NORMALGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_glow.png");
 
 	public DruidAltarRenderer() {
 	}
@@ -324,6 +324,10 @@ public class DruidAltarRenderer extends TileEntitySpecialRenderer<TileEntityDrui
 
 	@Override
 	public void renderTileEntityAt(TileEntityDruidAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
+		if(te == null || !te.hasWorldObj()) {
+			renderTileAsItem(x, y, z);
+			return;
+		}
 		renderTile(te, x, y, z, partialTicks);
 	}
 }

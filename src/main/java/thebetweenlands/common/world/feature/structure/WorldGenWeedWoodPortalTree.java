@@ -25,7 +25,7 @@ public class WorldGenWeedWoodPortalTree extends WorldGenerator {
 
 		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.LOG_WEEDWOOD.getDefaultState();
-		this.leaves = BlockRegistry.LEAVES_WEEDWOOD.getDefaultState();
+		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 		this.portal = BlockRegistry.TREE_PORTAL.getDefaultState();
 
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)

@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -23,8 +22,6 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockGenericStone extends Block implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlock{
-
-	public static final PropertyBool IS_SPOOPY = PropertyBool.create("isspoopy");
 	public static final PropertyEnum<EnumStoneType> VARIANT = PropertyEnum.<EnumStoneType>create("variant", EnumStoneType.class);
 
 	public BlockGenericStone() {
@@ -34,8 +31,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 		setSoundType(SoundType.STONE);
 		setHarvestLevel("pickaxe", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		//setBlockName("thebetweenlands.genericStone");
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumStoneType.CORRUPT_BETWEENSTONE).withProperty(IS_SPOOPY, false));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumStoneType.CORRUPT_BETWEENSTONE));
 	}
 
 	@Override
@@ -47,7 +43,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	}
 
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {VARIANT, IS_SPOOPY});
+		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
 
 	protected ItemStack createStackedBlock(IBlockState state) {
@@ -63,23 +59,13 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	}
 
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(IS_SPOOPY, false).withProperty(VARIANT, EnumStoneType.byMetadata(meta));
+		return this.getDefaultState().withProperty(VARIANT, EnumStoneType.byMetadata(meta));
 	}
 
 	@Override
 	public ItemBlock getItemBlock() {
 		return ItemBlockEnum.create(this, EnumStoneType.class);
 	}
-
-	/*public static enum EnumStoneType implements IStringSerializable{
-		CORRUPT_BETWEENSTONE;
-
-		@Override
-		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
-		}
-
-	}*/
 
 	public static enum EnumStoneType implements IStringSerializable {
 		CORRUPT_BETWEENSTONE(0);

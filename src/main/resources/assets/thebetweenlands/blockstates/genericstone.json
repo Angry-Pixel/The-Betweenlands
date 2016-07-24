@@ -1,6 +1,0 @@
-{
-  "variants": {
-    "isspoopy=false,variant=corrupt_betweenstone": {"model": "thebetweenlands:corrupt_betweenstone"},
-    "isspoopy=true,variant=corrupt_betweenstone": {"model": "thebetweenlands:INVALID"}
-  }
-}

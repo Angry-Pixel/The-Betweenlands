@@ -1,7 +1,15 @@
 {
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:tiles/druid_altar_particle"
+    }
+  },
   "variants": {
-    "normal": {
-      "model": "thebetweenlands:blank"
+    "active": {
+      "true": { },
+      "false": { }
     }
   }
 }

@@ -16,7 +16,7 @@
             "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
-                    "translation": [0, 0.1, 0],
+                    "translation": [0, 0, 0],
                     "scale":[0.75, 0.75, 0.75]
                 },
                 "ground": {

@@ -88,7 +88,7 @@ public class BlockRegistry {
 			.setSoundType2(SoundType.STONE)
 			.setHardness(1.5F)
 			.setResistance(10.0F);
-	public static final Block GENERICSTONE = new BlockGenericStone();
+	public static final Block GENERIC_STONE = new BlockGenericStone();
 	public static final Block MUD = new BlockMud();
 	public static final Block PEAT = new BlockPeat();
 	public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
@@ -155,7 +155,7 @@ public class BlockRegistry {
 	public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
 	public static final Block SAPLING_SAP = new BlockSaplingBetweenlands("SAP");
 	public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands("RUBBER");
-	public static final Block LEAVES_WEEDWOOD = new BlockLeavesBetweenlands() {
+	public static final Block LEAVES_WEEDWOOD_TREE = new BlockLeavesBetweenlands() {
 		@Override
 		public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 			return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
