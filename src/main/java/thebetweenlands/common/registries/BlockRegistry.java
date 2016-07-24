@@ -292,7 +292,8 @@ public class BlockRegistry {
 			if(block instanceof ISubtypeBlock) {
 				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
 				for(int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + String.format(subtypeBlock.getSubtypeName(i), name.getResourcePath()), "inventory"));
+					int meta = subtypeBlock.getSubtypeMeta(i);
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
 				}
 			} else {
 				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
@@ -338,6 +339,15 @@ public class BlockRegistry {
 		 * @return
 		 */
 		String getSubtypeName(int meta);
+		
+		/**
+		 * Returns the metadata for the specified subtype
+		 * @param subtype
+		 * @return
+		 */
+		default int getSubtypeMeta(int subtype) {
+			return subtype;
+		}
 	}
 
 	public interface IStateMappedBlock {
