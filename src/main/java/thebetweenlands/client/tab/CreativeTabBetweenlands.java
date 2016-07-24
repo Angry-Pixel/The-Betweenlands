@@ -24,4 +24,11 @@ public abstract class CreativeTabBetweenlands extends CreativeTabs {
 			}
 		}
 	}
+
+	@Override
+	public Item getTabIconItem() {
+		if(this.getIconItemStack() != null)
+			return this.getIconItemStack().getItem();
+		return null;
+	}
 }

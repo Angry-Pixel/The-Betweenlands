@@ -18,6 +18,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
@@ -26,6 +27,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 
 	public BlockSwampWater(Fluid fluid, Material material) {
 		super(fluid, material);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	public BlockSwampWater setUnderwaterBlock(boolean underwaterBlock) {

@@ -17,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.SoilHelper;
 
 public class BlockGenericPlant extends BlockBush {
@@ -24,6 +25,7 @@ public class BlockGenericPlant extends BlockBush {
 		super(Material.VINE);
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.PLANT);
+		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
 	@Override

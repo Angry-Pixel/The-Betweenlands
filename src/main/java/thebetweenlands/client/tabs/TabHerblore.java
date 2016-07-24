@@ -1,8 +1,8 @@
 package thebetweenlands.client.tabs;
 
-import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import thebetweenlands.client.tab.CreativeTabBetweenlands;
+import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 
 public class TabHerblore extends CreativeTabBetweenlands {
 	public TabHerblore() {
@@ -10,7 +10,7 @@ public class TabHerblore extends CreativeTabBetweenlands {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return /*BLItemRegistry.pestle*/Item.getItemFromBlock(Blocks.STONE);
+	public ItemStack getIconItemStack() {
+		return EnumItemCrushed.GROUND_GENERIC_LEAF.create(1);
 	}
 }

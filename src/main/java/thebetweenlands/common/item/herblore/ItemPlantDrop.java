@@ -89,7 +89,7 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		VENUS_FLY_TRAP_ITEM(35),
 		VOLARPAD_ITEM(36),
 		THORNS(37),
-		POISON_IVY(38);
+		POISON_IVY_ITEM(38);
 
 		private final int id;
 		private final String unlocalizedName;

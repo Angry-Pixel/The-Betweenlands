@@ -3,7 +3,7 @@ package thebetweenlands.common.registries;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.item.misc.ItemSwampTalisman;
+import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 
@@ -15,7 +15,7 @@ public class RecipeRegistry {
 	}
 
 	private void registerDruidAltarRecipes() {
-		DruidAltarRecipe.addRecipe(ItemSwampTalisman.createStack(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_1, 1), ItemSwampTalisman.createStack(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_2, 1), ItemSwampTalisman.createStack(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_3, 1), ItemSwampTalisman.createStack(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_4, 1), ItemSwampTalisman.createStack(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_0, 1));
+		DruidAltarRecipe.addRecipe(EnumTalisman.SWAMP_TALISMAN_1.create(1), EnumTalisman.SWAMP_TALISMAN_2.create(1), EnumTalisman.SWAMP_TALISMAN_3.create(1), EnumTalisman.SWAMP_TALISMAN_4.create(1), EnumTalisman.SWAMP_TALISMAN_0.create(1));
 	}
 
 	private void registerCompostRecipes() {
