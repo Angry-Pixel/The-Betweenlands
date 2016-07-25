@@ -1,34 +1,12 @@
 {
   "variants": {
-    "random=0": {
-      "model": "thebetweenlands:druid_stone_4"
-    },
-    "random=1": {
-      "model": "thebetweenlands:druid_stone_4",
-      "y": 90
-    },
-    "random=2": {
-      "model": "thebetweenlands:druid_stone_4",
-      "y": 180
-    },
-    "random=3": {
-      "model": "thebetweenlands:druid_stone_4",
-      "y": -90
-    },
-    "random=4": {
-      "model": "thebetweenlands:druid_stone_4_active"
-    },
-    "random=5": {
-      "model": "thebetweenlands:druid_stone_4_active",
-      "y": 90
-    },
-    "random=6": {
-      "model": "thebetweenlands:druid_stone_4_active",
-      "y": 180
-    },
-    "random=7": {
-      "model": "thebetweenlands:druid_stone_4_active",
-      "y": -90
-    }
+    "active=false,facing=north": { "model": "thebetweenlands:druid_stone_4" },
+    "active=false,facing=south": { "model": "thebetweenlands:druid_stone_4", "y": 180 },
+    "active=false,facing=west": { "model": "thebetweenlands:druid_stone_4", "y": 270 },
+    "active=false,facing=east": { "model": "thebetweenlands:druid_stone_4", "y": 90 },
+    "active=true,facing=north": { "model": "thebetweenlands:druid_stone_4_active" },
+    "active=true,facing=south": { "model": "thebetweenlands:druid_stone_4_active", "y": 180 },
+    "active=true,facing=west": { "model": "thebetweenlands:druid_stone_4_active", "y": 270 },
+    "active=true,facing=east": { "model": "thebetweenlands:druid_stone_4_active", "y": 90 }
   }
 }
