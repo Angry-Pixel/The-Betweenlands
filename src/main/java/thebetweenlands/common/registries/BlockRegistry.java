@@ -44,10 +44,7 @@ import thebetweenlands.common.block.plant.BlockGenericPlant;
 import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockGenericStackablePlantUnderwater;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
-import thebetweenlands.common.block.structure.BlockDruidSpawner;
-import thebetweenlands.common.block.structure.BlockDruidStone;
-import thebetweenlands.common.block.structure.BlockPortalFrame;
-import thebetweenlands.common.block.structure.BlockTreePortal;
+import thebetweenlands.common.block.structure.*;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
@@ -208,6 +205,7 @@ public class BlockRegistry {
 	public static final Block WEAK_MOSSY_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block DENTROTHYST = new BlockDentrothyst(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block LOOT_POT = new BlockLootPot();
+	public static final Block MOB_SPAWNER = new BlockMobSpawnerBetweenlands();
 
 	//Plants
 	public static final Block PITCHER_PLANT = new BlockGenericDoublePlant();

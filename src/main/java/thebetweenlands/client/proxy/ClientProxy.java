@@ -45,10 +45,7 @@ import thebetweenlands.client.render.render.item.TileEntityOctineShield;
 import thebetweenlands.client.render.render.item.TileEntitySymoriteShield;
 import thebetweenlands.client.render.render.item.TileEntityValoniteShield;
 import thebetweenlands.client.render.render.item.TileEntityWeedwoodShield;
-import thebetweenlands.client.render.render.tile.DruidAltarRenderer;
-import thebetweenlands.client.render.render.tile.LootPotRenderer;
-import thebetweenlands.client.render.render.tile.PurifierRenderer;
-import thebetweenlands.client.render.render.tile.WeedwoodWorkbenchRenderer;
+import thebetweenlands.client.render.render.tile.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -74,6 +71,7 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -232,6 +230,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new DruidAltarRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodWorkbench.class, new WeedwoodWorkbenchRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot.class, new LootPotRenderer());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMobSpawnerBetweenlands.class, new MobSpawnerBetweenlandsRenderer());
 		//shield rendering
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityOctineShield.class, new RenderBLShield(RenderBLShield.Shieldtype.OCTINE));
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySymoriteShield.class, new RenderBLShield(RenderBLShield.Shieldtype.SYMORITE));
@@ -252,6 +251,7 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_1.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_2.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_3.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
 	}
 
 	@Override

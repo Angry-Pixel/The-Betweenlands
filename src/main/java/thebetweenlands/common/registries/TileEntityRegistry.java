@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.common.tile.*;
+import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 
 public class TileEntityRegistry {
 	public void init() {
@@ -11,6 +12,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityWeedwoodWorkbench.class, "weedwoodWorkbench");
 		registerTileEntity(TileEntityCompostBin.class, "compost_bin");
 		registerTileEntity(TileEntityLootPot.class, "loot_pot");
+		registerTileEntity(TileEntityMobSpawnerBetweenlands.class, "mob_spawner");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

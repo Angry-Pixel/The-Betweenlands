@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockLootPot;
+import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.feature.loot.LootTables;
@@ -145,26 +146,26 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @param mob      the mob that should be in the spawner
      */
     public void rotatedSpawner(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation, String mob) {
-        /*pos.add(-( width / 2), 0, -(depth / 2));
-        IBlockState spawner;
+        pos.add(-(width / 2), 0, -(depth / 2));
+        IBlockState spawner = BlockRegistry.MOB_SPAWNER.getDefaultState();
         switch (rotation) {
             case 0:
-                world.setBlockState(pos.add(offsetX,offsetY, offsetZ), spawner);
-                BlockBLSpawner.setMob(world, pos.add(offsetX,offsetY, offsetZ), mob);
+                world.setBlockState(pos.add(offsetX, offsetY, offsetZ), spawner);
+                BlockMobSpawnerBetweenlands.setMob(world, pos.add(offsetX, offsetY, offsetZ), mob);
                 break;
             case 1:
                 world.setBlockState(pos.add(offsetZ, offsetY, depth - offsetX - 1), spawner);
-                BlockBLSpawner.setMob(world, pos.add(offsetZ, offsetY, depth - offsetX - 1), mob);
+                BlockMobSpawnerBetweenlands.setMob(world, pos.add(offsetZ, offsetY, depth - offsetX - 1), mob);
                 break;
             case 2:
                 world.setBlockState(pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1), spawner);
-                BlockBLSpawner.setMob(world, pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1), mob);
+                BlockMobSpawnerBetweenlands.setMob(world, pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1), mob);
                 break;
             case 3:
-                world.setBlockState(pos.add( width - offsetZ - 1, offsetY, offsetX), spawner);
-                BlockBLSpawner.setMob(world, x + width - offsetZ - 1, y + offsetY, z + offsetX, mob);
+                world.setBlockState(pos.add(width - offsetZ - 1, offsetY, offsetX), spawner);
+                BlockMobSpawnerBetweenlands.setMob(world, pos.add(width - offsetZ - 1, offsetY, offsetX), mob);
                 break;
-        }*/
+        }
 
     }
 
