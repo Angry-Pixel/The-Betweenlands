@@ -11,10 +11,7 @@ import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.stats.StatList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,7 +22,6 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class ItemBLShield extends ItemShield {
 	private ToolMaterial material;
-	//TODO add good way for rendering multiple shields, also add some stuff that is done for the shield item
 
 	public ItemBLShield(ToolMaterial material) {
 		this.material = material;
@@ -38,26 +34,8 @@ public class ItemBLShield extends ItemShield {
 
 	}
 
-	@Override
-	public double getDurabilityForDisplay(ItemStack stack) {
-		if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage")) {
-			return ((double) stack.getTagCompound().getInteger("damage") / (double) getMaxMetaDamage());
-		} else
-			return 1;
-	}
-
-
 	public int getMaxMetaDamage() {
-		return material.getMaxUses() * 2;
-	}
-
-	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
-		return stack.getTagCompound() != null && stack.getTagCompound().hasKey("damage") && stack.getTagCompound().getInteger("damage") > 0;
-	}
-
-	public String getItemStackDisplayName(ItemStack stack) {
-		return ("" + I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
+		return this.material.getMaxUses() * 2;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -68,7 +46,6 @@ public class ItemBLShield extends ItemShield {
 	public CreativeTabs getCreativeTab() {
 		return BLCreativeTabs.GEARS;
 	}
-
 
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
 		/*if (material == BLMaterialRegistry.TOOL_WEEDWOOD) {
@@ -82,41 +59,5 @@ public class ItemBLShield extends ItemShield {
 			return EnumItemMisc.VALONITE_SHARD.isItemOf(repair);
 		}
 		return false;
-	}
-
-	@Override
-	public boolean updateItemStackNBT(NBTTagCompound nbt) {
-		return super.updateItemStackNBT(nbt);
-	}
-
-
-	public boolean damageShield(int i, ItemStack stack, EntityLivingBase entityIn) {
-		if (stack.getTagCompound() == null || !stack.getTagCompound().hasKey("damage")) {
-			NBTTagCompound tagCompound = new NBTTagCompound();
-			tagCompound.setInteger("damage", material.getMaxUses() * 2);
-			stack.setTagCompound(new NBTTagCompound());
-		}
-
-		int damage = stack.getTagCompound().getInteger("damage") + i;
-		System.out.println(damage);
-		if (damage <= 0) {
-			entityIn.renderBrokenItemStack(stack);
-			--stack.stackSize;
-
-			if (entityIn instanceof EntityPlayer) {
-				EntityPlayer entityplayer = (EntityPlayer) entityIn;
-				entityplayer.addStat(StatList.getObjectBreakStats(stack.getItem()));
-			}
-
-			if (stack.stackSize < 0) {
-				stack.stackSize = 0;
-			}
-
-			stack.getTagCompound().setInteger("damage", 0);
-		} else {
-			stack.getTagCompound().setInteger("damage", damage);
-		}
-
-		return true;
 	}
 }
