@@ -1,0 +1,41 @@
+package thebetweenlands.client.render.model.loader;
+
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IModel;
+
+public abstract class LoaderArgs {
+	/**
+	 * Returns the name of this loader argument
+	 * @return
+	 */
+	public abstract String getName();
+
+	/**
+	 * Returns the model to load based on the specified arguments
+	 * @param original
+	 * @param location
+	 * @param args
+	 * @return
+	 */
+	public abstract IModel loadModel(IModel original, ResourceLocation location, String[] args);
+
+	/**
+	 * Returns a replacement for the specified resource location and baked model
+	 * @param location
+	 * @param original
+	 * @return
+	 */
+	public IBakedModel getModelReplacement(ModelResourceLocation location, IBakedModel original) {
+		return null;
+	}
+
+	/**
+	 * Throws an {@link IllegalArgumentException}
+	 * @param reason
+	 */
+	public final void throwInvalidArgs(String reason) {
+		throw new IllegalArgumentException(String.format("Illegal arguments for %s. Reason: %s", this.getName(), reason));
+	}
+}
