@@ -28,10 +28,53 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
 
 public class CustomModelLoader implements ICustomModelLoader {
-	private static enum MatchResult {
+	private static enum MatchType {
 		NORMAL,
 		ARGS,
 		NONE
+	}
+
+	static class MatchResult {
+		private final MatchType type;
+		private final LoaderArgs args;
+		private final String params;
+		private final ResourceLocation actualLocation;
+
+		private MatchResult(MatchType type, LoaderArgs args, String params, ResourceLocation location) {
+			this.type = type;
+			this.args = args;
+			this.params = params;
+			if(location != null && location.getResourcePath().startsWith("models/")) {
+				String path = location.getResourcePath();
+				path = path.substring("models/".length());
+				location = new ResourceLocation(location.getResourceDomain(), path);
+			}
+			this.actualLocation = location;
+		}
+
+		private MatchResult(ResourceLocation location) {
+			this(MatchType.NORMAL, null, null, location);
+		}
+
+		private MatchResult(ResourceLocation location, LoaderArgs args, String params) {
+			this(MatchType.ARGS, args, params, location);
+		}
+
+		public MatchType getType() {
+			return this.type;
+		}
+
+		public String getParameters() {
+			return this.params;
+		}
+
+		public LoaderArgs getArgument() {
+			return this.args;
+		}
+
+		public ResourceLocation getActualLocation() {
+			return this.actualLocation;
+		}
 	}
 
 	public final CustomModelManager registry;
@@ -43,7 +86,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 		//Item model loader args
 		this.loaderArgs.add(new LoaderArgs() {
 			private IModel dummyModel = null;
-			private final Map<ModelResourceLocation, IModel> dummyReplacementMap = new HashMap<>();
+			private final Map<ModelResourceLocation, ResourceLocation> dummyReplacementMap = new HashMap<>();
 
 			@Override
 			public String getName() {
@@ -55,18 +98,26 @@ public class CustomModelLoader implements ICustomModelLoader {
 				if(args.length != 1)
 					this.throwInvalidArgs("Invalid number of arguments");
 				ResourceLocation childModel = new ResourceLocation(args[0]);
-				this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getResourceDomain(), childModel.getResourcePath()), "inventory"), original);
+				this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getResourceDomain(), childModel.getResourcePath()), "inventory"), location);
 				return this.getDummyModel();
 			}
 
 			@Override
 			public IBakedModel getModelReplacement(ModelResourceLocation location, IBakedModel original) {
-				IModel replacementModel = this.dummyReplacementMap.get(location);
-				if(replacementModel != null) {
+				ResourceLocation replacementModelLocation = this.dummyReplacementMap.get(location);
+				if(replacementModelLocation != null) {
+					IModel replacementModel;
+					try {
+						//Makes sure that the model is loaded through the model loader and that the textures are registered properly
+						replacementModel = ModelLoaderRegistry.getModel(replacementModelLocation);
+					} catch (Exception ex) {
+						throw new RuntimeException("Failed to load model " + replacementModelLocation + " for child model " + location, ex);
+					}
 					IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
 							(loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
 					return new BakedModelItemWrapper(original, bakedModel);
 				}
+				//Nothing to replace
 				return null;
 			}
 
@@ -91,8 +142,9 @@ public class CustomModelLoader implements ICustomModelLoader {
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
 		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(this.getMatchResult(entry.getKey(), modelLocation).getKey() != MatchResult.NONE)
+			if(this.getMatchResult(entry.getKey(), modelLocation).getType() != MatchType.NONE) {
 				return true;
+			}
 		}
 		return false;
 	}
@@ -100,23 +152,22 @@ public class CustomModelLoader implements ICustomModelLoader {
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
 		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			Pair<MatchResult, Pair<LoaderArgs, String>> match = this.getMatchResult(entry.getKey(), modelLocation);
-			if(match.getKey() == MatchResult.NORMAL) {
-				return entry.getValue().apply(modelLocation);
-			} else if(match.getKey() == MatchResult.ARGS) {
-				LoaderArgs loaderArgs = match.getValue().getKey();
-				String loaderParam = match.getValue().getValue();
-				System.out.println("LOADER PARAM: " + loaderParam);
+			MatchResult match = this.getMatchResult(entry.getKey(), modelLocation);
+			if(match.getType() == MatchType.NORMAL) {
+				return entry.getValue().apply(match.getActualLocation());
+			} else if(match.getType() == MatchType.ARGS) {
+				LoaderArgs loaderArgs = match.getArgument();
+				String loaderParam = match.getParameters();
 				String[] loaderParamsArray = loaderParam.contains(",") ? loaderParam.split(",") : new String[]{ loaderParam };
-				return loaderArgs.loadModel(entry.getValue().apply(modelLocation), modelLocation, loaderParamsArray);
+				return loaderArgs.loadModel(entry.getValue().apply(match.getActualLocation()), match.getActualLocation(), loaderParamsArray);
 			}
 		}
 		return null;
 	}
 
-	private Pair<MatchResult, Pair<LoaderArgs, String>> getMatchResult(ResourceLocation registeredModel, ResourceLocation modelLocation) {
+	private MatchResult getMatchResult(ResourceLocation registeredModel, ResourceLocation modelLocation) {
 		if(!registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()))
-			return Pair.of(MatchResult.NONE, null);
+			return new MatchResult(MatchType.NONE, null, null, null);
 		String registeredPath = registeredModel.getResourcePath();
 		String modelPath = modelLocation.getResourcePath();
 		if(modelPath.startsWith(registeredPath)) {
@@ -140,10 +191,14 @@ public class CustomModelLoader implements ICustomModelLoader {
 			}
 			//Only accept if path fully matches or is a variant
 			if(suffix.length() == 0 || suffix.startsWith("#")) {
-				return loaderArg != null ? Pair.of(MatchResult.ARGS, Pair.of(loaderArg, loaderParam)) : Pair.of(MatchResult.NORMAL, null); 
+				ResourceLocation actualLocation = new ResourceLocation(modelLocation.getResourceDomain(), registeredPath + suffix);
+				if(loaderArg != null) {
+					return new MatchResult(actualLocation, loaderArg, loaderParam);
+				}
+				return new MatchResult(actualLocation); 
 			}
 		}
-		return Pair.of(MatchResult.NONE, null);
+		return new MatchResult(MatchType.NONE, null, null, null);
 	}
 
 	@SubscribeEvent
@@ -188,13 +243,11 @@ public class CustomModelLoader implements ICustomModelLoader {
 			}
 		}
 		List<IBakedModel> toRemove = new ArrayList<IBakedModel>();
-		Map<ModelResourceLocation, IBakedModel> removedChildModels = new HashMap<>();
 		Set<ModelResourceLocation> replacementKeys = replacementMap.keySet();
 		for(ModelResourceLocation loc : keys) {
 			if(replacementKeys.contains(loc)) {
 				IBakedModel bakedModel = modelRegistry.getObject(loc);
 				toRemove.add(bakedModel);
-				removedChildModels.put(loc, bakedModel);
 			}
 		}
 		Iterator<IBakedModel> it = modelRegistry.iterator();

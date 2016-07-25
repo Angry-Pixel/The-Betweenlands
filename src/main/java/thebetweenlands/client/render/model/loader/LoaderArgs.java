@@ -4,6 +4,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoaderRegistry;
 
 public abstract class LoaderArgs {
 	/**
@@ -13,7 +14,7 @@ public abstract class LoaderArgs {
 	public abstract String getName();
 
 	/**
-	 * Returns the model to load based on the specified arguments
+	 * Returns the model to load based on the specified arguments.
 	 * @param original
 	 * @param location
 	 * @param args
@@ -22,7 +23,8 @@ public abstract class LoaderArgs {
 	public abstract IModel loadModel(IModel original, ResourceLocation location, String[] args);
 
 	/**
-	 * Returns a replacement for the specified resource location and baked model
+	 * Returns a replacement for the specified resource location and baked model.
+	 * <p><b>Do NOT return an {@link IBakedModel} from an {@link IModel} that wasn't obtained through {@link ModelLoaderRegistry#getModel(ResourceLocation)} at some point!</b>
 	 * @param location
 	 * @param original
 	 * @return

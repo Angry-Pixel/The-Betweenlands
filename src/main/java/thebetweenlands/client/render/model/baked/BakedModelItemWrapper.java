@@ -20,8 +20,8 @@ public class BakedModelItemWrapper implements IPerspectiveAwareModel {
 	private final IBakedModel transformsModel, quadModel;
 
 	/**
-	 * Creates a baked model that returns the quads of quadModel and the transforms of transformsModel.
-	 * @param transformsModel The model with the transforms to be used
+	 * Creates a baked model that returns the quads of quadModel and the transforms and item overrides list of transformsModel.
+	 * @param transformsModel The model with the transforms and item overrides list to be used
 	 * @param quadModel The model with the quads to be used
 	 */
 	public BakedModelItemWrapper(IBakedModel transformsModel, IBakedModel quadModel) {
@@ -62,7 +62,7 @@ public class BakedModelItemWrapper implements IPerspectiveAwareModel {
 
 	@Override
 	public ItemOverrideList getOverrides() {
-		return this.quadModel.getOverrides();
+		return this.transformsModel.getOverrides();
 	}
 
 	@SuppressWarnings("deprecation")

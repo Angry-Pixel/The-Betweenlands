@@ -10,6 +10,7 @@ import net.minecraftforge.client.model.IModel;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
+import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
@@ -25,8 +26,16 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelBoneShield;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelOctineShield;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelSyrmoriteShield;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValoniteShield;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.util.ModelConverter.Box;
+import thebetweenlands.util.ModelConverter.Quad;
+import thebetweenlands.util.Vec3UV;
 
 public class ModelRegistry {
 	//Generic
@@ -49,6 +58,19 @@ public class ModelRegistry {
 	public static final IModel VOLARPAD_3 = new ModelFromModelBase(new ModelVolarpad(), new ResourceLocation("thebetweenlands:blocks/volarpad_3"), 256, 256);
 	public static final IModel WEEPING_BLUE = new ModelFromModelBase(new ModelWeepingBlue(), new ResourceLocation("thebetweenlands:blocks/weeping_blue"), 64, 64);
 	public static final IModel SWAMP_PLANT = new ModelFromModelBase(new ModelSwampPlant(), new ResourceLocation("thebetweenlands:blocks/swamp_plant"), 64, 64);
+
+	//Items
+	private static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
+		@Override
+		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
+			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 1.5D, -vertexIn.z - 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
+		}
+	};
+	public static final IModel BONE_SHIELD = new ModelFromModelBase(new ModelBoneShield(), new ResourceLocation("thebetweenlands:items/shields/bone_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel OCTINE_SHIELD = new ModelFromModelBase(new ModelOctineShield(), new ResourceLocation("thebetweenlands:items/shields/octine_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel SYRMORITE_SHIELD = new ModelFromModelBase(new ModelSyrmoriteShield(), new ResourceLocation("thebetweenlands:items/shields/syrmorite_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel VALONITE_SHIELD = new ModelFromModelBase(new ModelValoniteShield(), new ResourceLocation("thebetweenlands:items/shields/valonite_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel WEEDWOOD_SHIELD = new ModelFromModelBase(new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();

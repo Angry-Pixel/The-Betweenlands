@@ -13,7 +13,7 @@ public class BLMaterialRegistry {
     public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octane", 2, 900, 6.0F, 2.0F, 14);
     public static final ToolMaterial TOOL_VALONITE = EnumHelper.addToolMaterial("valonite", 3, 2500, 8.0F, 3.0F, 10);
     //TWEAK values
-    public static final ToolMaterial TOOL_SYMORITE = EnumHelper.addToolMaterial("syrmorite", 3, 2500, 8.0F, 3.0F, 10);
+    public static final ToolMaterial TOOL_SYRMORITE = EnumHelper.addToolMaterial("syrmorite", 3, 2500, 8.0F, 3.0F, 10);
     public static final ToolMaterial TOOL_LOOT = EnumHelper.addToolMaterial("loot", 2, 7500, 2.0F, 0.5F, 5);
     public static final ToolMaterial TOOL_LEGEND = EnumHelper.addToolMaterial("legend", 6, 10000, 16.0F, 6.0F, 20);
 

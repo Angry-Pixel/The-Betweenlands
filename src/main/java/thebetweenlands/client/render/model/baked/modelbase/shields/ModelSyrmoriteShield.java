@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.model.shields;
+package thebetweenlands.client.render.model.baked.modelbase.shields;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
@@ -8,7 +8,7 @@ import net.minecraft.entity.Entity;
  * BLShield_Syrmorite - TripleHeadedSheep
  * Created using Tabula 4.1.1
  */
-public class ModelSymoriteShield extends ModelBase {
+public class ModelSyrmoriteShield extends ModelBase {
     public ModelRenderer handle1;
     public ModelRenderer handle2;
     public ModelRenderer shield_main;
@@ -21,7 +21,7 @@ public class ModelSymoriteShield extends ModelBase {
     public ModelRenderer midrim2;
     public ModelRenderer midrim3;
 
-    public ModelSymoriteShield() {
+    public ModelSyrmoriteShield() {
         this.textureWidth = 128;
         this.textureHeight = 64;
         this.shieldplate1 = new ModelRenderer(this, 21, 14);

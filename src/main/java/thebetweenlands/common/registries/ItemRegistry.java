@@ -122,7 +122,7 @@ public class ItemRegistry {
 	public static final Item OCTINE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_OCTINE);
 	public static final Item VALONITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_VALONITE);
 	public static final Item WEEDWOOD_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_WEEDWOOD);
-	public static final Item SYMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYMORITE);
+	public static final Item SYRMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYRMORITE);
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
 
 

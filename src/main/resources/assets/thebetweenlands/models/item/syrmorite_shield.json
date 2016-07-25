@@ -1,11 +1,11 @@
 {
-  "parent": "thebetweenlands:item/internal/valonite_shield$from_item(thebetweenlands:valonite_shield)",
+  "parent": "thebetweenlands:item/internal/syrmorite_shield$from_item(thebetweenlands:syrmorite_shield)",
   "overrides": [
     {
       "predicate": {
         "blocking": 1
       },
-      "model": "thebetweenlands:item/valonite_shield_blocking"
+      "model": "thebetweenlands:item/syrmorite_shield_blocking"
     }
   ],
   "display": {
