@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "axis=y":    { "model": "thebetweenlands:pitstone_pillar" },
+    "axis=z":    { "model": "thebetweenlands:pitstone_pillar_side" },
+    "axis=x":    { "model": "thebetweenlands:pitstone_pillar_side", "y": 90 },
+    "axis=none": { "model": "thebetweenlands:pitstone_pillar" }
+  }
+}

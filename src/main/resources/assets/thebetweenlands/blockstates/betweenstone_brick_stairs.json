@@ -1,0 +1,330 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing=east,half=bottom,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=bottom,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=bottom,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=bottom,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=bottom,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=bottom,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=bottom,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=bottom,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=bottom,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=bottom,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=bottom,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=bottom,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=bottom,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=bottom,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=bottom,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=bottom,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=bottom,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=bottom,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=bottom,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=bottom,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=top,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "x": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=top,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "x": 180,
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=top,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "x": 180,
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=top,shape=straight": {
+      "model": "thebetweenlands:base_stairs",
+      "x": 180,
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=top,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=top,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=top,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=top,shape=outer_right": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=top,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=top,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=top,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=top,shape=outer_left": {
+      "model": "thebetweenlands:base_outer_stairs",
+      "x": 180,
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=top,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=top,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=top,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=top,shape=inner_right": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=east,half=top,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=west,half=top,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "y": 180,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=south,half=top,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "y": 90,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    },
+    "facing=north,half=top,shape=inner_left": {
+      "model": "thebetweenlands:base_inner_stairs",
+      "x": 180,
+      "y": 270,
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
+    }
+  }
+}

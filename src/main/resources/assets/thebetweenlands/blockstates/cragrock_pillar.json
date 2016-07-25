@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "axis=y":    { "model": "thebetweenlands:cragrock_pillar" },
+    "axis=z":    { "model": "thebetweenlands:cragrock_pillar_side" },
+    "axis=x":    { "model": "thebetweenlands:cragrock_pillar_side", "y": 90 },
+    "axis=none": { "model": "thebetweenlands:cragrock_pillar" }
+  }
+}

@@ -194,8 +194,8 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @param enumRotationSequence which sequence to use
      * @return the meta of corresponding to the rotation
      */
-    public int getMetaFromRotation(int start, int rotation, EnumRotationSequence enumRotationSequence) {
-        return enumRotationSequence.sequence[(rotation + start) % enumRotationSequence.sequence.length];
+    public IBlockState getStateFromRotation(int start, int rotation, IBlockState state, EnumRotationSequence enumRotationSequence) {
+        return state.getBlock().getStateFromMeta(enumRotationSequence.sequence[(rotation + start) % enumRotationSequence.sequence.length]);
     }
 
 

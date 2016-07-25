@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "axis=y":    { "model": "thebetweenlands:betweenstone_pillar" },
+    "axis=z":    { "model": "thebetweenlands:betweenstone_pillar_side" },
+    "axis=x":    { "model": "thebetweenlands:betweenstone_pillar_side", "y": 90 },
+    "axis=none": { "model": "thebetweenlands:betweenstone_pillar" }
+  }
+}
