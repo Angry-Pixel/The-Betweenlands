@@ -3,7 +3,6 @@ package thebetweenlands.common.world.storage.chunk;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -12,17 +11,13 @@ import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.BLMessage;
-import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData.ChunkSyncHandler.MessageSyncChunkData;
+import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
 import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
 
-import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +37,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
     }
 
     @Override
-    protected void init() {
+    public void init() {
         //System.out.println("INIT");
     }
 
@@ -78,7 +73,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
     ////////// Data //////////
 
     @Override
-    protected void load() {
+    public void load() {
         try {
             NBTTagCompound nbt = this.readData();
             if (nbt.hasKey("storage")) {
@@ -103,7 +98,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
     }
 
     @Override
-    protected void save() {
+    public void save() {
         try {
             NBTTagCompound nbt = new NBTTagCompound();
             if (!this.storage.isEmpty()) {
@@ -135,15 +130,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 
     public static class ChunkSyncHandler {
         private final Map<ChunkPos, List<EntityPlayerMP>> chunkWatchers = new HashMap<ChunkPos, List<EntityPlayerMP>>();
-
-        /**
-         * Registers the packet that keeps the properties in sync
-         *
-         * @param networkWrapper
-         */
-        public void registerPacket(SimpleNetworkWrapper networkWrapper) {
-            TheBetweenlands.registerMessage(MessageSyncChunkData.class, Side.CLIENT);
-        }
 
         private boolean addWatcher(ChunkPos chunk, EntityPlayerMP player) {
             List<EntityPlayerMP> watchers = this.chunkWatchers.get(chunk);
@@ -180,63 +166,6 @@ public class BetweenlandsChunkData extends ChunkDataBase {
         @SubscribeEvent
         public void onChunkUnload(ChunkEvent.Unload event) {
             this.chunkWatchers.remove(event.getChunk());
-        }
-
-        public static class MessageSyncChunkData extends BLMessage {
-            private int chunkX, chunkZ;
-            private String name;
-            private NBTTagCompound nbt;
-
-            public MessageSyncChunkData() {
-            }
-
-            public MessageSyncChunkData(BetweenlandsChunkData data) {
-                this.chunkX = data.getChunk().xPosition;
-                this.chunkZ = data.getChunk().zPosition;
-                this.name = data.name;
-                NBTTagCompound nbtData = data.readData();
-                this.nbt = nbtData != null ? nbtData : new NBTTagCompound();
-            }
-
-            @Override
-            public void deserialize(PacketBuffer buf) {
-                this.chunkX = buf.readInt();
-                this.chunkZ = buf.readInt();
-                PacketBuffer packetBuffer = new PacketBuffer(buf);
-                try {
-                    this.name = packetBuffer.readStringFromBuffer(128);
-                    this.nbt = packetBuffer.readNBTTagCompoundFromBuffer();
-                } catch (IOException e) {
-                }
-            }
-
-            @Override
-            public void serialize(PacketBuffer buf) {
-                buf.writeInt(this.chunkX);
-                buf.writeInt(this.chunkZ);
-                PacketBuffer packetBuffer = new PacketBuffer(buf);
-                packetBuffer.writeString(this.name);
-                packetBuffer.writeNBTTagCompoundToBuffer(this.nbt);
-            }
-
-            @Override
-            public IMessage process(MessageContext ctx) {
-                synchronized (CHUNK_DATA_HANDLER) {
-                    World world = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
-                    ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
-                    NBTTagCompound currentNBT = ChunkDataBase.getNBTCache(chunkPos, world);
-                    if (currentNBT == null)
-                        currentNBT = new NBTTagCompound();
-                    currentNBT.setTag(name, nbt);
-                    ChunkDataBase.addNBTCache(chunkPos, world, currentNBT);
-                    ChunkDataBase data = ChunkDataBase.getDataCache(chunkPos, world, BetweenlandsChunkData.class);
-                    if (data != null) {
-                        data.writeData(nbt);
-                        data.load();
-                    }
-                }
-                return null;
-            }
         }
     }
 }

@@ -31,7 +31,7 @@ public abstract class ChunkDataBase {
 		}
 	}
 
-	protected static ChunkDataBase getDataCache(ChunkPos pos, World world, Class<? extends ChunkDataBase> clazz) {
+	public static ChunkDataBase getDataCache(ChunkPos pos, World world, Class<? extends ChunkDataBase> clazz) {
 		synchronized (CHUNK_DATA_HANDLER) {
 			for (Entry<ChunkDataTypePair, ChunkDataBase> cacheEntry : CACHE.entrySet()) {
 				ChunkDataTypePair pair = cacheEntry.getKey();
@@ -54,13 +54,13 @@ public abstract class ChunkDataBase {
 		}
 	}
 
-	protected static void addNBTCache(ChunkPos pos, World world, NBTTagCompound nbt) {
+	public static void addNBTCache(ChunkPos pos, World world, NBTTagCompound nbt) {
 		synchronized (CHUNK_DATA_HANDLER) {
 			CHUNK_NBT_CACHE.put(new ChunkPosWorldPair(pos, world), nbt);
 		}
 	}
 
-	protected static NBTTagCompound getNBTCache(ChunkPos pos, World world) {
+	public static NBTTagCompound getNBTCache(ChunkPos pos, World world) {
 		synchronized (CHUNK_DATA_HANDLER) {
 			for (Entry<ChunkPosWorldPair, NBTTagCompound> cacheEntry : CHUNK_NBT_CACHE.entrySet()) {
 				ChunkPosWorldPair pair = cacheEntry.getKey();
@@ -173,17 +173,17 @@ public abstract class ChunkDataBase {
 	/**
 	 * Load data here
 	 */
-	protected abstract void load();
+	public abstract void load();
 
 	/**
 	 * Save data here
 	 */
-	protected abstract void save();
+	public abstract void save();
 
 	/**
 	 * Called before loading data and setting defaults
 	 */
-	protected abstract void init();
+	public abstract void init();
 
 	/**
 	 * Marks the chunk as dirty.

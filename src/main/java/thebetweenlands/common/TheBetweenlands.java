@@ -15,22 +15,14 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.BetweenlandsAPI;
 import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
 import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.BLMessage;
-import thebetweenlands.common.network.base.SidedPacketHandler;
-import thebetweenlands.common.network.base.impl.CommonPacketProxy;
-import thebetweenlands.common.network.base.impl.IDPacketObjectSerializer;
 import thebetweenlands.common.proxy.CommonProxy;
-import thebetweenlands.common.registries.PacketRegistry;
+import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
@@ -41,16 +33,11 @@ import thebetweenlands.util.config.ConfigHandler;
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
 public class TheBetweenlands {
 	public static final Registries REGISTRIES = new Registries();
-	public static final SidedPacketHandler sidedPacketHandler = new SidedPacketHandler();
-	public static final IDPacketObjectSerializer packetRegistry = new IDPacketObjectSerializer();
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands INSTANCE;
 	public static DimensionType dimensionType;
 	public static boolean isShadersModInstalled = false;
-	/// Network ///
 	public static SimpleNetworkWrapper networkWrapper;
-	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPACKETPROXY_LOCATION, serverSide = ModInfo.COMMONPACKETPROXY_LOCATION)
-	public static CommonPacketProxy packetProxy;
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
 	public static File sourceFile;
@@ -78,22 +65,12 @@ public class TheBetweenlands {
 
 		/// Network ///
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
-		sidedPacketHandler.setProxy(packetProxy).setNetworkWrapper(networkWrapper, 20, 21).setPacketSerializer(packetRegistry);
 
-		PacketRegistry.preInit();
+		MessageRegistry.preInit();
 
 		//Renderers
 		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
-	}
-
-	public static <M extends BLMessage> void registerMessage(Class<M> messageType, Side toSide) {
-		networkWrapper.registerMessage(new IMessageHandler<M, IMessage>() {
-			@Override
-			public IMessage onMessage(M message, MessageContext ctx) {
-				return message.process(ctx);
-			}
-		}, messageType, nextMessageId++, toSide);
 	}
 
 	@InstanceFactory

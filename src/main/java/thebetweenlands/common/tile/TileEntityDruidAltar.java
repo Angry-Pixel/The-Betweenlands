@@ -5,19 +5,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.base.SubscribePacket;
-import thebetweenlands.common.network.packet.server.PacketDruidAltarProgress;
+import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -41,17 +38,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
     public TileEntityDruidAltar() {
         super(5, "druid_altar");
-    }
-
-    @SubscribePacket
-    public static void onProgressPacket(PacketDruidAltarProgress pkt) {
-        TileEntity te = FMLClientHandler.instance().getWorldClient().getTileEntity(new BlockPos(pkt.x, pkt.y, pkt.z));
-        if (te instanceof TileEntityDruidAltar) {
-            TileEntityDruidAltar tile = (TileEntityDruidAltar) te;
-            if (pkt.progress >= 0) {
-                tile.craftingProgress = pkt.progress;
-            }
-        }
     }
 
     @Override
@@ -147,9 +133,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         ((TileEntityDruidAltar) worldObj.getTileEntity(pos)).craftingProgress = 1;
         worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), world.getBlockState(pos), 2);
         //Packet to start sound
-        TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -1)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
+        TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, -1), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Sets client crafting progress to 1
-        TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, 1)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
+        TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, 1), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Does the metadata stuff for the circle animated textures
         checkDruidCircleMeta(world);
     }
@@ -165,9 +151,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         ((TileEntityDruidAltar) worldObj.getTileEntity(pos)).craftingProgress = 0;
         worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), world.getBlockState(pos), 2);
         //Packet to cancel sound
-        TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, -2)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
+        TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, -2), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Sets client crafting progress to 0
-        TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this, 0)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
+        TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, 0), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
         //Does the metadata stuff for the circle animated textures
         checkDruidCircleMeta(world);
     }
@@ -178,7 +164,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
         if (world instanceof WorldServer) {
             dim = ((WorldServer) world).provider.getDimension();
         }
-        TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketDruidAltarProgress(this)), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
+        TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this), new NetworkRegistry.TargetPoint(dim, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, 64D));
     }
 
     private void checkDruidCircleMeta(World world) {
