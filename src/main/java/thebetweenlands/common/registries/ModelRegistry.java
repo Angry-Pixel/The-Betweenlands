@@ -14,6 +14,7 @@ import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProce
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom3;
@@ -60,7 +61,7 @@ public class ModelRegistry {
 	public static final IModel SWAMP_PLANT = new ModelFromModelBase(new ModelSwampPlant(), new ResourceLocation("thebetweenlands:blocks/swamp_plant"), 64, 64);
 
 	//Items
-	private static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
+	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
 		@Override
 		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
 			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 1.5D, -vertexIn.z - 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
@@ -71,6 +72,7 @@ public class ModelRegistry {
 	public static final IModel SYRMORITE_SHIELD = new ModelFromModelBase(new ModelSyrmoriteShield(), new ResourceLocation("thebetweenlands:items/shields/syrmorite_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel VALONITE_SHIELD = new ModelFromModelBase(new ModelValoniteShield(), new ResourceLocation("thebetweenlands:items/shields/valonite_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel WEEDWOOD_SHIELD = new ModelFromModelBase(new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), 64, 64, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel WEEDWOOD_SHIELD_BURNING = new ModelWeedwoodShieldBurning();
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();

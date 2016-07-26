@@ -5,6 +5,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.vecmath.Matrix4f;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMap.Builder;
@@ -16,6 +20,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -23,6 +28,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.IModelCustomData;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 
@@ -69,7 +75,7 @@ public class ModelCombined implements IModelCustomData {
 		return this.baseModel.getDefaultState();
 	}
 
-	public static class ModelBakedLifeCrystalOre implements IBakedModel {
+	public static class ModelBakedLifeCrystalOre implements IPerspectiveAwareModel {
 		private final IBakedModel baseBakedModel;
 		private final IBakedModel additionalBakedModel;
 
@@ -114,6 +120,17 @@ public class ModelCombined implements IModelCustomData {
 		@Override
 		public ItemOverrideList getOverrides() {
 			return this.baseBakedModel.getOverrides();
+		}
+
+		@SuppressWarnings("deprecation")
+		@Override
+		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
+			Pair<? extends IBakedModel, Matrix4f> result;
+			if(this.baseBakedModel instanceof IPerspectiveAwareModel) {
+				result = ((IPerspectiveAwareModel)this.baseBakedModel).handlePerspective(cameraTransformType);
+			} else 
+				result = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
+			return Pair.of(this, result.getValue());
 		}
 	}
 

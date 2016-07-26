@@ -1,28 +1,5 @@
 {
-  "parent": "thebetweenlands:item/internal/weedwood_shield$from_item(thebetweenlands:weedwood_shield)",
-  "overrides": [
-    {
-      "predicate": {
-        "blocking": 1,
-        "burning": 0
-      },
-      "model": "thebetweenlands:item/weedwood_shield_blocking"
-    },
-    {
-      "predicate": {
-        "blocking": 0,
-        "burning": 1
-      },
-      "model": "thebetweenlands:item/weedwood_shield_burning"
-    },
-    {
-      "predicate": {
-        "blocking": 1,
-        "burning": 1
-      },
-      "model": "thebetweenlands:item/weedwood_shield_burning_blocking"
-    }
-  ],
+  "parent": "thebetweenlands:item/internal/weedwood_shield_burning$from_item(thebetweenlands:item/weedwood_shield_burning)",
   "display": {
     "thirdperson_righthand": {
       "rotation": [

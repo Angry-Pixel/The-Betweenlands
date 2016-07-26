@@ -30,7 +30,11 @@ import thebetweenlands.common.item.food.ItemWeepingBluePetal;
 import thebetweenlands.common.item.food.ItemWightHeart;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
-import thebetweenlands.common.item.misc.*;
+import thebetweenlands.common.item.misc.ItemBLRecord;
+import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemSwampTalisman;
+import thebetweenlands.common.item.misc.TestItem;
+import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
@@ -121,7 +125,7 @@ public class ItemRegistry {
 	public static final Item VALONITE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item OCTINE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_OCTINE);
 	public static final Item VALONITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_VALONITE);
-	public static final Item WEEDWOOD_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_WEEDWOOD);
+	public static final Item WEEDWOOD_SHIELD = new ItemWeedwoodShield();
 	public static final Item SYRMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYRMORITE);
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
 
@@ -157,7 +161,7 @@ public class ItemRegistry {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		
+
 		for (Item item : this.ITEMS) {
 			TheBetweenlands.proxy.registerDefaultItemRenderer(item);
 		}

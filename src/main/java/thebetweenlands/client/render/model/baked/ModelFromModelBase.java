@@ -84,11 +84,11 @@ public class ModelFromModelBase implements IModel {
 	}
 
 	public static class ModelBakedModelBase implements IPerspectiveAwareModel {
-		private final TRSRTransformation transformation;
-		private final ImmutableMap<TransformType, TRSRTransformation> transforms;
-		private final VertexFormat format;
-		private final TextureAtlasSprite texture;
-		private final List<BakedQuad> quads;
+		protected final TRSRTransformation transformation;
+		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
+		protected final VertexFormat format;
+		protected final TextureAtlasSprite texture;
+		protected final List<BakedQuad> quads;
 
 		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, int width, int height) {
 			this.transformation = transformation.isPresent() ? transformation.get() : null;
