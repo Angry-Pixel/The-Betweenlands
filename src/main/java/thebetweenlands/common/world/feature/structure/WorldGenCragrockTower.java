@@ -41,7 +41,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
         MOSSY_CRAGROCK_TOP = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, BlockCragrock.EnumCragrockType.MOSSY_1);
         MOSSY_CRAGROCK_BOTTOM = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, BlockCragrock.EnumCragrockType.MOSSY_2);
         CRAGROCK_BRICKS = BlockRegistry.CRAGROCK_BRICKS.getDefaultState();
-
+        SMOOTH_CRAGROCK_STAIRS = BlockRegistry.SMOOTH_CRAGROCK_STAIRS.getDefaultState();
 
 
 

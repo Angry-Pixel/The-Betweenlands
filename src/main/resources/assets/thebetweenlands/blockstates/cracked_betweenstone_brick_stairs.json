@@ -1,8 +1,8 @@
 {
   "forge_marker": 1,
-  "defaults":{
+  "defaults": {
     "textures": {
-      "all": "thebetweenlands:blocks/limestone_bricks"
+      "all": "thebetweenlands:blocks/cracked_betweenstone_bricks"
     }
   },
   "variants": {
@@ -45,7 +45,10 @@
     "facing=east,half=bottom,shape=outer_left": {
       "model": "thebetweenlands:base_outer_stairs",
       "y": 270,
-      "uvlock": true
+      "uvlock": true,
+      "textures": {
+        "all": "thebetweenlands:blocks/betweenstone_bricks"
+      }
     },
     "facing=west,half=bottom,shape=outer_left": {
       "model": "thebetweenlands:base_outer_stairs",

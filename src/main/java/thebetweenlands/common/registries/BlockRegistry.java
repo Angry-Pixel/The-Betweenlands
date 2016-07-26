@@ -225,6 +225,21 @@ public class BlockRegistry {
 	//public static final Block SOLID_TAR_STAIRS = new BlockStairsBetweenlands(SOLID_TAR.getDefaultState());
 	//public static final Block TEMPLE_BRICK_STAIRS = new BlockStairsBetweenlands(TEMPLE_BRICK.getDefaultState());
 
+	public static final Block BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(BETWEENSTONE_BRICKS);
+	public static final Block MUD_BRICK_WALL = new BlockWallBetweenlands(MUD_BRICKS);
+	public static final Block CRAGROCK_WALL = new BlockWallBetweenlands(CRAGROCK);
+	public static final Block LIMESTONE_BRICK_WALL = new BlockWallBetweenlands(LIMESTONE_BRICKS);
+	public static final Block LIMESTONE_WALL = new BlockWallBetweenlands(LIMESTONE);
+	public static final Block PITSTONE_BRICK_WALL = new BlockWallBetweenlands(PITSTONE_BRICKS);
+	public static final Block SMOOTH_BETWEENSTONE_WALL = new BlockWallBetweenlands(SMOOTH_BETWEENSTONE);
+	public static final Block SMOOTH_CRAGROCK_WALL = new BlockWallBetweenlands(SMOOTH_CRAGROCK);
+	public static final Block MOSSY_BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(MOSSY_BETWEENSTONE_BRICKS);
+	public static final Block MOSSY_SMOOTH_BETWEENSTONE_WALL = new BlockWallBetweenlands(MOSSY_SMOOTH_BETWEENSTONE);
+	public static final Block CRACKED_BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(CRACKED_BETWEENSTONE_BRICKS);
+	//public static final Block SMOOTH_PITSTONE_WALL = new BlockWallBetweenlands(SMOOTH_PITSTONE);
+	//public static final Block TEMPLE_BRICK_BRICK_WALL = new BlockWallBetweenlands(TEMPLE_BRICKS);
+	//public static final Block SOLID_TAR_BRICK_WALL = new BlockWallBetweenlands(SOLID_TAR);
+
 
 	//Plants
 	public static final Block PITCHER_PLANT = new BlockGenericDoublePlant();

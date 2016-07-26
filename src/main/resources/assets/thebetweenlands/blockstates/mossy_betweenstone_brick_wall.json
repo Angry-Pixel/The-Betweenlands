@@ -1,0 +1,51 @@
+{
+  "forge_marker": 1,
+  "defaults":{
+    "textures": {
+      "wall": "thebetweenlands:blocks/mossy_betweenstone_bricks"
+    }
+  },
+  "variants": {
+    "variant":{
+      "cobblestone": {},
+      "mossy_cobblestone":{}
+    },
+    "up": {
+      "true": {
+        "submodel": "wall_post"
+      },
+      "false": {}
+    },
+    "north": {
+      "true": {
+        "submodel": "wall_side",
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "east": {
+      "true": {
+        "submodel": "wall_side",
+        "y": 90,
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "south": {
+      "true": {
+        "submodel": "wall_side",
+        "y": 180,
+        "uvlock": true
+      },
+      "false": {}
+    },
+    "west": {
+      "true": {
+        "submodel": "wall_side",
+        "y": 270,
+        "uvlock": true
+      },
+      "false": {}
+    }
+  }
+}
