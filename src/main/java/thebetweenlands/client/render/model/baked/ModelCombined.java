@@ -67,7 +67,7 @@ public class ModelCombined implements IModelCustomData {
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
 		IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
-		return new ModelBakedLifeCrystalOre(baseBakedModel, additionalBakedModel);
+		return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
 	}
 
 	@Override
@@ -75,11 +75,11 @@ public class ModelCombined implements IModelCustomData {
 		return this.baseModel.getDefaultState();
 	}
 
-	public static class ModelBakedLifeCrystalOre implements IPerspectiveAwareModel {
+	public static class BakedCombinedModel implements IPerspectiveAwareModel {
 		private final IBakedModel baseBakedModel;
 		private final IBakedModel additionalBakedModel;
 
-		public ModelBakedLifeCrystalOre(IBakedModel baseBakedModel, IBakedModel additionalBakedModel) {
+		public BakedCombinedModel(IBakedModel baseBakedModel, IBakedModel additionalBakedModel) {
 			this.baseBakedModel = baseBakedModel;
 			this.additionalBakedModel = additionalBakedModel;
 		}
