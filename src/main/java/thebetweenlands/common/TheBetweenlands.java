@@ -18,8 +18,8 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.BetweenlandsAPI;
-import thebetweenlands.common.entity.events.EntityShieldDamageEvent;
 import thebetweenlands.common.event.AnvilEventHandler;
+import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.MessageRegistry;
@@ -136,6 +136,6 @@ public class TheBetweenlands {
 		proxy.registerEventHandlers();
 
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
-		MinecraftForge.EVENT_BUS.register(new EntityShieldDamageEvent());
+		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
 	}
 }

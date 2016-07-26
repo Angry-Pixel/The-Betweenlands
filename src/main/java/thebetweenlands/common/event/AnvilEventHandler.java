@@ -1,19 +1,18 @@
 package thebetweenlands.common.event;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.item.tools.ItemBLShield;
 
 public class AnvilEventHandler {
 
-    @SubscribeEvent
-    public void onAnvilUpdate(AnvilUpdateEvent event) {
-        if (event.getLeft() != null && event.getLeft().getItem() instanceof ItemBLShield) {
+	@SubscribeEvent
+	public void onAnvilUpdate(AnvilUpdateEvent event) {
+		//TODO: I don't think this is needed anymore
+		/*if (event.getLeft() != null && event.getLeft().getItem() instanceof ItemBLShield) {
             if (event.getRight() != null && event.getLeft().getItem().getIsRepairable(event.getLeft(), event.getRight())) {
                 if (event.getLeft().getTagCompound() != null && event.getLeft().getTagCompound().hasKey("damage")) {
                     int damage = event.getLeft().getTagCompound().getInteger("damage");
-                    int repairPerItem = ((ItemBLShield) event.getLeft().getItem()).getMaxMetaDamage() / 3;
+                    int repairPerItem = ((ItemBLShield) event.getLeft().getItem()).getMaxDamage() / 3;
                     if (damage == 0) {
                         ItemStack output = event.getLeft().copy();
                         if (event.getName() != null)
@@ -37,6 +36,6 @@ public class AnvilEventHandler {
                     }
                 }
             }
-        }
-    }
+        }*/
+	}
 }
