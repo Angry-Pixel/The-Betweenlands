@@ -1,8 +1,7 @@
 {
-  "parent": "block/cube_column",
+  "parent": "block/cube",
   "textures": {
-    "side": "thebetweenlands:blocks/betweenstone_pillar",
-    "end": "thebetweenlands:blocks/betweenstone_pillar_top"
+    "particle": "#side"
   },
   "elements":[
     {

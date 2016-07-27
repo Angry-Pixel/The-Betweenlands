@@ -11,35 +11,43 @@ import net.minecraft.world.IBlockAccess;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockTemplePillar extends BlockRotatedPillar {
+	public static final AxisAlignedBB AABB_Y = new AxisAlignedBB(0.0625f, 0f, 0.0625f, .9375f, 1f, .9375f);
+	public static final AxisAlignedBB AABB_X = new AxisAlignedBB(0f, 0.0625f, 0.0625f, 1f, .9375f, .9375f);
+	public static final AxisAlignedBB AABB_Z = new AxisAlignedBB(0.0625f, 0.0625f, 0f, .9375f, .9375f, 1f);
 
-    public BlockTemplePillar() {
-        super(Material.ROCK);
-        setHardness(1.5F);
-        setResistance(10.0F);
-        setSoundType(SoundType.STONE);
-        setCreativeTab(BLCreativeTabs.BLOCKS);
-        setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.Y));
-    }
+	public BlockTemplePillar() {
+		super(Material.ROCK);
+		setHardness(1.5F);
+		setResistance(10.0F);
+		setSoundType(SoundType.STONE);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
+		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.Y));
+	}
 
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        switch (state.getValue(AXIS)) {
-            case Y:
-                return new AxisAlignedBB(0.0625f, 0f, 0.0625f, .9375f, 1f, .9375f);
-            case X:
-                return new AxisAlignedBB(0f, 0.0625f, 0.0625f, 1f, .9375f, .9375f);
-            default:
-                return new AxisAlignedBB(0.0625f, 0.0625f, 0f, .9375f, .9375f, 1f);
-        }
-    }
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		switch (state.getValue(AXIS)) {
+		case Y:
+			return AABB_Y;
+		case X:
+			return AABB_X;
+		default:
+			return AABB_Z;
+		}
+	}
 
-    @Override
-    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return false;
-    }
+	@Override
+	public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+		return false;
+	}
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
 }
