@@ -82,14 +82,7 @@ public class ItemBLShield extends ItemShield {
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
 		if(source.getEntity() instanceof EntityLivingBase) {
 			EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
-			ItemStack activeItem = null;
-			if(attacker instanceof EntityPlayer) {
-				activeItem = attacker.getActiveItemStack();
-			} else {
-				activeItem = attacker.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
-				if(activeItem == null || activeItem.getItem() instanceof ItemAxe == false)
-					activeItem = attacker.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND);
-			}
+			ItemStack activeItem = attacker.getActiveItemStack();
 			if(activeItem != null && activeItem.getItem() instanceof ItemAxe) {
 				float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
 				float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
@@ -116,8 +109,8 @@ public class ItemBLShield extends ItemShield {
 	 * @return
 	 */
 	public float getBlockedDamage(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		float multiplier = 0.5F - Math.min(this.material.getDamageVsEntity() / 3.0F, 1.0F) * 0.5F;
-		return Math.min(damage * multiplier, 6.0F);
+		float multiplier = 0.4F - Math.min(this.material.getDamageVsEntity() / 3.0F, 1.0F) * 0.4F;
+		return Math.min(damage * multiplier, 8.0F);
 	}
 
 	/**
