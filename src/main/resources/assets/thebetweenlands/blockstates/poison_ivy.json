@@ -1,5 +1,11 @@
 {
   "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/poison_ivy"
+    }
+  },
   "variants": {
     "up": {
       "true": {

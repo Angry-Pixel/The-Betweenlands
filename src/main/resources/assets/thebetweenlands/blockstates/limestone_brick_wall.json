@@ -1,15 +1,15 @@
 {
   "forge_marker": 1,
   "defaults":{
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/limestone_bricks"
+    },
     "textures": {
       "wall": "thebetweenlands:blocks/limestone_bricks"
     }
   },
   "variants": {
-    "variant":{
-      "cobblestone": {},
-      "mossy_cobblestone":{}
-    },
     "up": {
       "true": {
         "submodel": "wall_post"

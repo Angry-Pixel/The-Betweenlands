@@ -1,15 +1,15 @@
 {
   "forge_marker": 1,
   "defaults":{
+    "model": "thebetweenlands:internal/blank",
+    "custom": {
+      "particle_texture": "thebetweenlands:blocks/smooth_cragrock"
+    },
     "textures": {
       "wall": "thebetweenlands:blocks/smooth_cragrock"
     }
   },
   "variants": {
-    "variant":{
-      "cobblestone": {},
-      "mossy_cobblestone":{}
-    },
     "up": {
       "true": {
         "submodel": "wall_post"
