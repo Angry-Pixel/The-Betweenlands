@@ -10,7 +10,7 @@ import net.minecraftforge.common.util.EnumHelper;
 public class BLMaterialRegistry {
     public static final ToolMaterial TOOL_WEEDWOOD = EnumHelper.addToolMaterial("weedwood", 0, 80, 2.0F, 0.0F, 15);
     public static final ToolMaterial TOOL_BONE = EnumHelper.addToolMaterial("bone", 1, 320, 4.0F, 1.0F, 5);
-    public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octane", 2, 900, 6.0F, 2.0F, 14);
+    public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octine", 2, 900, 6.0F, 2.0F, 14);
     public static final ToolMaterial TOOL_VALONITE = EnumHelper.addToolMaterial("valonite", 3, 2500, 8.0F, 3.0F, 10);
     //TWEAK values
     public static final ToolMaterial TOOL_SYRMORITE = EnumHelper.addToolMaterial("syrmorite", 3, 2500, 8.0F, 3.0F, 10);

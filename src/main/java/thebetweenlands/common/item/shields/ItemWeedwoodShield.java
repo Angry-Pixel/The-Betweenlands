@@ -46,7 +46,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
 		super.onAttackBlocked(stack, attacked, damage, source);
-		if(source.getEntity() instanceof EntityLivingBase && attacked.worldObj.rand.nextFloat() < 0.25F) {
+		if(!attacked.worldObj.isRemote && source.getEntity() instanceof EntityLivingBase && attacked.worldObj.rand.nextFloat() < 0.25F) {
 			EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
 			ItemStack activeItem = attacker.getActiveItemStack();
 			if(activeItem != null) {
@@ -87,7 +87,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		ItemStack stack = entityItem.getEntityItem();
 		NBTTagCompound nbt = stack.getTagCompound();
-		if(nbt != null && nbt.hasKey("burningTicks")) {
+		if(!entityItem.worldObj.isRemote && nbt != null && nbt.hasKey("burningTicks")) {
 			int burningTicks = nbt.getInteger("burningTicks");
 			if(burningTicks > 0) {
 				nbt.setInteger("burningTicks", burningTicks - 1);
