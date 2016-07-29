@@ -1,17 +1,22 @@
 package thebetweenlands.common.item.herblore;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import com.google.common.base.CaseFormat;
 
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.common.item.ICustomJsonGenerationItem;
 import thebetweenlands.common.item.IGenericItem;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, ItemRegistry.ISubItemsItem {
@@ -42,61 +47,58 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		}
 	}
 
-	@Override
-	public List<String> getModels() {
-		List<String> models = new ArrayList<String>();
-		for (EnumItemPlantDrop type : EnumItemPlantDrop.values())
-			models.add(type.getUnlocalizedName());
-		return models;
-	}
+    @Override
+    public List<ResourceLocation> getModels() {
+        return Stream.of(EnumItemPlantDrop.values()).map(t -> new ResourceLocation(ModInfo.ID, t.getModelName())).collect(Collectors.toList());
+    }
 
 	public enum EnumItemPlantDrop implements IGenericItem {
-		GENERIC_LEAF(0),
-		ALGAE(1),
-		ARROW_ARUM_LEAF(2),
-		BLUE_EYED_GRASS_FLOWERS(3),
-		BLUE_IRIS_PETAL(4),
-		MIRE_CORAL_ITEM(5),
-		DEEP_WATER_CORAL_ITEM(6),
-		BOG_BEAN_FLOWER(7),
-		BONESET_FLOWERS(8),
-		BOTTLE_BRUSH_GRASS_BLADES(9),
-		BROOM_SEDGE_LEAVES(10),
-		BUTTON_BUSH_FLOWERS(11),
-		CARDINAL_FLOWER_PETALS(12),
-		CATTAIL_HEAD(13),
-		CAVE_GRASS_BLADES(14),
-		COPPER_IRIS_PETALS(15),
-		GOLDEN_CLUB_FLOWERS(16),
-		LICHEN(17),
-		MARSH_HIBISCUS_FLOWER(18),
-		MARSH_MALLOW_FLOWER(19),
-		MARSH_MARIGOLD_FLOWER(20),
-		NETTLE_LEAF(21),
-		PHRAGMITE_STEMS(22),
-		PICKEREL_WEED_FLOWER(23),
-		SHOOT_LEAVES(24),
-		SLUDGECREEP_LEAVES(25),
-		SOFT_RUSH_LEAVES(26),
-		SUNDEW_HEAD(27),
-		SWAMP_TALL_GRASS_BLADES(28),
-		CAVE_MOSS(29),
-		MOSS(30),
-		MILK_WEED(31),
-		HANGER(32),
-		PITCHER_PLANT_TRAP(33),
-		WATER_WEEDS_ITEM(34),
-		VENUS_FLY_TRAP_ITEM(35),
-		VOLARPAD_ITEM(36),
-		THORNS(37),
-		POISON_IVY_ITEM(38);
+		GENERIC_LEAF,
+		ALGAE,
+		ARROW_ARUM_LEAF,
+		BLUE_EYED_GRASS_FLOWERS,
+		BLUE_IRIS_PETAL,
+		MIRE_CORAL_ITEM,
+		DEEP_WATER_CORAL_ITEM,
+		BOG_BEAN_FLOWER,
+		BONESET_FLOWERS,
+		BOTTLE_BRUSH_GRASS_BLADES,
+		BROOM_SEDGE_LEAVES,
+		BUTTON_BUSH_FLOWERS,
+		CARDINAL_FLOWER_PETALS,
+		CATTAIL_HEAD,
+		CAVE_GRASS_BLADES,
+		COPPER_IRIS_PETALS,
+		GOLDEN_CLUB_FLOWERS,
+		LICHEN,
+		MARSH_HIBISCUS_FLOWER,
+		MARSH_MALLOW_FLOWER,
+		MARSH_MARIGOLD_FLOWER,
+		NETTLE_LEAF,
+		PHRAGMITE_STEMS,
+		PICKEREL_WEED_FLOWER,
+		SHOOT_LEAVES,
+		SLUDGECREEP_LEAVES,
+		SOFT_RUSH_LEAVES,
+		SUNDEW_HEAD,
+		SWAMP_TALL_GRASS_BLADES,
+		CAVE_MOSS,
+		MOSS,
+		MILK_WEED,
+		HANGER,
+		PITCHER_PLANT_TRAP,
+		WATER_WEEDS_ITEM,
+		VENUS_FLY_TRAP_ITEM,
+		VOLARPAD_ITEM,
+		THORNS,
+		POISON_IVY_ITEM;
 
-		private final int id;
 		private final String unlocalizedName;
+        private final String modelName;
 
-		EnumItemPlantDrop(int id) {
-			this.id = id;
-			this.unlocalizedName = this.name().toLowerCase(Locale.ENGLISH);
+		EnumItemPlantDrop() {
+			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
+			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
 		}
 
 		@Override
@@ -104,9 +106,14 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 			return this.unlocalizedName;
 		}
 
+        @Override
+        public String getModelName() {
+            return this.modelName;
+        }
+
 		@Override
 		public int getID() {
-			return this.id;
+			return this.ordinal();
 		}
 
 		@Override

@@ -98,9 +98,15 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 		BOTTOM,
 		CORNER_BOTTOM_RIGHT;
 
+		private final String name;
+
+		private EnumPortalFrame() {
+		    this.name = this.name().toLowerCase(Locale.ENGLISH);
+        }
+
 		@Override
 		public String getName() {
-			return name().toLowerCase(Locale.ENGLISH);
+			return name;
 		}
 	}
 

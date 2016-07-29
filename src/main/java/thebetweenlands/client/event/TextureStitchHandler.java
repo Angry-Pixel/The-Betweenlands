@@ -34,7 +34,7 @@ public class TextureStitchHandler {
 		//Corrosion
 		for (Item item : ItemRegistry.ITEMS) {
 			if (item instanceof ICorrodible) {
-				ResourceLocation[] variants = ((ICorrodible)item).getCorrodibleVariants();
+				ResourceLocation[] variants = ICorrodible.getItemCorrodibleVariants((Item & ICorrodible) item);
 				for(ResourceLocation variant : variants) {
 					try {
 						ResourceLocation modelLocation = new ResourceLocation(variant.getResourceDomain(), "item/" + variant.getResourcePath());

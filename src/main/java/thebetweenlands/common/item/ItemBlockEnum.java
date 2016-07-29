@@ -1,5 +1,7 @@
 package thebetweenlands.common.item;
 
+import com.google.common.base.CaseFormat;
+
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -24,6 +26,7 @@ public class ItemBlockEnum<T extends Enum<T> & IStringSerializable> extends Item
 	private final T[] values;
 	private final boolean hasGenericMetaSelector;
 	private final char separator;
+	private final String[] unlocalizedNames;
 
 	private ItemBlockEnum(Block block, T[] values, char separator, boolean hasGenericMetaSelector) {
 		super(block);
@@ -32,6 +35,7 @@ public class ItemBlockEnum<T extends Enum<T> & IStringSerializable> extends Item
 		this.values = values;
 		this.separator = separator;
 		this.hasGenericMetaSelector = hasGenericMetaSelector;
+		this.unlocalizedNames = new String[values.length];
 	}
 
 	@Override
@@ -42,15 +46,24 @@ public class ItemBlockEnum<T extends Enum<T> & IStringSerializable> extends Item
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		T match = null;
-		if(this.hasGenericMetaSelector)
-			for(T type : this.values)
-				if(((IGenericMetaSelector)type).isMetadataMatching(stack.getMetadata())) {
+		if (this.hasGenericMetaSelector)
+			for (T type : this.values)
+				if (((IGenericMetaSelector) type).isMetadataMatching(stack.getMetadata())) {
 					match = type;
 					break;
 				}
-		if(match == null) {
+		if (match == null) {
 			match = this.values[stack.getMetadata()];
 		}
-		return super.getUnlocalizedName() + separator + match.getName();
+		return this.getUnlocalizedName(match);
+	}
+
+	private String getUnlocalizedName(T value) {
+		String name = this.unlocalizedNames[value.ordinal()];
+		if (name == null) {
+			name = super.getUnlocalizedName() + this.separator + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, value.getName());
+			this.unlocalizedNames[value.ordinal()] = name;
+		}
+		return name;
 	}
 }

@@ -68,37 +68,28 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	}
 
 	public static enum EnumStoneType implements IStringSerializable {
-		CORRUPT_BETWEENSTONE(0);
+		CORRUPT_BETWEENSTONE;
 
-		private static final EnumStoneType[] METADATA_LOOKUP = new EnumStoneType[values().length];
-		private final int metadata;
 		private final String name;
 
-		private EnumStoneType(int metadataIn) {
-			this.metadata = metadataIn;
+		private EnumStoneType() {
 			this.name = this.name().toLowerCase(Locale.ENGLISH);
 		}
 
 		public int getMetadata() {
-			return this.metadata;
+			return this.ordinal();
 		}
 
 		public static EnumStoneType byMetadata(int metadata) {
-			if (metadata < 0 || metadata >= METADATA_LOOKUP.length) {
+			if (metadata < 0 || metadata >= values().length) {
 				metadata = 0;
 			}
-			return METADATA_LOOKUP[metadata];
+			return values()[metadata];
 		}
 
 		@Override
 		public String getName() {
 			return this.name;
-		}
-
-		static {
-			for (EnumStoneType type : values()) {
-				METADATA_LOOKUP[type.getMetadata()] = type;
-			}
 		}
 	}
 

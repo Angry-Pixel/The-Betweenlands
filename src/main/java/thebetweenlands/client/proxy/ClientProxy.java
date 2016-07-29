@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -151,11 +152,11 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerDefaultItemRenderer(Item item) {
 		if (item instanceof ItemRegistry.ISubItemsItem) {
-			List<String> models = ((ItemRegistry.ISubItemsItem) item).getModels();
+			List<ResourceLocation> models = ((ItemRegistry.ISubItemsItem) item).getModels();
 			for (int i = 0; i < models.size(); i++) {
 				if (ConfigHandler.debug && createJSONFile)
-					JsonRenderGenerator.createJSONForItem(item, models.get(i));
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
+					JsonRenderGenerator.createJSONForItem(item, models.get(i).getResourcePath());
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(models.get(i), "inventory"));
 			}
 		} else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
 			List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();

@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.container;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -181,21 +182,18 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	public enum EnumLootPot implements IStringSerializable, IGenericMetaSelector {
-		POT_1(0, "1"),
-		POT_2(1, "2"),
-		POT_3(2, "3");
+		POT_1("1"),
+		POT_2("2"),
+		POT_3("3");
 
-		private static final EnumLootPot[] METADATA_LOOKUP = new EnumLootPot[values().length];
-		private final int metadata;
 		private final String name;
 
-		private EnumLootPot(int metadataIn, String nameIn) {
-			this.metadata = metadataIn;
-			this.name = nameIn;
+		private EnumLootPot(String name) {
+			this.name = name.toLowerCase(Locale.ENGLISH);
 		}
 
 		public int getMetadata(EnumFacing facing) {
-			return facing.getHorizontalIndex() | (this.metadata << 2);
+			return facing.getHorizontalIndex() | (this.ordinal() << 2);
 		}
 
 		public String toString() {
@@ -204,20 +202,14 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 		public static EnumLootPot byMetadata(int metadata) {
 			metadata >>= 2;
-			if (metadata < 0 || metadata >= METADATA_LOOKUP.length) {
+			if (metadata < 0 || metadata >= values().length) {
 				metadata = 0;
 			}
-			return METADATA_LOOKUP[metadata];
+			return values()[metadata];
 		}
 
 		public String getName() {
 			return this.name;
-		}
-
-		static {
-			for (EnumLootPot type : values()) {
-				METADATA_LOOKUP[type.metadata] = type;
-			}
 		}
 
 		@Override

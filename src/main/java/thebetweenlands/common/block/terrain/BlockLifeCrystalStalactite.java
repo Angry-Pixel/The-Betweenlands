@@ -3,6 +3,7 @@ package thebetweenlands.common.block.terrain;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Locale;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -16,7 +17,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -97,20 +97,17 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	}
 
 	public static enum EnumLifeCrystalType implements IStringSerializable {
-		DEFAULT(0, "default"),
-		ORE(1, "ore");
+		DEFAULT,
+		ORE;
 
-		private static final EnumLifeCrystalType[] METADATA_LOOKUP = new EnumLifeCrystalType[values().length];
-		private final int metadata;
 		private final String name;
 
-		private EnumLifeCrystalType(int metadataIn, String nameIn) {
-			this.metadata = metadataIn;
-			this.name = nameIn;
+		private EnumLifeCrystalType() {
+			this.name = this.name().toLowerCase(Locale.ENGLISH);
 		}
 
 		public int getMetadata() {
-			return this.metadata;
+			return this.ordinal();
 		}
 
 		public String toString() {
@@ -118,20 +115,14 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 		}
 
 		public static EnumLifeCrystalType byMetadata(int metadata) {
-			if (metadata < 0 || metadata >= METADATA_LOOKUP.length) {
+			if (metadata < 0 || metadata >= EnumLifeCrystalType.values().length) {
 				metadata = 0;
 			}
-			return METADATA_LOOKUP[metadata];
+			return EnumLifeCrystalType.values()[metadata];
 		}
 
 		public String getName() {
 			return this.name;
-		}
-
-		static {
-			for (EnumLifeCrystalType type : values()) {
-				METADATA_LOOKUP[type.getMetadata()] = type;
-			}
 		}
 	}
 

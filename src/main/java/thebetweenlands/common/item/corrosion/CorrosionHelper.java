@@ -23,19 +23,6 @@ public final class CorrosionHelper {
 	}
 
 	/**
-	 * Returns the normal variant for the specified unlocalized name
-	 * @param unlocalizedName
-	 * @return
-	 */
-	public static ResourceLocation[] getVariantFromUnlocalizedName(String unlocalizedName) {
-		String actualName = unlocalizedName.substring("item.".length());
-		int domainSplit = actualName.indexOf(".");
-		String domain = actualName.substring(0, domainSplit);
-		String file = actualName.substring(domainSplit + 1);
-		return new ResourceLocation[] { new ResourceLocation(domain, file) };
-	}
-
-	/**
 	 * Adds the corrosion property overrides to the specified item
 	 * @param item
 	 */

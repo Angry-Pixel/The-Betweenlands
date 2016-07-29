@@ -16,6 +16,12 @@ public interface IGenericItem {
 	String getUnlocalizedName();
 
 	/**
+	 * Returns the model name of this generic item
+	 * @return
+	 */
+	String getModelName();
+
+	/**
 	 * Returns the ID (damage value) of this generic item
 	 * @return
 	 */

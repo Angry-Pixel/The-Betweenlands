@@ -117,10 +117,6 @@ public final class MathUtils {
         return x;
     }
 
-    public static float modf(float a, float b) {
-        return (a % b + b) % b;
-    }
-
     public static void minmax(Point3f min, Point3f max, float x, float y, float z) {
         if (min.x != min.x) {
             min.x = x;

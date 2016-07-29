@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import com.google.common.base.CaseFormat;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -336,13 +338,14 @@ public class BlockRegistry {
 	public static void registerBlock(String name, Block block) {
 		BLOCKS.add(block);
 
-		GameRegistry.register(block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
+		String unlocalized = ModInfo.NAME_PREFIX + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, name);
+		GameRegistry.register(block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(unlocalized));
 
 		ItemBlock item = getBlockItem(block);
 
 		//Allows ICustomItemBlock to return null if no item block is required
 		if(item != null)
-			GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.NAME_PREFIX + name));
+			GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(unlocalized));
 	}
 
 	public static ItemBlock getBlockItem(Block block) {

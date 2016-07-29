@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.common.base.CaseFormat;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.creativetab.CreativeTabs;
@@ -30,8 +32,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
 		for (EnumTalisman type : EnumTalisman.values())
 			list.add(type.create(1));
 	}
@@ -76,18 +77,18 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 	}
 
 	public enum EnumTalisman implements IGenericItem {
-		SWAMP_TALISMAN_0(0),
-		SWAMP_TALISMAN_1(1),
-		SWAMP_TALISMAN_2(2),
-		SWAMP_TALISMAN_3(3),
-		SWAMP_TALISMAN_4(4);
+		SWAMP_TALISMAN_0,
+		SWAMP_TALISMAN_1,
+		SWAMP_TALISMAN_2,
+		SWAMP_TALISMAN_3,
+		SWAMP_TALISMAN_4;
 
-		private final int id;
 		private final String unlocalizedName;
+		private final String modelName;
 
-		EnumTalisman(int id) {
-			this.id = id;
-			this.unlocalizedName = this.name().toLowerCase(Locale.ENGLISH);
+		EnumTalisman() {
+			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
+            this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
 		}
 
 		@Override
@@ -95,9 +96,14 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 			return this.unlocalizedName;
 		}
 
+        @Override
+        public String getModelName() {
+            return this.modelName;
+        }
+
 		@Override
 		public int getID() {
-			return this.id;
+			return this.ordinal();
 		}
 
 		@Override

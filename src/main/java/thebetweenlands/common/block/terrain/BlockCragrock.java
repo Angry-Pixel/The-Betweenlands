@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -87,21 +88,18 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 	}
 
 	public static enum EnumCragrockType implements IStringSerializable {
-		DEFAULT(0, "default"),
-		MOSSY_1(1, "mossy_1"),
-		MOSSY_2(2, "mossy_2");
+		DEFAULT,
+		MOSSY_1,
+		MOSSY_2;
 
-		private static final EnumCragrockType[] METADATA_LOOKUP = new EnumCragrockType[values().length];
-		private final int metadata;
 		private final String name;
 
-		private EnumCragrockType(int metadataIn, String nameIn) {
-			this.metadata = metadataIn;
-			this.name = nameIn;
+		private EnumCragrockType() {
+			this.name = name().toLowerCase(Locale.ENGLISH);
 		}
 
 		public int getMetadata() {
-			return this.metadata;
+			return this.ordinal();
 		}
 
 		public String toString() {
@@ -109,20 +107,14 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 		}
 
 		public static EnumCragrockType byMetadata(int metadata) {
-			if (metadata < 0 || metadata >= METADATA_LOOKUP.length) {
+			if (metadata < 0 || metadata >= values().length) {
 				metadata = 0;
 			}
-			return METADATA_LOOKUP[metadata];
+			return values()[metadata];
 		}
 
 		public String getName() {
 			return this.name;
-		}
-
-		static {
-			for (EnumCragrockType type : values()) {
-				METADATA_LOOKUP[type.getMetadata()] = type;
-			}
 		}
 	}
 

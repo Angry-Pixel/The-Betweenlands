@@ -30,6 +30,5 @@ public class Registries {
 		//this.itemRegistry.init();
 		this.recipeRegistry.init();
 		this.tileEntityRegistry.init();
-		this.soundRegistry.init();
 	}
 }

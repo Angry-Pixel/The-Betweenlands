@@ -5,8 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.google.common.base.CaseFormat;
+
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -41,7 +44,6 @@ import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.util.TranslationHelper;
 
 public class ItemRegistry {
 	//generic
@@ -169,14 +171,12 @@ public class ItemRegistry {
 
 	private void registerItem(Item item, String fieldName) {
 		String itemName = fieldName.toLowerCase(Locale.ENGLISH);
-		GameRegistry.register(item.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + itemName));
+		GameRegistry.register(item.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, itemName)));
 		ITEMS.add(item);
-		String name = item.getUnlocalizedName();
-		TranslationHelper.canTranslate(name + ".name");
 	}
 
 	public interface ISubItemsItem {
-		List<String> getModels();
+		List<ResourceLocation> getModels();
 	}
 
 	public interface ISingleJsonSubItems{

@@ -12,6 +12,14 @@ public interface ICorrodible {
 	 */
 	@SideOnly(Side.CLIENT)
 	default ResourceLocation[] getCorrodibleVariants() {
-		return CorrosionHelper.getVariantFromUnlocalizedName(((Item)this).getUnlocalizedName());
+		return null;
+	}
+
+	public static <I extends Item & ICorrodible> ResourceLocation[] getItemCorrodibleVariants(I item) {
+		ResourceLocation[] variants = item.getCorrodibleVariants();
+		if (variants == null) {
+			return new ResourceLocation[] { item.getRegistryName() };
+		}
+		return variants;
 	}
 }
