@@ -42,18 +42,18 @@ public class EntityRegistry {
 
     public void preInit() {
         id = 0;
-        registerEntity(EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
-        registerEntity(EntitySwampHag.class, "swamp_hag", 0x0B3B0B, 0xDBA901);
-        registerEntity(EntitySporeling.class, "sporeling", 0x696144, 0xFFFB00, 64, 1, true);
-        registerEntity(EntityDragonFly.class, "dragonfly", 0x31B53C, 0x779E3C);
-        registerEntity(EntityBloodSnail.class, "blood_snail", 0x8E9456, 0xB3261E);
-        registerEntity(EntityMireSnail.class, "mire_snail", 0x8E9456, 0xF2FA96);
-        registerEntity(EntityMireSnailEgg.class, "mire_snail_egg");
-        registerEntity(EntitySnailPoisonJet.class, "snail_poison_jet");
-        registerEntity(EntityLurker.class, "lurker", 0x283320, 0x827856);
-        registerEntity(EntityGiantToad.class, "toad", 0x405C3B, 0x7ABA45);
-        registerEntity(EntityBlindCaveFish.class, "blind_cave_fish", 0xD0D1C2, 0xECEDDF);
-        registerEntity(EntityChiromaw.class, "chiromaw", 0x3F5A69, 0xA16A77);
-        registerEntity(EntityFrog.class, "frog", 0x559653, 0xC72C2C, 64, 20, true);
+        registerEntity(EntityAngler.class, "Angler", 0x243B0B, 0x00FFFF);
+        registerEntity(EntitySwampHag.class, "SwampHag", 0x0B3B0B, 0xDBA901);
+        registerEntity(EntitySporeling.class, "Sporeling", 0x696144, 0xFFFB00, 64, 1, true);
+        registerEntity(EntityDragonFly.class, "Dragonfly", 0x31B53C, 0x779E3C);
+        registerEntity(EntityBloodSnail.class, "BloodSnail", 0x8E9456, 0xB3261E);
+        registerEntity(EntityMireSnail.class, "MireSnail", 0x8E9456, 0xF2FA96);
+        registerEntity(EntityMireSnailEgg.class, "MireSnailEgg");
+        registerEntity(EntitySnailPoisonJet.class, "SnailPoisonJet");
+        registerEntity(EntityLurker.class, "Lurker", 0x283320, 0x827856);
+        registerEntity(EntityGiantToad.class, "Toad", 0x405C3B, 0x7ABA45);
+        registerEntity(EntityBlindCaveFish.class, "BlindCaveFish", 0xD0D1C2, 0xECEDDF);
+        registerEntity(EntityChiromaw.class, "Chiromaw", 0x3F5A69, 0xA16A77);
+        registerEntity(EntityFrog.class, "Frog", 0x559653, 0xC72C2C, 64, 20, true);
     }
 }
