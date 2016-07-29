@@ -227,6 +227,20 @@ public class BlockRegistry {
 	//public static final Block SOLID_TAR_STAIRS = new BlockStairsBetweenlands(SOLID_TAR.getDefaultState());
 	//public static final Block TEMPLE_BRICK_STAIRS = new BlockStairsBetweenlands(TEMPLE_BRICK.getDefaultState());
 
+	public static final Block BETWEENSTONE_BRICK_SLAB = new BlockSlabBetweenlands(BETWEENSTONE_BRICKS);
+	public static final Block MUD_BRICK_SLAB = new BlockSlabBetweenlands(MUD_BRICKS);
+	public static final Block CRAGROCK_BRICK_SLAB = new BlockSlabBetweenlands(CRAGROCK_BRICKS);
+	public static final Block LIMESTONE_BRICK_SLAB = new BlockSlabBetweenlands(LIMESTONE_BRICKS);
+	public static final Block LIMESTONE_SLAB = new BlockSlabBetweenlands(LIMESTONE);
+	public static final Block SMOOTH_BETWEENSTONE_SLAB = new BlockSlabBetweenlands(SMOOTH_BETWEENSTONE);
+	public static final Block SMOOTH_CRAGROCK_SLAB = new BlockSlabBetweenlands(SMOOTH_CRAGROCK);
+	public static final Block POLISHED_LIMESTONE_SLAB = new BlockSlabBetweenlands(POLISHED_LIMESTONE);
+	public static final Block PITSTONE_BRICK_SLAB = new BlockSlabBetweenlands(PITSTONE_BRICKS);
+	public static final Block MOSSY_BETWEENSTONE_BRICK_SLAB = new BlockSlabBetweenlands(MOSSY_BETWEENSTONE_BRICKS);
+	public static final Block MOSSY_SMOOTH_BETWEENSTONE_SLAB = new BlockSlabBetweenlands(MOSSY_SMOOTH_BETWEENSTONE);
+	public static final Block CRACKED_BETWEENSTONE_BRICK_SLAB = new BlockSlabBetweenlands(CRACKED_BETWEENSTONE_BRICKS);
+
+
 	public static final Block BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(BETWEENSTONE_BRICKS);
 	public static final Block MUD_BRICK_WALL = new BlockWallBetweenlands(MUD_BRICKS);
 	public static final Block CRAGROCK_WALL = new BlockWallBetweenlands(CRAGROCK);
