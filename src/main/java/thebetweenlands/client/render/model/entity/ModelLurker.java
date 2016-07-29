@@ -4,7 +4,6 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
@@ -49,7 +48,7 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
 
     private EntityLurker currentLurker;
 
-    private float partialRenderTicks;
+    private float delta;
 
     public ModelLurker() {
         textureWidth = 256;
@@ -268,7 +267,7 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
             dragonfly.prevRenderYawOffset = dragonfly.renderYawOffset = 0;
             dragonfly.prevRotationYaw = dragonfly.rotationYaw = 0;
             dragonfly.prevRotationYawHead = dragonfly.rotationYawHead = 0;
-            ClientProxy.dragonFlyRenderer.createRenderFor(Minecraft.getMinecraft().getRenderManager()).doRender(dragonfly, 0, 0, 0, 0, partialRenderTicks);
+            ClientProxy.dragonFlyRenderer.doRender(dragonfly, 0, 0, 0, 0, delta);
             GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureBinding2D);
             GL11.glPopMatrix();
             if (texture2D) {
@@ -285,11 +284,11 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
     }
 
     @Override
-    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float delta) {
         EntityLurker lurker = (EntityLurker) entity;
-        float mouthOpen = lurker.getMouthOpen(partialRenderTicks);
-        float yaw = lurker.getTailYaw(partialRenderTicks) * MathUtils.DEG_TO_RAD * 0.2F;
-        float pitch = lurker.getTailPitch(partialRenderTicks) * MathUtils.DEG_TO_RAD * 0.2F;
+        float mouthOpen = lurker.getMouthOpen(delta);
+        float yaw = lurker.getTailYaw(delta) * MathUtils.DEG_TO_RAD * 0.2F;
+        float pitch = lurker.getTailPitch(delta) * MathUtils.DEG_TO_RAD * 0.2F;
         forefinLeftProximal.rotateAngleX = MathHelper.cos(swing * 0.8F - MathUtils.PI / 8) * speed * 1.5F - 0.2602503F;
         forefinLeftProximal.rotateAngleY = MathHelper.cos(swing * 0.8F) * speed * 1.7F + 0.2230717F;
         forefinLeftProximal.rotateAngleZ = MathHelper.sin(swing * 0.8F) * speed * 0.7F + 0.4461433F - speed * 0.7F;
@@ -312,6 +311,6 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
             segment.rotateAngleY = yaw + MathHelper.sin(swing * 0.4F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
             segment.rotateAngleZ = -trunk.rotateAngleZ / tail.length;
         }
-        this.partialRenderTicks = partialRenderTicks;
+        this.delta = delta;
     }
 }

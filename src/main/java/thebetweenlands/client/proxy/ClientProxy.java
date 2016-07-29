@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -27,19 +28,19 @@ import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryAngler;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBlindCaveFish;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryBloodSnail;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryChiromaw;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryDragonFly;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryFrog;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryGiantToad;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryLurker;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnail;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactoryMireSnailEgg;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySnailPoisonJet;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySporeling;
-import thebetweenlands.client.render.render.entity.renderfactory.RenderFactorySwampHag;
+import thebetweenlands.client.render.render.entity.render.RenderAngler;
+import thebetweenlands.client.render.render.entity.render.RenderBlindCaveFish;
+import thebetweenlands.client.render.render.entity.render.RenderBloodSnail;
+import thebetweenlands.client.render.render.entity.render.RenderChiromaw;
+import thebetweenlands.client.render.render.entity.render.RenderDragonFly;
+import thebetweenlands.client.render.render.entity.render.RenderFrog;
+import thebetweenlands.client.render.render.entity.render.RenderGiantToad;
+import thebetweenlands.client.render.render.entity.render.RenderLurker;
+import thebetweenlands.client.render.render.entity.render.RenderMireSnail;
+import thebetweenlands.client.render.render.entity.render.RenderMireSnailEgg;
+import thebetweenlands.client.render.render.entity.render.RenderSnailPoisonJet;
+import thebetweenlands.client.render.render.entity.render.RenderSporeling;
+import thebetweenlands.client.render.render.entity.render.RenderSwampHag;
 import thebetweenlands.client.render.render.tile.DruidAltarRenderer;
 import thebetweenlands.client.render.render.tile.LootPotRenderer;
 import thebetweenlands.client.render.render.tile.MobSpawnerBetweenlandsRenderer;
@@ -78,7 +79,7 @@ public class ClientProxy extends CommonProxy {
 	//Please turn this off again after using
 	private static final boolean createJSONFile = false;
 
-	public static RenderFactoryDragonFly dragonFlyRenderer;
+	public static Render<EntityDragonFly> dragonFlyRenderer;
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -207,23 +208,24 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void preInit() {
-		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, new RenderFactoryAngler());
-		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, new RenderFactoryBlindCaveFish());
-		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, new RenderFactoryMireSnail());
-		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, new RenderFactoryMireSnailEgg());
-		RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, new RenderFactoryBloodSnail());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, new RenderFactorySnailPoisonJet());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, new RenderFactorySwampHag());
-		RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, new RenderFactoryChiromaw());
-		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, dragonFlyRenderer = new RenderFactoryDragonFly());
-		RenderingRegistry.registerEntityRenderingHandler(EntityLurker.class, new RenderFactoryLurker());
-		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, new RenderFactoryFrog());
-		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, new RenderFactoryGiantToad());
-		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, new RenderFactorySporeling());
+		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, RenderAngler::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, RenderBlindCaveFish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, RenderMireSnail::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, RenderMireSnailEgg::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, RenderBloodSnail::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, RenderSnailPoisonJet::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, RenderSwampHag::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, RenderChiromaw::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, RenderDragonFly::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLurker.class, RenderLurker::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, RenderFrog::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, RenderGiantToad::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, RenderSporeling::new);
 	}
 
 	@Override
 	public void postInit() {
+	    dragonFlyRenderer = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityDragonFly.class);
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new PurifierRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new DruidAltarRenderer());
