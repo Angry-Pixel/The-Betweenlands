@@ -13,6 +13,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityCompostBin.class, "compost_bin");
 		registerTileEntity(TileEntityLootPot.class, "loot_pot");
 		registerTileEntity(TileEntityMobSpawnerBetweenlands.class, "mob_spawner");
+		registerTileEntity(TileEntityWisp.class, "wisp");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

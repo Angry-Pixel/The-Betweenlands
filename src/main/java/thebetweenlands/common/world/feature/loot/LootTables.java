@@ -40,6 +40,7 @@ public class LootTables {
         }
     });
 
+    public static final WeightedLootList DUNGEON_CHEST_LOOT = new WeightedLootList(new LootItemStack[] {});
 
     public static final WeightedLootList DUNGEON_POT_LOOT = new WeightedLootList(new LootItemStack[] {
             new LootItemStack(ItemRegistry.MARSHMALLOW).setAmount(1).setWeight(28),

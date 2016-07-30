@@ -1,6 +1,8 @@
 package thebetweenlands.common.world.feature;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -9,6 +11,7 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.feature.loot.LootTables;
 import thebetweenlands.common.world.feature.loot.LootUtil;
 
@@ -35,6 +38,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
     public int width;
     public int height;
     public int depth;
+    public IBlockState[] replaceable;
 
     /**
      * A constructor to make you not need to put in the width, height, depth  every time
@@ -43,15 +47,16 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @param height the height of the structure (not always necessary)
      * @param depth  the depth of the structure (z axis)
      */
-    public WorldGenHelper(int width, int height, int depth) {
+    public WorldGenHelper(int width, int height, int depth, IBlockState... replaceable) {
         this.width = width;
         this.height = height;
         this.depth = depth;
+        this.replaceable = replaceable;
     }
 
 
     /**
-     * Generates cube volumes and rotates them depending on the given rotatiopn
+     * Generates cube volumes and rotates them depending on the given rotation
      *
      * @param world      The world
      * @param x          x to generate relative from
@@ -97,6 +102,75 @@ public abstract class WorldGenHelper extends WorldGenerator {
         }
     }
 
+
+    /**
+     * Creates a WorldGenHelper#rotatedCubeVolume that also extends down until it hits a non replaceable block
+     *
+     * @param world      The world
+     * @param x          x to generate relative from
+     * @param y          y to generate relative from
+     * @param z          z to generate relative from
+     * @param offsetX    Where to generate relative from the x
+     * @param offsetY    Where to generate relative from the y
+     * @param offsetZ    Where to generate relative from the z
+     * @param blockState The block to generate
+     * @param sizeWidth  The width of the cube volume
+     * @param sizeHeight The height of the cube volume
+     * @param sizeDepth  The depth of the cube volume
+     * @param rotation   The rotation for the cube volume (0 to 3)
+     */
+    public void rotatedCubeVolumeExtendedDown(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation) {
+        while (isReplaceable(world, x, y, z, offsetX, offsetY - 1, offsetZ, rotation)) {
+            offsetY--;
+            sizeHeight++;
+        }
+        rotatedCubeVolume(world, x, y, z, offsetX, offsetY, offsetZ, blockState, sizeWidth, sizeHeight, sizeDepth, rotation);
+    }
+
+    /**
+     * checks if a block is replaceable
+     *
+     * @param world    The world
+     * @param x        x to generate relative from
+     * @param y        y to generate relative from
+     * @param z        z to generate relative from
+     * @param offsetX  Where to generate relative from the x
+     * @param offsetY  Where to generate relative from the y
+     * @param offsetZ  Where to generate relative from the z
+     * @param rotation The rotation for the cube volume (0 to 3)
+     * @return whether or not it is replaceable
+     */
+    public boolean isReplaceable(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation) {
+        return isReplaceable(world, new BlockPos(x, y, z), offsetX, offsetY, offsetZ, rotation);
+    }
+
+
+    /**
+     * checks if a block is replaceable
+     *
+     * @param world    The world
+     * @param pos      The position to generate relative to
+     * @param offsetX  Where to generate relative from the x
+     * @param offsetY  Where to generate relative from the y
+     * @param offsetZ  Where to generate relative from the z
+     * @param rotation The rotation for the cube volume (0 to 3)
+     * @return Whether or not it is replaceable
+     */
+    public boolean isReplaceable(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation) {
+        pos.add(-(width / 2), 0, -(depth / 2));
+        switch (rotation) {
+            case 0:
+                return world.getBlockState(pos.add(offsetX, offsetY, offsetZ)).getBlock().isReplaceable(world, pos.add(offsetX, offsetY, offsetZ)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(offsetX, offsetY, offsetZ))));
+            case 1:
+                return world.getBlockState(pos.add(offsetZ, offsetY, depth - offsetX - 1)).getBlock().isReplaceable(world, pos.add(offsetZ, offsetY, depth - offsetX - 1)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(offsetZ, offsetY, depth - offsetX - 1))));
+            case 2:
+                return world.getBlockState(pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1)).getBlock().isReplaceable(world, pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1))));
+            case 3:
+                return world.getBlockState(pos.add(width - offsetZ - 1, offsetY, offsetX)).getBlock().isReplaceable(world, pos.add(width - offsetZ - 1, offsetY, offsetX)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(width - offsetZ - 1, offsetY, offsetX))));
+        }
+        return false;
+    }
+
     /**
      * Generates a loot pot taking the rotation of a structure into a count
      *
@@ -112,59 +186,101 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @param max     The maximum amount of items
      * @param chance  The chance of it actually generating
      */
-    public void rotatedLoot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance) {
+    public void rotatedLootPot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance) {
         x -= width / 2;
         z -= depth / 2;
         if (rand.nextInt(chance) == 0)
             return;
         switch (rotation) {
             case 0:
-                generateLoot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max);
+                generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max);
                 break;
             case 1:
-                generateLoot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max);
+                generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max);
                 break;
             case 2:
-                generateLoot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max);
+                generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max);
                 break;
             case 3:
-                generateLoot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max);
+                generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max);
                 break;
         }
     }
 
     /**
-     * TODO fix when spawners are added
+     * Generates a loot pot taking the rotation of a structure into a count
+     *
+     * @param world   The workd
+     * @param rand    a random
+     * @param x       x to generate relative from
+     * @param y       y to generate relative from
+     * @param z       z to generate relative from
+     * @param offsetX Where to generate relative from the x
+     * @param offsetY Where to generate relative from the y
+     * @param offsetZ Where to generate relative from the z
+     * @param min     The minimum amount of items
+     * @param max     The maximum amount of items
+     * @param chance  The chance of it actually generating
+     */
+    public void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, int sequenceStart) {
+        x -= width / 2;
+        z -= depth / 2;
+        if (rand.nextInt(chance) == 0)
+            return;
+        switch (rotation) {
+            case 0:
+                generateLootChest(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+                break;
+            case 1:
+                generateLootChest(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+                break;
+            case 2:
+                generateLootChest(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+                break;
+            case 3:
+                generateLootChest(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+                break;
+        }
+    }
+
+    /**
      * Generates a spawner taking the rotation into a count
      *
      * @param world    the world
-     * @param pos      the position to generate relative from
+     * @param x       x to generate relative from
+     * @param y       y to generate relative from
+     * @param z       z to generate relative from
      * @param offsetX  Where to generate relative from the x
      * @param offsetY  Where to generate relative from the y
      * @param offsetZ  Where to generate relative from the z
      * @param rotation the rotation
      * @param mob      the mob that should be in the spawner
      */
-    public void rotatedSpawner(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation, String mob) {
-        pos.add(-(width / 2), 0, -(depth / 2));
+    public MobSpawnerLogicBetweenlands rotatedSpawner(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, String mob) {
+        BlockPos pos = (new BlockPos(x, y, z)).add(-(width / 2), 0, -(depth / 2));
         IBlockState spawner = BlockRegistry.MOB_SPAWNER.getDefaultState();
         switch (rotation) {
             case 0:
-                world.setBlockState(pos.add(offsetX, offsetY, offsetZ), spawner);
-                BlockMobSpawnerBetweenlands.setMob(world, pos.add(offsetX, offsetY, offsetZ), mob);
-                break;
+                pos = pos.add(offsetX, offsetY, offsetZ);
+                world.setBlockState(pos, spawner);
+                BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
+                return BlockMobSpawnerBetweenlands.getLogic(world, pos);
             case 1:
-                world.setBlockState(pos.add(offsetZ, offsetY, depth - offsetX - 1), spawner);
-                BlockMobSpawnerBetweenlands.setMob(world, pos.add(offsetZ, offsetY, depth - offsetX - 1), mob);
-                break;
+                pos = pos.add(offsetZ, offsetY, depth - offsetX - 1);
+                world.setBlockState(pos, spawner);
+                BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
+                return BlockMobSpawnerBetweenlands.getLogic(world, pos);
             case 2:
-                world.setBlockState(pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1), spawner);
-                BlockMobSpawnerBetweenlands.setMob(world, pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1), mob);
-                break;
+                pos = pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1);
+                world.setBlockState(pos, spawner);
+                BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
+                return BlockMobSpawnerBetweenlands.getLogic(world, pos);
+            default:
             case 3:
-                world.setBlockState(pos.add(width - offsetZ - 1, offsetY, offsetX), spawner);
-                BlockMobSpawnerBetweenlands.setMob(world, pos.add(width - offsetZ - 1, offsetY, offsetX), mob);
-                break;
+                pos = pos.add(width - offsetZ - 1, offsetY, offsetX);
+                world.setBlockState(pos, spawner);
+                BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
+                return BlockMobSpawnerBetweenlands.getLogic(world, pos);
         }
 
     }
@@ -178,11 +294,27 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @param min    The minimum amount of items
      * @param max    The maximum amount of items
      */
-    public void generateLoot(World world, Random random, BlockPos pos, int min, int max) {
+    public void generateLootPot(World world, Random random, BlockPos pos, int min, int max) {
         world.setBlockState(pos, getRandomLootPot(random), 3);
         TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
         if (lootPot != null)
             LootUtil.generateLoot(lootPot, random, LootTables.DUNGEON_POT_LOOT, min, max);
+    }
+
+    /** TODO change to weedwood chest when added
+     * Generates a loot chest at a location
+     *
+     * @param world  The world
+     * @param random A Random
+     * @param pos    The pos to generate at
+     * @param min    The minimum amount of items
+     * @param max    The maximum amount of items
+     */
+    public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state) {
+        world.setBlockState(pos, state, 3);
+        TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
+        if (chest != null)
+            LootUtil.generateLoot(chest, random, LootTables.DUNGEON_CHEST_LOOT, min, max);
     }
 
 
