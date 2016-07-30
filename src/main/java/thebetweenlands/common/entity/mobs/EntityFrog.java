@@ -24,6 +24,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -147,10 +148,9 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		/* TODO fix particles
         if (worldObj.isRemote && getSkin() == 4 && worldObj.getWorldTime() % 10 == 0) {
-            BLParticle.DIRT_DECAY.spawn(worldObj, posX, posY + 0.5D, posZ, 0, 0, 0, 0);
-        }*/
+            BLParticles.DIRT_DECAY.spawn(worldObj, posX, posY + 0.5D, posZ);
+        }
 	}
 
 	@Override

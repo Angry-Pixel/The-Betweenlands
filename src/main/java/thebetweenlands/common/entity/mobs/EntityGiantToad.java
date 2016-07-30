@@ -3,6 +3,8 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,11 +27,12 @@ import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.ControlledAnimation;
@@ -116,10 +119,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 		//Extend AABB so that the player doesn't suffocate in blocks
 		if (this.isBeingRidden()) {
-			this.setEntityBoundingBox(this.getEntityBoundingBox().expand(0.0D, this.getPassengers().get(0).height - 1D, 0.0D));
+			this.setEntityBoundingBox(this.getEntityBoundingBox().setMaxY(this.getEntityBoundingBox().minY + this.height + this.getControllingPassenger().height));
 		}
 		super.onUpdate();
-		this.setEntityBoundingBox(new AxisAlignedBB(this.getEntityBoundingBox().minX, this.getEntityBoundingBox().minY, this.getEntityBoundingBox().minZ, this.getEntityBoundingBox().maxX, this.getEntityBoundingBox().minY + this.height, this.getEntityBoundingBox().maxZ));
+		this.setEntityBoundingBox(this.getEntityBoundingBox().setMaxY(this.getEntityBoundingBox().minY + this.height));
 
 		if (this.onGround) {
 			this.ticksOnGround++;
@@ -176,6 +179,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								motionY += speedMultiplier * 0.6;
 								motionX += speedMultiplier * 0.5 * MathHelper.cos(angle);
 								motionZ += speedMultiplier * 0.5 * MathHelper.sin(angle);
+								ForgeHooks.onLivingJump(this);
 							} else if (this.isCollidedHorizontally) {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
@@ -188,8 +192,9 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(0.6D, 0.6D, 0.6D));
 				EntityLivingBase closestTarget = null;
 				float lastAngDiff = 0.0F;
+				Entity controllingPassenger = this.getControllingPassenger();
 				for (EntityLivingBase target : targets) {
-					if (target.getAITarget() == this.getPassengers().get(0) || (this.getPassengers().get(0) instanceof EntityLivingBase && ((EntityLivingBase) this.getPassengers().get(0)).getAITarget() == target)) {
+					if (target.getAITarget() == controllingPassenger || (controllingPassenger instanceof EntityLivingBase && ((EntityLivingBase) controllingPassenger).getAITarget() == target)) {
 						float x = (float) (target.posX - posX);
 						float z = (float) (target.posZ - posZ);
 						float angle = (float) (Math.atan2(z, x));
@@ -203,7 +208,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					}
 				}
 				if (closestTarget != null) {
-					DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, this.getPassengers().get(0));
+					DamageSource damageSource = new EntityDamageSourceIndirect("mob", this, controllingPassenger);
 					float attackDamage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 					if (closestTarget.attackEntityFrom(damageSource, attackDamage)) {
 						boolean doesJump = true;
@@ -223,7 +228,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 							if (this.inWater) {
 								this.strokeTicks = 20;
 								this.worldObj.setEntityState(this, (byte) 8);
-							}
+							} else
+								ForgeHooks.onLivingJump(this);
 							this.onGround = false;
 						}
 						closestTarget.knockBack(this, attackDamage, -x, -z);
@@ -290,17 +296,16 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		return SoundRegistry.GIANT_TOAD_DEATH;
 	}
 
-
-	//TODO handle the off_hand to
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand Hand, ItemStack stack) {
 		if (!this.worldObj.isRemote) {
-			boolean holdsEquipment = player.getHeldItem(Hand) != null /*&& (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == Registries.INSTANCE.itemRegistry.amuletSlot)*/;
-			if (holdsEquipment)
-				return false;
+			//TODO: handle equipment
+			//			boolean holdsEquipment = player.getHeldItem(Hand) != null /*&& (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == Registries.INSTANCE.itemRegistry.amuletSlot)*/;
+			//			if (holdsEquipment)
+			//				return false;
 			boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(Hand))/*player.getHeldItem(Hand) != null && player.getHeldItem(Hand).getItem() == ItemRegistry.ITEMS_GENERIC && player.getHeldItem(Hand).getItemDamage() == ItemGeneric.EnumItemGeneric.DRAGONFLY_WING.ordinal()*/;
 			if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
-				this.startRiding(this);
+				player.startRiding(this);
 			} else if (holdsWings) {
 				if (!this.isTamed()) {
 					this.temper += this.rand.nextInt(4) + 1;
@@ -337,7 +342,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		Entity entity = source.getEntity();
-		return !(this.isBeingRidden() && this.getPassengers().get(0) != null && this.getPassengers().get(0).equals(entity)) && super.attackEntityFrom(source, damage);
+		return !(this.isBeingRidden() && this.getControllingPassenger() != null && this.getControllingPassenger().equals(entity)) && super.attackEntityFrom(source, damage);
 	}
 
 	@Override
@@ -347,14 +352,15 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void moveEntityWithHeading(float strafing, float forward) {
-		if (this.isBeingRidden() && this.getPassengers().get(0) != null && this.getPassengers().get(0) instanceof EntityLivingBase) {
+		Entity controllingPassenger = this.getControllingPassenger();
+		if (this.isBeingRidden() && controllingPassenger != null && controllingPassenger instanceof EntityLivingBase) {
 			this.stepHeight = 1F;
-			this.prevRotationYaw = this.rotationYaw = this.getPassengers().get(0).rotationYaw;
-			this.rotationPitch = this.getPassengers().get(0).rotationPitch * 0.5F;
+			this.prevRotationYaw = this.rotationYaw = controllingPassenger.rotationYaw;
+			this.rotationPitch = controllingPassenger.rotationPitch * 0.5F;
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 			this.rotationYawHead = this.renderYawOffset = this.rotationYaw;
-			strafing = ((EntityLivingBase) this.getPassengers().get(0)).moveStrafing * 0.5F;
-			forward = ((EntityLivingBase) this.getPassengers().get(0)).moveForward;
+			strafing = ((EntityLivingBase) controllingPassenger).moveStrafing * 0.5F;
+			forward = ((EntityLivingBase) controllingPassenger).moveForward;
 
 			if (forward <= 0.0F) {
 				forward *= 0.25F;
@@ -371,6 +377,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 							motionZ += forward / 1.5F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
 							motionX += strafing / 2.0F * MathHelper.cos((float) Math.toRadians(this.rotationYaw));
 							motionZ += strafing / 2.0F * MathHelper.sin((float) Math.toRadians(this.rotationYaw));
+							ForgeHooks.onLivingJump(this);
 						}
 					}
 				}
@@ -415,22 +422,15 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		}
 	}
 
-	@Override
-	public double getMountedYOffset() {
-		return super.getMountedYOffset();
-	}
-
 	@SideOnly(Side.CLIENT)
 	protected void spawnToadParticles(boolean isHeart) {
-		/*TODO add particles
-        String s = isHeart ? "heart" : "smoke";
-
-        for (int i = 0; i < 7; ++i) {
-            double d0 = this.rand.nextGaussian() * 0.02D;
-            double d1 = this.rand.nextGaussian() * 0.02D;
-            double d2 = this.rand.nextGaussian() * 0.02D;
-            this.worldObj.spawnParticle(s, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2);
-        }*/
+		EnumParticleTypes enumparticletypes = isHeart ? EnumParticleTypes.HEART : EnumParticleTypes.SMOKE_NORMAL;
+		for (int i = 0; i < 7; ++i) {
+			double d0 = this.rand.nextGaussian() * 0.02D;
+			double d1 = this.rand.nextGaussian() * 0.02D;
+			double d2 = this.rand.nextGaussian() * 0.02D;
+			this.worldObj.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -447,6 +447,18 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		} else {
 			super.handleStatusUpdate(id);
 		}
+	}
+
+	@Override
+	@Nullable
+	public Entity getControllingPassenger() {
+		return this.getPassengers().isEmpty() ? null : (Entity)this.getPassengers().get(0);
+	}
+
+	@Override
+	public boolean canPassengerSteer() {
+		//TODO: onGround only updates properly if this return false??
+		return false;
 	}
 }
 
