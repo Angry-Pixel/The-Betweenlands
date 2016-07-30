@@ -32,6 +32,7 @@ import thebetweenlands.common.item.food.ItemSapJello;
 import thebetweenlands.common.item.food.ItemWeepingBluePetal;
 import thebetweenlands.common.item.food.ItemWightHeart;
 import thebetweenlands.common.item.herblore.ItemCrushed;
+import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -130,6 +131,7 @@ public class ItemRegistry {
 	public static final Item WEEDWOOD_SHIELD = new ItemWeedwoodShield();
 	public static final Item SYRMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYRMORITE);
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
+	public static final Item MANUAL_HL = new ItemManualHL();
 
 
 	//RECORDS

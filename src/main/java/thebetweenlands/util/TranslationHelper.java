@@ -1,6 +1,6 @@
 package thebetweenlands.util;
 
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.client.resources.I18n;
 import thebetweenlands.common.TheBetweenlands;
 
 public class TranslationHelper {
@@ -12,8 +12,8 @@ public class TranslationHelper {
      * @return localized string
      */
     public static String translateToLocal(String unlocalizedString) {
-        if (I18n.canTranslate(unlocalizedString))
-            return I18n.translateToLocal(unlocalizedString);
+        if (I18n.hasKey(unlocalizedString))
+            return I18n.format(unlocalizedString);
         else {
             if (!TheBetweenlands.unlocalizedNames.contains(unlocalizedString))
                 TheBetweenlands.unlocalizedNames.add(unlocalizedString);
@@ -28,7 +28,7 @@ public class TranslationHelper {
      * @return if the string can be localized
      */
     public static boolean canTranslate(String unlocalizedString) {
-        if (I18n.canTranslate(unlocalizedString))
+        if (I18n.hasKey(unlocalizedString))
             return true;
         else {
             if (!TheBetweenlands.unlocalizedNames.contains(unlocalizedString))

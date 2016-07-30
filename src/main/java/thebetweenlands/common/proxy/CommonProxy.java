@@ -1,6 +1,7 @@
 package thebetweenlands.common.proxy;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -8,6 +9,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
@@ -25,12 +28,11 @@ public class CommonProxy implements IGuiHandler {
     public static final int GUI_ANIMATOR = 6;
     public static final int GUI_PURIFIER = 7;
     public static final int GUI_PESTLE_AND_MORTAR = 8;
-    public static final int GUI_MANUAL = 9;
-    public static final int GUI_HL = 10;
-    public static final int GUI_LORE = 11;
-    public static final int GUI_LURKER_POUCH = 12;
-    public static final int GUI_LURKER_POUCH_NAMING = 13;
-    public static final int GUI_LURKER_POUCH_KEYBIND = 14;
+    public static final int GUI_HL = 9;
+    public static final int GUI_LORE = 10;
+    public static final int GUI_LURKER_POUCH = 11;
+    public static final int GUI_LURKER_POUCH_NAMING = 12;
+    public static final int GUI_LURKER_POUCH_KEYBIND = 13;
 
     @Override
     public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -108,4 +110,8 @@ public class CommonProxy implements IGuiHandler {
     public void updateWispParticles(TileEntityWisp te) {
     }
 
+    @SideOnly(Side.CLIENT)
+    public FontRenderer getCustomFontRenderer() {
+        return null;
+    }
 }

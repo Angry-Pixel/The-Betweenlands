@@ -139,7 +139,7 @@ public class DiscoveryContainer {
 	 * Writes this discovery container to an NBT
 	 * @param nbt
 	 */
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		NBTTagList discoveryList = new NBTTagList();
 		Iterator<Entry<AspectItem, List<IAspectType>>> discoveryIT = this.discoveredStaticAspects.entrySet().iterator();
 		while(discoveryIT.hasNext()) {
@@ -158,6 +158,7 @@ public class DiscoveryContainer {
 			discoveryList.appendTag(discoveryEntry);
 		}
 		nbt.setTag("discoveries", discoveryList);
+		return nbt;
     }
 
     /**
