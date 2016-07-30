@@ -60,19 +60,22 @@ public interface IGenericItem {
 		return item != null && item.getItem() == this.getItem() && item.getID() == this.getID();
 	}
 
-	static Map<Class<? extends Enum>, List<IGenericItem>> TYPE_TO_ITEMS = new HashMap<Class<? extends Enum>, List<IGenericItem>>();
-
+	static class TypeContainer {
+		private final Map<Class<? extends Enum>, List<IGenericItem>> typeToItems = new HashMap<Class<? extends Enum>, List<IGenericItem>>();
+	}
+	static TypeContainer TYPE_CONTAINER = new TypeContainer();
+	
 	/**
 	 * Returns a list of generic items for the specified type
 	 * @param type
 	 * @return
 	 */
 	public static List<IGenericItem> getGenericItems(Class<? extends Enum> type) {
-		List<IGenericItem> genericItems = TYPE_TO_ITEMS.get(type);
+		List<IGenericItem> genericItems = TYPE_CONTAINER.typeToItems.get(type);
 		if(genericItems == null) {
 			if(!IGenericItem.class.isAssignableFrom(type))
 				throw new RuntimeException("Type " + type + " does not implement IGenericItem");
-			TYPE_TO_ITEMS.put(type, genericItems = new ArrayList<IGenericItem>());
+			TYPE_CONTAINER.typeToItems.put(type, genericItems = new ArrayList<IGenericItem>());
 			for(Object item : type.getEnumConstants())
 				genericItems.add((IGenericItem)item);
 		}
