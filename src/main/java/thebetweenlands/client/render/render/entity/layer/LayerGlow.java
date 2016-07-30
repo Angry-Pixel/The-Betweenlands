@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.render.entity.layer;
 
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -25,9 +26,8 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		this.renderer.bindTexture(this.glowTexture);
 		GlStateManager.enableBlend();
-		GlStateManager.disableAlpha();
+		GlStateManager.enableAlpha();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
-		GlStateManager.disableLighting();
 		GlStateManager.depthMask(!entity.isInvisible());
 		int i = 61680;
 		int j = i % 65536;
@@ -35,18 +35,20 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 		GlStateManager.enableLighting();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		this.renderer.getMainModel().render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+		ModelBase mainModel = this.renderer.getMainModel();
+		mainModel.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
+		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		this.setLightmap(entity, partialTicks);
 		GlStateManager.depthMask(true);
 		GlStateManager.disableBlend();
-		GlStateManager.enableAlpha();
 	}
 
 	@Override
 	public boolean shouldCombineTextures() {
 		return false;
 	}
-	
+
 	/**
 	 * Updates the lighting map for the position of the specified entity
 	 * @param entityLivingIn
