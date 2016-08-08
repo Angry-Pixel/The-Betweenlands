@@ -18,8 +18,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.BetweenlandsAPI;
+import thebetweenlands.common.command.CommandAspectDiscovery;
+import thebetweenlands.common.command.CommandBLEvent;
+import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.event.AnvilEventHandler;
-import thebetweenlands.common.event.AspectTestHandler;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -28,6 +30,7 @@ import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.common.world.storage.world.WorldDataBase;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -119,12 +122,12 @@ public class TheBetweenlands {
 
 	@EventHandler
 	public void serverLoad(FMLServerStartingEvent event) {
-		/*event.registerServerCommand(new CommandBLEvent());
+		event.registerServerCommand(new CommandBLEvent());
 		event.registerServerCommand(new CommandResetAspects());
-		event.registerServerCommand(new CommandDecay());
-		event.registerServerCommand(new CommandFindPage());
+		//event.registerServerCommand(new CommandDecay());
+		//event.registerServerCommand(new CommandFindPage());
 		event.registerServerCommand(new CommandAspectDiscovery());
-		if (ConfigHandler.DEBUG) {
+		/*if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
 		}
 		BLGamerules.INSTANCE.onServerStarting(event);*/
@@ -138,7 +141,7 @@ public class TheBetweenlands {
 
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
-		
-		MinecraftForge.EVENT_BUS.register(AspectTestHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
+		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 	}
 }

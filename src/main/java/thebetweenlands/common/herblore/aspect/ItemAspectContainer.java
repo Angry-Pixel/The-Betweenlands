@@ -82,4 +82,12 @@ public final class ItemAspectContainer extends AspectContainer {
 		}
 		return aspects;
 	}
+
+	/**
+	 * Returns a list of all aspects in this container
+	 * @return
+	 */
+	public List<Aspect> getAspects() {
+		return this.getAspects(null);
+	}
 }

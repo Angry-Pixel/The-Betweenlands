@@ -8,14 +8,16 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
 import thebetweenlands.common.herblore.aspect.IDiscoveryProvider;
 import thebetweenlands.common.proxy.CommonProxy;
 
 public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
-    public ItemManualHL(){
+    public ItemManualHL() {
         setMaxStackSize(1);
+        this.setCreativeTab(BLCreativeTabs.HERBLORE);
     }
 
     @Override

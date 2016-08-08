@@ -200,7 +200,7 @@ public class AspectContainer {
 	 * @param type
 	 * @return
 	 */
-	public final int getAmount(IAspectType type) {
+	public final int get(IAspectType type) {
 		return this.getAmount(type, false) + this.getAmount(type, true);
 	}
 
@@ -210,7 +210,7 @@ public class AspectContainer {
 	 * @return
 	 */
 	public final Aspect getAspect(IAspectType type)  {
-		return new Aspect(type, this.getAmount(type));
+		return new Aspect(type, this.get(type));
 	}
 
 	/**
@@ -219,9 +219,9 @@ public class AspectContainer {
 	 * @param amount
 	 * @return
 	 */
-	public final AspectContainer setAmount(IAspectType type, int amount) {
+	public final AspectContainer set(IAspectType type, int amount) {
 		if(amount > 0) {
-			int currentAmount = this.getAmount(type);
+			int currentAmount = this.get(type);
 			int diff = currentAmount - amount;
 			int dynAmounts = this.getAmount(type, true);
 			this.putAmount(type, Math.max(dynAmounts - diff, 0), true);
@@ -243,7 +243,7 @@ public class AspectContainer {
 	 * @param amount
 	 * @return
 	 */
-	public final AspectContainer addAmount(IAspectType type, int amount) {
+	public final AspectContainer add(IAspectType type, int amount) {
 		this.addAmount(type, amount, true);
 		return this;
 	}
@@ -254,13 +254,13 @@ public class AspectContainer {
 	 * @param desiredAmount
 	 * @return the drained amount
 	 */
-	public final int drainAmount(IAspectType type, int desiredAmount) {
-		int amount = this.getAmount(type);
+	public final int drain(IAspectType type, int desiredAmount) {
+		int amount = this.get(type);
 		if(desiredAmount >= amount) {
-			this.setAmount(type, 0);
+			this.set(type, 0);
 			return amount;
 		}
-		this.setAmount(type, amount - desiredAmount);
+		this.set(type, amount - desiredAmount);
 		return desiredAmount;
 	}
 
