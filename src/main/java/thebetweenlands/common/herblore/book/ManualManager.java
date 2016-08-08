@@ -1,5 +1,6 @@
 package thebetweenlands.common.herblore.book;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -7,9 +8,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
+import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
 import thebetweenlands.common.herblore.aspect.IDiscoveryProvider;
+import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
@@ -126,7 +129,8 @@ public class ManualManager {
                     }
                 }
             }
-            return ingredient != null && AspectManager.get(player.worldObj).getDiscoveredAspects(ingredient, container).size() > 0;
+            ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getMinecraft().theWorld));
+            return ingredient != null && aspectContainer.getAspects(container).size() > 0;
         }
 
 

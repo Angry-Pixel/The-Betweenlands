@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.herblore.aspect.IAspectType;
+import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.ManualManager;
 import thebetweenlands.common.herblore.book.Page;

@@ -6,15 +6,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import thebetweenlands.common.world.events.*;
-
 public class EnvironmentEventRegistry {
 	public final EventDenseFog DENSE_FOG = new EventDenseFog(this);
 	public final EnvironmentEvent HEAVY_RAIN = new EventHeavyRain(this);
 	public final EventAuroras AURORAS = new EventAuroras(this);
 	public final EventBloodSky BLOODSKY = new EventBloodSky(this);
 	public final EventSpoopy SPOOPY = new EventSpoopy(this);
-	
+
 	public void init() {
 		register(DENSE_FOG);
 		register(HEAVY_RAIN);

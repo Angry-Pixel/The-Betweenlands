@@ -29,9 +29,18 @@ public class TextureStitchHandler {
 	//TODO: Mappings!
 	private static final Field f_mapRegisteredSprites = ReflectionHelper.findField(TextureMap.class, "mapRegisteredSprites");
 
+	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
+
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
 		//Corrosion
+		this.stitchedCorrosionSprites.clear();
+		Map<String, TextureAtlasSprite> mapRegisteredSprites;
+		try {
+			mapRegisteredSprites = (Map<String, TextureAtlasSprite>) f_mapRegisteredSprites.get(e.getMap());
+		} catch (Exception ex) {
+			throw new RuntimeException("Failed to load underlying sprite map", ex);
+		}
 		for (Item item : ItemRegistry.ITEMS) {
 			if (item instanceof ICorrodible) {
 				ResourceLocation[] variants = ICorrodible.getItemCorrodibleVariants((Item & ICorrodible) item);
@@ -57,13 +66,13 @@ public class TextureStitchHandler {
 								if(fileName.endsWith(corrodibleSuffix)) {
 									ResourceLocation completeBaseTextureLocation = new ResourceLocation(texture.getResourceDomain(), String.format("textures/%s.png", texture.getResourcePath()));
 									for (int n = 0; n < CorrosionHelper.CORROSION_STAGE_COUNT; n++) {
-										String corrosionSpriteName = "thebetweenlands:items/" + fileName.substring(0, fileName.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
+										String corrosionSpriteName = texture.getResourceDomain() + ":items/" + fileName.substring(0, fileName.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
 										TextureCorrosion corrosionTexture = new TextureCorrosion(corrosionSpriteName, completeBaseTextureLocation, n, item.getUnlocalizedName().hashCode());
 										//Forcibly sets the texture entry because TextureMap#setTextureEntry doesn't allow 
 										//overwriting a previously added sprite (usually set in ModelLoader#setupModelRegistry).
 										//Maybe find a better way to do this, if at all possible anyways
-										Map<String, TextureAtlasSprite> mapRegisteredSprites = (Map<String, TextureAtlasSprite>) f_mapRegisteredSprites.get(e.getMap());
 										mapRegisteredSprites.put(corrosionSpriteName, corrosionTexture);
+										this.stitchedCorrosionSprites.add(corrosionTexture);
 									}
 								}
 							}
@@ -87,6 +96,18 @@ public class TextureStitchHandler {
 				}
 				stitcher.setSprites(sprites);
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onTextureStitchPost(TextureStitchEvent.Post e) {
+		//Corrosion
+		TextureMap map = e.getMap();
+		for(TextureCorrosion corrosionSprite : this.stitchedCorrosionSprites) {
+			String parentIconName = corrosionSprite.getParentSpriteName().toString();
+			TextureAtlasSprite parentSprite = map.getTextureExtry(parentIconName);
+			if(parentSprite != null)
+				corrosionSprite.setParentSprite(parentSprite);
 		}
 	}
 

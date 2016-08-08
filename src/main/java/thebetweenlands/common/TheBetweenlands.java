@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.BetweenlandsAPI;
 import thebetweenlands.common.event.AnvilEventHandler;
+import thebetweenlands.common.event.AspectTestHandler;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -137,5 +138,7 @@ public class TheBetweenlands {
 
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
+		
+		MinecraftForge.EVENT_BUS.register(AspectTestHandler.INSTANCE);
 	}
 }

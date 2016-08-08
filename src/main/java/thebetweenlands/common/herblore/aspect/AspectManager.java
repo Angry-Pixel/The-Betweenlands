@@ -16,9 +16,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
-import thebetweenlands.util.NBTHelper;
 
 public class AspectManager {
 	public static enum AspectTier {
@@ -133,8 +133,8 @@ public class AspectManager {
 		}
 	}
 
-	private static final List<AspectEntry> registeredAspects = new ArrayList<AspectEntry>();
-	private static final Map<AspectItem, List<AspectItemEntry>> registeredItems = new LinkedHashMap<AspectItem, List<AspectItemEntry>>();
+	private static final List<AspectEntry> REGISTERED_ASPECTS = new ArrayList<AspectEntry>();
+	private static final Map<AspectItem, List<AspectItemEntry>> REGISTERED_ITEMS = new LinkedHashMap<AspectItem, List<AspectItemEntry>>();
 	private final Map<AspectItem, List<Aspect>> matchedAspects = new LinkedHashMap<AspectItem, List<Aspect>>();
 
 	public Map<AspectItem, List<Aspect>> getMatchedAspects() {
@@ -142,11 +142,11 @@ public class AspectManager {
 	}
 
 	public static Map<AspectItem, List<AspectItemEntry>> getRegisteredItems(){
-		return registeredItems;
+		return REGISTERED_ITEMS;
 	}
 
 	public static void registerAspect(AspectEntry entry) {
-		registeredAspects.add(entry);
+		REGISTERED_ASPECTS.add(entry);
 	}
 
 	public static void addStaticAspectsToItem(AspectItemEntry entry) {
@@ -155,16 +155,16 @@ public class AspectManager {
 
 	public static void addStaticAspectsToItem(AspectItemEntry entry, int aspectCount) {
 		AspectItem itemEntry = entry.item;
-		for(Entry<AspectItem, List<AspectItemEntry>> e : registeredItems.entrySet()) {
+		for(Entry<AspectItem, List<AspectItemEntry>> e : REGISTERED_ITEMS.entrySet()) {
 			if(e.getKey().equals(itemEntry)) {
 				itemEntry = e.getKey();
 				break;
 			}
 		}
-		List<AspectItemEntry> entryList = registeredItems.get(itemEntry);
+		List<AspectItemEntry> entryList = REGISTERED_ITEMS.get(itemEntry);
 		if(entryList == null) {
 			entryList = new ArrayList<AspectItemEntry>();
-			registeredItems.put(entry.item, entryList);
+			REGISTERED_ITEMS.put(entry.item, entryList);
 		}
 		for(int i = 0; i < aspectCount; i++) {
 			entryList.add(entry);
@@ -173,7 +173,7 @@ public class AspectManager {
 
 	public static List<AspectEntry> getAspectEntriesFromName(String name) {
 		List<AspectEntry> aspectEntries = new ArrayList<AspectEntry>();
-		for(AspectEntry aspect : registeredAspects) {
+		for(AspectEntry aspect : REGISTERED_ASPECTS) {
 			if(aspect.aspect.getName().equals(name)) {
 				aspectEntries.add(aspect);
 			}
@@ -182,7 +182,7 @@ public class AspectManager {
 	}
 
 	public static AspectItem getItemEntryFromName(String name, int damage) {
-		for(AspectItem e : registeredItems.keySet()) {
+		for(AspectItem e : REGISTERED_ITEMS.keySet()) {
 			if(e.item.getUnlocalizedName().equals(name) && e.damage == damage) {
 				return e;
 			}
@@ -304,12 +304,12 @@ public class AspectManager {
 		Random rnd = new Random();
 		rnd.setSeed(seed);
 
-		List<AspectEntry> availableAspects = new ArrayList<AspectEntry>(this.registeredAspects.size());
-		availableAspects.addAll(this.registeredAspects);
+		List<AspectEntry> availableAspects = new ArrayList<AspectEntry>(this.REGISTERED_ASPECTS.size());
+		availableAspects.addAll(this.REGISTERED_ASPECTS);
 
 		List<AspectEntry> possibleAspects = new ArrayList<AspectEntry>();
 
-		for(Entry<AspectItem, List<AspectItemEntry>> item : this.registeredItems.entrySet()) {
+		for(Entry<AspectItem, List<AspectItemEntry>> item : this.REGISTERED_ITEMS.entrySet()) {
 			AspectItem itemStack = item.getKey();
 			if(this.matchedAspects.containsKey(itemStack)) {
 				continue;
@@ -317,7 +317,7 @@ public class AspectManager {
 			List<AspectItemEntry> itemEntries = item.getValue();
 			List<Aspect> itemAspects = new ArrayList<Aspect>(itemEntries.size());
 			if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
-				this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, this.registeredAspects, rnd);
+				this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, this.REGISTERED_ASPECTS, rnd);
 			}
 			for(Aspect itemAspect : itemAspects) {
 				this.removeAvailableAspect(itemAspect, availableAspects);
@@ -335,7 +335,7 @@ public class AspectManager {
 					mergedAspects.add(aspect);
 				} else {
 					mergedAspects.remove(mergedAspect);
-					mergedAspects.add(new Aspect(mergedAspect.type, mergedAspect.getAmount() + aspect.getAmount()));
+					mergedAspects.add(new Aspect(mergedAspect.type, mergedAspect.amount + aspect.amount));
 				}
 			}
 			this.updateMatchedAspects(itemStack, mergedAspects);
@@ -372,7 +372,7 @@ public class AspectManager {
 				}
 			}
 			float baseAmount = randomAspect.baseAmount * matchingItemEntry.amountMultiplier;
-			itemAspects.add(new Aspect(randomAspect.aspect, baseAmount + baseAmount * matchingItemEntry.amountVaration * (rnd.nextFloat() * 2.0F - 1.0F)));
+			itemAspects.add(new Aspect(randomAspect.aspect, (int)(baseAmount + baseAmount * matchingItemEntry.amountVaration * (rnd.nextFloat() * 2.0F - 1.0F))));
 			foundMatches = true;
 		}
 		return foundMatches;
@@ -402,139 +402,6 @@ public class AspectManager {
 			}
 		}
 		return new ArrayList<Aspect>();
-	}
-
-	/**
-	 * Returns a list of all dynamic aspects on an item stack
-	 * @param stack
-	 * @return
-	 */
-	public static List<Aspect> getDynamicAspects(ItemStack stack) {
-		List<Aspect> aspects = new ArrayList<Aspect>();
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("herbloreAspects")) {
-			NBTTagList lst = stack.getTagCompound().getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
-			for(int i = 0; i < lst.tagCount(); i++) {
-				NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
-				Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
-				if(itemAspect != null)
-					aspects.add(itemAspect);
-			}
-		}
-		return aspects;
-	}
-
-	/**
-	 * Adds dynamic aspects to an item stack
-	 * @param stack
-	 * @param aspects
-	 * @return
-	 */
-	public static ItemStack addDynamicAspects(ItemStack stack, Aspect... aspects) {
-		if(!NBTHelper.getStackNBTSafe(stack).hasKey("herbloreAspects")) {
-			stack.getTagCompound().setTag("herbloreAspects", new NBTTagList());
-		}
-		NBTTagList lst = stack.getTagCompound().getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
-		for(Aspect aspect : aspects) {
-			NBTTagCompound aspectCompound = new NBTTagCompound();
-			aspect.writeToNBT(aspectCompound);
-			lst.appendTag(aspectCompound);
-		}
-		return stack;
-	}
-
-	/**
-	 * Removes all dynamic aspects from an item stack
-	 * @param stack
-	 * @return
-	 */
-	public static ItemStack removeDynamicAspects(ItemStack stack) {
-		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("herbloreAspects")) {
-			stack.getTagCompound().removeTag("herbloreAspects");
-		}
-		return stack;
-	}
-
-	/**
-	 * Removes all dynamic aspects from an item stack that match with one of the specified aspect types
-	 * @param stack
-	 * @param type
-	 * @return
-	 */
-	public static ItemStack removeDynamicAspects(ItemStack stack, IAspectType... types) {
-		for(IAspectType type : types) {
-			if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("herbloreAspects")) {
-				NBTTagList lst = stack.getTagCompound().getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
-				int count = lst.tagCount();
-				for(int i = 0; i < count; i++) {
-					NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
-					Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
-					if(itemAspect != null && itemAspect.type.equals(type)) {
-						lst.removeTag(i);
-						break;
-					}
-				}
-			}
-		}
-		return stack;
-	}
-
-	/**
-	 * Removes all dynamic aspects from an item stack that match with one of the specified aspects
-	 * @param stack
-	 * @param aspects
-	 * @return
-	 */
-	public static ItemStack removeDynamicAspects(ItemStack stack, Aspect... aspects) {
-		for(Aspect aspect : aspects) {
-			if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("herbloreAspects")) {
-				NBTTagList lst = stack.getTagCompound().getTagList("herbloreAspects", Constants.NBT.TAG_COMPOUND);
-				int count = lst.tagCount();
-				for(int i = 0; i < count; i++) {
-					NBTTagCompound aspectCompound = lst.getCompoundTagAt(i);
-					Aspect itemAspect = Aspect.readFromNBT(aspectCompound);
-					if(itemAspect != null && itemAspect.equals(aspect)) {
-						lst.removeTag(i);
-						break;
-					}
-				}
-			}
-		}
-		return stack;
-	}
-
-	/**
-	 * Returns a list of all discovered and dynamic aspects on an item. If you specify a player
-	 * this will only return the aspects that the player has discovered.
-	 * If the player is null this will return all aspects on an item.
-	 * @param stack
-	 * @param player
-	 * @return
-	 */
-	public List<Aspect> getDiscoveredAspects(ItemStack stack, DiscoveryContainer discoveryContainer) {
-		List<Aspect> aspects = new ArrayList<Aspect>();
-		if(discoveryContainer == null) {
-			aspects.addAll(this.getStaticAspects(new AspectItem(stack)));
-		} else {
-			aspects.addAll(discoveryContainer.getDiscoveredStaticAspects(this, new AspectItem(stack)));
-		}
-		aspects.addAll(getDynamicAspects(stack));
-		return aspects;
-	}
-
-	/**
-	 * Returns a list of all discovered and dynamic aspect types on an item. If you specify a player
-	 * this will only return the aspect types that the player has discovered.
-	 * If the player is null this will return all aspect types on an item.
-	 * @param stack
-	 * @param player
-	 * @return
-	 */
-	public List<IAspectType> getDiscoveredAspectTypes(ItemStack stack, DiscoveryContainer discoveryContainer) {
-		List<IAspectType> aspects = new ArrayList<IAspectType>();
-		for(Aspect aspect : this.getDiscoveredAspects(stack, discoveryContainer)) {
-			aspects.add(aspect.type);
-		}
-		return aspects;
 	}
 
 	/**

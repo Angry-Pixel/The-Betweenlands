@@ -12,6 +12,7 @@ public class Registries {
 	private RecipeRegistry recipeRegistry;
 	private SoundRegistry soundRegistry;
 	private ModelRegistry modelRegistry;
+	private AspectRegistry aspectRegistry;
 
 	public void preInit() {
 		(this.fluidRegistry = new FluidRegistry()).preInit();
@@ -23,6 +24,7 @@ public class Registries {
 		this.recipeRegistry = new RecipeRegistry();
 		this.soundRegistry = new SoundRegistry();
 		(this.modelRegistry = new ModelRegistry()).preInit();
+		this.aspectRegistry = new AspectRegistry();
 	}
 
 	public void init() {
@@ -30,5 +32,6 @@ public class Registries {
 		//this.itemRegistry.init();
 		this.recipeRegistry.init();
 		this.tileEntityRegistry.init();
+		this.aspectRegistry.init();
 	}
 }

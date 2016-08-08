@@ -1,8 +1,5 @@
 package thebetweenlands.client.tab;
 
-import thebetweenlands.client.tabs.*;
-
-
 public class BLCreativeTabs
 {
 	public static CreativeTabBetweenlands BLOCKS = new TabBlocks();

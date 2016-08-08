@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.herblore.aspect.IAspectType;
+import thebetweenlands.common.herblore.aspect.type.IAspectType;
 
 import java.util.ArrayList;
 import java.util.List;

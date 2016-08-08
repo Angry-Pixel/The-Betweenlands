@@ -7,7 +7,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.aspect.IAspectType;
+import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
+import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.util.AspectIconRenderer;
 
 import java.util.ArrayList;
@@ -91,7 +92,9 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
 
     public void getAspects() {
         aspects.clear();
-        for (Aspect aspect : AspectManager.get(Minecraft.getMinecraft().theWorld).getDiscoveredAspects(itemStack, AspectManager.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer))) {
+        ItemAspectContainer container = ItemAspectContainer.fromItem(this.itemStack, AspectManager.get(Minecraft.getMinecraft().theWorld));
+        List<Aspect> visibleAspects = container.getAspects(AspectManager.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer));
+        for (Aspect aspect : visibleAspects) {
             aspects.add(aspect.type);
         }
     }

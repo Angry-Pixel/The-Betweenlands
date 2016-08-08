@@ -3,6 +3,7 @@ package thebetweenlands.client.render.sprite;
 import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -23,6 +24,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.data.AnimationFrame;
 import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -36,30 +38,71 @@ public class TextureCorrosion extends TextureAtlasSprite {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Random RANDOM = new Random(0);
 
-	private int[] corrosionPixels;
-	private int corrosionWidth;
-	private int corrosionHeight;
+	//TODO: Mappings!
+	private static final Field f_frameCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "frameCounter");
+	private static final Field f_tickCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "tickCounter");
 
-	private AnimationMetadataSection animationMetadata;
-	private long seed;
-	private ResourceLocation baseTexture;
-	private int corrosionAmount;
+	private static int[] corrosionPixels;
+	private static int corrosionWidth;
+	private static int corrosionHeight;
+
+	private AnimationMetadataSection parentAnimationMetadata;
+	private final long seed;
+	private final ResourceLocation parentTexture;
+	private final ResourceLocation parentTextureSpriteName;
+	private final int corrosionAmount;
 	private int currentMipmapLevels = 0;
 	private ResourceLocation loadedResourceLocation = null;
 	private IResourceManager loaderResourceManager = null;
+	private TextureAtlasSprite parentSprite;
 
-	public TextureCorrosion(String spriteName, ResourceLocation baseTexture, int corrosionAmount, long seed) {
+	public TextureCorrosion(String spriteName, ResourceLocation parentTexture, int corrosionAmount, long seed) {
 		super(spriteName);
-		this.baseTexture = baseTexture;
+		this.parentTexture = parentTexture;
+		String spritePath = this.parentTexture.getResourcePath();
+		spritePath = spritePath.substring("textures/".length(), spritePath.length() - ".png".length());
+		this.parentTextureSpriteName = new ResourceLocation(this.parentTexture.getResourceDomain(), spritePath);
 		this.corrosionAmount = corrosionAmount;
 		this.seed = seed;
+	}
+
+	/**
+	 * Returns the parent texture location
+	 * @return
+	 */
+	public ResourceLocation getParentTexture() {
+		return this.parentTexture;
+	}
+
+	/**
+	 * Returns the parent sprite name
+	 * @return
+	 */
+	public ResourceLocation getParentSpriteName() {
+		return this.parentTextureSpriteName;
+	}
+
+	/**
+	 * Sets the parent sprite
+	 * @param sprite
+	 */
+	public void setParentSprite(TextureAtlasSprite sprite) {
+		this.parentSprite = sprite;
+	}
+
+	/**
+	 * Returns the parent sprite
+	 * @return
+	 */
+	public TextureAtlasSprite getParentSprite() {
+		return this.parentSprite;
 	}
 
 	/**
 	 * Resets the sprite
 	 */
 	private void resetSprite() {
-		this.animationMetadata = null;
+		this.parentAnimationMetadata = null;
 		this.setFramesTextureData(new ArrayList<int[][]>());
 		this.frameCounter = 0;
 		this.tickCounter = 0;
@@ -102,7 +145,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		try {
 			this.loadedResourceLocation = location;
 			this.loaderResourceManager = manager;
-			resource = manager.getResource(this.baseTexture);
+			resource = manager.getResource(this.parentTexture);
 			this.loadSpriteFrames(resource, this.currentMipmapLevels + 1);
 		} catch (RuntimeException runtimeexception) {
 			LOGGER.error((String)("Unable to parse metadata from " + this.loadedResourceLocation), (Throwable)runtimeexception);
@@ -193,7 +236,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 					this.framesTextureData.set(frameIndex, getFrameTextureData(mipmappedFrames, frameWidth, frameHeight, frameIndex));
 				}
 
-				this.animationMetadata = spriteMetadata;
+				this.parentAnimationMetadata = spriteMetadata;
 			} else {
 				ArrayList animationFrames = Lists.newArrayList();
 
@@ -202,7 +245,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 					animationFrames.add(new AnimationFrame(frameIndex, -1));
 				}
 
-				this.animationMetadata = new AnimationMetadataSection(animationFrames, width, height, spriteMetadata.getFrameTime(), spriteMetadata.isInterpolate());
+				this.parentAnimationMetadata = new AnimationMetadataSection(animationFrames, width, height, spriteMetadata.getFrameTime(), spriteMetadata.isInterpolate());
 			}
 		}
 	}
@@ -244,24 +287,36 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	@Override
 	public void updateAnimation() {
-		//TODO: This should always stay in sync with the parent's tickCounter and frameCounter. 
-		//That's usually the case, but if something calls updateAnimation from somewhere else 
-		//than TextureMap#updateAnimations it'll desync
-		
-		++this.tickCounter;
+		if(this.parentSprite == null) {
+			++this.tickCounter;
 
-		if (this.tickCounter >= this.animationMetadata.getFrameTimeSingle(this.frameCounter)) {
-			int frameIndex = this.animationMetadata.getFrameIndex(this.frameCounter);
-			int frameCount = this.animationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.animationMetadata.getFrameCount();
-			this.frameCounter = (this.frameCounter + 1) % frameCount;
-			this.tickCounter = 0;
-			int nextFrameIndex = this.animationMetadata.getFrameIndex(this.frameCounter);
+			if (this.tickCounter >= this.parentAnimationMetadata.getFrameTimeSingle(this.frameCounter)) {
+				int frameIndex = this.parentAnimationMetadata.getFrameIndex(this.frameCounter);
+				int frameCount = this.parentAnimationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.parentAnimationMetadata.getFrameCount();
+				this.frameCounter = (this.frameCounter + 1) % frameCount;
+				this.tickCounter = 0;
+				int nextFrameIndex = this.parentAnimationMetadata.getFrameIndex(this.frameCounter);
 
-			if (frameIndex != nextFrameIndex && nextFrameIndex >= 0 && nextFrameIndex < this.framesTextureData.size()) {
-				TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(nextFrameIndex), this.width, this.height, this.originX, this.originY, false, false);
+				if (frameIndex != nextFrameIndex && nextFrameIndex >= 0 && nextFrameIndex < this.framesTextureData.size()) {
+					TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(nextFrameIndex), this.width, this.height, this.originX, this.originY, false, false);
+				}
+			} else if (this.parentAnimationMetadata.isInterpolate()) {
+				this.updateAnimationInterpolated();
 			}
-		} else if (this.animationMetadata.isInterpolate()) {
-			this.updateAnimationInterpolated();
+		} else {
+			int prevFrameIndex = this.parentAnimationMetadata.getFrameIndex(this.frameCounter);
+			try {
+				this.tickCounter = f_tickCounter.getInt(this.parentSprite);
+				this.frameCounter = f_frameCounter.getInt(this.parentSprite);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+			int nextFrameIndex = this.parentAnimationMetadata.getFrameIndex(this.frameCounter);
+			if (prevFrameIndex != nextFrameIndex) {
+				TextureUtil.uploadTextureMipmap((int[][])this.framesTextureData.get(nextFrameIndex), this.width, this.height, this.originX, this.originY, false, false);
+			} else if (this.parentAnimationMetadata.isInterpolate()) {
+				this.updateAnimationInterpolated();
+			}
 		}
 	}
 
@@ -269,10 +324,10 @@ public class TextureCorrosion extends TextureAtlasSprite {
 	 * Uploads the interpolated frames
 	 */
 	private void updateAnimationInterpolated() {
-		double interpolatedFrameIndex = 1.0D - (double)this.tickCounter / (double)this.animationMetadata.getFrameTimeSingle(this.frameCounter);
-		int frameIndex = this.animationMetadata.getFrameIndex(this.frameCounter);
-		int frameCount = this.animationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.animationMetadata.getFrameCount();
-		int nextFrameIndex = this.animationMetadata.getFrameIndex((this.frameCounter + 1) % frameCount);
+		double interpolatedFrameIndex = 1.0D - (double)this.tickCounter / (double)this.parentAnimationMetadata.getFrameTimeSingle(this.frameCounter);
+		int frameIndex = this.parentAnimationMetadata.getFrameIndex(this.frameCounter);
+		int frameCount = this.parentAnimationMetadata.getFrameCount() == 0 ? this.framesTextureData.size() : this.parentAnimationMetadata.getFrameCount();
+		int nextFrameIndex = this.parentAnimationMetadata.getFrameIndex((this.frameCounter + 1) % frameCount);
 
 		if (frameIndex != nextFrameIndex && nextFrameIndex >= 0 && nextFrameIndex < this.framesTextureData.size()) {
 			int[][] frame = (int[][])this.framesTextureData.get(frameIndex);
@@ -316,6 +371,6 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	@Override
 	public boolean hasAnimationMetadata() {
-		return this.animationMetadata != null;
+		return this.parentAnimationMetadata != null;
 	}
 }

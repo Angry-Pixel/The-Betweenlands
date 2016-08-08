@@ -1,39 +1,44 @@
 package thebetweenlands.common.herblore.aspect;
 
 import net.minecraft.nbt.NBTTagCompound;
+import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.common.registries.AspectRegistry;
 
-public class Aspect implements Comparable<Aspect> {
+public final class Aspect implements Comparable<Aspect> {
+	/**
+	 * The type of this aspect
+	 */
 	public final IAspectType type;
-	public final float amount;
 
-	public Aspect(IAspectType aspect, float amount) {
+	/**
+	 * The amount of this aspect
+	 */
+	public final int amount;
+
+	Aspect(IAspectType aspect, int amount) {
 		if(aspect == null) throw new RuntimeException("Aspect can't be null");
 		this.type = aspect;
 		this.amount = amount;
 	}
+	
+	public float getDisplayAmount() {
+		return this.amount / 100.0F;
+	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setString("aspect", this.type.getName());
-		nbt.setFloat("amount", this.amount);
+		nbt.setInteger("amount", this.amount);
 		return nbt;
 	}
 
 	public static Aspect readFromNBT(NBTTagCompound nbt) {
 		String aspectName = nbt.getString("aspect");
-		float amount = nbt.getFloat("amount");
+		int amount = nbt.getInteger("amount");
 		IAspectType aspectType = AspectRegistry.getAspectTypeFromName(aspectName);
 		if(aspectType != null) {
 			return new Aspect(aspectType, amount);
 		}
 		return null;
-	}
-
-	public float getAmount() {
-		return this.amount;
-	}
-
-	public IAspectType getType() {
-		return this.type;
 	}
 
 	@Override

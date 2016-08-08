@@ -1,17 +1,16 @@
 package thebetweenlands.common.world.storage.world;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import javax.annotation.ParametersAreNonnullByDefault;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Map.Entry;
 
 public abstract class WorldDataBase extends WorldSavedData {
 	public static final WorldUnloadHandler WORLD_UNLOAD_HANDLER = new WorldUnloadHandler();
@@ -53,6 +52,7 @@ public abstract class WorldDataBase extends WorldSavedData {
 			result.init();
 			result.setDefaults();
 			result.save();
+			result.markDirty();
 			storage.setData(result.mapName, result);
 		} else {
 			result.world = world;
@@ -72,13 +72,11 @@ public abstract class WorldDataBase extends WorldSavedData {
 		this.data = compound.getCompoundTag("worldData");
 	}
 
-	//TODO check this please
 	@Override
-	@ParametersAreNonnullByDefault
-	public NBTTagCompound writeToNBT(NBTTagCompound nbtTagCompound) {
+	public final NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		this.save();
-		nbtTagCompound.setTag("worldData", this.data);
-		return nbtTagCompound;
+		compound.setTag("worldData", this.data);
+		return compound;
 	}
 
 	/**

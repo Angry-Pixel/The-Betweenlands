@@ -4,10 +4,10 @@ import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.aspect.AspectRegistry;
-import thebetweenlands.common.herblore.aspect.IAspectType;
+import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.book.widgets.ButtonWidget;
 import thebetweenlands.common.herblore.book.widgets.PictureWidget;
+import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
