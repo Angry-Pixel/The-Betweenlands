@@ -1,0 +1,87 @@
+package thebetweenlands.client.render.shader.effect;
+
+import org.lwjgl.opengl.ARBMultitexture;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.ResourceLocation;
+
+public class GodRayEffect extends PostProcessingEffect {
+	private Framebuffer occlusionMap = null;
+
+	private int occlusionMapUniformID = -1;
+	private int godRayXUniformID = -1;
+	private int godRayYUniformID = -1;
+	private int exposureUniformID = -1;
+	private int decayUniformID = -1;
+	private int densityUniformID = -1;
+	private int weightUniformID = -1;
+	private int illuminationDecayUniformID = -1;
+
+	private float godRayX = 0.5F;
+	private float godRayY = 0.5F;
+
+	private float exposure = 1.0F;
+	private float decay = 1.0F;
+	private float density = 1.0F;
+	private float weight = 1.0F;
+	private float illuminationDecay = 1.0F;
+
+	public GodRayEffect setOcclusionMap(Framebuffer occlusionMap) {
+		this.occlusionMap = occlusionMap;
+		return this;
+	}
+
+	public GodRayEffect setRayPos(float x, float y) {
+		this.godRayX = x;
+		this.godRayY = y;
+		return this;
+	}
+
+	public GodRayEffect setParams(float exposure, float decay, float density, float weight, float illuminationDecay) {
+		this.exposure = exposure;
+		this.decay = decay;
+		this.density = density;
+		this.weight = weight;
+		this.illuminationDecay = illuminationDecay;
+		return this;
+	}
+
+	@Override
+	protected ResourceLocation[] getShaders() {
+		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/godray/godray.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/godray/godray.fsh")};
+	}
+
+	@Override
+	protected boolean initEffect() {
+		this.occlusionMapUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "s_occlusion");
+		this.godRayXUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_godRayX");
+		this.godRayYUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_godRayY");
+		this.exposureUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_exposure");
+		this.decayUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_decay");
+		this.densityUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_density");
+		this.weightUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_weight");
+		this.illuminationDecayUniformID = OpenGlHelper.glGetUniformLocation(this.getShaderProgram(), "u_illuminationDecay");
+		return true;
+	}
+
+	@Override
+	protected void uploadUniforms() {
+		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB + 0);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.occlusionMap.framebufferTexture);
+		OpenGlHelper.glUniform1i(this.occlusionMapUniformID, 0);
+
+		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB);
+
+		OpenGlHelper.glUniform1(this.godRayXUniformID, this.getSingleFloatBuffer(this.godRayX));
+		OpenGlHelper.glUniform1(this.godRayYUniformID, this.getSingleFloatBuffer(this.godRayY));
+		OpenGlHelper.glUniform1(this.exposureUniformID, this.getSingleFloatBuffer(this.exposure));
+		OpenGlHelper.glUniform1(this.decayUniformID, this.getSingleFloatBuffer(this.decay));
+		OpenGlHelper.glUniform1(this.densityUniformID, this.getSingleFloatBuffer(this.density));
+		OpenGlHelper.glUniform1(this.weightUniformID, this.getSingleFloatBuffer(this.weight));
+		OpenGlHelper.glUniform1(this.illuminationDecayUniformID, this.getSingleFloatBuffer(this.illuminationDecay));
+	}
+}

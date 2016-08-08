@@ -1,0 +1,45 @@
+{
+    "blend": {
+        "func": "add",
+        "srcrgb": "one",
+        "dstrgb": "zero"
+    },
+    "vertex": "blshader",
+    "fragment": "blshader",
+    "attributes": [ "Position" ],
+    "samplers": [
+        { "name": "s_diffuse" },
+        { "name": "s_diffuse_depth" },
+        { "name": "s_repellerShield" },
+        { "name": "s_repellerShield_depth" },
+        { "name": "s_gasParticles" },
+        { "name": "s_gasParticles_depth" }
+    ],
+    "uniforms": [
+        { "name": "u_projMat",          "type": "matrix4x4", "count": 16, "values": [ 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0 ] },
+        { "name": "u_INVMVP",           "type": "matrix4x4", "count": 16, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ] },
+        { "name": "u_MVP",              "type": "matrix4x4", "count": 16, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ] },
+        { "name": "u_camPos",           "type": "float",     "count": 3,  "values": [ 0.0, 0.0, 0.0 ] },
+        { "name": "u_inSize",           "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+        { "name": "u_outSize",          "type": "float",     "count": 2,  "values": [ 1.0, 1.0 ] },
+        { "name": "u_zNear",            "type": "float",     "count": 1,  "values": [ 0.001 ] },
+        { "name": "u_zFar",             "type": "float",     "count": 1,  "values": [ 200.0 ] },
+        { "name": "u_fogMode",          "type": "float",     "count": 1,  "values": [ 0.0 ] },
+        { "name": "u_lightSourcesX",    "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightSourcesY",    "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightSourcesZ",    "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightColorsR",     "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightColorsG",     "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightColorsB",     "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightRadii",       "type": "float",     "count": 32, "values": [ 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+                                                                                  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 ]},
+        { "name": "u_lightSources",     "type": "float",     "count": 1,  "values": [ 0 ] },
+        { "name": "u_msTime",           "type": "float",     "count": 1,  "values": [ 0 ] }
+    ]
+}

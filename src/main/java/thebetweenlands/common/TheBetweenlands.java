@@ -45,7 +45,6 @@ public class TheBetweenlands {
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
 	public static File sourceFile;
-	public static ArrayList<String> unlocalizedNames = new ArrayList<>();
 	private static File configDir;
 	private static int nextMessageId;
 

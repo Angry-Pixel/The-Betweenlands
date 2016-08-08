@@ -26,6 +26,8 @@ import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TextureStitchHandler {
+	public static final TextureStitchHandler INSTANCE = new TextureStitchHandler();
+
 	//TODO: Mappings!
 	private static final Field f_mapRegisteredSprites = ReflectionHelper.findField(TextureMap.class, "mapRegisteredSprites");
 

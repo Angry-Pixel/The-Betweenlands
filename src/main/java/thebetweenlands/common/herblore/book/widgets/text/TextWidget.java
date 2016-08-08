@@ -8,6 +8,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
 import net.minecraft.client.resources.I18n;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags.*;
+import thebetweenlands.util.TranslationHelper;
 
 @SideOnly(Side.CLIENT)
 public class TextWidget extends ManualWidgetBase {
@@ -26,7 +27,7 @@ public class TextWidget extends ManualWidgetBase {
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
-            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.init();
     }
@@ -39,7 +40,7 @@ public class TextWidget extends ManualWidgetBase {
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
-            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.init();
         this.pageNumber = pageNumber;
@@ -52,7 +53,7 @@ public class TextWidget extends ManualWidgetBase {
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
-            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.init();
         this.pageNumber = pageNumber;
@@ -66,7 +67,7 @@ public class TextWidget extends ManualWidgetBase {
         this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
-            TheBetweenlands.unlocalizedNames.add(unlocalizedText);
+        	TranslationHelper.addUnlocalizedString(unlocalizedText);
         }
         this.scale = scale;
         this.init();
@@ -80,7 +81,7 @@ public class TextWidget extends ManualWidgetBase {
         height = 144;
         this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRendererObj);
         if (!isLocalized && (!I18n.hasKey(text) || text.equals(""))) {
-            TheBetweenlands.unlocalizedNames.add(text);
+        	TranslationHelper.addUnlocalizedString(text);
         }
         this.init();
     }
