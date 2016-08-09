@@ -90,6 +90,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 						if(ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
 							ShaderLinkHelper.setNewStaticShaderLinkHelper();
 						}
+						//TODO: Set EntityRenderer#useShader to true
 						this.setShaderGroup(mc.entityRenderer, shaderWrapper.createShaderGroup());
 						this.currentShaderGroup = mc.entityRenderer.getShaderGroup();
 						this.currentShader = shaderWrapper;

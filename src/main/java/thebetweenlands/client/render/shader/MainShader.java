@@ -18,7 +18,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.client.shader.ShaderUniform;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -37,7 +36,7 @@ import thebetweenlands.util.GLUProjection.Projection;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class MainShader extends WorldShader {
-	private Framebuffer depthBuffer;
+	private DepthBuffer depthBuffer;
 	private List<LightSource> lightSources = new ArrayList<LightSource>();
 	private net.minecraft.client.renderer.Matrix4f INVMVP;
 	private net.minecraft.client.renderer.Matrix4f MVP;
@@ -102,24 +101,23 @@ public class MainShader extends WorldShader {
 	 * Returns the depth buffer
 	 * @return
 	 */
-	public Framebuffer getDepthBuffer() {
-		if(this.depthBuffer == null) {
-			this.depthBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
-		}
-		return this.depthBuffer;
+	public int getDepthTexture() {
+		if(this.depthBuffer != null)
+			return this.depthBuffer.getTexture();
+		return -1;
 	}
 
 	/**
 	 * Deletes the shader group and all buffers to free memory
 	 */
+	@Override
 	public void delete() {
-		if(this.getShaderGroup() != null)
-			this.getShaderGroup().deleteShaderGroup();
+		super.delete();
 		this.deleteBuffers();
 	}
 
 	private void deleteBuffers() {
-		this.depthBuffer.deleteFramebuffer();
+		this.depthBuffer.deleteBuffer();
 		for(GeometryBuffer gBuffer : this.geometryBuffers.values()) {
 			gBuffer.deleteBuffers();
 		}
@@ -135,30 +133,20 @@ public class MainShader extends WorldShader {
 	 * @param input
 	 */
 	public void updateBuffers(Framebuffer input) {
-		if(this.depthBuffer == null) {
-			this.depthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, true);
-			this.updateSampler("diffuse_depth", this.depthBuffer);
+		if(this.depthBuffer == null)
+			this.depthBuffer = new DepthBuffer();
+		if(this.depthBuffer.blitDepthBuffer(input)) {
+			this.updateSampler("diffuse_depth", this.depthBuffer.getTexture());
 		}
-		if(input.framebufferWidth != this.depthBuffer.framebufferWidth
-				|| input.framebufferHeight != this.depthBuffer.framebufferHeight) {
-			this.depthBuffer.deleteFramebuffer();
-			this.depthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, true);
-			this.updateSampler("diffuse_depth", this.depthBuffer);
-		}
-		input.bindFramebuffer(false);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.depthBuffer.framebufferTexture);
-		GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_DEPTH_COMPONENT, 0, 0, 
-				this.depthBuffer.framebufferTextureWidth,
-				this.depthBuffer.framebufferTextureHeight,
-				0);
 
 		for(Entry<String, GeometryBuffer> geomBufferEntry : this.geometryBuffers.entrySet()) {
-			geomBufferEntry.getValue().updateBuffers(input);
-			if(geomBufferEntry.getValue().hasDepthBuffer())
-				geomBufferEntry.getValue().updateDepth();
+			GeometryBuffer geometryBuffer = geomBufferEntry.getValue();
+			geometryBuffer.updateGeometryBuffer(input.framebufferWidth, input.framebufferHeight);
+			if(geometryBuffer.hasDepthBuffer())
+				geometryBuffer.updateDepthBuffer();
 			String samplerName = geomBufferEntry.getKey();
-			int geomBuffer = geomBufferEntry.getValue().getDiffuseTexture();
-			int geomDepthBuffer = geomBufferEntry.getValue().getDepthTexture();
+			int geomBuffer = geometryBuffer.getDiffuseTexture();
+			int geomDepthBuffer = geometryBuffer.getDepthTexture();
 			this.updateSampler(samplerName, geomBuffer);
 			if(geomDepthBuffer >= 0) {
 				this.updateSampler(samplerName + "_depth", geomDepthBuffer);
@@ -194,60 +182,17 @@ public class MainShader extends WorldShader {
 	}
 
 	private void uploadMisc(CShaderInt shader) {
-		{
-			ShaderUniform uniform = shader.getUniform("u_zNear");
-			if(uniform != null) {
-				uniform.set(0.05F);
-			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_zFar");
-			if(uniform != null) {
-				uniform.set((float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16) * 2.0F);
-			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_camPos");
-			if(uniform != null) {
-				uniform.set(
-						(float)(renderPosX),
-						(float)(renderPosY),
-						(float)(renderPosZ));
-			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_msTime");
-			if(uniform != null) {
-				uniform.set(System.nanoTime() / 1000000.0F);
-			}
-		}
+		shader.updateUniform("u_zNear", (uniform) -> uniform.set(0.05F));
+		shader.updateUniform("u_zFar", (uniform) -> uniform.set((float)(Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16) * 2.0F));
+		shader.updateUniform("u_camPos", (uniform) -> uniform.set((float)renderPosX, (float)renderPosY, (float)renderPosZ));
+		shader.updateUniform("u_msTime", (uniform) -> uniform.set(System.nanoTime() / 1000000.0F));
 	}
 
 	private void uploadMatrices(CShaderInt shader) {
-		{
-			ShaderUniform uniform = shader.getUniform("u_INVMVP");
-			if(uniform != null) {
-				uniform.set(this.INVMVP);
-			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_MVP");
-			if(uniform != null) {
-				uniform.set(this.MVP);
-			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_MV");
-			if(uniform != null) {
-				uniform.set(this.MV);
-			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_PM");
-			if(uniform != null) {
-				uniform.set(this.PM);
-			}
-		}
+		shader.updateUniform("u_INVMVP", (uniform) -> uniform.set(this.INVMVP));
+		shader.updateUniform("u_MVP", (uniform) -> uniform.set(this.MVP));
+		shader.updateUniform("u_MV", (uniform) -> uniform.set(this.MV));
+		shader.updateUniform("u_PM", (uniform) -> uniform.set(this.PM));
 	}
 
 	private static final Comparator<LightSource> lightSourceSorter = new Comparator<LightSource>(){
@@ -274,93 +219,69 @@ public class MainShader extends WorldShader {
 		//Sorts lights by distance
 		Collections.sort(this.lightSources, lightSourceSorter);
 
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightColorsR");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(this.lightSources.get(i).r);
-				}
-				uniform.set(posArray);
+		shader.updateUniform("u_lightColorsR", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(this.lightSources.get(i).r);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightColorsG");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(this.lightSources.get(i).g);
-				}
-				uniform.set(posArray);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightColorsG", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(this.lightSources.get(i).g);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightColorsB");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(this.lightSources.get(i).b);
-				}
-				uniform.set(posArray);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightColorsB", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(this.lightSources.get(i).b);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightSourcesX");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(-renderPosX + this.lightSources.get(i).x);
-				}
-				uniform.set(posArray);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightSourcesX", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(-renderPosX + this.lightSources.get(i).x);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightSourcesY");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(-renderPosY + this.lightSources.get(i).y);
-				}
-				uniform.set(posArray);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightSourcesY", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(-renderPosY + this.lightSources.get(i).y);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightSourcesZ");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(-renderPosZ + this.lightSources.get(i).z);
-				}
-				uniform.set(posArray);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightSourcesZ", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(-renderPosZ + this.lightSources.get(i).z);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightRadii");
-			if(uniform != null) {
-				float[] posArray = new float[32];
-				for(int i = 0; i < this.lightSources.size(); i++) {
-					if(i >= 32) break;
-					posArray[i] = (float)(this.lightSources.get(i).radius);
-				}
-				uniform.set(posArray);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightRadii", (uniform) -> {
+			float[] posArray = new float[32];
+			for(int i = 0; i < this.lightSources.size(); i++) {
+				if(i >= 32) break;
+				posArray[i] = (float)(this.lightSources.get(i).radius);
 			}
-		}
-		{
-			ShaderUniform uniform = shader.getUniform("u_lightSources");
-			if(uniform != null) {
-				int count = this.lightSources.size();
-				if(count > 32) {
-					count = 32;
-				}
-				uniform.set(count);
+			uniform.set(posArray);
+		});
+		shader.updateUniform("u_lightSources", (uniform) -> {
+			int count = this.lightSources.size();
+			if(count > 32) {
+				count = 32;
 			}
-		}
+			uniform.set(count);
+		});
 	}
 
 	/**
@@ -502,14 +423,14 @@ public class MainShader extends WorldShader {
 			weight *= 1.0F - mult;
 		}
 
-		Framebuffer worldDepthBuffer = this.getDepthBuffer();
+		int depthTexture = this.getDepthTexture();
 		//TODO: Requires Sky implementation
 		//		int clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getDepthTexture();
 		//
-		//		if(worldDepthBuffer == null || clipPlaneBuffer < 0) return; //FBOs not yet ready
+		//		if(depthTexture < 0 || clipPlaneBuffer < 0) return; //FBOs not yet ready
 		//
 		//		//Extract occluding objects
-		//		this.occlusionExtractor.setDepthTextures(worldDepthBuffer.framebufferTexture, clipPlaneBuffer);
+		//		this.occlusionExtractor.setDepthTextures(depthTexture, clipPlaneBuffer);
 		//		this.occlusionExtractor.create(this.getBlitBuffer("bloodSkyBlitBuffer1"))
 		//		.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
 		//		.setPreviousFBO(Minecraft.getMinecraft().getFramebuffer())

@@ -183,4 +183,12 @@ public class WorldShader {
 	 * @param shadershaderGroup		The shader group that has been applied
 	 */
 	public void postShader(CShaderGroup shaderGroup, float partialTicks) { }
+	
+	/**
+	 * Deletes the shader group and all buffers to free memory
+	 */
+	public void delete() {
+		if(this.getShaderGroup() != null)
+			this.getShaderGroup().deleteShaderGroup();
+	}
 }

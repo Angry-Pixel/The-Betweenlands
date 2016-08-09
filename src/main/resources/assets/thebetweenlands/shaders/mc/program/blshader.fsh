@@ -165,28 +165,27 @@ void main() {
     }
     
     
-	
-	//TODO: I'm not quite sure why, but this seems to affect the result really weirdly if the s_gasParticles FBO wasn't cleared?
+
 	//////// Gas Particles ////////
-	//vec4 gasParticlesBuffCol = texture2D(s_gasParticles, v_texCoord);
-	//bool inGas = gasParticlesBuffCol.a != 0.0F;
-    //if(inGas) {
-	//	//Get gas frag pos
-    //    vec3 gasFragPos = getFragPos(s_gasParticles_depth);
-	//	
-	//	//Get depth (distance to camera)
-    //    float fragCamDist = length(fragPos);
-    //    float gasFragCamDist = length(gasFragPos);
-    //    
-    //    //Check if repeller shield is behind or in front of the diffuse fragment
-    //    bool inBack = fragCamDist <= gasFragCamDist;
-    //    if(!inBack) {
-	//		color += applyFog(gasFragPos, gasParticlesBuffCol);
-	//		distortion = true;
-	//		distortionMultiplier += 1.5F;
-	//		/////WIP stuff/////
-	//	}
-	//}
+	vec4 gasParticlesBuffCol = texture2D(s_gasParticles, v_texCoord);
+	bool inGas = gasParticlesBuffCol.a != 0.0F;
+    if(inGas) {
+		//Get gas frag pos
+        vec3 gasFragPos = getFragPos(s_gasParticles_depth);
+		
+		//Get depth (distance to camera)
+        float fragCamDist = length(fragPos);
+        float gasFragCamDist = length(gasFragPos);
+        
+        //Check if repeller shield is behind or in front of the diffuse fragment
+        bool inBack = fragCamDist <= gasFragCamDist;
+        if(!inBack) {
+			color += applyFog(gasFragPos, gasParticlesBuffCol);
+			distortion = true;
+			distortionMultiplier += 1.5F;
+			/////WIP stuff/////
+		}
+	}
 	
 	
     

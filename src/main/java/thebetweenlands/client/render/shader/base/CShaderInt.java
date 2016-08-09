@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
@@ -67,12 +68,32 @@ public class CShaderInt extends Shader {
 		}
 	}
 
+	/**
+	 * Returns the name of this shader
+	 * @return
+	 */
 	public String getName() {
 		return this.shaderName;
 	}
 
+	/**
+	 * Returns a uniform with the specified name.
+	 * Returns null if no such uniform was found
+	 * @param name
+	 * @return
+	 */
 	public ShaderUniform getUniform(String name) {
-		return this.getShaderManager().getShaderUniformOrDefault(name);
+		return this.getShaderManager().getShaderUniform(name);
+	}
+
+	/**
+	 * Updates the uniform with the specified name
+	 * @param name
+	 */
+	public void updateUniform(String name, Consumer<ShaderUniform> consumer) {
+		ShaderUniform uniform = this.getUniform(name);
+		if(uniform != null)
+			consumer.accept(uniform);
 	}
 
 	@Override
@@ -139,7 +160,7 @@ public class CShaderInt extends Shader {
 		GlStateManager.setFogStart(/*FogHandler.INSTANCE.getCurrentFogStart()*/6);
 		GlStateManager.setFogEnd(/*FogHandler.INSTANCE.getCurrentFogEnd()*/50);
 		GlStateManager.setFogDensity(/*FogHandler.INSTANCE.getCurrentFogDensity()*/0.05F);
-		
+
 		//Render texture over whole screen
 		GlStateManager.depthMask(false);
 		GlStateManager.colorMask(true, true, true, true);

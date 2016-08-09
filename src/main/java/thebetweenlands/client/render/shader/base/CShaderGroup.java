@@ -4,18 +4,17 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import com.google.gson.JsonSyntaxException;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.client.shader.Shader;
 import net.minecraft.client.shader.ShaderGroup;
-import net.minecraft.client.util.JsonException;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class CShaderGroup extends ShaderGroup {
 	private IResourceManager pResourceManager;
@@ -29,7 +28,6 @@ public class CShaderGroup extends ShaderGroup {
 		this.wrapper = wrapper;
 	}
 
-	//Called after CTOR
 	@Override
 	public void parseGroup(TextureManager textureManager, ResourceLocation resourceLocation) throws JsonSyntaxException, IOException {
 		try {
@@ -41,9 +39,17 @@ public class CShaderGroup extends ShaderGroup {
 			slField.setAccessible(true);
 			this.pListShaders = (List) slField.get(this);
 		} catch (Exception e) {
-			e.printStackTrace();
+			throw new RuntimeException("Failed to get underlying ShaderGroup fields", e);
 		}
-		super.parseGroup(textureManager, resourceLocation);
+		try {
+			super.parseGroup(textureManager, resourceLocation);
+		} catch(Exception ex) {
+			RuntimeException exception = new RuntimeException("Failed to load shader " + resourceLocation, ex);
+			if(ConfigHandler.debug)
+				exception.printStackTrace();
+			else
+				throw exception;
+		}
 	}
 
 	@Override
@@ -58,9 +64,9 @@ public class CShaderGroup extends ShaderGroup {
 		super.loadShaderGroup(partialTicks);
 
 		//Pop off the GL_TEXTURE matrix
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 		this.wrapper.postShader(this, partialTicks);
 		//Push matrix to prevent stack underflow
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 	}
 }

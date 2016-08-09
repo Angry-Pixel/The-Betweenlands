@@ -2,12 +2,11 @@ package thebetweenlands.client.render.shader;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.shader.Framebuffer;
 
 public class GeometryBuffer {
 	private Framebuffer geometryBuffer;
-	private Framebuffer geometryDepthBuffer;
+	private DepthBuffer geometryDepthBuffer;
 	private boolean depthBuffer = false;
 
 	/**
@@ -19,55 +18,39 @@ public class GeometryBuffer {
 	}
 
 	/**
-	 * Initializes the buffers if necessary and updates the dimensions
+	 * Initializes the geometry buffer if necessary and updates the dimensions
 	 * @param input
-	 * @return
+	 * @return Returns true if the FBO was initialized or resized
 	 */
-	public boolean updateBuffers(Framebuffer input) {
+	public boolean updateGeometryBuffer(int width, int height) {
 		boolean changed = false;
 
 		//Init geometry buffer
 		if(this.geometryBuffer == null) {
-			this.geometryBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, this.depthBuffer);
+			this.geometryBuffer = new Framebuffer(width, height, this.depthBuffer);
 			changed = true;
 		}
-		if(input.framebufferWidth != this.geometryBuffer.framebufferWidth
-				|| input.framebufferHeight != this.geometryBuffer.framebufferHeight) {
+		if(width != this.geometryBuffer.framebufferWidth
+				|| height != this.geometryBuffer.framebufferHeight) {
 			this.geometryBuffer.deleteFramebuffer();
-			this.geometryBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, this.depthBuffer);
+			this.geometryBuffer = new Framebuffer(width, height, this.depthBuffer);
 			changed = true;
-		}
-
-		if(this.depthBuffer) {
-			//Init geometry depth buffer
-			if(this.geometryDepthBuffer == null) {
-				this.geometryDepthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
-				changed = true;
-			}
-			if(input.framebufferWidth != this.geometryDepthBuffer.framebufferWidth
-					|| input.framebufferHeight != this.geometryDepthBuffer.framebufferHeight) {
-				this.geometryDepthBuffer.deleteFramebuffer();
-				this.geometryDepthBuffer = new Framebuffer(input.framebufferWidth, input.framebufferHeight, false);
-				changed = true;
-			}
 		}
 
 		return changed;
 	}
 
 	/**
+	 * Initializes the geometry buffer if necessary and updates the dimensions.
 	 * Copies the depth buffer into a seperate texture
+	 * <p><b>Note:</b> Binds the FBO
+	 * @return Returns true if the FBO was initialized or resized
 	 */
-	public void updateDepth() {
+	public boolean updateDepthBuffer() {
 		if(this.depthBuffer) {
-			//Update depth buffer
-			this.geometryBuffer.bindFramebuffer(false);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.geometryDepthBuffer.framebufferTexture);
-			GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_DEPTH_COMPONENT, 0, 0, 
-					this.geometryDepthBuffer.framebufferTextureWidth, 
-					this.geometryDepthBuffer.framebufferTextureHeight, 
-					0);
+			return this.geometryDepthBuffer.blitDepthBuffer(this.geometryBuffer);
 		}
+		return false;
 	}
 
 	/**
@@ -75,10 +58,9 @@ public class GeometryBuffer {
 	 * @return
 	 */
 	public int getDiffuseTexture() {
-		if(this.geometryBuffer == null) {
-			this.geometryBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, this.depthBuffer);
-		}
-		return this.geometryBuffer.framebufferTexture;
+		if(this.geometryBuffer != null)
+			return this.geometryBuffer.framebufferTexture;
+		return -1;
 	}
 
 	/**
@@ -86,23 +68,25 @@ public class GeometryBuffer {
 	 * @return
 	 */
 	public int getDepthTexture() {
-		if(this.depthBuffer) {
-			if(this.geometryDepthBuffer == null) {
-				this.geometryDepthBuffer = new Framebuffer(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight, false);
-			}
-			return this.geometryDepthBuffer.framebufferTexture;
+		if(this.depthBuffer && this.geometryDepthBuffer != null) {
+			return this.geometryDepthBuffer.getTexture();
 		}
 		return -1;
 	}
 
+	/**
+	 * Binds the underlying FBO
+	 */
 	public void bind() {
 		if(this.geometryBuffer != null) {
 			this.geometryBuffer.bindFramebuffer(false);
-		}
+		} else
+			throw new NullPointerException("The buffers aren't initialized yet");
 	}
 
 	/**
 	 * Clears the buffer
+	 * <p><b>Note:</b> Binds the FBO
 	 * @param r Red
 	 * @param g Green
 	 * @param b Blue
@@ -120,6 +104,7 @@ public class GeometryBuffer {
 
 	/**
 	 * Clears the buffer with depth = 1.0
+	 * <p><b>Note:</b> Binds the FBO
 	 * @param r Red
 	 * @param g Green
 	 * @param b Blue
@@ -134,7 +119,7 @@ public class GeometryBuffer {
 	 */
 	public void deleteBuffers() {
 		if(this.geometryBuffer != null) this.geometryBuffer.deleteFramebuffer();
-		if(this.geometryDepthBuffer != null) this.geometryDepthBuffer.deleteFramebuffer();
+		if(this.geometryDepthBuffer != null) this.geometryDepthBuffer.deleteBuffer();
 	}
 
 	/**
