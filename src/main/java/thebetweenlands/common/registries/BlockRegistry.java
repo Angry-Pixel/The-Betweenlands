@@ -38,6 +38,7 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.plant.BlockAlgae;
 import thebetweenlands.common.block.plant.BlockBasicVine;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
@@ -46,7 +47,15 @@ import thebetweenlands.common.block.plant.BlockGenericPlant;
 import thebetweenlands.common.block.plant.BlockGenericPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockGenericStackablePlantUnderwater;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
-import thebetweenlands.common.block.structure.*;
+import thebetweenlands.common.block.structure.BlockDruidSpawner;
+import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
+import thebetweenlands.common.block.structure.BlockPortalFrame;
+import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
+import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.block.structure.BlockTemplePillar;
+import thebetweenlands.common.block.structure.BlockTreePortal;
+import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
@@ -292,7 +301,8 @@ public class BlockRegistry {
 	public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
 	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
-
+	public static final Block ALGAE = new BlockAlgae();
+	
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();

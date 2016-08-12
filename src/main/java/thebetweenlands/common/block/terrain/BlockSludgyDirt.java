@@ -57,7 +57,6 @@ public class BlockSludgyDirt extends Block {
 		if(entity instanceof IEntityBL == false) entity.setInWeb();
 	}
 
-
 	@Override
 	public boolean isOpaqueCube(IBlockState s) {
 		return false;
@@ -66,7 +65,7 @@ public class BlockSludgyDirt extends Block {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.CUTOUT;
+		return BlockRenderLayer.TRANSLUCENT;
 	}
 
 	@Override

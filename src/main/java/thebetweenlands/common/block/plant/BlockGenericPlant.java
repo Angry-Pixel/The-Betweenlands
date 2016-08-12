@@ -35,7 +35,7 @@ public class BlockGenericPlant extends BlockBush {
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		return super.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos.up());
+		return super.canPlaceBlockAt(worldIn, pos) && worldIn.isAirBlock(pos.up()) && this.canBlockStay(worldIn, pos, worldIn.getBlockState(pos));
 	}
 
 	@Override

@@ -54,7 +54,7 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 
 	public enum EnumItemPlantDrop implements IGenericItem {
 		GENERIC_LEAF(0),
-		ALGAE(1),
+		ALGAE_ITEM(1),
 		ARROW_ARUM_LEAF(2),
 		BLUE_EYED_GRASS_FLOWERS(3),
 		BLUE_IRIS_PETAL(4),
