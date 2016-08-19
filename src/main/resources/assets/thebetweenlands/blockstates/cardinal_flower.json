@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "half=lower": {
+            "model": "thebetweenlands:cardinal_flower_bottom"
+        },
+        "half=upper": { 
+            "model": "thebetweenlands:cardinal_flower_top"
+        }
+    }
+}

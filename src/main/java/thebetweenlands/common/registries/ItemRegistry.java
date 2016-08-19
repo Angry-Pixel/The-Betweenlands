@@ -44,6 +44,7 @@ import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
+import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ItemRegistry {
@@ -132,6 +133,7 @@ public class ItemRegistry {
 	public static final Item SYRMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYRMORITE);
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
 	public static final Item MANUAL_HL = new ItemManualHL();
+	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 
 
 	//RECORDS

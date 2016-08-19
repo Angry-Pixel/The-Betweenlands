@@ -1,8 +1,8 @@
 {
   "parent":"block/cube",
   "textures": {
-    "particle": "#all",
-    "all": "thebetweenlands:blocks/algae"
+    "all": "thebetweenlands:blocks/algae",
+    "particle": "thebetweenlands:blocks/algae"
   },
   "elements":[
     {

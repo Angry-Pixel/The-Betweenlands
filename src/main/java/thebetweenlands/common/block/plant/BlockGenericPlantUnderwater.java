@@ -1,33 +1,37 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.List;
 import java.util.Random;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.property.ExtendedBlockState;
-import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock {
+public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
+	protected ItemStack sickleHarvestableDrop;
+	
 	public BlockGenericPlantUnderwater(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		this.setHardness(1.5F);
@@ -37,6 +41,11 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
+	public BlockGenericPlantUnderwater setSickleDrop(ItemStack drop) {
+		this.sickleHarvestableDrop = drop;
+		return this;
+	}
+	
 	@Override
 	public boolean isBlockNormalCube(IBlockState blockState) {
 		return false;
@@ -124,5 +133,25 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
 		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockGenericPlantUnderwater && ((BlockGenericPlantUnderwater)plantable).canSustainPlant(state));
+	}
+	
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS;
+	}
+
+	@Override
+	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(this)));
+	}
+	
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop) : ImmutableList.of();
 	}
 }

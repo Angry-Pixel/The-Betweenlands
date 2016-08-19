@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "half=lower": {
+            "model": "thebetweenlands:broomsedge_bottom"
+        },
+        "half=upper": { 
+            "model": "thebetweenlands:broomsedge_top"
+        }
+    }
+}

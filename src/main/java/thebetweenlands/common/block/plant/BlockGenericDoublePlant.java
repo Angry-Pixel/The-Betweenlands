@@ -1,8 +1,11 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
@@ -26,23 +29,33 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBlock {
+public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable {
 	public static final PropertyEnum<BlockGenericDoublePlant.EnumBlockHalf> HALF = PropertyEnum.<BlockGenericDoublePlant.EnumBlockHalf>create("half", BlockGenericDoublePlant.EnumBlockHalf.class);
 	public static final PropertyEnum<EnumFacing> FACING = BlockHorizontal.FACING;
 
+	protected ItemStack sickleHarvestableDrop;
+	
 	public BlockGenericDoublePlant() {
-		super(Material.VINE);
+		super(Material.PLANTS);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockGenericDoublePlant.EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.NORTH));
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.PLANT);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
+	public BlockGenericDoublePlant setSickleDrop(ItemStack drop) {
+		this.sickleHarvestableDrop = drop;
+		return this;
+	}
+	
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return FULL_BLOCK_AABB;
@@ -183,5 +196,25 @@ public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBl
 	@Override
 	public void setStateMapper(Builder builder) {
 		builder.ignore(FACING);
+	}
+
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS;
+	}
+
+	@Override
+	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(this)));
+	}
+
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+		return true;
+	}
+
+	@Override
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop) : ImmutableList.of();
 	}
 }
