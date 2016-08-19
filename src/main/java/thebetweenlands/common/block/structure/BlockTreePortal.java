@@ -17,6 +17,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.teleporter.TeleporterHandler;
 
 public class BlockTreePortal extends BasicBlock {
     public BlockTreePortal() {
@@ -168,22 +169,19 @@ public class BlockTreePortal extends BasicBlock {
 		return NULL_AABB;
 	}
 
-    @Override
-    public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
-        /*if (entity.ridingEntity == null && entity.riddenByEntity == null && entity.timeUntilPortal <= 0) {
-            if(entity instanceof EntityPlayer){
-                EntityPropertiesPortal props = BLEntityPropertiesRegistry.HANDLER.getProperties(entity, EntityPropertiesPortal.class);
-                props.inPortal = true;
-            } else if(!world.isRemote) {
-                if (entity.dimension == 0)
-                    TeleporterHandler.transferToBL(entity);
-                else
-                    TeleporterHandler.transferToOverworld(entity);
-                entity.timeUntilPortal = 10;
-            }
-        }*/
-    }
-
+    
+	@Override
+	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0) {
+			if (entityIn.dimension == 0)
+				TeleporterHandler.transferToBL(entityIn);
+			else
+				TeleporterHandler.transferToOverworld(entityIn);
+			if (entityIn != null)
+				entityIn.timeUntilPortal = 10;
+			return;
+		}
+	}
 
     @Override
 	@SideOnly(Side.CLIENT)

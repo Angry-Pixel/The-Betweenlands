@@ -1,7 +1,6 @@
 package thebetweenlands.common;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.MinecraftForge;
@@ -27,7 +26,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.WorldDataBase;
@@ -56,15 +54,14 @@ public class TheBetweenlands {
 		sourceFile = event.getSourceFile();
 
 		BetweenlandsAPI.init(new BetweenlandsAPIImp());
-
-		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
+		
+		// TODO WORLDGEN BEFOR THIS IS UNCOMMENTED!!!
+		//dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.INSTANCE.dimensionId, WorldProviderBetweenlands.class, false);
+		//DimensionManager.registerDimension(ConfigHandler.INSTANCE.dimensionId, dimensionType);
 
 		REGISTRIES.preInit();
 
 		NetworkRegistry.INSTANCE.registerGuiHandler(INSTANCE, proxy);
-
-		//DimensionManager.registerProviderType(ModInfo.DIMENSION_ID, WorldProviderBetweenlands.class, true);
-		//DimensionManager.registerDimension(ModInfo.DIMENSION_ID, ModInfo.DIMENSION_ID);*/
 
 		/// Network ///
 		networkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(ModInfo.CHANNEL);
@@ -86,7 +83,10 @@ public class TheBetweenlands {
 	public void init(FMLInitializationEvent event) {
 		REGISTRIES.init();
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
-
+		
+		// TODO WORLDGEN BEFORE THIS IS UNCOMMENTED!!!
+		//TeleporterHandler.init();
+		
 		proxy.init();
 
 		this.registerEventHandlers();
