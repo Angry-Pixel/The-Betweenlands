@@ -40,6 +40,8 @@ import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockAlgae;
 import thebetweenlands.common.block.plant.BlockBasicVine;
+import thebetweenlands.common.block.plant.BlockBladderwortFlower;
+import thebetweenlands.common.block.plant.BlockBladderwortStalk;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
 import thebetweenlands.common.block.plant.BlockCaveGrass;
@@ -320,7 +322,9 @@ public class BlockRegistry {
 	public static final Block COPPER_IRIS = new BlockGenericPlant().setSickleDrop(EnumItemPlantDrop.COPPER_IRIS_PETALS.create(1));
 	public static final Block MARSH_HIBISCUS = new BlockGenericPlant().setSickleDrop(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER.create(1));
 	public static final Block MARSH_MALLOW = new BlockGenericPlant().setSickleDrop(EnumItemPlantDrop.MARSH_MALLOW_FLOWER.create(1));
-	
+	public static final Block BLADDERWORT_FLOWER = new BlockBladderwortFlower();
+	public static final Block BLADDERWORT_STALK = new BlockBladderwortStalk(FluidRegistry.SWAMP_WATER, Material.WATER);
+
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
