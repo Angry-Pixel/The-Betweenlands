@@ -172,6 +172,8 @@ public class BlockTreePortal extends BasicBlock {
     
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+		// TODO WORLDGEN BEFOR THIS IS UNCOMMENTED!!!
+		/*
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0) {
 			if (entityIn.dimension == 0)
 				TeleporterHandler.transferToBL(entityIn);
@@ -181,6 +183,7 @@ public class BlockTreePortal extends BasicBlock {
 				entityIn.timeUntilPortal = 10;
 			return;
 		}
+		*/
 	}
 
     @Override
