@@ -68,7 +68,7 @@ public class TextureStitchHandler {
 								if(fileName.endsWith(corrodibleSuffix)) {
 									ResourceLocation completeBaseTextureLocation = new ResourceLocation(texture.getResourceDomain(), String.format("textures/%s.png", texture.getResourcePath()));
 									for (int n = 0; n < CorrosionHelper.CORROSION_STAGE_COUNT; n++) {
-										String corrosionSpriteName = texture.getResourceDomain() + ":items/" + fileName.substring(0, fileName.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
+										String corrosionSpriteName = texture.getResourceDomain() + ":" + path.substring(0, path.length() - corrodibleSuffix.length()) + "_corrosion_" + n;
 										TextureCorrosion corrosionTexture = new TextureCorrosion(corrosionSpriteName, completeBaseTextureLocation, n, item.getUnlocalizedName().hashCode());
 										//Forcibly sets the texture entry because TextureMap#setTextureEntry doesn't allow 
 										//overwriting a previously added sprite (usually set in ModelLoader#setupModelRegistry).

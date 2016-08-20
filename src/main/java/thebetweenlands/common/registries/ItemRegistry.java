@@ -46,6 +46,7 @@ import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
+import thebetweenlands.common.item.tools.ItemSickle;
 import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -113,7 +114,8 @@ public class ItemRegistry {
 	public static final Item VALONITE_LEGGINGS = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 2, EntityEquipmentSlot.LEGS, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item VALONITE_BOOTS = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 3, EntityEquipmentSlot.FEET, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item RUBBER_BOOTS = new ItemRubberBoots().setCreativeTab(BLCreativeTabs.GEARS);
-	//tools
+
+	//TOOLS
 	public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item WEEDWOOD_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item WEEDWOOD_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
@@ -137,7 +139,7 @@ public class ItemRegistry {
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
 	public static final Item MANUAL_HL = new ItemManualHL();
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
-
+	public static final Item SICKLE = new ItemSickle();
 
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);

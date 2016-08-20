@@ -28,8 +28,10 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	protected static final AxisAlignedBB AABB_BOTTOM_HALF = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
 	protected static final AxisAlignedBB AABB_TOP_HALF = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
 
+	@SuppressWarnings("deprecation")
 	public BlockSlabBetweenlands(Block block) {
 		super(block.getMaterial(block.getDefaultState()));
+		setSoundType(block.getSoundType());
 		setDefaultState(blockState.getBaseState().withProperty(HALF, EnumBlockHalfBL.BOTTOM));
 		setHardness(2.0F);
 		setLightOpacity(0);
@@ -142,6 +144,4 @@ public class BlockSlabBetweenlands extends BasicBlock {
 			return values()[metadata];
 		}
 	}
-
-
 }

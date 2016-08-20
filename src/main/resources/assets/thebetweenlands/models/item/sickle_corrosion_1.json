@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "thebetweenlands:items/strictly_herblore/tools/sickle_corrodible",
+    "layer1": "thebetweenlands:items/strictly_herblore/tools/sickle_corrosion_1"
+  }
+}

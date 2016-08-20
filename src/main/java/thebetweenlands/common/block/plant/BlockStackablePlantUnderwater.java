@@ -64,20 +64,21 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 		for (height = 1; this.isSamePlant(worldIn.getBlockState(pos.up(height)).getBlock()); ++height);
 		for (int offset = height; offset > 0; offset--) {
 			if (!player.capabilities.isCreativeMode) {
-				worldIn.destroyBlock(pos.up(offset), true);
-			} else {
-				worldIn.setBlockToAir(pos.up(offset));
+				BlockPos offsetPos = pos.up(offset);
+				IBlockState blockState = worldIn.getBlockState(offsetPos);
+				blockState.getBlock().dropBlockAsItem(worldIn, offsetPos, blockState, 0);
 			}
+			worldIn.setBlockToAir(pos.up(offset));
 		}
 		if(this.breaksLower) {
 			//Down
 			BlockPos offsetPos;
 			for (int offset = 1; this.isSamePlant(worldIn.getBlockState(offsetPos = pos.down(offset)).getBlock()); offset++) {
 				if (!player.capabilities.isCreativeMode) {
-					worldIn.destroyBlock(offsetPos, true);
-				} else {
-					worldIn.setBlockToAir(offsetPos);
+					IBlockState blockState = worldIn.getBlockState(offsetPos);
+					blockState.getBlock().dropBlockAsItem(worldIn, offsetPos, blockState, 0);
 				}
+				worldIn.setBlockToAir(offsetPos);
 			}
 		}
 		super.onBlockHarvested(worldIn, pos, state, player);

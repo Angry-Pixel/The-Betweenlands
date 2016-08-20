@@ -66,12 +66,12 @@ public class BlockWeedwoodBush extends Block implements /*IShearable,*/ ISickleH
 	}
 
 	@Override
-	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of(EnumItemMisc.WEEDWOOD_STICK.create(1));
 	}
 
@@ -122,9 +122,9 @@ public class BlockWeedwoodBush extends Block implements /*IShearable,*/ ISickleH
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
-    }
+		return BlockRenderLayer.CUTOUT;
+	}
 }

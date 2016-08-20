@@ -26,7 +26,7 @@ public class BlockPoisonIvy extends BlockVineBL {
 	}
 
 	@Override
-	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of(EnumItemPlantDrop.POISON_IVY_ITEM.create(1));
 	}
 }

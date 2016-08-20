@@ -98,12 +98,12 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 	}
 
 	@Override
-	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop) : ImmutableList.of();
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop.copy()) : ImmutableList.of();
 	}
 }

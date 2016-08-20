@@ -42,7 +42,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	public static final PropertyEnum<EnumFacing> FACING = BlockHorizontal.FACING;
 
 	protected ItemStack sickleHarvestableDrop;
-	
+
 	public BlockDoublePlantBL() {
 		super(Material.PLANTS);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.NORTH));
@@ -55,7 +55,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 		this.sickleHarvestableDrop = drop;
 		return this;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return FULL_BLOCK_AABB;
@@ -209,12 +209,12 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	}
 
 	@Override
-	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop) : ImmutableList.of();
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop.copy()) : ImmutableList.of();
 	}
 }

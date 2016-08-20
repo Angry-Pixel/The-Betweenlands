@@ -50,4 +50,16 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+		return super.shouldSideBeRendered(blockState, blockAccess, pos, side) && (blockAccess.getBlockState(pos.offset(side)).getBlock() != this
+				|| blockState.getValue(AXIS) != blockAccess.getBlockState(pos.offset(side)).getValue(AXIS));
+	}
+
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return side.getAxis() == base_state.getValue(AXIS);
+	}
 }

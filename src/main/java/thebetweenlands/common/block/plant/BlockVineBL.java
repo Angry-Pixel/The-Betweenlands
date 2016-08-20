@@ -39,12 +39,12 @@ public class BlockVineBL extends BlockVine implements ISickleHarvestable, IShear
 	}
 
 	@Override
-	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of();
 	}
 }

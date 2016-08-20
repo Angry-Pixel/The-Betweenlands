@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.List;
 import java.util.Random;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -10,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -24,11 +28,6 @@ public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {
 		return super.isSamePlant(block) || block == BlockRegistry.GOLDEN_CLUB_FLOWER;
 	}
 
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Item.getItemFromBlock(BlockRegistry.GOLDEN_CLUB_FLOWER);
-	}
-	
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, BlockRegistry.GOLDEN_CLUB_STALK.getDefaultState());
@@ -45,5 +44,10 @@ public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {
 	public void setStateMapper(Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(IS_TOP, IS_BOTTOM);
+	}
+	
+	@Override
+	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(BlockRegistry.GOLDEN_CLUB_FLOWER)));
 	}
 }

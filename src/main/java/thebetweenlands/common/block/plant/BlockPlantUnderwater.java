@@ -3,9 +3,12 @@ package thebetweenlands.common.block.plant;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -39,6 +42,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 
 	public BlockPlantUnderwater(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
+		this.setSoundType(SoundType.PLANT);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
@@ -151,17 +155,23 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	}
 
 	@Override
-	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return true;
 	}
 
 	@Override
-	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
-		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop) : ImmutableList.of();
+	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
+		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop.copy()) : ImmutableList.of();
 	}
-	
+
 	@Override
-    public int quantityDropped(Random par1Random) {
-        return 1;
-    }
+	@Nullable
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return null;
+	}
+
+	@Override
+	public int quantityDropped(Random par1Random) {
+		return 0;
+	}
 }
