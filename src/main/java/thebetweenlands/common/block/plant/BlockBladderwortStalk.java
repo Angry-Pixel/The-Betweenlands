@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockBladderwortStalk extends BlockGenericStackablePlantUnderwater {
+public class BlockBladderwortStalk extends BlockStackablePlantUnderwater {
 	@Override
 	protected boolean canGrow(World world, BlockPos pos, IBlockState state, int height) {
 		return world.getBlockState(pos.up()) != this && 

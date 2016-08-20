@@ -3,6 +3,8 @@ package thebetweenlands.client.proxy;
 import java.io.File;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -161,11 +163,13 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerDefaultItemRenderer(Item item) {
 		if (item instanceof ItemRegistry.ISubItemsItem) {
-			List<ResourceLocation> models = ((ItemRegistry.ISubItemsItem) item).getModels();
-			for (int i = 0; i < models.size(); i++) {
+			Set<Entry<Integer, ResourceLocation>> models = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet();
+			Iterator<Entry<Integer, ResourceLocation>> modelsIT = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet().iterator();
+			while(modelsIT.hasNext()) {
+				Entry<Integer, ResourceLocation> model = modelsIT.next();
 				if (ConfigHandler.debug && createJSONFile)
-					JsonRenderGenerator.createJSONForItem(item, models.get(i).getResourcePath());
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(models.get(i), "inventory"));
+					JsonRenderGenerator.createJSONForItem(item, model.getValue().getResourcePath());
+				ModelLoader.setCustomModelResourceLocation(item, model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
 			}
 		} else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
 			List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();

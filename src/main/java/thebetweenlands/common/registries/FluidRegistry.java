@@ -20,6 +20,16 @@ public class FluidRegistry {
 		public Fluid setBlock(Block block) {
 			return this;
 		}
+
+		/**
+		 * Sets the original block of this fluid
+		 * @param block
+		 * @return
+		 */
+		public Fluid setOriginalBlock(Block block) {
+			this.block = block;
+			return this;
+		}
 	}
 
 	public static final Fluid SWAMP_WATER = new FluidMultipleBlocks("swamp_water", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
@@ -38,5 +48,9 @@ public class FluidRegistry {
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
+	}
+
+	public void init() {
+		SWAMP_WATER.setBlock(BlockRegistry.SWAMP_WATER);
 	}
 }

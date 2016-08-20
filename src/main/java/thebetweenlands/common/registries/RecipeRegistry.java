@@ -77,7 +77,7 @@ public class RecipeRegistry {
 		//        CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.saplingRubberTree));
 		//        CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.saplingSapTree));
 		//        CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.saplingWeedwood));
-		CompostRecipe.addRecipe(3, 5000, ItemRegistry.ITEMS_MISC, EnumItemMisc.SWAMP_REED.getID());
+		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_REED_ITEM);
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.ITEMS_MISC, EnumItemMisc.DRIED_SWAMP_REED.getID());
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.ITEMS_MISC, EnumItemMisc.SWAMP_REED_ROPE.getID());
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.ITEMS_MISC, EnumItemMisc.TANGLED_ROOT.getID());

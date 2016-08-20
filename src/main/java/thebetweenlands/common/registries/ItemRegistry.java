@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 
@@ -36,6 +37,7 @@ import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemSwampReed;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
@@ -86,6 +88,7 @@ public class ItemRegistry {
 	public static final Item FLAT_HEAD_MUSHROOM_ITEM = new ItemFlatHeadMushroom();
 	public static final Item BLACK_HAT_MUSHROOM_ITEM = new ItemBlackHatMushroom();
 	public static final Item BULB_CAPPED_MUSHROOM_ITEM = new ItemBulbCappedMushroom();
+	public static final Item SWAMP_REED_ITEM = new ItemSwampReed();
 	public static final Item FRIED_SWAMP_KELP = new ItemBLFood(5, 0.6F, false);
 	public static final Item FORBIDDEN_FIG = new ItemForbiddenFig();
 	public static final Item CANDY_BLUE = new ItemBLFood(3, 1.0F, false);
@@ -180,7 +183,7 @@ public class ItemRegistry {
 	}
 
 	public interface ISubItemsItem {
-		List<ResourceLocation> getModels();
+		Map<Integer, ResourceLocation> getModels();
 	}
 
 	public interface ISingleJsonSubItems{

@@ -13,11 +13,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockBogBeanStalk extends BlockGenericStackablePlantUnderwater {
+public class BlockBogBeanStalk extends BlockStackablePlantUnderwater {
 	public BlockBogBeanStalk() {
 		super(true);
 		this.setMaxHeight(1);
-		this.setCreativeTab(null);
 	}
 
 	@Override

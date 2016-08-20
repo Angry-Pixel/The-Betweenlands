@@ -33,5 +33,6 @@ public class Registries {
 		this.recipeRegistry.init();
 		this.tileEntityRegistry.init();
 		this.aspectRegistry.init();
+		this.fluidRegistry.init();
 	}
 }

@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:swamp_reed"
+  },
+  "variants": {
+    "is_top": {
+      "true": {
+        "model": "thebetweenlands:swamp_reed_top"
+      },
+      "false": { }
+    },
+    "is_bottom": {
+      "true": { },
+      "false": { }
+    }
+  }
+}

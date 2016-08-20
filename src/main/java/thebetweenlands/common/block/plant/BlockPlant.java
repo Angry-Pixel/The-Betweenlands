@@ -27,17 +27,17 @@ import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockGenericPlant extends BlockBush implements IShearable, ISickleHarvestable {
+public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable {
 	protected ItemStack sickleHarvestableDrop;
 
-	public BlockGenericPlant() {
+	public BlockPlant() {
 		super(Material.PLANTS);
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.PLANT);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
-	public BlockGenericPlant setSickleDrop(ItemStack drop) {
+	public BlockPlant setSickleDrop(ItemStack drop) {
 		this.sickleHarvestableDrop = drop;
 		return this;
 	}
@@ -61,7 +61,7 @@ public class BlockGenericPlant extends BlockBush implements IShearable, ISickleH
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 		}
 	}
 

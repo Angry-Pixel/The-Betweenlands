@@ -1,7 +1,9 @@
 package thebetweenlands.common.item.herblore;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -48,8 +50,11 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 	}
 
     @Override
-    public List<ResourceLocation> getModels() {
-        return Stream.of(EnumItemPlantDrop.values()).map(t -> new ResourceLocation(ModInfo.ID, t.getModelName())).collect(Collectors.toList());
+    public Map<Integer, ResourceLocation> getModels() {
+    	Map<Integer, ResourceLocation> models = new HashMap();
+    	for(EnumItemPlantDrop type : EnumItemPlantDrop.values())
+    		models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
+        return models;
     }
 
 	public enum EnumItemPlantDrop implements IGenericItem {
@@ -69,11 +74,11 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		CATTAIL_HEAD(13),
 		CAVE_GRASS_BLADES(14),
 		COPPER_IRIS_PETALS(15),
-		GOLDEN_CLUB_FLOWERS(16),
+		GOLDEN_CLUB_FLOWER_ITEM(16),
 		LICHEN(17),
 		MARSH_HIBISCUS_FLOWER(18),
 		MARSH_MALLOW_FLOWER(19),
-		MARSH_MARIGOLD_FLOWER(20),
+		MARSH_MARIGOLD_FLOWER_ITEM(20),
 		NETTLE_LEAF(21),
 		PHRAGMITE_STEMS(22),
 		PICKEREL_WEED_FLOWER(23),
@@ -84,14 +89,16 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		SWAMP_TALL_GRASS_BLADES(28),
 		CAVE_MOSS(29),
 		MOSS(30),
-		MILK_WEED(31),
+		MILKWEED_ITEM(31),
 		HANGER(32),
 		PITCHER_PLANT_TRAP(33),
 		WATER_WEEDS_ITEM(34),
 		VENUS_FLY_TRAP_ITEM(35),
 		VOLARPAD_ITEM(36),
 		THORNS(37),
-		POISON_IVY_ITEM(38);
+		POISON_IVY_ITEM(38),
+		BLADDERWORT_STALK_ITEM(39),
+		BLADDERWORT_FLOWER_ITEM(40);
 
 		private final int id;
 		private final String unlocalizedName;

@@ -37,21 +37,21 @@ import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable {
-	public static final PropertyEnum<BlockGenericDoublePlant.EnumBlockHalf> HALF = PropertyEnum.<BlockGenericDoublePlant.EnumBlockHalf>create("half", BlockGenericDoublePlant.EnumBlockHalf.class);
+public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable {
+	public static final PropertyEnum<BlockDoublePlantBL.EnumBlockHalf> HALF = PropertyEnum.<BlockDoublePlantBL.EnumBlockHalf>create("half", BlockDoublePlantBL.EnumBlockHalf.class);
 	public static final PropertyEnum<EnumFacing> FACING = BlockHorizontal.FACING;
 
 	protected ItemStack sickleHarvestableDrop;
 	
-	public BlockGenericDoublePlant() {
+	public BlockDoublePlantBL() {
 		super(Material.PLANTS);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockGenericDoublePlant.EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.NORTH));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.NORTH));
 		this.setHardness(0.0F);
 		this.setSoundType(SoundType.PLANT);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
-	public BlockGenericDoublePlant setSickleDrop(ItemStack drop) {
+	public BlockDoublePlantBL setSickleDrop(ItemStack drop) {
 		this.sickleHarvestableDrop = drop;
 		return this;
 	}
@@ -74,7 +74,7 @@ public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBl
 	@Override
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
-			boolean isUpperHalf = state.getValue(HALF) == BlockGenericDoublePlant.EnumBlockHalf.UPPER;
+			boolean isUpperHalf = state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER;
 			BlockPos posAboveOrHere = isUpperHalf ? pos : pos.up();
 			BlockPos posBelowOrHere = isUpperHalf ? pos.down() : pos;
 			Block blockAboveOrHere = (Block)(isUpperHalf ? this : worldIn.getBlockState(posAboveOrHere).getBlock());
@@ -97,7 +97,7 @@ public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBl
 	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
 		if (state.getBlock() != this) 
 			return super.canBlockStay(worldIn, pos, state); //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
-		if (state.getValue(HALF) == BlockGenericDoublePlant.EnumBlockHalf.UPPER) {
+		if (state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER) {
 			return worldIn.getBlockState(pos.down()).getBlock() == this;
 		} else {
 			IBlockState stateAbove = worldIn.getBlockState(pos.up());
@@ -117,19 +117,19 @@ public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBl
 	}
 
 	public void placeAt(World worldIn, BlockPos lowerPos, int updateFlags) {
-		worldIn.setBlockState(lowerPos, this.getDefaultState().withProperty(HALF, BlockGenericDoublePlant.EnumBlockHalf.LOWER), updateFlags);
-		worldIn.setBlockState(lowerPos.up(), this.getDefaultState().withProperty(HALF, BlockGenericDoublePlant.EnumBlockHalf.UPPER), updateFlags);
+		worldIn.setBlockState(lowerPos, this.getDefaultState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.LOWER), updateFlags);
+		worldIn.setBlockState(lowerPos.up(), this.getDefaultState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.UPPER), updateFlags);
 	}
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		int rot = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		worldIn.setBlockState(pos.up(), this.getDefaultState().withProperty(HALF, BlockGenericDoublePlant.EnumBlockHalf.UPPER).withProperty(FACING, EnumFacing.getHorizontal(rot)), 2);
+		worldIn.setBlockState(pos.up(), this.getDefaultState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.UPPER).withProperty(FACING, EnumFacing.getHorizontal(rot)), 2);
 	}
 
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-		if (state.getValue(HALF) == BlockGenericDoublePlant.EnumBlockHalf.UPPER) {
+		if (state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER) {
 			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
 				if (!player.capabilities.isCreativeMode) {
 					IBlockState iblockstate = worldIn.getBlockState(pos.down());
@@ -155,7 +155,7 @@ public class BlockGenericDoublePlant extends BlockBush implements IStateMappedBl
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int facing = ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
-		boolean isUpper = state.getValue(HALF) == BlockGenericDoublePlant.EnumBlockHalf.UPPER;
+		boolean isUpper = state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER;
 		int meta = facing << 1;
 		meta |= isUpper ? 1 : 0;
 		return meta;

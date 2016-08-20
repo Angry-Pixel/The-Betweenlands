@@ -30,14 +30,14 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
+public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
 	protected ItemStack sickleHarvestableDrop;
 
-	public BlockGenericPlantUnderwater() {
+	public BlockPlantUnderwater() {
 		this(FluidRegistry.SWAMP_WATER, Material.WATER);
 	}
 
-	public BlockGenericPlantUnderwater(Fluid fluid, Material materialIn) {
+	public BlockPlantUnderwater(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
@@ -46,7 +46,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
-	public BlockGenericPlantUnderwater setSickleDrop(ItemStack drop) {
+	public BlockPlantUnderwater setSickleDrop(ItemStack drop) {
 		this.sickleHarvestableDrop = drop;
 		return this;
 	}
@@ -137,7 +137,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
-		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockGenericPlantUnderwater && ((BlockGenericPlantUnderwater)plantable).canSustainPlant(state));
+		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockPlantUnderwater && ((BlockPlantUnderwater)plantable).canSustainPlant(state));
 	}
 
 	@Override
@@ -159,4 +159,9 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, int x, int y, int z, int fortune) {
 		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop) : ImmutableList.of();
 	}
+	
+	@Override
+    public int quantityDropped(Random par1Random) {
+        return 1;
+    }
 }

@@ -22,11 +22,12 @@ public abstract class ItemPlantableFood extends ItemBLFood {
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		Block block = worldIn.getBlockState(pos).getBlock();
 		boolean isReplacing = block.isReplaceable(worldIn, pos);
-		if (isReplacing || (facing == EnumFacing.UP && worldIn.isAirBlock(new BlockPos(pos.getX(), pos.getY() + 1, pos.getZ())))) {
-			BlockPos newPos = new BlockPos(pos.getX(), pos.getY() + (isReplacing ? 0 : 1), pos.getZ());
+		BlockPos facingOffset = pos.offset(facing);
+		if (isReplacing || (worldIn.isAirBlock(facingOffset) || worldIn.getBlockState(facingOffset).getBlock().isReplaceable(worldIn, facingOffset))) {
+			BlockPos newPos = isReplacing ? pos : facingOffset;
 			block = worldIn.getBlockState(newPos).getBlock();
 			Block placeBlock = this.getBlock(stack, playerIn, worldIn, newPos);
-			if (block != placeBlock && placeBlock.canPlaceBlockAt(worldIn, new BlockPos(newPos))) {
+			if (block != placeBlock && placeBlock.canPlaceBlockAt(worldIn, newPos)) {
 				if (!worldIn.isRemote) {
 					worldIn.setBlockState(newPos, this.getBlockState(placeBlock, stack, playerIn, worldIn, newPos));
 					worldIn.playSound((EntityPlayer)null, (float)pos.getX() + 0.5F, (float)pos.getY() + 0.5F, (float)pos.getZ() + 0.5F, placeBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (placeBlock.getSoundType().getVolume() + 1.0F) / 2.0F, placeBlock.getSoundType().getPitch() * 0.8F);

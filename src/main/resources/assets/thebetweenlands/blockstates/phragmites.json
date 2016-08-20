@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "half=lower": {
+            "model": "thebetweenlands:phragmites_bottom"
+        },
+        "half=upper": { 
+            "model": "thebetweenlands:phragmites_top"
+        }
+    }
+}

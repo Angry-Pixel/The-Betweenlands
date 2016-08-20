@@ -8,7 +8,7 @@ public class SoilHelper {
 	public static boolean canSustainPlant(IBlockState state) {
 		return state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.FARMLAND ||
 				state.getBlock() == BlockRegistry.SWAMP_DIRT || state.getBlock() == BlockRegistry.SWAMP_GRASS ||
-				state.getBlock() == BlockRegistry.DEAD_GRASS;
+				state.getBlock() == BlockRegistry.DEAD_GRASS || state.getBlock() == BlockRegistry.SLUDGY_DIRT;
 	}
 
 	public static boolean canSustainUnderwaterPlant(IBlockState state) {

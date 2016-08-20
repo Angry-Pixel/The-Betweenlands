@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockBladderwortFlower extends BlockGenericPlant {
+public class BlockBladderwortFlower extends BlockPlant {
 	@Override
 	protected boolean canSustainBush(IBlockState state) {
 		return state.getBlock() == BlockRegistry.BLADDERWORT_STALK;

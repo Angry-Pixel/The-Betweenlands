@@ -1,10 +1,9 @@
 package thebetweenlands.common.item.herblore;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 
@@ -76,10 +75,13 @@ public class ItemCrushed extends Item implements ICustomJsonGenerationItem, Item
 		}
 	}
 
-    @Override
-    public List<ResourceLocation> getModels() {
-        return Stream.of(EnumItemCrushed.values()).map(t -> new ResourceLocation(ModInfo.ID, t.getModelName())).collect(Collectors.toList());
-    }
+	@Override
+	public Map<Integer, ResourceLocation> getModels() {
+		Map<Integer, ResourceLocation> models = new HashMap();
+		for(EnumItemCrushed type : EnumItemCrushed.values())
+			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
+		return models;
+	}
 
 	public enum EnumItemCrushed implements IGenericItem {
 		GROUND_GENERIC_LEAF(0),
@@ -150,10 +152,10 @@ public class ItemCrushed extends Item implements ICustomJsonGenerationItem, Item
 			return this.unlocalizedName;
 		}
 
-        @Override
-        public String getModelName() {
-            return this.modelName;
-        }
+		@Override
+		public String getModelName() {
+			return this.modelName;
+		}
 
 		@Override
 		public int getID() {

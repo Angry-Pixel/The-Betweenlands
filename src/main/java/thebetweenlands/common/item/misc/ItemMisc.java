@@ -1,8 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
+import java.util.Map;
 import java.util.stream.Stream;
 
 import com.google.common.base.CaseFormat;
@@ -39,8 +40,11 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 	}
 
 	@Override
-	public List<ResourceLocation> getModels() {
-		return Stream.of(EnumItemMisc.values()).map(t -> new ResourceLocation(ModInfo.ID, t.getModelName())).collect(Collectors.toList());
+	public Map<Integer, ResourceLocation> getModels() {
+		Map<Integer, ResourceLocation> models = new HashMap();
+		for(EnumItemMisc type : EnumItemMisc.values())
+			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
+		return models;
 	}
 
 	public enum EnumItemMisc implements IGenericItem {
@@ -49,7 +53,6 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		COMPOST(2),
 		DRAGONFLY_WING(3),
 		LURKER_SKIN(4),
-		SWAMP_REED(5),
 		DRIED_SWAMP_REED(6),
 		SWAMP_REED_ROPE(7),
 		TANGLED_ROOT(8),
@@ -91,7 +94,7 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 
 		EnumItemMisc(int id) {
 			this.id = id;
-		    this.modelName = this.name().toLowerCase(Locale.ENGLISH);
+			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
 			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
 		}
 
@@ -100,10 +103,10 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 			return this.unlocalizedName;
 		}
 
-        @Override
-        public String getModelName() {
-            return this.modelName;
-        }
+		@Override
+		public String getModelName() {
+			return this.modelName;
+		}
 
 		@Override
 		public int getID() {

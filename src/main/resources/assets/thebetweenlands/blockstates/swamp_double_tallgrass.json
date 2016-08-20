@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "half=lower": {
+            "model": "thebetweenlands:swamp_double_tallgrass_bottom"
+        },
+        "half=upper": { 
+            "model": "thebetweenlands:swamp_double_tallgrass_top"
+        }
+    }
+}

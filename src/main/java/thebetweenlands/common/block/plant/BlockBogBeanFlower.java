@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockBogBeanFlower extends BlockGenericStackablePlant {
+public class BlockBogBeanFlower extends BlockStackablePlant {
 	public BlockBogBeanFlower() {
 		super(true);
 		this.setMaxHeight(1);

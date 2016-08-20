@@ -8,7 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockVenusFlyTrap extends BlockGenericPlant {
+public class BlockVenusFlyTrap extends BlockPlant {
 	public static final PropertyBool BLOOMING = PropertyBool.create("blooming");
 
 	public BlockVenusFlyTrap() {
