@@ -19,10 +19,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 
 public class BlockRootUnderwater extends BlockSwampWater {
-	public BlockRootUnderwater(Fluid fluid, Material materialIn) {
-		super(fluid, materialIn);
+	public BlockRootUnderwater() {
+		super(FluidRegistry.SWAMP_WATER, Material.WATER);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);

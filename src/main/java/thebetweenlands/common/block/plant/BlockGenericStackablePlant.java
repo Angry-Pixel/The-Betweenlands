@@ -2,12 +2,14 @@ package thebetweenlands.common.block.plant;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -22,15 +24,17 @@ public class BlockGenericStackablePlant extends BlockGenericPlant implements ISt
 	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
 	protected int maxHeight = 3;
+	protected boolean breaksLower = false;
 
-	public BlockGenericStackablePlant() {
+	public BlockGenericStackablePlant(boolean breaksLower) {
 		super();
+		this.breaksLower = breaksLower;
 		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return BlockStateContainerHelper.extendBlockstateContainer((ExtendedBlockState) super.createBlockState(), new IProperty[]{AGE, IS_TOP, IS_BOTTOM}, new IUnlistedProperty[0]);
+		return new BlockStateContainer(this, new IProperty[]{AGE, IS_TOP, IS_BOTTOM});
 	}
 
 	@Override
@@ -38,6 +42,39 @@ public class BlockGenericStackablePlant extends BlockGenericPlant implements ISt
 		boolean isTop = worldIn.getBlockState(pos.up()).getBlock() != this;
 		boolean isBottom = worldIn.getBlockState(pos.down()).getBlock() != this;
 		return state.withProperty(IS_TOP, isTop).withProperty(IS_BOTTOM, isBottom);
+	}
+
+	@Override
+	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
+		BlockPos offsetPos;
+		//Up
+		for (int offset = 1; this.isSamePlant(worldIn.getBlockState(offsetPos = pos.up(offset)).getBlock()); ++offset) {
+			if (!player.capabilities.isCreativeMode) {
+				worldIn.destroyBlock(offsetPos, true);
+			} else {
+				worldIn.setBlockToAir(offsetPos);
+			}
+		}
+		if(this.breaksLower) {
+			//Down
+			for (int offset = 1; this.isSamePlant(worldIn.getBlockState(offsetPos = pos.down(offset)).getBlock()); ++offset) {
+				if (!player.capabilities.isCreativeMode) {
+					worldIn.destroyBlock(offsetPos, true);
+				} else {
+					worldIn.setBlockToAir(offsetPos);
+				}
+			}
+		}
+		super.onBlockHarvested(worldIn, pos, state, player);
+	}
+
+	/**
+	 * Returns true if the specified block should be counted as the same plant
+	 * @param block
+	 * @return
+	 */
+	protected boolean isSamePlant(Block block) {
+		return block == this;
 	}
 
 	/**
@@ -66,8 +103,8 @@ public class BlockGenericStackablePlant extends BlockGenericPlant implements ISt
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		this.checkAndDropBlock(worldIn, pos, state);
+		
 		int height;
-
 		for (height = 1; worldIn.getBlockState(pos.down(height)).getBlock() == this; ++height);
 
 		if (this.canGrow(worldIn, pos, state, height)) {
@@ -103,6 +140,13 @@ public class BlockGenericStackablePlant extends BlockGenericPlant implements ISt
 		world.setBlockState(pos.up(), this.getDefaultState());
 	}
 
+	@Override
+	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+		int height;
+		for (height = 1; worldIn.getBlockState(pos.down(height)).getBlock() == this; ++height);
+        return super.canPlaceBlockAt(worldIn, pos) && height <= this.maxHeight;
+    }
+	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(AGE, Integer.valueOf(meta));

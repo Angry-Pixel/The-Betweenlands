@@ -27,11 +27,16 @@ import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
 	protected ItemStack sickleHarvestableDrop;
-	
+
+	public BlockGenericPlantUnderwater() {
+		this(FluidRegistry.SWAMP_WATER, Material.WATER);
+	}
+
 	public BlockGenericPlantUnderwater(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		this.setHardness(1.5F);
@@ -45,7 +50,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 		this.sickleHarvestableDrop = drop;
 		return this;
 	}
-	
+
 	@Override
 	public boolean isBlockNormalCube(IBlockState blockState) {
 		return false;
@@ -134,7 +139,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
 		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockGenericPlantUnderwater && ((BlockGenericPlantUnderwater)plantable).canSustainPlant(state));
 	}
-	
+
 	@Override
 	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return item.getItem() == ItemRegistry.SYRMORITE_SHEARS;
@@ -144,7 +149,7 @@ public class BlockGenericPlantUnderwater extends BlockSwampWater implements net.
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(this)));
 	}
-	
+
 	@Override
 	public boolean isHarvestable(ItemStack item, IBlockAccess world, int x, int y, int z) {
 		return true;

@@ -60,7 +60,7 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		BLUE_IRIS_PETAL(4),
 		MIRE_CORAL_ITEM(5),
 		DEEP_WATER_CORAL_ITEM(6),
-		BOG_BEAN_FLOWER(7),
+		BOG_BEAN_FLOWER_ITEM(7),
 		BONESET_FLOWERS(8),
 		BOTTLE_BRUSH_GRASS_BLADES(9),
 		BROOM_SEDGE_LEAVES(10),
