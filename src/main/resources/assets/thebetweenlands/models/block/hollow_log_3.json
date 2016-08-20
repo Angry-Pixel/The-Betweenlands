@@ -1,0 +1,12 @@
+{
+    "parent": "thebetweenlands:block/cube_inner",
+    "textures": {
+        "particle": "thebetweenlands:blocks/hollow_log_side",
+        "down": "thebetweenlands:blocks/hollow_log_side",
+        "up": "thebetweenlands:blocks/hollow_log_side",
+        "north": "thebetweenlands:blocks/hollow_log_end",
+        "east": "thebetweenlands:blocks/hollow_log_side_moss",
+        "south": "thebetweenlands:blocks/hollow_log_end",
+        "west": "thebetweenlands:blocks/hollow_log_side_moss"
+    }
+}

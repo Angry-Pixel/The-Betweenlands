@@ -14,7 +14,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Lists;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBase;
@@ -115,7 +114,7 @@ public class ModelFromModelBase implements IModel {
 		@Override
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
 			if(side == null)
-				return Collections.synchronizedList(Lists.newArrayList(this.quads));
+				return this.quads;
 			return Collections.emptyList();
 		}
 

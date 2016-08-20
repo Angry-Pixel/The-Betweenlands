@@ -70,101 +70,103 @@ public class ModelRoot implements IModel {
 
 			List<BakedQuad> quads = new ArrayList<>();
 
-			try {
-				int distUp = state.getValue(BlockRoot.DIST_UP);
-				int distDown = state.getValue(BlockRoot.DIST_DOWN);
-				boolean noTop = state.getValue(BlockRoot.NO_TOP);
-				boolean noBottom = state.getValue(BlockRoot.NO_BOTTOM);
-				int posX = state.getValue(BlockRoot.POS_X);
-				int posY = state.getValue(BlockRoot.POS_Y);
-				int posZ = state.getValue(BlockRoot.POS_Z);
-				float height = 1.0F;
+			if(side == null) {
+				try {
+					int distUp = state.getValue(BlockRoot.DIST_UP);
+					int distDown = state.getValue(BlockRoot.DIST_DOWN);
+					boolean noTop = state.getValue(BlockRoot.NO_TOP);
+					boolean noBottom = state.getValue(BlockRoot.NO_BOTTOM);
+					int posX = state.getValue(BlockRoot.POS_X);
+					int posY = state.getValue(BlockRoot.POS_Y);
+					int posZ = state.getValue(BlockRoot.POS_Z);
+					float height = 1.0F;
 
-				int totalHeight = 1 + distDown + distUp;
-				float distToMidBottom, distToMidTop;
+					int totalHeight = 1 + distDown + distUp;
+					float distToMidBottom, distToMidTop;
 
-				double squareAmount = 1.2D;
-				double halfTotalHeightSQ;
+					double squareAmount = 1.2D;
+					double halfTotalHeightSQ;
 
-				if(noTop) {
-					halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-					distToMidBottom = Math.abs(distUp + 1);
-					distToMidTop = Math.abs(distUp);
-				} else if(noBottom) {
-					halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-					distToMidBottom = Math.abs(distDown);
-					distToMidTop = Math.abs(distDown + 1);
-				} else {
-					float halfTotalHeight = totalHeight * 0.5F;
-					halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
-					distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
-					distToMidTop = Math.abs(halfTotalHeight - distUp);
-				}
+					if(noTop) {
+						halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+						distToMidBottom = Math.abs(distUp + 1);
+						distToMidTop = Math.abs(distUp);
+					} else if(noBottom) {
+						halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+						distToMidBottom = Math.abs(distDown);
+						distToMidTop = Math.abs(distDown + 1);
+					} else {
+						float halfTotalHeight = totalHeight * 0.5F;
+						halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
+						distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
+						distToMidTop = Math.abs(halfTotalHeight - distUp);
+					}
 
-				int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
-				int minValTop = (noTop && distUp == 0) ? 0 : 1;
-				int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
-				int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
+					int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
+					int minValTop = (noTop && distUp == 0) ? 0 : 1;
+					int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
+					int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
 
-				float umin = 0;
-				float umax = 16;
-				float vmin = 0;
-				float vmax = 16;
+					float umin = 0;
+					float umax = 16;
+					float vmin = 0;
+					float vmax = 16;
 
-				float halfSize = (float) scaledValBottom / 16;
-				float halfSizeTexW = halfSize * (umax - umin);
-				float halfSize1 = (float) (scaledValTop) / 16;
-				float halfSizeTex1 = halfSize1 * (umax - umin);
+					float halfSize = (float) scaledValBottom / 16;
+					float halfSizeTexW = halfSize * (umax - umin);
+					float halfSize1 = (float) (scaledValTop) / 16;
+					float halfSizeTex1 = halfSize1 * (umax - umin);
 
-				StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
+					StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
 
-				QuadBuilder builder = new QuadBuilder(this.format);
+					QuadBuilder builder = new QuadBuilder(this.format);
 
-				boolean hasTop = distUp == 0 && !noTop;
-				boolean hasBottom = distDown == 0 && !noBottom;
+					boolean hasTop = distUp == 0 && !noTop;
+					boolean hasBottom = distDown == 0 && !noBottom;
 
-				builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
+					builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
 
-				// front
-				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-				// back
-				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-				// left
-				builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-				// right
-				builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-
-				// top
-				if(distUp == 0) {
+					// front
+					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
+					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+					// back
+					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+					// left
+					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+					// right
+					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
+					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
 					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
-				}
 
-				// bottom
-				if(distDown == 0) {
-					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
-				}
+					// top
+					if(distUp == 0) {
+						builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+						builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
+					}
 
-				quads.addAll(builder.build());
-			} catch(Exception ex) {
-				//throws inexplicable NPE when damaging block :(
+					// bottom
+					if(distDown == 0) {
+						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
+						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
+						builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
+						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
+					}
+
+					quads = builder.build();
+				} catch(Exception ex) {
+					//throws inexplicable NPE when damaging block :(
+				}
 			}
 
 			return quads;

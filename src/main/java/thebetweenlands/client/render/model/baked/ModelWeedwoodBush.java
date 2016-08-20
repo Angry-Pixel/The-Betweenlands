@@ -7,19 +7,28 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.vecmath.Matrix4f;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.Function;
+import com.google.common.base.Optional;
+import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.IPerspectiveAwareModel;
+import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -43,7 +52,8 @@ public class ModelWeedwoodBush implements IModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new ModelBakedWeedwoodBush(format, bakedTextureGetter.apply(TEXTURE_LEAVES), bakedTextureGetter.apply(TEXTURE_STICKS));
+		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
+		return new ModelBakedWeedwoodBush(format, state.apply(Optional.<IModelPart>absent()), map, bakedTextureGetter.apply(TEXTURE_LEAVES), bakedTextureGetter.apply(TEXTURE_STICKS));
 	}
 
 	@Override
@@ -51,12 +61,16 @@ public class ModelWeedwoodBush implements IModel {
 		return TRSRTransformation.identity();
 	}
 
-	public static class ModelBakedWeedwoodBush implements IBakedModel {
+	public static class ModelBakedWeedwoodBush implements IBakedModel, IPerspectiveAwareModel {
+		protected final TRSRTransformation transformation;
+		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 		private final VertexFormat format;
 		private final TextureAtlasSprite textureLeaves;
 		private final TextureAtlasSprite textureSticks;
 
-		private ModelBakedWeedwoodBush(VertexFormat format, TextureAtlasSprite textureLeaves, TextureAtlasSprite textureSticks) {
+		private ModelBakedWeedwoodBush(VertexFormat format, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, TextureAtlasSprite textureLeaves, TextureAtlasSprite textureSticks) {
+			this.transformation = transformation.isPresent() ? transformation.get() : null;
+			this.transforms = transforms;
 			this.format = format;
 			this.textureLeaves = textureLeaves;
 			this.textureSticks = textureSticks;
@@ -68,23 +82,31 @@ public class ModelWeedwoodBush implements IModel {
 
 			List<BakedQuad> quads = new ArrayList<>();
 
-			try {
+			if(side == null) {
 				float mini = 0F, minj = 0F, mink = 0F, maxi = 0.0F, maxj = 0.0F, maxk = 0.0F;
+				int posX = 0, posY = 0, posZ = 0;
 
-				if (state.getValue(BlockWeedwoodBush.WEST))
-					mini = -0.25F;
-				if (state.getValue(BlockWeedwoodBush.EAST))
-					maxi = 0.25F;
-				if (state.getValue(BlockWeedwoodBush.DOWN))
-					minj = -0.25F;
-				if (state.getValue(BlockWeedwoodBush.UP))
-					maxj = 0.25F;
-				if (state.getValue(BlockWeedwoodBush.NORTH))
-					mink = -0.25F;
-				if (state.getValue(BlockWeedwoodBush.SOUTH))
-					maxk = 0.25F;
+				try {
+					if (state.getValue(BlockWeedwoodBush.WEST))
+						mini = -0.25F;
+					if (state.getValue(BlockWeedwoodBush.EAST))
+						maxi = 0.25F;
+					if (state.getValue(BlockWeedwoodBush.DOWN))
+						minj = -0.25F;
+					if (state.getValue(BlockWeedwoodBush.UP))
+						maxj = 0.25F;
+					if (state.getValue(BlockWeedwoodBush.NORTH))
+						mink = -0.25F;
+					if (state.getValue(BlockWeedwoodBush.SOUTH))
+						maxk = 0.25F;
+					posX = state.getValue(BlockWeedwoodBush.POS_X);
+					posY = state.getValue(BlockWeedwoodBush.POS_Y);
+					posZ = state.getValue(BlockWeedwoodBush.POS_Z);
+				} catch(Exception ex) {
+					//how should this handle item rendering gracefully? :(
+				}
 
-				QuadBuilder builder = new QuadBuilder(this.format);
+				QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation);
 
 				builder.setSprite(this.textureLeaves);
 
@@ -273,7 +295,7 @@ public class ModelWeedwoodBush implements IModel {
 					int cSticks = 5;
 
 					Random rnd = new Random();
-					long seed = state.getValue(BlockWeedwoodBush.POS_X) * 0x2FC20FL ^ state.getValue(BlockWeedwoodBush.POS_Y) * 0x6EBFFF5L ^ state.getValue(BlockWeedwoodBush.POS_Z);
+					long seed = posX * 0x2FC20FL ^ posY * 0x6EBFFF5L ^ posZ;
 					rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 
 					for(int i = 0; i < cSticks; i++) {
@@ -301,10 +323,7 @@ public class ModelWeedwoodBush implements IModel {
 						builder.addVertex(xp2+xOff, 0.8+yOff, zp2+zOff, 16.0F, 0.0F);
 					}
 				}
-
-				return builder.build();
-			} catch(Exception ex) {
-				//throws inexplicable NPE when damaging block :(
+				quads = builder.build();
 			}
 
 			return quads;
@@ -338,6 +357,11 @@ public class ModelWeedwoodBush implements IModel {
 		@Override
 		public ItemOverrideList getOverrides() {
 			return ItemOverrideList.NONE;
+		}
+
+		@Override
+		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
+			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
 		}
 	}
 }

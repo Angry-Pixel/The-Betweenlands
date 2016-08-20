@@ -49,6 +49,7 @@ import thebetweenlands.common.block.plant.BlockCaveGrass;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
+import thebetweenlands.common.block.plant.BlockHollowLog;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockNettle;
@@ -358,6 +359,7 @@ public class BlockRegistry {
 	public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1));
 	public static final Block DEAD_WEEDWOOD_BUSH = new BlockPlant().setSickleDrop(EnumItemMisc.WEEDWOOD_STICK.create(1));
 	public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
+	public static final Block HOLLOW_LOG = new BlockHollowLog();
 
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();

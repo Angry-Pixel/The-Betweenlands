@@ -71,108 +71,110 @@ public class ModelLifeCrystalStalactite implements IModel {
 
 			List<BakedQuad> quads = new ArrayList<>();
 
-			try {
-				EnumLifeCrystalType type = state.getValue(BlockLifeCrystalStalactite.VARIANT);
-				int distUp = state.getValue(BlockLifeCrystalStalactite.DIST_UP);
-				int distDown = state.getValue(BlockLifeCrystalStalactite.DIST_DOWN);
-				boolean noTop = state.getValue(BlockLifeCrystalStalactite.NO_TOP);
-				boolean noBottom = state.getValue(BlockLifeCrystalStalactite.NO_BOTTOM);
-				int posX = state.getValue(BlockLifeCrystalStalactite.POS_X);
-				int posY = state.getValue(BlockLifeCrystalStalactite.POS_Y);
-				int posZ = state.getValue(BlockLifeCrystalStalactite.POS_Z);
-				float height = distUp == 0 ? 0.75F : 1.0F;
+			if(side == null) {
+				try {
+					EnumLifeCrystalType type = state.getValue(BlockLifeCrystalStalactite.VARIANT);
+					int distUp = state.getValue(BlockLifeCrystalStalactite.DIST_UP);
+					int distDown = state.getValue(BlockLifeCrystalStalactite.DIST_DOWN);
+					boolean noTop = state.getValue(BlockLifeCrystalStalactite.NO_TOP);
+					boolean noBottom = state.getValue(BlockLifeCrystalStalactite.NO_BOTTOM);
+					int posX = state.getValue(BlockLifeCrystalStalactite.POS_X);
+					int posY = state.getValue(BlockLifeCrystalStalactite.POS_Y);
+					int posZ = state.getValue(BlockLifeCrystalStalactite.POS_Z);
+					float height = distUp == 0 ? 0.75F : 1.0F;
 
-				int totalHeight = 1 + distDown + distUp;
-				float distToMidBottom, distToMidTop;
+					int totalHeight = 1 + distDown + distUp;
+					float distToMidBottom, distToMidTop;
 
-				double squareAmount = 1.2D;
-				double halfTotalHeightSQ;
+					double squareAmount = 1.2D;
+					double halfTotalHeightSQ;
 
-				if(noTop) {
-					halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-					distToMidBottom = Math.abs(distUp + 1);
-					distToMidTop = Math.abs(distUp);
-				} else if(noBottom) {
-					halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
-					distToMidBottom = Math.abs(distDown);
-					distToMidTop = Math.abs(distDown + 1);
-				} else {
-					float halfTotalHeight = totalHeight * 0.5F;
-					halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
-					distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
-					distToMidTop = Math.abs(halfTotalHeight - distUp);
-				}
-
-				int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
-				int minValTop = (noTop && distUp == 0) ? 0 : 1;
-				int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
-				int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
-
-				float umin = 0;
-				float umax = 16;
-				float vmin = 0;
-				float vmax = 16;
-
-				float halfSize = (float) scaledValBottom / 16;
-				float halfSizeTexW = halfSize * (umax - umin);
-				float halfSize1 = (float) (scaledValTop) / 16;
-				float halfSizeTex1 = halfSize1 * (umax - umin);
-
-				StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
-
-				QuadBuilder builder = new QuadBuilder(this.format);
-
-				for(int i = 0; i < (type == EnumLifeCrystalType.DEFAULT ? 1 : 2); i++) {
-					if(type == EnumLifeCrystalType.DEFAULT) {
-						builder.setSprite(this.textureDefault);
+					if(noTop) {
+						halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+						distToMidBottom = Math.abs(distUp + 1);
+						distToMidTop = Math.abs(distUp);
+					} else if(noBottom) {
+						halfTotalHeightSQ = Math.pow(totalHeight, squareAmount);
+						distToMidBottom = Math.abs(distDown);
+						distToMidTop = Math.abs(distDown + 1);
 					} else {
-						if(i == 0) 
-							builder.setSprite(this.textureOreBackground);
-						else if(i == 1)
-							builder.setSprite(this.textureOre);
+						float halfTotalHeight = totalHeight * 0.5F;
+						halfTotalHeightSQ = Math.pow(halfTotalHeight, squareAmount);
+						distToMidBottom = Math.abs(halfTotalHeight - distUp - 1);
+						distToMidTop = Math.abs(halfTotalHeight - distUp);
 					}
 
-					// front
-					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-					// back
-					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-					// left
-					builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
-					// right
-					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-					builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
-					builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
-					builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+					int minValBottom = (noBottom && distDown == 0) ? 0 : 1;
+					int minValTop = (noTop && distUp == 0) ? 0 : 1;
+					int scaledValBottom = (int) (Math.pow(distToMidBottom, squareAmount) / halfTotalHeightSQ * (8 - minValBottom)) + minValBottom;
+					int scaledValTop = (int) (Math.pow(distToMidTop, squareAmount) / halfTotalHeightSQ * (8 - minValTop)) + minValTop;
 
-					// top
-					if(distUp == 0) {
+					float umin = 0;
+					float umax = 16;
+					float vmin = 0;
+					float vmax = 16;
+
+					float halfSize = (float) scaledValBottom / 16;
+					float halfSizeTexW = halfSize * (umax - umin);
+					float halfSize1 = (float) (scaledValTop) / 16;
+					float halfSizeTex1 = halfSize1 * (umax - umin);
+
+					StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
+
+					QuadBuilder builder = new QuadBuilder(this.format);
+
+					for(int i = 0; i < (type == EnumLifeCrystalType.DEFAULT ? 1 : 2); i++) {
+						if(type == EnumLifeCrystalType.DEFAULT) {
+							builder.setSprite(this.textureDefault);
+						} else {
+							if(i == 0) 
+								builder.setSprite(this.textureOreBackground);
+							else if(i == 1)
+								builder.setSprite(this.textureOre);
+						}
+
+						// front
+						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
+						builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin, vmin);
+						builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+						// back
+						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+						builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmax);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+						// left
+						builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmax);
 						builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+						// right
+						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin, vmax);
+						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin, vmin);
 						builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-						builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
-						builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
+
+						// top
+						if(distUp == 0) {
+							builder.addVertex(core.tX - halfSize1, height, core.tZ - halfSize1, umin, vmin);
+							builder.addVertex(core.tX - halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+							builder.addVertex(core.tX + halfSize1, height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
+							builder.addVertex(core.tX + halfSize1, height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
+						}
+
+						// bottom
+						if(distDown == 0) {
+							builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
+							builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
+							builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
+							builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
+						}
 					}
 
-					// bottom
-					if(distDown == 0) {
-						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
-						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin, vmin);
-						builder.addVertex(core.bX + halfSize, 0, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
-						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
-					}
+					quads = builder.build();
+				} catch(Exception ex) {
+					//throws inexplicable NPE when damaging block :(
 				}
-
-				quads.addAll(builder.build());
-			} catch(Exception ex) {
-				//throws inexplicable NPE when damaging block :(
 			}
 
 			return quads;

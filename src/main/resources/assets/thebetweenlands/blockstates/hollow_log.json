@@ -1,0 +1,24 @@
+{
+  "variants": {
+    "facing=north": [ 
+      {"model": "thebetweenlands:hollow_log_1"},
+      {"model": "thebetweenlands:hollow_log_2"},
+      {"model": "thebetweenlands:hollow_log_3"} 
+    ],
+    "facing=south": [ 
+      {"model": "thebetweenlands:hollow_log_1", "y": 180},
+      {"model": "thebetweenlands:hollow_log_2", "y": 180},
+      {"model": "thebetweenlands:hollow_log_3", "y": 180}
+    ],
+    "facing=west": [ 
+      {"model": "thebetweenlands:hollow_log_1", "y": 270},
+      {"model": "thebetweenlands:hollow_log_2", "y": 270},
+      {"model": "thebetweenlands:hollow_log_3", "y": 270} 
+    ],
+    "facing=east": [ 
+      {"model": "thebetweenlands:hollow_log_1", "y": 90},
+      {"model": "thebetweenlands:hollow_log_2", "y": 90},
+      {"model": "thebetweenlands:hollow_log_3", "y": 90} 
+    ]
+  }
+}
