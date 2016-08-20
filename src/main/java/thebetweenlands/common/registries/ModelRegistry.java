@@ -14,6 +14,7 @@ import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProce
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom2;
@@ -59,6 +60,7 @@ public class ModelRegistry {
 	public static final IModel VOLARPAD_3 = new ModelFromModelBase(new ModelVolarpad(), new ResourceLocation("thebetweenlands:blocks/volarpad_3"), 256, 256);
 	public static final IModel WEEPING_BLUE = new ModelFromModelBase(new ModelWeepingBlue(), new ResourceLocation("thebetweenlands:blocks/weeping_blue"), 64, 64);
 	public static final IModel SWAMP_PLANT = new ModelFromModelBase(new ModelSwampPlant(), new ResourceLocation("thebetweenlands:blocks/swamp_plant"), 64, 64);
+	public static final IModel WEEDWOOD_BUSH = new ModelWeedwoodBush();
 
 	//Items
 	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {

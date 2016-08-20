@@ -27,7 +27,8 @@ public class BlockNettleFlowered extends BlockPlant {
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		if(entityIn instanceof IEntityBL == false) 
+		//TODO add && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entity) when elxirs are added
+		if(!worldIn.isRemote && entityIn instanceof IEntityBL == false)
 			entityIn.attackEntityFrom(DamageSource.cactus, 1);
 	}
 }

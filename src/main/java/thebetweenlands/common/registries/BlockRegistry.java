@@ -39,7 +39,6 @@ import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.plant.BlockAlgae;
-import thebetweenlands.common.block.plant.BlockBasicVine;
 import thebetweenlands.common.block.plant.BlockBladderwortFlower;
 import thebetweenlands.common.block.plant.BlockBladderwortStalk;
 import thebetweenlands.common.block.plant.BlockBogBeanFlower;
@@ -56,10 +55,13 @@ import thebetweenlands.common.block.plant.BlockNettle;
 import thebetweenlands.common.block.plant.BlockNettleFlowered;
 import thebetweenlands.common.block.plant.BlockPlant;
 import thebetweenlands.common.block.plant.BlockPlantUnderwater;
+import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockStackablePlantUnderwater;
 import thebetweenlands.common.block.plant.BlockSwampReed;
 import thebetweenlands.common.block.plant.BlockSwampReedUnderwater;
+import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
+import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
@@ -316,7 +318,7 @@ public class BlockRegistry {
 	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
 	public static final Block ALGAE = new BlockAlgae().setSickleDrop(EnumItemPlantDrop.ALGAE_ITEM.create(1));
-	public static final Block POISON_IVY = new BlockBasicVine(true);
+	public static final Block POISON_IVY = new BlockPoisonIvy();
 	public static final Block ROOT = new BlockRoot();
 	public static final Block ROOT_UNDERWATER = new BlockRootUnderwater();
 	public static final Block ARROW_ARUM = new BlockPlant().setSickleDrop(EnumItemPlantDrop.ARROW_ARUM_LEAF.create(1));
@@ -351,7 +353,12 @@ public class BlockRegistry {
 	public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1));
 	public static final Block SWAMP_REED = new BlockSwampReed();
 	public static final Block SWAMP_REED_UNDERWATER = new BlockSwampReedUnderwater();
-	
+	public static final Block THORNS = new BlockThorns();
+	public static final Block TALL_CATTAIL = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.CATTAIL_HEAD.create(1));
+	public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1));
+	public static final Block DEAD_WEEDWOOD_BUSH = new BlockPlant().setSickleDrop(EnumItemMisc.WEEDWOOD_STICK.create(1));
+	public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
+
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();

@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.common.block.plant.BlockBasicVine;
+import thebetweenlands.common.block.plant.BlockVineBL;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WorldGenWeedWoodTree extends WorldGenerator {
@@ -288,7 +288,7 @@ public class WorldGenWeedWoodTree extends WorldGenerator {
 			int length = rand.nextInt(4) + 4;
 			for (int yy = 0; yy < length; ++yy)
 				if (world.isAirBlock(pos.down(yy)))
-					world.setBlockState(pos.down(yy), ivy.withProperty(BlockBasicVine.getPropertyFor(facing.getOpposite()), Boolean.valueOf(true)), 2);
+					world.setBlockState(pos.down(yy), ivy.withProperty(BlockVineBL.getPropertyFor(facing.getOpposite()), Boolean.valueOf(true)), 2);
 				else
 					break;
 		}

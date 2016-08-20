@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "half=lower": {
+            "model": "thebetweenlands:tall_cattail_bottom"
+        },
+        "half=upper": { 
+            "model": "thebetweenlands:tall_cattail_top"
+        }
+    }
+}
