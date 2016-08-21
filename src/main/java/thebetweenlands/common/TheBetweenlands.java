@@ -26,7 +26,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
-import thebetweenlands.common.world.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.WorldDataBase;
 import thebetweenlands.core.TheBetweenlandsPreconditions;

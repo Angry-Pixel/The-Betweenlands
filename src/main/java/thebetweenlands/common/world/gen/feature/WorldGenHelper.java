@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.feature;
+package thebetweenlands.common.world.gen.feature;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -12,8 +12,8 @@ import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
-import thebetweenlands.common.world.feature.loot.LootTables;
-import thebetweenlands.common.world.feature.loot.LootUtil;
+import thebetweenlands.common.world.gen.feature.loot.LootTables;
+import thebetweenlands.common.world.gen.feature.loot.LootUtil;
 
 import java.util.Random;
 

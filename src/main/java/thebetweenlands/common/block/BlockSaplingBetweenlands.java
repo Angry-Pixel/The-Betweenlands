@@ -21,8 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.world.feature.tree.WorldGenSapTree;
-import thebetweenlands.common.world.feature.tree.WorldGenWeedWoodTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedWoodTree;
 
 public class BlockSaplingBetweenlands extends BlockSapling implements IStateMappedBlock  {
 

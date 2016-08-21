@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.feature.loot;
+package thebetweenlands.common.world.gen.feature.loot;
 
 import net.minecraft.item.ItemStack;
 

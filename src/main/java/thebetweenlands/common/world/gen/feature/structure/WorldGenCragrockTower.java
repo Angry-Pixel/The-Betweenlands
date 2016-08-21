@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.feature.structure;
+package thebetweenlands.common.world.gen.feature.structure;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -7,7 +7,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.feature.WorldGenHelper;
+import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 
 import java.util.Random;
 

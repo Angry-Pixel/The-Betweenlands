@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 
 //MINE!!
 public class TestItem extends Item {

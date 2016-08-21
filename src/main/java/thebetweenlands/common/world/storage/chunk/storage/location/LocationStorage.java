@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
@@ -80,7 +82,7 @@ public class LocationStorage extends ChunkStorage {
 		String locationName = this.name;
 		boolean translate = locationName.startsWith("translate:");
 		if(translate)
-			locationName = I18n.translateToLocal("location." + locationName.replaceFirst("translate:", "") + ".name");
+			locationName = I18n.format("location." + locationName.replaceFirst("translate:", "") + ".name");
 		return locationName;
 	}
 
@@ -129,6 +131,10 @@ public class LocationStorage extends ChunkStorage {
 
 	public boolean isInside(Entity entity) {
 		return this.area.isVecInside(entity.getPositionVector());
+	}
+
+	public boolean isInside(BlockPos pos) {
+		return this.area.isVecInside(new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
 	}
 
 	public AxisAlignedBB getArea() {

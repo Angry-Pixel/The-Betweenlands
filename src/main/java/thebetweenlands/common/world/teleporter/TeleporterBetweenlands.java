@@ -19,7 +19,7 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.feature.structure.WorldGenWeedWoodPortalTree;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedWoodPortalTree;
 import thebetweenlands.util.config.ConfigHandler;
 
 

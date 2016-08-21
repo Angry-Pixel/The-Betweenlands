@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.world.feature.structure.WorldGenWeedWoodPortalTree;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedWoodPortalTree;
 
 public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
 	public ItemSwampTalisman() {
