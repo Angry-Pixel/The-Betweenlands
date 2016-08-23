@@ -6,10 +6,12 @@ import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
@@ -182,16 +184,17 @@ public class BiomeGenerator {
 	public final void replaceBiomeBlocks(
 			int blockX, int blockZ, int inChunkZ, int inChunkX, 
 			double baseBlockNoise, Random rng, long seed, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
+			float terrainWeight) {
 		this.rng.setSeed((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
 
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 0);
+			feature.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeight, 0);
 		}
 
-		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 0)) {
+		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeight, 0)) {
 			return;
 		}
 
@@ -202,6 +205,17 @@ public class BiomeGenerator {
 		int blocksBelow = -1;
 		//Amount of blocks below the first block under the layer
 		int blocksBelowLayer = -1;
+
+		//System.out.println(terrainWeight);
+		for(int y = 120; y <= 120 + (32 - terrainWeight * 32); y++) {
+			if(y < 255) {
+				if(this.biome == BiomeRegistry.SWAMPLANDS) {
+					chunkPrimer.setBlockState(inChunkX, y, inChunkZ, Blocks.OBSIDIAN.getDefaultState());
+				} else {
+					chunkPrimer.setBlockState(inChunkX, y, inChunkZ, Blocks.STONE.getDefaultState());
+				}
+			}
+		}
 
 		for(int y = 255; y >= 0; --y) {
 			//Generate bottom block
@@ -267,10 +281,10 @@ public class BiomeGenerator {
 		}
 
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 1);
+			feature.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeight, 1);
 		}
 
-		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 1);
+		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeight, 1);
 	}
 
 	/**
@@ -298,7 +312,7 @@ public class BiomeGenerator {
 	 */
 	protected boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, int pass) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeight, int pass) {
 		return true;
 	}
 }

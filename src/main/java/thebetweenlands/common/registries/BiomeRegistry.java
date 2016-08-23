@@ -9,9 +9,11 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.BiomePatchyIslands;
+import thebetweenlands.common.world.biome.BiomeSwamplands;
 
 public class BiomeRegistry {
-	public static BiomeBetweenlands PATCHY_ISLANDS = new BiomePatchyIslands();
+	public static final BiomeBetweenlands PATCHY_ISLANDS = new BiomePatchyIslands();
+	public static final BiomeBetweenlands SWAMPLANDS = new BiomeSwamplands();
 
 	public static final List<BiomeBetweenlands> REGISTERED_BIOMES = new ArrayList<BiomeBetweenlands>();
 

@@ -3,7 +3,10 @@ package thebetweenlands.common.world.biome;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.gen.biome.BiomeGenerator;
@@ -11,6 +14,7 @@ import thebetweenlands.util.IWeightProvider;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	protected final List<BLSpawnEntry> blSpawnEntries = new ArrayList<BLSpawnEntry>();
+	private int grassColor, foliageColor;
 	private short biomeWeight;
 	private BiomeGenerator biomeGenerator;
 
@@ -66,6 +70,30 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		return this;
 	}
 
+	/**
+	 * 
+	 * @param grassColor
+	 * @param foliageColor
+	 * @return
+	 */
+	public final BiomeBetweenlands setColors(int grassColor, int foliageColor) {
+		this.grassColor = grassColor;
+		this.foliageColor = foliageColor;
+		return this;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public int getGrassColorAtPos(BlockPos pos) {
+		return this.grassColor;
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+    public int getFoliageColorAtPos(BlockPos pos) {
+		return this.foliageColor;
+	}
+	
 	/**
 	 * Returns Biome specific weighted probability.
 	 */

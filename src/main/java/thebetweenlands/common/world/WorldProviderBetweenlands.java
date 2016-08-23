@@ -30,23 +30,21 @@ import thebetweenlands.util.config.ConfigHandler;
  *
  */
 public class WorldProviderBetweenlands extends WorldProvider {
-	public static final int LAYER_HEIGHT = 80;
+	public static final int LAYER_HEIGHT = 120;
 
 	public static final int CAVE_WATER_HEIGHT = 20;
 
-	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 14;
+	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 20;
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
+	
 	public float[] originalLightBrightnessTable = new float[16];
-	@SideOnly(Side.CLIENT)
-	private double[] currentFogColor;
-	@SideOnly(Side.CLIENT)
-	private double[] lastFogColor;
+	
 	private boolean allowHostiles, allowAnimals;
 	private BetweenlandsWorldData worldData;
 
 	public WorldProviderBetweenlands() {
-		this.hasNoSky = true;
+		this.hasNoSky = false;
 	}
 
 	/**
@@ -75,19 +73,6 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float partialTicks) {
 		return 0.2F;
-	}
-
-	@SideOnly(Side.CLIENT)
-	@Override
-	public Vec3d getFogColor(float celestialAngle, float partialTickTime) {
-		/*if(this.currentFogColor == null || this.lastFogColor == null) {
-			this.initFogColors(Minecraft.getMinecraft().thePlayer);
-		}
-		double r = this.currentFogColor[0] + (this.currentFogColor[0] - this.lastFogColor[0]) * partialTickTime;
-		double g = this.currentFogColor[1] + (this.currentFogColor[1] - this.lastFogColor[1]) * partialTickTime;
-		double b = this.currentFogColor[2] + (this.currentFogColor[2] - this.lastFogColor[2]) * partialTickTime;
-		return new Vec3d(r / 255D, g / 255D, b / 255D);*/
-		return new Vec3d(1, 1, 1);
 	}
 
 	@Override
@@ -119,7 +104,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean doesXZShowFog(int x, int z) {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -190,115 +175,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 			}
 			this.worldObj.rainingStrength = rainingStrength;
 		} else {
-			this.updateFogColors();
-		}
-	}
-
-	private int[] getTargetFogColor(EntityPlayer player) {
-		Biome biome = this.worldObj.getBiomeGenForCoords(player.getPosition());
-		int[] targetFogColor = new int[]{255, 255, 255};
-
-		//TODO: Biome fog
-		/*if(biome instanceof BiomeGenBaseBetweenlands) {
-			targetFogColor = ((BiomeGenBaseBetweenlands) biome).getFogRGB().clone();
-		} else {
-			targetFogColor = new int[]{(int) 255, (int) 255, (int) 255};
-		}*/
-
-		//TODO: Shaders
-		/*if(!ShaderHelper.INSTANCE.canUseShaders()) {
-			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()) {
-				targetFogColor = new int[] {(int) (0.74F * 255), (int) (0.18F * 255), (int) (0.08F * 255)};
-			} else if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
-				targetFogColor = new int[] {(int) (0.4F * 255), (int) (0.22F * 255), (int) (0.08F * 255)};
-			}
-		}*/
-
-		return targetFogColor;
-	}
-
-	private void initFogColors(EntityPlayer player) {
-		int[] targetFogColor = this.getTargetFogColor(player);
-
-		if(this.currentFogColor == null) {
-			this.currentFogColor = new double[3];
-			for(int i = 0; i < 3; i++) {
-				this.currentFogColor[i] = targetFogColor[i];
-			}
-		}
-
-		if(this.lastFogColor == null) {
-			this.lastFogColor = new double[3];
-		} else {
-			for(int i = 0; i < 3; i++) {
-				this.lastFogColor[i] = this.currentFogColor[i];
-			}
-		}
-	}
-
-	private void updateFogColors() {
-		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-
-		if(player == null) return;
-
-		this.initFogColors(player);
-
-		int[] targetFogColor = this.getTargetFogColor(player);
-
-		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
-		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
-		float m = 0;
-		if (FogHandler.INSTANCE.hasDenseFog()) {
-			float y = (float) player.posY;
-			if (y < transitionStart) {
-				if (transitionEnd < y) {
-					m = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
-				}
-			} else {
-				m = 80;
-			}
-		}
-
-		LocationAmbience ambience = LocationStorage.getAmbience(player);
-
-		if(ambience != null && ambience.hasFogBrightness()) {
-			m = ambience.getFogBrightness();
-		}
-
-		//TODO: Shaders
-		/*if(!ShaderHelper.INSTANCE.canUseShaders()) {
-			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()
-					|| WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
-				m = 0;
-			}
-		}*/
-
-		if(ambience != null && ambience.hasFogColor()) {
-			for(int i = 0; i < 3; i++) {
-				int diff = 255 - ambience.getFogColor()[i];
-				targetFogColor[i] = (int) (ambience.getFogColor()[i] + (diff / 255.0D * m));
-			}
-		} else {
-			for(int i = 0; i < 3; i++) {
-				int diff = 255 - targetFogColor[i];
-				targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * m));
-			}
-		}
-
-		for(int a = 0; a < 3; a++) {
-			if(this.currentFogColor[a] != targetFogColor[a]) {
-				if(this.currentFogColor[a] < targetFogColor[a]) {
-					this.currentFogColor[a] += 0.2D;
-					if(this.currentFogColor[a] > targetFogColor[a]) {
-						this.currentFogColor[a] = targetFogColor[a];
-					}
-				} else if(this.currentFogColor[a] > targetFogColor[a]) {
-					this.currentFogColor[a] -= 0.2D;
-					if(this.currentFogColor[a] < targetFogColor[a]) {
-						this.currentFogColor[a] = targetFogColor[a];
-					}
-				}
-			}
+			//TODO: Update fog colors
 		}
 	}
 
