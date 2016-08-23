@@ -157,16 +157,20 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @return Whether or not it is replaceable
      */
     public boolean isReplaceable(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation) {
-        pos.add(-(width / 2), 0, -(depth / 2));
+        pos = pos.add(-(width / 2), 0, -(depth / 2));
         switch (rotation) {
             case 0:
-                return world.getBlockState(pos.add(offsetX, offsetY, offsetZ)).getBlock().isReplaceable(world, pos.add(offsetX, offsetY, offsetZ)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(offsetX, offsetY, offsetZ))));
+                pos = pos.add(offsetX, offsetY, offsetZ);
+                return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
             case 1:
-                return world.getBlockState(pos.add(offsetZ, offsetY, depth - offsetX - 1)).getBlock().isReplaceable(world, pos.add(offsetZ, offsetY, depth - offsetX - 1)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(offsetZ, offsetY, depth - offsetX - 1))));
+                pos = pos.add(offsetZ, offsetY, depth - offsetX - 1);
+                return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
             case 2:
-                return world.getBlockState(pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1)).getBlock().isReplaceable(world, pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1))));
+                pos = pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1);
+                return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
             case 3:
-                return world.getBlockState(pos.add(width - offsetZ - 1, offsetY, offsetX)).getBlock().isReplaceable(world, pos.add(width - offsetZ - 1, offsetY, offsetX)) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos.add(width - offsetZ - 1, offsetY, offsetX))));
+                pos = pos.add(width - offsetZ - 1, offsetY, offsetX);
+                return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
         }
         return false;
     }
