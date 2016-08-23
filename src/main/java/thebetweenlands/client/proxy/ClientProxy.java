@@ -31,19 +31,7 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.particle.entity.ParticleWisp;
-import thebetweenlands.client.render.entity.RenderAngler;
-import thebetweenlands.client.render.entity.RenderBlindCaveFish;
-import thebetweenlands.client.render.entity.RenderBloodSnail;
-import thebetweenlands.client.render.entity.RenderChiromaw;
-import thebetweenlands.client.render.entity.RenderDragonFly;
-import thebetweenlands.client.render.entity.RenderFrog;
-import thebetweenlands.client.render.entity.RenderGiantToad;
-import thebetweenlands.client.render.entity.RenderLurker;
-import thebetweenlands.client.render.entity.RenderMireSnail;
-import thebetweenlands.client.render.entity.RenderMireSnailEgg;
-import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
-import thebetweenlands.client.render.entity.RenderSporeling;
-import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.*;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
@@ -53,18 +41,7 @@ import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
-import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
-import thebetweenlands.common.entity.mobs.EntityBloodSnail;
-import thebetweenlands.common.entity.mobs.EntityChiromaw;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
-import thebetweenlands.common.entity.mobs.EntityFrog;
-import thebetweenlands.common.entity.mobs.EntityGiantToad;
-import thebetweenlands.common.entity.mobs.EntityLurker;
-import thebetweenlands.common.entity.mobs.EntityMireSnail;
-import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
-import thebetweenlands.common.entity.mobs.EntitySporeling;
-import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
@@ -233,6 +210,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, RenderFrog::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, RenderGiantToad::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, RenderSporeling::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, RenderTermite::new);
 	}
 
 	@Override

@@ -59,7 +59,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
         CARVED_CRAGROCK = BlockRegistry.CARVED_CRAGROCK.getDefaultState();
 
         while (worldIn.isAirBlock(pos) && pos.getY() > 80)
-            pos.add(0, -1, 0);
+            pos = pos.add(0, -1, 0);
 
 
         return tower(worldIn, rand, pos.getX(), pos.getY(), pos.getZ());
