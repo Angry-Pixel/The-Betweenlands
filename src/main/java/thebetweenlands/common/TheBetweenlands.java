@@ -3,6 +3,7 @@ package thebetweenlands.common;
 import java.io.File;
 
 import net.minecraft.world.DimensionType;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
@@ -26,6 +27,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.WorldDataBase;
@@ -54,10 +56,9 @@ public class TheBetweenlands {
 		sourceFile = event.getSourceFile();
 
 		BetweenlandsAPI.init(new BetweenlandsAPIImp());
-		
-		// TODO WORLDGEN BEFOR THIS IS UNCOMMENTED!!!
-		//dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.INSTANCE.dimensionId, WorldProviderBetweenlands.class, false);
-		//DimensionManager.registerDimension(ConfigHandler.INSTANCE.dimensionId, dimensionType);
+
+		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.INSTANCE.dimensionId, WorldProviderBetweenlands.class, false);
+		DimensionManager.registerDimension(ConfigHandler.INSTANCE.dimensionId, dimensionType);
 
 		REGISTRIES.preInit();
 
@@ -83,10 +84,10 @@ public class TheBetweenlands {
 	public void init(FMLInitializationEvent event) {
 		REGISTRIES.init();
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
-		
+
 		// TODO WORLDGEN BEFORE THIS IS UNCOMMENTED!!!
 		//TeleporterHandler.init();
-		
+
 		proxy.init();
 
 		this.registerEventHandlers();

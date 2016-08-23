@@ -4,8 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.world.biome.Biome;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
-import thebetweenlands.common.world.gen.feature.terrain.BiomeGenerator;
+import thebetweenlands.common.world.gen.biome.BiomeGenerator;
 import thebetweenlands.util.IWeightProvider;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {
@@ -15,6 +16,13 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 
 	public BiomeBetweenlands(BiomeProperties properties) {
 		super(properties);
+		this.spawnableCreatureList.clear();
+		this.spawnableMonsterList.clear();
+		this.spawnableWaterCreatureList.clear();
+		this.spawnableCaveCreatureList.clear();
+		this.biomeWeight = 100;
+		this.topBlock = BlockRegistry.SWAMP_GRASS.getDefaultState();
+		this.fillerBlock = BlockRegistry.SWAMP_DIRT.getDefaultState();
 	}
 
 	/**
@@ -30,8 +38,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	}
 
 	/**
-	 * Returns the biome primer.
-	 * If no primer was specified the default biome primer is returned
+	 * Returns the biome generator.
+	 * If no generator was specified the default biome generator is returned
 	 * @return
 	 */
 	public final BiomeGenerator getBiomeGenerator() {
@@ -48,6 +56,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 
 	/**
 	 * Sets Biome specific weighted probability.
+	 * The default weight is 100.
 	 * @param weight
 	 */
 	protected final BiomeBetweenlands setWeight(int weight) {

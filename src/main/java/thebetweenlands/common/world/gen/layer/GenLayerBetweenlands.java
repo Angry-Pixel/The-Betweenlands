@@ -26,6 +26,6 @@ public abstract class GenLayerBetweenlands extends GenLayer {
 
 		genLayer = new GenLayerVoronoiZoom(10L, genLayer);
 		genLayer.initWorldGenSeed(seed);
-		return new GenLayer[]{null, genLayer, null};
+		return new GenLayer[]{genLayer, genLayer, genLayer};
 	}
 }

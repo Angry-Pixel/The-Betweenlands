@@ -1,18 +1,18 @@
-package thebetweenlands.common.world.gen.feature.terrain;
+package thebetweenlands.common.world.gen.biome;
 
 import java.util.Random;
 
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkProvider;
+import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 
 public abstract class BiomeFeature {
 	/**
 	 * Initializes additional noise generators.
 	 * @param rng Seeded Random
 	 */
-	public void initializeNoiseGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(Random rng, Biome biome) {
 
 	}
 
@@ -35,13 +35,11 @@ public abstract class BiomeFeature {
 	 * @param baseBlockNoise
 	 * @param rng
 	 * @param chunkPrimer
-	 * @param chunkProvider
+	 * @param chunkGenerator
 	 * @param biomesForGeneration
-	 * @param blockAccess
 	 * @param pass
 	 */
 	public abstract void replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
-			double baseBlockNoise, Random rng, ChunkPrimer chunkPrimer, 
-			/*ChunkProviderBetweenlands*/IChunkProvider chunkProvider, Biome[] biomesForGeneration,
-			IBlockAccess blockAccess, int pass);
+			double baseBlockNoise, ChunkPrimer chunkPrimer, 
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, int pass);
 }

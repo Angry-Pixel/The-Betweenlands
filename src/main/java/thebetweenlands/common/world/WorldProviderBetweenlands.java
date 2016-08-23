@@ -10,11 +10,15 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.event.FogHandler;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
 import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
 import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
@@ -63,11 +67,6 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	@Override
-	public boolean canCoordinateBeSpawn(int x, int z) {
-		return true;
-	}
-
-	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTickTime) {
 		return 0.35F;
 	}
@@ -81,20 +80,20 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public Vec3d getFogColor(float celestialAngle, float partialTickTime) {
-		if(this.currentFogColor == null || this.lastFogColor == null) {
+		/*if(this.currentFogColor == null || this.lastFogColor == null) {
 			this.initFogColors(Minecraft.getMinecraft().thePlayer);
 		}
 		double r = this.currentFogColor[0] + (this.currentFogColor[0] - this.lastFogColor[0]) * partialTickTime;
 		double g = this.currentFogColor[1] + (this.currentFogColor[1] - this.lastFogColor[1]) * partialTickTime;
 		double b = this.currentFogColor[2] + (this.currentFogColor[2] - this.lastFogColor[2]) * partialTickTime;
-		return new Vec3d(r / 255D, g / 255D, b / 255D);
+		return new Vec3d(r / 255D, g / 255D, b / 255D);*/
+		return new Vec3d(1, 1, 1);
 	}
 
-	//TODO: Chunk provider
-	/*@Override
+	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new ChunkProviderBetweenlands(this.worldObj, this.worldObj.getSeed(), BLBlockRegistry.betweenstone, BLBlockRegistry.swampWater, LAYER_HEIGHT);
-	}*/
+		return new ChunkGeneratorBetweenlands(this.worldObj, this.worldObj.getSeed(), BlockRegistry.BETWEENSTONE, BlockRegistry.SWAMP_WATER, LAYER_HEIGHT);
+	}
 
 	@Override
 	protected void generateLightBrightnessTable() {
@@ -108,9 +107,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public void createBiomeProvider() {
-		//TODO: Chunk manager
-		//this.worldChunkMgr = new WorldChunkManagerBetweenlands(this.worldObj);
 		this.setDimension(ConfigHandler.dimensionId);
+		this.biomeProvider = new BiomeProviderBetweenlands(this.worldObj.getWorldInfo());
 	}
 
 	@Override
