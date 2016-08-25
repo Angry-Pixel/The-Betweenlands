@@ -8,7 +8,6 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -19,9 +18,8 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
-import net.minecraftforge.event.terraingen.InitNoiseGensEvent;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.gen.biome.BiomeGenerator;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 
 public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	/**
@@ -34,6 +32,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 */
 	public final Block layerBlock;
 
+	public final IBlockState baseBlockState;
+	public final IBlockState layerBlockState;
 
 
 
@@ -45,16 +45,13 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private NoiseGeneratorPerlin surfaceNoise;
 	public NoiseGeneratorOctaves scaleNoise;
 	public NoiseGeneratorOctaves depthNoise;
-	public NoiseGeneratorOctaves forestNoise;
 	private final World worldObj;
 	/**
-	 * Technically this isn't heightmap, it's a 3D density map
+	 * Technically this isn't a heightmap, it's a 3D density map
 	 */
 	private final double[] heightMap;
 	private final float[] biomeWeights;
-	//private ChunkProviderSettings settings;
-	private IBlockState oceanBlock = Blocks.WATER.getDefaultState();
-	private double[] depthBuffer = new double[256];
+	private double[] surfaceNoiseBuffer = new double[256];
 	private float[] terrainBiomeWeights = new float[256];
 	private Biome[] biomesForGeneration;
 	private double[] mainNoiseRegion;
@@ -71,7 +68,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 	public ChunkGeneratorBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
 		this.baseBlock = baseBlock;
+		this.baseBlockState = baseBlock.getDefaultState();
 		this.layerBlock = layerBlock;
+		this.layerBlockState = layerBlock.getDefaultState();
 		this.layerHeight = layerHeight;
 		this.worldObj = world;
 		this.seed = seed;
@@ -90,17 +89,14 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.surfaceNoise = new NoiseGeneratorPerlin(this.rand, 4);
 		this.scaleNoise = new NoiseGeneratorOctaves(this.rand, 10);
 		this.depthNoise = new NoiseGeneratorOctaves(this.rand, 16);
-		this.forestNoise = new NoiseGeneratorOctaves(this.rand, 8);
-		InitNoiseGensEvent.ContextOverworld ctx = new InitNoiseGensEvent.ContextOverworld(minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise, forestNoise);
+		ContextBetweenlands ctx = new ContextBetweenlands(minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise);
 		ctx = net.minecraftforge.event.terraingen.TerrainGen.getModdedNoiseGenerators(world, this.rand, ctx);
 		this.minLimitPerlinNoise = ctx.getLPerlin1();
 		this.maxLimitPerlinNoise = ctx.getLPerlin2();
 		this.mainPerlinNoise = ctx.getPerlin();
-		this.surfaceNoise = ctx.getHeight();
+		this.surfaceNoise = ctx.getSurfaceNoise();
 		this.scaleNoise = ctx.getScale();
 		this.depthNoise = ctx.getDepth();
-		this.forestNoise = ctx.getForest();
-		//this.settings = new ChunkProviderSettings.Factory().build();
 		world.setSeaLevel(layerHeight);
 	}
 
@@ -130,7 +126,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 * @param primer
 	 */
 	public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer primer) {
-		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4 - 2, chunkZ * 4 - 2, 10, 10);
+		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4 - 5, chunkZ * 4 - 5, 15, 15);
 		this.generateHeightmap(chunkX * 4, 0, chunkZ * 4);
 
 		//X
@@ -210,9 +206,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 							//Step Z axis
 							for (int blockZ = 0; blockZ < 4; ++blockZ) {
 								if ((currentValZC += stepZAxis) > 0.0D) {
-									primer.setBlockState(heightMapX * 4 + blockX, heightMapY * 8 + blockY, heightMapZ * 4 + blockZ, this.baseBlock.getDefaultState());
+									primer.setBlockState(heightMapX * 4 + blockX, heightMapY * 8 + blockY, heightMapZ * 4 + blockZ, this.baseBlockState);
 								} else if (heightMapY * 8 + blockY < this.layerHeight) {
-									primer.setBlockState(heightMapX * 4 + blockX, heightMapY * 8 + blockY, heightMapZ * 4 + blockZ, this.layerBlock.getDefaultState());
+									primer.setBlockState(heightMapX * 4 + blockX, heightMapY * 8 + blockY, heightMapZ * 4 + blockZ, this.layerBlockState);
 								}
 							}
 
@@ -237,12 +233,12 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 * @param z
 	 */
 	private void generateHeightmap(int x, int y, int z) {
-		this.depthRegion = this.depthNoise.generateNoiseOctaves(this.depthRegion, x, z, 5, 5, /*(double)this.settings.depthNoiseScaleX*/200.0D, /*(double)this.settings.depthNoiseScaleZ*/200.0D, /*(double)this.settings.depthNoiseScaleExponent*/0.5D);
-		float f = /*this.settings.coordinateScale*/684.412F * 8;
-		float f1 = /*this.settings.heightScale*/684.412F * 8;
-		this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, x, y, z, 5, 33, 5, (double)(f / /*this.settings.mainNoiseScaleX*/80.0F), (double)(f1 / /*this.settings.mainNoiseScaleY*/160.0F), (double)(f / /*this.settings.mainNoiseScaleZ*/80.0F));
-		this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, x, y, z, 5, 33, 5, (double)f, (double)f1, (double)f);
-		this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, x, y, z, 5, 33, 5, (double)f, (double)f1, (double)f);
+		this.depthRegion = this.depthNoise.generateNoiseOctaves(this.depthRegion, x, z, 5, 5, 200.0D, 200.0D, 0.5D);
+		float scaleXZ = 684.412F * 8;
+		float scaleY = 684.412F * 8;
+		this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, x, y, z, 5, 33, 5, (double)(scaleXZ / 80.0F), (double)(scaleY / 160.0F), (double)(scaleXZ / 80.0F));
+		this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, x, y, z, 5, 33, 5, (double)scaleXZ, (double)scaleY, (double)scaleXZ);
+		this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, x, y, z, 5, 33, 5, (double)scaleXZ, (double)scaleY, (double)scaleXZ);
 
 		int noiseIndex = 0;
 		int heightMapIndex = 0;
@@ -251,20 +247,16 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 			for (int heightMapZ = 0; heightMapZ < 5; ++heightMapZ) {
 				float biomeVariation = 0.0F;
 				float biomeDepth = 0.0F;
-				float centerBiomeWeight = 0.0F;
-				Biome centerBiome = this.biomesForGeneration[heightMapX + 2 + (heightMapZ + 2) * 10];
+				float totalBiomeWeight = 0.0F;
+				Biome centerBiome = this.biomesForGeneration[heightMapX + 5 + (heightMapZ + 5) * 15];
 
-				float centerBiomeWeightTest = 0.0F;
-				
-				//Averages biome height and variation in a 5x5 area
-				for (int offsetX = -2; offsetX <= 2; ++offsetX) {
-					for (int offsetZ = -2; offsetZ <= 2; ++offsetZ) {
-						Biome nearbyBiome = this.biomesForGeneration[heightMapX + offsetX + 2 + (heightMapZ + offsetZ + 2) * 10];
+				float nearestOtherBiomeSq = 50;
+
+				//Averages biome height and variation in a 5x5 area and calculates the biome terrain weight from an 11x11 area
+				for (int offsetX = -5; offsetX <= 5; ++offsetX) {
+					for (int offsetZ = -5; offsetZ <= 5; ++offsetZ) {
+						Biome nearbyBiome = this.biomesForGeneration[heightMapX + 5 + offsetX + (heightMapZ + 5 + offsetZ) * 15];
 						float nearbyBiomeDepth = nearbyBiome.getBaseHeight();
-						/*if(nearbyBiome instanceof BiomeSwamplands) {
-							//nearbyBiomeDepth += 5.0F;
-							System.out.println(nearbyBiome + " " + nearbyBiomeDepth);
-						}*/
 						float nearbyBiomeVariation = nearbyBiome.getHeightVariation();
 
 						//No amplified terrain
@@ -274,39 +266,36 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
                             f6 = 1.0F + f6 * 4.0F;
                         }*/
 
-						float weight = this.biomeWeights[offsetX + 2 + (offsetZ + 2) * 5];
+						if(offsetX >= -2 && offsetX <= 2 && offsetZ >= -2 && offsetZ <=2) {
+							float weight = this.biomeWeights[offsetX + 2 + (offsetZ + 2) * 5];
 
-						if (nearbyBiome.getBaseHeight() > centerBiome.getBaseHeight()) {
-							weight /= 2.0F;
+							if (nearbyBiome.getBaseHeight() > centerBiome.getBaseHeight()) {
+								weight /= 2.0F;
+							}
+
+							biomeVariation += nearbyBiomeVariation * weight;
+							biomeDepth += nearbyBiomeDepth * weight;
+							totalBiomeWeight += weight;
 						}
 
-						biomeVariation += nearbyBiomeVariation * weight;
-						biomeDepth += nearbyBiomeDepth * weight;
-						centerBiomeWeight += weight;
-						
-						if(nearbyBiome == centerBiome)
-							centerBiomeWeightTest += 1.0F;
+						float distWeighted = (offsetX*offsetX + offsetZ*offsetZ);
+						if(nearbyBiome != centerBiome && distWeighted < nearestOtherBiomeSq) {
+							nearestOtherBiomeSq = distWeighted;
+						}
 					}
 				}
 
-				/*//TODO: Do this in constructor when generating biomeWeights
-				float maxBiomeTerrainWeight = 0.0F;
-				for(int xo = -2; xo <= 2; xo++) {
-					for(int zo = -2; zo <= 2; zo++) {
-						maxBiomeTerrainWeight += (float) (10.0F / Math.sqrt(xo*xo+zo*zo+0.2F));
-					}
-				}*/
+				//The 0 point is offset by some blocks so that the lerp doesn't cause problems later on
+				this.terrainBiomeWeights[heightMapIndex] = MathHelper.clamp_float(Math.max((nearestOtherBiomeSq - 2) / 46.0F, 0.0F), 0.0F, 1.0F);
 
-				this.terrainBiomeWeights[heightMapX + heightMapZ * 5] = /*centerBiomeWeight / maxBiomeTerrainWeight*/centerBiomeWeightTest/25.0F;
-
-				biomeVariation = biomeVariation / centerBiomeWeight;
-				biomeDepth = biomeDepth / centerBiomeWeight;
+				biomeVariation = biomeVariation / totalBiomeWeight;
+				biomeDepth = biomeDepth / totalBiomeWeight;
 
 				//Small offset for biome depth?
 				double depthPerturbation = this.depthRegion[heightMapIndex] / 8000.0D;
 
 				//TODO: Check this
-				depthPerturbation = 0.0D;
+				//depthPerturbation = 0.0D;
 
 				if (depthPerturbation < 0.0D) {
 					depthPerturbation = -depthPerturbation * 0.3D;
@@ -334,36 +323,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 				++heightMapIndex;
 
-				double depth = (biomeDepth * this.layerHeight) / 256.0D /*- depthPerturbation * 10*/;
+				double depth = (biomeDepth * this.layerHeight) / 256.0D;
 
 				for (int heightMapY = 0; heightMapY < 33; ++heightMapY) {
-					//					double densityOffset = ((double)heightMapY - depth * 32.0D) * 4.0D;
-					//
-					//					/*if (densityOffset < 0.0D) {
-					//						densityOffset *= 4.0D;
-					//					}*/
-					//
-					//					/*double maxGenDensity = 0.0D;
-					//					for(int i = 0; i < octaves - 1; i++) {
-					//						maxGenDensity += 2 * Math.pow(2.0D, i);
-					//					}
-					//					maxGenDensity /= 2.0D;*/
-					//					
-					//					double minDensity = (this.minLimitRegion[noiseIndex] / 65535.0D + 1.0D) / 2.0D * (256.0D - this.layerHeight) + this.layerHeight;
-					//					double maxDensity = (this.maxLimitRegion[noiseIndex] / 65535.0D + 1.0D) / 2.0D * (256.0D - this.layerHeight) + this.layerHeight;
-					//					double mainDensity = (this.mainNoiseRegion[noiseIndex] / 255.0D + 1.0D) / 2.0D;
-					//					
-					//					double clampedDensity = MathHelper.denormalizeClamp(minDensity, maxDensity, mainDensity) / 256.0D / 4.0D - densityOffset;
-					//
-					//					//System.out.println(clampedDensity);
-					//					
-					//					/*if (heightMapY > 29) {
-					//						double multiplier = (double)((float)(heightMapY - 29) / 3.0F);
-					//						clampedDensity = clampedDensity * (1.0D - multiplier) + -10.0D * multiplier;
-					//					}*/
-					//
-					//					this.heightMap[noiseIndex] = clampedDensity;
-
 					double densityOffset = ((double)heightMapY * 8.0D - biomeDepth - (depthPerturbation * biomeVariation / 256.0D)) / 256.0D;
 
 					double maxGenDensity16 = 0.0D;
@@ -388,114 +350,6 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				}
 			}
 		}
-
-		//		this.depthRegion = this.depthNoise.generateNoiseOctaves(this.depthRegion, x, z, 5, 5, (double)this.settings.depthNoiseScaleX, (double)this.settings.depthNoiseScaleZ, (double)this.settings.depthNoiseScaleExponent);
-		//		float f = this.settings.coordinateScale;
-		//		float f1 = this.settings.heightScale;
-		//		this.mainNoiseRegion = this.mainPerlinNoise.generateNoiseOctaves(this.mainNoiseRegion, x, y, z, 5, 33, 5, (double)(f / this.settings.mainNoiseScaleX), (double)(f1 / this.settings.mainNoiseScaleY), (double)(f / this.settings.mainNoiseScaleZ));
-		//		this.minLimitRegion = this.minLimitPerlinNoise.generateNoiseOctaves(this.minLimitRegion, x, y, z, 5, 33, 5, (double)f, (double)f1, (double)f);
-		//		this.maxLimitRegion = this.maxLimitPerlinNoise.generateNoiseOctaves(this.maxLimitRegion, x, y, z, 5, 33, 5, (double)f, (double)f1, (double)f);
-		//		int noiseIndex = 0;
-		//		int heightMapIndex = 0;
-		//
-		//		for (int heightMapX = 0; heightMapX < 5; ++heightMapX) {
-		//			for (int heightMapZ = 0; heightMapZ < 5; ++heightMapZ) {
-		//				float biomeVariation = 0.0F;
-		//				float biomeDepth = 0.0F;
-		//				float centerBiomeWeight = 0.0F;
-		//				Biome centerBiome = this.biomesForGeneration[heightMapX + 2 + (heightMapZ + 2) * 10];
-		//
-		//				//Averages biome height and variation in a 5x5 area
-		//				for (int offsetX = -2; offsetX <= 2; ++offsetX) {
-		//					for (int offsetZ = -2; offsetZ <= 2; ++offsetZ) {
-		//						Biome nearbyBiome = this.biomesForGeneration[heightMapX + offsetX + 2 + (heightMapZ + offsetZ + 2) * 10];
-		//						float nearbyBiomeDepth = this.settings.biomeDepthOffSet + nearbyBiome.getBaseHeight() * this.settings.biomeDepthWeight;
-		//						float nearbyBiomeVariation = this.settings.biomeScaleOffset + nearbyBiome.getHeightVariation() * this.settings.biomeScaleWeight;
-		//
-		//						//No amplified terrain
-		//						/*if (this.terrainType == WorldType.AMPLIFIED && f5 > 0.0F)
-		//                        {
-		//                            f5 = 1.0F + f5 * 2.0F;
-		//                            f6 = 1.0F + f6 * 4.0F;
-		//                        }*/
-		//
-		//						float weight = this.biomeWeights[offsetX + 2 + (offsetZ + 2) * 5] / (nearbyBiomeDepth + 2.0F);
-		//
-		//						if (nearbyBiome.getBaseHeight() > centerBiome.getBaseHeight()) {
-		//							weight /= 2.0F;
-		//						}
-		//
-		//						biomeVariation += nearbyBiomeVariation * weight;
-		//						biomeDepth += nearbyBiomeDepth * weight;
-		//						centerBiomeWeight += weight;
-		//					}
-		//				}
-		//
-		//				biomeVariation = biomeVariation / centerBiomeWeight;
-		//				biomeDepth = biomeDepth / centerBiomeWeight;
-		//				biomeVariation = biomeVariation * 0.9F + 0.1F; //Magic numbers?
-		//				biomeDepth = (biomeDepth * 4.0F - 1.0F) / 8.0F; //More magic numbers??
-		//
-		//				//Small offset for biome depth?
-		//				double depthPerturbation = this.depthRegion[heightMapIndex] / 8000.0D;
-		//
-		//				if (depthPerturbation < 0.0D) {
-		//					depthPerturbation = -depthPerturbation * 0.3D;
-		//				}
-		//
-		//				depthPerturbation = depthPerturbation * 3.0D - 2.0D;
-		//
-		//				if (depthPerturbation < 0.0D) {
-		//					depthPerturbation = depthPerturbation / 2.0D;
-		//
-		//					if (depthPerturbation < -1.0D)
-		//					{
-		//						depthPerturbation = -1.0D;
-		//					}
-		//
-		//					depthPerturbation = depthPerturbation / 1.4D;
-		//					depthPerturbation = depthPerturbation / 2.0D;
-		//				} else {
-		//					if (depthPerturbation > 1.0D) {
-		//						depthPerturbation = 1.0D;
-		//					}
-		//
-		//					depthPerturbation = depthPerturbation / 8.0D;
-		//				}
-		//
-		//				++heightMapIndex;
-		//
-		//				double biomeDepthDouble = (double)biomeDepth;
-		//				biomeDepthDouble = biomeDepthDouble + depthPerturbation * 0.2D;
-		//				biomeDepthDouble = biomeDepthDouble * (double)this.settings.baseSize / 8.0D;
-		//				double depth = (double)this.settings.baseSize + biomeDepthDouble * 4.0D;
-		//
-		//				for (int heightMapY = 0; heightMapY < 33; ++heightMapY) {
-		//					double densityOffset = ((double)heightMapY - depth) * (double)this.settings.stretchY * 128.0D / 256.0D / (double)biomeVariation;
-		//
-		//					if (densityOffset < 0.0D) {
-		//						densityOffset *= 4.0D;
-		//					}
-		//
-		//					double minDensity = this.minLimitRegion[noiseIndex] / (double)this.settings.lowerLimitScale;
-		//					double maxDensity = this.maxLimitRegion[noiseIndex] / (double)this.settings.upperLimitScale;
-		//					double mainDensity = (this.mainNoiseRegion[noiseIndex] / 10.0D + 1.0D) / 2.0D;
-		//					//TODO: Figure out noise ranges
-		//					double tv = this.mainNoiseRegion[noiseIndex];
-		//					if(tv >= 200F || tv <= -200F)
-		//						System.out.println("L: " + tv);
-		//					double clampedDensity = MathHelper.denormalizeClamp(minDensity, maxDensity, mainDensity) - densityOffset;
-		//
-		//					if (heightMapY > 29) {
-		//						double multiplier = (double)((float)(heightMapY - 29) / 3.0F);
-		//						clampedDensity = clampedDensity * (1.0D - multiplier) + -10.0D * multiplier;
-		//					}
-		//
-		//					this.heightMap[noiseIndex] = clampedDensity;
-		//					++noiseIndex;
-		//				}
-		//			}
-		//		}
 	}
 
 	/**
@@ -509,133 +363,38 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, chunkX, chunkZ, primer, this.worldObj))
 			return;
 
-		this.depthBuffer = this.surfaceNoise.getRegion(this.depthBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
+		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
-		/*for (int x = 0; x < 16; ++x) {
-			for (int z = 0; z < 16; ++z) {
-				double baseBlockNoise = this.depthBuffer[z + x * 16];
+		//TODO: This could be optimized by using 4 loops to reduce the array lookups, similar to setBlocksInChunk
+		for(int z = 0; z < 16; z++) {
+			for(int x = 0; x < 16; x++) {
+				float fractionZ = (z % 4) / 4.0F;
+				float fractionX = (x % 4) / 4.0F;
+				int biomeWeightZ = z / 4;
+				int biomeWeightX = x / 4;
+
+				float weightXCZC = this.terrainBiomeWeights[biomeWeightX + biomeWeightZ * 5];
+				float weightXNZC = this.terrainBiomeWeights[biomeWeightX+1 + biomeWeightZ * 5];
+				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ+1) * 5];
+				float weightXNZN = this.terrainBiomeWeights[biomeWeightX+1 + (biomeWeightZ+1) * 5];
+
+				float interpZAxisXC = weightXCZC + (weightXCZN - weightXCZC) * fractionZ;
+				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * fractionZ;
+				float currentVal = interpZAxisXC + (interpZAxisXN - interpZAxisXC) * fractionX;
+
+				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
 				Biome biome = biomesIn[z + x * 16];
 				if(biome instanceof BiomeBetweenlands) {
 					BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
 					generator.initializeGenerators(this.seed);
-					generator.generateNoise(chunkX, chunkZ);
-					generator.replaceBiomeBlocks(chunkX * 16 + x, chunkZ * 16 + z, x, z, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, this.terrainBiomeWeights[x + z * 16]);
+					//X and Z seem to be swapped, don't ask...
+					generator.generateNoise(chunkZ, chunkX);
+					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, currentVal);
 				} else {
 					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
 				}
+
 			}
-		}*/
-
-		//		for (int x = 0; x < 4; ++x) {
-		//			for (int z = 0; z < 4; ++z) {
-		//
-		//				/*//Step along X axis
-		//					double stepXAxisZC = (currentValXNZCYC - currentValXCZCYC) * 0.25D;
-		//					double stepXAxisZN = (currentValXNZNYC - currentValXCZNYC) * 0.25D;
-		//
-		//					//Step X axis
-		//					for (int blockX = 0; blockX < 4; ++blockX) {
-		//						//Step along Z axis
-		//						double stepZAxis = (currentValXCZN - currentValXCZC) * 0.25D;
-		//
-		//						double currentValZC = currentValXCZC - stepZAxis;
-		//
-		//						//Step Z axis
-		//						for (int blockZ = 0; blockZ < 4; ++blockZ) {
-		//							if ((currentValZC += stepZAxis) > 0.0D) {
-		//
-		//							}
-		//						}
-		//					}*/
-		//
-		//				float terrainBiomeWeight = 0.0F;
-		//
-		//				try {
-		//					float currentValXNZC = this.terrainBiomeWeights[x + 1 + z * 16 + 2];
-		//					float currentValXCZC = this.terrainBiomeWeights[x + z * 16 + 2];
-		//					float currentValXNZN = this.terrainBiomeWeights[x + 1 + z * 16 + 16 + 2];
-		//					float currentValXCZN = this.terrainBiomeWeights[x + z * 16 + 16 + 2];
-		//
-		//					float stepXAxisZC = (currentValXNZC - currentValXCZC) * 0.25F;
-		//					float stepXAxisZN = (currentValXNZN - currentValXCZN) * 0.25F;
-		//
-		//					for(int stepX = 0; stepX < 4; ++stepX) {
-		//						float stepZAxis = (currentValXCZN - currentValXCZC) * 0.25F;
-		//
-		//						float currentValZC = currentValXCZC - stepZAxis;
-		//
-		//						for (int stepZ = 0; stepZ < 4; ++stepZ) {
-		//							terrainBiomeWeight = currentValZC += stepZAxis;
-		//
-		//							int blockX = x * 4 + stepX;
-		//							int blockZ = z * 4 + stepZ;
-		//							
-		//							double baseBlockNoise = this.depthBuffer[blockZ + blockX * 16];
-		//							Biome biome = biomesIn[blockZ + blockX * 16];
-		//							if(biome instanceof BiomeBetweenlands) {
-		//								BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
-		//								generator.initializeGenerators(this.seed);
-		//								generator.generateNoise(chunkX, chunkZ);
-		//
-		//								generator.replaceBiomeBlocks(chunkX * 16 + blockX, chunkZ * 16 + blockZ, blockX, blockZ, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, terrainBiomeWeight);
-		//							} else {
-		//								biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + blockX, chunkZ * 16 + blockZ, baseBlockNoise);
-		//							}
-		//						}
-		//					}
-		//				} catch(Exception ex) {
-		//
-		//				}
-		//			}
-		//		}
-
-		try {
-			for(int weightStepX = 0; weightStepX < 4; weightStepX++) {
-				for(int weightStepZ = 0; weightStepZ < 4; weightStepZ++) {
-					float weightXCZC = this.terrainBiomeWeights[weightStepZ + weightStepX * 5];
-					float weightXNZC = this.terrainBiomeWeights[weightStepZ+1 + weightStepX * 5];
-					float weightXCZN = this.terrainBiomeWeights[weightStepZ + (weightStepX+1) * 5];
-					float weightXNZN = this.terrainBiomeWeights[weightStepZ+1 + (weightStepX+1) * 5];
-
-					float stepXAxisXC = (weightXCZN - weightXCZC) * 0.25F;
-					float stepXAxisXN = (weightXNZN - weightXNZC) * 0.25F;
-
-					float currentValXAxisXC = weightXCZC;
-					float currentValXAxisXN = weightXNZC;
-
-					for(int interpStepX = 0; interpStepX < 4; interpStepX++) {
-						float stepZAxis = (currentValXAxisXN - currentValXAxisXC) * 0.25F;
-
-						float currentVal = currentValXAxisXN/* - stepZAxis*/;
-
-						for(int interpStepZ = 0; interpStepZ < 4; interpStepZ++) {
-							int x = weightStepX * 4 + interpStepX;
-							int z = weightStepZ * 4 + interpStepZ;
-
-							double baseBlockNoise = this.depthBuffer[z + x * 16];
-							Biome biome = biomesIn[z + x * 16];
-							if(biome instanceof BiomeBetweenlands) {
-								BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
-								generator.initializeGenerators(this.seed);
-								generator.generateNoise(chunkX, chunkZ);
-								if(currentVal != 1.0D) {
-									System.out.println(currentVal);
-								}
-								generator.replaceBiomeBlocks(chunkX * 16 + x, chunkZ * 16 + z, x, z, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, currentVal);
-							} else {
-								biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
-							}
-							
-							currentVal += stepZAxis;
-						}
-
-						currentValXAxisXC += stepXAxisXC;
-						currentValXAxisXN += stepXAxisXN;
-					}
-				}
-			}
-		} catch(Exception ex) {
-			ex.printStackTrace();
 		}
 	}
 

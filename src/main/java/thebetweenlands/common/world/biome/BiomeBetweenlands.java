@@ -9,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
-import thebetweenlands.common.world.gen.biome.BiomeGenerator;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.util.IWeightProvider;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {

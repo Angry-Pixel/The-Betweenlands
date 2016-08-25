@@ -24,8 +24,10 @@ public abstract class GenLayerBetweenlands extends GenLayer {
 		genLayer = new GenLayerSubBiomes(101L, genLayer);
 		genLayer = GenLayerZoom.magnify(2100L, genLayer, biomeSize);
 
-		genLayer = new GenLayerVoronoiZoom(10L, genLayer);
+		GenLayer indexLayer = new GenLayerVoronoiZoom(10L, genLayer);
+		indexLayer.initWorldGenSeed(seed);
 		genLayer.initWorldGenSeed(seed);
-		return new GenLayer[]{genLayer, genLayer, genLayer};
+		
+		return new GenLayer[]{genLayer, indexLayer, genLayer};
 	}
 }

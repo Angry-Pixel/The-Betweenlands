@@ -1,26 +1,20 @@
 package thebetweenlands.common.world;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.event.FogHandler;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
 import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -37,14 +31,14 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 20;
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
-	
+
 	public float[] originalLightBrightnessTable = new float[16];
-	
+
 	private boolean allowHostiles, allowAnimals;
 	private BetweenlandsWorldData worldData;
 
 	public WorldProviderBetweenlands() {
-		this.hasNoSky = false;
+		this.hasNoSky = true;
 	}
 
 	/**
@@ -77,7 +71,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new ChunkGeneratorBetweenlands(this.worldObj, this.worldObj.getSeed(), BlockRegistry.BETWEENSTONE, BlockRegistry.SWAMP_WATER, LAYER_HEIGHT);
+		return new ChunkGeneratorBetweenlands(this.worldObj, this.worldObj.getSeed(), BlockRegistry.BETWEENSTONE, Blocks.WATER/*BlockRegistry.SWAMP_WATER*/, LAYER_HEIGHT);
 	}
 
 	@Override

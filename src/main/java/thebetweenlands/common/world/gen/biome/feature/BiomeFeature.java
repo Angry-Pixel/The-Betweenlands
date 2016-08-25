@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.biome;
+package thebetweenlands.common.world.gen.biome.feature;
 
 import java.util.Random;
 
@@ -39,7 +39,11 @@ public abstract class BiomeFeature {
 	 * @param biomesForGeneration
 	 * @param pass
 	 */
-	public abstract void replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
+	public abstract void replaceStackBlocks(int x, int z, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeight, int pass);
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeight, int pass);
+	
+	public static double lerp(double val1, double val2, double lerp) {
+		return val2 + (val1 - val2) * lerp;
+	}
 }
