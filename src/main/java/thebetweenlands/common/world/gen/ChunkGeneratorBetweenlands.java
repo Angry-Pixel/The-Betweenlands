@@ -62,8 +62,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private final long seed;
 	private final int layerHeight;
 
-
-
+	private final List<BiomeGenerator> initializedNoiseGenerators = new ArrayList<BiomeGenerator>();
+	private final List<BiomeGenerator> initializedGenerators = new ArrayList<BiomeGenerator>();
 
 
 
@@ -353,8 +353,6 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		}
 	}
 
-	private final List<BiomeGenerator> initializedGenerators = new ArrayList<BiomeGenerator>();
-
 	/**
 	 * Modifies the terrain with biome specific features
 	 * @param chunkX
@@ -369,7 +367,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
 		//TODO: This could be optimized by using 4 loops to reduce the array lookups, similar to setBlocksInChunk
-		this.initializedGenerators.clear();
+		this.initializedNoiseGenerators.clear();
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
 				float fractionZ = (z % 4) / 4.0F;
@@ -390,11 +388,12 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				Biome biome = biomesIn[z + x * 16];
 				if(biome instanceof BiomeBetweenlands) {
 					BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
-					if(!this.initializedGenerators.contains(generator)) {
+					if(!this.initializedGenerators.contains(generator))
 						generator.initializeGenerators(this.seed);
+					if(!this.initializedNoiseGenerators.contains(generator)) {
 						//X and Z seem to be swapped, don't ask...
 						generator.generateNoise(chunkZ, chunkX);
-						this.initializedGenerators.add(generator);
+						this.initializedNoiseGenerators.add(generator);
 					}
 					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, currentVal);
 				} else {

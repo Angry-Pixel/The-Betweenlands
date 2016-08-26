@@ -29,7 +29,6 @@ public class BiomeGenerator {
 	protected boolean hasBaseBlockPatches = true;
 	private NoiseGeneratorPerlin baseBlockLayerVariationNoiseGen;
 	protected double[] baseBlockLayerVariationNoise = new double[256];
-	private boolean isNoiseGenInitialized = false;
 
 	private final List<BiomeFeature> biomeFeatures = new ArrayList<BiomeFeature>();
 
@@ -142,18 +141,9 @@ public class BiomeGenerator {
 		if(this.baseBlockLayerVariationNoiseGen == null) {
 			this.baseBlockLayerVariationNoiseGen = new NoiseGeneratorPerlin(new Random(seed), 4);
 		}
-		this.isNoiseGenInitialized = true;
 		for(BiomeFeature feature : this.biomeFeatures) {
 			feature.initializeGenerators(new Random(seed), this.biome);
 		}
-	}
-
-	/**
-	 * Returns whether the noise generators were already initialized
-	 * @return
-	 */
-	public final boolean isNoiseGenInitialized() {
-		return this.isNoiseGenInitialized;
 	}
 
 	/**
