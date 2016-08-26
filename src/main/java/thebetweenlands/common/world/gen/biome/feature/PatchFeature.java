@@ -49,7 +49,7 @@ public class PatchFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise,
 			ChunkPrimer chunkPrimer, ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			Biome biome, float terrainWeight, int pass) {
+			Biome biome, float terrainWeights[], float terrainWeight, int pass) {
 		if(pass == 1) {
 			if(this.mudNoise[x * 16 + z] * this.mult * terrainWeight + this.offset <= 0) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;

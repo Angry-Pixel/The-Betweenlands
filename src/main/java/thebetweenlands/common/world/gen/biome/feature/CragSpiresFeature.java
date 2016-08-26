@@ -36,7 +36,7 @@ public class CragSpiresFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
 			int pass) {
 		if(pass == 0) {
 			double noise = this.spireNoise[x * 16 + z] / 1.5f * terrainWeight + 2.4f;

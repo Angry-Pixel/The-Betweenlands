@@ -21,6 +21,7 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
+import thebetweenlands.common.world.gen.feature.MapGenCavesBetweenlands;
 
 public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	/**
@@ -53,7 +54,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private final double[] heightMap;
 	private final float[] biomeWeights;
 	private double[] surfaceNoiseBuffer = new double[256];
-	private float[] terrainBiomeWeights = new float[256];
+	private float[] terrainBiomeWeights = new float[25];
+	private float[] interpolatedTerrainBiomeWeights = new float[256];
 	private Biome[] biomesForGeneration;
 	private double[] mainNoiseRegion;
 	private double[] minLimitRegion;
@@ -65,7 +67,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private final List<BiomeGenerator> initializedNoiseGenerators = new ArrayList<BiomeGenerator>();
 	private final List<BiomeGenerator> initializedGenerators = new ArrayList<BiomeGenerator>();
 
-
+	private MapGenCavesBetweenlands caveGenerator;
 
 	public ChunkGeneratorBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
 		this.baseBlock = baseBlock;
@@ -99,15 +101,44 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.scaleNoise = ctx.getScale();
 		this.depthNoise = ctx.getDepth();
 		world.setSeaLevel(layerHeight);
+		this.caveGenerator = new MapGenCavesBetweenlands(seed);
 	}
 
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) {
 		this.rand.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
+
 		ChunkPrimer chunkprimer = new ChunkPrimer();
 		this.setBlocksInChunk(chunkX, chunkZ, chunkprimer);
+
+		//Interpolate biome weights
+		//TODO: This could be optimized by using 4 loops to reduce the array lookups, similar to setBlocksInChunk
+		for(int z = 0; z < 16; z++) {
+			for(int x = 0; x < 16; x++) {
+				float fractionZ = (z % 4) / 4.0F;
+				float fractionX = (x % 4) / 4.0F;
+				int biomeWeightZ = z / 4;
+				int biomeWeightX = x / 4;
+
+				float weightXCZC = this.terrainBiomeWeights[biomeWeightX + biomeWeightZ * 5];
+				float weightXNZC = this.terrainBiomeWeights[biomeWeightX+1 + biomeWeightZ * 5];
+				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ+1) * 5];
+				float weightXNZN = this.terrainBiomeWeights[biomeWeightX+1 + (biomeWeightZ+1) * 5];
+
+				float interpZAxisXC = weightXCZC + (weightXCZN - weightXCZC) * fractionZ;
+				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * fractionZ;
+				float currentVal = interpZAxisXC + (interpZAxisXN - interpZAxisXC) * fractionX;
+
+				this.interpolatedTerrainBiomeWeights[x + z * 16] = currentVal;
+			}
+		}
+
 		this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
 		this.replaceBiomeBlocks(chunkX, chunkZ, chunkprimer, this.biomesForGeneration);
+
+		//Gen caves
+		this.caveGenerator.setBiomeTerrainWeights(this.interpolatedTerrainBiomeWeights);
+		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
 
 		Chunk chunk = new Chunk(this.worldObj, chunkprimer, chunkX, chunkZ);
 		byte[] biomeArray = chunk.getBiomeArray();
@@ -128,6 +159,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 */
 	public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer primer) {
 		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4 - 5, chunkZ * 4 - 5, 15, 15);
+
 		this.generateHeightmap(chunkX * 4, 0, chunkZ * 4);
 
 		//X
@@ -366,23 +398,10 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
-		//TODO: This could be optimized by using 4 loops to reduce the array lookups, similar to setBlocksInChunk
 		this.initializedNoiseGenerators.clear();
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
-				float fractionZ = (z % 4) / 4.0F;
-				float fractionX = (x % 4) / 4.0F;
-				int biomeWeightZ = z / 4;
-				int biomeWeightX = x / 4;
-
-				float weightXCZC = this.terrainBiomeWeights[biomeWeightX + biomeWeightZ * 5];
-				float weightXNZC = this.terrainBiomeWeights[biomeWeightX+1 + biomeWeightZ * 5];
-				float weightXCZN = this.terrainBiomeWeights[biomeWeightX + (biomeWeightZ+1) * 5];
-				float weightXNZN = this.terrainBiomeWeights[biomeWeightX+1 + (biomeWeightZ+1) * 5];
-
-				float interpZAxisXC = weightXCZC + (weightXCZN - weightXCZC) * fractionZ;
-				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * fractionZ;
-				float currentVal = interpZAxisXC + (interpZAxisXN - interpZAxisXC) * fractionX;
+				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
 
 				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
 				Biome biome = biomesIn[z + x * 16];
@@ -395,7 +414,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 						generator.generateNoise(chunkZ, chunkX);
 						this.initializedNoiseGenerators.add(generator);
 					}
-					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, currentVal);
+					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights);
 				} else {
 					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
 				}

@@ -30,7 +30,7 @@ public class AlgaeFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
 			int pass) {
 		if(pass == 1) {
 			if(this.algaeNoise[x * 16 + z] / 1.6f * terrainWeight + 1.8f <= 0) {

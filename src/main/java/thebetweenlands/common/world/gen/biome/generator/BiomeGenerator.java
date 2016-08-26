@@ -174,16 +174,16 @@ public class BiomeGenerator {
 			int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, Random rng, long seed, ChunkPrimer chunkPrimer, 
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			float terrainWeight) {
+			float terrainWeight, float terrainWeights[]) {
 		this.rng.setSeed((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
 
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeight, 0);
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, 0);
 		}
 
-		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeight, 0)) {
+		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, 0)) {
 			return;
 		}
 
@@ -259,10 +259,10 @@ public class BiomeGenerator {
 		}
 
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeight, 1);
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, 1);
 		}
 
-		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeight, 1);
+		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, 1);
 	}
 
 	/**
@@ -290,7 +290,7 @@ public class BiomeGenerator {
 	 */
 	protected boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeight, int pass) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeights[], float terrainWeight, int pass) {
 		return true;
 	}
 }

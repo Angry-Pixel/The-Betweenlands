@@ -41,7 +41,7 @@ public abstract class BiomeFeature {
 	 */
 	public abstract void replaceStackBlocks(int x, int z, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeight, int pass);
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight, int pass);
 	
 	public static double lerp(double val1, double val2, double lerp) {
 		return val2 + (val1 - val2) * lerp;
