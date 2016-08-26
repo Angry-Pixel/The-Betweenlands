@@ -59,12 +59,13 @@ public class FlatLandFeature extends BiomeFeature {
 			int terrainHeight = (int)Math.ceil(Math.abs(noise * (this.waterHeight - lowestBlock)));
 			float riverThreshold = 6.0f * (terrainHeight + 2);
 			double riverPercentage = 1.0D - (riverNoise / riverThreshold);
+			float weight = (Math.min(terrainWeight + 0.5F, 1.0F) - 0.5F) * 2.0F;
 			if(riverNoise < riverThreshold) {
-				for(int y = lowestBlock; y < lerp((this.waterHeight + terrainHeight - riverPercentage * (terrainHeight + ((riverThreshold - riverNoise) / 16.0D))), lowestBlock, Math.sqrt(terrainWeight)); y++) {
+				for(int y = lowestBlock; y < lerp((this.waterHeight + terrainHeight - riverPercentage * (terrainHeight + ((riverThreshold - riverNoise) / 16.0D))), lowestBlock, weight); y++) {
 					chunkPrimer.setBlockState(x, y, z, chunkGenerator.baseBlockState);
 				}
 			} else {
-				for(int y = lowestBlock; y < lerp((this.waterHeight + terrainHeight), lowestBlock, Math.sqrt(terrainWeight)); y++) {
+				for(int y = lowestBlock; y < lerp((this.waterHeight + terrainHeight), lowestBlock, weight); y++) {
 					chunkPrimer.setBlockState(x, y, z, chunkGenerator.baseBlockState);
 				}
 			}

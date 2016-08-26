@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -207,7 +208,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 							for (int blockZ = 0; blockZ < 4; ++blockZ) {
 								if ((currentValZC += stepZAxis) > 0.0D) {
 									primer.setBlockState(heightMapX * 4 + blockX, heightMapY * 8 + blockY, heightMapZ * 4 + blockZ, this.baseBlockState);
-								} else if (heightMapY * 8 + blockY < this.layerHeight) {
+								} else if (heightMapY * 8 + blockY <= this.layerHeight) {
 									primer.setBlockState(heightMapX * 4 + blockX, heightMapY * 8 + blockY, heightMapZ * 4 + blockZ, this.layerBlockState);
 								}
 							}
@@ -352,6 +353,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		}
 	}
 
+	private final List<BiomeGenerator> initializedGenerators = new ArrayList<BiomeGenerator>();
+
 	/**
 	 * Modifies the terrain with biome specific features
 	 * @param chunkX
@@ -366,6 +369,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
 		//TODO: This could be optimized by using 4 loops to reduce the array lookups, similar to setBlocksInChunk
+		this.initializedGenerators.clear();
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
 				float fractionZ = (z % 4) / 4.0F;
@@ -386,9 +390,12 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				Biome biome = biomesIn[z + x * 16];
 				if(biome instanceof BiomeBetweenlands) {
 					BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
-					generator.initializeGenerators(this.seed);
-					//X and Z seem to be swapped, don't ask...
-					generator.generateNoise(chunkZ, chunkX);
+					if(!this.initializedGenerators.contains(generator)) {
+						generator.initializeGenerators(this.seed);
+						//X and Z seem to be swapped, don't ask...
+						generator.generateNoise(chunkZ, chunkX);
+						this.initializedGenerators.add(generator);
+					}
 					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, currentVal);
 				} else {
 					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);

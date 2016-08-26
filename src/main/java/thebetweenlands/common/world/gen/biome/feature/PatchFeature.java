@@ -51,7 +51,7 @@ public class PatchFeature extends BiomeFeature {
 			ChunkPrimer chunkPrimer, ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
 			Biome biome, float terrainWeight, int pass) {
 		if(pass == 1) {
-			if(this.mudNoise[x * 16 + z] * this.mult + this.offset <= 0) {
+			if(this.mudNoise[x * 16 + z] * this.mult * terrainWeight + this.offset <= 0) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;
 				for(int yo = 0; yo < WorldProviderBetweenlands.LAYER_HEIGHT + 20; yo++) {
 					Block currentBlock = chunkPrimer.getBlockState(x, y - yo, z).getBlock();
