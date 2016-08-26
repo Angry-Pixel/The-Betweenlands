@@ -11,7 +11,7 @@ import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 
 public class DeepWatersFeature extends BiomeFeature {
 	private NoiseGeneratorPerlin islandNoiseGen;
-	private double[] islandNoise = new double[256];
+	private double[] terrainNoise = new double[256];
 
 	@Override
 	public void initializeGenerators(Random rng, Biome biome) {
@@ -21,7 +21,7 @@ public class DeepWatersFeature extends BiomeFeature {
 	@Override
 	public void generateNoise(int chunkX, int chunkZ,
 			Biome biome) {
-		this.islandNoise = this.islandNoiseGen.getRegion(this.islandNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.05D * 1.0D, 0.05D * 1.0D, 1.0D);
+		this.terrainNoise = this.islandNoiseGen.getRegion(this.terrainNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.05D * 1.0D, 0.05D * 1.0D, 1.0D);
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class DeepWatersFeature extends BiomeFeature {
 					break;
 				}
 			}
-			double noise = this.islandNoise[x * 16 + z] / 12.0f;
+			double noise = this.terrainNoise[x * 16 + z] / 12.0f;
 			for(int y = lowestBlock; y < lerp(layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) - 2, lowestBlock, terrainWeight); y++) {
 				chunkPrimer.setBlockState(x, y, z, chunkGenerator.baseBlockState);
 			}

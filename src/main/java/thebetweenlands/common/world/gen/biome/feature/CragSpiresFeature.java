@@ -36,7 +36,7 @@ public class CragSpiresFeature extends BiomeFeature {
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeight,
 			int pass) {
 		if(pass == 0) {
-			double noise = this.spireNoise[x * 16 + z] / 1.5f + 2.4f;
+			double noise = this.spireNoise[x * 16 + z] / 1.5f * terrainWeight + 2.4f;
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			if(chunkPrimer.getBlockState(x, layerHeight, z).getBlock() != chunkGenerator.layerBlock) {
 				return;
@@ -53,7 +53,7 @@ public class CragSpiresFeature extends BiomeFeature {
 			if(WorldProviderBetweenlands.LAYER_HEIGHT - lowestBlock < 3) {
 				return;
 			}
-			if(-noise * 12 * terrainWeight >= 1) {
+			if(-noise * 12 >= 1) {
 				for(int y = lowestBlock; y < layerHeight; y++) {
 					chunkPrimer.setBlockState(x, y, z, this.cragrockDefault);
 				}
@@ -76,7 +76,7 @@ public class CragSpiresFeature extends BiomeFeature {
 						int nz = z + zo;
 						nx = nx < 0 ? 0 : (nx > 15 ? 15 : nx);
 						nz = nz < 0 ? 0 : (nz > 15 ? 15 : nz);
-						double sNoise = this.spireNoise[nx * 16 + nz] / 1.5f + 2.4f;
+						double sNoise = this.spireNoise[nx * 16 + nz] * terrainWeight / 1.5f + 2.4f;
 						if(-sNoise * 12 >= 1) {
 							validSpire = true;
 							break;
@@ -85,7 +85,7 @@ public class CragSpiresFeature extends BiomeFeature {
 				}
 				if(validSpire) {
 					int rockHeight = (int)Math.floor(-noise * 12);
-					for(int y = lowestBlock; y < lerp(layerHeight + rockHeight, lowestBlock, terrainWeight); y++) {
+					for(int y = lowestBlock; y < layerHeight + rockHeight; y++) {
 						chunkPrimer.setBlockState(x, y, z, this.cragrockDefault);
 					}
 				}
