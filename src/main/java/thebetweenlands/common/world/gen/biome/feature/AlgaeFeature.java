@@ -11,6 +11,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 
+/**
+ * Adds algae to water surfaces
+ */
 public class AlgaeFeature extends BiomeFeature {
 	private NoiseGeneratorPerlin algaeNoiseGen;
 	private double[] algaeNoise = new double[256];

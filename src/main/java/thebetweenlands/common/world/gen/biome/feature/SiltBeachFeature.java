@@ -11,6 +11,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 
+/**
+ * Adds silt beaches to low areas close to water
+ */
 public class SiltBeachFeature extends BiomeFeature {
 	private NoiseGeneratorPerlin siltNoiseGen;
 	private double[] siltNoise = new double[256];

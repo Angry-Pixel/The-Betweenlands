@@ -13,6 +13,9 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 
+/**
+ * Adds coarse, corroded islands to larger water bodies
+ */
 public class CoarseIslandsFeature extends BiomeFeature {
 	private final IBlockState cragrockDefault = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.DEFAULT);
 	private final IBlockState cragrockMossy1 = BlockRegistry.CRAGROCK.getDefaultState().withProperty(BlockCragrock.VARIANT, EnumCragrockType.MOSSY_1);
@@ -43,11 +46,11 @@ public class CoarseIslandsFeature extends BiomeFeature {
 		if(pass == 0) {
 			double islandNoise = this.islandNoise[x * 16 + z] / 0.9f * terrainWeight + 2.1f;
 			double cragNoise = this.cragNoise[x * 16 + z] / 2.1f + 2.0f;
-			boolean isCrag = cragNoise * islandNoise <= 0;
+			boolean isCrag = cragNoise <= 0;
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			if(islandNoise <= 0 && chunkPrimer.getBlockState(x, layerHeight, z).getBlock() == chunkGenerator.layerBlock) {
 				int minHeight = 1;
-				int heightVariation = 5;
+				int heightVariation = 4;
 				for(int yOff = 0; yOff < layerHeight; yOff++) {
 					int y = layerHeight - yOff;
 					Block currentBlock = chunkPrimer.getBlockState(x, y, z).getBlock();
@@ -61,7 +64,8 @@ public class CoarseIslandsFeature extends BiomeFeature {
 						break;
 					}
 				}
-				int maxHeight = (int) Math.ceil(-islandNoise / 4.0f * heightVariation) + (isCrag ? 1 : 0);
+				int islandHeight = (int) Math.ceil(-islandNoise / 4.0f * heightVariation);
+				int maxHeight = islandHeight + (isCrag && -islandNoise / 4.0F * heightVariation >= 1.25F ? 1 : 0);
 				for(int yOff = 0; yOff < maxHeight; yOff++) {
 					int y = minHeight + layerHeight + yOff;
 					if(isCrag) {
@@ -98,7 +102,7 @@ public class CoarseIslandsFeature extends BiomeFeature {
 						break;
 					}
 				}
-				for(int y = lowestBlock; y < lerp(layerHeight - (layerHeight - lowestBlock) / 7.5f, lowestBlock, terrainWeight); y++) {
+				for(int y = lowestBlock; y < lerp(layerHeight - (layerHeight - lowestBlock) / 3.5f, lowestBlock, terrainWeight); y++) {
 					chunkPrimer.setBlockState(x, y, z, chunkGenerator.baseBlockState);
 				}
 			}
