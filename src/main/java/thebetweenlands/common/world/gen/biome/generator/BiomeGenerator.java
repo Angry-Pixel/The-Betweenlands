@@ -13,6 +13,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.feature.BiomeFeature;
 
 public class BiomeGenerator {
@@ -36,8 +37,28 @@ public class BiomeGenerator {
 	protected IChunkGenerator chunkGenerator;
 	protected Biome[] biomesForGeneration;
 
+	protected BiomeDecoratorBetweenlands decorator = new BiomeDecoratorBetweenlands();
+
 	public BiomeGenerator(Biome biome) {
 		this.biome = biome;
+	}
+
+	/**
+	 * Sets the biome decorator
+	 * @param decorator
+	 * @return
+	 */
+	public BiomeGenerator setDecorator(BiomeDecoratorBetweenlands decorator) {
+		this.decorator = decorator;
+		return this;
+	}
+
+	/**
+	 * Returns the biome decorator
+	 * @return
+	 */
+	public BiomeDecoratorBetweenlands getDecorator() {
+		return this.decorator;
 	}
 
 	/**

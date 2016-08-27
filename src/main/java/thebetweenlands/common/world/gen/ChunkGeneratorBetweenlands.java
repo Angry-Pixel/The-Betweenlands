@@ -7,11 +7,13 @@ import java.util.Random;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldEntitySpawner;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
@@ -19,7 +21,10 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
+import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.gen.feature.MapGenCavesBetweenlands;
 
@@ -425,7 +430,34 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 	@Override
 	public void populate(int x, int z) {
+		BlockFalling.fallInstantly = true;
+		int bx = x * 16;
+		int bz = z * 16;
+		BlockPos blockPos = new BlockPos(bx, 0, bz);
+		Biome biome = this.worldObj.getBiomeGenForCoords(blockPos.add(16, 0, 16));
+		this.rand.setSeed(this.worldObj.getSeed());
+		long seedX = this.rand.nextLong() / 2L * 2L + 1L;
+		long seedZ = this.rand.nextLong() / 2L * 2L + 1L;
+		this.rand.setSeed((long)x * seedX + (long)z * seedZ ^ this.worldObj.getSeed());
 
+		ForgeEventFactory.onChunkPopulate(true, this, this.worldObj, this.rand, x, z, false);
+
+		if(biome instanceof BiomeBetweenlands) {
+			BiomeDecoratorBetweenlands decorator = ((BiomeBetweenlands)biome).getBiomeGenerator().getDecorator();
+			if(decorator != null) {
+				decorator.decorate(this.worldObj, this.rand, bx, bz);
+			}
+			MobSpawnHandler.INSTANCE.populateChunk(this.worldObj, x, z);
+		} else {
+			biome.decorate(this.worldObj, this.rand, new BlockPos(bx, 0, bz));
+			if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.worldObj, this.rand, x, z, false, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS)) {
+				WorldEntitySpawner.performWorldGenSpawning(this.worldObj, biome, bx + 8, bz + 8, 16, 16, this.rand);
+			}
+		}
+
+		ForgeEventFactory.onChunkPopulate(false, this, this.worldObj, this.rand, x, z, false);
+
+		BlockFalling.fallInstantly = false;
 	}
 
 	@Override

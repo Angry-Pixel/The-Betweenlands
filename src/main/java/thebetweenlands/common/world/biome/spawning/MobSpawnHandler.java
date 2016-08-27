@@ -27,7 +27,6 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.event.ForgeEventFactory;
-import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -274,9 +273,7 @@ public class MobSpawnHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public void onChunkPopulate(PopulateChunkEvent.Post event) {
-		World world = event.getWorld();
+	public void populateChunk(World world, int chunkX, int chunkZ) {
 		if(world == null || world.provider.getDimension() != ConfigHandler.dimensionId)
 			return;
 
@@ -287,7 +284,7 @@ public class MobSpawnHandler {
 			//long start = System.nanoTime();
 			int spawnedEntities = 0;
 			for(int i = 0; i < CHUNK_GEN_SPAWN_RUNS; i++) {
-				spawnedEntities += this.populateChunk(world, new ChunkPos(event.getChunkX(), event.getChunkZ()), spawnHostiles, spawnAnimals, false, true,
+				spawnedEntities += this.populateChunk(world, new ChunkPos(chunkX, chunkZ), spawnHostiles, spawnAnimals, false, true,
 						SPAWNING_ATTEMPTS_PER_CHUNK, 60, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT, 1.0F);
 			}
 			//System.out.println("Spawned: " + spawnedEntities + " Time: " + (System.nanoTime() - start) / 1000000.0F);
