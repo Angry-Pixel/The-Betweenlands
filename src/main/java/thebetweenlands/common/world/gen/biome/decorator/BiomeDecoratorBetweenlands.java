@@ -9,12 +9,14 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
 
 public class BiomeDecoratorBetweenlands {
 	private World world;
 	private int x, y, z;
 	private Random rand;
+	private ChunkGeneratorBetweenlands generator;
 
 	/**
 	 * Returns a random X/Z offset for generating a feature with a padding of 8 blocks
@@ -48,7 +50,7 @@ public class BiomeDecoratorBetweenlands {
 	public final BlockPos getRandomPos() {
 		return new BlockPos(this.x + this.offsetXZ(), this.y + this.offsetY(), this.z + this.offsetXZ());
 	}
-	
+
 	/**
 	 * Returns a random position with a custom padding
 	 * @param padding Block padding from chunk borders, from 0 to 15
@@ -57,7 +59,7 @@ public class BiomeDecoratorBetweenlands {
 	public final BlockPos getRandomPos(int padding) {
 		return new BlockPos(this.x + this.offsetXZ(padding), this.y + this.offsetY(), this.z + this.offsetXZ(padding));
 	}
-	
+
 	/**
 	 * Returns a random X position with a padding of 8 blocks
 	 * @return
@@ -65,7 +67,7 @@ public class BiomeDecoratorBetweenlands {
 	public final int getRandomPosX() {
 		return this.x + this.offsetXZ();
 	}
-	
+
 	/**
 	 * Returns a random X position with a custom padding
 	 * @param padding Block padding from chunk borders, from 0 to 15
@@ -74,7 +76,7 @@ public class BiomeDecoratorBetweenlands {
 	public final int getRandomPosX(int padding) {
 		return this.x + this.offsetXZ(padding);
 	}
-	
+
 	/**
 	 * Returns a random Z position with a padding of 8 blocks
 	 * @return
@@ -82,7 +84,7 @@ public class BiomeDecoratorBetweenlands {
 	public final int getRandomPosZ() {
 		return this.z + this.offsetXZ();
 	}
-	
+
 	/**
 	 * Returns a random Z position with a custom padding
 	 * @param padding Block padding from chunk borders, from 0 to 15
@@ -99,9 +101,13 @@ public class BiomeDecoratorBetweenlands {
 	public final int getRandomPosY() {
 		return this.y + this.offsetY();
 	}
-	
+
 	public final World getWorld() {
 		return this.world;
+	}
+
+	public final ChunkGeneratorBetweenlands getChunkGenerator() {
+		return this.generator;
 	}
 
 	public final int getX() {
@@ -127,15 +133,19 @@ public class BiomeDecoratorBetweenlands {
 	 * @param x
 	 * @param z
 	 */
-	public void decorate(World world, Random rand, int x, int z) {
+	public void decorate(World world, ChunkGeneratorBetweenlands generator, Random rand, int x, int z) {
 		this.x = x;
 		this.z = z;
 		this.y = world.getHeight(new BlockPos(x, 0, z)).getY();
 		this.rand = rand;
 		this.world = world;
+		this.generator = generator;
 
 		this.generateOres();
 		this.generate(DecorationHelper::populateCaves);
+		//TODO: Implement missing generators
+		//this.generate(5, DecorationHelper::generateStagnantWaterPool);
+		//this.generate(100, DecorationHelper::generateUndergroundRuins);
 	}
 
 	/**

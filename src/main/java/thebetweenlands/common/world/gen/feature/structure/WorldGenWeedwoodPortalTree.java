@@ -10,7 +10,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class WorldGenWeedWoodPortalTree extends WorldGenerator {
+public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 
 	private IBlockState bark;
 	private IBlockState wood;

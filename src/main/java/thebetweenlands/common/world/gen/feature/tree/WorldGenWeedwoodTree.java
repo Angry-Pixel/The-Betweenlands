@@ -11,7 +11,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.plant.BlockVineBL;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class WorldGenWeedWoodTree extends WorldGenerator {
+public class WorldGenWeedwoodTree extends WorldGenerator {
 	private IBlockState logX, logY, logZ, bark;
 	private IBlockState  wood;
 	private IBlockState  leaves;

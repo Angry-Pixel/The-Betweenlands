@@ -22,7 +22,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedWoodTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 
 public class BlockSaplingBetweenlands extends BlockSapling implements IStateMappedBlock  {
 
@@ -85,7 +85,7 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 
 		switch (TREE_TYPE) {
 			case "WEEDWOOD":
-				worldGen = new WorldGenWeedWoodTree();
+				worldGen = new WorldGenWeedwoodTree();
 				break;
 			case "SAP":
 				worldGen = new WorldGenSapTree();

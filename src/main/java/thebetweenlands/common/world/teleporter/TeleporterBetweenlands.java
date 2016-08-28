@@ -19,7 +19,7 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedWoodPortalTree;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedwoodPortalTree;
 import thebetweenlands.util.config.ConfigHandler;
 
 
@@ -119,13 +119,13 @@ public final class TeleporterBetweenlands extends Teleporter {
 					Block block = worldServerInstance.getBlockState(new BlockPos(x, y, z)).getBlock();
 					if (block != Blocks.AIR) {
 						if (canGenerate(worldServerInstance, x, y, z)) {
-							new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, new BlockPos(x, y, z));
+							new WorldGenWeedwoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, new BlockPos(x, y, z));
 							entity.setLocationAndAngles(x, y + 2, z, entity.rotationYaw, entity.rotationPitch);
 							return true;
 						} else {
 							for (int yy = y; yy <= maxPortalSpawnHeight; yy++) {
 								if (canGenerate(worldServerInstance, x, yy, z)) {
-									new WorldGenWeedWoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, new BlockPos(x, yy, z));
+									new WorldGenWeedwoodPortalTree().generate(worldServerInstance, worldServerInstance.rand, new BlockPos(x, yy, z));
 									entity.setLocationAndAngles(x, yy + 2, z, entity.rotationYaw, entity.rotationPitch);
 									return true;
 								}

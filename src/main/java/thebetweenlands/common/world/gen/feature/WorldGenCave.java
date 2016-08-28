@@ -4,6 +4,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public abstract class WorldGenCave extends WorldGenerator {
 	protected final EnumFacing[] directions = { EnumFacing.SOUTH, EnumFacing.WEST, EnumFacing.NORTH, EnumFacing.EAST };
@@ -33,7 +34,7 @@ public abstract class WorldGenCave extends WorldGenerator {
 	}
 
 	protected boolean isValidBlock(World world, BlockPos pos) {
-		return world.getBlockState(pos).isNormalCube();
+		return SurfaceType.UNDERGROUND.matches(world.getBlockState(pos));
 	}
 
 

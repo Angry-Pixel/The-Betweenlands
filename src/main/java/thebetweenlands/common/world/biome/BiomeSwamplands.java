@@ -2,6 +2,7 @@ package thebetweenlands.common.world.biome;
 
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorSwamplands;
 import thebetweenlands.common.world.gen.biome.feature.AlgaeFeature;
 import thebetweenlands.common.world.gen.biome.feature.FlatLandFeature;
 import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
@@ -19,7 +20,8 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D))
 		.addFeature(new AlgaeFeature())
-		.addFeature(new SiltBeachFeature(0.98F));
+		.addFeature(new SiltBeachFeature(0.98F))
+		.setDecorator(new BiomeDecoratorSwamplands());
 	}
 
 }

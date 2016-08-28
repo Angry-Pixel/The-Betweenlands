@@ -21,6 +21,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
@@ -74,6 +75,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 	private MapGenCavesBetweenlands caveGenerator;
 
+	private NoiseGeneratorSimplex treeNoise;
+	private NoiseGeneratorSimplex speleothemDensityNoise;
+
 	public ChunkGeneratorBetweenlands(World world, long seed, Block baseBlock, Block layerBlock, int layerHeight) {
 		this.baseBlock = baseBlock;
 		this.baseBlockState = baseBlock.getDefaultState();
@@ -97,7 +101,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.surfaceNoise = new NoiseGeneratorPerlin(this.rand, 4);
 		this.scaleNoise = new NoiseGeneratorOctaves(this.rand, 10);
 		this.depthNoise = new NoiseGeneratorOctaves(this.rand, 16);
-		ContextBetweenlands ctx = new ContextBetweenlands(minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise);
+		this.treeNoise = new NoiseGeneratorSimplex(this.rand);
+		this.speleothemDensityNoise = new NoiseGeneratorSimplex(this.rand);
+		ContextBetweenlands ctx = new ContextBetweenlands(minLimitPerlinNoise, maxLimitPerlinNoise, mainPerlinNoise, surfaceNoise, scaleNoise, depthNoise, treeNoise, speleothemDensityNoise);
 		ctx = net.minecraftforge.event.terraingen.TerrainGen.getModdedNoiseGenerators(world, this.rand, ctx);
 		this.minLimitPerlinNoise = ctx.getLPerlin1();
 		this.maxLimitPerlinNoise = ctx.getLPerlin2();
@@ -105,6 +111,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.surfaceNoise = ctx.getSurfaceNoise();
 		this.scaleNoise = ctx.getScale();
 		this.depthNoise = ctx.getDepth();
+		this.treeNoise = ctx.getTreeNoise();
+		this.speleothemDensityNoise = ctx.getSpeleothemDensityNoise();
 		world.setSeaLevel(layerHeight);
 		this.caveGenerator = new MapGenCavesBetweenlands(seed);
 	}
@@ -445,7 +453,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		if(biome instanceof BiomeBetweenlands) {
 			BiomeDecoratorBetweenlands decorator = ((BiomeBetweenlands)biome).getBiomeGenerator().getDecorator();
 			if(decorator != null) {
-				decorator.decorate(this.worldObj, this.rand, bx, bz);
+				decorator.decorate(this.worldObj, this, this.rand, bx, bz);
 			}
 			MobSpawnHandler.INSTANCE.populateChunk(this.worldObj, x, z);
 		} else {
@@ -481,5 +489,13 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	@Override
 	public void recreateStructures(Chunk chunkIn, int x, int z) {
 		//No structures
+	}
+
+	public double evalTreeNoise(double x, double z) {
+		return this.treeNoise.getValue(x, z);
+	}
+
+	public double evalSpeleothemDensityNoise(double x, double z) {
+		return this.speleothemDensityNoise.getValue(x, z);
 	}
 }
