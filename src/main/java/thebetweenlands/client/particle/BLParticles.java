@@ -12,6 +12,7 @@ import thebetweenlands.client.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.particle.entity.ParticleBug;
+import thebetweenlands.client.particle.entity.ParticleCaveWaterDrip;
 import thebetweenlands.client.particle.entity.ParticleDruidCasting;
 import thebetweenlands.client.particle.entity.ParticleFish;
 import thebetweenlands.client.particle.entity.ParticleMoth;
@@ -79,7 +80,8 @@ public enum BLParticles {
 	SPLASH_TAR(new ParticleBreakingBL.Factory()
 			.getBaseArgsBuilder()
 			.withColor(0, 0, 0, 1.0F)
-			.buildBaseArgs());
+			.buildBaseArgs()),
+	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory());
 
 
 

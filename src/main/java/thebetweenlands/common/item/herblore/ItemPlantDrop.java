@@ -87,7 +87,7 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		SOFT_RUSH_LEAVES(26),
 		SUNDEW_HEAD(27),
 		SWAMP_TALL_GRASS_BLADES(28),
-		CAVE_MOSS(29),
+		CAVE_MOSS_ITEM(29),
 		MOSS(30),
 		MILKWEED_ITEM(31),
 		HANGER(32),

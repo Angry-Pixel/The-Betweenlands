@@ -26,9 +26,9 @@ import thebetweenlands.util.config.ConfigHandler;
 public class WorldProviderBetweenlands extends WorldProvider {
 	public static final int LAYER_HEIGHT = 120;
 
-	public static final int CAVE_WATER_HEIGHT = 20;
+	public static final int CAVE_WATER_HEIGHT = 15;
 
-	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 20;
+	public static final int PITSTONE_HEIGHT = CAVE_WATER_HEIGHT + 30;
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
 

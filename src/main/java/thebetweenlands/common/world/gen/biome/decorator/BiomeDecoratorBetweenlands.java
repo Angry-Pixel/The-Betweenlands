@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
 import java.util.Random;
+import java.util.function.Function;
 
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -11,34 +12,146 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
 
 public class BiomeDecoratorBetweenlands {
-	protected World world;
-	protected int x, z;
-	protected Random rand;
+	private World world;
+	private int x, y, z;
+	private Random rand;
 
+	/**
+	 * Returns a random X/Z offset for generating a feature with a padding of 8 blocks
+	 * @return
+	 */
 	public final int offsetXZ() {
 		return this.rand.nextInt(16) + 8;
 	}
 
+	/**
+	 * Returns a random X/Z offset for generating a feature with a custom padding
+	 * @param padding Block padding from chunk borders, from 0 to 15
+	 * @return
+	 */
+	public final int offsetXZ(int padding) {
+		return this.rand.nextInt(32 - padding * 2) + padding;
+	}
+
+	/**
+	 * Returns a random Y offset in the range of -8 to 8
+	 * @return
+	 */
+	public final int offsetY() {
+		return this.rand.nextInt(16) - 8;
+	}
+
+	/**
+	 * Returns a random position with a padding of 8 blocks
+	 * @return
+	 */
+	public final BlockPos getRandomPos() {
+		return new BlockPos(this.x + this.offsetXZ(), this.y + this.offsetY(), this.z + this.offsetXZ());
+	}
+	
+	/**
+	 * Returns a random position with a custom padding
+	 * @param padding Block padding from chunk borders, from 0 to 15
+	 * @return
+	 */
+	public final BlockPos getRandomPos(int padding) {
+		return new BlockPos(this.x + this.offsetXZ(padding), this.y + this.offsetY(), this.z + this.offsetXZ(padding));
+	}
+	
+	/**
+	 * Returns a random X position with a padding of 8 blocks
+	 * @return
+	 */
+	public final int getRandomPosX() {
+		return this.x + this.offsetXZ();
+	}
+	
+	/**
+	 * Returns a random X position with a custom padding
+	 * @param padding Block padding from chunk borders, from 0 to 15
+	 * @return
+	 */
+	public final int getRandomPosX(int padding) {
+		return this.x + this.offsetXZ(padding);
+	}
+	
+	/**
+	 * Returns a random Z position with a padding of 8 blocks
+	 * @return
+	 */
+	public final int getRandomPosZ() {
+		return this.z + this.offsetXZ();
+	}
+	
+	/**
+	 * Returns a random Z position with a custom padding
+	 * @param padding Block padding from chunk borders, from 0 to 15
+	 * @return
+	 */
+	public final int getRandomPosZ(int padding) {
+		return this.z + this.offsetXZ(padding);
+	}
+
+	/**
+	 * Returns a random Y position
+	 * @return
+	 */
+	public final int getRandomPosY() {
+		return this.y + this.offsetY();
+	}
+	
+	public final World getWorld() {
+		return this.world;
+	}
+
+	public final int getX() {
+		return this.x;
+	}
+
+	public final int getY() {
+		return this.y;
+	}
+
+	public final int getZ() {
+		return this.z;
+	}
+
+	public final Random getRand() {
+		return this.rand;
+	}
+
+	/**
+	 * Decorates the specified chunk
+	 * @param world
+	 * @param rand
+	 * @param x
+	 * @param z
+	 */
 	public void decorate(World world, Random rand, int x, int z) {
 		this.x = x;
 		this.z = z;
+		this.y = world.getHeight(new BlockPos(x, 0, z)).getY();
 		this.rand = rand;
 		this.world = world;
 
-		//TODO: Implement ore gen
-		//this.generateOres();
+		this.generateOres();
+		this.generate(DecorationHelper::populateCaves);
 	}
 
+	/**
+	 * Generates the default ores
+	 */
 	protected void generateOres() {
-		this.generateOre(22, OreGens.SULFUR, 0, 128);
-		this.generateOre(10, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);	
-		this.generateOre(10, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(1, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(3, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(4, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(200, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		//TODO: Tweak these values for new terrain height
+		this.generateOre(22, 10, OreGens.SULFUR, 0, 128);
+		this.generateOre(10, 8, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(10, 8, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(10, 8, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);	
+		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(0.2F, 14, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(3, 8, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(4, 8, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(200, 8, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
 		//Generate middle gems
 		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
@@ -76,12 +189,50 @@ public class BiomeDecoratorBetweenlands {
 		}
 	}
 
-	protected void generateOre(int tries, WorldGenerator oreGen, int minY, int maxY) {
+	/**
+	 * Attempts to generate an ore vein
+	 * @param tries
+	 * @param padding
+	 * @param oreGen
+	 * @param minY
+	 * @param maxY
+	 */
+	protected void generateOre(float tries, int padding, WorldGenerator oreGen, int minY, int maxY) {
+		tries = tries >= 1.0F ? tries : (this.rand.nextFloat() <= tries ? 1 : 0);
 		for (int i = 0; i < tries; i++) {
-			int xx = this.x + this.offsetXZ();
-			int yy = this.rand.nextInt(maxY) + this.rand.nextInt(maxY) + (minY - maxY);
-			int zz = this.z + this.offsetXZ();
+			int xx = this.x + this.offsetXZ(padding);
+			int yy = minY + this.rand.nextInt(maxY - minY);
+			int zz = this.z + this.offsetXZ(padding);
 			oreGen.generate(this.world, this.rand, new BlockPos(xx, yy, zz));
 		}
+	}
+
+	/**
+	 * Tries to generate the specified feature
+	 * @param tries How many attempts should be run. If this value is < 1 it is used as a probability
+	 * @param generator
+	 * @return
+	 */
+	public boolean generate(float tries, Function<BiomeDecoratorBetweenlands, Boolean> generator) {
+		boolean generated = false;
+		if(tries < 1.0F) {
+			if(this.rand.nextFloat() <= tries)
+				generated = generator.apply(this);
+		} else {
+			for(int i = 0; i < tries; i++) {
+				if(generator.apply(this))
+					generated = true;
+			}
+		}
+		return generated;
+	}
+
+	/**
+	 * Tries to generate the specified feature
+	 * @param generator
+	 * @return
+	 */
+	public boolean generate(Function<BiomeDecoratorBetweenlands, Boolean> generator) {
+		return this.generate(1, generator);
 	}
 }

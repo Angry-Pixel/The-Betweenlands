@@ -46,6 +46,7 @@ import thebetweenlands.common.block.plant.BlockBogBeanStalk;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
 import thebetweenlands.common.block.plant.BlockCaveGrass;
+import thebetweenlands.common.block.plant.BlockCaveMoss;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
@@ -351,7 +352,7 @@ public class BlockRegistry {
 	public static final Block NETTLE = new BlockNettle().setSickleDrop(EnumItemPlantDrop.NETTLE_LEAF.create(1));
 	public static final Block NETTLE_FLOWERED = new BlockNettleFlowered().setSickleDrop(EnumItemPlantDrop.NETTLE_LEAF.create(1));
 	public static final Block PICKEREL_WEED = new BlockPlant().setSickleDrop(EnumItemPlantDrop.PICKEREL_WEED_FLOWER.create(1));
-	public static final Block PHRAGMITES = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PHRAGMITE_STEMS.create(1));
+	public static final BlockDoublePlantBL PHRAGMITES = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PHRAGMITE_STEMS.create(1));
 	public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1));
 	public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1));
 	public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1));
@@ -363,6 +364,7 @@ public class BlockRegistry {
 	public static final Block DEAD_WEEDWOOD_BUSH = new BlockPlant().setSickleDrop(EnumItemMisc.WEEDWOOD_STICK.create(1));
 	public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
 	public static final Block HOLLOW_LOG = new BlockHollowLog();
+	public static final Block CAVE_MOSS = new BlockCaveMoss();
 
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();

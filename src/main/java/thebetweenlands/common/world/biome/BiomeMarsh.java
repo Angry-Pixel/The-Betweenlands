@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.biome;
 
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorMarsh;
 import thebetweenlands.common.world.gen.biome.feature.Marsh1Feature;
 import thebetweenlands.common.world.gen.biome.feature.Marsh2Feature;
 import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
@@ -15,7 +16,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 3.5D, 0.03125D * 3.5D, BlockRegistry.PEAT.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 12.5D, 0.03125D * 12.5D, BlockRegistry.PEAT.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
-		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()));
+		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
+		.setDecorator(new BiomeDecoratorMarsh());
 	}
 
 }
