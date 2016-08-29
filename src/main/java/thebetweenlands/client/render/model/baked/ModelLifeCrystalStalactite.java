@@ -81,7 +81,7 @@ public class ModelLifeCrystalStalactite implements IModel {
 					int posX = state.getValue(BlockLifeCrystalStalactite.POS_X);
 					int posY = state.getValue(BlockLifeCrystalStalactite.POS_Y);
 					int posZ = state.getValue(BlockLifeCrystalStalactite.POS_Z);
-					float height = distUp == 0 ? 0.75F : 1.0F;
+					float height = distUp == 0 && noTop ? 0.75F : 1.0F;
 
 					int totalHeight = 1 + distDown + distUp;
 					float distToMidBottom, distToMidTop;

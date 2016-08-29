@@ -14,22 +14,20 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 
-public class BlockPeat extends Block
-{
+public class BlockPeat extends Block {
+	private static final AxisAlignedBB PEAT_AABB = new AxisAlignedBB(0, 0, 0, 1, 1 - 0.125, 1);
+
 	public BlockPeat() {
 		super(Material.GROUND);
 		setHardness(0.5F);
-		setSoundType(SoundType.SAND);
+		setSoundType(SoundType.GROUND);
 		setHarvestLevel("shovel", 0);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		//setBlockName("thebetweenlands.peat");
-		//setBlockTextureName("thebetweenlands:peat");
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World world, BlockPos pos) {
-		float f = 0.125F;
-		return new AxisAlignedBB((double)pos.getX(), (double)pos.getY(), (double)pos.getZ(), (double)(pos.getX() + 1), (double)((float)(pos.getY() + 1) - f), (double)(pos.getZ() + 1));
+		return PEAT_AABB;
 	}
 
 	@Override

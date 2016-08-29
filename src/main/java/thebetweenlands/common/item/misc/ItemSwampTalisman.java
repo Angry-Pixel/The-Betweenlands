@@ -21,7 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedWoodPortalTree;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedwoodPortalTree;
 
 public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
 	public ItemSwampTalisman() {
@@ -55,7 +55,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 				if (EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack)) {
 					Block block = worldIn.getBlockState(pos).getBlock();
 					if (block instanceof BlockSapling) {
-						if(new WorldGenWeedWoodPortalTree().generate(worldIn, itemRand, pos)) {
+						if(new WorldGenWeedwoodPortalTree().generate(worldIn, itemRand, pos)) {
 							//  worldIn.playSound(playerIn, pos, "thebetweenlands:portalActivate", 1.0F, itemRand.nextFloat() * 0.4F + 0.8F);
 							playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
 						}

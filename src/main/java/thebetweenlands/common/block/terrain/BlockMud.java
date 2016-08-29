@@ -90,7 +90,7 @@ public class BlockMud extends Block {
 
     @Override
     public boolean isOpaqueCube(IBlockState blockState) {
-        return false;
+        return true;
     }
 
     /*@Override

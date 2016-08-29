@@ -22,6 +22,8 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
+
+//TODO: Rewrite this mess, preferably so that it doesn't wreck the TPS...
 public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock {
 	private boolean isUnderwaterBlock = false;
 

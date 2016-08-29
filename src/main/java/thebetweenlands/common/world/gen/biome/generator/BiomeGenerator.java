@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.biome;
+package thebetweenlands.common.world.gen.biome.generator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +13,8 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.feature.BiomeFeature;
 
 public class BiomeGenerator {
 	protected final Biome biome;
@@ -28,7 +30,6 @@ public class BiomeGenerator {
 	protected boolean hasBaseBlockPatches = true;
 	private NoiseGeneratorPerlin baseBlockLayerVariationNoiseGen;
 	protected double[] baseBlockLayerVariationNoise = new double[256];
-	private boolean isNoiseGenInitialized = false;
 
 	private final List<BiomeFeature> biomeFeatures = new ArrayList<BiomeFeature>();
 
@@ -36,8 +37,28 @@ public class BiomeGenerator {
 	protected IChunkGenerator chunkGenerator;
 	protected Biome[] biomesForGeneration;
 
+	protected BiomeDecoratorBetweenlands decorator = new BiomeDecoratorBetweenlands();
+
 	public BiomeGenerator(Biome biome) {
 		this.biome = biome;
+	}
+
+	/**
+	 * Sets the biome decorator
+	 * @param decorator
+	 * @return
+	 */
+	public BiomeGenerator setDecorator(BiomeDecoratorBetweenlands decorator) {
+		this.decorator = decorator;
+		return this;
+	}
+
+	/**
+	 * Returns the biome decorator
+	 * @return
+	 */
+	public BiomeDecoratorBetweenlands getDecorator() {
+		return this.decorator;
 	}
 
 	/**
@@ -141,18 +162,9 @@ public class BiomeGenerator {
 		if(this.baseBlockLayerVariationNoiseGen == null) {
 			this.baseBlockLayerVariationNoiseGen = new NoiseGeneratorPerlin(new Random(seed), 4);
 		}
-		this.isNoiseGenInitialized = true;
 		for(BiomeFeature feature : this.biomeFeatures) {
 			feature.initializeGenerators(new Random(seed), this.biome);
 		}
-	}
-
-	/**
-	 * Returns whether the noise generators were already initialized
-	 * @return
-	 */
-	public final boolean isNoiseGenInitialized() {
-		return this.isNoiseGenInitialized;
 	}
 
 	/**
@@ -180,18 +192,19 @@ public class BiomeGenerator {
 	 * @param biomesForGeneration
 	 */
 	public final void replaceBiomeBlocks(
-			int blockX, int blockZ, int inChunkZ, int inChunkX, 
+			int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, Random rng, long seed, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
+			float terrainWeight, float terrainWeights[]) {
 		this.rng.setSeed((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
 
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 0);
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, 0);
 		}
 
-		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 0)) {
+		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, 0)) {
 			return;
 		}
 
@@ -267,10 +280,10 @@ public class BiomeGenerator {
 		}
 
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 1);
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, 1);
 		}
 
-		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, 1);
+		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, 1);
 	}
 
 	/**
@@ -298,7 +311,7 @@ public class BiomeGenerator {
 	 */
 	protected boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, int pass) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeights[], float terrainWeight, int pass) {
 		return true;
 	}
 }

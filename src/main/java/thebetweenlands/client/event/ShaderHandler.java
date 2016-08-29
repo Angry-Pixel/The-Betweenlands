@@ -35,6 +35,9 @@ public class ShaderHandler {
 	public void onRenderHand(RenderWorldLastEvent event) {
 		if(!(ConfigHandler.useShader && ShaderHelper.INSTANCE.isShaderSupported())) return;
 
+		//TODO: Remove once shaders are implemented
+		if(true) return;
+		
 		//TODO: Requires overlayes
 		/*GL11.glPushMatrix();
 		//Small fix for hand depth buffer issues because the hand is rendered after the depth buffer has been cleared
