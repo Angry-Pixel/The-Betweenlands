@@ -1,55 +1,87 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
-import com.google.common.base.Predicate;
+import java.util.List;
 
-import net.minecraft.block.Block;
+import javax.annotation.Nullable;
+
+import com.google.common.base.Predicate;
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public enum SurfaceType implements Predicate<IBlockState> {
-	GRASS,
-	DIRT,
-	SAND,
-	WATER,
-	PEAT,
-	MIXED,
-	UNDERGROUND;
+	GRASS(ImmutableList.of(
+			BlockMatcher.forBlock(Blocks.GRASS),
+			BlockMatcher.forBlock(Blocks.MYCELIUM),
+			BlockMatcher.forBlock(BlockRegistry.SWAMP_GRASS),
+			BlockMatcher.forBlock(BlockRegistry.DEAD_GRASS)
+			)),
+	DIRT(ImmutableList.of(
+			BlockMatcher.forBlock(BlockRegistry.SWAMP_DIRT),
+			BlockMatcher.forBlock(Blocks.DIRT),
+			BlockMatcher.forBlock(BlockRegistry.MUD),
+			BlockMatcher.forBlock(BlockRegistry.SLUDGY_DIRT),
+			BlockMatcher.forBlock(BlockRegistry.PEAT)
+			)),
+	SAND(ImmutableList.of(
+			BlockMatcher.forBlock(Blocks.SAND),
+			BlockMatcher.forBlock(BlockRegistry.SILT)
+			)),
+	WATER(ImmutableList.of(
+			BlockMatcher.forBlock(BlockRegistry.SWAMP_WATER),
+			BlockMatcher.forBlock(Blocks.WATER),
+			BlockMatcher.forBlock(Blocks.FLOWING_WATER)
+			)),
+	PEAT(ImmutableList.of(
+			BlockMatcher.forBlock(BlockRegistry.PEAT)
+			)),
+	MIXED(GRASS, DIRT, SAND, PEAT),
+	UNDERGROUND(ImmutableList.of(
+			BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE),
+			BlockMatcher.forBlock(BlockRegistry.PITSTONE),
+			BlockMatcher.forBlock(BlockRegistry.LIMESTONE),
+			BlockMatcher.forBlock(BlockRegistry.OCTINE_ORE),
+			BlockMatcher.forBlock(BlockRegistry.SCABYST_ORE),
+			BlockMatcher.forBlock(BlockRegistry.SLIMY_BONE_ORE),
+			BlockMatcher.forBlock(BlockRegistry.SULFUR_ORE),
+			BlockMatcher.forBlock(BlockRegistry.SYRMORITE_ORE),
+			BlockMatcher.forBlock(BlockRegistry.VALONITE_ORE)
+			)),
+	GRASS_AND_DIRT(GRASS, DIRT);
+
+	private final List<Predicate<IBlockState>> matchers;
+	private final SurfaceType types[];
+
+	private SurfaceType(@Nullable List<Predicate<IBlockState>> matchers, SurfaceType... types) {
+		this.matchers = matchers;
+		this.types = types;
+	}
+
+	private SurfaceType(SurfaceType... types) {
+		this(null, types);
+	}
 
 	@Override
 	public boolean apply(IBlockState input) {
 		if(input == null)
 			return false;
-		Block block = input.getBlock();
-		switch (this) {
-		case GRASS:
-			return block == Blocks.GRASS || block == Blocks.MYCELIUM || block == BlockRegistry.SWAMP_GRASS || 
-			block == BlockRegistry.DEAD_GRASS;
-		case DIRT:
-			return block == BlockRegistry.SWAMP_DIRT || block == Blocks.DIRT || 
-			block == BlockRegistry.MUD || block == BlockRegistry.SLUDGY_DIRT ||
-			block == BlockRegistry.PEAT;
-		case SAND:
-			return block == Blocks.SAND || block == BlockRegistry.SILT;
-		case WATER:
-			return block == BlockRegistry.SWAMP_WATER || block == Blocks.WATER || block == Blocks.FLOWING_WATER;
-		case PEAT:
-			return block == BlockRegistry.PEAT;
-		case MIXED:
-			return block == Blocks.GRASS || block == Blocks.DIRT || block == Blocks.SAND || 
-			block == BlockRegistry.SWAMP_GRASS || block == BlockRegistry.SWAMP_DIRT || 
-			block == BlockRegistry.DEAD_GRASS || block == BlockRegistry.MUD || 
-			block == BlockRegistry.PEAT || block == BlockRegistry.SLUDGY_DIRT || 
-			block == BlockRegistry.SILT;
-		case UNDERGROUND:
-			return block == BlockRegistry.BETWEENSTONE || block == BlockRegistry.PITSTONE|| block == BlockRegistry.LIMESTONE ||
-			block == BlockRegistry.OCTINE_ORE || block == BlockRegistry.SCABYST_ORE || block == BlockRegistry.SLIMY_BONE_ORE ||
-			block == BlockRegistry.SULFUR_ORE || block == BlockRegistry.SYRMORITE_ORE || block == BlockRegistry.VALONITE_ORE;
-		default:
-			return false;
+		if(this.types != null && this.types.length > 0){
+			for(SurfaceType type : this.types)
+				if(type.apply(input))
+					return true;
 		}
+		if(this.matchers != null) {
+			for(Predicate<IBlockState> matcher : this.matchers) {
+				if(matcher.apply(input))
+					return true;
+			}
+		}
+		return false;
 	}
 
 	public boolean matches(World world, BlockPos pos) {

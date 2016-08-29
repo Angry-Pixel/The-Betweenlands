@@ -136,6 +136,7 @@ public class BlockRegistry {
 			.setHardness(1.2F)
 			.setResistance(8.0F);
 	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
+	public static final Block COARSE_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND).setItemDropped(Item.getItemFromBlock(SWAMP_DIRT));
 	public static final Block SWAMP_GRASS = new BlockSwampGrass();
 	public static final Block WISP = new BlockWisp();
 	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.875F);

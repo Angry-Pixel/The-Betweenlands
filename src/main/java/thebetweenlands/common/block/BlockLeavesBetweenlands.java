@@ -115,7 +115,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		if (!worldIn.isRemote) {
-			/*if (((Boolean)state.getValue(CHECK_DECAY)).booleanValue() && ((Boolean)state.getValue(DECAYABLE)).booleanValue()) {
+			if (((Boolean)state.getValue(CHECK_DECAY)).booleanValue() && ((Boolean)state.getValue(DECAYABLE)).booleanValue()) {
 				byte logReach = 5;
 				int checkRadius = logReach + 1;
 				byte cacheSize = 32;
@@ -205,7 +205,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 				} else {
 					this.removeLeaves(worldIn, pos);
 				}
-			}*/
+			}
 		}
 	}
 

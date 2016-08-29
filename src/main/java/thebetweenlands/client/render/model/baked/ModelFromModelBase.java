@@ -94,7 +94,6 @@ public class ModelFromModelBase implements IModel {
 			this.transforms = transforms;
 			this.format = format;
 			this.texture = texture;
-			this.quads = new ArrayList<BakedQuad>();
 			ModelConverter converter = new ModelConverter(model, 0.0625D, true);
 			Model convertedModel = converter.getModel();
 			QuadBuilder builder = new QuadBuilder(this.format).setSprite(this.texture).setTransformation(this.transformation);
@@ -108,13 +107,13 @@ public class ModelFromModelBase implements IModel {
 					}
 				}
 			}
-			this.quads.addAll(builder.build());
+			this.quads = builder.build();
 		}
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
-			//if(side == null)
-			//	return this.quads;
+			if(side == null)
+				return this.quads;
 			return Collections.emptyList();
 		}
 

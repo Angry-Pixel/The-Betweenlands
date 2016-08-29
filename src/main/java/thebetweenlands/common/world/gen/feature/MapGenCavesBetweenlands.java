@@ -118,7 +118,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 						double f2 = Math.sqrt(Math.pow(0.5, 2) - Math.pow(h - 0.5, 2));
 						int height = (int) ((f1 + f2) / 1.4576 * 3);
 						for (int dy = -1; dy < height; dy++) {
-							primer.setBlockState(bx, y + dy, bz, dy < height - 1 ? BlockRegistry.SWAMP_DIRT.getDefaultState() : BlockRegistry.SWAMP_GRASS.getDefaultState());
+							primer.setBlockState(bx, y + dy, bz, dy < height - 1 ? BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState() : BlockRegistry.SWAMP_GRASS.getDefaultState());
 						}
 					}
 				}

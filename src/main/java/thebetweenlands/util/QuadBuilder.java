@@ -45,9 +45,14 @@ public class QuadBuilder {
 	private float[] color = new float[]{1f, 1f, 1f, 1f};
 	private Vec3d normal;
 
-	private final List<Vertex> vertices = new ArrayList<Vertex>();
+	private final List<Vertex> vertices;
 
 	public QuadBuilder(VertexFormat format) {
+		this(50, format);
+	}
+
+	public QuadBuilder(int vertices, VertexFormat format) {
+		this.vertices = new ArrayList<Vertex>(vertices);
 		this.format = format;
 	}
 
@@ -230,7 +235,7 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public List<BakedQuad> build(@Nullable Consumer<UnpackedBakedQuad.Builder> quadConsumer) {
-		List<BakedQuad> quads = new ArrayList<BakedQuad>();
+		List<BakedQuad> quads = new ArrayList<BakedQuad>(this.vertices.size() / 4);
 		if(this.vertices.size() % 4 != 0)
 			throw new RuntimeException("Invalid number of vertices");
 		for(int i = 0; i < this.vertices.size(); i += 4) {
