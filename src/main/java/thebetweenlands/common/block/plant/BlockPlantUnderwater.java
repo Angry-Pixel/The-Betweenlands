@@ -124,7 +124,8 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 		if (state.getBlock() == this) //Forge: This function is called during world gen and placement, before this block is set, so if we are not 'here' then assume it's the pre-check.
 		{
 			IBlockState soil = worldIn.getBlockState(pos.down());
-			return soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
+			return soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) || 
+					this.canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
 		}
 		return this.canSustainPlant(worldIn.getBlockState(pos.down()));
 	}
@@ -136,7 +137,8 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
-		return super.canPlaceBlockAt(worldIn, pos) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
+		return super.canPlaceBlockAt(worldIn, pos) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && 
+				(soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) || this.canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
 	}
 
 	@Override

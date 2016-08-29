@@ -113,8 +113,8 @@ public class ModelFromModelBase implements IModel {
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
-			if(side == null)
-				return this.quads;
+			//if(side == null)
+			//	return this.quads;
 			return Collections.emptyList();
 		}
 

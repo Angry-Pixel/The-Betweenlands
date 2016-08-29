@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks.EnumType;
 import net.minecraft.block.SoundType;
@@ -27,6 +28,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
 public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMappedBlock {
+	private int[] decayBlockCache;
 
 	public BlockLeavesBetweenlands() {
 		setHardness(0.2F);
@@ -108,5 +110,107 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(StateMap.Builder builder) {
 		builder.ignore(BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE);		
+	}
+
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if (!worldIn.isRemote) {
+			/*if (((Boolean)state.getValue(CHECK_DECAY)).booleanValue() && ((Boolean)state.getValue(DECAYABLE)).booleanValue()) {
+				byte logReach = 5;
+				int checkRadius = logReach + 1;
+				byte cacheSize = 32;
+				int cacheSquared = cacheSize * cacheSize;
+				int cacheHalf = cacheSize / 2;
+
+				if (this.decayBlockCache == null) {
+					this.decayBlockCache = new int[cacheSize * cacheSize * cacheSize];
+				}
+
+				//states:
+				//0: can sustain leaves
+				//-1: can't sustain leaves
+				//-2: is leaves block
+
+				int x = pos.getX();
+				int y = pos.getY();
+				int z = pos.getZ();
+
+				if (worldIn.isAreaLoaded(new BlockPos(x - checkRadius, y - checkRadius, z - checkRadius), new BlockPos(x + checkRadius, y + checkRadius, z + checkRadius))) {
+					BlockPos.MutableBlockPos mutableBlockPos = new BlockPos.MutableBlockPos();
+
+					//Pupulate block cache
+					for (int xo = -logReach; xo <= logReach; ++xo) {
+						for (int yo = -logReach; yo <= logReach; ++yo) {
+							for (int zo = -logReach; zo <= logReach; ++zo) {
+								IBlockState blockState = worldIn.getBlockState(mutableBlockPos.setPos(x + xo, y + yo, z + zo));
+								Block block = blockState.getBlock();
+
+								if (!block.canSustainLeaves(blockState, worldIn, mutableBlockPos.setPos(x + xo, y + yo, z + zo))) {
+									if (block.isLeaves(blockState, worldIn, mutableBlockPos.setPos(x + xo, y + yo, z + zo))) {
+										this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = -2;
+									} else {
+										this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = -1;
+									}
+								} else {
+									this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = 0;
+								}
+							}
+						}
+					}
+
+					//Iterate multiple times over the block cache
+					for (int distancePass = 1; distancePass <= logReach; ++distancePass) {
+						for (int xo = -logReach; xo <= logReach; ++xo) {
+							for (int yo = -logReach; yo <= logReach; ++yo) {
+								for (int zo = -logReach; zo <= logReach; ++zo) {
+									//If value != distancePass - 1 then it's not connected to a log
+									if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] == distancePass - 1) {
+										//Check for adjacent leaves and set their value to the current distance pass
+
+										if (this.decayBlockCache[(xo + cacheHalf - 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf - 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf + 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf + 1) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf - 1) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf - 1) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf + 1) * cacheSize + zo + cacheHalf] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf + 1) * cacheSize + zo + cacheHalf] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + (zo + cacheHalf - 1)] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + (zo + cacheHalf - 1)] = distancePass;
+										}
+
+										if (this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf + 1] == -2) {
+											this.decayBlockCache[(xo + cacheHalf) * cacheSquared + (yo + cacheHalf) * cacheSize + zo + cacheHalf + 1] = distancePass;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+
+				//Get distance to log at center block
+				int distanceToLog = this.decayBlockCache[cacheHalf * cacheSquared + cacheHalf * cacheSize + cacheHalf];
+
+				if (distanceToLog >= 0) {
+					worldIn.setBlockState(pos, state.withProperty(CHECK_DECAY, Boolean.valueOf(false)), 4);
+				} else {
+					this.removeLeaves(worldIn, pos);
+				}
+			}*/
+		}
+	}
+
+	protected void removeLeaves(World world, BlockPos pos) {
+		this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
+		world.setBlockToAir(pos);
 	}
 }

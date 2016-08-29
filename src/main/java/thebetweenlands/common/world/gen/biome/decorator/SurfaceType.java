@@ -29,7 +29,8 @@ public enum SurfaceType implements Predicate<IBlockState> {
 			block == BlockRegistry.DEAD_GRASS;
 		case DIRT:
 			return block == BlockRegistry.SWAMP_DIRT || block == Blocks.DIRT || 
-			block == BlockRegistry.MUD || block == BlockRegistry.SLUDGY_DIRT;
+			block == BlockRegistry.MUD || block == BlockRegistry.SLUDGY_DIRT ||
+			block == BlockRegistry.PEAT;
 		case SAND:
 			return block == Blocks.SAND || block == BlockRegistry.SILT;
 		case WATER:
@@ -54,7 +55,7 @@ public enum SurfaceType implements Predicate<IBlockState> {
 	public boolean matches(World world, BlockPos pos) {
 		return this.apply(world.getBlockState(pos));
 	}
-	
+
 	public boolean matches(IBlockState state) {
 		return this.apply(state);
 	}

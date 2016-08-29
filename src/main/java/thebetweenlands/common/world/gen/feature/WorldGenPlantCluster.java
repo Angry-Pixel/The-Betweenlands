@@ -11,10 +11,18 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class WorldGenPlantCluster extends WorldGenerator {
 	private final IBlockState blockState;
 	private final Block block;
+	private final int offset;
+	private final int attempts;
 
-	public WorldGenPlantCluster(IBlockState blockState) {
+	public WorldGenPlantCluster(IBlockState blockState, int offset, int attempts) {
 		this.blockState = blockState;
 		this.block = blockState.getBlock();
+		this.offset = offset;
+		this.attempts = attempts;
+	}
+	
+	public WorldGenPlantCluster(IBlockState blockState) {
+		this(blockState, 8, 128);
 	}
 
 	@Override
@@ -25,11 +33,11 @@ public class WorldGenPlantCluster extends WorldGenerator {
 			position = position.down();
 		}
 
-		for (int i = 0; i < 128; ++i) {
-			BlockPos blockpos = position.add(rand.nextInt(8) - rand.nextInt(8), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(8) - rand.nextInt(8));
+		for (int i = 0; i < this.attempts; ++i) {
+			BlockPos blockpos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
 			if (worldIn.isAirBlock(blockpos) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
-				worldIn.setBlockState(blockpos, this.blockState, 2);
+				this.setBlockAndNotifyAdequately(worldIn, blockpos, this.blockState);
 				generated = true;
 			}
 		}
