@@ -211,6 +211,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, RenderGiantToad::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, RenderSporeling::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, RenderTermite::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, RenderLeech::new);
 	}
 
 	@Override

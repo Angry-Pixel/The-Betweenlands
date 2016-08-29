@@ -35,6 +35,7 @@ public class EntityRegistry {
         registerEntity(EntityAngler.class, "Angler", 0x243B0B, 0x00FFFF);
         registerEntity(EntitySwampHag.class, "SwampHag", 0x0B3B0B, 0xDBA901);
         registerEntity(EntitySporeling.class, "Sporeling", 0x696144, 0xFFFB00, 64, 1, true);
+        registerEntity(EntityLeech.class, "leech", 0x804E3D, 0x635940);
         registerEntity(EntityDragonFly.class, "Dragonfly", 0x31B53C, 0x779E3C);
         registerEntity(EntityBloodSnail.class, "BloodSnail", 0x8E9456, 0xB3261E);
         registerEntity(EntityMireSnail.class, "MireSnail", 0x8E9456, 0xF2FA96);

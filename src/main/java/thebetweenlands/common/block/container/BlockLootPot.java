@@ -33,6 +33,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.ItemBlockEnum.IGenericMetaSelector;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -173,10 +174,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
 		if (!worldIn.isRemote)
 			if (worldIn.rand.nextInt(3) == 0) {
-				/*TODO add when termites are added
-                EntityTermite entity = new EntityTermite(world);
+                EntityTermite entity = new EntityTermite(worldIn);
                 entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getZ(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-                worldIn.spawnEntityInWorld(entity);*/
+                worldIn.spawnEntityInWorld(entity);
 			}
 		super.onBlockDestroyedByPlayer(worldIn, pos, state);
 	}
