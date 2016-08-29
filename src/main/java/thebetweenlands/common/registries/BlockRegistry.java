@@ -89,10 +89,12 @@ import thebetweenlands.common.block.terrain.BlockRootUnderwater;
 import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
+import thebetweenlands.common.block.terrain.BlockStagnantWater;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.block.terrain.BlockTar;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -100,6 +102,8 @@ import thebetweenlands.common.lib.ModInfo;
 
 public class BlockRegistry {
 	public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
+	public static final Block STAGNANT_WATER = new BlockStagnantWater();
+	public static final Block TAR = new BlockTar();
 
 	public static final Block DRUID_STONE_1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
 	public static final Block DRUID_STONE_2 = new BlockDruidStone(Material.ROCK, "druid_stone_2");
@@ -172,6 +176,11 @@ public class BlockRegistry {
 	public static final Block STALACTITE = new BlockStalactite();
 	public static final Block SILT = new BlockSilt();
 	public static final Block DEAD_GRASS = new BlockDeadGrass();
+	public static final Block TAR_SOLID = new BasicBlock(Material.ROCK)
+			.setDefaultCreativeTab()
+			.setSoundType2(SoundType.STONE)
+			.setHardness(1.5F)
+			.setResistance(10.0F);
 
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();

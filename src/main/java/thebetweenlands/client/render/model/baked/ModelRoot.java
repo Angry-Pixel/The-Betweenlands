@@ -119,6 +119,15 @@ public class ModelRoot implements IModel {
 
 					StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
 
+					if(distDown == 0 && !noBottom) {
+						core.bX = 0.5D;
+						core.bZ = 0.5D;
+					}
+					if(distUp == 0 && !noTop) {
+						core.tX = 0.5D;
+						core.tZ = 0.5D;
+					}
+					
 					QuadBuilder builder = new QuadBuilder(this.format);
 
 					boolean hasTop = distUp == 0 && !noTop;

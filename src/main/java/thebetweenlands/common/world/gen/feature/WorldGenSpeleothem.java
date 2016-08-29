@@ -31,9 +31,9 @@ public class WorldGenSpeleothem extends WorldGenerator {
 			int length = rand.nextInt(height < 11 ? height / 2 : 5) + 1;
 			boolean isColumn = length == height / 2;
 			for (int dy = 0; dy < length; dy++) {
-				world.setBlockState(pos.add(0, -dy, 0), speleothem);
+				this.setBlockAndNotifyAdequately(world, pos.add(0, -dy, 0), speleothem);
 				if (hasStalagmite && (isColumn || dy < length - 1)) {
-					world.setBlockState(pos.add(0, -height + dy + 1, 0), speleothem);
+					this.setBlockAndNotifyAdequately(world, pos.add(0, -height + dy + 1, 0), speleothem);
 				}
 			}
 			return true;

@@ -126,6 +126,15 @@ public class ModelStalactite implements IModel {
 
 					builder.setSprite(hasTop ? this.textureTop : hasBottom ? this.textureBottom : this.textureMiddle);
 
+					if(distDown == 0 && !noBottom) {
+						core.bX = 0.5D;
+						core.bZ = 0.5D;
+					}
+					if(distUp == 0 && !noTop) {
+						core.tX = 0.5D;
+						core.tZ = 0.5D;
+					}
+
 					// front
 					builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 					builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);

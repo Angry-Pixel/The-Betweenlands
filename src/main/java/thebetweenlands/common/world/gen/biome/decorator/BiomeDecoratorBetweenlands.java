@@ -44,7 +44,7 @@ public class BiomeDecoratorBetweenlands {
 	}
 
 	/**
-	 * Returns a random position with a padding of 8 blocks
+	 * Returns a random position near the surface with a padding of 8 blocks
 	 * @return
 	 */
 	public final BlockPos getRandomPos() {
@@ -52,7 +52,7 @@ public class BiomeDecoratorBetweenlands {
 	}
 
 	/**
-	 * Returns a random position with a custom padding
+	 * Returns a random position near the surface with a custom padding
 	 * @param padding Block padding from chunk borders, from 0 to 15
 	 * @return
 	 */
@@ -95,7 +95,7 @@ public class BiomeDecoratorBetweenlands {
 	}
 
 	/**
-	 * Returns a random Y position
+	 * Returns a random Y position near the surface
 	 * @return
 	 */
 	public final int getRandomPosY() {
@@ -143,8 +143,7 @@ public class BiomeDecoratorBetweenlands {
 
 		this.generateOres();
 		this.generate(DecorationHelper::populateCaves);
-		//TODO: Implement missing generators
-		//this.generate(5, DecorationHelper::generateStagnantWaterPool);
+		this.generate(5, DecorationHelper::generateStagnantWaterPool);
 		//this.generate(100, DecorationHelper::generateUndergroundRuins);
 	}
 
@@ -161,7 +160,7 @@ public class BiomeDecoratorBetweenlands {
 		this.generateOre(0.2F, 14, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(3, 8, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(4, 8, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(200, 8, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		this.generateOre(80, 8, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
 		//Generate middle gems
 		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);

@@ -46,7 +46,7 @@ public class WorldGenCavePots extends WorldGenerator {
 						if(world.isAirBlock(offsetPos)) {
 							IBlockState surfaceBlock = world.getBlockState(offsetPos.down());
 							if(surfaceBlock.getBlock() == BlockRegistry.BETWEENSTONE || surfaceBlock == BlockRegistry.PITSTONE) {
-								world.setBlockState(offsetPos, this.getRandomPot(random));
+								this.setBlockAndNotifyAdequately(world, offsetPos, this.getRandomPot(random));
 								TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(offsetPos);
 								LootUtil.generateLoot(lootPot, random, LootTables.COMMON_POT_LOOT, 0, 2);
 							}

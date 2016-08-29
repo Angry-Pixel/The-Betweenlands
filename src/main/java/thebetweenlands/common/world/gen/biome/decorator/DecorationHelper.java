@@ -9,30 +9,39 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveGrass;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
 import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
+import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallHollowLog;
 import thebetweenlands.common.world.gen.feature.WorldGenSpeleothem;
+import thebetweenlands.common.world.gen.feature.WorldGenSwampReedCluster;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
-	private final static WorldGenerator GEN_SPELEOTHEM = new WorldGenSpeleothem();
-	private final static WorldGenerator GEN_CAVE_POTS = new WorldGenCavePots();
-	private final static WorldGenerator GEN_CAVE_THORNS = new WorldGenCaveThorns();
-	private final static WorldGenerator GEN_CAVE_MOSS = new WorldGenCaveMoss();
-	private final static WorldGenerator GEN_CAVE_GRASS = new WorldGenCaveGrass();
-	private final static WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedwoodTree();
-	private final static WorldGenerator GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
-	private final static WorldGenerator GEN_SWAMP_TALLGRASS = new WorldGenPlantCluster(BlockRegistry.SWAMP_TALLGRASS.getDefaultState());
-	private final static WorldGenerator GEN_NETTLES = new WorldGenPlantCluster(BlockRegistry.NETTLE.getDefaultState());
-	private final static WorldGenerator GEN_ARROW_ARUM = new WorldGenPlantCluster(BlockRegistry.ARROW_ARUM.getDefaultState());
-	private final static WorldGenerator GEN_PICKEREL_WEED = new WorldGenPlantCluster(BlockRegistry.PICKEREL_WEED.getDefaultState());
-	private final static WorldGenerator GEN_MARSH_HIBISCUS = new WorldGenPlantCluster(BlockRegistry.MARSH_HIBISCUS.getDefaultState());
-	private final static WorldGenerator GEN_MARSH_MALLOW = new WorldGenPlantCluster(BlockRegistry.MARSH_MALLOW.getDefaultState());
-	private final static WorldGenerator GEN_BUTTON_BUSH = new WorldGenPlantCluster(BlockRegistry.BUTTON_BUSH.getDefaultState());
-	private final static WorldGenerator GEN_SOFT_RUSH = new WorldGenPlantCluster(BlockRegistry.SOFT_RUSH.getDefaultState());
-	private final static WorldGenerator GEN_BOTTLE_BRUSH_GRASS = new WorldGenPlantCluster(BlockRegistry.BOTTLE_BRUSH_GRASS.getDefaultState());
-	
+	private static final WorldGenerator GEN_SPELEOTHEM = new WorldGenSpeleothem();
+	private static final WorldGenerator GEN_CAVE_POTS = new WorldGenCavePots();
+	private static final WorldGenerator GEN_CAVE_THORNS = new WorldGenCaveThorns();
+	private static final WorldGenerator GEN_CAVE_MOSS = new WorldGenCaveMoss();
+	private static final WorldGenerator GEN_CAVE_GRASS = new WorldGenCaveGrass();
+	private static final WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedwoodTree();
+	private static final WorldGenerator GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
+	private static final WorldGenerator GEN_SWAMP_TALLGRASS = new WorldGenPlantCluster(BlockRegistry.SWAMP_TALLGRASS.getDefaultState());
+	private static final WorldGenerator GEN_NETTLES = new WorldGenPlantCluster(BlockRegistry.NETTLE.getDefaultState());
+	private static final WorldGenerator GEN_ARROW_ARUM = new WorldGenPlantCluster(BlockRegistry.ARROW_ARUM.getDefaultState());
+	private static final WorldGenerator GEN_PICKEREL_WEED = new WorldGenPlantCluster(BlockRegistry.PICKEREL_WEED.getDefaultState());
+	private static final WorldGenerator GEN_MARSH_HIBISCUS = new WorldGenPlantCluster(BlockRegistry.MARSH_HIBISCUS.getDefaultState());
+	private static final WorldGenerator GEN_MARSH_MALLOW = new WorldGenPlantCluster(BlockRegistry.MARSH_MALLOW.getDefaultState());
+	private static final WorldGenerator GEN_BUTTON_BUSH = new WorldGenPlantCluster(BlockRegistry.BUTTON_BUSH.getDefaultState());
+	private static final WorldGenerator GEN_SOFT_RUSH = new WorldGenPlantCluster(BlockRegistry.SOFT_RUSH.getDefaultState());
+	private static final WorldGenerator GEN_BOTTLE_BRUSH_GRASS = new WorldGenPlantCluster(BlockRegistry.BOTTLE_BRUSH_GRASS.getDefaultState());
+	private static final WorldGenerator GEN_STAGNANT_WATER_POOL = new WorldGenFluidPool(BlockRegistry.STAGNANT_WATER);
+	private static final WorldGenerator GEN_TAR_POOL = new WorldGenFluidPool(BlockRegistry.TAR);
+	private static final WorldGenerator GEN_SWAMP_REED = new WorldGenSwampReedCluster();
+	private static final WorldGenerator GEN_SWAMP_PLANT = new WorldGenPlantCluster(BlockRegistry.SWAMP_PLANT.getDefaultState());
+	private static final WorldGenerator GEN_FLAT_HEAD_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState(), 5, 15);
+	private static final WorldGenerator GEN_BLACK_HAT_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState(), 5, 15);
+	private static final WorldGenerator GEN_CATTAIL = new WorldGenPlantCluster(BlockRegistry.CATTAIL.getDefaultState());
+
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
@@ -186,7 +195,7 @@ public class DecorationHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean generateButtonBushCluster(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
@@ -194,7 +203,7 @@ public class DecorationHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean generateSoftRushCluster(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
@@ -202,7 +211,7 @@ public class DecorationHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean generateBroomsedge(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
@@ -211,11 +220,112 @@ public class DecorationHelper {
 		}
 		return false;
 	}
-	
+
 	public static boolean generateBottleBrushGrassCluster(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
 			return GEN_BOTTLE_BRUSH_GRASS.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateStagnantWaterPool(BiomeDecoratorBetweenlands decorator) {
+		int x = decorator.getRandomPosX();
+		int y = 6 + decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START / 2);
+		int z = decorator.getRandomPosZ();
+		BlockPos pos = new BlockPos(x, y, z);
+		if(SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos)) {
+			return GEN_STAGNANT_WATER_POOL.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateTarPool(BiomeDecoratorBetweenlands decorator) {
+		int x = decorator.getRandomPosX();
+		int y = 6 + decorator.getRand().nextInt(WorldProviderBetweenlands.LAYER_HEIGHT + 20);
+		int z = decorator.getRandomPosZ();
+		BlockPos pos = new BlockPos(x, y, z);
+		if(SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos) || SurfaceType.MIXED.matches(decorator.getWorld(), pos)) {
+			return GEN_TAR_POOL.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateSwampReedCluster(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		World world = decorator.getWorld();
+		if(SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
+			return GEN_SWAMP_REED.generate(decorator.getWorld(), decorator.getRand(), pos);
+		} else if(SurfaceType.MIXED.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
+			return GEN_SWAMP_REED.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateSwampPlantCluster(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
+			return GEN_SWAMP_PLANT.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateVenusFlyTrap(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
+			decorator.getWorld().setBlockState(pos, BlockRegistry.VENUS_FLY_TRAP.getDefaultState());
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean generatePitcherPlant(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
+			BlockRegistry.PITCHER_PLANT.placeAt(decorator.getWorld(), pos, 2);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean generateFlatHeadMushroomCluster(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && !decorator.getWorld().isAirBlock(pos.down())) {
+			return GEN_FLAT_HEAD_MUSHROOM.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateBlackHatMushroomCluster(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && !decorator.getWorld().isAirBlock(pos.down())) {
+			return GEN_BLACK_HAT_MUSHROOM.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateVolarpad(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
+			BlockRegistry.VOLARPAD.placeAt(decorator.getWorld(), pos, 2);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean generateTallCattail(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
+			BlockRegistry.TALL_CATTAIL.placeAt(decorator.getWorld(), pos, 2);
+			return true;
+		}
+		return false;
+	}
+
+	public static boolean generateCattailCluster(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS.matches(decorator.getWorld(), pos.down())) {
+			return GEN_CATTAIL.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}

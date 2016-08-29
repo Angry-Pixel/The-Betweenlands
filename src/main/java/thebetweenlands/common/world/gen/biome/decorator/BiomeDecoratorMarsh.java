@@ -31,5 +31,6 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		this.generate(90, DecorationHelper::generateSoftRushCluster);
 		this.generate(40, DecorationHelper::generateBroomsedge);
 		this.generate(5, DecorationHelper::generateBottleBrushGrassCluster);
+		//this.generate(100, DecorationHelper::generateUndergroundRuins);
 	}
 }
