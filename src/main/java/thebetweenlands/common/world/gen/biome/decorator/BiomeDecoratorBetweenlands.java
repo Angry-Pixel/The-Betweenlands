@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -14,7 +15,7 @@ import thebetweenlands.common.world.gen.feature.OreGens;
 
 public class BiomeDecoratorBetweenlands {
 	private World world;
-	private int x, y, z;
+	private int x, y, z, seaGroundY;
 	private Random rand;
 	private ChunkGeneratorBetweenlands generator;
 
@@ -59,6 +60,23 @@ public class BiomeDecoratorBetweenlands {
 	public final BlockPos getRandomPos(int padding) {
 		return new BlockPos(this.x + this.offsetXZ(padding), this.y + this.offsetY(), this.z + this.offsetXZ(padding));
 	}
+	
+	/**
+	 * Returns a random position near the sea ground (or surface if there's no water) with a padding of 8 blocks
+	 * @return
+	 */
+	public final BlockPos getRandomPosSeaGround() {
+		return new BlockPos(this.x + this.offsetXZ(), this.seaGroundY + this.offsetY(), this.z + this.offsetXZ());
+	}
+
+	/**
+	 * Returns a random position near the sea ground (or surface if there's no water) with a custom padding
+	 * @param padding Block padding from chunk borders, from 0 to 15
+	 * @return
+	 */
+	public final BlockPos getRandomPosSeaGround(int padding) {
+		return new BlockPos(this.x + this.offsetXZ(padding), this.seaGroundY + this.offsetY(), this.z + this.offsetXZ(padding));
+	}
 
 	/**
 	 * Returns a random X position with a padding of 8 blocks
@@ -102,6 +120,14 @@ public class BiomeDecoratorBetweenlands {
 		return this.y + this.offsetY();
 	}
 
+	/**
+	 * Returns a random Y position near the sea ground (or surface if there's no water)
+	 * @return
+	 */
+	public final int getRandomPosYSeaGround() {
+		return this.seaGroundY + this.offsetY();
+	}
+
 	public final World getWorld() {
 		return this.world;
 	}
@@ -116,6 +142,10 @@ public class BiomeDecoratorBetweenlands {
 
 	public final int getY() {
 		return this.y;
+	}
+
+	public final int getSeaGroundY() {
+		return this.seaGroundY;
 	}
 
 	public final int getZ() {
@@ -137,13 +167,25 @@ public class BiomeDecoratorBetweenlands {
 		this.x = x;
 		this.z = z;
 		this.y = world.getHeight(new BlockPos(x, 0, z)).getY();
+		this.seaGroundY = this.y;
+		if(this.y <= WorldProviderBetweenlands.LAYER_HEIGHT && world.getBlockState(new BlockPos(this.x, this.y, this.z)).getMaterial().isLiquid()) {
+			MutableBlockPos offsetPos = new MutableBlockPos();
+			for(int oy = this.y; oy > 0; oy--) {
+				offsetPos.setPos(this.x, oy, this.z);
+				if(!world.getBlockState(offsetPos).getMaterial().isLiquid()) {
+					this.seaGroundY = oy;
+					break;
+				}
+			}
+		}
 		this.rand = rand;
 		this.world = world;
 		this.generator = generator;
 
 		this.generateOres();
 		this.generate(DecorationHelper::populateCaves);
-		this.generate(5, DecorationHelper::generateStagnantWaterPool);
+		this.generate(2, DecorationHelper::generateStagnantWaterPool);
+		//TODO: Implement missing generators
 		//this.generate(100, DecorationHelper::generateUndergroundRuins);
 	}
 
@@ -165,7 +207,7 @@ public class BiomeDecoratorBetweenlands {
 		//Generate middle gems
 		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
 		if(this.world.getBiomeGenForCoords(new BlockPos(this.x, 0, this.z)) == BiomeRegistry.SLUDGE_PLAINS) {
-			cycles = 5 + this.rand.nextInt(3);
+			cycles = 4 + this.rand.nextInt(2);
 		}
 		for(int i = 0; i < cycles; i++) {
 			if(this.rand.nextInt(9 / cycles + 1) == 0) {

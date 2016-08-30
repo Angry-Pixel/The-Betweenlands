@@ -14,14 +14,14 @@ public class BlockNettleFlowered extends BlockPlant {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
-		if(rand.nextInt(25) == 0) {
+		if(rand.nextInt(350) == 0) {
 			BlockPos randOffset = pos.add(rand.nextInt(3) - 1, rand.nextInt(2) - rand.nextInt(2), rand.nextInt(3) - 1);
 			if(worldIn.isAirBlock(randOffset) && canBlockStay(worldIn, randOffset, worldIn.getBlockState(randOffset))) {
 				worldIn.setBlockState(randOffset, BlockRegistry.NETTLE.getDefaultState());
 			}
-			if(rand.nextInt(40) == 0) {
-				worldIn.setBlockState(pos, BlockRegistry.NETTLE.getDefaultState());
-			}
+		}
+		if(rand.nextInt(220) == 0) {
+			worldIn.setBlockState(pos, BlockRegistry.NETTLE.getDefaultState());
 		}
 	}
 

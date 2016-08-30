@@ -44,6 +44,14 @@ public class BiomeGenerator {
 	}
 
 	/**
+	 * Returns the biome
+	 * @return
+	 */
+	public Biome getBiome() {
+		return this.biome;
+	}
+
+	/**
 	 * Sets the biome decorator
 	 * @param decorator
 	 * @return
@@ -179,8 +187,37 @@ public class BiomeGenerator {
 		}
 	}
 
+	public static enum EnumGeneratorPass {
+		PRE_REPLACE_BIOME_BLOCKS,
+		POST_REPLACE_BIOME_BLOCKS,
+		POST_GEN_CAVES
+	}
+
 	/**
-	 * Modifies the terrain with biome and {@link BiomeFeature} specific features.
+	 * Modifies the terrain with {@link BiomeFeature} specific features.
+	 * @param blockX
+	 * @param blockZ
+	 * @param inChunkX
+	 * @param inChunkZ
+	 * @param baseBlockNoise
+	 * @param chunkPrimer
+	 * @param chunkGenerator
+	 * @param biomesForGeneration
+	 * @param terrainWeight
+	 * @param terrainWeights
+	 * @param pass
+	 */
+	public final void runBiomeFeatures(int blockX, int blockZ, int inChunkX, int inChunkZ, 
+			double baseBlockNoise, ChunkPrimer chunkPrimer, 
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
+			float terrainWeight, float terrainWeights[], EnumGeneratorPass pass) {
+		for(BiomeFeature feature : this.biomeFeatures) {
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, pass);
+		}
+	}
+
+	/**
+	 * Modifies the terrain with biome specific features.
 	 * @param blockX
 	 * @param blockZ
 	 * @param inChunkX
@@ -200,11 +237,7 @@ public class BiomeGenerator {
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
 
-		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, 0);
-		}
-
-		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, 0)) {
+		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS)) {
 			return;
 		}
 
@@ -279,11 +312,7 @@ public class BiomeGenerator {
 				chunkPrimer.setBlockState(inChunkX, y, inChunkZ, BlockRegistry.BETWEENSTONE.getDefaultState());*/
 		}
 
-		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, 1);
-		}
-
-		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, 1);
+		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
 	}
 
 	/**
@@ -311,7 +340,7 @@ public class BiomeGenerator {
 	 */
 	protected boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeights[], float terrainWeight, int pass) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeights[], float terrainWeight, EnumGeneratorPass pass) {
 		return true;
 	}
 }

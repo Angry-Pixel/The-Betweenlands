@@ -2,7 +2,7 @@
   "forge_marker": 1,
   "variants": {
     "normal": {
-      "model": "forge:fluid",
+      "model": "thebetweenlands:internal/fluid",
       "custom": { "fluid": "swamp_water" }
     }
   }

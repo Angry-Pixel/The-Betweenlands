@@ -9,6 +9,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
+import thebetweenlands.client.render.model.baked.ModelFluidBL;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
@@ -80,6 +81,7 @@ public class ModelRegistry {
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
 	public static final IModel STALACTITE = new ModelStalactite();
 	public static final IModel ROOT = new ModelRoot();
+	public static final IModel FLUID = new ModelFluidBL(FluidRegistry.SWAMP_WATER);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

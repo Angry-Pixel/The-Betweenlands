@@ -19,12 +19,12 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 
-
-//TODO: Rewrite this mess, preferably so that it doesn't wreck the TPS...
-public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock {
+public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock, ITintedBlock {
 	private boolean isUnderwaterBlock = false;
 
 	public BlockSwampWater(Fluid fluid, Material material) {
@@ -322,6 +322,20 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
 	{
 		int quantaRemaining = quantaPerBlock - state.getValue(LEVEL);
+
+		//Replenishing source
+		if(quantaRemaining < quantaPerBlock && !world.isAirBlock(pos.down())) {
+			int adjacentSources = 0;
+			if(this.isSourceBlock(world, pos.east())) adjacentSources++;
+			if(this.isSourceBlock(world, pos.north())) adjacentSources++;
+			if(this.isSourceBlock(world, pos.south())) adjacentSources++;
+			if(this.isSourceBlock(world, pos.west())) adjacentSources++;
+			if(adjacentSources >= 2) {
+				world.setBlockState(pos, state.withProperty(LEVEL, 0), 2);
+				quantaRemaining = quantaPerBlock;
+			}
+		}
+
 		int expQuanta = -101;
 
 		if(!(state.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)state.getBlock()).isUnderwaterBlock)) {
@@ -439,5 +453,43 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		return super.canPlaceBlockAt(worldIn, pos) && (!this.isUnderwaterBlock || worldIn.getBlockState(pos).getMaterial() == Material.WATER);
+	}
+
+	private static final int DEEP_COLOR_R = 19;
+	private static final int DEEP_COLOR_G = 24;
+	private static final int DEEP_COLOR_B = 68;
+
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		if(worldIn == null || pos == null || tintIndex != 0) {
+			return -1;
+		}
+
+		int r = 0;
+		int g = 0;
+		int b = 0;
+		for (int dx = -1; dx <= 1; dx++) {
+			for (int dz = -1; dz <= 1; dz++) {
+				int colorMultiplier = worldIn.getBiomeGenForCoords(pos.add(dx, 0, dz)).getWaterColorMultiplier();
+				r += (colorMultiplier & 0xFF0000) >> 16; g += (colorMultiplier & 0x00FF00) >> 8; b += colorMultiplier & 0x0000FF;
+			}
+		}
+		r /= 9;
+		g /= 9;
+		b /= 9;
+		float depth = 0;
+		if (pos.getY() > WorldProviderBetweenlands.CAVE_START) {
+			depth = 1;
+		} else {
+			if (pos.getY() < WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
+				depth = 0;
+			} else {
+				depth = (pos.getY() - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+			}
+		}
+		r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);	
+		g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
+		b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
+		return r << 16 | g << 8 | b;
 	}
 }

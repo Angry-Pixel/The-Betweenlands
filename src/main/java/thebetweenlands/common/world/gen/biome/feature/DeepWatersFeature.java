@@ -8,6 +8,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 public class DeepWatersFeature extends BiomeFeature {
 	private NoiseGeneratorPerlin islandNoiseGen;
@@ -27,8 +28,8 @@ public class DeepWatersFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
-			int pass) {
-		if(pass == 0) {
+			EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			//Flatten terrain
 			int lowestBlock = 0;

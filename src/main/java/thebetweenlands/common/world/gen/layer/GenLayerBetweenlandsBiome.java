@@ -28,7 +28,7 @@ public class GenLayerBetweenlandsBiome extends GenLayerBetweenlands {
 		for (int zz = 0; zz < sizeZ; ++zz) {
 			for (int xx = 0; xx < sizeX; ++xx) {
 				this.initChunkSeed(xx + x, zz + z);
-				ints[xx + zz * sizeX] = Biome.getIdForBiome(/*this.biomesToGenerate.getRandomItem(this.nextInt(this.totalWeight))*/BiomeRegistry.SWAMPLANDS);
+				ints[xx + zz * sizeX] = Biome.getIdForBiome(this.biomesToGenerate.getRandomItem(this.nextInt(this.totalWeight)));
 			}
 		}
 

@@ -37,6 +37,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	protected final BiomeBetweenlands setBiomeGenerator(BiomeGenerator generator) {
 		if(this.biomeGenerator != null)
 			throw new RuntimeException("Can only set the biome generator once!");
+		if(this.biomeGenerator.getBiome() != this)
+			throw new RuntimeException("Generator was assigned to a different biome!");
 		this.biomeGenerator = generator;
 		return this;
 	}

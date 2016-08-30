@@ -2,6 +2,7 @@ package thebetweenlands.common.world.biome;
 
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorSludgePlains;
 import thebetweenlands.common.world.gen.biome.feature.FlatLandFeature;
 import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
 
@@ -10,7 +11,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 	public BiomeSludgePlains() {
 		super(new BiomeProperties("sludge_plains").setBaseHeight(110.0F).setHeightVariation(3F).setWaterColor(0x3A2F0B));
 		//this.setWeight(5);
-		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1)
+		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlains())
 		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT))
 		.addFeature(new PatchFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BlockRegistry.SLUDGY_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))

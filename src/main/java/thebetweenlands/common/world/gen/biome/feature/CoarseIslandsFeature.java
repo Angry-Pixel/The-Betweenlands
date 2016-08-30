@@ -12,6 +12,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
  * Adds coarse, corroded islands to larger water bodies
@@ -42,8 +43,8 @@ public class CoarseIslandsFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
-			int pass) {
-		if(pass == 0) {
+			EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			double islandNoise = this.islandNoise[x * 16 + z] / 0.9f * terrainWeight + 2.1f;
 			double cragNoise = this.cragNoise[x * 16 + z] / 2.1f + 2.0f;
 			boolean isCrag = cragNoise <= 0;

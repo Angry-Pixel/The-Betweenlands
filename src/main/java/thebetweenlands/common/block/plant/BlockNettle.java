@@ -14,7 +14,7 @@ public class BlockNettle extends BlockPlant {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
-		if(rand.nextInt(80) == 0) {
+		if(rand.nextInt(240) == 0) {
 			worldIn.setBlockState(pos, BlockRegistry.NETTLE_FLOWERED.getDefaultState());
 		}
 	}

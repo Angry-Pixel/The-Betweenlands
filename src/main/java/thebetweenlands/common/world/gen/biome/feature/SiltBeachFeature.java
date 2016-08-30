@@ -10,6 +10,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
  * Adds silt beaches to low areas close to water
@@ -41,8 +42,8 @@ public class SiltBeachFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
-			int pass) {
-		if(pass == 1) {
+			EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && terrainWeight <= this.terrainWeightThreshold) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT;
 				Block currentBlock = chunkPrimer.getBlockState(x, y, z).getBlock();

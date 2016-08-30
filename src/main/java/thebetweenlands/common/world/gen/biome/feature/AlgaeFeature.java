@@ -10,6 +10,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
  * Adds algae to water surfaces
@@ -31,8 +32,8 @@ public class AlgaeFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
-			int pass) {
-		if(pass == 1) {
+			EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			if(this.algaeNoise[x * 16 + z] / 1.6f * terrainWeight + 1.8f <= 0) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT;
 				Block currentBlock = chunkPrimer.getBlockState(x, y, z).getBlock();

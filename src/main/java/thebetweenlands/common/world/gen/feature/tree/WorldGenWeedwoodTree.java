@@ -158,7 +158,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (!isALog(world.getBlockState(pos.add(x1, y1, z1))) && rand.nextInt(5) != 0)
 							world.setBlockState(pos.add(x1, y1, z1), leaves, 2);
-					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(5) == 0 && y1 > 0)
+					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && y1 > 0)
 						if (!isALog(world.getBlockState(pos.add(x1, y1, z1))))
 							world.setBlockState(pos.add(x1, y1, z1), logY);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(3) == 0 && y1 == 0)

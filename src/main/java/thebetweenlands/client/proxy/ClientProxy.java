@@ -57,6 +57,7 @@ import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
@@ -86,7 +87,6 @@ import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -266,46 +266,18 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
 
 		//Block colors
+		for(Block block : BlockRegistry.BLOCKS) {
+			if(block instanceof ITintedBlock) {
+				final ITintedBlock tintedBlock = (ITintedBlock) block;
 				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
-					private static final int DEEP_COLOR_R = 19;
-					private static final int DEEP_COLOR_G = 24;
-					private static final int DEEP_COLOR_B = 68;
-
 					@Override
 					public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-						if(worldIn == null || pos == null) {
-							return -1;
-						}
-						
-						int r = 0;
-						int g = 0;
-						int b = 0;
-						for (int dx = -1; dx <= 1; dx++) {
-							for (int dz = -1; dz <= 1; dz++) {
-								int colorMultiplier = worldIn.getBiomeGenForCoords(pos).getWaterColorMultiplier();
-								r += (colorMultiplier & 0xFF0000) >> 16; g += (colorMultiplier & 0x00FF00) >> 8; b += colorMultiplier & 0x0000FF;
-							}
-						}
-						r /= 9;
-						g /= 9;
-						b /= 9;
-						float depth = 0;
-						if (pos.getY() > WorldProviderBetweenlands.CAVE_START) {
-							depth = 1;
-						} else {
-							if (pos.getY() < WorldProviderBetweenlands.CAVE_WATER_HEIGHT) {
-								depth = 0;
-							} else {
-								depth = (pos.getY() - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) / (float) (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
-							}
-						}
-						r = (int) (r * depth + DEEP_COLOR_R * (1 - depth) + 0.5F);	
-						g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
-						b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
-						return r << 16 | g << 8 | b;
+						return tintedBlock.getColorMultiplier(state, worldIn, pos, tintIndex);
 					}
-				}, new Block[]{BlockRegistry.SWAMP_WATER});
-		
+				}, new Block[]{(Block) tintedBlock});
+			}
+		}
+
 		pixelLove = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getMinecraft().renderEngine, false);
 		if (Minecraft.getMinecraft().gameSettings.language != null) {
 			pixelLove.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());

@@ -12,6 +12,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
  * Adds Cragrock spires to large water bodies
@@ -37,8 +38,8 @@ public class CragSpiresFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
-			int pass) {
-		if(pass == 0) {
+			EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			double noise = this.spireNoise[x * 16 + z] / 1.5f * terrainWeight + 2.4f;
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			if(chunkPrimer.getBlockState(x, layerHeight, z).getBlock() != chunkGenerator.layerBlock) {

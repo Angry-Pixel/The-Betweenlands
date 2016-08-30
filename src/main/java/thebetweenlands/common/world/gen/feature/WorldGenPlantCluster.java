@@ -13,6 +13,7 @@ public class WorldGenPlantCluster extends WorldGenerator {
 	private final Block block;
 	private final int offset;
 	private final int attempts;
+	private boolean isUnderwater = false;
 
 	public WorldGenPlantCluster(IBlockState blockState, int offset, int attempts) {
 		this.blockState = blockState;
@@ -23,6 +24,11 @@ public class WorldGenPlantCluster extends WorldGenerator {
 	
 	public WorldGenPlantCluster(IBlockState blockState) {
 		this(blockState, 8, 128);
+	}
+	
+	public WorldGenPlantCluster setUnderwater(boolean underwater) {
+		this.isUnderwater = underwater;
+		return this;
 	}
 
 	@Override
@@ -36,7 +42,7 @@ public class WorldGenPlantCluster extends WorldGenerator {
 		for (int i = 0; i < this.attempts; ++i) {
 			BlockPos blockpos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
-			if (worldIn.isAirBlock(blockpos) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
+			if ((worldIn.isAirBlock(blockpos) || (this.isUnderwater && worldIn.getBlockState(blockpos).getMaterial().isLiquid())) && this.block.canPlaceBlockAt(worldIn, blockpos)) {
 				this.setBlockAndNotifyAdequately(worldIn, blockpos, this.blockState);
 				generated = true;
 			}

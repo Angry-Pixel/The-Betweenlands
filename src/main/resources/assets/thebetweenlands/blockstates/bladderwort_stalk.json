@@ -4,7 +4,7 @@
     "model": "thebetweenlands:internal/model_combined",
     "custom": { 
       "model_base": "thebetweenlands:block/bladderwort_stalk",
-      "model_additional": "forge:block/fluid",
+      "model_additional": "thebetweenlands:block/internal/fluid",
       "model_additional_data": {
         "fluid": "swamp_water"
       }

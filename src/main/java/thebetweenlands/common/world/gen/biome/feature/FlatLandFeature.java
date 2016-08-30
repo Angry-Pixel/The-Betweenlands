@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
  * Takes all base terrain below the water height, moves it above the water and creates small rivers
@@ -40,8 +41,8 @@ public class FlatLandFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
-			int pass) {
-		if(pass == 0) {
+			EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			//Flatten terrain
 			int lowestBlock = 0;
 			for(int yOff = 0; yOff < this.waterHeight; yOff++) {

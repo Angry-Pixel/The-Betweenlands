@@ -4,7 +4,7 @@
     "model": "thebetweenlands:internal/model_combined",
     "custom": { 
       "model_base": "thebetweenlands:block/swamp_kelp",
-      "model_additional": "forge:block/fluid",
+      "model_additional": "thebetweenlands:block/internal/fluid",
       "model_additional_data": {
         "fluid": "swamp_water"
       }

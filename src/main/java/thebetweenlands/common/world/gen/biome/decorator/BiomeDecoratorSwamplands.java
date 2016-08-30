@@ -11,7 +11,7 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		super.decorate(world, generator, rand, x, z);
 
 		//TODO: Implement missing generators
-		this.generate(60, DecorationHelper::generateTarPool);
+		this.generate(8, DecorationHelper::generateTarPoolSurface);
 		//this.generate(30, DecorationHelper::generateGiantWeedwoodTree);
 		//this.generate(10, DecorationHelper::generateDeadTree);
 		//this.generate(2, DecorationHelper::generateRottenLogStructure);
@@ -20,19 +20,19 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		//this.generate(45, DecorationHelper::generateWeedwoodBush);
 		//this.generate(70, DecorationHelper::generateRubberTree);
 		//this.generate(70, DecorationHelper::generateSapTree);
-		
-		this.generate(20, DecorationHelper::generateSwampReedCluster);
-		this.generate(80, DecorationHelper::generateSwampPlantCluster);
-		this.generate(120, DecorationHelper::generateSwampTallgrassCluster);
-		this.generate(6, DecorationHelper::generateVenusFlyTrap);
-		this.generate(10, DecorationHelper::generatePitcherPlant);
+
+		this.generate(40, DecorationHelper::generateSwampReedCluster);
+		this.generate(8, DecorationHelper::generateSwampPlantCluster);
+		this.generate(100, DecorationHelper::generateSwampTallgrassCluster);
+		this.generate(0.6F, DecorationHelper::generateVenusFlyTrapCluster);
+		this.generate(0.9F, DecorationHelper::generatePitcherPlant);
 		this.generate(2, DecorationHelper::generateFlatHeadMushroomCluster);
 		this.generate(2, DecorationHelper::generateBlackHatMushroomCluster);
 		this.generate(2, DecorationHelper::generateVolarpad);
 		this.generate(5, DecorationHelper::generateCattailCluster);
 		this.generate(20, DecorationHelper::generateTallCattail);
 		this.generate(8, DecorationHelper::generateNettlesCluster);
-		
+
 		//this.generate(20, DecorationHelper::generateMossCluster);
 	}
 }

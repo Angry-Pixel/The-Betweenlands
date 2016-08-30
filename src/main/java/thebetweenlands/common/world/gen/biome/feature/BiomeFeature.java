@@ -2,10 +2,10 @@ package thebetweenlands.common.world.gen.biome.feature;
 
 import java.util.Random;
 
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 public abstract class BiomeFeature {
 	/**
@@ -41,7 +41,7 @@ public abstract class BiomeFeature {
 	 */
 	public abstract void replaceStackBlocks(int x, int z, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight, int pass);
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight, EnumGeneratorPass pass);
 	
 	public static double lerp(double val1, double val2, double lerp) {
 		return val2 + (val1 - val2) * lerp;

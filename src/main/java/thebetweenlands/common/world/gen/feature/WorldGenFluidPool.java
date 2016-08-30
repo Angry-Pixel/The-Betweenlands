@@ -22,8 +22,10 @@ public class WorldGenFluidPool extends WorldGenerator {
 			BlockRegistry.BETWEENSTONE_BRICK_SLAB
 			);
 	private final double size;
+	private int minY = 0;
 
 	public WorldGenFluidPool(Block blockIn, double size) {
+		super(true);
 		this.block = blockIn;
 		this.size = size;
 	}
@@ -31,13 +33,18 @@ public class WorldGenFluidPool extends WorldGenerator {
 	public WorldGenFluidPool(Block blockIn) {
 		this(blockIn, 1.0D);
 	}
+	
+	public WorldGenFluidPool setMinY(int minY) {
+		this.minY = minY;
+		return this;
+	}
 
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
 		for (position = position.add(-8, 0, -8); position.getY() > 5 && worldIn.isAirBlock(position); position = position.down()) {
 			;
 		}
 
-		if (position.getY() <= 4) {
+		if (position.getY() <= 4 + this.minY) {
 			return false;
 		} else {
 			position = position.down(4);

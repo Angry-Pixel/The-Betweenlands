@@ -1,6 +1,5 @@
 package thebetweenlands.common.world;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.GameType;
@@ -71,7 +70,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new ChunkGeneratorBetweenlands(this.worldObj, this.worldObj.getSeed(), BlockRegistry.BETWEENSTONE, Blocks.WATER/*BlockRegistry.SWAMP_WATER*/, LAYER_HEIGHT);
+		return new ChunkGeneratorBetweenlands(this.worldObj, this.worldObj.getSeed(), BlockRegistry.BETWEENSTONE, /*Blocks.WATER*/BlockRegistry.SWAMP_WATER, LAYER_HEIGHT);
 	}
 
 	@Override

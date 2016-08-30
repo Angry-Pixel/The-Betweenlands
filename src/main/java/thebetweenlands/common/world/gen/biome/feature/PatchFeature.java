@@ -10,6 +10,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
  * Generates block patches at the surface of the terrain
@@ -49,8 +50,8 @@ public class PatchFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise,
 			ChunkPrimer chunkPrimer, ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			Biome biome, float terrainWeights[], float terrainWeight, int pass) {
-		if(pass == 1) {
+			Biome biome, float terrainWeights[], float terrainWeight, EnumGeneratorPass pass) {
+		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			if(this.mudNoise[x * 16 + z] * this.mult * terrainWeight + this.offset <= 0) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;
 				for(int yo = 0; yo < WorldProviderBetweenlands.LAYER_HEIGHT + 20; yo++) {

@@ -27,6 +27,7 @@ import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
+import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.gen.feature.MapGenCavesBetweenlands;
 
 public class ChunkGeneratorBetweenlands implements IChunkGenerator {
@@ -151,7 +152,20 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 		//Gen caves
 		this.caveGenerator.setBiomeTerrainWeights(this.interpolatedTerrainBiomeWeights);
+		//TODO: Maybe these can be optimized to speed up the world gen quite a bit. Sampling the noise for only every second point and then lerp?
 		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
+
+		for(int z = 0; z < 16; z++) {
+			for(int x = 0; x < 16; x++) {
+				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
+				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
+				Biome biome = this.biomesForGeneration[z + x * 16];
+				if(biome instanceof BiomeBetweenlands) {
+					BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
+					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, chunkprimer, this, this.biomesForGeneration, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.POST_GEN_CAVES);
+				}
+			}
+		}
 
 		Chunk chunk = new Chunk(this.worldObj, chunkprimer, chunkX, chunkZ);
 		byte[] biomeArray = chunk.getBiomeArray();
@@ -369,7 +383,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 				++heightMapIndex;
 
-				double depth = (biomeDepth * this.layerHeight) / 256.0D;
+				//double depth = (biomeDepth * this.layerHeight) / 256.0D;
 
 				for (int heightMapY = 0; heightMapY < 33; ++heightMapY) {
 					double densityOffset = ((double)heightMapY * 8.0D - biomeDepth - (depthPerturbation * biomeVariation / 256.0D)) / 256.0D;
@@ -427,7 +441,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 						generator.generateNoise(chunkZ, chunkX);
 						this.initializedNoiseGenerators.add(generator);
 					}
+					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS);
 					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights);
+					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
 				} else {
 					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
 				}
