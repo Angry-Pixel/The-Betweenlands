@@ -60,7 +60,7 @@ public class BiomeDecoratorBetweenlands {
 	public final BlockPos getRandomPos(int padding) {
 		return new BlockPos(this.x + this.offsetXZ(padding), this.y + this.offsetY(), this.z + this.offsetXZ(padding));
 	}
-	
+
 	/**
 	 * Returns a random position near the sea ground (or surface if there's no water) with a padding of 8 blocks
 	 * @return
@@ -270,6 +270,9 @@ public class BiomeDecoratorBetweenlands {
 			if(this.rand.nextFloat() <= tries)
 				generated = generator.apply(this);
 		} else {
+			float remainder = tries % 1.0F;
+			if(this.rand.nextFloat() <= remainder)
+				tries++;
 			for(int i = 0; i < tries; i++) {
 				if(generator.apply(this))
 					generated = true;

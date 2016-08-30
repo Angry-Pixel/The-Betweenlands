@@ -17,6 +17,6 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBetweenlands {
 		//this.generate(5, DecorationHelper::generateMudStructures);
 		this.generate(50, DecorationHelper::generateSludgecreepCluster);
 		this.generate(10, DecorationHelper::generateDeadWeedwoodBushCluster);
-		this.generate(10, DecorationHelper::generateRootsCluster);
+		this.generate(0.8F, DecorationHelper::generateRootsCluster);
 	}
 }

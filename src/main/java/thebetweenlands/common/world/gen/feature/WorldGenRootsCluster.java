@@ -32,7 +32,7 @@ public class WorldGenRootsCluster extends WorldGenerator {
 	}
 
 	private boolean generateRootsStack(World world, Random rand, BlockPos pos) {
-		int height = 0;
+		int height = 6;
 		MutableBlockPos checkPos = new MutableBlockPos();
 		for(int yo = 0; yo < 6; yo++) {
 			checkPos.setPos(pos.getX(), pos.getY() + yo, pos.getZ());
