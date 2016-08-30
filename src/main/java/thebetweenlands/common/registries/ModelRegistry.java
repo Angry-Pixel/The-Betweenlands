@@ -68,7 +68,7 @@ public class ModelRegistry {
 	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
 		@Override
 		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
-			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 1.5D, -vertexIn.z - 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
+			return new Vec3UV(-vertexIn.x - 0.5D, vertexIn.y + 1.5D, -vertexIn.z - 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	};
 	public static final IModel BONE_SHIELD = new ModelFromModelBase(new ModelBoneShield(), new ResourceLocation("thebetweenlands:items/shields/bone_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
