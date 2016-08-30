@@ -30,6 +30,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelBoneShield;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelDentrothystShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelOctineShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelSyrmoriteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValoniteShield;
@@ -76,6 +77,11 @@ public class ModelRegistry {
 	public static final IModel VALONITE_SHIELD = new ModelFromModelBase(new ModelValoniteShield(), new ResourceLocation("thebetweenlands:items/shields/valonite_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel WEEDWOOD_SHIELD = new ModelFromModelBase(new ModelWeedwoodShield(), new ResourceLocation("thebetweenlands:items/shields/weedwood_shield"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel WEEDWOOD_SHIELD_BURNING = new ModelWeedwoodShieldBurning();
+	public static final IModel DENTROTHYST_SHIELD_GREEN = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green"), 64, 64, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel DENTROTHYST_SHIELD_GREEN_POLISHED = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green_polished"), 64, 64, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel DENTROTHYST_SHIELD_ORANGE = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange"), 64, 64, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel DENTROTHYST_SHIELD_ORANGE_POLISHED = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange_polished"), 64, 64, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel LURKER_SKIN_SHIELD = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/lurker_skin_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();

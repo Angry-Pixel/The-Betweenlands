@@ -137,6 +137,11 @@ public class ItemRegistry {
 	public static final Item WEEDWOOD_SHIELD = new ItemWeedwoodShield();
 	public static final Item SYRMORITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_SYRMORITE);
 	public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
+	public static final Item DENTROTHYST_SHIELD_GREEN = new ItemBLShield(BLMaterialRegistry.TOOL_DENTROTHYST);
+	public static final Item DENTROTHYST_SHIELD_GREEN_POLISHED = new ItemBLShield(BLMaterialRegistry.TOOL_DENTROTHYST);
+	public static final Item DENTROTHYST_SHIELD_ORANGE = new ItemBLShield(BLMaterialRegistry.TOOL_DENTROTHYST);
+	public static final Item DENTROTHYST_SHIELD_ORANGE_POLISHED = new ItemBLShield(BLMaterialRegistry.TOOL_DENTROTHYST);
+	public static final Item LURKER_SKIN_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_LURKER_SKIN);
 	public static final Item MANUAL_HL = new ItemManualHL();
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 	public static final Item SICKLE = new ItemSickle();
