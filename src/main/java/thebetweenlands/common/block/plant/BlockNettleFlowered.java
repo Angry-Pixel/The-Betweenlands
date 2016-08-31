@@ -16,7 +16,7 @@ public class BlockNettleFlowered extends BlockPlant {
 		super.updateTick(worldIn, pos, state, rand);
 		if(rand.nextInt(350) == 0) {
 			BlockPos randOffset = pos.add(rand.nextInt(3) - 1, rand.nextInt(2) - rand.nextInt(2), rand.nextInt(3) - 1);
-			if(worldIn.isAirBlock(randOffset) && canBlockStay(worldIn, randOffset, worldIn.getBlockState(randOffset))) {
+			if(worldIn.isAreaLoaded(randOffset, 0) && worldIn.isAirBlock(randOffset) && canBlockStay(worldIn, randOffset, worldIn.getBlockState(randOffset))) {
 				worldIn.setBlockState(randOffset, BlockRegistry.NETTLE.getDefaultState());
 			}
 		}

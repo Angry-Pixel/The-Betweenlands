@@ -21,7 +21,7 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 		//this.generate(5, DecorationHelper::generateIdolHead);
 		this.generate(20, DecorationHelper::generateSwampReedCluster);
 		this.generate(0.4F, DecorationHelper::generateMireCoralCluster);
-		//this.generate(10, DecorationHelper::generateMossCluster);
+		this.generate(25, DecorationHelper::generateMossCluster);
 		this.generate(10, DecorationHelper::generateMilkweedCluster);
 		this.generate(10, DecorationHelper::generateShootsCluster);
 		this.generate(10, DecorationHelper::generateCardinalFlower);

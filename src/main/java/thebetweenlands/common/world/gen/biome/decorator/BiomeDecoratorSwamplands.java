@@ -20,7 +20,6 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.generate(45, DecorationHelper::generateWeedwoodBush);
 		this.generate(4, DecorationHelper::generateRubberTree);
 		this.generate(8, DecorationHelper::generateSapTree);
-
 		this.generate(40, DecorationHelper::generateSwampReedCluster);
 		this.generate(8, DecorationHelper::generateSwampPlantCluster);
 		this.generate(100, DecorationHelper::generateSwampTallgrassCluster);
@@ -32,7 +31,6 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.generate(5, DecorationHelper::generateCattailCluster);
 		this.generate(20, DecorationHelper::generateTallCattail);
 		this.generate(8, DecorationHelper::generateNettlesCluster);
-
-		//this.generate(20, DecorationHelper::generateMossCluster);
+		this.generate(40, DecorationHelper::generateMossCluster);
 	}
 }

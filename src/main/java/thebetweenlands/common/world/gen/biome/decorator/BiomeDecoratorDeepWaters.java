@@ -15,7 +15,7 @@ public class BiomeDecoratorDeepWaters extends BiomeDecoratorBetweenlands {
 		this.generate(2, DecorationHelper::generateBladderwortCluster);
 		this.generate(5, DecorationHelper::generateMireCoralCluster);
 		this.generate(5, DecorationHelper::generateDeepWaterCoralCluster);
-		//this.generate(10, DecorationHelper::generateLichenCluster);
+		this.generate(240, DecorationHelper::generateLichenCluster);
 		this.generate(5, DecorationHelper::generateSwampKelpCluster);
 		this.generate(25, DecorationHelper::generateWaterWeedsCluster);
 	}
