@@ -7,7 +7,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
@@ -205,9 +204,6 @@ public class BiomeDecoratorBetweenlands {
 
 		//Generate middle gems
 		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
-		if(this.world.getBiomeGenForCoords(new BlockPos(this.x, 0, this.z)) == BiomeRegistry.SLUDGE_PLAINS) {
-			cycles = 4 + this.rand.nextInt(2);
-		}
 		for(int i = 0; i < cycles; i++) {
 			if(this.rand.nextInt(9 / cycles + 1) == 0) {
 				int xx = this.x + this.offsetXZ();

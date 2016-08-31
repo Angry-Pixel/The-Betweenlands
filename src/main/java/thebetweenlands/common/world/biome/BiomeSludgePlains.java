@@ -4,6 +4,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorSludgePlains;
 import thebetweenlands.common.world.gen.biome.feature.FlatLandFeature;
+import thebetweenlands.common.world.gen.biome.feature.MiddleGemFeature;
 import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
 
 public class BiomeSludgePlains extends BiomeBetweenlands {
@@ -15,7 +16,8 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT))
 		.addFeature(new PatchFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BlockRegistry.SLUDGY_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))
-		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D));
+		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D))
+		.addFeature(new MiddleGemFeature());
 		this.setFoliageColors(0x5B3522, 0x5B3522);
 	}
 

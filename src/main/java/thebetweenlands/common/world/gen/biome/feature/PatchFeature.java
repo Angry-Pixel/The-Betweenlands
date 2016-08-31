@@ -38,7 +38,8 @@ public class PatchFeature extends BiomeFeature {
 	}
 
 	@Override
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
+		Random rng = new Random(seed);
 		this.mudNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 	}
 
@@ -50,7 +51,7 @@ public class PatchFeature extends BiomeFeature {
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise,
 			ChunkPrimer chunkPrimer, ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			Biome biome, float terrainWeights[], float terrainWeight, EnumGeneratorPass pass) {
+			Biome biome, float[] terrainWeights, float terrainWeight, EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			if(this.mudNoise[x * 16 + z] * this.mult * terrainWeight + this.offset <= 0) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT + 20;

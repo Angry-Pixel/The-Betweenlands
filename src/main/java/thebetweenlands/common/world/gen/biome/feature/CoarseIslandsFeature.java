@@ -29,7 +29,8 @@ public class CoarseIslandsFeature extends BiomeFeature {
 	private double[] cragNoise = new double[256];
 
 	@Override
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
+		Random rng = new Random(seed);
 		this.islandNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 		this.cragNoiseGen = new NoiseGeneratorPerlin(rng, 5);
 	}
@@ -42,7 +43,7 @@ public class CoarseIslandsFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			double islandNoise = this.islandNoise[x * 16 + z] / 0.9f * terrainWeight + 2.1f;

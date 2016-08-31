@@ -20,7 +20,8 @@ public class AlgaeFeature extends BiomeFeature {
 	private double[] algaeNoise = new double[256];
 
 	@Override
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
+		Random rng = new Random(seed);
 		this.algaeNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 	}
 
@@ -31,7 +32,7 @@ public class AlgaeFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			if(this.algaeNoise[x * 16 + z] / 1.6f * terrainWeight + 1.8f <= 0) {

@@ -10,9 +10,9 @@ import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGener
 public abstract class BiomeFeature {
 	/**
 	 * Initializes additional noise generators.
-	 * @param rng Seeded Random
+	 * @param seed World seed
 	 */
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
 
 	}
 
@@ -41,7 +41,7 @@ public abstract class BiomeFeature {
 	 */
 	public abstract void replaceStackBlocks(int x, int z, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight, EnumGeneratorPass pass);
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight, EnumGeneratorPass pass);
 	
 	public static double lerp(double val1, double val2, double lerp) {
 		return val2 + (val1 - val2) * lerp;

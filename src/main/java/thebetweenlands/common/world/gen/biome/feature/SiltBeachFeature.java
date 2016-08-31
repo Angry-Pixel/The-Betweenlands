@@ -30,7 +30,8 @@ public class SiltBeachFeature extends BiomeFeature {
 	}
 
 	@Override
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
+		Random rng = new Random(seed);
 		this.siltNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 	}
 
@@ -41,7 +42,7 @@ public class SiltBeachFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
 			if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && terrainWeight <= this.terrainWeightThreshold) {

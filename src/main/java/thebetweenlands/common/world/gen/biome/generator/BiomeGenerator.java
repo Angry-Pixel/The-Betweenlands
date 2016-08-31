@@ -171,7 +171,7 @@ public class BiomeGenerator {
 			this.baseBlockLayerVariationNoiseGen = new NoiseGeneratorPerlin(new Random(seed), 4);
 		}
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.initializeGenerators(new Random(seed), this.biome);
+			feature.initializeGenerators(seed, this.biome);
 		}
 	}
 
@@ -210,7 +210,7 @@ public class BiomeGenerator {
 	public final void runBiomeFeatures(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			float terrainWeight, float terrainWeights[], EnumGeneratorPass pass) {
+			float terrainWeight, float[] terrainWeights, EnumGeneratorPass pass) {
 		for(BiomeFeature feature : this.biomeFeatures) {
 			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, pass);
 		}
@@ -232,7 +232,7 @@ public class BiomeGenerator {
 			int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, Random rng, long seed, ChunkPrimer chunkPrimer, 
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			float terrainWeight, float terrainWeights[]) {
+			float terrainWeight, float[] terrainWeights) {
 		this.rng.setSeed((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
@@ -340,7 +340,7 @@ public class BiomeGenerator {
 	 */
 	protected boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float terrainWeights[], float terrainWeight, EnumGeneratorPass pass) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float[] terrainWeights, float terrainWeight, EnumGeneratorPass pass) {
 		return true;
 	}
 }

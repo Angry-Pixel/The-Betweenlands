@@ -17,7 +17,8 @@ public class Marsh1Feature extends BiomeFeature {
 	protected double[] fuzzNoise = new double[256];
 
 	@Override
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
+		Random rng = new Random(seed);
 		this.islandNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 		this.fuzzNoiseGen = new NoiseGeneratorPerlin(rng, 8);
 	}
@@ -30,7 +31,7 @@ public class Marsh1Feature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			double noise = (this.islandNoise[x * 16 + z] / 1.4f +

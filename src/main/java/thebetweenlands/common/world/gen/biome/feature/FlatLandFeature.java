@@ -27,7 +27,8 @@ public class FlatLandFeature extends BiomeFeature {
 	}
 
 	@Override
-	public void initializeGenerators(Random rng, Biome biome) {
+	public void initializeGenerators(long seed, Biome biome) {
+		Random rng = new Random(seed);
 		this.landNoiseGen = new NoiseGeneratorPerlin(rng, 4);
 		this.riverNoiseGen = new NoiseGeneratorPerlin(rng, 2);
 	}
@@ -40,7 +41,7 @@ public class FlatLandFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float terrainWeights[], float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
 			//Flatten terrain
