@@ -18,6 +18,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenSpeleothem;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampKelpCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampReedCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.CubicBezier;
 
@@ -61,6 +62,7 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_DEAD_WEEDWOOD_BUSH = new WorldGenPlantCluster(BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
 	private static final WorldGenerator GEN_ROOTS = new WorldGenRootsCluster();
 	private static final WorldGenerator GEN_WATER_WEEDS = new WorldGenPlantCluster(BlockRegistry.WATER_WEEDS.getDefaultState()).setUnderwater(true);
+	private static final WorldGenerator GEN_UNDERGROUND_RUINS = new WorldGenUndergroundRuins();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -504,6 +506,17 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPosSeaGround();
 		if(SurfaceType.WATER.matches(decorator.getWorld(), pos) && SurfaceType.DIRT.matches(decorator.getWorld(), pos.down())) {
 			return GEN_WATER_WEEDS.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateUndergroundRuins(BiomeDecoratorBetweenlands decorator) {
+		int x = decorator.getRandomPosX(10);
+		int y = WorldProviderBetweenlands.CAVE_WATER_HEIGHT + decorator.getRand().nextInt(20);
+		int z = decorator.getRandomPosZ(10);
+		BlockPos pos = new BlockPos(x, y, z);
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos.down())) {
+			return GEN_UNDERGROUND_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}

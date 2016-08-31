@@ -9,12 +9,19 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerGrass;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockSwampGrass extends BasicBlock implements IGrowable {
+public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlock {
 
 	public BlockSwampGrass() {
 		super(Material.GRASS);
@@ -70,4 +77,15 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable {
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
 		//TODO: Bonemeal growing
 	}
+
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+    public BlockRenderLayer getBlockLayer() {
+        return BlockRenderLayer.CUTOUT;
+    }
 }

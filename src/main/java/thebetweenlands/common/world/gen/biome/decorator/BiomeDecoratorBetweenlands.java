@@ -185,8 +185,7 @@ public class BiomeDecoratorBetweenlands {
 		this.generateOres();
 		this.generate(DecorationHelper::populateCaves);
 		this.generate(2, DecorationHelper::generateStagnantWaterPool);
-		//TODO: Implement missing generators
-		//this.generate(100, DecorationHelper::generateUndergroundRuins);
+		this.generate(100, DecorationHelper::generateUndergroundRuins);
 	}
 
 	/**

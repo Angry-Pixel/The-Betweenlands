@@ -12,8 +12,10 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -32,6 +34,7 @@ import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.BlockRubberLog;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockLootPot;
@@ -324,11 +327,11 @@ public class BlockRegistry {
 		public Block.EnumOffsetType getOffsetType() {
 			return Block.EnumOffsetType.XZ;
 		}
-	}.setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1));
+	}.setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1)).setReplaceable(true);
 	public static final Block SWAMP_KELP = new BlockStackablePlantUnderwater().setLightLevel(0.2F);
 	public static final Block MIRE_CORAL = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.MIRE_CORAL_ITEM.create(1)).setLightLevel(1F);
 	public static final Block DEEP_WATER_CORAL = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.DEEP_WATER_CORAL_ITEM.create(1)).setLightLevel(1F);
-	public static final Block WATER_WEEDS = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1));
+	public static final Block WATER_WEEDS = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1)).setReplaceable(true);
 	public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
 	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
@@ -345,7 +348,7 @@ public class BlockRegistry {
 	public static final Block BUTTON_BUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.BUTTON_BUSH_FLOWERS.create(1));
 	public static final BlockDoublePlantBL CARDINAL_FLOWER = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.CARDINAL_FLOWER_PETALS.create(1));
 	public static final Block CATTAIL = new BlockPlant().setSickleDrop(EnumItemPlantDrop.CATTAIL_HEAD.create(1));
-	public static final Block CAVE_GRASS = new BlockCaveGrass().setSickleDrop(EnumItemPlantDrop.CAVE_GRASS_BLADES.create(1));
+	public static final Block CAVE_GRASS = new BlockCaveGrass().setSickleDrop(EnumItemPlantDrop.CAVE_GRASS_BLADES.create(1)).setReplaceable(true);
 	public static final Block COPPER_IRIS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.COPPER_IRIS_PETALS.create(1));
 	public static final Block MARSH_HIBISCUS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.MARSH_HIBISCUS_FLOWER.create(1));
 	public static final Block MARSH_MALLOW = new BlockPlant().setSickleDrop(EnumItemPlantDrop.MARSH_MALLOW_FLOWER.create(1));
@@ -363,14 +366,14 @@ public class BlockRegistry {
 	public static final Block NETTLE_FLOWERED = new BlockNettleFlowered().setSickleDrop(EnumItemPlantDrop.NETTLE_LEAF.create(1));
 	public static final Block PICKEREL_WEED = new BlockPlant().setSickleDrop(EnumItemPlantDrop.PICKEREL_WEED_FLOWER.create(1));
 	public static final BlockDoublePlantBL PHRAGMITES = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PHRAGMITE_STEMS.create(1));
-	public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1));
-	public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1));
+	public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1)).setReplaceable(true);
+	public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
 	public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1));
 	public static final Block SWAMP_REED = new BlockSwampReed();
 	public static final Block SWAMP_REED_UNDERWATER = new BlockSwampReedUnderwater();
 	public static final Block THORNS = new BlockThorns();
 	public static final BlockDoublePlantBL TALL_CATTAIL = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.CATTAIL_HEAD.create(1));
-	public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1));
+	public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1)).setReplaceable(true);
 	public static final Block DEAD_WEEDWOOD_BUSH = new BlockPlant().setSickleDrop(EnumItemMisc.WEEDWOOD_STICK.create(1));
 	public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
 	public static final Block HOLLOW_LOG = new BlockHollowLog();
@@ -407,26 +410,6 @@ public class BlockRegistry {
 			}
 		} catch (IllegalAccessException e) {
 			throw new RuntimeException(e);
-		}
-	}
-
-	public static void registerRenderers() {
-		for (Block block : BLOCKS) {
-			if(block instanceof IStateMappedBlock) {
-				StateMap.Builder builder = new StateMap.Builder();
-				((IStateMappedBlock)block).setStateMapper(builder);
-				ModelLoader.setCustomStateMapper(block, builder.build());
-			}
-			ResourceLocation name = block.getRegistryName();
-			if(block instanceof ISubtypeBlock) {
-				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
-				for(int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
-					int meta = subtypeBlock.getSubtypeMeta(i);
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
-				}
-			} else {
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
-			}
 		}
 	}
 

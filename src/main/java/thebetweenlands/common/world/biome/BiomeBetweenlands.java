@@ -73,12 +73,12 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	}
 
 	/**
-	 * 
+	 * Sets the grass and foliage colors
 	 * @param grassColor
 	 * @param foliageColor
 	 * @return
 	 */
-	public final BiomeBetweenlands setColors(int grassColor, int foliageColor) {
+	public final BiomeBetweenlands setFoliageColors(int grassColor, int foliageColor) {
 		this.grassColor = grassColor;
 		this.foliageColor = foliageColor;
 		return this;
@@ -87,12 +87,16 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getGrassColorAtPos(BlockPos pos) {
+		if(this.grassColor == 0)
+			return super.getGrassColorAtPos(pos);
 		return this.grassColor;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
     public int getFoliageColorAtPos(BlockPos pos) {
+		if(this.foliageColor == 0)
+			return super.getFoliageColorAtPos(pos);
 		return this.foliageColor;
 	}
 	

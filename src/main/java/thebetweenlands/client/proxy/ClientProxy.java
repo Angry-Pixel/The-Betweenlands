@@ -13,10 +13,13 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.IBlockColor;
+import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -79,6 +82,8 @@ import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
@@ -138,7 +143,27 @@ public class ClientProxy extends CommonProxy {
 	public void registerItemAndBlockRenderers() {
 		CustomModelManager.INSTANCE.registerLoader();
 		//TODO ItemRegistry.registerRenderers();
-		BlockRegistry.registerRenderers();
+		registerBlockRenderers();
+	}
+
+	private static void registerBlockRenderers() {
+		for (Block block : BlockRegistry.BLOCKS) {
+			if(block instanceof IStateMappedBlock) {
+				StateMap.Builder builder = new StateMap.Builder();
+				((IStateMappedBlock)block).setStateMapper(builder);
+				ModelLoader.setCustomStateMapper(block, builder.build());
+			}
+			ResourceLocation name = block.getRegistryName();
+			if(block instanceof ISubtypeBlock) {
+				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
+				for(int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
+					int meta = subtypeBlock.getSubtypeMeta(i);
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
+				}
+			} else {
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
+			}
+		}
 	}
 
 	@Override
@@ -266,15 +291,27 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
 
 		//Block colors
-		for(Block block : BlockRegistry.BLOCKS) {
+		for (Block block : BlockRegistry.BLOCKS) {
+			if(block instanceof IStateMappedBlock) {
+				StateMap.Builder builder = new StateMap.Builder();
+				((IStateMappedBlock)block).setStateMapper(builder);
+				ModelLoader.setCustomStateMapper(block, builder.build());
+			}
 			if(block instanceof ITintedBlock) {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
+				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+					@Override
+					public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+						IBlockState blockState = ((ItemBlock)stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
+						return tintedBlock.getColorMultiplier(blockState, null, null, tintIndex);
+					}
+				}, block);
 				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
 					@Override
 					public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
 						return tintedBlock.getColorMultiplier(state, worldIn, pos, tintIndex);
 					}
-				}, new Block[]{(Block) tintedBlock});
+				}, block);
 			}
 		}
 

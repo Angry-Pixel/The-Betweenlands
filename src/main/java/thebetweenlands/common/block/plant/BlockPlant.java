@@ -28,7 +28,10 @@ import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable {
+	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
+
 	protected ItemStack sickleHarvestableDrop;
+	protected boolean isReplaceable = false;
 
 	public BlockPlant() {
 		super(Material.PLANTS);
@@ -42,9 +45,14 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 		return this;
 	}
 
+	public BlockPlant setReplaceable(boolean replaceable) {
+		this.isReplaceable = replaceable;
+		return this;
+	}
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return FULL_BLOCK_AABB;
+		return PLANT_AABB;
 	}
 
 	@Override
@@ -54,7 +62,7 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
-		return false;
+		return this.isReplaceable;
 	}
 
 	@Override

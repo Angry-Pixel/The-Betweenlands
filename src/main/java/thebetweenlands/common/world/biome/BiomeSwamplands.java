@@ -11,7 +11,7 @@ import thebetweenlands.common.world.gen.biome.feature.SiltBeachFeature;
 public class BiomeSwamplands extends BiomeBetweenlands {
 
 	public BiomeSwamplands() {
-		super(new BiomeProperties("swamplands").setBaseHeight(110.0F).setHeightVariation(5F).setWaterColor(0x184220));
+		super(new BiomeProperties("swamplands").setBaseHeight(110.0F).setHeightVariation(5F).setWaterColor(0x184220).setTemperature(0.8F).setRainfall(0.9F));
 		//this.setWeight(25);
 		this.getBiomeGenerator().setFillerBlockState(BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState())
 		.setTopBlockState(BlockRegistry.DEAD_GRASS.getDefaultState())
@@ -22,6 +22,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new AlgaeFeature())
 		.addFeature(new SiltBeachFeature(0.98F))
 		.setDecorator(new BiomeDecoratorSwamplands());
+		this.setFoliageColors(0x2AFF00, 0x2AFF00);
 	}
 
 }

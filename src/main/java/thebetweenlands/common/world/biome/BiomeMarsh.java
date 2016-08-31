@@ -9,7 +9,7 @@ import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
 public class BiomeMarsh extends BiomeBetweenlands {
 
 	public BiomeMarsh(int type) {
-		super(new BiomeProperties("marsh_" + type).setBaseHeight(119F).setHeightVariation(1.1F).setWaterColor(0x485E18));
+		super(new BiomeProperties("marsh_" + type).setBaseHeight(119F).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
 		//this.setWeight(10);
 		this.getBiomeGenerator()
 		.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
@@ -18,6 +18,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
 		.setDecorator(new BiomeDecoratorMarsh());
+		this.setFoliageColors(0x627017, 0x627017);
 	}
 
 }

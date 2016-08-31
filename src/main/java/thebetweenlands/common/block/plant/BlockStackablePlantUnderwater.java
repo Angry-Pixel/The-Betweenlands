@@ -11,6 +11,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -22,6 +23,8 @@ import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.FluidRegistry;
 
 public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
+	protected static final AxisAlignedBB STACKABLE_PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1D, 0.9D);
+
 	public static final PropertyBool IS_TOP = BlockStackablePlant.IS_TOP;
 	public static final PropertyBool IS_BOTTOM = BlockStackablePlant.IS_BOTTOM;
 	public static final PropertyInteger AGE = BlockStackablePlant.AGE;
@@ -43,6 +46,11 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	public BlockStackablePlantUnderwater(Fluid fluid, Material materialIn, boolean breaksLower) {
 		super(fluid, materialIn);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, 0).withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return STACKABLE_PLANT_AABB;
 	}
 
 	@Override

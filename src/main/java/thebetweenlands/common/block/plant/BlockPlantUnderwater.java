@@ -34,8 +34,11 @@ import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
+	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
+	
 	protected ItemStack sickleHarvestableDrop;
-
+	protected boolean isReplaceable = false;
+	
 	public BlockPlantUnderwater() {
 		this(FluidRegistry.SWAMP_WATER, Material.WATER);
 	}
@@ -53,6 +56,21 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	public BlockPlantUnderwater setSickleDrop(ItemStack drop) {
 		this.sickleHarvestableDrop = drop;
 		return this;
+	}
+	
+	public BlockPlantUnderwater setReplaceable(boolean replaceable) {
+		this.isReplaceable = replaceable;
+		return this;
+	}
+	
+	@Override
+	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
+		return this.isReplaceable;
+	}
+	
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return PLANT_AABB;
 	}
 
 	@Override

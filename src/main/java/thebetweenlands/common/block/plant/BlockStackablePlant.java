@@ -10,6 +10,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -17,6 +18,8 @@ import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
 public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock {
+	protected static final AxisAlignedBB STACKABLE_PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1D, 0.9D);
+	
 	public static final PropertyBool IS_TOP = PropertyBool.create("is_top");
 	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
 	public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 15);
@@ -33,6 +36,11 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
 	}
 
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return STACKABLE_PLANT_AABB;
+	}
+	
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[]{AGE, IS_TOP, IS_BOTTOM});
