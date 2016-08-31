@@ -6,12 +6,13 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
@@ -22,8 +23,9 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 
-public class BlockRubberLog extends Block {
+public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	public static final PropertyBool NORTH = PropertyBool.create("north");
 	public static final PropertyBool EAST = PropertyBool.create("east");
 	public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -115,7 +117,6 @@ public class BlockRubberLog extends Block {
 	}
 
 	public BlockRubberLog() {
-		super(Material.WOOD);
 		this.setHardness(2.0F);
 		this.setSoundType(SoundType.WOOD);
 		this.setHarvestLevel("axe", 0);
@@ -135,7 +136,7 @@ public class BlockRubberLog extends Block {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { UP, DOWN, NORTH, SOUTH, EAST, WEST, NATURAL });
+		return new BlockStateContainer(this, new IProperty[] { LOG_AXIS, UP, DOWN, NORTH, SOUTH, EAST, WEST, NATURAL });
 	}
 
 	@Override
@@ -225,5 +226,10 @@ public class BlockRubberLog extends Block {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		state = this.getActualState(state, source, pos);
 		return getCombinedBoundingBoxForState(state);
+	}
+
+	@Override
+	public void setStateMapper(Builder builder) {
+		builder.ignore(LOG_AXIS);
 	}
 }

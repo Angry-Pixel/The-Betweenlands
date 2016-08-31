@@ -17,9 +17,9 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		//this.generate(2, DecorationHelper::generateRottenLogStructure);
 		this.generate(4, DecorationHelper::generateSmallHollowLog);
 		this.generate(80, DecorationHelper::generateWeedwoodTree);
-		//this.generate(45, DecorationHelper::generateWeedwoodBush);
-		//this.generate(70, DecorationHelper::generateRubberTree);
-		//this.generate(70, DecorationHelper::generateSapTree);
+		this.generate(45, DecorationHelper::generateWeedwoodBush);
+		this.generate(4, DecorationHelper::generateRubberTree);
+		this.generate(8, DecorationHelper::generateSapTree);
 
 		this.generate(40, DecorationHelper::generateSwampReedCluster);
 		this.generate(8, DecorationHelper::generateSwampPlantCluster);

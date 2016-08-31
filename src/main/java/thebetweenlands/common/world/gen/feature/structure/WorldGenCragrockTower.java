@@ -1,5 +1,8 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+
+import java.util.Random;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -7,9 +10,9 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
-
-import java.util.Random;
 
 public class WorldGenCragrockTower extends WorldGenHelper {
     private static IBlockState CRAGROCK;
@@ -58,24 +61,127 @@ public class WorldGenCragrockTower extends WorldGenHelper {
         WISP = BlockRegistry.WISP.getDefaultState();
         CARVED_CRAGROCK = BlockRegistry.CARVED_CRAGROCK.getDefaultState();
 
-        while (worldIn.isAirBlock(pos) && pos.getY() > 80)
+        while (worldIn.isAirBlock(pos) && pos.getY() > WorldProviderBetweenlands.LAYER_HEIGHT)
             pos = pos.add(0, -1, 0);
 
 
         return tower(worldIn, rand, pos.getX(), pos.getY(), pos.getZ());
     }
 
+    private boolean rotatedCubeMatches(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction, SurfaceType type) {
+		x -= width / 2;
+		z -= depth / 2;
+		switch (direction) {
+		case 0:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
+					for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
+						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 1:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
+					for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
+						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 2:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
+					for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
+						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 3:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
+					for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
+						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		}
+		return true;
+	}
+
+	private boolean canGenerate(World world, int x, int y, int z, int direction) {
+		x -= width / 2;
+		z -= depth / 2;
+		switch (direction) {
+		case 0:
+			for (int yy = y; yy < y + height; yy++)
+				for (int xx = x; xx < x + width; xx++)
+					for (int zz = z; zz < z + depth; zz++) {
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 1:
+			for (int yy = y; yy < y + height; yy++)
+				for (int zz = z + depth - 1; zz > z + depth - width - 1; zz--)
+					for (int xx = x; xx < x + depth; xx++) {
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+							return false;
+
+					}
+			break;
+		case 2:
+			for (int yy = y; yy < y + height; yy++)
+				for (int xx = x + width - 1; xx > x + width - width - 1; xx--)
+					for (int zz = z + depth - 1; zz > z + depth - depth - 1; zz--) {
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+							return false;
+
+					}
+			break;
+		case 3:
+			for (int yy = y; yy < y + height; yy++)
+				for (int zz = z; zz < z + width; zz++)
+					for (int xx = x + width - 1; xx > x + width - depth - 1; xx--) {
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+							return false;
+
+					}
+			break;
+		}
+		return true;
+	}
+    
     private boolean tower(World world, Random random, int x, int y, int z) {
         int direction = random.nextInt(4);
-        BlockPos pos = new BlockPos(x, y, z);
-        /*if (!canGenerate(world, x, y, z, direction))
+        
+        if (!canGenerate(world, x, y, z, direction))
             return false;
         if (!rotatedCubeMatches(world, x, y, z, 1, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED)
                 || !rotatedCubeMatches(world, x, y, z, 14, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED))
-            return false;*/
+            return false;
 
         rotatedCubeVolume(world, x, y, z, 0, 0, 3, Blocks.AIR.getDefaultState(), width, height, depth - 3, direction);
 
+        //TODO: World locations
+        /*x -= width / 2;
+		z -= depth / 2;
+		switch (direction) {
+		case 0:
+			StorageHelper.addArea(world, "translate:cragrockTower", AxisAlignedBB.getBoundingBox(x, y, z, x+width, y+height, z+depth).expand(6, 6, 6), EnumLocationType.DUNGEON, 0);
+			break;
+		case 1:
+			StorageHelper.addArea(world, "translate:cragrockTower", AxisAlignedBB.getBoundingBox(x, y, z + depth - width - 1, x + depth, y+height, z + depth - 1).expand(6, 6, 6), EnumLocationType.DUNGEON, 0);
+			break;
+		case 2:
+			StorageHelper.addArea(world, "translate:cragrockTower", AxisAlignedBB.getBoundingBox(x + width - width - 1, y, z + depth - depth - 1, x + width - 1, y+height, z + depth - 1).expand(6, 6, 6), EnumLocationType.DUNGEON, 0);
+			break;
+		case 3:
+			StorageHelper.addArea(world, "translate:cragrockTower", AxisAlignedBB.getBoundingBox(x + width - depth - 1, y, z, x + width - 1, y+height, z + width).expand(6, 6, 6), EnumLocationType.DUNGEON, 0);
+			break;
+		}
+		x += width / 2;
+		z += depth / 2;*/
+        
         //FLOOR 0
         //WALLS
         rotatedCubeVolumeExtendedDown(world, x, y, z, 7, 0, 5, CRAGROCK, 1, 3, 1, direction);

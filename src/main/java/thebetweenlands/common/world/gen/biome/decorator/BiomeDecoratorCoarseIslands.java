@@ -13,9 +13,8 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 		//TODO: Implement missing generators
 		//this.generate(30, DecorationHelper::generateGiantWeedwoodTree);
 		this.generate(25, DecorationHelper::generateWeedwoodTree);
-		//this.generate(30, DecorationHelper::generateSapTree);
-		//this.generate(40, DecorationHelper::generateWeedwoodBush);
-
+		this.generate(15, DecorationHelper::generateSapTree);
+		this.generate(40, DecorationHelper::generateWeedwoodBush);
 		this.generate(10, DecorationHelper::generateCattailCluster);
 		this.generate(40, DecorationHelper::generateSwampTallgrassCluster);
 		this.generate(1, DecorationHelper::generateNettlesCluster);
@@ -27,7 +26,6 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 		this.generate(5, DecorationHelper::generateCopperIrisCluster);
 		this.generate(5, DecorationHelper::generateBlueIrisCluster);
 		this.generate(4, DecorationHelper::generateSwampKelpCluster);
-
-		//this.generate(5, DecorationHelper::generateCragrockTower);
+		this.generate(5, DecorationHelper::generateCragrockTower);
 	}
 }

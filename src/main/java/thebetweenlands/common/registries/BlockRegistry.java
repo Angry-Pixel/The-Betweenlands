@@ -12,17 +12,12 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -34,7 +29,6 @@ import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.BlockRubberLog;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
-import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockLootPot;
@@ -317,7 +311,7 @@ public class BlockRegistry {
 		public BlockRenderLayer getBlockLayer() {
 			return BlockRenderLayer.TRANSLUCENT;
 		}
-	};
+	}.setLightLevel(1.0F);
 	public static final Block FLAT_HEAD_MUSHROOM = new BlockPlant();
 	public static final Block VENUS_FLY_TRAP = new BlockVenusFlyTrap().setSickleDrop(EnumItemPlantDrop.VENUS_FLY_TRAP_ITEM.create(1));
 	public static final BlockDoublePlantBL VOLARPAD = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.VOLARPAD_ITEM.create(1));

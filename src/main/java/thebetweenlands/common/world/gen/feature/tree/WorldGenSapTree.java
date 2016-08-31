@@ -27,7 +27,7 @@ public class WorldGenSapTree extends WorldGenerator {
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)
 			for (int zz = - maxRadius; zz <= maxRadius; zz++)
 				for (int yy = 2; yy < height; yy++)
-					if (!world.isAirBlock(pos.add(xx, yy, zz)) && world.getBlockState(pos.add(xx, yy, zz)).isNormalCube())
+					if (!world.isAirBlock(pos.add(xx, yy, zz)) && !world.getBlockState(pos.add(xx, yy, zz)).getBlock().isReplaceable(world, pos.add(xx, yy, zz)))
 						return false;
 
 		for (int yy = 0; yy < height; ++yy) {

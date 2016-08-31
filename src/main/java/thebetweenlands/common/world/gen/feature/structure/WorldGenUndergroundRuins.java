@@ -188,7 +188,7 @@ public class WorldGenUndergroundRuins extends WorldGenerator {
 		rotatedCubeVolume(world, x, y, z, 5, 0, 0, BlockRegistry.PITSTONE_BRICKS.getDefaultState(), 1, 2, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 0, 5, BlockRegistry.PITSTONE_BRICKS.getDefaultState(), 1, 2, 1, direction);
 
-		//TODO: Stairs
+		//TODO: Check stairs
 		rotatedCubeVolume(world, x, y, z, 1, 0, 0, BlockRegistry.PITSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH), 4, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 0, 0, 1, BlockRegistry.PITSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH), 1, 1, 4, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 5, BlockRegistry.PITSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST), 4, 1, 1, direction);
@@ -254,7 +254,7 @@ public class WorldGenUndergroundRuins extends WorldGenerator {
 		rotatedCubeVolume(world, x, y, z, 4, 2, 4, BlockRegistry.PITSTONE_BRICKS.getDefaultState(), 1, 1, 7, direction);
 		rotatedCubeVolume(world, x, y, z, 2, 2, 10, BlockRegistry.PITSTONE_BRICKS.getDefaultState(), 1, 2, 1, direction);
 
-		//TODO: Stairs
+		//TODO: Check stairs
 		rotatedCubeVolume(world, x, y, z, 2, 2, 4, getBlockStateFromDirection(3, direction, upsideDownStairSequence), 1, 1, 1, direction);
 
 		rotatedCubeVolume(world, x, y, z, 1, 3, 4, BlockRegistry.PITSTONE_BRICKS.getDefaultState(), 1, 1, 6, direction);
@@ -306,7 +306,7 @@ public class WorldGenUndergroundRuins extends WorldGenerator {
 		rotatedCubeVolume(world, x, y, z, 1, 1, 5, BlockRegistry.PITSTONE_BRICK_WALL.getDefaultState(), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 3, Blocks.AIR.getDefaultState(), 1, 2, 1, direction);
 
-		//TODO: Stairs
+		//TODO: Check stairs
 		rotatedCubeVolume(world, x, y, z, 0, 2, 2, getBlockStateFromDirection(3, direction, stairSequence), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 0, 2, 3, getBlockStateFromDirection(0, direction, stairSequence), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 0, 2, 4, getBlockStateFromDirection(1, direction, stairSequence), 1, 1, 1, direction);

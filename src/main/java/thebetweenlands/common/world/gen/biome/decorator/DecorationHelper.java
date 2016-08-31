@@ -5,6 +5,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.gen.feature.WorldGenBigBulbCappedMushroom;
 import thebetweenlands.common.world.gen.feature.WorldGenBladderwortCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveGrass;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
@@ -13,12 +14,16 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
+import thebetweenlands.common.world.gen.feature.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallHollowLog;
 import thebetweenlands.common.world.gen.feature.WorldGenSpeleothem;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampKelpCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampReedCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
+import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.CubicBezier;
 
@@ -40,7 +45,7 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_SOFT_RUSH = new WorldGenPlantCluster(BlockRegistry.SOFT_RUSH.getDefaultState());
 	private static final WorldGenerator GEN_BOTTLE_BRUSH_GRASS = new WorldGenPlantCluster(BlockRegistry.BOTTLE_BRUSH_GRASS.getDefaultState());
 	private static final WorldGenerator GEN_STAGNANT_WATER_POOL = new WorldGenFluidPool(BlockRegistry.STAGNANT_WATER);
-	private static final WorldGenerator GEN_TAR_POOL_SURFACE = new WorldGenFluidPool(BlockRegistry.TAR);
+	private static final WorldGenerator GEN_TAR_POOL_SURFACE = new WorldGenFluidPool(BlockRegistry.TAR).setMinY(WorldProviderBetweenlands.CAVE_START + 5);
 	private static final WorldGenerator GEN_SWAMP_REED = new WorldGenSwampReedCluster();
 	private static final WorldGenerator GEN_SWAMP_PLANT = new WorldGenPlantCluster(BlockRegistry.SWAMP_PLANT.getDefaultState());
 	private static final WorldGenerator GEN_FLAT_HEAD_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState(), 5, 15);
@@ -63,6 +68,11 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_ROOTS = new WorldGenRootsCluster();
 	private static final WorldGenerator GEN_WATER_WEEDS = new WorldGenPlantCluster(BlockRegistry.WATER_WEEDS.getDefaultState()).setUnderwater(true);
 	private static final WorldGenerator GEN_UNDERGROUND_RUINS = new WorldGenUndergroundRuins();
+	private static final WorldGenerator GEN_CRAGROCK_TOWER = new WorldGenCragrockTower();
+	private static final WorldGenerator GEN_WEEDWOOD_BUSH = new WorldGenWeedwoodBush();
+	private static final WorldGenerator GEN_SAP_TREE = new WorldGenSapTree();
+	private static final WorldGenerator GEN_RUBBER_TREE = new WorldGenRubberTree();
+	private static final WorldGenerator GEN_BIG_BULB_CAPPED_MUSHROOM = new WorldGenBigBulbCappedMushroom();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -517,6 +527,46 @@ public class DecorationHelper {
 		BlockPos pos = new BlockPos(x, y, z);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_UNDERGROUND_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateCragrockTower(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPosSeaGround(10);
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
+			return GEN_CRAGROCK_TOWER.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateWeedwoodBush(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS_AND_DIRT.matches(decorator.getWorld(), pos.down())) {
+			return GEN_WEEDWOOD_BUSH.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateSapTree(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS_AND_DIRT.matches(decorator.getWorld(), pos.down())) {
+			return GEN_SAP_TREE.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateRubberTree(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS_AND_DIRT.matches(decorator.getWorld(), pos.down())) {
+			return GEN_RUBBER_TREE.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateBigBulbCappedMushroom(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.GRASS_AND_DIRT.matches(decorator.getWorld(), pos.down())) {
+			return GEN_BIG_BULB_CAPPED_MUSHROOM.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}

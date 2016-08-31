@@ -79,6 +79,7 @@ import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
+import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -312,6 +313,19 @@ public class ClientProxy extends CommonProxy {
 						return tintedBlock.getColorMultiplier(state, worldIn, pos, tintIndex);
 					}
 				}, block);
+			}
+		}
+
+		//Item colors
+		for(Item item : ItemRegistry.ITEMS) {
+			if(item instanceof ITintedItem) {
+				final ITintedItem tintedItem = (ITintedItem) item;
+				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+					@Override
+					public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+						return tintedItem.getColorMultiplier(stack, tintIndex);
+					}
+				}, item);
 			}
 		}
 
