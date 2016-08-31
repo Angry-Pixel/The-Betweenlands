@@ -14,6 +14,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityLootPot.class, "loot_pot");
 		registerTileEntity(TileEntityMobSpawnerBetweenlands.class, "mob_spawner");
 		registerTileEntity(TileEntityWisp.class, "wisp");
+		registerTileEntity(TileEntityBLFurnace.class, "sulfur_furnace");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

@@ -33,6 +33,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.event.ShaderHandler;
 import thebetweenlands.client.event.TextureStitchHandler;
+import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
@@ -86,6 +87,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityLootPot;
@@ -125,6 +127,12 @@ public class ClientProxy extends CommonProxy {
 		}
 		case GUI_HL:{
 			return new GuiManualHerblore(player);
+		}
+		case GUI_BL_FURNACE: {
+			if (tile instanceof TileEntityBLFurnace) {
+				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tile);
+			}
+			break;
 		}
 		}
 		return null;

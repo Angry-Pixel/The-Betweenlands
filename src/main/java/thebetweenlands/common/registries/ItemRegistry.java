@@ -10,6 +10,7 @@ import com.google.common.base.CaseFormat;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -37,6 +38,7 @@ import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampReed;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.TestItem;
@@ -51,6 +53,8 @@ import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ItemRegistry {
+	private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
+	private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 	//generic
 	public static final Item ITEMS_MISC = new ItemMisc().setCreativeTab(BLCreativeTabs.ITEMS);
 	public static final Item ITEMS_CRUSHED = new ItemCrushed().setCreativeTab(BLCreativeTabs.HERBLORE);
@@ -195,5 +199,42 @@ public class ItemRegistry {
 
 	public interface ISingleJsonSubItems{
 		List<String> getTypes();
+	}
+	
+	private static void registerProperties() {
+		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.OCTINE_ORE)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.SYRMORITE_ORE)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.SULFUR_ORE)));
+		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.VALONITE_ORE)));
+		//ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.LIFE_CRYSTAL_STALACTITE)));
+
+		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.OCTINE_INGOT.getID()));
+		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_INGOT.getID()));
+		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SULFUR.getID()));
+		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.VALONITE_SHARD.getID()));
+		//INGOTS.add(new ItemStack(LIFE_CRYSTAL));
+	}
+
+	private static boolean containsItem(List<ItemStack> lst, ItemStack stack) {
+		for(ItemStack s : lst) {
+			if(s.getItem() == stack.getItem() && s.getItemDamage() == stack.getItemDamage())
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isIngotFromOre(ItemStack input, ItemStack output) {
+		if(input == null || output == null) return false;
+		return isOre(input) && isIngot(output);
+	}
+
+	public static boolean isOre(ItemStack stack) {
+		if(stack == null) return false;
+		return containsItem(ORES, stack);
+	}
+
+	public static boolean isIngot(ItemStack stack) {
+		if(stack == null) return false;
+		return containsItem(INGOTS, stack);
 	}
 }

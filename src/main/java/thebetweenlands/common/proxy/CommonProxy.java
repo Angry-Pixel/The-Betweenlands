@@ -11,9 +11,11 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -52,6 +54,12 @@ public class CommonProxy implements IGuiHandler {
             case GUI_WEEDWOOD_CRAFT: {
                 if (tile instanceof TileEntityWeedwoodWorkbench) {
                     return new ContainerWeedwoodWorkbench(player.inventory, (TileEntityWeedwoodWorkbench) tile);
+                }
+                break;
+            }
+            case GUI_BL_FURNACE: {
+                if (tile instanceof TileEntityBLFurnace) {
+                    return new ContainerBLFurnace(player.inventory, (TileEntityBLFurnace) tile);
                 }
                 break;
             }

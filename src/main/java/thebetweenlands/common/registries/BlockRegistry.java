@@ -29,6 +29,7 @@ import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.BlockRubberLog;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
+import thebetweenlands.common.block.container.BlockBLFurnace;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockLootPot;
@@ -386,7 +387,8 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
 	public static final Block COMPOST_BIN = new BlockCompostBin();
 	public static final Block WEEDWOOD_JUKEBOX = new BlockWeedwoodJukebox();
-
+	public static final Block SULFUR_FURNACE = new BlockBLFurnace(false);
+	public static final Block SULFUR_FURNACE_ACTIVE = new BlockBLFurnace(true);
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
