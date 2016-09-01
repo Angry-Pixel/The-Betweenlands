@@ -18,6 +18,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallHollowLog;
+import thebetweenlands.common.world.gen.feature.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.WorldGenSpawnerStructure;
 import thebetweenlands.common.world.gen.feature.WorldGenSpeleothem;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampKelpCluster;
@@ -80,6 +81,7 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_LICHEN = new WorldGenMossCluster(BlockRegistry.LICHEN.getDefaultState());
 	private static final WorldGenerator GEN_SPAWNER_STRUCTURE = new WorldGenSpawnerStructure();
 	private static final WorldGenerator GEN_IDOL_HEAD = new WorldGenIdolHeads();
+	private static final WorldGenerator GEN_SMALL_RUINS = new WorldGenSmallRuins();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -607,6 +609,14 @@ public class DecorationHelper {
 		if(SurfaceType.MIXED.matches(decorator.getWorld(), pos.down()) &&
 				SurfaceType.WATER.matches(decorator.getWorld(), pos.up())) {
 			return GEN_IDOL_HEAD.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateSmallRuinsCluster(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
+			return GEN_SMALL_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}
