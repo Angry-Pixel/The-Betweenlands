@@ -11,10 +11,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
 import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -60,6 +62,12 @@ public class CommonProxy implements IGuiHandler {
             case GUI_BL_FURNACE: {
                 if (tile instanceof TileEntityBLFurnace) {
                     return new ContainerBLFurnace(player.inventory, (TileEntityBLFurnace) tile);
+                }
+                break;
+            }
+            case GUI_BL_DUAL_FURNACE: {
+                if (tile instanceof TileEntityBLDualFurnace) {
+                    return new ContainerBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tile);
                 }
                 break;
             }

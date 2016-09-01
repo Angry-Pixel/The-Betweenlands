@@ -33,6 +33,7 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.event.ShaderHandler;
 import thebetweenlands.client.event.TextureStitchHandler;
+import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
@@ -88,6 +89,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
@@ -133,6 +135,12 @@ public class ClientProxy extends CommonProxy {
 		case GUI_BL_FURNACE: {
 			if (tile instanceof TileEntityBLFurnace) {
 				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tile);
+			}
+			break;
+		}
+		case GUI_BL_DUAL_FURNACE: {
+			if (tile instanceof TileEntityBLDualFurnace) {
+				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tile);
 			}
 			break;
 		}
