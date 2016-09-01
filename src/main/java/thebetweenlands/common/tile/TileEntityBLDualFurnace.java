@@ -16,15 +16,17 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import thebetweenlands.blocks.container.BlockBLDualFurnace;
-import thebetweenlands.items.BLItemRegistry;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.container.BlockBLDualFurnace;
+import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.ItemRegistry;
 
-public class TileEntityBLDualFurnace extends TileEntity implements ISidedInventory
+public class TileEntityBLDualFurnace extends TileEntity implements ISidedInventory, ITickable
 {
 	private static final int[] slotsTop = new int[] {0, 4};
 	private static final int[] slotsBottom = new int[] {2, 1, 6, 5};
@@ -70,7 +72,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			return null;
 	}
 
-	@Override
+	//@Override
 	public ItemStack getStackInSlotOnClosing(int slot) {
 		if (furnaceItemStacks[slot] != null) {
 			ItemStack itemstack = furnaceItemStacks[slot];
@@ -89,12 +91,12 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public String getInventoryName() {
-		return hasCustomInventoryName() ? customName : "container.dualFurnaceBL";
+	public String getName() {
+		return hasCustomName() ? customName : "container.dualFurnaceBL";
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return customName != null && customName.length() > 0;
 	}
 
@@ -127,7 +129,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setShort("BurnTime", (short)furnaceBurnTime);
 		nbt.setShort("CookTime", (short)furnaceCookTime);
@@ -145,8 +147,9 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			}
 		}
 		nbt.setTag("Items", nbttaglist);
-		if (hasCustomInventoryName())
+		if (hasCustomName())
 			nbt.setString("CustomName", customName);
+		return nbt;
 	}
 
 	@Override
@@ -189,7 +192,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public void updateEntity() {
+	public void update() {
 		boolean isBurning1 = furnaceBurnTime > 0;
 		boolean isDirty1 = false;
 		boolean isBurning2 = furnaceBurnTime2 > 0;
@@ -267,7 +270,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 		if (isBurning1 != furnaceBurnTime > 0 || isBurning2 != furnaceBurnTime2 > 0) {
 			isDirty1 = true;
 			isDirty2 = true;
-			BlockBLDualFurnace.updateFurnaceBlockState(furnaceBurnTime > 0 || furnaceBurnTime2 > 0, worldObj, xCoord, yCoord, zCoord);
+			BlockBLDualFurnace.setState(furnaceBurnTime > 0 || furnaceBurnTime2 > 0, worldObj, pos);
 		}
 
 		if (isDirty1 || isDirty2) {
@@ -279,7 +282,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 		if (furnaceItemStacks[0] == null)
 			return false;
 		else {
-			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItemStacks[0]);
+			ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(furnaceItemStacks[0]);
 			if (itemstack == null) return false;
 			if (furnaceItemStacks[2] == null) return true;
 			if (!furnaceItemStacks[2].isItemEqual(itemstack)) return false;
@@ -292,7 +295,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 		if (furnaceItemStacks[4] == null)
 			return false;
 		else {
-			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItemStacks[4]);
+			ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(furnaceItemStacks[4]);
 			if (itemstack == null) return false;
 			if (furnaceItemStacks[6] == null) return true;
 			if (!furnaceItemStacks[6].isItemEqual(itemstack)) return false;
@@ -303,7 +306,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 	public void smeltItem() {
 		if (canSmelt()) {
-			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItemStacks[0]);
+			ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(furnaceItemStacks[0]);
 
 			if (furnaceItemStacks[2] == null)
 				furnaceItemStacks[2] = itemstack.copy();
@@ -311,7 +314,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			else if (furnaceItemStacks[2].getItem() == itemstack.getItem())
 				furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
-			if(BLItemRegistry.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
+			if(ItemRegistry.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
 				if(furnaceItemStacks[3] != null) {
 					boolean useFlux = this.worldObj.rand.nextInt(3) == 0;
 					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
@@ -332,7 +335,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 
 	public void smeltItem2() {
 		if (canSmelt2()) {
-			ItemStack itemstack = FurnaceRecipes.smelting().getSmeltingResult(furnaceItemStacks[4]);
+			ItemStack itemstack = FurnaceRecipes.instance().getSmeltingResult(furnaceItemStacks[4]);
 
 			if (furnaceItemStacks[6] == null)
 				furnaceItemStacks[6] = itemstack.copy();
@@ -340,7 +343,7 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 			else if (furnaceItemStacks[6].getItem() == itemstack.getItem())
 				furnaceItemStacks[6].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
 
-			if(BLItemRegistry.isIngotFromOre(furnaceItemStacks[4], furnaceItemStacks[6])) {
+			if(ItemRegistry.isIngotFromOre(furnaceItemStacks[4], furnaceItemStacks[6])) {
 				if(furnaceItemStacks[7] != null) {
 					boolean useFlux = this.worldObj.rand.nextInt(3) == 0;
 					if(useFlux && furnaceItemStacks[6].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[6].stackSize + 1 <= furnaceItemStacks[6].getMaxStackSize()) {
@@ -359,35 +362,44 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 		}
 	}
 
-	public static int getItemBurnTime(ItemStack itemstack) {
-		if (itemstack == null)
+	public static int getItemBurnTime(ItemStack stack) {
+		if (stack == null) {
 			return 0;
-		else {
-			Item item = itemstack.getItem();
+		} else {
+			Item item = stack.getItem();
 
-			if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.air) {
+			if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.AIR) {
 				Block block = Block.getBlockFromItem(item);
 
-				if (block == Blocks.wooden_slab)
+				if (block == Blocks.WOODEN_SLAB)
 					return 150;
 
-				if (block.getMaterial() == Material.wood)
+				if (block.getDefaultState().getMaterial() == Material.WOOD)
 					return 300;
 
-				if (block == Blocks.coal_block)
+				if (block == Blocks.COAL_BLOCK)
 					return 16000;
 			}
 
-			if (item instanceof ItemTool && ((ItemTool)item).getToolMaterialName().equals("WOOD")) return 200;
-			if (item instanceof ItemSword && ((ItemSword)item).getToolMaterialName().equals("WOOD")) return 200;
-			if (item instanceof ItemHoe && ((ItemHoe)item).getToolMaterialName().equals("WOOD")) return 200;
-			if (item == Items.stick) return 100;
-			if (item == Items.coal) return 1600;
-			if (item instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.id) return 1600;
-			if (item == Items.lava_bucket) return 20000;
-			if (item == Item.getItemFromBlock(Blocks.sapling)) return 100;
-			if (item == Items.blaze_rod) return 2400;
-			return GameRegistry.getFuelValue(itemstack);
+			if (item instanceof ItemTool && "WOOD".equals(((ItemTool) item).getToolMaterialName()))
+				return 200;
+			if (item instanceof ItemSword && "WOOD".equals(((ItemSword) item).getToolMaterialName()))
+				return 200;
+			if (item instanceof ItemHoe && "WOOD".equals(((ItemHoe) item).getMaterialName()))
+				return 200;
+			if (item == Items.STICK)
+				return 100;
+			if (item == Items.COAL)
+				return 1600;
+			if (item instanceof ItemMisc && stack.getItemDamage() == EnumItemMisc.SULFUR.getID())
+				return 1600;
+			if (item == Items.LAVA_BUCKET)
+				return 20000;
+			if (item == Item.getItemFromBlock(Blocks.SAPLING))
+				return 100;
+			if (item == Items.BLAZE_ROD)
+				return 2400;
+			return GameRegistry.getFuelValue(stack);
 		}
 	}
 
@@ -396,19 +408,13 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 	}
 
 	public static boolean isItemFlux(ItemStack itemstack) {
-		return itemstack.getItem() == BLItemRegistry.itemsGeneric && itemstack.getItemDamage() == EnumItemGeneric.LIMESTONE_FLUX.id;
+		return itemstack.getItem() == ItemRegistry.ITEMS_MISC && itemstack.getItemDamage() == EnumItemMisc.LIMESTONE_FLUX.getID();
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return worldObj.getTileEntity(xCoord, yCoord, zCoord) != this ? false : player.getDistanceSq((double)xCoord + 0.5D, (double)yCoord + 0.5D, (double)zCoord + 0.5D) <= 64.0D;
-	}
-
-	@Override
-	public void openInventory() {}
-
-	@Override
-	public void closeInventory() {}
+    public boolean isUseableByPlayer(EntityPlayer player) {
+        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
+    }
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
@@ -416,18 +422,55 @@ public class TileEntityBLDualFurnace extends TileEntity implements ISidedInvento
 	}
 
 	@Override
-	public int[] getAccessibleSlotsFromSide(int side) {
-		return side == 0 ? slotsBottom : (side == 1 ? slotsTop : slotsSides);
-	}
+    public int[] getSlotsForFace(EnumFacing side) {
+        return side == EnumFacing.DOWN ? slotsBottom : (side == EnumFacing.UP ? slotsTop : slotsSides);
+    }
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack itemstack, int side) {
+	public boolean canInsertItem(int slot, ItemStack itemstack, EnumFacing direction) {
 		return isItemValidForSlot(slot, itemstack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemstack, int side) {
-		return side != 0 || slot != 1 && slot != 5 || itemstack.getItem() == Items.bucket;
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing direction) {
+		if (direction == EnumFacing.DOWN && (slot == 1 || slot == 5)) {
+			Item item = stack.getItem();
+
+			if (item != Items.WATER_BUCKET && item != Items.BUCKET)
+				return false;
+		}
+		return true;
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		return null;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) {
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public void clear() {	
 	}
 
 }

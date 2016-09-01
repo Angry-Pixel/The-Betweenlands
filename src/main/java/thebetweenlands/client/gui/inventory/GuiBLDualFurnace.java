@@ -1,18 +1,15 @@
 package thebetweenlands.client.gui.inventory;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-import thebetweenlands.inventory.container.ContainerBLDualFurnace;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 
 @SideOnly(Side.CLIENT)
 public class GuiBLDualFurnace extends GuiContainer {
@@ -28,7 +25,7 @@ public class GuiBLDualFurnace extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-        String s = tileFurnace.hasCustomInventoryName() ? tileFurnace.getInventoryName() : I18n.format(tileFurnace.getInventoryName(), new Object[0]);
+        String s = tileFurnace.hasCustomName() ? tileFurnace.getName() : I18n.format(tileFurnace.getName(), new Object[0]);
         fontRendererObj.drawString(s, xSize / 2 - fontRendererObj.getStringWidth(s) / 2, 6, 4210752);
         fontRendererObj.drawString(I18n.format("container.inventory", new Object[0]), 8, ySize - 96 + 2, 4210752);
     }
@@ -54,19 +51,6 @@ public class GuiBLDualFurnace extends GuiContainer {
             i1 = tileFurnace.getCookProgressScaled2(24);
             drawTexturedModalRect(k + 79, l + 109, 176, 14, i1 + 1, 16);
         }
-        if (tileFurnace.getStackInSlot(6) == null)
-			renderSlot(ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX).getIconIndex(), 26, 39);
-        if (tileFurnace.getStackInSlot(7) == null)
-			renderSlot(ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX).getIconIndex(), 26, 110);
 	}
 
-	private void renderSlot(IIcon icon, int iconX, int iconY) {
-		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glColor4f(1f, 1f, 1f, 0.2f);
-		mc.getTextureManager().bindTexture(TextureMap.locationItemsTexture);
-		drawTexturedModelRectFromIcon(guiLeft + iconX, guiTop + iconY, icon, 16, 16);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
-	}
 }

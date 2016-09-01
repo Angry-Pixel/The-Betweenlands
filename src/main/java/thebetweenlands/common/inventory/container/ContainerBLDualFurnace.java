@@ -3,17 +3,17 @@ package thebetweenlands.common.inventory.container;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnace;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
-import thebetweenlands.inventory.slot.SlotRestriction;
-import thebetweenlands.items.misc.ItemGeneric;
-import thebetweenlands.items.misc.ItemGeneric.EnumItemGeneric;
-import thebetweenlands.tileentities.TileEntityBLDualFurnace;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.inventory.slot.SlotRestriction;
+import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 
 public class ContainerBLDualFurnace extends Container {
 	private TileEntityBLDualFurnace tileFurnace;
@@ -29,14 +29,14 @@ public class ContainerBLDualFurnace extends Container {
 		tileFurnace = tile;
 		addSlotToContainer(new Slot(tile, 0, 56, 21));
 		addSlotToContainer(new Slot(tile, 1, 56, 57));
-		addSlotToContainer(new SlotFurnace(inventory.player, tile, 2, 116, 39));
-		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
+		addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 2, 116, 39));
+		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, new ItemStack(EnumItemMisc.LIMESTONE_FLUX.getItem(), 1, EnumItemMisc.LIMESTONE_FLUX.getID()), 64);
 		addSlotToContainer(fluxSlot1);
 
 		addSlotToContainer(new Slot(tile, 4, 56, 92));
 		addSlotToContainer(new Slot(tile, 5, 56, 128));
-		addSlotToContainer(new SlotFurnace(inventory.player, tile, 6, 116, 110));
-		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, ItemGeneric.createStack(EnumItemGeneric.LIMESTONE_FLUX), 64);
+		addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 6, 116, 110));
+		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, new ItemStack(EnumItemMisc.LIMESTONE_FLUX.getItem(), 1, EnumItemMisc.LIMESTONE_FLUX.getID()), 64);
 		addSlotToContainer(fluxSlot2);
 
 		int i;
@@ -50,15 +50,15 @@ public class ContainerBLDualFurnace extends Container {
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting crafter) {
-		super.addCraftingToCrafters(crafter);
-		crafter.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
-		crafter.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
-		crafter.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
+	public void addListener(IContainerListener listener) {
+		super.addListener(listener);
+		listener.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
+		listener.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
+		listener.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
 
-		crafter.sendProgressBarUpdate(this, 3, tileFurnace.furnaceCookTime2);
-		crafter.sendProgressBarUpdate(this, 4, tileFurnace.furnaceBurnTime2);
-		crafter.sendProgressBarUpdate(this, 5, tileFurnace.currentItemBurnTime2);
+		listener.sendProgressBarUpdate(this, 3, tileFurnace.furnaceCookTime2);
+		listener.sendProgressBarUpdate(this, 4, tileFurnace.furnaceBurnTime2);
+		listener.sendProgressBarUpdate(this, 5, tileFurnace.currentItemBurnTime2);
 	}
 
 
@@ -66,26 +66,25 @@ public class ContainerBLDualFurnace extends Container {
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
 
-		for (int i = 0; i < crafters.size(); ++i) {
-			ICrafting icrafting = (ICrafting)crafters.get(i);
+        for (IContainerListener listener : listeners) {
 
 			if (lastCookTime != tileFurnace.furnaceCookTime)
-				icrafting.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
+            	listener.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
 
 			if (lastBurnTime != tileFurnace.furnaceBurnTime)
-				icrafting.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
+            	listener.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
 
 			if (lastItemBurnTime != tileFurnace.currentItemBurnTime)
-				icrafting.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
+            	listener.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
 
 			if (lastCookTime2 != tileFurnace.furnaceCookTime2)
-				icrafting.sendProgressBarUpdate(this, 3, tileFurnace.furnaceCookTime2);
+            	listener.sendProgressBarUpdate(this, 3, tileFurnace.furnaceCookTime2);
 
 			if (lastBurnTime2 != tileFurnace.furnaceBurnTime2)
-				icrafting.sendProgressBarUpdate(this, 4, tileFurnace.furnaceBurnTime2);
+            	listener.sendProgressBarUpdate(this, 4, tileFurnace.furnaceBurnTime2);
 
 			if (lastItemBurnTime2 != tileFurnace.currentItemBurnTime2)
-				icrafting.sendProgressBarUpdate(this, 5, tileFurnace.currentItemBurnTime2);
+            	listener.sendProgressBarUpdate(this, 5, tileFurnace.currentItemBurnTime2);
 		}
 
 		lastCookTime = tileFurnace.furnaceCookTime;
@@ -139,15 +138,15 @@ public class ContainerBLDualFurnace extends Container {
 				slot.onSlotChange(itemstack1, itemstack);
 			}
 			else if (slotIndex != 1 && slotIndex != 0 && slotIndex != 3 && slotIndex != 4 && slotIndex != 5 && slotIndex != 7) {
-				if (FurnaceRecipes.smelting().getSmeltingResult(itemstack1) != null) {
+				if (FurnaceRecipes.instance().getSmeltingResult(itemstack1) != null) {
 					if (!mergeItemStack(itemstack1, 0, 1, false) && !mergeItemStack(itemstack1, 4, 5, false))
 						return null;
 				}
-				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.SULFUR.id) {
+				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemMisc && itemstack.getItemDamage() == EnumItemMisc.SULFUR.getID()) {
 					if (!mergeItemStack(itemstack1, 1, 2, false) && !mergeItemStack(itemstack1, 5, 6, false))
 						return null;
 				}
-				 else if (itemstack1.getItem() instanceof ItemGeneric && itemstack.getItemDamage() == EnumItemGeneric.LIMESTONE_FLUX.id) {
+				 else if (itemstack1.getItem() instanceof ItemMisc && itemstack.getItemDamage() == EnumItemMisc.LIMESTONE_FLUX.getID()) {
 	                    if (!mergeItemStack(itemstack1, 3, 4, false) && !mergeItemStack(itemstack1, 7, 8, false))
 	                        return null;
 	                }

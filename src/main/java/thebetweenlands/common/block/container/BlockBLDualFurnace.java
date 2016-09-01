@@ -1,211 +1,236 @@
-package thebetweenlands.blocks.container;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.World;
-import thebetweenlands.TheBetweenlands;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.client.particle.BLParticle;
-import thebetweenlands.creativetabs.BLCreativeTabs;
-import thebetweenlands.proxy.CommonProxy;
-import thebetweenlands.tileentities.TileEntityBLDualFurnace;
+package thebetweenlands.common.block.container;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.BlockContainer;
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.InventoryHelper;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
+
 public class BlockBLDualFurnace extends BlockContainer {
-    private final Random rand = new Random();
-    private final boolean active;
-    private static boolean isBurning;
-    @SideOnly(Side.CLIENT)
-    private IIcon topIcon;
-    @SideOnly(Side.CLIENT)
-    private IIcon frontIcon;
+	private final boolean isBurning;
+	private static boolean keepInventory;
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-    public BlockBLDualFurnace(boolean isActive) {
-        super(Material.rock);
-        active = isActive;
+    public BlockBLDualFurnace(boolean isBurning) {
+        super(Material.ROCK);
+        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.isBurning = isBurning;
         setHardness(3.5F);
-        setStepSound(soundTypePiston);
-        if(!isActive)
-        	setCreativeTab(BLCreativeTabs.blocks);
+        setSoundType(SoundType.STONE);
+        if(!isBurning)
+        	setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
 	@Override
-	public Item getItemDropped(int meta, Random rand, int fortune) {
-        return Item.getItemFromBlock(BLBlockRegistry.dualFurnaceBL);
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        return Item.getItemFromBlock(BlockRegistry.SULFUR_FURNACE_DUAL);
     }
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public IIcon getIcon(int side, int meta) {
-		if (side == 1)
-			return topIcon;
-		switch(meta) {
-		case 0:
-			return side == 3 ? frontIcon : blockIcon;
-		case 1:
-			return side == 4 ? frontIcon : blockIcon;
-		case 2:
-			return side == 2 ? frontIcon : blockIcon;
-		case 3:
-			return side == 5 ? frontIcon : blockIcon;
-		default :
-			return blockIcon;
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+        setDefaultFacing(worldIn, pos, state);
+    }
+
+    private void setDefaultFacing(World worldIn, BlockPos pos, IBlockState state) {
+        if (!worldIn.isRemote) {
+            IBlockState iblockstate = worldIn.getBlockState(pos.north());
+            IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
+            IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
+            IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
+            EnumFacing enumfacing = (EnumFacing)state.getValue(FACING);
+
+            if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock())
+                enumfacing = EnumFacing.SOUTH;
+
+            else if (enumfacing == EnumFacing.SOUTH && iblockstate1.isFullBlock() && !iblockstate.isFullBlock())
+                enumfacing = EnumFacing.NORTH;
+
+            else if (enumfacing == EnumFacing.WEST && iblockstate2.isFullBlock() && !iblockstate3.isFullBlock())
+                enumfacing = EnumFacing.EAST;
+
+            else if (enumfacing == EnumFacing.EAST && iblockstate3.isFullBlock() && !iblockstate2.isFullBlock())
+                enumfacing = EnumFacing.WEST;
+
+            worldIn.setBlockState(pos, state.withProperty(FACING, enumfacing), 2);
+        }
+    }
+
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (world.isRemote)
+			return true;
+		else {
+			TileEntityBLDualFurnace tileentityfurnace = (TileEntityBLDualFurnace)world.getTileEntity(pos);
+            if (tileentityfurnace != null)
+            	player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_BL_DUAL_FURNACE, world, pos.getX(), pos.getY(), pos.getZ());
+            return true;
 		}
 	}
 
-    @SideOnly(Side.CLIENT)
-	@Override
-    public void registerBlockIcons(IIconRegister icon) {
-        blockIcon = icon.registerIcon("thebetweenlands:sulfurFurnaceSide");
-        frontIcon = icon.registerIcon(active ? "thebetweenlands:sulfurFurnaceDualFrontOn" : "thebetweenlands:sulfurFurnaceDualFrontOff");
-        topIcon = icon.registerIcon("thebetweenlands:sulfurFurnaceTop");
-    }
+	public static void setState(boolean active, World world, BlockPos pos) {
+		IBlockState iblockstate = world.getBlockState(pos);
+		TileEntity tileentity = world.getTileEntity(pos);
+		keepInventory = true;
 
-	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote)
-			return true;
+		if (active)
+			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE_DUAL_ACTIVE.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
+		else
+			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE_DUAL.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
 
-		else {
-            TileEntityBLDualFurnace tileentityfurnace = (TileEntityBLDualFurnace)world.getTileEntity(x, y, z);
-            if (tileentityfurnace != null)
-            	player.openGui(TheBetweenlands.instance, CommonProxy.GUI_BL_DUAL_FURNACE, world, x, y, z);
-            return true;
-        }
-    }
+		keepInventory = false;
 
-    public static void updateFurnaceBlockState(boolean inUse, World world, int x, int y, int z) {
-        int meta = world.getBlockMetadata(x, y, z);
-        TileEntity tileentity = world.getTileEntity(x, y, z);
-        isBurning = true;
-
-        if (inUse)
-            world.setBlock(x, y, z, BLBlockRegistry.dualFurnaceBLLit);
-        else
-            world.setBlock(x, y, z, BLBlockRegistry.dualFurnaceBL);
-
-        isBurning = false;
-        world.setBlockMetadataWithNotify(x, y, z, meta, 2);
-
-        if (tileentity != null) {
-            tileentity.validate();
-            world.setTileEntity(x, y, z, tileentity);
-        }
-    }
+		if (tileentity != null) {
+			tileentity.validate();
+			world.setTileEntity(pos, tileentity);
+		}
+	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
         return new TileEntityBLDualFurnace();
     }
 
-	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack is) {
-		int rot = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 2.5D) & 3;
-		world.setBlockMetadataWithNotify(x, y, z, rot, 3);
-        if (is.hasDisplayName())
-            ((TileEntityBLDualFurnace)world.getTileEntity(x, y, z)).getStackDisplayName(is.getDisplayName());
-    }
+	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+	}
 
 	@Override
-	public void breakBlock(World world, int x, int y, int z, Block block, int meta) {
-        if (!isBurning) {
-            TileEntityBLDualFurnace tileentityfurnace = (TileEntityBLDualFurnace)world.getTileEntity(x, y, z);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
-            if (tileentityfurnace != null) {
-                for (int slot = 0; slot < tileentityfurnace.getSizeInventory(); ++slot) {
-                    ItemStack itemstack = tileentityfurnace.getStackInSlot(slot);
+		if (stack.hasDisplayName())
+			((TileEntityBLDualFurnace)world.getTileEntity(pos)).getStackDisplayName(stack.getDisplayName());
+	}
 
-                    if (itemstack != null) {
-                        float xOffset = rand.nextFloat() * 0.8F + 0.1F;
-                        float yOffset = rand.nextFloat() * 0.8F + 0.1F;
-                        float zOffset = rand.nextFloat() * 0.8F + 0.1F;
+	@Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		 if (!keepInventory) {
+            TileEntity tileentity = world.getTileEntity(pos);
 
-                        while (itemstack.stackSize > 0) {
-                            int ammount = rand.nextInt(21) + 10;
-
-                            if (ammount > itemstack.stackSize)
-                                ammount = itemstack.stackSize;
-
-                            itemstack.stackSize -= ammount;
-                            EntityItem entityitem = new EntityItem(world, (double)((float)x + xOffset), (double)((float)y + yOffset), (double)((float)z + zOffset), new ItemStack(itemstack.getItem(), ammount, itemstack.getItemDamage()));
-
-                            if (itemstack.hasTagCompound())
-                                entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
-
-                            float velocity = 0.05F;
-                            entityitem.motionX = (double)((float)rand.nextGaussian() * velocity);
-                            entityitem.motionY = (double)((float)rand.nextGaussian() * velocity + 0.2F);
-                            entityitem.motionZ = (double)((float)rand.nextGaussian() * velocity);
-                            world.spawnEntityInWorld(entityitem);
-                        }
-                    }
-                }
-                world.func_147453_f(x, y, z, block);
+            if (tileentity instanceof TileEntityBLDualFurnace) {
+                InventoryHelper.dropInventoryItems(world, pos, (TileEntityBLDualFurnace)tileentity);
+                world.updateComparatorOutputLevel(pos, this);
             }
         }
-        super.breakBlock(world, x, y, z, block, meta);
+        super.breakBlock(world, pos, state);
     }
 
-	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int x, int y, int z, Random rand) {
-        if (active) {
-            int meta = world.getBlockMetadata(x, y, z);
-            float f = (float)x + 0.5F;
-            float f1 = (float)y + 0.0F + rand.nextFloat() * 6.0F / 16.0F;
-            float f2 = (float)z + 0.5F;
-            float f3 = 0.52F;
-            float f4 = rand.nextFloat() * 0.6F - 0.3F;
+	@SuppressWarnings("incomplete-switch")
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if (this.isBurning) {
+			EnumFacing enumfacing = (EnumFacing) stateIn.getValue(FACING);
+			double d0 = (double) pos.getX() + 0.5D;
+			double d1 = (double) pos.getY() + rand.nextDouble() * 6.0D / 16.0D;
+			double d2 = (double) pos.getZ() + 0.5D;
+			double d3 = 0.52D;
+			double d4 = rand.nextDouble() * 0.6D - 0.3D;
 
-            if (meta == 1) {
-            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, 0);
-                world.spawnParticle("flame", (double)(f - f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-            }
-            else if (meta == 3) {
-            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D, 0);
-                world.spawnParticle("flame", (double)(f + f3), (double)f1, (double)(f2 + f4), 0.0D, 0.0D, 0.0D);
-            }
-            else if (meta == 2) {
-            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D, 0);
-                world.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 - f3), 0.0D, 0.0D, 0.0D);
-            }
-            else if (meta == 0) {
-            	BLParticle.SULFUR_TORCH.spawn(world, (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D, 0);
-                world.spawnParticle("flame", (double)(f + f4), (double)f1, (double)(f2 + f3), 0.0D, 0.0D, 0.0D);
-            }
-        }
-    }
+			if (rand.nextDouble() < 0.1D) {
+				worldIn.playSound((double) pos.getX() + 0.5D, (double) pos.getY(), (double) pos.getZ() + 0.5D, SoundEvents.BLOCK_FURNACE_FIRE_CRACKLE, SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+			}
+
+			switch (enumfacing) {
+			case WEST:
+				worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+				worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 - 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+				break;
+			case EAST:
+				worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+				worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + 0.52D, d1, d2 + d4, 0.0D, 0.0D, 0.0D, new int[0]);
+				break;
+			case NORTH:
+				worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D, new int[0]);
+				worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 - 0.52D, 0.0D, 0.0D, 0.0D, new int[0]);
+				break;
+			case SOUTH:
+				worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D, new int[0]);
+				worldIn.spawnParticle(EnumParticleTypes.FLAME, d0 + d4, d1, d2 + 0.52D, 0.0D, 0.0D, 0.0D, new int[0]);
+			}
+		}
+	}
 
 	@Override
-	public boolean hasComparatorInputOverride() {
+	public boolean hasComparatorInputOverride(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public int getComparatorInputOverride(World world, int x, int y, int z, int side) {
-		return Container.calcRedstoneFromInventory((IInventory)world.getTileEntity(x, y, z));
+	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+		return Container.calcRedstone(world.getTileEntity(pos));
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public Item getItem(World world, int x, int y, int z) {
-		return Item.getItemFromBlock(BLBlockRegistry.dualFurnaceBL);
+	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
+		return new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL);
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		EnumFacing enumfacing = EnumFacing.getFront(meta);
+
+		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
+			enumfacing = EnumFacing.NORTH;
+		}
+
+		return getDefaultState().withProperty(FACING, enumfacing);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return ((EnumFacing) state.getValue(FACING)).getIndex();
+	}
+
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+	}
+
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FACING });
 	}
 
 }

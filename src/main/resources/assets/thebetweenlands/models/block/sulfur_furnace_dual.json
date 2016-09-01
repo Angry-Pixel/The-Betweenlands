@@ -1,0 +1,8 @@
+{
+    "parent": "block/orientable",
+    "textures": {
+        "top": "thebetweenlands:blocks/sulfur_furnace_top",
+        "front": "thebetweenlands:blocks/sulfur_furnace_dual_front_off",
+        "side": "thebetweenlands:blocks/sulfur_furnace_side"
+    }
+}
