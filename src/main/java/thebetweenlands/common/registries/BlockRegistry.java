@@ -396,7 +396,7 @@ public class BlockRegistry {
 	public static final Block COMPOST_BIN = new BlockCompostBin();
 	public static final Block WEEDWOOD_JUKEBOX = new BlockWeedwoodJukebox();
 	public static final Block SULFUR_FURNACE = new BlockBLFurnace(false);
-	public static final Block SULFUR_FURNACE_ACTIVE = new BlockBLFurnace(true);
+	public static final Block SULFUR_FURNACE_ACTIVE = new BlockBLFurnace(true).setLightLevel(0.875F);
 	public static final Block WEEDWOOD_CHEST = new BlockChestBetweenlands(BlockChestBetweenlands.WEEDWOOD_CHEST);
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();

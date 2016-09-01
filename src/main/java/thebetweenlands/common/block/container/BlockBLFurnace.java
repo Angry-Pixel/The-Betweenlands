@@ -14,7 +14,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryHelper;
@@ -39,17 +38,17 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
 public class BlockBLFurnace extends BlockContainer {
-    private final boolean active;
-    private static boolean isBurning;
+	private final boolean isBurning;
+	private static boolean keepInventory;
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-    public BlockBLFurnace(boolean isActive) {
+    public BlockBLFurnace(boolean isBurning) {
         super(Material.ROCK);
         this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
-        active = isActive;
+        this.isBurning = isBurning;
         setHardness(3.5F);
         setSoundType(SoundType.STONE);
-        if(!isActive)
+        if(!isBurning)
         	setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
@@ -102,14 +101,14 @@ public class BlockBLFurnace extends BlockContainer {
 	public static void setState(boolean active, World world, BlockPos pos) {
 		IBlockState iblockstate = world.getBlockState(pos);
 		TileEntity tileentity = world.getTileEntity(pos);
-		isBurning = true;
+		keepInventory = true;
 
 		if (active)
 			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE_ACTIVE.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
 		else
 			world.setBlockState(pos, BlockRegistry.SULFUR_FURNACE.getDefaultState().withProperty(FACING, iblockstate.getValue(FACING)), 3);
 
-		isBurning = false;
+		keepInventory = false;
 
 		if (tileentity != null) {
 			tileentity.validate();
@@ -136,7 +135,7 @@ public class BlockBLFurnace extends BlockContainer {
 
 	@Override
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        if (!isBurning) {
+		 if (!keepInventory) {
             TileEntity tileentity = world.getTileEntity(pos);
 
             if (tileentity instanceof TileEntityBLFurnace) {
@@ -195,7 +194,7 @@ public class BlockBLFurnace extends BlockContainer {
 
 	@Override
 	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-		return new ItemStack(Blocks.FURNACE);
+		return new ItemStack(BlockRegistry.SULFUR_FURNACE);
 	}
 
 	@Override
