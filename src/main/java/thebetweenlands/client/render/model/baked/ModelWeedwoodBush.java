@@ -336,7 +336,7 @@ public class ModelWeedwoodBush implements IModel {
 
 		@Override
 		public boolean isGui3d() {
-			return false;
+			return true;
 		}
 
 		@Override

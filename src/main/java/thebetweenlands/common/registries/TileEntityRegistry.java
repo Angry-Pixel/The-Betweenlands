@@ -7,14 +7,15 @@ import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 
 public class TileEntityRegistry {
 	public void init() {
-		registerTileEntity(TileEntityDruidAltar.class, "druidAltar");
+		registerTileEntity(TileEntityDruidAltar.class, "druid_altar");
 		registerTileEntity(TileEntityPurifier.class, "purifier");
-		registerTileEntity(TileEntityWeedwoodWorkbench.class, "weedwoodWorkbench");
+		registerTileEntity(TileEntityWeedwoodWorkbench.class, "weedwood_workbench");
 		registerTileEntity(TileEntityCompostBin.class, "compost_bin");
 		registerTileEntity(TileEntityLootPot.class, "loot_pot");
 		registerTileEntity(TileEntityMobSpawnerBetweenlands.class, "mob_spawner");
 		registerTileEntity(TileEntityWisp.class, "wisp");
 		registerTileEntity(TileEntityBLFurnace.class, "sulfur_furnace");
+		registerTileEntity(TileEntityChestBetweenlands.class, "betweenlands_chest");
 	}
 
 	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

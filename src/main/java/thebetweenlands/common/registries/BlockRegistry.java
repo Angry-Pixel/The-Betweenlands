@@ -30,6 +30,7 @@ import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.BlockRubberLog;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
 import thebetweenlands.common.block.container.BlockBLFurnace;
+import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockLootPot;
@@ -376,7 +377,7 @@ public class BlockRegistry {
 	public static final Block CAVE_MOSS = new BlockCaveMoss();
 	public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
 	public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
-	
+
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
@@ -389,6 +390,7 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_JUKEBOX = new BlockWeedwoodJukebox();
 	public static final Block SULFUR_FURNACE = new BlockBLFurnace(false);
 	public static final Block SULFUR_FURNACE_ACTIVE = new BlockBLFurnace(true);
+	public static final Block WEEDWOOD_CHEST = new BlockChestBetweenlands(BlockChestBetweenlands.WEEDWOOD_CHEST);
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

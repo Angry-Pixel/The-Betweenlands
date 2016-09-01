@@ -14,6 +14,7 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		//this.generate(70, DecorationHelper::generateGiantWeedwoodTree);
 		//this.generate(10, DecorationHelper::generateWightFortress);
 		this.generate(1, DecorationHelper::generateWeedwoodTree);
+		this.generate(0.5F, DecorationHelper::generateSpawnerStructure);
 		//this.generate(2, DecorationHelper::generateSmallRuins);
 		this.generate(300, DecorationHelper::generatePhragmites);
 		this.generate(5, DecorationHelper::generateSmallHollowLog);
@@ -22,7 +23,6 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		this.generate(2, DecorationHelper::generateNettlesCluster);
 		this.generate(3, DecorationHelper::generateWeepingBlue);
 		//this.generate(4, DecorationHelper::generateWisp);
-		//this.generate(1, DecorationHelper::generateDungeon);
 		this.generate(2, DecorationHelper::generateArrowArumCluster);
 		this.generate(2, DecorationHelper::generatePickerelWeedCluster);
 		this.generate(2, DecorationHelper::generateMarshHibiscusCluster);

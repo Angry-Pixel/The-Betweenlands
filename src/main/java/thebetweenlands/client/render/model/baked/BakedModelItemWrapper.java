@@ -46,7 +46,7 @@ public class BakedModelItemWrapper implements IPerspectiveAwareModel {
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -73,6 +73,6 @@ public class BakedModelItemWrapper implements IPerspectiveAwareModel {
 			result = ((IPerspectiveAwareModel)this.transformsModel).handlePerspective(cameraTransformType);
 		} else 
 			result = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
-		return Pair.of(this.quadModel, result.getValue());
+		return Pair.of(this, result.getValue());
 	}
 }

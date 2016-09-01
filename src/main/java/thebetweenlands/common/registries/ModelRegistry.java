@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.client.model.ModelChest;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import thebetweenlands.client.render.model.baked.ModelBlank;
@@ -88,6 +89,13 @@ public class ModelRegistry {
 	public static final IModel STALACTITE = new ModelStalactite();
 	public static final IModel ROOT = new ModelRoot();
 	public static final IModel FLUID = new ModelFluidBL(FluidRegistry.SWAMP_WATER);
+	public static final IModel WEEDWOOD_CHEST = new ModelFromModelBase(new ModelChest(), new ResourceLocation("thebetweenlands:tiles/weedwood_chest"), 64, 32,
+			new IVertexProcessor() {
+		@Override
+		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
+			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
+		}
+	});
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
