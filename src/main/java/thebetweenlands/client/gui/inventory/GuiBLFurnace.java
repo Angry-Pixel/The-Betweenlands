@@ -3,15 +3,12 @@ package thebetweenlands.client.gui.inventory;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.container.ContainerBLFurnace;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
 
 
@@ -48,18 +45,5 @@ public class GuiBLFurnace extends GuiContainer {
 			this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
 		}
 
-		if (tileFurnace.getStackInSlot(3) == null)
-			renderSlot(new ItemStack(EnumItemMisc.LIMESTONE_FLUX.getItem(), 0 , EnumItemMisc.LIMESTONE_FLUX.getID()), k + 26, l + 35);
 	}
-
-    private void renderSlot(ItemStack stack, int x, int y) {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        //TODO fix alpha because minecraft just changes it to 1 in it's item render code
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-        GlStateManager.color(1f, 1f, 1f, 0.2f);
-        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
-    }
 }

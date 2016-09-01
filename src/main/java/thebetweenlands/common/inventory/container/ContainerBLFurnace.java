@@ -27,7 +27,7 @@ public class ContainerBLFurnace extends Container {
         addSlotToContainer(new Slot(tile, 0, 56, 17));
         addSlotToContainer(new Slot(tile, 1, 56, 53));
         addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 2, 116, 35));
-        Slot fluxSlot = new Slot(tile, 3, 26, 35);
+        Slot fluxSlot = new SlotRestriction(tile, 3, 26, 35, new ItemStack(EnumItemMisc.LIMESTONE_FLUX.getItem(), 1, EnumItemMisc.LIMESTONE_FLUX.getID()), 64);
         addSlotToContainer(fluxSlot);
         int i;
 
