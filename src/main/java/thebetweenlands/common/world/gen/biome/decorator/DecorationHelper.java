@@ -12,6 +12,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
 import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
+import thebetweenlands.common.world.gen.feature.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
@@ -78,6 +79,7 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_MOSS = new WorldGenMossCluster(BlockRegistry.MOSS.getDefaultState());
 	private static final WorldGenerator GEN_LICHEN = new WorldGenMossCluster(BlockRegistry.LICHEN.getDefaultState());
 	private static final WorldGenerator GEN_SPAWNER_STRUCTURE = new WorldGenSpawnerStructure();
+	private static final WorldGenerator GEN_IDOL_HEAD = new WorldGenIdolHeads();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -596,6 +598,15 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
 			return GEN_SPAWNER_STRUCTURE.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateSunkenIdolHead(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(SurfaceType.MIXED.matches(decorator.getWorld(), pos.down()) &&
+				SurfaceType.WATER.matches(decorator.getWorld(), pos.up())) {
+			return GEN_IDOL_HEAD.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}

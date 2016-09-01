@@ -42,6 +42,8 @@ public class LootTables {
 
     public static final WeightedLootList DUNGEON_CHEST_LOOT = new WeightedLootList(new LootItemStack[] {});
 
+    public static final WeightedLootList COMMON_CHEST_LOOT = new WeightedLootList(new LootItemStack[] {});
+    
     public static final WeightedLootList DUNGEON_POT_LOOT = new WeightedLootList(new LootItemStack[] {
             new LootItemStack(ItemRegistry.MARSHMALLOW).setAmount(1).setWeight(28),
             new LootItemStack(ItemRegistry.ITEMS_MISC).setDamage(ItemMisc.EnumItemMisc.SYRMORITE_INGOT.getID()).setAmount(4, 16).setWeight(28),

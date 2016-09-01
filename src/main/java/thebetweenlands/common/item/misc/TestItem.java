@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.WorldGenIdolHeads;
 
 //MINE!!
 public class TestItem extends Item {
@@ -21,8 +21,8 @@ public class TestItem extends Item {
      /*   WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
         worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.getX(), pos.getY() + 1, pos.getZ());*/
         if (!world.isRemote) {
-            WorldGenCragrockTower tower = new WorldGenCragrockTower();
-            tower.generate(world, itemRand, pos.up());
+            WorldGenIdolHeads head = new WorldGenIdolHeads();
+            head.generate(world, itemRand, pos.up());
         }
         return EnumActionResult.SUCCESS;
     }

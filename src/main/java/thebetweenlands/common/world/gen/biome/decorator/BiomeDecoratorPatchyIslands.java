@@ -13,12 +13,12 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 		//TODO: Implement missing generators
 		this.generate(50, DecorationHelper::generateWeedwoodTree);
 		this.generate(10, DecorationHelper::generateSapTree);
+		this.generate(0.5F, DecorationHelper::generateSunkenIdolHead);
 		this.generate(5, DecorationHelper::generateCattailCluster);
 		this.generate(40, DecorationHelper::generateTallCattail);
 		this.generate(8, DecorationHelper::generateBigBulbCappedMushroom);
 		this.generate(50, DecorationHelper::generateSwampTallgrassCluster);
 		this.generate(100, DecorationHelper::generateSwampTallgrassCluster);
-		//this.generate(5, DecorationHelper::generateIdolHead);
 		this.generate(20, DecorationHelper::generateSwampReedCluster);
 		this.generate(0.4F, DecorationHelper::generateMireCoralCluster);
 		this.generate(25, DecorationHelper::generateMossCluster);
