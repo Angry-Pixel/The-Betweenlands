@@ -153,7 +153,9 @@ public class ItemRegistry {
 	public static final Item SICKLE = new ItemSickle();
 	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemBLBucketEmpty();
 	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET_EMPTY);
-
+	public static final Item SYRMORITE_BUCKET_EMPTY = new ItemBLBucketEmpty();
+	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET_EMPTY);
+	
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
 	public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);

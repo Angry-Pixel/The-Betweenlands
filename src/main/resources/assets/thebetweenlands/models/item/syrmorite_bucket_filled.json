@@ -1,0 +1,18 @@
+{
+  "parent": "thebetweenlands:item/internal/bucket$from_item_advanced(
+    {
+      \"source\": \"thebetweenlands:syrmorite_bucket_filled\",
+      \"inherit_overrides\": false,
+      \"custom\": {
+        \"fluid\": \"swamp_water\",
+        \"base_texture\": \"thebetweenlands:items/syrmorite_bucket_base\",
+        \"liquid_template\": \"thebetweenlands:items/syrmorite_bucket_base\",
+        \"cover_texture\": \"thebetweenlands:items/syrmorite_bucket_cover\"
+      }
+    }
+  )",
+  "textures": {
+    "layer0": "thebetweenlands:items/syrmorite_bucket_base",
+    "layer1": "thebetweenlands:items/syrmorite_bucket_cover"
+  }
+}

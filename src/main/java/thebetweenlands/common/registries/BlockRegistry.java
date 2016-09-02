@@ -89,6 +89,7 @@ import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockRoot;
 import thebetweenlands.common.block.terrain.BlockRootUnderwater;
+import thebetweenlands.common.block.terrain.BlockRubber;
 import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
@@ -107,6 +108,7 @@ public class BlockRegistry {
 	public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
 	public static final Block STAGNANT_WATER = new BlockStagnantWater();
 	public static final Block TAR = new BlockTar();
+	public static final Block RUBBER = new BlockRubber();
 
 	public static final Block DRUID_STONE_1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
 	public static final Block DRUID_STONE_2 = new BlockDruidStone(Material.ROCK, "druid_stone_2");

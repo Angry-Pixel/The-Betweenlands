@@ -35,7 +35,8 @@ public class FluidRegistry {
 
 	public static final FluidMultipleBlocks SWAMP_WATER = (FluidMultipleBlocks) new FluidMultipleBlocks("swamp_water", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
 	public static final Fluid STAGNANT_WATER = new Fluid("stagnant_water", new ResourceLocation("thebetweenlands:fluids/stagnant_water_still"), new ResourceLocation("thebetweenlands:fluids/stagnant_water_flowing")).setDensity(1000).setViscosity(1000);
-	public static final Fluid TAR = new Fluid("tar", new ResourceLocation("thebetweenlands:fluids/tar_still"), new ResourceLocation("thebetweenlands:fluids/tar_flowing")).setDensity(2000).setViscosity(2000);
+	public static final Fluid TAR = new Fluid("tar", new ResourceLocation("thebetweenlands:fluids/tar_still"), new ResourceLocation("thebetweenlands:fluids/tar_flowing")).setDensity(2000).setViscosity(2000).setTemperature(330);
+	public static final Fluid RUBBER = new Fluid("rubber", new ResourceLocation("thebetweenlands:fluids/rubber_still"), new ResourceLocation("thebetweenlands:fluids/rubber_flowing")).setDensity(1200).setViscosity(1500);
 
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
