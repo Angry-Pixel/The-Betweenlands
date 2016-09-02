@@ -21,9 +21,8 @@ import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemBLBucketEmpty extends Item {
+public abstract class ItemBLBucketEmpty extends Item {
 	public ItemBLBucketEmpty() {
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 	}
@@ -75,7 +74,7 @@ public class ItemBLBucketEmpty extends Item {
 	}
 
 	private ItemStack fillBucket(ItemStack emptyBuckets, EntityPlayer player, Fluid fluid) {
-		ItemStack fullBucket = UniversalBucket.getFilledBucket(ItemRegistry.WEEDWOOD_BUCKET_FILLED, fluid);
+		ItemStack fullBucket = UniversalBucket.getFilledBucket(this.getFilledBucket(), fluid);
 		if (player.capabilities.isCreativeMode) {
 			return emptyBuckets;
 		} else if (--emptyBuckets.stackSize <= 0) {
@@ -87,4 +86,6 @@ public class ItemBLBucketEmpty extends Item {
 			return emptyBuckets;
 		}
 	}
+
+	protected abstract UniversalBucket getFilledBucket();
 }

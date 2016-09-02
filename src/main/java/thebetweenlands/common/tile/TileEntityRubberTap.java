@@ -63,16 +63,19 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	@Override
 	public void update() {
 		if(!this.worldObj.isRemote) {
-			this.fillProgress++;
 			FluidStack drained = this.tank.drain(Fluid.BUCKET_VOLUME, false);
 			final int ticksPerStep = ((BlockRubberTap)this.getBlockType()).ticksPerStep;
-			if((drained == null || drained.amount < Fluid.BUCKET_VOLUME) && this.fillProgress >= ticksPerStep) {
-				this.tank.fill(new FluidStack(FluidRegistry.RUBBER, 67), true);
-				this.fillProgress = 0;
+			if(drained == null || drained.amount < Fluid.BUCKET_VOLUME) {
+				this.fillProgress++;
 
-				IBlockState stat = this.worldObj.getBlockState(this.pos);
-				this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
-				this.markDirty();
+				if(this.fillProgress >= ticksPerStep) {
+					this.tank.fill(new FluidStack(FluidRegistry.RUBBER, 67), true);
+					this.fillProgress = 0;
+
+					IBlockState stat = this.worldObj.getBlockState(this.pos);
+					this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+					this.markDirty();
+				}
 			}
 		}
 	}
@@ -81,6 +84,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	public NBTTagCompound writeToNBT(NBTTagCompound tagCompound) {
 		super.writeToNBT(tagCompound);
 		this.tank.writeToNBT(tagCompound);
+		tagCompound.setInteger("FillProgress", this.fillProgress);
 		return tagCompound;
 	}
 
@@ -88,6 +92,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	public void readFromNBT(NBTTagCompound tagCompound) {
 		super.readFromNBT(tagCompound);
 		this.tank.readFromNBT(tagCompound);
+		this.fillProgress = tagCompound.getInteger("FillProgress");
 	}
 
 	@Override

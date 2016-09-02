@@ -12,6 +12,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -151,11 +152,21 @@ public class ItemRegistry {
 	public static final Item MANUAL_HL = new ItemManualHL();
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 	public static final Item SICKLE = new ItemSickle();
-	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemBLBucketEmpty();
+	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemBLBucketEmpty() {
+		@Override
+		protected UniversalBucket getFilledBucket() {
+			return WEEDWOOD_BUCKET_FILLED;
+		}
+	};
 	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET_EMPTY);
-	public static final Item SYRMORITE_BUCKET_EMPTY = new ItemBLBucketEmpty();
+	public static final Item SYRMORITE_BUCKET_EMPTY = new ItemBLBucketEmpty() {
+		@Override
+		protected UniversalBucket getFilledBucket() {
+			return SYRMORITE_BUCKET_FILLED;
+		}
+	};
 	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET_EMPTY);
-	
+
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
 	public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);

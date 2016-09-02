@@ -108,7 +108,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 
 	private boolean canPlaceOn(World worldIn, BlockPos pos) {
 		IBlockState state = worldIn.getBlockState(pos);
-		return state.getBlock() == BlockRegistry.LOG_RUBBER /*&& state.getValue(BlockRubberLog.NATURAL)*/;//TODO: Natural check
+		return state.getBlock() == BlockRegistry.LOG_RUBBER && state.getValue(BlockRubberLog.NATURAL);
 	}
 
 	@Override
@@ -160,6 +160,8 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 			if(drained != null) {
 				int amount = (int)((float)drained.amount / (float)Fluid.BUCKET_VOLUME * 15.0F);
 				state = state.withProperty(AMOUNT, amount);
+			} else {
+				state = state.withProperty(AMOUNT, 0);
 			}
 		}
 		return state;

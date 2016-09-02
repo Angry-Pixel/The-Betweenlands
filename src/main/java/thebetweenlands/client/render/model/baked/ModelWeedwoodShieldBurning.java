@@ -44,7 +44,7 @@ public class ModelWeedwoodShieldBurning extends ModelFromModelBase {
 		protected ModelBakedWeedwoodShieldBurning(IVertexProcessor vertexProcessor,
 				Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms,
 				VertexFormat format, ModelBase model, TextureAtlasSprite texture, TextureAtlasSprite flameSprite, int width, int height) {
-			super(vertexProcessor, transformation, transforms, format, model, texture, width, height);
+			super(vertexProcessor, transformation, transforms, format, model, texture, texture, width, height);
 
 			QuadBuilder builder = new QuadBuilder(this.format).setSprite(flameSprite);
 			for(int i = 0; i < 4; i++) {

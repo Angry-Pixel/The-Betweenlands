@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -14,6 +13,8 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.model.ModelBase;
@@ -26,7 +27,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.IModelCustomData;
 import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
@@ -38,27 +39,37 @@ import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.Vec3UV;
 
-public class ModelFromModelBase implements IModel {
+public class ModelFromModelBase implements IModelCustomData {
 	public static interface IVertexProcessor {
 		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box);
 	}
 
 	public final ModelBase model;
 	public final ResourceLocation texture;
+	public final ResourceLocation particleTexture;
 	public final int width;
 	public final int height;
 	public final IVertexProcessor vertexProcessor;
 
 	public ModelFromModelBase(ModelBase model, ResourceLocation texture, int width, int height) {
-		this(model, texture, width, height, null);
+		this(model, texture, texture, width, height, null);
 	}
 
 	public ModelFromModelBase(ModelBase model, ResourceLocation texture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
+		this(model, texture, texture, width, height, vertexProcessor);
+	}
+
+	public ModelFromModelBase(ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height) {
+		this(model, texture, particleTexture, width, height, null);
+	}
+
+	public ModelFromModelBase(ModelBase model, ResourceLocation texture, ResourceLocation particleTexture, int width, int height, @Nullable IVertexProcessor vertexProcessor) {
 		this.model = model;
 		this.texture = texture;
 		this.width = width;
 		this.height = height;
 		this.vertexProcessor = vertexProcessor;
+		this.particleTexture = particleTexture;
 	}
 
 	@Override
@@ -68,13 +79,15 @@ public class ModelFromModelBase implements IModel {
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
+		if(this.particleTexture != this.texture)
+			return ImmutableSet.of(this.texture, this.particleTexture);
 		return ImmutableSet.of(this.texture);
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		return new ModelBakedModelBase(this.vertexProcessor, state.apply(Optional.<IModelPart>absent()), map, format, this.model, bakedTextureGetter.apply(this.texture), this.width, this.height);
+		return new ModelBakedModelBase(this.vertexProcessor, state.apply(Optional.<IModelPart>absent()), map, format, this.model, bakedTextureGetter.apply(this.texture), bakedTextureGetter.apply(this.particleTexture), this.width, this.height);
 	}
 
 	@Override
@@ -87,13 +100,15 @@ public class ModelFromModelBase implements IModel {
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 		protected final VertexFormat format;
 		protected final TextureAtlasSprite texture;
+		protected final TextureAtlasSprite particleTexture;
 		protected final List<BakedQuad> quads;
 
-		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, int width, int height) {
+		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, TextureAtlasSprite particleTexture, int width, int height) {
 			this.transformation = transformation.isPresent() ? transformation.get() : null;
 			this.transforms = transforms;
 			this.format = format;
 			this.texture = texture;
+			this.particleTexture = particleTexture;
 			ModelConverter converter = new ModelConverter(model, 0.0625D, true);
 			Model convertedModel = converter.getModel();
 			QuadBuilder builder = new QuadBuilder(this.format).setSprite(this.texture).setTransformation(this.transformation);
@@ -134,7 +149,7 @@ public class ModelFromModelBase implements IModel {
 
 		@Override
 		public TextureAtlasSprite getParticleTexture() {
-			return this.texture;
+			return this.particleTexture;
 		}
 
 		@Override
@@ -151,5 +166,17 @@ public class ModelFromModelBase implements IModel {
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
 			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
 		}
+	}
+
+	@Override
+	public ModelFromModelBase process(ImmutableMap<String, String> customData) {
+		if(!customData.containsKey("particle_texture")) 
+			return this;
+
+		String particleTextureJsonStr = customData.get("particle_texture");
+		JsonElement e = new JsonParser().parse(particleTextureJsonStr);
+		String particleTexture = e.getAsString();
+
+		return new ModelFromModelBase(this.model, this.texture, new ResourceLocation(particleTexture), this.width, this.height, this.vertexProcessor);
 	}
 }

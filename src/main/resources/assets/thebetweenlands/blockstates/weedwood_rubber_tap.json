@@ -3,7 +3,8 @@
   "defaults": {
     "model": "thebetweenlands:internal/weedwood_rubber_tap",
     "custom": {
-      "fluid_texture": "thebetweenlands:fluids/rubber_still"
+      "fluid_texture": "thebetweenlands:fluids/rubber_still",
+      "particle_texture": "thebetweenlands:blocks/weedwood"
     }
   },
   "variants": {

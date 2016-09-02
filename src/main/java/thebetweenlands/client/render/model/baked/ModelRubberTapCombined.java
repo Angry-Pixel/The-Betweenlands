@@ -17,15 +17,19 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTap;
 
 public class ModelRubberTapCombined implements IModelCustomData {
 	private final IModel tapModel;
+	private final int height;
 	private final ResourceLocation tapTexture;
+	private final ResourceLocation particleTexture;
 
 	public ModelRubberTapCombined(ResourceLocation texture) {
-		this(texture, null, 0);
+		this(texture, texture, null, 0);
 	}
 
-	public ModelRubberTapCombined(ResourceLocation texture, ResourceLocation fluidTexture, int height) {
-		this.tapModel = new ModelCombined(new ModelFromModelBase(new ModelRubberTap(), texture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
+	public ModelRubberTapCombined(ResourceLocation texture, ResourceLocation particleTexture, ResourceLocation fluidTexture, int height) {
+		this.tapModel = new ModelCombined(new ModelFromModelBase(new ModelRubberTap(), texture, particleTexture, 128, 128), new ModelRubberTapLiquid(fluidTexture, height));
 		this.tapTexture = texture;
+		this.particleTexture = particleTexture;
+		this.height = height;
 	}
 
 	@Override
@@ -58,13 +62,18 @@ public class ModelRubberTapCombined implements IModelCustomData {
 		String fluidJsonStr = customData.get("fluid_texture");
 		String fluid = parser.parse(fluidJsonStr).getAsString();
 
-		int height = 0;
-
+		int height = this.height;
 		if(customData.containsKey("fluid_height")) {
 			String fluidHeightJsonStr = customData.get("fluid_height");
 			height = parser.parse(fluidHeightJsonStr).getAsInt();
 		}
 
-		return new ModelRubberTapCombined(this.tapTexture, new ResourceLocation(fluid), height);
+		ResourceLocation particleTexture = this.particleTexture;
+		if(customData.containsKey("particle_texture")) {
+			String particleTextureJsonStr = customData.get("particle_texture");
+			particleTexture = new ResourceLocation(parser.parse(particleTextureJsonStr).getAsString());
+		}
+
+		return new ModelRubberTapCombined(this.tapTexture, particleTexture, new ResourceLocation(fluid), height);
 	}
 }
