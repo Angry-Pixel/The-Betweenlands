@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.ITileEntityProvider;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
@@ -34,10 +33,18 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	protected static final AxisAlignedBB TAP_EAST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.15D, 0.6D, 1.0D, 0.85D);
 	protected static final AxisAlignedBB TAP_SOUTH_AABB = new AxisAlignedBB(0.15D, 0.0D, 0.0D, 0.85D, 1.0D, 0.6D);
 	protected static final AxisAlignedBB TAP_NORTH_AABB = new AxisAlignedBB(0.15D, 0.0D, 0.4D, 0.85D, 1.0D, 1.0D);
-	
-	public BlockRubberTap(Material material) {
-		super(material);
+
+	/**
+	 * The number of ticks it requires to fill up to the next step (15 steps in total)
+	 */
+	public final int ticksPerStep;
+
+	public BlockRubberTap(IBlockState material, int ticksPerStep) {
+		super(material.getMaterial());
 		this.setDefaultState(this.getBlockState().getBaseState().withProperty(AMOUNT, 0));
+		this.setSoundType(material.getBlock().getSoundType());
+		this.setHardness(2.0F);
+		this.ticksPerStep = ticksPerStep;
 	}
 
 	@Override
@@ -162,7 +169,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityRubberTap();
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		switch ((EnumFacing)state.getValue(FACING)) {

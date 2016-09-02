@@ -5,13 +5,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.block.BlockRubberTap;
 import thebetweenlands.common.registries.FluidRegistry;
 
 public class TileEntityRubberTap extends TileEntity implements IFluidHandler, ITickable {
@@ -62,9 +65,9 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 		if(!this.worldObj.isRemote) {
 			this.fillProgress++;
 			FluidStack drained = this.tank.drain(Fluid.BUCKET_VOLUME, false);
-			final int ticksPerFill = this.getBlockType() == BlockRegistry.WEEDWOOD_RUBBER_TAP ? 800 : 400; //Weedwood tap is slower
-			if((drained == null || drained.amount < Fluid.BUCKET_VOLUME) && this.fillProgress >= ticksPerFill) {
-				this.tank.fill(new FluidStack(FluidRegistry.RUBBER, 100), true);
+			final int ticksPerStep = ((BlockRubberTap)this.getBlockType()).ticksPerStep;
+			if((drained == null || drained.amount < Fluid.BUCKET_VOLUME) && this.fillProgress >= ticksPerStep) {
+				this.tank.fill(new FluidStack(FluidRegistry.RUBBER, 67), true);
 				this.fillProgress = 0;
 
 				IBlockState stat = this.worldObj.getBlockState(this.pos);
@@ -107,22 +110,44 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(doFill)
+		if(doFill) {
 			this.markDirty();
+			IBlockState stat = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
 		return this.tank.fill(resource, doFill);
 	}
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(doDrain)
+		if(doDrain) {
 			this.markDirty();
+			IBlockState stat = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
 		return this.tank.drain(resource, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if(doDrain)
+		if(doDrain) {
 			this.markDirty();
+			IBlockState stat = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
 		return this.tank.drain(maxDrain, doDrain);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T) tank;
+		return super.getCapability(capability, facing);
 	}
 }
