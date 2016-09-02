@@ -1,0 +1,35 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/weedwood_rubber_tap",
+    "custom": {
+      "fluid_texture": "thebetweenlands:fluids/rubber_still"
+    }
+  },
+  "variants": {
+    "amount": {
+      0: { "custom": { "fluid_height": 0 } },
+      1: { "custom": { "fluid_height": 1 } },
+      2: { "custom": { "fluid_height": 2 } },
+      3: { "custom": { "fluid_height": 3 } },
+      4: { "custom": { "fluid_height": 4 } },
+      5: { "custom": { "fluid_height": 5 } },
+      6: { "custom": { "fluid_height": 6 } },
+      7: { "custom": { "fluid_height": 7 } },
+      8: { "custom": { "fluid_height": 8 } },
+      9: { "custom": { "fluid_height": 9 } },
+      10: { "custom": { "fluid_height": 10 } },
+      11: { "custom": { "fluid_height": 11 } },
+      12: { "custom": { "fluid_height": 12 } },
+      13: { "custom": { "fluid_height": 13 } },
+      14: { "custom": { "fluid_height": 14 } },
+      15: { "custom": { "fluid_height": 15 } }
+    },
+    "facing": {
+      "north": { },
+      "south": { "y": 180 },
+      "east": { "y": 90 },
+      "west": { "y": 270 }
+    }
+  }
+}

@@ -8,6 +8,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
@@ -15,8 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -53,6 +56,17 @@ public class ItemBLBucketEmpty extends Item {
 						playerIn.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
 						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(itemStackIn, playerIn, fluid));
 					} else {
+						TileEntity te = worldIn.getTileEntity(blockpos);
+						if(te != null && te instanceof IFluidHandler) {
+							IFluidHandler handler = (IFluidHandler) te;
+							FluidStack drained = handler.drain(Fluid.BUCKET_VOLUME, false);
+							if(drained != null && drained.amount == Fluid.BUCKET_VOLUME) {
+								drained = handler.drain(Fluid.BUCKET_VOLUME, true);
+								playerIn.addStat(StatList.getObjectUseStats(this));
+								playerIn.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
+								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(itemStackIn, playerIn, drained.getFluid()));
+							}
+						}
 						return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
 					}
 				}

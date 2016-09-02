@@ -6,6 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -42,7 +43,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (entity instanceof EntityLivingBase /*&& !(entity instanceof EntityTarBeast)*/) {
+		if (entity instanceof EntityLivingBase /*&& !(entity instanceof EntityTarBeast)*/ && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)) {
 			entity.motionX *= 0.005D;
 			entity.motionZ *= 0.005D;
 			if(entity.motionY < 0)

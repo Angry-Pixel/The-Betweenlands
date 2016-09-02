@@ -28,6 +28,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
 import thebetweenlands.common.block.BlockRubberLog;
+import thebetweenlands.common.block.BlockRubberTap;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.block.container.BlockBLFurnace;
@@ -238,14 +239,14 @@ public class BlockRegistry {
 	public static final Block MOSSY_BETWEENSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block MOSSY_SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block MUD_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-	public static final Block OCTINE_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block OCTINE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block PITSTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block PITSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block POLISHED_LIMESTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block SMOOTH_CRAGROCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-	public static final Block SYRMORITE_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-	public static final Block VALONITE_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block SYRMORITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block VALONITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_POLISHED_LIMESTONE = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_MOSSY_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
@@ -403,6 +404,8 @@ public class BlockRegistry {
 	public static final Block SULFUR_FURNACE_DUAL = new BlockBLDualFurnace(false);
 	public static final Block SULFUR_FURNACE_DUAL_ACTIVE = new BlockBLDualFurnace(true).setLightLevel(0.875F);
 	public static final Block WEEDWOOD_CHEST = new BlockChestBetweenlands(BlockChestBetweenlands.WEEDWOOD_CHEST);
+	public static final Block WEEDWOOD_RUBBER_TAP = new BlockRubberTap(Material.WOOD);
+	public static final Block SYRMORITE_RUBBER_TAP = new BlockRubberTap(Material.IRON);
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

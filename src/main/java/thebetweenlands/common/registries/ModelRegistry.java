@@ -16,6 +16,8 @@ import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
+import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
+import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -98,6 +100,11 @@ public class ModelRegistry {
 	public static final IModel STALACTITE = new ModelStalactite();
 	public static final IModel ROOT = new ModelRoot();
 	public static final IModel FLUID = new ModelFluidBL(FluidRegistry.SWAMP_WATER);
+	public static final IModel RUBBER_TAP_LIQUID = new ModelRubberTapLiquid(null, 0);
+	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"));
+	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"));
+
+
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

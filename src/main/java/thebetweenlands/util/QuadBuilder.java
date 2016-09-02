@@ -202,6 +202,17 @@ public class QuadBuilder {
 
 	/**
 	 * Adds a vertex and infers the UV coordinates from the vertex index
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public QuadBuilder addVertexInferUV(double x, double y, double z) {
+		return this.addVertexInferUV(new Vec3d(x, y, z));
+	}
+
+	/**
+	 * Adds a vertex and infers the UV coordinates from the vertex index
 	 * @param pos
 	 * @return
 	 */
