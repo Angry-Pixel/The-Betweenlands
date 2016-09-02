@@ -17,10 +17,10 @@ public abstract class LoaderArgs {
 	 * Returns the model to load based on the specified arguments.
 	 * @param original
 	 * @param location
-	 * @param args
+	 * @param arg
 	 * @return
 	 */
-	public abstract IModel loadModel(IModel original, ResourceLocation location, String[] args);
+	public abstract IModel loadModel(IModel original, ResourceLocation location, String arg);
 
 	/**
 	 * Returns a replacement for the specified resource location and baked model.
@@ -39,5 +39,14 @@ public abstract class LoaderArgs {
 	 */
 	public final void throwInvalidArgs(String reason) {
 		throw new IllegalArgumentException(String.format("Illegal arguments for %s. Reason: %s", this.getName(), reason));
+	}
+	
+	/**
+	 * Throws an {@link IllegalArgumentException}
+	 * @param reason
+	 * @param cause
+	 */
+	public final void throwInvalidArgs(String reason, Exception cause) {
+		throw new IllegalArgumentException(String.format("Illegal arguments for %s. Reason: %s", this.getName(), reason), cause);
 	}
 }

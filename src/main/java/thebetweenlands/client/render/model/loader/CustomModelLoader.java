@@ -13,10 +13,8 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
@@ -25,7 +23,8 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
+import thebetweenlands.client.render.model.loader.args.AdvancedItemLoaderArgs;
+import thebetweenlands.client.render.model.loader.args.SimpleItemLoaderArgs;
 
 public class CustomModelLoader implements ICustomModelLoader {
 	private static enum MatchType {
@@ -84,54 +83,8 @@ public class CustomModelLoader implements ICustomModelLoader {
 		this.registry = registry;
 
 		//Item model loader args
-		this.loaderArgs.add(new LoaderArgs() {
-			private IModel dummyModel = null;
-			private final Map<ModelResourceLocation, ResourceLocation> dummyReplacementMap = new HashMap<>();
-
-			@Override
-			public String getName() {
-				return "from_item";
-			}
-
-			@Override
-			public IModel loadModel(IModel original, ResourceLocation location, String[] args) {
-				if(args.length != 1)
-					this.throwInvalidArgs("Invalid number of arguments");
-				ResourceLocation childModel = new ResourceLocation(args[0]);
-				this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getResourceDomain(), childModel.getResourcePath()), "inventory"), location);
-				return this.getDummyModel();
-			}
-
-			@Override
-			public IBakedModel getModelReplacement(ModelResourceLocation location, IBakedModel original) {
-				ResourceLocation replacementModelLocation = this.dummyReplacementMap.get(location);
-				if(replacementModelLocation != null) {
-					IModel replacementModel;
-					try {
-						//Makes sure that the model is loaded through the model loader and that the textures are registered properly
-						replacementModel = ModelLoaderRegistry.getModel(replacementModelLocation);
-					} catch (Exception ex) {
-						throw new RuntimeException("Failed to load model " + replacementModelLocation + " for child model " + location, ex);
-					}
-					IBakedModel bakedModel = replacementModel.bake(replacementModel.getDefaultState(), DefaultVertexFormats.ITEM, 
-							(loc) -> Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(loc.toString()));
-					return new BakedModelItemWrapper(original, bakedModel);
-				}
-				//Nothing to replace
-				return null;
-			}
-
-			private IModel getDummyModel() {
-				if(this.dummyModel == null) {
-					try {
-						this.dummyModel = ModelLoaderRegistry.getModel(new ResourceLocation("thebetweenlands:item/dummy"));
-					} catch (Exception ex) {
-						throw new RuntimeException("Failed to load dummy item model!", ex);
-					}
-				}
-				return this.dummyModel;
-			}
-		});
+		this.loaderArgs.add(new SimpleItemLoaderArgs());
+		this.loaderArgs.add(new AdvancedItemLoaderArgs());
 	}
 
 	@Override
@@ -158,8 +111,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 			} else if(match.getType() == MatchType.ARGS) {
 				LoaderArgs loaderArgs = match.getArgument();
 				String loaderParam = match.getParameters();
-				String[] loaderParamsArray = loaderParam.contains(",") ? loaderParam.split(",") : new String[]{ loaderParam };
-				return loaderArgs.loadModel(entry.getValue().apply(match.getActualLocation()), match.getActualLocation(), loaderParamsArray);
+				return loaderArgs.loadModel(entry.getValue().apply(match.getActualLocation()), match.getActualLocation(), loaderParam);
 			}
 		}
 		return null;

@@ -33,7 +33,7 @@ public class FluidRegistry {
 		}
 	}
 
-	public static final Fluid SWAMP_WATER = new FluidMultipleBlocks("swamp_water", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
+	public static final FluidMultipleBlocks SWAMP_WATER = (FluidMultipleBlocks) new FluidMultipleBlocks("swamp_water", new ResourceLocation("thebetweenlands:fluids/swamp_water_still"), new ResourceLocation("thebetweenlands:fluids/swamp_water_flowing")).setDensity(1000).setViscosity(1000);
 	public static final Fluid STAGNANT_WATER = new Fluid("stagnant_water", new ResourceLocation("thebetweenlands:fluids/stagnant_water_still"), new ResourceLocation("thebetweenlands:fluids/stagnant_water_flowing")).setDensity(1000).setViscosity(1000);
 	public static final Fluid TAR = new Fluid("tar", new ResourceLocation("thebetweenlands:fluids/tar_still"), new ResourceLocation("thebetweenlands:fluids/tar_flowing")).setDensity(2000).setViscosity(2000);
 
@@ -45,7 +45,9 @@ public class FluidRegistry {
 			for (Field f : FluidRegistry.class.getDeclaredFields()) {
 				Object obj = f.get(null);
 				if (obj instanceof Fluid) {
-					net.minecraftforge.fluids.FluidRegistry.registerFluid((Fluid) obj);
+					Fluid fluid = (Fluid) obj;
+					net.minecraftforge.fluids.FluidRegistry.registerFluid(fluid);
+					net.minecraftforge.fluids.FluidRegistry.addBucketForFluid(fluid);
 					REGISTERED_FLUIDS.add((Fluid)obj);
 				}
 			}
@@ -55,6 +57,6 @@ public class FluidRegistry {
 	}
 
 	public void init() {
-		SWAMP_WATER.setBlock(BlockRegistry.SWAMP_WATER);
+		SWAMP_WATER.setOriginalBlock(BlockRegistry.SWAMP_WATER);
 	}
 }

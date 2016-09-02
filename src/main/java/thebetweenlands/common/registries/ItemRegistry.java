@@ -44,6 +44,8 @@ import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.ItemBLAxe;
+import thebetweenlands.common.item.tools.ItemBLBucketEmpty;
+import thebetweenlands.common.item.tools.ItemBLBucketFilled;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
@@ -149,6 +151,8 @@ public class ItemRegistry {
 	public static final Item MANUAL_HL = new ItemManualHL();
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 	public static final Item SICKLE = new ItemSickle();
+	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemBLBucketEmpty();
+	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET_EMPTY);
 
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
@@ -173,7 +177,7 @@ public class ItemRegistry {
 	public void preInit() {
 		try {
 			for (Field field : this.getClass().getDeclaredFields()) {
-				if (field.getType().isAssignableFrom(Item.class)) {
+				if (field.get(this) instanceof Item) {
 					Item item = (Item) field.get(this);
 					registerItem(item, field.getName());
 				}
@@ -182,7 +186,9 @@ public class ItemRegistry {
 			ex.printStackTrace();
 		}
 
-		for (Item item : this.ITEMS) {
+		registerProperties();
+
+		for (Item item : ITEMS) {
 			TheBetweenlands.proxy.registerDefaultItemRenderer(item);
 		}
 	}
@@ -200,7 +206,7 @@ public class ItemRegistry {
 	public interface ISingleJsonSubItems{
 		List<String> getTypes();
 	}
-	
+
 	private static void registerProperties() {
 		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.OCTINE_ORE)));
 		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.SYRMORITE_ORE)));

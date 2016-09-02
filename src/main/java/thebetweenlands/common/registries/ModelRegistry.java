@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
+import thebetweenlands.client.render.model.baked.ModelDynBucketBL;
 import thebetweenlands.client.render.model.baked.ModelFluidBL;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
@@ -83,12 +84,7 @@ public class ModelRegistry {
 	public static final IModel DENTROTHYST_SHIELD_ORANGE = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel DENTROTHYST_SHIELD_ORANGE_POLISHED = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange_polished"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel LURKER_SKIN_SHIELD = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/lurker_skin_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
-
-	//Misc
-	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
-	public static final IModel STALACTITE = new ModelStalactite();
-	public static final IModel ROOT = new ModelRoot();
-	public static final IModel FLUID = new ModelFluidBL(FluidRegistry.SWAMP_WATER);
+	public static final IModel BUCKET = new ModelDynBucketBL();
 	public static final IModel WEEDWOOD_CHEST = new ModelFromModelBase(new ModelChest(), new ResourceLocation("thebetweenlands:tiles/weedwood_chest"), 64, 32,
 			new IVertexProcessor() {
 		@Override
@@ -96,6 +92,12 @@ public class ModelRegistry {
 			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	});
+
+	//Misc
+	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
+	public static final IModel STALACTITE = new ModelStalactite();
+	public static final IModel ROOT = new ModelRoot();
+	public static final IModel FLUID = new ModelFluidBL(FluidRegistry.SWAMP_WATER);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

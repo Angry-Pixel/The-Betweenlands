@@ -25,14 +25,22 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
 public class ModelBlank implements IModelCustomData {
-	private ResourceLocation particleTexture;
+	private final ResourceLocation particleTexture;
+	private final List<ResourceLocation> texturesToLoad = new ArrayList<ResourceLocation>();
 
-	public ModelBlank() { }
+	public ModelBlank() {
+		this.particleTexture = null;
+	}
 
 	public ModelBlank(ResourceLocation texture) {
 		if(texture == null)
 			throw new IllegalArgumentException("No particle texture specified!");
 		this.particleTexture = texture;
+	}
+	
+	public ModelBlank(List<ResourceLocation> texturesToLoad) {
+		this.texturesToLoad.addAll(texturesToLoad);
+		this.particleTexture = texturesToLoad.get(0);
 	}
 
 	@Override
@@ -45,6 +53,8 @@ public class ModelBlank implements IModelCustomData {
 		List<ResourceLocation> textures = new ArrayList<ResourceLocation>();
 		if(this.particleTexture != null)
 			textures.add(this.particleTexture);
+		if(!this.texturesToLoad.isEmpty())
+			textures.addAll(this.texturesToLoad);
 		return textures;
 	}
 
