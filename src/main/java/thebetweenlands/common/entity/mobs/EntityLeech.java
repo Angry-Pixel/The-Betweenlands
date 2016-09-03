@@ -52,7 +52,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
     private final EntityAIBLAvoidEntity avoidHarmer = new EntityAIBLAvoidEntity(this, EntityPlayer.class, 6, 0.5, 0.6);
 
-    private static final DataParameter<Byte> BLOOD_CONSUMED = EntityDataManager.createKey(EntityAngler.class, DataSerializers.BYTE);
+    private static final DataParameter<Byte> BLOOD_CONSUMED = EntityDataManager.createKey(EntityLeech.class, DataSerializers.BYTE);
 
     public EntityLeech(World worldIn) {
         super(worldIn);
@@ -204,7 +204,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
     }
 
     public int getBloodConsumed() {
-        return dataManager.get(BLOOD_CONSUMED);
+        return dataManager.get(BLOOD_CONSUMED) & 0xFF;
     }
 
     public void setBloodConsumed(int amount) {
