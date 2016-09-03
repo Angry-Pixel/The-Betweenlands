@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.loader;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javax.annotation.Nonnull;
+
+import org.apache.commons.lang3.Validate;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
@@ -24,26 +28,29 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.client.render.model.loader.args.AdvancedItemLoaderExtension;
-import thebetweenlands.client.render.model.loader.args.SimpleItemLoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.AdvancedItemLoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.CustomDataLoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
+import thebetweenlands.client.render.model.loader.extension.LoaderExtensionException;
+import thebetweenlands.client.render.model.loader.extension.SimpleItemLoaderExtension;
 
-public class CustomModelLoader implements ICustomModelLoader {
-	private static enum MatchType {
+public final class CustomModelLoader implements ICustomModelLoader {
+	private static enum LoaderType {
 		NORMAL,
-		ARGS,
+		EXTENSION,
 		NONE
 	}
 
-	private static class MatchResult {
-		private final MatchType type;
-		private final LoaderExtension args;
-		private final String params;
+	private static class LoaderResult {
+		private final LoaderType type;
+		private final LoaderExtension extension;
+		private final String args;
 		private final ResourceLocation actualLocation;
 
-		private MatchResult(MatchType type, LoaderExtension args, String params, ResourceLocation location) {
+		private LoaderResult(LoaderType type, LoaderExtension extension, String args, ResourceLocation location) {
 			this.type = type;
+			this.extension = extension;
 			this.args = args;
-			this.params = params;
 			if(location != null && location.getResourcePath().startsWith("models/")) {
 				String path = location.getResourcePath();
 				path = path.substring("models/".length());
@@ -52,45 +59,30 @@ public class CustomModelLoader implements ICustomModelLoader {
 			this.actualLocation = location;
 		}
 
-		private MatchResult(ResourceLocation location) {
-			this(MatchType.NORMAL, null, null, location);
+		private LoaderResult(ResourceLocation location) {
+			this(LoaderType.NORMAL, null, null, location);
 		}
 
-		private MatchResult(ResourceLocation location, LoaderExtension args, String params) {
-			this(MatchType.ARGS, args, params, location);
-		}
-
-		public MatchType getType() {
-			return this.type;
-		}
-
-		public String getParameters() {
-			return this.params;
-		}
-
-		public LoaderExtension getArgument() {
-			return this.args;
-		}
-
-		public ResourceLocation getActualLocation() {
-			return this.actualLocation;
+		private LoaderResult(ResourceLocation location, LoaderExtension extension, String args) {
+			this(LoaderType.EXTENSION, extension, args, location);
 		}
 	}
 
-	public final CustomModelManager registry;
+	private final CustomModelManager manager;
 	private final List<LoaderExtension> loaderExtensions = new ArrayList<LoaderExtension>();
 
+	//Default loader extensions
 	public static final LoaderExtension SIMPLE_ITEM_LOADER_EXTENSION = new SimpleItemLoaderExtension();
 	public static final LoaderExtension ADVANCED_ITEM_LOADER_EXTENSION = new AdvancedItemLoaderExtension();
-	//public static final LoaderExtension CUSTOM_DATA_LOADER_EXTENSION = new CustomDataLoaderExtension();
+	public static final LoaderExtension CUSTOM_DATA_LOADER_EXTENSION = new CustomDataLoaderExtension();
 
-	CustomModelLoader(CustomModelManager registry) {
-		this.registry = registry;
+	CustomModelLoader(CustomModelManager manager) {
+		this.manager = manager;
 
 		//Item model loader extensions
 		this.registerExtension(SIMPLE_ITEM_LOADER_EXTENSION);
 		this.registerExtension(ADVANCED_ITEM_LOADER_EXTENSION);
-		//this.registerExtension(CUSTOM_DATA_LOADER_EXTENSION);
+		this.registerExtension(CUSTOM_DATA_LOADER_EXTENSION);
 	}
 
 	/**
@@ -98,9 +90,18 @@ public class CustomModelLoader implements ICustomModelLoader {
 	 * @param extension
 	 * @return
 	 */
-	public CustomModelLoader registerExtension(LoaderExtension extension) {
+	public CustomModelLoader registerExtension(@Nonnull LoaderExtension extension) {
+		Validate.notNull(extension);
 		this.loaderExtensions.add(extension);
 		return this;
+	}
+
+	/**
+	 * Returns an unmodifiable list of all registered loader extensions
+	 * @return
+	 */
+	public List<LoaderExtension> getExtensions() {
+		return Collections.unmodifiableList(this.loaderExtensions);
 	}
 
 	@Override
@@ -113,8 +114,8 @@ public class CustomModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			if(this.getMatchResult(entry.getKey(), modelLocation).getType() != MatchType.NONE) {
+		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+			if(this.getLoaderResult(entry.getKey(), modelLocation).type != LoaderType.NONE) {
 				return true;
 			}
 		}
@@ -123,67 +124,97 @@ public class CustomModelLoader implements ICustomModelLoader {
 
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.registry.registeredModels.entrySet()) {
-			MatchResult match = this.getMatchResult(entry.getKey(), modelLocation);
-			if(match.getType() == MatchType.NORMAL) {
-				return entry.getValue().apply(match.getActualLocation());
-			} else if(match.getType() == MatchType.ARGS) {
-				LoaderExtension loaderArgs = match.getArgument();
-				String loaderParam = match.getParameters();
-				return loaderArgs.loadModel(entry.getValue().apply(match.getActualLocation()), match.getActualLocation(), loaderParam);
+		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+			LoaderResult match = this.getLoaderResult(entry.getKey(), modelLocation);
+			if(match.type == LoaderType.NORMAL) {
+				return entry.getValue().apply(match.actualLocation);
+			} else if(match.type == LoaderType.EXTENSION) {
+				LoaderExtension loaderExtension = match.extension;
+				String loaderArgs = match.args;
+				try {
+					return loaderExtension.loadModel(entry.getValue().apply(match.actualLocation), match.actualLocation, loaderArgs);
+				} catch(Exception ex) {
+					if(ex instanceof LoaderExtensionException == false)
+						this.throwLoaderException(loaderExtension, ex);
+					else
+						throw ex;
+				}
 			}
 		}
 		return null;
 	}
 
-	private MatchResult getMatchResult(ResourceLocation registeredModel, ResourceLocation modelLocation) {
+	/**
+	 * Compares two model locations and returns how they should be handled if they match
+	 * @param registeredModel
+	 * @param modelLocation
+	 * @return
+	 */
+	private LoaderResult getLoaderResult(ResourceLocation registeredModel, ResourceLocation modelLocation) {
+		//Not in the same domain, can't match
 		if(!registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()))
-			return new MatchResult(MatchType.NONE, null, null, null);
+			return new LoaderResult(LoaderType.NONE, null, null, null);
+
 		String registeredPath = registeredModel.getResourcePath();
 		String modelPath = modelLocation.getResourcePath();
+
 		if(modelPath.startsWith(registeredPath)) {
 			String suffix = modelPath.substring(registeredPath.length());
-			//Find loader args in suffix
-			LoaderExtension loaderArg = null;
+
+			//Find loader extension in suffix
+			LoaderExtension loaderExtension = null;
 			for(LoaderExtension arg : this.loaderExtensions) {
 				String argPrefix = "$" + arg.getName() + "(";
 				if(suffix.startsWith(argPrefix)) {
-					loaderArg = arg;
+					loaderExtension = arg;
 					break;
 				}
 			}
-			String loaderParam = null;
-			if(loaderArg != null) {
-				suffix = suffix.substring(loaderArg.getName().length() + 2);
-				loaderParam = suffix.substring(0, suffix.indexOf(")"));
-				suffix = suffix.substring(loaderParam.length() + 1);
-				if(loaderParam.length() == 0)
-					loaderParam = null;
+
+			//Find loader args in suffix
+			String loaderArgs = null;
+			if(loaderExtension != null) {
+				suffix = suffix.substring(loaderExtension.getName().length() + 2);
+				loaderArgs = suffix.substring(0, suffix.indexOf(")"));
+				suffix = suffix.substring(loaderArgs.length() + 1);
+				if(loaderArgs.length() == 0)
+					loaderArgs = null;
 			}
+
 			//Only accept if path fully matches or is a variant
 			if(suffix.length() == 0 || suffix.startsWith("#")) {
 				ResourceLocation actualLocation = new ResourceLocation(modelLocation.getResourceDomain(), registeredPath + suffix);
-				if(loaderArg != null) {
-					return new MatchResult(actualLocation, loaderArg, loaderParam);
-				}
-				return new MatchResult(actualLocation); 
+
+				//Extension loader
+				if(loaderExtension != null)
+					return new LoaderResult(actualLocation, loaderExtension, loaderArgs);
+
+				//Normal loader
+				return new LoaderResult(actualLocation); 
 			}
 		}
-		return new MatchResult(MatchType.NONE, null, null, null);
+
+		//No match
+		return new LoaderResult(LoaderType.NONE, null, null, null);
 	}
 
 	@SubscribeEvent
 	public void onModelBake(ModelBakeEvent event) {
 		IRegistry<ModelResourceLocation, IBakedModel> modelRegistry = event.getModelRegistry();
 		List<Pair<ModelResourceLocation, IBakedModel>> loadedModels = new ArrayList<Pair<ModelResourceLocation, IBakedModel>>();
+
 		for(ModelResourceLocation modelLocation : modelRegistry.getKeys()) {
 			IBakedModel model = modelRegistry.getObject(modelLocation);
+
+			//Model depends on other baked models
 			if(model instanceof IBakedModelDependant) {
 				IBakedModelDependant dependant = (IBakedModelDependant) model;
 				Collection<ModelResourceLocation> dependencies = dependant.getDependencies(modelLocation);
 				Map<ModelResourceLocation, IBakedModel> loadedDependencies = new HashMap<ModelResourceLocation, IBakedModel>();
+
 				for(ModelResourceLocation dependencyLocation : dependencies) {
 					IBakedModel bakedModel = modelRegistry.getObject(dependencyLocation);
+
 					if(bakedModel == null) {
 						ResourceLocation dependencyLocationNoVariants = new ResourceLocation(dependencyLocation.getResourceDomain(), dependencyLocation.getResourcePath());
 						try {
@@ -194,8 +225,10 @@ public class CustomModelLoader implements ICustomModelLoader {
 							throw new RuntimeException("Failed to load model dependency " + dependencyLocationNoVariants + " for model " + modelLocation, ex);
 						}
 					}
+
 					loadedDependencies.put(dependencyLocation, bakedModel);
 				}
+
 				dependant.setDependencies(modelLocation, loadedDependencies);
 			}
 		}
@@ -203,33 +236,66 @@ public class CustomModelLoader implements ICustomModelLoader {
 			modelRegistry.putObject(loadedModel.getKey(), loadedModel.getValue());
 		}
 
-		//Replace models
+		//Replace loader extensions models
 		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
 		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
-		for(LoaderExtension args : this.loaderExtensions) {
+
+		//Get model replacements from extensions
+		for(LoaderExtension extension : this.loaderExtensions) {
 			for(ModelResourceLocation loc : keys) {
-				IBakedModel replacement = args.getModelReplacement(loc, modelRegistry.getObject(loc));
-				if(replacement != null)
-					replacementMap.put(loc, replacement);
+				try {
+					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
+					if(replacement != null)
+						replacementMap.put(loc, replacement);
+				} catch(Exception ex) {
+					if(ex instanceof LoaderExtensionException == false)
+						this.throwLoaderException(extension, ex);
+					else
+						throw ex;
+				}
 			}
 		}
-		List<IBakedModel> toRemove = new ArrayList<IBakedModel>();
-		Set<ModelResourceLocation> replacementKeys = replacementMap.keySet();
-		for(ModelResourceLocation loc : keys) {
-			if(replacementKeys.contains(loc)) {
-				IBakedModel bakedModel = modelRegistry.getObject(loc);
-				toRemove.add(bakedModel);
-			}
+
+		this.replaceRegistryObjects(modelRegistry, replacementMap);
+	}
+
+	/**
+	 * Throws a {@link LoaderExtensionException}
+	 * @param reason
+	 * @param cause
+	 */
+	private void throwLoaderException(LoaderExtension extension, Throwable cause) {
+		throw new LoaderExtensionException(String.format("Model loader extension %s failed loading a model", extension.getName()), cause);
+	}
+
+	/**
+	 * Replaces the specified objects in the specified registry
+	 * @param registry
+	 * @param map
+	 */
+	private <K, T> void replaceRegistryObjects(IRegistry<K, T> registry, Map<K, T> map) {
+		List<T> objectsToRemove = new ArrayList<T>(map.size());
+		Set<K> replacementKeys = map.keySet();
+
+		//Gather registered objects
+		for(K replacementKey : replacementKeys) {
+			T obj = registry.getObject(replacementKey);
+			if(obj != null)
+				objectsToRemove.add(obj);
 		}
-		Iterator<IBakedModel> it = modelRegistry.iterator();
-		IBakedModel model = null;
+
+		//Remove registered objects
+		Iterator<T> it = registry.iterator();
+		T obj = null;
 		while(it.hasNext()) {
-			model = it.next();
-			if(toRemove.contains(model))
+			obj = it.next();
+			if(objectsToRemove.contains(obj))
 				it.remove();
 		}
-		for(Entry<ModelResourceLocation, IBakedModel> replacement : replacementMap.entrySet()) {
-			modelRegistry.putObject(replacement.getKey(), replacement.getValue());
+
+		//Add replacement objects
+		for(Entry<K, T> replacement : map.entrySet()) {
+			registry.putObject(replacement.getKey(), replacement.getValue());
 		}
 	}
 }

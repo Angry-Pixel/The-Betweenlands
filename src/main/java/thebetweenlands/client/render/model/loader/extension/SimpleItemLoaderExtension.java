@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.model.loader.args;
+package thebetweenlands.client.render.model.loader.extension;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,7 +11,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
-import thebetweenlands.client.render.model.loader.LoaderExtension;
 
 /**
  * Allows json item models to load non-json models
