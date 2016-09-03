@@ -16,6 +16,7 @@ import com.google.common.base.Function;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraftforge.client.event.ModelBakeEvent;
@@ -23,8 +24,8 @@ import net.minecraftforge.client.model.ICustomModelLoader;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.client.render.model.loader.args.AdvancedItemLoaderArgs;
-import thebetweenlands.client.render.model.loader.args.SimpleItemLoaderArgs;
+import thebetweenlands.client.render.model.loader.args.AdvancedItemLoaderExtension;
+import thebetweenlands.client.render.model.loader.args.SimpleItemLoaderExtension;
 
 public class CustomModelLoader implements ICustomModelLoader {
 	private static enum MatchType {
@@ -33,13 +34,13 @@ public class CustomModelLoader implements ICustomModelLoader {
 		NONE
 	}
 
-	static class MatchResult {
+	private static class MatchResult {
 		private final MatchType type;
-		private final LoaderArgs args;
+		private final LoaderExtension args;
 		private final String params;
 		private final ResourceLocation actualLocation;
 
-		private MatchResult(MatchType type, LoaderArgs args, String params, ResourceLocation location) {
+		private MatchResult(MatchType type, LoaderExtension args, String params, ResourceLocation location) {
 			this.type = type;
 			this.args = args;
 			this.params = params;
@@ -55,7 +56,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 			this(MatchType.NORMAL, null, null, location);
 		}
 
-		private MatchResult(ResourceLocation location, LoaderArgs args, String params) {
+		private MatchResult(ResourceLocation location, LoaderExtension args, String params) {
 			this(MatchType.ARGS, args, params, location);
 		}
 
@@ -67,7 +68,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 			return this.params;
 		}
 
-		public LoaderArgs getArgument() {
+		public LoaderExtension getArgument() {
 			return this.args;
 		}
 
@@ -77,19 +78,37 @@ public class CustomModelLoader implements ICustomModelLoader {
 	}
 
 	public final CustomModelManager registry;
-	private final List<LoaderArgs> loaderArgs = new ArrayList<LoaderArgs>();
+	private final List<LoaderExtension> loaderExtensions = new ArrayList<LoaderExtension>();
+
+	public static final LoaderExtension SIMPLE_ITEM_LOADER_EXTENSION = new SimpleItemLoaderExtension();
+	public static final LoaderExtension ADVANCED_ITEM_LOADER_EXTENSION = new AdvancedItemLoaderExtension();
+	//public static final LoaderExtension CUSTOM_DATA_LOADER_EXTENSION = new CustomDataLoaderExtension();
 
 	CustomModelLoader(CustomModelManager registry) {
 		this.registry = registry;
 
-		//Item model loader args
-		this.loaderArgs.add(new SimpleItemLoaderArgs());
-		this.loaderArgs.add(new AdvancedItemLoaderArgs());
+		//Item model loader extensions
+		this.registerExtension(SIMPLE_ITEM_LOADER_EXTENSION);
+		this.registerExtension(ADVANCED_ITEM_LOADER_EXTENSION);
+		//this.registerExtension(CUSTOM_DATA_LOADER_EXTENSION);
+	}
+
+	/**
+	 * Registers a loader extension
+	 * @param extension
+	 * @return
+	 */
+	public CustomModelLoader registerExtension(LoaderExtension extension) {
+		this.loaderExtensions.add(extension);
+		return this;
 	}
 
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
-		//NOOP
+		for(LoaderExtension extension : this.loaderExtensions) {
+			if(extension instanceof IResourceManagerReloadListener)
+				((IResourceManagerReloadListener)extension).onResourceManagerReload(resourceManager);
+		}
 	}
 
 	@Override
@@ -109,7 +128,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 			if(match.getType() == MatchType.NORMAL) {
 				return entry.getValue().apply(match.getActualLocation());
 			} else if(match.getType() == MatchType.ARGS) {
-				LoaderArgs loaderArgs = match.getArgument();
+				LoaderExtension loaderArgs = match.getArgument();
 				String loaderParam = match.getParameters();
 				return loaderArgs.loadModel(entry.getValue().apply(match.getActualLocation()), match.getActualLocation(), loaderParam);
 			}
@@ -125,8 +144,8 @@ public class CustomModelLoader implements ICustomModelLoader {
 		if(modelPath.startsWith(registeredPath)) {
 			String suffix = modelPath.substring(registeredPath.length());
 			//Find loader args in suffix
-			LoaderArgs loaderArg = null;
-			for(LoaderArgs arg : this.loaderArgs) {
+			LoaderExtension loaderArg = null;
+			for(LoaderExtension arg : this.loaderExtensions) {
 				String argPrefix = "$" + arg.getName() + "(";
 				if(suffix.startsWith(argPrefix)) {
 					loaderArg = arg;
@@ -187,7 +206,7 @@ public class CustomModelLoader implements ICustomModelLoader {
 		//Replace models
 		Set<ModelResourceLocation> keys = modelRegistry.getKeys();
 		Map<ModelResourceLocation, IBakedModel> replacementMap = new HashMap<>();
-		for(LoaderArgs args : this.loaderArgs) {
+		for(LoaderExtension args : this.loaderExtensions) {
 			for(ModelResourceLocation loc : keys) {
 				IBakedModel replacement = args.getModelReplacement(loc, modelRegistry.getObject(loc));
 				if(replacement != null)

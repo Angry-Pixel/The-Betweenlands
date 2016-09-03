@@ -61,8 +61,8 @@ public class ModelDynBucketBL implements IModel, IModelCustomData {
 		JsonParser parser = new JsonParser();
 
 		Fluid fluid = null;
-		if(customData.containsKey("fluid")) {
-			String fluidName = parser.parse(customData.get("fluid")).getAsString();
+		if(customData.containsKey("default_fluid")) {
+			String fluidName = parser.parse(customData.get("default_fluid")).getAsString();
 			fluid = FluidRegistry.getFluid(fluidName);
 		}
 
