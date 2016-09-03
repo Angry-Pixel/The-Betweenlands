@@ -194,7 +194,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
      * @param type the surface type
      * @return
      */
-	public boolean rotatedCubeMatches(World world, int x, int y, int z, int sizeWidth, int sizeHeight, int sizeDepth, int offsetX, int offsetY, int offsetZ,  int rotation, SurfaceType type) {
+	public boolean rotatedCubeMatches(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int sizeWidth, int sizeHeight, int sizeDepth,  int rotation, SurfaceType type) {
 		x -= width / 2;
 		z -= depth / 2;
 		switch (rotation) {
@@ -202,7 +202,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
 						for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
-							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -210,7 +210,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int zz = z + sizeDepth - offsetX - 1; zz > z + sizeDepth - offsetX - sizeWidth - 1; zz--)
 						for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
-							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -218,7 +218,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int xx = x + sizeWidth - offsetX - 1; xx > x + sizeWidth - offsetX - sizeWidth - 1; xx--)
 						for (int zz = z + sizeDepth - offsetZ - 1; zz > z + sizeDepth - offsetZ - sizeDepth - 1; zz--) {
-							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -226,7 +226,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
 						for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
-							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;

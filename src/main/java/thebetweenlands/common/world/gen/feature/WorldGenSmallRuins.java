@@ -540,42 +540,42 @@ public class WorldGenSmallRuins extends WorldGenHelper {
         boolean replaceable = true;
         switch (direction) {
             case 0:
-                if (!world.isAreaLoaded(new BlockPos(x + offsetA - 4, y + offsetB, z + offsetC - 4), new BlockPos(x + offsetA + sizeWidth + 4, y + offsetB + sizeHeight, z + offsetC + sizeDepth + 4)))
+                if (!world.isAreaLoaded(this.getCheckPos(x + offsetA - 4, y + offsetB, z + offsetC - 4), this.getCheckPos(x + offsetA + sizeWidth + 4, y + offsetB + sizeHeight, z + offsetC + sizeDepth + 4)))
                     return true;
                 for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
                     for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
                         for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
-                            if (!world.getBlockState(new BlockPos(xx, yy, zz)).getBlock().isReplaceable(world, new BlockPos(xx, yy, zz)))
+                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
                                 replaceable = false;
                         }
                 break;
             case 1:
-                if (!world.isAreaLoaded(new BlockPos(x + offsetC - 4, y + offsetB, z + depth - offsetA - sizeWidth - 1 - 4), new BlockPos(x + offsetC + sizeDepth + 4, y + offsetB + sizeHeight, z + depth - offsetA - 1 + 4)))
+                if (!world.isAreaLoaded(this.getCheckPos(x + offsetC - 4, y + offsetB, z + depth - offsetA - sizeWidth - 1 - 4), this.getCheckPos(x + offsetC + sizeDepth + 4, y + offsetB + sizeHeight, z + depth - offsetA - 1 + 4)))
                     return true;
                 for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
                     for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
                         for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
-                            if (!world.getBlockState(new BlockPos(xx, yy, zz)).getBlock().isReplaceable(world, new BlockPos(xx, yy, zz)))
+                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
                                 replaceable = false;
                         }
                 break;
             case 2:
-                if (!world.isAreaLoaded(new BlockPos(x + width - offsetA - sizeWidth - 1 - 4, y + offsetB, z + depth - offsetC - sizeDepth - 1 - 4), new BlockPos(x + width - offsetA - 1 + 4, y + offsetB + sizeHeight, z + depth - offsetC - 1 + 4)))
+                if (!world.isAreaLoaded(this.getCheckPos(x + width - offsetA - sizeWidth - 1 - 4, y + offsetB, z + depth - offsetC - sizeDepth - 1 - 4), this.getCheckPos(x + width - offsetA - 1 + 4, y + offsetB + sizeHeight, z + depth - offsetC - 1 + 4)))
                     return true;
                 for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
                     for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
                         for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
-                            if (!world.getBlockState(new BlockPos(xx, yy, zz)).getBlock().isReplaceable(world, new BlockPos(xx, yy, zz)))
+                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
                                 replaceable = false;
                         }
                 break;
             case 3:
-                if (!world.isAreaLoaded(new BlockPos(x + width - offsetC - sizeDepth - 1 - 4, y + offsetB, z + offsetA - 4), new BlockPos(x + width - offsetC - 1 + 4, y + offsetB + sizeHeight, z + offsetA + sizeWidth + 4)))
+                if (!world.isAreaLoaded(this.getCheckPos(x + width - offsetC - sizeDepth - 1 - 4, y + offsetB, z + offsetA - 4), this.getCheckPos(x + width - offsetC - 1 + 4, y + offsetB + sizeHeight, z + offsetA + sizeWidth + 4)))
                     return true;
                 for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
                     for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
                         for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
-                            if (!world.getBlockState(new BlockPos(xx, yy, zz)).getBlock().isReplaceable(world, new BlockPos(xx, yy, zz)))
+                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
                                 replaceable = false;
                         }
                 break;
