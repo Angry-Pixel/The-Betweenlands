@@ -68,45 +68,6 @@ public class WorldGenCragrockTower extends WorldGenHelper {
         return tower(worldIn, rand, pos.getX(), pos.getY(), pos.getZ());
     }
 
-    private boolean rotatedCubeMatches(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction, SurfaceType type) {
-		x -= width / 2;
-		z -= depth / 2;
-		switch (direction) {
-		case 0:
-			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-				for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
-					for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
-						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-							return false;
-					}
-			break;
-		case 1:
-			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-				for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
-					for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
-						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-							return false;
-					}
-			break;
-		case 2:
-			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-				for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
-					for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
-						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-							return false;
-					}
-			break;
-		case 3:
-			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-				for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
-					for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
-						if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-							return false;
-					}
-			break;
-		}
-		return true;
-	}
 
 	private boolean canGenerate(World world, int x, int y, int z, int direction) {
 		x -= width / 2;

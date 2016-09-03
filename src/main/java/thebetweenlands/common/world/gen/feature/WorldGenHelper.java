@@ -15,8 +15,10 @@ import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.loot.LootTables;
 import thebetweenlands.common.world.gen.feature.loot.LootUtil;
+import thebetweenlands.common.world.gen.feature.loot.WeightedLootList;
 
 public abstract class WorldGenHelper extends WorldGenerator {
 	/**
@@ -26,7 +28,8 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		STAIR(0, 3, 1, 2),
 		UPSIDE_DOWN_STAIR(4, 7, 5, 6),
 		CHEST(2, 5, 3, 4),
-		LOG_SIDEWAYS(4, 8);
+		LOG_SIDEWAYS(4, 8),
+		PILLAR_SIDEWAYS(7, 8);
 
 		private int[] sequence;
 
@@ -49,7 +52,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	}
 
 	/**
-	 * A constructor to make you not need to put in the width, height, depth  every time
+	 * A constructor that takes the width, height, depth every time
 	 *
 	 * @param width  the width of the structure (x axis)
 	 * @param height the height of the structure (not always necessary)
@@ -62,6 +65,9 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		this.replaceable = replaceable;
 	}
 
+	public WorldGenHelper(IBlockState... replaceable) {
+		this.replaceable = replaceable;
+	}
 
 	/**
 	 * Generates cube volumes and rotates them depending on the given rotation
@@ -176,9 +182,62 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	}
 
 	/**
+	 * Checks if an area matches a surface type
+	 * @param world    The world
+	 * @param x        x to generate relative from
+	 * @param y        y to generate relative from
+	 * @param z        z to generate relative from
+	 * @param offsetX  Where to generate relative from the x
+	 * @param offsetY  Where to generate relative from the y
+	 * @param offsetZ  Where to generate relative from the z
+	 * @param rotation The rotation for the cube volume (0 to 3)
+     * @param type the surface type
+     * @return
+     */
+	public boolean rotatedCubeMatches(World world, int x, int y, int z, int sizeWidth, int sizeHeight, int sizeDepth, int offsetX, int offsetY, int offsetZ,  int rotation, SurfaceType type) {
+		x -= width / 2;
+		z -= depth / 2;
+		switch (rotation) {
+			case 0:
+				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+					for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
+						for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
+							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+								return false;
+						}
+				break;
+			case 1:
+				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+					for (int zz = z + sizeDepth - offsetX - 1; zz > z + sizeDepth - offsetX - sizeWidth - 1; zz--)
+						for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
+							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+								return false;
+						}
+				break;
+			case 2:
+				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+					for (int xx = x + sizeWidth - offsetX - 1; xx > x + sizeWidth - offsetX - sizeWidth - 1; xx--)
+						for (int zz = z + sizeDepth - offsetZ - 1; zz > z + sizeDepth - offsetZ - sizeDepth - 1; zz--) {
+							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+								return false;
+						}
+				break;
+			case 3:
+				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+					for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
+						for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
+							if (!type.matches(world.getBlockState(new BlockPos(xx, yy, zz))))
+								return false;
+						}
+				break;
+		}
+		return true;
+	}
+
+	/**
 	 * Generates a loot pot taking the rotation of a structure into a count
 	 *
-	 * @param world   The workd
+	 * @param world   The world
 	 * @param rand    a random
 	 * @param x       x to generate relative from
 	 * @param y       y to generate relative from
@@ -197,16 +256,16 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			return;
 		switch (rotation) {
 		case 0:
-			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max);
+			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, LootTables.DUNGEON_POT_LOOT);
 			break;
 		case 1:
-			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max);
+			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, LootTables.DUNGEON_POT_LOOT);
 			break;
 		case 2:
-			generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max);
+			generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, LootTables.DUNGEON_POT_LOOT);
 			break;
 		case 3:
-			generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max);
+			generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, LootTables.DUNGEON_POT_LOOT);
 			break;
 		}
 	}
@@ -298,11 +357,11 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param min    The minimum amount of items
 	 * @param max    The maximum amount of items
 	 */
-	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max) {
+	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, WeightedLootList list) {
 		world.setBlockState(pos, getRandomLootPot(random), 3);
 		TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
 		if (lootPot != null)
-			LootUtil.generateLoot(lootPot, random, LootTables.DUNGEON_POT_LOOT, min, max);
+			LootUtil.generateLoot(lootPot, random, list, min, max);
 	}
 
 	/** TODO change to weedwood chest when added
