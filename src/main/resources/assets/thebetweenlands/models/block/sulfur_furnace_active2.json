@@ -1,14 +1,11 @@
 {
-    "parent": "block/orientable",
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
     "textures": {
-        "0": "thebetweenlands:blocks/sulfur_furnace_back",
-        "1": "thebetweenlands:blocks/sulfur_furnace_side",
-        "2": "thebetweenlands:blocks/betweenstone_bricks",
-        "3": "thebetweenlands:blocks/sulfur_furnace_front",
-        "4": "thebetweenlands:blocks/sulfur_furnace_top",
-        "5": "blocks/fire_layer_0",
-        "6": "blocks/fire_layer_1",
-        "particle": "thebetweenlands:blocks/sulfur_furnace_side"
+        "0": "blocks/sulfur_furnace_back_new",
+        "1": "blocks/sulfur_furnace_side_new",
+        "2": "blocks/betweenstone_bricks",
+        "3": "blocks/sulfur_furnace_front_off_new",
+        "4": "blocks/sulfur_furnace_top_new"
     },
     "elements": [
         {
@@ -214,36 +211,36 @@
                 "up": { "texture": "#4", "uv": [ 11.0, 13.0, 12.0, 15.0 ] }
             }
         },
-                {
+        {
             "name": "fire_1",
-            "from": [ 4.0, 5.0, 3.0 ], 
-            "to": [ 12.0, 10.0, 4.0 ], 
+            "from": [ 3.0, 5.0, 3.0 ], 
+            "to": [ 13.0, 10.0, 4.0 ], 
             "faces": {
-                "south": { "texture": "#5", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+                "south": { "texture": "#2", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
         {
             "name": "fire_2",
-            "from": [ 4.0, 5.0, 6.0 ], 
-            "to": [ 12.0, 10.0, 7.0 ], 
+            "from": [ 3.0, 5.0, 6.0 ], 
+            "to": [ 13.0, 10.0, 7.0 ], 
             "faces": {
-                "south": { "texture": "#6", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+                "south": { "texture": "#2", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "rotation": 180 }
             }
         },
         {
             "name": "fire_3",
-            "from": [ 4.0, 5.0, 9.0 ], 
-            "to": [ 12.0, 10.0, 10.0 ], 
+            "from": [ 3.0, 5.0, 9.0 ], 
+            "to": [ 13.0, 10.0, 10.0 ], 
             "faces": {
-                "south": { "texture": "#5", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+                "south": { "texture": "#2", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
         {
             "name": "fire_4",
-            "from": [ 4.0, 5.0, 11.0 ], 
-            "to": [ 12.0, 10.0, 12.0 ], 
+            "from": [ 3.0, 5.0, 11.0 ], 
+            "to": [ 13.0, 10.0, 12.0 ], 
             "faces": {
-                "south": { "texture": "#6", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
+                "south": { "texture": "#2", "uv": [ 0.0, 0.0, 16.0, 16.0 ], "rotation": 180 }
             }
         }
     ]
