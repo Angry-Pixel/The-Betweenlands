@@ -55,7 +55,7 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return super.shouldSideBeRendered(blockState, blockAccess, pos, side) && (blockAccess.getBlockState(pos.offset(side)).getBlock() != this
-				|| blockState.getValue(AXIS) != blockAccess.getBlockState(pos.offset(side)).getValue(AXIS));
+				|| (blockState.getValue(AXIS) != blockAccess.getBlockState(pos.offset(side)).getValue(AXIS) || side.getAxis() != blockState.getValue(AXIS)));
 	}
 
 	@Override
