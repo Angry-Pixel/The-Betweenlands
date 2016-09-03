@@ -11,10 +11,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import thebetweenlands.client.render.model.baked.BakedModelItemWrapper;
-import thebetweenlands.client.render.model.loader.LoaderArgs;
+import thebetweenlands.client.render.model.loader.LoaderExtension;
 
-public class SimpleItemLoaderArgs extends LoaderArgs {
-	private IModel dummyModel = null;
+/**
+ * Allows json item models to load non-json models
+ */
+public class SimpleItemLoaderExtension extends LoaderExtension {
 	private final Map<ModelResourceLocation, ResourceLocation> dummyReplacementMap = new HashMap<>();
 
 	@Override
@@ -26,7 +28,7 @@ public class SimpleItemLoaderArgs extends LoaderArgs {
 	public IModel loadModel(IModel original, ResourceLocation location, String arg) {
 		ResourceLocation childModel = new ResourceLocation(arg);
 		this.dummyReplacementMap.put(new ModelResourceLocation(new ResourceLocation(childModel.getResourceDomain(), childModel.getResourcePath()), "inventory"), location);
-		return this.getDummyModel();
+		return this.getItemDummyModel();
 	}
 
 	@Override
@@ -51,16 +53,5 @@ public class SimpleItemLoaderArgs extends LoaderArgs {
 		}
 		//Nothing to replace
 		return null;
-	}
-
-	private IModel getDummyModel() {
-		if(this.dummyModel == null) {
-			try {
-				this.dummyModel = ModelLoaderRegistry.getModel(new ResourceLocation("thebetweenlands:item/dummy"));
-			} catch (Exception ex) {
-				throw new RuntimeException("Failed to load dummy item model!", ex);
-			}
-		}
-		return this.dummyModel;
 	}
 }

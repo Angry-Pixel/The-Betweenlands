@@ -6,7 +6,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 
-public abstract class LoaderArgs {
+public abstract class LoaderExtension {
+	private IModel dummyModel = null;
+
 	/**
 	 * Returns the name of this loader argument
 	 * @return
@@ -40,7 +42,7 @@ public abstract class LoaderArgs {
 	public final void throwInvalidArgs(String reason) {
 		throw new IllegalArgumentException(String.format("Illegal arguments for %s. Reason: %s", this.getName(), reason));
 	}
-	
+
 	/**
 	 * Throws an {@link IllegalArgumentException}
 	 * @param reason
@@ -48,5 +50,20 @@ public abstract class LoaderArgs {
 	 */
 	public final void throwInvalidArgs(String reason, Exception cause) {
 		throw new IllegalArgumentException(String.format("Illegal arguments for %s. Reason: %s", this.getName(), reason), cause);
+	}
+
+	/**
+	 * Returns a blank item dummy model
+	 * @return
+	 */
+	protected final IModel getItemDummyModel() {
+		if(this.dummyModel == null) {
+			try {
+				this.dummyModel = ModelLoaderRegistry.getModel(new ResourceLocation("thebetweenlands:item/dummy"));
+			} catch (Exception ex) {
+				throw new RuntimeException("Failed to load dummy item model!", ex);
+			}
+		}
+		return this.dummyModel;
 	}
 }
