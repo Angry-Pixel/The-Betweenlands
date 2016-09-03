@@ -15,6 +15,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.sound.BLSoundEvent;
 
@@ -24,6 +25,7 @@ public class ItemBLRecord extends ItemRecord {
     public ItemBLRecord(BLSoundEvent soundIn) {
         super(soundIn.name, soundIn);
         name = soundIn.name;
+        this.setCreativeTab(BLCreativeTabs.SPECIALS);
     }
 
     @Override

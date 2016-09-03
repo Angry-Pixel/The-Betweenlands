@@ -25,11 +25,14 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * Enums to get the meta data of a stair with when a structure is rotated
 	 */
 	public enum EnumRotationSequence {
+		//TODO: This ought to be removed and replaced with the proper block states at some point
+		//E.g. enum.getRotatedBlockState(IProperty propertyThatContainsTheRotation, IBlockState theBlockStateToRotate)
+		
 		STAIR(0, 3, 1, 2),
 		UPSIDE_DOWN_STAIR(4, 7, 5, 6),
 		CHEST(2, 5, 3, 4),
 		LOG_SIDEWAYS(4, 8),
-		PILLAR_SIDEWAYS(7, 8);
+		PILLAR_SIDEWAYS(8, 7);
 
 		private int[] sequence;
 
