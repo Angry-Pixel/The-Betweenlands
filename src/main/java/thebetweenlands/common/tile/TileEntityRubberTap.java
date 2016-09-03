@@ -155,4 +155,12 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 			return (T) tank;
 		return super.getCapability(capability, facing);
 	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		this.tank.writeToNBT(nbt);
+		nbt.setInteger("FillProgress", this.fillProgress);
+		return nbt;
+	}
 }

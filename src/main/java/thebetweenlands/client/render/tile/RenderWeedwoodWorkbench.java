@@ -1,9 +1,9 @@
 package thebetweenlands.client.render.tile;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -16,11 +16,11 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 
 	@Override
 	public void renderTileEntityAt(TileEntityWeedwoodWorkbench table, double x, double y, double z, float partialTicks, int destroyStage) {
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y + 0.875D, z + 0.5D);
-		GL11.glScalef(0.25F, 0.25F, 0.25F);
-		GL11.glRotatef(90.0F * (-table.rotation + 3), 0.0F, 1.0F, 0.0F);
-		GL11.glTranslatef(-1.5F, -0.0F, -1.0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x + 0.5D, y + 0.875D, z + 0.5D);
+		GlStateManager.scale(0.25F, 0.25F, 0.25F);
+		GlStateManager.rotate(90.0F * (-table.rotation + 3), 0.0F, 1.0F, 0.0F);
+		GlStateManager.translate(-1.5F, -0.0F, -1.0F);
 
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		float prevLGTX = OpenGlHelper.lastBrightnessX;
@@ -33,19 +33,20 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 			for (int column = 0; column < 3; column++) {
 				ItemStack stack = table.craftingSlots[column * 3 + row];
 				if (stack != null) {
-					GL11.glPushMatrix();
-					GL11.glTranslated(row * 0.75F, 0.0D, column * 0.75F);
-					GL11.glTranslatef(0.75F, 0.52F, 0.25F);
-					GL11.glScalef(0.5F, 0.5F, 0.5F);
-					GL11.glRotatef(90.0F, 1.0F, 0.0F, 0.0F);
-					GL11.glRotatef(180.0F, 0.0F, 0.0F, 1.0F);
-					renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
-					GL11.glPopMatrix();
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(row * 0.75F, 0.0D, column * 0.75F);
+					GlStateManager.translate(0.75F, 0.52F, 0.25F);
+					GlStateManager.scale(0.5F, 0.5F, 0.5F);
+					GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
+					GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+					RenderHelper.disableStandardItemLighting();
+					this.renderItem.renderItem(stack, this.renderItem.getItemModelMesher().getItemModel(stack));
+					GlStateManager.popMatrix();
 				}
 			}
 		}
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, prevLGTX, prevLGTY);
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }
