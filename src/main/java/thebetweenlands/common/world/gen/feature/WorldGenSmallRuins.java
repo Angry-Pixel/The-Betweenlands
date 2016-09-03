@@ -27,22 +27,18 @@ public class WorldGenSmallRuins extends WorldGenHelper {
     private static final IBlockState BETWEENSTONE_BRICKS = BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState();
     private static final IBlockState BETWEENSTONE_BRICK_STAIRS = BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState();
     private static final IBlockState BETWEENSTONE_BRICK_SLAB = BlockRegistry.BETWEENSTONE_BRICK_SLAB.getDefaultState();
+    private static final IBlockState BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN = BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
     private static final IBlockState CHISELED_BETWEENSTONE = BlockRegistry.BETWEENSTONE_CHISELED.getDefaultState();
     private static final IBlockState BETWEENSTONE_PILLAR = BlockRegistry.BETWEENSTONE_PILLAR.getDefaultState();
     private static final IBlockState SMOOTH_BETWEENSTONE_WALL = BlockRegistry.SMOOTH_BETWEENSTONE_WALL.getDefaultState();
     private static final IBlockState WEEDWOOD_LOG = BlockRegistry.LOG_WEEDWOOD.getDefaultState();
     private static final IBlockState WEEDWOOD_PLANK_STAIRS = BlockRegistry.WEEDWOOD_PLANK_STAIRS.getDefaultState();
     private static final IBlockState WEEDWOOD_PLANK_SLAB = BlockRegistry.WEEDWOOD_PLANK_SLAB.getDefaultState();
+    private static final IBlockState WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN = WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
     private static final IBlockState BETWEENSTONE_BRICK_WALL = BlockRegistry.BETWEENSTONE_BRICK_WALL.getDefaultState();
     private static final IBlockState WEEDWOOD_FENCE = BlockRegistry.WEEDWOOD_PLANK_FENCE.getDefaultState();
 
 
-    /**
-     * A constructor to make you not need to put in the width, height, depth  every time
-     */
-    public WorldGenSmallRuins() {
-        super();
-    }
 
     @Override
     public boolean generate(World world, Random random, BlockPos position) {
@@ -148,7 +144,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 
             rotatedCubeVolume(world, x, y, z, 2, height - 3, 0, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 3, height - 3, 0, getStateFromRotation(2, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 4, height - 3, 0, BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 4, height - 3, 0, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 5, height - 3, 0, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
 
             rotatedCubeVolume(world, x, y, z, 3, height - 2, 0, BETWEENSTONE_BRICK_SLAB, 3, 1, 1, direction);
@@ -185,7 +181,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             rotatedCubeVolume(world, x, y, z, 6, height - 7, 0, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
 
             rotatedCubeVolume(world, x, y, z, 3, height - 6, 0, getStateFromRotation(2, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 4, height - 6, 0, BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 4, height - 6, 0, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 5, height - 6, 0, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, height - 6, 0, getStateFromRotation(2, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 
@@ -283,7 +279,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
                     int zz;
                     for (zz = z + 3; zz <= z + width - 3; zz++) {
                         world.setBlockState(new BlockPos(x - width + 1, yy + 1, zz), BETWEENSTONE_BRICK_SLAB);
-                        world.setBlockState(new BlockPos(x - width + 1, yy, zz), BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 3);
+                        world.setBlockState(new BlockPos(x - width + 1, yy, zz), BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 3);
                     }
                     world.setBlockState(new BlockPos(x - width + 1, yy, zz), getStateFromRotation(3, 0, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 3);
                     world.setBlockState(new BlockPos(x - width + 1, yy + 1, zz), BETWEENSTONE_BRICK_SLAB);
@@ -313,7 +309,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
                     world.setBlockState(new BlockPos(x - width + 2, yy + 1, z + width - 1), BETWEENSTONE_BRICK_SLAB);
                     int xx;
                     for (xx = x - width + 3; xx <= x - 3; xx++) {
-                        world.setBlockState(new BlockPos(xx, yy, z + width - 1), BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 3);
+                        world.setBlockState(new BlockPos(xx, yy, z + width - 1), BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 3);
                         if (random.nextInt(8) == 0) {
                             generateLoot(world, random, xx, yy + 1, z + width - 1);
                         } else
@@ -381,7 +377,6 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             this.addLocationArea(world, x, y, z, 0, 0, 0, width, 1, depth, direction, generatedLocations);
 
             rotatedCubeVolume(world, x, y, z, 0, 0, 0, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
-            //Who needs pillars? I don't
             rotatedCubeVolume(world, x, y, z, 1, 0, 0, getStateFromRotation(7, direction, BETWEENSTONE_PILLAR, EnumRotationSequence.PILLAR_SIDEWAYS), width - 2, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, width - 1, 0, 0, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
             rotatedLootPot(world, random, x, y, z, 0, 1, 0, direction, 1, 2, 5);
@@ -432,13 +427,13 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             rotatedCubeVolume(world, x, y, z, 6, 5, 3, getStateFromRotation(1, direction, WEEDWOOD_PLANK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 8, 3, getStateFromRotation(1, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 9, 3, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 7, 5, 3, WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 3, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 7, 5, 3, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 3, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 10, 0, 3, BETWEENSTONE_BRICKS, 1, 6, 3, direction);
             rotatedCubeVolume(world, x, y, z, 10, 3, 3, getStateFromRotation(1, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 10, 6, 3, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
 
-            rotatedCubeVolume(world, x, y, z, 6, 5, 4, WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 6, 8, 4, BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 6, 5, 4, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 6, 8, 4, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 9, 4, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
             //TODO Stupid rope
             //rotatedCubeVolume(world, x, y, z, 7, 3, 4, BLBlockRegistry.rope, 0, 1, 2, 1, direction);
@@ -450,7 +445,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             rotatedCubeVolume(world, x, y, z, 6, 5, 5, getStateFromRotation(3, direction, WEEDWOOD_PLANK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 8, 5, getStateFromRotation(3, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 9, 5, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 7, 5, 5, WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 3, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 7, 5, 5, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 3, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 10, 6, 5, getStateFromRotation(3, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 
             rotatedCubeVolume(world, x, y, z, 2, 0, 6, BETWEENSTONE_TILES, 1, 4, 1, direction);
@@ -458,12 +453,12 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             rotatedCubeVolume(world, x, y, z, 2, 8, 6, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 3, 8, 6, getStateFromRotation(2, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 3, 9, 6, BETWEENSTONE_BRICK_SLAB, 3, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 4, 8, 6, BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 4, 8, 6, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 5, 8, 6, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 0, 6, BETWEENSTONE_TILES, 1, 4, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 4, 6, BETWEENSTONE_BRICKS, 1, 6, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 10, 6, getStateFromRotation(1, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 7, 5, 6, WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 3, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 7, 5, 6, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 3, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 9, 0, 6, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
             rotatedLootPot(world, random, x, y, z, 9, 1, 6, direction, 1, 2, 1);
             rotatedCubeVolume(world, x, y, z, 10, 0, 6, BETWEENSTONE_TILES, 1, 4, 1, direction);
@@ -475,12 +470,12 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             rotatedCubeVolume(world, x, y, z, 6, 8, 7, getStateFromRotation(1, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 9, 7, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 7, 0, 7, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 8, 5, 7, WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 2, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 8, 5, 7, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 2, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 10, 0, 7, BETWEENSTONE_BRICKS, 1, 6, 1, direction);
             rotatedCubeVolume(world, x, y, z, 10, 6, 7, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
 
             rotatedCubeVolume(world, x, y, z, 5, 0, 8, BETWEENSTONE_BRICKS, 4, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 6, 8, 8, BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 6, 8, 8, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 6, 9, 8, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 9, 4, 8, WEEDWOOD_FENCE, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 9, 5, 8, getStateFromRotation(0, direction, WEEDWOOD_LOG, EnumRotationSequence.LOG_SIDEWAYS), 3, 1, 1, direction);
@@ -517,7 +512,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
             rotatedCubeVolume(world, x, y, z, 7, 6, 10, getStateFromRotation(2, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 7, 7, 10, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 8, 2, 10, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
-            rotatedCubeVolume(world, x, y, z, 8, 6, 10, BETWEENSTONE_BRICK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP), 1, 1, 1, direction);
+            rotatedCubeVolume(world, x, y, z, 8, 6, 10, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 8, 7, 10, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 9, 2, 10, BETWEENSTONE_BRICKS, 1, 1, 1, direction);
             rotatedCubeVolume(world, x, y, z, 9, 6, 10, getStateFromRotation(0, direction, BETWEENSTONE_BRICK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
@@ -534,54 +529,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
     }
 
 
-    private boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
-        x -= width / 2;
-        z -= depth / 2;
-        boolean replaceable = true;
-        switch (direction) {
-            case 0:
-                if (!world.isAreaLoaded(this.getCheckPos(x + offsetA - 4, y + offsetB, z + offsetC - 4), this.getCheckPos(x + offsetA + sizeWidth + 4, y + offsetB + sizeHeight, z + offsetC + sizeDepth + 4)))
-                    return true;
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
-                        for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
-                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-                                replaceable = false;
-                        }
-                break;
-            case 1:
-                if (!world.isAreaLoaded(this.getCheckPos(x + offsetC - 4, y + offsetB, z + depth - offsetA - sizeWidth - 1 - 4), this.getCheckPos(x + offsetC + sizeDepth + 4, y + offsetB + sizeHeight, z + depth - offsetA - 1 + 4)))
-                    return true;
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
-                        for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
-                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-                                replaceable = false;
-                        }
-                break;
-            case 2:
-                if (!world.isAreaLoaded(this.getCheckPos(x + width - offsetA - sizeWidth - 1 - 4, y + offsetB, z + depth - offsetC - sizeDepth - 1 - 4), this.getCheckPos(x + width - offsetA - 1 + 4, y + offsetB + sizeHeight, z + depth - offsetC - 1 + 4)))
-                    return true;
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
-                        for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
-                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-                                replaceable = false;
-                        }
-                break;
-            case 3:
-                if (!world.isAreaLoaded(this.getCheckPos(x + width - offsetC - sizeDepth - 1 - 4, y + offsetB, z + offsetA - 4), this.getCheckPos(x + width - offsetC - 1 + 4, y + offsetB + sizeHeight, z + offsetA + sizeWidth + 4)))
-                    return true;
-                for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-                    for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
-                        for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
-                            if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-                                replaceable = false;
-                        }
-                break;
-        }
-        return !replaceable;
-    }
+
 
 
     private boolean addLocationArea(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction, List<LocationStorage> addedLocations) {

@@ -11,6 +11,8 @@ import net.minecraft.world.World;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallRuins;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenMudStructures;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
 
 //MINE!!
 public class TestItem extends Item {
@@ -26,7 +28,7 @@ public class TestItem extends Item {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(world, itemRand, pos.up());
         }*/
-        WorldGenSmallRuins smallRuins = new WorldGenSmallRuins();
+        WorldGenMudStructures smallRuins = new WorldGenMudStructures();
         smallRuins.generate(world, itemRand, pos.up());
         return EnumActionResult.SUCCESS;
     }
