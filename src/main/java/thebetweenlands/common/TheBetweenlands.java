@@ -31,6 +31,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.WorldDataBase;
+import thebetweenlands.common.world.teleporter.TeleporterHandler;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -85,8 +86,7 @@ public class TheBetweenlands {
 		REGISTRIES.init();
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 
-		// TODO WORLDGEN BEFORE THIS IS UNCOMMENTED!!!
-		//TeleporterHandler.init();
+		TeleporterHandler.init();
 
 		proxy.init();
 
