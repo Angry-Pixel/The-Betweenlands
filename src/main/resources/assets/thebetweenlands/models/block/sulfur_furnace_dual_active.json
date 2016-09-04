@@ -8,6 +8,7 @@
         "4": "thebetweenlands:blocks/sulfur_furnace_top",
         "5": "blocks/fire_layer_0",
         "6": "blocks/fire_layer_1",
+        "7": "thebetweenlands:blocks/sulfur_furnace_inside_active",
         "particle": "thebetweenlands:blocks/sulfur_furnace_side"
     },
     "elements": [
@@ -20,7 +21,7 @@
                 "east": { "texture": "#1", "uv": [ 0.0, 11.0, 16.0, 16.0 ] },
                 "south": { "texture": "#2", "uv": [ 0.0, 11.0, 16.0, 16.0 ] },
                 "west": { "texture": "#1", "uv": [ 0.0, 11.0, 16.0, 16.0 ] },
-                "up": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "up": { "texture": "#7", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
                 "down": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
@@ -276,32 +277,32 @@
         },
         {
             "name": "fire_1",
-            "from": [ 4.0, 5.0, 3.0 ], 
-            "to": [ 12.0, 10.0, 4.0 ], 
+            "from": [ 3.0, 5.0, 3.0 ], 
+            "to": [ 13.0, 10.0, 4.0 ], 
             "faces": {
                 "south": { "texture": "#5", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
         {
             "name": "fire_2",
-            "from": [ 4.0, 5.0, 6.0 ], 
-            "to": [ 12.0, 10.0, 7.0 ], 
+            "from": [ 3.0, 5.0, 6.0 ], 
+            "to": [ 13.0, 10.0, 7.0 ], 
             "faces": {
                 "south": { "texture": "#6", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
         {
             "name": "fire_3",
-            "from": [ 4.0, 5.0, 9.0 ], 
-            "to": [ 12.0, 10.0, 10.0 ], 
+            "from": [ 3.0, 5.0, 9.0 ], 
+            "to": [ 13.0, 10.0, 10.0 ], 
             "faces": {
                 "south": { "texture": "#5", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
         {
             "name": "fire_4",
-            "from": [ 4.0, 5.0, 11.0 ], 
-            "to": [ 12.0, 10.0, 12.0 ], 
+            "from": [ 3.0, 5.0, 11.0 ], 
+            "to": [ 13.0, 10.0, 12.0 ], 
             "faces": {
                 "south": { "texture": "#6", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }

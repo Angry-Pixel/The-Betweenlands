@@ -6,6 +6,7 @@
         "2": "thebetweenlands:blocks/sulfur_furnace_dual_front",
         "3": "thebetweenlands:blocks/betweenstone_bricks",
         "4": "thebetweenlands:blocks/sulfur_furnace_top",
+        "5": "thebetweenlands:blocks/sulfur_furnace_inside",
         "particle": "thebetweenlands:blocks/sulfur_furnace_side"
     },
     "elements": [
@@ -18,7 +19,7 @@
                 "east": { "texture": "#1", "uv": [ 0.0, 11.0, 16.0, 16.0 ] },
                 "south": { "texture": "#2", "uv": [ 0.0, 11.0, 16.0, 16.0 ] },
                 "west": { "texture": "#1", "uv": [ 0.0, 11.0, 16.0, 16.0 ] },
-                "up": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+                "up": { "texture": "#5", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
                 "down": { "texture": "#3", "uv": [ 0.0, 0.0, 16.0, 16.0 ] }
             }
         },
