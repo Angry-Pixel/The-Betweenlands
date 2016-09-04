@@ -6,7 +6,7 @@
         "2": "thebetweenlands:blocks/sulfur_furnace_dual_front",
         "3": "thebetweenlands:blocks/betweenstone_bricks",
         "4": "thebetweenlands:blocks/sulfur_furnace_top",
-        "5": "thebetweenlands:blocks/sulfur_furnace_inside",
+        "5": "thebetweenlands:blocks/sulfur_furnace_dual_inside",
         "particle": "thebetweenlands:blocks/sulfur_furnace_side"
     },
     "elements": [
