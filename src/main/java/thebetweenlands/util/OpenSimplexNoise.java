@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.util;
 
 /*
  * OpenSimplex (Simplectic) Noise in Java.
