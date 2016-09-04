@@ -144,6 +144,8 @@ tile.thebetweenlands.weedwoodJukebox.name=Weedwood Jukebox
 tile.thebetweenlands.weedwoodWorkbench.name=Weedwood Workbench
 tile.thebetweenlands.weepingBlue.name=Weeping Blue
 tile.thebetweenlands.wisp.name=Wisp
+tile.thebetweenlands.sulfurFurnace.name=Sulfur Furnace
+tile.thebetweenlands.sulfurFurnaceDual.name=Dual Sulfur Furnace
 
 # Items
 
@@ -371,3 +373,7 @@ item.thebetweenlands.weedwoodSword.name=Weedwood Sword
 item.thebetweenlands.weepingBluePetal.name=Weeping Blue Petal
 item.thebetweenlands.wightHeart.name=Wight's Heart
 item.thebetweenlands.yellowDottedFungus.name=Yellow Dotted Fungus
+
+# Container
+container.furnaceBL=Sulfur Furnace
+container.dualFurnaceBL=Dual Sulfur Furnace
