@@ -103,7 +103,7 @@ public class BlockWallBetweenlands extends Block {
 	{
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		Block block = iblockstate.getBlock();
-		return block == Blocks.BARRIER ? false : (block != this && !(block instanceof BlockFenceGate || block instanceof BlockFenceGateBetweenlands) ? (block.getMaterial(iblockstate).isOpaque() && iblockstate.isFullCube() ? block.getMaterial(iblockstate) != Material.GOURD : false) : true);
+		return block == Blocks.BARRIER ? false : (!(block instanceof BlockWallBetweenlands) && !(block instanceof BlockFenceGate) ? (iblockstate.getMaterial().isOpaque() && iblockstate.isFullCube() ? iblockstate.getMaterial() != Material.GOURD : false) : true);
 	}
 
 	/**
