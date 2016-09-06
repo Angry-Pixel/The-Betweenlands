@@ -1,7 +1,6 @@
 package thebetweenlands.client.render.tile;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -22,7 +21,7 @@ public class TileEntitySpikeTrapRenderer extends TileEntitySpecialRenderer {
 	public final void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
 		TileEntitySpikeTrap spikes = (TileEntitySpikeTrap) tile;
 		int brightness = 0;
-		brightness = spikes.getWorld().getLightFor(EnumSkyBlock.SKY, spikes.getPos());
+		brightness = tile.getWorld().getLightFromNeighborsFor(EnumSkyBlock.BLOCK, tile.getPos());
 		int lightmapX = brightness % 65536;
 		int lightmapY = brightness / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)lightmapX / 1.0F, (float)lightmapY / 1.0F);
@@ -32,13 +31,14 @@ public class TileEntitySpikeTrapRenderer extends TileEntitySpecialRenderer {
 		else
 			bindTexture(INACTIVE_TEXTURE);
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		GL11.glScaled(-1, -1, 1);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.pushMatrix();
+		GlStateManager.color(1, 1, 1);
+		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.scale(-1, -1, 1);
+		GlStateManager.disableCull();
 		model.renderSpikes(spikes);
-		GL11.glEnable(GL11.GL_CULL_FACE);
-		GL11.glPopMatrix();
+		GlStateManager.enableCull();;
+		GlStateManager.popMatrix();
 
 	}
 }

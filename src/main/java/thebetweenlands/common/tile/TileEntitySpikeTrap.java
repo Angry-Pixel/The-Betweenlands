@@ -120,10 +120,16 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 	}
 
 	@Override
+    public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = new NBTTagCompound();
+        return writeToNBT(nbt);
+    }
+
+	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		NBTTagCompound tag = new NBTTagCompound();
-		writeToNBT(tag);
-		return new SPacketUpdateTileEntity(pos, 1, tag);
+		NBTTagCompound nbt = new NBTTagCompound();
+		writeToNBT(nbt);
+		return new SPacketUpdateTileEntity(pos, 1, nbt);
 	}
 
 	@Override
