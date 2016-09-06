@@ -1000,9 +1000,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
-						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
-						else if(blockType == betweenstoneBrickSlab)
+						if(blockType == limestoneBrickSlab || blockType == betweenstoneBrickSlab)
 							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
@@ -1037,9 +1035,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = length - offsetA - 1; zz > length - offsetA - sizeWidth - 1; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
-						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
-						else if(blockType == betweenstoneBrickSlab)
+						if(blockType == limestoneBrickSlab || blockType == betweenstoneBrickSlab)
 							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
@@ -1074,9 +1070,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int xx = length - offsetA - 1; xx > length - offsetA - sizeWidth - 1; xx--)
 					for (int zz = length - offsetC - 1; zz > length - offsetC - sizeDepth - 1; zz--) {
-						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
-						else if(blockType == betweenstoneBrickSlab)
+						if(blockType == limestoneBrickSlab || blockType == betweenstoneBrickSlab)
 							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
@@ -1111,9 +1105,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			for (int yy = offsetB; yy < offsetB + sizeHeight; yy++)
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = length - offsetC - 1; xx > length - offsetC - sizeDepth - 1; xx--) {
-						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
-						else if(blockType == betweenstoneBrickSlab)
+						if(blockType == limestoneBrickSlab || blockType == betweenstoneBrickSlab)
 							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
