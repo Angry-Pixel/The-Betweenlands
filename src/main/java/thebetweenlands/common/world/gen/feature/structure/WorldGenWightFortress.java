@@ -9,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
@@ -224,6 +225,40 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 7:
 			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+		}
+		return state;
+	}
+
+	public IBlockState getWeedWoodChestRotations(IBlockState state, int blockMeta) {
+		int direction = blockMeta;
+		switch (direction) {
+		case 0: //unused
+		case 1: //unused
+		case 2:
+			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.NORTH);
+		case 3:
+			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.SOUTH);
+		case 4:
+			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.WEST);
+		case 5:
+			return state.withProperty(BlockChestBetweenlands.FACING, EnumFacing.EAST);
+		}
+		return state;
+	}
+
+	private IBlockState getLootPotRotations(IBlockState state, int blockMeta) {
+		int direction = blockMeta;
+		switch (direction) {
+		case 0: //unused
+		case 1: //unused
+		case 2:
+			return state.withProperty(BlockLootPot.FACING, EnumFacing.NORTH);
+		case 3:
+			return state.withProperty(BlockLootPot.FACING, EnumFacing.SOUTH);
+		case 4:
+			return state.withProperty(BlockLootPot.FACING, EnumFacing.WEST);
+		case 5:
+			return state.withProperty(BlockLootPot.FACING, EnumFacing.EAST);
 		}
 		return state;
 	}
@@ -950,7 +985,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	private void placeChest(World world, Random rand, BlockPos pos, int blockMeta) {
-		world.setBlockState(pos, chest,/* blockMeta,*/ 2);
+		world.setBlockState(pos, getWeedWoodChestRotations(chest, blockMeta), 2);
 		TileEntityChestBetweenlands lootChest = (TileEntityChestBetweenlands) world.getTileEntity(pos);
 		if (lootChest != null) {
 			LootUtil.generateLoot(lootChest, rand, LootTables.DUNGEON_CHEST_LOOT, 4, 8);
@@ -961,7 +996,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		if(rand.nextInt(5) != 0 || world.isAirBlock(pos.down()))
 			return;
 		else {
-			world.setBlockState(pos, blockType, /*blockMeta,*/ 2);
+			world.setBlockState(pos, getLootPotRotations(blockType, blockMeta), 2);
 			TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
 			if (lootPot != null) {
 				LootUtil.generateLoot(lootPot, rand, LootTables.DUNGEON_POT_LOOT, 1, 3);
@@ -970,6 +1005,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			}
 		}
 	}
+
 /*
 	public void setSwordStone(World world, Random rand, BlockPos pos, IBlockState blockType, int blockMeta, byte type) {
 		world.setBlockState(pos, blockType, blockMeta, 2);
