@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"normal": [
+            { "model": "thebetweenlands:fallen_leaves" },
+            { "model": "thebetweenlands:fallen_leaves", "y": 90 },
+            { "model": "thebetweenlands:fallen_leaves", "y": 180 },
+            { "model": "thebetweenlands:fallen_leaves", "y": 270 }
+        ]
+	}
+}

@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
+import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -159,7 +160,7 @@ public class DecorationHelper {
 		if (canShortThingsGenerateHere(decorator)) {
 			BlockPos pos = decorator.getRandomPos(14);
 			World world = decorator.getWorld();
-			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) || 
+			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) ||
 					(SurfaceType.WATER.matches(world, pos) && world.getBlockState(pos.down()) == BlockRegistry.MUD))
 				return GEN_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
@@ -617,6 +618,15 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
 			return GEN_SMALL_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateFallenLeaves(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		Block block = decorator.getWorld().getBlockState(pos.down()).getBlock();
+		if (decorator.getRand().nextInt(3) == 0 && decorator.getWorld().isAirBlock(pos) && block == BlockRegistry.DEAD_GRASS || block == BlockRegistry.SWAMP_GRASS || block == BlockRegistry.SWAMP_DIRT || block == BlockRegistry.MUD || block == BlockRegistry.WEEDWOOD) {
+			return decorator.getWorld().setBlockState(pos, BlockRegistry.FALLEN_LEAVES.getDefaultState());
 		}
 		return false;
 	}

@@ -1,13 +1,6 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Random;
-
 import com.google.common.base.CaseFormat;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,86 +17,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.block.BlockLeavesBetweenlands;
-import thebetweenlands.common.block.BlockLogBetweenlands;
-import thebetweenlands.common.block.BlockRubberLog;
-import thebetweenlands.common.block.BlockRubberTap;
-import thebetweenlands.common.block.BlockSaplingBetweenlands;
-import thebetweenlands.common.block.container.BlockBLDualFurnace;
-import thebetweenlands.common.block.container.BlockBLFurnace;
-import thebetweenlands.common.block.container.BlockChestBetweenlands;
-import thebetweenlands.common.block.container.BlockCompostBin;
-import thebetweenlands.common.block.container.BlockDruidAltar;
-import thebetweenlands.common.block.container.BlockLootPot;
-import thebetweenlands.common.block.container.BlockPurifier;
-import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
-import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
-import thebetweenlands.common.block.plant.BlockAlgae;
-import thebetweenlands.common.block.plant.BlockBladderwortFlower;
-import thebetweenlands.common.block.plant.BlockBladderwortStalk;
-import thebetweenlands.common.block.plant.BlockBogBeanFlower;
-import thebetweenlands.common.block.plant.BlockBogBeanStalk;
-import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
-import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
-import thebetweenlands.common.block.plant.BlockCaveGrass;
-import thebetweenlands.common.block.plant.BlockCaveMoss;
-import thebetweenlands.common.block.plant.BlockDoublePlantBL;
-import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
-import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
-import thebetweenlands.common.block.plant.BlockHollowLog;
-import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
-import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
-import thebetweenlands.common.block.plant.BlockMoss;
-import thebetweenlands.common.block.plant.BlockNettle;
-import thebetweenlands.common.block.plant.BlockNettleFlowered;
-import thebetweenlands.common.block.plant.BlockPlant;
-import thebetweenlands.common.block.plant.BlockPlantUnderwater;
-import thebetweenlands.common.block.plant.BlockPoisonIvy;
-import thebetweenlands.common.block.plant.BlockStackablePlantUnderwater;
-import thebetweenlands.common.block.plant.BlockSwampReed;
-import thebetweenlands.common.block.plant.BlockSwampReedUnderwater;
-import thebetweenlands.common.block.plant.BlockThorns;
-import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
-import thebetweenlands.common.block.plant.BlockWeedwoodBush;
-import thebetweenlands.common.block.structure.BlockDruidSpawner;
-import thebetweenlands.common.block.structure.BlockDruidStone;
-import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
-import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
-import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
-import thebetweenlands.common.block.structure.BlockPortalFrame;
-import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
-import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
-import thebetweenlands.common.block.structure.BlockTemplePillar;
-import thebetweenlands.common.block.structure.BlockTreePortal;
-import thebetweenlands.common.block.structure.BlockWallBetweenlands;
-import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
-import thebetweenlands.common.block.terrain.BlockCragrock;
-import thebetweenlands.common.block.terrain.BlockDeadGrass;
-import thebetweenlands.common.block.terrain.BlockDentrothyst;
-import thebetweenlands.common.block.terrain.BlockGenericCollapsing;
-import thebetweenlands.common.block.terrain.BlockGenericMirage;
-import thebetweenlands.common.block.terrain.BlockGenericOre;
-import thebetweenlands.common.block.terrain.BlockGenericStone;
-import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
-import thebetweenlands.common.block.terrain.BlockMud;
-import thebetweenlands.common.block.terrain.BlockPeat;
-import thebetweenlands.common.block.terrain.BlockRoot;
-import thebetweenlands.common.block.terrain.BlockRootUnderwater;
-import thebetweenlands.common.block.terrain.BlockRubber;
-import thebetweenlands.common.block.terrain.BlockSilt;
-import thebetweenlands.common.block.terrain.BlockSlimyGrass;
-import thebetweenlands.common.block.terrain.BlockSludgyDirt;
-import thebetweenlands.common.block.terrain.BlockStagnantWater;
-import thebetweenlands.common.block.terrain.BlockStalactite;
-import thebetweenlands.common.block.terrain.BlockSwampDirt;
-import thebetweenlands.common.block.terrain.BlockSwampGrass;
-import thebetweenlands.common.block.terrain.BlockSwampWater;
-import thebetweenlands.common.block.terrain.BlockTar;
-import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.block.*;
+import thebetweenlands.common.block.container.*;
+import thebetweenlands.common.block.plant.*;
+import thebetweenlands.common.block.structure.*;
+import thebetweenlands.common.block.terrain.*;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class BlockRegistry {
 	public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
@@ -157,6 +84,7 @@ public class BlockRegistry {
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return EnumItemMisc.SULFUR.create(1 + rand.nextInt(fortune + 1));
 		}
+
 		@SideOnly(Side.CLIENT)
 		@Override
 		public void spawnParticle(World world, double x, double y, double z) {
@@ -320,6 +248,7 @@ public class BlockRegistry {
 		public Block.EnumOffsetType getOffsetType() {
 			return Block.EnumOffsetType.XZ;
 		}
+
 		@Override
 		@SideOnly(Side.CLIENT)
 		public BlockRenderLayer getBlockLayer() {
@@ -407,6 +336,8 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_RUBBER_TAP = new BlockRubberTap(WEEDWOOD_PLANKS.getDefaultState(), 540);
 	public static final Block SYRMORITE_RUBBER_TAP = new BlockRubberTap(SYRMORITE_BLOCK.getDefaultState(), 260);
 
+	public static final Block FALLEN_LEAVES = new BlockFallenLeaves("fallenLeaves");
+
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
 	public void preInit() {
@@ -418,8 +349,8 @@ public class BlockRegistry {
 					String name = field.getName().toLowerCase(Locale.ENGLISH);
 					registerBlock(name, block);
 
-					if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-						if(block.getCreativeTabToDisplayOn() == null)
+					if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+						if (block.getCreativeTabToDisplayOn() == null)
 							block.setCreativeTab(BLCreativeTabs.BLOCKS);
 					}
 				}
@@ -438,7 +369,7 @@ public class BlockRegistry {
 		ItemBlock item = getBlockItem(block);
 
 		//Allows ICustomItemBlock to return null if no item block is required
-		if(item != null)
+		if (item != null)
 			GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(unlocalized));
 	}
 
@@ -454,6 +385,7 @@ public class BlockRegistry {
 	public interface ICustomItemBlock {
 		/**
 		 * Returns a custom item for this block
+		 *
 		 * @return
 		 */
 		ItemBlock getItemBlock();
@@ -462,6 +394,7 @@ public class BlockRegistry {
 	public interface ISubtypeBlock {
 		/**
 		 * Returns the amount of subtypes
+		 *
 		 * @return
 		 */
 		int getSubtypeNumber();
@@ -469,6 +402,7 @@ public class BlockRegistry {
 		/**
 		 * Returns the name of this subtype.
 		 * String is formatted, use %s for the normal registry name.
+		 *
 		 * @param meta
 		 * @return
 		 */
@@ -476,6 +410,7 @@ public class BlockRegistry {
 
 		/**
 		 * Returns the metadata for the specified subtype
+		 *
 		 * @param subtype
 		 * @return
 		 */
@@ -487,6 +422,7 @@ public class BlockRegistry {
 	public interface IStateMappedBlock {
 		/**
 		 * Sets the statemap
+		 *
 		 * @param builder
 		 */
 		@SideOnly(Side.CLIENT)
