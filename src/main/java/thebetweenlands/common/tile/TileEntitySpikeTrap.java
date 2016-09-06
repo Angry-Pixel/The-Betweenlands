@@ -1,4 +1,4 @@
-package thebetweenlands.tileentities;
+package thebetweenlands.common.tile;
 
 import java.util.List;
 
@@ -7,41 +7,38 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import thebetweenlands.common.registries.SoundRegistry;
 
-public class TileEntitySpikeTrap extends TileEntity {
+public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	public int animationTicks;
 	public boolean active;
 	public byte type;
 
 	@Override
-	public boolean canUpdate() {
-		return true;
-	}
-
-	@Override
-	public void updateEntity() {
+	public void update() {
 		if (!worldObj.isRemote) {
-			if (!worldObj.isAirBlock(xCoord, yCoord + 1, zCoord)) {
+			if (!worldObj.isAirBlock(pos.up())) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = worldObj.getBlock(xCoord, yCoord + 1, zCoord);
-				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 1, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 1, zCoord)));
-				block.dropBlockAsItem(worldObj, xCoord, yCoord + 1, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 1, zCoord), 0);
-				worldObj.setBlockToAir(xCoord, yCoord + 1, zCoord);
+				Block block = worldObj.getBlockState(pos.up()).getBlock();
+				worldObj.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(worldObj.getBlockState(pos.up()).getBlock()));
+				block.dropBlockAsItem(worldObj, pos.up(), worldObj.getBlockState(pos.up()), 0);
+				worldObj.setBlockToAir(pos.up());
 			}
-			if (!worldObj.isAirBlock(xCoord, yCoord + 2, zCoord)) {
+			if (!worldObj.isAirBlock(pos.up(2))) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = worldObj.getBlock(xCoord, yCoord + 2, zCoord);
-				worldObj.playAuxSFXAtEntity(null, 2001, xCoord, yCoord + 2, zCoord, Block.getIdFromBlock(worldObj.getBlock(xCoord, yCoord + 2, zCoord)));
-				block.dropBlockAsItem(worldObj, xCoord, yCoord + 2, zCoord, worldObj.getBlockMetadata(xCoord, yCoord + 2, zCoord), 0);
-				worldObj.setBlockToAir(xCoord, yCoord + 2, zCoord);
+				Block block = worldObj.getBlockState(pos.up(2)).getBlock();
+				worldObj.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(worldObj.getBlockState(pos.up(2)).getBlock()));
+				block.dropBlockAsItem(worldObj, pos.up(2), worldObj.getBlockState(pos.up(2)), 0);
+				worldObj.setBlockToAir(pos.up(2));
 			}
 			if (worldObj.rand.nextInt(500) == 0) {
 				if (type != 0 && !active && animationTicks == 0)
@@ -58,7 +55,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
-				worldObj.playSoundEffect(xCoord, yCoord, zCoord, "thebetweenlands:spike", 1.25F, 1.0F);
+				worldObj.playSound((double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F, false);
 			if (animationTicks <= 20)
 				animationTicks++;
 			if (animationTicks == 20)
@@ -71,18 +68,18 @@ public class TileEntitySpikeTrap extends TileEntity {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		markDirty();
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		markDirty();
 	}
 
 	@SuppressWarnings("unchecked")
 	protected Entity activateBlock() {
 		float y = 1F / 16 * animationTicks;
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 1D, yCoord + 1D + y, zCoord + 1D));
+		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1D, pos.getY() + 1D + y, pos.getZ() + 1D));
 		if (animationTicks >= 1)
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
@@ -95,7 +92,7 @@ public class TileEntitySpikeTrap extends TileEntity {
 
 	@SuppressWarnings("unchecked")
 	protected Entity isBlockOccupied() {
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, AxisAlignedBB.getBoundingBox(xCoord + 0.25D, yCoord, zCoord + 0.25D, xCoord + 0.75D, yCoord + 2D, zCoord + 0.75D));
+		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY(), pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY() + 2D, pos.getZ() + 0.75D));
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
@@ -106,11 +103,12 @@ public class TileEntitySpikeTrap extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("animationTicks", animationTicks);
 		nbt.setBoolean("active", active);
 		nbt.setByte("type", type);
+		return nbt;
 	}
 
 	@Override
@@ -122,18 +120,15 @@ public class TileEntitySpikeTrap extends TileEntity {
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbt = new NBTTagCompound();
-		nbt.setInteger("animationTicks", animationTicks);
-		nbt.setBoolean("active", active);
-		nbt.setByte("type", type);
-		return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, nbt);
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound tag = new NBTTagCompound();
+		writeToNBT(tag);
+		return new SPacketUpdateTileEntity(pos, 1, tag);
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity packet) {
-		animationTicks = packet.func_148857_g().getInteger("animationTicks");
-		active = packet.func_148857_g().getBoolean("active");
-		type = packet.func_148857_g().getByte("type");
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+		readFromNBT(packet.getNbtCompound());
 	}
+
 }

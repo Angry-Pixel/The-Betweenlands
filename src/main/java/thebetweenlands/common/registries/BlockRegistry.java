@@ -201,6 +201,7 @@ public class BlockRegistry {
 	public static final Block MOSSY_BETWEENSTONE_BRICK_STAIRS = new BlockStairsBetweenlands(MOSSY_BETWEENSTONE_BRICKS.getDefaultState());
 	public static final Block MOSSY_SMOOTH_BETWEENSTONE_STAIRS = new BlockStairsBetweenlands(MOSSY_SMOOTH_BETWEENSTONE.getDefaultState());
 	public static final Block CRACKED_BETWEENSTONE_BRICK_STAIRS = new BlockStairsBetweenlands(CRACKED_BETWEENSTONE_BRICKS.getDefaultState());
+	public static final Block SPIKE_TRAP = new BlockSpikeTrap();
 	public static final Block WEEDWOOD_PLANK_STAIRS = new BlockStairsBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
 	//public static final Block SOLID_TAR_STAIRS = new BlockStairsBetweenlands(SOLID_TAR.getDefaultState());
 	//public static final Block TEMPLE_BRICK_STAIRS = new BlockStairsBetweenlands(TEMPLE_BRICK.getDefaultState());

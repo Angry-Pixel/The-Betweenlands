@@ -1,30 +1,28 @@
-package thebetweenlands.client.render.tileentity;
-
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+package thebetweenlands.client.render.tile;
 
 import org.lwjgl.opengl.GL11;
 
-import thebetweenlands.client.model.block.ModelSpikeBlock;
-import thebetweenlands.tileentities.TileEntitySpikeTrap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.model.tile.ModelSpikeBlock;
+import thebetweenlands.common.tile.TileEntitySpikeTrap;
 
 @SideOnly(Side.CLIENT)
 public class TileEntitySpikeTrapRenderer extends TileEntitySpecialRenderer {
 	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spikeBlockActive.png");
 	private static final ResourceLocation INACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spikeBlockInactive.png");
-	private final RenderBlocks blockRenderer = new RenderBlocks();
 	private final ModelSpikeBlock model = new ModelSpikeBlock();
 
 	@Override
-	public final void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTickTime) {
+	public final void renderTileEntityAt(TileEntity tile, double x, double y, double z, float partialTicks, int destroyStage) {
 		TileEntitySpikeTrap spikes = (TileEntitySpikeTrap) tile;
 		int brightness = 0;
-		brightness = tile.getWorldObj().getLightBrightnessForSkyBlocks(tile.xCoord, tile.yCoord + 1, tile.zCoord, 0);
+		brightness = spikes.getWorld().getLightFor(EnumSkyBlock.SKY, spikes.getPos());
 		int lightmapX = brightness % 65536;
 		int lightmapY = brightness / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)lightmapX / 1.0F, (float)lightmapY / 1.0F);

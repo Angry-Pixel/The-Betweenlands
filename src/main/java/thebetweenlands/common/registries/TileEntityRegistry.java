@@ -10,6 +10,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRubberTap;
+import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
@@ -29,6 +30,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityBLDualFurnace.class, "sulfur_furnace_dual");
 		registerTileEntity(TileEntityChestBetweenlands.class, "betweenlands_chest");
 		registerTileEntity(TileEntityRubberTap.class, "rubber_tap");
+		registerTileEntity(TileEntitySpikeTrap.class, "spike_trap");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

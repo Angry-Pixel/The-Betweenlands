@@ -1,27 +1,23 @@
-package thebetweenlands.blocks.structure;
+package thebetweenlands.common.block.structure;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.world.World;
-import thebetweenlands.blocks.BLBlockRegistry;
-import thebetweenlands.creativetabs.BLCreativeTabs;
-import thebetweenlands.tileentities.TileEntitySpikeTrap;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.tile.TileEntitySpikeTrap;
 
 public class BlockSpikeTrap extends BlockContainer {
 
 	public BlockSpikeTrap() {
-		super(Material.rock);
-		setStepSound(Block.soundTypeStone);
+		super(Material.ROCK);
+		setSoundType(SoundType.STONE);
 		setHardness(10F);
 		setResistance(2000.0F);
-		setCreativeTab(BLCreativeTabs.blocks);
-		setBlockName("thebetweenlands.spikeTrap");
-		setBlockTextureName("thebetweenlands:limestone");
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override
@@ -30,23 +26,13 @@ public class BlockSpikeTrap extends BlockContainer {
 	}
 
 	@Override
-	public int getRenderType() {
-		return -1;
-	}
-
-	@Override
-	public boolean isOpaqueCube() {
-		return true;
-	}
-
-	@Override
-	public boolean renderAsNormalBlock() {
-		return true;
-	}
-
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {	
-        return BLBlockRegistry.polishedLimestone.getBlockTextureFromSide(0);
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return true;
+	}
 
 }
