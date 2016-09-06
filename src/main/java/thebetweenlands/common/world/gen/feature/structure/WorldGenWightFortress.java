@@ -20,8 +20,6 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.feature.loot.LootTables;
 import thebetweenlands.common.world.gen.feature.loot.LootUtil;
 
-
-
 public class WorldGenWightFortress extends WorldGenerator {
 
 	private int length = -1;
@@ -158,16 +156,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	}
 
 	public IBlockState getRandomMushroom(Random rand) {
-		int type = rand.nextInt(3);
-		switch (type) {
-		case 0:
-			return mushroomflatHead;
-		case 1:
-			return mushroomBlackHat;
-		case 2:
-			return mushroomBulbCapped;
-		}
-		return mushroomBlackHat;
+		return rand.nextBoolean() ? mushroomflatHead : mushroomBlackHat;
 	}
 
 	public IBlockState getRandomCollapsingTiles(Random rand) {
@@ -178,47 +167,25 @@ public class WorldGenWightFortress extends WorldGenerator {
 		return rand.nextBoolean() ? betweenstoneSmooth : betweenstoneSmoothMossy;
 	}
 
-	public IBlockState getRandomSmoothBetweenstoneStairs(Random rand, int metaPlaced) {
-		IBlockState stairType = betweenstoneStairsSmooth;
-		int direction = metaPlaced;
+	public IBlockState getRandomSmoothBetweenstoneStairs(Random rand, IBlockState state, int blockMeta) {
 		int type = rand.nextInt(4);
 
 		switch (type) {
 		case 0:
 		case 1:
 		case 2:
-			stairType = betweenstoneStairsSmooth;
 			break;
 		case 3:
-			stairType = betweenstoneStairsSmoothMossy;
+			state = betweenstoneStairsSmoothMossy;
 			break;
 		}
 
-		switch (direction) {
-		case 0:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST);
-		case 1:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST);
-		case 2:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH);
-		case 3:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH);
-		case 4:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
-		case 5:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
-		case 6:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
-		case 7:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
-		}
-		return stairType;
+		return getStairRotations(state, blockMeta);
 	}
 
-	public IBlockState getRandomBetweenstoneBrickStairs(Random rand, int metaPlaced) {
-		IBlockState stairType = betweenstoneBrickStairs;
+	public IBlockState getRandomBetweenstoneBrickStairs(Random rand, IBlockState state, int blockMeta) {
 		int type = rand.nextInt(8);
-		int direction = metaPlaced;
+
 		switch (type) {
 		case 0:
 		case 1:
@@ -226,35 +193,39 @@ public class WorldGenWightFortress extends WorldGenerator {
 		case 3:
 		case 4:
 		case 5:
-			stairType = betweenstoneBrickStairs;
 			break;
 		case 6:
-			stairType = betweenstoneBrickStairsMossy;
+			state = betweenstoneBrickStairsMossy;
 			break;
 		case 7:
-			stairType = betweenstoneBrickStairsCracked;
+			state = betweenstoneBrickStairsCracked;
 			break;
 		}
 
+		return getStairRotations(state, blockMeta);
+	}
+	
+	public IBlockState getStairRotations(IBlockState state, int blockMeta) {
+		int direction = blockMeta;
 		switch (direction) {
 		case 0:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST);
 		case 1:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST);
 		case 2:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH);
 		case 3:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH);
 		case 4:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.EAST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 5:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 6:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.SOUTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		case 7:
-			return stairType.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
+			return state.withProperty(BlockStairsBetweenlands.FACING, EnumFacing.NORTH).withProperty(BlockStairsBetweenlands.HALF, EnumHalf.TOP);
 		}
-		return stairType;
+		return state;
 	}
 
 	private IBlockState getSlabType(IBlockState slabType, int blockMeta) {
@@ -796,9 +767,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		for (int xa = 1; xa <= 31; ++xa) {
 			for(int za = 1; za <= 31; ++za) {
-				if(world.getBlockState(pos.add(xa, 0, za)).isNormalCube() && world.isAirBlock(pos.add(xa, 1, za)))
+				if(world.getBlockState(pos.add(xa, -1, za)).isNormalCube() && world.isAirBlock(pos.add(xa, 0, za)))
 					if(rand.nextInt(8) == 0)
-						world.setBlockState(pos.add(xa, 1, za), getRandomMushroom(rand));
+						world.setBlockState(pos.add(xa, 0, za), getRandomMushroom(rand));
 			}
 		}
 
@@ -1030,25 +1001,25 @@ public class WorldGenWightFortress extends WorldGenerator {
 				for (int xx = offsetA; xx < offsetA + sizeWidth; xx++)
 					for (int zz = offsetC; zz < offsetC + sizeDepth; zz++) {
 						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(limestoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(betweenstoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
 						else if(blockType == betweenstoneBricks)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomBricks(rand), 2);
 						else if(blockType == betweenstoneBrickWall)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomWall(rand), 2);
 						else if(blockType == betweenstoneBrickStairs)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneStairsSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
 						else if(blockType == lootPot1)
-							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
+							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
 							if (yy <= 17 && yy != 0) {
 								if (rand.nextInt(4) == 0)
@@ -1067,25 +1038,25 @@ public class WorldGenWightFortress extends WorldGenerator {
 				for (int zz = length - offsetA - 1; zz > length - offsetA - sizeWidth - 1; zz--)
 					for (int xx = offsetC; xx < offsetC + sizeDepth; xx++) {
 						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(limestoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(betweenstoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
 						else if(blockType == betweenstoneBricks)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomBricks(rand), 2);
 						else if(blockType == betweenstoneBrickWall)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomWall(rand), 2);
 						else if(blockType == betweenstoneBrickStairs)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneStairsSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
 						else if(blockType == lootPot1)
-							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
+							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
 							if (yy <= 17 && yy != 0) {
 								if (rand.nextInt(4) == 0)
@@ -1104,25 +1075,25 @@ public class WorldGenWightFortress extends WorldGenerator {
 				for (int xx = length - offsetA - 1; xx > length - offsetA - sizeWidth - 1; xx--)
 					for (int zz = length - offsetC - 1; zz > length - offsetC - sizeDepth - 1; zz--) {
 						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(limestoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(betweenstoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
 						else if(blockType == betweenstoneBricks)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomBricks(rand), 2);
 						else if(blockType == betweenstoneBrickWall)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomWall(rand), 2);
 						else if(blockType == betweenstoneBrickStairs)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneStairsSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
 						else if(blockType == lootPot1)
-							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
+							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
 							if (yy <= 17 && yy != 0) {
 								if (rand.nextInt(4) == 0)
@@ -1141,25 +1112,25 @@ public class WorldGenWightFortress extends WorldGenerator {
 				for (int zz = offsetA; zz < offsetA + sizeWidth; zz++)
 					for (int xx = length - offsetC - 1; xx > length - offsetC - sizeDepth - 1; xx--) {
 						if(blockType == limestoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(limestoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneBrickSlab)
-							world.setBlockState(pos.add(xx, yy, zz), getSlabType(betweenstoneBrickSlab, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getSlabType(blockType, blockMeta), 2);
 						else if(blockType == betweenstoneTiles)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTiles : getRandomTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomTiles(rand), 2);
 						else if(blockType == betweenstoneBricks)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBricks : getRandomBricks(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomBricks(rand), 2);
 						else if(blockType == betweenstoneBrickWall)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneBrickWall : getRandomWall(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomWall(rand), 2);
 						else if(blockType == betweenstoneBrickStairs)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomBetweenstoneBrickStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneStairsSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockMeta), 2);
+							world.setBlockState(pos.add(xx, yy, zz), getRandomSmoothBetweenstoneStairs(rand, blockType, blockMeta), 2);
 						else if(blockType == betweenstoneSmooth)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneSmooth : getRandomSmoothBetweenstone(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
-							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? betweenstoneTilesCollapsing : getRandomCollapsingTiles(rand), 2);
+							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
 						else if(blockType == lootPot1)
-							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? lootPot1 : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
+							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
 							if (yy <= 17 && yy != 0) {
 								if (rand.nextInt(4) == 0)
