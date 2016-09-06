@@ -38,6 +38,10 @@ public class BlockGenericCollapsing extends BlockFalling {
     }
 
     @Override
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    }
+
+    @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
         if (!worldIn.isRemote)
             createFallingBlock(worldIn, pos);
