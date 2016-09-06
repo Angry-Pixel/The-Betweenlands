@@ -33,6 +33,8 @@ import java.util.Locale;
 import java.util.Random;
 
 public class BlockRegistry {
+	private BlockRegistry() { }
+	
 	public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
 	public static final Block STAGNANT_WATER = new BlockStagnantWater();
 	public static final Block TAR = new BlockTar();
@@ -341,7 +343,7 @@ public class BlockRegistry {
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
-	public void preInit() {
+	public static void preInit() {
 		try {
 			for (Field field : BlockRegistry.class.getDeclaredFields()) {
 				Object obj = field.get(null);

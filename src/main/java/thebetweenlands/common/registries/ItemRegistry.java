@@ -56,6 +56,8 @@ import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ItemRegistry {
+	private ItemRegistry() { }
+	
 	private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
 	private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 	//generic
@@ -187,11 +189,11 @@ public class ItemRegistry {
 
 	public final static List<Item> ITEMS = new ArrayList<Item>();
 
-	public void preInit() {
+	public static void preInit() {
 		try {
-			for (Field field : this.getClass().getDeclaredFields()) {
-				if (field.get(this) instanceof Item) {
-					Item item = (Item) field.get(this);
+			for (Field field : ItemRegistry.class.getDeclaredFields()) {
+				if (field.get(null) instanceof Item) {
+					Item item = (Item) field.get(null);
 					registerItem(item, field.getName());
 				}
 			}
@@ -206,7 +208,7 @@ public class ItemRegistry {
 		}
 	}
 
-	private void registerItem(Item item, String fieldName) {
+	private static void registerItem(Item item, String fieldName) {
 		String itemName = fieldName.toLowerCase(Locale.ENGLISH);
 		GameRegistry.register(item.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, itemName)));
 		ITEMS.add(item);

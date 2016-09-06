@@ -8,17 +8,19 @@ import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 
 public class RecipeRegistry {
-	public void init() {
+	private RecipeRegistry() { }
+	
+	public static void init() {
 
 		registerDruidAltarRecipes();
 		registerCompostRecipes();
 	}
 
-	private void registerDruidAltarRecipes() {
+	private static void registerDruidAltarRecipes() {
 		DruidAltarRecipe.addRecipe(EnumTalisman.SWAMP_TALISMAN_1.create(1), EnumTalisman.SWAMP_TALISMAN_2.create(1), EnumTalisman.SWAMP_TALISMAN_3.create(1), EnumTalisman.SWAMP_TALISMAN_4.create(1), EnumTalisman.SWAMP_TALISMAN_0.create(1));
 	}
 
-	private void registerCompostRecipes() {
+	private static void registerCompostRecipes() {
 		CompostRecipe.addRecipe(30, 12000, ItemRegistry.ITEMS_MISC, EnumItemMisc.ROTTEN_BARK.getID());
 		//        CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BlockRegistry.rottenWeedwoodBark));
 		//        CompostRecipe.addRecipe(10, 8000, Item.getItemFromBlock(BlockRegistry.sundew));

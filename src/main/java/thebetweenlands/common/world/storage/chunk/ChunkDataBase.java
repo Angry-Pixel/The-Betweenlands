@@ -1,424 +1,360 @@
 package thebetweenlands.common.world.storage.chunk;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
+import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
-import java.util.*;
-import java.util.Map.Entry;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import thebetweenlands.common.lib.ModInfo;
 
 public abstract class ChunkDataBase {
-	public static final ChunkDataHandler CHUNK_DATA_HANDLER = new ChunkDataHandler();
-	private static final Map<ChunkDataTypePair, ChunkDataBase> CACHE = new HashMap<ChunkDataTypePair, ChunkDataBase>();
-	private static final Map<ChunkPosWorldPair, NBTTagCompound> CHUNK_NBT_CACHE = new HashMap<ChunkPosWorldPair, NBTTagCompound>();
-	private static final List<Chunk> CHUNK_UNLOAD_QUEUE = new ArrayList<Chunk>();
-	public final String name;
-	private NBTTagCompound data = new NBTTagCompound();
+	private static final class ChunkIdentifier {
+		private final World world;
+		private final ChunkPos chunk;
+		private final int hash;
+
+		private ChunkIdentifier(World world, ChunkPos chunk) {
+			this.world = world;
+			this.chunk = chunk;
+			int worldHash = world.hashCode();
+			int chunkHash = chunk.hashCode();
+			final int prime = 31;
+			int hash = 1;
+			hash = prime * hash + chunkHash;
+			hash = prime * hash + worldHash;
+			this.hash = hash;
+		}
+
+		@Override
+		public int hashCode() {
+			return this.hash;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			ChunkIdentifier other = (ChunkIdentifier) obj;
+			if (this.chunk == null) {
+				if (other.chunk != null)
+					return false;
+			} else if (!this.chunk.equals(other.chunk))
+				return false;
+			if (this.hash != other.hash)
+				return false;
+			if (this.world == null) {
+				if (other.world != null)
+					return false;
+			} else if (!this.world.equals(other.world))
+				return false;
+			return true;
+		}
+	}
+
+	private static final Map<ChunkIdentifier, ChunkDataContainer> CHUNK_CONTAINER_CACHE = new HashMap<>();
+	private static final Map<ChunkIdentifier, List<EntityPlayerMP>> CHUNK_WATCHERS = new HashMap<>();
+	private static final Deque<ChunkIdentifier> UNLOAD_QUEUE = new ArrayDeque<>();
+
 	private Chunk chunk;
 	private World world;
 
-	public ChunkDataBase(String name) {
-		this.name = name;
-	}
-
-	protected static void addDataCache(ChunkPos pos, World world, Class<? extends ChunkDataBase> clazz, ChunkDataBase data) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			CACHE.put(new ChunkDataTypePair(pos, world, clazz), data);
-		}
-	}
-
-	public static ChunkDataBase getDataCache(ChunkPos pos, World world, Class<? extends ChunkDataBase> clazz) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			for (Entry<ChunkDataTypePair, ChunkDataBase> cacheEntry : CACHE.entrySet()) {
-				ChunkDataTypePair pair = cacheEntry.getKey();
-				if (pair.pos.equals(pos) && pair.type.equals(clazz) && pair.world.equals(world)) {
-					return cacheEntry.getValue();
-				}
-			}
-			return null;
-		}
-	}
-
-	protected static void removeDataCache(ChunkPos pos, World world, Class<? extends ChunkDataBase> clazz) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			Iterator<Entry<ChunkDataTypePair, ChunkDataBase>> dataCacheIT = CACHE.entrySet().iterator();
-			while (dataCacheIT.hasNext()) {
-				ChunkDataTypePair pair = dataCacheIT.next().getKey();
-				if (pair.pos.equals(pos) && pair.world.equals(world) && pair.type.equals(clazz))
-					dataCacheIT.remove();
-			}
-		}
-	}
-
-	public static void addNBTCache(ChunkPos pos, World world, NBTTagCompound nbt) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			CHUNK_NBT_CACHE.put(new ChunkPosWorldPair(pos, world), nbt);
-		}
-	}
-
-	public static NBTTagCompound getNBTCache(ChunkPos pos, World world) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			for (Entry<ChunkPosWorldPair, NBTTagCompound> cacheEntry : CHUNK_NBT_CACHE.entrySet()) {
-				ChunkPosWorldPair pair = cacheEntry.getKey();
-				if (pair.pos.equals(pos) && pair.world.equals(world)) {
-					return cacheEntry.getValue();
-				}
-			}
-			return null;
-		}
-	}
-
-	protected static void removeNBTCache(ChunkPos pos, World world) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			Iterator<Entry<ChunkPosWorldPair, NBTTagCompound>> nbtCacheIT = CHUNK_NBT_CACHE.entrySet().iterator();
-			while (nbtCacheIT.hasNext()) {
-				ChunkPosWorldPair chunkPosWorldPair = nbtCacheIT.next().getKey();
-				if (chunkPosWorldPair.pos.equals(pos) && chunkPosWorldPair.world.equals(world))
-					nbtCacheIT.remove();
-			}
-		}
-	}
-
+	@Nullable
 	public static <T extends ChunkDataBase> T forChunk(World world, Chunk chunk, Class<T> clazz) {
-		synchronized (CHUNK_DATA_HANDLER) {
-			ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
+		ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(world, chunk.getChunkCoordIntPair()));
 
-			ChunkDataBase cached = getDataCache(chunkPos, world, clazz);
-			if (cached != null) {
-				//Already cached
-				cached.chunk = chunk;
-				cached.world = world;
-				return (T) cached;
-			}
+		if(container != null) {
+			//Get cached handler instance
+			T cached = container.getCachedHandler(clazz);
 
-			T newInstance = null;
-			try {
-				newInstance = clazz.getConstructor().newInstance();
-			} catch (Exception ex) {
-				throw new RuntimeException(ex);
-			}
+			if(cached != null)
+				return cached;
 
-			NBTTagCompound nbt = getNBTCache(chunkPos, world);
+			NBTTagCompound nbt = container.getNBT();
 
-			if (nbt == null)
-				nbt = new NBTTagCompound();
+			//No cached instance, create new handler
+			T newInstance = getHandlerInstance(world, chunk, clazz, (handlerName) -> {
+				if(!nbt.hasKey(handlerName)) {
+					return null;
+				} else {
+					NBTTagCompound handlerNBT = nbt.getCompoundTag(handlerName);
+					//Data is either null or not matching
+					if(handlerNBT instanceof NBTTagCompound == false)
+						handlerNBT = new NBTTagCompound();
+					return handlerNBT;
+				}
+			});
 
-			((ChunkDataBase) newInstance).chunk = chunk;
-			((ChunkDataBase) newInstance).world = world;
-
-			if (!nbt.hasKey(newInstance.name)) {
-				//Creating for the first time
-				newInstance.init();
-				newInstance.setDefaults();
-				chunk.setChunkModified();
-				newInstance.postInit();
-			} else {
-				//Loading from chunk NBT
-				newInstance.init();
-				((ChunkDataBase) newInstance).readFromNBTInternal(nbt);
-				newInstance.load();
-				newInstance.postInit();
-			}
-
-			CACHE.put(new ChunkDataTypePair(chunkPos, world, clazz), newInstance);
+			container.addHandler(newInstance);
 
 			return newInstance;
 		}
+
+		return null;
 	}
 
 	/**
-	 * Thread safe read from the NBT.
-	 * Read-only
+	 * Returns a new handler instance of the specified handler type
+	 * @param world
+	 * @param chunk
+	 * @param handlerClass
+	 * @return
 	 */
-	public final NBTTagCompound readData() {
-		synchronized(this) {
-			return (NBTTagCompound) this.data.copy();
+	private static <T extends ChunkDataBase> T getHandlerInstance(World world, Chunk chunk, Class<T> handlerClass, Function<String, NBTTagCompound> nbtProvider) {
+		T newInstance = null;
+		try {
+			newInstance = handlerClass.getConstructor().newInstance();
+		} catch (Exception ex) {
+			throw new RuntimeException(ex);
+		}
+		((ChunkDataBase)newInstance).chunk = chunk;
+		((ChunkDataBase)newInstance).world = world;
+
+		newInstance.init();
+
+		NBTTagCompound nbt = nbtProvider.apply(newInstance.getName());
+
+		//Load data from NBT
+		if(nbt != null) {
+			//Load from nbt
+			newInstance.readFromNBT(nbt);
+		} else {
+			//Set defaults
+			newInstance.setDefaults();
+		}
+
+		//Update watchers
+		List<EntityPlayerMP> watchers = CHUNK_WATCHERS.get(new ChunkIdentifier(world, chunk.getChunkCoordIntPair()));
+		if(watchers != null)
+			for(EntityPlayerMP watcher : watchers)
+				newInstance.onWatched(watcher);
+
+		return newInstance;
+	}
+
+	/**
+	 * Adds or overrides a chunk container
+	 * @param chunk
+	 * @param nbt
+	 */
+	public static void updateContainerData(World world, Chunk chunk, NBTTagCompound nbt) {
+		if(chunk.isLoaded()) {
+			CHUNK_CONTAINER_CACHE.put(new ChunkIdentifier(world, chunk.getChunkCoordIntPair()), new ChunkDataContainer(nbt));
 		}
 	}
 
 	/**
-	 * Thread safe write to the NBT.
-	 * @param compound
+	 * Adds or overrides the data of a chunk data handler
+	 * @param chunk
+	 * @param handlerClass
+	 * @param nbt
 	 */
-	public final void writeData(NBTTagCompound compound) {
-		synchronized(this) {
-			this.data = (NBTTagCompound) compound.copy();
+	public static <T extends ChunkDataBase> void updateHandlerData(World world, Chunk chunk, Class<T> handlerClass, NBTTagCompound nbt) {
+		if(chunk.isLoaded()) {
+			ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(world, chunk.getChunkCoordIntPair()));
+			if(container != null) {
+				ChunkDataBase handler = container.getCachedHandler(handlerClass);
+				if(handler == null) {
+					T newInstance = getHandlerInstance(world, chunk, handlerClass, (handlerName) -> nbt);
+					container.addHandler(newInstance);
+				} else {
+					handler.readFromNBT(nbt);
+				}
+			}
 		}
 	}
 
-	private final void writeToNBTInternal(NBTTagCompound compound) {
-		synchronized(this) {
-			compound.setTag(this.name, this.data);
-		}
-	}
-
-	private final void readFromNBTInternal(NBTTagCompound compound) {
-		synchronized(this) {
-			this.data = compound.getCompoundTag(this.name);
-		}
-	}
-
-	public Chunk getChunk() {
+	/**
+	 * Returns the chunk
+	 * @return
+	 */
+	public final Chunk getChunk() {
 		return this.chunk;
 	}
 
-	public World getWorld() {
+	/**
+	 * Returns the world
+	 * @return
+	 */
+	public final World getWorld() {
 		return this.world;
 	}
 
 	/**
-	 * Load data here
+	 * Returns the name of this handler
+	 * @return
 	 */
-	public abstract void load();
+	public abstract String getName();
 
 	/**
-	 * Save data here
+	 * Called when the handler is initialized
 	 */
-	public abstract void save();
+	protected void init() {
+
+	}
 
 	/**
-	 * Called before loading data and setting defaults
+	 * Reads the data from the NBT
 	 */
-	public abstract void init();
+	protected void readFromNBT(NBTTagCompound nbt) {
+
+	}
 
 	/**
-	 * Marks the chunk as dirty.
-	 * Syncs the data with the client.
-	 * Don't forget this if you want the data to be saved!
+	 * Writes the data to the NBT
+	 */
+	protected NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		return nbt;
+	}
+
+	/**
+	 * Called when the handler is added to a chunk for the first time
+	 */
+	protected void setDefaults() {
+
+	}
+
+	/**
+	 * Called when the chunk is unloaded
+	 */
+	protected void onUnloaded() {
+
+	}
+
+	/**
+	 * Called when a player starts watching a chunk
+	 * @param player
+	 */
+	protected void onWatched(EntityPlayerMP player) {
+
+	}
+
+	/**
+	 * Called when a player stops watching a chunk
+	 * @param player
+	 */
+	protected void onUnwatched(EntityPlayerMP player) {
+
+	}
+
+	/**
+	 * Marks the chunk as dirty
 	 */
 	public void markDirty() {
-		this.save();
 		this.chunk.setChunkModified();
 	}
 
-	/**
-	 * Called after the data has been loaded or initilized
-	 */
-	protected void postInit() { }
-
-	/**
-	 * Called when this data is created for the first time for this world
-	 */
-	protected abstract void setDefaults();
-
-	/**
-	 * Called when the data is unloaded
-	 */
-	protected void onUnload() { }
-
-	private static class ChunkDataTypePair {
-		protected final ChunkPos pos;
-		protected final World world;
-		protected final Class<? extends ChunkDataBase> type;
-
-		private ChunkDataTypePair(ChunkPos pos, World world, Class<? extends ChunkDataBase> data) {
-			this.pos = pos;
-			this.world = world;
-			this.type = data;
-		}
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((pos == null) ? 0 : pos.hashCode());
-			result = prime * result + ((type == null) ? 0 : type.hashCode());
-			result = prime * result + ((world == null) ? 0 : world.hashCode());
-			return result;
-		}
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			ChunkDataTypePair other = (ChunkDataTypePair) obj;
-			if (pos == null) {
-				if (other.pos != null)
-					return false;
-			} else if (!pos.equals(other.pos))
-				return false;
-			if (type == null) {
-				if (other.type != null)
-					return false;
-			} else if (!type.equals(other.type))
-				return false;
-			if (world == null) {
-				if (other.world != null)
-					return false;
-			} else if (!world.equals(other.world))
-				return false;
-			return true;
-		}
-	}
-
-	private static class ChunkPosWorldPair {
-		protected final ChunkPos pos;
-		protected final World world;
-
-		private ChunkPosWorldPair(ChunkPos pos, World world) {
-			this.pos = pos;
-			this.world = world;
-		}
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((pos == null) ? 0 : pos.hashCode());
-			result = prime * result + ((world == null) ? 0 : world.hashCode());
-			return result;
-		}
-		@Override
-		public boolean equals(Object obj) {
-			if (this == obj)
-				return true;
-			if (obj == null)
-				return false;
-			if (getClass() != obj.getClass())
-				return false;
-			ChunkPosWorldPair other = (ChunkPosWorldPair) obj;
-			if (pos == null) {
-				if (other.pos != null)
-					return false;
-			} else if (!pos.equals(other.pos))
-				return false;
-			if (world == null) {
-				if (other.world != null)
-					return false;
-			} else if (!world.equals(other.world))
-				return false;
-			return true;
-		}
-	}
-
-	public static class ChunkDataHandler {
-		private ChunkDataHandler(){}
+	public static final class ChunkEventHandler {
+		private ChunkEventHandler() { }
 
 		@SubscribeEvent
-		public void onChunkDataEvent(ChunkDataEvent event) {
-			synchronized(CHUNK_DATA_HANDLER) {
-				ChunkPos chunkPos = new ChunkPos(event.getChunk().xPosition, event.getChunk().zPosition);
-				NBTTagCompound chunkNBT = event.getData();
-				if(event instanceof ChunkDataEvent.Save) {
-					//Write previous extended chunk data
-					NBTTagCompound prevNBT = getNBTCache(chunkPos, event.getWorld());
-					if(prevNBT != null) {
-						chunkNBT.setTag("extendedChunkData", prevNBT);
-					}
+		public static void onChunkDataEvent(ChunkDataEvent event) {
+			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getChunkCoordIntPair());
+			NBTTagCompound chunkNBT = event.getData();
 
-					//Write new extended chunk data
-					for(ChunkDataTypePair pair : CACHE.keySet()) {
-						if(pair.pos.equals(chunkPos) && pair.world.equals(event.getWorld())) {
-							NBTTagCompound chunkData = new NBTTagCompound();
-							ChunkDataBase data = CACHE.get(pair);
-							data.writeToNBTInternal(chunkData);
-							chunkNBT.setTag("extendedChunkData", chunkData);
-						}
-					}
+			if(event instanceof ChunkDataEvent.Save) {
+				ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(id);
 
-					boolean removeNBTCache = false;
+				//Save container to chunk NBT
+				if(container != null) {
+					container.saveHandlers();
+					chunkNBT.setTag(ModInfo.ID + ".ExtendedChunkData", container.getNBT());
+				}
+			} else if(event instanceof ChunkDataEvent.Load) {
+				NBTBase extendedChunkData = chunkNBT.getCompoundTag(ModInfo.ID + ".ExtendedChunkData");
 
-					//Remove unloaded chunks from the cache
-					Iterator<Chunk> unloadIT = CHUNK_UNLOAD_QUEUE.iterator();
-					while(unloadIT.hasNext()) {
-						Chunk unloadedChunk = unloadIT.next();
-						if(unloadedChunk == event.getChunk()) {
-							for(ChunkDataTypePair cpair : this.getDataCacheKeys(chunkPos, event.getWorld())) {
-								if(cpair != null) {
-									ChunkDataBase data = CACHE.get(cpair);
-									if(data != null) {
-										data.onUnload();
-										CACHE.remove(cpair);
-										//Data has been previously written from data cache, NBT cache not required anymore
-										removeNBTCache = true;
-									}
-								}
-							}
-							unloadIT.remove();
-						}
-					}
-					if(!event.getChunk().isLoaded() || event.getWorld().isRemote) {
-						for(ChunkDataTypePair cpair : this.getDataCacheKeys(chunkPos, event.getWorld())) {
-							ChunkDataBase data = CACHE.get(cpair);
-							if(data != null) {
-								data.onUnload();
-								CACHE.remove(cpair);
-								//Data has been previously written from data cache, NBT cache not required anymore
-								removeNBTCache = true;
-							}
-						}
-					}
-					if(!event.getChunk().isLoaded() || removeNBTCache || event.getWorld().isRemote) {
-						removeNBTCache(chunkPos, event.getWorld());
-					}
-				} else if(event instanceof ChunkDataEvent.Load) {
-					if(chunkNBT.hasKey("extendedChunkData") && chunkNBT.getTag("extendedChunkData") instanceof NBTTagCompound) {
-						//Cache extended chunk data
-						CHUNK_NBT_CACHE.put(new ChunkPosWorldPair(chunkPos, event.getWorld()), chunkNBT.getCompoundTag("extendedChunkData"));
+				//Data is either null or not matching
+				if(extendedChunkData instanceof NBTTagCompound == false)
+					extendedChunkData = new NBTTagCompound();
+
+				CHUNK_CONTAINER_CACHE.put(id, new ChunkDataContainer((NBTTagCompound)extendedChunkData));
+			}
+		}
+
+		@SubscribeEvent
+		public static void onChunkLoad(ChunkEvent.Load event) {
+			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getChunkCoordIntPair());
+			if(!CHUNK_CONTAINER_CACHE.containsKey(id))
+				CHUNK_CONTAINER_CACHE.put(id, new ChunkDataContainer(new NBTTagCompound()));
+		}
+
+		@SubscribeEvent
+		public static void onChunkUnload(ChunkEvent.Unload event) {
+			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getChunkCoordIntPair());
+
+			CHUNK_WATCHERS.remove(id);
+
+			//Chunks aren't saved client side, remove immediately
+			if(event.getWorld().isRemote && !event.getChunk().isLoaded()) {
+				CHUNK_CONTAINER_CACHE.remove(id);
+				return;
+			}
+
+			//Queue chunk for unloading the next tick
+			ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(id);
+			if(container != null) {
+				UNLOAD_QUEUE.push(id);
+			}
+		}
+
+		@SubscribeEvent
+		public static void onServerTick(ServerTickEvent event) {
+			if(event.phase == Phase.END) {
+				//Remove queued chunks
+				ChunkIdentifier queuedChunk;
+				while((queuedChunk = UNLOAD_QUEUE.poll()) != null) {
+					ChunkDataContainer container = CHUNK_CONTAINER_CACHE.remove(queuedChunk);
+					if(container != null) {
+						List<ChunkDataBase> handlers = container.getHandlers();
+						for(ChunkDataBase handler : handlers)
+							handler.onUnloaded();
 					}
 				}
 			}
 		}
 
 		@SubscribeEvent
-		public void onChunkUnload(ChunkEvent.Unload event) {
-			synchronized(CHUNK_DATA_HANDLER) {
-				ChunkPos chunkPos = new ChunkPos(event.getChunk().xPosition, event.getChunk().zPosition);
-				for(ChunkDataTypePair pair : this.getDataCacheKeys(chunkPos, event.getWorld())) {
-					//Add unloaded chunks to the unload queue
-					if(pair != null) {
-						if(CACHE.containsKey(pair) || getNBTCache(chunkPos, event.getWorld()) != null) {
-							if(event.getWorld().isRemote) {
-								//Directly remove cache on client side
-								for(ChunkDataTypePair cpair : this.getDataCacheKeys(chunkPos, event.getWorld())) {
-									CACHE.remove(cpair);
-								}
-							} else {
-								//Add chunk to unloading queue
-								CHUNK_UNLOAD_QUEUE.add(event.getChunk());
-							}
+		public static void onChunkWatchEvent(ChunkWatchEvent event) {
+			ChunkIdentifier id = new ChunkIdentifier(event.getPlayer().getEntityWorld(), event.getChunk());
+			ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(id);
 
-							//System.out.println("Cache: " + CACHE.size());
-							//System.out.println("NBT Cache: " + CHUNK_NBT_CACHE.size());
-							//System.out.println("Unload queue: " + CHUNK_UNLOAD_QUEUE.size());
-						}
+			if(container != null) {
+				List<EntityPlayerMP> watchers = CHUNK_WATCHERS.get(id);
+				if(event instanceof ChunkWatchEvent.Watch) {
+					if(watchers == null) {
+						CHUNK_WATCHERS.put(id, watchers = new ArrayList<>());
 					}
+					watchers.add(event.getPlayer());
+					List<ChunkDataBase> handlers = container.getHandlers();
+					for(ChunkDataBase handler : handlers)
+						handler.onWatched(event.getPlayer());
+				} else if(event instanceof ChunkWatchEvent.UnWatch) {
+					if(watchers != null)
+						watchers.remove(event.getPlayer());
+					List<ChunkDataBase> handlers = container.getHandlers();
+					for(ChunkDataBase handler : handlers)
+						handler.onUnwatched(event.getPlayer());
 				}
-				if(event.getWorld().isRemote) {
-					//Directly remove cache on client side
-					removeNBTCache(chunkPos, event.getWorld());
-				}
-			}
-		}
-
-		//TODO: Test if the caches are cleared properly on the client when unloading a world
-		/*@SubscribeEvent
-		public void onWorldUnload(WorldEvent.Unload event) {
-			synchronized(CHUNK_DATA_HANDLER) {
-				if(event.world.isRemote) {
-					CHUNK_UNLOAD_QUEUE.clear();
-					CHUNK_NBT_CACHE.clear();
-					CACHE.clear();
-				}
-			}
-		}*/
-
-		private List<ChunkDataTypePair> getDataCacheKeys(ChunkPos chunkPos, World world) {
-			synchronized(CHUNK_DATA_HANDLER) {
-				List<ChunkDataTypePair> caches = new ArrayList<ChunkDataTypePair>();
-				Iterator<Entry<ChunkDataTypePair, ChunkDataBase>> pairIT = CACHE.entrySet().iterator();
-				while(pairIT.hasNext()) {
-					Entry<ChunkDataTypePair, ChunkDataBase> entry = pairIT.next();
-					if(entry.getKey().pos.equals(chunkPos) && entry.getKey().world.equals(world)) {
-						caches.add(entry.getKey());
-					}
-				}
-				return caches;
 			}
 		}
 	}

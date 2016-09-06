@@ -29,6 +29,8 @@ import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 
 public class AspectRegistry {
+	private AspectRegistry() { }
+	
 	public static final List<IAspectType> ASPECT_TYPES = new ArrayList<IAspectType>();
 
 	public static final IAspectType AZUWYNN = new AspectAzuwynn();
@@ -68,12 +70,12 @@ public class AspectRegistry {
 		return null;
 	}
 
-	public void init() {
+	public static void init() {
 		registerItems();
 		registerAspects();
 	}
 
-	private void registerItems() {
+	private static void registerItems() {
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(EnumItemCrushed.GROUND_ALGAE.create(1)), 				AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F), 3);
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(EnumItemCrushed.GROUND_ARROW_ARUM.create(1)), 			AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F), 3);
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(EnumItemCrushed.GROUND_BLACKHAT_MUSHROOM.create(1)), 	AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F), 2);
@@ -130,7 +132,7 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(new AspectItemEntry(new AspectItem(EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1)), 		AspectTier.UNCOMMON, AspectGroup.GEM_BYRGINAZ, 2.0F, 0.25F));
 	}
 
-	private void registerAspects() {
+	private static void registerAspects() {
 		AspectManager.registerAspect(new AspectEntry(AspectRegistry.BYARIIS, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.HIGH));
 		AspectManager.registerAspect(new AspectEntry(AspectRegistry.AZUWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));
 		AspectManager.registerAspect(new AspectEntry(AspectRegistry.CELAWYNN, 	AspectTier.COMMON, 		AspectGroup.HERB, Amounts.LOW_MEDIUM));

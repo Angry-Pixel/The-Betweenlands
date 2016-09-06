@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
 
 public class SoundRegistry {
+	private SoundRegistry() { }
+	
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
 
     // Music
@@ -179,5 +181,9 @@ public class SoundRegistry {
         GameRegistry.register(event);
         SOUNDS.add(event);
         return event;
+    }
+    
+    public static void preInit() {
+    	assert !SOUNDS.isEmpty();
     }
 }

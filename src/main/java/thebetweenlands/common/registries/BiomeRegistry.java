@@ -16,6 +16,8 @@ import thebetweenlands.common.world.biome.BiomeSludgePlains;
 import thebetweenlands.common.world.biome.BiomeSwamplands;
 
 public class BiomeRegistry {
+	private BiomeRegistry() { }
+	
 	public static final BiomeBetweenlands PATCHY_ISLANDS = new BiomePatchyIslands();
 	public static final BiomeBetweenlands SWAMPLANDS = new BiomeSwamplands();
 	public static final BiomeBetweenlands DEEP_WATERS = new BiomeDeepWaters();
@@ -26,7 +28,7 @@ public class BiomeRegistry {
 
 	public static final List<BiomeBetweenlands> REGISTERED_BIOMES = new ArrayList<BiomeBetweenlands>();
 
-	public void preInit() {
+	public static void preInit() {
 		try {
 			for (Field f : BiomeRegistry.class.getDeclaredFields()) {
 				Object obj = f.get(null);

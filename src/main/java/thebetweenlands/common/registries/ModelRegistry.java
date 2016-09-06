@@ -46,6 +46,8 @@ import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelRegistry {
+	private ModelRegistry() { }
+	
 	//Generic
 	public static final IModel BLANK = new ModelBlank();
 	public static final IModel MODEL_COMBINED = new ModelCombined();
@@ -108,7 +110,7 @@ public class ModelRegistry {
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
-	private final ICustomRegistrar defaultRegistrar = new DefaultRegistrar(CustomModelManager.INSTANCE);
+	private static final ICustomRegistrar DEFAULT_REGISTRAR = new DefaultRegistrar(CustomModelManager.INSTANCE);
 
 	public static interface ICustomRegistrar {
 		/**
@@ -138,16 +140,16 @@ public class ModelRegistry {
 		}
 	}
 
-	public void preInit() {
+	public static void preInit() {
 		try {
-			for (Field field : this.getClass().getDeclaredFields()) {
+			for (Field field : ModelRegistry.class.getDeclaredFields()) {
 				if (field.getType().isAssignableFrom(IModel.class)) {
-					IModel model = (IModel) field.get(this);
+					IModel model = (IModel) field.get(null);
 					MODELS.add(model);
 					ResourceLocation blockLocation = new ResourceLocation(ModInfo.ID, "models/block/internal/" + field.getName().toLowerCase(Locale.ENGLISH));
 					ResourceLocation itemLocation = new ResourceLocation(ModInfo.ID, "models/item/internal/" + field.getName().toLowerCase(Locale.ENGLISH));
-					this.registerModel(model, blockLocation);
-					this.registerModel(model, itemLocation);
+					registerModel(model, blockLocation);
+					registerModel(model, itemLocation);
 				}
 			}
 		} catch (Exception ex) {
@@ -155,9 +157,9 @@ public class ModelRegistry {
 		}
 	}
 
-	private void registerModel(IModel model, ResourceLocation location) {
+	private static void registerModel(IModel model, ResourceLocation location) {
 		if(model instanceof ICustomRegistrar == false || !((ICustomRegistrar)model).registerModel(model, location)) {
-			this.defaultRegistrar.registerModel(model, location);
+			DEFAULT_REGISTRAR.registerModel(model, location);
 		}
 	}
 }

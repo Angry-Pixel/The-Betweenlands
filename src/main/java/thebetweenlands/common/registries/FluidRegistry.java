@@ -9,6 +9,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
 public class FluidRegistry {
+	private FluidRegistry() { }
+	
 	/**
 	 * A fluid that can be used by multiple blocks
 	 */
@@ -41,7 +43,7 @@ public class FluidRegistry {
 
 	public static final List<Fluid> REGISTERED_FLUIDS = new ArrayList<Fluid>();
 
-	public void preInit() {
+	public static void preInit() {
 		try {
 			for (Field f : FluidRegistry.class.getDeclaredFields()) {
 				Object obj = f.get(null);
@@ -57,7 +59,7 @@ public class FluidRegistry {
 		}
 	}
 
-	public void init() {
+	public static void init() {
 		SWAMP_WATER.setOriginalBlock(BlockRegistry.SWAMP_WATER);
 	}
 }

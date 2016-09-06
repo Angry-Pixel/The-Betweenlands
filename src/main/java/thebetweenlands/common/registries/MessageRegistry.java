@@ -14,6 +14,8 @@ import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
 
 public class MessageRegistry {
+	private MessageRegistry() { }
+	
     private static byte nextMessageId = 0;
 
     public static void preInit() {

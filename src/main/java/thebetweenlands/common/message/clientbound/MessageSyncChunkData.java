@@ -2,69 +2,64 @@ package thebetweenlands.common.message.clientbound;
 
 import java.io.IOException;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.message.BLMessage;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 
 public class MessageSyncChunkData extends BLMessage {
-    private int chunkX, chunkZ;
-    private String name;
-    private NBTTagCompound nbt;
+	private int chunkX, chunkZ;
+	private NBTTagCompound nbt;
 
-    public MessageSyncChunkData() {}
+	public MessageSyncChunkData() {}
 
-    public MessageSyncChunkData(BetweenlandsChunkData data) {
-        this.chunkX = data.getChunk().xPosition;
-        this.chunkZ = data.getChunk().zPosition;
-        this.name = data.name;
-        NBTTagCompound nbtData = data.readData();
-        this.nbt = nbtData != null ? nbtData : new NBTTagCompound();
-    }
+	public MessageSyncChunkData(Chunk chunk, NBTTagCompound nbt) {
+		this.chunkX = chunk.xPosition;
+		this.chunkZ = chunk.zPosition;
+		this.nbt = nbt;
+	}
 
-    @Override
-    public void deserialize(PacketBuffer buf) {
-        this.chunkX = buf.readInt();
-        this.chunkZ = buf.readInt();
-        PacketBuffer packetBuffer = new PacketBuffer(buf);
-        try {
-            this.name = packetBuffer.readStringFromBuffer(128);
-            this.nbt = packetBuffer.readNBTTagCompoundFromBuffer();
-        } catch (IOException e) {
-        }
-    }
+	@Override
+	public void deserialize(PacketBuffer buf) {
+		this.chunkX = buf.readInt();
+		this.chunkZ = buf.readInt();
+		PacketBuffer packetBuffer = new PacketBuffer(buf);
+		try {
+			this.nbt = packetBuffer.readNBTTagCompoundFromBuffer();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
-    @Override
-    public void serialize(PacketBuffer buf) {
-        buf.writeInt(this.chunkX);
-        buf.writeInt(this.chunkZ);
-        PacketBuffer packetBuffer = new PacketBuffer(buf);
-        packetBuffer.writeString(this.name);
-        packetBuffer.writeNBTTagCompoundToBuffer(this.nbt);
-    }
+	@Override
+	public void serialize(PacketBuffer buf) {
+		buf.writeInt(this.chunkX);
+		buf.writeInt(this.chunkZ);
+		PacketBuffer packetBuffer = new PacketBuffer(buf);
+		packetBuffer.writeNBTTagCompoundToBuffer(this.nbt);
+	}
 
-    @Override
-    public IMessage process(MessageContext ctx) {
-        synchronized (BetweenlandsChunkData.CHUNK_DATA_HANDLER) {
-            World world = FMLCommonHandler.instance().getMinecraftServerInstance().getEntityWorld();
-            ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
-            NBTTagCompound currentNBT = ChunkDataBase.getNBTCache(chunkPos, world);
-            if (currentNBT == null)
-                currentNBT = new NBTTagCompound();
-            currentNBT.setTag(name, nbt);
-            ChunkDataBase.addNBTCache(chunkPos, world, currentNBT);
-            ChunkDataBase data = ChunkDataBase.getDataCache(chunkPos, world, BetweenlandsChunkData.class);
-            if (data != null) {
-                data.writeData(nbt);
-                data.load();
-            }
-        }
-        return null;
-    }
+	@Override
+	public IMessage process(MessageContext ctx) {
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			Minecraft.getMinecraft().addScheduledTask(() -> this.updateChunks(this.chunkX, this.chunkZ, this.nbt));
+		}
+		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void updateChunks(int chunkX, int chunkZ, NBTTagCompound nbt) {
+		Chunk chunk = Minecraft.getMinecraft().theWorld.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
+		if(chunk != null) {
+			ChunkDataBase.updateHandlerData(Minecraft.getMinecraft().theWorld, chunk, BetweenlandsChunkData.class, nbt);
+		}
+	}
 }

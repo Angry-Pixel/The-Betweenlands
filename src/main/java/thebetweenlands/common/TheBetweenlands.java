@@ -29,6 +29,7 @@ import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.WorldDataBase;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
@@ -47,7 +48,6 @@ public class TheBetweenlands {
 	public static CommonProxy proxy;
 	public static File sourceFile;
 	private static File configDir;
-	private static int nextMessageId;
 
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
@@ -58,8 +58,8 @@ public class TheBetweenlands {
 
 		BetweenlandsAPI.init(new BetweenlandsAPIImp());
 
-		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.INSTANCE.dimensionId, WorldProviderBetweenlands.class, false);
-		DimensionManager.registerDimension(ConfigHandler.INSTANCE.dimensionId, dimensionType);
+		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
+		DimensionManager.registerDimension(ConfigHandler.dimensionId, dimensionType);
 
 		REGISTRIES.preInit();
 
@@ -139,9 +139,9 @@ public class TheBetweenlands {
 	private void registerEventHandlers() {
 		proxy.registerEventHandlers();
 
-		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
-		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_DATA_HANDLER);
+		MinecraftForge.EVENT_BUS.register(ChunkDataBase.ChunkEventHandler.class);
+		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.class);
 	}
 }

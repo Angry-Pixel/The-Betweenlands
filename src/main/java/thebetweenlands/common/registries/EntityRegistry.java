@@ -7,6 +7,8 @@ import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 
 public class EntityRegistry {
+	private EntityRegistry() { }
+	
     private static int id;
 
     private static void registerEntity(Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
@@ -29,7 +31,7 @@ public class EntityRegistry {
         net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
     }
 
-    public void preInit() {
+    public static void preInit() {
         id = 0;
         //probably need to change this to lower_underscore for 1.11
         registerEntity(EntityAngler.class, "Angler", 0x243B0B, 0x00FFFF);

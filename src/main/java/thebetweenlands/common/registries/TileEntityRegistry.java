@@ -15,7 +15,9 @@ import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 
 public class TileEntityRegistry {
-	public void init() {
+	private TileEntityRegistry() { }
+	
+	public static void init() {
 		registerTileEntity(TileEntityDruidAltar.class, "druid_altar");
 		registerTileEntity(TileEntityPurifier.class, "purifier");
 		registerTileEntity(TileEntityWeedwoodWorkbench.class, "weedwood_workbench");
@@ -29,7 +31,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityRubberTap.class, "rubber_tap");
 	}
 
-	private void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
+	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
 		GameRegistry.registerTileEntity(cls, "tile.thebetweenlands." + baseName);
 	}
 }
