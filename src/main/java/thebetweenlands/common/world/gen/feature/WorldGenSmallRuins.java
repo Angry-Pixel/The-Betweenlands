@@ -38,7 +38,9 @@ public class WorldGenSmallRuins extends WorldGenHelper {
     private static final IBlockState BETWEENSTONE_BRICK_WALL = BlockRegistry.BETWEENSTONE_BRICK_WALL.getDefaultState();
     private static final IBlockState WEEDWOOD_FENCE = BlockRegistry.WEEDWOOD_PLANK_FENCE.getDefaultState();
 
-
+    public WorldGenSmallRuins(){
+        super(BlockRegistry.MUD.getDefaultState(), BlockRegistry.SWAMP_GRASS.getDefaultState());
+    }
 
     @Override
     public boolean generate(World world, Random random, BlockPos position) {
@@ -390,10 +392,17 @@ public class WorldGenSmallRuins extends WorldGenHelper {
         width = 12;
         depth = 12;
         int direction = random.nextInt(4);
+        int originalY = y;
+        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED)) {
+            y--;
+            if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
+                return false;
+        }
+
         if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 13, depth, direction))
             return false;
-        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
-            return false;
+
+
         if (doGen) {
             this.addLocationArea(world, x, y, z, 0, 0, 0, width, 13, depth, direction, generatedLocations);
 
@@ -527,9 +536,6 @@ public class WorldGenSmallRuins extends WorldGenHelper {
         }
         return true;
     }
-
-
-
 
 
     private boolean addLocationArea(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction, List<LocationStorage> addedLocations) {

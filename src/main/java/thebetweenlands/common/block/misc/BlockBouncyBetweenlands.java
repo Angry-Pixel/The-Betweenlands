@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.misc;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -7,11 +7,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.BasicBlock;
 
-public class BlockBouncyBL extends BasicBlock {
+public class BlockBouncyBetweenlands extends BasicBlock {
     private float heightFactor;
 
-    public BlockBouncyBL(float heightFactor) {
+    public BlockBouncyBetweenlands(float heightFactor) {
         super(Material.CLAY);
         slipperiness = 0.7f;
         this.heightFactor = heightFactor;
