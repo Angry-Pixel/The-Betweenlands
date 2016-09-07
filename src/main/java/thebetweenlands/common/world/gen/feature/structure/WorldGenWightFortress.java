@@ -56,7 +56,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState betweenstoneStairsSmoothMossy = BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_STAIRS.getDefaultState();
 	private IBlockState betweenstoneTilesFortress = BlockRegistry.GLOWING_BETWEENSTONE_TILE.getDefaultState();
 	private IBlockState stagnantWater = BlockRegistry.STAGNANT_WATER.getDefaultState();
-	//private IBlockState spikeTrap = BlockRegistry.spikeTrap;
+	private IBlockState spikeTrap = BlockRegistry.SPIKE_TRAP.getDefaultState();
 	//private IBlockState swordStone = BlockRegistry.itemCage;
 	private IBlockState root = BlockRegistry.ROOT.getDefaultState();
 	//private IBlockState possessedBlock = BlockRegistry.possessedBlock;
@@ -621,7 +621,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 					if (tower == 0 && direction == 0 || tower == 1 && direction == 3 || tower == 2 && direction == 2 || tower == 3 && direction == 1) {
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 8, 16, 11, betweenstoneBricks, 0, 1, 3, 4, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 17, 15, betweenstoneBrickStairs, direction == 0 ? 0 : direction== 1 ? 3 : direction == 2 ? 1 : 2, 1, 1, 1, direction);
-					//	rotatedCubeVolume(world, rand, pos.add(x, y, z), 8, 17, 15, spikeTrap, 0, 3, 1, 1, direction);
+						rotatedCubeVolume(world, rand, pos.add(x, y, z), 8, 17, 15, spikeTrap, 0, 3, 1, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 9, 17, 14, betweenstoneBricks, 0, 2, 2, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 8, 19, 10, betweenstoneBrickWall, 0, 1, 2, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 8, 19, 12, betweenstoneBrickWall, 0, 1, 2, 1, direction);
@@ -632,7 +632,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 					if (tower == 0 && direction == 1 || tower == 1 && direction == 0 || tower == 2 && direction == 3 || tower == 3 && direction == 2) {
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 16, 11, betweenstoneBricks, 0, 1, 3, 4, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 17, 15, betweenstoneBrickStairs, direction == 0 ? 1 : direction== 1 ? 2 : direction == 2 ? 0 : 3, 1, 1, 1, direction);
-					//	rotatedCubeVolume(world, rand, pos.add(x, y, z), 2, 17, 15, spikeTrap, 0, 3, 1, 1, direction);
+						rotatedCubeVolume(world, rand, pos.add(x, y, z), 2, 17, 15, spikeTrap, 0, 3, 1, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 2, 17, 14, betweenstoneBricks, 0, 2, 2, 1, direction);//
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 19, 10, betweenstoneBrickWall, 0, 1, 2, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 19, 12, betweenstoneBrickWall, 0, 1, 2, 1, direction);
@@ -918,7 +918,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		rotatedCubeVolume(world, rand, pos, 18, 17, 9, limestonePolished, 0, 5, 1, 2, 0);
 		rotatedCubeVolume(world, rand, pos, 21, 17, 11, limestonePolished, 0, 2, 1, 3, 0);
 		rotatedCubeVolume(world, rand, pos, 21, 17, 18, limestonePolished, 0, 2, 1, 3, 0);
-	//	rotatedCubeVolume(world, rand, pos, 11, 17, 11, spikeTrap, 0, 10, 1, 10, 0);
+		rotatedCubeVolume(world, rand, pos, 11, 17, 11, spikeTrap, 0, 10, 1, 10, 0);
 		rotatedCubeVolume(world, rand, pos, 9, 17, 9, betweenstoneBricks, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, pos, 22, 17, 22, betweenstoneBricks, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, pos, 9, 17, 22, betweenstoneBricks, 0, 1, 1, 1, 0);
