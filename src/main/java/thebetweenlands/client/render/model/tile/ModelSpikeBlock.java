@@ -65,12 +65,13 @@ public class ModelSpikeBlock extends ModelBase {
         block.addBox(-8.0F, -8.0F, -8.0F, 16, 16, 16, 0.0F);
     }
 
-	public void renderSpikes(TileEntitySpikeTrap tile) {
+	public void renderSpikes(TileEntitySpikeTrap tile, float partialTicks) {
 		renderBlock();
-		if (tile.active || !tile.active && tile.animationTicks > 0) {
-			if (tile.animationTicks <= 5)
-				GL11.glTranslatef(0F, 0F - 1F / 5 * tile.animationTicks, 0F);
-			if (tile.animationTicks > 5)
+		float interpolatedAnimationTicks = tile.prevAnimationTicks + (tile.animationTicks - tile.prevAnimationTicks) * partialTicks;
+		if (tile.active || !tile.active && interpolatedAnimationTicks > 0) {
+			if (interpolatedAnimationTicks <= 5)
+				GL11.glTranslatef(0F, 0F - 1F / 5 * interpolatedAnimationTicks, 0F);
+			if (interpolatedAnimationTicks > 5)
 				GL11.glTranslatef(0F, - 1F, 0F);
 	        shaft4.render(0.0625F);
 	        shaft3.render(0.0625F);

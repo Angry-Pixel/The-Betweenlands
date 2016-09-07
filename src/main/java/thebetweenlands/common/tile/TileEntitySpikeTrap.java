@@ -17,6 +17,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
+	public int prevAnimationTicks;
 	public int animationTicks;
 	public boolean active;
 	public byte type;
@@ -52,6 +53,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 					setActive(true);
 
 		}
+		this.prevAnimationTicks = this.animationTicks;
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
@@ -76,7 +78,6 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Entity activateBlock() {
 		float y = 1F / 16 * animationTicks;
 		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1D, pos.getY() + 1D + y, pos.getZ() + 1D));
@@ -90,7 +91,6 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected Entity isBlockOccupied() {
 		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY(), pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY() + 2D, pos.getZ() + 0.75D));
 		for (int i = 0; i < list.size(); i++) {
