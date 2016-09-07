@@ -1,7 +1,10 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -623,11 +626,41 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateFallenLeaves(BiomeDecoratorBetweenlands decorator) {
-		BlockPos pos = decorator.getRandomPos();
-		Block block = decorator.getWorld().getBlockState(pos.down()).getBlock();
-		if (decorator.getRand().nextInt(3) == 0 && decorator.getWorld().isAirBlock(pos) && block == BlockRegistry.DEAD_GRASS || block == BlockRegistry.SWAMP_GRASS || block == BlockRegistry.SWAMP_DIRT || block == BlockRegistry.MUD || block == BlockRegistry.WEEDWOOD) {
-			return decorator.getWorld().setBlockState(pos, BlockRegistry.FALLEN_LEAVES.getDefaultState());
+		World world = decorator.getWorld();
+		MutableBlockPos checkPos = new MutableBlockPos();
+		boolean generated = false;
+		for(int xo = 0; xo < 32; xo++) {
+			for(int zo = 0; zo < 32; zo++) {
+				int px = decorator.getX() + xo;
+				int pz = decorator.getZ() + zo;
+				int py = world.func_189649_b(px, pz) - 1;
+				Block surfaceBlock = world.getBlockState(checkPos.setPos(px, py, pz)).getBlock();
+				if(surfaceBlock instanceof BlockLeaves) {
+					int yo = 0;
+					boolean hasLeaves = true;
+					for(int i = 0; i < 128; i++) {
+						yo++;
+						if(py-yo <= WorldProviderBetweenlands.CAVE_START) {
+							break;
+						}
+						IBlockState cBlockState = world.getBlockState(checkPos.setPos(px, py-yo, pz));
+						boolean isBlockLeaves = cBlockState.getBlock() instanceof BlockLeaves;
+						if(isBlockLeaves) {
+							hasLeaves = true;
+						}
+						if(hasLeaves && (SurfaceType.GRASS_AND_DIRT.matches(cBlockState) || cBlockState.getBlock() == BlockRegistry.LOG_WEEDWOOD)) {
+							if(world.isAirBlock(checkPos.setPos(px, py-yo+1, pz)) && decorator.getRand().nextInt(3) == 0) {
+								world.setBlockState(new BlockPos(px, py-yo+1, pz), BlockRegistry.FALLEN_LEAVES.getDefaultState());
+								generated = true;
+							}
+						}
+						if(!isBlockLeaves && cBlockState.isOpaqueCube()) {
+							hasLeaves = false;
+						}
+					}
+				}
+			}
 		}
-		return false;
+		return generated;
 	}
 }

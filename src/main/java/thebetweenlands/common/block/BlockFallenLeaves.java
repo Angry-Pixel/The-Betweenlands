@@ -36,12 +36,6 @@ public class BlockFallenLeaves extends BlockBush {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		entity.motionX *= 0.9D;
-		entity.motionZ *= 0.9D;
-	}
-
-	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		return world.getBlockState(pos.down()).isOpaqueCube();
 	}
@@ -51,6 +45,7 @@ public class BlockFallenLeaves extends BlockBush {
 		return world.getBlockState(pos.down()).isOpaqueCube();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
