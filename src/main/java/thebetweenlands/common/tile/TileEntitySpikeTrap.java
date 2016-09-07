@@ -55,7 +55,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
-				worldObj.playSound((double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F, false);
+				worldObj.playSound(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
 			if (animationTicks <= 20)
 				animationTicks++;
 			if (animationTicks == 20)
@@ -68,12 +68,12 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		markDirty();
+		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
-		markDirty();
+		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
 	}
 
 	@SuppressWarnings("unchecked")
