@@ -29,6 +29,8 @@ import thebetweenlands.common.block.BlockBouncyBL;
 import thebetweenlands.common.block.BlockFallenLeaves;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
+import thebetweenlands.common.block.BlockPressurePlateBetweenlands;
+import thebetweenlands.common.block.BlockPressurePlateBetweenlands.PressurePlateSensitivity;
 import thebetweenlands.common.block.BlockRubberLog;
 import thebetweenlands.common.block.BlockRubberTap;
 import thebetweenlands.common.block.BlockSaplingBetweenlands;
@@ -246,15 +248,15 @@ public class BlockRegistry {
 	public static final Block MOSSY_BETWEENSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block MOSSY_SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block MUD_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-	public static final Block OCTINE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block OCTINE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
 	public static final Block RUBBER_BLOCK = new BlockBouncyBL(0.8f).setSoundType2(SoundType.SLIME).setHardness(1.0f);
 	public static final Block PITSTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block PITSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block POLISHED_LIMESTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block SMOOTH_CRAGROCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-	public static final Block SYRMORITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-	public static final Block VALONITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block SYRMORITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
+	public static final Block VALONITE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_POLISHED_LIMESTONE = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
 	public static final Block WEAK_MOSSY_BETWEENSTONE_TILES = new BlockGenericCollapsing(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
@@ -322,6 +324,19 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
 	public static final Block WEEDWOOD_LOG_FENCE_GATE = new BlockFenceGateBetweenlands(WEEDWOOD.getDefaultState());
 	public static final Block RUBBER_TREE_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(RUBBER_TREE_PLANKS.getDefaultState());
+
+	public static final Block WEEDWOOD_PRESSURE_PLATE = new BlockPressurePlateBetweenlands(Material.WOOD, PressurePlateSensitivity.EVERYTHING)
+			.setSoundType(SoundType.WOOD)
+			.setHardness(2.0F)
+			.setResistance(5.0F);
+	public static final Block BETWEENSTONE_PRESSURE_PLATE = new BlockPressurePlateBetweenlands(Material.ROCK, PressurePlateSensitivity.MOBS)
+			.setSoundType(SoundType.STONE)
+			.setHardness(1.5F)
+			.setResistance(10.0F);
+	public static final Block SYRMORITE_PRESSURE_PLATE = new BlockPressurePlateBetweenlands(Material.IRON, PressurePlateSensitivity.PLAYERS)
+			.setSoundType(SoundType.METAL)
+			.setHardness(1.5F)
+			.setResistance(10.0F);
 
 	//Plants
 	public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
