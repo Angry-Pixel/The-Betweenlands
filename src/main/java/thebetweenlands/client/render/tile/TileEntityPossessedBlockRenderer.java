@@ -26,6 +26,7 @@ public class TileEntityPossessedBlockRenderer extends TileEntitySpecialRenderer<
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(-1, -1, 1);
+
 		switch (facing) {
 		case NORTH:
 			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
