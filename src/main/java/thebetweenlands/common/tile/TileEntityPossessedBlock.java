@@ -40,7 +40,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 					animationTicks++;
 				if (animationTicks == 24) {
 					setActive(false);
-					coolDown = 10;
+					coolDown = 200;
 				}
 			}
 			if (!active) {
