@@ -12,7 +12,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Mirror;
@@ -24,6 +23,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -229,7 +229,7 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	}
 
 	@Override
-	public void setStateMapper(Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(LOG_AXIS);
 	}
 }

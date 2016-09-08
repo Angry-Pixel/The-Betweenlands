@@ -8,7 +8,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -25,6 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.util.AdvancedStateMap;
 
 /**
  * Just a vanilla C&P because it's not extensible...
@@ -229,7 +229,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
 	}
 
 	@Override
-	public void setStateMapper(Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(POWERED);
 	}
 }

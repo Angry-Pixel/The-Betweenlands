@@ -103,6 +103,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -172,7 +173,7 @@ public class ClientProxy extends CommonProxy {
 	private static void registerBlockRenderers() {
 		for (Block block : BlockRegistry.BLOCKS) {
 			if(block instanceof IStateMappedBlock) {
-				StateMap.Builder builder = new StateMap.Builder();
+				AdvancedStateMap.Builder builder = new AdvancedStateMap.Builder();
 				((IStateMappedBlock)block).setStateMapper(builder);
 				ModelLoader.setCustomStateMapper(block, builder.build());
 			}
@@ -320,11 +321,6 @@ public class ClientProxy extends CommonProxy {
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
-			if(block instanceof IStateMappedBlock) {
-				StateMap.Builder builder = new StateMap.Builder();
-				((IStateMappedBlock)block).setStateMapper(builder);
-				ModelLoader.setCustomStateMapper(block, builder.build());
-			}
 			if(block instanceof ITintedBlock) {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
 				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {

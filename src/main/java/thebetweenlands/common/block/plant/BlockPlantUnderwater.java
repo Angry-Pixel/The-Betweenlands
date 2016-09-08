@@ -11,7 +11,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -32,6 +31,7 @@ import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
@@ -114,7 +114,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(LEVEL);
 	}

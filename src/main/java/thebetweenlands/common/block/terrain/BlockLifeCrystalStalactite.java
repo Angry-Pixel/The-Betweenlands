@@ -10,7 +10,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -32,6 +31,7 @@ import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockLifeCrystalStalactite extends BlockSwampWater implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlock, IStateMappedBlock {
 	public static final PropertyEnum<EnumLifeCrystalType> VARIANT = PropertyEnum.<EnumLifeCrystalType>create("variant", EnumLifeCrystalType.class);
@@ -182,7 +182,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(VARIANT);
 	}

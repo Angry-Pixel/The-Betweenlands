@@ -1,0 +1,133 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:dug_grass",
+    "textures": {
+      "bottom": "thebetweenlands:blocks/swamp_dirt",
+      "side": "thebetweenlands:blocks/swamp_grass_side",
+      "side_overlay": "thebetweenlands:blocks/swamp_grass_side_overlay",
+      "quadrant_0": "thebetweenlands:blocks/dug_swamp_grass_composted_0",
+      "quadrant_1": "thebetweenlands:blocks/dug_swamp_grass_composted_0",
+      "quadrant_2": "thebetweenlands:blocks/dug_swamp_grass_composted_0",
+      "quadrant_3": "thebetweenlands:blocks/dug_swamp_grass_composted_0",
+      "quadrant_0_overlay": "thebetweenlands:blocks/dug_swamp_grass_0_overlay",
+      "quadrant_1_overlay": "thebetweenlands:blocks/dug_swamp_grass_0_overlay",
+      "quadrant_2_overlay": "thebetweenlands:blocks/dug_swamp_grass_0_overlay",
+      "quadrant_3_overlay": "thebetweenlands:blocks/dug_swamp_grass_0_overlay",
+      "particle": "thebetweenlands:blocks/swamp_dirt"
+    }
+  },
+  "variants": {
+    "top_north_west_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_grass_composted_1",
+          "quadrant_0_overlay": "thebetweenlands:blocks/dug_swamp_grass_1_overlay"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_grass_composted_2",
+          "quadrant_0_overlay": "thebetweenlands:blocks/dug_swamp_grass_2_overlay"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_grass_composted_3",
+          "quadrant_0_overlay": "thebetweenlands:blocks/dug_swamp_grass_3_overlay"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_grass_composted_4",
+          "quadrant_0_overlay": "thebetweenlands:blocks/dug_swamp_grass_4_overlay"
+        }
+      }
+    },
+    "top_north_east_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_grass_composted_1",
+          "quadrant_1_overlay": "thebetweenlands:blocks/dug_swamp_grass_1_overlay"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_grass_composted_2",
+          "quadrant_1_overlay": "thebetweenlands:blocks/dug_swamp_grass_2_overlay"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_grass_composted_3",
+          "quadrant_1_overlay": "thebetweenlands:blocks/dug_swamp_grass_3_overlay"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_grass_composted_4",
+          "quadrant_1_overlay": "thebetweenlands:blocks/dug_swamp_grass_4_overlay"
+        }
+      }
+    },
+    "top_south_west_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_grass_composted_1",
+          "quadrant_2_overlay": "thebetweenlands:blocks/dug_swamp_grass_1_overlay"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_grass_composted_2",
+          "quadrant_2_overlay": "thebetweenlands:blocks/dug_swamp_grass_2_overlay"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_grass_composted_3",
+          "quadrant_2_overlay": "thebetweenlands:blocks/dug_swamp_grass_3_overlay"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_grass_composted_4",
+          "quadrant_2_overlay": "thebetweenlands:blocks/dug_swamp_grass_4_overlay"
+        }
+      }
+    },
+    "top_south_east_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_grass_composted_1",
+          "quadrant_3_overlay": "thebetweenlands:blocks/dug_swamp_grass_1_overlay"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_grass_composted_2",
+          "quadrant_3_overlay": "thebetweenlands:blocks/dug_swamp_grass_2_overlay"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_grass_composted_3",
+          "quadrant_3_overlay": "thebetweenlands:blocks/dug_swamp_grass_3_overlay"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_grass_composted_4",
+          "quadrant_3_overlay": "thebetweenlands:blocks/dug_swamp_grass_4_overlay"
+        }
+      }
+    },
+    "inventory": {
+      "model": "thebetweenlands:dug_grass"
+    }
+  }
+}

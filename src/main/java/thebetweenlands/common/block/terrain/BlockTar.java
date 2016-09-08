@@ -3,7 +3,6 @@ package thebetweenlands.common.block.terrain;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +20,7 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 	public BlockTar() {
@@ -111,7 +111,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockTar.LEVEL);
 	}
 }

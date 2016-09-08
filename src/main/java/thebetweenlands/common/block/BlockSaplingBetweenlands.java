@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSapling;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +22,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockSaplingBetweenlands extends BlockSapling implements IStateMappedBlock  {
 
@@ -107,7 +107,7 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(TYPE);
 	}
 

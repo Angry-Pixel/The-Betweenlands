@@ -12,7 +12,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -26,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMappedBlock {
 	private int[] decayBlockCache;
@@ -108,7 +108,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockLeavesBetweenlands.CHECK_DECAY, BlockLeavesBetweenlands.DECAYABLE);		
 	}
 

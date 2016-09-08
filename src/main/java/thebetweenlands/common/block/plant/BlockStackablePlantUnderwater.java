@@ -9,7 +9,6 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap.Builder;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +20,7 @@ import net.minecraftforge.fluids.Fluid;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	protected static final AxisAlignedBB STACKABLE_PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1D, 0.9D);
@@ -184,7 +184,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	}
 
 	@Override
-	public void setStateMapper(Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(AGE);
 	}

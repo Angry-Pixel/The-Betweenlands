@@ -1,0 +1,111 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:dug_dirt_all",
+    "textures": {
+      "all": "thebetweenlands:blocks/swamp_dirt",
+      "quadrant_0": "thebetweenlands:blocks/dug_swamp_dirt_decayed_0",
+      "quadrant_1": "thebetweenlands:blocks/dug_swamp_dirt_decayed_0",
+      "quadrant_2": "thebetweenlands:blocks/dug_swamp_dirt_decayed_0",
+      "quadrant_3": "thebetweenlands:blocks/dug_swamp_dirt_decayed_0",
+      "particle": "thebetweenlands:blocks/swamp_dirt"
+    }
+  },
+  "variants": {
+    "top_north_west_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_dirt_decayed_1"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_dirt_decayed_2"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_dirt_decayed_3"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_0": "thebetweenlands:blocks/dug_swamp_dirt_decayed_4"
+        }
+      }
+    },
+    "top_north_east_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_dirt_decayed_1"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_dirt_decayed_2"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_dirt_decayed_3"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_1": "thebetweenlands:blocks/dug_swamp_dirt_decayed_4"
+        }
+      }
+    },
+    "top_south_west_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_dirt_decayed_1"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_dirt_decayed_2"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_dirt_decayed_3"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_2": "thebetweenlands:blocks/dug_swamp_dirt_decayed_4"
+        }
+      }
+    },
+    "top_south_east_index": {
+      0: { },
+      1: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_dirt_decayed_1"
+        }
+      },
+      2: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_dirt_decayed_2"
+        }
+      },
+      3: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_dirt_decayed_3"
+        }
+      },
+      4: {
+        "textures": {
+          "quadrant_3": "thebetweenlands:blocks/dug_swamp_dirt_decayed_4"
+        }
+      }
+    },
+    "inventory": {
+      "model": "thebetweenlands:dug_dirt_all"
+    }
+  }
+}

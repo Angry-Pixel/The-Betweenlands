@@ -5,7 +5,6 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -23,6 +22,7 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBlock, ITintedBlock {
 	private boolean isUnderwaterBlock = false;
@@ -446,7 +446,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockSwampWater.LEVEL);
 	}
 

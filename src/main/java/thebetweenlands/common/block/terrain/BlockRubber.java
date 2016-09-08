@@ -1,7 +1,6 @@
 package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock {
 	public BlockRubber() {
@@ -48,7 +48,7 @@ public class BlockRubber extends BlockFluidClassic implements IStateMappedBlock 
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void setStateMapper(StateMap.Builder builder) {
+	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockRubber.LEVEL);
 	}
 }

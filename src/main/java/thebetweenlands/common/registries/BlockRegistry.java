@@ -12,7 +12,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -25,6 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.BlockDugDirt;
+import thebetweenlands.common.block.BlockDugGrass;
 import thebetweenlands.common.block.BlockFallenLeaves;
 import thebetweenlands.common.block.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.BlockLogBetweenlands;
@@ -110,6 +111,7 @@ import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockRegistry {
 	private BlockRegistry() { }
@@ -424,6 +426,11 @@ public class BlockRegistry {
 	public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
 	public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
 
+	public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
+	public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(Material.GROUND);
+	public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(Material.GROUND, true);
+	public static final Block DUG_SWAMP_GRASS = new BlockDugGrass();
+	
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
@@ -532,7 +539,7 @@ public class BlockRegistry {
 		 * @param builder
 		 */
 		@SideOnly(Side.CLIENT)
-		void setStateMapper(StateMap.Builder builder);
+		void setStateMapper(AdvancedStateMap.Builder builder);
 	}
 }
 
