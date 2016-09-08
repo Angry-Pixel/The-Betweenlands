@@ -112,9 +112,13 @@ public class ModelStalactite implements IModel {
 					float vmin = 0;
 					float vmax = 16;
 
-					float halfSize = (float) scaledValBottom / 16;
+					//This is necessary because vertices that are on the exact same point seem to cause problems with the lighting
+					float bottomLightingFix = (distDown == 0 && noBottom ? 0.0001F : 0);
+					float topLightingFix = (distUp == 0 && noTop ? 0.0001F : 0);
+
+					float halfSize = (float) scaledValBottom / 16 + bottomLightingFix;
 					float halfSizeTexW = halfSize * (umax - umin);
-					float halfSize1 = (float) (scaledValTop) / 16;
+					float halfSize1 = (float) (scaledValTop) / 16 + topLightingFix;
 					float halfSizeTex1 = halfSize1 * (umax - umin);
 
 					StalactiteHelper core = StalactiteHelper.getValsFor(posX, posY, posZ);
@@ -183,7 +187,7 @@ public class ModelStalactite implements IModel {
 
 		@Override
 		public boolean isAmbientOcclusion() {
-			return false;
+			return true;
 		}
 
 		@Override
