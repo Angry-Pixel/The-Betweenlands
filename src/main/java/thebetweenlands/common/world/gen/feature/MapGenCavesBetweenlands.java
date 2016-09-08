@@ -99,9 +99,9 @@ public class MapGenCavesBetweenlands extends MapGenBase {
                     if (surfaceDist <= UPPER_BOUND) {
                         noise += (shouldntBreak + MathUtils.linearTransformd(seaLevelBreak.eval(x * XZ_BREAK_SCALE, z * XZ_BREAK_SCALE), -1, 1, 0, 1)) * BREAK_SCALE * (1 - surfaceDist / (float) UPPER_BOUND);
                     }
-                    if (y == level) {   
-                        primer.setBlockState(bx, 150, bz, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.byMetadata((int) MathUtils.linearTransformd(noise, -0.5F, 1, 0, 15))));
-                    }
+                    //if (y == level) {   
+                    //    primer.setBlockState(bx, 150, bz, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.byMetadata((int) MathUtils.linearTransformd(noise, -0.5F, 1, 0, 15))));
+                    //}
                     if (noise < limit) {
                         primer.setBlockState(bx, y, bz, y > WorldProviderBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.getDefaultState() : BlockRegistry.SWAMP_WATER.getDefaultState());
                     }
