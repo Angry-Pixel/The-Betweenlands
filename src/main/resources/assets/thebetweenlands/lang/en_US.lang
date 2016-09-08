@@ -147,6 +147,8 @@ tile.thebetweenlands.wisp.name=Wisp
 tile.thebetweenlands.sulfurFurnace.name=Sulfur Furnace
 tile.thebetweenlands.sulfurFurnaceDual.name=Dual Sulfur Furnace
 tile.thebetweenlands.fallenLeaves.name=Fallen Leaves
+tile.thebetweenlands.spike_trap.name=Spike Trap
+tile.thebetweenlands.possessed_block.name=Possessed Block
 
 # Items
 
