@@ -12,6 +12,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -59,7 +60,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState spikeTrap = BlockRegistry.SPIKE_TRAP.getDefaultState();
 	//private IBlockState swordStone = BlockRegistry.itemCage;
 	private IBlockState root = BlockRegistry.ROOT.getDefaultState();
-	//private IBlockState possessedBlock = BlockRegistry.possessedBlock;
+	private IBlockState possessedBlock = BlockRegistry.POSSESSED_BLOCK.getDefaultState();
 	private IBlockState chest = BlockRegistry.WEEDWOOD_CHEST.getDefaultState();
 	private IBlockState lootPot1 = BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_1);
 	private IBlockState lootPot2 = BlockRegistry.LOOT_POT.getDefaultState().withProperty(BlockLootPot.VARIANT, EnumLootPot.POT_2);
@@ -259,6 +260,23 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return state.withProperty(BlockLootPot.FACING, EnumFacing.WEST);
 		case 5:
 			return state.withProperty(BlockLootPot.FACING, EnumFacing.EAST);
+		}
+		return state;
+	}
+
+	public IBlockState getPossessedBlockRotations(IBlockState state, int blockMeta) {
+		int direction = blockMeta;
+		switch (direction) {
+		case 0: //unused
+		case 1: //unused
+		case 2:
+			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.NORTH);
+		case 3:
+			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.SOUTH);
+		case 4:
+			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.WEST);
+		case 5:
+			return state.withProperty(BlockPossessedBlock.FACING, EnumFacing.EAST);
 		}
 		return state;
 	}
@@ -608,7 +626,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 16, 10, betweenstoneTiles, 0, 3, 1, 6, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 11, 10, Blocks.AIR.getDefaultState(), 0, 3, 5, 2, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 5, 17, 10, Blocks.AIR.getDefaultState(), 0, 3, 4, 3, direction);
-					//	rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 5, 12, possessedBlock, tower == 0 && direction == 0 ? 5 : tower == 0 && direction == 1 ? 2 : tower == 1 && direction == 0 ? 5 : tower == 1 && direction == 3 ? 3 : tower == 2 && direction == 2 ? 4 : tower == 2 && direction == 3 ? 3 : tower == 3 && direction == 1 ? 2 : 4, 1, 1, 1, direction);
+						rotatedCubeVolume(world, rand, pos.add(x, y, z), 4, 5, 12, possessedBlock, tower == 0 && direction == 0 ? 5 : tower == 0 && direction == 1 ? 2 : tower == 1 && direction == 0 ? 5 : tower == 1 && direction == 3 ? 3 : tower == 2 && direction == 2 ? 4 : tower == 2 && direction == 3 ? 3 : tower == 3 && direction == 1 ? 2 : 4, 1, 1, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 5, 11, lootPot1, direction == 0 ? 5 : direction== 1 ? 3 : direction == 2 ? 4 : 2, 1, 1, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 5, 12, lootPot1, direction == 0 ? 5 : direction== 1 ? 3 : direction == 2 ? 4 : 2, 1, 1, 1, direction);
 						rotatedCubeVolume(world, rand, pos.add(x, y, z), 7, 5, 13, lootPot1, direction == 0 ? 5 : direction== 1 ? 3 : direction == 2 ? 4 : 2, 1, 1, 1, direction);
@@ -868,7 +886,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		rotatedCubeVolume(world, rand, pos, 20, 8, 24, betweenstoneBricks, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, pos, 19, 5, 23, betweenstoneBricks, 0, 1, 1, 1, direction);
 		rotatedCubeVolume(world, rand, pos, 18, 10, 24, Blocks.AIR.getDefaultState(), 0, 3, 1, 1, direction);
-	//	rotatedCubeVolume(world, rand, pos, 22, 12, 24, possessedBlock, direction == 0 ? 4 : direction == 1 ? 3 : direction == 2 ? 5 : 2, 1, 1, 1, direction);
+		rotatedCubeVolume(world, rand, pos, 22, 12, 24, possessedBlock, direction == 0 ? 4 : direction == 1 ? 3 : direction == 2 ? 5 : 2, 1, 1, 1, direction);
 
 		//3rd betweenstoneBrickStairs
 		for(int count = 0; count < 6 ;count ++)
@@ -1001,7 +1019,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			if (lootPot != null) {
 				LootUtil.generateLoot(lootPot, rand, LootTables.DUNGEON_POT_LOOT, 1, 3);
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);
-				//world.markBlockForUpdate(pos);
+				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 			}
 		}
 	}
@@ -1052,6 +1070,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
+						else if(blockType == possessedBlock)
+							world.setBlockState(pos.add(xx, yy, zz), getPossessedBlockRotations(blockType, blockMeta), 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
@@ -1087,6 +1107,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
+						else if(blockType == possessedBlock)
+							world.setBlockState(pos.add(xx, yy, zz), getPossessedBlockRotations(blockType, blockMeta), 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
@@ -1122,6 +1144,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
+						else if(blockType == possessedBlock)
+							world.setBlockState(pos.add(xx, yy, zz), getPossessedBlockRotations(blockType, blockMeta), 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
@@ -1157,6 +1181,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomSmoothBetweenstone(rand), 2);
 						else if(blockType == betweenstoneTilesCollapsing)
 							world.setBlockState(pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : getRandomCollapsingTiles(rand), 2);
+						else if(blockType == possessedBlock)
+							world.setBlockState(pos.add(xx, yy, zz), getPossessedBlockRotations(blockType, blockMeta), 2);
 						else if(blockType == lootPot1)
 							placeRandomisedLootPot(world, rand, pos.add(xx, yy, zz), rand.nextBoolean() ? blockType : rand.nextBoolean() ? lootPot2 : lootPot3, blockMeta);
 						else if (blockType == chest) {
