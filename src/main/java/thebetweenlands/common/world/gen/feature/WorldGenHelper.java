@@ -3,9 +3,9 @@ package thebetweenlands.common.world.gen.feature;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -17,8 +17,6 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.loot.LootTables;
-import thebetweenlands.common.world.gen.feature.loot.LootUtil;
-import thebetweenlands.common.world.gen.feature.loot.WeightedLootList;
 
 public abstract class WorldGenHelper extends WorldGenerator {
 	/**
@@ -260,6 +258,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		switch (rotation) {
 		case 0:
 			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, LootTables.DUNGEON_POT_LOOT);
+
 			break;
 		case 1:
 			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, LootTables.DUNGEON_POT_LOOT);
@@ -288,23 +287,23 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param max     The maximum amount of items
 	 * @param chance  The chance of it actually generating
 	 */
-	public void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, int sequenceStart) {
+	public void rotatedLootChest(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, int sequenceStart, ResourceLocation lootTable) {
 		x -= width / 2;
 		z -= depth / 2;
 		if (rand.nextInt(chance) == 0)
 			return;
 		switch (rotation) {
 		case 0:
-			generateLootChest(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+			generateLootChest(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, getStateFromRotation(sequenceStart, rotation, BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), EnumRotationSequence.CHEST), lootTable);
 			break;
 		case 1:
-			generateLootChest(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+			generateLootChest(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, getStateFromRotation(sequenceStart, rotation, BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), EnumRotationSequence.CHEST), lootTable);
 			break;
 		case 2:
-			generateLootChest(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+			generateLootChest(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, getStateFromRotation(sequenceStart, rotation, BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), EnumRotationSequence.CHEST), lootTable);
 			break;
 		case 3:
-			generateLootChest(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, getStateFromRotation(sequenceStart, rotation, Blocks.CHEST.getDefaultState(), EnumRotationSequence.CHEST));
+			generateLootChest(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, getStateFromRotation(sequenceStart, rotation, BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), EnumRotationSequence.CHEST), lootTable);
 			break;
 		}
 	}
@@ -424,14 +423,14 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param min    The minimum amount of items
 	 * @param max    The maximum amount of items
 	 */
-	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, WeightedLootList list) {
+	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, ResourceLocation list) {
 		world.setBlockState(pos, getRandomLootPot(random), 3);
 		TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
 		if (lootPot != null)
-			LootUtil.generateLoot(lootPot, random, list, min, max);
+			lootPot.setLootTable(LootTables.COMMON_CHEST_LOOT, random.nextLong());
 	}
 
-	/** TODO change to weedwood chest when added
+	/**
 	 * Generates a loot chest at a location
 	 *
 	 * @param world  The world
@@ -440,11 +439,12 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param min    The minimum amount of items
 	 * @param max    The maximum amount of items
 	 */
-	public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state) {
+	public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state, ResourceLocation lootTable) {
 		world.setBlockState(pos, state, 3);
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
+
 		if (chest != null)
-			LootUtil.generateLoot(chest, random, LootTables.DUNGEON_CHEST_LOOT, min, max);
+			chest.setLootTable(lootTable, random.nextLong());
 	}
 
 

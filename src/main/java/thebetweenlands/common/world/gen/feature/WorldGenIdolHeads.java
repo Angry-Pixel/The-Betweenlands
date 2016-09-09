@@ -18,7 +18,6 @@ import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.world.gen.feature.loot.LootTables;
-import thebetweenlands.common.world.gen.feature.loot.LootUtil;
 
 
 public class WorldGenIdolHeads extends WorldGenerator {
@@ -220,7 +219,7 @@ public class WorldGenIdolHeads extends WorldGenerator {
 		world.setBlockState(new BlockPos(x, y - 1, z), BlockRegistry.WEEDWOOD_CHEST.getDefaultState());
 		lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x, y - 1, z));
 		if (lootChest != null)
-			LootUtil.generateLoot(lootChest, rand, LootTables.COMMON_CHEST_LOOT, 4, 8);
+			lootChest.setLootTable(LootTables.COMMON_CHEST_LOOT, rand.nextLong());
 		return true;
 	}
 

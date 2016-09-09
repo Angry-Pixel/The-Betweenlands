@@ -13,6 +13,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
+import thebetweenlands.common.world.gen.feature.loot.LootTables;
 
 public class WorldGenCragrockTower extends WorldGenHelper {
     private static IBlockState CRAGROCK;
@@ -892,9 +893,9 @@ public class WorldGenCragrockTower extends WorldGenHelper {
         rotatedCubeVolume(world, x, y, z, 8, 52, 15, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 8, 53, 15, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
         rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands.wight").setMaxEntities(2).setCheckRange(24.0D).setDelay(300, 600);
-        rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1);
-        rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1);
-        rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3);
+        rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1, LootTables.DUNGEON_CHEST_LOOT);
+        rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1, LootTables.DUNGEON_CHEST_LOOT);
+        rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3, LootTables.DUNGEON_CHEST_LOOT);
         rotatedLootPot(world, random, x, y, z, 10, 52, 6, direction, 3, 4, 3);
         rotatedLootPot(world, random, x, y, z, 11, 52, 6, direction, 3, 4, 3);
         rotatedLootPot(world, random, x, y, z, 6, 52, 6, direction, 3, 4, 3);
