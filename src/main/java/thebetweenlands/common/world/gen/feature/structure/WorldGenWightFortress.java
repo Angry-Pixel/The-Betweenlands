@@ -74,6 +74,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState mushroomBlackHat = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
 	private IBlockState mushroomBulbCapped = BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
 	private IBlockState mushroomflatHead = BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
+	private IBlockState energyBarrier = BlockRegistry.ENERGY_BARRIER.getDefaultState();
 
 	public WorldGenWightFortress() {
 		//these sizes are subject to change
@@ -996,7 +997,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, pos, 19, 18, 10, lootPot1, direction == 0 ? 2 : direction== 1 ? 5 : direction == 2 ? 3 : 4, 1, 1, 1, direction);
 
 			//energy barrier
-		//	rotatedCubeVolume(world, rand, pos, 15, 29, 13, energyBarrier, 0, 2, 4, 1, direction);
+			rotatedCubeVolume(world, rand, pos, 15, 29, 13, energyBarrier, 0, 2, 4, 1, direction);
 		}
 
 		return true;
