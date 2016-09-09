@@ -53,6 +53,7 @@ import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
 import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderSwordEnergy;
 import thebetweenlands.client.render.entity.RenderTermite;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
@@ -62,11 +63,13 @@ import thebetweenlands.client.render.tile.RenderLootPot;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
+import thebetweenlands.client.render.tile.TileEntityItemCageRenderer;
 import thebetweenlands.client.render.tile.TileEntityPossessedBlockRenderer;
 import thebetweenlands.client.render.tile.TileEntitySpikeTrapRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -96,6 +99,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -292,6 +296,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, RenderSporeling::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, RenderTermite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, RenderLeech::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySwordEnergy.class, RenderSwordEnergy::new);
 	}
 
 	@Override
@@ -306,6 +311,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlands.class, new RenderChestBetweenlands());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new TileEntitySpikeTrapRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new TileEntityPossessedBlockRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new TileEntityItemCageRenderer());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -318,6 +324,7 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP), 0, TileEntitySpikeTrap.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
 		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {

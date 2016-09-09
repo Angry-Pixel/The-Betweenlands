@@ -7,6 +7,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -33,6 +34,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityRubberTap.class, "rubber_tap");
 		registerTileEntity(TileEntitySpikeTrap.class, "spike_trap");
 		registerTileEntity(TileEntityPossessedBlock.class, "possessed_block");
+		registerTileEntity(TileEntityItemCage.class, "item_cage");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
