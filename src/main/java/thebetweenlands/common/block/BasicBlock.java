@@ -13,8 +13,8 @@ import java.util.Random;
 public class BasicBlock extends Block {
     private Item itemDropped;
 
-    public BasicBlock(Material materialIn) {
-        super(materialIn);
+    public BasicBlock(Material material) {
+        super(material);
     }
 
     public BasicBlock setSoundType2(SoundType sound) {

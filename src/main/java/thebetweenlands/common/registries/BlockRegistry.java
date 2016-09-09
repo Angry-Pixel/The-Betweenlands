@@ -23,16 +23,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.block.BlockDugDirt;
-import thebetweenlands.common.block.BlockDugGrass;
-import thebetweenlands.common.block.BlockFallenLeaves;
-import thebetweenlands.common.block.BlockLeavesBetweenlands;
-import thebetweenlands.common.block.BlockLogBetweenlands;
-import thebetweenlands.common.block.BlockPressurePlateBetweenlands;
-import thebetweenlands.common.block.BlockRubberLog;
-import thebetweenlands.common.block.BlockRubberTap;
-import thebetweenlands.common.block.BlockSaplingBetweenlands;
+import thebetweenlands.common.block.*;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.block.container.BlockBLFurnace;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
@@ -450,6 +441,8 @@ public class BlockRegistry {
 	public static final Block SYRMORITE_RUBBER_TAP = new BlockRubberTap(SYRMORITE_BLOCK.getDefaultState(), 260);
 
 	public static final Block FALLEN_LEAVES = new BlockFallenLeaves("fallenLeaves");
+
+	public static final Block ENERGY_BARRIER = new BlockEnergyBarrier();
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
