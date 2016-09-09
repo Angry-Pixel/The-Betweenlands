@@ -16,8 +16,10 @@ import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
+import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.feature.loot.LootTables;
 
@@ -57,7 +59,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 	private IBlockState betweenstoneTilesFortress = BlockRegistry.GLOWING_BETWEENSTONE_TILE.getDefaultState();
 	private IBlockState stagnantWater = BlockRegistry.STAGNANT_WATER.getDefaultState();
 	private IBlockState spikeTrap = BlockRegistry.SPIKE_TRAP.getDefaultState();
-	//private IBlockState swordStone = BlockRegistry.itemCage;
+	private IBlockState swordStone = BlockRegistry.ITEM_CAGE.getDefaultState();;
 	private IBlockState root = BlockRegistry.ROOT.getDefaultState();
 	private IBlockState possessedBlock = BlockRegistry.POSSESSED_BLOCK.getDefaultState();
 	private IBlockState chest = BlockRegistry.WEEDWOOD_CHEST.getDefaultState();
@@ -942,15 +944,15 @@ public class WorldGenWightFortress extends WorldGenerator {
 		rotatedCubeVolume(world, rand, pos, 9, 17, 22, betweenstoneBricks, 0, 1, 1, 1, 0);
 		rotatedCubeVolume(world, rand, pos, 22, 17, 9, betweenstoneBricks, 0, 1, 1, 1, 0);
 
-	/*	setSwordStone(world, rand, xx + 12, yy + 22, zz + 12, swordStone, 0, (byte) 0);
-		setSwordStone(world, rand, xx + 19, yy + 22, zz + 12, swordStone, 0, (byte) 1);
-		setSwordStone(world, rand, xx + 19, yy + 22, zz + 19, swordStone, 0, (byte) 2);
-		setSwordStone(world, rand, xx + 12, yy + 22, zz + 19, swordStone, 0, (byte) 3);
+		setSwordStone(world, rand, pos.add(12, 22, 12), swordStone, (byte) 0);
+		setSwordStone(world, rand, pos.add(19, 22, 12), swordStone, (byte) 1);
+		setSwordStone(world, rand, pos.add(19, 22, 19), swordStone, (byte) 2);
+		setSwordStone(world, rand, pos.add(12, 22, 19), swordStone, (byte) 3);
 
 		EntitySwordEnergy swordEnergy = new EntitySwordEnergy(world);
-		swordEnergy.setPosition(xx + 16D, yy + 21.5, zz + 16D);
+		swordEnergy.setPosition(pos.getX() + 16D, pos.getY() + 21.5, pos.getZ() + 16D);
 		world.spawnEntityInWorld(swordEnergy);
-	*/
+	
 		//floor 1
 		rotatedCubeVolume(world, rand, pos, 12, 23, 12, limestonePolishedCollapsing, 0, 8, 1, 8, 0);
 		rotatedCubeVolume(world, rand, pos, 16, 24, 16, chest, direction == 0 ? 5 : direction == 1 ? 2 : direction == 2 ? 4 : 3, 1, 1, 1, direction);
@@ -1024,14 +1026,14 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 	}
 
-/*
-	public void setSwordStone(World world, Random rand, BlockPos pos, IBlockState blockType, int blockMeta, byte type) {
-		world.setBlockState(pos, blockType, blockMeta, 2);
-		TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(x, y, z);
+
+	public void setSwordStone(World world, Random rand, BlockPos pos, IBlockState blockType, byte type) {
+		world.setBlockState(pos, blockType, 2);
+		TileEntityItemCage swordStone = (TileEntityItemCage) world.getTileEntity(pos);
 		if (swordStone != null)
 			swordStone.setType(type);
 	}
-
+/*
 	private void placeSign(World world, Random rand, int x, int y, int z, Block blockType, int blockMeta) {
 		world.setBlockState(x, y, z, obviousSign, blockMeta, 2);
 		TileEntityBLSign sign = (TileEntityBLSign) world.getTileEntity(x, y, z);
