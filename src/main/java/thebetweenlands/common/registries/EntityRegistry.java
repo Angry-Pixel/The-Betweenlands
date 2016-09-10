@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -51,5 +52,6 @@ public class EntityRegistry {
         registerEntity(EntityChiromaw.class, "Chiromaw", 0x3F5A69, 0xA16A77);
         registerEntity(EntityFrog.class, "Frog", 0x559653, 0xC72C2C, 64, 20, true);
         registerEntity(EntitySwordEnergy.class, "SwordEnergy");
+        registerEntity(EntityShockwaveSwordItem.class, "ShockwaveSwordItem");
     }
 }

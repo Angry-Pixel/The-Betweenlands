@@ -14,10 +14,10 @@ import net.minecraft.util.ResourceLocation;
  * @param <T>
  */
 public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
-	public final RenderLivingBase renderer;
+	public final RenderLivingBase<T> renderer;
 	public final ResourceLocation glowTexture;
 
-	public LayerGlow(RenderLivingBase renderer, ResourceLocation glowTexture) {
+	public LayerGlow(RenderLivingBase<T> renderer, ResourceLocation glowTexture) {
 		this.renderer = renderer;
 		this.glowTexture = glowTexture;
 	}

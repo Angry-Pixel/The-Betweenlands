@@ -9,7 +9,6 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
@@ -27,9 +26,11 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("textures/entity/creeper/creeper_armor.png");
 	private static ModelSwordEnergy model = new ModelSwordEnergy();
 
-	@SideOnly(Side.CLIENT)
-	private EntityItem ghostItem;
-	
+	private final ItemStack swordPiece1 = EnumItemMisc.SHOCKWAVE_SWORD_1.create(1);
+	private final ItemStack swordPiece2 = EnumItemMisc.SHOCKWAVE_SWORD_2.create(1);
+	private final ItemStack swordPiece3 = EnumItemMisc.SHOCKWAVE_SWORD_3.create(1);
+	private final ItemStack swordPiece4 = EnumItemMisc.SHOCKWAVE_SWORD_4.create(1);
+
 	public RenderSwordEnergy(RenderManager rendermanagerIn) {
 		super(rendermanagerIn);
 	}
@@ -40,7 +41,7 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 	}
 
 	public void renderSwordEnergy(EntitySwordEnergy energyBall, double x, double y, double z, float rotationYaw, float partialTickTime) {
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.addDynLight(new LightSource(energyBall.posX, energyBall.posY + 0.5D, energyBall.posZ, 
 					2f,
 					5.0f / 255.0f * 13.0F, 
@@ -73,21 +74,14 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 
-		ghostItem = new EntityItem(energyBall.worldObj);
-		ghostItem.hoverStart = 0.0F;
-		
-		ghostItem.setEntityItemStack(new ItemStack(EnumItemMisc.SHOCKWAVE_SWORD_1.getItem(), 1, EnumItemMisc.SHOCKWAVE_SWORD_1.getID()));
 		double interpPos1 = energyBall.lastPos1 + (energyBall.pos1 - energyBall.lastPos1) * partialTickTime;
-		renderItemInBlock(x - interpPos1, y + 0.725F, z - interpPos1, ghostItem, ticks);
+		renderItemInBlock(x - interpPos1, y + 0.725F, z - interpPos1, this.swordPiece1, ticks);
 		double interpPos2 = energyBall.lastPos2 + (energyBall.pos2 - energyBall.lastPos2) * partialTickTime;
-		ghostItem.setEntityItemStack(new ItemStack(EnumItemMisc.SHOCKWAVE_SWORD_2.getItem(), 1, EnumItemMisc.SHOCKWAVE_SWORD_2.getID()));
-		renderItemInBlock(x + interpPos2, y + 0.725F, z - interpPos2, ghostItem, ticks);
+		renderItemInBlock(x + interpPos2, y + 0.725F, z - interpPos2, this.swordPiece2, ticks);
 		double interpPos3 = energyBall.lastPos3 + (energyBall.pos3 - energyBall.lastPos3) * partialTickTime;
-		ghostItem.setEntityItemStack(new ItemStack(EnumItemMisc.SHOCKWAVE_SWORD_3.getItem(), 1, EnumItemMisc.SHOCKWAVE_SWORD_3.getID()));
-		renderItemInBlock(x + interpPos3, y + 0.725F, z + interpPos3, ghostItem, ticks);
+		renderItemInBlock(x + interpPos3, y + 0.725F, z + interpPos3, this.swordPiece3, ticks);
 		double interpPos4 = energyBall.lastPos4 + (energyBall.pos4 - energyBall.lastPos4) * partialTickTime;
-		ghostItem.setEntityItemStack(new ItemStack(EnumItemMisc.SHOCKWAVE_SWORD_4.getItem(), 1, EnumItemMisc.SHOCKWAVE_SWORD_4.getID()));
-		renderItemInBlock(x - interpPos4, y + 0.725F, z + interpPos4, ghostItem, ticks);
+		renderItemInBlock(x - interpPos4, y + 0.725F, z + interpPos4, this.swordPiece4, ticks);
 
 
 		FMLClientHandler.instance().getClient().getTextureManager().bindTexture(FORCE_TEXTURE);
@@ -131,15 +125,16 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		GL11.glLoadIdentity();
 		GL11.glMatrixMode(GL11.GL_MODELVIEW);
 		GL11.glEnable(GL11.GL_LIGHTING);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
-	public void renderItemInBlock(double x, double y, double z, EntityItem ghostItem, float ticks) {
+	public void renderItemInBlock(double x, double y, double z, ItemStack item, float ticks) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) (y), (float) z);
 		GL11.glScalef(1.25F, 1.25F, 1.25F);
 		GL11.glRotatef(ticks * 4F, 0, 1, 0);
-		Minecraft.getMinecraft().getRenderItem().renderItem(ghostItem.getEntityItem(), ItemCameraTransforms.TransformType.GROUND);
+		Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
 		GL11.glPopMatrix();
 	}
 
@@ -173,7 +168,7 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		double minVEnd = 0.0D;
 		double maxU = diff.lengthVector() / 2.0D;
 
-		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
+		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexbuffer.pos(start.xCoord + (localSide.xCoord + localUp.xCoord) * startWidth, start.yCoord + (localSide.yCoord + localUp.yCoord) * startWidth, start.zCoord + (localSide.zCoord + localUp.zCoord) * startWidth).tex(0, minVStart).endVertex();
 		vertexbuffer.pos(start.xCoord + (localSide.xCoord - localUp.xCoord) * startWidth, start.yCoord + (localSide.yCoord - localUp.yCoord) * startWidth, start.zCoord + (localSide.zCoord - localUp.zCoord) * startWidth).tex(0, maxVStart).endVertex();
 		vertexbuffer.pos(end.xCoord + (localSide.xCoord - localUp.xCoord) * endWidth, end.yCoord + (localSide.yCoord - localUp.yCoord) * endWidth, end.zCoord + (localSide.zCoord - localUp.zCoord) * endWidth).tex(maxU, maxVEnd).endVertex();

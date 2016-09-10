@@ -116,9 +116,16 @@ public class BlockEnergyBarrier extends Block {
 					}
 				}
 			} else {
-				entity.attackEntityFrom(DamageSource.cactus, 1);
-				float yaw = (float) Math.toRadians(entity.rotationYaw);
-				entity.addVelocity(MathHelper.sin(yaw) * 0.1F, 0.08D, -MathHelper.cos(yaw) * 0.1F);
+				entity.attackEntityFrom(DamageSource.magic, 1);
+				double dx = (entity.posX - (pos.getX()))*2-1;
+				double dz = (entity.posZ - (pos.getZ()))*2-1;
+				if(Math.abs(dx) > Math.abs(dz))
+					dz = 0;
+				else
+					dx = 0;
+				dx = (int)dx;
+				dz = (int)dz;
+				entity.addVelocity(dx*0.85D, 0.08D, dz*0.85D);
 				entity.playSound(SoundRegistry.REJECTED, 0.5F, 1F);
 			}
 		}

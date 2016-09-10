@@ -16,7 +16,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnData {
-	
+
 	private static final DataParameter<Float> PART_POS_1 = EntityDataManager.<Float>createKey(EntitySwordEnergy.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> PART_POS_2 = EntityDataManager.<Float>createKey(EntitySwordEnergy.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> PART_POS_3 = EntityDataManager.<Float>createKey(EntitySwordEnergy.class, DataSerializers.FLOAT);
@@ -65,7 +65,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 
 			if (getSwordPart1Pos() <= 0 && getSwordPart2Pos() <= 0 && getSwordPart3Pos() <= 0 && getSwordPart4Pos() <= 0) {
 				worldObj.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_SWORD, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				EntityItem entityItem = new EntityItem(worldObj, posX, posY, posZ, new ItemStack(ItemRegistry.BONE_SWORD));
+				EntityItem entityItem = new EntityShockwaveSwordItem(worldObj, posX, posY, posZ, new ItemStack(ItemRegistry.BONE_SWORD));
 				entityItem.motionX = 0;
 				entityItem.motionY = 0;
 				entityItem.motionZ = 0;

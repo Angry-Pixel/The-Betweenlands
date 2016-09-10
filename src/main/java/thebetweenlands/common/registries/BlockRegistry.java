@@ -61,6 +61,7 @@ import thebetweenlands.common.block.plant.BlockHollowLog;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockMoss;
+import thebetweenlands.common.block.plant.BlockMushroomBetweenlands;
 import thebetweenlands.common.block.plant.BlockNettle;
 import thebetweenlands.common.block.plant.BlockNettleFlowered;
 import thebetweenlands.common.block.plant.BlockPlant;
@@ -352,8 +353,8 @@ public class BlockRegistry {
 	public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
 	public static final BlockDoublePlantBL WEEPING_BLUE = new BlockDoublePlantBL();
 	public static final BlockDoublePlantBL SUNDEW = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.SUNDEW_HEAD.create(1));
-	public static final Block BLACK_HAT_MUSHROOM = new BlockPlant();
-	public static final Block BULB_CAPPED_MUSHROOM = new BlockPlant() {
+	public static final Block BLACK_HAT_MUSHROOM = new BlockMushroomBetweenlands();
+	public static final Block BULB_CAPPED_MUSHROOM = new BlockMushroomBetweenlands() {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public Block.EnumOffsetType getOffsetType() {
@@ -366,7 +367,7 @@ public class BlockRegistry {
 			return BlockRenderLayer.TRANSLUCENT;
 		}
 	}.setLightLevel(1.0F);
-	public static final Block FLAT_HEAD_MUSHROOM = new BlockPlant();
+	public static final Block FLAT_HEAD_MUSHROOM = new BlockMushroomBetweenlands();
 	public static final Block VENUS_FLY_TRAP = new BlockVenusFlyTrap().setSickleDrop(EnumItemPlantDrop.VENUS_FLY_TRAP_ITEM.create(1));
 	public static final BlockDoublePlantBL VOLARPAD = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.VOLARPAD_ITEM.create(1));
 	public static final Block SWAMP_PLANT = new BlockPlant() {

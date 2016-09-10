@@ -25,15 +25,15 @@ public class TestItem extends Item {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(world, itemRand, pos.up());
         }*/
-        if (!world.isRemote) {
+        /*if (!world.isRemote) {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(world, itemRand, pos.up());
-        }
-        /*
+        }*/
+        
         if (!world.isRemote) {
             WorldGenWightFortress fortress = new WorldGenWightFortress();
     		fortress.generate(world, itemRand, pos.up());
-    	}*/
+    	}
 
         return EnumActionResult.SUCCESS;
     }
