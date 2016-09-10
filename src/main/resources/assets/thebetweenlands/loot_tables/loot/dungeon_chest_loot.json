@@ -1,0 +1,131 @@
+{
+  "pools": [
+    {
+      "name": "common_chest_loot", //idk why this exists, don't know if the name does anything
+      //amount of diferent items
+      "rolls": {
+        "min": 1,
+        "max": 4
+      },
+      //amount of posible extra rolls per level of the new luck enchant that might be implemented
+      "bonus_rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:golden_apple",
+          "weight": 20,                          //the amount of times it counts
+          "quality": 5 							 //the higher the level the more it's seen as treasure, the lower the level the more it's seen as junk (negative numbers are accepted). used for luck effect
+        },
+        {
+          "type": "item",
+          "name": "minecraft:name_tag",
+          "weight": 30
+        },
+        {
+          "type": "item",
+          "name": "minecraft:book",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "enchant_randomly"   //we can make custom functions for stuff like lore, enchantments, random chance for smelting, random damage, etc.
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_pickaxe",
+          "weight": 5
+        },
+        {
+          //an extra chance for nothing to appear
+          "type": "empty",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_count",        //the quantity the item appears in
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            },
+            {
+              "function": "set_data",		//sets meta data
+              "data":12
+            }
+          ],
+          "weight": 10
+        }
+      ]
+    },
+    {
+      //you can make a secound pool that will also add items to the loot, you can for example make one with treasure and one with useless stuff to make sure it both generates
+      "name": "common_chest_loot",
+      "rolls": {
+        "min": 1,
+        "max": 4
+      },
+      "conditions":[
+        {
+          "condition":"random_chance",   //gives this specific pool a smaller chance to happen
+          "chance":0.45
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "minecraft:golden_apple",
+          "weight": 20
+        },
+        {
+          "type": "item",
+          "name": "minecraft:name_tag",
+          "weight": 30
+        },
+        {
+          "type": "item",
+          "name": "minecraft:book",
+          "weight": 10,
+          "functions": [
+            {
+              "function": "enchant_randomly"
+            }
+          ]
+        },
+        {
+          "type": "item",
+          "name": "minecraft:iron_pickaxe",
+          "weight": 5
+        },
+        {
+          "type": "empty",
+          "weight": 5
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 5
+              }
+            },
+            {
+              "function": "set_data",
+              "data":12
+            }
+          ],
+          "weight": 10
+        }
+      ]
+    }
+  ]
+}

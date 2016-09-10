@@ -16,7 +16,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
-import thebetweenlands.common.world.gen.feature.loot.LootTables;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public abstract class WorldGenHelper extends WorldGenerator {
 	/**
@@ -257,17 +257,17 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			return;
 		switch (rotation) {
 		case 0:
-			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, LootTables.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
 
 			break;
 		case 1:
-			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, LootTables.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
 			break;
 		case 2:
-			generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, LootTables.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
 			break;
 		case 3:
-			generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, LootTables.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
 			break;
 		}
 	}
@@ -427,7 +427,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		world.setBlockState(pos, getRandomLootPot(random), 3);
 		TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
 		if (lootPot != null)
-			lootPot.setLootTable(LootTables.COMMON_CHEST_LOOT, random.nextLong());
+			lootPot.setLootTable(LootTableRegistry.COMMON_CHEST_LOOT, random.nextLong());
 	}
 
 	/**

@@ -12,7 +12,7 @@ import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHal
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
-import thebetweenlands.common.world.gen.feature.loot.LootTables;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
 
 import java.util.ArrayList;
@@ -563,7 +563,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
         TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(new BlockPos(x, y, z));
         if (lootPot != null) {
            // LootUtil.generateLoot(lootPot, random, LootTables.COMMON_POT_LOOT, 1, 2);
-            lootPot.setLootTable(LootTables.COMMON_POT_LOOT, random.nextLong());
+            lootPot.setLootTable(LootTableRegistry.COMMON_POT_LOOT, random.nextLong());
         }
     }
 

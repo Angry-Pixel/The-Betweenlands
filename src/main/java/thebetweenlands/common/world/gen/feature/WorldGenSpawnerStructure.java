@@ -12,7 +12,7 @@ import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
-import thebetweenlands.common.world.gen.feature.loot.LootTables;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class WorldGenSpawnerStructure extends WorldGenerator {
 	@Override
@@ -87,25 +87,25 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 1));
 					if (lootChest != null)
-						lootChest.setLootTable(LootTables.DUNGEON_CHEST_LOOT, random.nextLong());
+						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
 					break;
 				case 1:
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 3));
 					if (lootChest != null)
-						lootChest.setLootTable(LootTables.DUNGEON_CHEST_LOOT, random.nextLong());
+						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
 					break;
 				case 2:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 1));
 					if (lootChest != null)
-						lootChest.setLootTable(LootTables.DUNGEON_CHEST_LOOT, random.nextLong());
+						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
 					break;
 				case 3:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
 					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 3));
 					if (lootChest != null)
-						lootChest.setLootTable(LootTables.DUNGEON_CHEST_LOOT, random.nextLong());
+						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
 					break;
 				}
 			} else if (yy < y + 4) {

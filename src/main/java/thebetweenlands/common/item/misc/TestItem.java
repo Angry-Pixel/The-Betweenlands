@@ -8,6 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.world.gen.feature.WorldGenSpawnerStructure;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 
 //MINE!!
@@ -23,15 +24,16 @@ public class TestItem extends Item {
         /*if (!world.isRemote) {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(world, itemRand, pos.up());
-        }
+        }*/
         if (!world.isRemote) {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(world, itemRand, pos.up());
-        }*/
+        }
+        /*
         if (!world.isRemote) {
             WorldGenWightFortress fortress = new WorldGenWightFortress();
     		fortress.generate(world, itemRand, pos.up());
-    	}
+    	}*/
 
         return EnumActionResult.SUCCESS;
     }

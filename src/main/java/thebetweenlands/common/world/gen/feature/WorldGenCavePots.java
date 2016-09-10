@@ -11,7 +11,7 @@ import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.common.world.gen.feature.loot.LootTables;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class WorldGenCavePots extends WorldGenerator {
 	public WorldGenCavePots() {
@@ -47,7 +47,7 @@ public class WorldGenCavePots extends WorldGenerator {
 							if(surfaceBlock.getBlock() == BlockRegistry.BETWEENSTONE || surfaceBlock == BlockRegistry.PITSTONE) {
 								this.setBlockAndNotifyAdequately(world, offsetPos, this.getRandomPot(random));
 								TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(offsetPos);
-								lootPot.setLootTable(LootTables.COMMON_POT_LOOT, random.nextLong());
+								lootPot.setLootTable(LootTableRegistry.COMMON_POT_LOOT, random.nextLong());
 							}
 						}
 					}

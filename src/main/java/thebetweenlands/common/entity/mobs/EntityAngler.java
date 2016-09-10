@@ -13,16 +13,21 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootTableList;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
+
+import javax.annotation.Nullable;
 
 public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAngler.class, DataSerializers.BOOLEAN);
@@ -70,18 +75,11 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		return 0.4F;
 	}
 
+
+	@Nullable
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		int amount = rand.nextInt(3) + rand.nextInt(1 + looting);
-		int count;
-		if (recentlyHit) {
-			for (count = 0; count < amount; ++count) {
-				if (rand.nextBoolean())
-					entityDropItem(EnumItemMisc.ANGLER_TOOTH.create(3), 0.0F);
-				else
-					entityDropItem(new ItemStack(ItemRegistry.ANGLER_MEAT_RAW, 1, 0), 0.0F);
-			}
-		}
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.ANGLER;
 	}
 
 	@Override

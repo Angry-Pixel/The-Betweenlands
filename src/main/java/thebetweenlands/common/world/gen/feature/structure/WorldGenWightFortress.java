@@ -21,7 +21,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.common.world.gen.feature.loot.LootTables;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class WorldGenWightFortress extends WorldGenerator {
 
@@ -1008,7 +1008,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		world.setBlockState(pos, getWeedWoodChestRotations(chest, blockMeta), 2);
 		TileEntityChestBetweenlands lootChest = (TileEntityChestBetweenlands) world.getTileEntity(pos);
 		if (lootChest != null) {
-			lootChest.setLootTable(LootTables.DUNGEON_CHEST_LOOT, rand.nextLong());
+			lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
 		}
 	}
 
@@ -1019,7 +1019,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			world.setBlockState(pos, getLootPotRotations(blockType, blockMeta), 2);
 			TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
 			if (lootPot != null) {
-				lootPot.setLootTable(LootTables.DUNGEON_CHEST_LOOT, rand.nextLong());
+				lootPot.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);
 				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 			}
