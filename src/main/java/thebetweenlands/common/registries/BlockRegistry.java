@@ -38,6 +38,7 @@ import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
+import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.plant.BlockAlgae;
@@ -350,6 +351,7 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_PLANK_BUTTON = new BlockButtonBetweenlands(true);
 	public static final Block BETWEENSTONE_BUTTON = new BlockButtonBetweenlands(false);
 	public static final Block WEEDWOOD_LADDER = new BlockLadderBetweenlands();
+	public static final Block WEEDWOOD_LEVER = new BlockLeverBetweenlands();
 
 	//Plants
 	public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
