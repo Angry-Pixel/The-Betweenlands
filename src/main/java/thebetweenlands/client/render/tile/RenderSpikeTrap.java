@@ -9,9 +9,9 @@ import thebetweenlands.client.render.model.tile.ModelSpikeBlock;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 
 @SideOnly(Side.CLIENT)
-public class TileEntitySpikeTrapRenderer extends TileEntitySpecialRenderer<TileEntitySpikeTrap> {
-	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spikeBlockActive.png");
-	private static final ResourceLocation INACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spikeBlockInactive.png");
+public class RenderSpikeTrap extends TileEntitySpecialRenderer<TileEntitySpikeTrap> {
+	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spike_block_active.png");
+	private static final ResourceLocation INACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spike_block_inactive.png");
 	private final ModelSpikeBlock model = new ModelSpikeBlock();
 
 	@Override

@@ -63,9 +63,9 @@ import thebetweenlands.client.render.tile.RenderLootPot;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
-import thebetweenlands.client.render.tile.TileEntityItemCageRenderer;
-import thebetweenlands.client.render.tile.TileEntityPossessedBlockRenderer;
-import thebetweenlands.client.render.tile.TileEntitySpikeTrapRenderer;
+import thebetweenlands.client.render.tile.RenderItemCage;
+import thebetweenlands.client.render.tile.RenderPossessedBlock;
+import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
@@ -309,9 +309,9 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot.class, new RenderLootPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMobSpawnerBetweenlands.class, new RenderSpawnerBetweenlands());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlands.class, new RenderChestBetweenlands());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new TileEntitySpikeTrapRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new TileEntityPossessedBlockRenderer());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new TileEntityItemCageRenderer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new RenderSpikeTrap());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new RenderPossessedBlock());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new RenderItemCage());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);

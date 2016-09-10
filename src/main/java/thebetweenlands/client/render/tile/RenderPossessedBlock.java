@@ -12,8 +12,8 @@ import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 
 @SideOnly(Side.CLIENT)
-public class TileEntityPossessedBlockRenderer extends TileEntitySpecialRenderer<TileEntityPossessedBlock> {
-	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/possessedBlock.png");
+public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPossessedBlock> {
+	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/possessed_block.png");
 	private final ModelPossessedBlock model = new ModelPossessedBlock();
 
 	@SuppressWarnings("incomplete-switch")

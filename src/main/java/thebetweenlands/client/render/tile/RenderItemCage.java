@@ -14,18 +14,17 @@ import thebetweenlands.common.tile.TileEntityItemCage;
 
 
 @SideOnly(Side.CLIENT)
-public class TileEntityItemCageRenderer extends TileEntitySpecialRenderer<TileEntityItemCage> {
+public class RenderItemCage extends TileEntitySpecialRenderer<TileEntityItemCage> {
 
-	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/itemCagePower.png");
-	private static final ResourceLocation CAGE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/itemCage.png");
+	private static final ResourceLocation FORCE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_cage_power.png");
+	private static final ResourceLocation CAGE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/item_cage.png");
 	private final ModelItemCage model = new ModelItemCage();
 
 	@Override
 	public void renderTileEntityAt(TileEntityItemCage tile, double x, double y, double z, float partialTicks, int destroyStage) {
-		int type = tile.type;
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.addDynLight(new LightSource(tile.getPos().getX() + 0.5D, tile.getPos().getY() + 0.5D, tile.getPos().getZ() + 0.5D, 
 					2f,
 					5.0f / 255.0f * 13.0F, 
