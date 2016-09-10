@@ -3,9 +3,23 @@ package thebetweenlands.common.registries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 
 public class EntityRegistry {
@@ -53,5 +67,6 @@ public class EntityRegistry {
         registerEntity(EntityFrog.class, "Frog", 0x559653, 0xC72C2C, 64, 20, true);
         registerEntity(EntitySwordEnergy.class, "SwordEnergy");
         registerEntity(EntityShockwaveSwordItem.class, "ShockwaveSwordItem");
+        registerEntity(EntityShockwaveBlock.class, "ShockwaveBlock");
     }
 }

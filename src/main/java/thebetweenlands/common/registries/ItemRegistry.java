@@ -55,6 +55,7 @@ import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
+import thebetweenlands.common.item.tools.ItemShockwaveSword;
 import thebetweenlands.common.item.tools.ItemSickle;
 import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.lib.ModInfo;
@@ -159,6 +160,7 @@ public class ItemRegistry {
 	public static final Item MANUAL_HL = new ItemManualHL();
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 	public static final Item SICKLE = new ItemSickle();
+	public static final Item SHOCKWAVE_SWORD = new ItemShockwaveSword(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemBLBucketEmpty() {
 		@Override
 		protected UniversalBucket getFilledBucket() {

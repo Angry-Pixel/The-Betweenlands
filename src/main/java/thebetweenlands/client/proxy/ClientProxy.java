@@ -51,6 +51,7 @@ import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderShockwaveBlock;
 import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
 import thebetweenlands.client.render.entity.RenderSporeling;
@@ -71,6 +72,7 @@ import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -308,6 +310,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, RenderTermite::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, RenderLeech::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySwordEnergy.class, RenderSwordEnergy::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, RenderShockwaveBlock::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, (RenderManager manager) -> {
 			return new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem());
 		});
