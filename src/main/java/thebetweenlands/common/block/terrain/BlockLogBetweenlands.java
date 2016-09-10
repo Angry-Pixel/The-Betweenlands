@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.properties.IProperty;

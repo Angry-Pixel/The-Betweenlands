@@ -7,7 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.common.block.BlockRubberLog;
+import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WorldGenRubberTree extends WorldGenerator {

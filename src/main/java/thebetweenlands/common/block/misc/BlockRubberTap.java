@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.misc;
 
 import javax.annotation.Nullable;
 
@@ -23,6 +23,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 

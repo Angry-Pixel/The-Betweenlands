@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.farming;
 
 import java.util.List;
 
@@ -24,6 +24,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;

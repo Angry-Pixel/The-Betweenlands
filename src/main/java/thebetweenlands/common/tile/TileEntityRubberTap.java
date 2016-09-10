@@ -14,7 +14,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import thebetweenlands.common.block.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.registries.FluidRegistry;
 
 public class TileEntityRubberTap extends TileEntity implements IFluidHandler, ITickable {

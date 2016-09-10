@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.plant;
 
 import java.util.List;
 import java.util.Random;

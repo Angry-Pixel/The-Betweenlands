@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.terrain;
 
 import java.util.ArrayList;
 import java.util.List;

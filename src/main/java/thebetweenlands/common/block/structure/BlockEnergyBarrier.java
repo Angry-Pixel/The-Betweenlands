@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
