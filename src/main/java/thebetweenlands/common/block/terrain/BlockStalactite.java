@@ -10,6 +10,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
@@ -27,6 +28,7 @@ public class BlockStalactite extends BasicBlock {
 		super(Material.ROCK);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

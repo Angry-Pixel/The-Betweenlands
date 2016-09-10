@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import com.google.common.base.CaseFormat;
 
 import net.minecraft.block.Block;
@@ -22,7 +25,6 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticles;
-import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.container.BlockBLDualFurnace;
 import thebetweenlands.common.block.container.BlockBLFurnace;
@@ -70,6 +72,7 @@ import thebetweenlands.common.block.plant.BlockSwampReedUnderwater;
 import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
+import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
@@ -117,6 +120,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.AdvancedStateMap;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class BlockRegistry {
 	private BlockRegistry() { }
@@ -456,10 +460,26 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_CHEST = new BlockChestBetweenlands(BlockChestBetweenlands.WEEDWOOD_CHEST);
 	public static final Block WEEDWOOD_RUBBER_TAP = new BlockRubberTap(WEEDWOOD_PLANKS.getDefaultState(), 540);
 	public static final Block SYRMORITE_RUBBER_TAP = new BlockRubberTap(SYRMORITE_BLOCK.getDefaultState(), 260);
-
 	public static final Block FALLEN_LEAVES = new BlockFallenLeaves("fallenLeaves");
-
 	public static final Block ENERGY_BARRIER = new BlockEnergyBarrier();
+	public static final Block WEEDWOOD_DOOR = new BlockDoorBetweenlands(Material.WOOD) {
+		@Override
+		public Item getDoorItem() {
+			return ItemRegistry.WEEDWOOD_DOOR_ITEM;
+		}
+	}.setSoundType(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
+	public static final Block RUBBER_TREE_PLANK_DOOR = new BlockDoorBetweenlands(Material.WOOD) {
+		@Override
+		public Item getDoorItem() {
+			return ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM;
+		}
+	}.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+	public static final Block SYRMORITE_DOOR = new BlockDoorBetweenlands(Material.IRON) {
+		@Override
+		public Item getDoorItem() {
+			return ItemRegistry.SYRMORITE_DOOR_ITEM;
+		}
+	}.setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
@@ -472,9 +492,9 @@ public class BlockRegistry {
 					String name = field.getName().toLowerCase(Locale.ENGLISH);
 					registerBlock(name, block);
 
-					if (FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+					if (ConfigHandler.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 						if (block.getCreativeTabToDisplayOn() == null)
-							block.setCreativeTab(BLCreativeTabs.BLOCKS);
+							System.out.println(String.format("Warning: Block %s doesn't have a creative tab", block.getUnlocalizedName()));
 					}
 				}
 			}
@@ -490,28 +510,38 @@ public class BlockRegistry {
 		GameRegistry.register(block.setRegistryName(ModInfo.ID, name).setUnlocalizedName(unlocalized));
 
 		ItemBlock item = getBlockItem(block);
-
-		//Allows ICustomItemBlock to return null if no item block is required
-		if (item != null)
-			GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(unlocalized));
+		GameRegistry.register((ItemBlock) item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(unlocalized));
 	}
 
 	public static ItemBlock getBlockItem(Block block) {
-		ItemBlock item;
+		ItemBlock item = null;
 		if (block instanceof ICustomItemBlock)
 			item = ((ICustomItemBlock) block).getItemBlock();
-		else
+		if(item == null)
 			item = new ItemBlock(block);
 		return item;
 	}
 
 	public interface ICustomItemBlock {
 		/**
-		 * Returns a custom item for this block
+		 * Returns a custom item for this block.
 		 *
 		 * @return
 		 */
-		ItemBlock getItemBlock();
+		@Nonnull
+		default ItemBlock getItemBlock() {
+			return (ItemBlock) Item.getItemFromBlock((Block)this);
+		}
+
+		/**
+		 * Returns which item this block should be rendered as
+		 * @return
+		 */
+		@SideOnly(Side.CLIENT)
+		@Nullable
+		default Item getRenderedItem() {
+			return null;
+		}
 	}
 
 	public interface ISubtypeBlock {

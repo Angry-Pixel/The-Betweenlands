@@ -94,6 +94,7 @@ import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -184,15 +185,22 @@ public class ClientProxy extends CommonProxy {
 				((IStateMappedBlock)block).setStateMapper(builder);
 				ModelLoader.setCustomStateMapper(block, builder.build());
 			}
+			if(block instanceof ICustomItemBlock) {
+				ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
+				if(customItemBlock.getRenderedItem() != null) {
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(customItemBlock.getRenderedItem().getRegistryName(), "inventory"));
+					continue;
+				}
+			}
 			ResourceLocation name = block.getRegistryName();
 			if(block instanceof ISubtypeBlock) {
 				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
 				for(int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
 					int meta = subtypeBlock.getSubtypeMeta(i);
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
 				}
 			} else {
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name.getResourcePath(), "inventory"));
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(name, "inventory"));
 			}
 		}
 	}

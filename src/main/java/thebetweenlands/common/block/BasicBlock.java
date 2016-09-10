@@ -15,6 +15,7 @@ public class BasicBlock extends Block {
 
     public BasicBlock(Material material) {
         super(material);
+        this.setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
     public BasicBlock setSoundType2(SoundType sound) {

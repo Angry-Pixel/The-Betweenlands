@@ -26,6 +26,7 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
@@ -49,6 +50,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

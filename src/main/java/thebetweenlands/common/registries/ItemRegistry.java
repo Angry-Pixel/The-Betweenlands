@@ -8,12 +8,15 @@ import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 
+import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.BLMaterialRegistry;
@@ -38,6 +41,7 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemBLRecord;
+import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampReed;
@@ -54,10 +58,11 @@ import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.item.tools.ItemSickle;
 import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemRegistry {
 	private ItemRegistry() { }
-	
+
 	private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
 	private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 	//generic
@@ -168,6 +173,24 @@ public class ItemRegistry {
 		}
 	};
 	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET_EMPTY);
+	public static final Item WEEDWOOD_DOOR_ITEM = new ItemDoorBetweenlands() {
+		@Override
+		public Block getDoorBlock() {
+			return BlockRegistry.WEEDWOOD_DOOR;
+		}
+	};
+	public static final Item SYRMORITE_DOOR_ITEM = new ItemDoorBetweenlands() {
+		@Override
+		public Block getDoorBlock() {
+			return BlockRegistry.SYRMORITE_DOOR;
+		}
+	};
+	public static final Item RUBBER_TREE_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+		@Override
+		public Block getDoorBlock() {
+			return BlockRegistry.RUBBER_TREE_PLANK_DOOR;
+		}
+	};
 
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
@@ -195,6 +218,11 @@ public class ItemRegistry {
 				if (field.get(null) instanceof Item) {
 					Item item = (Item) field.get(null);
 					registerItem(item, field.getName());
+
+					if (ConfigHandler.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+						if (item.getCreativeTab() == null)
+							System.out.println(String.format("Warning: Item %s doesn't have a creative tab", item.getUnlocalizedName()));
+					}
 				}
 			}
 		} catch (Exception ex) {

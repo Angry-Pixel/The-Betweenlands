@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
@@ -20,6 +21,7 @@ public class BlockSilt extends BasicBlock {
 		setHardness(0.5F);
 		setSoundType(SoundType.SAND);
 		setHarvestLevel("shovel", 0);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

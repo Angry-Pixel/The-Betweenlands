@@ -12,6 +12,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -22,6 +23,7 @@ public class BlockGenericCollapsing extends BlockFalling {
     public BlockGenericCollapsing(Material material) {
         super(material);
         fallInstantly = false;
+        this.setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
     public BlockGenericCollapsing setSoundType2(SoundType sound) {

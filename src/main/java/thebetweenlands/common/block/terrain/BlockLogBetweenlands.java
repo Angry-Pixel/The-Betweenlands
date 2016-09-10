@@ -12,6 +12,7 @@ public class BlockLogBetweenlands extends BlockLog {
 		setHarvestLevel("axe", 0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
 		setDefaultState(blockState.getBaseState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

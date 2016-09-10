@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -21,6 +22,7 @@ public class BlockDeadGrass extends BasicBlock implements IGrowable {
 		this.setSoundType(SoundType.PLANT);
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

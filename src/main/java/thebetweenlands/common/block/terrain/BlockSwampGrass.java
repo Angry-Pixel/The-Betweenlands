@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -29,6 +30,7 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 		this.setSoundType(SoundType.PLANT);
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

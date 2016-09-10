@@ -20,6 +20,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -33,6 +34,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 		this.setTickRandomly(true);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

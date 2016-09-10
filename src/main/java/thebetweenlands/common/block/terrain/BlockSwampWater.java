@@ -29,7 +29,6 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 
 	public BlockSwampWater(Fluid fluid, Material material) {
 		super(fluid, material);
-		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	public BlockSwampWater setUnderwaterBlock(boolean underwaterBlock) {
