@@ -26,7 +26,6 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 	public void renderShockwaveBlock(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x, (float) y, (float) z);
-		GL11.glTranslatef(0.0F, 0.5F, 0.0F);
 		GL11.glRotated(-90, 0, 1, 0);
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(entity.blockID.getStateFromMeta(entity.blockMeta), 1.0F);

@@ -56,10 +56,10 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		}
 	}
 
-	private Entity getEntityByUUID(UUID p_152378_1_) {
+	private Entity getEntityByUUID(UUID id) {
 		for (int i = 0; i < worldObj.loadedEntityList.size(); ++i) {
 			Entity entity = (Entity)worldObj.loadedEntityList.get(i);
-			if (p_152378_1_.equals(entity.getUniqueID())) {
+			if (id.equals(entity.getUniqueID())) {
 				return entity;
 			}
 		}
@@ -85,7 +85,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			}
 
 			if (ticksExisted > jumpDelay) {
-				motionY -= 0.15D;
+				motionY -= 0.25D;
 
 				if (posY <= originY || onGround) {
 					worldObj.setBlockState(new BlockPos(originX, originY, originZ), blockID.getStateFromMeta(blockMeta), 3);
