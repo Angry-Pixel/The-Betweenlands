@@ -3,6 +3,8 @@ package thebetweenlands.common.entity;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nullable;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -104,7 +106,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			} else {
 				damageSource = DamageSource.generic;
 			}
-			List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox());
+			List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D));
 			for(EntityLivingBase entity : entities) {
 				if (entity != null) {
 					if (entity instanceof EntityLivingBase) {
@@ -143,13 +145,25 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBox(Entity entity) {
-		return null;
+	@Nullable
+	public AxisAlignedBB getCollisionBox(Entity entityIn) {
+		return entityIn.getEntityBoundingBox();
+	}
+
+	@Override
+	@Nullable
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return this.getEntityBoundingBox();
 	}
 
 	@Override
 	public boolean canBePushed() {
 		return false;
+	}
+
+	@Override
+	public boolean canBeCollidedWith() {
+		return !this.isDead;
 	}
 
 	@Override

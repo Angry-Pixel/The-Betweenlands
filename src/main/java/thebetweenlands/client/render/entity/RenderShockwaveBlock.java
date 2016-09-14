@@ -38,7 +38,7 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 
 	public void renderShockwaveBlock(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {
 		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x, (float) y, (float) z);
+		GL11.glTranslatef((float) x - 0.5F, (float) y, (float) z - 0.5F);
 		//Lighting is already handled in the block renderer
 		GL11.glDisable(GL11.GL_LIGHTING);
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
