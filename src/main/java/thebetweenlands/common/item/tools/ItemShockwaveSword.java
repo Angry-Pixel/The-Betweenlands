@@ -103,7 +103,7 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(new BlockPos(originX, originY, originZ)).getBlock().getMetaFromState(world.getBlockState(new BlockPos(originX, originY, originZ))));
 
 								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-								shockwaveBlock.setOrigin(originX, originY, originZ, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), player.posX, player.posZ, player);
+								shockwaveBlock.setOrigin(new BlockPos(originX, originY, originZ), MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), player.posX, player.posZ, player);
 								shockwaveBlock.setLocationAndAngles(originX, originY, originZ, 0.0F, 0.0F);
 								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 								world.setBlockToAir(new BlockPos(originX, originY, originZ));

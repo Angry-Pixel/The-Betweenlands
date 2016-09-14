@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -25,7 +26,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	public Block blockID;
 	public int blockMeta;
-	public int originX, originY, originZ, jumpDelay;
+	public int jumpDelay;
+	public BlockPos origin;
 	private double waveStartX, waveStartZ;
 
 	public EntityShockwaveBlock(World world) {
@@ -68,9 +70,9 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public void onUpdate() {
-		if(!worldObj.isRemote && (isDead || getDistance(originX + 0.5D, originY, originZ + 0.5D) > 2)) {
-			if(worldObj.isAirBlock(new BlockPos(originX, originY, originZ))) {
-				worldObj.setBlockState(new BlockPos(originX, originY, originZ), blockID.getStateFromMeta(blockMeta), 3);
+		if(!worldObj.isRemote && (isDead || getDistance(origin.getX() + 0.5D, origin.getY(), origin.getZ() + 0.5D) > 2)) {
+			if(worldObj.isAirBlock(new BlockPos(origin.getX(), origin.getY(), origin.getZ()))) {
+				worldObj.setBlockState(new BlockPos(origin.getX(), origin.getY(), origin.getZ()), blockID.getStateFromMeta(blockMeta), 3);
 			}
 		}
 
@@ -87,8 +89,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			if (ticksExisted > jumpDelay) {
 				motionY -= 0.25D;
 
-				if (posY <= originY || onGround) {
-					worldObj.setBlockState(new BlockPos(originX, originY, originZ), blockID.getStateFromMeta(blockMeta), 3);
+				if (posY <= origin.getY() || onGround) {
+					worldObj.setBlockState(new BlockPos(origin.getX(), origin.getY(), origin.getZ()), blockID.getStateFromMeta(blockMeta), 3);
 					setDead();
 				}
 			}
@@ -124,8 +126,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public void setDead() {
-		if(worldObj.isAirBlock(new BlockPos(originX, originY, originZ))) {
-			worldObj.setBlockState(new BlockPos(originX, originY, originZ), blockID.getStateFromMeta(blockMeta), 3);
+		if(worldObj.isAirBlock(new BlockPos(origin.getX(), origin.getY(), origin.getZ()))) {
+			worldObj.setBlockState(new BlockPos(origin.getX(), origin.getY(), origin.getZ()), blockID.getStateFromMeta(blockMeta), 3);
 		}
 		super.setDead();
 	}
@@ -152,21 +154,23 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public void writeSpawnData(ByteBuf data) {
-		data.writeInt(Block.getIdFromBlock(blockID));
-		data.writeInt(blockMeta);
+		PacketBuffer buffer = new PacketBuffer(data);
+		buffer.writeInt(Block.getIdFromBlock(blockID));
+		buffer.writeInt(blockMeta);
+		buffer.writeBlockPos(origin);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
-		blockID = Block.getBlockById(data.readInt());
-		blockMeta = data.readInt();
+		PacketBuffer buffer = new PacketBuffer(data);
+		blockID = Block.getBlockById(buffer.readInt());
+		blockMeta = buffer.readInt();
+		origin = buffer.readBlockPos();
 	}
 
-	public void setOrigin(int x, int y, int z, int delay, double waveStartX, double waveStartZ, Entity source) {
-		originX = x;
-		originY = y;
-		originZ = z;
-		jumpDelay = delay;
+	public void setOrigin(BlockPos pos, int delay, double waveStartX, double waveStartZ, Entity source) {
+		this.origin = pos;
+		this.jumpDelay = delay;
 		this.waveStartX = waveStartX;
 		this.waveStartZ = waveStartZ;
 		setOwner(source.getUniqueID().toString());
@@ -180,10 +184,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound data) {
 		blockID = Block.getBlockById(data.getInteger("blockID"));
-		blockMeta = data.getInteger("blockMeta");	
-		originX = data.getInteger("originX");
-		originY = data.getInteger("originY");
-		originZ = data.getInteger("originZ");
+		blockMeta = data.getInteger("blockMeta");
+		origin = new BlockPos(data.getInteger("originX"), data.getInteger("originY"), data.getInteger("originZ"));
 		waveStartX = data.getDouble("waveStartX");
 		waveStartZ = data.getDouble("waveStartZ");
 		jumpDelay = data.getInteger("jumpDelay");
@@ -194,9 +196,9 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	protected void writeEntityToNBT(NBTTagCompound data) {
 		data.setInteger("blockID", Block.getIdFromBlock(blockID));
 		data.setInteger("blockMeta", blockMeta);
-		data.setInteger("originX", originX);
-		data.setInteger("originY", originY);
-		data.setInteger("originZ", originZ);
+		data.setInteger("originX", origin.getX());
+		data.setInteger("originY", origin.getY());
+		data.setInteger("originZ", origin.getZ());
 		data.setDouble("waveStartX", waveStartX);
 		data.setDouble("waveStartZ", waveStartZ);
 		data.setInteger("jumpDelay", jumpDelay);
