@@ -13,6 +13,7 @@ import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
+import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
@@ -35,6 +36,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntitySpikeTrap.class, "spike_trap");
 		registerTileEntity(TileEntityPossessedBlock.class, "possessed_block");
 		registerTileEntity(TileEntityItemCage.class, "item_cage");
+		registerTileEntity(TileEntityWeedwoodSign.class, "weedwood_sign");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

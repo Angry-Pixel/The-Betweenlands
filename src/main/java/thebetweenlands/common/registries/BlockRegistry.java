@@ -85,9 +85,11 @@ import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
+import thebetweenlands.common.block.structure.BlockStandingWeedwoodSign;
 import thebetweenlands.common.block.structure.BlockTemplePillar;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
+import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
@@ -480,7 +482,11 @@ public class BlockRegistry {
 			return ItemRegistry.SYRMORITE_DOOR_ITEM;
 		}
 	}.setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
-
+	public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
+	public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
+	
+	
+	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
 	public static void preInit() {

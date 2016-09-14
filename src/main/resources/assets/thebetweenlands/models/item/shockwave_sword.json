@@ -1,0 +1,92 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/shockwave_sword_corrodible"
+  },
+  "overrides": [
+      {
+          "predicate": {
+              "charging": 0,
+              "corrosion": 0
+          },
+          "model": "thebetweenlands:item/shockwave_sword_corrosion_0"
+      },
+      {
+          "predicate": {
+              "charging": 0,
+              "corrosion": 1
+          },
+          "model": "thebetweenlands:item/shockwave_sword_corrosion_1"
+      },
+      {
+          "predicate": {
+              "charging": 0,
+              "corrosion": 2
+          },
+          "model": "thebetweenlands:item/shockwave_sword_corrosion_2"
+      },
+      {
+          "predicate": {
+              "charging": 0,
+              "corrosion": 3
+          },
+          "model": "thebetweenlands:item/shockwave_sword_corrosion_3"
+      },
+      {
+          "predicate": {
+              "charging": 0,
+              "corrosion": 4
+          },
+          "model": "thebetweenlands:item/shockwave_sword_corrosion_4"
+      },
+      {
+          "predicate": {
+              "charging": 0,
+              "corrosion": 5
+          },
+          "model": "thebetweenlands:item/shockwave_sword_corrosion_5"
+      },
+      {
+          "predicate": {
+              "charging": 1,
+              "corrosion": 0
+          },
+          "model": "thebetweenlands:item/shockwave_sword_charging_corrosion_0"
+      },
+      {
+          "predicate": {
+              "charging": 1,
+              "corrosion": 1
+          },
+          "model": "thebetweenlands:item/shockwave_sword_charging_corrosion_1"
+      },
+      {
+          "predicate": {
+              "charging": 1,
+              "corrosion": 2
+          },
+          "model": "thebetweenlands:item/shockwave_sword_charging_corrosion_2"
+      },
+      {
+          "predicate": {
+              "charging": 1,
+              "corrosion": 3
+          },
+          "model": "thebetweenlands:item/shockwave_sword_charging_corrosion_3"
+      },
+      {
+          "predicate": {
+              "charging": 1,
+              "corrosion": 4
+          },
+          "model": "thebetweenlands:item/shockwave_sword_charging_corrosion_4"
+      },
+      {
+          "predicate": {
+              "charging": 1,
+              "corrosion": 5
+          },
+          "model": "thebetweenlands:item/shockwave_sword_charging_corrosion_5"
+      }
+  ]
+}

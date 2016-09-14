@@ -46,6 +46,7 @@ import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampReed;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
+import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.ItemBLAxe;
@@ -193,6 +194,7 @@ public class ItemRegistry {
 			return BlockRegistry.RUBBER_TREE_PLANK_DOOR;
 		}
 	};
+	public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
 
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);

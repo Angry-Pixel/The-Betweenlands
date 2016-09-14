@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/shockwave_sword_charging_corrodible",
+    "layer1": "thebetweenlands:items/shockwave_sword_charging_corrosion_0"
+  }
+}

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
@@ -44,7 +45,6 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	private static int[] corrosionPixels;
 	private static int corrosionWidth;
-	private static int corrosionHeight;
 
 	private AnimationMetadataSection parentAnimationMetadata;
 	private final long seed;
@@ -119,7 +119,6 @@ public class TextureCorrosion extends TextureAtlasSprite {
 			corrosionPixels = new int[corrosionImg.getWidth() * corrosionImg.getHeight()];
 			corrosionImg.getRGB(0, 0, corrosionImg.getWidth(), corrosionImg.getHeight(), corrosionPixels, 0, corrosionImg.getWidth());
 			corrosionWidth = corrosionImg.getWidth();
-			corrosionHeight = corrosionImg.getHeight();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -222,11 +221,11 @@ public class TextureCorrosion extends TextureAtlasSprite {
 			this.height = width;
 
 			if (spriteMetadata.getFrameCount() > 0) {
-				Iterator frameIndexIterator = spriteMetadata.getFrameIndexSet().iterator();
+				Iterator<Integer> frameIndexIterator = spriteMetadata.getFrameIndexSet().iterator();
 
 				int frameIndex = 0;
 				while (frameIndexIterator.hasNext()) {
-					frameIndex = ((Integer) frameIndexIterator.next()).intValue();
+					frameIndex = frameIndexIterator.next().intValue();
 
 					if (frameIndex >= frameCount) {
 						throw new RuntimeException("invalid frameindex " + frameIndex);
@@ -238,7 +237,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 				this.parentAnimationMetadata = spriteMetadata;
 			} else {
-				ArrayList animationFrames = Lists.newArrayList();
+				List<AnimationFrame> animationFrames = Lists.newArrayList();
 
 				for (int frameIndex = 0; frameIndex < frameCount; frameIndex++) {
 					framesTextureData.add(getFrameTextureData(mipmappedFrames, frameWidth, frameHeight, frameIndex));

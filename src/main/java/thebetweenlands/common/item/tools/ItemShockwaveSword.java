@@ -2,17 +2,21 @@ package thebetweenlands.common.item.tools;
 
 import java.util.List;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item.ToolMaterial;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -21,15 +25,24 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
+import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.util.NBTHelper;
 
 
-public class ItemShockwaveSword extends ItemSword {
-
+public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 	public ItemShockwaveSword(ToolMaterial material) {
 		super(material);
+		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
+			@Override
+			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+				return stack.getTagCompound() != null && stack.getTagCompound().getInteger("cooldown") < 60 ? 1 : 0;
+			}
+		});
+		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -37,41 +50,7 @@ public class ItemShockwaveSword extends ItemSword {
 		super.addInformation(stack, player, list, flag);
 		list.add("Shift, right-click on the ground to create a shockwave");
 	}
-/*
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister reg) {
-		super.registerIcons(reg);
-		this.iconCharging = reg.registerIcon("thebetweenlands:shockwaveSwordDepleted");
-	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconIndex(ItemStack stack) {
-		if (!stack.hasTagCompound())
-			stack.setTagCompound(new NBTTagCompound());
-		if (!stack.getTagCompound().hasKey("uses"))
-			stack.getTagCompound().setInteger("uses", 0);
-		if(stack.getTagCompound().getInteger("uses") == 3)
-			return this.iconsChargingCorroded[CorrodibleItemHelper.getCorrosionStage(stack)];
-		return super.getIconIndex(stack);
-	}
-
-	@Override
-	public IIcon[] getIcons() {
-		IIcon[] defaultIcons = super.getIcons();
-		IIcon[] allIcons = new IIcon[defaultIcons.length + 1];
-		System.arraycopy(defaultIcons, 0, allIcons, 0, defaultIcons.length);
-		allIcons[allIcons.length - 1] = this.iconCharging;
-		return allIcons;
-	}
-
-	@Override
-	public void setCorrosionIcons(IIcon[][] corrosionIcons) {
-		super.setCorrosionIcons(corrosionIcons);
-		this.iconsChargingCorroded = corrosionIcons[corrosionIcons.length - 1];
-	}
-*/
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
 		if (!stack.hasTagCompound())
@@ -96,16 +75,13 @@ public class ItemShockwaveSword extends ItemSword {
 		return 1000;
 	}
 
-	//@Override
-	//public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {	
-	if (!stack.hasTagCompound()) {
+		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 			return EnumActionResult.FAIL;
 		}
-		if (facing.getIndex() == 1 && player.isSneaking()) {
-
+		if (facing == EnumFacing.UP) {
 			if (!world.isRemote) {
 				if (stack.getTagCompound().getInteger("uses") < 3) {
 					stack.damageItem(2, player);
@@ -146,5 +122,14 @@ public class ItemShockwaveSword extends ItemSword {
 			}
 		}
 		return EnumActionResult.FAIL;
+	}
+
+	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("cooldown");
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		boolean wasCharging = oldStack.getTagCompound() != null && oldStack.getTagCompound().getInteger("cooldown") < 60;
+		boolean isCharging = newStack.getTagCompound() != null && newStack.getTagCompound().getInteger("cooldown") < 60;
+		return (super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !isCharging || isCharging != wasCharging) || !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
 	}
 }
