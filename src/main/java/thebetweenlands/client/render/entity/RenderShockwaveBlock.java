@@ -31,7 +31,8 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 
 	@Override
 	public void doRender(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {
-		renderShockwaveBlock(entity, x, y, z, yaw, tick);
+		if(entity.posY != entity.origin.getY())
+			renderShockwaveBlock(entity, x, y, z, yaw, tick);
 	}
 
 	public void renderShockwaveBlock(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {

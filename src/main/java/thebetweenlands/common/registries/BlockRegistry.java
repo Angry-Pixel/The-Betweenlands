@@ -43,6 +43,7 @@ import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.plant.BlockAlgae;
 import thebetweenlands.common.block.plant.BlockBladderwortFlower;
 import thebetweenlands.common.block.plant.BlockBladderwortStalk;
@@ -484,7 +485,7 @@ public class BlockRegistry {
 	}.setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
 	public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
 	public static final Block WALL_WEEDWOOD_SIGN = new BlockWallWeedwoodSign();
-	
+	public static final Block SULFUR_TORCH = new BlockSulfurTorch();
 	
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();

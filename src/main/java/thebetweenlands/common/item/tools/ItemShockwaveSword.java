@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
@@ -88,22 +89,29 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 					world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.0F, 2.0F);
 					double direction = Math.toRadians(player.rotationYaw);
 					Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
-					for (int distance = 1; distance < 16; distance++) {
-						for(int distance2 = -(distance-2); distance2 < (distance-2); distance2++) {
-							int originX = MathHelper.floor_double(player.posX - Math.sin(direction) * distance - diag.xCoord * distance2 * 0.25D);
+					List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
+					for (int distance = -1; distance <= 16; distance++) {
+						for(int distance2 = -distance; distance2 <= distance; distance2++) {
+							int originX = MathHelper.floor_double(pos.getX() + 0.5D - Math.sin(direction) * distance - diag.xCoord * distance2 * 0.25D);
 							int originY = pos.getY();
-							int originZ = MathHelper.floor_double(player.posZ + Math.cos(direction) * distance + diag.zCoord * distance2 * 0.25D);
+							int originZ = MathHelper.floor_double(pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.zCoord * distance2 * 0.25D);
+							BlockPos origin = new BlockPos(originX, originY, originZ);
+
+							if(spawnedPos.contains(origin))
+								continue;
+
+							spawnedPos.add(origin);
 
 							IBlockState block = world.getBlockState(new BlockPos(originX, originY, originZ));
 
 							if (block != null && block.isNormalCube() && !block.getBlock().hasTileEntity(block) 
-									&& block.getBlockHardness(world, new BlockPos(originX, originY, originZ)) <= 5.0F && block.getBlockHardness(world, new BlockPos(originX, originY, originZ)) >= 0.0F
-									&& (world.isAirBlock(new BlockPos(originX, originY+1, originZ)) || world.getBlockState(new BlockPos(originX, originY+1, originZ)).getBlock().isReplaceable(world, new BlockPos(originX, originY+1, originZ)))) {
-								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlockState(new BlockPos(originX, originY, originZ)).getBlock()));
-								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(new BlockPos(originX, originY, originZ)).getBlock().getMetaFromState(world.getBlockState(new BlockPos(originX, originY, originZ))));
+									&& block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F
+									&& (world.isAirBlock(origin.up()) || world.getBlockState(origin.up()).getBlock().isReplaceable(world, origin.up()))) {
+								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlockState(origin).getBlock()));
+								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
 
 								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-								shockwaveBlock.setOrigin(new BlockPos(originX, originY, originZ), MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), player.posX, player.posZ, player);
+								shockwaveBlock.setOrigin(origin, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), origin.getX() + 0.5D, origin.getZ() + 0.5D, player);
 								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
 								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 								world.spawnEntityInWorld(shockwaveBlock);
