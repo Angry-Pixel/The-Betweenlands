@@ -176,6 +176,8 @@ public class LocationStorage extends ChunkStorage {
 
 	public static LocationAmbience getAmbience(Entity entity) {
 		List<LocationStorage> locations = LocationStorage.getLocations(entity);
+		if(locations.isEmpty())
+			return null;
 		Collections.sort(locations, LAYER_SORTER);
 		LocationStorage highestLocation = null;
 		for(int i = 0; i < locations.size(); i++) {

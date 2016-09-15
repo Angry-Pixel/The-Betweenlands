@@ -36,7 +36,7 @@ public class SoundRegistry {
     // Ambience
     public static final BLSoundEvent AMBIENT_BLOOD_SKY = reg("ambient_blood_sky");
     public static final BLSoundEvent AMBIENT_CAVE = reg("ambient_cave");
-    public static final BLSoundEvent AMBIENT_SIGHT_FORTRESS = reg("ambient_wight_fortress");
+    public static final BLSoundEvent AMBIENT_WIGHT_FORTRESS = reg("ambient_wight_fortress");
     public static final BLSoundEvent AMBIENT_SPOOPY = reg("ambient_spoopy");
     public static final BLSoundEvent AMBIENT_SWAMP = reg("ambient_swamp");
     public static final BLSoundEvent AMBIENT_WATER = reg("ambient_water");

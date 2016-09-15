@@ -11,6 +11,7 @@ public class Registries {
 		BiomeRegistry.preInit();
 		SoundRegistry.preInit();
 		ModelRegistry.preInit();
+		AmbienceRegistry.preInit();
 	}
 
 	public void init() {
