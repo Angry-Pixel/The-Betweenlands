@@ -314,8 +314,8 @@ public abstract class PostProcessingEffect {
 					IOUtils.copy(Minecraft.getMinecraft().getResourceManager().getResource(shaderLocations[i]).getInputStream(), strBuf, "UTF-8");
 					shaders[i] = strBuf.toString();
 				}
-				vertexShaderID = this.createShader(shaders[0], ARBVertexShader.GL_VERTEX_SHADER_ARB);
-				fragmentShaderID = this.createShader(shaders[1], ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
+				vertexShaderID = createShader(shaders[0], ARBVertexShader.GL_VERTEX_SHADER_ARB);
+				fragmentShaderID = createShader(shaders[1], ARBFragmentShader.GL_FRAGMENT_SHADER_ARB);
 			} catch(Exception ex) {
 				this.shaderProgramID = -1;
 				vertexShaderID = -1;

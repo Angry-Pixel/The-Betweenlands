@@ -11,9 +11,11 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.event.FogHandler;
+import thebetweenlands.client.render.BLSkyRenderer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -311,12 +313,11 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		}
 	}
 
-	//TODO: Sky render
-	/*@SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer() {
 		return BLSkyRenderer.INSTANCE;
-	}*/
+	}
 
 	//Fix for buggy rain (?)
 	@Override

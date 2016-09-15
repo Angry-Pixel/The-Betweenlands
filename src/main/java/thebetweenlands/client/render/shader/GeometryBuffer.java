@@ -47,10 +47,16 @@ public class GeometryBuffer {
 	 * @return Returns true if the FBO was initialized or resized
 	 */
 	public boolean updateDepthBuffer() {
+		boolean changed = false;
 		if(this.depthBuffer) {
-			return this.geometryDepthBuffer.blitDepthBuffer(this.geometryBuffer);
+			if(this.geometryDepthBuffer == null) {
+				this.geometryDepthBuffer = new DepthBuffer();
+				changed = true;
+			}
+			if(this.geometryDepthBuffer.blitDepthBuffer(this.geometryBuffer))
+				changed = true;
 		}
-		return false;
+		return changed;
 	}
 
 	/**
