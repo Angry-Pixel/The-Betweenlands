@@ -72,19 +72,14 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 	}
 
 	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 1000;
-	}
-
-	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {	
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
-			return EnumActionResult.FAIL;
+			return EnumActionResult.PASS;
 		}
 		if (facing == EnumFacing.UP) {
-			if (!world.isRemote) {
-				if (stack.getTagCompound().getInteger("uses") < 3) {
+			if (stack.getTagCompound().getInteger("uses") < 3) {
+				if (!world.isRemote) {
 					stack.damageItem(2, player);
 					world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.0F, 2.0F);
 					double direction = Math.toRadians(player.rotationYaw);
@@ -111,7 +106,7 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
 
 								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-								shockwaveBlock.setOrigin(origin, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), origin.getX() + 0.5D, origin.getZ() + 0.5D, player);
+								shockwaveBlock.setOrigin(origin, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), pos.getX() + 0.5D, pos.getZ() + 0.5D, player);
 								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
 								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 								world.spawnEntityInWorld(shockwaveBlock);
@@ -123,11 +118,11 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 						stack.getTagCompound().setInteger("uses", 3);
 						stack.getTagCompound().setInteger("cooldown", 0);
 					}
-					return EnumActionResult.PASS;
 				}
+				return EnumActionResult.SUCCESS;
 			}
 		}
-		return EnumActionResult.FAIL;
+		return EnumActionResult.PASS;
 	}
 
 	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("cooldown");
