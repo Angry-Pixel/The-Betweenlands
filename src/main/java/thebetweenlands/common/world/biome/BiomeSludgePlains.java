@@ -12,6 +12,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 	public BiomeSludgePlains() {
 		super(new BiomeProperties("sludge_plains").setBaseHeight(110.0F).setHeightVariation(3F).setWaterColor(0x3A2F0B).setTemperature(0.8F).setRainfall(0.9F));
 		//this.setWeight(5);
+		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlains())
 		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT))
 		.addFeature(new PatchFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BlockRegistry.SLUDGY_DIRT.getDefaultState()))

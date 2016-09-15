@@ -32,6 +32,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import thebetweenlands.client.event.FogHandler;
 import thebetweenlands.client.event.ShaderHandler;
 import thebetweenlands.client.event.TextureStitchHandler;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
@@ -391,6 +392,7 @@ public class ClientProxy extends CommonProxy {
 	public void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(TextureStitchHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FogHandler.class);
 	}
 
 	@Override

@@ -158,10 +158,11 @@ public class LocationStorage extends ChunkStorage {
 		Chunk chunk = entity.worldObj.getChunkFromBlockCoords(entity.getPosition());
 		if(chunk != null) {
 			BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(entity.worldObj, chunk);
-			for(ChunkStorage storage : chunkData.getStorage()) {
-				if(storage instanceof LocationStorage && ((LocationStorage)storage).isInside(entity))
-					locations.add((LocationStorage)storage);
-			}
+			if(chunkData != null)
+				for(ChunkStorage storage : chunkData.getStorage()) {
+					if(storage instanceof LocationStorage && ((LocationStorage)storage).isInside(entity))
+						locations.add((LocationStorage)storage);
+				}
 		}
 		return locations;
 	}
