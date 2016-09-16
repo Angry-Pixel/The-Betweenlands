@@ -77,18 +77,18 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 			stack.setTagCompound(new NBTTagCompound());
 			return EnumActionResult.PASS;
 		}
-		if (facing == EnumFacing.UP) {
-			if (stack.getTagCompound().getInteger("uses") < 3) {
-				if (!world.isRemote) {
-					stack.damageItem(2, player);
-					world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.0F, 2.0F);
-					double direction = Math.toRadians(player.rotationYaw);
-					Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
-					List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
-					for (int distance = -1; distance <= 16; distance++) {
-						for(int distance2 = -distance; distance2 <= distance; distance2++) {
+		if (stack.getTagCompound().getInteger("uses") < 3) {
+			if (!world.isRemote) {
+				stack.damageItem(2, player);
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.0F, 2.0F);
+				double direction = Math.toRadians(player.rotationYaw);
+				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
+				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
+				for (int distance = -1; distance <= 16; distance++) {
+					for(int distance2 = -distance; distance2 <= distance; distance2++) {
+						for(int yo = -1; yo <= 1; yo++) {
 							int originX = MathHelper.floor_double(pos.getX() + 0.5D - Math.sin(direction) * distance - diag.xCoord * distance2 * 0.25D);
-							int originY = pos.getY();
+							int originY = pos.getY() + yo;
 							int originZ = MathHelper.floor_double(pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.zCoord * distance2 * 0.25D);
 							BlockPos origin = new BlockPos(originX, originY, originZ);
 
@@ -101,7 +101,7 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 
 							if (block != null && block.isNormalCube() && !block.getBlock().hasTileEntity(block) 
 									&& block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F
-									&& (world.isAirBlock(origin.up()) || world.getBlockState(origin.up()).getBlock().isReplaceable(world, origin.up()))) {
+									&& !world.getBlockState(origin.up()).isOpaqueCube()) {
 								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlockState(origin).getBlock()));
 								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
 
@@ -110,17 +110,18 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
 								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
 								world.spawnEntityInWorld(shockwaveBlock);
+								break;
 							}
 						}
 					}
-					stack.getTagCompound().setInteger("uses", stack.getTagCompound().getInteger("uses") + 1);
-					if (stack.getTagCompound().getInteger("uses") >= 3) {
-						stack.getTagCompound().setInteger("uses", 3);
-						stack.getTagCompound().setInteger("cooldown", 0);
-					}
 				}
-				return EnumActionResult.SUCCESS;
+				stack.getTagCompound().setInteger("uses", stack.getTagCompound().getInteger("uses") + 1);
+				if (stack.getTagCompound().getInteger("uses") >= 3) {
+					stack.getTagCompound().setInteger("uses", 3);
+					stack.getTagCompound().setInteger("cooldown", 0);
+				}
 			}
+			return EnumActionResult.SUCCESS;
 		}
 		return EnumActionResult.PASS;
 	}
