@@ -34,8 +34,9 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	public EntityShockwaveBlock(World world) {
 		super(world);
-		setSize(1.0F, 1.0F);
-		setBlock(Blocks.STONE, 0);
+		this.setSize(1.0F, 1.0F);
+		this.setBlock(Blocks.STONE, 0);
+		this.noClip = true;
 	}
 
 	public void setBlock(Block blockID, int blockMeta) {
@@ -72,26 +73,43 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public void onUpdate() {
-		motionX = 0;
-		motionZ = 0;
-		posX = lastTickPosX;
-		posZ = lastTickPosZ;
-		isAirBorne = true;
-		if (!worldObj.isRemote) {
-			if (ticksExisted == jumpDelay) {
-				motionY += 0.5D;
-			}
+		this.worldObj.theProfiler.startSection("entityBaseTick");
 
-			if (ticksExisted > jumpDelay) {
-				motionY -= 0.25D;
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+		this.motionX = 0;
+		this.motionZ = 0;
+		this.lastTickPosX = this.posX;
+		this.lastTickPosY = this.posY;
+		this.lastTickPosZ = this.posZ;
 
-				if (posY <= origin.getY() || onGround) {
-					setDead();
+		if(this.ticksExisted >= this.jumpDelay) {
+			if(this.ticksExisted == this.jumpDelay && this.motionY <= 0.0D) {
+				this.motionY += 0.25D;
+			} else {
+				this.motionY -= 0.05D;
+
+				if(!this.worldObj.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
+					this.kill();
 				}
 			}
+		} else {
+			this.motionY = 0.0D;
 		}
 
-		if(motionY > 0.1D && !worldObj.isRemote) {
+		if(this.posY < -64.0D) {
+			this.kill();
+		}
+
+		if(this.posY + this.motionY <= this.origin.getY()) {
+			this.motionY = 0.0D;
+			this.setLocationAndAngles(this.posX, this.origin.getY(), this.posZ, 0, 0);
+		} else {
+			this.moveEntity(0, this.motionY, 0);
+		}
+
+		if(this.motionY > 0.1D && !this.worldObj.isRemote) {
 			DamageSource damageSource;
 			Entity owner = getOwner();
 			if(owner != null) {
@@ -99,13 +117,13 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			} else {
 				damageSource = DamageSource.generic;
 			}
-			List<EntityLivingBase> entities = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D));
+			List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D));
 			for(EntityLivingBase entity : entities) {
 				if (entity != null) {
 					if (entity instanceof EntityLivingBase) {
 						if(entity.attackEntityFrom(damageSource, 10F)) {
 							float knockback = 1.5F;
-							Vec3d dir = new Vec3d(posX - waveStartX, 0, posZ - waveStartZ);
+							Vec3d dir = new Vec3d(this.posX - this.waveStartX, 0, this.posZ - this.waveStartZ);
 							dir = dir.normalize();
 							entity.motionX = dir.xCoord * knockback;
 							entity.motionY = 0.5D;
@@ -116,7 +134,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			}
 		}
 
-		moveEntity(motionX, motionY, motionZ);
+		this.firstUpdate = false;
+		this.worldObj.theProfiler.endSection();
 	}
 
 	@Override
@@ -159,17 +178,19 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	@Override
 	public void writeSpawnData(ByteBuf data) {
 		PacketBuffer buffer = new PacketBuffer(data);
-		buffer.writeInt(Block.getIdFromBlock(block));
-		buffer.writeInt(blockMeta);
-		buffer.writeBlockPos(origin);
+		buffer.writeInt(Block.getIdFromBlock(this.block));
+		buffer.writeInt(this.blockMeta);
+		buffer.writeBlockPos(this.origin);
+		buffer.writeInt(this.jumpDelay);
 	}
 
 	@Override
 	public void readSpawnData(ByteBuf data) {
 		PacketBuffer buffer = new PacketBuffer(data);
-		block = Block.getBlockById(buffer.readInt());
-		blockMeta = buffer.readInt();
-		origin = buffer.readBlockPos();
+		this.block = Block.getBlockById(buffer.readInt());
+		this.blockMeta = buffer.readInt();
+		this.origin = buffer.readBlockPos();
+		this.jumpDelay = buffer.readInt();
 	}
 
 	public void setOrigin(BlockPos pos, int delay, double waveStartX, double waveStartZ, Entity source) {
@@ -177,37 +198,37 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		this.jumpDelay = delay;
 		this.waveStartX = waveStartX;
 		this.waveStartZ = waveStartZ;
-		setOwner(source.getUniqueID().toString());
+		this.setOwner(source.getUniqueID().toString());
 	}
 
 	@Override
 	protected void entityInit() {
-		dataManager.register(OWNER_DW, "");
+		this.getDataManager().register(OWNER_DW, "");
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound data) {
-		block = Block.getBlockById(data.getInteger("blockID"));
-		if(block == null)
-			block = Blocks.STONE;
-		blockMeta = data.getInteger("blockMeta");
-		origin = new BlockPos(data.getInteger("originX"), data.getInteger("originY"), data.getInteger("originZ"));
-		waveStartX = data.getDouble("waveStartX");
-		waveStartZ = data.getDouble("waveStartZ");
-		jumpDelay = data.getInteger("jumpDelay");
+		this.block = Block.getBlockById(data.getInteger("blockID"));
+		if(this.block == null)
+			this.block = Blocks.STONE;
+		this.blockMeta = data.getInteger("blockMeta");
+		this.origin = new BlockPos(data.getInteger("originX"), data.getInteger("originY"), data.getInteger("originZ"));
+		this.waveStartX = data.getDouble("waveStartX");
+		this.waveStartZ = data.getDouble("waveStartZ");
+		this.jumpDelay = data.getInteger("jumpDelay");
 		setOwner(data.getString("ownerUUID"));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound data) {
-		data.setInteger("blockID", Block.getIdFromBlock(block));
-		data.setInteger("blockMeta", blockMeta);
-		data.setInteger("originX", origin.getX());
-		data.setInteger("originY", origin.getY());
-		data.setInteger("originZ", origin.getZ());
-		data.setDouble("waveStartX", waveStartX);
-		data.setDouble("waveStartZ", waveStartZ);
-		data.setInteger("jumpDelay", jumpDelay);
-		data.setString("ownerUUID", getOwnerUUID());
+		data.setInteger("blockID", Block.getIdFromBlock(this.block));
+		data.setInteger("blockMeta", this.blockMeta);
+		data.setInteger("originX", this.origin.getX());
+		data.setInteger("originY", this.origin.getY());
+		data.setInteger("originZ", this.origin.getZ());
+		data.setDouble("waveStartX", this.waveStartX);
+		data.setDouble("waveStartZ", this.waveStartZ);
+		data.setInteger("jumpDelay", this.jumpDelay);
+		data.setString("ownerUUID", this.getOwnerUUID());
 	}
 }
