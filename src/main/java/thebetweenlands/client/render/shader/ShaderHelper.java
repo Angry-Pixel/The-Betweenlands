@@ -109,6 +109,8 @@ public class ShaderHelper {
 
 			targetFramebuffer2.framebufferClear();
 
+			GL11.glDisable(GL11.GL_ALPHA_TEST);
+
 			for(int i = 0; i < renderPasses; i++) {
 				//Renders the shader to the blitBuffer
 				this.worldShader.setRenderPass(i);
@@ -156,6 +158,8 @@ public class ShaderHelper {
 			//Render additional post processing effects
 			this.worldShader.setRenderPass(0);
 			this.worldShader.renderPostEffects(partialTicks);
+
+			GL11.glEnable(GL11.GL_ALPHA_TEST);
 		}
 	}
 
