@@ -29,6 +29,11 @@ public class AmbienceSound extends MovingSound {
 
 	@Override
 	public void update() {
+		if(this.player == null || this.player.worldObj == null) {
+			this.stopImmediately();
+			return;
+		}
+
 		if(!this.donePlaying)
 			this.pitch = this.type.getPitch();
 
