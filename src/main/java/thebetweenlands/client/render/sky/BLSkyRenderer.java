@@ -419,8 +419,8 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDepthMask(false);
 		GL11.glEnable(GL11.GL_FOG);
-		GL11.glFogf(GL11.GL_FOG_START, FogHandler.getCurrentFogStart());
-		GL11.glFogf(GL11.GL_FOG_END, FogHandler.getCurrentFogEnd()*FogHandler.getCurrentFogEnd()/15.0F);
+		GL11.glFogf(GL11.GL_FOG_START, 30);
+		GL11.glFogf(GL11.GL_FOG_END, 50);
 		GL11.glColor3f(skyR, skyG, skyB);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glEnable(GL11.GL_BLEND);
@@ -649,20 +649,42 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glColor4f(0, 0, 0, 0.35F);
 			RenderHelper.disableStandardItemLighting();
 			GL11.glDepthMask(false);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
+
+			float ticks = Minecraft.getMinecraft().theWorld.getTotalWorldTime() + partialTicks;
+
+			float domeRotation = (float)(Math.sin(ticks / 1600.0F) * 120.0F - ticks / 20.0F + Math.cos(ticks / 800.0F) * 30.0F * Math.sin(ticks / 1400.0F));
+
+			GL11.glScalef(1F, 0.8F, 1F);
+
+			GL11.glColor4f(0, 0, 0, 0.25F);
 			GL11.glCallList(this.skyDispListStart);
+
+			GL11.glColor4f(0, 0, 0, 0.15F);
+			GL11.glPushMatrix();
+			GL11.glRotated(domeRotation, 0, 1, 0);
+			GL11.glTranslated(0, Math.cos(ticks / 160.0F) * 4.0F, 0.0F);
+			GL11.glCallList(this.skyDispListStart);
+			GL11.glPopMatrix();
+
+			GL11.glPushMatrix();
+			GL11.glRotated(-domeRotation / 1.8F * (Math.sin(ticks / 2000.0F) / 60.0F), 0, 1, 0);
+			GL11.glTranslated(0, -Math.cos(ticks / 180.0F) * 5.0F, 0.0F);
+			GL11.glCallList(this.skyDispListStart);
+			GL11.glPopMatrix();
+
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 			GL11.glDepthMask(true);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_ALPHA_TEST);
+
 			GL11.glPopMatrix();
 
 			GL11.glFogf(GL11.GL_FOG_START, FogHandler.getCurrentFogStart());
@@ -700,6 +722,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			if(((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
 				GL11.glDisable(GL11.GL_FOG);
 				this.renderAuroras(mc);
+				GL11.glEnable(GL11.GL_FOG);
 			}
 		}
 
