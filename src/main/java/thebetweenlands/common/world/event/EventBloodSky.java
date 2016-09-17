@@ -3,17 +3,16 @@ package thebetweenlands.common.world.event;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventBloodSky extends TimedEnvironmentEvent {
 	private boolean soundPlayed = true;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
-	
+
 	public EventBloodSky(EnvironmentEventRegistry registry) {
 		super(registry);
 	}
@@ -22,11 +21,11 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 		this.lastSkyTransparency = this.skyTransparency;
 		this.skyTransparency = transparency;
 	}
-	
+
 	public float getSkyTransparency(float partialTicks) {
 		return this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks;
 	}
-	
+
 	@Override
 	public String getEventName() {
 		return "bloodSky";
@@ -63,15 +62,14 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 			}
 		}
 	}
-	
+
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
 		super.setActive(active, markDirty);
 		if(active) {
 			World world = TheBetweenlands.proxy.getClientWorld();
 			if(world != null && world.isRemote && !this.soundPlayed) {
-				//TODO: Sound
-				world.playSound(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ, new SoundEvent(new ResourceLocation("thebetweenlands:bloodSkyRoar")), SoundCategory.AMBIENT, 100.0F, 1.0F, false);
+				world.playSound(Minecraft.getMinecraft().thePlayer.posX, Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ, SoundRegistry.AMBIENT_BLOOD_SKY_ROAR, SoundCategory.AMBIENT, 100.0F, 1.0F, false);
 			}
 			this.soundPlayed = true;
 		} else {

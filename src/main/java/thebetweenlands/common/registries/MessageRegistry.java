@@ -12,6 +12,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.message.BLMessage;
 import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
+import thebetweenlands.common.message.clientbound.MessageSyncEnvironmentEvent;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -21,6 +22,7 @@ public class MessageRegistry {
     public static void preInit() {
         registerMessage(MessageDruidAltarProgress.class, Side.CLIENT);
         registerMessage(MessageSyncChunkData.class, Side.CLIENT);
+        registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {

@@ -1,9 +1,11 @@
-package thebetweenlands.client.render;
+package thebetweenlands.client.render.sky;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
@@ -13,7 +15,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -45,8 +46,7 @@ public class BLSkyRenderer extends IRenderHandler {
 	private static final ResourceLocation SKY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
 	private static final ResourceLocation FOG_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/fog_texture.png");
 	private static final ResourceLocation SKY_SPOOPY_TEXTURE_RES = new ResourceLocation("thebetweenlands:textures/sky/spoopy.png");
-	//TODO: Auroras
-	//private List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
+	private List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 	public final GeometryBuffer clipPlaneBuffer = new GeometryBuffer(true);
 	public static final BLSkyRenderer INSTANCE = new BLSkyRenderer();
 
@@ -332,8 +332,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		double newAuroraPosY = 180;
 		double minDist = 0.0D;
 
-		//TODO: Auroras
-		/*Iterator<AuroraRenderer> auroraIT = this.auroras.iterator();
+		Iterator<AuroraRenderer> auroraIT = this.auroras.iterator();
 		while(auroraIT.hasNext()) {
 			AuroraRenderer aurora = auroraIT.next();
 			if(aurora.getDistance(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ) > 180) {
@@ -347,7 +346,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		}
 		if(minDist > 150 || this.auroras.size() == 0) {
 			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY, newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(40) + 15));
-		}*/
+		}
 
 		List<Vector4f> gradients = new ArrayList<Vector4f>();
 
@@ -386,10 +385,9 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
 		GL11.glTranslated(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ);
-		//TODO: Auroras
-		/*for(AuroraRenderer aurora : this.auroras) {
+		for(AuroraRenderer aurora : this.auroras) {
 			aurora.render(0.4F, gradients);
-		}*/
+		}
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(true);
@@ -397,8 +395,6 @@ public class BLSkyRenderer extends IRenderHandler {
 
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-		RenderGlobal renderGlobal = mc.renderGlobal;
-
 		Vec3d skyColor = world.getSkyColor(mc.getRenderViewEntity(), partialTicks);
 		float skyR = (float)skyColor.xCoord;
 		float skyG = (float)skyColor.yCoord;

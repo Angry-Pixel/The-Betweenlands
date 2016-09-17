@@ -60,13 +60,9 @@ public class FogHandler {
 		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().thePlayer.posY > WorldProviderBetweenlands.CAVE_START) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			boolean denseFog = false;
-			if((!ConfigHandler.debug && eeRegistry.DENSE_FOG.isActive())/* ||
-					(DebugHandlerClient.INSTANCE.denseFog && ConfigHandler.DEBUG && !eeRegistry.DENSE_FOG.isActive()) ||
-					(!DebugHandlerClient.INSTANCE.denseFog && ConfigHandler.DEBUG && eeRegistry.DENSE_FOG.isActive())*/) {
-				denseFog = true;
+			if(eeRegistry.DENSE_FOG.isActive()) {
+				return true;
 			}
-			return denseFog;
 		}
 		return false;
 	}

@@ -33,7 +33,7 @@ public final class TeleporterHandler {
 	}
 
 	public static void transferToBL(Entity entity) {
-		INSTANCE.transferEntity(entity, ConfigHandler.INSTANCE.dimensionId);
+		INSTANCE.transferEntity(entity, ConfigHandler.dimensionId);
 	}
 
 	private final TObjectByteMap<UUID> waitingPlayers = new TObjectByteHashMap<UUID>();
@@ -57,8 +57,6 @@ public final class TeleporterHandler {
 			world.customTeleporters.add(teleportToOverworld = new TeleporterBetweenlands(world));
 		else if (world.provider.getDimensionType() == TheBetweenlands.dimensionType)
 			world.customTeleporters.add(teleportToBetweenlands = new TeleporterBetweenlands(world));
-
-		System.out.println("added to " + e.getWorld());
 	}
 
 	@SubscribeEvent
@@ -77,7 +75,7 @@ public final class TeleporterHandler {
 	}
 
 	private void transferEntity(Entity entity, int dimensionId) {
-		if (dimensionId != 0 && dimensionId != ConfigHandler.INSTANCE.dimensionId)
+		if (dimensionId != 0 && dimensionId != ConfigHandler.dimensionId)
 			throw new IllegalArgumentException("Supplied invalid dimension ID into Betweenlands teleporter: " + dimensionId);
 
 		World world = entity.worldObj;

@@ -22,6 +22,7 @@ import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.event.AnvilEventHandler;
+import thebetweenlands.common.event.EnvironmentEventHandler;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -84,7 +85,6 @@ public class TheBetweenlands {
 	@EventHandler
 	public void init(FMLInitializationEvent event) {
 		REGISTRIES.init();
-		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 
 		TeleporterHandler.init();
 
@@ -143,5 +143,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.ChunkEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.class);
+		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
+		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.class);
 	}
 }

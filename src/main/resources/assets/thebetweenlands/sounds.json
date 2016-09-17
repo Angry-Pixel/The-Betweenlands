@@ -1,8 +1,8 @@
 {
-  "blood_sky_roar": {
+  "ambient_blood_sky_roar": {
     "category": "ambient",
     "sounds": [
-      "thebetweenlands:blood_sky_roar"
+      "thebetweenlands:ambience/ambient_blood_sky_roar"
     ]
   },
   "ambient_blood_sky": {
