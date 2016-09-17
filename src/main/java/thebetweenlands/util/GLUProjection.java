@@ -274,14 +274,12 @@ public final class GLUProjection {
 		this.displayHeight = this.viewport.get(3);
 		this.fovX = (float) Math.toDegrees(2.0D * Math.atan((this.displayWidth / this.displayHeight) * Math.tan(Math.toRadians(this.fovY) / 2.0D)));
 		//Getting modelview vectors
-		Vector3D ft = new Vector3D(this.modelview.get(12), this.modelview.get(13), this.modelview.get(14));
 		Vector3D lv = new Vector3D(this.modelview.get(0), this.modelview.get(1), this.modelview.get(2));
 		Vector3D uv = new Vector3D(this.modelview.get(4), this.modelview.get(5), this.modelview.get(6));
 		Vector3D fv = new Vector3D(this.modelview.get(8), this.modelview.get(9), this.modelview.get(10));
 		//Default axes
 		Vector3D nuv = new Vector3D(0, 1.0D, 0);
 		Vector3D nlv = new Vector3D(1.0D, 0, 0);
-		Vector3D nfv = new Vector3D(0, 0, 1.0D);
 		//Calculate yaw and pitch from modelview
 		double yaw = Math.toDegrees(Math.atan2(nlv.cross(lv).length(), nlv.dot(lv))) + 180.0D;
 		if(fv.x < 0.0D) {
@@ -495,7 +493,6 @@ public final class GLUProjection {
 	 * @return
 	 */
 	public Vector3D[] getFrustum(double x, double y, double z, double rotationYaw, double rotationPitch, double fov, double farDistance, double aspectRatio) {
-		Vector3D viewVec = this.getRotationVector(rotationYaw, rotationPitch).snormalize();
 		double hFar = 2D * Math.tan(Math.toRadians(fov / 2D)) * farDistance;
 		double wFar = hFar * aspectRatio;
 		Vector3D view = this.getRotationVector(rotationYaw, rotationPitch).snormalize();

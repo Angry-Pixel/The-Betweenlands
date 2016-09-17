@@ -67,8 +67,7 @@ public class ShaderHelper {
 	public void updateShaders(float partialTicks) {
 		if(this.isRequired() && this.canUseShaders()) {
 			if(this.worldShader == null) {
-				this.worldShader = new WorldShader();
-				this.worldShader.init();
+				this.worldShader = new WorldShader().init();
 				this.blitBuffer = new ResizableFramebuffer(false);
 			}
 
@@ -99,8 +98,9 @@ public class ShaderHelper {
 			}*/
 
 			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);;
 			Framebuffer targetFramebuffer1 = mainFramebuffer;
-			Framebuffer targetFramebuffer2 = this.blitBuffer.getFramebuffer(targetFramebuffer1.framebufferWidth, targetFramebuffer1.framebufferHeight);
+			Framebuffer targetFramebuffer2 = blitFramebuffer;
 
 			int renderPasses = MathHelper.floor_double(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
 			renderPasses = 1; //Multiple render passes are currently not recommended

@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.event.handler.FogHandler;
@@ -459,23 +460,23 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		double renderWidth = scaledResolution.getScaledWidth();
 		double renderHeight = scaledResolution.getScaledHeight();
 
-		float rayX = 0.5F;
-		float rayY = 1.0F;
-
-		Vec3d lightPos = new Vec3d(45, 30, 30);
+		Vec3d lightPos = new Vec3d(45, 40, 30);
 
 		//Get screen space coordinates of light source
-		Projection p = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.DIRECT, false);
+		Projection projection = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.ORTHOGONAL, false);
+		Projection projectionUnclamped = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.NONE, false);
 
 		//Get light source positions in texture coords
-		rayX = (float)(p.getX() / renderWidth);
-		rayY = (float)(p.getY() / renderHeight);
+		float rayX = (float)(projection.getX() / renderWidth);
+		float rayY = (float)(projection.getY() / renderHeight);
+
+		float rayYUnclamped = (float)(projectionUnclamped.getY() / renderWidth);
 
 		//Calculate angle differences
 		Vec3d lookVec = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
-		lookVec = new Vec3d(lookVec.xCoord, 0, lookVec.zCoord);
+		lookVec = new Vec3d(lookVec.xCoord + 0.0001D, 0, lookVec.zCoord + 0.0001D);
 		lookVec = lookVec.normalize();
-		Vec3d sLightPos = new Vec3d(lightPos.xCoord, 0, lightPos.zCoord).normalize();
+		Vec3d sLightPos = new Vec3d(lightPos.xCoord + 0.0001D, 0, lightPos.zCoord + 0.0001D).normalize();
 		float lightXZAngle = (float) Math.toDegrees(Math.acos(sLightPos.dotProduct(lookVec)));
 		float fovX = GLUProjection.getInstance().getFovX() / 2.0F;
 		float angDiff = Math.abs(lightXZAngle);
@@ -484,12 +485,18 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		float illuminationDecay = 0.44F;
 		float weight = 0.12F;
 
-		//Lower decay if outside of view
+		//Lower effect strength if outside of view
+		if(rayYUnclamped <= 0.0F) {
+			float mult = 1 + MathHelper.clamp_float(rayYUnclamped / 5.0F * (1.0F - angDiff / fovX), -1, 0.0F);
+			decay *= mult;
+			illuminationDecay *= mult;
+			weight *= mult;
+		}
 		if(angDiff > fovX) {
-			float mult = ((angDiff - fovX) / 400.0F);
-			decay *= 1.0F - mult;
-			illuminationDecay *= 1.0F - mult;
-			weight *= 1.0F - mult;
+			float mult = 1.0F - ((angDiff - fovX) / 400.0F);
+			decay *= mult;
+			illuminationDecay *= mult;
+			weight *= mult;
 		}
 
 		int depthTexture = this.depthBuffer.getTexture();
@@ -512,16 +519,15 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		//Render god's ray to blitFramebuffer
 		float beat = 0.0F;
 		if(hasBeat) {
-			beat = Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F);
+			beat = Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F) / 4.0F;
 		}
 		float density = 0.1F + beat;
 		this.godRayEffect.setOcclusionMap(occlusionFramebuffer)
-		.setParams(0.8F, decay, density * 4.0F, weight * 2.0F, illuminationDecay)
+		.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F)
 		.setRayPos(rayX, rayY)
 		.create(blitFramebuffer)
 		.setSource(mainFramebuffer.framebufferTexture)
 		.setPreviousFramebuffer(mainFramebuffer)
-		//.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
 		.render(partialTicks);
 
 		//Render blitFramebuffer to main framebuffer
@@ -579,35 +585,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			.setSource(mainFramebuffer.framebufferTexture)
 			.setBlitFramebuffer(blitFramebuffer)
 			.setPreviousFramebuffer(mainFramebuffer)
-			.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
 			.render(partialTicks);
-
-			/*ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
-
-			//Render blit buffer to main buffer
-			GL11.glPushMatrix();
-
-			double renderWidth = scaledResolution.getScaledWidth();
-			double renderHeight = scaledResolution.getScaledHeight();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.getBlitBuffer("swirlBlitBuffer").framebufferTexture);
-			GL11.glBegin(GL11.GL_TRIANGLES);
-			GL11.glTexCoord2d(0.0D, 1.0D);
-			GL11.glVertex2d(0, 0);
-			GL11.glTexCoord2d(0.0D, 0.0D);
-			GL11.glVertex2d(0, renderHeight);
-			GL11.glTexCoord2d(1.0D, 0.0D);
-			GL11.glVertex2d(renderWidth, renderHeight);
-			GL11.glTexCoord2d(1.0D, 0.0D);
-			GL11.glVertex2d(renderWidth, renderHeight);
-			GL11.glTexCoord2d(1.0D, 1.0D);
-			GL11.glVertex2d(renderWidth, 0);
-			GL11.glTexCoord2d(0.0D, 1.0D);
-			GL11.glVertex2d(0, 0);
-			GL11.glEnd();
-
-			GL11.glPopMatrix();*/
 		}
 	}
 
