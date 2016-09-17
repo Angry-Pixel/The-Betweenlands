@@ -1,9 +1,9 @@
-package thebetweenlands.client.render.shader.effect;
+package thebetweenlands.client.render.shader.postprocessing;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class WarpEffect extends PostProcessingEffect {
+public class Warp extends PostProcessingEffect {
 	private float scale = 1.0F;
 	private float timeScale = 1.0F;
 	private float multipier = 1.0F;
@@ -21,28 +21,28 @@ public class WarpEffect extends PostProcessingEffect {
 	private int warpXUniformID = -1;
 	private int warpYUniformID = -1;
 
-	public WarpEffect setScale(float scale) {
+	public Warp setScale(float scale) {
 		this.scale = scale;
 		return this;
 	}
 
-	public WarpEffect setTimeScale(float timeScale) {
+	public Warp setTimeScale(float timeScale) {
 		this.timeScale = timeScale;
 		return this;
 	}
 
-	public WarpEffect setMultiplier(float multiplier) {
+	public Warp setMultiplier(float multiplier) {
 		this.multipier = multiplier;
 		return this;
 	}
 
-	public WarpEffect setOffset(float xOffset, float yOffset) {
+	public Warp setOffset(float xOffset, float yOffset) {
 		this.xOffset = xOffset;
 		this.yOffset = yOffset;
 		return this;
 	}
 
-	public WarpEffect setWarpDir(float warpX, float warpY) {
+	public Warp setWarpDir(float warpX, float warpY) {
 		this.warpX = warpX;
 		this.warpY = warpY;
 		return this;
@@ -68,13 +68,13 @@ public class WarpEffect extends PostProcessingEffect {
 
 	@Override
 	protected void uploadUniforms() {
-		OpenGlHelper.glUniform1(this.timeUniformID, this.getSingleFloatBuffer(System.nanoTime() / 1000000.0F));
-		OpenGlHelper.glUniform1(this.scaleUniformID, this.getSingleFloatBuffer(this.scale));
-		OpenGlHelper.glUniform1(this.timeScaleUniformID, this.getSingleFloatBuffer(this.timeScale));
-		OpenGlHelper.glUniform1(this.multiplierUniformID, this.getSingleFloatBuffer(this.multipier));
-		OpenGlHelper.glUniform1(this.xOffsetUniformID, this.getSingleFloatBuffer(this.xOffset));
-		OpenGlHelper.glUniform1(this.yOffsetUniformID, this.getSingleFloatBuffer(this.yOffset));
-		OpenGlHelper.glUniform1(this.warpXUniformID, this.getSingleFloatBuffer(this.warpX));
-		OpenGlHelper.glUniform1(this.warpYUniformID, this.getSingleFloatBuffer(this.warpY));
+		this.uploadFloat(this.timeUniformID, System.nanoTime() / 1000000.0F);
+		this.uploadFloat(this.scaleUniformID, this.scale);
+		this.uploadFloat(this.timeScaleUniformID, this.timeScale);
+		this.uploadFloat(this.multiplierUniformID, this.multipier);
+		this.uploadFloat(this.xOffsetUniformID, this.xOffset);
+		this.uploadFloat(this.yOffsetUniformID, this.yOffset);
+		this.uploadFloat(this.warpXUniformID, this.warpX);
+		this.uploadFloat(this.warpYUniformID, this.warpY);
 	}
 }

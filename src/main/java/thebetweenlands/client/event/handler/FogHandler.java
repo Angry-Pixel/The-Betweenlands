@@ -1,4 +1,4 @@
-package thebetweenlands.client.event;
+package thebetweenlands.client.event.handler;
 
 import org.lwjgl.opengl.GL11;
 

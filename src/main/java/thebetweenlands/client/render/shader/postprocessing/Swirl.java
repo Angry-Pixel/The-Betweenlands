@@ -1,13 +1,13 @@
-package thebetweenlands.client.render.shader.effect;
+package thebetweenlands.client.render.shader.postprocessing;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class SwirlEffect extends PostProcessingEffect {
+public class Swirl extends PostProcessingEffect {
 	private float angle = 0.0F;
 	private int angleUniformID = -1;
 
-	public SwirlEffect setAngle(float angle) {
+	public Swirl setAngle(float angle) {
 		this.angle = angle;
 		return this;
 	}
@@ -25,6 +25,6 @@ public class SwirlEffect extends PostProcessingEffect {
 
 	@Override
 	protected void uploadUniforms() {
-		OpenGlHelper.glUniform1(this.angleUniformID, this.getSingleFloatBuffer(this.angle));
+		this.uploadFloat(this.angleUniformID, this.angle);
 	}
 }

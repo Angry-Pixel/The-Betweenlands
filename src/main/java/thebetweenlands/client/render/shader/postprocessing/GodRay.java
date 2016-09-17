@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.shader.effect;
+package thebetweenlands.client.render.shader.postprocessing;
 
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.GL11;
@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
-public class GodRayEffect extends PostProcessingEffect {
+public class GodRay extends PostProcessingEffect {
 	private Framebuffer occlusionMap = null;
 
 	private int occlusionMapUniformID = -1;
@@ -29,18 +29,18 @@ public class GodRayEffect extends PostProcessingEffect {
 	private float weight = 1.0F;
 	private float illuminationDecay = 1.0F;
 
-	public GodRayEffect setOcclusionMap(Framebuffer occlusionMap) {
+	public GodRay setOcclusionMap(Framebuffer occlusionMap) {
 		this.occlusionMap = occlusionMap;
 		return this;
 	}
 
-	public GodRayEffect setRayPos(float x, float y) {
+	public GodRay setRayPos(float x, float y) {
 		this.godRayX = x;
 		this.godRayY = y;
 		return this;
 	}
 
-	public GodRayEffect setParams(float exposure, float decay, float density, float weight, float illuminationDecay) {
+	public GodRay setParams(float exposure, float decay, float density, float weight, float illuminationDecay) {
 		this.exposure = exposure;
 		this.decay = decay;
 		this.density = density;
@@ -76,12 +76,12 @@ public class GodRayEffect extends PostProcessingEffect {
 
 		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB);
 
-		OpenGlHelper.glUniform1(this.godRayXUniformID, this.getSingleFloatBuffer(this.godRayX));
-		OpenGlHelper.glUniform1(this.godRayYUniformID, this.getSingleFloatBuffer(this.godRayY));
-		OpenGlHelper.glUniform1(this.exposureUniformID, this.getSingleFloatBuffer(this.exposure));
-		OpenGlHelper.glUniform1(this.decayUniformID, this.getSingleFloatBuffer(this.decay));
-		OpenGlHelper.glUniform1(this.densityUniformID, this.getSingleFloatBuffer(this.density));
-		OpenGlHelper.glUniform1(this.weightUniformID, this.getSingleFloatBuffer(this.weight));
-		OpenGlHelper.glUniform1(this.illuminationDecayUniformID, this.getSingleFloatBuffer(this.illuminationDecay));
+		this.uploadFloat(this.godRayXUniformID, this.godRayX);
+		this.uploadFloat(this.godRayYUniformID, this.godRayY);
+		this.uploadFloat(this.exposureUniformID, this.exposure);
+		this.uploadFloat(this.decayUniformID, this.decay);
+		this.uploadFloat(this.densityUniformID, this.density);
+		this.uploadFloat(this.weightUniformID, this.weight);
+		this.uploadFloat(this.illuminationDecayUniformID, this.illuminationDecay);
 	}
 }

@@ -14,7 +14,7 @@ import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.event.FogHandler;
+import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.render.BLSkyRenderer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;

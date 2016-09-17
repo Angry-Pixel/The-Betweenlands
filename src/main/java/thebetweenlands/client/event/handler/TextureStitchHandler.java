@@ -1,4 +1,4 @@
-package thebetweenlands.client.event;
+package thebetweenlands.client.event.handler;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

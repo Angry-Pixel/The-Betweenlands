@@ -25,7 +25,7 @@ public class RenderItemCage extends TileEntitySpecialRenderer<TileEntityItemCage
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && tile != null) {
-			ShaderHelper.INSTANCE.addDynLight(new LightSource(tile.getPos().getX() + 0.5D, tile.getPos().getY() + 0.5D, tile.getPos().getZ() + 0.5D, 
+			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(tile.getPos().getX() + 0.5D, tile.getPos().getY() + 0.5D, tile.getPos().getZ() + 0.5D, 
 					2f,
 					5.0f / 255.0f * 13.0F, 
 					40.0f / 255.0f * 13.0F, 

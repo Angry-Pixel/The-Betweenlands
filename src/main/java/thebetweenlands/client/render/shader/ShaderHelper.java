@@ -1,42 +1,33 @@
 package thebetweenlands.client.render.shader;
 
-import java.lang.reflect.Field;
-
 import org.lwjgl.opengl.ContextCapabilities;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.resources.IResourceManager;
-import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.client.shader.ShaderGroup;
-import net.minecraft.client.shader.ShaderLinkHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import thebetweenlands.client.render.shader.base.CShaderGroup;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.math.MathHelper;
+import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class ShaderHelper implements IResourceManagerReloadListener {
+public class ShaderHelper {
+	private ShaderHelper() { }
+
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
 
-	//TODO: Mappings!
-	private static final Field f_theShaderGroup = ReflectionHelper.findField(EntityRenderer.class, "theShaderGroup");
-
-	private MainShader currentShader;
-	private boolean failedLoading = false;
-	private ShaderGroup currentShaderGroup;
 	private boolean checked = false;
 	private boolean shadersSupported = false;
-	private boolean needsReload = false;
 
-	/**
-	 * Returns whether the world shader is supported and active
-	 * @return
-	 */
-	public boolean isWorldShaderActive() {
-		return this.canUseShaders() && this.currentShader != null && Minecraft.getMinecraft().entityRenderer.getShaderGroup() != null
-				&& Minecraft.getMinecraft().entityRenderer.getShaderGroup() == this.currentShader.getShaderGroup();
+	private WorldShader worldShader = null;
+	private ResizableFramebuffer blitBuffer = null;
+
+	public WorldShader getWorldShader() {
+		return this.worldShader;
 	}
 
 	/**
@@ -44,7 +35,18 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 * @return
 	 */
 	public boolean canUseShaders() {
+		//TODO: Remove once complete
+		if(true)
+			return false;
 		return OpenGlHelper.isFramebufferEnabled() && this.isShaderSupported() && ConfigHandler.useShader;
+	}
+
+	/**
+	 * Returns whether the world shader is active
+	 * @return
+	 */
+	public boolean isWorldShaderActive() {
+		return this.canUseShaders() && this.worldShader != null;
 	}
 
 	/**
@@ -63,58 +65,109 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	}
 
 	/**
-	 * Loads and enables the world shader
+	 * Updates and initializes the main shader if necessary
 	 */
-	public void enableWorldShader() {
-		if(!this.failedLoading && !this.isShaderSupported() && ConfigHandler.useShader) {
-			this.failedLoading = true;
-			System.err.println("Your system does not support shaders. Please disable shaders in the betweenlands config file.");
-			return;
+	public void updateShaders(float partialTicks) {
+		if(this.isRequired() && this.canUseShaders()) {
+			if(this.worldShader == null) {
+				this.worldShader = new WorldShader();
+				this.worldShader.init();
+				this.blitBuffer = new ResizableFramebuffer(false);
+			}
+
+			this.worldShader.updateDepthBuffer();
+			this.worldShader.updateMatrices();
+			this.worldShader.updateTextures(partialTicks);
 		}
-		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.getFramebuffer() != null && mc.getResourceManager() != null && mc.getTextureManager() != null) {
-			if(this.isRequired()) {
-				if(this.currentShader == null || mc.entityRenderer.getShaderGroup() == null || mc.entityRenderer.getShaderGroup() != this.currentShaderGroup || this.needsShaderReload()) {
-					MainShader shaderWrapper = this.currentShader;
-					if(shaderWrapper != null) {
-						shaderWrapper.delete();
-					}
-					shaderWrapper = new MainShader(
-							mc.getTextureManager(),
-							mc.getResourceManager(), mc.getFramebuffer(),
-							new ResourceLocation("thebetweenlands:shaders/mc/config/blmain.json"),
-							new ResourceLocation("thebetweenlands:shaders/mc/program/"),
-							new ResourceLocation("thebetweenlands:textures/shader/")
-							);
-					try {
-						if(ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
-							ShaderLinkHelper.setNewStaticShaderLinkHelper();
-						}
-						//TODO: Set EntityRenderer#useShader to true
-						this.setShaderGroup(mc.entityRenderer, shaderWrapper.createShaderGroup());
-						this.currentShaderGroup = mc.entityRenderer.getShaderGroup();
-						this.currentShader = shaderWrapper;
-						mc.entityRenderer.getShaderGroup().createBindFramebuffers(mc.displayWidth, mc.displayHeight);
-						if(this.needsShaderReload()) {
-							this.needsReload = false;
-						}
-					} catch (Exception e) {
-						this.failedLoading = true;
-						throw new RuntimeException("Failed loading shader files!", e);
+	}
+
+	/**
+	 * Renders the main shader to the screen
+	 */
+	public void renderShaders() {
+		if(this.worldShader != null && this.isRequired() && this.canUseShaders()) {
+			/*if(ShaderHelper2.INSTANCE.getWorldShader() != null) {
+				for(int x = -10; x < 10; x++) {
+					for(int z = -10; z < 10; z++) {
+						double posX = Minecraft.getMinecraft().getRenderManager().viewerPosX + x*4;
+						double posY = 4;//Minecraft.getMinecraft().getRenderManager().viewerPosY;
+						double posZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ + z*4;
+						ShaderHelper2.INSTANCE.getWorldShader().addLight(new LightSource(posX, posY, posZ, 
+								2f,
+								5.0f / 255.0f * 13.0F, 
+								40.0f / 255.0f * 13.0F, 
+								60.0f / 255.0f * 13.0F));
 					}
 				}
-			} else if(mc.entityRenderer.getShaderGroup() instanceof CShaderGroup) {
-				this.setShaderGroup(mc.entityRenderer, null);
+			}*/
+
+			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
+
+			int renderPasses = MathHelper.floor_double(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
+			renderPasses = 1; //Multiple render passes are currently not recommended
+
+			Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
+
+			blitFramebuffer.framebufferClear();
+
+			for(int i = 0; i < renderPasses; i++) {
+				//Renders the shader to the blitBuffer
+				this.worldShader.setBackgroundColor(1, 1, 1, 1);
+				this.worldShader.setLightIndex(i);
+				this.worldShader.create(blitFramebuffer)
+				.setSource(mainFramebuffer.framebufferTexture)
+				.setRestoreGlState(true)
+				.setMirrorY(false)
+				.setClearDepth(true)
+				.setClearColor(false)
+				.render();
+
+				//Ping-pong FBOs
+				Framebuffer previous = blitFramebuffer;
+				blitFramebuffer = mainFramebuffer;
+				mainFramebuffer = previous;
+			}
+
+			Framebuffer targetFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+
+			//Render last pass to the target framebuffer if necessary
+			if(mainFramebuffer != targetFramebuffer) {
+				Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
+
+				targetFramebuffer.bindFramebuffer(false);
+
+				float renderWidth = (float)mainFramebuffer.framebufferTextureWidth;
+				float renderHeight = (float)mainFramebuffer.framebufferTextureHeight;
+				GlStateManager.viewport(0, 0, (int)renderWidth, (int)renderHeight);
+
+				GlStateManager.color(1, 1, 1, 1);
+				GlStateManager.enableTexture2D();
+				mainFramebuffer.bindFramebufferTexture();
+				GlStateManager.depthMask(false);
+				GlStateManager.colorMask(true, true, true, true);
+				Tessellator tessellator = Tessellator.getInstance();
+				VertexBuffer vb = tessellator.getBuffer();
+				vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				vb.pos(0.0D, (double)mainFramebuffer.framebufferTextureHeight / 2.0D, 500.0D).tex(0, 0).endVertex();
+				vb.pos((double)mainFramebuffer.framebufferTextureWidth / 2.0D, (double)mainFramebuffer.framebufferTextureHeight / 2.0D, 500.0D).tex(1, 0).endVertex();
+				vb.pos((double)mainFramebuffer.framebufferTextureWidth / 2.0D, 0.0D, 500.0D).tex(1, 1).endVertex();
+				vb.pos(0.0D, 0.0D, 500.0D).tex(0, 1).endVertex();
+				tessellator.draw();
+				GlStateManager.depthMask(true);
+				GlStateManager.colorMask(true, true, true, true);
 			}
 		}
 	}
 
-	private void setShaderGroup(EntityRenderer er, ShaderGroup group) {
-		try {
-			f_theShaderGroup.set(er, group);
-		} catch (IllegalArgumentException | IllegalAccessException e) {
-			throw new RuntimeException("Failed to set shader group", e);
-		}
+	/**
+	 * Deletes the main shader
+	 */
+	public void deleteShaders() {
+		if(this.worldShader != null)
+			this.worldShader.delete();
+		if(this.blitBuffer != null)
+			this.blitBuffer.delete();
 	}
 
 	private boolean isRequired() {
@@ -127,48 +180,5 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		//		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
 		//TODO: Requires dimension and portal
 		return true;
-	}
-
-	private boolean needsShaderReload() {
-		return this.needsReload;
-	}
-
-	public void scheduleShaderReload() {
-		this.needsReload = true;
-	}
-
-	public void updateShader() {
-		if(!this.isShaderSupported() || this.failedLoading || !ConfigHandler.useShader) {
-			return;
-		}
-		if(this.currentShader != null) {
-			this.currentShader.updateMatrices();
-			this.currentShader.updateBuffers(Minecraft.getMinecraft().getFramebuffer());
-		}
-	}
-
-	public void clearDynLights() {
-		if(ConfigHandler.useShader && !this.failedLoading && this.isShaderSupported()) {
-			if(this.currentShader != null) {
-				this.currentShader.clearLights();
-			}
-		}
-	}
-
-	public void addDynLight(LightSource light) {
-		if(ConfigHandler.useShader && !this.failedLoading && this.isShaderSupported()) {
-			if(this.currentShader != null) {
-				this.currentShader.addLight(light);
-			}
-		}
-	}
-
-	public MainShader getCurrentShader() {
-		return this.currentShader;
-	}
-
-	@Override
-	public void onResourceManagerReload(IResourceManager resourceManager) {
-		this.scheduleShaderReload();
 	}
 }

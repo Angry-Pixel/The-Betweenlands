@@ -1,4 +1,4 @@
-package thebetweenlands.client.event;
+package thebetweenlands.client.event.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.SoundCategory;

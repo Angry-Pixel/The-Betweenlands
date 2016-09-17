@@ -1,9 +1,9 @@
-package thebetweenlands.client.render.shader.effect;
+package thebetweenlands.client.render.shader.postprocessing;
 
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class StarfieldEffect extends PostProcessingEffect {
+public class Starfield extends PostProcessingEffect {
 	private final boolean faded;
 
 	private float timeScale = 1.0F;
@@ -19,21 +19,21 @@ public class StarfieldEffect extends PostProcessingEffect {
 	private int offsetYUniformID = -1;
 	private int offsetZUniformID = -1;
 
-	public StarfieldEffect(boolean faded) {
+	public Starfield(boolean faded) {
 		this.faded = faded;
 	}
 
-	public StarfieldEffect setTimeScale(float timeScale) {
+	public Starfield setTimeScale(float timeScale) {
 		this.timeScale = timeScale;
 		return this;
 	}
 
-	public StarfieldEffect setZoom(float zoom) {
+	public Starfield setZoom(float zoom) {
 		this.zoom = zoom;
 		return this;
 	}
 
-	public StarfieldEffect setOffset(float x, float y, float z) {
+	public Starfield setOffset(float x, float y, float z) {
 		this.offsetX = x;
 		this.offsetY = y;
 		this.offsetZ = z;
@@ -59,11 +59,11 @@ public class StarfieldEffect extends PostProcessingEffect {
 
 	@Override
 	protected void uploadUniforms() {
-		OpenGlHelper.glUniform1(this.timeUniformID, this.getSingleFloatBuffer(System.nanoTime() / 1000000.0F));
-		OpenGlHelper.glUniform1(this.timeScaleUniformID, this.getSingleFloatBuffer(this.timeScale));
-		OpenGlHelper.glUniform1(this.zoomUniformID, this.getSingleFloatBuffer(this.zoom));
-		OpenGlHelper.glUniform1(this.offsetXUniformID, this.getSingleFloatBuffer(this.offsetX));
-		OpenGlHelper.glUniform1(this.offsetYUniformID, this.getSingleFloatBuffer(this.offsetY));
-		OpenGlHelper.glUniform1(this.offsetZUniformID, this.getSingleFloatBuffer(this.offsetZ));
+		this.uploadFloat(this.timeUniformID, System.nanoTime() / 1000000.0F);
+		this.uploadFloat(this.timeScaleUniformID, this.timeScale);
+		this.uploadFloat(this.zoomUniformID, this.zoom);
+		this.uploadFloat(this.offsetXUniformID, this.offsetX);
+		this.uploadFloat(this.offsetYUniformID, this.offsetY);
+		this.uploadFloat(this.offsetZUniformID, this.offsetZ);
 	}
 }

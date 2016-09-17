@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.shader.effect;
+package thebetweenlands.client.render.shader.postprocessing;
 
 import net.minecraft.util.ResourceLocation;
 

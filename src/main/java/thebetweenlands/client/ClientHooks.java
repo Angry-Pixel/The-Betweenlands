@@ -1,5 +1,8 @@
 package thebetweenlands.client;
 
+import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.client.event.PreRenderShadersEvent;
+
 public final class ClientHooks {
 	private ClientHooks() { }
 
@@ -7,6 +10,6 @@ public final class ClientHooks {
 	 * Called before the vanilla shaders are applied to the screen
 	 */
 	public static void onPreRenderShaders(float partialTicks) {
-		//TODO: Add forge event and render BL shaders to screen
+		MinecraftForge.EVENT_BUS.post(new PreRenderShadersEvent(partialTicks));
 	}
 }
