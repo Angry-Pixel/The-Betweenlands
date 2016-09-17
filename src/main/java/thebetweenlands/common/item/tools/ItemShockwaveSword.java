@@ -7,6 +7,7 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,7 +50,7 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
 		super.addInformation(stack, player, list, flag);
-		list.add("Shift, right-click on the ground to create a shockwave");
+		list.add(I18n.format("shockwaveSword.usage"));
 	}
 
 	@Override

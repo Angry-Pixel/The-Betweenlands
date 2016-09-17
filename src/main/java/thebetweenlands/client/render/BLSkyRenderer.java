@@ -271,8 +271,8 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
-			if(shader != null && shader.getStarfieldTextureID() >= 0) {
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, shader.getStarfieldTextureID());
+			if(shader != null && shader.getStarfieldTexture() >= 0) {
+				GL11.glBindTexture(GL11.GL_TEXTURE_2D, shader.getStarfieldTexture());
 			}
 		}
 
@@ -486,7 +486,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-		boolean useShaderSky = ShaderHelper.INSTANCE.isWorldShaderActive() && ShaderHelper.INSTANCE.getWorldShader() != null && ShaderHelper.INSTANCE.getWorldShader().getStarfieldTextureID() >= 0;
+		boolean useShaderSky = ShaderHelper.INSTANCE.isWorldShaderActive() && ShaderHelper.INSTANCE.getWorldShader() != null && ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture() >= 0;
 
 		float starBrightness = (world.getStarBrightness(partialTicks) + 0.5F) * invRainStrength * invRainStrength * invRainStrength;
 		float fade = 1.0F;
@@ -585,7 +585,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		if(useShaderSky) {
 			//Render shader sky dome
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getWorldShader().getStarfieldTextureID());
+			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture());
 			GL11.glDisable(GL11.GL_ALPHA_TEST);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_TEXTURE_2D);

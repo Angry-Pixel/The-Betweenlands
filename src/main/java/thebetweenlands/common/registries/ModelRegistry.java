@@ -35,6 +35,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelBoneShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelDentrothystShield;
+import thebetweenlands.client.render.model.baked.modelbase.shields.ModelLurkerSkinShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelOctineShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelSyrmoriteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValoniteShield;
@@ -87,7 +88,7 @@ public class ModelRegistry {
 	public static final IModel DENTROTHYST_SHIELD_GREEN_POLISHED = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_green_polished"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel DENTROTHYST_SHIELD_ORANGE = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange"), 64, 64, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel DENTROTHYST_SHIELD_ORANGE_POLISHED = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/dentrothyst_shield_orange_polished"), 64, 64, SHIELD_VERTEX_PROCESSOR);
-	public static final IModel LURKER_SKIN_SHIELD = new ModelFromModelBase(new ModelDentrothystShield(), new ResourceLocation("thebetweenlands:items/shields/lurker_skin_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
+	public static final IModel LURKER_SKIN_SHIELD = new ModelFromModelBase(new ModelLurkerSkinShield(), new ResourceLocation("thebetweenlands:items/shields/lurker_skin_shield"), 128, 128, SHIELD_VERTEX_PROCESSOR);
 	public static final IModel BUCKET = new ModelDynBucketBL();
 	public static final IModel WEEDWOOD_CHEST = new ModelFromModelBase(new ModelChest(), new ResourceLocation("thebetweenlands:tiles/weedwood_chest"), 64, 32,
 			new IVertexProcessor() {

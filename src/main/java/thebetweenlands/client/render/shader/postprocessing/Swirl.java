@@ -3,7 +3,7 @@ package thebetweenlands.client.render.shader.postprocessing;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class Swirl extends PostProcessingEffect {
+public class Swirl extends PostProcessingEffect<Swirl> {
 	private float angle = 0.0F;
 	private int angleUniformID = -1;
 

@@ -17,49 +17,57 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
-public abstract class PostProcessingEffect {
+public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 	//Clear colors
 	private float cr, cg, cb, ca;
 
 	//Additional stages
-	private PostProcessingEffect[] stages;
+	private PostProcessingEffect<?>[] stages;
 
 	//Buffers
-	private static final FloatBuffer TEXEL_SIZE_BUFFER = BufferUtils.createFloatBuffer(2);
-	private static final FloatBuffer CLEAR_COLOR_BUFFER = BufferUtils.createFloatBuffer(16);
-	private static final FloatBuffer MATRIX4F_BUFFER = BufferUtils.createFloatBuffer(16);
-	private static final FloatBuffer FLOAT_BUFFER_1 = BufferUtils.createFloatBuffer(1);
-	private static final FloatBuffer FLOAT_BUFFER_2 = BufferUtils.createFloatBuffer(2);
-	private static final FloatBuffer FLOAT_BUFFER_3 = BufferUtils.createFloatBuffer(3);
-	private static final FloatBuffer FLOAT_BUFFER_4 = BufferUtils.createFloatBuffer(4);
-	private static final IntBuffer INT_BUFFER_1 = BufferUtils.createIntBuffer(1);
-	private static final IntBuffer INT_BUFFER_2 = BufferUtils.createIntBuffer(2);
-	private static final IntBuffer INT_BUFFER_3 = BufferUtils.createIntBuffer(3);
-	private static final IntBuffer INT_BUFFER_4 = BufferUtils.createIntBuffer(4);
+	private static final FloatBuffer TEXEL_SIZE_BUFFER = GLAllocation.createDirectFloatBuffer(2);
+	private static final FloatBuffer CLEAR_COLOR_BUFFER = GLAllocation.createDirectFloatBuffer(16);
+	private static final FloatBuffer MATRIX4F_BUFFER = GLAllocation.createDirectFloatBuffer(16);
+	private static final FloatBuffer FLOAT_BUFFER_1 = GLAllocation.createDirectFloatBuffer(1);
+	private static final FloatBuffer FLOAT_BUFFER_2 = GLAllocation.createDirectFloatBuffer(2);
+	private static final FloatBuffer FLOAT_BUFFER_3 = GLAllocation.createDirectFloatBuffer(3);
+	private static final FloatBuffer FLOAT_BUFFER_4 = GLAllocation.createDirectFloatBuffer(4);
+	private static final IntBuffer INT_BUFFER_1 = GLAllocation.createDirectIntBuffer(1);
+	private static final IntBuffer INT_BUFFER_2 = GLAllocation.createDirectIntBuffer(2);
+	private static final IntBuffer INT_BUFFER_3 = GLAllocation.createDirectIntBuffer(3);
+	private static final IntBuffer INT_BUFFER_4 = GLAllocation.createDirectIntBuffer(4);
 
 	private int shaderProgramID = -1;
 	private int diffuseSamplerUniformID = -1;
 	private int texelSizeUniformID = -1;
 
+	private boolean initialized = false;
+
 	/**
 	 * Initializes the effect. Requires an OpenGL context to work
 	 */
-	public final PostProcessingEffect init() {
-		this.initShaders();
-		this.stages = this.getStages();
-		if(this.stages != null && this.stages.length > 0) {
-			for(PostProcessingEffect stage : this.stages) {
-				stage.init();
+	@SuppressWarnings("unchecked")
+	public final T init() {
+		//Only initialize once to prevent allocation memory leaks
+		if(!this.initialized) {
+			this.initShaders();
+			this.stages = this.getStages();
+			if(this.stages != null && this.stages.length > 0) {
+				for(PostProcessingEffect<?> stage : this.stages) {
+					stage.init();
+				}
 			}
+			if(!this.initEffect() || this.shaderProgramID < 0) {
+				throw new RuntimeException("Couldn't initialize shaders for post processing effect: " + this.toString());
+			}
+			this.initialized = true;
 		}
-		if(!this.initEffect() || this.shaderProgramID < 0) {
-			throw new RuntimeException("Couldn't initialize shaders for post processing effect: " + this.toString());
-		}
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -70,12 +78,13 @@ public abstract class PostProcessingEffect {
 	 * @param a Alpha
 	 * @return
 	 */
-	public final PostProcessingEffect setBackgroundColor(float r, float g, float b, float a) {
+	@SuppressWarnings("unchecked")
+	public final T setBackgroundColor(float r, float g, float b, float a) {
 		this.cr = r;
 		this.cg = g;
 		this.cb = b;
 		this.ca = a;
-		return this;
+		return (T) this;
 	}
 
 	/**
@@ -89,9 +98,10 @@ public abstract class PostProcessingEffect {
 	 * Deletes all shaders and frees memory
 	 */
 	public final void delete() {
-		OpenGlHelper.glDeleteProgram(this.shaderProgramID);
+		if(this.shaderProgramID > 0)
+			OpenGlHelper.glDeleteProgram(this.shaderProgramID);
 		if(this.stages != null && this.stages.length > 0) {
-			for(PostProcessingEffect stage : this.stages) {
+			for(PostProcessingEffect<?> stage : this.stages) {
 				stage.delete();
 			}
 		}
@@ -103,17 +113,17 @@ public abstract class PostProcessingEffect {
 	 * @param dst
 	 * @return
 	 */
-	public EffectBuilder create(Framebuffer dst) {
-		return new EffectBuilder(this, dst);
+	public EffectBuilder<T> create(Framebuffer dst) {
+		return new EffectBuilder<T>(this, dst);
 	}
 
-	public static final class EffectBuilder {
-		private final PostProcessingEffect effect;
+	public static final class EffectBuilder<T extends PostProcessingEffect<?>> {
+		private final PostProcessingEffect<T> effect;
 		private final Framebuffer dst;
 
 		private int src = -1;
-		private Framebuffer blitFBO = null;
-		private Framebuffer prevFBO = null;
+		private Framebuffer blitFrfamebuffer = null;
+		private Framebuffer prevFramebuffer = null;
 		private double renderWidth = -1.0D;
 		private double renderHeight = -1.0D;
 		private boolean restore = true;
@@ -122,38 +132,39 @@ public abstract class PostProcessingEffect {
 		private boolean clearDepth = true;
 		private boolean clearColor = true;
 
-		protected EffectBuilder(PostProcessingEffect effect, Framebuffer dst) {
+		protected EffectBuilder(PostProcessingEffect<T> effect, Framebuffer dst) {
 			this.effect = effect;
 			this.dst = dst;
 		}
 
 		/**
 		 * Sets the source texture the effect should read from.
+		 * <p><b>Note:</b> If the source is the same as the destination a blit buffer is required
 		 * @param src
 		 * @return
 		 */
-		public EffectBuilder setSource(int src) {
+		public EffectBuilder<T> setSource(int src) {
 			this.src = src;
 			return this;
 		}
 
 		/**
 		 * Sets the blit FBO if this effect requires one
-		 * @param blitFBO
+		 * @param blitFramebuffer
 		 * @return
 		 */
-		public EffectBuilder setBlitFramebuffer(Framebuffer blitFBO) {
-			this.blitFBO = blitFBO;
+		public EffectBuilder<T> setBlitFramebuffer(Framebuffer blitFramebuffer) {
+			this.blitFrfamebuffer = blitFramebuffer;
 			return this;
 		}
 
 		/**
 		 * Sets which FBO should be bound after applying the effect
-		 * @param prevFBO
+		 * @param prevFramebuffer
 		 * @return
 		 */
-		public EffectBuilder setPreviousFramebuffer(Framebuffer prevFBO) {
-			this.prevFBO = prevFBO;
+		public EffectBuilder<T> setPreviousFramebuffer(Framebuffer prevFramebuffer) {
+			this.prevFramebuffer = prevFramebuffer;
 			return this;
 		}
 
@@ -164,7 +175,7 @@ public abstract class PostProcessingEffect {
 		 * @param renderHeight
 		 * @return
 		 */
-		public EffectBuilder setRenderDimensions(double renderWidth, double renderHeight) {
+		public EffectBuilder<T> setRenderDimensions(double renderWidth, double renderHeight) {
 			this.renderWidth = renderWidth;
 			this.renderHeight = renderHeight;
 			return this;
@@ -176,7 +187,7 @@ public abstract class PostProcessingEffect {
 		 * @param restore
 		 * @return
 		 */
-		public EffectBuilder setRestoreGlState(boolean restore) {
+		public EffectBuilder<T> setRestoreGlState(boolean restore) {
 			this.restore = restore;
 			return this;
 		}
@@ -186,7 +197,7 @@ public abstract class PostProcessingEffect {
 		 * @param mirror
 		 * @return
 		 */
-		public EffectBuilder setMirrorX(boolean mirror) {
+		public EffectBuilder<T> setMirrorX(boolean mirror) {
 			this.mirrorX = mirror;
 			return this;
 		}
@@ -196,7 +207,7 @@ public abstract class PostProcessingEffect {
 		 * @param mirror
 		 * @return
 		 */
-		public EffectBuilder setMirrorY(boolean mirror) {
+		public EffectBuilder<T> setMirrorY(boolean mirror) {
 			this.mirrorY = mirror;
 			return this;
 		}
@@ -206,7 +217,7 @@ public abstract class PostProcessingEffect {
 		 * @param clearDepth
 		 * @return
 		 */
-		public EffectBuilder setClearDepth(boolean clearDepth) {
+		public EffectBuilder<T> setClearDepth(boolean clearDepth) {
 			this.clearDepth = clearDepth;
 			return this;
 		}
@@ -216,23 +227,23 @@ public abstract class PostProcessingEffect {
 		 * @param clearDepth
 		 * @return
 		 */
-		public EffectBuilder setClearColor(boolean clearColor) {
+		public EffectBuilder<T> setClearColor(boolean clearColor) {
 			this.clearColor = clearColor;
 			return this;
 		}
 
-		public void render() {
+		public void render(float partialTicks) {
 			double renderWidth = this.renderWidth;
 			double renderHeight = this.renderHeight;
 			if(renderWidth < 0.0D || renderHeight < 0.0D) {
 				renderWidth = this.dst.framebufferWidth;
 				renderHeight = this.dst.framebufferHeight;
 			}
-			this.effect.render(this.src, this.dst, this.blitFBO, this.prevFBO, renderWidth, renderHeight, this.restore, this.mirrorX, this.mirrorY, this.clearDepth, this.clearColor);
+			this.effect.render(partialTicks, this.src, this.dst, this.blitFrfamebuffer, this.prevFramebuffer, renderWidth, renderHeight, this.restore, this.mirrorX, this.mirrorY, this.clearDepth, this.clearColor);
 		}
 	}
 
-	private final void render(int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore,
+	private final void render(float partialTicks, int src, Framebuffer dst, Framebuffer blitBuffer, Framebuffer prev, double renderWidth, double renderHeight, boolean restore,
 			boolean mirrorX, boolean mirrorY, boolean clearDepth, boolean clearColor) {
 		if(this.shaderProgramID == -1 || dst == null) return;
 
@@ -289,10 +300,7 @@ public abstract class PostProcessingEffect {
 
 		//Upload sampler uniform (src texture ID)
 		if(this.diffuseSamplerUniformID >= 0 && src >= 0) {
-			OpenGlHelper.glUniform1i(this.diffuseSamplerUniformID, 0);
-			GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, src);
+			this.uploadSampler(this.diffuseSamplerUniformID, src, 5);
 		}
 
 		//Upload texel size uniform
@@ -325,9 +333,9 @@ public abstract class PostProcessingEffect {
 
 		//Apply additional stages
 		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
-			for(PostProcessingEffect stage : this.stages) {
+			for(PostProcessingEffect<?> stage : this.stages) {
 				//Render to blit buffer
-				stage.render(intermediateDst.framebufferTexture, blitBuffer, intermediateDst, null, renderWidth, renderHeight, false, false, false, clearDepth, clearColor);
+				stage.render(partialTicks, intermediateDst.framebufferTexture, blitBuffer, intermediateDst, null, renderWidth, renderHeight, false, false, false, clearDepth, clearColor);
 
 				//Render from blit buffer to destination buffer
 				intermediateDst.bindFramebuffer(true);
@@ -382,7 +390,7 @@ public abstract class PostProcessingEffect {
 		//Bind previous shader
 		OpenGlHelper.glUseProgram(prevShaderProgram);
 
-		this.postRender();
+		this.postRender(partialTicks);
 
 		if(restore) {
 			//Restore matrices
@@ -514,10 +522,11 @@ public abstract class PostProcessingEffect {
 	protected void uploadUniforms() {}
 
 	/**
-	 * Returns additional stages
+	 * Returns additional stages.
+	 * <p><b>Note:</b> If additional stages are used a blit buffer is required
 	 * @return
 	 */
-	protected PostProcessingEffect[] getStages() { return null; }
+	protected PostProcessingEffect<?>[] getStages() { return null; }
 
 	/**
 	 * Used to delete additional things and free memory
@@ -533,7 +542,7 @@ public abstract class PostProcessingEffect {
 	/**
 	 * Called after the shader was rendered to the screen
 	 */
-	protected void postRender() {}
+	protected void postRender(float partialTicks) {}
 
 	/**
 	 * Uploads up to 4 floats
@@ -633,7 +642,7 @@ public abstract class PostProcessingEffect {
 
 	/**
 	 * Uploads a sampler.
-	 * Texture unit 0 is reserved for the default diffuse sampler
+	 * Texture unit 5 is reserved for the default diffuse sampler
 	 * @param uniform
 	 * @param texture
 	 * @param textureUnit

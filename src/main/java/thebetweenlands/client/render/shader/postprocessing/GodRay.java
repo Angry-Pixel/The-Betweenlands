@@ -1,14 +1,10 @@
 package thebetweenlands.client.render.shader.postprocessing;
 
-import org.lwjgl.opengl.ARBMultitexture;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 
-public class GodRay extends PostProcessingEffect {
+public class GodRay extends PostProcessingEffect<GodRay> {
 	private Framebuffer occlusionMap = null;
 
 	private int occlusionMapUniformID = -1;
@@ -69,12 +65,8 @@ public class GodRay extends PostProcessingEffect {
 
 	@Override
 	protected void uploadUniforms() {
-		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB + 0);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.occlusionMap.framebufferTexture);
-		OpenGlHelper.glUniform1i(this.occlusionMapUniformID, 0);
-
-		GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB);
+		//Override diffuse sampler
+		this.uploadSampler(this.occlusionMapUniformID, this.occlusionMap.framebufferTexture, 5);
 
 		this.uploadFloat(this.godRayXUniformID, this.godRayX);
 		this.uploadFloat(this.godRayYUniformID, this.godRayY);

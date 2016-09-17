@@ -13,7 +13,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
@@ -28,24 +27,26 @@ public class ShaderHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public void onPreRenderShaders(PreRenderShadersEvent event) {
-		ShaderHelper.INSTANCE.renderShaders();
+		if(ShaderHelper.INSTANCE.canUseShaders())
+			ShaderHelper.INSTANCE.renderShaders(event.getPartialTicks());
 	}
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
-		if(!(ConfigHandler.useShader && ShaderHelper.INSTANCE.isShaderSupported())) 
-			return;
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
+			//Enable FBOs
+			Minecraft mc = Minecraft.getMinecraft();
+			if(!mc.gameSettings.fboEnable) {
+				mc.gameSettings.fboEnable = true;
+				mc.getFramebuffer().createBindFramebuffer(mc.displayWidth, mc.displayHeight);
+			}
 
-		//Enable FBOs
-		Minecraft mc = Minecraft.getMinecraft();
-		if(!mc.gameSettings.fboEnable) {
-			mc.gameSettings.fboEnable = true;
-			mc.getFramebuffer().createBindFramebuffer(mc.displayWidth, mc.displayHeight);
+			//TODO: Render hand/items/overlays with GL11.glColorMask(false, false, false, false)
+
+			//Initialize and update shaders and textures
+			ShaderHelper.INSTANCE.updateShaders(event.getPartialTicks());
 		}
-
-		//Initialize and update shaders and depth buffer
-		ShaderHelper.INSTANCE.updateShaders(event.getPartialTicks());
 	}
 
 	//	@SideOnly(Side.CLIENT)

@@ -3,7 +3,7 @@ package thebetweenlands.client.render.shader.postprocessing;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 
-public class Warp extends PostProcessingEffect {
+public class Warp extends PostProcessingEffect<Warp> {
 	private float scale = 1.0F;
 	private float timeScale = 1.0F;
 	private float multipier = 1.0F;

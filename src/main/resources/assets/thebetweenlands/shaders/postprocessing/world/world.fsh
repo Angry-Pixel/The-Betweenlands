@@ -171,7 +171,7 @@ void main() {
         float fragCamDist = length(fragPos);
         float gasFragCamDist = length(gasFragPos);
         
-        //Check if repeller shield is behind or in front of the diffuse fragment
+        //Check if gas particle is behind or in front of the diffuse fragment
         bool inBack = fragCamDist <= gasFragCamDist;
         if(!inBack) {
 			color += applyFog(gasFragPos, gasParticlesBuffCol);

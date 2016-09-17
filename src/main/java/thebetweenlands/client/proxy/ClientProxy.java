@@ -118,6 +118,7 @@ import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
+import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
@@ -334,7 +335,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new RenderPossessedBlock());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new RenderItemCage());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodSign.class, new RenderWeedwoodSign());
-		
+
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
@@ -395,6 +396,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.class);
 		MinecraftForge.EVENT_BUS.register(AmbienceSoundPlayHandler.class);
+		MinecraftForge.EVENT_BUS.register(GLUProjection.getInstance());
 	}
 
 	@Override

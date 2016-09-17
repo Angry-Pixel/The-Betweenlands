@@ -35,9 +35,6 @@ public class ShaderHelper {
 	 * @return
 	 */
 	public boolean canUseShaders() {
-		//TODO: Remove once complete
-		if(true)
-			return false;
 		return OpenGlHelper.isFramebufferEnabled() && this.isShaderSupported() && ConfigHandler.useShader;
 	}
 
@@ -84,15 +81,15 @@ public class ShaderHelper {
 	/**
 	 * Renders the main shader to the screen
 	 */
-	public void renderShaders() {
+	public void renderShaders(float partialTicks) {
 		if(this.worldShader != null && this.isRequired() && this.canUseShaders()) {
-			/*if(ShaderHelper2.INSTANCE.getWorldShader() != null) {
-				for(int x = -10; x < 10; x++) {
-					for(int z = -10; z < 10; z++) {
+			/*if(INSTANCE.getWorldShader() != null) {
+				for(int x = -1; x <= 1; x++) {
+					for(int z = -1; z <= 1; z++) {
 						double posX = Minecraft.getMinecraft().getRenderManager().viewerPosX + x*4;
 						double posY = 4;//Minecraft.getMinecraft().getRenderManager().viewerPosY;
 						double posZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ + z*4;
-						ShaderHelper2.INSTANCE.getWorldShader().addLight(new LightSource(posX, posY, posZ, 
+						INSTANCE.getWorldShader().addLight(new LightSource(posX, posY, posZ, 
 								2f,
 								5.0f / 255.0f * 13.0F, 
 								40.0f / 255.0f * 13.0F, 
@@ -102,61 +99,63 @@ public class ShaderHelper {
 			}*/
 
 			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
+			Framebuffer targetFramebuffer1 = mainFramebuffer;
+			Framebuffer targetFramebuffer2 = this.blitBuffer.getFramebuffer(targetFramebuffer1.framebufferWidth, targetFramebuffer1.framebufferHeight);
 
 			int renderPasses = MathHelper.floor_double(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
 			renderPasses = 1; //Multiple render passes are currently not recommended
 
 			Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
 
-			blitFramebuffer.framebufferClear();
+			targetFramebuffer2.framebufferClear();
 
 			for(int i = 0; i < renderPasses; i++) {
 				//Renders the shader to the blitBuffer
-				this.worldShader.setBackgroundColor(1, 1, 1, 1);
-				this.worldShader.setLightIndex(i);
-				this.worldShader.create(blitFramebuffer)
-				.setSource(mainFramebuffer.framebufferTexture)
+				this.worldShader.setRenderPass(i);
+				this.worldShader.create(targetFramebuffer2)
+				.setSource(targetFramebuffer1.framebufferTexture)
 				.setRestoreGlState(true)
 				.setMirrorY(false)
 				.setClearDepth(true)
 				.setClearColor(false)
-				.render();
+				.render(partialTicks);
 
 				//Ping-pong FBOs
-				Framebuffer previous = blitFramebuffer;
-				blitFramebuffer = mainFramebuffer;
-				mainFramebuffer = previous;
+				Framebuffer previous = targetFramebuffer2;
+				targetFramebuffer2 = targetFramebuffer1;
+				targetFramebuffer1 = previous;
 			}
 
-			Framebuffer targetFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-
-			//Render last pass to the target framebuffer if necessary
-			if(mainFramebuffer != targetFramebuffer) {
+			//Render last pass to the main framebuffer if necessary
+			if(targetFramebuffer1 != mainFramebuffer) {
 				Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
 
-				targetFramebuffer.bindFramebuffer(false);
+				mainFramebuffer.bindFramebuffer(false);
 
-				float renderWidth = (float)mainFramebuffer.framebufferTextureWidth;
-				float renderHeight = (float)mainFramebuffer.framebufferTextureHeight;
+				float renderWidth = (float)targetFramebuffer1.framebufferTextureWidth;
+				float renderHeight = (float)targetFramebuffer1.framebufferTextureHeight;
 				GlStateManager.viewport(0, 0, (int)renderWidth, (int)renderHeight);
 
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.enableTexture2D();
-				mainFramebuffer.bindFramebufferTexture();
+				targetFramebuffer1.bindFramebufferTexture();
 				GlStateManager.depthMask(false);
 				GlStateManager.colorMask(true, true, true, true);
 				Tessellator tessellator = Tessellator.getInstance();
 				VertexBuffer vb = tessellator.getBuffer();
 				vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				vb.pos(0.0D, (double)mainFramebuffer.framebufferTextureHeight / 2.0D, 500.0D).tex(0, 0).endVertex();
-				vb.pos((double)mainFramebuffer.framebufferTextureWidth / 2.0D, (double)mainFramebuffer.framebufferTextureHeight / 2.0D, 500.0D).tex(1, 0).endVertex();
-				vb.pos((double)mainFramebuffer.framebufferTextureWidth / 2.0D, 0.0D, 500.0D).tex(1, 1).endVertex();
+				vb.pos(0.0D, (double)targetFramebuffer1.framebufferTextureHeight / 2.0D, 500.0D).tex(0, 0).endVertex();
+				vb.pos((double)targetFramebuffer1.framebufferTextureWidth / 2.0D, (double)targetFramebuffer1.framebufferTextureHeight / 2.0D, 500.0D).tex(1, 0).endVertex();
+				vb.pos((double)targetFramebuffer1.framebufferTextureWidth / 2.0D, 0.0D, 500.0D).tex(1, 1).endVertex();
 				vb.pos(0.0D, 0.0D, 500.0D).tex(0, 1).endVertex();
 				tessellator.draw();
 				GlStateManager.depthMask(true);
 				GlStateManager.colorMask(true, true, true, true);
 			}
+
+			//Render additional post processing effects
+			this.worldShader.setRenderPass(0);
+			this.worldShader.renderPostEffects(partialTicks);
 		}
 	}
 

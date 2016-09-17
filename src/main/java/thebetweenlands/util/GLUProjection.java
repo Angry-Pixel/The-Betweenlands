@@ -4,8 +4,18 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.vector.Matrix4f;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * Helper class to project world space coordinates to screen space coordinates with {@link GLU#gluProject(float, float, float, FloatBuffer, FloatBuffer, IntBuffer, FloatBuffer)}
@@ -550,5 +560,21 @@ public final class GLUProjection {
 		double nc = -Math.cos(-rotPitch * 0.017453292F);
 		double ns = Math.sin(-rotPitch * 0.017453292F);
 		return new Vector3D((double)(s * nc), (double)ns, (double)(c * nc));
+	}
+
+	private static final IntBuffer VIEWPORT_BUFFER = GLAllocation.createDirectIntBuffer(16);
+	private static final FloatBuffer MODELVIEW_BUFFER = GLAllocation.createDirectFloatBuffer(16);
+	private static final FloatBuffer PROJECTION_BUFFER = GLAllocation.createDirectFloatBuffer(16);
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void renderWorld(RenderWorldLastEvent event) {
+		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, MODELVIEW_BUFFER);
+		GL11.glGetFloat(GL11.GL_PROJECTION_MATRIX, PROJECTION_BUFFER);
+		GL11.glGetInteger(GL11.GL_VIEWPORT, VIEWPORT_BUFFER);
+		ScaledResolution sr = new ScaledResolution(Minecraft.getMinecraft());
+		GLUProjection.getInstance().updateMatrices(VIEWPORT_BUFFER, MODELVIEW_BUFFER, PROJECTION_BUFFER, 
+				(float)sr.getScaledWidth() / (float)Minecraft.getMinecraft().displayWidth, 
+				(float)sr.getScaledHeight() / (float)Minecraft.getMinecraft().displayHeight);
 	}
 }
