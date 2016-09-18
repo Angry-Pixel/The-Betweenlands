@@ -18,6 +18,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.util.IsolatedBlockModelRenderer;
 
@@ -36,18 +38,32 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 	}
 
 	public void renderShockwaveBlock(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {
+		ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY + 0.5D, entity.posZ, 
+				(entity.ticksExisted + tick) / 20.0F + 0.8F,
+				5.0f / 255.0f * 8.0F, 
+				20.0f / 255.0f * 8.0F, 
+				80.0f / 255.0f * 8.0F));
+		ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY + 0.5D, entity.posZ, 
+				(entity.ticksExisted + tick) / 25.0F + 0.8F,
+				-1.5F, 
+				-1.5F, 
+				-1.5F));
+
 		GL11.glPushMatrix();
 		GL11.glTranslatef((float) x - 0.5F, (float) y, (float) z - 0.5F);
 		//Lighting is already handled in the block renderer
 		GL11.glDisable(GL11.GL_LIGHTING);
 		bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
 		@SuppressWarnings("deprecation")
 		IBlockState state = entity.block.getStateFromMeta(entity.blockMeta);
 		IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
 		if(model != null) {
 			Tessellator tessellator = Tessellator.getInstance();
 			VertexBuffer buffer = tessellator.getBuffer();
+
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+
 			blockRenderer.setLighting((IBlockState blockState, @Nullable EnumFacing facing) -> {
 				return state.getPackedLightmapCoords(entity.worldObj, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
 			}).setTint((IBlockState blockState, int tintIndex) -> {
@@ -56,7 +72,9 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 				else
 					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, tintIndex);
 			});
+
 			blockRenderer.renderModel(entity.origin, model, state, MathHelper.getPositionRandom(entity.origin), buffer);
+
 			tessellator.draw();
 		}
 		GL11.glEnable(GL11.GL_LIGHTING);

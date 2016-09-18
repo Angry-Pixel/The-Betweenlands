@@ -20,6 +20,7 @@ public class EntityShockwaveSwordItem extends EntityItem {
 		super(worldIn);
 		this.setPickupDelay(80);
 		this.setNoDespawn();
+		this.setSize(0.25F, 1.0F);
 	}
 
 	public EntityShockwaveSwordItem(World worldObj, double posX, double posY, double posZ, ItemStack itemStack) {
@@ -39,7 +40,7 @@ public class EntityShockwaveSwordItem extends EntityItem {
 		super.onUpdate();
 		this.lastWaveProgress = this.waveProgress;
 		this.waveProgress = this.getDataManager().get(WAVE_PROGRESS);
-		if(this.waveProgress < 40)
+		if(this.waveProgress < 50)
 			this.getDataManager().set(WAVE_PROGRESS, this.waveProgress + 1);
 	}
 

@@ -34,6 +34,10 @@ public class AmbienceSound extends MovingSound {
 			return;
 		}
 
+		this.xPosF = (float) this.player.posX;
+		this.yPosF = (float) this.player.posY;
+		this.zPosF = (float) this.player.posZ;
+
 		if(!this.donePlaying)
 			this.pitch = this.type.getPitch();
 

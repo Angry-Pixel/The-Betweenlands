@@ -6,6 +6,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.FogMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,18 +45,34 @@ public class FogHandler {
 	private static float farPlaneDistance = 0.0F;
 	private static int fogMode;
 
+	/**
+	 * Returns the current fog start
+	 * @return
+	 */
 	public static float getCurrentFogStart() {
 		return currentFogStart;
 	}
 
+	/**
+	 * Returns the current fog end
+	 * @return
+	 */
 	public static float getCurrentFogEnd() {
 		return currentFogEnd;
 	}
 
+	/**
+	 * Returns the current fog mode
+	 * @return
+	 */
 	public static int getCurrentFogMode() {
 		return fogMode;
 	}
 
+	/**
+	 * Returns whether the "Dense Fog" event is active
+	 * @return
+	 */
 	public static boolean hasDenseFog() {
 		World world = Minecraft.getMinecraft().theWorld;
 		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().thePlayer.posY > WorldProviderBetweenlands.CAVE_START) {
@@ -71,16 +89,19 @@ public class FogHandler {
 	@SubscribeEvent
 	public static void onFogRenderEvent(RenderFogEvent event) {
 		farPlaneDistance = event.getFarPlaneDistance();
-		fogMode = event.getFogMode();
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderView != null && renderView.dimension == ConfigHandler.dimensionId) {
 			float partialTicks = (float) event.getRenderPartialTicks();
 			float fogStart = currentFogStart + (currentFogStart - lastFogStart) * partialTicks;
 			float fogEnd = currentFogEnd + (currentFogEnd - lastFogEnd) * partialTicks;
 			fogMode = GL11.GL_LINEAR;
-			GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_LINEAR);
-			GL11.glFogf(GL11.GL_FOG_START, fogStart);
-			GL11.glFogf(GL11.GL_FOG_END, fogEnd);
+			GlStateManager.setFog(FogMode.LINEAR);
+			GlStateManager.setFogStart(fogStart);
+			GlStateManager.setFogEnd(fogEnd);
+		} else {
+			lastFogStart = currentFogStart = farPlaneDistance * 0.75F;
+			currentFogStart = currentFogEnd = farPlaneDistance;
+			fogMode = GL11.GL_LINEAR;
 		}
 	}
 
@@ -254,7 +275,7 @@ public class FogHandler {
 			Block block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.worldObj, renderView, (float) event.getRenderPartialTicks()).getBlock();
 			if(block instanceof BlockSwampWater) {
 				fogMode = GL11.GL_EXP;
-				GL11.glFogi(GL11.GL_FOG_MODE, GL11.GL_EXP);
+				GlStateManager.setFog(FogMode.EXP);
 				if (renderView instanceof EntityLivingBase && ((EntityLivingBase)renderView).isPotionActive(Potion.getPotionById(13)/*Water breathing*/)) {
 					event.setDensity(0.1F);
 				} else {

@@ -1,5 +1,9 @@
 package thebetweenlands.common.block.structure;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -13,7 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,9 +26,6 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockEnergyBarrier extends Block {
 	private static final AxisAlignedBB BOUNDS = new AxisAlignedBB(0.125, 0.0, 0.125, 0.875, 1.0, 0.875);
@@ -94,7 +94,7 @@ public class BlockEnergyBarrier extends Block {
 			EnumHand swordHand = null;
 			for (EnumHand hand : EnumHand.values()) {
 				ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-				if (stack != null && stack.getItem() == ItemRegistry.BONE_SWORD) { //TODO: Shockwave Sword
+				if (stack != null && stack.getItem() == ItemRegistry.SHOCKWAVE_SWORD) {
 					swordHand = hand;
 					break;
 				}
@@ -108,12 +108,12 @@ public class BlockEnergyBarrier extends Block {
 							for (int z = -range; z < range; z++) {
 								BlockPos offset = pos.add(x, y, z);
 								if (world.getBlockState(offset).getBlock() == this) {
-									world.playEvent(null, 2001, offset, data);
 									world.setBlockToAir(offset);
 								}
 							}
 						}
 					}
+					world.playEvent(null, 2001, pos, data);
 				}
 			} else {
 				entity.attackEntityFrom(DamageSource.magic, 1);

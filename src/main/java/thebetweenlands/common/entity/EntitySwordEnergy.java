@@ -9,13 +9,17 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnData {
+	private static final AxisAlignedBB RENDER_BOUNDING_BOX = new AxisAlignedBB(-9, -2, -9, 10, 3, 10);
 
 	private static final DataParameter<Float> PART_POS_1 = EntityDataManager.<Float>createKey(EntitySwordEnergy.class, DataSerializers.FLOAT);
 	private static final DataParameter<Float> PART_POS_2 = EntityDataManager.<Float>createKey(EntitySwordEnergy.class, DataSerializers.FLOAT);
@@ -25,9 +29,16 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 	public float pulseFloat;
 	public float pos1, pos2, pos3, pos4, lastPos1, lastPos2, lastPos3, lastPos4;
 	AnimationMathHelper pulse = new AnimationMathHelper();
+
 	public EntitySwordEnergy(World world) {
 		super(world);
-		setSize(7.5F, 1F);
+		this.setSize(1F, 1F);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public AxisAlignedBB getRenderBoundingBox() {
+		return RENDER_BOUNDING_BOX.offset(this.posX, this.posY, this.posZ);
 	}
 
 	@Override

@@ -56,12 +56,11 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 
 	@SuppressWarnings("unchecked")
 	public Entity isSwordEnergyBelow() {
-		List<Entity> list = worldObj.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX() - 1D, pos.getY() - 1D, pos.getZ() - 1D, pos.getX() + 2D, pos.getY() + 1D, pos.getZ() + 2D));
+		List<EntitySwordEnergy> list = worldObj.getEntitiesWithinAABB(EntitySwordEnergy.class, new AxisAlignedBB(pos.getX() - 9D, pos.getY() - 2D, pos.getZ() - 9D, pos.getX() + 10D, pos.getY() + 3D, pos.getZ() + 10D));
 		for (int i = 0; i < list.size(); i++) {
-			Entity entity = list.get(i);
+			EntitySwordEnergy entity = list.get(i);
 			if (entity != null)
-				if (entity instanceof EntitySwordEnergy)
-					return entity;
+				return entity;
 		}
 		return null;
 	}

@@ -29,6 +29,8 @@ public class AmbienceManager {
 	private final List<AmbienceSound> delayedAmbiences = new ArrayList<AmbienceSound>();
 	private final List<AmbienceSound> playingAmbiences = new ArrayList<AmbienceSound>();
 
+	private int lastSoundPlayTicks = 0;
+
 	public void registerAmbience(AmbienceType type) {
 		List<AmbienceType> types = this.ambienceRegistry.get(type.getAmbienceLayer());
 		if(types == null)
@@ -51,6 +53,9 @@ public class AmbienceManager {
 	}
 
 	public void update() {
+		if(this.lastSoundPlayTicks > 0)
+			this.lastSoundPlayTicks--;
+
 		//Keep track of delayed sounds
 		Iterator<AmbienceSound> delayedAmbiencesIT = this.delayedAmbiences.iterator();
 		while(delayedAmbiencesIT.hasNext()) {
@@ -113,7 +118,12 @@ public class AmbienceManager {
 								}
 							}
 							if(!isPlaying && typeIndex <= lowestPlayedAmbience) {
-								this.playSound(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
+								if(this.lastSoundPlayTicks <= 0) {
+									this.playSound(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
+									this.lastSoundPlayTicks = 1;
+								} else {
+									break;
+								}
 							}
 						}
 					}
