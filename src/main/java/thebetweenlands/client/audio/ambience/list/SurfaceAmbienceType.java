@@ -2,19 +2,23 @@ package thebetweenlands.client.audio.ambience.list;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.MathHelper;
+import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
+import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class SurfaceAmbienceType extends AmbienceType {
 	@Override
 	public boolean isActive() {
+		//System.out.println(this.getPlayer().posY > WorldProviderBetweenlands.CAVE_START - 15);
 		return this.getPlayer().posY > WorldProviderBetweenlands.CAVE_START - 15;
 	}
 
 	@Override
-	public EnumAmbienceLayer getAmbienceLayer() {
-		return EnumAmbienceLayer.OVERLAY;
+	public AmbienceLayer getAmbienceLayer() {
+		return AmbienceRegistry.BASE_LAYER;
 	}
 
 	@Override
@@ -35,9 +39,15 @@ public class SurfaceAmbienceType extends AmbienceType {
 	@Override
 	public float getVolume() {
 		if(this.getPlayer().posY <= WorldProviderBetweenlands.CAVE_START) {
-			return Math.max(1.0F - (float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F);
+			return MathHelper.clamp_float(1.0F - (float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
 		} else {
 			return 1.0F;
 		}
+	}
+
+	@Override
+	public float getLowerPriorityVolume() {
+		//Don't stop other lower priority ambiences from playing
+		return 1.0F;
 	}
 }

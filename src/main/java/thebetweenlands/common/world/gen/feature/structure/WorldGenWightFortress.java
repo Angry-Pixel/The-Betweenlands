@@ -1,11 +1,13 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -18,10 +20,15 @@ import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHal
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.storage.chunk.storage.StorageHelper;
+import thebetweenlands.common.world.storage.chunk.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience;
+import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
 
 public class WorldGenWightFortress extends WorldGenerator {
 
@@ -94,16 +101,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 				}
 			}
 		}
-	/*	List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", AxisAlignedBB.getBoundingBox(x - 10, y - 10, z - 10, x + 42, y + 80, z + 42), EnumLocationType.WIGHT_TOWER, 0, true);
+		List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42), EnumLocationType.WIGHT_TOWER, 0, true);
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80)).getChunkData().markDirty();
 		}
-		StorageHelper.addArea(world, "translate:wightTowerPuzzle", AxisAlignedBB.getBoundingBox(x - 10 + 20, y + 17, z - 10 + 20, x + 42 - 20, y + 17 + 6, z + 42 - 20), EnumLocationType.WIGHT_TOWER, 1, true);
-		StorageHelper.addArea(world, "translate:wightTowerTeleporter", AxisAlignedBB.getBoundingBox(x - 10 + 23, y + 17 + 12, z - 10 + 23, x + 42 - 23, y + 17 + 6 + 11, z + 42 - 23), EnumLocationType.WIGHT_TOWER, 2, true);
-		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", AxisAlignedBB.getBoundingBox(x - 10 + 17, y + 17 + 19, z - 10 + 17, x + 42 - 17, y + 17 + 12 + 32, z + 42 - 17), EnumLocationType.WIGHT_TOWER, 3, true);
+		StorageHelper.addArea(world, "translate:wightTowerPuzzle", new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20), EnumLocationType.WIGHT_TOWER, 1, true);
+		StorageHelper.addArea(world, "translate:wightTowerTeleporter", new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23), EnumLocationType.WIGHT_TOWER, 2, true);
+		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17), EnumLocationType.WIGHT_TOWER, 3, true);
 		for(LocationStorage location : addedLocations) {
 			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F)).getChunkData().markDirty();
-		}*/
+		}
 		return generateStructure(world, rand, pos);
 	}
 

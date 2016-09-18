@@ -8,17 +8,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public abstract class AmbienceType {
-	public static enum EnumAmbienceLayer {
-		LAYER1(1), LAYER2(1), OVERLAY(Integer.MAX_VALUE);
-
-		public static final EnumAmbienceLayer TYPES[] = EnumAmbienceLayer.values();
-
-		public final int tracks;
-		private EnumAmbienceLayer(int tracks) {
-			this.tracks = tracks;
-		}
-	}
-
 	public abstract boolean isActive();
 
 	private EntityPlayer player;
@@ -33,11 +22,9 @@ public abstract class AmbienceType {
 	}
 
 	/**
-	 * Defines the compatibility with other playing ambient tracks.
-	 * LAYER1 and LAYER2 allows only one ambient track per group to be played at once.
-	 * OVERLAY allows any amount of ambient tracks to play at once.
+	 * Defines the compatibility and priorities with other playing ambient tracks in the same layer
 	 */
-	public abstract EnumAmbienceLayer getAmbienceLayer();
+	public abstract AmbienceLayer getAmbienceLayer();
 
 	/**
 	 * Defines the priority over other ambient tracks.

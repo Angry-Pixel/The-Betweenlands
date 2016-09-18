@@ -2,7 +2,9 @@ package thebetweenlands.client.audio.ambience.list;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
+import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
@@ -37,8 +39,8 @@ public class EventAmbienceType extends AmbienceType {
 	}
 
 	@Override
-	public EnumAmbienceLayer getAmbienceLayer() {
-		return EnumAmbienceLayer.LAYER1;
+	public AmbienceLayer getAmbienceLayer() {
+		return AmbienceRegistry.BASE_LAYER;
 	}
 
 	@Override

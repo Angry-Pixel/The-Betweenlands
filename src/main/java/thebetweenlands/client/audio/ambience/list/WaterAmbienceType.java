@@ -4,7 +4,9 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
+import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class WaterAmbienceType extends AmbienceType {
@@ -19,8 +21,8 @@ public class WaterAmbienceType extends AmbienceType {
 	}
 
 	@Override
-	public EnumAmbienceLayer getAmbienceLayer() {
-		return EnumAmbienceLayer.LAYER1;
+	public AmbienceLayer getAmbienceLayer() {
+		return AmbienceRegistry.BASE_LAYER;
 	}
 
 	@Override
@@ -34,11 +36,6 @@ public class WaterAmbienceType extends AmbienceType {
 	}
 
 	@Override
-	public float getLowerPriorityVolume() {
-		return 0.1F;
-	}
-
-	@Override
 	public SoundCategory getCategory() {
 		return SoundCategory.AMBIENT;
 	}
@@ -46,5 +43,11 @@ public class WaterAmbienceType extends AmbienceType {
 	@Override
 	public SoundEvent getSound() {
 		return SoundRegistry.AMBIENT_WATER;
+	}
+
+	@Override
+	public float getLowerPriorityVolume() {
+		//Decrease volume of other ambiences (e.g. surface and cave ambience)
+		return 0.1F;
 	}
 }

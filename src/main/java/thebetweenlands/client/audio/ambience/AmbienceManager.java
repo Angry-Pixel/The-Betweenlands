@@ -12,7 +12,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.audio.ambience.AmbienceType.EnumAmbienceLayer;
 import thebetweenlands.common.TheBetweenlands;
 
 @SideOnly(Side.CLIENT)
@@ -26,7 +25,7 @@ public class AmbienceManager {
 		}
 	};
 
-	private final Map<EnumAmbienceLayer, List<AmbienceType>> ambienceRegistry = new HashMap<EnumAmbienceLayer, List<AmbienceType>>();
+	private final Map<AmbienceLayer, List<AmbienceType>> ambienceRegistry = new HashMap<AmbienceLayer, List<AmbienceType>>();
 	private final List<AmbienceSound> delayedAmbiences = new ArrayList<AmbienceSound>();
 	private final List<AmbienceSound> playingAmbiences = new ArrayList<AmbienceSound>();
 
@@ -37,7 +36,7 @@ public class AmbienceManager {
 		types.add(type);
 	}
 
-	private List<AmbienceType> getTypes(EnumAmbienceLayer layer) {
+	private List<AmbienceType> getTypes(AmbienceLayer layer) {
 		List<AmbienceType> types = this.ambienceRegistry.get(layer);
 		if(types == null)
 			types = new ArrayList<AmbienceType>();
@@ -60,6 +59,7 @@ public class AmbienceManager {
 			if(soundPlaying)
 				delayedAmbiencesIT.remove();
 		}
+
 		//Remove completely stopped ambient tracks
 		Iterator<AmbienceSound> playingAmbiencesIT = this.playingAmbiences.iterator();
 		while(playingAmbiencesIT.hasNext()) {
@@ -75,7 +75,7 @@ public class AmbienceManager {
 		//Update ambient tracks
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		if(player != null) {
-			for(EnumAmbienceLayer layer : EnumAmbienceLayer.TYPES) {
+			for(AmbienceLayer layer : this.ambienceRegistry.keySet()) {
 				List<AmbienceType> availableAmbiences = this.getTypes(layer);
 
 				//Update player
@@ -83,56 +83,72 @@ public class AmbienceManager {
 					type.setPlayer(player);
 				}
 
-				int tracks = layer.tracks;
+				int maxTracks = layer.getMaxTracks();
 				if(!availableAmbiences.isEmpty()) {
 					List<AmbienceType> sorted = this.sortByPriority(availableAmbiences);
 
+					//Check if other ambient tracks on this layer are allowed to play
+					int lowestPlayedAmbience = Integer.MAX_VALUE;
+					for(int typeIndex = 0, i = 0; i < sorted.size() && typeIndex < maxTracks; i++) {
+						AmbienceType type = sorted.get(i);
+						if(type.isActive()) {
+							typeIndex++;
+							if(type.getLowerPriorityVolume() <= 0.0F) {
+								lowestPlayedAmbience = typeIndex;
+								break;
+							}
+						}
+					}
+
 					//Add ambient tracks that should be playing
-					boolean lowerOthers = true;
-					int typeIndex = 0;
-					for(int i = 0; i < sorted.size() && typeIndex < tracks; i++) {
+					for(int typeIndex = 0, i = 0; i < sorted.size() && typeIndex < maxTracks; i++) {
 						AmbienceType type = sorted.get(i);
 						if(type.isActive()) {
 							typeIndex++;
 							boolean isPlaying = false;
 							for(AmbienceSound sound : this.playingAmbiences) {
 								if(type == sound.type) {
-									sound.setLowPriority(false);
 									isPlaying = true;
-									if(sound.isFadingOut())
-										sound.cancelFade();
 									break;
 								}
 							}
-							if(!isPlaying) {
+							if(!isPlaying && typeIndex <= lowestPlayedAmbience) {
 								this.playSound(new AmbienceSound(type.getSound(), type.getCategory(), type, player, this), type.getDelay());
 							}
-							if(type.getLowerPriorityVolume() < 0.0F)
-								lowerOthers = false;
 						}
 					}
 
-					//Stop any ambient tracks that don't have priority or shouldn't play
+					//Stop or set any ambient tracks to lower priority if they don't have priority or shouldn't play
 					for(AmbienceSound sound : this.playingAmbiences) {
-						if(!sound.isStopping()) {
-							boolean hasPriority = false;
-							int index = 0;
-							for(int i = 0; i < sorted.size() && index < tracks; i++) {
-								AmbienceType type = sorted.get(i);
-								if(type.isActive()) {
-									index++;
-									if(sound.type.equals(type)) {
-										hasPriority = true;
-										break;
-									}
-								}
+						//Whether the sound has a lower priority and has to use a lower volume
+						boolean lowerPriority = false;
+
+						int typeIndex = 0;
+						for(int i = 0; i < sorted.size() && typeIndex < maxTracks; i++) {
+							AmbienceType otherType = sorted.get(i);
+							if(otherType.isActive()) {
+								typeIndex++;
+
+								if(sound.type == otherType)
+									break;
+
+								if(otherType.getLowerPriorityVolume() > 0.0F && otherType.getLowerPriorityVolume() < 1.0F)
+									lowerPriority = true;
 							}
-							if(!hasPriority) {
-								if(!lowerOthers) {
-									sound.stop();
-								} else {
-									sound.setLowPriority(true);
-								}
+						}
+
+						if(typeIndex <= lowestPlayedAmbience && sound.isFadingOut()) {
+							//Stop fading out, the sound can play again
+							sound.cancelFade();
+						}
+
+						if(!sound.isStopping()) {
+							if(lowestPlayedAmbience != Integer.MAX_VALUE && typeIndex > lowestPlayedAmbience) {
+								//The sound is not allowed to play, stop
+								sound.stop();
+							} else {
+								//The sound has lower priority, use decreased volume
+								sound.setLowPriority(lowerPriority);
 							}
 						}
 					}
@@ -141,6 +157,10 @@ public class AmbienceManager {
 		}
 	}
 
+	/**
+	 * Returns the highest volume to be used by any lower priority ambiences
+	 * @return
+	 */
 	float getLowerPriorityVolume() {
 		float lowest = Float.MAX_VALUE;
 		for(AmbienceSound sound : this.playingAmbiences) {
@@ -162,6 +182,10 @@ public class AmbienceManager {
 		}
 	}
 
+	/**
+	 * Returns whether music should be stopped
+	 * @return
+	 */
 	public boolean shouldStopMusic() {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		if(player != null) {
@@ -173,6 +197,9 @@ public class AmbienceManager {
 		return false;
 	}
 
+	/**
+	 * Stops all tracks
+	 */
 	public void stopAll() {
 		for(AmbienceSound sound : this.playingAmbiences) {
 			Minecraft.getMinecraft().getSoundHandler().stopSound(sound);

@@ -39,9 +39,11 @@ public class AmbienceSound extends MovingSound {
 
 		float desiredVolume = this.type.getVolume();
 		int fadeTicks = Math.max(this.type.getFadeTime(), 1);
-		float incr = Math.max(desiredVolume / (float)fadeTicks, 0.001F);
+		float incr = Math.max((this.volume + Math.abs(desiredVolume - this.volume)) / (float)fadeTicks, 0.001F);
+
 		if(this.isStopping())
 			desiredVolume = 0.0F;
+
 		if(this.isLowPriority)
 			desiredVolume = Math.min(desiredVolume, this.mgr.getLowerPriorityVolume());
 
@@ -58,7 +60,10 @@ public class AmbienceSound extends MovingSound {
 				this.volume = desiredVolume;
 			}
 		}
-		
+
+		if(this.volume <= 0.0F && this.isStopping())
+			this.donePlaying = true;
+
 		if(this.donePlaying)
 			this.repeat = false;
 	}

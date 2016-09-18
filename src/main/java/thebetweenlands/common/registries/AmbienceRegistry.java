@@ -1,7 +1,9 @@
 package thebetweenlands.common.registries;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.client.audio.ambience.list.CaveAmbienceType;
 import thebetweenlands.client.audio.ambience.list.EventAmbienceType;
@@ -14,6 +16,8 @@ import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbie
 
 @SideOnly(Side.CLIENT)
 public class AmbienceRegistry {
+	public static final AmbienceLayer BASE_LAYER = new AmbienceLayer(new ResourceLocation("base_layer"));
+
 	public static void preInit() {
 		//Base ambience
 		AmbienceManager.INSTANCE.registerAmbience(new SurfaceAmbienceType());
@@ -27,10 +31,15 @@ public class AmbienceRegistry {
 				return super.isActive() && !this.getAmbience().getLocation().getName().equals("translate:wightTowerBoss");
 			}
 		});
-		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, null) { //Silences the other ambient tracks
+		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, SoundRegistry.AMBIENT_WIGHT_FORTRESS) { //Silences the other ambient tracks
 			@Override
 			public boolean isActive() {
 				return super.isActive() && this.getAmbience().getLocation().getName().equals("translate:wightTowerBoss");
+			}
+
+			@Override
+			public float getVolume() {
+				return 0.0F;
 			}
 		});
 

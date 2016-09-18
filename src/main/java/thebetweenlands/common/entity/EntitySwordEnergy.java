@@ -65,7 +65,7 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 
 			if (getSwordPart1Pos() <= 0 && getSwordPart2Pos() <= 0 && getSwordPart3Pos() <= 0 && getSwordPart4Pos() <= 0) {
 				worldObj.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_SWORD, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				EntityItem entityItem = new EntityShockwaveSwordItem(worldObj, posX, posY, posZ, new ItemStack(ItemRegistry.BONE_SWORD));
+				EntityItem entityItem = new EntityShockwaveSwordItem(worldObj, posX, posY, posZ, new ItemStack(ItemRegistry.SHOCKWAVE_SWORD));
 				entityItem.motionX = 0;
 				entityItem.motionY = 0;
 				entityItem.motionZ = 0;
