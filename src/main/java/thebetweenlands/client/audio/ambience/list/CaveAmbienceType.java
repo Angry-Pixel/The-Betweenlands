@@ -14,7 +14,7 @@ public class CaveAmbienceType extends AmbienceType {
 
 	@Override
 	public EnumAmbienceLayer getAmbienceLayer() {
-		return EnumAmbienceLayer.LAYER1;
+		return EnumAmbienceLayer.OVERLAY;
 	}
 
 	@Override
@@ -30,5 +30,14 @@ public class CaveAmbienceType extends AmbienceType {
 	@Override
 	public SoundEvent getSound() {
 		return SoundRegistry.AMBIENT_CAVE;
+	}
+
+	@Override
+	public float getVolume() {
+		if(this.getPlayer().posY <= WorldProviderBetweenlands.CAVE_START) {
+			return (float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F;
+		} else {
+			return 1.0F;
+		}
 	}
 }

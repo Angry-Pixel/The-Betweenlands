@@ -58,6 +58,9 @@ public class AmbienceSound extends MovingSound {
 				this.volume = desiredVolume;
 			}
 		}
+		
+		if(this.donePlaying)
+			this.repeat = false;
 	}
 
 	/**
@@ -86,6 +89,7 @@ public class AmbienceSound extends MovingSound {
 	 */
 	public void stopImmediately() {
 		this.donePlaying = true;
+		this.repeat = false;
 	}
 
 	/**

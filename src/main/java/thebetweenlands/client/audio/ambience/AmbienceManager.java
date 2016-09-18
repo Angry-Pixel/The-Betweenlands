@@ -96,7 +96,7 @@ public class AmbienceManager {
 							typeIndex++;
 							boolean isPlaying = false;
 							for(AmbienceSound sound : this.playingAmbiences) {
-								if(type.equals(sound.type)) {
+								if(type == sound.type) {
 									sound.setLowPriority(false);
 									isPlaying = true;
 									if(sound.isFadingOut())
@@ -175,8 +175,14 @@ public class AmbienceManager {
 
 	public void stopAll() {
 		for(AmbienceSound sound : this.playingAmbiences) {
+			Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
+			sound.stopImmediately();
+		}
+		for(AmbienceSound sound : this.delayedAmbiences) {
+			Minecraft.getMinecraft().getSoundHandler().stopSound(sound);
 			sound.stopImmediately();
 		}
 		this.playingAmbiences.clear();
+		this.delayedAmbiences.clear();
 	}
 }

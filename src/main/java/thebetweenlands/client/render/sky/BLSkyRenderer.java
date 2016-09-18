@@ -656,6 +656,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 
+			//TODO: Don't use world time because of lag
 			float ticks = Minecraft.getMinecraft().theWorld.getTotalWorldTime() + partialTicks;
 
 			float domeRotation = (float)(Math.sin(ticks / 1600.0F) * 120.0F - ticks / 20.0F + Math.cos(ticks / 800.0F) * 30.0F * Math.sin(ticks / 1400.0F));

@@ -9,12 +9,12 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 public class SurfaceAmbienceType extends AmbienceType {
 	@Override
 	public boolean isActive() {
-		return this.getPlayer().posY > WorldProviderBetweenlands.CAVE_START;
+		return this.getPlayer().posY > WorldProviderBetweenlands.CAVE_START - 15;
 	}
 
 	@Override
 	public EnumAmbienceLayer getAmbienceLayer() {
-		return EnumAmbienceLayer.LAYER1;
+		return EnumAmbienceLayer.OVERLAY;
 	}
 
 	@Override
@@ -30,5 +30,14 @@ public class SurfaceAmbienceType extends AmbienceType {
 	@Override
 	public SoundEvent getSound() {
 		return SoundRegistry.AMBIENT_SWAMP;
+	}
+
+	@Override
+	public float getVolume() {
+		if(this.getPlayer().posY <= WorldProviderBetweenlands.CAVE_START) {
+			return Math.max(1.0F - (float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F);
+		} else {
+			return 1.0F;
+		}
 	}
 }
