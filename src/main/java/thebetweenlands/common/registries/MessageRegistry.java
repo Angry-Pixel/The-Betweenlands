@@ -13,6 +13,7 @@ import thebetweenlands.common.message.BLMessage;
 import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
 import thebetweenlands.common.message.clientbound.MessageSyncEnvironmentEvent;
+import thebetweenlands.common.message.clientbound.MessageWeedwoodBushRustle;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -23,6 +24,7 @@ public class MessageRegistry {
         registerMessage(MessageDruidAltarProgress.class, Side.CLIENT);
         registerMessage(MessageSyncChunkData.class, Side.CLIENT);
         registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
+		registerMessage(MessageWeedwoodBushRustle.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {
