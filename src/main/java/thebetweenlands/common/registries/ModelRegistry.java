@@ -27,6 +27,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom
 import thebetweenlands.client.render.model.baked.modelbase.ModelBulbCappedMushroom;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
@@ -48,7 +49,7 @@ import thebetweenlands.util.Vec3UV;
 
 public class ModelRegistry {
 	private ModelRegistry() { }
-	
+
 	//Generic
 	public static final IModel BLANK = new ModelBlank();
 	public static final IModel MODEL_COMBINED = new ModelCombined();
@@ -106,8 +107,7 @@ public class ModelRegistry {
 	public static final IModel RUBBER_TAP_LIQUID = new ModelRubberTapLiquid(null, 0);
 	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"));
 	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"));
-
-
+	public static final IModel MUD_FLOWER_POT_BASE = new ModelFromModelBase(new ModelMudFlowerPot(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot"), 32, 32);
 
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

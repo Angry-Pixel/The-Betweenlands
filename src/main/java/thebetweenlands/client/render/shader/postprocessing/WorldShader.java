@@ -194,11 +194,11 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	@Override
 	protected void uploadUniforms() {
-		this.uploadSampler(this.depthUniformID, this.depthBuffer.getTexture(), 6);
-		this.uploadSampler(this.repellerDiffuseUniformID, this.repellerShieldBuffer.getDiffuseTexture(), 7);
-		this.uploadSampler(this.repellerDepthUniformID, this.repellerShieldBuffer.getDepthTexture(), 8);
-		this.uploadSampler(this.gasParticlesDiffuseUniformID, this.gasParticlesBuffer.getDiffuseTexture(), 9);
-		this.uploadSampler(this.gasParticlesDepthUniformID, this.gasParticlesBuffer.getDepthTexture(), 10);
+		this.uploadSampler(this.depthUniformID, this.depthBuffer.getTexture(), 1);
+		this.uploadSampler(this.repellerDiffuseUniformID, this.repellerShieldBuffer.getDiffuseTexture(), 2);
+		this.uploadSampler(this.repellerDepthUniformID, this.repellerShieldBuffer.getDepthTexture(), 3);
+		this.uploadSampler(this.gasParticlesDiffuseUniformID, this.gasParticlesBuffer.getDiffuseTexture(), 4);
+		this.uploadSampler(this.gasParticlesDepthUniformID, this.gasParticlesBuffer.getDepthTexture(), 5);
 
 		this.uploadMatrix4f(this.invMVPUniformID, this.invertedModelviewProjectionMatrix);
 		this.uploadInt(this.fogModeUniformID, FogHandler.getCurrentFogMode());

@@ -8,16 +8,15 @@ import java.nio.IntBuffer;
 import org.apache.commons.io.IOUtils;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.ARBFragmentShader;
-import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ARBShaderObjects;
 import org.lwjgl.opengl.ARBVertexShader;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.util.vector.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
@@ -271,28 +270,28 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			GL11.glGetFloat(GL11.GL_COLOR_CLEAR_VALUE, CLEAR_COLOR_BUFFER);
 
 			//Backup matrices
-			GL11.glPushMatrix();
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glPushMatrix();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glPushMatrix();
+			GlStateManager.pushMatrix();
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.pushMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.pushMatrix();
 		}
 
 		//Set up 2D matrices
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0.0D, intermediateDst.framebufferWidth, intermediateDst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
-		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+		GlStateManager.matrixMode(GL11.GL_PROJECTION);
+		GlStateManager.loadIdentity();
+		GlStateManager.ortho(0.0D, intermediateDst.framebufferWidth, intermediateDst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		GlStateManager.loadIdentity();
+		GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
 		//Clear buffers
 		if(clearDepth) {
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+			GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT);
 		}
 		if(clearColor) {
-			GL11.glClearColor(this.cr, this.cg, this.cb, this.ca);
-			GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+			GlStateManager.clearColor(this.cr, this.cg, this.cb, this.ca);
+			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
 		}
 
 		//Use shader
@@ -300,7 +299,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 		//Upload sampler uniform (src texture ID)
 		if(this.diffuseSamplerUniformID >= 0 && src >= 0) {
-			this.uploadSampler(this.diffuseSamplerUniformID, src, 5);
+			this.uploadSampler(this.diffuseSamplerUniformID, src, 0);
 		}
 
 		//Upload texel size uniform
@@ -316,20 +315,20 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		this.uploadUniforms();
 
 		//Render texture
-		GL11.glBegin(GL11.GL_TRIANGLES);
-		GL11.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
-		GL11.glVertex2d(0, 0);
-		GL11.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 0 : 1);
-		GL11.glVertex2d(0, renderHeight);
-		GL11.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 0 : 1);
-		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 0 : 1);
-		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 1 : 0);
-		GL11.glVertex2d(renderWidth, 0);
-		GL11.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
-		GL11.glVertex2d(0, 0);
-		GL11.glEnd();
+		GlStateManager.glBegin(GL11.GL_TRIANGLES);
+		GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
+		GlStateManager.glVertex3f(0, 0, 0);
+		GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 0 : 1);
+		GlStateManager.glVertex3f(0, (float)renderHeight, 0);
+		GlStateManager.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 0 : 1);
+		GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+		GlStateManager.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 0 : 1);
+		GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+		GlStateManager.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 1 : 0);
+		GlStateManager.glVertex3f((float)renderWidth, 0, 0);
+		GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
+		GlStateManager.glVertex3f(0, 0, 0);
+		GlStateManager.glEnd();
 
 		//Apply additional stages
 		if(blitBuffer != null && this.stages != null && this.stages.length > 0) {
@@ -339,7 +338,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 				//Render from blit buffer to destination buffer
 				intermediateDst.bindFramebuffer(true);
-				GL11.glBindTexture(GL11.GL_TEXTURE_2D, blitBuffer.framebufferTexture);
+				/*GL11.glBindTexture(GL11.GL_TEXTURE_2D, blitBuffer.framebufferTexture);
 				GL11.glBegin(GL11.GL_TRIANGLES);
 				GL11.glTexCoord2d(0, 0);
 				GL11.glVertex2d(0, 0);
@@ -353,7 +352,21 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 				GL11.glVertex2d(renderWidth, 0);
 				GL11.glTexCoord2d(0, 0);
 				GL11.glVertex2d(0, 0);
-				GL11.glEnd();
+				GL11.glEnd();*/
+				GlStateManager.glBegin(GL11.GL_TRIANGLES);
+				GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
+				GlStateManager.glVertex3f(0, 0, 0);
+				GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 0 : 1);
+				GlStateManager.glVertex3f(0, (float)renderHeight, 0);
+				GlStateManager.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 0 : 1);
+				GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+				GlStateManager.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 0 : 1);
+				GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+				GlStateManager.glTexCoord2f(mirrorX ? 0 : 1, mirrorY ? 1 : 0);
+				GlStateManager.glVertex3f((float)renderWidth, 0, 0);
+				GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
+				GlStateManager.glVertex3f(0, 0, 0);
+				GlStateManager.glEnd();
 			}
 		}
 
@@ -362,29 +375,29 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 		if(intermediateDst != dst) {
 			//Set up 2D matrices
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glLoadIdentity();
-			GL11.glOrtho(0.0D, dst.framebufferWidth, dst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glLoadIdentity();
-			GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.loadIdentity();
+			GlStateManager.ortho(0.0D, dst.framebufferWidth, dst.framebufferHeight, 0.0D, 1000.0D, 3000.0D);
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.loadIdentity();
+			GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
 			dst.bindFramebuffer(true);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, intermediateDst.framebufferTexture);
-			GL11.glBegin(GL11.GL_TRIANGLES);
-			GL11.glTexCoord2d(0, 0);
-			GL11.glVertex2d(0, 0);
-			GL11.glTexCoord2d(0, 1);
-			GL11.glVertex2d(0, renderHeight);
-			GL11.glTexCoord2d(1, 1);
-			GL11.glVertex2d(renderWidth, renderHeight);
-			GL11.glTexCoord2d(1, 1);
-			GL11.glVertex2d(renderWidth, renderHeight);
-			GL11.glTexCoord2d(1, 0);
-			GL11.glVertex2d(renderWidth, 0);
-			GL11.glTexCoord2d(0, 0);
-			GL11.glVertex2d(0, 0);
-			GL11.glEnd();
+			GlStateManager.bindTexture(intermediateDst.framebufferTexture);
+			GlStateManager.glBegin(GL11.GL_TRIANGLES);
+			GlStateManager.glTexCoord2f(0, 0);
+			GlStateManager.glVertex3f(0, 0, 0);
+			GlStateManager.glTexCoord2f(0, 1);
+			GlStateManager.glVertex3f(0, (float)renderHeight, 0);
+			GlStateManager.glTexCoord2f(1, 1);
+			GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+			GlStateManager.glTexCoord2f(1, 1);
+			GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+			GlStateManager.glTexCoord2f(1, 0);
+			GlStateManager.glVertex3f((float)renderWidth, 0, 0);
+			GlStateManager.glTexCoord2f(0, 0);
+			GlStateManager.glVertex3f(0, 0, 0);
+			GlStateManager.glEnd();
 		}
 
 		//Bind previous shader
@@ -394,20 +407,21 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 		if(restore) {
 			//Restore matrices
-			GL11.glMatrixMode(GL11.GL_PROJECTION);
-			GL11.glPopMatrix();
-			GL11.glMatrixMode(GL11.GL_MODELVIEW);
-			GL11.glPopMatrix();
+			GlStateManager.matrixMode(GL11.GL_PROJECTION);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.popMatrix();
 
 			//Restore attributes
-			GL11.glPopAttrib();
-			GL11.glClearColor(CLEAR_COLOR_BUFFER.get(0), CLEAR_COLOR_BUFFER.get(1), CLEAR_COLOR_BUFFER.get(2), CLEAR_COLOR_BUFFER.get(3));
+			GlStateManager.popAttrib();
+			GlStateManager.clearColor(CLEAR_COLOR_BUFFER.get(0), CLEAR_COLOR_BUFFER.get(1), CLEAR_COLOR_BUFFER.get(2), CLEAR_COLOR_BUFFER.get(3));
 
 			//Restore matrices
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 
 			//Bind previous FBO
-			if(prev != null) prev.bindFramebuffer(true);
+			if(prev != null)
+				prev.bindFramebuffer(true);
 		}
 	}
 
@@ -642,19 +656,19 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 	/**
 	 * Uploads a sampler.
-	 * Texture unit 5 is reserved for the default diffuse sampler
+	 * Texture unit 0 is reserved for the default diffuse sampler
 	 * @param uniform
 	 * @param texture
 	 * @param textureUnit
 	 */
 	protected final void uploadSampler(int uniform, int texture, int textureUnit) {
-		if(uniform >= 0) {
-			GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB + textureUnit);
-			GL11.glEnable(GL11.GL_TEXTURE_2D);
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, texture);
+		if(uniform >= 0 && textureUnit >= 0) {
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit + textureUnit);
+			GlStateManager.enableTexture2D();
+			GlStateManager.bindTexture(texture);
 			OpenGlHelper.glUniform1i(uniform, textureUnit);
-			GL11.glDisable(GL11.GL_TEXTURE_2D);
-			GL13.glActiveTexture(ARBMultitexture.GL_TEXTURE0_ARB);
+			GlStateManager.disableTexture2D();
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 		}
 	}
 

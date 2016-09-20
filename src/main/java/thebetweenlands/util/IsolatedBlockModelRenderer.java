@@ -69,6 +69,7 @@ public class IsolatedBlockModelRenderer {
 	private AmbientOcclusionProvider ao;
 	private LightingProvider lighting;
 	private TintProvider tint;
+	private boolean useRandomOffsets = true;
 
 	/**
 	 * Sets the occlusion culler
@@ -111,6 +112,16 @@ public class IsolatedBlockModelRenderer {
 	}
 
 	/**
+	 * Sets whether random offsets should be used
+	 * @param useRandomOffsets
+	 * @return
+	 */
+	public IsolatedBlockModelRenderer setUseRandomOffsets(boolean useRandomOffsets) {
+		this.useRandomOffsets = useRandomOffsets;
+		return this;
+	}
+
+	/**
 	 * Renders a block model
 	 * @param pos Position used for random offsets
 	 * @param model Model to render
@@ -148,12 +159,12 @@ public class IsolatedBlockModelRenderer {
 			}
 		}
 
-		List<BakedQuad> list1 = model.getQuads(state, (EnumFacing)null, rand);
+		/*List<BakedQuad> list1 = model.getQuads(state, (EnumFacing)null, rand);
 
 		if (!list1.isEmpty()) {
 			this.renderQuadsSmooth(pos, state, buffer, list1, blockBounds, bitset);
 			flag = true;
-		}
+		}*/
 
 		return flag;
 	}
@@ -172,12 +183,12 @@ public class IsolatedBlockModelRenderer {
 			}
 		}
 
-		List<BakedQuad> list1 = model.getQuads(state, (EnumFacing)null, rand);
+		/*List<BakedQuad> list1 = model.getQuads(state, (EnumFacing)null, rand);
 
 		if (!list1.isEmpty()) {
 			this.renderQuadsFlat(state, pos, -1, true, buffer, list1, bitset, lighting);
 			flag = true;
-		}
+		}*/
 
 		return flag;
 	}
@@ -189,7 +200,7 @@ public class IsolatedBlockModelRenderer {
 		Block block = state.getBlock();
 		Block.EnumOffsetType offsetType = block.getOffsetType();
 
-		if (offsetType != Block.EnumOffsetType.NONE) {
+		if (this.useRandomOffsets && offsetType != Block.EnumOffsetType.NONE) {
 			long posRand = MathHelper.getPositionRandom(pos);
 			blockX += ((double)((float)(posRand >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D;
 			blockZ += ((double)((float)(posRand >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D;
@@ -250,7 +261,7 @@ public class IsolatedBlockModelRenderer {
 		Block block = state.getBlock();
 		Block.EnumOffsetType offsetType = block.getOffsetType();
 
-		if (offsetType != Block.EnumOffsetType.NONE) {
+		if (this.useRandomOffsets && offsetType != Block.EnumOffsetType.NONE) {
 			int randX = pos.getX();
 			int randZ = pos.getZ();
 			long posRand = (long)(randX * 3129871) ^ (long)randZ * 116129781L;

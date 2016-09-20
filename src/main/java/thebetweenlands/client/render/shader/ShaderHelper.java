@@ -1,7 +1,10 @@
 package thebetweenlands.client.render.shader;
 
+import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GLContext;
 
 import net.minecraft.client.Minecraft;
@@ -26,6 +29,11 @@ public class ShaderHelper {
 	private WorldShader worldShader = null;
 	private ResizableFramebuffer blitBuffer = null;
 
+	/**
+	 * The minumum amount of required texture units for the shaders to work properly
+	 */
+	public static final int MIN_REQUIRED_TEX_UNITS = 6;
+
 	public WorldShader getWorldShader() {
 		return this.worldShader;
 	}
@@ -35,7 +43,13 @@ public class ShaderHelper {
 	 * @return
 	 */
 	public boolean canUseShaders() {
-		return OpenGlHelper.isFramebufferEnabled() && this.isShaderSupported() && ConfigHandler.useShader;
+		if(this.isShaderSupported()) {
+			return OpenGlHelper.isFramebufferEnabled() && ConfigHandler.useShader;
+		} else {
+			//Shaders not supported, disable in config
+			ConfigHandler.useShader = false;
+			return false;
+		}
 	}
 
 	/**
@@ -54,9 +68,11 @@ public class ShaderHelper {
 		if(!this.checked){
 			this.checked = true;
 			ContextCapabilities contextCapabilities = GLContext.getCapabilities();
-			boolean supportsGL21 = contextCapabilities.OpenGL21;
-			boolean supported = supportsGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
-			this.shadersSupported = OpenGlHelper.areShadersSupported() && supported && OpenGlHelper.framebufferSupported;
+			boolean supported = contextCapabilities.OpenGL21 || (contextCapabilities.GL_ARB_vertex_shader && contextCapabilities.GL_ARB_fragment_shader && contextCapabilities.GL_ARB_shader_objects);
+			boolean arbMultitexture = contextCapabilities.GL_ARB_multitexture && !contextCapabilities.OpenGL13;
+			int maxTextureUnits = arbMultitexture ? GL11.glGetInteger(ARBMultitexture.GL_MAX_TEXTURE_UNITS_ARB) : (!contextCapabilities.OpenGL20 ? GL11.glGetInteger(GL13.GL_MAX_TEXTURE_UNITS) : GL11.glGetInteger(GL20.GL_MAX_TEXTURE_IMAGE_UNITS));
+			boolean textureUnitsSupported = maxTextureUnits >= MIN_REQUIRED_TEX_UNITS;
+			this.shadersSupported = OpenGlHelper.areShadersSupported() && supported && OpenGlHelper.framebufferSupported && textureUnitsSupported;
 		}
 		return this.shadersSupported;
 	}
@@ -127,6 +143,9 @@ public class ShaderHelper {
 				targetFramebuffer2 = targetFramebuffer1;
 				targetFramebuffer1 = previous;
 			}
+
+			//Make sure texture unit is set to default
+			GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 
 			//Render last pass to the main framebuffer if necessary
 			if(targetFramebuffer1 != mainFramebuffer) {

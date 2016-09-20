@@ -1,0 +1,8 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "thebetweenlands:internal/mud_flower_pot_base"
+    }
+  }
+}

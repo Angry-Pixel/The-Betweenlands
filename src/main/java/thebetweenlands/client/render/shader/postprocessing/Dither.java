@@ -47,7 +47,7 @@ public class Dither extends PostProcessingEffect<Dither> {
 
 	@Override
 	protected void uploadUniforms() {
-		this.uploadSampler(this.bayerMatrixSamplerUniformID, this.bayerMatrixTexture, 6);
+		this.uploadSampler(this.bayerMatrixSamplerUniformID, this.bayerMatrixTexture, 1);
 	}
 
 	@Override
