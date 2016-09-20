@@ -40,6 +40,7 @@ public class EntityRegistry {
 		//probably need to change this to lower_underscore for 1.11
 		registerEntity(EntityAngler.class, "Angler", 0x243B0B, 0x00FFFF);
 		registerEntity(EntitySwampHag.class, "SwampHag", 0x0B3B0B, 0xDBA901);
+		registerEntity(EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
 		registerEntity(EntitySporeling.class, "Sporeling", 0x696144, 0xFFFB00, 64, 1, true);
 		registerEntity(EntityLeech.class, "leech", 0x804E3D, 0x635940);
 		registerEntity(EntityDragonFly.class, "Dragonfly", 0x31B53C, 0x779E3C);
@@ -56,6 +57,5 @@ public class EntityRegistry {
 		registerEntity(EntitySwordEnergy.class, "SwordEnergy");
 		registerEntity(EntityShockwaveSwordItem.class, "ShockwaveSwordItem");
 		registerEntity(EntityShockwaveBlock.class, "ShockwaveBlock");
-		registerEntity(EntityGecko.class, "gecko", 0xFF8000, 0x22E0B1, 64, 1, true);
 	}
 }

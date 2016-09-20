@@ -12,6 +12,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.CaseFormat;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockHopper;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -26,15 +27,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
-import thebetweenlands.common.block.container.BlockBLDualFurnace;
-import thebetweenlands.common.block.container.BlockBLFurnace;
-import thebetweenlands.common.block.container.BlockChestBetweenlands;
-import thebetweenlands.common.block.container.BlockCompostBin;
-import thebetweenlands.common.block.container.BlockDruidAltar;
-import thebetweenlands.common.block.container.BlockLootPot;
-import thebetweenlands.common.block.container.BlockPurifier;
-import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
-import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.container.*;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
@@ -490,7 +483,7 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
 	public static final Block RUBBER_TREE_PLANK_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.WOOD).setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
 	public static final Block SYRMORITE_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
-
+	public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
 
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

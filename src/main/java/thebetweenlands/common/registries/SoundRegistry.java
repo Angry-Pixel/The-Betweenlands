@@ -130,6 +130,8 @@ public class SoundRegistry {
 
     public static final BLSoundEvent WIGHT_HURT = reg("wight_hurt");
     public static final BLSoundEvent WIGHT_MOAN = reg("wight_moan");
+    public static final BLSoundEvent WIGHT_DEATH = reg("wight_death");
+    public static final BLSoundEvent WIGHT_ATTACK = reg("wight_attack");
 
     public static final BLSoundEvent CRAB_SNIP = reg("crab_snip");
 

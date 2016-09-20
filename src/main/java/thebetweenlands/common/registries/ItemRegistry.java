@@ -22,6 +22,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBLArmor;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
+import thebetweenlands.common.item.armor.ItemSkullMask;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -130,6 +131,8 @@ public class ItemRegistry {
 	public static final Item VALONITE_LEGGINGS = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 2, EntityEquipmentSlot.LEGS, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item VALONITE_BOOTS = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 3, EntityEquipmentSlot.FEET, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item RUBBER_BOOTS = new ItemRubberBoots().setCreativeTab(BLCreativeTabs.GEARS);
+	//TODO actuall do this...
+	public static final Item SKULL_MASK = new ItemSkullMask().setCreativeTab(BLCreativeTabs.GEARS);
 
 	//TOOLS
 	public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
