@@ -66,6 +66,7 @@ import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
+import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderItemCage;
 import thebetweenlands.client.render.tile.RenderLootPot;
 import thebetweenlands.client.render.tile.RenderMudFlowerPot;
@@ -113,6 +114,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
@@ -342,7 +344,8 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new RenderItemCage());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodSign.class, new RenderWeedwoodSign());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
-		
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
+
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
@@ -355,7 +358,8 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP), 0, TileEntitySpikeTrap.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
-
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
+		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if(block instanceof ITintedBlock) {

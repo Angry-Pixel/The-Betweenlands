@@ -29,7 +29,8 @@ public final class ItemAspectContainer extends AspectContainer {
 	}
 
 	/**
-	 * Creates an aspect container for the specified item stack
+	 * Creates an aspect container for the specified item stack.
+	 * <p><b>If the aspect manager is null the container will not contain static aspects!</b>
 	 * @param stack
 	 * @param manager
 	 * @return
@@ -37,10 +38,19 @@ public final class ItemAspectContainer extends AspectContainer {
 	public static ItemAspectContainer fromItem(ItemStack stack, @Nullable AspectManager manager) {
 		ItemAspectContainer container = new ItemAspectContainer(manager, stack);
 		List<Aspect> staticAspects = manager != null ? manager.getStaticAspects(new AspectItem(stack)) : null;
-		if(stack.getTagCompound() != null)
-			container.create(stack.getTagCompound(), staticAspects);
-		else 
-			container.create(null, staticAspects);
+		container.load(stack.getTagCompound(), staticAspects);
+		return container;
+	}
+
+	/**
+	 * Creates an aspect container for the specified item stack.
+	 * <p><b>Does not contain static aspects!</b>
+	 * @param stack
+	 * @return
+	 */
+	public static ItemAspectContainer fromItem(ItemStack stack) {
+		ItemAspectContainer container = new ItemAspectContainer(null, stack);
+		container.load(stack.getTagCompound(), null);
 		return container;
 	}
 
@@ -49,7 +59,7 @@ public final class ItemAspectContainer extends AspectContainer {
 		NBTTagCompound nbt = this.itemStack.getTagCompound();
 		if(nbt == null)
 			this.itemStack.setTagCompound(nbt = new NBTTagCompound());
-		this.writeToNBT(nbt);
+		this.save(nbt);
 	}
 
 	/**
@@ -58,6 +68,7 @@ public final class ItemAspectContainer extends AspectContainer {
 	 * @param discoveries
 	 * @return
 	 */
+	@Deprecated //TODO: This will no longer be required once the static aspects are server side only anymore
 	public List<Aspect> getAspects(DiscoveryContainer discoveries) {
 		List<Aspect> discoveredAspects = null;
 		if(discoveries != null && this.manager != null)

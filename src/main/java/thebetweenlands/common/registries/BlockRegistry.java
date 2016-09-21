@@ -31,6 +31,7 @@ import thebetweenlands.common.block.container.BlockBLFurnace;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
+import thebetweenlands.common.block.container.BlockGeckoCage;
 import thebetweenlands.common.block.container.BlockHopperBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockPurifier;
@@ -494,6 +495,8 @@ public class BlockRegistry {
 	public static final Block SYRMORITE_TRAPDOOR = new BlockTrapDoorBetweenlands(Material.IRON).setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
 	public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
 	public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
+	public static final Block GECKO_CAGE = new BlockGeckoCage();
+	
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

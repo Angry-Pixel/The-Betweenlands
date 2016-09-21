@@ -5,7 +5,6 @@ import java.util.List;
 
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-
 import thebetweenlands.common.sound.BLSoundEvent;
 
 public class SoundRegistry {
@@ -43,7 +42,6 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_WATER = reg("ambient_water");
 
     // Miscellaneous
-    public static final BLSoundEvent BLOOD_SKY_ROAR = reg("blood_sky_roar");
     public static final BLSoundEvent CRUMBLE = reg("crumble");
     public static final BLSoundEvent FIG = reg("fig");
     public static final BLSoundEvent SPIKE = reg("spike");

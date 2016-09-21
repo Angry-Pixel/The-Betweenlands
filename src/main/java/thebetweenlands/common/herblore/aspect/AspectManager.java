@@ -66,7 +66,7 @@ public class AspectManager {
 		}
 	}
 
-	public static final class AspectItem {
+	public static class AspectItem {
 		public final Item item;
 		public final int damage;
 
@@ -304,12 +304,12 @@ public class AspectManager {
 		Random rnd = new Random();
 		rnd.setSeed(seed);
 
-		List<AspectEntry> availableAspects = new ArrayList<AspectEntry>(this.REGISTERED_ASPECTS.size());
-		availableAspects.addAll(this.REGISTERED_ASPECTS);
+		List<AspectEntry> availableAspects = new ArrayList<AspectEntry>(REGISTERED_ASPECTS.size());
+		availableAspects.addAll(REGISTERED_ASPECTS);
 
 		List<AspectEntry> possibleAspects = new ArrayList<AspectEntry>();
 
-		for(Entry<AspectItem, List<AspectItemEntry>> item : this.REGISTERED_ITEMS.entrySet()) {
+		for(Entry<AspectItem, List<AspectItemEntry>> item : REGISTERED_ITEMS.entrySet()) {
 			AspectItem itemStack = item.getKey();
 			if(this.matchedAspects.containsKey(itemStack)) {
 				continue;
@@ -317,7 +317,7 @@ public class AspectManager {
 			List<AspectItemEntry> itemEntries = item.getValue();
 			List<Aspect> itemAspects = new ArrayList<Aspect>(itemEntries.size());
 			if(!this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, availableAspects, rnd)) {
-				this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, this.REGISTERED_ASPECTS, rnd);
+				this.fillItemAspects(itemAspects, itemEntries.size(), itemEntries, possibleAspects, REGISTERED_ASPECTS, rnd);
 			}
 			for(Aspect itemAspect : itemAspects) {
 				this.removeAvailableAspect(itemAspect, availableAspects);
@@ -484,8 +484,8 @@ public class AspectManager {
 		for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof IDiscoveryProvider) {
+				@SuppressWarnings("unchecked")
 				IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
-				ItemStack providerObj = stack;
 				DiscoveryContainer container = provider.getContainer(stack);
 				if(container != null)
 					containerList.add(container);

@@ -17,30 +17,40 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
 
+/**
+ * The aspect container contains dynamic and static aspects.
+ * Static aspects are only saved when their amount changes, so that they
+ * can be updated in case the aspect distribution seed is changed. Once
+ * the amount of a static aspect in this container has changed it is no 
+ * longer treated as a static aspect.
+ */
 public class AspectContainer {
 	public static final String ASPECTS_NBT_TAG = "blHerbloreAspects";
 
-	protected static final class InternalAspect {
+	/**
+	 * Internal representation of aspects
+	 */
+	private static final class InternalAspect {
 		public final IAspectType type;
 		public final int amount;
 		public final boolean isDynamic;
 		private boolean isSaved = false;
 
-		protected InternalAspect(IAspectType type, int amount, boolean isDynamic, boolean isSaved) {
+		private InternalAspect(IAspectType type, int amount, boolean isDynamic, boolean isSaved) {
 			this.type = type;
 			this.amount = amount;
 			this.isDynamic = isDynamic;
 			this.isSaved = isSaved;
 		}
 
-		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		private NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 			nbt.setString("aspect", this.type.getName());
 			nbt.setInteger("amount", this.amount);
 			nbt.setBoolean("dynamic", this.isDynamic);
 			return nbt;
 		}
 
-		public static InternalAspect readFromNBT(NBTTagCompound nbt) {
+		private static InternalAspect readFromNBT(NBTTagCompound nbt) {
 			String aspectName = nbt.getString("aspect");
 			int amount = nbt.getInteger("amount");
 			boolean isDynamic = nbt.getBoolean("dynamic");
@@ -51,12 +61,7 @@ public class AspectContainer {
 			return null;
 		}
 
-		public InternalAspect setSaved() {
-			this.isSaved = true;
-			return this;
-		}
-
-		public boolean isSaved() {
+		private boolean isSaved() {
 			return this.isSaved;
 		}
 	}
@@ -109,7 +114,7 @@ public class AspectContainer {
 		else
 			dynAmounts += amount;
 		entries.clear();
-		entries.add(new InternalAspect(type, staticAmounts > 0 ? staticAmounts : 0, false, true));
+		entries.add(new InternalAspect(type, staticAmounts > 0 ? staticAmounts : 0, false, prevStaticAmounts != staticAmounts));
 		entries.add(new InternalAspect(type, dynAmounts > 0 ? dynAmounts : 0, true, true));
 		if(prevStaticAmounts != staticAmounts || prevDynAmounts != dynAmounts)
 			this.onChanged();
@@ -123,9 +128,10 @@ public class AspectContainer {
 	 */
 	protected final AspectContainer clearAspects(IAspectType type) {
 		List<InternalAspect> entries = this.getEntries(type);
-		int prevAmounts = this.getAmount(type, true) + this.getAmount(type, false);
+		int prevStaticAmounts = this.getAmount(type, false);
+		int prevAmounts = this.getAmount(type, true) + prevStaticAmounts;
 		entries.clear();
-		entries.add(new InternalAspect(type, 0, false, true));
+		entries.add(new InternalAspect(type, 0, false, prevStaticAmounts != 0));
 		entries.add(new InternalAspect(type, 0, true, true));
 		if(prevAmounts > 0)
 			this.onChanged();
@@ -156,7 +162,7 @@ public class AspectContainer {
 		else
 			dynAmounts = amount;
 		entries.clear();
-		entries.add(new InternalAspect(type, staticAmounts > 0 ? staticAmounts : 0, false, true));
+		entries.add(new InternalAspect(type, staticAmounts > 0 ? staticAmounts : 0, false, prevStaticAmounts != staticAmounts));
 		entries.add(new InternalAspect(type, dynAmounts > 0 ? dynAmounts : 0, true, true));
 		if(prevStaticAmounts != staticAmounts || prevDynAmounts != dynAmounts)
 			this.onChanged();
@@ -265,11 +271,25 @@ public class AspectContainer {
 	}
 
 	/**
+	 * Returns whether this container is empty
+	 * @return
+	 */
+	public final boolean isEmpty() {
+		for(List<InternalAspect> aspects : this.aspects.values()) {
+			for(InternalAspect aspect : aspects) {
+				if(aspect.amount > 0)
+					return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Writes this container to the specified NBT
 	 * @param nbt
 	 * @return
 	 */
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound save(NBTTagCompound nbt) {
 		NBTTagList typesList = new NBTTagList();
 		Set<Entry<IAspectType, List<InternalAspect>>> entrySet = this.aspects.entrySet();
 		for(Entry<IAspectType, List<InternalAspect>> entry : entrySet) {
@@ -290,7 +310,7 @@ public class AspectContainer {
 	 * @param staticAspects
 	 * @return
 	 */
-	public AspectContainer create(@Nullable NBTTagCompound nbt, @Nullable List<Aspect> staticAspects) {
+	public AspectContainer load(@Nullable NBTTagCompound nbt, @Nullable List<Aspect> staticAspects) {
 		List<InternalAspect> aspects = new ArrayList<InternalAspect>();
 		if(nbt != null) {
 			NBTTagList typesList = nbt.getTagList(ASPECTS_NBT_TAG, Constants.NBT.TAG_LIST);
