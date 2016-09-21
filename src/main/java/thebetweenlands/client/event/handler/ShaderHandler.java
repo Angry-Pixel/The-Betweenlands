@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
@@ -34,14 +35,15 @@ public class ShaderHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onRenderWorldLast(RenderWorldLastEvent event) {
-		if(ShaderHelper.INSTANCE.canUseShaders()) {
-			//Enable FBOs
-			Minecraft mc = Minecraft.getMinecraft();
-			if(!mc.gameSettings.fboEnable) {
-				mc.gameSettings.fboEnable = true;
-				mc.getFramebuffer().createBindFramebuffer(mc.displayWidth, mc.displayHeight);
-			}
+		Minecraft mc = Minecraft.getMinecraft();
 
+		if(ShaderHelper.INSTANCE.isShaderSupported() && ConfigHandler.useShader && !mc.gameSettings.fboEnable) {
+			//Enable FBOs
+			mc.gameSettings.fboEnable = true;
+			mc.getFramebuffer().createBindFramebuffer(mc.displayWidth, mc.displayHeight);
+		}
+
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
 			//TODO: Render hand/items/overlays with GL11.glColorMask(false, false, false, false)
 
 			//Initialize and update shaders and textures
