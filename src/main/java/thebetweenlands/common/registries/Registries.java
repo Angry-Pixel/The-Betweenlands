@@ -12,6 +12,7 @@ public class Registries {
 		SoundRegistry.preInit();
 		ModelRegistry.preInit();
 		AmbienceRegistry.preInit();
+		CapabilityRegistry.preInit();
 	}
 
 	public void init() {

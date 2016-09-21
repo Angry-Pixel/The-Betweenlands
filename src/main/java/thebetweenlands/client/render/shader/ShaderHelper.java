@@ -149,13 +149,18 @@ public class ShaderHelper {
 
 			//Render last pass to the main framebuffer if necessary
 			if(targetFramebuffer1 != mainFramebuffer) {
-				Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
-
 				mainFramebuffer.bindFramebuffer(false);
 
 				float renderWidth = (float)targetFramebuffer1.framebufferTextureWidth;
 				float renderHeight = (float)targetFramebuffer1.framebufferTextureHeight;
+
 				GlStateManager.viewport(0, 0, (int)renderWidth, (int)renderHeight);
+				GlStateManager.matrixMode(GL11.GL_PROJECTION);
+				GlStateManager.loadIdentity();
+				GlStateManager.ortho(0.0D, renderWidth, renderHeight, 0.0D, 1000.0D, 3000.0D);
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				GlStateManager.loadIdentity();
+				GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.enableTexture2D();
@@ -165,9 +170,9 @@ public class ShaderHelper {
 				Tessellator tessellator = Tessellator.getInstance();
 				VertexBuffer vb = tessellator.getBuffer();
 				vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-				vb.pos(0.0D, (double)targetFramebuffer1.framebufferTextureHeight / 2.0D, 500.0D).tex(0, 0).endVertex();
-				vb.pos((double)targetFramebuffer1.framebufferTextureWidth / 2.0D, (double)targetFramebuffer1.framebufferTextureHeight / 2.0D, 500.0D).tex(1, 0).endVertex();
-				vb.pos((double)targetFramebuffer1.framebufferTextureWidth / 2.0D, 0.0D, 500.0D).tex(1, 1).endVertex();
+				vb.pos(0.0D, (double)targetFramebuffer1.framebufferTextureHeight, 500.0D).tex(0, 0).endVertex();
+				vb.pos((double)targetFramebuffer1.framebufferTextureWidth, (double)targetFramebuffer1.framebufferTextureHeight, 500.0D).tex(1, 0).endVertex();
+				vb.pos((double)targetFramebuffer1.framebufferTextureWidth, 0.0D, 500.0D).tex(1, 1).endVertex();
 				vb.pos(0.0D, 0.0D, 500.0D).tex(0, 1).endVertex();
 				tessellator.draw();
 				GlStateManager.depthMask(true);
