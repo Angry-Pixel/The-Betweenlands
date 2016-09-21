@@ -19,6 +19,7 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
 import net.minecraftforge.fml.common.Loader;
@@ -33,7 +34,7 @@ public class EntityCapabilityHandler {
 
 	private static final Map<EntityPlayerMP, List<EntityCapabilityTracker>> TRACKER_MAP = new HashMap<EntityPlayerMP, List<EntityCapabilityTracker>>();
 
-	private int updateTimer = 0;
+	private static int updateTimer = 0;
 
 	/**
 	 * Registers an entity capability
@@ -61,9 +62,8 @@ public class EntityCapabilityHandler {
 		return ID_CAPABILITY_MAP.get(id);
 	}
 
-	@SuppressWarnings("unchecked")
 	private static <T> void registerCapability(EntityCapability<?, T> capability) {
-		CapabilityManager.INSTANCE.register((Class<T>) capability.getClass(), capability, capability);
+		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), capability, capability);
 		ID_CAPABILITY_MAP.put(capability.getID(), capability);
 	}
 
@@ -140,7 +140,20 @@ public class EntityCapabilityHandler {
 	}
 
 	@SubscribeEvent
-	public void onServerTickEvent(ServerTickEvent event) {
+	public static void onEntityUpdate(LivingUpdateEvent event) {
+		if(!event.getEntity().getEntityWorld().isRemote && event.getEntity() instanceof EntityPlayerMP)  {
+			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
+			if(trackers != null) {
+				for(EntityCapabilityTracker tracker : trackers) {
+					tracker.update();
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onServerTickEvent(ServerTickEvent event) {
 		if(event.phase == Phase.END) {
 			updateTimer++;
 			if(updateTimer > 20) {

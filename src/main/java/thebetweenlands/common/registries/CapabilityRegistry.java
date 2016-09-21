@@ -7,7 +7,7 @@ public class CapabilityRegistry {
 	private CapabilityRegistry() { }
 
 	public static void preInit() {
-		//EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 
 		EntityCapabilityHandler.registerCapabilities();
 	}

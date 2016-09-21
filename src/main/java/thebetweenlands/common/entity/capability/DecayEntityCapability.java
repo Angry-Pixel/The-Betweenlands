@@ -5,10 +5,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
 import thebetweenlands.common.entity.capability.base.EntityCapability;
 import thebetweenlands.common.lib.ModInfo;
 
 public class DecayEntityCapability extends EntityCapability<DecayEntityCapability, IDecayCapability> implements IDecayCapability {
+	@CapabilityInject(IDecayCapability.class)
+	public static final Capability<IDecayCapability> CAPABILITY = null;
+
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "decay");
@@ -16,7 +20,12 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 
 	@Override
 	protected Capability<IDecayCapability> getCapability() {
-		return EntityCapabilities.DECAY_CAPABILITY;
+		return CAPABILITY;
+	}
+
+	@Override
+	protected Class<IDecayCapability> getCapabilityClass() {
+		return IDecayCapability.class;
 	}
 
 	@Override
@@ -54,5 +63,20 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.decay = nbt.getInteger("Decay");
+	}
+
+	@Override
+	public void writeTrackingDataToNBT(NBTTagCompound nbt) {
+		this.writeToNBT(nbt);
+	}
+
+	@Override
+	public void readTrackingDataFromNBT(NBTTagCompound nbt) {
+		this.readFromNBT(nbt);
+	}
+
+	@Override
+	public int getTrackingTime() {
+		return 0;
 	}
 }

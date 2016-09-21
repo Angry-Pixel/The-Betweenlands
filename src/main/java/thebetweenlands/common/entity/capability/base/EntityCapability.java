@@ -45,20 +45,30 @@ public abstract class EntityCapability<F, T> implements IStorage<T>, Callable<T>
 		return this.entity;
 	}
 
+	/**
+	 * Returns the capability ID
+	 * @return
+	 */
 	public abstract ResourceLocation getID();
 
 	/**
-	 * Returns a new instance of the capability with the default state
+	 * Returns a <b>new</b> instance of the capability with the default state
 	 * @return
 	 */
 	protected abstract T getDefaultCapabilityImplementation();
 
 	/**
-	 * Returns the capability instance.
+	 * Returns the internal capability instance.
 	 * <p>Use the {@link net.minecraftforge.common.capabilities.CapabilityInject} annotation to retrieve the capability
 	 * @return
 	 */
 	protected abstract Capability<T> getCapability();
+
+	/**
+	 * Returns the internal capability class
+	 * @return
+	 */
+	protected abstract Class<T> getCapabilityClass();
 
 	/**
 	 * Returns the entity capability that is specific to the specified entity
