@@ -43,6 +43,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param index
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public <T> T getObject(Class<T> type, int index) {
 			return (T)this.data[index];
 		}
@@ -55,6 +56,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param index
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public <T> T[] getObjectArray(Class<T> type, int index) {
 			return (T[])this.data[index];
 		}
@@ -232,7 +234,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		public final float r, g, b, a;
 		public final DataHelper data;
 
-		public ImmutableParticleArgs(World world, double x, double y, double z, ParticleArgs builder) {
+		public ImmutableParticleArgs(World world, double x, double y, double z, ParticleArgs<?> builder) {
 			this.world = world;
 			this.x = x;
 			this.y = y;
@@ -252,8 +254,8 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	/**
 	 * Particle arguments
 	 */
-	public static class ParticleArgs<T extends ParticleArgs> implements Consumer<ParticleArgs> {
-		public static final class ArgumentDataBuilder<T extends ParticleArgs> {
+	public static class ParticleArgs<T extends ParticleArgs<?>> implements Consumer<ParticleArgs<?>> {
+		public static final class ArgumentDataBuilder<T extends ParticleArgs<?>> {
 			private int highestIndex = 0;
 			private final Map<Integer, Object> setArgs;
 			private final T args;
@@ -310,7 +312,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 			}
 		}
 
-		private static final ParticleArgs BUILDER = new ParticleArgs();
+		private static final ParticleArgs<?> BUILDER = ParticleArgs.create();
 
 		private static final Object[] NO_DATA = new Object[0];
 
@@ -323,17 +325,21 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		private Object[] data;
 		private boolean dataSet = false;
 
-		private ParticleArgs container;
+		private ParticleArgs<?> container;
 
 		private ParticleArgs() {
 			this.reset();
+		}
+
+		private static <F extends ParticleArgs<?>> ParticleArgs<F> create() {
+			return new ParticleArgs<F>();
 		}
 
 		/**
 		 * Creates a copy of the specified particle args
 		 * @param args
 		 */
-		public ParticleArgs(ParticleArgs args) {
+		private ParticleArgs(ParticleArgs<?> args) {
 			if(args == null)
 				throw new NullPointerException("Particle args to copy must not be null");
 			this.motionSet = args.motionSet;
@@ -355,6 +361,14 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 					this.data[i] = args.data[i];
 			}
 			this.dataSet = args.dataSet;
+		}
+
+		/**
+		 * Creates a copy of the specified particle args
+		 * @param args
+		 */
+		public static <F extends ParticleArgs<?>> ParticleArgs<F> copy(ParticleArgs<?> args) {
+			return new ParticleArgs<F>(args);
 		}
 
 		/**
@@ -400,7 +414,8 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param consumer
 		 * @return
 		 */
-		public final T accept(Consumer<ParticleArgs> consumer) {
+		@SuppressWarnings("unchecked")
+		public final T accept(Consumer<ParticleArgs<?>> consumer) {
 			consumer.accept(this);
 			return (T) this;
 		}
@@ -412,6 +427,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param motionZ
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public final T withMotion(double motionX, double motionY, double motionZ) {
 			this.motionX = motionX;
 			this.motionY = motionY;
@@ -425,6 +441,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param scale
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public final T withScale(float scale) {
 			this.scale = scale;
 			this.scaleSet = true;
@@ -439,6 +456,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param a
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public final T withColor(float r, float g, float b, float a) {
 			this.r = r;
 			this.g = g;
@@ -472,6 +490,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param data
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public final T withData(Object... data) {
 			if(data == null || data.length == 0) 
 				data = NO_DATA;
@@ -485,6 +504,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param size
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public final ArgumentDataBuilder<T> withDataBuilder() {
 			return new ArgumentDataBuilder<T>((T) this);
 		}
@@ -573,7 +593,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * Returns a singleton instance of ParticleArgs
 		 * @return
 		 */
-		public static ParticleArgs get() {
+		public static ParticleArgs<?> get() {
 			BUILDER.reset();
 			return BUILDER;
 		}
@@ -584,10 +604,10 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * @param container Arguments to combine with
 		 * @return The container with the combined args
 		 */
-		protected final ParticleArgs combineArgs(ParticleArgs args) {
-			ParticleArgs container = args.container;
+		protected final ParticleArgs<?> combineArgs(ParticleArgs<?> args) {
+			ParticleArgs<?> container = args.container;
 			if(container == null)
-				container = args.container = new ParticleArgs(args);
+				container = args.container = ParticleArgs.copy(args);
 			if(!container.isMotionSet()) {
 				container.withMotion(this.getMotionX(), this.getMotionY(), this.getMotionZ());
 			}
@@ -626,15 +646,15 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		 * See {@link #combineArgs(ParticleArgs)}.
 		 */
 		@Override
-		public final void accept(ParticleArgs defaultArgs) {
+		public final void accept(ParticleArgs<?> defaultArgs) {
 			defaultArgs.combineArgs(this);
 		}
 	}
 
 	private final ParticleTextureStitcher<T> stitcher;
 	private final Class<T> type;
-	private final ParticleArgs baseArgs;
-	private final ParticleArgs defaultArgs;
+	private final ParticleArgs<?> baseArgs;
+	private final ParticleArgs<?> defaultArgs;
 
 	/**
 	 * Creates a new particle factory for the specified particle type
@@ -652,9 +672,9 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	public ParticleFactory(Class<T> type, @Nullable ParticleTextureStitcher<T> stitcher) {
 		this.stitcher = stitcher;
 		this.type = type;
-		this.baseArgs = new ParticleArgs();
+		this.baseArgs = ParticleArgs.create();
 		this.setBaseArguments(this.baseArgs);
-		this.defaultArgs = new ParticleArgs();
+		this.defaultArgs = ParticleArgs.create();
 	}
 
 	/**
@@ -709,7 +729,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	 * Using {@link ParticleFactory#EMPTY_ARG} has no effect.
 	 * @param args
 	 */
-	protected void setBaseArguments(ParticleArgs args) { }
+	protected void setBaseArguments(ParticleArgs<?> args) { }
 
 	/**
 	 * Sets the default arguments based on the world and position the particle is being spawned at.
@@ -721,22 +741,27 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	 * @param z
 	 * @param args
 	 */
-	protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) { }
+	protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) { }
 
-	public static final class BaseArgsBuilder<F extends ParticleFactory, B extends BaseArgsBuilder<F, ?, C>, C extends Particle> extends ParticleArgs<B> {
-		private final ParticleFactory factory;
+	public static final class BaseArgsBuilder<F extends ParticleFactory<?, ?>, B extends ParticleArgs<?>, C extends Particle> extends ParticleArgs<B> {
+		private final ParticleFactory<?, ?> factory;
 
-		private BaseArgsBuilder(ParticleFactory factory) {
+		private BaseArgsBuilder(ParticleFactory<?, ?> factory) {
 			super();
 			this.factory = factory;
+		}
+
+		private static <F extends ParticleFactory<?, ?>, B extends ParticleArgs<?>, C extends Particle> BaseArgsBuilder<F, B, C> create(ParticleFactory<?, ?> factory) {
+			return new BaseArgsBuilder<F, B, C>(factory);
 		}
 
 		/**
 		 * Builds the arguments and sets the base arguments of the factory if overwritten
 		 * @return
 		 */
+		@SuppressWarnings("unchecked")
 		public final F buildBaseArgs() {
-			ParticleArgs container = new ParticleArgs();
+			ParticleArgs<?> container = ParticleArgs.create();
 			//Fill with arguments from the builder
 			container = this.combineArgs(container);
 			//Fill with base arguments from factory
@@ -754,7 +779,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 		}
 	}
 
-	private final BaseArgsBuilder baseArgsBuilder = new BaseArgsBuilder(this);
+	private final BaseArgsBuilder<F, BaseArgsBuilder<F, ?, T>, T> baseArgsBuilder = BaseArgsBuilder.create(this);
 
 	/**
 	 * Returns the base arguments builder.
@@ -777,7 +802,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	 * @param args
 	 * @return
 	 */
-	public final T create(World world, double x, double y, double z, @Nullable ParticleArgs args) {
+	public final T create(World world, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		if(args == null)
 			args = ParticleArgs.get();
 		this.defaultArgs.reset();
@@ -804,7 +829,7 @@ public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends
 	 * @param args
 	 * @return
 	 */
-	public final T spawn(World world, double x, double y, double z, @Nullable ParticleArgs args) {
+	public final T spawn(World world, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		T particle = this.create(world, x, y, z, args);
 		if(particle != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(particle);

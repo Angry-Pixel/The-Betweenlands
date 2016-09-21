@@ -3,6 +3,7 @@ package thebetweenlands.client.particle.entity;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -11,6 +12,7 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.ParticleTextureStitcher;
 import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.util.MathUtils;
 
 //TODO: Still a WIP
 public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
@@ -18,7 +20,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	private float flameScale;
 	private int brightness;
 
-	public ParticleWisp(World world, double x, double y, double z, double mx, double my, double mz, float scale, int bright) {
+	protected ParticleWisp(World world, double x, double y, double z, double mx, double my, double mz, float scale, int bright) {
 		super(world, x, y, z, mx, my, mz);
 		this.motionX = this.motionX * 0.01D + mx;
 		this.motionY = this.motionY * 0.01D + my;
@@ -40,6 +42,11 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	}
 
 	@Override
+	public void setStitchedSprites(TextureAtlasSprite[] sprites) {
+		((Particle)this).setParticleTexture(sprites[0]);
+	}
+
+	@Override
 	public void renderParticle(VertexBuffer buff, Entity entityIn, float partialTicks, float rx, float rz, float ryz, float rxy, float rxz) {
 		float currentX = (float) (prevPosX + (posX - prevPosX) * partialTicks);
 		float currentY = (float) (prevPosY + (posY - prevPosY) * partialTicks);
@@ -49,7 +56,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		if(!BlockWisp.canSee(this.worldObj)) {
 			distance = MathHelper.clamp_float(getDistanceToViewer(currentX, currentY, currentZ, partialTicks), 10, 20);
 		}
-		this.setAlphaF(/*1.0F - MathHelper.sin(MathUtils.PI / 20 * distance)*/0.8F);
+		this.setAlphaF(1.0F - MathHelper.sin(MathUtils.PI / 20 * distance));
 		super.renderParticle(buff, entityIn, partialTicks, rx, rz, ryz, rxy, rxz);
 	}
 
@@ -105,7 +112,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
+		protected void setBaseArguments(ParticleArgs<?> args) {
 			args.withData(255);
 		}
 	}

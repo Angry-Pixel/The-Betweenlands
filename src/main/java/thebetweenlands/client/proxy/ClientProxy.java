@@ -36,6 +36,7 @@ import thebetweenlands.client.event.handler.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
 import thebetweenlands.client.event.handler.TextureStitchHandler;
+import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
 import thebetweenlands.client.gui.inventory.GuiBLFurnace;
 import thebetweenlands.client.gui.inventory.GuiDruidAltar;
@@ -76,6 +77,7 @@ import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
+import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
@@ -345,7 +347,8 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodSign.class, new RenderWeedwoodSign());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
-
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new RenderWisp());
+		
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
@@ -359,7 +362,7 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
-		
+
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if(block instanceof ITintedBlock) {
@@ -408,18 +411,19 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(FogHandler.class);
 		MinecraftForge.EVENT_BUS.register(AmbienceSoundPlayHandler.class);
 		MinecraftForge.EVENT_BUS.register(GLUProjection.getInstance());
+		MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
 	}
 
 	@Override
 	public void updateWispParticles(TileEntityWisp te) {
-		Iterator<Object> i = te.particleList.iterator();
-		while (i.hasNext()) {
-			if (!((ParticleWisp) i.next()).isAlive()) {
-				i.remove();
+		Iterator<Object> it = te.particleList.iterator();
+		while (it.hasNext()) {
+			ParticleWisp wisp = (ParticleWisp) it.next();
+			if (!wisp.isAlive()) {
+				it.remove();
+			} else {
+				wisp.onUpdate();
 			}
-		}
-		for (Object particle : te.particleList) {
-			((ParticleWisp) particle).onUpdate();
 		}
 	}
 

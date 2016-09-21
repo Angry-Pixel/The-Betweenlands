@@ -12,7 +12,7 @@ public final class ParticleTextureStitcher<T> {
 	 * @param textures
 	 * @return
 	 */
-	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher create(Class<T> cls, ResourceLocation[] textures) {
+	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher<T> create(Class<T> cls, ResourceLocation... textures) {
 		return new ParticleTextureStitcher<T>(textures);
 	}
 
@@ -23,7 +23,7 @@ public final class ParticleTextureStitcher<T> {
 	 * @param texture
 	 * @return
 	 */
-	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher create(Class<T> cls, ResourceLocation texture) {
+	public static <T extends Particle & IParticleSpriteReceiver> ParticleTextureStitcher<T> create(Class<T> cls, ResourceLocation texture) {
 		return create(cls, new ResourceLocation[]{texture});
 	}
 

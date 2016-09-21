@@ -33,6 +33,7 @@ public class TextureStitchHandler {
 
 	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
 
+	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
 		//Corrosion
@@ -89,7 +90,7 @@ public class TextureStitchHandler {
 		//Particles
 		BLParticles[] particles = BLParticles.values();
 		for(BLParticles particle : particles) {
-			ParticleTextureStitcher stitcher = particle.getFactory().getStitcher();
+			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
 			if(stitcher != null) {
 				ResourceLocation[] textures = stitcher.getTextures();
 				TextureAtlasSprite[] sprites = new TextureAtlasSprite[textures.length];

@@ -88,9 +88,9 @@ public enum BLParticles {
 
 
 
-	private ParticleFactory factory;
+	private ParticleFactory<?, ?> factory;
 
-	private BLParticles(ParticleFactory factory) {
+	private BLParticles(ParticleFactory<?, ?> factory) {
 		this.factory = factory;
 	}
 
@@ -98,7 +98,7 @@ public enum BLParticles {
 		return this.factory.getType();
 	}
 
-	public ParticleFactory getFactory() {
+	public ParticleFactory<?, ?> getFactory() {
 		return this.factory;
 	}
 
@@ -111,7 +111,7 @@ public enum BLParticles {
 	 * @param args
 	 * @return
 	 */
-	public Particle create(World world, double x, double y, double z, @Nullable ParticleArgs args) {
+	public Particle create(World world, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		return this.getFactory().create(world, x, y, z, args);
 	}
 
@@ -124,7 +124,7 @@ public enum BLParticles {
 	 * @param args
 	 * @return
 	 */
-	public Particle spawn(World world, double x, double y, double z, @Nullable ParticleArgs args) {
+	public Particle spawn(World world, double x, double y, double z, @Nullable ParticleArgs<?> args) {
 		return this.getFactory().spawn(world, x, y, z, args);
 	}
 
