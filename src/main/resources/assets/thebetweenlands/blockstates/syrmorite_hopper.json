@@ -1,39 +1,21 @@
 {
   "variants": {
-    "enabled=true,facing=down": {
-      "model": "betweenlands:syrmorite_hopper_down"
+    "facing=down": {
+      "model": "thebetweenlands:syrmorite_hopper_down"
     },
-    "enabled=true,facing=north": {
-      "model": "betweenlands:syrmorite_hopper_side"
+    "facing=north": {
+      "model": "thebetweenlands:syrmorite_hopper_side"
     },
-    "enabled=true,facing=south": {
-      "model": "betweenlands:syrmorite_hopper_side",
+    "facing=south": {
+      "model": "thebetweenlands:syrmorite_hopper_side",
       "y": 180
     },
-    "enabled=true,facing=west": {
-      "model": "betweenlands:syrmorite_hopper_side",
+    "facing=west": {
+      "model": "thebetweenlands:syrmorite_hopper_side",
       "y": 270
     },
-    "enabled=true,facing=east": {
-      "model": "betweenlands:syrmorite_hopper_side",
-      "y": 90
-    },
-    "enabled=false,facing=down": {
-      "model": "betweenlands:syrmorite_hopper_down"
-    },
-    "enabled=false,facing=north": {
-      "model": "betweenlands:syrmorite_hopper_side"
-    },
-    "enabled=false,facing=south": {
-      "model": "betweenlands:syrmorite_hopper_side",
-      "y": 180
-    },
-    "enabled=false,facing=west": {
-      "model": "betweenlands:syrmorite_hopper_side",
-      "y": 270
-    },
-    "enabled=false,facing=east": {
-      "model": "betweenlands:syrmorite_hopper_side",
+    "facing=east": {
+      "model": "thebetweenlands:syrmorite_hopper_side",
       "y": 90
     }
   }
