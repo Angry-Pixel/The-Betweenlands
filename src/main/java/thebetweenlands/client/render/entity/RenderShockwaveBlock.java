@@ -18,10 +18,10 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.block.IsolatedBlockModelRenderer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
-import thebetweenlands.util.IsolatedBlockModelRenderer;
 
 @SideOnly(Side.CLIENT)
 public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {

@@ -11,63 +11,61 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.model.pipeline.ForgeBlockModelRenderer;
+import net.minecraftforge.client.model.pipeline.VertexBufferConsumer;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import thebetweenlands.client.render.block.VertexLighterFlatNoOffsets;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
-import thebetweenlands.util.IsolatedBlockModelRenderer;
 
 public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudFlowerPot> {
-	private static final IsolatedBlockModelRenderer blockRenderer = new IsolatedBlockModelRenderer().setUseRandomOffsets(false);
+	private static final VertexLighterFlatNoOffsets FLAT_LIGHTER = new VertexLighterFlatNoOffsets(Minecraft.getMinecraft().getBlockColors());
 
 	@Override
 	public final void renderTileEntityAt(TileEntityMudFlowerPot te, double x, double y, double z, float partialTicks, int destroyStage) {
-		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexBuffer = tessellator.getBuffer();
-		this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		RenderHelper.disableStandardItemLighting();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.enableBlend();
-		GlStateManager.disableCull();
-
-		if (Minecraft.isAmbientOcclusionEnabled()) {
-			GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		} else {
-			GlStateManager.shadeModel(GL11.GL_FLAT);
-		}
-
-		GlStateManager.pushMatrix();
-		GlStateManager.translate(x + 0.25F, y + 0.35F, z + 0.75F);
-		GlStateManager.scale(0.5F, 0.5F, 0.5F);
-
-		//vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
-
 		BlockPos pos = te.getPos();
 		IBlockState potBlockState = te.getBlockType().getExtendedState(te.getWorld().getBlockState(pos), te.getWorld(), pos);
 
 		if(potBlockState instanceof IExtendedBlockState) {
 			IBlockState flowerBlockState = ((IExtendedBlockState)potBlockState).getValue(BlockMudFlowerPot.FLOWER);
 
-			if(flowerBlockState != null) {
+			if(flowerBlockState != null && flowerBlockState.getBlock() != Blocks.AIR) {
 				IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(flowerBlockState);
 				if(model != null) {
-					/*blockRenderer.setLighting((IBlockState blockState, @Nullable EnumFacing facing) -> {
-						return flowerBlockState.getPackedLightmapCoords(te.getWorld(), facing != null ? pos.up().offset(facing) : pos.up());
-					}).setTint((IBlockState blockState, int tintIndex) -> {
-						return Minecraft.getMinecraft().getBlockColors().colorMultiplier(flowerBlockState, null, null, tintIndex);
-					});
+					Tessellator tessellator = Tessellator.getInstance();
+					VertexBuffer vertexBuffer = tessellator.getBuffer();
+					this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+					RenderHelper.disableStandardItemLighting();
+					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GlStateManager.enableBlend();
+					GlStateManager.disableCull();
 
-					blockRenderer.renderModel(pos, model, flowerBlockState, MathHelper.getPositionRandom(pos), vertexBuffer);*/
-					//TODO: Doesn't work, crashes when the face of a baked quad is null
-					Minecraft.getMinecraft().getBlockRendererDispatcher().getBlockModelRenderer().renderModelBrightness(model, flowerBlockState, 1, true);
+					if (Minecraft.isAmbientOcclusionEnabled()) {
+						GlStateManager.shadeModel(GL11.GL_SMOOTH);
+					} else {
+						GlStateManager.shadeModel(GL11.GL_FLAT);
+					}
+
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(x + 0.325F, y + 0.39F, z + 0.325F);
+					GlStateManager.scale(0.35F, 0.35F, 0.35F);
+
+					vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
+
+					FLAT_LIGHTER.setParent(new VertexBufferConsumer(vertexBuffer));
+					ForgeBlockModelRenderer.render(FLAT_LIGHTER, te.getWorld(), model, flowerBlockState, pos, vertexBuffer, false, MathHelper.getPositionRandom(pos));
+
+					tessellator.draw();
+
+					GlStateManager.popMatrix();
+
+					RenderHelper.enableStandardItemLighting();
 				}
 			}
 		}
-
-		//tessellator.draw();
-
-		GlStateManager.popMatrix();
-
-		RenderHelper.enableStandardItemLighting();
 	}
 }

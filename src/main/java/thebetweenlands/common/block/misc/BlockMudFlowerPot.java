@@ -45,7 +45,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public static final PropertyBlockStateUnlisted FLOWER = new PropertyBlockStateUnlisted("flower");
 
 	public BlockMudFlowerPot() {
-		super(Material.ROCK);
+		super(Material.CIRCUITS);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
