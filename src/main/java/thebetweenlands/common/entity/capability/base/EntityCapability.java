@@ -10,8 +10,17 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.Capability.IStorage;
 
-public abstract class EntityCapability<F, T> implements IStorage<T>, Callable<T> {
-	private Entity entity;
+/**
+ * Internal representation and wrapper of entity capabilities.
+ * <p>Use their respective {@link Capability} to interface with the data.
+ * <p><b>Note:</b> This class <b>must</b> be an implementation of the capability it provides!
+ *
+ * @param <F> The default implementation of the capability
+ * @param <T> The capability
+ * @param <E> The entity type
+ */
+public abstract class EntityCapability<F, T, E extends Entity> implements IStorage<T>, Callable<T> {
+	private E entity;
 	private boolean dirty = false;
 
 	@Override
@@ -33,15 +42,16 @@ public abstract class EntityCapability<F, T> implements IStorage<T>, Callable<T>
 		return (T) this.getDefaultCapabilityImplementation();
 	}
 
+	@SuppressWarnings("unchecked")
 	void setEntity(Entity entity) {
-		this.entity = entity;
+		this.entity = (E) entity;
 	}
 
 	/**
 	 * Returns the entity
 	 * @return
 	 */
-	public final Entity getEntity() {
+	public final E getEntity() {
 		return this.entity;
 	}
 
@@ -75,9 +85,10 @@ public abstract class EntityCapability<F, T> implements IStorage<T>, Callable<T>
 	 * @param entity
 	 * @return
 	 */
-	public final EntityCapability<?, ?> getEntityCapability(Entity entity) {
+	@SuppressWarnings("unchecked")
+	public final EntityCapability<?, ?, E> getEntityCapability(E entity) {
 		if(entity.hasCapability(this.getCapability(), null))
-			return (EntityCapability<?, ?>) entity.getCapability(this.getCapability(), null);
+			return (EntityCapability<?, ?, E>) entity.getCapability(this.getCapability(), null);
 		return null;
 	}
 

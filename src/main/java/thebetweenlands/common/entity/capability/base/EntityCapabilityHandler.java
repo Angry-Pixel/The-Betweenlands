@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -20,6 +21,7 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
 import net.minecraftforge.fml.common.Loader;
@@ -29,8 +31,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
 public class EntityCapabilityHandler {
-	private static final List<EntityCapability<?, ?>> REGISTERED_CAPABILITIES = new ArrayList<EntityCapability<?, ?>>();
-	private static final Map<ResourceLocation, EntityCapability<?, ?>> ID_CAPABILITY_MAP = new HashMap<ResourceLocation, EntityCapability<?, ?>>();
+	private static final List<EntityCapability<?, ?, ? extends Entity>> REGISTERED_CAPABILITIES = new ArrayList<EntityCapability<?, ?, ? extends Entity>>();
+	private static final Map<ResourceLocation, EntityCapability<?, ?, ? extends Entity>> ID_CAPABILITY_MAP = new HashMap<ResourceLocation, EntityCapability<?, ?, ? extends Entity>>();
 
 	private static final Map<EntityPlayerMP, List<EntityCapabilityTracker>> TRACKER_MAP = new HashMap<EntityPlayerMP, List<EntityCapabilityTracker>>();
 
@@ -40,7 +42,9 @@ public class EntityCapabilityHandler {
 	 * Registers an entity capability
 	 * @param entityCapability
 	 */
-	public static <T, F extends T> void registerEntityCapability(EntityCapability<F, T> entityCapability) {
+	public static <T, F extends T, E extends Entity> void registerEntityCapability(EntityCapability<F, T, E> entityCapability) {
+		//Make sure the entity capability is the implementation of the capability
+		Preconditions.checkState(entityCapability.getCapabilityClass().isAssignableFrom(entityCapability.getClass()));
 		REGISTERED_CAPABILITIES.add(entityCapability);
 	}
 
@@ -49,7 +53,7 @@ public class EntityCapabilityHandler {
 	 */
 	public static void registerCapabilities() {
 		Preconditions.checkState(Loader.instance().isInState(LoaderState.PREINITIALIZATION));
-		for(EntityCapability<?, ?> capability : REGISTERED_CAPABILITIES) {
+		for(EntityCapability<?, ?, ?> capability : REGISTERED_CAPABILITIES) {
 			registerCapability(capability);
 		}
 	}
@@ -58,26 +62,31 @@ public class EntityCapabilityHandler {
 	 * Returns the capability with the specified ID
 	 * @param id
 	 */
-	public static EntityCapability<?, ?> getCapability(ResourceLocation id) {
-		return ID_CAPABILITY_MAP.get(id);
+	@SuppressWarnings("unchecked")
+	public static <E extends Entity> EntityCapability<?, ?, E> getCapability(ResourceLocation id, E entity) {
+		EntityCapability<?, ?, ?> entityCapability = ID_CAPABILITY_MAP.get(id);
+		if(entityCapability != null && entity.hasCapability(entityCapability.getCapability(), null)) {
+			return (EntityCapability<?, ?, E>) entity.getCapability(entityCapability.getCapability(), null);
+		}
+		return null;
 	}
 
-	private static <T> void registerCapability(EntityCapability<?, T> capability) {
+	private static <T, E extends Entity> void registerCapability(EntityCapability<?, T, E> capability) {
 		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), capability, capability);
 		ID_CAPABILITY_MAP.put(capability.getID(), capability);
 	}
 
 	@SubscribeEvent
 	public static void onAttachCapabilities(AttachCapabilitiesEvent.Entity event) {
-		for(EntityCapability<?, ?> entityCapability : REGISTERED_CAPABILITIES) {
+		for(EntityCapability<?, ?, ?> entityCapability : REGISTERED_CAPABILITIES) {
 			if(entityCapability.isApplicable(event.getEntity())) {
 				final Capability<?> capabilityInstance = entityCapability.getCapability();
 
 				event.addCapability(entityCapability.getID(), new ICapabilitySerializable<NBTTagCompound>() {
 					private Object entityCapability = this.getNewInstance();
 
-					private EntityCapability<?, ?> getNewInstance() {
-						EntityCapability<?, ?> entityCapability = (EntityCapability<?, ?>)capabilityInstance.getDefaultInstance();
+					private EntityCapability<?, ?, ?> getNewInstance() {
+						EntityCapability<?, ?, ?> entityCapability = (EntityCapability<?, ?, ?>)capabilityInstance.getDefaultInstance();
 						entityCapability.setEntity(event.getEntity());
 						return entityCapability;
 					}
@@ -169,17 +178,35 @@ public class EntityCapabilityHandler {
 		}
 	}
 
+	@SubscribeEvent
+	public static void onPlayerClone(PlayerEvent.Clone event) {
+		//Clone persistent capability properties
+		EntityPlayer oldPlayer = event.getOriginal();
+		EntityPlayer newPlayer = event.getEntityPlayer();
+		List<EntityCapability<?, ?, EntityPlayer>> capabilities = getEntityCapabilities(oldPlayer);
+		for(EntityCapability<?, ?, EntityPlayer> capability : capabilities) {
+			if(capability.isPersistent()) {
+				NBTTagCompound nbt = new NBTTagCompound();
+				capability.writeToNBT(nbt);
+				EntityCapability<?, ?, EntityPlayer> newCapability = capability.getEntityCapability(newPlayer);
+				if(newCapability != null)
+					newCapability.readFromNBT(nbt);
+			}
+		}
+	}
+
 	/**
 	 * Returns a list of all found registered capabilities on an entity
 	 * @param entity
 	 * @return
 	 */
-	private static List<EntityCapability<?, ?>> getEntityCapabilities(Entity entity) {
-		List<EntityCapability<?, ?>> capabilities = new ArrayList<EntityCapability<?, ?>>();
+	@SuppressWarnings("unchecked")
+	private static <E extends Entity> List<EntityCapability<?, ?, E>> getEntityCapabilities(E entity) {
+		List<EntityCapability<?, ?, E>> capabilities = new ArrayList<EntityCapability<?, ?, E>>();
 
-		for(EntityCapability<?, ?> capability : REGISTERED_CAPABILITIES) {
+		for(EntityCapability<?, ?, ?> capability : REGISTERED_CAPABILITIES) {
 			if(entity.hasCapability(capability.getCapability(), null))
-				capabilities.add((EntityCapability<?, ?>) entity.getCapability(capability.getCapability(), null));
+				capabilities.add((EntityCapability<?, ?, E>) entity.getCapability(capability.getCapability(), null));
 		}
 
 		return capabilities;
@@ -191,8 +218,8 @@ public class EntityCapabilityHandler {
 	 * @param target
 	 */
 	private static void addTrackers(EntityPlayerMP watcher, Entity target) {
-		List<EntityCapability<?, ?>> entityCapabilities = getEntityCapabilities(target);
-		for(EntityCapability<?, ?> capability : entityCapabilities) {
+		List<EntityCapability<?, ?, Entity>> entityCapabilities = getEntityCapabilities(target);
+		for(EntityCapability<?, ?, Entity> capability : entityCapabilities) {
 			if(capability.getTrackingTime() >= 0) {
 				List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(watcher);
 				if(trackers == null)
@@ -208,8 +235,8 @@ public class EntityCapabilityHandler {
 	 * @param target
 	 */
 	private static void removeTrackers(EntityPlayerMP watcher, Entity target) {
-		List<EntityCapability<?, ?>> entityCapabilities = getEntityCapabilities(target);
-		for(EntityCapability<?, ?> capability : entityCapabilities) {
+		List<EntityCapability<?, ?, Entity>> entityCapabilities = getEntityCapabilities(target);
+		for(EntityCapability<?, ?, Entity> capability : entityCapabilities) {
 			if(capability.getTrackingTime() >= 0) {
 				List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(watcher);
 				if(trackers != null) {

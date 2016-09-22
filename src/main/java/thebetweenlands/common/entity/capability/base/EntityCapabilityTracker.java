@@ -5,16 +5,15 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.message.clientbound.MessageSyncEntityCapabilities;
 
 public class EntityCapabilityTracker {
-	private final EntityCapability<?, ?> entityCapability;
+	private final EntityCapability<?, ?, ?> entityCapability;
 	private final EntityPlayerMP watcher;
 
-	private boolean trackerReady = false;
+	private boolean trackerReady = true;
 	private int lastUpdate = 0;
 
-	public EntityCapabilityTracker(EntityCapability<?, ?> entityCapability, EntityPlayerMP watcher) {
+	public EntityCapabilityTracker(EntityCapability<?, ?, ?> entityCapability, EntityPlayerMP watcher) {
 		this.entityCapability = entityCapability;
 		this.watcher = watcher;
-		this.trackerReady = true;
 	}
 
 	/**
@@ -29,7 +28,7 @@ public class EntityCapabilityTracker {
 	 * Returns the entity capability
 	 * @return
 	 */
-	public EntityCapability<?, ?> getEntityCapability() {
+	public EntityCapability<?, ?, ?> getEntityCapability() {
 		return this.entityCapability;
 	}
 
@@ -44,6 +43,7 @@ public class EntityCapabilityTracker {
 		}
 
 		if(this.trackerReady && this.entityCapability.isDirty()) {
+			this.lastUpdate = 0;
 			this.trackerReady = false;
 			this.entityCapability.setDirty(false);
 			this.sendPacket();

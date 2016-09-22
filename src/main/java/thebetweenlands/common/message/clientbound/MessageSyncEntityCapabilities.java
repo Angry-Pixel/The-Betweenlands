@@ -23,7 +23,7 @@ public class MessageSyncEntityCapabilities extends BLMessage {
 
 	public MessageSyncEntityCapabilities() { }
 
-	public MessageSyncEntityCapabilities(EntityCapability<?, ?> entityCapability) {
+	public MessageSyncEntityCapabilities(EntityCapability<?, ?, ?> entityCapability) {
 		this.capability = entityCapability.getID();
 		this.entityID = entityCapability.getEntity().getEntityId();
 		this.nbt = new NBTTagCompound();
@@ -65,9 +65,8 @@ public class MessageSyncEntityCapabilities extends BLMessage {
 		World world = Minecraft.getMinecraft().theWorld;
 		Entity entity = this.getEntity(world);
 		if(entity != null) {
-			EntityCapability<?, ?> capability = EntityCapabilityHandler.getCapability(this.capability);
+			EntityCapability<?, ?, Entity> capability = EntityCapabilityHandler.getCapability(this.capability, entity);
 			if(capability != null) {
-				capability = capability.getEntityCapability(entity);
 				capability.readTrackingDataFromNBT(this.nbt);
 			}
 		}

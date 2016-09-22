@@ -24,6 +24,7 @@ import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.entity.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.event.EnvironmentEventHandler;
+import thebetweenlands.common.event.PlayerDecayHandler;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -147,5 +148,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(EntityCapabilityHandler.class);
+		MinecraftForge.EVENT_BUS.register(PlayerDecayHandler.class);
 	}
 }
