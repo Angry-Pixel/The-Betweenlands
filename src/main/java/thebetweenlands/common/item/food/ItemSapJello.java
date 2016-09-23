@@ -2,12 +2,13 @@ package thebetweenlands.common.item.food;
 
 import net.minecraft.item.ItemStack;
 
-public class ItemSapJello extends ItemBLFood {
+public class ItemSapJello extends ItemBLFood implements IDecayFood {
     public ItemSapJello() {
         super(4, 15f, false);
         setAlwaysEdible();
     }
 
+    @Override
     public int getDecayHealAmount(ItemStack stack) {
         return 4;
     }

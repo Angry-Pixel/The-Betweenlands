@@ -46,7 +46,7 @@ public class DecayRenderHandler {
 			//Render decay overlay
 			int decay = player.getCapability(DecayEntityCapability.CAPABILITY, null).getDecayStats().getDecayLevel();
 			float glow = (float) ((Math.cos(player.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
-			float transparency = 0.85F * (20 - decay) / 10.0F - glow;
+			float transparency = 0.85F * decay / 20.0F - glow;
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			this.renderer.bindTexture(PLAYER_DECAY_TEXTURE);
@@ -176,7 +176,7 @@ public class DecayRenderHandler {
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			float glow = (float) ((Math.cos(this.entity.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
-			float transparency = 0.85F * (20 - decay) / 10.0F - glow;
+			float transparency = 0.85F * decay / 20.0F - glow;
 			GlStateManager.color(1, 1, 1, transparency);
 			this.parent.render(partialTicks);
 			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());

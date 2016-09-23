@@ -4,13 +4,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 
 public class DecayStats {
-	private int decayLevel = 20;
+	private int decayLevel = 0;
+	private int prevDecayLevel = 0;
 	private float decaySaturationLevel = 5.0F;
-	private float decayExhaustionLevel;
-	private int prevDecayLevel = 20;
+	private float decayAccelerationLevel;
 	private final DecayEntityCapability capability;
 
 	public DecayStats(@Nullable DecayEntityCapability capability) {
@@ -18,13 +19,14 @@ public class DecayStats {
 	}
 
 	/**
-	 * Adds decay stats
+	 * Adds or removes decay.
+	 * Negative decay increases saturation and decreases the decay level while positive decay decreases the saturation and increases the decay level.
 	 * @param decay Decay to be added
 	 * @param saturationModifier Saturation
 	 */
 	public void addStats(int decay, float saturationModifier) {
-		this.decayLevel = Math.min(decay + this.decayLevel, 20);
-		this.decaySaturationLevel = Math.min(this.decaySaturationLevel + (float)decay * saturationModifier * 2.0F, (float)this.decayLevel / 4.0F);
+		this.decayLevel = MathHelper.clamp_int(this.decayLevel + decay, 0, 20);
+		this.decaySaturationLevel = MathHelper.clamp_float(this.decaySaturationLevel + (float)-decay * saturationModifier * 2.0F, 0.0F, (float)(20 - this.decayLevel) / 4.0F);
 		if(this.capability != null)
 			this.capability.markDirty();
 	}
@@ -38,12 +40,13 @@ public class DecayStats {
 
 		this.prevDecayLevel = this.decayLevel;
 
-		if (this.decayExhaustionLevel > 4.0F) {
-			this.decayExhaustionLevel -= 4.0F;
+		if (this.decayAccelerationLevel > 4.0F) {
+			this.decayAccelerationLevel -= 4.0F;
 
 			if (this.decaySaturationLevel > 0.0F) {
 				this.decaySaturationLevel = Math.max(this.decaySaturationLevel - 1.0F, 0.0F);
 			} else if (difficulty != EnumDifficulty.PEACEFUL) {
+				this.decaySaturationLevel = 0.0F;
 				this.decayLevel = Math.max(this.decayLevel - 1, 0);
 				if(this.capability != null)
 					this.capability.markDirty();
@@ -51,9 +54,9 @@ public class DecayStats {
 		}
 
 		if(player.isInWater()) {
-			this.addExhaustion(0.00038F);
+			this.addDecayAcceleration(0.00038F);
 		} else {
-			this.addExhaustion(0.00024F);
+			this.addDecayAcceleration(0.00024F);
 		}
 	}
 
@@ -65,7 +68,7 @@ public class DecayStats {
 		if (nbt.hasKey("decayLevel", 99)) {
 			this.decayLevel = nbt.getInteger("decayLevel");
 			this.decaySaturationLevel = nbt.getFloat("decaySaturationLevel");
-			this.decayExhaustionLevel = nbt.getFloat("decayExhaustionLevel");
+			this.decayAccelerationLevel = nbt.getFloat("decayExhaustionLevel");
 		}
 	}
 
@@ -76,11 +79,11 @@ public class DecayStats {
 	public void writeNBT(NBTTagCompound nbt) {
 		nbt.setInteger("decayLevel", this.decayLevel);
 		nbt.setFloat("decaySaturationLevel", this.decaySaturationLevel);
-		nbt.setFloat("decayExhaustionLevel", this.decayExhaustionLevel);
+		nbt.setFloat("decayExhaustionLevel", this.decayAccelerationLevel);
 	}
 
 	/**
-	 * Returns the decay level
+	 * Returns the decay level (0 = no decay, 20 = maximum decay)
 	 * @return
 	 */
 	public int getDecayLevel() {
@@ -96,15 +99,15 @@ public class DecayStats {
 	}
 
 	/**
-	 * Adds decay exhaustion
-	 * @param decayExhaustion
+	 * Adds decay acceleration (once >= 4 is accumulated the decay level is increased by one)
+	 * @param acceleration
 	 */
-	public void addExhaustion(float decayExhaustion) {
-		this.decayExhaustionLevel = Math.min(this.decayExhaustionLevel + decayExhaustion, 40.0F);
+	public void addDecayAcceleration(float acceleration) {
+		this.decayAccelerationLevel = Math.min(this.decayAccelerationLevel + acceleration, 40.0F);
 	}
 
 	/**
-	 * Returns the saturation level
+	 * Returns the decay saturation level (higher = slower decay rate)
 	 * @return
 	 */
 	public float getSaturationLevel() {
@@ -112,11 +115,11 @@ public class DecayStats {
 	}
 
 	/**
-	 * Returns the exhaustion level
+	 * Returns the decay acceleration level
 	 * @return
 	 */
-	public float getExhaustionLevel() {
-		return this.decayExhaustionLevel;
+	public float getAccelerationLevel() {
+		return this.decayAccelerationLevel;
 	}
 
 	/**
@@ -130,7 +133,7 @@ public class DecayStats {
 	}
 
 	/**
-	 * Sets the decay saturation level
+	 * Sets the decay saturation level (higher = slower decay rate)
 	 * @param saturation
 	 */
 	public void setDecaySaturationLevel(float saturation) {

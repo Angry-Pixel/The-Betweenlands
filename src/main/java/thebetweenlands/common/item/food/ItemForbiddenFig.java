@@ -13,11 +13,12 @@ import thebetweenlands.util.TranslationHelper;
 import java.util.List;
 
 
-public class ItemForbiddenFig extends ItemBLFood {
+public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
     public ItemForbiddenFig() {
         super(20, 5.0F, false);
     }
 
+    @Override
     public int getDecayHealAmount(ItemStack stack) {
         return 20;
     }
