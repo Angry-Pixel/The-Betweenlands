@@ -15,7 +15,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 @SideOnly(Side.CLIENT)
 public class GuiDruidAltar extends GuiContainer {
-    private static final ResourceLocation GUI_DRUID_ALTAR = new ResourceLocation("thebetweenlands:textures/gui/druidAltar.png");
+    private static final ResourceLocation GUI_DRUID_ALTAR = new ResourceLocation("thebetweenlands:textures/gui/druid_altar.png");
     private static Item ghostIcon = ItemRegistry.SWAMP_TALISMAN;
     private final TileEntityDruidAltar tile;
     private ItemStack stack;

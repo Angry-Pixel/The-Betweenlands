@@ -1,6 +1,8 @@
 package thebetweenlands.common.entity.capability;
 
-public interface IDecayCapability {
+import thebetweenlands.common.entity.capability.base.ISerializableEntityCapability;
+
+public interface IDecayCapability extends ISerializableEntityCapability {
 	/**
 	 * Returns the decay stats
 	 * @return

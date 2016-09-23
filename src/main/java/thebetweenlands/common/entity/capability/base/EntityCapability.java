@@ -1,14 +1,11 @@
 package thebetweenlands.common.entity.capability.base;
 
-import java.util.concurrent.Callable;
+import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.Capability.IStorage;
 
 /**
  * Internal representation and wrapper of entity capabilities.
@@ -19,27 +16,13 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
  * @param <T> The capability
  * @param <E> The entity type
  */
-public abstract class EntityCapability<F, T, E extends Entity> implements IStorage<T>, Callable<T> {
+public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E extends Entity> {
 	private E entity;
 	private boolean dirty = false;
 
-	@Override
-	public final NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
-		NBTTagCompound nbt = new NBTTagCompound();
-		this.writeToNBT(nbt);
-		return nbt;
-	}
-
-	@Override
-	public final void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
-		if(nbt instanceof NBTTagCompound) {
-			this.readFromNBT((NBTTagCompound)nbt);
-		}
-	}
-
-	@Override
-	public final T call() throws Exception {
-		return (T) this.getDefaultCapabilityImplementation();
+	protected EntityCapability() {
+		//Make sure the entity capability is the implementation of the capability
+		Preconditions.checkState(this.getCapabilityClass().isAssignableFrom(this.getClass()), "Entity capability %s must implement %s", this.getClass().getName(), this.getCapabilityClass().getName());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -65,17 +48,17 @@ public abstract class EntityCapability<F, T, E extends Entity> implements IStora
 	 * Returns a <b>new</b> instance of the capability with the default state
 	 * @return
 	 */
-	protected abstract T getDefaultCapabilityImplementation();
+	protected abstract F getDefaultCapabilityImplementation();
 
 	/**
-	 * Returns the internal capability instance.
+	 * Returns the capability instance.
 	 * <p>Use the {@link net.minecraftforge.common.capabilities.CapabilityInject} annotation to retrieve the capability
 	 * @return
 	 */
 	protected abstract Capability<T> getCapability();
 
 	/**
-	 * Returns the internal capability class
+	 * Returns the capability class
 	 * @return
 	 */
 	protected abstract Class<T> getCapabilityClass();
@@ -90,22 +73,6 @@ public abstract class EntityCapability<F, T, E extends Entity> implements IStora
 		if(entity.hasCapability(this.getCapability(), null))
 			return (EntityCapability<?, ?, E>) entity.getCapability(this.getCapability(), null);
 		return null;
-	}
-
-	/**
-	 * Writes the data to the nbt
-	 * @param nbt
-	 */
-	public void writeToNBT(NBTTagCompound nbt) {
-
-	}
-
-	/**
-	 * Reads the data from the nbt
-	 * @param nbt
-	 */
-	public void readFromNBT(NBTTagCompound nbt) {
-
 	}
 
 	/**

@@ -6,16 +6,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
 
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -42,9 +45,9 @@ public class EntityCapabilityHandler {
 	 * Registers an entity capability
 	 * @param entityCapability
 	 */
-	public static <T, F extends T, E extends Entity> void registerEntityCapability(EntityCapability<F, T, E> entityCapability) {
+	public static <T, F extends EntityCapability<F, T, E>, E extends Entity> void registerEntityCapability(EntityCapability<F, T, E> entityCapability) {
 		//Make sure the entity capability is the implementation of the capability
-		Preconditions.checkState(entityCapability.getCapabilityClass().isAssignableFrom(entityCapability.getClass()));
+		Preconditions.checkState(entityCapability.getCapabilityClass().isAssignableFrom(entityCapability.getClass()), "Entity capability %s must implement %s", entityCapability.getClass().getName(), entityCapability.getCapabilityClass().getName());
 		REGISTERED_CAPABILITIES.add(entityCapability);
 	}
 
@@ -72,7 +75,30 @@ public class EntityCapabilityHandler {
 	}
 
 	private static <T, E extends Entity> void registerCapability(EntityCapability<?, T, E> capability) {
-		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), capability, capability);
+		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), new IStorage<T>() {
+			@Override
+			public final NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
+				if(instance instanceof ISerializableEntityCapability) {
+					NBTTagCompound nbt = new NBTTagCompound();
+					((ISerializableEntityCapability)instance).writeToNBT(nbt);
+					return nbt;
+				}
+				return null;
+			}
+
+			@Override
+			public final void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
+				if(instance instanceof ISerializableEntityCapability && nbt instanceof NBTTagCompound) {
+					((ISerializableEntityCapability)instance).readFromNBT((NBTTagCompound)nbt);
+				}
+			}
+		}, new Callable<T>() {
+			@SuppressWarnings("unchecked")
+			@Override
+			public final T call() throws Exception {
+				return (T) capability.getDefaultCapabilityImplementation();
+			}
+		});
 		ID_CAPABILITY_MAP.put(capability.getID(), capability);
 	}
 
@@ -185,12 +211,12 @@ public class EntityCapabilityHandler {
 		EntityPlayer newPlayer = event.getEntityPlayer();
 		List<EntityCapability<?, ?, EntityPlayer>> capabilities = getEntityCapabilities(oldPlayer);
 		for(EntityCapability<?, ?, EntityPlayer> capability : capabilities) {
-			if(capability.isPersistent()) {
+			if(capability.isPersistent() && capability instanceof ISerializableEntityCapability) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				capability.writeToNBT(nbt);
+				((ISerializableEntityCapability)capability).writeToNBT(nbt);
 				EntityCapability<?, ?, EntityPlayer> newCapability = capability.getEntityCapability(newPlayer);
-				if(newCapability != null)
-					newCapability.readFromNBT(nbt);
+				if(newCapability != null && newCapability instanceof ISerializableEntityCapability)
+					((ISerializableEntityCapability)newCapability).readFromNBT(nbt);
 			}
 		}
 	}

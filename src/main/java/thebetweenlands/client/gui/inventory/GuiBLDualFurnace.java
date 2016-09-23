@@ -13,7 +13,7 @@ import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 
 @SideOnly(Side.CLIENT)
 public class GuiBLDualFurnace extends GuiContainer {
-    private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("thebetweenlands:textures/gui/dualFurnace.png");
+    private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("thebetweenlands:textures/gui/dual_furnace.png");
     private TileEntityBLDualFurnace tileFurnace;
 
     public GuiBLDualFurnace(InventoryPlayer inventory, TileEntityBLDualFurnace tile) {

@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.capability;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.EnumDifficulty;
@@ -11,7 +13,7 @@ public class DecayStats {
 	private int prevDecayLevel = 20;
 	private final DecayEntityCapability capability;
 
-	public DecayStats(DecayEntityCapability capability) {
+	public DecayStats(@Nullable DecayEntityCapability capability) {
 		this.capability = capability;
 	}
 
@@ -23,7 +25,8 @@ public class DecayStats {
 	public void addStats(int decay, float saturationModifier) {
 		this.decayLevel = Math.min(decay + this.decayLevel, 20);
 		this.decaySaturationLevel = Math.min(this.decaySaturationLevel + (float)decay * saturationModifier * 2.0F, (float)this.decayLevel / 4.0F);
-		this.capability.markDirty();
+		if(this.capability != null)
+			this.capability.markDirty();
 	}
 
 	/**
@@ -42,7 +45,8 @@ public class DecayStats {
 				this.decaySaturationLevel = Math.max(this.decaySaturationLevel - 1.0F, 0.0F);
 			} else if (difficulty != EnumDifficulty.PEACEFUL) {
 				this.decayLevel = Math.max(this.decayLevel - 1, 0);
-				this.capability.markDirty();
+				if(this.capability != null)
+					this.capability.markDirty();
 			}
 		}
 
@@ -59,7 +63,7 @@ public class DecayStats {
 	 */
 	public void readNBT(NBTTagCompound nbt) {
 		if (nbt.hasKey("decayLevel", 99)) {
-			this.decayLevel = nbt.getInteger("DecayLevel");
+			this.decayLevel = nbt.getInteger("decayLevel");
 			this.decaySaturationLevel = nbt.getFloat("decaySaturationLevel");
 			this.decayExhaustionLevel = nbt.getFloat("decayExhaustionLevel");
 		}
@@ -121,7 +125,8 @@ public class DecayStats {
 	 */
 	public void setDecayLevel(int decay) {
 		this.decayLevel = decay;
-		this.capability.markDirty();
+		if(this.capability != null)
+			this.capability.markDirty();
 	}
 
 	/**

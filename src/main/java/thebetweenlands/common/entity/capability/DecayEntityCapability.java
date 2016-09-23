@@ -30,7 +30,7 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	}
 
 	@Override
-	protected IDecayCapability getDefaultCapabilityImplementation() {
+	protected DecayEntityCapability getDefaultCapabilityImplementation() {
 		return new DecayEntityCapability();
 	}
 
@@ -53,7 +53,7 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 
 	@Override
 	public float getMaxPlayerHealth() {
-		return Math.min(26f - ((20 - this.decayStats.getDecayLevel())), 20f);
+		return Math.min(26f - this.decayStats.getDecayLevel(), 20f);
 	}
 
 	@Override

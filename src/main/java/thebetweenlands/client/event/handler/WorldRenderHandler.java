@@ -103,6 +103,7 @@ public class WorldRenderHandler {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.depthMask(true);
+		GlStateManager.disableBlend();
 
 		GlStateManager.popMatrix();
 		WISP_TILE_LIST.clear();

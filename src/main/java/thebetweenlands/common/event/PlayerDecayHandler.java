@@ -34,13 +34,13 @@ public class PlayerDecayHandler {
 
 				int decay = capability.getDecayStats().getDecayLevel();
 
-				if (decay <= 4) {
+				if (decay >= 16) {
 					event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 1, 2, true, false));
 					event.player.jumpMovementFactor = 0.001F;
-				} else if (decay <= 7) {
+				} else if (decay >= 13) {
 					event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 1, 1, true, false));
 					event.player.jumpMovementFactor = 0.002F;
-				} else if (decay <= 10) {
+				} else if (decay >= 10) {
 					event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 1, 0, true, false));
 				}
 

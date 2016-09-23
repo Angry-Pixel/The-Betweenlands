@@ -33,7 +33,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.event.handler.AmbienceSoundPlayHandler;
+import thebetweenlands.client.event.handler.DecayRenderHandler;
 import thebetweenlands.client.event.handler.FogHandler;
+import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
 import thebetweenlands.client.event.handler.TextureStitchHandler;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
@@ -348,7 +350,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new RenderWisp());
-		
+
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
@@ -412,6 +414,8 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(AmbienceSoundPlayHandler.class);
 		MinecraftForge.EVENT_BUS.register(GLUProjection.getInstance());
 		MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
+		MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
 	}
 
 	@Override
