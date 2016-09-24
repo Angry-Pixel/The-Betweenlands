@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.capability.base;
+package thebetweenlands.common.capability.base;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -78,9 +78,9 @@ public class EntityCapabilityHandler {
 		CapabilityManager.INSTANCE.register(capability.getCapabilityClass(), new IStorage<T>() {
 			@Override
 			public final NBTBase writeNBT(Capability<T> capability, T instance, EnumFacing side) {
-				if(instance instanceof ISerializableEntityCapability) {
+				if(instance instanceof ISerializableCapability) {
 					NBTTagCompound nbt = new NBTTagCompound();
-					((ISerializableEntityCapability)instance).writeToNBT(nbt);
+					((ISerializableCapability)instance).writeToNBT(nbt);
 					return nbt;
 				}
 				return null;
@@ -88,8 +88,8 @@ public class EntityCapabilityHandler {
 
 			@Override
 			public final void readNBT(Capability<T> capability, T instance, EnumFacing side, NBTBase nbt) {
-				if(instance instanceof ISerializableEntityCapability && nbt instanceof NBTTagCompound) {
-					((ISerializableEntityCapability)instance).readFromNBT((NBTTagCompound)nbt);
+				if(instance instanceof ISerializableCapability && nbt instanceof NBTTagCompound) {
+					((ISerializableCapability)instance).readFromNBT((NBTTagCompound)nbt);
 				}
 			}
 		}, new Callable<T>() {
@@ -211,12 +211,12 @@ public class EntityCapabilityHandler {
 		EntityPlayer newPlayer = event.getEntityPlayer();
 		List<EntityCapability<?, ?, EntityPlayer>> capabilities = getEntityCapabilities(oldPlayer);
 		for(EntityCapability<?, ?, EntityPlayer> capability : capabilities) {
-			if(capability.isPersistent() && capability instanceof ISerializableEntityCapability) {
+			if(capability.isPersistent() && capability instanceof ISerializableCapability) {
 				NBTTagCompound nbt = new NBTTagCompound();
-				((ISerializableEntityCapability)capability).writeToNBT(nbt);
+				((ISerializableCapability)capability).writeToNBT(nbt);
 				EntityCapability<?, ?, EntityPlayer> newCapability = capability.getEntityCapability(newPlayer);
-				if(newCapability != null && newCapability instanceof ISerializableEntityCapability)
-					((ISerializableEntityCapability)newCapability).readFromNBT(nbt);
+				if(newCapability != null && newCapability instanceof ISerializableCapability)
+					((ISerializableCapability)newCapability).readFromNBT(nbt);
 			}
 		}
 	}

@@ -18,10 +18,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.BetweenlandsAPI;
+import thebetweenlands.common.capability.base.EntityCapabilityHandler;
+import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandResetAspects;
-import thebetweenlands.common.entity.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.event.AnvilEventHandler;
 import thebetweenlands.common.event.EnvironmentEventHandler;
 import thebetweenlands.common.event.PlayerDecayHandler;
@@ -148,6 +149,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(EntityCapabilityHandler.class);
+		MinecraftForge.EVENT_BUS.register(ItemCapabilityHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerDecayHandler.class);
 	}
 }

@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.capability.base;
+package thebetweenlands.common.capability.base;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import thebetweenlands.common.TheBetweenlands;

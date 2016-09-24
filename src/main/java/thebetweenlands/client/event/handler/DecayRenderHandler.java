@@ -19,9 +19,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.entity.capability.DecayEntityCapability;
-import thebetweenlands.common.entity.capability.IDecayCapability;
+import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class DecayRenderHandler {
 	public static final ResourceLocation PLAYER_DECAY_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/player_decay.png");
@@ -44,7 +44,7 @@ public class DecayRenderHandler {
 			model.bipedLeftArmwear.showModel = false;
 
 			//Render decay overlay
-			int decay = player.getCapability(DecayEntityCapability.CAPABILITY, null).getDecayStats().getDecayLevel();
+			int decay = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null).getDecayStats().getDecayLevel();
 			float glow = (float) ((Math.cos(player.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
 			float transparency = 0.85F * decay / 20.0F - glow;
 			GlStateManager.enableBlend();
@@ -83,8 +83,8 @@ public class DecayRenderHandler {
 	private static void onRenderPlayer(RenderPlayerEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
 
-		if(player.hasCapability(DecayEntityCapability.CAPABILITY, null)) {
-			IDecayCapability capability = player.getCapability(DecayEntityCapability.CAPABILITY, null);
+		if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
 				if(event instanceof RenderPlayerEvent.Pre) {
 					LayerDecay layer = new LayerDecay(event.getRenderer());
@@ -105,8 +105,8 @@ public class DecayRenderHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		Minecraft mc = Minecraft.getMinecraft();
 
-		if(player != null && player.hasCapability(DecayEntityCapability.CAPABILITY, null)) {
-			IDecayCapability capability = player.getCapability(DecayEntityCapability.CAPABILITY, null);
+		if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
 				RenderPlayer playerRenderer = (RenderPlayer) Minecraft.getMinecraft().getRenderManager().getEntityRenderObject((AbstractClientPlayer) Minecraft.getMinecraft().thePlayer);
 
@@ -169,7 +169,7 @@ public class DecayRenderHandler {
 			this.parent.render(partialTicks);
 
 			//Render decay overlay
-			int decay = this.entity.getCapability(DecayEntityCapability.CAPABILITY, null).getDecayStats().getDecayLevel();
+			int decay = this.entity.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null).getDecayStats().getDecayLevel();
 			GlStateManager.pushMatrix();
 			Minecraft.getMinecraft().renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);
 			GlStateManager.enableTexture2D();

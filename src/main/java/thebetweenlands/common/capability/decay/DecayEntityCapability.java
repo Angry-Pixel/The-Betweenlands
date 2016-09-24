@@ -1,19 +1,16 @@
-package thebetweenlands.common.entity.capability;
+package thebetweenlands.common.capability.decay;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityInject;
-import thebetweenlands.common.entity.capability.base.EntityCapability;
+import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class DecayEntityCapability extends EntityCapability<DecayEntityCapability, IDecayCapability, EntityPlayer> implements IDecayCapability {
-	@CapabilityInject(IDecayCapability.class)
-	public static final Capability<IDecayCapability> CAPABILITY = null;
-
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "decay");
@@ -21,7 +18,7 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 
 	@Override
 	protected Capability<IDecayCapability> getCapability() {
-		return CAPABILITY;
+		return CapabilityRegistry.CAPABILITY_DECAY;
 	}
 
 	@Override

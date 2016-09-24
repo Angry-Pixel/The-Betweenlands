@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.capability;
+package thebetweenlands.common.capability.decay;
 
 import javax.annotation.Nullable;
 

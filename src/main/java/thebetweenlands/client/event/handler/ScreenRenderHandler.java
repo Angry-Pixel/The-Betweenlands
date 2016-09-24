@@ -14,8 +14,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.entity.capability.DecayEntityCapability;
-import thebetweenlands.common.entity.capability.IDecayCapability;
+import thebetweenlands.common.capability.decay.IDecayCapability;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -82,8 +82,8 @@ public class ScreenRenderHandler extends Gui {
 
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
-			if (player != null && player.hasCapability(DecayEntityCapability.CAPABILITY, null)) {
-				IDecayCapability capability = player.getCapability(DecayEntityCapability.CAPABILITY, null);
+			if (player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 				if(capability.isDecayEnabled()) {
 					int startX = (width / 2) - (27 / 2) + 23;

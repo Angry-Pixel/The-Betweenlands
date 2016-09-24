@@ -12,8 +12,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.capability.base.EntityCapability;
-import thebetweenlands.common.entity.capability.base.EntityCapabilityHandler;
+import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.message.BLMessage;
 
 public class MessageSyncEntityCapabilities extends BLMessage {
