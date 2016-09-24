@@ -11,6 +11,8 @@ import thebetweenlands.common.capability.circlegem.IEntityCircleGemCapability;
 import thebetweenlands.common.capability.circlegem.IItemCircleGemCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
 import thebetweenlands.common.capability.decay.IDecayCapability;
+import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
+import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 
 public class CapabilityRegistry {
 	private CapabilityRegistry() { }
@@ -24,10 +26,14 @@ public class CapabilityRegistry {
 	@CapabilityInject(IItemCircleGemCapability.class)
 	public static final Capability<ICircleGemCapability> CAPABILITY_ITEM_CIRCLE_GEM = null;
 
+	@CapabilityInject(IEquipmentCapability.class)
+	public static final Capability<IEquipmentCapability> CAPABILITY_EQUIPMENT = null;
+
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
-
+		EntityCapabilityHandler.registerEntityCapability(new EquipmentEntityCapability());
+		
 		ItemCapabilityHandler.registerItemCapability(new CircleGemItemCapability());
 
 

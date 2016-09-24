@@ -128,6 +128,6 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 
 	@Override
 	public int getTrackingTime() {
-		return 10;
+		return 0;
 	}
 }
