@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBLArmor;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
@@ -43,6 +44,7 @@ import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
+import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampReed;
@@ -179,6 +181,24 @@ public class ItemRegistry {
 		}
 	};
 	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET_EMPTY);
+
+	//RECORDS
+	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
+	public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);
+	public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH);
+	public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER);
+	public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE);
+	public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE);
+	public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612);
+	public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ACIENT);
+	public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY);
+	public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE);
+	public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD);
+	public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD);
+	public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS);
+	public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
+
+	//MISC
 	public static final Item WEEDWOOD_DOOR_ITEM = new ItemDoorBetweenlands() {
 		@Override
 		public Block getDoorBlock() {
@@ -198,22 +218,9 @@ public class ItemRegistry {
 		}
 	};
 	public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
-
-	//RECORDS
-	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
-	public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);
-	public static final Item CHRISTMAS_ON_THE_MARSH = new ItemBLRecord(SoundRegistry.CHRISTMAS_ON_THE_MARSH);
-	public static final Item THE_EXPLORER = new ItemBLRecord(SoundRegistry.THE_EXPLORER);
-	public static final Item HAG_DANCE = new ItemBLRecord(SoundRegistry.HAG_DANCE);
-	public static final Item LONELY_FIRE = new ItemBLRecord(SoundRegistry.LONELY_FIRE);
-	public static final Item MYSTERIOUS_RECORD = new ItemBLRecord(SoundRegistry._16612);
-	public static final Item ANCIENT = new ItemBLRecord(SoundRegistry.ACIENT);
-	public static final Item BENEATH_A_GREEN_SKY = new ItemBLRecord(SoundRegistry.BENEATH_A_GREEN_SKY);
-	public static final Item DJ_WIGHTS_MIXTAPE = new ItemBLRecord(SoundRegistry.DJ_WIGHTS_MIXTAPE);
-	public static final Item ONWARDS = new ItemBLRecord(SoundRegistry.ONWARD);
-	public static final Item STUCK_IN_THE_MUD = new ItemBLRecord(SoundRegistry.STUCK_IN_THE_MUD);
-	public static final Item WANDERING_WISPS = new ItemBLRecord(SoundRegistry.WANDERING_WISPS);
-	public static final Item WATERLOGGED = new ItemBLRecord(SoundRegistry.WATERLOGGED);
+	public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
+	public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
+	public static final Item GREEN_MIDDLE_GEM = new ItemGem(CircleGemType.GREEN);
 
 	public static final Item TEST_ITEM = new TestItem();
 
