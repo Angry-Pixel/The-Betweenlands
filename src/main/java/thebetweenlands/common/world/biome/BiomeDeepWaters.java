@@ -1,5 +1,9 @@
 package thebetweenlands.common.world.biome;
 
+import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorDeepWaters;
 import thebetweenlands.common.world.gen.biome.feature.AlgaeFeature;
 import thebetweenlands.common.world.gen.biome.feature.CragSpiresFeature;
@@ -15,6 +19,17 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		.addFeature(new DeepWatersFeature())
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());
+
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 10).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 35).setHostile(true).setSpawnCheckRadius(16.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 45).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 30).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 	}
 
 }

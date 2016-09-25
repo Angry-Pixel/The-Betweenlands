@@ -43,7 +43,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 	@Override
 	public void setStitchedSprites(TextureAtlasSprite[] sprites) {
-		((Particle)this).setParticleTexture(sprites[0]);
+		this.setParticleTexture(sprites[0]);
 	}
 
 	@Override

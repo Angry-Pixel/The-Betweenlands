@@ -1,31 +1,42 @@
 package thebetweenlands.common.item.tools;
 
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemNet extends Item {
+	public ItemNet() {
+		this.maxStackSize = 1;
+		this.setMaxDamage(32);
+		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
 
-    public ItemNet() {
-        this.maxStackSize = 1;
-        this.setMaxDamage(32);
-    }
-    /*
-    @Override
-    public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-        if (target instanceof EntityFirefly || target instanceof EntityGecko) {
-            ItemStack itemStack1;
-            if (target instanceof EntityFirefly)
-                itemStack1 = new ItemStack(ItemRegistry.fireFly);
-            else
-                itemStack1 = new ItemStack(ItemRegistry.gecko);
-            if (playerIn.getHeldItem(hand) != null && playerIn.getHeldItem(hand).getItem() == this && !playerIn.worldObj.isRemote) {
-                if (((EntityLiving) target).getCustomNameTag() != null)
-                    itemStack1.setStackDisplayName(((EntityLiving) target).getCustomNameTag());
-                playerIn.worldObj.spawnEntityInWorld(new EntityItem(playerIn.worldObj, playerIn.posX, playerIn.posY, playerIn.posZ, itemStack1));
-                target.setDead();
-                stack.damageItem(1, playerIn);
-            }
-            playerIn.swingArm(hand);
-        }
-        return true;
-    }*/
+	@Override
+	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
+		if (target instanceof EntityFirefly || target instanceof EntityGecko) {
+			ItemStack receivedItem;
+			if (target instanceof EntityFirefly) {
+				receivedItem = new ItemStack(ItemRegistry.FIREFLY);
+			} else {
+				receivedItem = new ItemStack(ItemRegistry.GECKO);
+			}
+			if (player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() == this && !player.worldObj.isRemote) {
+				if (target.getCustomNameTag() != null) {
+					receivedItem.setStackDisplayName(target.getCustomNameTag());
+				}
+				player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, receivedItem));
+				target.setDead();
+				stack.damageItem(1, player);
+			}
+			player.swingArm(hand);
+		}
+		return true;
+	}
 }

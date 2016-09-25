@@ -1,16 +1,19 @@
 package thebetweenlands.common.world.biome;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.EventSpawnEntry;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.util.IWeightProvider;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	protected final List<BLSpawnEntry> blSpawnEntries = new ArrayList<BLSpawnEntry>();
@@ -28,6 +31,10 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.biomeWeight = 100;
 		this.topBlock = BlockRegistry.SWAMP_GRASS.getDefaultState();
 		this.fillerBlock = BlockRegistry.SWAMP_DIRT.getDefaultState();
+		this.blSpawnEntries.add(new EventSpawnEntry(EntityFirefly.class, (short) 150, "bloodSky").setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new EventSpawnEntry(EntitySwampHag.class, (short) 175, "bloodSky").setHostile(true));
+//		this.blSpawnEntries.add(new EventSpawnEntry(EntityPeatMummy.class, (short) 65, "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D)); TODO
+//		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
 	}
 
 	/**

@@ -38,11 +38,11 @@ import java.util.List;
 import java.util.UUID;
 
 public class EntityWight extends EntityMob implements IEntityBL {
-    public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute((IAttribute) null, "bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");
-    public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute((IAttribute) null, "bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
-    public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute((IAttribute) null, "bl.volatileFlightSpeed", 0.25D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
-    public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute((IAttribute) null, "bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
-    public static final IAttribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute((IAttribute) null, "bl.volatileMaxDamage", 20.0D, 0.0D, Double.MAX_VALUE)).setDescription("Volatile Max Damage");
+    public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute(null, "bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");
+    public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute(null, "bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
+    public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute(null, "bl.volatileFlightSpeed", 0.25D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
+    public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute(null, "bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
+    public static final IAttribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute(null, "bl.volatileMaxDamage", 20.0D, 0.0D, Double.MAX_VALUE)).setDescription("Volatile Max Damage");
 
     private static final DataParameter<Byte> ATTACK_STATE_DW = EntityDataManager.createKey(EntityWight.class, DataSerializers.BYTE);
     private static final DataParameter<Float> ANIMATION_STATE_DW = EntityDataManager.createKey(EntityWight.class, DataSerializers.FLOAT);
@@ -80,7 +80,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
         super(world);
         setSize(0.7F, 2.2F);
         this.setPathPriority(PathNodeType.WATER, 0.0f);
-        ;
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, this.meleeAttack);
         this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 1.0D));
@@ -165,7 +164,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
             this.repairY = nbt.getInteger("repairY");
             this.repairZ = nbt.getInteger("repairZ");
             this.breakBlock = nbt.getBoolean("breakBlock");
-            this.repairBlock = (Block) Block.REGISTRY.getObject(new ResourceLocation(nbt.getString("repairBlock")));
+            this.repairBlock = Block.REGISTRY.getObject(new ResourceLocation(nbt.getString("repairBlock")));
         }
         this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
         this.canTurnVolatileOnTarget = nbt.getBoolean("canTurnVolatileOnTarget");
@@ -278,7 +277,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                         double dz = this.getAttackTarget().posZ - this.posZ;
                         double dy;
                         if (this.getAttackTarget() instanceof EntityLivingBase) {
-                            EntityLivingBase entitylivingbase = (EntityLivingBase) this.getAttackTarget();
+                            EntityLivingBase entitylivingbase = this.getAttackTarget();
                             dy = entitylivingbase.posY + (double) entitylivingbase.getEyeHeight() - (this.posY + (double) this.getEyeHeight());
                         } else {
                             dy = (this.getAttackTarget().getEntityBoundingBox().minY + this.getAttackTarget().getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
@@ -671,7 +670,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                 this.setVolatile(false);
             }
         }
-        if (this.getAttackTarget() != null && source instanceof EntityDamageSource && ((EntityDamageSource) source).getEntity() == this.getAttackTarget())
+        if (this.getAttackTarget() != null && source instanceof EntityDamageSource && source.getEntity() == this.getAttackTarget())
             this.canTurnVolatileOnTarget = true;
         return ret;
     }

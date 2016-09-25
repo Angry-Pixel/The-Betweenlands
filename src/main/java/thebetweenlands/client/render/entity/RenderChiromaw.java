@@ -17,14 +17,13 @@ public class RenderChiromaw extends RenderLiving<EntityChiromaw> {
 
 	public RenderChiromaw(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelChiromaw(), 0.5F);
-		this.addLayer(new LayerGlow(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_glow.png")));
+		this.addLayer(new LayerGlow<>(this, new ResourceLocation("thebetweenlands:textures/entity/chiromaw_glow.png")));
 	}
 
 	@Override
-	protected void preRenderCallback(EntityChiromaw entitylivingbaseIn, float partialTickTime) {
-		EntityChiromaw chiromaw = entitylivingbaseIn;
+	protected void preRenderCallback(EntityChiromaw chiromaw, float partialTickTime) {
 		if (!chiromaw.getIsHanging()) {
-			float flap = MathHelper.sin((entitylivingbaseIn.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
+			float flap = MathHelper.sin((chiromaw.ticksExisted + partialTickTime) * 0.5F) * 0.6F;
 			GlStateManager.translate(0.0F, 0F - flap * 0.5F, 0.0F);
 		}
 	}

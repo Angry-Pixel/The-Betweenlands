@@ -4,8 +4,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorMarsh;
 import thebetweenlands.common.world.gen.biome.feature.Marsh1Feature;
 import thebetweenlands.common.world.gen.biome.feature.Marsh2Feature;
@@ -26,6 +30,18 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
 		.setDecorator(new BiomeDecoratorMarsh());
 		this.setFoliageColors(0x627017, 0x627017);
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 4).setHostile(true).setSpawnCheckRadius(64.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 14).setHostile(true).setSpawnCheckRadius(64.0D));
+//		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D)); TODO
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 54).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setHostile(true).setGroupSize(1, 3));
+//		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 8).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
 	}
 
 	private float fogRangeInterpolateStart = 0.0F;

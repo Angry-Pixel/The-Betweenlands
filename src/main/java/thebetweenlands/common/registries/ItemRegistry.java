@@ -1,13 +1,6 @@
 package thebetweenlands.common.registries;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
 import com.google.common.base.CaseFormat;
-
 import net.minecraft.block.Block;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -24,46 +17,22 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBLArmor;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.armor.ItemSkullMask;
-import thebetweenlands.common.item.food.ItemBLFood;
-import thebetweenlands.common.item.food.ItemBlackHatMushroom;
-import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
-import thebetweenlands.common.item.food.ItemChiromawWing;
-import thebetweenlands.common.item.food.ItemFlatHeadMushroom;
-import thebetweenlands.common.item.food.ItemForbiddenFig;
-import thebetweenlands.common.item.food.ItemGertsDonut;
-import thebetweenlands.common.item.food.ItemMarshmallow;
-import thebetweenlands.common.item.food.ItemMarshmallowPink;
-import thebetweenlands.common.item.food.ItemNettleSoup;
-import thebetweenlands.common.item.food.ItemRottenFood;
-import thebetweenlands.common.item.food.ItemSapBall;
-import thebetweenlands.common.item.food.ItemSapJello;
-import thebetweenlands.common.item.food.ItemWeepingBluePetal;
-import thebetweenlands.common.item.food.ItemWightHeart;
+import thebetweenlands.common.item.food.*;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
-import thebetweenlands.common.item.misc.ItemBLRecord;
-import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
-import thebetweenlands.common.item.misc.ItemGem;
-import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.item.misc.ItemSwampReed;
-import thebetweenlands.common.item.misc.ItemSwampTalisman;
-import thebetweenlands.common.item.misc.ItemWeedwoodSign;
-import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
-import thebetweenlands.common.item.tools.ItemBLAxe;
-import thebetweenlands.common.item.tools.ItemBLBucketEmpty;
-import thebetweenlands.common.item.tools.ItemBLBucketFilled;
-import thebetweenlands.common.item.tools.ItemBLPickaxe;
-import thebetweenlands.common.item.tools.ItemBLShield;
-import thebetweenlands.common.item.tools.ItemBLShovel;
-import thebetweenlands.common.item.tools.ItemBLSword;
-import thebetweenlands.common.item.tools.ItemShockwaveSword;
-import thebetweenlands.common.item.tools.ItemSickle;
-import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
+import thebetweenlands.common.item.tools.*;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.config.ConfigHandler;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 public class ItemRegistry {
 	private ItemRegistry() { }
@@ -223,6 +192,10 @@ public class ItemRegistry {
 	public static final Item GREEN_MIDDLE_GEM = new ItemGem(CircleGemType.GREEN);
 
 	public static final Item TEST_ITEM = new TestItem();
+
+	public static final Item NET = new ItemNet();
+	public static final Item GECKO = new ItemMob("gecko");
+	public static final Item FIREFLY = new ItemMob("firefly");
 
 	public final static List<Item> ITEMS = new ArrayList<Item>();
 
