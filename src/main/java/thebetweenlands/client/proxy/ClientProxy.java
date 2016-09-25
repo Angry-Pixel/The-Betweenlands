@@ -1,5 +1,11 @@
 package thebetweenlands.client.proxy;
 
+import java.io.File;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -26,20 +32,79 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import thebetweenlands.client.event.handler.*;
-import thebetweenlands.client.gui.inventory.*;
+import thebetweenlands.client.event.handler.AmbienceSoundPlayHandler;
+import thebetweenlands.client.event.handler.DecayRenderHandler;
+import thebetweenlands.client.event.handler.FogHandler;
+import thebetweenlands.client.event.handler.ScreenRenderHandler;
+import thebetweenlands.client.event.handler.ShaderHandler;
+import thebetweenlands.client.event.handler.TextureStitchHandler;
+import thebetweenlands.client.event.handler.WorldRenderHandler;
+import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
+import thebetweenlands.client.gui.inventory.GuiBLFurnace;
+import thebetweenlands.client.gui.inventory.GuiDruidAltar;
+import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.particle.entity.ParticleWisp;
-import thebetweenlands.client.render.entity.*;
+import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderBlindCaveFish;
+import thebetweenlands.client.render.entity.RenderBloodSnail;
+import thebetweenlands.client.render.entity.RenderChiromaw;
+import thebetweenlands.client.render.entity.RenderDragonFly;
+import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderFrog;
+import thebetweenlands.client.render.entity.RenderGecko;
+import thebetweenlands.client.render.entity.RenderGiantToad;
+import thebetweenlands.client.render.entity.RenderLeech;
+import thebetweenlands.client.render.entity.RenderLurker;
+import thebetweenlands.client.render.entity.RenderMireSnail;
+import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderShockwaveBlock;
+import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
+import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSporeling;
+import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderSwordEnergy;
+import thebetweenlands.client.render.entity.RenderTermite;
+import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
-import thebetweenlands.client.render.tile.*;
+import thebetweenlands.client.render.tile.RenderChestBetweenlands;
+import thebetweenlands.client.render.tile.RenderDruidAltar;
+import thebetweenlands.client.render.tile.RenderGeckoCage;
+import thebetweenlands.client.render.tile.RenderInfuser;
+import thebetweenlands.client.render.tile.RenderItemCage;
+import thebetweenlands.client.render.tile.RenderLootPot;
+import thebetweenlands.client.render.tile.RenderMudFlowerPot;
+import thebetweenlands.client.render.tile.RenderPossessedBlock;
+import thebetweenlands.client.render.tile.RenderPurifier;
+import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
+import thebetweenlands.client.render.tile.RenderSpikeTrap;
+import thebetweenlands.client.render.tile.RenderWeedwoodSign;
+import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
+import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
@@ -51,17 +116,26 @@ import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tile.*;
+import thebetweenlands.common.tile.TileEntityBLDualFurnace;
+import thebetweenlands.common.tile.TileEntityBLFurnace;
+import thebetweenlands.common.tile.TileEntityChestBetweenlands;
+import thebetweenlands.common.tile.TileEntityCompostBin;
+import thebetweenlands.common.tile.TileEntityDruidAltar;
+import thebetweenlands.common.tile.TileEntityGeckoCage;
+import thebetweenlands.common.tile.TileEntityInfuser;
+import thebetweenlands.common.tile.TileEntityItemCage;
+import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.common.tile.TileEntityPossessedBlock;
+import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntitySpikeTrap;
+import thebetweenlands.common.tile.TileEntityWeedwoodSign;
+import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
+import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.config.ConfigHandler;
-
-import java.io.File;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import java.util.Set;
 
 public class ClientProxy extends CommonProxy {
 
@@ -264,6 +338,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void postInit() {
 		dragonFlyRenderer = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityDragonFly.class);
@@ -281,6 +356,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new RenderWisp());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new RenderInfuser());
 
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -295,7 +371,8 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
-
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.INFUSER), 0, TileEntityInfuser.class);
+		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if(block instanceof ITintedBlock) {

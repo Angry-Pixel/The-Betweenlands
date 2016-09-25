@@ -8,6 +8,7 @@ import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityCompostBin;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
+import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
@@ -41,6 +42,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityWeedwoodSign.class, "weedwood_sign");
 		registerTileEntity(TileEntityMudFlowerPot.class, "mud_flower_pot");
 		registerTileEntity(TileEntityGeckoCage.class, "gecko_cage");
+		registerTileEntity(TileEntityInfuser.class, "infuser");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

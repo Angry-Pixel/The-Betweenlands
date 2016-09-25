@@ -58,6 +58,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 
 	public TileEntityRubberTap() {
 		this.tank = new FluidTank(FluidRegistry.RUBBER, 0, Fluid.BUCKET_VOLUME);
+		this.tank.setTileEntity(this);
 	}
 
 	@Override
@@ -152,7 +153,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-			return (T) tank;
+			return (T) this;
 		return super.getCapability(capability, facing);
 	}
 

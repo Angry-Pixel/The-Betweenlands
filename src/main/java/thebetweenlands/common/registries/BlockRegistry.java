@@ -33,6 +33,7 @@ import thebetweenlands.common.block.container.BlockCompostBin;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockGeckoCage;
 import thebetweenlands.common.block.container.BlockHopperBetweenlands;
+import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
@@ -496,6 +497,7 @@ public class BlockRegistry {
 	public static final Block SYRMORITE_HOPPER = new BlockHopperBetweenlands();
 	public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
 	public static final Block GECKO_CAGE = new BlockGeckoCage();
+	public static final Block INFUSER = new BlockInfuser();
 	
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();

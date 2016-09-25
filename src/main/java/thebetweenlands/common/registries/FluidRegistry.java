@@ -14,7 +14,7 @@ public class FluidRegistry {
 	/**
 	 * A fluid that can be used by multiple blocks
 	 */
-	static class FluidMultipleBlocks extends Fluid {
+	public static class FluidMultipleBlocks extends Fluid {
 		public FluidMultipleBlocks(String fluidName, ResourceLocation still, ResourceLocation flowing) {
 			super(fluidName, still, flowing);
 		}

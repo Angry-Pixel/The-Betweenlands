@@ -6,6 +6,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -33,13 +34,28 @@ public class ItemBLBucketFilled extends UniversalBucket {
 			} else if(item instanceof UniversalBucket) {
 				UniversalBucket bucket = (UniversalBucket)item;
 				return bucket.getFluid(container);
-			}
-			//This is broken!!
-			// else if (item == ForgeModContainer.getInstance().universalBucket) {
-			//    return ForgeModContainer.getInstance().universalBucket.getFluid(container);
-			//} 
-			else {
+			} else {
 				return null;
+			}
+		}
+
+		@Override
+		public boolean canFillFluidType(FluidStack fluid) {
+			if (fluid.getFluid() == FluidRegistry.WATER || fluid.getFluid() == FluidRegistry.LAVA || fluid.getFluid().getName().equals("milk")) {
+				return true;
+			}
+			return FluidRegistry.getBucketFluids().contains(fluid.getFluid());
+		}
+
+		@Override
+		protected void setFluid(Fluid fluid) {
+			if(fluid == null && this.container.getItem() instanceof UniversalBucket) {
+				this.container.deserializeNBT(((UniversalBucket)this.container.getItem()).getEmpty().writeToNBT(new NBTTagCompound()));
+			} else if (FluidRegistry.getBucketFluids().contains(fluid) && this.container.getItem() instanceof UniversalBucket) {
+				ItemStack filledBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluid);
+				this.container.deserializeNBT(filledBucket.serializeNBT());
+			} else {
+				super.setFluid(fluid);
 			}
 		}
 	}

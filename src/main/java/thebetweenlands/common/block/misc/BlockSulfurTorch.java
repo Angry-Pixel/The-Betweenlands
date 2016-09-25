@@ -17,6 +17,7 @@ public class BlockSulfurTorch extends BlockTorch {
 	public BlockSulfurTorch() {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setSoundType(SoundType.WOOD);
+		this.setLightLevel(0.9375F);
 	}
 
 	@Override
