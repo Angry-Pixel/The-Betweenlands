@@ -114,6 +114,7 @@ public class EntityCapabilityHandler {
 					private EntityCapability<?, ?, ?> getNewInstance() {
 						EntityCapability<?, ?, ?> entityCapability = (EntityCapability<?, ?, ?>)capabilityInstance.getDefaultInstance();
 						entityCapability.setEntity(event.getEntity());
+						entityCapability.init();
 						return entityCapability;
 					}
 

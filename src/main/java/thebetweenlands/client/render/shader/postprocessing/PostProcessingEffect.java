@@ -315,6 +315,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		this.uploadUniforms();
 
 		//Render texture
+		GlStateManager.enableTexture2D();
 		GlStateManager.glBegin(GL11.GL_TRIANGLES);
 		GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
 		GlStateManager.glVertex3f(0, 0, 0);
@@ -338,21 +339,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 
 				//Render from blit buffer to destination buffer
 				intermediateDst.bindFramebuffer(true);
-				/*GL11.glBindTexture(GL11.GL_TEXTURE_2D, blitBuffer.framebufferTexture);
-				GL11.glBegin(GL11.GL_TRIANGLES);
-				GL11.glTexCoord2d(0, 0);
-				GL11.glVertex2d(0, 0);
-				GL11.glTexCoord2d(0, 1);
-				GL11.glVertex2d(0, renderHeight);
-				GL11.glTexCoord2d(1, 1);
-				GL11.glVertex2d(renderWidth, renderHeight);
-				GL11.glTexCoord2d(1, 1);
-				GL11.glVertex2d(renderWidth, renderHeight);
-				GL11.glTexCoord2d(1, 0);
-				GL11.glVertex2d(renderWidth, 0);
-				GL11.glTexCoord2d(0, 0);
-				GL11.glVertex2d(0, 0);
-				GL11.glEnd();*/
+				GlStateManager.enableTexture2D();
 				GlStateManager.glBegin(GL11.GL_TRIANGLES);
 				GlStateManager.glTexCoord2f(mirrorX ? 1 : 0, mirrorY ? 1 : 0);
 				GlStateManager.glVertex3f(0, 0, 0);
@@ -373,7 +360,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		//Don't use any shader to copy from blit buffer to destination
 		OpenGlHelper.glUseProgram(0);
 
-		if(intermediateDst != dst) {
+		if(src == dst.framebufferTexture) {
 			//Set up 2D matrices
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GlStateManager.loadIdentity();
@@ -383,6 +370,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 			GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
 			dst.bindFramebuffer(true);
+			GlStateManager.enableTexture2D();
 			GlStateManager.bindTexture(intermediateDst.framebufferTexture);
 			GlStateManager.glBegin(GL11.GL_TRIANGLES);
 			GlStateManager.glTexCoord2f(0, 0);

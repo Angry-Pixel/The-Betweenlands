@@ -27,13 +27,13 @@ public class GeometryBuffer {
 
 		//Init geometry buffer
 		if(this.geometryBuffer == null) {
-			this.geometryBuffer = new Framebuffer(width, height, this.depthBuffer);
+			this.geometryBuffer = new FloatFramebuffer(width, height, this.depthBuffer);
 			changed = true;
 		}
 		if(width != this.geometryBuffer.framebufferWidth
 				|| height != this.geometryBuffer.framebufferHeight) {
 			this.geometryBuffer.deleteFramebuffer();
-			this.geometryBuffer = new Framebuffer(width, height, this.depthBuffer);
+			this.geometryBuffer = new FloatFramebuffer(width, height, this.depthBuffer);
 			changed = true;
 		}
 

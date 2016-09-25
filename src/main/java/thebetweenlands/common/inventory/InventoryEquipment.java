@@ -6,12 +6,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 
-public class InventoryEquipment implements IInventory {
+public class InventoryEquipment implements IInventory, ITickable {
 	protected final ItemStack[] inventory;
 	protected final EquipmentEntityCapability capability;
 
@@ -130,5 +131,14 @@ public class InventoryEquipment implements IInventory {
 	@Nullable
 	public ItemStack getStackInSlot(int index) {
 		return index >= this.getSizeInventory() ? null : this.inventory[index];
+	}
+
+	@Override
+	public void update() {
+		for(int i = 0; i < this.inventory.length; i++) {
+			ItemStack stack = this.inventory[i];
+			if(stack != null)
+				stack.getItem().onUpdate(stack, this.capability.getEntity().getEntityWorld(), this.capability.getEntity(), i, false);
+		}
 	}
 }

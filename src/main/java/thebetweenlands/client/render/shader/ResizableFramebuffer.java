@@ -21,7 +21,7 @@ public class ResizableFramebuffer {
 			if(this.framebuffer != null) {
 				this.framebuffer.deleteFramebuffer();
 			}
-			this.framebuffer = new Framebuffer(width, height, this.depth);
+			this.framebuffer = new FloatFramebuffer(width, height, this.depth);
 		}
 		return this.framebuffer;
 	}

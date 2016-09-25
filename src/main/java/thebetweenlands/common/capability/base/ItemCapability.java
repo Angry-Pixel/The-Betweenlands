@@ -27,6 +27,14 @@ public abstract class ItemCapability<F extends ItemCapability<F, T>, T> {
 	}
 
 	/**
+	 * Initializes the default values
+	 * <p><b>Note:</b> This is called before the capability is attached to the item stack
+	 */
+	protected void init() {
+
+	}
+
+	/**
 	 * Returns the item stack
 	 * @return
 	 */

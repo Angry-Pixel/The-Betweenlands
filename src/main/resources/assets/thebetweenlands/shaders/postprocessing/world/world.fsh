@@ -184,11 +184,14 @@ void main() {
 	
     
     //////// Distortion and diffuse texel ////////
+    vec4 sourceColor;
     if(!distortion) {
-        color += vec4(texture2D(s_diffuse, v_texCoord));
+        sourceColor = vec4(texture2D(s_diffuse, v_texCoord));
+        color += sourceColor;
     } else {
         float fragDistortion = (fragPos.y + u_camPos.y + (cos(fragPos.x + u_camPos.x) * sin(fragPos.z + u_camPos.z))) * 5.0F;
-        color += vec4(texture2D(s_diffuse, v_texCoord + vec2(sin(fragDistortion + u_msTime / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
+        sourceColor = vec4(texture2D(s_diffuse, v_texCoord + vec2(sin(fragDistortion + u_msTime / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
+        color += sourceColor;
     }
     
     //////// Lighting ////////
@@ -202,7 +205,7 @@ void main() {
         if(dist < radius) {
             vec3 lightColor = light.color;
             if(lightColor.r != -1 || lightColor.g != -1 || lightColor.b != -1) {
-                color *= vec4(1.0F, 1.0F, 1.0F, 1.0F) + (vec4(lightColor * (1.0F - dist / radius), 0.0F) * lightingFogMultiplier);
+                color += sourceColor * (vec4(lightColor * pow(1.0F - dist / radius, 2), 0.0F) * lightingFogMultiplier);
             }
         }
     }

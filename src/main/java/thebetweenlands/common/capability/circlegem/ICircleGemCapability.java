@@ -21,16 +21,17 @@ public interface ICircleGemCapability extends ISerializableCapability {
 	public void addGem(CircleGem gem);
 
 	/**
-	 * Removes a gem
-	 * @param gem True if the gem was removed
-	 * @return
+	 * Removes the first occurrence of the specified gem
+	 * @param gem
+	 * @return True if the gem was removed
 	 */
 	public boolean removeGem(CircleGem gem);
 
 	/**
 	 * Removes all gems
+	 * @return True if a gem was removed
 	 */
-	public void removeAll();
+	public boolean removeAll();
 
 	/**
 	 * Returns an unmodifiable list of all gems

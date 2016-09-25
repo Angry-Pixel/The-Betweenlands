@@ -12,6 +12,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.capability.base.ItemCapability;
+import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
+import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -49,6 +51,17 @@ public class CircleGemItemCapability extends ItemCapability<CircleGemItemCapabil
 
 	private List<CircleGem> gems = new ArrayList<CircleGem>();
 
+	protected boolean isItemGem() {
+		return this.getItemStack().getItem() instanceof ItemGem;
+	}
+
+	@Override
+	protected void init() {
+		if(this.isItemGem()) {
+			this.gems.add(new CircleGem(((ItemGem)this.getItemStack().getItem()).type, CombatType.BOTH));
+		}
+	}
+
 	@Override
 	public boolean canAdd(CircleGem gem) {
 		return this.gems.isEmpty();
@@ -63,6 +76,9 @@ public class CircleGemItemCapability extends ItemCapability<CircleGemItemCapabil
 
 	@Override
 	public boolean removeGem(CircleGem gem) {
+		if(this.isItemGem()) {
+			return false;
+		}
 		Iterator<CircleGem> gemIT = this.gems.iterator();
 		while(gemIT.hasNext()) {
 			CircleGem currentGem = gemIT.next();
@@ -80,8 +96,13 @@ public class CircleGemItemCapability extends ItemCapability<CircleGemItemCapabil
 	}
 
 	@Override
-	public void removeAll() {
+	public boolean removeAll() {
+		if(this.isItemGem()) {
+			return false;
+		}
+		boolean hadGems = !this.gems.isEmpty();
 		this.gems.clear();
+		return hadGems;
 	}
 
 	@Override

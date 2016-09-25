@@ -56,7 +56,6 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 
 	@Override
 	public boolean canAdd(CircleGem gem) {
-		//TODO Requires amulets
 		return true;
 	}
 
@@ -88,8 +87,10 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 	}
 
 	@Override
-	public void removeAll() {
+	public boolean removeAll() {
+		boolean hadGems = !this.gems.isEmpty();
 		this.gems.clear();
+		return hadGems;
 	}
 
 	@Override

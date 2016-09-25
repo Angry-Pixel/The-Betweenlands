@@ -11,6 +11,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.inventory.InventoryEquipment;
+import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -53,7 +54,12 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public IInventory getInventory(EnumEquipmentInventory inventory) {
-		return new InventoryEquipment(this, this.inventories[inventory.id]);
+		switch(inventory) {
+		case AMULET:
+			return new InventoryEquipmentAmulets(this, this.inventories[inventory.id]);
+		default:
+			return new InventoryEquipment(this, this.inventories[inventory.id]);
+		}
 	}
 
 	@Override

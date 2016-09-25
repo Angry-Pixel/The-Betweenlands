@@ -31,6 +31,14 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	}
 
 	/**
+	 * Initializes the default values
+	 * <p><b>Note:</b> This is called before the capability is attached to the entity
+	 */
+	protected void init() {
+
+	}
+
+	/**
 	 * Returns the entity
 	 * @return
 	 */

@@ -139,7 +139,7 @@ public class DecayRenderHandler {
 						//Render hands and item
 						Minecraft.getMinecraft().entityRenderer.enableLightmap();
 						mc.getItemRenderer().renderItemInFirstPerson(event.getPartialTicks());
-						Minecraft.getMinecraft().entityRenderer.enableLightmap();
+						Minecraft.getMinecraft().entityRenderer.disableLightmap();
 
 						model.bipedRightArm = previousModelRight;
 						model.bipedLeftArm = previousModelLeft;

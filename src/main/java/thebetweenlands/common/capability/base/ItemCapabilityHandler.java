@@ -80,6 +80,7 @@ public class ItemCapabilityHandler {
 					private ItemCapability<?, ?> getNewInstance() {
 						ItemCapability<?, ?> itemCapability = (ItemCapability<?, ?>)capabilityInstance.getDefaultInstance();
 						itemCapability.setStack(event.getItemStack());
+						itemCapability.init();
 						return itemCapability;
 					}
 
