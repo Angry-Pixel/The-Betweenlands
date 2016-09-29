@@ -6,11 +6,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.capability.base.ISerializableCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class DecayEntityCapability extends EntityCapability<DecayEntityCapability, IDecayCapability, EntityPlayer> implements IDecayCapability {
+public class DecayEntityCapability extends EntityCapability<DecayEntityCapability, IDecayCapability, EntityPlayer> implements IDecayCapability, ISerializableCapability {
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "decay");

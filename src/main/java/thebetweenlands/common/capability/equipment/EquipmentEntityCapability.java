@@ -10,12 +10,13 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.capability.base.ISerializableCapability;
 import thebetweenlands.common.inventory.InventoryEquipment;
 import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityCapability, IEquipmentCapability, EntityPlayer> implements IEquipmentCapability {
+public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityCapability, IEquipmentCapability, EntityPlayer> implements IEquipmentCapability, ISerializableCapability {
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "equipment");

@@ -4,9 +4,7 @@ import java.util.List;
 
 import javax.annotation.Nonnull;
 
-import thebetweenlands.common.capability.base.ISerializableCapability;
-
-public interface ICircleGemCapability extends ISerializableCapability {
+public interface ICircleGemCapability {
 	/**
 	 * Returns whether the specified gem can be added
 	 * @param gem

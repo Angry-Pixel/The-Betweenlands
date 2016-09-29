@@ -13,10 +13,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.capability.base.ISerializableCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityCapability, IEntityCircleGemCapability, EntityLivingBase> implements IEntityCircleGemCapability {
+public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityCapability, IEntityCircleGemCapability, EntityLivingBase> implements IEntityCircleGemCapability, ISerializableCapability {
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "entity_gems");

@@ -7,12 +7,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.capability.corrosion.ICorrosionCapability;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public final class CorrosionHelper {
 	public static final int MAX_CORROSION = 255;
@@ -42,11 +42,9 @@ public final class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCoating(ItemStack itemStack) {
-		if (itemStack.hasTagCompound()) {
-			NBTTagCompound tagCompound = itemStack.getTagCompound();
-			if (tagCompound.hasKey("CorrosionCoating", 3)) {
-				return tagCompound.getInteger("CorrosionCoating");
-			}
+		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
+			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
+			return capability.getCoating();
 		}
 		return 0;
 	}
@@ -57,11 +55,9 @@ public final class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCorrosion(ItemStack itemStack) {
-		if (itemStack.hasTagCompound()) {
-			NBTTagCompound tagCompound = itemStack.getTagCompound();
-			if (tagCompound.hasKey("Corrosion", 3)) {
-				return tagCompound.getInteger("Corrosion");
-			}
+		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
+			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
+			return capability.getCorrosion();
 		}
 		return 0;
 	}
@@ -72,7 +68,10 @@ public final class CorrosionHelper {
 	 * @param coating
 	 */
 	public static void setCoating(ItemStack itemStack, int coating) {
-		itemStack.setTagInfo("CorrosionCoating", new NBTTagInt(coating));
+		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
+			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
+			capability.setCoating(coating);
+		}
 	}
 
 	/**
@@ -81,7 +80,10 @@ public final class CorrosionHelper {
 	 * @param corrosion
 	 */
 	public static void setCorrosion(ItemStack itemStack, int corrosion) {
-		itemStack.setTagInfo("Corrosion", new NBTTagInt(corrosion));
+		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
+			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
+			capability.setCorrosion(corrosion);
+		}
 	}
 
 	/**

@@ -3,7 +3,7 @@ package thebetweenlands.common.capability.base;
 import net.minecraft.nbt.NBTTagCompound;
 
 /**
- * Any entity capability that saves the data to NBT implements this interface
+ * Capabilities can implement this interface to save/load data to/from NBT
  */
 public interface ISerializableCapability {
 	/**

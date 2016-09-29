@@ -11,13 +11,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.capability.base.ISerializableCapability;
 import thebetweenlands.common.capability.base.ItemCapability;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class CircleGemItemCapability extends ItemCapability<CircleGemItemCapability, IItemCircleGemCapability> implements IItemCircleGemCapability {
+public class CircleGemItemCapability extends ItemCapability<CircleGemItemCapability, IItemCircleGemCapability> implements IItemCircleGemCapability, ISerializableCapability {
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "item_gems");
