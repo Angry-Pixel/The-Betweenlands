@@ -6,9 +6,9 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.common.herblore.aspect.AspectManager.AspectItem;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 
 public final class ItemAspectContainer extends AspectContainer {
@@ -37,7 +37,7 @@ public final class ItemAspectContainer extends AspectContainer {
 	 */
 	public static ItemAspectContainer fromItem(ItemStack stack, @Nullable AspectManager manager) {
 		ItemAspectContainer container = new ItemAspectContainer(manager, stack);
-		List<Aspect> staticAspects = manager != null ? manager.getStaticAspects(new AspectItem(stack)) : null;
+		List<Aspect> staticAspects = manager != null ? manager.getStaticAspects(AspectManager.getAspectItem(stack)) : null;
 		container.load(stack.getTagCompound(), staticAspects);
 		return container;
 	}
@@ -64,15 +64,14 @@ public final class ItemAspectContainer extends AspectContainer {
 
 	/**
 	 * Returns a list of all aspects in this container.
-	 * Specify a discovery container if you only want discovered or dynamic aspects to be visible.
+	 * Specify a discovery container if you only want discovered or dynamic aspects to be visible
 	 * @param discoveries
 	 * @return
 	 */
-	@Deprecated //TODO: This will no longer be required once the static aspects are server side only anymore
-	public List<Aspect> getAspects(DiscoveryContainer discoveries) {
+	public List<Aspect> getAspects(DiscoveryContainer<?> discoveries) {
 		List<Aspect> discoveredAspects = null;
 		if(discoveries != null && this.manager != null)
-			discoveredAspects = discoveries.getDiscoveredStaticAspects(this.manager, new AspectItem(this.itemStack));
+			discoveredAspects = discoveries.getDiscoveredStaticAspects(this.manager, AspectManager.getAspectItem(this.itemStack));
 		List<Aspect> aspects = new ArrayList<Aspect>();
 		Set<IAspectType> types = this.getAvailableAspectTypes();
 		for(IAspectType type : types) {
@@ -95,10 +94,11 @@ public final class ItemAspectContainer extends AspectContainer {
 	}
 
 	/**
-	 * Returns a list of all aspects in this container
+	 * Returns a list of all aspects that are discovered and visible to the specified player
+	 * @param player
 	 * @return
 	 */
-	public List<Aspect> getAspects() {
-		return this.getAspects(null);
+	public List<Aspect> getAspects(EntityPlayer player) {
+		return this.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(player));
 	}
 }

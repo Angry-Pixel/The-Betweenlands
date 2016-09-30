@@ -343,4 +343,20 @@ public class AspectContainer {
 		}
 		return this;
 	}
+
+	/**
+	 * Returns a list of all aspects in this container
+	 * @return
+	 */
+	public List<Aspect> getAspects() {
+		List<Aspect> aspects = new ArrayList<Aspect>();
+		Set<IAspectType> types = this.getAvailableAspectTypes();
+		for(IAspectType type : types) {
+			int amount = this.getAmount(type, true);
+			amount += this.getAmount(type, false);
+			if(amount > 0)
+				aspects.add(new Aspect(type, amount));
+		}
+		return aspects;
+	}
 }

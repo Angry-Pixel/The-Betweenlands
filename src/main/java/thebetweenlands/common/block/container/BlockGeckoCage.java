@@ -94,18 +94,18 @@ public class BlockGeckoCage extends BlockContainer {
 				}*/
 				if(tile.getAspectType() == null) {
 					if(tile.hasGecko()) {
-						if(AspectManager.hasDiscoveryProvider(player)) {
+						if(DiscoveryContainer.hasDiscoveryProvider(player)) {
 							if(!world.isRemote) {
 								AspectManager manager = AspectManager.get(world);
-								AspectItem aspectItem = new AspectItem(heldItemStack);
+								AspectItem aspectItem = manager.getAspectItem(heldItemStack);
 								List<Aspect> aspects = manager.getStaticAspects(aspectItem);
 								if(aspects.size() > 0) {
-									DiscoveryContainer mergedKnowledge = AspectManager.getMergedDiscoveryContainer(player);
+									DiscoveryContainer mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
 									AspectDiscovery discovery = mergedKnowledge.discover(manager, aspectItem);
 									switch(discovery.result) {
 									case NEW:
 									case LAST:
-										AspectManager.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
+										DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 										if(!world.isRemote) {
 											tile.setAspectType(discovery.discovered.type, 600);
 											player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));

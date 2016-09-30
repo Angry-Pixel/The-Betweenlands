@@ -148,7 +148,7 @@ public class PageCreators {
     public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
-        ItemStack itemStack = new ItemStack(item.item, 1, item.damage);
+        ItemStack itemStack = item.getOriginal();
         ArrayList<ManualWidgetBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, itemStack, 1f));
         //TODO add when pam is added

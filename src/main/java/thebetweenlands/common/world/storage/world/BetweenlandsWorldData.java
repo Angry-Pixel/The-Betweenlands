@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.storage.world;
 
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.lib.ModInfo;
@@ -58,7 +59,7 @@ public class BetweenlandsWorldData extends WorldDataBase {
 				event.readFromNBT(this.getData());
 			}
 			this.environmentEventRegistry.setDisabled(this.getData().getBoolean("eventsDisabled"));
-			this.aspectManager.loadAndPopulateStaticAspects(this.getData(), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
+			this.aspectManager.loadAndPopulateStaticAspects(this.getData().getCompoundTag("itemAspects"), AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 		}
 	}
 
@@ -72,7 +73,9 @@ public class BetweenlandsWorldData extends WorldDataBase {
 				event.writeToNBT(this.getData());
 			}
 			this.getData().setBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
-			this.aspectManager.saveStaticAspects(this.getData());
+			NBTTagCompound aspectData = new NBTTagCompound();
+			this.aspectManager.saveStaticAspects(aspectData);
+			this.getData().setTag("itemAspects", aspectData);
 		}
 	}
 

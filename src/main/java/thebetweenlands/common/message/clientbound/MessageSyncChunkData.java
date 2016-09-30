@@ -35,7 +35,7 @@ public class MessageSyncChunkData extends BLMessage {
 		try {
 			this.nbt = packetBuffer.readNBTTagCompoundFromBuffer();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

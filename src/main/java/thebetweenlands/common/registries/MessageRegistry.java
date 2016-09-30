@@ -11,6 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.message.BLMessage;
 import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
+import thebetweenlands.common.message.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
 import thebetweenlands.common.message.clientbound.MessageSyncEntityCapabilities;
 import thebetweenlands.common.message.clientbound.MessageSyncEnvironmentEvent;
@@ -27,13 +28,14 @@ public class MessageRegistry {
         registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
 		registerMessage(MessageWeedwoodBushRustle.class, Side.CLIENT);
 		registerMessage(MessageSyncEntityCapabilities.class, Side.CLIENT);
+		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {
 		TheBetweenlands.networkWrapper.registerMessage(getHandler(messageType, toSide), messageType, MessageRegistry.nextMessageId++, toSide);
 	}
 
-	private static IMessageHandler getHandler(Class<? extends BLMessage> messageType, Side toSide) {
+	private static IMessageHandler<BLMessage, IMessage> getHandler(Class<? extends BLMessage> messageType, Side toSide) {
 		if (toSide == Side.CLIENT) {
 			return new ClientboundHandler();
 		}

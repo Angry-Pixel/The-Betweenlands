@@ -1,21 +1,36 @@
 package thebetweenlands.client.event.handler;
 
+import java.text.DecimalFormat;
+import java.util.List;
 import java.util.Random;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.capability.decay.IDecayCapability;
+import thebetweenlands.common.herblore.aspect.Aspect;
+import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.AspectIconRenderer;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -28,7 +43,7 @@ public class ScreenRenderHandler extends Gui {
 	private int updateCounter;
 
 	@SubscribeEvent
-	public void renderGui(RenderGameOverlayEvent.Post event) {
+	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
 		if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
 			this.updateCounter++;
 
@@ -137,6 +152,54 @@ public class ScreenRenderHandler extends Gui {
 							drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
 					}
 				}
+			}
+		}
+	}
+
+	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
+
+	@SubscribeEvent
+	public void onRenderScreen(DrawScreenEvent.Post event) {
+		Minecraft mc = Minecraft.getMinecraft();
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mc.currentScreen instanceof GuiContainer && mc.thePlayer != null) {
+			GuiContainer container = (GuiContainer) mc.currentScreen;
+			Slot slot = container.getSlotUnderMouse();
+			if(slot != null && slot.getHasStack()) {
+				ScaledResolution resolution = new ScaledResolution(mc);
+				FontRenderer fontRenderer = mc.fontRendererObj;
+				double mouseX = (Mouse.getX() * resolution.getScaledWidth_double()) / mc.displayWidth;
+				double mouseY = resolution.getScaledHeight_double() - (Mouse.getY() * resolution.getScaledHeight_double()) / mc.displayHeight - 1;
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(mouseX + 8, mouseY - 38, 500);
+				int yOffset = 0;
+				int width = 0;
+				List<Aspect> aspects = ItemAspectContainer.fromItem(slot.getStack(), AspectManager.get(mc.theWorld)).getAspects(mc.thePlayer);
+				GlStateManager.enableTexture2D();
+				GlStateManager.enableBlend();
+				RenderHelper.disableStandardItemLighting();
+				if(aspects != null && aspects.size() > 0) {
+					for(Aspect aspect : aspects) {
+						String aspectText = aspect.type.getName() + " (" + ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
+						String aspectTypeText = aspect.type.getType();
+						GlStateManager.color(1, 1, 1, 1);
+						fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
+						fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
+						AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIconIndex());
+						int entryWidth = Math.max(fontRenderer.getStringWidth(aspectText) + 19, fontRenderer.getStringWidth(aspectTypeText) + 19);
+						if(entryWidth > width) {
+							width = entryWidth;
+						}
+						yOffset -= 21;
+					}
+					GlStateManager.translate(0, 0, -10);
+					Gui.drawRect(0, yOffset + 20, width + 1, 21, 0x90000000);
+					Gui.drawRect(1, yOffset + 21, width, 20, 0xAA000000);
+				}
+				RenderHelper.enableGUIStandardItemLighting();
+				GlStateManager.popMatrix();
+				GlStateManager.enableTexture2D();
+				GlStateManager.enableBlend();
+				GlStateManager.color(1, 1, 1, 1);
 			}
 		}
 	}
