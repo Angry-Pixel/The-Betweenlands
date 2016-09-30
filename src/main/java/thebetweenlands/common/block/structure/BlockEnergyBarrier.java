@@ -13,8 +13,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -100,20 +102,27 @@ public class BlockEnergyBarrier extends Block {
 				}
 			}
 			if (swordHand != null) {
-				if (!world.isRemote) {
-					int data = Block.getIdFromBlock(world.getBlockState(pos).getBlock());
-					int range = 7;
-					for (int x = -range; x < range; x++) {
-						for (int y = -range; y < range; y++) {
-							for (int z = -range; z < range; z++) {
-								BlockPos offset = pos.add(x, y, z);
-								if (world.getBlockState(offset).getBlock() == this) {
-									world.setBlockToAir(offset);
+				int data = Block.getIdFromBlock(world.getBlockState(pos).getBlock());
+				if (!world.isRemote)
+					world.playEvent(null, 2001, pos, data);
+				int range = 7;
+				for (int x = -range; x < range; x++) {
+					for (int y = -range; y < range; y++) {
+						for (int z = -range; z < range; z++) {
+							BlockPos offset = pos.add(x, y, z);
+							IBlockState blockState = world.getBlockState(offset);
+							if (blockState.getBlock() == this) {
+								if (blockState.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+									for(int i = 0; i < 8; i++) {
+										world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, offset.getX() + (double)world.rand.nextFloat(), offset.getY() + (double)world.rand.nextFloat(), offset.getZ() + (double)world.rand.nextFloat(), (double)world.rand.nextFloat() - 0.5D, (double)world.rand.nextFloat() - 0.5D, (double)world.rand.nextFloat() - 0.5D, new int[] {Block.getStateId(blockState)});
+									}
 								}
+
+								if (!world.isRemote)
+									world.setBlockToAir(offset);
 							}
 						}
 					}
-					world.playEvent(null, 2001, pos, data);
 				}
 			} else {
 				entity.attackEntityFrom(DamageSource.magic, 1);

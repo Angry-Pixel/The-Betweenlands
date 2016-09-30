@@ -47,15 +47,15 @@ public class RenderShockwaveSwordItem extends RenderEntityItem {
 
 			if(waveProgress > 40) {
 				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
-						((1.0F + (float)Math.sin((entity.ticksExisted + partialTicks) / 20.0F)) / 2.0F + 0.25F) * (waveProgress - 40) / 10.0F,
-						5.0f / 255.0f * 13.0F, 
-						20.0f / 255.0f * 13.0F, 
-						80.0f / 255.0f * 13.0F));
+						((1.0F + (float)Math.sin((entity.ticksExisted + partialTicks) / 20.0F)) / 2.0F + 0.25F) * (waveProgress - 40) / 10.0F + 1.0F,
+						10.0f / 255.0f * 13.0F, 
+						40.0f / 255.0f * 13.0F, 
+						160.0f / 255.0f * 13.0F));
 				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 
 						((1.0F + (float)Math.sin((entity.ticksExisted + partialTicks) / 20.0F)) / 4.0F + 0.25F) * (waveProgress - 40) / 10.0F,
-						-1.25F, 
-						-1.25F, 
-						-1.25F));
+						-10.0F, 
+						-10.0F, 
+						-10.0F));
 			}
 		}
 	}

@@ -40,15 +40,15 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 	public void renderShockwaveBlock(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY + 0.5D, entity.posZ, 
-					(entity.ticksExisted + tick) / 15.0F + 0.8F,
-					5.0f / 255.0f * 4.0F, 
-					20.0f / 255.0f * 4.0F, 
-					80.0f / 255.0f * 4.0F));
+					(entity.ticksExisted + tick) / 12.0F + 1F,
+					10.0f / 255.0f * 4.0F, 
+					40.0f / 255.0f * 4.0F, 
+					160.0f / 255.0f * 4.0F));
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY + 0.5D, entity.posZ, 
-					(entity.ticksExisted + tick) / 40.0F + 0.4F,
-					-1.2F, 
-					-1.2F, 
-					-1.2F));
+					(entity.ticksExisted + tick) / 35.0F + 0.6F,
+					-3.4F, 
+					-3.4F, 
+					-3.4F));
 		}
 
 		GL11.glPushMatrix();
