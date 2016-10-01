@@ -22,7 +22,7 @@ public class TreeSpawnEntry extends BLSpawnEntry {
 	}
 
 	@Override
-	protected void update(World world, BlockPos pos) {
+	public void update(World world, BlockPos pos) {
 		int treeHeight = WorldProviderBetweenlands.LAYER_HEIGHT + 8;
 		short spawnWeight = this.getBaseWeight();
 		if(pos.getY() < treeHeight) {
@@ -33,7 +33,7 @@ public class TreeSpawnEntry extends BLSpawnEntry {
 	}
 
 	@Override
-	protected boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
+	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
 		return /*surfaceBlockState.getBlock() == BlockRegistry.TREE_FUNGUS*/false;//TODO: Requires tree fungus
 	}
 }

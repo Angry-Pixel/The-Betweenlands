@@ -28,7 +28,7 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 	}
 
 	@Override
-	protected void update(World world, BlockPos pos) {
+	public void update(World world, BlockPos pos) {
 		int caveHeight = WorldProviderBetweenlands.CAVE_START;
 		if(pos.getY() <= caveHeight) {
 			this.setWeight((short) 0);
@@ -38,7 +38,7 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 	}
 
 	@Override
-	protected boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState spawnBlockState, IBlockState surfaceBlockState) {
-		return surfaceBlockState.isNormalCube() || (this.canSpawnOnWater && spawnBlockState.getMaterial().isLiquid());
+	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState spawnBlockState, IBlockState surfaceBlockState) {
+		return surfaceBlockState.isNormalCube() || (this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid());
 	}
 }

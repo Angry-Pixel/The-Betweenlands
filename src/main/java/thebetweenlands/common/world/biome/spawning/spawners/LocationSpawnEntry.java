@@ -27,7 +27,7 @@ public class LocationSpawnEntry extends BLSpawnEntry {
 	}
 
 	@Override
-	protected void update(World world, BlockPos pos) {
+	public void update(World world, BlockPos pos) {
 		boolean inLocation = false;
 		Chunk chunk = world.getChunkFromBlockCoords(pos);
 		if(chunk != null) {

@@ -107,7 +107,7 @@ public class MobSpawnHandler {
 		 * @param block
 		 * @param surfaceBlock
 		 */
-		protected boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
+		public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
 			return surfaceBlockState.isNormalCube();
 		}
 
@@ -119,7 +119,7 @@ public class MobSpawnHandler {
 		 * @param z
 		 * @return
 		 */
-		protected void update(World world, BlockPos pos) { }
+		public void update(World world, BlockPos pos) { }
 
 		@Override
 		public final short getWeight() {
@@ -255,6 +255,10 @@ public class MobSpawnHandler {
 				ex.printStackTrace();
 			}
 			return null;
+		}
+
+		public final Class<? extends EntityLiving> getEntityType() {
+			return this.entityType;
 		}
 	}
 

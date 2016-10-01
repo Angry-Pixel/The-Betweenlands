@@ -132,7 +132,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	public boolean getCanSpawnAnimals() {
-		return this.allowAnimals;
+		//TODO: See setAllowedSpawnTypes
+		return /*this.allowAnimals*/true;
 	}
 
 	@Override

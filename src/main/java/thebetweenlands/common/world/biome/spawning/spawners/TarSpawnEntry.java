@@ -20,7 +20,7 @@ public class TarSpawnEntry extends SurfaceSpawnEntry {
 	}
 
 	@Override
-	protected boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
+	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
 		return /*blockState.getBlock() == BlockRegistry.TAR*/false; //TODO: Requires tar
 	}
 }
