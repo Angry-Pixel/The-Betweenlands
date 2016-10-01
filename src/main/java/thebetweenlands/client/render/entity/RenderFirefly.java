@@ -39,7 +39,7 @@ public class RenderFirefly extends Render<EntityFirefly> {
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
+		this.bindTexture(TEXTURE);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 

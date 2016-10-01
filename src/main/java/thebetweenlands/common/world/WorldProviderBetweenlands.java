@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
@@ -119,13 +120,15 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public void setAllowedSpawnTypes(boolean allowHostiles, boolean allowAnimals) {
+		super.setAllowedSpawnTypes(allowHostiles, allowAnimals);
+		//TODO: This only seems to work on the client side...
 		this.allowHostiles = allowHostiles;
 		this.allowAnimals = allowAnimals;
-		super.setAllowedSpawnTypes(allowHostiles, allowAnimals);
 	}
 
 	public boolean getCanSpawnHostiles() {
-		return this.allowHostiles;
+		//TODO: See setAllowedSpawnTypes
+		return /*this.allowHostiles*/this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	public boolean getCanSpawnAnimals() {

@@ -33,6 +33,7 @@ import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
@@ -153,5 +154,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemCapabilityHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerDecayHandler.class);
 		MinecraftForge.EVENT_BUS.register(AspectSyncHandler.class);
+		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 	}
 }

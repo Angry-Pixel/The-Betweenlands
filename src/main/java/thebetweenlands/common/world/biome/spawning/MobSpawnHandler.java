@@ -38,7 +38,7 @@ import thebetweenlands.util.WeightedList;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class MobSpawnHandler {
-	public static MobSpawnHandler INSTANCE = new MobSpawnHandler();
+	public static final MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	//How many times a chunk should be populated with mobs when it generates
 	private static final int CHUNK_GEN_SPAWN_RUNS = 64;
@@ -352,7 +352,6 @@ public class MobSpawnHandler {
 				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof BiomeBetweenlands == false) 
 					continue;
 
-				/*Block centerSpawnBlock = world.getBlock(spawnPos.chunkPosX, spawnPos.chunkPosY, spawnPos.chunkPosZ);*/
 				IBlockState centerSpawnBlockState = world.getBlockState(spawnPos);
 
 				if(centerSpawnBlockState.isNormalCube()) 
@@ -402,7 +401,7 @@ public class MobSpawnHandler {
 				int cez = MathHelper.floor_double((spawnPos.getZ() + groupCheckRadius) / 16.0D);
 				for (int cx = csx; cx <= cex; ++cx) {
 					for (int cz = csz; cz <= cez; ++cz) {
-						if(world.getChunkProvider().getLoadedChunk(cx, cz) != null) {
+						if(world.getChunkProvider().getLoadedChunk(cx, cz) == null) {
 							continue spawnLoop;
 						}
 					}
@@ -461,7 +460,6 @@ public class MobSpawnHandler {
 						Chunk spawnChunk = world.getChunkFromBlockCoords(entitySpawnPos);
 						ClassInheritanceMultiMap<Entity>[] entityLists = spawnChunk.getEntityLists();
 						int chunkEntityCount = 0;
-						boolean nextGroupAttempt = false;
 						for(int l = 0; l < entityLists.length; l++) {
 							int subChunkEntityCount = 0;
 							for(Entity entity : entityLists[l]) {
@@ -526,7 +524,7 @@ public class MobSpawnHandler {
 		Chunk chunk = world.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
 		int x = chunkPos.chunkXPos * 16 + world.rand.nextInt(16);
 		int z = chunkPos.chunkZPos * 16 + world.rand.nextInt(16);
-		int y = world.rand.nextInt(chunk == null ? world.getActualHeight() : chunk.getTopFilledSegment() + 16 - 1);
+		int y = Math.min(world.rand.nextInt(chunk == null ? world.getActualHeight() : chunk.getTopFilledSegment() + 16 - 1), 256);
 		return new BlockPos(x, y, z);
 	}
 

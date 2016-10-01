@@ -9,6 +9,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.entity.layer.LayerGlow;
 import thebetweenlands.client.render.model.entity.ModelAngler;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 
 @SideOnly(Side.CLIENT)
@@ -38,15 +40,14 @@ public class RenderAngler extends RenderLiving<EntityAngler> {
 	public void doRender(EntityAngler entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
-		/*TODO add shader helper
-        if (ShaderHelper.INSTANCE.canUseShaders()) {
+        if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
             double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.3f;
             double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.3f;
-            ShaderHelper.INSTANCE.addDynLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff,
-                    1.6f,
-                    10.0f / 255.0f * 13.0F,
+            ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff,
+                    2.6f,
                     30.0f / 255.0f * 13.0F,
-                    20.0f / 255.0f * 13.0F));
-        }*/
+                    90.0f / 255.0f * 13.0F,
+                    60.0f / 255.0f * 13.0F));
+        }
 	}
 }
