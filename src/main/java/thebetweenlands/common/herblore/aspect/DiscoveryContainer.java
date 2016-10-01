@@ -166,7 +166,7 @@ public class DiscoveryContainer<T> {
 			e.getKey().writeToNBT(discoveryEntry);
 			NBTTagList aspectListCompound = new NBTTagList();
 			for(IAspectType type : e.getValue()) {
-				aspectListCompound.appendTag(AspectManager.writeAspectTypeNBT(type, new NBTTagCompound()));
+				aspectListCompound.appendTag(type.writeToNBT(new NBTTagCompound()));
 			}
 			discoveryEntry.setTag("aspects", aspectListCompound);
 			discoveryList.appendTag(discoveryEntry);
@@ -191,7 +191,7 @@ public class DiscoveryContainer<T> {
 			NBTTagList aspectListCompound = discoveryEntry.getTagList("aspects", Constants.NBT.TAG_COMPOUND);
 			for (int c = 0; c < aspectListCompound.tagCount(); c++) {
 				NBTTagCompound aspectTypeCompound = aspectListCompound.getCompoundTagAt(c);
-				aspectTypeList.add(AspectManager.readAspectTypeFromNBT(aspectTypeCompound));
+				aspectTypeList.add(IAspectType.readFromNBT(aspectTypeCompound));
 			}
 			this.discoveredStaticAspects.put(item, aspectTypeList);
 		}

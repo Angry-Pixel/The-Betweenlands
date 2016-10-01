@@ -101,7 +101,7 @@ public class ButtonWidget extends ManualWidgetBase {
             if (items.size() > 0)
                 renderItem(xStart, yStart, items.get(currentItem), false, false, manual.manualType);
             else if (aspect != null) {
-                AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIconIndex());
+                AspectIconRenderer.renderIcon(xStart, yStart, 16, 16, aspect.getIcon());
             } else if (resourceLocation != null) {
                 Minecraft.getMinecraft().renderEngine.bindTexture(resourceLocation);
                 manual.drawTexture(xStart, yStart, 16, 16, page.textureWidth, page.textureHeight, page.xStartTexture, page.xEndTexture, page.yStartTexture, page.yEndTexture);

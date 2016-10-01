@@ -1,5 +1,8 @@
 package thebetweenlands.common.herblore.aspect.type;
 
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.common.lib.ModInfo;
+
 public class AspectFergalaz implements IAspectType {
 	@Override
 	public String getName() {
@@ -17,7 +20,7 @@ public class AspectFergalaz implements IAspectType {
 	}
 
 	@Override
-	public int getIconIndex() {
-		return 6;
+	public ResourceLocation getIcon() {
+		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_fergalaz.png");
 	}
 }

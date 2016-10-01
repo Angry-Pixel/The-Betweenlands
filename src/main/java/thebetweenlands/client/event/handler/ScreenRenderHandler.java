@@ -25,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -43,10 +44,13 @@ public class ScreenRenderHandler extends Gui {
 	private int updateCounter;
 
 	@SubscribeEvent
+	public void onClientTick(ClientTickEvent event) {
+		this.updateCounter++;
+	}
+
+	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
 		if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
-			this.updateCounter++;
-
 			int width = event.getResolution().getScaledWidth();
 			int height = event.getResolution().getScaledHeight();
 
@@ -163,8 +167,10 @@ public class ScreenRenderHandler extends Gui {
 		Minecraft mc = Minecraft.getMinecraft();
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mc.currentScreen instanceof GuiContainer && mc.thePlayer != null) {
 			GuiContainer container = (GuiContainer) mc.currentScreen;
-			Slot slot = container.getSlotUnderMouse();
-			if(slot != null && slot.getHasStack()) {
+
+			//Render aspects tooltip
+			Slot selectedSlot = container.getSlotUnderMouse();
+			if(selectedSlot != null && selectedSlot.getHasStack()) {
 				ScaledResolution resolution = new ScaledResolution(mc);
 				FontRenderer fontRenderer = mc.fontRendererObj;
 				double mouseX = (Mouse.getX() * resolution.getScaledWidth_double()) / mc.displayWidth;
@@ -173,7 +179,7 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.translate(mouseX + 8, mouseY - 38, 500);
 				int yOffset = 0;
 				int width = 0;
-				List<Aspect> aspects = ItemAspectContainer.fromItem(slot.getStack(), AspectManager.get(mc.theWorld)).getAspects(mc.thePlayer);
+				List<Aspect> aspects = ItemAspectContainer.fromItem(selectedSlot.getStack(), AspectManager.get(mc.theWorld)).getAspects(mc.thePlayer);
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
 				RenderHelper.disableStandardItemLighting();
@@ -184,7 +190,7 @@ public class ScreenRenderHandler extends Gui {
 						GlStateManager.color(1, 1, 1, 1);
 						fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);
 						fontRenderer.drawString(aspectTypeText, 2 + 17, 2 + 9 + yOffset, 0xFFFFFFFF);
-						AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIconIndex());
+						AspectIconRenderer.renderIcon(2, 2 + yOffset, 16, 16, aspect.type.getIcon());
 						int entryWidth = Math.max(fontRenderer.getStringWidth(aspectText) + 19, fontRenderer.getStringWidth(aspectTypeText) + 19);
 						if(entryWidth > width) {
 							width = entryWidth;
@@ -201,6 +207,27 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.enableBlend();
 				GlStateManager.color(1, 1, 1, 1);
 			}
+
+			//Render and cycle through aspect overlays
+			/*for(Slot slot : container.inventorySlots.inventorySlots) {
+				if(slot.getHasStack()) {
+					try {
+						ItemStack stack = slot.getStack();
+						List<Aspect> aspects = ItemAspectContainer.fromItem(stack, AspectManager.get(mc.theWorld)).getAspects(mc.thePlayer);
+						if(!aspects.isEmpty()) {
+							Aspect aspect = aspects.get(aspects.size() > 1 ? (this.updateCounter / 40) % (aspects.size()) : 0);
+							int guiX = ReflectionHelper.findField(GuiContainer.class, "guiLeft").getInt(container);
+							int guiY = ReflectionHelper.findField(GuiContainer.class, "guiTop").getInt(container);
+							GlStateManager.pushMatrix();
+							GlStateManager.translate(0, 0, 500);
+							AspectIconRenderer.renderIcon(guiX + slot.xDisplayPosition, guiY + slot.yDisplayPosition, 16, 16, aspect.type.getIcon());
+							GlStateManager.popMatrix();
+						}
+					} catch(Exception ex) {
+
+					}
+				}
+			}*/
 		}
 	}
 }

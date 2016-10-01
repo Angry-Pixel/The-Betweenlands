@@ -20,7 +20,6 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
-import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
 
 public class AspectManager {
@@ -44,21 +43,21 @@ public class AspectManager {
 		}
 	}
 
-	public static class AspectEntry {
+	public static final class AspectEntry {
 		public final IAspectType aspect;
 		public final int tier;
-		public final int type;
+		public final int group;
 		public final float baseAmount;
 		public final String aspectName;
 
-		public AspectEntry(IAspectType aspect, AspectTier tier, AspectGroup type, float baseAmount) {
-			this(aspect, tier.id, type.id, baseAmount);
+		private AspectEntry(IAspectType aspect, AspectTier tier, AspectGroup group, float baseAmount) {
+			this(aspect, tier.id, group.id, baseAmount);
 		}
 
-		public AspectEntry(IAspectType aspect, int tier, int type, float baseAmount) {
+		private AspectEntry(IAspectType aspect, int tier, int group, float baseAmount) {
 			this.aspect = aspect;
 			this.tier = tier;
-			this.type = type;
+			this.group = group;
 			this.baseAmount = baseAmount;
 			this.aspectName = this.aspect.getName();
 		}
@@ -67,25 +66,30 @@ public class AspectManager {
 	public static final class AspectItemEntry {
 		public final AspectItem item;
 		public final int tier;
-		public final int type;
+		public final int group;
 		public final float amountMultiplier, amountVaration;
 		public final ResourceLocation itemName;
 
-		public AspectItemEntry(ItemStack item, IItemStackMatcher matcher, AspectTier tier, AspectGroup type, float amountMultiplier, float amountVariation) {
-			this(item, matcher, tier.id, type.id, amountMultiplier, amountVariation);
+		private AspectItemEntry(ItemStack item, IItemStackMatcher matcher, AspectTier tier, AspectGroup group, float amountMultiplier, float amountVariation) {
+			this(item, matcher, tier.id, group.id, amountMultiplier, amountVariation);
 		}
 
-		public AspectItemEntry(ItemStack item, IItemStackMatcher matcher, int tier, int type, float amountMultiplier, float amountVariation) {
+		private AspectItemEntry(ItemStack item, IItemStackMatcher matcher, int tier, int group, float amountMultiplier, float amountVariation) {
 			this.item = new AspectItem(item, matcher);
 			this.tier = tier;
-			this.type = type;
+			this.group = group;
 			this.amountMultiplier = amountMultiplier;
 			this.amountVaration = amountVariation;
 			this.itemName = item.getItem().getRegistryName();
 		}
 
+		/**
+		 * Returns whether the tiers and groups are matching
+		 * @param aspectEntry
+		 * @return
+		 */
 		public boolean matchEntry(AspectEntry aspectEntry) {
-			return aspectEntry.tier == this.tier && aspectEntry.type == this.type;
+			return aspectEntry.tier == this.tier && aspectEntry.group == this.group;
 		}
 	}
 
@@ -147,6 +151,7 @@ public class AspectManager {
 	private static final List<AspectEntry> REGISTERED_ASPECTS = new ArrayList<AspectEntry>();
 	private static final Map<AspectItem, List<AspectItemEntry>> REGISTERED_ITEMS = new LinkedHashMap<AspectItem, List<AspectItemEntry>>();
 	private static final Map<Item, List<AspectItem>> ITEM_TO_ASPECT_ITEMS = new HashMap<Item, List<AspectItem>>();
+
 	private final Map<AspectItem, List<Aspect>> matchedAspects = new LinkedHashMap<AspectItem, List<Aspect>>();
 
 	/**
@@ -167,27 +172,81 @@ public class AspectManager {
 
 	/**
 	 * Registers an aspect
-	 * @param entry
+	 * @param aspect
+	 * @param tier
+	 * @param type
+	 * @param baseAmount
 	 */
-	public static void registerAspect(AspectEntry entry) {
-		REGISTERED_ASPECTS.add(entry);
+	public static void registerAspect(IAspectType aspect, AspectTier tier, AspectGroup type, float baseAmount) {
+		registerAspect(aspect, tier.id, type.id, baseAmount);
 	}
 
 	/**
-	 * Adds a single static aspect to the specified entry
-	 * @param entry
+	 * Registers an aspect
+	 * @param aspect
+	 * @param tier
+	 * @param type
+	 * @param baseAmount
 	 */
-	public static void addStaticAspectsToItem(AspectItemEntry entry) {
-		addStaticAspectsToItem(entry, 1);
+	public static void registerAspect(IAspectType aspect, int tier, int type, float baseAmount) {
+		REGISTERED_ASPECTS.add(new AspectEntry(aspect, tier, type, baseAmount));
 	}
 
 	/**
 	 * Adds static aspects to the specified entry
-	 * @param entry
-	 * @param aspectCount How often the aspect should be added
+	 * @param item Item
+	 * @param matcher The matcher returns whether an aspect is applicable to a certain item stack
+	 * @param tier Aspect tier
+	 * @param type Aspect type
+	 * @param amountMultiplier Aspect amount multiplier
+	 * @param amountVariation Random aspect amount variation
 	 */
-	public static void addStaticAspectsToItem(AspectItemEntry entry, int aspectCount) {
+	public static void addStaticAspectsToItem(ItemStack item, IItemStackMatcher matcher, AspectTier tier, AspectGroup type, float amountMultiplier, float amountVariation) {
+		addStaticAspectsToItem(item, matcher, tier, type, amountMultiplier, amountVariation, 1);
+	}
+
+	/**
+	 * Adds static aspects to the specified entry
+	 * @param item Item
+	 * @param matcher The matcher returns whether an aspect is applicable to a certain item stack
+	 * @param tier Aspect tier
+	 * @param type Aspect type
+	 * @param amountMultiplier Aspect amount multiplier
+	 * @param amountVariation Random aspect amount variation
+	 * @param aspectCount How often the item should have this entry
+	 */
+	public static void addStaticAspectsToItem(ItemStack item, IItemStackMatcher matcher, AspectTier tier, AspectGroup type, float amountMultiplier, float amountVariation, int aspectCount) {
+		addStaticAspectsToItem(item, matcher, tier.id, type.id, amountMultiplier, amountVariation, aspectCount);
+	}
+
+	/**
+	 * Adds static aspects to the specified entry
+	 * @param item Item
+	 * @param matcher The matcher returns whether an aspect is applicable to a certain item stack
+	 * @param tier Aspect tier
+	 * @param type Aspect type
+	 * @param amountMultiplier Aspect amount multiplier
+	 * @param amountVariation Random aspect amount variation
+	 */
+	public static void addStaticAspectsToItem(ItemStack item, IItemStackMatcher matcher, int tier, int type, float amountMultiplier, float amountVariation) {
+		addStaticAspectsToItem(item, matcher, tier, type, amountMultiplier, amountVariation, 1);
+	}
+
+	/**
+	 * Adds static aspects to the specified entry
+	 * @param item Item
+	 * @param matcher The matcher returns whether an aspect is applicable to a certain item stack
+	 * @param tier Aspect tier
+	 * @param type Aspect type
+	 * @param amountMultiplier Aspect amount multiplier
+	 * @param amountVariation Random aspect amount variation
+	 * @param aspectCount How often the item should have this entry
+	 */
+	public static void addStaticAspectsToItem(ItemStack item, IItemStackMatcher matcher, int tier, int type, float amountMultiplier, float amountVariation, int aspectCount) {
+		AspectItemEntry entry = new AspectItemEntry(item, matcher, tier, type, amountMultiplier, amountVariation);
 		AspectItem itemEntry = entry.item;
+
+		//Check if aspect item already exists, if so use that
 		for(Entry<AspectItem, List<AspectItemEntry>> e : REGISTERED_ITEMS.entrySet()) {
 			if(e.getKey().equals(itemEntry)) {
 				itemEntry = e.getKey();
@@ -314,7 +373,7 @@ public class AspectManager {
 	}
 
 	/**
-	 * Resets all static aspects
+	 * Resets all static aspects and generates a new distribution with the specified seed
 	 * @param aspectSeed
 	 */
 	public void resetStaticAspects(long aspectSeed) {
@@ -491,25 +550,5 @@ public class AspectManager {
 			aspects.add(aspect.type);
 		}
 		return aspects;
-	}
-
-	/**
-	 * Writes an aspect type to the specified nbt compound
-	 * @param type
-	 * @param nbt
-	 * @return
-	 */
-	public static NBTTagCompound writeAspectTypeNBT(IAspectType type, NBTTagCompound nbt) {
-		nbt.setString("type", type.getName());
-		return nbt;
-	}
-
-	/**
-	 * Reads an aspect type from the specified compound
-	 * @param nbt
-	 * @return
-	 */
-	public static IAspectType readAspectTypeFromNBT(NBTTagCompound nbt) {
-		return AspectRegistry.getAspectTypeFromName(nbt.getString("type"));
 	}
 }

@@ -1,13 +1,53 @@
 package thebetweenlands.common.herblore.aspect.type;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import thebetweenlands.common.registries.AspectRegistry;
 
 public interface IAspectType {
-	String getName();
+	/**
+	 * Returns the name of this aspect
+	 * @return
+	 */
+	public String getName();
 
-	String getType();
+	/**
+	 * Returns the type of this aspect
+	 * @return
+	 */
+	public String getType();
 
-	String getDescription();
-	
-	int getIconIndex();
+	/**
+	 * Returns the description of this aspect
+	 * @return
+	 */
+	public String getDescription();
+
+	/**
+	 * Returns the aspect icon
+	 * @return
+	 */
+	public ResourceLocation getIcon();
+
+	/**
+	 * Writes this aspect type to the specified NBT
+	 * @param nbt
+	 * @return
+	 */
+	public default NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt.setString("type", this.getName());
+		return nbt;
+	}
+
+	/**
+	 * Reads the aspect type from the specified NBT
+	 * @param nbt
+	 * @return
+	 */
+	@Nullable
+	public static IAspectType readFromNBT(NBTTagCompound nbt) {
+		return AspectRegistry.getAspectTypeFromName(nbt.getString("type"));
+	}
 }

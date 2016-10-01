@@ -44,7 +44,7 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
         List<IAspectType> subItems = aspects.subList(currentItems, currentItems + (aspects.size() - currentItems > 5 ? 6 : aspects.size() - currentItems));
         int width = 0;
         for (IAspectType aspect : subItems) {
-            AspectIconRenderer.renderIcon(xStart + width, yStart, 16, 16, aspect.getIconIndex());
+            AspectIconRenderer.renderIcon(xStart + width, yStart, 16, 16, aspect.getIcon());
             PageLink link = new PageLink(xStart + width, yStart, 16, 16, aspect);
             if (link.category != null)
                 pageLinks.add(link);
