@@ -13,7 +13,6 @@ import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 
 import net.minecraft.block.state.IBlockState;
@@ -50,6 +49,7 @@ public class ModelFromModelBase implements IModelCustomData {
 	public final int width;
 	public final int height;
 	public final IVertexProcessor vertexProcessor;
+	private boolean ambientOcclusion = true;
 
 	public ModelFromModelBase(ModelBase model, ResourceLocation texture, int width, int height) {
 		this(model, texture, texture, width, height, null);
@@ -72,6 +72,24 @@ public class ModelFromModelBase implements IModelCustomData {
 		this.particleTexture = particleTexture;
 	}
 
+	/**
+	 * Sets whether ambient occlusion should be used
+	 * @param ao
+	 * @return
+	 */
+	public ModelFromModelBase setAmbientOcclusion(boolean ao) {
+		this.ambientOcclusion = ao;
+		return this;
+	}
+
+	/**
+	 * Returns whether ambient occlusion should be used
+	 * @return
+	 */
+	public boolean isAmbientOcclusion() {
+		return this.ambientOcclusion;
+	}
+
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
 		return Collections.emptyList();
@@ -87,7 +105,7 @@ public class ModelFromModelBase implements IModelCustomData {
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		return new ModelBakedModelBase(this.vertexProcessor, state.apply(Optional.<IModelPart>absent()), map, format, this.model, bakedTextureGetter.apply(this.texture), bakedTextureGetter.apply(this.particleTexture), this.width, this.height);
+		return new ModelBakedModelBase(this.vertexProcessor, state.apply(Optional.<IModelPart>absent()), map, format, this.model, bakedTextureGetter.apply(this.texture), bakedTextureGetter.apply(this.particleTexture), this.width, this.height, this.ambientOcclusion);
 	}
 
 	@Override
@@ -102,8 +120,9 @@ public class ModelFromModelBase implements IModelCustomData {
 		protected final TextureAtlasSprite texture;
 		protected final TextureAtlasSprite particleTexture;
 		protected final List<BakedQuad> quads;
+		protected final boolean ambientOcclusion;
 
-		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, TextureAtlasSprite particleTexture, int width, int height) {
+		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, TextureAtlasSprite particleTexture, int width, int height, boolean ambientOcclusion) {
 			this.transformation = transformation.isPresent() ? transformation.get() : null;
 			this.transforms = transforms;
 			this.format = format;
@@ -123,6 +142,7 @@ public class ModelFromModelBase implements IModelCustomData {
 				}
 			}
 			this.quads = builder.build();
+			this.ambientOcclusion = ambientOcclusion;
 		}
 
 		@Override
@@ -134,7 +154,7 @@ public class ModelFromModelBase implements IModelCustomData {
 
 		@Override
 		public boolean isAmbientOcclusion() {
-			return false;
+			return this.ambientOcclusion;
 		}
 
 		@Override
@@ -173,10 +193,14 @@ public class ModelFromModelBase implements IModelCustomData {
 		if(!customData.containsKey("particle_texture")) 
 			return this;
 
-		String particleTextureJsonStr = customData.get("particle_texture");
-		JsonElement e = new JsonParser().parse(particleTextureJsonStr);
-		String particleTexture = e.getAsString();
+		JsonParser parser = new JsonParser();
+		String particleTexture = parser.parse(customData.get("particle_texture")).getAsString();
 
-		return new ModelFromModelBase(this.model, this.texture, new ResourceLocation(particleTexture), this.width, this.height, this.vertexProcessor);
+		boolean ambientOcclusion = this.isAmbientOcclusion();
+		if(customData.containsKey("ambient_occlusion")) {
+			ambientOcclusion = parser.parse(customData.get("ambient_occlusion")).getAsBoolean();
+		}
+
+		return new ModelFromModelBase(this.model, this.texture, new ResourceLocation(particleTexture), this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
 	}
 }

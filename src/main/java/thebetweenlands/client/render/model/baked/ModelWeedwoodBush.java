@@ -331,7 +331,7 @@ public class ModelWeedwoodBush implements IModel {
 
 		@Override
 		public boolean isAmbientOcclusion() {
-			return false;
+			return true;
 		}
 
 		@Override

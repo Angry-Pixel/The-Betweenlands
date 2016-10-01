@@ -53,7 +53,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
-		return !Minecraft.getMinecraft().gameSettings.fancyGraphics;
+		return Blocks.LEAVES.isOpaqueCube(state);
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package thebetweenlands.common.registries;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+
 public class Registries {
 	public static final Registries INSTANCE = new Registries();
 
@@ -10,9 +13,12 @@ public class Registries {
 		EntityRegistry.preInit();
 		BiomeRegistry.preInit();
 		SoundRegistry.preInit();
-		ModelRegistry.preInit();
-		AmbienceRegistry.preInit();
 		CapabilityRegistry.preInit();
+		
+		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+			ModelRegistry.preInit();
+			AmbienceRegistry.preInit();
+		}
 	}
 
 	public void init() {
