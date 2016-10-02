@@ -1,34 +1,35 @@
 package thebetweenlands.client.render.shader.postprocessing;
 
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.render.shader.DepthBuffer;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
 import thebetweenlands.util.config.ConfigHandler;
+
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private DepthBuffer depthBuffer;
@@ -79,45 +80,45 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	@Override
 	protected ResourceLocation[] getShaders() {
-		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/world/world.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/world/world.fsh")};
+		return new ResourceLocation[]{new ResourceLocation("thebetweenlands:shaders/postprocessing/world/world.vsh"), new ResourceLocation("thebetweenlands:shaders/postprocessing/world/world.fsh")};
 	}
 
 	@Override
 	protected void deleteEffect() {
-		if(this.depthBuffer != null)
+		if (this.depthBuffer != null)
 			this.depthBuffer.deleteBuffer();
 
-		if(this.blitBuffer != null)
+		if (this.blitBuffer != null)
 			this.blitBuffer.delete();
 
-		if(this.occlusionBuffer != null)
+		if (this.occlusionBuffer != null)
 			this.occlusionBuffer.delete();
 
-		if(this.repellerShieldBuffer != null)
+		if (this.repellerShieldBuffer != null)
 			this.repellerShieldBuffer.deleteBuffers();
 
-		if(this.gasParticlesBuffer != null)
+		if (this.gasParticlesBuffer != null)
 			this.gasParticlesBuffer.deleteBuffers();
 
-		if(this.gasTextureBaseFramebuffer != null)
+		if (this.gasTextureBaseFramebuffer != null)
 			this.gasTextureBaseFramebuffer.deleteFramebuffer();
 
-		if(this.gasTextureFramebuffer != null)
+		if (this.gasTextureFramebuffer != null)
 			this.gasTextureFramebuffer.deleteFramebuffer();
 
-		if(this.starfieldTextureFramebuffer != null)
+		if (this.starfieldTextureFramebuffer != null)
 			this.starfieldTextureFramebuffer.deleteFramebuffer();
 
-		if(this.gasWarpEffect != null)
+		if (this.gasWarpEffect != null)
 			this.gasWarpEffect.delete();
 
-		if(this.starfieldEffect != null)
+		if (this.starfieldEffect != null)
 			this.starfieldEffect.delete();
 
-		if(this.occlusionExtractor != null)
+		if (this.occlusionExtractor != null)
 			this.occlusionExtractor.delete();
 
-		if(this.godRayEffect != null)
+		if (this.godRayEffect != null)
 			this.godRayEffect.delete();
 	}
 
@@ -132,15 +133,15 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.invMVPUniformID = this.getUniform("u_INVMVP");
 		this.fogModeUniformID = this.getUniform("u_fogMode");
 
-		for(int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
+		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
 			this.lightSourcePositionUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].position");
 		}
 
-		for(int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
+		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
 			this.lightSourceColorUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].color");
 		}
 
-		for(int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
+		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
 			this.lightSourceRadiusUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].radius");
 		}
 
@@ -172,7 +173,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		return true;
 	}
 
-	private static final Comparator<LightSource> LIGHT_SOURCE_SORTER = new Comparator<LightSource>(){
+	private static final Comparator<LightSource> LIGHT_SOURCE_SORTER = new Comparator<LightSource>() {
 		@Override
 		public int compare(LightSource o1, LightSource o2) {
 			double dx1 = o1.x - Minecraft.getMinecraft().getRenderManager().viewerPosX;
@@ -181,11 +182,11 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			double dx2 = o2.x - Minecraft.getMinecraft().getRenderManager().viewerPosX;
 			double dy2 = o2.y - Minecraft.getMinecraft().getRenderManager().viewerPosY;
 			double dz2 = o2.z - Minecraft.getMinecraft().getRenderManager().viewerPosZ;
-			double d1 = Math.sqrt(dx1*dx1 + dy1*dy1 + dz1*dz1);
-			double d2 = Math.sqrt(dx2*dx2 + dy2*dy2 + dz2*dz2);
-			if(d1 > d2) {
+			double d1 = Math.sqrt(dx1 * dx1 + dy1 * dy1 + dz1 * dz1);
+			double d2 = Math.sqrt(dx2 * dx2 + dy2 * dy2 + dz2 * dz2);
+			if (d1 > d2) {
 				return 1;
-			} else if(d1 < d2) {
+			} else if (d1 < d2) {
 				return -1;
 			}
 			return 0;
@@ -212,9 +213,9 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		final double renderPosY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
 		final double renderPosZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
 
-		for(int i = 0; i < renderedLightSources; i++) {
+		for (int i = 0; i < renderedLightSources; i++) {
 			LightSource lightSource = this.lightSources.get(this.currentRenderPass * MAX_LIGHT_SOURCES_PER_PASS + i);
-			this.uploadFloat(this.lightSourcePositionUniformIDs[i], (float)(lightSource.x - renderPosX), (float)(lightSource.y - renderPosY), (float)(lightSource.z - renderPosZ));
+			this.uploadFloat(this.lightSourcePositionUniformIDs[i], (float) (lightSource.x - renderPosX), (float) (lightSource.y - renderPosY), (float) (lightSource.z - renderPosZ));
 			this.uploadFloat(this.lightSourceColorUniformIDs[i], lightSource.r, lightSource.g, lightSource.b);
 			this.uploadFloat(this.lightSourceRadiusUniformIDs[i], lightSource.radius);
 		}
@@ -233,6 +234,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the main FBO
+	 *
 	 * @return
 	 */
 	protected final Framebuffer getMainFramebuffer() {
@@ -241,6 +243,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the depth buffer
+	 *
 	 * @return
 	 */
 	public DepthBuffer getDepthBuffer() {
@@ -265,6 +268,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the inverted MVP matrix
+	 *
 	 * @return
 	 */
 	public Matrix4f getInvertedModelviewProjectionMatrix() {
@@ -273,6 +277,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the MVP matrix
+	 *
 	 * @return
 	 */
 	public Matrix4f getModelviewProjectionMatrix() {
@@ -281,6 +286,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the MV matrix
+	 *
 	 * @return
 	 */
 	public Matrix4f getModelviewMatrix() {
@@ -289,6 +295,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the modelview buffer
+	 *
 	 * @return
 	 */
 	public FloatBuffer getModelviewBuffer() {
@@ -297,6 +304,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the projection matrix
+	 *
 	 * @return
 	 */
 	public Matrix4f getProjectionMatrix() {
@@ -305,6 +313,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the projection buffer
+	 *
 	 * @return
 	 */
 	public FloatBuffer getProjectionBuffer() {
@@ -313,6 +322,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Adds a dynamic light source for this frame
+	 *
 	 * @param light
 	 */
 	public void addLight(LightSource light) {
@@ -328,6 +338,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the amount of light sources
+	 *
 	 * @return
 	 */
 	public int getLightSourcesAmount() {
@@ -336,6 +347,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Sets the current render pass
+	 *
 	 * @param pass
 	 */
 	public void setRenderPass(int pass) {
@@ -344,6 +356,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the gas texture
+	 *
 	 * @return
 	 */
 	public int getGasTexture() {
@@ -352,6 +365,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the starfield texture
+	 *
 	 * @return
 	 */
 	public int getStarfieldTexture() {
@@ -360,11 +374,12 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Updates the shader textures
+	 *
 	 * @param partialTicks
 	 */
 	public void updateTextures(float partialTicks) {
 		World world = Minecraft.getMinecraft().theWorld;
-		if(world != null && !Minecraft.getMinecraft().isGamePaused()) {
+		if (world != null && !Minecraft.getMinecraft().isGamePaused()) {
 			//Update repeller shield
 			this.updateRepellerShieldTexture(partialTicks);
 
@@ -372,20 +387,19 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			this.updateGasParticlesTexture(partialTicks);
 
 			boolean hasCloud = false;
-			//TODO: Requires Gas Cloud
-			//			for(Entity e : (List<Entity>) Minecraft.getMinecraft().theWorld.loadedEntityList) {
-			//				if(e instanceof EntityGasCloud) {
-			//					hasCloud = true;
-			//					break;
-			//				}
-			//			}
-			if(hasCloud) {
+			for (Entity entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+				if (entity instanceof EntityGasCloud) {
+					hasCloud = true;
+					break;
+				}
+			}
+			if (hasCloud) {
 				//Update gas texture
 				float worldTimeInterp = world.getWorldTime() + partialTicks;
-				float offsetX = ((float)Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
-				float offsetY = ((float)Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
+				float offsetX = ((float) Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
+				float offsetY = ((float) Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
 				this.gasWarpEffect.setOffset(offsetX, offsetY)
-				.setWarpDir(0.75F, 0.75F);
+						.setWarpDir(0.75F, 0.75F);
 
 				this.gasTextureFramebuffer.bindFramebuffer(false);
 				GL11.glClearColor(1, 1, 1, 1);
@@ -396,21 +410,21 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
 
 				this.gasWarpEffect.create(this.gasTextureFramebuffer)
-				.setSource(this.gasTextureBaseFramebuffer.framebufferTexture)
-				.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
-				.setRenderDimensions(64.0F * 20.0F, 64.0F * 20.0F)
-				.render(partialTicks);
+						.setSource(this.gasTextureBaseFramebuffer.framebufferTexture)
+						.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
+						.setRenderDimensions(64.0F * 20.0F, 64.0F * 20.0F)
+						.render(partialTicks);
 			}
 
 			//Update starfield texture
-			float offX = (float)(Minecraft.getMinecraft().getRenderManager().viewerPosX / 8000.0D);
-			float offY = (float)(Minecraft.getMinecraft().getRenderManager().viewerPosZ / 8000.0D);
-			float offZ = (float)(-Minecraft.getMinecraft().getRenderManager().viewerPosY / 10000.0D);
+			float offX = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosX / 8000.0D);
+			float offY = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosZ / 8000.0D);
+			float offZ = (float) (-Minecraft.getMinecraft().getRenderManager().viewerPosY / 10000.0D);
 			this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
 			this.starfieldEffect.create(this.starfieldTextureFramebuffer)
-			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
-			.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
-			.render(partialTicks);
+					.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
+					.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
+					.render(partialTicks);
 		}
 
 
@@ -418,6 +432,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Renders additional post processing effects such as god's rays, swirl etc.
+	 *
 	 * @param partialTicks
 	 */
 	public void renderPostEffects(float partialTicks) {
@@ -439,20 +454,20 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		boolean hasBeat = false;
 
 		World world = Minecraft.getMinecraft().theWorld;
-		if(world != null) {
-			if(world.provider instanceof WorldProviderBetweenlands) {
+		if (world != null) {
+			if (world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
 				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().BLOODSKY.getSkyTransparency(partialTicks);
-				if(skyTransparency > 0.01F) {
+				if (skyTransparency > 0.01F) {
 					hasBeat = true;
 				}
 				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().SPOOPY.getSkyTransparency(partialTicks);
 			}
 		}
 
-		if(skyTransparency <= 0.01F) {
+		if (skyTransparency <= 0.01F) {
 			return;
-		} else if(skyTransparency > 1.0F) {
+		} else if (skyTransparency > 1.0F) {
 			skyTransparency = 1.0F;
 		}
 
@@ -467,10 +482,10 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		Projection projectionUnclamped = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.NONE, false);
 
 		//Get light source positions in texture coords
-		float rayX = (float)(projection.getX() / renderWidth);
-		float rayY = (float)(projection.getY() / renderHeight);
+		float rayX = (float) (projection.getX() / renderWidth);
+		float rayY = (float) (projection.getY() / renderHeight);
 
-		float rayYUnclamped = (float)(projectionUnclamped.getY() / renderWidth);
+		float rayYUnclamped = (float) (projectionUnclamped.getY() / renderWidth);
 
 		//Calculate angle differences
 		Vec3d lookVec = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
@@ -486,13 +501,13 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		float weight = 0.12F;
 
 		//Lower effect strength if outside of view
-		if(rayYUnclamped <= 0.0F) {
+		if (rayYUnclamped <= 0.0F) {
 			float mult = 1 + MathHelper.clamp_float(rayYUnclamped / 5.0F * (1.0F - angDiff / fovX), -1, 0.0F);
 			decay *= mult;
 			illuminationDecay *= mult;
 			weight *= mult;
 		}
-		if(angDiff > fovX) {
+		if (angDiff > fovX) {
 			float mult = 1.0F - ((angDiff - fovX) / 400.0F);
 			decay *= mult;
 			illuminationDecay *= mult;
@@ -502,7 +517,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		int depthTexture = this.depthBuffer.getTexture();
 		int clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getDepthTexture();
 
-		if(depthTexture < 0 || clipPlaneBuffer < 0) return; //FBOs not yet ready
+		if (depthTexture < 0 || clipPlaneBuffer < 0) return; //FBOs not yet ready
 
 		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
 		Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
@@ -511,24 +526,24 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		//Extract occluding objects
 		this.occlusionExtractor.setDepthTextures(depthTexture, clipPlaneBuffer);
 		this.occlusionExtractor.create(occlusionFramebuffer)
-		.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
-		.setPreviousFramebuffer(mainFramebuffer)
-		//.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
-		.render(partialTicks);
+				.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
+				.setPreviousFramebuffer(mainFramebuffer)
+				//.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
+				.render(partialTicks);
 
 		//Render god's ray to blitFramebuffer
 		float beat = 0.0F;
-		if(hasBeat) {
-			beat = Math.abs(((float)Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D) * (float)Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F) / 4.0F;
+		if (hasBeat) {
+			beat = Math.abs(((float) Math.sin(System.nanoTime() / 100000000.0D) / 3.0F) / (Math.abs((float) Math.sin(System.nanoTime() / 4000000000.0D) * (float) Math.sin(System.nanoTime() / 4000000000.0D) * (float) Math.sin(System.nanoTime() / 4000000000.0D + 0.05F) * 120.0F) * 180.0F + 15.5F) * 30.0F) / 4.0F;
 		}
 		float density = 0.1F + beat;
 		this.godRayEffect.setOcclusionMap(occlusionFramebuffer)
-		.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F)
-		.setRayPos(rayX, rayY)
-		.create(blitFramebuffer)
-		.setSource(mainFramebuffer.framebufferTexture)
-		.setPreviousFramebuffer(mainFramebuffer)
-		.render(partialTicks);
+				.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F)
+				.setRayPos(rayX, rayY)
+				.create(blitFramebuffer)
+				.setSource(mainFramebuffer.framebufferTexture)
+				.setPreviousFramebuffer(mainFramebuffer)
+				.render(partialTicks);
 
 		//Render blitFramebuffer to main framebuffer
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
@@ -556,6 +571,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Sets the swirl effect angle
+	 *
 	 * @param swirlAngle
 	 */
 	public void setSwirlAngle(float swirlAngle) {
@@ -565,6 +581,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	/**
 	 * Returns the swirl effect angle
+	 *
 	 * @param partialTicks
 	 * @return
 	 */
@@ -575,17 +592,17 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private void applySwirl(float partialTicks) {
 		float interpolatedSwirlAngle = this.getSwirlAngle(partialTicks);
 
-		if(interpolatedSwirlAngle != 0.0F) {
+		if (interpolatedSwirlAngle != 0.0F) {
 			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
 			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 
 			//Render swirl
 			this.swirlEffect.setAngle(interpolatedSwirlAngle);
 			this.swirlEffect.create(mainFramebuffer)
-			.setSource(mainFramebuffer.framebufferTexture)
-			.setBlitFramebuffer(blitFramebuffer)
-			.setPreviousFramebuffer(mainFramebuffer)
-			.render(partialTicks);
+					.setSource(mainFramebuffer.framebufferTexture)
+					.setBlitFramebuffer(blitFramebuffer)
+					.setPreviousFramebuffer(mainFramebuffer)
+					.render(partialTicks);
 		}
 	}
 

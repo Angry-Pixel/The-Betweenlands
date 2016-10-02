@@ -1,8 +1,5 @@
 package thebetweenlands.common.tile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -13,6 +10,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -21,6 +19,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.client.particle.BLParticles;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
@@ -29,6 +28,10 @@ import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.util.ColorUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 //TODO: Send resulting elixir recipe with the NBT
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler, ITickable {
@@ -320,11 +323,11 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	}
 
 	public void extractFluids(FluidStack fluid) {
-		if (fluid.isFluidEqual(waterTank.getFluid())) {
-			waterTank.drain(fluid.amount, true);
-		}
-		if (getWaterAmount() == 0) {
-			if (hasInfusion) {
+				if (fluid.isFluidEqual(waterTank.getFluid())) {
+					waterTank.drain(fluid.amount, true);
+				}
+				if (getWaterAmount() == 0) {
+					if (hasInfusion) {
 				//TODO: Vials
 				/*for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
 					ItemStack stack = getStackInSlot(i);
@@ -346,14 +349,13 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					setInventorySlotContents(i, null);
 				}*/
 				if (evaporation == 600) {
-					//TODO: Gas cloud
-					/*EntityGasCloud gasCloud = new EntityGasCloud(this.worldObj);
+					EntityGasCloud gasCloud = new EntityGasCloud(this.worldObj);
 					if(this.infusingRecipe != null) {
 						float[] color = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
 						gasCloud.setGasColor(ColorUtils.toHex(color[0], color[1], color[2], 0.66F));
 					}
-					gasCloud.setLocationAndAngles(this.xCoord + 0.5D, this.yCoord + 1D, this.zCoord + 0.5D, MathHelper.wrapAngleTo180_float(this.worldObj.rand.nextFloat() * 360.0F), 0.0F);
-					this.worldObj.spawnEntityInWorld(gasCloud);*/
+					gasCloud.setLocationAndAngles(this.pos.getX() + 0.5D, this.pos.getY() + 1D, this.pos.getZ() + 0.5D, MathHelper.wrapDegrees(this.worldObj.rand.nextFloat() * 360.0F), 0.0F);
+					this.worldObj.spawnEntityInWorld(gasCloud);
 				}
 				this.infusingRecipe = null;
 			}

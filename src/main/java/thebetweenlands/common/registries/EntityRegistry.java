@@ -57,5 +57,6 @@ public class EntityRegistry {
 		registerEntity(EntitySwordEnergy.class, "sword_energy");
 		registerEntity(EntityShockwaveSwordItem.class, "shockwave_sword_item");
 		registerEntity(EntityShockwaveBlock.class, "shockwave_block");
+		registerEntity(EntityGasCloud.class, "gasCloud", 0xFFB300, 0xFFD000);
 	}
 }

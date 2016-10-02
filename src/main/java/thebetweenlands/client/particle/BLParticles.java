@@ -1,23 +1,14 @@
 package thebetweenlands.client.particle;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.particle.entity.ParticleAltarCrafting;
-import thebetweenlands.client.particle.entity.ParticleBreakingBL;
-import thebetweenlands.client.particle.entity.ParticleBubbleBL;
-import thebetweenlands.client.particle.entity.ParticleBug;
-import thebetweenlands.client.particle.entity.ParticleCaveWaterDrip;
-import thebetweenlands.client.particle.entity.ParticleDruidCasting;
-import thebetweenlands.client.particle.entity.ParticleFish;
-import thebetweenlands.client.particle.entity.ParticleMoth;
-import thebetweenlands.client.particle.entity.ParticlePortalBL;
-import thebetweenlands.client.particle.entity.ParticleWisp;
+import thebetweenlands.client.particle.entity.*;
+
+import javax.annotation.Nullable;
 
 public enum BLParticles {
 
@@ -82,7 +73,8 @@ public enum BLParticles {
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
-	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory()));
+	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
+	GAS_CLOUD(new ParticleGasCloud.Factory());
 
 
 
