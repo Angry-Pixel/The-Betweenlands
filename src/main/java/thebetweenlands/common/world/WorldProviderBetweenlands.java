@@ -24,9 +24,9 @@ import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
-import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationAmbience;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.util.config.ConfigHandler;
 
 /**

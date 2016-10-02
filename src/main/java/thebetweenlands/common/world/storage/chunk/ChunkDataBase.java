@@ -13,9 +13,11 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
@@ -24,6 +26,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
 
 public abstract class ChunkDataBase {
 	private static final class ChunkIdentifier {
@@ -79,6 +82,8 @@ public abstract class ChunkDataBase {
 
 	private Chunk chunk;
 	private World world;
+	private final List<ChunkStorage> storage = new ArrayList<ChunkStorage>();
+	private final List<EntityPlayerMP> watchers = new ArrayList<EntityPlayerMP>();
 
 	@Nullable
 	public static <T extends ChunkDataBase> T forChunk(World world, Chunk chunk, Class<T> clazz) {
@@ -150,6 +155,8 @@ public abstract class ChunkDataBase {
 			for(EntityPlayerMP watcher : watchers)
 				newInstance.onWatched(watcher);
 
+		newInstance.onLoaded();
+
 		return newInstance;
 	}
 
@@ -170,7 +177,7 @@ public abstract class ChunkDataBase {
 	 * @param handlerClass
 	 * @param nbt
 	 */
-	public static <T extends ChunkDataBase> void updateHandlerData(World world, Chunk chunk, Class<T> handlerClass, NBTTagCompound nbt) {
+	public static <T extends ChunkDataBase> void updateHandlerData(World world, Chunk chunk, Class<T> handlerClass, NBTTagCompound nbt, boolean packet) {
 		if(chunk.isLoaded()) {
 			ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(world, chunk.getChunkCoordIntPair()));
 			if(container != null) {
@@ -179,7 +186,11 @@ public abstract class ChunkDataBase {
 					T newInstance = getHandlerInstance(world, chunk, handlerClass, (handlerName) -> nbt);
 					container.addHandler(newInstance);
 				} else {
-					handler.readFromNBT(nbt);
+					if(packet) {
+						handler.readFromPacketNBT(nbt);
+					} else {
+						handler.readFromNBT(nbt);
+					}
 				}
 			}
 		}
@@ -218,14 +229,65 @@ public abstract class ChunkDataBase {
 	 * Reads the data from the NBT
 	 */
 	protected void readFromNBT(NBTTagCompound nbt) {
+		this.readStorageFromNBT(nbt, false);
+	}
 
+	/**
+	 * Reads the data from a packet NBT
+	 * @param nbt
+	 */
+	protected void readFromPacketNBT(NBTTagCompound nbt) {
+		this.readStorageFromNBT(nbt, true);
 	}
 
 	/**
 	 * Writes the data to the NBT
 	 */
 	protected NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		return this.writeStorageToNBT(nbt, false);
+	}
+
+	/**
+	 * Writes the data to the packet NBT
+	 * @param nbt
+	 * @return
+	 */
+	protected NBTTagCompound writeToPacketNBT(NBTTagCompound nbt) {
+		return this.writeStorageToNBT(nbt, true);
+	}
+
+	protected NBTTagCompound writeStorageToNBT(NBTTagCompound nbt, boolean packet) {
+		if (!this.storage.isEmpty()) {
+			NBTTagList storageList = new NBTTagList();
+			for (ChunkStorage storage : this.storage) {
+				NBTTagCompound storageCompound = new NBTTagCompound();
+				try {
+					ChunkStorage.save(storage, storageCompound, packet);
+					storageList.appendTag(storageCompound);
+				} catch(Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+			nbt.setTag("storage", storageList);
+		}
 		return nbt;
+	}
+
+	protected void readStorageFromNBT(NBTTagCompound nbt, boolean packet) {
+		if (nbt.hasKey("storage")) {
+			this.storage.clear();
+			NBTTagList storageList = nbt.getTagList("storage", Constants.NBT.TAG_COMPOUND);
+			for (int i = 0; i < storageList.tagCount(); i++) {
+				NBTTagCompound storageCompound = storageList.getCompoundTagAt(i);
+				try {
+					ChunkStorage storage = ChunkStorage.load(this, storageCompound, packet);
+					this.storage.add(storage);
+				} catch (Exception ex) {
+					this.markDirty();
+					ex.printStackTrace();
+				}
+			}
+		}
 	}
 
 	/**
@@ -236,10 +298,21 @@ public abstract class ChunkDataBase {
 	}
 
 	/**
+	 * Called after the chunk data has loaded
+	 */
+	protected void onLoaded() {
+		for(ChunkStorage storage : this.storage) {
+			storage.onLoaded();
+		}
+	}
+
+	/**
 	 * Called when the chunk is unloaded
 	 */
 	protected void onUnloaded() {
-
+		for(ChunkStorage storage : this.storage) {
+			storage.onUnloaded();
+		}
 	}
 
 	/**
@@ -247,7 +320,10 @@ public abstract class ChunkDataBase {
 	 * @param player
 	 */
 	protected void onWatched(EntityPlayerMP player) {
-
+		this.watchers.add(player);
+		for(ChunkStorage storage : this.storage) {
+			storage.onWatched(player);
+		}
 	}
 
 	/**
@@ -255,7 +331,18 @@ public abstract class ChunkDataBase {
 	 * @param player
 	 */
 	protected void onUnwatched(EntityPlayerMP player) {
+		this.watchers.remove(player);
+		for(ChunkStorage storage : this.storage) {
+			storage.onUnwatched(player);
+		}
+	}
 
+	/**
+	 * Returns the list of all watchers
+	 * @return
+	 */
+	public List<EntityPlayerMP> getWatchers() {
+		return this.watchers;
 	}
 
 	/**
@@ -263,6 +350,14 @@ public abstract class ChunkDataBase {
 	 */
 	public void markDirty() {
 		this.chunk.setChunkModified();
+	}
+
+	/**
+	 * Returns the storage list
+	 * @return
+	 */
+	public List<ChunkStorage> getStorage() {
+		return this.storage;
 	}
 
 	public static final class ChunkEventHandler {

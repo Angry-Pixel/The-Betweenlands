@@ -20,7 +20,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
-import thebetweenlands.common.world.storage.world.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 
 public class AspectManager {
 	public static enum AspectTier {

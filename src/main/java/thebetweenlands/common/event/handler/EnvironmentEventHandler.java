@@ -1,4 +1,4 @@
-package thebetweenlands.common.event;
+package thebetweenlands.common.event.handler;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;

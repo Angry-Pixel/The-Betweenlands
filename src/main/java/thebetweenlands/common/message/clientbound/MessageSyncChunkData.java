@@ -50,7 +50,7 @@ public class MessageSyncChunkData extends BLMessage {
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
-			Minecraft.getMinecraft().addScheduledTask(() -> this.updateChunks(this.chunkX, this.chunkZ, this.nbt));
+			this.updateChunks(this.chunkX, this.chunkZ, this.nbt);
 		}
 		return null;
 	}
@@ -59,7 +59,7 @@ public class MessageSyncChunkData extends BLMessage {
 	private void updateChunks(int chunkX, int chunkZ, NBTTagCompound nbt) {
 		Chunk chunk = Minecraft.getMinecraft().theWorld.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
 		if(chunk != null) {
-			ChunkDataBase.updateHandlerData(Minecraft.getMinecraft().theWorld, chunk, BetweenlandsChunkData.class, nbt);
+			ChunkDataBase.updateHandlerData(Minecraft.getMinecraft().theWorld, chunk, BetweenlandsChunkData.class, nbt, true);
 		}
 	}
 }

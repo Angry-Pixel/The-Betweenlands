@@ -25,10 +25,10 @@ import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.storage.chunk.storage.StorageHelper;
-import thebetweenlands.common.world.storage.chunk.storage.location.EnumLocationType;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.EnumLocationType;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationAmbience;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationAmbience.EnumLocationAmbience;
 
 public class WorldGenWightFortress extends WorldGenerator {
 
@@ -103,13 +103,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 		List<LocationStorage> addedLocations = StorageHelper.addArea(world, "translate:wightTower", new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42), EnumLocationType.WIGHT_TOWER, 0, true);
 		for(LocationStorage location : addedLocations) {
-			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80)).getChunkData().markDirty();
+			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80)).markDirty();
 		}
 		StorageHelper.addArea(world, "translate:wightTowerPuzzle", new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20), EnumLocationType.WIGHT_TOWER, 1, true);
 		StorageHelper.addArea(world, "translate:wightTowerTeleporter", new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23), EnumLocationType.WIGHT_TOWER, 2, true);
 		addedLocations = StorageHelper.addArea(world, "translate:wightTowerBoss", new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17), EnumLocationType.WIGHT_TOWER, 3, true);
 		for(LocationStorage location : addedLocations) {
-			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F)).getChunkData().markDirty();
+			location.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F)).markDirty();
 		}
 		return generateStructure(world, rand, pos);
 	}

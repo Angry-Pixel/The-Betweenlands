@@ -31,7 +31,7 @@ import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
 
 import javax.annotation.Nullable;
 import java.util.List;

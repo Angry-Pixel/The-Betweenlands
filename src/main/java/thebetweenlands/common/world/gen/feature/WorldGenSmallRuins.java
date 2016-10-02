@@ -12,8 +12,8 @@ import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHal
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
 
 import java.util.ArrayList;
 import java.util.List;

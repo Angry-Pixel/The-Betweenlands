@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.storage.world;
+package thebetweenlands.common.world.storage.world.global;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;

@@ -14,6 +14,7 @@ public class Registries {
 		BiomeRegistry.preInit();
 		SoundRegistry.preInit();
 		CapabilityRegistry.preInit();
+		StorageRegistry.preInit();
 		
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ModelRegistry.preInit();

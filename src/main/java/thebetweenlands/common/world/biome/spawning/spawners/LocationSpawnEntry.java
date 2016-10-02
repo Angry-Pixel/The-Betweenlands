@@ -7,8 +7,8 @@ import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
-import thebetweenlands.common.world.storage.chunk.storage.location.EnumLocationType;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.EnumLocationType;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
 
 /**
  * Spawns entities only in the specified world location type.

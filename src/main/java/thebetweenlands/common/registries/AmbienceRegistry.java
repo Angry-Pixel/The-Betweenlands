@@ -12,7 +12,7 @@ import thebetweenlands.client.audio.ambience.list.SurfaceAmbienceType;
 import thebetweenlands.client.audio.ambience.list.WaterAmbienceType;
 import thebetweenlands.common.world.event.EventBloodSky;
 import thebetweenlands.common.world.event.EventSpoopy;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationAmbience.EnumLocationAmbience;
 
 @SideOnly(Side.CLIENT)
 public class AmbienceRegistry {

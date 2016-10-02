@@ -1,4 +1,4 @@
-package thebetweenlands.common.event;
+package thebetweenlands.common.event.handler;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;

@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.storage.chunk.storage.location;
+package thebetweenlands.common.world.storage.chunk.storage.locationold;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
+import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
 
 public class LocationStorage extends ChunkStorage {
@@ -25,11 +26,11 @@ public class LocationStorage extends ChunkStorage {
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
-	public LocationStorage(Chunk chunk, BetweenlandsChunkData data) {
+	public LocationStorage(Chunk chunk, ChunkDataBase data) {
 		super(chunk, data);
 	}
 
-	public LocationStorage(Chunk chunk, BetweenlandsChunkData data, String name, AxisAlignedBB area, EnumLocationType type) {
+	public LocationStorage(Chunk chunk, ChunkDataBase data, String name, AxisAlignedBB area, EnumLocationType type) {
 		super(chunk, data);
 		this.name = name;
 		this.area = area;
@@ -88,6 +89,7 @@ public class LocationStorage extends ChunkStorage {
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
 		this.name = nbt.getString("name");
 		double minX = nbt.getDouble("minX");
 		double minY = nbt.getDouble("minY");
@@ -107,6 +109,7 @@ public class LocationStorage extends ChunkStorage {
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
 		nbt.setString("name", this.name);
 		nbt.setDouble("minX", this.area.minX);
 		nbt.setDouble("minY", this.area.minY);

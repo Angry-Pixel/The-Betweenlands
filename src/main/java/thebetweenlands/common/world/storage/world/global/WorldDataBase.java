@@ -1,9 +1,13 @@
-package thebetweenlands.common.world.storage.world;
+package thebetweenlands.common.world.storage.world.global;
 
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -11,12 +15,16 @@ import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.storage.MapStorage;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.world.storage.chunk.storage.shared.SharedStorageReference;
+import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 
 public abstract class WorldDataBase extends WorldSavedData {
 	public static final WorldUnloadHandler WORLD_UNLOAD_HANDLER = new WorldUnloadHandler();
 	private static final Map<WorldDataTypePair, WorldDataBase> CACHE = new HashMap<WorldDataTypePair, WorldDataBase>();
+
 	private World world;
 	private NBTTagCompound data = new NBTTagCompound();
+	private Map<String, SharedStorage> sharedStorage = new HashMap<>();
 
 	public WorldDataBase(String name) {
 		super(name);
@@ -32,6 +40,7 @@ public abstract class WorldDataBase extends WorldSavedData {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
 	public static <T extends WorldDataBase> T forWorld(World world, Class<T> clazz) {
 		WorldDataBase cached = getMatchingData(world, clazz);
 		if (cached != null) {
@@ -101,6 +110,60 @@ public abstract class WorldDataBase extends WorldSavedData {
 
 	public NBTTagCompound getData() {
 		return this.data;
+	}
+
+	/**
+	 * Returns the shared storage with the specified UUID
+	 * @param uuid
+	 * @return
+	 */
+	@Nullable
+	public SharedStorage getSharedStorage(String uuid) {
+		return this.sharedStorage.get(uuid);
+	}
+
+	/**
+	 * Loads a shared storage reference. If necessary the shared storage will be loaded and then cached
+	 * @param reference
+	 * @param nbtProvider
+	 * @return
+	 */
+	@Nullable
+	public SharedStorage loadSharedStorageReference(SharedStorageReference reference, Supplier<NBTTagCompound> nbtProvider) {
+		SharedStorage storage = this.sharedStorage.get(reference.getUniqueIDString());
+		if(storage == null) {
+			NBTTagCompound sharedNBT = nbtProvider.get();
+			if(sharedNBT != null) {
+				storage = SharedStorage.load(sharedNBT);
+				this.sharedStorage.put(storage.getUniqueIDString(), storage);
+			}
+		}
+		if(storage != null && !storage.getReferences().contains(reference)) {
+			storage.loadReference(reference);
+		}
+		return storage;
+	}
+
+	/**
+	 * Unloads a shared storage reference. If all references are unloaded the shared storage is saved and unloaded
+	 * @param reference
+	 * @param nbtSaver Saves the NBT data
+	 * @return True if the shared storage was unloaded
+	 */
+	public boolean unloadSharedStorageReference(SharedStorageReference reference, Consumer<NBTTagCompound> nbtSaver) {
+		SharedStorage storage = this.sharedStorage.get(reference.getUniqueIDString());
+		if(storage != null) {
+			storage.unloadReference(reference);
+			if(storage.getReferences().isEmpty()) {
+				this.sharedStorage.remove(reference.getUniqueIDString());
+				NBTTagCompound sharedNBT = new NBTTagCompound();
+				storage.writeToNBT(sharedNBT);
+				nbtSaver.accept(sharedNBT);
+				storage.onUnload();
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static class WorldDataTypePair {

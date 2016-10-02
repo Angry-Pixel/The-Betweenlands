@@ -9,9 +9,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
-import thebetweenlands.common.world.storage.chunk.storage.location.EnumLocationType;
-import thebetweenlands.common.world.storage.chunk.storage.location.GuardedLocationStorage;
-import thebetweenlands.common.world.storage.chunk.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.EnumLocationType;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.GuardedLocationStorage;
+import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
 
 public class StorageHelper {
 	public static List<LocationStorage> addArea(World world, String name, AxisAlignedBB area, EnumLocationType type, int layer) {

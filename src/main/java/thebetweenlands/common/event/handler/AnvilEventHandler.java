@@ -1,4 +1,4 @@
-package thebetweenlands.common.event;
+package thebetweenlands.common.event.handler;
 
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
