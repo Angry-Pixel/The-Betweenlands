@@ -38,6 +38,7 @@ public class EntityRegistry {
 	public static void preInit() {
 		id = 0;
 		registerEntity(EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
+		registerEntity(EntitySludge.class, "sludge", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntitySwampHag.class, "swamp_hag", 0x0B3B0B, 0xDBA901);
 		registerEntity(EntityWight.class, "wight", 0xECF8E0, 0x243B0B);
 		registerEntity(EntityFirefly.class, "firefly", 0xFFB300, 0xFFD000);

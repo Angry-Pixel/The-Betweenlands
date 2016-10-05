@@ -263,6 +263,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, (RenderManager manager) -> new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
 	}
 
 	@SuppressWarnings("deprecation")

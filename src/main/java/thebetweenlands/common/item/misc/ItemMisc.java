@@ -1,13 +1,6 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.stream.Stream;
-
 import com.google.common.base.CaseFormat;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,6 +10,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.stream.Stream;
 
 public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 	public ItemMisc() {
@@ -41,7 +40,7 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 
 	@Override
 	public Map<Integer, ResourceLocation> getModels() {
-		Map<Integer, ResourceLocation> models = new HashMap();
+		Map<Integer, ResourceLocation> models = new HashMap<>();
 		for(EnumItemMisc type : EnumItemMisc.values())
 			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
 		return models;

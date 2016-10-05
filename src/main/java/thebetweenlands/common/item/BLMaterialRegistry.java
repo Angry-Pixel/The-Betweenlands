@@ -54,5 +54,5 @@ public class BLMaterialRegistry {
 	}.setReplaceable().setTranslucent().setNoPushMobility();
 	public static final Material TAR = new MaterialLiquid(MapColor.BLACK);
 	public static final Material RUBBER = new MaterialLiquid(MapColor.WATER);
-
+	public static final Material SLUDGE = new BLMaterial(MapColor.DIRT).setRequiresTool();
 }
