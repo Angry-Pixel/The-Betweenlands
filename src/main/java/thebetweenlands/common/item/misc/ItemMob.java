@@ -8,11 +8,11 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.util.TranslationHelper;
 
 public class ItemMob extends Item {
 	private final String name;
@@ -38,7 +38,7 @@ public class ItemMob extends Item {
 		if (entity != null) {
 			BlockPos offset = pos.offset(facing);
 			entity.setLocationAndAngles(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F, 0.0F, 0.0F);
-			if (!(stack.getDisplayName().equals(I18n.translateToLocal(stack.getUnlocalizedName()))) && !(stack.getDisplayName().equals(stack.getUnlocalizedName())))
+			if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getUnlocalizedName()))) && !(stack.getDisplayName().equals(stack.getUnlocalizedName())))
 				entity.setCustomNameTag(stack.getDisplayName());
 			world.spawnEntityInWorld(entity);
 		}

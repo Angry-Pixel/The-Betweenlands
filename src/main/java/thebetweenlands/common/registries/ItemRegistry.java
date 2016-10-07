@@ -25,6 +25,9 @@ import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.*;
+import thebetweenlands.common.item.tools.bow.EnumArrowType;
+import thebetweenlands.common.item.tools.bow.ItemBLArrow;
+import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -150,6 +153,11 @@ public class ItemRegistry {
 		}
 	};
 	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET_EMPTY);
+	public static final Item ANGLER_TOOTH_ARROW = new ItemBLArrow(EnumArrowType.DEFAULT).setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item POISONED_ANGLER_TOOTH_ARROW = new ItemBLArrow( EnumArrowType.ANGLER_POISON).setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item OCTINE_ARROW = new ItemBLArrow(EnumArrowType.OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item BASILISK_ARROW = new ItemBLArrow(EnumArrowType.BASILISK).setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item WEEDWOOD_BOW = new ItemBLBow().setCreativeTab(BLCreativeTabs.GEARS);
 
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);

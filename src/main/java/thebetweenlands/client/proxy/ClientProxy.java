@@ -41,6 +41,7 @@ import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
@@ -265,6 +266,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, RenderBLArrow::new);
 	
 		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
 	}

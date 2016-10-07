@@ -7,6 +7,7 @@ import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 
 public class EntityRegistry {
@@ -28,11 +29,13 @@ public class EntityRegistry {
 	private static void registerEntity(Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
 		registerEntity(entityClass, name, trackingRange, trackingFrequency, velocityUpdates);
 		net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
+		id++;
 	}
 
 	private static void registerEntity(Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor) {
 		registerEntity(entityClass, name);
 		net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
+		id++;
 	}
 
 	public static void preInit() {
@@ -48,6 +51,7 @@ public class EntityRegistry {
 		registerEntity(EntityBloodSnail.class, "blood_snail", 0x8E9456, 0xB3261E);
 		registerEntity(EntityMireSnail.class, "mire_snail", 0x8E9456, 0xF2FA96);
 		registerEntity(EntityMireSnailEgg.class, "mire_snail_egg");
+		registerEntity(EntityBLArrow.class, "blArrow", 64, 20, true);
 		registerEntity(EntitySnailPoisonJet.class, "snail_poison_jet");
 		registerEntity(EntityLurker.class, "lurker", 0x283320, 0x827856);
 		registerEntity(EntityTermite.class, "termite", 0xD9D7A7, 0xD99830);
