@@ -1,5 +1,14 @@
 package thebetweenlands.client.render.shader.postprocessing;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GLAllocation;
@@ -10,8 +19,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
 import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.render.shader.DepthBuffer;
 import thebetweenlands.client.render.shader.GeometryBuffer;
@@ -24,12 +31,6 @@ import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
 import thebetweenlands.util.config.ConfigHandler;
-
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private DepthBuffer depthBuffer;
@@ -384,47 +385,10 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			this.updateRepellerShieldTexture(partialTicks);
 
 			//Update gas particles
-			this.updateGasParticlesTexture(partialTicks);
-
-			boolean hasCloud = false;
-			for (Entity entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
-				if (entity instanceof EntityGasCloud) {
-					hasCloud = true;
-					break;
-				}
-			}
-			if (hasCloud) {
-				//Update gas texture
-				float worldTimeInterp = world.getWorldTime() + partialTicks;
-				float offsetX = ((float) Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
-				float offsetY = ((float) Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 800.0F;
-				this.gasWarpEffect.setOffset(offsetX, offsetY)
-						.setWarpDir(0.75F, 0.75F);
-
-				this.gasTextureFramebuffer.bindFramebuffer(false);
-				GL11.glClearColor(1, 1, 1, 1);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-				this.gasTextureBaseFramebuffer.bindFramebuffer(false);
-				GL11.glClearColor(1, 1, 1, 1);
-				GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
-
-				this.gasWarpEffect.create(this.gasTextureFramebuffer)
-						.setSource(this.gasTextureBaseFramebuffer.framebufferTexture)
-						.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
-						.setRenderDimensions(64.0F * 20.0F, 64.0F * 20.0F)
-						.render(partialTicks);
-			}
+			this.updateGasParticlesTexture(world, partialTicks);
 
 			//Update starfield texture
-			float offX = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosX / 8000.0D);
-			float offY = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosZ / 8000.0D);
-			float offZ = (float) (-Minecraft.getMinecraft().getRenderManager().viewerPosY / 10000.0D);
-			this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
-			this.starfieldEffect.create(this.starfieldTextureFramebuffer)
-					.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
-					.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
-					.render(partialTicks);
+			this.updateStarfieldTexture(partialTicks);
 		}
 
 
@@ -526,10 +490,10 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		//Extract occluding objects
 		this.occlusionExtractor.setDepthTextures(depthTexture, clipPlaneBuffer);
 		this.occlusionExtractor.create(occlusionFramebuffer)
-				.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
-				.setPreviousFramebuffer(mainFramebuffer)
-				//.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
-				.render(partialTicks);
+		.setSource(Minecraft.getMinecraft().getFramebuffer().framebufferTexture)
+		.setPreviousFramebuffer(mainFramebuffer)
+		//.setRenderDimensions(Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight)
+		.render(partialTicks);
 
 		//Render god's ray to blitFramebuffer
 		float beat = 0.0F;
@@ -538,12 +502,12 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		}
 		float density = 0.1F + beat;
 		this.godRayEffect.setOcclusionMap(occlusionFramebuffer)
-				.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F)
-				.setRayPos(rayX, rayY)
-				.create(blitFramebuffer)
-				.setSource(mainFramebuffer.framebufferTexture)
-				.setPreviousFramebuffer(mainFramebuffer)
-				.render(partialTicks);
+		.setParams(0.8F, decay * 1.01F, density * 1.5F, weight * 0.8F, illuminationDecay * 1.25F)
+		.setRayPos(rayX, rayY)
+		.create(blitFramebuffer)
+		.setSource(mainFramebuffer.framebufferTexture)
+		.setPreviousFramebuffer(mainFramebuffer)
+		.render(partialTicks);
 
 		//Render blitFramebuffer to main framebuffer
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
@@ -599,10 +563,10 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			//Render swirl
 			this.swirlEffect.setAngle(interpolatedSwirlAngle);
 			this.swirlEffect.create(mainFramebuffer)
-					.setSource(mainFramebuffer.framebufferTexture)
-					.setBlitFramebuffer(blitFramebuffer)
-					.setPreviousFramebuffer(mainFramebuffer)
-					.render(partialTicks);
+			.setSource(mainFramebuffer.framebufferTexture)
+			.setBlitFramebuffer(blitFramebuffer)
+			.setPreviousFramebuffer(mainFramebuffer)
+			.render(partialTicks);
 		}
 	}
 
@@ -620,7 +584,37 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		mainFramebuffer.bindFramebuffer(false);
 	}
 
-	private void updateGasParticlesTexture(float partialTicks) {
+	private void updateGasParticlesTexture(World world, float partialTicks) {
+		boolean hasCloud = false;
+		for (Entity entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+			if (entity instanceof EntityGasCloud) {
+				hasCloud = true;
+				break;
+			}
+		}
+		if (hasCloud) {
+			//Update gas texture
+			float worldTimeInterp = world.getWorldTime() + partialTicks;
+			float offsetX = ((float) Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
+			float offsetY = ((float) Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
+			this.gasWarpEffect.setOffset(offsetX, offsetY)
+			.setWarpDir(0.75F, 0.75F).setScale(1.5F);
+
+			this.gasTextureFramebuffer.bindFramebuffer(false);
+			GlStateManager.clearColor(1, 1, 1, 1);
+			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+
+			this.gasTextureBaseFramebuffer.bindFramebuffer(false);
+			GlStateManager.clearColor(1, 1, 1, 1);
+			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+
+			this.gasWarpEffect.create(this.gasTextureFramebuffer)
+			.setSource(this.gasTextureBaseFramebuffer.framebufferTexture)
+			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
+			.setRenderDimensions(64.0F * 1.0F, 64.0F * 1.0F)
+			.render(partialTicks);
+		}
+
 		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
 
 		this.gasParticlesBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
@@ -632,5 +626,16 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.gasParticlesBuffer.updateDepthBuffer();
 
 		mainFramebuffer.bindFramebuffer(false);
+	}
+
+	private void updateStarfieldTexture(float partialTicks) {
+		float offX = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosX / 8000.0D);
+		float offY = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosZ / 8000.0D);
+		float offZ = (float) (-Minecraft.getMinecraft().getRenderManager().viewerPosY / 10000.0D);
+		this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, offZ);
+		this.starfieldEffect.create(this.starfieldTextureFramebuffer)
+		.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
+		.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
+		.render(partialTicks);
 	}
 }

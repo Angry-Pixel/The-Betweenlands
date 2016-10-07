@@ -32,6 +32,7 @@ import thebetweenlands.client.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.entity.*;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.tile.*;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
@@ -264,6 +265,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
+	
+		((IReloadableResourceManager)Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
 	}
 
 	@SuppressWarnings("deprecation")

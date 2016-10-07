@@ -13,13 +13,15 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class ShaderHelper {
+public class ShaderHelper implements IResourceManagerReloadListener {
 	private ShaderHelper() { }
 
 	public static final ShaderHelper INSTANCE = new ShaderHelper();
@@ -249,10 +251,15 @@ public class ShaderHelper {
 	public void deleteShaders() {
 		if(this.worldShader != null)
 			this.worldShader.delete();
+		this.worldShader = null;
+
 		if(this.blitBuffer != null)
 			this.blitBuffer.delete();
+		this.blitBuffer = null;
+
 		if(this.toneMappingShader != null)
 			this.toneMappingShader.delete();
+		this.toneMappingShader = null;
 	}
 
 	private boolean isRequired() {
@@ -265,5 +272,10 @@ public class ShaderHelper {
 		//		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
 		//TODO: Requires dimension and portal
 		return true;
+	}
+
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		this.deleteShaders();
 	}
 }

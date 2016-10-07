@@ -1,7 +1,8 @@
 package thebetweenlands.client.render.entity;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -12,7 +13,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
+import thebetweenlands.client.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
@@ -29,7 +30,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 	public void doRender(EntityGasCloud entity, double x, double y, double z, float yaw, float partialTicks) {
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ,
-					2.5f,
+					4.5f,
 					-1,
 					-1,
 					-1));
@@ -43,16 +44,19 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			GL11.glBindTexture(GL11.GL_TEXTURE_2D, ShaderHelper.INSTANCE.getWorldShader().getGasTexture());
+			//Use animated shader texture
+			GlStateManager.bindTexture(ShaderHelper.INSTANCE.getWorldShader().getGasTexture());
 		} else {
+			//Use static texture
 			this.bindTexture(TEXTURE);
 		}
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		for (Particle particle : entity.gasParticles) {
-			particle.renderParticle(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,
+		for (Object obj: entity.gasParticles) {
+			ParticleGasCloud particle = (ParticleGasCloud) obj;
+			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,
 					ActiveRenderInfo.getRotationX(),
 					ActiveRenderInfo.getRotationXZ(),
 					ActiveRenderInfo.getRotationZ(),

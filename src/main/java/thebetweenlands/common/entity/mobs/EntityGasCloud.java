@@ -28,7 +28,7 @@ import java.util.List;
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	public static final DataParameter<Integer> GAS_CLOUD_COLOR = EntityDataManager.createKey(EntityGasCloud.class, DataSerializers.VARINT);
 
-	public List<Particle> gasParticles = new ArrayList<>();
+	public List<Object> gasParticles = new ArrayList<>();
 
 	private int courseChangeCooldown;
 	private double waypointX;
@@ -152,12 +152,11 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
 					.create(this.worldObj, x, y, z, ParticleFactory.ParticleArgs.get()
 							.withMotion(mx, my, mz)
-							.withColor(this.getGasColor())
-							.withScale(this.rand.nextFloat() * 0.75F + 0.6F));
+							.withColor(this.getGasColor()));
 			this.gasParticles.add(particle);
 
 			for (int i = 0; i < this.gasParticles.size(); i++) {
-				Particle gasParticle = this.gasParticles.get(i);
+				Particle gasParticle = (Particle)this.gasParticles.get(i);
 				gasParticle.onUpdate();
 				if (!gasParticle.isAlive()) {
 					this.gasParticles.remove(i);
