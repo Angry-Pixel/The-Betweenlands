@@ -19,7 +19,7 @@ public class RenderAngler extends RenderLiving<EntityAngler> {
 
 	public RenderAngler(RenderManager manager) {
 		super(manager, new ModelAngler(), 0.5F);
-		this.addLayer(new LayerGlow(this, new ResourceLocation("thebetweenlands:textures/entity/angler_glow.png")));
+		this.addLayer(new LayerGlow<EntityAngler>(this, new ResourceLocation("thebetweenlands:textures/entity/angler_glow.png")));
 	}
 
 	@Override
@@ -41,9 +41,12 @@ public class RenderAngler extends RenderLiving<EntityAngler> {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
         if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+        	double rx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
+			double ry = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+			double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
             double xOff = Math.sin(Math.toRadians(-entity.renderYawOffset)) * 0.3f;
             double zOff = Math.cos(Math.toRadians(-entity.renderYawOffset)) * 0.3f;
-            ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX + xOff, entity.posY + 0.95f, entity.posZ + zOff,
+            ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx + xOff, ry + 0.95f, rz + zOff,
                     2.6f,
                     30.0f / 255.0f * 13.0F,
                     90.0f / 255.0f * 13.0F,

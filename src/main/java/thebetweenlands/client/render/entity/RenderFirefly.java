@@ -1,20 +1,24 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.*;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.Random;
+
+import javax.vecmath.Vector3d;
+
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
-
-import javax.vecmath.Vector3d;
-import java.util.AbstractMap.SimpleEntry;
-import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class RenderFirefly extends Render<EntityFirefly> {
