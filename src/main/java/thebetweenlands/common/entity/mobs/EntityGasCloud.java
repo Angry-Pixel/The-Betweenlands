@@ -1,5 +1,8 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityFlying;
@@ -14,7 +17,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -22,9 +25,7 @@ import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.entity.ParticleGasCloud;
 
-import java.util.ArrayList;
-import java.util.List;
-
+//TODO: Rewrite with new AI and movement (see EntityGhast)
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	public static final DataParameter<Integer> GAS_CLOUD_COLOR = EntityDataManager.createKey(EntityGasCloud.class, DataSerializers.VARINT);
 
@@ -100,7 +101,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 		if (this.courseChangeCooldown-- <= 0) {
 			this.courseChangeCooldown += this.rand.nextInt(5) + 2;
-			dist = MathHelper.sqrt_double(dist);
+			dist = Math.min(MathHelper.sqrt_double(dist), 23); //Limit steps
 
 			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist, closestTarget != null)) {
 				this.motionX += dx / dist * speed;
@@ -118,10 +119,15 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 		double dx = (this.waypointX - this.posX) / step;
 		double dy = (this.waypointY - this.posY) / step;
 		double dz = (this.waypointZ - this.posZ) / step;
+		MutableBlockPos checkPos = new MutableBlockPos();
 		for (int i = 1; i < step; ++i) {
-			BlockPos pos = new BlockPos(this.posX + dx * step, this.posY + dy * step, this.posZ + dz * step);
-			IBlockState state = this.worldObj.getBlockState(pos);
-			if ((!canPassSolidBlocks && state.isOpaqueCube()) || state.getMaterial().isLiquid()) {
+			checkPos.setPos(this.posX + dx * step, this.posY + dy * step, this.posZ + dz * step);
+			if(this.worldObj.isBlockLoaded(checkPos)) {
+				IBlockState state = this.worldObj.getBlockState(checkPos);
+				if ((!canPassSolidBlocks && state.isOpaqueCube()) || state.getMaterial().isLiquid()) {
+					return false;
+				}
+			} else {
 				return false;
 			}
 		}

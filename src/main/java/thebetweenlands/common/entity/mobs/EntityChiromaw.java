@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
+//TODO: Rewrite with new AI and movement (see EntityGhast)
 public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
     private static final DataParameter<Boolean> IS_HANGING = EntityDataManager.createKey(EntityChiromaw.class, DataSerializers.BOOLEAN);
     public int courseChangeCooldown;
@@ -98,7 +99,8 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
             if (courseChangeCooldown-- <= 0) {
                 courseChangeCooldown += rand.nextInt(5) + 2;
-                distanceScaled = (double) MathHelper.sqrt_double(distanceScaled);
+                
+                distanceScaled = Math.min(MathHelper.sqrt_double(distanceScaled), 23); //Limit steps
 
                 if (isCourseTraversable(waypointX, waypointY, waypointZ, distanceScaled)) {
                     motionX += distanceX / distanceScaled * 0.2D;
@@ -134,14 +136,11 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
     }
 
     private boolean isCourseTraversable(double x, double y, double z, double distance) {
-        double boxX = (waypointX - posX) / distance;
-        double boxY = (waypointY - posY) / distance;
-        double boxZ = (waypointZ - posZ) / distance;
-        AxisAlignedBB axisalignedbb = getEntityBoundingBox();
-
+        double deltaX = (waypointX - posX) / distance;
+        double deltaY = (waypointY - posY) / distance;
+        double deltaZ = (waypointZ - posZ) / distance;
         for (int i = 1; (double) i < distance; ++i) {
-            axisalignedbb.offset(boxX, boxY, boxZ);
-            if (!worldObj.getCollisionBoxes(axisalignedbb).isEmpty())
+            if (!worldObj.getCollisionBoxes(getEntityBoundingBox().offset(deltaX*i, deltaY*i, deltaZ*i)).isEmpty())
                 return false;
         }
         return true;

@@ -13,6 +13,7 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
+//TODO: Rewrite with new AI and movement (see EntityGhast)
 public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	public int courseChangeCooldown;
 	public double waypointX;
@@ -61,7 +62,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 		}
 		if (this.courseChangeCooldown-- <= 0) {
 			this.courseChangeCooldown += this.rand.nextInt(5) + 2;
-			dist = MathHelper.sqrt_double(dist);
+			dist = Math.min(MathHelper.sqrt_double(dist), 23); //Limit steps
 			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist)) {
 				this.motionX += deltaX / dist * 0.03D;
 				this.motionY += deltaY / dist * 0.03D;
@@ -87,7 +88,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 		double deltaY = (this.waypointY - this.posY) / step;
 		double deltaZ = (this.waypointZ - this.posZ) / step;
 		for (int i = 1; i < step; ++i) {
-			if (!this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox().offset(deltaX, deltaY, deltaZ)).isEmpty()) {
+			if (!this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox().offset(deltaX*i, deltaY*i, deltaZ*i)).isEmpty()) {
 				return false;
 			}
 		}

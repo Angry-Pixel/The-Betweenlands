@@ -598,7 +598,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			float offsetX = ((float) Math.sin((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
 			float offsetY = ((float) Math.cos((worldTimeInterp / 20.0F) % (Math.PI * 2.0D)) + 1.0F) / 600.0F;
 			this.gasWarpEffect.setOffset(offsetX, offsetY)
-			.setWarpDir(0.75F, 0.75F).setScale(1.5F);
+			.setWarpDir(0.75F, 0.75F).setScale(1.8F);
 
 			this.gasTextureFramebuffer.bindFramebuffer(false);
 			GlStateManager.clearColor(1, 1, 1, 1);
@@ -611,7 +611,6 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			this.gasWarpEffect.create(this.gasTextureFramebuffer)
 			.setSource(this.gasTextureBaseFramebuffer.framebufferTexture)
 			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
-			.setRenderDimensions(64.0F * 1.0F, 64.0F * 1.0F)
 			.render(partialTicks);
 		}
 
