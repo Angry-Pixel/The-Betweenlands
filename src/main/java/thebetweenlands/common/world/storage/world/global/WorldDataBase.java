@@ -9,12 +9,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 import net.minecraft.world.chunk.Chunk;
@@ -162,9 +164,11 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 			Chunk chunk = this.world.getChunkProvider().getLoadedChunk(referenceChunk.chunkXPos, referenceChunk.chunkZPos);
 			if(chunk != null) {
 				ChunkDataBase chunkData = ChunkDataBase.forChunk(this, chunk);
-				SharedStorageReference reference = chunkData.getReference(storage.getUUID());
-				if(reference != null && !storage.getReferences().contains(reference)) {
-					storage.loadReference(reference);
+				if(chunkData != null) {
+					SharedStorageReference reference = chunkData.getReference(storage.getUUID());
+					if(reference != null && !storage.getReferences().contains(reference)) {
+						storage.loadReference(reference);
+					}
 				}
 			}
 		}
@@ -262,6 +266,44 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 		} catch(Exception ex) {
 			throw new RuntimeException(ex);
 		}
+	}
+
+	/**
+	 * Returns a list of shared storages at the specified position
+	 * @param storageClass
+	 * @param selector
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, @Nullable Predicate<F> selector, double x, double z) {
+		List<F> storages = new ArrayList<>();
+		int cx = MathHelper.floor_double(x) / 16;
+		int cz = MathHelper.floor_double(z) / 16;
+		Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);
+		ChunkDataBase chunkStorage = ChunkDataBase.forChunk(this, chunk);
+		if(chunkStorage != null) {
+			for(SharedStorageReference ref : chunkStorage.getSharedStorageReferences()) {
+				SharedStorage storage = this.getSharedStorage(ref.getUUIDString());
+				if(storage != null && storageClass.isAssignableFrom(storage.getClass()) && (selector == null || selector.test((F) storage))) {
+					storages.add((F) storage);
+				}
+			}
+		}
+		return storages;
+	}
+
+	/**
+	 * Returns a list of shared storages at the specified position
+	 * @param storageClass
+	 * @param x
+	 * @param z
+	 * @return
+	 */
+	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, double x, double z) {
+		return this.getSharedStorageAt(storageClass, null, x, z);
 	}
 
 	private static class WorldDataTypePair {

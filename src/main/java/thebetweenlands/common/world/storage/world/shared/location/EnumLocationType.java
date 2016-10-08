@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.storage.chunk.storage.locationold;
+package thebetweenlands.common.world.storage.world.shared.location;
 
 public enum EnumLocationType {
 	NONE("none"), RUINS("ruins"), HUT("hut"), SHACK("shack"), WIGHT_TOWER("wightTower"), DUNGEON("dungeon");

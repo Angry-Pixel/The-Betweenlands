@@ -154,7 +154,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
 		if(!this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
-			if(chunkData.linkSharedStorage(this)) {
+			if(chunkData != null && chunkData.linkSharedStorage(this)) {
 				return this.linkedChunks.add(chunkPos);
 			}
 		}
@@ -170,7 +170,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
 		if(this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
-			if(chunkData.unlinkSharedStorage(this)) {
+			if(chunkData != null && chunkData.unlinkSharedStorage(this)) {
 				return this.linkedChunks.remove(chunkPos);
 			}
 		}
@@ -186,7 +186,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		for(ChunkPos pos : this.linkedChunks) {
 			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.chunkXPos, pos.chunkZPos);
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
-			if(chunkData.unlinkSharedStorage(this)) {
+			if(chunkData != null && chunkData.unlinkSharedStorage(this)) {
 				unlinked = true;
 			}
 		}

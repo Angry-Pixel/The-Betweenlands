@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.storage.chunk.storage.locationold;
+package thebetweenlands.common.world.storage.world.shared.location;
 
 import net.minecraft.nbt.NBTTagCompound;
 

@@ -1,8 +1,14 @@
 package thebetweenlands.common.world.gen.feature;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.container.BlockLootPot;
@@ -10,14 +16,12 @@ import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
-import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
-import thebetweenlands.common.registries.LootTableRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
+import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 public class WorldGenSmallRuins extends WorldGenHelper {
 
@@ -113,8 +117,12 @@ public class WorldGenSmallRuins extends WorldGenHelper {
                         break;
                 }
             }
+            BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
             for (LocationStorage location : generatedLocations) {
+            	location.linkChunks();
                 location.setSeed(random.nextLong());
+                location.setDirty(true);
+                worldStorage.addSharedStorage(location);
             }
             return true;
         } else
@@ -541,20 +549,21 @@ public class WorldGenSmallRuins extends WorldGenHelper {
         x -= width / 2;
         z -= depth / 2;
         //TODO: World locations
-        /*switch (direction) {
+        BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+        switch (direction) {
         case 0:
-			addedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x+offsetA, y+offsetB, z+offsetC, x+offsetA+sizeWidth, y+offsetB+sizeHeight, z+offsetC+sizeDepth).expand(6, 6, 6), EnumLocationType.RUINS, 0));
+			addedLocations.add(new LocationStorage(worldStorage, UUID.randomUUID(), "translate:ruins", new AxisAlignedBB(x+offsetA, y+offsetB, z+offsetC, x+offsetA+sizeWidth, y+offsetB+sizeHeight, z+offsetC+sizeDepth).expand(6, 6, 6), EnumLocationType.RUINS));
 			break;
 		case 1:
-			addedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x+offsetC, y+offsetB, z + depth - offsetA - sizeWidth - 1, x+offsetC+sizeDepth, y+offsetB+sizeHeight, z + depth - offsetA - 1).expand(6, 6, 6), EnumLocationType.RUINS, 0));
+			addedLocations.add(new LocationStorage(worldStorage, UUID.randomUUID(), "translate:ruins", new AxisAlignedBB(x+offsetC, y+offsetB, z + depth - offsetA - sizeWidth - 1, x+offsetC+sizeDepth, y+offsetB+sizeHeight, z + depth - offsetA - 1).expand(6, 6, 6), EnumLocationType.RUINS));
 			break;
 		case 2:
-			addedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x + width - offsetA - sizeWidth - 1, y+offsetB, z + depth - offsetC - sizeDepth - 1, x + width - offsetA - 1, y+offsetB+sizeHeight, z + depth - offsetC - 1).expand(6, 6, 6), EnumLocationType.RUINS, 0));
+			addedLocations.add(new LocationStorage(worldStorage, UUID.randomUUID(), "translate:ruins", new AxisAlignedBB(x + width - offsetA - sizeWidth - 1, y+offsetB, z + depth - offsetC - sizeDepth - 1, x + width - offsetA - 1, y+offsetB+sizeHeight, z + depth - offsetC - 1).expand(6, 6, 6), EnumLocationType.RUINS));
 			break;
 		case 3:
-			addedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x + width - offsetC - sizeDepth - 1, y+offsetB, z + offsetA, x + width - offsetC - 1, y+offsetB+sizeHeight, z + offsetA + sizeWidth).expand(6, 6, 6), EnumLocationType.RUINS, 0));
+			addedLocations.add(new LocationStorage(worldStorage, UUID.randomUUID(), "translate:ruins", new AxisAlignedBB(x + width - offsetC - sizeDepth - 1, y+offsetB, z + offsetA, x + width - offsetC - 1, y+offsetB+sizeHeight, z + offsetA + sizeWidth).expand(6, 6, 6), EnumLocationType.RUINS));
 			break;
-		}*/
+		}
         return true;
     }
 

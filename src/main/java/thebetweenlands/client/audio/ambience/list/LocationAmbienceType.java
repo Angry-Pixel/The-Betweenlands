@@ -5,9 +5,9 @@ import net.minecraft.util.SoundEvent;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
-import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationAmbience;
-import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationStorage;
-import thebetweenlands.common.world.storage.chunk.storage.locationold.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience;
+import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 public class LocationAmbienceType extends AmbienceType {
 	private final EnumLocationAmbience ambience;
