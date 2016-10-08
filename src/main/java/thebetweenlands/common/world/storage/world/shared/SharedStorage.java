@@ -155,7 +155,10 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		if(!this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
 			if(chunkData != null && chunkData.linkSharedStorage(this)) {
-				return this.linkedChunks.add(chunkPos);
+				if(this.linkedChunks.add(chunkPos)) {
+					this.setDirty(true);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -171,7 +174,10 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		if(this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
 			if(chunkData != null && chunkData.unlinkSharedStorage(this)) {
-				return this.linkedChunks.remove(chunkPos);
+				if(this.linkedChunks.remove(chunkPos)) {
+					this.setDirty(true);
+					return true;
+				}
 			}
 		}
 		return false;
@@ -191,6 +197,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 			}
 		}
 		this.linkedChunks.clear();
+		this.setDirty(true);
 		return unlinked;
 	}
 

@@ -269,7 +269,7 @@ public class MobSpawnHandler {
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
-			if(world.getGameRules().getBoolean("doMobSpawning") && world.getWorldTime() % 2 == 0) {
+			if(world.getGameRules().getBoolean("doMobSpawning") && world.getWorldTime() % 6 == 0) {
 				//long start = System.nanoTime();
 				this.populateWorld(world);
 				//System.out.println("Time: " + (System.nanoTime() - start) / 1000000.0F);
