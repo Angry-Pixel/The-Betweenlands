@@ -12,8 +12,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.message.BLMessage;
-import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 
 public class MessageSyncChunkData extends BLMessage {
 	private int chunkX, chunkZ;
@@ -59,7 +59,7 @@ public class MessageSyncChunkData extends BLMessage {
 	private void updateChunks(int chunkX, int chunkZ, NBTTagCompound nbt) {
 		Chunk chunk = Minecraft.getMinecraft().theWorld.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
 		if(chunk != null) {
-			ChunkDataBase.updateHandlerData(Minecraft.getMinecraft().theWorld, chunk, BetweenlandsChunkData.class, nbt, true);
+			ChunkDataBase.updateHandlerData(BetweenlandsWorldData.forWorld(Minecraft.getMinecraft().theWorld), chunk, nbt);
 		}
 	}
 }

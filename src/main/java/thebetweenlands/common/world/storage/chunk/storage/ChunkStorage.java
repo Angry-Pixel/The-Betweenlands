@@ -7,18 +7,12 @@ import java.util.Map.Entry;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.CapabilityDispatcher;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import thebetweenlands.common.event.AttachChunkStorageCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 
-public abstract class ChunkStorage implements ICapabilityProvider {
+public abstract class ChunkStorage {
 	private static final Map<ResourceLocation, Class<? extends ChunkStorage>> STORAGE_MAP = new HashMap<ResourceLocation, Class<? extends ChunkStorage>>();
 
 	/**
@@ -59,14 +53,14 @@ public abstract class ChunkStorage implements ICapabilityProvider {
 	 * @param nbt
 	 * @return
 	 */
-	public static ChunkStorage load(ChunkDataBase chunkData, NBTTagCompound nbt, boolean packet) {
+	public static ChunkStorage load(World world, ChunkDataBase chunkData, NBTTagCompound nbt, boolean packet) {
 		try {
 			ResourceLocation type = new ResourceLocation(nbt.getString("type"));
 			Class<? extends ChunkStorage> storageClass = ChunkStorage.getStorageType(type);
 			if (storageClass == null)
-				throw new Exception("Chunk storage type not mapped!");
-			Constructor<? extends ChunkStorage> ctor = storageClass.getConstructor(Chunk.class, ChunkDataBase.class);
-			ChunkStorage storage = ctor.newInstance(chunkData.getChunk(), chunkData);
+				throw new Exception("Chunk storage type not mapped");
+			Constructor<? extends ChunkStorage> ctor = storageClass.getConstructor(World.class, ChunkDataBase.class);
+			ChunkStorage storage = ctor.newInstance(world, chunkData);
 			if(packet) {
 				storage.readFromPacketNBT(nbt.getCompoundTag("storage"));
 			} else {
@@ -86,7 +80,7 @@ public abstract class ChunkStorage implements ICapabilityProvider {
 	public static void save(ChunkStorage storage, NBTTagCompound nbt, boolean packet) {
 		ResourceLocation type = ChunkStorage.getStorageTypeID(storage.getClass());
 		if (type == null)
-			throw new RuntimeException("Chunk storage type not mapped!");
+			throw new RuntimeException("Chunk storage type not mapped");
 		nbt.setString("type", type.toString());
 		NBTTagCompound storageNBT = new NBTTagCompound();
 		if(packet) {
@@ -99,16 +93,10 @@ public abstract class ChunkStorage implements ICapabilityProvider {
 
 	private final Chunk chunk;
 	private final ChunkDataBase chunkData;
-	private CapabilityDispatcher capabilities;
 
-	public ChunkStorage(Chunk chunk, ChunkDataBase chunkData) {
-		this.chunk = chunk;
+	public ChunkStorage(World world, ChunkDataBase chunkData) {
+		this.chunk = chunkData.getChunk();
 		this.chunkData = chunkData;
-
-		//Gather capabilities
-		AttachCapabilitiesEvent event = new AttachChunkStorageCapabilitiesEvent(this);
-		MinecraftForge.EVENT_BUS.post(event);
-		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
 	}
 
 	/**
@@ -124,16 +112,6 @@ public abstract class ChunkStorage implements ICapabilityProvider {
 	 */
 	public void markDirty() {
 		this.chunkData.markDirty();
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return this.capabilities == null ? false : this.capabilities.hasCapability(capability, facing);
-	}
-
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
 	}
 
 	/**
@@ -171,7 +149,6 @@ public abstract class ChunkStorage implements ICapabilityProvider {
 	 * @param nbt
 	 */
 	public void readFromNBT(NBTTagCompound nbt) {
-		if (this.capabilities != null && nbt.hasKey("ForgeCaps")) this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 	}
 
 	/**
@@ -179,7 +156,6 @@ public abstract class ChunkStorage implements ICapabilityProvider {
 	 * @param nbt
 	 */
 	public void writeToNBT(NBTTagCompound nbt) {
-		if (this.capabilities != null) nbt.setTag("ForgeCaps", this.capabilities.serializeNBT());
 	}
 
 	/**

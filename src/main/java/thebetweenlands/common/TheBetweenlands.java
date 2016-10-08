@@ -146,7 +146,7 @@ public class TheBetweenlands {
 
 		MinecraftForge.EVENT_BUS.register(ConfigHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_UNLOAD_HANDLER);
+		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_EVENT_HANDLER);
 		MinecraftForge.EVENT_BUS.register(ChunkDataBase.ChunkEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.class);
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());

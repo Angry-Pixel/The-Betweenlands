@@ -2,6 +2,7 @@ package thebetweenlands.common.world.storage.world.shared;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,21 +11,27 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import thebetweenlands.common.event.AttachSharedStorageCapabilitiesEvent;
-import thebetweenlands.common.world.storage.chunk.storage.shared.SharedStorageReference;
+import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
+import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 
 public abstract class SharedStorage implements ICapabilityProvider {
 	private static final Map<ResourceLocation, Class<? extends SharedStorage>> STORAGE_MAP = new HashMap<ResourceLocation, Class<? extends SharedStorage>>();
 
 	/**
-	 * Returns the chunk storage class for the specified ID
+	 * Returns the shared storage class for the specified ID
 	 * @param type
 	 * @return
 	 */
@@ -33,7 +40,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	}
 
 	/**
-	 * Returns the chunk storage ID for the specified class
+	 * Returns the shared storage ID for the specified class
 	 * @param storageClass
 	 * @return
 	 */
@@ -46,7 +53,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	}
 
 	/**
-	 * Registers a chunk storage type
+	 * Registers a shared storage type
 	 * @param id
 	 * @param storageClass
 	 */
@@ -61,18 +68,22 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * @param nbt
 	 * @return
 	 */
-	public static SharedStorage load(NBTTagCompound nbt) {
+	public static SharedStorage load(WorldDataBase<?> worldStorage, NBTTagCompound nbt, boolean packet) {
 		try {
 			ResourceLocation type = new ResourceLocation(nbt.getString("type"));
+			UUID uuid = nbt.getUniqueId("uuid");
 			Class<? extends SharedStorage> storageClass = SharedStorage.getStorageType(type);
 			if (storageClass == null)
-				throw new Exception("Shared storage type not mapped!");
-			Constructor<? extends SharedStorage> ctor = storageClass.getConstructor(UUID.class);
-			UUID uuid = nbt.getUniqueId("uuid");
-			SharedStorage storage = ctor.newInstance(uuid);
-			storage.readFromNBT(nbt.getCompoundTag("storage"));
+				throw new Exception("Shared storage type not mapped");
+			Constructor<? extends SharedStorage> ctor = storageClass.getConstructor(WorldDataBase.class, UUID.class);
+			SharedStorage storage = ctor.newInstance(worldStorage, uuid);
+			if(packet) {
+				storage.readFromPacketNBT(nbt.getCompoundTag("data"));
+			} else {
+				storage.readFromNBT(nbt.getCompoundTag("data"));
+			}
 			return storage;
-		} catch (Exception ex) {
+		} catch(Exception ex) {
 			throw new RuntimeException(ex);
 		}
 	}
@@ -82,117 +93,38 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * @param storage
 	 * @param nbt
 	 */
-	public static void save(SharedStorage storage, NBTTagCompound nbt) {
-		ResourceLocation type = SharedStorage.getStorageTypeID(storage.getClass());
+	public static NBTTagCompound save(SharedStorage sharedStorage, NBTTagCompound nbt, boolean packet) {
+		ResourceLocation type = SharedStorage.getStorageTypeID(sharedStorage.getClass());
 		if (type == null)
-			throw new RuntimeException("Shared storage type not mapped!");
+			throw new RuntimeException("Shared storage type not mapped");
 		nbt.setString("type", type.toString());
-		nbt.setUniqueId("uuid", storage.uuid);
-		NBTTagCompound storageNBT = new NBTTagCompound();
-		storage.writeToNBT(storageNBT);
-		nbt.setTag("storage", storageNBT);
+		nbt.setUniqueId("uuid", sharedStorage.getUUID());
+		if(packet) {
+			nbt.setTag("data", sharedStorage.writeToPacketNBT(new NBTTagCompound()));
+		} else {
+			nbt.setTag("data", sharedStorage.writeToNBT(new NBTTagCompound()));
+		}
+		return nbt;
 	}
 
-	private final List<SharedStorageReference> references = new ArrayList<>();
-	private CapabilityDispatcher capabilities;
-	private final List<EntityPlayerMP> watchers = new ArrayList<EntityPlayerMP>();
-	private boolean dirty = false;
+	private final List<EntityPlayerMP> watchers = new ArrayList<>();
+	private final WorldDataBase<?> worldStorage;
+	private final List<ChunkPos> linkedChunks = new ArrayList<>();
+	private final List<SharedStorageReference> loadedReferences = new ArrayList<>();
 	private final UUID uuid;
-	private final String uuidStr;
+	private final String uuidString;
+	private CapabilityDispatcher capabilities;
+	private boolean dirty = false;
 
-	public SharedStorage(UUID uuid) {
+	public SharedStorage(WorldDataBase<?> worldStorage, UUID uuid) {
+		this.worldStorage = worldStorage;
 		this.uuid = uuid;
-		this.uuidStr = uuid.toString();
+		this.uuidString = uuid.toString();
 
 		//Gather capabilities
 		AttachCapabilitiesEvent event = new AttachSharedStorageCapabilitiesEvent(this);
 		MinecraftForge.EVENT_BUS.post(event);
 		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
-	}
-
-	/**
-	 * Returns the UUID
-	 * @return
-	 */
-	public UUID getUniqueID() {
-		return this.uuid;
-	}
-
-	/**
-	 * Returns the UUID String
-	 * @return
-	 */
-	public String getUniqueIDString() {
-		return this.uuidStr;
-	}
-
-	/**
-	 * Sets whether the data is dirty
-	 */
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
-
-	/**
-	 * Returns whether the data needs to be saved
-	 * @return
-	 */
-	public boolean isDirty() {
-		return this.dirty;
-	}
-
-	/**
-	 * Called when a reference is unloaded
-	 */
-	public void unloadReference(SharedStorageReference reference) {
-		this.references.remove(reference);
-	}
-
-	/**
-	 * Called when a reference is loaded
-	 * @param reference
-	 */
-	public void loadReference(SharedStorageReference reference) {
-		this.references.add(reference);
-	}
-
-	/**
-	 * Called when the shared storage is unloaded
-	 */
-	public void onUnload() {
-
-	}
-
-	/**
-	 * Called when the shared storage is watched by a player
-	 * @param player
-	 */
-	public void onWatched(EntityPlayerMP player) {
-		this.watchers.add(player);
-	}
-
-	/**
-	 * Called when the storage is unwatched by a player
-	 * @param player
-	 */
-	public void onUnwatched(EntityPlayerMP player) {
-		this.watchers.remove(player);
-	}
-
-	/**
-	 * Returns the list of all watchers
-	 * @return
-	 */
-	public List<EntityPlayerMP> getWatchers() {
-		return this.watchers;
-	}
-
-	/**
-	 * Returns the list of all references
-	 * @return
-	 */
-	public List<SharedStorageReference> getReferences() {
-		return this.references;
 	}
 
 	@Override
@@ -206,36 +138,218 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	}
 
 	/**
-	 * Reads the data from the NBT
+	 * Returns the world storage
+	 * @return
+	 */
+	public final WorldDataBase<?> getWorldStorage() {
+		return this.worldStorage;
+	}
+
+	/**
+	 * Links the specified chunk to this shared storage
+	 * @param chunk
+	 * @return
+	 */
+	public final boolean linkChunk(Chunk chunk) {
+		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
+		if(!this.linkedChunks.contains(chunkPos)) {
+			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
+			if(chunkData.linkSharedStorage(this)) {
+				return this.linkedChunks.add(chunkPos);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Unlinks the specified chunk from this shared storage
+	 * @param chunk
+	 * @return
+	 */
+	public final boolean unlinkChunk(Chunk chunk) {
+		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
+		if(this.linkedChunks.contains(chunkPos)) {
+			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
+			if(chunkData.unlinkSharedStorage(this)) {
+				return this.linkedChunks.remove(chunkPos);
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Unlinks all chunks from this shared storage
+	 * @return
+	 */
+	public final boolean unlinkAllChunks() {
+		boolean unlinked = false;
+		for(ChunkPos pos : this.linkedChunks) {
+			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.chunkXPos, pos.chunkZPos);
+			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
+			if(chunkData.unlinkSharedStorage(this)) {
+				unlinked = true;
+			}
+		}
+		this.linkedChunks.clear();
+		return unlinked;
+	}
+
+	/**
+	 * Loads a reference
+	 * @param reference
+	 * @return
+	 */
+	public final boolean loadReference(SharedStorageReference reference) {
+		if(!this.loadedReferences.contains(reference)) {
+			return this.loadedReferences.add(reference);
+		}
+		return false;
+	}
+
+	/**
+	 * Unloads a reference
+	 * @param reference
+	 * @return
+	 */
+	public final boolean unloadReference(SharedStorageReference reference) {
+		return this.loadedReferences.remove(reference);
+	}
+
+	/**
+	 * Returns a list of all currently loaded references
+	 * @return
+	 */
+	public final List<SharedStorageReference> getReferences() {
+		return Collections.unmodifiableList(this.loadedReferences);
+	}
+
+	/**
+	 * Returns a list of all linked chunks
+	 * @return
+	 */
+	public final List<ChunkPos> getLinkedChunks() {
+		return Collections.unmodifiableList(this.linkedChunks);
+	}
+
+	/**
+	 * Returns the UUID
+	 * @return
+	 */
+	public final UUID getUUID() {
+		return this.uuid;
+	}
+
+	/**
+	 * Returns the UUID string
+	 * @return
+	 */
+	public final String getUUIDString() {
+		return this.uuidString;
+	}
+
+	/**
+	 * Writes the shared storage to the NBT
+	 * @param nbt
+	 * @return
+	 */
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		NBTTagList referenceChunkList = new NBTTagList();
+		for(ChunkPos referenceChunk : this.linkedChunks) {
+			NBTTagCompound referenceChunkNbt = new NBTTagCompound();
+			referenceChunkNbt.setInteger("x", referenceChunk.chunkXPos);
+			referenceChunkNbt.setInteger("z", referenceChunk.chunkZPos);
+			referenceChunkList.appendTag(referenceChunkNbt);
+		}
+		nbt.setTag("ReferenceChunks", referenceChunkList);
+		if (this.capabilities != null) nbt.setTag("ForgeCaps", this.capabilities.serializeNBT());
+		return nbt;
+	}
+
+	/**
+	 * Reads the shared storage from the NBT
 	 * @param nbt
 	 */
 	public void readFromNBT(NBTTagCompound nbt) {
+		this.linkedChunks.clear();
+		NBTTagList referenceChunkList = nbt.getTagList("ReferenceChunks", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < referenceChunkList.tagCount(); i++) {
+			NBTTagCompound referenceChunkNbt = referenceChunkList.getCompoundTagAt(i);
+			this.linkedChunks.add(new ChunkPos(referenceChunkNbt.getInteger("x"), referenceChunkNbt.getInteger("z")));
+		}
 		if (this.capabilities != null && nbt.hasKey("ForgeCaps")) this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 	}
 
 	/**
-	 * Writes the data to the NBT
+	 * Writes the shared storage to the packet NBT
 	 * @param nbt
+	 * @return
 	 */
-	public void writeToNBT(NBTTagCompound nbt) {
-		if (this.capabilities != null) nbt.setTag("ForgeCaps", this.capabilities.serializeNBT());
+	public NBTTagCompound writeToPacketNBT(NBTTagCompound nbt) {
+		return this.writeToNBT(nbt);
 	}
 
 	/**
-	 * Reads the data from the packet NBT
+	 * Reads the shared storage from the packet NBT
 	 * @param nbt
 	 */
 	public void readFromPacketNBT(NBTTagCompound nbt) {
 		this.readFromNBT(nbt);
-		//TODO: Read currently loaded references from nbt and add them if their chunks are loaded on the client side (this side)
 	}
 
 	/**
-	 * Writes the data to the packet NBT
-	 * @param nbt
+	 * Called when a player starts watching this shared storage
+	 * @param chunkStorage
+	 * @param player
 	 */
-	public void writeToPacketNBT(NBTTagCompound nbt) {
-		this.writeToNBT(nbt);
-		//TODO: Write currently loaded references to nbt
+	public void onWatched(ChunkDataBase chunkStorage, EntityPlayerMP player) {
+		this.watchers.add(player);
+	}
+
+	/**
+	 * Called when a player stops watching this shared storage
+	 * @param chunkStorage
+	 * @param player
+	 */
+	public void onUnwatched(ChunkDataBase chunkStorage, EntityPlayerMP player) {
+		this.watchers.remove(player);
+	}
+
+	/**
+	 * Returns the list of all watchers
+	 * @return
+	 */
+	public List<EntityPlayerMP> getWatchers() {
+		return this.watchers;
+	}
+
+	/**
+	 * Sets whether the data is dirty and needs to be saved to the file or sent to the client
+	 * @param dirty
+	 * @return
+	 */
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	/**
+	 * Returns whether the data is dirty
+	 * @return
+	 */
+	public boolean isDirty() {
+		return this.dirty;
+	}
+
+	/**
+	 * Called after the shared storage has loaded
+	 */
+	public void onLoaded() {
+
+	}
+
+	/**
+	 * Called when the shared storage is unloaded
+	 */
+	public void onUnloaded() {
+
 	}
 }

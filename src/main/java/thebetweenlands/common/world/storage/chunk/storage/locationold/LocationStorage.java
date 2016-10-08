@@ -11,6 +11,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
@@ -26,12 +27,12 @@ public class LocationStorage extends ChunkStorage {
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
 
-	public LocationStorage(Chunk chunk, ChunkDataBase data) {
-		super(chunk, data);
+	public LocationStorage(World world, ChunkDataBase data) {
+		super(world, data);
 	}
 
-	public LocationStorage(Chunk chunk, ChunkDataBase data, String name, AxisAlignedBB area, EnumLocationType type) {
-		super(chunk, data);
+	public LocationStorage(World world, ChunkDataBase data, String name, AxisAlignedBB area, EnumLocationType type) {
+		super(world, data);
 		this.name = name;
 		this.area = area;
 		if(type == null)

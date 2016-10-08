@@ -6,8 +6,9 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 
-public class BetweenlandsWorldData extends WorldDataBase {
+public class BetweenlandsWorldData extends WorldDataBase<BetweenlandsChunkData> {
 	private EnvironmentEventRegistry environmentEventRegistry = new EnvironmentEventRegistry();
 	private AspectManager aspectManager = new AspectManager();
 
@@ -81,5 +82,10 @@ public class BetweenlandsWorldData extends WorldDataBase {
 
 	public static BetweenlandsWorldData forWorld(World world) {
 		return WorldDataBase.forWorld(world, BetweenlandsWorldData.class);
+	}
+
+	@Override
+	public Class<BetweenlandsChunkData> getChunkStorage() {
+		return BetweenlandsChunkData.class;
 	}
 }

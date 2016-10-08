@@ -3,18 +3,18 @@ package thebetweenlands.common.world.storage.chunk.storage.locationold;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.World;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 
 public class GuardedLocationStorage extends LocationStorage {
 	private boolean guarded = true;
 
-	public GuardedLocationStorage(Chunk chunk, ChunkDataBase data) {
-		super(chunk, data);
+	public GuardedLocationStorage(World world, ChunkDataBase data) {
+		super(world, data);
 	}
 
-	public GuardedLocationStorage(Chunk chunk, ChunkDataBase data, String name, AxisAlignedBB area, EnumLocationType type) {
-		super(chunk, data, name, area, type);
+	public GuardedLocationStorage(World world, ChunkDataBase data, String name, AxisAlignedBB area, EnumLocationType type) {
+		super(world, data, name, area, type);
 	}
 
 	public boolean isGuarded() {

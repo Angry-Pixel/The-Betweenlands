@@ -1,37 +1,52 @@
 package thebetweenlands.common.world.storage.world.global;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapStorage;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.world.storage.chunk.storage.shared.SharedStorageReference;
+import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
+import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 
-public abstract class WorldDataBase extends WorldSavedData {
-	public static final WorldUnloadHandler WORLD_UNLOAD_HANDLER = new WorldUnloadHandler();
-	private static final Map<WorldDataTypePair, WorldDataBase> CACHE = new HashMap<WorldDataTypePair, WorldDataBase>();
+/**
+ * World specific storage.
+ * <p><b>{@link WorldDataBase#WORLD_EVENT_HANDLER} must be registered to {@link MinecraftForge.EVENT_BUS}.</b>
+ * 
+ * @param <T> Chunk storage type
+ */
+public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedData {
+	public static final WorldEventHandler WORLD_EVENT_HANDLER = new WorldEventHandler();
+	private static final Map<WorldDataTypePair, WorldDataBase<?>> CACHE = new HashMap<WorldDataTypePair, WorldDataBase<?>>();
 
 	private World world;
 	private NBTTagCompound data = new NBTTagCompound();
-	private Map<String, SharedStorage> sharedStorage = new HashMap<>();
+	private final Map<String, SharedStorage> sharedStorage = new HashMap<String, SharedStorage>();
+	private File sharedStorageDir;
 
 	public WorldDataBase(String name) {
 		super(name);
 	}
 
-	private static WorldDataBase getMatchingData(World world, Class<? extends WorldDataBase> clazz) {
-		for (Entry<WorldDataTypePair, WorldDataBase> cacheEntry : CACHE.entrySet()) {
+	private static WorldDataBase<?> getMatchingData(World world, Class<? extends WorldDataBase<?>> clazz) {
+		for (Entry<WorldDataTypePair, WorldDataBase<?>> cacheEntry : CACHE.entrySet()) {
 			WorldDataTypePair pair = cacheEntry.getKey();
 			if (pair.world == world && pair.data.equals(clazz)) {
 				return cacheEntry.getValue();
@@ -41,8 +56,8 @@ public abstract class WorldDataBase extends WorldSavedData {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <T extends WorldDataBase> T forWorld(World world, Class<T> clazz) {
-		WorldDataBase cached = getMatchingData(world, clazz);
+	public static <T extends WorldDataBase<?>> T forWorld(World world, Class<T> clazz) {
+		WorldDataBase<?> cached = getMatchingData(world, clazz);
 		if (cached != null) {
 			cached.world = world;
 			return (T) cached;
@@ -54,7 +69,7 @@ public abstract class WorldDataBase extends WorldSavedData {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-		WorldDataBase result = (WorldDataBase) storage.getOrLoadData(clazz, newInstance.mapName);
+		WorldDataBase<?> result = (WorldDataBase<?>) storage.getOrLoadData(clazz, newInstance.mapName);
 		if (result == null) {
 			result = newInstance;
 			result.world = world;
@@ -68,10 +83,15 @@ public abstract class WorldDataBase extends WorldSavedData {
 			result.init();
 			result.load();
 		}
+		result.sharedStorageDir = new File(world.getSaveHandler().getWorldDirectory(), "data" + File.separator + "shared_storage" + File.separator);
 		CACHE.put(new WorldDataTypePair(world, clazz), result);
 		return (T) result;
 	}
 
+	/**
+	 * Returns the world object
+	 * @return
+	 */
 	public World getWorld() {
 		return this.world;
 	}
@@ -108,8 +128,68 @@ public abstract class WorldDataBase extends WorldSavedData {
 	 */
 	protected abstract void setDefaults();
 
+	/**
+	 * Returns the chunk storage
+	 * @return
+	 */
+	public abstract Class<T> getChunkStorage();
+
+	/**
+	 * Returns the world data
+	 * @return
+	 */
 	public NBTTagCompound getData() {
 		return this.data;
+	}
+
+	/**
+	 * Returns the shared storage file directory
+	 * @return
+	 */
+	public File getSharedStorageDirectory() {
+		return this.sharedStorageDir;
+	}
+
+	/**
+	 * Adds a shared storage
+	 * @param storage
+	 */
+	public void addSharedStorage(SharedStorage storage) {
+		this.sharedStorage.put(storage.getUUIDString(), storage);
+
+		//Add already loaded references
+		for(ChunkPos referenceChunk : storage.getLinkedChunks()) {
+			Chunk chunk = this.world.getChunkProvider().getLoadedChunk(referenceChunk.chunkXPos, referenceChunk.chunkZPos);
+			if(chunk != null) {
+				ChunkDataBase chunkData = ChunkDataBase.forChunk(this, chunk);
+				SharedStorageReference reference = chunkData.getReference(storage.getUUID());
+				if(reference != null && !storage.getReferences().contains(reference)) {
+					storage.loadReference(reference);
+				}
+			}
+		}
+
+		storage.onLoaded();
+	}
+
+	/**
+	 * Permanently removes a shared storage
+	 * @param storage
+	 */
+	public void removeSharedStorage(SharedStorage storage) {
+		if(this.sharedStorage.containsKey(storage.getUUIDString())) {
+			if(!this.world.isRemote) {
+				storage.unlinkAllChunks();
+			}
+			this.sharedStorage.remove(storage.getUUIDString());
+			if(!this.world.isRemote) {
+				File file = new File(this.getSharedStorageDirectory(), storage.getUUIDString() + ".dat");
+				if(file.exists()) {
+					file.delete();
+				}
+			}
+			storage.onUnloaded();
+		}
 	}
 
 	/**
@@ -117,74 +197,114 @@ public abstract class WorldDataBase extends WorldSavedData {
 	 * @param uuid
 	 * @return
 	 */
-	@Nullable
 	public SharedStorage getSharedStorage(String uuid) {
 		return this.sharedStorage.get(uuid);
 	}
 
 	/**
-	 * Loads a shared storage reference. If necessary the shared storage will be loaded and then cached
-	 * @param reference
-	 * @param nbtProvider
+	 * Returns a list of all currently loaded shared storages
 	 * @return
 	 */
+	public Collection<SharedStorage> getSharedStorage() {
+		return Collections.unmodifiableCollection(this.sharedStorage.values());
+	}
+
+	/**
+	 * Loads a shared storage from a file
+	 * @param reference
+	 */
 	@Nullable
-	public SharedStorage loadSharedStorageReference(SharedStorageReference reference, Supplier<NBTTagCompound> nbtProvider) {
-		SharedStorage storage = this.sharedStorage.get(reference.getUniqueIDString());
-		if(storage == null) {
-			NBTTagCompound sharedNBT = nbtProvider.get();
-			if(sharedNBT != null) {
-				storage = SharedStorage.load(sharedNBT);
-				this.sharedStorage.put(storage.getUniqueIDString(), storage);
+	public SharedStorage loadSharedStorage(SharedStorageReference reference) {
+		SharedStorage storage = null;
+		NBTTagCompound nbt = null;
+		File file = new File(this.getSharedStorageDirectory(), reference.getUUIDString() + ".dat");
+		if(file.exists()) {
+			try {
+				nbt = CompressedStreamTools.read(file);
+			} catch(Exception ex) {
+				throw new RuntimeException(ex);
 			}
+			storage = SharedStorage.load(this, nbt, false);
+		} else {
+			return null;
 		}
-		if(storage != null && !storage.getReferences().contains(reference)) {
-			storage.loadReference(reference);
-		}
+		this.addSharedStorage(storage);
+		storage.onLoaded();
 		return storage;
 	}
 
 	/**
-	 * Unloads a shared storage reference. If all references are unloaded the shared storage is saved and unloaded
-	 * @param reference
-	 * @param nbtSaver Saves the NBT data
-	 * @return True if the shared storage was unloaded
+	 * Unloads a shared storage and saves to a file if necessary
+	 * @param storage
 	 */
-	public boolean unloadSharedStorageReference(SharedStorageReference reference, Consumer<NBTTagCompound> nbtSaver) {
-		SharedStorage storage = this.sharedStorage.get(reference.getUniqueIDString());
-		if(storage != null) {
-			storage.unloadReference(reference);
-			if(storage.getReferences().isEmpty()) {
-				this.sharedStorage.remove(reference.getUniqueIDString());
-				NBTTagCompound sharedNBT = new NBTTagCompound();
-				storage.writeToNBT(sharedNBT);
-				nbtSaver.accept(sharedNBT);
-				storage.onUnload();
-				return true;
+	public void unloadSharedStorage(SharedStorage storage) {
+		if(this.sharedStorage.containsKey(storage.getUUIDString())) {
+			//Only save if dirty
+			if(storage.isDirty()) {
+				this.saveSharedStorage(storage);
 			}
+			this.sharedStorage.remove(storage.getUUIDString());
+			storage.onUnloaded();
 		}
-		return false;
+	}
+
+	/**
+	 * Saves the specified shared storage to a file
+	 * @param storage
+	 */
+	public void saveSharedStorage(SharedStorage storage) {
+		NBTTagCompound nbt = SharedStorage.save(storage, new NBTTagCompound(), false);
+		try {
+			File savePath = this.getSharedStorageDirectory();
+			savePath.mkdirs();
+			File file = new File(savePath, storage.getUUIDString() + ".dat");
+			CompressedStreamTools.safeWrite(nbt, file);
+		} catch(Exception ex) {
+			throw new RuntimeException(ex);
+		}
 	}
 
 	private static class WorldDataTypePair {
 		private World world;
-		private Class<? extends WorldDataBase> data;
-		private WorldDataTypePair(World world, Class<? extends WorldDataBase> data) {
+		private Class<? extends WorldDataBase<?>> data;
+		private WorldDataTypePair(World world, Class<? extends WorldDataBase<?>> data) {
 			this.world = world;
 			this.data = data;
 		}
 	}
 
-	public static class WorldUnloadHandler {
-		private WorldUnloadHandler(){}
+	public static class WorldEventHandler {
+		private WorldEventHandler(){}
 
 		@SubscribeEvent
 		public void onWorldUnload(WorldEvent.Unload event) {
-			Iterator<Entry<WorldDataTypePair, WorldDataBase>> cacheIT = CACHE.entrySet().iterator();
+			Iterator<Entry<WorldDataTypePair, WorldDataBase<?>>> cacheIT = CACHE.entrySet().iterator();
 			while(cacheIT.hasNext()) {
-				World world = cacheIT.next().getKey().world;
+				Entry<WorldDataTypePair, WorldDataBase<?>> entry = cacheIT.next();
+				World world = entry.getKey().world;
 				if(world.equals(event.getWorld())) {
+					//Unload and save shared storages
+					WorldDataBase<?> worldStorage = entry.getValue();
+					List<SharedStorage> sharedStorages = new ArrayList<>();
+					sharedStorages.addAll(worldStorage.getSharedStorage());
+					for(SharedStorage sharedStorage : sharedStorages) {
+						worldStorage.unloadSharedStorage(sharedStorage);
+					}
+
+					//Remove entry
 					cacheIT.remove();
+				}
+			}
+		}
+
+		@SubscribeEvent
+		public void onWorldSave(WorldEvent.Save event) {
+			for(WorldDataBase<?> worldStorage : CACHE.values()) {
+				//Save shared storages
+				List<SharedStorage> sharedStorages = new ArrayList<>();
+				sharedStorages.addAll(worldStorage.getSharedStorage());
+				for(SharedStorage sharedStorage : sharedStorages) {
+					worldStorage.saveSharedStorage(sharedStorage);
 				}
 			}
 		}

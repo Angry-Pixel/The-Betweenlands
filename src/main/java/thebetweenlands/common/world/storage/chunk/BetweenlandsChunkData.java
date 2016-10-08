@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 
 
 public class BetweenlandsChunkData extends ChunkDataBase {
@@ -18,7 +19,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	}
 
 	public static BetweenlandsChunkData forChunk(World world, Chunk chunk) {
-		return ChunkDataBase.forChunk(world, chunk, BetweenlandsChunkData.class);
+		return ChunkDataBase.forChunk(BetweenlandsWorldData.forWorld(world), chunk);
 	}
 
 	@Override
@@ -43,7 +44,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	protected void sendDataToAllWatchers() {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			if (!this.getWatchers().isEmpty()) {
-				NBTTagCompound nbt = this.writeToPacketNBT(new NBTTagCompound());
+				NBTTagCompound nbt = this.writeToNBT(new NBTTagCompound());
 				for (EntityPlayerMP watcher : this.getWatchers()) {
 					TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), nbt), watcher);
 				}
@@ -56,7 +57,7 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	 * @param player
 	 */
 	protected void sendDataToPlayer(EntityPlayerMP player) {
-		TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), this.writeToPacketNBT(new NBTTagCompound())), player);
+		TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), this.writeToNBT(new NBTTagCompound())), player);
 	}
 
 	@Override

@@ -35,9 +35,9 @@ public class StorageHelper {
 				BetweenlandsChunkData chunkData = BetweenlandsChunkData.forChunk(world, chunk);
 				LocationStorage location;
 				if(guarded) {
-					location = new GuardedLocationStorage(chunk, chunkData, name, clampedArea, type).setLayer(layer);
+					location = new GuardedLocationStorage(world, chunkData, name, clampedArea, type).setLayer(layer);
 				} else {
-					location = new LocationStorage(chunk, chunkData, name, clampedArea, type).setLayer(layer);
+					location = new LocationStorage(world, chunkData, name, clampedArea, type).setLayer(layer);
 				}
 				addedLocations.add(location);
 				chunkData.getStorage().add(location);
