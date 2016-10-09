@@ -27,6 +27,13 @@ import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 
+/**
+ * Shared storage can be linked to an arbitrary number of chunks. Each linked chunk
+ * has access to the same shared storage it was linked to. A chunk can be linked to multiple shared
+ * storages.
+ * <p>Capabilities can be attached using the {@link AttachSharedStorageCapabilitiesEvent} event.
+ * <p>Implement {@link net.minecraft.util.ITickable} if the shared storage has to be updated every tick.
+ */
 public abstract class SharedStorage implements ICapabilityProvider {
 	private static final Map<ResourceLocation, Class<? extends SharedStorage>> STORAGE_MAP = new HashMap<ResourceLocation, Class<? extends SharedStorage>>();
 
@@ -357,6 +364,13 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * Called when the shared storage is unloaded
 	 */
 	public void onUnloaded() {
+
+	}
+
+	/**
+	 * Called when the shared storage is permanently removed from the world
+	 */
+	public void onRemoved() {
 
 	}
 }

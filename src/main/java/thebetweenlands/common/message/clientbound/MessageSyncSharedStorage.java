@@ -45,7 +45,22 @@ public class MessageSyncSharedStorage extends BLMessage {
 			World world = Minecraft.getMinecraft().theWorld;
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 			SharedStorage sharedStorage = SharedStorage.load(worldStorage, this.nbt, true);
-			worldStorage.addSharedStorage(sharedStorage);
+			SharedStorage loadedStorage = worldStorage.getSharedStorage(sharedStorage.getUUIDString());
+			if(loadedStorage != null && sharedStorage.getLinkedChunks().isEmpty()) {
+				//Remove storage if all chunks have been unlinked
+				worldStorage.removeSharedStorage(loadedStorage);
+			} else {
+				if(loadedStorage != null && sharedStorage.getClass() == loadedStorage.getClass()) {
+					//Storage already loaded, update NBT only
+					loadedStorage.readFromPacketNBT(sharedStorage.writeToPacketNBT(new NBTTagCompound()));
+				} else {
+					//Remove storage if the class is not matching
+					if(loadedStorage != null) {
+						worldStorage.removeSharedStorage(loadedStorage);
+					}
+					worldStorage.addSharedStorage(sharedStorage);
+				}
+			}
 		}
 		return null;
 	}

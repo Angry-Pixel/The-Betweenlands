@@ -16,6 +16,7 @@ import thebetweenlands.common.message.clientbound.MessageSyncEntityCapabilities;
 import thebetweenlands.common.message.clientbound.MessageSyncEnvironmentEvent;
 import thebetweenlands.common.message.clientbound.MessageSyncSharedStorage;
 import thebetweenlands.common.message.clientbound.MessageSyncStaticAspects;
+import thebetweenlands.common.message.clientbound.MessageRemoveSharedStorage;
 import thebetweenlands.common.message.clientbound.MessageWeedwoodBushRustle;
 
 public class MessageRegistry {
@@ -31,6 +32,7 @@ public class MessageRegistry {
 		registerMessage(MessageSyncEntityCapabilities.class, Side.CLIENT);
 		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);
 		registerMessage(MessageSyncSharedStorage.class, Side.CLIENT);
+		registerMessage(MessageRemoveSharedStorage.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {

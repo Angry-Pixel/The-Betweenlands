@@ -4,14 +4,17 @@ import java.util.UUID;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.util.ITickable;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.message.clientbound.MessageRemoveSharedStorage;
 import thebetweenlands.common.message.clientbound.MessageSyncSharedStorage;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 
-public abstract class BetweenlandsSharedStorage extends SharedStorage {
+public abstract class BetweenlandsSharedStorage extends SharedStorage implements ITickable {
+	protected boolean requiresSync = false;
+
 	public BetweenlandsSharedStorage(WorldDataBase<?> worldStorage, UUID uuid) {
 		super(worldStorage, uuid);
 	}
@@ -20,7 +23,7 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage {
 	public void setDirty(boolean dirty) {
 		super.setDirty(dirty);
 		if(dirty) {
-			this.sendDataToAllWatchers();
+			this.requiresSync = true;
 		}
 	}
 
@@ -30,22 +33,40 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage {
 		this.sendDataToPlayer(player);
 	}
 
-	/**
-	 * Sends the chunk data to all watching players
-	 */
-	protected void sendDataToAllWatchers() {
-		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
-			if (!this.getWatchers().isEmpty()) {
-				NBTTagCompound nbt = SharedStorage.save(this, new NBTTagCompound(), true);
-				for (EntityPlayerMP watcher : this.getWatchers()) {
-					TheBetweenlands.networkWrapper.sendTo(new MessageSyncSharedStorage(nbt), watcher);
+	@Override
+	public void update() {
+		if(this.requiresSync) {
+			if(!this.getWorldStorage().getWorld().isRemote) {
+				if (!this.getWatchers().isEmpty()) {
+					NBTTagCompound nbt = SharedStorage.save(this, new NBTTagCompound(), true);
+					this.sendDataToAllWatchers(new MessageSyncSharedStorage(nbt));
 				}
+			}
+			this.requiresSync = false;
+		}
+	}
+
+	@Override
+	public void onRemoved() {
+		//Notify clients if shared storage is removed
+		if(!this.getWorldStorage().getWorld().isRemote) {
+			if (!this.getWatchers().isEmpty()) {
+				this.sendDataToAllWatchers(new MessageRemoveSharedStorage(this.getUUID()));
 			}
 		}
 	}
 
 	/**
-	 * Sends the chunk data to a player
+	 * Sends the message to all watching players
+	 */
+	protected void sendDataToAllWatchers(IMessage message) {
+		for (EntityPlayerMP watcher : this.getWatchers()) {
+			TheBetweenlands.networkWrapper.sendTo(message, watcher);
+		}
+	}
+
+	/**
+	 * Sends the shared storage data to a player
 	 * @param player
 	 */
 	protected void sendDataToPlayer(EntityPlayerMP player) {
