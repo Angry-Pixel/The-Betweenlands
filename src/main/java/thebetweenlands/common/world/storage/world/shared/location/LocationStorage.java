@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.storage.world.shared.location;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -8,17 +9,19 @@ import java.util.UUID;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 import thebetweenlands.common.world.storage.world.shared.BetweenlandsSharedStorage;
 
 public class LocationStorage extends BetweenlandsSharedStorage {
-	private AxisAlignedBB boundingBox;
+	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
 	private String name;
 	private EnumLocationType type;
 	private int layer;
@@ -38,13 +41,42 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @param uuid
 	 * @param boundingBox
 	 */
-	public LocationStorage(WorldDataBase<?> worldStorage, UUID uuid, String name, AxisAlignedBB boundingBox, EnumLocationType type) {
+	public LocationStorage(WorldDataBase<?> worldStorage, UUID uuid, String name, EnumLocationType type) {
 		super(worldStorage, uuid);
 		this.name = name;
-		this.boundingBox = boundingBox;
 		if(type == null)
 			type = EnumLocationType.NONE;
 		this.type = type;
+	}
+
+	/**
+	 * Adds the specified bounding boxes
+	 * @param boundingBoxes
+	 * @return
+	 */
+	public LocationStorage addBounds(AxisAlignedBB... boundingBoxes) {
+		for(AxisAlignedBB boundingBox : boundingBoxes) {
+			this.boundingBoxes.add(boundingBox);
+		}
+		return this;
+	}
+
+	/**
+	 * Returns the bounding boxes of this location
+	 * @return
+	 */
+	public List<AxisAlignedBB> getBounds() {
+		return this.boundingBoxes;
+	}
+
+	/**
+	 * Removes the specified bounding boxes
+	 * @param boundingBoxes
+	 */
+	public void removeBounds(AxisAlignedBB... boundingBoxes) {
+		for(AxisAlignedBB boundingBox : boundingBoxes) {
+			this.boundingBoxes.remove(boundingBox);
+		}
 	}
 
 	/**
@@ -52,14 +84,16 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public LocationStorage linkChunks() {
-		int sx = MathHelper.floor_double(this.boundingBox.minX / 16.0D);
-		int sz = MathHelper.floor_double(this.boundingBox.minZ / 16.0D);
-		int ex = MathHelper.ceiling_double_int(this.boundingBox.maxX / 16.0D);
-		int ez = MathHelper.ceiling_double_int(this.boundingBox.maxZ / 16.0D);
-		for(int cx = sx; cx <= ex; cx++) {
-			for(int cz = sz; cz <= ez; cz++) {
-				Chunk chunk = this.getWorldStorage().getWorld().getChunkFromChunkCoords(cx, cz);
-				this.linkChunk(chunk);
+		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+			int sx = MathHelper.floor_double(boundingBox.minX / 16.0D);
+			int sz = MathHelper.floor_double(boundingBox.minZ / 16.0D);
+			int ex = MathHelper.ceiling_double_int(boundingBox.maxX / 16.0D);
+			int ez = MathHelper.ceiling_double_int(boundingBox.maxZ / 16.0D);
+			for(int cx = sx; cx <= ex; cx++) {
+				for(int cz = sz; cz <= ez; cz++) {
+					Chunk chunk = this.getWorldStorage().getWorld().getChunkFromChunkCoords(cx, cz);
+					this.linkChunk(chunk);
+				}
 			}
 		}
 		return this;
@@ -176,13 +210,18 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.name = nbt.getString("name");
-		double minX = nbt.getDouble("minX");
-		double minY = nbt.getDouble("minY");
-		double minZ = nbt.getDouble("minZ");
-		double maxX = nbt.getDouble("maxX");
-		double maxY = nbt.getDouble("maxY");
-		double maxZ = nbt.getDouble("maxZ");
-		this.boundingBox = new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
+		this.boundingBoxes.clear();
+		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < boundingBoxes.tagCount(); i++) {
+			NBTTagCompound boxNbt = boundingBoxes.getCompoundTagAt(i);
+			double minX = boxNbt.getDouble("minX");
+			double minY = boxNbt.getDouble("minY");
+			double minZ = boxNbt.getDouble("minZ");
+			double maxX = boxNbt.getDouble("maxX");
+			double maxY = boxNbt.getDouble("maxY");
+			double maxZ = boxNbt.getDouble("maxZ");
+			this.boundingBoxes.add(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
+		}
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
 		this.layer = nbt.getInteger("layer");
 		if(nbt.hasKey("ambience")) {
@@ -197,12 +236,18 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setString("name", this.name);
-		nbt.setDouble("minX", this.boundingBox.minX);
-		nbt.setDouble("minY", this.boundingBox.minY);
-		nbt.setDouble("minZ", this.boundingBox.minZ);
-		nbt.setDouble("maxX", this.boundingBox.maxX);
-		nbt.setDouble("maxY", this.boundingBox.maxY);
-		nbt.setDouble("maxZ", this.boundingBox.maxZ);
+		NBTTagList boundingBoxes = new NBTTagList();
+		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+			NBTTagCompound boxNbt = new NBTTagCompound();
+			boxNbt.setDouble("minX", boundingBox.minX);
+			boxNbt.setDouble("minY", boundingBox.minY);
+			boxNbt.setDouble("minZ", boundingBox.minZ);
+			boxNbt.setDouble("maxX", boundingBox.maxX);
+			boxNbt.setDouble("maxY", boundingBox.maxY);
+			boxNbt.setDouble("maxZ", boundingBox.maxZ);
+			boundingBoxes.appendTag(boxNbt);
+		}
+		nbt.setTag("bounds", boundingBoxes);
 		nbt.setString("type", this.type.name);
 		nbt.setInteger("layer", this.layer);
 		if(this.hasAmbience()) {
@@ -216,30 +261,17 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	}
 
 	/**
-	 * Returns the bounding box of this location
-	 * @return
-	 */
-	public AxisAlignedBB getBoundingBox() {
-		return this.boundingBox;
-	}
-
-	/**
-	 * Returns whether the specified bounding box is equal to the bounding box of this location
-	 * @param other
-	 * @return
-	 */
-	public boolean isBoundingBoxEqual(AxisAlignedBB other) {
-		return this.boundingBox.minX == other.minX && this.boundingBox.minY == other.minY && this.boundingBox.minZ == other.minZ
-				&& this.boundingBox.maxX == other.maxX && this.boundingBox.maxY == other.maxY && this.boundingBox.maxZ == other.maxZ;
-	}
-
-	/**
 	 * Returns whether the specified entity is inside this location
 	 * @param entity
 	 * @return
 	 */
 	public boolean isInside(Entity entity) {
-		return this.boundingBox.isVecInside(entity.getPositionVector());
+		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+			if(boundingBox.isVecInside(entity.getPositionVector())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -247,16 +279,13 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @param pos
 	 * @return
 	 */
-	public boolean isInside(BlockPos pos) {
-		return this.boundingBox.isVecInside(new Vec3d(pos.getX(), pos.getY(), pos.getZ()));
-	}
-
-	/**
-	 * Returns the location bounding box
-	 * @return
-	 */
-	public AxisAlignedBB getArea() {
-		return this.boundingBox;
+	public boolean isInside(Vec3i pos) {
+		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+			if(boundingBox.isVecInside(new Vec3d(pos.getX(), pos.getY(), pos.getZ()))) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

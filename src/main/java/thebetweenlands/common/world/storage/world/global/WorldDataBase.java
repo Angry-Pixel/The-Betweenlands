@@ -188,11 +188,12 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	}
 
 	/**
-	 * Adds a shared storage
+	 * Adds a shared storage. All necessary chunks must be linked before adding the specified shared storage.
 	 * @param storage
+	 * @return True if the storage was successfully added
 	 */
-	public void addSharedStorage(SharedStorage storage) {
-		if(!this.sharedStorage.containsKey(storage.getUUIDString())) {
+	public boolean addSharedStorage(SharedStorage storage) {
+		if(!this.sharedStorage.containsKey(storage.getUUIDString()) && !storage.getLinkedChunks().isEmpty()) {
 			this.sharedStorage.put(storage.getUUIDString(), storage);
 
 			if(storage instanceof ITickable) {
@@ -222,14 +223,18 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 			}
 
 			storage.onLoaded();
+
+			return true;
 		}
+		return false;
 	}
 
 	/**
-	 * Permanently removes a shared storage
+	 * Permanently removes a shared storage. All linked chunks will be unlinked.
 	 * @param storage
+	 * @return True if the storage was successfully removed
 	 */
-	public void removeSharedStorage(SharedStorage storage) {
+	public boolean removeSharedStorage(SharedStorage storage) {
 		if(this.sharedStorage.containsKey(storage.getUUIDString())) {
 			if(!this.world.isRemote) {
 				storage.unlinkAllChunks();
@@ -253,7 +258,10 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 			storage.onUnloaded();
 
 			storage.onRemoved();
+
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -300,8 +308,9 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	/**
 	 * Unloads a shared storage and saves to a file if necessary
 	 * @param storage
+	 * @return True if the storage was successfully unloaded
 	 */
-	public void unloadSharedStorage(SharedStorage storage) {
+	public boolean unloadSharedStorage(SharedStorage storage) {
 		if(this.sharedStorage.containsKey(storage.getUUIDString())) {
 			//Only save if dirty
 			if(storage.isDirty() && !this.world.isRemote) {
@@ -321,7 +330,10 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 			}
 
 			storage.onUnloaded();
+
+			return true;
 		}
+		return false;
 	}
 
 	/**

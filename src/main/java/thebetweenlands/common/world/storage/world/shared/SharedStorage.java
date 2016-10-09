@@ -4,6 +4,7 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -155,7 +156,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	/**
 	 * Links the specified chunk to this shared storage
 	 * @param chunk
-	 * @return
+	 * @return True if the chunk was linked successfully
 	 */
 	public final boolean linkChunk(Chunk chunk) {
 		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
@@ -174,7 +175,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	/**
 	 * Unlinks the specified chunk from this shared storage
 	 * @param chunk
-	 * @return
+	 * @return True if the chunk was unlinked successfully
 	 */
 	public final boolean unlinkChunk(Chunk chunk) {
 		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
@@ -192,20 +193,28 @@ public abstract class SharedStorage implements ICapabilityProvider {
 
 	/**
 	 * Unlinks all chunks from this shared storage
-	 * @return
+	 * @return True if all chunks were successfully unlinked
 	 */
 	public final boolean unlinkAllChunks() {
-		boolean unlinked = false;
-		for(ChunkPos pos : this.linkedChunks) {
+		boolean changed = false;
+		boolean allUnlinked = true;
+		Iterator<ChunkPos> it = this.linkedChunks.iterator();
+		ChunkPos pos = null;
+		while(it.hasNext()) {
+			pos = it.next();
 			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.chunkXPos, pos.chunkZPos);
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
-			if(chunkData != null && chunkData.unlinkSharedStorage(this)) {
-				unlinked = true;
+			if(chunkData == null || !chunkData.unlinkSharedStorage(this)) {
+				allUnlinked = false;
+			} else if(chunkData != null) {
+				it.remove();
+				changed = true;
 			}
 		}
-		this.linkedChunks.clear();
-		this.setDirty(true);
-		return unlinked;
+		if(changed) {
+			this.setDirty(true);
+		}
+		return allUnlinked;
 	}
 
 	/**
