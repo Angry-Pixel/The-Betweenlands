@@ -230,6 +230,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		}
 		this.visible = nbt.getBoolean("visible");
 		this.guarded = nbt.getBoolean("guarded");
+		this.locationSeed = nbt.getLong("seed");
 	}
 
 	@Override
@@ -257,6 +258,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		}
 		nbt.setBoolean("visible", this.visible);
 		nbt.setBoolean("guarded", this.guarded);
+		nbt.setLong("seed", this.locationSeed);
 		return nbt;
 	}
 

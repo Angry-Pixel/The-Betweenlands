@@ -1,5 +1,7 @@
 package thebetweenlands.client.event.handler;
 
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -35,9 +37,11 @@ public class DebugHandlerSharedLocation {
 //								GL11.glColor4f(1, 1, 1, 1);
 //								GL11.glLineWidth(1.2f);
 //
-//								float red = 0.1F + location.getLayer() / 5.0F;
-//								float green = 0.4F;
-//								float blue = 1.0F - location.getLayer() / 5.0F;
+//								Random rnd = new Random(location.getSeed());
+//								
+//								float red = rnd.nextFloat() / 2.0F + location.getLayer() / 5.0F;
+//								float green = rnd.nextFloat() / 2.0F;
+//								float blue = rnd.nextFloat() - location.getLayer() / 5.0F;
 //								float alpha = 0.08F;
 //
 //								GL11.glColor4f(red/1.5f, green/1.5f, blue/1.5f, alpha/1.5f);
