@@ -10,14 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.message.BLMessage;
-import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
-import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
-import thebetweenlands.common.message.clientbound.MessageSyncEntityCapabilities;
-import thebetweenlands.common.message.clientbound.MessageSyncEnvironmentEvent;
-import thebetweenlands.common.message.clientbound.MessageSyncSharedStorage;
-import thebetweenlands.common.message.clientbound.MessageSyncStaticAspects;
-import thebetweenlands.common.message.clientbound.MessageRemoveSharedStorage;
-import thebetweenlands.common.message.clientbound.MessageWeedwoodBushRustle;
+import thebetweenlands.common.message.clientbound.*;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -33,6 +26,7 @@ public class MessageRegistry {
 		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);
 		registerMessage(MessageSyncSharedStorage.class, Side.CLIENT);
 		registerMessage(MessageRemoveSharedStorage.class, Side.CLIENT);
+		registerMessage(MessageDruidTeleportParticles.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {
