@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
+import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 //MINE!!
 public class TestItem extends Item {
@@ -36,7 +37,12 @@ public class TestItem extends Item {
 		if(!world.isRemote) {
 			if(playerIn.isSneaking()) {
 				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-				List<SharedStorage> storages = worldStorage.getSharedStorageAt(SharedStorage.class, pos.getX(), pos.getZ());
+				List<SharedStorage> storages = worldStorage.getSharedStorageAt(SharedStorage.class, (storage) -> {
+					if(storage instanceof LocationStorage) {
+						return ((LocationStorage)storage).isInside(pos);
+					}
+					return true;
+				}, pos.getX(), pos.getZ());
 				for(SharedStorage storage : storages) {
 					worldStorage.removeSharedStorage(storage);
 				}
