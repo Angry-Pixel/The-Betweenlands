@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.misc;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,7 @@ public class ItemMob extends Item {
 		if (world.isRemote) return EnumActionResult.FAIL;
 		EntityLiving entity = null;
 		switch (name) {
-			case "fireFly":
+			case "firefly":
 				entity = new EntityFirefly(world);
 				break;
 			case "gecko":
@@ -38,11 +39,13 @@ public class ItemMob extends Item {
 		if (entity != null) {
 			BlockPos offset = pos.offset(facing);
 			entity.setLocationAndAngles(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F, 0.0F, 0.0F);
-			if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getUnlocalizedName()))) && !(stack.getDisplayName().equals(stack.getUnlocalizedName())))
+			if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getUnlocalizedName()))) && stack.hasDisplayName())
 				entity.setCustomNameTag(stack.getDisplayName());
 			world.spawnEntityInWorld(entity);
+			entity.playLivingSound();
+			player.setHeldItem(hand, null);
+			return EnumActionResult.SUCCESS;
 		}
-		player.setHeldItem(hand, null);
-		return EnumActionResult.SUCCESS;
+		return EnumActionResult.FAIL;
 	}
 }
