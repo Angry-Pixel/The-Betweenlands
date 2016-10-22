@@ -26,10 +26,10 @@ public class RenderItemCage extends TileEntitySpecialRenderer<TileEntityItemCage
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && tile != null) {
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(tile.getPos().getX() + 0.5D, tile.getPos().getY() + 0.5D, tile.getPos().getZ() + 0.5D, 
-					2f,
-					5.0f / 255.0f * 13.0F, 
-					40.0f / 255.0f * 13.0F, 
-					60.0f / 255.0f * 13.0F));
+					3.5f,
+					5.0f / 255.0f * 16.0F, 
+					40.0f / 255.0f * 16.0F, 
+					60.0f / 255.0f * 16.0F));
 		}
 
 		GlStateManager.pushMatrix();

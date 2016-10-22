@@ -32,6 +32,9 @@ import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
 import thebetweenlands.util.config.ConfigHandler;
 
+/**
+ * TODO: Make lighting and other spacial effects use "correct" deferred rendering
+ */
 public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private DepthBuffer depthBuffer;
 	private ResizableFramebuffer blitBuffer;
@@ -321,6 +324,14 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		return PROJECTION;
 	}
 
+	/**
+	 * Returns the gas particle geometry buffer
+	 * @return
+	 */
+	public GeometryBuffer getGasParticleBuffer() {
+		return this.gasParticlesBuffer;
+	}
+	
 	/**
 	 * Adds a dynamic light source for this frame
 	 *
@@ -613,18 +624,9 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
 			.render(partialTicks);
 		}
-
-		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-
-		this.gasParticlesBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
-		this.gasParticlesBuffer.clear(0, 0, 0, 0, 1);
-		this.gasParticlesBuffer.bind();
-
-		//TODO: Render gas particles
-
+		
+		//Update gas particles depth buffer
 		this.gasParticlesBuffer.updateDepthBuffer();
-
-		mainFramebuffer.bindFramebuffer(false);
 	}
 
 	private void updateStarfieldTexture(float partialTicks) {
@@ -636,5 +638,14 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
 		.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
 		.render(partialTicks);
+	}
+	
+	@Override
+	public void postRender(float partialTicks) {
+		//Clear gas particles buffer after rendering the shader for the next frame
+		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+		this.gasParticlesBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
+		this.gasParticlesBuffer.clear(0, 0, 0, 0, 1);
+		mainFramebuffer.bindFramebuffer(false);
 	}
 }

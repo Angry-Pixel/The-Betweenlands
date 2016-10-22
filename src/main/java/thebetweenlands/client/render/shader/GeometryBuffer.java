@@ -48,7 +48,7 @@ public class GeometryBuffer {
 	 */
 	public boolean updateDepthBuffer() {
 		boolean changed = false;
-		if(this.depthBuffer) {
+		if(this.depthBuffer && this.geometryBuffer != null) {
 			if(this.geometryDepthBuffer == null) {
 				this.geometryDepthBuffer = new DepthBuffer();
 				changed = true;

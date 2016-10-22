@@ -28,13 +28,13 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 
 	@Override
 	public void doRender(EntityGasCloud entity, double x, double y, double z, float yaw, float partialTicks) {
-		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+		/*if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ,
 					4.5f,
 					-1,
 					-1,
 					-1));
-		}
+		}*/
 
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
@@ -53,7 +53,34 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();
+		
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+		this.renderGasParticles(buffer, entity, partialTicks);
+		tessellator.draw();
+		
+		GlStateManager.depthMask(true);
+		GlStateManager.color(0.0F, 1.0F, 0.0F, 1.0F);
+		
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			//Render particles to gas fbo
+			ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer().bind();
+			
+			//GlStateManager.disableBlend();
+			
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+			this.renderGasParticles(buffer, entity, partialTicks);
+			tessellator.draw();
+			
+			//GlStateManager.enableBlend();
+			
+			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+		}
+
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		GlStateManager.enableLighting();
+	}
+	
+	private void renderGasParticles(VertexBuffer buffer, EntityGasCloud entity, float partialTicks) {
 		for (Object obj: entity.gasParticles) {
 			ParticleGasCloud particle = (ParticleGasCloud) obj;
 			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,
@@ -63,11 +90,6 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 					ActiveRenderInfo.getRotationYZ(),
 					ActiveRenderInfo.getRotationXY());
 		}
-		tessellator.draw();
-
-		GlStateManager.depthMask(true);
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		GlStateManager.enableLighting();
 	}
 
 	@Override

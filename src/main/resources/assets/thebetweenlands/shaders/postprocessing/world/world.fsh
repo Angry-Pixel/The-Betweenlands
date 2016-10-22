@@ -79,8 +79,6 @@ void main() {
     //A color multiplier that is applied to the final color
     float colorMultiplier = 1.0F;
     
-    //Set to true if fragment should be distorted
-    bool distortion = false;
     //Strength of distortion
     float distortionMultiplier = 0.0F;
     
@@ -100,7 +98,6 @@ void main() {
         if(dist < radius) {
             vec3 lightColor = light.color;
             if(lightColor.r == -1 && lightColor.g == -1 && lightColor.b == -1) {
-                distortion = true;
 				if(distortionMultiplier < 0.6F) {
 					distortionMultiplier += max(distortionMultiplier, 1.0F - pow(dist / radius, 4));
 				}
@@ -130,7 +127,6 @@ void main() {
         bool inBack = fragCamDist <= shieldFragCamDist;
         if(!inBack) {
             //Calculate distortion and color multiplier
-            distortion = true;
             //distortionMultiplier += 1.5F / (pow(shieldFragCamDist - fragCamDist, 2) / 100.0F + 1.0F);
             
             //Calculate color multiplier (affected by fog)
@@ -174,10 +170,8 @@ void main() {
         //Check if gas particle is behind or in front of the diffuse fragment
         bool inBack = fragCamDist <= gasFragCamDist;
         if(!inBack) {
-			color += applyFog(gasFragPos, gasParticlesBuffCol);
-			distortion = true;
-			distortionMultiplier += 1.5F;
-			/////WIP stuff/////
+			distortionMultiplier += 20.0F * applyFog(gasFragPos, gasParticlesBuffCol).a;
+			colorMultiplier += applyFog(gasFragPos, gasParticlesBuffCol).a;
 		}
 	}
 	
@@ -185,7 +179,7 @@ void main() {
     
     //////// Distortion and diffuse texel ////////
     vec4 sourceColor;
-    if(!distortion) {
+    if(distortionMultiplier <= 0.0F) {
         sourceColor = vec4(texture2D(s_diffuse, v_texCoord));
         color += sourceColor;
     } else {
