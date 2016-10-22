@@ -44,7 +44,7 @@ public class ItemVoodooDoll extends Item {
                 player.addChatMessage(new TextComponentTranslation("chat.voodoo.no.mobs"));
             } else if (attacked) {
                 stack.damageItem(1, player);
-                world.playSound(player, player.getPosition(), SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 1.0F, 1.0F - world.rand.nextFloat() * 0.3F);
+                world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 1.0F, 1.0F - world.rand.nextFloat() * 0.3F);
             }
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);
