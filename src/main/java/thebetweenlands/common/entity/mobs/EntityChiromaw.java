@@ -39,8 +39,18 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	protected void initEntityAI() {
 		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
 			@Override
+			protected double getRandomX(Random rand) {
+				return this.entity.posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 5.0F);
+			}
+
+			@Override
 			protected double getRandomY(Random rand) {
-				return this.entity.posY + (rand.nextFloat() * 1.5D - 1.0D) * 16.0D;
+				return this.entity.posY + (rand.nextFloat() * 1.75D - 1.0D) * 5.0D;
+			}
+
+			@Override
+			protected double getRandomZ(Random rand) {
+				return this.entity.posZ + (double)((rand.nextFloat() * 2.0F - 1.0F) * 5.0F);
 			}
 
 			@Override
@@ -89,24 +99,26 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 		super.updateAITasks();
 
 		if (getIsHanging()) {
-			if (!worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ))).isNormalCube()) {
-				setIsHanging(false);
-				this.worldObj.playEvent((EntityPlayer)null, 1025, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
-			} else {
-				if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null) {
+			if(!this.worldObj.isRemote) {
+				this.moveHelper.setMoveTo(this.posX, this.posY + 0.5D, this.posZ, 0);
+
+				if (this.rand.nextInt(250) == 0 || !this.worldObj.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
 					setIsHanging(false);
-					this.worldObj.playEvent((EntityPlayer)null, 1025, new BlockPos((int) posX, (int) posY, (int) posZ), 0);
+					this.worldObj.playEvent(null, 1025, this.getPosition(), 0);
+				} else if(this.getAttackTarget() != null) {
+					setIsHanging(false);
+					this.worldObj.playEvent(null, 1025, this.getPosition(), 0);
 				}
 			}
 		} else {
 			if (this.getAttackTarget() != null) {
 				double distanceX = this.getAttackTarget().posX - this.posX;
 				double distanceZ = this.getAttackTarget().posZ - this.posZ;
-				renderYawOffset = rotationYaw = -((float) Math.atan2(distanceX, distanceZ)) * 180.0F / (float) Math.PI;
+				this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(distanceX, distanceZ)) * 180.0F / (float) Math.PI;
 			} else {
-				renderYawOffset = rotationYaw = -((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI;
+				this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
 
-				if (rand.nextInt(20) == 0 && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), (int) posY + 1, MathHelper.floor_double(posZ))).isNormalCube()) {
+				if(!this.worldObj.isRemote && this.rand.nextInt(20) == 0 && worldObj.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
 					setIsHanging(true);
 				}
 			}
