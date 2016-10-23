@@ -112,7 +112,11 @@ public class WorldRenderHandler {
 			EntityFirefly entity = e.getKey().getValue();
 			renderer.renderFirefly(entity, pos.x, pos.y, pos.z, event.getPartialTicks());
 			if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ,
+				double interpX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * event.getPartialTicks();
+				double interpY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * event.getPartialTicks();
+				double interpZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * event.getPartialTicks();
+				
+				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ,
 						entity.worldObj.rand.nextFloat() * 0.1f + 7.0f,
 						16.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.4f,
 						12.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.1f,

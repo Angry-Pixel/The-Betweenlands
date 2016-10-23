@@ -2,14 +2,15 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
 import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -17,32 +18,111 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.entity.ParticleGasCloud;
+import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
+import thebetweenlands.common.entity.movement.FlightMoveHelper;
 
-//TODO: Rewrite with new AI and movement (see EntityGhast)
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	public static final DataParameter<Integer> GAS_CLOUD_COLOR = EntityDataManager.createKey(EntityGasCloud.class, DataSerializers.VARINT);
 
 	public List<Object> gasParticles = new ArrayList<>();
 
-	private int courseChangeCooldown;
-	private double waypointX;
-	private double waypointY;
-	private double waypointZ;
-
-	private double aboveLayer = 6.0D;
+	protected double aboveLayer = 6.0D;
 
 	public EntityGasCloud(World world) {
 		super(world);
 		this.setSize(1.75F, 1.75F);
 		this.noClip = true;
 		this.ignoreFrustumCheck = true;
+		this.moveHelper = new FlightMoveHelper(this) {
+			@Override
+			protected boolean isNotColliding(double x, double y, double z, double step) {
+				double stepX = (x - this.entity.posX) / step;
+				double stepY = (y - this.entity.posY) / step;
+				double stepZ = (z - this.entity.posZ) / step;
+
+				double cx = this.entity.posX;
+				double cy = this.entity.posY;
+				double cz = this.entity.posZ;
+
+				boolean canPassSolidBlocks = ((EntityGasCloud) this.entity).getAttackTarget() != null;
+
+				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
+
+				for(int i = 1; (double)i < step; ++i) {
+					cx += stepX;
+					cy += stepY;
+					cz += stepZ;
+
+					checkPos.setPos(cx, cy, cz);
+
+					if(this.entity.getEntityWorld().isBlockLoaded(checkPos)) {
+						IBlockState state = this.entity.getEntityWorld().getBlockState(checkPos);
+
+						if ((!canPassSolidBlocks && state.isOpaqueCube()) || state.getMaterial().isLiquid()) {
+							return false;
+						}
+					} else {
+						return false;
+					}
+				}
+
+				checkPos.release();
+
+				return true;
+			}
+		};
+	}
+
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
+			@Override
+			protected double getRandomY(Random rand) {
+				if(this.entity.posY <= 0.0D) {
+					return this.entity.posY + 16.0F;
+				}
+
+				int worldHeight = 0;
+
+				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
+
+				for(int yo = 0; yo < MathHelper.ceiling_double_int(EntityGasCloud.this.aboveLayer); yo++) {
+					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
+
+					if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
+						worldHeight = checkPos.getY();
+						break;
+					}
+				}
+
+				checkPos.release();
+
+				if(this.entity.posY > worldHeight + EntityGasCloud.this.aboveLayer) {
+					return this.entity.posY + (-rand.nextFloat() * 2.0F) * 16.0F;
+				} else {
+					float rndFloat = rand.nextFloat() * 2.0F - 1.0F;
+					if(rndFloat > 0.0D) {
+						double maxRange = worldHeight + EntityGasCloud.this.aboveLayer - this.entity.posY;
+						return this.entity.posY + (-rand.nextFloat() * 2.0F) * maxRange;
+					} else {
+						return this.entity.posY + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
+					}
+				}
+			}
+
+			@Override
+			protected double getFlightSpeed() {
+				return 0.015D;
+			}
+		});
+		this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
 	}
 
 	public void setGasColor(int color) {
@@ -67,74 +147,6 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	}
 
 	@Override
-	protected void updateAITasks() {
-		if (!this.worldObj.isRemote && this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL) {
-			this.setDead();
-		}
-
-		super.updateAITasks();
-
-		if (this.worldObj.isRemote) {
-			return;
-		}
-
-		double dx = this.waypointX - this.posX;
-		double dy = this.waypointY - this.posY;
-		double dz = this.waypointZ - this.posZ;
-		double dist = dx * dx + dy * dy + dz * dz;
-
-		if (dist < 1.0D || dist > 3600.0D) {
-			this.waypointX = this.posX + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
-			this.waypointY = this.posY + (this.rand.nextFloat() * 2.0F - 1.5F) * 6.0F;
-			this.waypointZ = this.posZ + (this.rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
-		}
-
-		float speed = 0.02F;
-
-		EntityPlayer closestTarget = this.worldObj.getNearestAttackablePlayer(this, 16.0D, 16.0D);
-		if (closestTarget != null) {
-			this.waypointX = closestTarget.posX;
-			this.waypointY = closestTarget.posY;
-			this.waypointZ = closestTarget.posZ;
-			speed = 0.05F;
-		}
-
-		if (this.courseChangeCooldown-- <= 0) {
-			this.courseChangeCooldown += this.rand.nextInt(5) + 2;
-			dist = Math.min(MathHelper.sqrt_double(dist), 23); //Limit steps
-
-			if (this.isCourseTraversable(this.waypointX, this.waypointY, this.waypointZ, dist, closestTarget != null)) {
-				this.motionX += dx / dist * speed;
-				this.motionY += dy / dist * speed;
-				this.motionZ += dz / dist * speed;
-			} else {
-				this.waypointX = this.posX;
-				this.waypointY = this.posY;
-				this.waypointZ = this.posZ;
-			}
-		}
-	}
-
-	private boolean isCourseTraversable(double x, double y, double z, double step, boolean canPassSolidBlocks) {
-		double dx = (this.waypointX - this.posX) / step;
-		double dy = (this.waypointY - this.posY) / step;
-		double dz = (this.waypointZ - this.posZ) / step;
-		MutableBlockPos checkPos = new MutableBlockPos();
-		for (int i = 1; i < step; ++i) {
-			checkPos.setPos(this.posX + dx * step, this.posY + dy * step, this.posZ + dz * step);
-			if(this.worldObj.isBlockLoaded(checkPos)) {
-				IBlockState state = this.worldObj.getBlockState(checkPos);
-				if ((!canPassSolidBlocks && state.isOpaqueCube()) || state.getMaterial().isLiquid()) {
-					return false;
-				}
-			} else {
-				return false;
-			}
-		}
-		return true;
-	}
-
-	@Override
 	public boolean getCanSpawnHere() {
 		return super.getCanSpawnHere() && this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
@@ -147,6 +159,10 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		if (!this.worldObj.isRemote && this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL) {
+			this.setDead();
+		}
 
 		if (this.worldObj.isRemote) {
 			double x = this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
@@ -168,12 +184,13 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 					this.gasParticles.remove(i);
 				}
 			}
+		}
+
+		if (this.isInWater()) {
+			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.1D);
 		} else {
-			if (this.isInWater()) {
-				this.motionY += 0.01D;
-				this.waypointX = this.posX;
-				this.waypointY = this.posY + 0.1D;
-				this.waypointZ = this.posZ;
+			if(this.getAttackTarget() != null) {
+				this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, 0.06D);
 			}
 		}
 
