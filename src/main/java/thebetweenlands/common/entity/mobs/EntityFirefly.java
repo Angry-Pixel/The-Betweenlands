@@ -25,7 +25,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	protected void initEntityAI() {
 		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
 			@Override
-			protected double getRandomY(Random rand) {
+			protected double getTargetY(Random rand, double distanceMultiplier) {
 				int worldHeight = MathHelper.floor_double(EntityFirefly.this.aboveLayer);
 
 				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
@@ -33,6 +33,9 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 				for(int yo = 0; yo < MathHelper.ceiling_double_int(EntityFirefly.this.aboveLayer); yo++) {
 					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
 
+					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
+						return this.entity.posY;
+					
 					if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
 						worldHeight = checkPos.getY();
 						break;
@@ -42,14 +45,14 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 				checkPos.release();
 
 				if(this.entity.posY > worldHeight + EntityFirefly.this.aboveLayer) {
-					return this.entity.posY + (-rand.nextFloat() * 2.0F) * 16.0F;
+					return this.entity.posY + (-rand.nextFloat() * 2.0F) * 16.0F * distanceMultiplier;
 				} else {
 					float rndFloat = rand.nextFloat() * 2.0F - 1.0F;
 					if(rndFloat > 0.0D) {
 						double maxRange = worldHeight + EntityFirefly.this.aboveLayer - this.entity.posY;
-						return this.entity.posY + (-rand.nextFloat() * 2.0F) * maxRange;
+						return this.entity.posY + (-rand.nextFloat() * 2.0F) * maxRange * distanceMultiplier;
 					} else {
-						return this.entity.posY + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F;
+						return this.entity.posY + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier;
 					}
 				}
 			}

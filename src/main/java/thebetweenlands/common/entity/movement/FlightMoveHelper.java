@@ -7,6 +7,7 @@ import net.minecraft.util.math.MathHelper;
 
 public class FlightMoveHelper extends EntityMoveHelper {
 	protected int courseChangeCooldown;
+	protected boolean blocked = false;
 
 	public FlightMoveHelper(EntityLiving entity) {
 		super(entity);
@@ -29,11 +30,21 @@ public class FlightMoveHelper extends EntityMoveHelper {
 					this.entity.motionX += dx / distSq * this.speed;
 					this.entity.motionY += dy / distSq * this.speed;
 					this.entity.motionZ += dz / distSq * this.speed;
+					this.blocked = false;
 				} else {
 					this.action = EntityMoveHelper.Action.WAIT;
+					this.blocked = true;
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns whether the path is currently blocked
+	 * @return
+	 */
+	public boolean isBlocked() {
+		return this.blocked;
 	}
 
 	/**

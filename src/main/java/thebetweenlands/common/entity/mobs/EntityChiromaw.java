@@ -39,18 +39,18 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	protected void initEntityAI() {
 		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
 			@Override
-			protected double getRandomX(Random rand) {
-				return this.entity.posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 5.0F);
+			protected double getTargetX(Random rand, double distanceMultiplier) {
+				return this.entity.posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 10.0F * distanceMultiplier);
 			}
 
 			@Override
-			protected double getRandomY(Random rand) {
-				return this.entity.posY + (rand.nextFloat() * 1.75D - 1.0D) * 5.0D;
+			protected double getTargetY(Random rand, double distanceMultiplier) {
+				return this.entity.posY + (rand.nextFloat() * 1.75D - 1.0D) * 10.0D * distanceMultiplier;
 			}
 
 			@Override
-			protected double getRandomZ(Random rand) {
-				return this.entity.posZ + (double)((rand.nextFloat() * 2.0F - 1.0F) * 5.0F);
+			protected double getTargetZ(Random rand, double distanceMultiplier) {
+				return this.entity.posZ + (double)((rand.nextFloat() * 2.0F - 1.0F) * 10.0F * distanceMultiplier);
 			}
 
 			@Override
