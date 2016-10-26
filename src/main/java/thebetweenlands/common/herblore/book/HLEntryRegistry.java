@@ -7,6 +7,8 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.book.widgets.ButtonWidget;
 import thebetweenlands.common.herblore.book.widgets.PictureWidget;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -31,7 +33,7 @@ public class HLEntryRegistry {
     @SideOnly(Side.CLIENT)
     public static void init() {
         initAspectEntries();
-        //initElixirEntries();
+        initElixirEntries();
     }
 
     /**
@@ -107,21 +109,21 @@ public class HLEntryRegistry {
         CATEGORIES.add(aspectCategory);
     }
 
-    /*TODO add when elixirs are added
     @SideOnly(Side.CLIENT)
     public static void initElixirEntries() {
         elixirPages.clear();
         ArrayList<Page> infusionPages = new ArrayList<>();
         ArrayList<Page> antiInfusionPages = new ArrayList<>();
 
+        /*TODO add when elixir item is added
         for (ElixirEffect effect : ElixirEffectRegistry.getEffects()) {
             if (effect != ElixirEffectRegistry.EFFECT_PETRIFY && effect != ElixirEffectRegistry.EFFECT_ISOLATEDSENSES && effect != ElixirEffectRegistry.EFFECT_LIMBLESS && effect != ElixirEffectRegistry.EFFECT_DEFORMED && effect != ElixirEffectRegistry.EFFECT_HUNTERSSENSEMASTER && effect != ElixirEffectRegistry.EFFECT_WINGS && effect != ElixirEffectRegistry.EFFECT_GILLSGROWTH) {
                 if (effect.isAntiInfusion())
-                    antiInfusionPages.addAll(PageCreators.elixirPages(BLItemRegistry.elixir.getElixirItem(effect, 1, 1, 0), manualType, effect));
+                    antiInfusionPages.addAll(PageCreators.elixirPages(ItemRegistry.ELIXIR.getElixirItem(effect, 1, 1, 0), manualType, effect));
                 else
-                    infusionPages.addAll(PageCreators.elixirPages(BLItemRegistry.elixir.getElixirItem(effect, 1, 1, 0), manualType, effect));
+                    infusionPages.addAll(PageCreators.elixirPages(ItemRegistry.ELIXIR.getElixirItem(effect, 1, 1, 0), manualType, effect));
             }
-        }
+        }*/
 
         ArrayList<Page> temp = new ArrayList<>();
         while (infusionPages.size() > 0) {
@@ -151,7 +153,7 @@ public class HLEntryRegistry {
         }
         infusionPages.clear();
         infusionPages.addAll(temp);
-        infusionPages.add(0, new Page("infusions", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manualHL.png", 122, 150, 16, 451, 1024.0D, 1024.0D)).setPageNumber(1));
+        infusionPages.add(0, new Page("infusions", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 16, 451, 1024.0D, 1024.0D)).setPageNumber(1));
         temp.clear();
         while (antiInfusionPages.size() > 0) {
             Page currentFirst = null;
@@ -180,11 +182,11 @@ public class HLEntryRegistry {
         }
         antiInfusionPages.clear();
         antiInfusionPages.addAll(temp);
-        antiInfusionPages.add(0, new Page("infusions", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manualHL.png", 122, 150, 162, 451, 1024.0D, 1024.0D)).setPageNumber(infusionPages.size()));
+        antiInfusionPages.add(0, new Page("infusions", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 162, 451, 1024.0D, 1024.0D)).setPageNumber(infusionPages.size()));
         elixirPages.clear();
         elixirPages.addAll(infusionPages);
         elixirPages.addAll(antiInfusionPages);
         elixirCategory = new ManualCategory(elixirPages, 2, manualType, "elixirCategory");
         CATEGORIES.add(elixirCategory);
-    }*/
+    }
 }

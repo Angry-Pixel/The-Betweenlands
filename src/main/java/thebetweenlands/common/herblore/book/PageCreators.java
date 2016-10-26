@@ -2,6 +2,7 @@ package thebetweenlands.common.herblore.book;
 
 import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -10,6 +11,8 @@ import thebetweenlands.common.herblore.book.widgets.*;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextWidget;
+import thebetweenlands.common.herblore.elixir.ElixirRecipes;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.util.TranslationHelper;
 
 import java.util.ArrayList;
@@ -167,7 +170,7 @@ public class PageCreators {
         return newPages;
     }
 
-    /*TODO add when Elixirs are added
+
     public static ArrayList<Page> elixirPages(ItemStack item, Item manualType, ElixirEffect effect) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
@@ -175,12 +178,12 @@ public class PageCreators {
         widgets.add(new ItemWidget(18, 12, item, 1f));
         widgets.add(new TextWidget(38, 14, item.getDisplayName(), true));
         height += 32;
-        TextContainer textContainer = new TextContainer(114, 130, I18n.translateToLocal("manual." + item.getUnlocalizedName() + ".description"), Minecraft.getMinecraft().fontRenderer);
+        TextContainer textContainer = new TextContainer(114, 130, TranslationHelper.translateToLocal("manual." + item.getUnlocalizedName() + ".description"), Minecraft.getMinecraft().fontRendererObj);
         textContainer = parseTextContainer(textContainer);
         Page temp = null;
         if (textContainer.getPages().size() > 1) {
             widgets.add(new TextWidget(15, height, "manual." + item.getUnlocalizedName() + ".description", 0, 114, 130));
-            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetsBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).addItem(item));
+            newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).addItem(item));
             widgets.clear();
             widgets.add(new TextWidget(15, 14, "manual." + item.getUnlocalizedName() + ".description", 1, 114, 130));
             if (ElixirRecipes.getFromEffect(effect) != null && ElixirRecipes.getFromEffect(effect).aspects != null) {
@@ -206,7 +209,7 @@ public class PageCreators {
         }
 
         return newPages;
-    }*/
+    }
 
     /**
      * Parses the text container. Used to get the right width and height of the container
