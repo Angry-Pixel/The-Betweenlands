@@ -406,7 +406,7 @@ public class BlockRegistry {
 	public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
 	public static final Block GECKO_CAGE = new BlockGeckoCage();
 	public static final Block INFUSER = new BlockInfuser();
-	
+	public static final Block MORTAR = new BlockMortar();
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

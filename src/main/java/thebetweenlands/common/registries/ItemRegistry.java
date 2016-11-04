@@ -205,7 +205,8 @@ public class ItemRegistry {
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
     public static final Item GREEN_MIDDLE_GEM = new ItemGem(CircleGemType.GREEN);
-
+    public static final Item PESTLE = new ItemPestle();
+    public static final Item LIFE_CRYSTAL = new ItemLifeCrystal();
     public static final Item TEST_ITEM = new TestItem();
 
     public static final Item NET = new ItemNet();
