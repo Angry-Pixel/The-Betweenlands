@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.util.TranslationHelper;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public class ItemLifeCrystal extends Item {
                 return 1;
             return 0;
         });
+        setCreativeTab(BLCreativeTabs.ITEMS);
     }
 
     @SuppressWarnings({"unchecked", "rawtypes"})

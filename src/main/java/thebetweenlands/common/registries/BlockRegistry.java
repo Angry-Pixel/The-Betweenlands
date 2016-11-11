@@ -407,6 +407,7 @@ public class BlockRegistry {
 	public static final Block GECKO_CAGE = new BlockGeckoCage();
 	public static final Block INFUSER = new BlockInfuser();
 	public static final Block MORTAR = new BlockMortar();
+	public static final Block ANIMATOR = new BlockAnimator();
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

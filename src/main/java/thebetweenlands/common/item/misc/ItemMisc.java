@@ -85,7 +85,8 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		SHOCKWAVE_SWORD_4(36),
 		PYRAD_FLAME(37),
 		AMULET_SOCKET(38),
-		SCABYST(39);
+		SCABYST(39),
+		SCROLL(40);
 
 		private final int id;
 		private final String unlocalizedName;

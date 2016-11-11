@@ -60,6 +60,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         }
         ItemStack output = PestleAndMortarRecipe.getOutput(inventory[0]);
         if (pestleInstalled() && !outputIsFull()) {
+
             if (isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
                 if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
                     progress++;

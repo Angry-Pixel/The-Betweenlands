@@ -28,6 +28,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityGeckoCage.class, "gecko_cage");
 		registerTileEntity(TileEntityInfuser.class, "infuser");
 		registerTileEntity(TileEntityMortar.class, "mortar");
+		registerTileEntity(TileEntityAnimator.class, "animator");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

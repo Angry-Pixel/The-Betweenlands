@@ -11,17 +11,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
-import thebetweenlands.common.inventory.container.ContainerBLFurnace;
-import thebetweenlands.common.inventory.container.ContainerDruidAltar;
-import thebetweenlands.common.inventory.container.ContainerPurifier;
-import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityBLDualFurnace;
-import thebetweenlands.common.tile.TileEntityBLFurnace;
-import thebetweenlands.common.tile.TileEntityDruidAltar;
-import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.common.inventory.container.*;
+import thebetweenlands.common.tile.*;
 
 public class CommonProxy implements IGuiHandler {
     public static final int GUI_DRUID_ALTAR = 1;
@@ -70,6 +61,16 @@ public class CommonProxy implements IGuiHandler {
                     return new ContainerBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tile);
                 }
                 break;
+            }
+            case GUI_PESTLE_AND_MORTAR: {
+                if (tile instanceof TileEntityMortar) {
+                    return new ContainerMortar(player.inventory, (TileEntityMortar) tile);
+                }
+                break;
+            }
+            case GUI_ANIMATOR: {
+                if (tile instanceof TileEntityAnimator)
+                    return new ContainerAnimator(player.inventory, (TileEntityAnimator) tile);
             }
         }
         return null;
@@ -123,6 +124,7 @@ public class CommonProxy implements IGuiHandler {
     public void setCustomStateMap(Block block, StateMap stateMap) {
 
     }
+
     public void updateWispParticles(TileEntityWisp te) {
     }
 
