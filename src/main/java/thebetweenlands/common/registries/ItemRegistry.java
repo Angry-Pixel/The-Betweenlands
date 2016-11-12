@@ -19,9 +19,7 @@ import thebetweenlands.common.item.armor.ItemBLArmor;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.armor.ItemSkullMask;
 import thebetweenlands.common.item.food.*;
-import thebetweenlands.common.item.herblore.ItemCrushed;
-import thebetweenlands.common.item.herblore.ItemManualHL;
-import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.herblore.*;
 import thebetweenlands.common.item.misc.*;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
@@ -39,8 +37,10 @@ import java.util.Locale;
 import java.util.Map;
 
 public class ItemRegistry {
+    public final static List<Item> ITEMS = new ArrayList<Item>();
     private ItemRegistry() {
     }
+
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
@@ -213,7 +213,10 @@ public class ItemRegistry {
     public static final Item GECKO = new ItemMob("gecko");
     public static final Item FIREFLY = new ItemMob("firefly");
 
-    public final static List<Item> ITEMS = new ArrayList<Item>();
+
+    public final static ItemDentrothystVial DENTROTHYST_VIAL = new ItemDentrothystVial();
+    public static final ItemAspectVial ASPECT_VIAL = new ItemAspectVial();
+    public static final Item WEEDWOOD_BUCKET_INFUSION = new ItemWeedwoodBucketInfusion();
 
     public static void preInit() {
         try {

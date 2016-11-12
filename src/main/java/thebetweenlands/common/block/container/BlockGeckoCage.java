@@ -12,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -28,6 +29,7 @@ import thebetweenlands.common.herblore.aspect.AspectManager.AspectItem;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer.AspectDiscovery;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 
 public class BlockGeckoCage extends BlockContainer {
@@ -81,9 +83,9 @@ public class BlockGeckoCage extends BlockContainer {
 				return false;
 
 			if(heldItemStack != null) {
-				//TODO: Requires gecko item
-				/*Item heldItem = heldItemStack.getItem();
-				if(heldItem == BLItemRegistry.gecko) {
+
+				Item heldItem = heldItemStack.getItem();
+				if(heldItem == ItemRegistry.GECKO) {
 					if(!tile.hasGecko()) {
 						tile.addGecko(12);
 						if(!player.capabilities.isCreativeMode)
@@ -91,7 +93,7 @@ public class BlockGeckoCage extends BlockContainer {
 						return true;
 					}
 					return false;
-				}*/
+				}
 				if(tile.getAspectType() == null) {
 					if(tile.hasGecko()) {
 						if(DiscoveryContainer.hasDiscoveryProvider(player)) {

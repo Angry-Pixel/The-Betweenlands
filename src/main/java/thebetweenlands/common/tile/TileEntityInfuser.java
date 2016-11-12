@@ -1,6 +1,7 @@
 package thebetweenlands.common.tile;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,6 +28,7 @@ import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.ColorUtils;
 
@@ -35,502 +37,505 @@ import java.util.List;
 
 //TODO: Send resulting elixir recipe with the NBT
 public class TileEntityInfuser extends TileEntityBasicInventory implements IFluidHandler, ITickable {
-	public static final int MAX_INGREDIENTS = 6;
+    public static final int MAX_INGREDIENTS = 6;
 
-	public final FluidTank waterTank;
+    public final FluidTank waterTank;
 
-	private final IFluidTankProperties[] properties = new IFluidTankProperties[] { 
-			new IFluidTankProperties() {
-				@Override
-				public FluidStack getContents() {
-					return TileEntityInfuser.this.waterTank.getFluid();
-				}
+    private final IFluidTankProperties[] properties = new IFluidTankProperties[]{
+            new IFluidTankProperties() {
+                @Override
+                public FluidStack getContents() {
+                    return TileEntityInfuser.this.waterTank.getFluid();
+                }
 
-				@Override
-				public int getCapacity() {
-					return TileEntityInfuser.this.waterTank.getCapacity();
-				}
+                @Override
+                public int getCapacity() {
+                    return TileEntityInfuser.this.waterTank.getCapacity();
+                }
 
-				@Override
-				public boolean canFill() {
-					return TileEntityInfuser.this.waterTank.canFill();
-				}
+                @Override
+                public boolean canFill() {
+                    return TileEntityInfuser.this.waterTank.canFill();
+                }
 
-				@Override
-				public boolean canDrain() {
-					return TileEntityInfuser.this.waterTank.canDrain();
-				}
+                @Override
+                public boolean canDrain() {
+                    return TileEntityInfuser.this.waterTank.canDrain();
+                }
 
-				@Override
-				public boolean canFillFluidType(FluidStack fluidStack) {
-					return TileEntityInfuser.this.waterTank.canFillFluidType(fluidStack);
-				}
+                @Override
+                public boolean canFillFluidType(FluidStack fluidStack) {
+                    return TileEntityInfuser.this.waterTank.canFillFluidType(fluidStack);
+                }
 
-				@Override
-				public boolean canDrainFluidType(FluidStack fluidStack) {
-					return TileEntityInfuser.this.waterTank.canDrainFluidType(fluidStack);
-				}
-			}
-	};
+                @Override
+                public boolean canDrainFluidType(FluidStack fluidStack) {
+                    return TileEntityInfuser.this.waterTank.canDrainFluidType(fluidStack);
+                }
+            }
+    };
 
-	private int infusionTime = 0;
-	private int stirProgress = 90;
-	private int temp = 0;
-	private int evaporation = 0;
-	private int itemBob = 0;
-	private boolean countUp = true;
-	private boolean hasInfusion = false;
-	private boolean hasCrystal = false;
-	private float crystalVelocity = 0.0F;
-	private float crystalRotation = 0.0F;
-	private ElixirRecipe infusingRecipe = null;
-	private boolean updateRecipe = false;
+    private int infusionTime = 0;
+    private int stirProgress = 90;
+    private int temp = 0;
+    private int evaporation = 0;
+    private int itemBob = 0;
+    private boolean countUp = true;
+    private boolean hasInfusion = false;
+    private boolean hasCrystal = false;
+    private float crystalVelocity = 0.0F;
+    private float crystalRotation = 0.0F;
+    private ElixirRecipe infusingRecipe = null;
+    private boolean updateRecipe = false;
 
-	/** 0 = no progress, 1 = in progress, 2 = finished, 3 = failed **/
-	private int currentInfusionState = 0;
-	private int prevInfusionState = 0;
-	private int infusionColorGradientTicks = 0;
+    /**
+     * 0 = no progress, 1 = in progress, 2 = finished, 3 = failed
+     **/
+    private int currentInfusionState = 0;
+    private int prevInfusionState = 0;
+    private int infusionColorGradientTicks = 0;
 
-	public float[] prevInfusionColor = new float[4];
-	public float[] currentInfusionColor = new float[4];
+    public float[] prevInfusionColor = new float[4];
+    public float[] currentInfusionColor = new float[4];
 
-	public TileEntityInfuser() {
-		super(MAX_INGREDIENTS + 2, "infuser");
-		this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 3);
-		this.waterTank.setTileEntity(this);
-	}
+    public TileEntityInfuser() {
+        super(MAX_INGREDIENTS + 2, "infuser");
+        this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 3);
+        this.waterTank.setTileEntity(this);
+    }
 
-	@Override
-	public IFluidTankProperties[] getTankProperties() {
-		return this.properties;
-	}
+    @Override
+    public IFluidTankProperties[] getTankProperties() {
+        return this.properties;
+    }
 
-	@Override
-	public int fill(FluidStack resource, boolean doFill) {
-		int filled = this.waterTank.fill(resource, false);
-		if(filled == resource.amount && doFill) {
-			this.waterTank.fill(resource, true);
-			if(temp >= 3) {
-				temp = temp - temp / 3;
-				evaporation = 0;
-			}
+    @Override
+    public int fill(FluidStack resource, boolean doFill) {
+        int filled = this.waterTank.fill(resource, false);
+        if (filled == resource.amount && doFill) {
+            this.waterTank.fill(resource, true);
+            if (temp >= 3) {
+                temp = temp - temp / 3;
+                evaporation = 0;
+            }
 
-			if(doFill) {
-				this.markDirty();
-				IBlockState stat = this.worldObj.getBlockState(this.pos);
-				this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
-			}
-		}
-		return filled;
-	}
+            if (doFill) {
+                this.markDirty();
+                IBlockState stat = this.worldObj.getBlockState(this.pos);
+                this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+            }
+        }
+        return filled;
+    }
 
-	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		return null;
-	}
+    @Override
+    public FluidStack drain(FluidStack resource, boolean doDrain) {
+        return null;
+    }
 
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		return null;
-	}
+    @Override
+    public FluidStack drain(int maxDrain, boolean doDrain) {
+        return null;
+    }
 
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
+    @Override
+    public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+        return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+    }
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
-			return (T) this;
-		return super.getCapability(capability, facing);
-	}
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+        if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return (T) this;
+        return super.getCapability(capability, facing);
+    }
 
-	@Override
-	public void update() {
-		BlockPos pos = this.getPos();
+    @Override
+    public void update() {
+        BlockPos pos = this.getPos();
 
-		if(this.updateRecipe) {
-			this.updateInfusingRecipe();
-			this.updateRecipe = false;
-		}
-		boolean updateBlock = false;
-		if(this.hasInfusion && this.infusingRecipe != null) {
-			if(!this.worldObj.isRemote) {
-				this.infusionTime++;
-			} else {
-				if(this.prevInfusionState != this.currentInfusionState) {
-					if(this.currentInfusionState == 2) {
-						this.worldObj.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
-					}
-					this.prevInfusionColor = this.currentInfusionColor;
-					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
-				} else {
-					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
-				}
-			}
-			this.prevInfusionState = this.currentInfusionState;
-			if(!this.worldObj.isRemote) {
-				if(this.infusionTime > this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
-					//fail
-					if(this.currentInfusionState != 3)
-						updateBlock = true;
-					this.currentInfusionState = 3;
-				} else if(this.infusionTime > this.infusingRecipe.idealInfusionTime - this.infusingRecipe.infusionTimeVariation
-						&& this.infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
-					//finished
-					if(this.currentInfusionState != 2)
-						updateBlock = true;
-					this.currentInfusionState = 2;
-				} else {
-					//progress
-					if(this.currentInfusionState != 1)
-						updateBlock = true;
-					this.currentInfusionState = 1;
-				}
-			}
-			if(this.infusionColorGradientTicks > 0) {
-				this.infusionColorGradientTicks++;
-			}
-			if(!this.worldObj.isRemote && this.currentInfusionState != prevInfusionState) {
-				//start gradient animation
-				this.infusionColorGradientTicks = 1;
-				updateBlock = true;
-			}
-			if(!this.worldObj.isRemote && this.infusionColorGradientTicks > 30) {
-				this.infusionColorGradientTicks = 0;
-				updateBlock = true;
-			}
-			if(this.worldObj.isRemote && this.infusionColorGradientTicks > 0) {
-				if(this.worldObj.isRemote && this.currentInfusionState == 2) {
-					for(int i = 0; i < 10; i++) {
-						double x = pos.getX() + 0.25F + this.worldObj.rand.nextFloat() * 0.5F;
-						double z = pos.getZ() + 0.25F + this.worldObj.rand.nextFloat() * 0.5F;
-						BLParticles.STEAM_PURIFIER.spawn(this.worldObj, x, pos.getY() + 1.0D - this.worldObj.rand.nextFloat() * 0.2F, z);
-					}
-				}
-			}
-		} else {
-			if(this.currentInfusionState != 0)
-				updateBlock = true;
-			this.currentInfusionState = 0;
-			this.infusionTime = 0;
-			this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
-			this.prevInfusionColor = this.currentInfusionColor;
-		}
-		if(!this.worldObj.isRemote && updateBlock) {
-			this.markForUpdate();
-		}
-		if (worldObj.isRemote) {
-			if (isValidCrystalInstalled()) {
-				crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
-				crystalRotation += this.crystalVelocity;
-				if (crystalRotation >= 360.0F) {
-					crystalRotation -= 360.0F;
-				} else if (this.crystalRotation <= 360.0F) {
-					this.crystalRotation += 360.0F;
-				}
-				if (Math.abs(crystalVelocity) <= 1.0F && this.getWorld().rand.nextInt(15) == 0) {
-					crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
-				}
-			}
-			if(countUp && itemBob <= 20) {
-				itemBob++;
-				if(itemBob == 20)
-					countUp = false;
-			}
-			if(!countUp && itemBob >= 0) {
-				itemBob--;
-				if(itemBob == 0)
-					countUp = true;
-			}
-			return;
-		}
+        if (this.updateRecipe) {
+            this.updateInfusingRecipe();
+            this.updateRecipe = false;
+        }
+        boolean updateBlock = false;
+        if (this.hasInfusion && this.infusingRecipe != null) {
+            if (!this.worldObj.isRemote) {
+                this.infusionTime++;
+            } else {
+                if (this.prevInfusionState != this.currentInfusionState) {
+                    if (this.currentInfusionState == 2) {
+                        this.worldObj.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
+                    }
+                    this.prevInfusionColor = this.currentInfusionColor;
+                    this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+                } else {
+                    this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+                }
+            }
+            this.prevInfusionState = this.currentInfusionState;
+            if (!this.worldObj.isRemote) {
+                if (this.infusionTime > this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+                    //fail
+                    if (this.currentInfusionState != 3)
+                        updateBlock = true;
+                    this.currentInfusionState = 3;
+                } else if (this.infusionTime > this.infusingRecipe.idealInfusionTime - this.infusingRecipe.infusionTimeVariation
+                        && this.infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
+                    //finished
+                    if (this.currentInfusionState != 2)
+                        updateBlock = true;
+                    this.currentInfusionState = 2;
+                } else {
+                    //progress
+                    if (this.currentInfusionState != 1)
+                        updateBlock = true;
+                    this.currentInfusionState = 1;
+                }
+            }
+            if (this.infusionColorGradientTicks > 0) {
+                this.infusionColorGradientTicks++;
+            }
+            if (!this.worldObj.isRemote && this.currentInfusionState != prevInfusionState) {
+                //start gradient animation
+                this.infusionColorGradientTicks = 1;
+                updateBlock = true;
+            }
+            if (!this.worldObj.isRemote && this.infusionColorGradientTicks > 30) {
+                this.infusionColorGradientTicks = 0;
+                updateBlock = true;
+            }
+            if (this.worldObj.isRemote && this.infusionColorGradientTicks > 0) {
+                if (this.worldObj.isRemote && this.currentInfusionState == 2) {
+                    for (int i = 0; i < 10; i++) {
+                        double x = pos.getX() + 0.25F + this.worldObj.rand.nextFloat() * 0.5F;
+                        double z = pos.getZ() + 0.25F + this.worldObj.rand.nextFloat() * 0.5F;
+                        BLParticles.STEAM_PURIFIER.spawn(this.worldObj, x, pos.getY() + 1.0D - this.worldObj.rand.nextFloat() * 0.2F, z);
+                    }
+                }
+            }
+        } else {
+            if (this.currentInfusionState != 0)
+                updateBlock = true;
+            this.currentInfusionState = 0;
+            this.infusionTime = 0;
+            this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
+            this.prevInfusionColor = this.currentInfusionColor;
+        }
+        if (!this.worldObj.isRemote && updateBlock) {
+            this.markForUpdate();
+        }
+        if (worldObj.isRemote) {
+            if (isValidCrystalInstalled()) {
+                crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
+                crystalRotation += this.crystalVelocity;
+                if (crystalRotation >= 360.0F) {
+                    crystalRotation -= 360.0F;
+                } else if (this.crystalRotation <= 360.0F) {
+                    this.crystalRotation += 360.0F;
+                }
+                if (Math.abs(crystalVelocity) <= 1.0F && this.getWorld().rand.nextInt(15) == 0) {
+                    crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
+                }
+            }
+            if (countUp && itemBob <= 20) {
+                itemBob++;
+                if (itemBob == 20)
+                    countUp = false;
+            }
+            if (!countUp && itemBob >= 0) {
+                itemBob--;
+                if (itemBob == 0)
+                    countUp = true;
+            }
+            return;
+        }
 
-		//To keep infusion time on client in sync
-		if(this.infusionTime > 0 && this.infusionTime % 20 == 0) {
-			this.markForUpdate();
-		}
+        //To keep infusion time on client in sync
+        if (this.infusionTime > 0 && this.infusionTime % 20 == 0) {
+            this.markForUpdate();
+        }
 
-		if (stirProgress < 90) {
-			stirProgress++;
-			this.markForUpdate();
-		}
-		if (stirProgress == 89) {
-			if(temp == 100 && !hasInfusion) {
-				if(this.hasIngredients()) {
-					hasInfusion = true;
-					this.markForUpdate();
-				}
-			}
-			evaporation = 0;
-		}
-		if(worldObj.getBlockState(pos.down()).getBlock() == Blocks.FIRE && temp < 100 && getWaterAmount() > 0) {
-			if(worldObj.getWorldTime()%12 == 0) {
-				temp++;
-				this.markForUpdate();
-			}
-		}
-		if(worldObj.getBlockState(pos.down()).getBlock() != Blocks.FIRE && temp > 0) {
-			if(worldObj.getWorldTime()%6 == 0) {
-				temp--;
-				this.markForUpdate();
-			}
-		}
-		if(temp == 100) {
-			evaporation++;
-			if(evaporation == 600 && getWaterAmount() >= Fluid.BUCKET_VOLUME) {
-				extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
-			}
-			this.markForUpdate();
-		}
-		if(temp < 100 && evaporation > 0) {
-			evaporation--;
-			this.markForUpdate();
-		}
-		if(isValidCrystalInstalled()) {
-			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion) {
-				inventory[MAX_INGREDIENTS + 1].setItemDamage(inventory[MAX_INGREDIENTS + 1].getItemDamage() + 1);
-				stirProgress = 0;
-			}
-			if(!hasCrystal) {
-				hasCrystal = true;
-				this.markForUpdate();
-			}
-		} else {
-			if(hasCrystal) {
-				hasCrystal = false;
-				this.markForUpdate();
-			}
-		}
-	}
+        if (stirProgress < 90) {
+            stirProgress++;
+            this.markForUpdate();
+        }
+        if (stirProgress == 89) {
+            if (temp == 100 && !hasInfusion) {
+                if (this.hasIngredients()) {
+                    hasInfusion = true;
+                    this.markForUpdate();
+                }
+            }
+            evaporation = 0;
+        }
+        if (worldObj.getBlockState(pos.down()).getBlock() == Blocks.FIRE && temp < 100 && getWaterAmount() > 0) {
+            if (worldObj.getWorldTime() % 12 == 0) {
+                temp++;
+                this.markForUpdate();
+            }
+        }
+        if (worldObj.getBlockState(pos.down()).getBlock() != Blocks.FIRE && temp > 0) {
+            if (worldObj.getWorldTime() % 6 == 0) {
+                temp--;
+                this.markForUpdate();
+            }
+        }
+        if (temp == 100) {
+            evaporation++;
+            if (evaporation == 600 && getWaterAmount() >= Fluid.BUCKET_VOLUME) {
+                extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+            }
+            this.markForUpdate();
+        }
+        if (temp < 100 && evaporation > 0) {
+            evaporation--;
+            this.markForUpdate();
+        }
+        if (isValidCrystalInstalled()) {
+            if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion) {
+                inventory[MAX_INGREDIENTS + 1].setItemDamage(inventory[MAX_INGREDIENTS + 1].getItemDamage() + 1);
+                stirProgress = 0;
+            }
+            if (!hasCrystal) {
+                hasCrystal = true;
+                this.markForUpdate();
+            }
+        } else {
+            if (hasCrystal) {
+                hasCrystal = false;
+                this.markForUpdate();
+            }
+        }
+    }
 
-	/**
-	 * Returns the current infusing state:
-	 * 0 = no progress, 1 = in progress, 2 = finished, 3 = failed
-	 */
-	public int getInfusingState()  {
-		return this.currentInfusionState;
-	}
+    /**
+     * Returns the current infusing state:
+     * 0 = no progress, 1 = in progress, 2 = finished, 3 = failed
+     */
+    public int getInfusingState() {
+        return this.currentInfusionState;
+    }
 
-	/**
-	 * Returns the infusion color gradient ticks
-	 * @return
-	 */
-	public int getInfusionColorGradientTicks() {
-		return this.infusionColorGradientTicks;
-	}
+    /**
+     * Returns the infusion color gradient ticks
+     *
+     * @return
+     */
+    public int getInfusionColorGradientTicks() {
+        return this.infusionColorGradientTicks;
+    }
 
-	public void extractFluids(FluidStack fluid) {
-				if (fluid.isFluidEqual(waterTank.getFluid())) {
-					waterTank.drain(fluid.amount, true);
-				}
-				if (getWaterAmount() == 0) {
-					if (hasInfusion) {
-				//TODO: Vials
-				/*for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
-					ItemStack stack = getStackInSlot(i);
-					if(stack != null && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
-						//Return empty vials
-						ItemStack ret = null;
-						switch(stack.getItemDamage()) {
-						case 0:
-						default:
-							ret = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0);
-							break;
-						case 1:
-							ret = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2);
-							break;
-						}
-						EntityItem entity = new EntityItem(this.worldObj, this.getPos().getX() + 0.5D, this.getPos().getY() + 1.0D, this.getPos().getZ() + 0.5D, ret);
-						this.worldObj.spawnEntityInWorld(entity);
-					}
-					setInventorySlotContents(i, null);
-				}*/
-				if (evaporation == 600) {
-					EntityGasCloud gasCloud = new EntityGasCloud(this.worldObj);
-					if(this.infusingRecipe != null) {
-						float[] color = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
-						gasCloud.setGasColor(ColorUtils.toHex(color[0], color[1], color[2], 0.66F));
-					}
-					gasCloud.setLocationAndAngles(this.pos.getX() + 0.5D, this.pos.getY() + 1D, this.pos.getZ() + 0.5D, MathHelper.wrapDegrees(this.worldObj.rand.nextFloat() * 360.0F), 0.0F);
-					this.worldObj.spawnEntityInWorld(gasCloud);
-				}
-				this.infusingRecipe = null;
-			}
-			hasInfusion = false;
-			temp = 0;
-		}
-		evaporation = 0;
-		this.markForUpdate();
-	}
+    public void extractFluids(FluidStack fluid) {
+        if (fluid.isFluidEqual(waterTank.getFluid())) {
+            waterTank.drain(fluid.amount, true);
+        }
+        if (getWaterAmount() == 0) {
+            if (hasInfusion) {
 
-	public void markForUpdate() {
-		IBlockState state = this.worldObj.getBlockState(this.getPos());
-		this.worldObj.notifyBlockUpdate(this.getPos(), state, state, 2);
-	}
+                for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
+                    ItemStack stack = getStackInSlot(i);
+                    if (stack != null && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
+                        //Return empty vials
+                        ItemStack ret = null;
+                        switch (stack.getItemDamage()) {
+                            case 0:
+                            default:
+                                ret = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0);
+                                break;
+                            case 1:
+                                ret = new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2);
+                                break;
+                        }
+                        EntityItem entity = new EntityItem(this.worldObj, this.getPos().getX() + 0.5D, this.getPos().getY() + 1.0D, this.getPos().getZ() + 0.5D, ret);
+                        this.worldObj.spawnEntityInWorld(entity);
+                    }
+                    setInventorySlotContents(i, null);
+                }
+                if (evaporation == 600) {
+                    EntityGasCloud gasCloud = new EntityGasCloud(this.worldObj);
+                    if (this.infusingRecipe != null) {
+                        float[] color = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
+                        gasCloud.setGasColor(ColorUtils.toHex(color[0], color[1], color[2], 0.66F));
+                    }
+                    gasCloud.setLocationAndAngles(this.pos.getX() + 0.5D, this.pos.getY() + 1D, this.pos.getZ() + 0.5D, MathHelper.wrapDegrees(this.worldObj.rand.nextFloat() * 360.0F), 0.0F);
+                    this.worldObj.spawnEntityInWorld(gasCloud);
+                }
+                this.infusingRecipe = null;
+            }
+            hasInfusion = false;
+            temp = 0;
+        }
+        evaporation = 0;
+        this.markForUpdate();
+    }
 
-	public int getWaterAmount() {
-		return waterTank.getFluidAmount();
-	}
+    public void markForUpdate() {
+        IBlockState state = this.worldObj.getBlockState(this.getPos());
+        this.worldObj.notifyBlockUpdate(this.getPos(), state, state, 2);
+    }
 
-	public int getTanksFullValue() {
-		return waterTank.getCapacity();
-	}
+    public int getWaterAmount() {
+        return waterTank.getFluidAmount();
+    }
 
-	public int getScaledWaterAmount(int scale) {
-		return waterTank.getFluid() != null ? (int) ((float) waterTank.getFluid().amount / (float) waterTank.getCapacity() * scale) : 0;
-	}
+    public int getTanksFullValue() {
+        return waterTank.getCapacity();
+    }
 
-	public boolean isValidCrystalInstalled() {
-		return inventory[MAX_INGREDIENTS + 1] != null /*&& inventory[MAX_INGREDIENTS + 1].getItem() == ItemRegistry.LIFE_CRYSTAL TODO: Life crystal*/ && inventory[MAX_INGREDIENTS + 1].getItemDamage() < inventory[MAX_INGREDIENTS + 1].getMaxDamage();
-	}
+    public int getScaledWaterAmount(int scale) {
+        return waterTank.getFluid() != null ? (int) ((float) waterTank.getFluid().amount / (float) waterTank.getCapacity() * scale) : 0;
+    }
 
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
-		nbt.setInteger("stirProgress", stirProgress);
-		nbt.setInteger("evaporation", evaporation);
-		nbt.setInteger("temp", temp);
-		nbt.setInteger("infusionTime", infusionTime);
-		nbt.setBoolean("hasInfusion", hasInfusion);
-		nbt.setBoolean("hasCrystal", hasCrystal);
-		nbt.setInteger("infusionState", this.currentInfusionState);
-		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
-		return nbt;
-	}
+    public boolean isValidCrystalInstalled() {
+        return inventory[MAX_INGREDIENTS + 1] != null && inventory[MAX_INGREDIENTS + 1].getItem() == ItemRegistry.LIFE_CRYSTAL && inventory[MAX_INGREDIENTS + 1].getItemDamage() < inventory[MAX_INGREDIENTS + 1].getMaxDamage();
+    }
 
-	@Override
-	public void readFromNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
-		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
-		stirProgress = nbt.getInteger("stirProgress");
-		evaporation = nbt.getInteger("evaporation");
-		temp = nbt.getInteger("temp");
-		infusionTime = nbt.getInteger("infusionTime");
-		hasInfusion = nbt.getBoolean("hasInfusion");
-		hasCrystal = nbt.getBoolean("hasCrystal");
-		currentInfusionState = nbt.getInteger("infusionState");
-		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
-		this.updateRecipe = true;
-	}
+    @Override
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+        super.writeToNBT(nbt);
+        nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
+        nbt.setInteger("stirProgress", stirProgress);
+        nbt.setInteger("evaporation", evaporation);
+        nbt.setInteger("temp", temp);
+        nbt.setInteger("infusionTime", infusionTime);
+        nbt.setBoolean("hasInfusion", hasInfusion);
+        nbt.setBoolean("hasCrystal", hasCrystal);
+        nbt.setInteger("infusionState", this.currentInfusionState);
+        nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
+        return nbt;
+    }
 
-	@Override
-	public SPacketUpdateTileEntity getUpdatePacket() {
-		return new SPacketUpdateTileEntity(this.getPos(), 1, this.getUpdateTag());
-	}
+    @Override
+    public void readFromNBT(NBTTagCompound nbt) {
+        super.readFromNBT(nbt);
+        waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
+        stirProgress = nbt.getInteger("stirProgress");
+        evaporation = nbt.getInteger("evaporation");
+        temp = nbt.getInteger("temp");
+        infusionTime = nbt.getInteger("infusionTime");
+        hasInfusion = nbt.getBoolean("hasInfusion");
+        hasCrystal = nbt.getBoolean("hasCrystal");
+        currentInfusionState = nbt.getInteger("infusionState");
+        infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
+        this.updateRecipe = true;
+    }
 
-	@Override
-	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		NBTTagCompound nbt = pkt.getNbtCompound();
-		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
-		stirProgress = nbt.getInteger("stirProgress");
-		evaporation = nbt.getInteger("evaporation");
-		temp = nbt.getInteger("temp");
-		infusionTime = nbt.getInteger("infusionTime");
-		hasInfusion = nbt.getBoolean("hasInfusion");
-		hasCrystal = nbt.getBoolean("hasCrystal");
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound itemStackCompound = nbt.getCompoundTag("slotItem" + i);
-			if(itemStackCompound != null && !itemStackCompound.getString("id").isEmpty())
-				inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);
-			else
-				inventory[i] = null;
-		}
-		currentInfusionState = nbt.getInteger("infusionState");
-		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
-		this.updateInfusingRecipe();
-	}
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        return new SPacketUpdateTileEntity(this.getPos(), 1, this.getUpdateTag());
+    }
 
-	@Override
-	public NBTTagCompound getUpdateTag() {
-		NBTTagCompound nbt = super.getUpdateTag();
-		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
-		nbt.setInteger("stirProgress", stirProgress);
-		nbt.setInteger("evaporation", evaporation);
-		nbt.setInteger("temp", temp);
-		nbt.setInteger("infusionTime", infusionTime);
-		nbt.setBoolean("hasInfusion", hasInfusion);
-		nbt.setBoolean("hasCrystal", hasCrystal);
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound itemStackCompound = new NBTTagCompound();
-			if(inventory[i] != null) {
-				inventory[i].writeToNBT(itemStackCompound);
-			} 
-			nbt.setTag("slotItem" + i, itemStackCompound);
-		}
-		nbt.setInteger("infusionState", this.currentInfusionState);
-		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
-		return nbt;
-	}
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        NBTTagCompound nbt = pkt.getNbtCompound();
+        waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
+        stirProgress = nbt.getInteger("stirProgress");
+        evaporation = nbt.getInteger("evaporation");
+        temp = nbt.getInteger("temp");
+        infusionTime = nbt.getInteger("infusionTime");
+        hasInfusion = nbt.getBoolean("hasInfusion");
+        hasCrystal = nbt.getBoolean("hasCrystal");
+        for (int i = 0; i < getSizeInventory(); i++) {
+            NBTTagCompound itemStackCompound = nbt.getCompoundTag("slotItem" + i);
+            if (itemStackCompound != null && !itemStackCompound.getString("id").isEmpty())
+                inventory[i] = ItemStack.loadItemStackFromNBT(itemStackCompound);
+            else
+                inventory[i] = null;
+        }
+        currentInfusionState = nbt.getInteger("infusionState");
+        infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
+        this.updateInfusingRecipe();
+    }
 
-	public boolean hasIngredients() {
-		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
-			if(inventory[i] != null) return true;
-		}
-		return false;
-	}
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound nbt = super.getUpdateTag();
+        nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
+        nbt.setInteger("stirProgress", stirProgress);
+        nbt.setInteger("evaporation", evaporation);
+        nbt.setInteger("temp", temp);
+        nbt.setInteger("infusionTime", infusionTime);
+        nbt.setBoolean("hasInfusion", hasInfusion);
+        nbt.setBoolean("hasCrystal", hasCrystal);
+        for (int i = 0; i < getSizeInventory(); i++) {
+            NBTTagCompound itemStackCompound = new NBTTagCompound();
+            if (inventory[i] != null) {
+                inventory[i].writeToNBT(itemStackCompound);
+            }
+            nbt.setTag("slotItem" + i, itemStackCompound);
+        }
+        nbt.setInteger("infusionState", this.currentInfusionState);
+        nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
+        return nbt;
+    }
 
-	public List<IAspectType> getInfusingAspects() {
-		List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
-		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
-			if(inventory[i] != null) {
-				ItemAspectContainer container = ItemAspectContainer.fromItem(inventory[i], AspectManager.get(this.worldObj));
-				for(Aspect aspect : container.getAspects()) {
-					infusingAspects.add(aspect.type);
-				}
-			}
-		}
-		return infusingAspects;
-	}
+    public boolean hasIngredients() {
+        for (int i = 0; i <= MAX_INGREDIENTS; i++) {
+            if (inventory[i] != null) return true;
+        }
+        return false;
+    }
 
-	public boolean hasFullIngredients() {
-		for(int i = 0; i <= MAX_INGREDIENTS; i++) {
-			if(inventory[i] == null) return false;
-		}
-		return true;
-	}
+    public List<IAspectType> getInfusingAspects() {
+        List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
+        for (int i = 0; i <= MAX_INGREDIENTS; i++) {
+            if (inventory[i] != null) {
+                ItemAspectContainer container = ItemAspectContainer.fromItem(inventory[i], AspectManager.get(this.worldObj));
+                for (Aspect aspect : container.getAspects()) {
+                    infusingAspects.add(aspect.type);
+                }
+            }
+        }
+        return infusingAspects;
+    }
 
-	public int getInfusionTime() {
-		return this.infusionTime;
-	}
+    public boolean hasFullIngredients() {
+        for (int i = 0; i <= MAX_INGREDIENTS; i++) {
+            if (inventory[i] == null) return false;
+        }
+        return true;
+    }
 
-	public float getCrystalRotation() {
-		return this.crystalRotation;
-	}
+    public int getInfusionTime() {
+        return this.infusionTime;
+    }
 
-	public int getEvaporation() {
-		return this.evaporation;
-	}
+    public float getCrystalRotation() {
+        return this.crystalRotation;
+    }
 
-	public boolean hasInfusion() {
-		return this.hasInfusion;
-	}
+    public int getEvaporation() {
+        return this.evaporation;
+    }
 
-	public int getItemBob() {
-		return this.itemBob;
-	}
+    public boolean hasInfusion() {
+        return this.hasInfusion;
+    }
 
-	public int getStirProgress() {
-		return this.stirProgress;
-	}
+    public int getItemBob() {
+        return this.itemBob;
+    }
 
-	public int getTemperature() {
-		return this.temp;
-	}
+    public int getStirProgress() {
+        return this.stirProgress;
+    }
 
-	public void setStirProgress(int progress) {
-		this.stirProgress = progress;
-	}
+    public int getTemperature() {
+        return this.temp;
+    }
 
-	public ElixirRecipe getInfusingRecipe() {
-		return this.infusingRecipe;
-	}
+    public void setStirProgress(int progress) {
+        this.stirProgress = progress;
+    }
 
-	public void updateInfusingRecipe() {
-		if(this.worldObj != null)
-			this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
-	}
+    public ElixirRecipe getInfusingRecipe() {
+        return this.infusingRecipe;
+    }
+
+    public void updateInfusingRecipe() {
+        if (this.worldObj != null)
+            this.infusingRecipe = ElixirRecipes.getFromAspects(this.getInfusingAspects());
+    }
 }

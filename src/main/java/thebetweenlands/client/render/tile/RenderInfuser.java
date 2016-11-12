@@ -2,6 +2,7 @@ package thebetweenlands.client.render.tile;
 
 import java.util.Random;
 
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -35,40 +36,40 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		bindTexture(TEXTURE);
 
 		if(infuser == null || !infuser.hasWorldObj()) {
-			GL11.glPushMatrix();
-			GL11.glTranslatef((float) 0.5F, (float) 1.5F, (float) 0.5F);
-			GL11.glScalef(1F, -1F, -1F);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate((float) 0.5F, (float) 1.5F, (float) 0.5F);
+			GlStateManager.scale(1F, -1F, -1F);
 			model.render();
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 			return;
 		}
 
 		BlockPos pos = infuser.getPos();
 		EnumFacing facing = infuser.getWorld().getBlockState(pos).getValue(BlockInfuser.FACING);
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		GL11.glScalef(1F, -1F, -1F);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.scale(1F, -1F, -1F);
 		switch (facing) {
 		default:
 		case NORTH:
-			GL11.glRotatef(180F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(180F, 0.0F, 1F, 0F);
 			break;
 		case WEST:
-			GL11.glRotatef(0F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
 			break;
 		case EAST:
-			GL11.glRotatef(90F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(90F, 0.0F, 1F, 0F);
 			break;
 		case SOUTH:
-			GL11.glRotatef(-90F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(-90F, 0.0F, 1F, 0F);
 			break;
 		}
 		model.render();
-		GL11.glPushMatrix();
-		GL11.glRotatef(infuser.getStirProgress() * 4, 0.0F, 1F, 0F);
+		GlStateManager.pushMatrix();
+		GlStateManager.rotate(infuser.getStirProgress() * 4, 0.0F, 1F, 0F);
 		model.renderSpoon();
-		GL11.glPopMatrix();
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
+		GlStateManager.popMatrix();
 
 		ElixirRecipe recipe = infuser.getInfusingRecipe();
 
@@ -92,12 +93,12 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 			double xo = -0.2D + rand.nextFloat() * 0.4D;
 			double zo = -0.2D + rand.nextFloat() * 0.4D;
 			double rot = (stirProgress < 90 && amount >= 100 ? stirProgress * 4D + 45D : 45D) + randRot;
-			GL11.glPushMatrix();
-			GL11.glTranslated(x + 0.5D, 0, z + 0.5D);
-			GL11.glRotated(-rot, 0, 1, 0);
-			GL11.glTranslated(xo, 0, zo);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5D, 0, z + 0.5D);
+			GlStateManager.rotate((float)-rot, 0, 1, 0);
+			GlStateManager.translate(xo, 0, zo);
 			renderItemInSlot(infuser, i, 0, itemY, 0, amount >= 100 ? (i % 2 == 0 ? (itemBob * 0.01D) : ((-itemBob + 20) * 0.01D)) : 0.0D, -rot);
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		}
 
 		renderItemInSlot(infuser, TileEntityInfuser.MAX_INGREDIENTS + 1, x + 0.5, y + 1.43D, z + 0.5D, itemBob * 0.01D, crystalRotation);
@@ -106,9 +107,9 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 			Tessellator tess = Tessellator.getInstance();
 			VertexBuffer vb = tess.getBuffer();
 			TextureAtlasSprite waterSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(FluidRegistry.SWAMP_WATER.getStill().toString());
-			GL11.glPushMatrix();
-			GL11.glEnable(GL11.GL_BLEND);
-			GL11.glBlendFunc(770, 771);
+			GlStateManager.pushMatrix();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(770, 771);
 			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			float tx = (float) x + 0.0F;
 			float ty = (float) (y + 0.35F + size * 0.5F);
@@ -132,21 +133,21 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 			vb.pos(0.8125, 0, 0.1875).tex(waterSprite.getMaxU(), waterSprite.getMinV()).color(targetColor[0], targetColor[1], targetColor[2], targetColor[3]).endVertex();
 			vb.setTranslation(0, 0, 0);
 			tess.draw();
-			GL11.glDisable(GL11.GL_BLEND);
-			GL11.glPopMatrix();
+			GlStateManager.disableBlend();
+			GlStateManager.popMatrix();
 		}
 	}
 
 	private void renderItemInSlot(TileEntityInfuser infuser, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
 		if (infuser.getStackInSlot(slotIndex) != null) {
-			GL11.glPushMatrix();
-			GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-			GL11.glTranslated(x, y, z);
-			GL11.glScaled(0.25D, 0.25D, 0.25D);
-			GL11.glTranslated(0D, itemBob, 0D);
-			GL11.glRotated(rotation, 0, 1, 0);
+			GlStateManager.pushMatrix();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.translate(x, y, z);
+			GlStateManager.scale(0.25D, 0.25D, 0.25D);
+			GlStateManager.translate(0D, itemBob, 0D);
+			GlStateManager.rotate((float) rotation, 0, 1, 0);
 			Minecraft.getMinecraft().getRenderItem().renderItem(infuser.getStackInSlot(slotIndex), TransformType.FIXED);
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		}
 	}
 
@@ -154,18 +155,18 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		float scale = 0.02666667F;
 		float height = 0.8F;
 
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5F, y + height + 0.75F, z + 0.5F);
-		GL11.glNormal3f(0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
-		GL11.glRotatef(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
-		GL11.glScalef(-scale, -scale, scale);
-		GL11.glDisable(GL11.GL_LIGHTING);
-		GL11.glDepthMask(false);
-		GL11.glDisable(GL11.GL_DEPTH_TEST);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x + 0.5F, y + height + 0.75F, z + 0.5F);
+		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(-Minecraft.getMinecraft().getRenderManager().playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(Minecraft.getMinecraft().getRenderManager().playerViewX, 1.0F, 0.0F, 0.0F);
+		GlStateManager.scale(-scale, -scale, scale);
+		GlStateManager.disableLighting();
+		GlStateManager.depthMask(false);
+		GlStateManager.disableDepth();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableTexture2D();
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer vb = tessellator.getBuffer();
@@ -179,14 +180,14 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		vb.pos(width + 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 		tessellator.draw();
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 		fontrenderer.drawString(count, -fontrenderer.getStringWidth(count) / 2, 0, 553648127);
-		GL11.glEnable(GL11.GL_DEPTH_TEST);
-		GL11.glDepthMask(true);
+		GlStateManager.enableDepth();
+		GlStateManager.depthMask(true);
 		fontrenderer.drawString(count, -fontrenderer.getStringWidth(count) / 2, 0, -1);
-		GL11.glEnable(GL11.GL_LIGHTING);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glPopMatrix();
+		GlStateManager.enableLighting();
+		GlStateManager.disableBlend();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.popMatrix();
 	}
 }

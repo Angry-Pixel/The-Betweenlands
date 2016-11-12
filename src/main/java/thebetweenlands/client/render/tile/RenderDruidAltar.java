@@ -2,14 +2,11 @@ package thebetweenlands.client.render.tile;
 
 import java.util.Random;
 
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.texture.TextureMap;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.Vector3d;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -28,6 +25,7 @@ import thebetweenlands.util.LightingUtil;
 public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidAltar> {
 	public static RenderDruidAltar instance;
 	private final ModelDruidAltar model = new ModelDruidAltar();
+	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 	private final ModelStone stone = new ModelStone();
 	private final ResourceLocation ACTIVE = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_active.png");
 	private final ResourceLocation ACTIVEGLOW = new ResourceLocation("thebetweenlands:textures/tiles/druid_altar_active_glow.png");
@@ -142,7 +140,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 					GlStateManager.translate(midVec.x, y + yOff, midVec.z);
 					GlStateManager.scale(0.3f, 0.3f, 0.3f);
 					GlStateManager.rotate(-renderRotation * 2.0f, 0, (float) y, 0);
-					Minecraft.getMinecraft().getRenderItem().renderItem(item, ItemCameraTransforms.TransformType.GROUND);
+					renderItem(item);
 					GlStateManager.popMatrix();
 				}
 				if (exit) {
@@ -165,7 +163,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 			GlStateManager.translate(x + 0.5D, y + 3.0D, z + 0.5D);
 			GlStateManager.scale(0.3f, 0.3f, 0.3f);
 			GlStateManager.rotate(-renderRotation * 2.0f, 0, 1, 0);
-			Minecraft.getMinecraft().getRenderItem().renderItem(itemTalisman, ItemCameraTransforms.TransformType.GROUND);
+			renderItem(itemTalisman);
 			GlStateManager.popMatrix();
 		}
 
@@ -329,5 +327,12 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 			return;
 		}
 		renderTile(te, x, y, z, partialTicks);
+	}
+
+
+	private void renderItem(ItemStack stack){
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+		renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
 	}
 }

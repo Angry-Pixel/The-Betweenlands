@@ -33,6 +33,7 @@ import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
 
 public class BlockInfuser extends BlockContainer {
@@ -100,15 +101,15 @@ public class BlockInfuser extends BlockContainer {
 						}
 					}
 				}
-				//TODO Life crystal
-				/*if(heldItem != null && heldItem.getItem() == ItemRegistry.LIFE_CRYSTAL) {
+
+				if(heldItem != null && heldItem.getItem() == ItemRegistry.LIFE_CRYSTAL) {
 					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) == null) {
 						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, heldItem);
 						tile.updateInfusingRecipe();
-						if (!player.capabilities.isCreativeMode) player.setCurrentItemOrArmor(0, null);
+						if (!player.capabilities.isCreativeMode) player.setHeldItem(hand, null);
 					}
 					return true;
-				}*/
+				}
 			}
 
 			if(player.isSneaking() && !tile.hasInfusion()) {

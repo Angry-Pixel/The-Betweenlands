@@ -1,17 +1,17 @@
 package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.model.tile.ModelAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
@@ -27,6 +27,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
     private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/animator.png");
     public static RenderAnimator instance;
     private RenderManager renderManager;
+    private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
     private double viewRot;
 
     public RenderAnimator() {
@@ -41,18 +42,18 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 
     public void renderTileAsItem(double x, double y, double z) {
         bindTexture(TEXTURE);
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         renderMainModel(x, y, z);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     private void renderMainModel(double x, double y, double z) {
-        GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5F, y + 2F, z + 0.5F);
-        GL11.glRotatef(180F, 0.0F, 0.0F, 1.0F);
-        GL11.glScalef(1.5F, 1.5F, 1.5F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + 0.5F, y + 2F, z + 0.5F);
+        GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.scale(1.5F, 1.5F, 1.5F);
         model.renderAll(0.0625F);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     @Override
@@ -62,80 +63,89 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
         viewRot = 180D + Math.toDegrees(Math.atan2(renderManager.viewerPosX - te.getPos().getX() - 0.5D, renderManager.viewerPosZ - te.getPos().getZ() - 0.5D));
         int meta = te.getBlockMetadata();
         bindTexture(TEXTURE);
-        GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5F, y + 1.5F, z + 0.5F);
-        GL11.glScalef(1F, -1F, -1F);
-        GL11.glRotatef(meta * 90.0F - 180.0F, 0.0F, 1F, 0F);
-        GL11.glDisable(GL11.GL_CULL_FACE);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + 0.5F, y + 1.5F, z + 0.5F);
+        GlStateManager.scale(1F, -1F, -1F);
+        GlStateManager.rotate(meta * 90.0F - 180.0F, 0.0F, 1F, 0F);
+        GlStateManager.disableCull();
         model.render(null, 0, 0, 0, 0, 0, 0.0625F);
-        GL11.glEnable(GL11.GL_CULL_FACE);
-        GL11.glPopMatrix();
+        GlStateManager.enableCull();
+        GlStateManager.popMatrix();
 
         // Sulfur rendering
         if (te.getStackInSlot(2) != null) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(x + 0.5D, y + 0.27D, z + 0.5D);
-            GL11.glRotated(180, 1, 0, 0);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x + 0.5D, y + 0.27D, z + 0.5D);
+            GlStateManager.rotate(180, 1, 0, 0);
             int items = te.getStackInSlot(2).stackSize;
             rand.setSeed((long) (te.getPos().getX() + te.getPos().getY() + te.getPos().getZ()));
             for (int i = 0; i < items; i++) {
-                GL11.glPushMatrix();
-                GL11.glTranslated(rand.nextFloat() / 3.0D - 1.0D / 6.0D, 0.0D, rand.nextFloat() / 3.0D - 1.0D / 6.0D);
-                GL11.glRotated(rand.nextFloat() * 30.0D - 15.0D, 1, 0, 0);
-                GL11.glRotated(rand.nextFloat() * 30.0D - 15.0D, 0, 0, 1);
-                GL11.glScaled(0.125D, 0.125D, 0.125D);
-                GL11.glRotated(90, 1, 0, 0);
-                GL11.glRotated(rand.nextFloat() * 360.0F, 0, 0, 1);
-                Minecraft.getMinecraft().getRenderItem().renderItem(ItemMisc.EnumItemMisc.SULFUR.create(1), ItemCameraTransforms.TransformType.GROUND);
-                GL11.glPopMatrix();
+                GlStateManager.pushMatrix();
+                GlStateManager.translate(rand.nextFloat() / 3.0D - 1.0D / 6.0D, 0.0D, rand.nextFloat() / 3.0D - 1.0D / 6.0D);
+                GlStateManager.rotate(rand.nextFloat() * 30.0f - 15.0f, 1, 0, 0);
+                GlStateManager.rotate(rand.nextFloat() * 30.0f - 15.0f, 0, 0, 1);
+                GlStateManager.scale(0.125D, 0.125D, 0.125D);
+                GlStateManager.rotate(90, 1, 0, 0);
+                GlStateManager.rotate(rand.nextFloat() * 360.0F, 0, 0, 1);
+                ItemStack stack = ItemMisc.EnumItemMisc.SULFUR.create(1);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+                renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
+                GlStateManager.popMatrix();
             }
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
 
         // Life crystal
         if (te.getStackInSlot(1) != null) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(x + 0.5D, y + 0.43D, z + 0.5D);
-            GL11.glScaled(0.18D, 0.18D, 0.18D);
-            GL11.glRotated(viewRot, 0, 1, 0);
-            Minecraft.getMinecraft().getRenderItem().renderItem(new ItemStack(ItemRegistry.LIFE_CRYSTAL), ItemCameraTransforms.TransformType.GROUND);
-            GL11.glPopMatrix();
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x + 0.5D, y + 0.43D, z + 0.5D);
+            GlStateManager.scale(0.18D, 0.18D, 0.18D);
+            GlStateManager.rotate((float) viewRot, 0, 1, 0);
+            ItemStack stack = new ItemStack(ItemRegistry.LIFE_CRYSTAL);
+            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+            renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
+            GlStateManager.popMatrix();
         }
 
         // Item
         ItemStack input = te.getStackInSlot(0);
         if (input != null) {
-            GL11.glPushMatrix();
-            GL11.glTranslated(x + 0.5D, y + 1.43D, z + 0.5D);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x + 0.5D, y + 1.43D, z + 0.5D);
 
             AnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
 
             if (!(input.getItem() instanceof ItemMonsterPlacer) && (recipe == null || recipe.getRenderEntity() == null)) {
-                GL11.glScaled(0.3D, 0.3D, 0.3D);
-                GL11.glRotated(viewRot, 0, 1, 0);
-                Minecraft.getMinecraft().getRenderItem().renderItem(te.getStackInSlot(0), ItemCameraTransforms.TransformType.GROUND);
+                GlStateManager.scale(0.3D, 0.3D, 0.3D);
+                GlStateManager.rotate((float) viewRot, 0, 1, 0);
+                ItemStack stack = te.getStackInSlot(0);
+                Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+                Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+                renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
             } else {
-                GL11.glEnable(GL11.GL_BLEND);
-                GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.65F);
+                GlStateManager.enableBlend();
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 0.65F);
                 Entity entity = null;
-                if(recipe.getRenderEntity() != null) {
+                if (recipe.getRenderEntity() != null) {
                     entity = recipe.getRenderEntity();
-                } else if(input.getItem() instanceof ItemMonsterPlacer) {
+                } else if (input.getItem() instanceof ItemMonsterPlacer) {
                     entity = EntityList.createEntityByID(input.getItemDamage(), te.getWorld());
                 }
                 if (entity != null) {
-                    GL11.glTranslated(0.0D, -entity.height/4.0D, 0.0D);
-                    GL11.glRotated(viewRot +180, 0, 1, 0);
-                    GL11.glScaled(0.75D, 0.75D, 0.75D);
+                    GlStateManager.translate(0.0D, -entity.height / 4.0D, 0.0D);
+                    GlStateManager.rotate((float) viewRot + 180f, 0, 1, 0);
+                    GlStateManager.scale(0.75D, 0.75D, 0.75D);
                     entity.setWorld(te.getWorld());
                     entity.setRotationYawHead(0F);
                     entity.rotationPitch = 0F;
                     renderManager.doRenderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
                 }
-                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             }
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
     }
 }

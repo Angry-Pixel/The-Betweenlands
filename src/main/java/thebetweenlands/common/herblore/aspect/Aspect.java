@@ -15,7 +15,7 @@ public final class Aspect implements Comparable<Aspect> {
 	 */
 	public final int amount;
 
-	Aspect(IAspectType aspect, int amount) {
+	public Aspect(IAspectType aspect, int amount) {
 		if(aspect == null) throw new RuntimeException("Aspect can't be null");
 		this.type = aspect;
 		this.amount = amount;

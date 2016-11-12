@@ -11,12 +11,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.*;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
@@ -210,6 +205,16 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 
 	public ItemStack fillTankWithBucket(ItemStack bucket) {
 		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(bucket);
+		if (fluid == null && bucket.getItem() instanceof IFluidContainerItem) {
+			fluid = ((IFluidContainerItem)bucket.getItem()).getFluid(bucket);
+			int amountFilled = fill(null, fluid, false);
+			if (amountFilled == fluid.amount) {
+				fill(null, fluid, true);
+				ItemStack t = bucket;
+				((IFluidContainerItem)bucket.getItem()).drain(t, ((IFluidContainerItem)bucket.getItem()).getCapacity(t), true);
+				return t;
+			}
+		}
 		if (fluid != null) {
 			int amountFilled = fill(null, fluid, false);
 			if (amountFilled == fluid.amount) {

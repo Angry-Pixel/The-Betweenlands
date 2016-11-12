@@ -66,12 +66,12 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 			}
 
 			if (heldItem != null) {
-				ItemStack newItem = tile.fillTankWithBucket(player.inventory.getStackInSlot(player.inventory.currentItem));
+				ItemStack newItem = tile.fillTankWithBucket(heldItem.copy());
 				world.markChunkDirty(pos, tile);
-				if (!player.capabilities.isCreativeMode) {
-					player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
-				}
 				if (!ItemStack.areItemStacksEqual(heldItem, newItem)) {
+					if (!player.capabilities.isCreativeMode) {
+						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
+					}
 					return true;
 				}
 			}

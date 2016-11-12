@@ -54,6 +54,7 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.*;
+import thebetweenlands.common.tile.spawner.TileEntityAlembic;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.GLUProjection;
@@ -301,6 +302,7 @@ public class ClientProxy extends CommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new RenderInfuser());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMortar.class, new RenderPestleAndMortar());
         ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnimator.class, new RenderAnimator());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new RenderAlembic());
 
         //item models
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -316,6 +318,8 @@ public class ClientProxy extends CommonProxy {
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
         ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.INFUSER), 0, TileEntityInfuser.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MORTAR), 0, TileEntityMortar.class);
+        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ANIMATOR), 0, TileEntityAnimator.class);
 
         //Block colors
         for (Block block : BlockRegistry.BLOCKS) {
@@ -368,6 +372,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
         MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
+        MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
 
         if (ConfigHandler.debug) {
             MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);

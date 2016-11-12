@@ -45,7 +45,6 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             fuelBurnProgress = 0;
             fuelConsumed = 0;
         }
-        System.out.println(fuelConsumed);
         if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && fuelConsumed < requiredFuelCount && isValidFocalItem()) {
             this.itemToAnimate = this.inventory[0];
             if (lifeCrystalLife >= this.requiredLifeCount) {
@@ -70,6 +69,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             if(result == null) result = recipe.getResult();
             if(result != null) {
                 setInventorySlotContents(0, result.copy());
+                worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
             }
             inventory[1].setItemDamage(inventory[1].getItemDamage() + recipe.requiredLife);
             this.itemAnimated = true;
