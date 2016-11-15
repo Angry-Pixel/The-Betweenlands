@@ -30,6 +30,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 
@@ -162,6 +163,19 @@ public class EntityCapabilityHandler {
 	}
 
 	@SubscribeEvent
+	public static void onEntityChangeDimension(PlayerChangedDimensionEvent event) {
+		if(!event.player.getEntityWorld().isRemote && event.player instanceof EntityPlayerMP)  {
+			EntityPlayerMP player = (EntityPlayerMP) event.player;
+			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
+			if(trackers != null) {
+				for(EntityCapabilityTracker tracker : trackers) {
+					tracker.sendPacket();
+				}
+			}
+		}
+	}
+	
+	@SubscribeEvent
 	public static void onEntityStartTracking(StartTracking event) {
 		if(event.getEntityPlayer() instanceof EntityPlayerMP) {
 			addTrackers((EntityPlayerMP)event.getEntityPlayer(), event.getTarget());
@@ -198,7 +212,7 @@ public class EntityCapabilityHandler {
 				while(it.hasNext()) {
 					Entry<EntityPlayerMP, List<EntityCapabilityTracker>> entry = it.next();
 					EntityPlayerMP player = entry.getKey();
-					if(!player.getEntityWorld().playerEntities.contains(player))
+					if(!player.getServerWorld().getMinecraftServer().getPlayerList().getPlayerList().contains(player))
 						it.remove();
 				}
 			}

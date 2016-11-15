@@ -372,7 +372,6 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
         MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
-        MinecraftForge.EVENT_BUS.register(AspectItemOverlayHandler.INSTANCE);
 
         if (ConfigHandler.debug) {
             MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);

@@ -1,5 +1,9 @@
 package thebetweenlands.common.tile.spawner;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -12,16 +16,13 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
 
 public class TileEntityAlembic extends TileEntity implements ITickable {
     public static final int DISTILLING_TIME = 4800; //4 Minutes
@@ -303,9 +304,9 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
                             itemAspectIT.remove();
                         }
                     }
-                    aspect = new Aspect(aspect.type, (int) totalAmount);
                     aspectVial = new ItemStack(ItemRegistry.ASPECT_VIAL, 1, vialType);
-                    AspectManager.get(this.worldObj).addDynamicAspects(aspectVial, aspect);
+                    ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(aspectVial);
+                    aspectContainer.add(aspect.type, (int) totalAmount);
                 }
                 if (this.producableItemAspects.size() == 0) {
                     this.reset();

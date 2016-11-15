@@ -1,20 +1,20 @@
 package thebetweenlands.common.item.herblore;
 
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.event.handler.AspectItemOverlayHandler;
+import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.aspect.Aspect;
-import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedRecipeHelper;
-
-import java.util.List;
 
 public class ItemAspectVial extends Item {
 
@@ -32,11 +32,11 @@ public class ItemAspectVial extends Item {
 
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
-        List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
+        List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
 
         if (itemAspects.size() >= 1) {
             Aspect aspect = itemAspects.get(0);
-            return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + AspectItemOverlayHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
+            return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -96,18 +96,19 @@ public class ItemAspectVial extends Item {
 */
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
+    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
         list.add(new ItemStack(item, 1, 0)); //green
         list.add(new ItemStack(item, 1, 1)); //orange
 
         //Add all aspects
         for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
-            Aspect itemAspect = new Aspect(aspect, 400);
             ItemStack stackGreen = new ItemStack(item, 1, 0);
-            AspectManager.addDynamicAspects(stackGreen, itemAspect);
+            ItemAspectContainer greenAspectContainer = ItemAspectContainer.fromItem(stackGreen);
+            greenAspectContainer.add(aspect, 400);
             list.add(stackGreen);
             ItemStack stackOrange = new ItemStack(item, 1, 1);
-            AspectManager.addDynamicAspects(stackOrange, itemAspect);
+            ItemAspectContainer orangeAspectContainer = ItemAspectContainer.fromItem(stackOrange);
+            orangeAspectContainer.add(aspect, 400);
             list.add(stackOrange);
         }
     }
