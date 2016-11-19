@@ -25,6 +25,11 @@ public class RenderLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> 
 	@Override
 	public void renderTileEntityAt(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage) {
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
+		
+		//Block is sometimes not loot pot it seems?!
+		if(state.getBlock() instanceof BlockLootPot == false)
+			return;
+		
 		EnumLootPot type = state.getValue(BlockLootPot.VARIANT);
 		EnumFacing rotation = state.getValue(BlockLootPot.FACING);
 		int offset = te.getModelRotationOffset();

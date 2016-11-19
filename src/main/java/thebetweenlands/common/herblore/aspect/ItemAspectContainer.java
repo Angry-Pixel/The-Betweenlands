@@ -6,6 +6,8 @@ import java.util.Set;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -13,6 +15,8 @@ import thebetweenlands.common.herblore.aspect.type.IAspectType;
 
 //TODO: Use capabilities for performance
 public final class ItemAspectContainer extends AspectContainer {
+	public static final String ASPECTS_NBT_TAG = "blHerbloreAspects";
+
 	/**
 	 * The item stack this container belongs to
 	 */
@@ -38,8 +42,9 @@ public final class ItemAspectContainer extends AspectContainer {
 	 */
 	public static ItemAspectContainer fromItem(ItemStack stack, @Nullable AspectManager manager) {
 		ItemAspectContainer container = new ItemAspectContainer(manager, stack);
-		List<Aspect> staticAspects = manager != null ? manager.getStaticAspects(AspectManager.getAspectItem(stack)) : null;
-		container.load(stack.getTagCompound(), staticAspects);
+		NBTTagCompound aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
+		if(aspectNbt != null)
+			container.read(aspectNbt);
 		return container;
 	}
 
@@ -51,7 +56,9 @@ public final class ItemAspectContainer extends AspectContainer {
 	 */
 	public static ItemAspectContainer fromItem(ItemStack stack) {
 		ItemAspectContainer container = new ItemAspectContainer(null, stack);
-		container.load(stack.getTagCompound(), null);
+		NBTTagCompound aspectNbt = stack.getTagCompound() != null ? stack.getTagCompound().getCompoundTag(ASPECTS_NBT_TAG) : null;
+		if(aspectNbt != null)
+			container.read(aspectNbt);
 		return container;
 	}
 
@@ -60,7 +67,7 @@ public final class ItemAspectContainer extends AspectContainer {
 		NBTTagCompound nbt = this.itemStack.getTagCompound();
 		if(nbt == null)
 			this.itemStack.setTagCompound(nbt = new NBTTagCompound());
-		this.save(nbt);
+		nbt.setTag(ASPECTS_NBT_TAG, this.save(new NBTTagCompound()));
 	}
 
 	/**
@@ -74,9 +81,9 @@ public final class ItemAspectContainer extends AspectContainer {
 		if(discoveries != null && this.manager != null)
 			discoveredAspects = discoveries.getDiscoveredStaticAspects(this.manager, AspectManager.getAspectItem(this.itemStack));
 		List<Aspect> aspects = new ArrayList<Aspect>();
-		Set<IAspectType> types = this.getAvailableAspectTypes();
+		Set<IAspectType> types = this.getStoredAspectTypes();
 		for(IAspectType type : types) {
-			int amount = this.getAmount(type, true);
+			int amount = this.get(type, true);
 			boolean hasDiscovered = false;
 			if(discoveredAspects != null) {
 				for(Aspect discovered : discoveredAspects) {
@@ -87,7 +94,7 @@ public final class ItemAspectContainer extends AspectContainer {
 				}
 			}
 			if(discoveredAspects == null || hasDiscovered)
-				amount += this.getAmount(type, false);
+				amount += this.get(type, false);
 			if(amount > 0)
 				aspects.add(new Aspect(type, amount));
 		}
@@ -101,5 +108,10 @@ public final class ItemAspectContainer extends AspectContainer {
 	 */
 	public List<Aspect> getAspects(EntityPlayer player) {
 		return this.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(player));
+	}
+
+	@Override
+	protected List<Aspect> getStaticAspects() {
+		return this.manager != null ? this.manager.getStaticAspects(AspectManager.getAspectItem(this.itemStack)) : ImmutableList.of();
 	}
 }

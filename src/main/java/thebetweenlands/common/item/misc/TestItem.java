@@ -10,6 +10,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
+import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
@@ -35,7 +37,7 @@ public class TestItem extends Item {
         }*/
 
 		if(!world.isRemote) {
-			if(playerIn.isSneaking()) {
+			/*if(playerIn.isSneaking()) {
 				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 				List<SharedStorage> storages = worldStorage.getSharedStorageAt(SharedStorage.class, (storage) -> {
 					if(storage instanceof LocationStorage) {
@@ -49,6 +51,13 @@ public class TestItem extends Item {
 			} else {
 				WorldGenWightFortress fortress = new WorldGenWightFortress();
 				fortress.generate(world, itemRand, pos.up());
+			}*/
+			ItemAspectContainer container = ItemAspectContainer.fromItem(stack);
+			if(!playerIn.isSneaking()) {
+				container.add(AspectRegistry.AZUWYNN, 10);
+				System.out.println("Added: 10");
+			} else {
+				System.out.println("Drained: " + container.drain(AspectRegistry.AZUWYNN, 8));
 			}
 		}
 

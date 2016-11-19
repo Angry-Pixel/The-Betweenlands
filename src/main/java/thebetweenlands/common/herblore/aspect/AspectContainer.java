@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import javax.annotation.Nullable;
+import javax.annotation.Nonnull;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,57 +26,122 @@ import thebetweenlands.common.registries.AspectRegistry;
  * longer treated as a static aspect.
  */
 public class AspectContainer {
-	public static final String ASPECTS_NBT_TAG = "blHerbloreAspects";
+	protected static final class Storage {
+		private final IAspectType type;
+		private final AspectContainer container;
+		private int dynamicAmount;
+		private int storedStaticAmount;
+		private boolean hasStoredStaticAmount;
 
-	/**
-	 * Internal representation of aspects
-	 */
-	private static final class InternalAspect {
-		public final IAspectType type;
-		public final int amount;
-		public final boolean isDynamic;
-		private boolean isSaved = false;
-
-		private InternalAspect(IAspectType type, int amount, boolean isDynamic, boolean isSaved) {
+		private Storage(IAspectType type, AspectContainer container) {
 			this.type = type;
-			this.amount = amount;
-			this.isDynamic = isDynamic;
-			this.isSaved = isSaved;
+			this.dynamicAmount = 0;
+			this.storedStaticAmount = 0;
+			this.hasStoredStaticAmount = false;
+			this.container = container;
 		}
 
-		private NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-			nbt.setString("aspect", this.type.getName());
-			nbt.setInteger("amount", this.amount);
-			nbt.setBoolean("dynamic", this.isDynamic);
+		/**
+		 * Writes the storage data to the specified NBT
+		 * @param nbt
+		 * @return
+		 */
+		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+			nbt.setInteger("dynamic", this.dynamicAmount);
+			nbt.setInteger("storedStatic", this.storedStaticAmount);
+			nbt.setBoolean("hasStoredStatic", this.hasStoredStaticAmount);
 			return nbt;
 		}
 
-		private static InternalAspect readFromNBT(NBTTagCompound nbt) {
-			String aspectName = nbt.getString("aspect");
-			int amount = nbt.getInteger("amount");
-			boolean isDynamic = nbt.getBoolean("dynamic");
-			IAspectType aspectType = AspectRegistry.getAspectTypeFromName(aspectName);
-			if(aspectType != null) {
-				return new InternalAspect(aspectType, amount, isDynamic, true);
+		/**
+		 * Reads the storage data from the specified NBT
+		 * @param nbt
+		 * @return
+		 */
+		public Storage readFromNBT(NBTTagCompound nbt) {
+			this.dynamicAmount = nbt.getInteger("dynamic");
+			this.storedStaticAmount = nbt.getInteger("storedStatic");
+			this.hasStoredStaticAmount = nbt.getBoolean("hasStoredStatic");
+			return this;
+		}
+
+		/**
+		 * Returns the amount
+		 * @param dynamic
+		 * @param staticAspects
+		 * @return
+		 */
+		public int getAmount(boolean dynamic) {
+			if(dynamic) {
+				return this.dynamicAmount;
+			} else {
+				if(this.hasStoredStaticAmount) {
+					//Return stored static amount if it has been changed previously
+					return this.storedStaticAmount;
+				} else {
+					List<Aspect> staticAspects = this.container.getStaticAspects();
+					if(staticAspects != null) {
+						int amount = 0;
+						for(Aspect aspect : staticAspects) {
+							if(aspect.type == this.type) {
+								amount += aspect.amount;
+							}
+						}
+						return amount;
+					} else {
+						return 0;
+					}
+				}
 			}
-			return null;
 		}
 
-		private boolean isSaved() {
-			return this.isSaved;
+		/**
+		 * Sets the amount
+		 * @param dynamic
+		 * @param amount
+		 * @return
+		 */
+		public Storage setAmount(boolean dynamic, int amount) {
+			if(dynamic) {
+				this.dynamicAmount = amount;
+			} else {
+				this.storedStaticAmount = amount;
+				this.hasStoredStaticAmount = true;
+			}
+			return this;
+		}
+
+		/**
+		 * Resets the static amount to the default
+		 * @return
+		 */
+		public Storage resetStaticAmount() {
+			this.storedStaticAmount = 0;
+			this.hasStoredStaticAmount = false;
+			return this;
 		}
 	}
 
-	private final Map<IAspectType, List<InternalAspect>> aspects = new HashMap<IAspectType, List<InternalAspect>>();
+	private final Map<IAspectType, Storage> storage = new HashMap<IAspectType, Storage>();
 
-	private final List<InternalAspect> getEntries(IAspectType type) {
-		List<InternalAspect> lst = this.aspects.get(type);
-		if(lst == null)
-			this.aspects.put(type, lst = new ArrayList<InternalAspect>());
-		return lst;
+	/**
+	 * Returns the storage for the specified aspect
+	 * @param type
+	 * @return
+	 */
+	protected final Storage getStorage(IAspectType type) {
+		Storage storage = this.storage.get(type);
+		if(storage == null) {
+			this.storage.put(type, storage = new Storage(type, this));
+		}
+		return storage;
 	}
 
-	public AspectContainer() { }
+	public AspectContainer() {
+		for(IAspectType type : AspectRegistry.ASPECT_TYPES) {
+			this.storage.put(type, new Storage(type, this));
+		}
+	}
 
 	/**
 	 * Called when the data was changed
@@ -83,131 +149,30 @@ public class AspectContainer {
 	protected void onChanged() { }
 
 	/**
-	 * Returns the set of all available aspect types
+	 * Returns the set of all stored aspect types
 	 * @return
 	 */
-	protected final ImmutableSet<IAspectType> getAvailableAspectTypes() {
-		return ImmutableSet.copyOf(this.aspects.keySet());
-	}
-
-	/**
-	 * Adds the amount of the specified aspect type
-	 * @param type
-	 * @param amount
-	 * @param isDynamic
-	 * @return
-	 */
-	protected final AspectContainer addAmount(IAspectType type, int amount, boolean isDynamic) {
-		List<InternalAspect> entries = this.getEntries(type);
-		int dynAmounts = 0;
-		int staticAmounts = 0;
-		int prevStaticAmounts = this.getAmount(type, false);
-		int prevDynAmounts = this.getAmount(type, true);
-		for(InternalAspect aspect : entries) {
-			if(!aspect.isDynamic)
-				staticAmounts += aspect.amount;
-			else
-				dynAmounts += aspect.amount;
-		}
-		if(!isDynamic)
-			staticAmounts += amount;
-		else
-			dynAmounts += amount;
-		entries.clear();
-		entries.add(new InternalAspect(type, staticAmounts > 0 ? staticAmounts : 0, false, prevStaticAmounts != staticAmounts));
-		entries.add(new InternalAspect(type, dynAmounts > 0 ? dynAmounts : 0, true, true));
-		if(prevStaticAmounts != staticAmounts || prevDynAmounts != dynAmounts)
-			this.onChanged();
-		return this;
-	}
-
-	/**
-	 * Removes all aspects of the specified type
-	 * @param type
-	 * @return
-	 */
-	protected final AspectContainer clearAspects(IAspectType type) {
-		List<InternalAspect> entries = this.getEntries(type);
-		int prevStaticAmounts = this.getAmount(type, false);
-		int prevAmounts = this.getAmount(type, true) + prevStaticAmounts;
-		entries.clear();
-		entries.add(new InternalAspect(type, 0, false, prevStaticAmounts != 0));
-		entries.add(new InternalAspect(type, 0, true, true));
-		if(prevAmounts > 0)
-			this.onChanged();
-		return this;
-	}
-
-	/**
-	 * Sets the amount of the specified aspect type
-	 * @param type
-	 * @param amount
-	 * @param isDynamic
-	 * @return
-	 */
-	protected final AspectContainer putAmount(IAspectType type, int amount, boolean isDynamic) {
-		List<InternalAspect> entries = this.getEntries(type);
-		int dynAmounts = 0;
-		int staticAmounts = 0;
-		int prevStaticAmounts = this.getAmount(type, false);
-		int prevDynAmounts = this.getAmount(type, true);
-		for(InternalAspect aspect : entries) {
-			if(!aspect.isDynamic)
-				staticAmounts += aspect.amount;
-			else
-				dynAmounts += aspect.amount;
-		}
-		if(!isDynamic)
-			staticAmounts = amount;
-		else
-			dynAmounts = amount;
-		entries.clear();
-		entries.add(new InternalAspect(type, staticAmounts > 0 ? staticAmounts : 0, false, prevStaticAmounts != staticAmounts));
-		entries.add(new InternalAspect(type, dynAmounts > 0 ? dynAmounts : 0, true, true));
-		if(prevStaticAmounts != staticAmounts || prevDynAmounts != dynAmounts)
-			this.onChanged();
-		return this;
+	protected final ImmutableSet<IAspectType> getStoredAspectTypes() {
+		return ImmutableSet.copyOf(this.storage.keySet());
 	}
 
 	/**
 	 * Returns the amount of the specified aspect type
 	 * @param type
-	 * @param isDynamic
 	 * @return
 	 */
-	protected final int getAmount(IAspectType type, boolean isDynamic) {
-		List<InternalAspect> entries = this.getEntries(type);
-		int dynAmounts = 0;
-		int staticAmounts = 0;
-		for(InternalAspect aspect : entries) {
-			if(!aspect.isDynamic)
-				staticAmounts += aspect.amount;
-			else
-				dynAmounts += aspect.amount;
-		}
-		if(!isDynamic)
-			return staticAmounts;
-		else
-			return dynAmounts;
+	protected final int get(IAspectType type, boolean dynamic) {
+		return this.getStorage(type).getAmount(dynamic);
 	}
-
-	/**
-	 * Clears this container
-	 */
-	public final AspectContainer clear() {
-		Set<IAspectType> types = this.getAvailableAspectTypes();
-		for(IAspectType type : types)
-			this.clearAspects(type);
-		return this;
-	}
-
+	
 	/**
 	 * Returns the amount of the specified aspect type
 	 * @param type
 	 * @return
 	 */
 	public final int get(IAspectType type) {
-		return this.getAmount(type, false) + this.getAmount(type, true);
+		Storage storage = this.getStorage(type);
+		return storage.getAmount(true) + storage.getAmount(false);
 	}
 
 	/**
@@ -226,19 +191,24 @@ public class AspectContainer {
 	 * @return
 	 */
 	public final AspectContainer set(IAspectType type, int amount) {
-		if(amount > 0) {
-			int currentAmount = this.get(type);
-			int diff = currentAmount - amount;
-			int dynAmounts = this.getAmount(type, true);
-			this.putAmount(type, Math.max(dynAmounts - diff, 0), true);
-			if(dynAmounts < diff)
-				diff -= dynAmounts;
-			else 
-				diff = 0;
-			int staticAmounts = this.getAmount(type, false);
-			this.putAmount(type, Math.max(staticAmounts - diff, 0), false);
-		} else {
-			this.clearAspects(type);
+		if(amount >= 0) {
+			Storage storage = this.getStorage(type);
+			int diff = this.get(type) - amount;
+			if(diff > 0) {
+				//Remove
+				int dynAmounts = storage.getAmount(true);
+				storage.setAmount(true, Math.max(dynAmounts - diff, 0));
+				diff = Math.max(diff - dynAmounts, 0);
+				if(diff > 0) {
+					//Drain static aspect last and only if necessary
+					storage.setAmount(false, storage.getAmount(false) - diff);
+				}
+				this.onChanged();
+			} else if(diff < 0) {
+				//Add
+				storage.setAmount(true, amount - storage.getAmount(false));
+				this.onChanged();
+			}
 		}
 		return this;
 	}
@@ -250,7 +220,14 @@ public class AspectContainer {
 	 * @return
 	 */
 	public final AspectContainer add(IAspectType type, int amount) {
-		this.addAmount(type, amount, true);
+		Storage storage = this.getStorage(type);
+
+		storage.dynamicAmount += amount;
+
+		if(amount != 0) {
+			this.onChanged();
+		}
+
 		return this;
 	}
 
@@ -275,13 +252,11 @@ public class AspectContainer {
 	 * @return
 	 */
 	public final boolean isEmpty() {
-		for(List<InternalAspect> aspects : this.aspects.values()) {
-			for(InternalAspect aspect : aspects) {
-				if(aspect.amount > 0)
-					return true;
-			}
+		for(Storage storage : this.storage.values()) {
+			if(storage.getAmount(true) + storage.getAmount(false) > 0)
+				return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**
@@ -291,16 +266,22 @@ public class AspectContainer {
 	 */
 	public NBTTagCompound save(NBTTagCompound nbt) {
 		NBTTagList typesList = new NBTTagList();
-		Set<Entry<IAspectType, List<InternalAspect>>> entrySet = this.aspects.entrySet();
-		for(Entry<IAspectType, List<InternalAspect>> entry : entrySet) {
-			NBTTagList aspectsList = new NBTTagList();
-			for(InternalAspect aspect : entry.getValue()) {
-				if(aspect.isSaved())
-					aspectsList.appendTag(aspect.writeToNBT(new NBTTagCompound()));
+		for(Entry<IAspectType, Storage> entry : this.storage.entrySet()) {
+			IAspectType type = entry.getKey();
+			Storage storage = entry.getValue();
+			
+			if(storage.dynamicAmount == 0 && !storage.hasStoredStaticAmount) {
+				//Doesn't have to be saved
+				continue;
 			}
-			typesList.appendTag(aspectsList);
+			
+			NBTTagCompound storageNbt = new NBTTagCompound();
+			storageNbt.setTag("aspect", type.writeToNBT(new NBTTagCompound()));
+			storageNbt.setTag("storage", storage.writeToNBT(new NBTTagCompound()));
+
+			typesList.appendTag(storageNbt);
 		}
-		nbt.setTag(ASPECTS_NBT_TAG, typesList);
+		nbt.setTag("container", typesList);
 		return nbt;
 	}
 
@@ -310,50 +291,38 @@ public class AspectContainer {
 	 * @param staticAspects
 	 * @return
 	 */
-	public AspectContainer load(@Nullable NBTTagCompound nbt, @Nullable List<Aspect> staticAspects) {
-		List<InternalAspect> aspects = new ArrayList<InternalAspect>();
-		if(nbt != null) {
-			NBTTagList typesList = nbt.getTagList(ASPECTS_NBT_TAG, Constants.NBT.TAG_LIST);
-			int typesCount = typesList.tagCount();
-			for(int i = 0; i < typesCount; i++) {
-				NBTTagList aspectsList = (NBTTagList) typesList.get(i);
-				int aspectsCount = aspectsList.tagCount();
-				for(int c = 0; c < aspectsCount; c++) {
-					NBTTagCompound aspectNBT = aspectsList.getCompoundTagAt(c);
-					InternalAspect aspect = InternalAspect.readFromNBT(aspectNBT);
-					if(aspect != null)
-						aspects.add(aspect);
-				}
-			}
-		}
-		if(staticAspects != null) {
-			for(Aspect aspect : staticAspects) {
-				boolean hasStatic = false;
-				for(InternalAspect internalAspect : aspects) {
-					if(!internalAspect.isDynamic && aspect.type == internalAspect.type)
-						hasStatic = true;
-				}
-				if(!hasStatic)
-					aspects.add(new InternalAspect(aspect.type, aspect.amount, false, false));
-			}
-		}
-		for(InternalAspect aspect : aspects) {
-			List<InternalAspect> entries = this.getEntries(aspect.type);
-			entries.add(aspect);
+	public AspectContainer read(NBTTagCompound nbt) {
+		NBTTagList typesList = nbt.getTagList("container", Constants.NBT.TAG_COMPOUND);
+		for(int i = 0; i < typesList.tagCount(); i++) {
+			NBTTagCompound storageNbt = typesList.getCompoundTagAt(i);
+			IAspectType type = IAspectType.readFromNBT(storageNbt.getCompoundTag("aspect"));
+			if(type == null)
+				continue;
+			Storage storage = this.getStorage(type);
+			storage.readFromNBT(storageNbt.getCompoundTag("storage"));
 		}
 		return this;
+	}
+
+	/**
+	 * Returns a list of static aspects of this container
+	 * @return
+	 */
+	@Nonnull
+	protected List<Aspect> getStaticAspects() {
+		return ImmutableList.of();
 	}
 
 	/**
 	 * Returns a list of all aspects in this container
 	 * @return
 	 */
+	@Nonnull
 	public List<Aspect> getAspects() {
 		List<Aspect> aspects = new ArrayList<Aspect>();
-		Set<IAspectType> types = this.getAvailableAspectTypes();
+		Set<IAspectType> types = this.getStoredAspectTypes();
 		for(IAspectType type : types) {
-			int amount = this.getAmount(type, true);
-			amount += this.getAmount(type, false);
+			int amount = this.get(type);
 			if(amount > 0)
 				aspects.add(new Aspect(type, amount));
 		}
