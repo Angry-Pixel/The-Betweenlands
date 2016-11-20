@@ -27,9 +27,10 @@ public class FlightMoveHelper extends EntityMoveHelper {
 				distSq = (double)MathHelper.sqrt_double(distSq);
 
 				if(this.isNotColliding(this.posX, this.posY, this.posZ, distSq)) {
-					this.entity.motionX += dx / distSq * this.speed;
-					this.entity.motionY += dy / distSq * this.speed;
-					this.entity.motionZ += dz / distSq * this.speed;
+					double speed = this.getFlightSpeed();
+					this.entity.motionX += dx / distSq * speed;
+					this.entity.motionY += dy / distSq * speed;
+					this.entity.motionZ += dz / distSq * speed;
 					this.blocked = false;
 				} else {
 					this.action = EntityMoveHelper.Action.WAIT;
@@ -87,5 +88,13 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	 */
 	protected boolean isBlocked(AxisAlignedBB aabb) {
 		return !this.entity.worldObj.getCollisionBoxes(this.entity, aabb).isEmpty();
+	}
+	
+	/**
+	 * Returns the flight speed
+	 * @return
+	 */
+	protected double getFlightSpeed() {
+		return this.speed;
 	}
 }

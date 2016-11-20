@@ -7,11 +7,11 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 
-public class EntityAIFlyRandomly extends EntityAIBase {
-	protected final EntityLiving entity;
+public class EntityAIFlyRandomly<T extends EntityLiving> extends EntityAIBase {
+	protected final T entity;
 	protected double distanceMultiplier = 1.0D;
 
-	public EntityAIFlyRandomly(EntityLiving entity) {
+	public EntityAIFlyRandomly(T entity) {
 		this.entity = entity;
 		this.setMutexBits(1);
 	}

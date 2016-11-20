@@ -17,9 +17,11 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
+import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -37,7 +39,19 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
+		this.tasks.addTask(0, new EntityAIMoveToDirect<EntityChiromaw>(this, 0.1D) {
+			@Override
+			protected Vec3d getTarget() {
+				if(!this.entity.getIsHanging()) {
+					EntityLivingBase target = this.entity.getAttackTarget();
+					if(target != null) {
+						return new Vec3d(target.posX, target.posY + 1 - this.entity.rand.nextFloat() * 0.3, target.posZ);
+					}
+				}
+				return null;
+			}
+		});
+		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityChiromaw>(this) {
 			@Override
 			protected double getTargetX(Random rand, double distanceMultiplier) {
 				return this.entity.posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 10.0F * distanceMultiplier);
@@ -58,7 +72,8 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 				return 0.08D;
 			}
 		});
-		this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
+
+		this.targetTasks.addTask(0, new EntityAIFindEntityNearestPlayer(this));
 	}
 
 	@Override
@@ -80,8 +95,6 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 		if (attackTarget != null) {
 			if (attackTarget instanceof EntityPlayer && ((EntityPlayer) attackTarget).capabilities.isCreativeMode || !getEntitySenses().canSee(attackTarget)) {
 				this.setAttackTarget(null);
-			} else if(!this.getIsHanging()) {
-				this.moveHelper.setMoveTo(attackTarget.posX, attackTarget.posY + 1 - this.rand.nextFloat() * 0.3, attackTarget.posZ, 0.1D);
 			}
 		}
 

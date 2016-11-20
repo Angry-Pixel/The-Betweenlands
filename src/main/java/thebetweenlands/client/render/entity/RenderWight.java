@@ -5,89 +5,97 @@ import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.entity.ModelWight;
+import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityWight;
 
 public class RenderWight extends RenderLiving<EntityWight> {
-    private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/wight.png");
+	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/wight.png");
 
-    private static final ModelWight model = new ModelWight();
-    private static final ModelWight modelHeadOnly = new ModelWight().setRenderHeadOnly(true);
+	private static final ModelWight MODEL = new ModelWight();
+	private static final ModelWight MODEL_HEAD_ONLY = new ModelWight().setRenderHeadOnly(true);
 
-    public RenderWight(RenderManager rendermanagerIn) {
-        super(rendermanagerIn, model, 0.5f);
-    }
+	public RenderWight(RenderManager rendermanagerIn) {
+		super(rendermanagerIn, MODEL, 0.5f);
+	}
 
-    @Override
-    protected ResourceLocation getEntityTexture(EntityWight entity) {
-        return texture;
-    }
+	@Override
+	protected ResourceLocation getEntityTexture(EntityWight entity) {
+		return texture;
+	}
 
-    @Override
-    protected void preRenderCallback(EntityWight entitylivingbaseIn, float partialTickTime) {
-        if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-            //TODO ShaderHelper.INSTANCE.addDynLight(new LightSource(entityliving.posX, entityliving.posY, entityliving.posZ, 10.0f, -1, -1, -1));
-        }
+	@Override
+	protected void preRenderCallback(EntityWight entity, float partialTickTime) {
+		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 10.0f, -1, -1, -1));
+		}
 
-        GlStateManager.color(0, 0, 0, 0);
-    }
+		GlStateManager.scale(0.9F, 0.9F, 0.9F);
 
-    /*TODO this
-    @Override
-    protected int shouldRenderPass(EntityLivingBase entityliving, int pass, float partialTickTime) {
-        EntityWight wight = (EntityWight) entityliving;
+		if(entity.isVolatile()) {
+			GlStateManager.scale(0.5D, 0.5D, 0.5D);
+			GlStateManager.translate(0, 1.0D, 0);
+		}
+	}
 
-        GlStateManager.depthMask(true);
+	@Override
+	public void doRender(EntityWight entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		if(!entity.isVolatile()) {
+			GlStateManager.pushMatrix();
+			GlStateManager.disableBlend();
+			GlStateManager.colorMask(false, false, false, false);
+			GlStateManager.color(1, 1, 1, 1);
 
-        if (wight.isVolatile()) {
-            this.setRenderPassModel(this.modelHeadOnly);
-            if (pass == 0) {
-                GlStateManager.scale(0.9F, 0.9F, 0.9F);
-                GlStateManager.disableBlend();
-                GlStateManager.colorMask(false, false, false, false);
-                GlStateManager.color(1, 1, 1, 1);
-                GlStateManager.pushMatrix();
-                GlStateManager.translate(0, 1.65D, 0);
-                GlStateManager.scale(0.5D, 0.5D, 0.5D);
-                if (wight.getRidingEntity() != null) {
-                    GlStateManager.rotate((float) ((wight.ticksExisted + partialTickTime) / 30.0D * 360.0D, 0, 1, 0);
-                    GlStateManager.rotate(180, 0, 1, 0);
-                    GlStateManager.scale(0, 0, 0.8D);
-                }
-                LightingUtil.INSTANCE.setLighting(255);
-                return 1;
-            } else if (pass == 1) {
-                GlStateManager.colorMask(true, true, true, true);
-                GlStateManager.enableBlend();
-                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-                GlStateManager.color(1F, 1F, 1F, 0.4F);
-                return 1;
-            } else if (pass == 2) {
-                GlStateManager.popMatrix();
-                LightingUtil.INSTANCE.revert();
-            }
+			super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
-            return -1;
-        }
+			GlStateManager.colorMask(true, true, true, true);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1F, 1F, 1F, 1F - entity.getHidingAnimation(partialTicks) * 0.5F);
 
-        this.setRenderPassModel(this.model);
+			super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
-        if (pass == 0) {
-            GlStateManager.scale(0.9F, 0.9F, 0.9F);
-            GlStateManager.translate(0, 0.175D, 0);
-            GlStateManager.disableBlend();
-            GlStateManager.colorMask(false, false, false, false);
-            GlStateManager.color(1, 1, 1, 1);
-            return 1;
-        } else if (pass == 1) {
-            GlStateManager.colorMask(true, true, true, true);
-            GlStateManager.enableBlend();
-            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-            GlStateManager.color(1F, 1F, 1F, 1F - wight.getAnimation() * 0.5F);
-            return 1;
-        }
+			GlStateManager.popMatrix();
+		} else {
+			this.mainModel = MODEL_HEAD_ONLY;
 
-        return -1;
-    }*/
+			GlStateManager.pushMatrix();
+			GlStateManager.disableBlend();
+			GlStateManager.colorMask(false, false, false, false);
+			GlStateManager.color(1, 1, 1, 1);
 
+			if (entity.getRidingEntity() != null) {
+				GlStateManager.enableRescaleNormal();
+				GlStateManager.scale(-1.0F, -1.0F, 1.0F);
+				GlStateManager.rotate((float) (entity.ticksExisted + partialTicks) / 30.0F * 360.0F, 0, 1, 0);
+				GlStateManager.rotate(180, 0, 1, 0);
+				GlStateManager.translate(0, -entity.getRidingEntity().getEyeHeight() + 0.2D, 0.8D);
+				GlStateManager.scale(0.5D, 0.5D, 0.5D);
+
+				this.bindEntityTexture(entity);
+
+				MODEL_HEAD_ONLY.render(entity, 0.0F, 0.0F, entity.ticksExisted + partialTicks, 0.0F, 0.0F, 0.0625F);
+
+				GlStateManager.colorMask(true, true, true, true);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(1F, 1F, 1F, 0.4F);
+
+				MODEL_HEAD_ONLY.render(entity, 0.0F, 0.0F, entity.ticksExisted + partialTicks, 0.0F, 0.0F, 0.0625F);
+			} else {
+				super.doRender(entity, x, y, z, entityYaw, partialTicks);
+
+				GlStateManager.colorMask(true, true, true, true);
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.color(1F, 1F, 1F, 0.4F);
+
+				super.doRender(entity, x, y, z, entityYaw, partialTicks);
+			}
+
+			GlStateManager.popMatrix();
+
+			this.mainModel = MODEL;
+		}
+	}
 }

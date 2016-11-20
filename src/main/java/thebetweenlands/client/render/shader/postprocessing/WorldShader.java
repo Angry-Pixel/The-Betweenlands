@@ -65,6 +65,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private int[] lightSourceColorUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
 	private int[] lightSourceRadiusUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
 	private int lightSourceAmountUniformID = -1;
+	private int msTimeUniformID = -1;
 
 	//Shader textures
 	private Framebuffer gasTextureBaseFramebuffer = null;
@@ -136,6 +137,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.gasParticlesDepthUniformID = this.getUniform("s_gasParticles_depth");
 		this.invMVPUniformID = this.getUniform("u_INVMVP");
 		this.fogModeUniformID = this.getUniform("u_fogMode");
+		this.msTimeUniformID = this.getUniform("u_msTime");
 
 		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
 			this.lightSourcePositionUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].position");
@@ -225,6 +227,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		}
 
 		this.uploadInt(this.lightSourceAmountUniformID, renderedLightSources);
+		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
 	}
 
 	/**

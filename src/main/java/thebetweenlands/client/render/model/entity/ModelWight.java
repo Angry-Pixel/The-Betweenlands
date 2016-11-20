@@ -133,11 +133,11 @@ public class ModelWight extends ModelBase {
         super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         if(entity instanceof EntityWight) {
             EntityWight wight = (EntityWight) entity;
-            neck.rotateAngleX = 0.4009094953223726F + wight.getAnimation();
-            jaw.rotateAngleX = -0.4009094953223726F + 1F - wight.getAnimation();
+            neck.rotateAngleX = 0.4F + wight.getHidingAnimation(entityTickTime - entity.ticksExisted);
+            jaw.rotateAngleX = -0.4F + 1F - wight.getHidingAnimation(entityTickTime - entity.ticksExisted);
         } else {
-            neck.rotateAngleX = 0.4009094953223726F;
-            jaw.rotateAngleX = -0.4009094953223726F + 1;
+            neck.rotateAngleX = 0.4F;
+            jaw.rotateAngleX = -0.4F + 1;
         }
         armright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
         armleft.rotateAngleX = -MathHelper.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAngle;
