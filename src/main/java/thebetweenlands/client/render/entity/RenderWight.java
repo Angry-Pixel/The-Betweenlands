@@ -65,11 +65,12 @@ public class RenderWight extends RenderLiving<EntityWight> {
 			GlStateManager.color(1, 1, 1, 1);
 
 			if (entity.getRidingEntity() != null) {
+				GlStateManager.translate(x, y, z);
 				GlStateManager.enableRescaleNormal();
 				GlStateManager.scale(-1.0F, -1.0F, 1.0F);
 				GlStateManager.rotate((float) (entity.ticksExisted + partialTicks) / 30.0F * 360.0F, 0, 1, 0);
 				GlStateManager.rotate(180, 0, 1, 0);
-				GlStateManager.translate(0, -entity.getRidingEntity().getEyeHeight() + 0.2D, 0.8D);
+				GlStateManager.translate(0, -entity.getRidingEntity().getEyeHeight() + 1.65D, 0.8D);
 				GlStateManager.scale(0.5D, 0.5D, 0.5D);
 
 				this.bindEntityTexture(entity);

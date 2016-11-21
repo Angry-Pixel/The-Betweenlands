@@ -48,6 +48,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
+//Only leaving this here in case we still need some of the not yet updated code
+@Deprecated
 public class EntityWightOld extends EntityMob implements IEntityBL {
 	public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute(null, "bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");
 	public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute(null, "bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");

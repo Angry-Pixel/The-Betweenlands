@@ -27,6 +27,7 @@ public class MessageRegistry {
 		registerMessage(MessageSyncSharedStorage.class, Side.CLIENT);
 		registerMessage(MessageRemoveSharedStorage.class, Side.CLIENT);
 		registerMessage(MessageDruidTeleportParticles.class, Side.CLIENT);
+		registerMessage(MessageWightVolatileParticles.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {

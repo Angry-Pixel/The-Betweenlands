@@ -14,32 +14,7 @@ public class EntityRegistry {
 	private EntityRegistry() {
 	}
 
-	private static int id;
-
-	private static void registerEntity(Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
-		net.minecraftforge.fml.common.registry.EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.INSTANCE, trackingRange, trackingFrequency, velocityUpdates);
-		id++;
-	}
-
-	private static void registerEntity(Class<? extends Entity> entityClass, String name) {
-		net.minecraftforge.fml.common.registry.EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.INSTANCE, 64, 3, true);
-		id++;
-	}
-
-	private static void registerEntity(Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
-		registerEntity(entityClass, name, trackingRange, trackingFrequency, velocityUpdates);
-		net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
-		id++;
-	}
-
-	private static void registerEntity(Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor) {
-		registerEntity(entityClass, name);
-		net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
-		id++;
-	}
-
 	public static void preInit() {
-		id = 0;
 		registerEntity(EntityDarkDruid.class, "darkDruid", 0x000000, 0xFF0000);
 		registerEntity(EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
 		registerEntity(EntitySludge.class, "sludge", 0x3A2F0B, 0x5F4C0B);
@@ -64,6 +39,31 @@ public class EntityRegistry {
 		registerEntity(EntitySwordEnergy.class, "sword_energy");
 		registerEntity(EntityShockwaveSwordItem.class, "shockwave_sword_item");
 		registerEntity(EntityShockwaveBlock.class, "shockwave_block");
-		registerEntity(EntityGasCloud.class, "gasCloud", 0xFFB300, 0xFFD000);
+		registerEntity(EntityGasCloud.class, "gas_cloud", 0xFFB300, 0xFFD000);
+		registerEntity(EntityVolatileSoul.class, "volatile_soul");
+	}
+	
+	private static int id = 0;
+
+	private static void registerEntity(Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
+		net.minecraftforge.fml.common.registry.EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.INSTANCE, trackingRange, trackingFrequency, velocityUpdates);
+		id++;
+	}
+
+	private static void registerEntity(Class<? extends Entity> entityClass, String name) {
+		net.minecraftforge.fml.common.registry.EntityRegistry.registerModEntity(entityClass, name, id, TheBetweenlands.INSTANCE, 64, 3, true);
+		id++;
+	}
+
+	private static void registerEntity(Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor, int trackingRange, int trackingFrequency, boolean velocityUpdates) {
+		registerEntity(entityClass, name, trackingRange, trackingFrequency, velocityUpdates);
+		net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
+		id++;
+	}
+
+	private static void registerEntity(Class<? extends EntityLiving> entityClass, String name, int eggBackgroundColor, int eggForegroundColor) {
+		registerEntity(entityClass, name);
+		net.minecraftforge.fml.common.registry.EntityRegistry.registerEgg(entityClass, eggBackgroundColor, eggForegroundColor);
+		id++;
 	}
 }

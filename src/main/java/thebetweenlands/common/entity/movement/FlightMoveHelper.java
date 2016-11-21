@@ -65,6 +65,9 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	 * @return
 	 */
 	protected boolean isNotColliding(double x, double y, double z, double step) {
+		if(this.entity.noClip)
+			return true;
+		
 		double stepX = (x - this.entity.posX) / step;
 		double stepY = (y - this.entity.posY) / step;
 		double stepZ = (z - this.entity.posZ) / step;
