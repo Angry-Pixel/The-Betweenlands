@@ -14,7 +14,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 
@@ -28,14 +27,6 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 
 	@Override
 	public void doRender(EntityGasCloud entity, double x, double y, double z, float yaw, float partialTicks) {
-		/*if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ,
-					4.5f,
-					-1,
-					-1,
-					-1));
-		}*/
-
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

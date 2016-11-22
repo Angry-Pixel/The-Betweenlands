@@ -9,6 +9,8 @@ import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodNode;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.launchwrapper.IClassTransformer;
 import thebetweenlands.core.module.PreRenderShadersHookTransformer;
 import thebetweenlands.core.module.TransformerModule;
@@ -16,14 +18,14 @@ import thebetweenlands.core.module.TransformerModule;
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	public static boolean constructed;
 
-	private final List<TransformerModule> modules = new ArrayList<TransformerModule>();
-	private final List<TransformerModule> currentClassModules = new ArrayList<TransformerModule>();
-	private final List<TransformerModule> currentMethodModules = new ArrayList<TransformerModule>();
+	private static final List<TransformerModule> modules = new ArrayList<TransformerModule>();
+
+	static {
+		registerModule(new PreRenderShadersHookTransformer());
+	}
 
 	public TheBetweenlandsClassTransformer() {
 		constructed = true;
-
-		this.registerModule(new PreRenderShadersHookTransformer());
 	}
 
 	/**
@@ -31,61 +33,84 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	 * @param module
 	 * @return
 	 */
-	public TheBetweenlandsClassTransformer registerModule(TransformerModule module) {
-		this.modules.add(module);
-		return this;
+	public static void registerModule(TransformerModule module) {
+		modules.add(module);
+	}
+
+	/**
+	 * Returns all registered modules
+	 * @return
+	 */
+	public static List<TransformerModule> getModules() {
+		return ImmutableList.copyOf(modules);
 	}
 
 	@Override
 	public byte[] transform(String name, String transformedName, byte[] classBytes) {
-		this.currentClassModules.clear();
+		List<TransformerModule> currentClassModules = new ArrayList<TransformerModule>();
 
-		for(TransformerModule module : this.modules) {
+		for(TransformerModule module : modules) {
 			if(module.acceptsClass(name)) {
 				module.reset();
-				this.currentClassModules.add(module);
+				currentClassModules.add(module);
 			}
 		}
 
 		ClassNode classNode = null;
 
-		if(!this.currentClassModules.isEmpty()) {
+		if(!currentClassModules.isEmpty()) {
 			classNode = readClass(classBytes);
 
-			for(TransformerModule module : this.currentClassModules) {
+			for(TransformerModule module : currentClassModules) {
 				module.transformClass(classNode);
 			}
 
+			List<TransformerModule> currentMethodModules = new ArrayList<TransformerModule>();
+			
 			for(MethodNode method : classNode.methods) {
-				this.currentMethodModules.clear();
+				currentMethodModules.clear();
 
-				for(TransformerModule module : this.currentClassModules) {
-					if(module.acceptsMethod(method)) {
-						if(!module.wasSuccessful()) {
-							module.transformMethod(method);
-							this.currentMethodModules.add(module);
-						}
+				for(TransformerModule module : currentClassModules) {
+					if(!module.wasSuccessful() && module.acceptsMethod(method)) {
+						module.transformMethod(method);
+						currentMethodModules.add(module);
 					}
 				}
 
 				for (int i = 0; i < method.instructions.size(); i++) {
 					AbstractInsnNode insnNode = method.instructions.get(i);
 
-					for(TransformerModule module : this.currentClassModules) {
+					for(TransformerModule module : currentMethodModules) {
 						if(!module.wasSuccessful())
 							i += module.transformMethodInstruction(method, insnNode, i);
 					}
 				}
 			}
-		}
-
-		for(TransformerModule module : this.currentClassModules) {
-			if(!module.wasSuccessful()) {
-				throw new RuntimeException(String.format("Transformer module %s failed", module.getName()));
-			}
+			
+			checkModules(currentClassModules);
 		}
 
 		return classNode == null ? classBytes : writeClass(classNode);
+	}
+
+	/**
+	 * Checks if all modules were successful and throws a {@link ClassTransformationException} otherwise.
+	 * @param modules
+	 */
+	public static void checkModules() {
+		checkModules(modules);
+	}
+
+	/**
+	 * Checks if all modules in the specified list were successful and throws a {@link ClassTransformationException} otherwise.
+	 * @param modules
+	 */
+	private static void checkModules(List<TransformerModule> modules) {
+		for(TransformerModule module : modules) {
+			if(!module.wasSuccessful()) {
+				throw new ClassTransformationException(String.format("Transformer module %s failed", module.getName()));
+			}
+		}
 	}
 
 	private ClassNode readClass(byte[] classBytes) {
@@ -99,5 +124,13 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
 		classNode.accept(classWriter);
 		return classWriter.toByteArray();
+	}
+
+	private static class ClassTransformationException extends RuntimeException {
+		private static final long serialVersionUID = -6506110261102379179L;
+
+		public ClassTransformationException(String str) {
+			super(str);
+		}
 	}
 }

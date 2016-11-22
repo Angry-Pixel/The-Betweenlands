@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.biome;
 
 import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
@@ -12,7 +13,7 @@ import thebetweenlands.common.world.gen.biome.feature.DeepWatersFeature;
 public class BiomeDeepWaters extends BiomeBetweenlands {
 
 	public BiomeDeepWaters() {
-		super(new BiomeProperties("deep_waters").setBaseHeight(108.0F).setHeightVariation(5.0F).setWaterColor(0x1b3944).setTemperature(0.8F).setRainfall(0.9F));
+		super(new BiomeProperties("deep_waters").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 12).setHeightVariation(5.0F).setWaterColor(0x1b3944).setTemperature(0.8F).setRainfall(0.9F));
 		//this.setWeight(15);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorDeepWaters())

@@ -207,27 +207,6 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.enableBlend();
 				GlStateManager.color(1, 1, 1, 1);
 			}
-
-			//Render and cycle through aspect overlays
-			/*for(Slot slot : container.inventorySlots.inventorySlots) {
-				if(slot.getHasStack()) {
-					try {
-						ItemStack stack = slot.getStack();
-						List<Aspect> aspects = ItemAspectContainer.fromItem(stack, AspectManager.get(mc.theWorld)).getAspects(mc.thePlayer);
-						if(!aspects.isEmpty()) {
-							Aspect aspect = aspects.get(aspects.size() > 1 ? (this.updateCounter / 40) % (aspects.size()) : 0);
-							int guiX = ReflectionHelper.findField(GuiContainer.class, "guiLeft").getInt(container);
-							int guiY = ReflectionHelper.findField(GuiContainer.class, "guiTop").getInt(container);
-							GlStateManager.pushMatrix();
-							GlStateManager.translate(0, 0, 500);
-							AspectIconRenderer.renderIcon(guiX + slot.xDisplayPosition, guiY + slot.yDisplayPosition, 16, 16, aspect.type.getIcon());
-							GlStateManager.popMatrix();
-						}
-					} catch(Exception ex) {
-
-					}
-				}
-			}*/
 		}
 	}
 }

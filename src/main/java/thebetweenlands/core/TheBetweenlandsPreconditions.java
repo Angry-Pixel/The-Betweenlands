@@ -24,6 +24,8 @@ public final class TheBetweenlandsPreconditions {
 	}
 
 	private static class MissingClassTransformation extends RuntimeException {
+		private static final long serialVersionUID = 946208971201883597L;
+
 		public MissingClassTransformation() {
 			super(MCT_MSG);
 		}

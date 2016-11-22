@@ -26,8 +26,8 @@ import thebetweenlands.util.config.ConfigHandler;
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
 
-	private final Method methodRenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand" /*TODO: Mappings!*/}, float.class, int.class);
-	private final Method methodSetupCameraTransform = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"setupCameraTransform" /*TODO: Mappings!*/}, float.class, int.class);
+	private final Method methodRenderHand = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"renderHand", "func_78476_b", "b"}, float.class, int.class);
+	private final Method methodSetupCameraTransform = ReflectionHelper.findMethod(EntityRenderer.class, null, new String[]{"setupCameraTransform", "func_78479_a", "a"}, float.class, int.class);
 
 	private boolean cancelOverlays = false;
 

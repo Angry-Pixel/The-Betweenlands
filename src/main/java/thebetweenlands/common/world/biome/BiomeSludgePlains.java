@@ -10,7 +10,7 @@ import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
 public class BiomeSludgePlains extends BiomeBetweenlands {
 
 	public BiomeSludgePlains() {
-		super(new BiomeProperties("sludge_plains").setBaseHeight(110.0F).setHeightVariation(3F).setWaterColor(0x3A2F0B).setTemperature(0.8F).setRainfall(0.9F));
+		super(new BiomeProperties("sludge_plains").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 10).setHeightVariation(3F).setWaterColor(0x3A2F0B).setTemperature(0.8F).setRainfall(0.9F));
 		//this.setWeight(5);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlains())

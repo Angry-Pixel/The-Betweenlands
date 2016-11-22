@@ -19,7 +19,7 @@ import thebetweenlands.util.FogGenerator;
 public class BiomeMarsh extends BiomeBetweenlands {
 
 	public BiomeMarsh(int type) {
-		super(new BiomeProperties("marsh_" + type).setBaseHeight(119F).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
+		super(new BiomeProperties("marsh_" + type).setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
 		//this.setWeight(10);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator()

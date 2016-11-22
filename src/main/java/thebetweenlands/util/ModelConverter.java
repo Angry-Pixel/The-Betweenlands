@@ -464,7 +464,7 @@ public class ModelConverter {
 
 				//ModelBox quad list
 				if(f_mbQuadList == null) {
-					f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList", "field_78254_i");
+					f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList", "field_78254_i", "i");
 				}
 				TexturedQuad[] mbQuadList = null;
 				try {

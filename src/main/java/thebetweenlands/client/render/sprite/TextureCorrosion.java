@@ -39,9 +39,8 @@ public class TextureCorrosion extends TextureAtlasSprite {
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Random RANDOM = new Random(0);
 
-	//TODO: Mappings!
-	private static final Field f_frameCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "frameCounter");
-	private static final Field f_tickCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "tickCounter");
+	private static final Field f_frameCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "frameCounter", "field_110973_g", "h");
+	private static final Field f_tickCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "tickCounter", "field_110983_h", "i");
 
 	private static int[] corrosionPixels;
 	private static int corrosionWidth;

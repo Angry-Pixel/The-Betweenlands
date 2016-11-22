@@ -30,7 +30,7 @@ plugins {
 */
 
 minecraft {
-    version = "1.10.2-12.18.1.2018"
+    version = "1.10.2-12.18.2.2151"
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '/*!*/true/*!*/', 'false'

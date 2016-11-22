@@ -165,7 +165,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 			targetFramebuffer2.framebufferClear();
 
-			GL11.glDisable(GL11.GL_ALPHA_TEST);
+			GlStateManager.disableAlpha();
 
 			for(int i = 0; i < renderPasses; i++) {
 				//Renders the shader to the blitBuffer
@@ -241,7 +241,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 				.render(partialTicks);
 			}
 
-			GL11.glEnable(GL11.GL_ALPHA_TEST);
+			GlStateManager.enableAlpha();
 		}
 	}
 
