@@ -71,9 +71,6 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private final long seed;
 	private final int layerHeight;
 
-	private final List<BiomeGenerator> initializedNoiseGenerators = new ArrayList<BiomeGenerator>();
-	private final List<BiomeGenerator> initializedGenerators = new ArrayList<BiomeGenerator>();
-
 	private MapGenCavesBetweenlands caveGenerator;
 
 	private NoiseGeneratorSimplex treeNoise;
@@ -123,10 +120,12 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.rand.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
 
 		ChunkPrimer chunkprimer = new ChunkPrimer();
+		
 		this.setBlocksInChunk(chunkX, chunkZ, chunkprimer);
 
 		//Interpolate biome weights
 		//TODO: This could be optimized by using 4 loops to reduce the array lookups, similar to setBlocksInChunk
+
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
 				float fractionZ = (z % 4) / 4.0F;
@@ -153,8 +152,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		//Gen caves
 		this.caveGenerator.setBiomeTerrainWeights(this.interpolatedTerrainBiomeWeights);
 		//TODO: Maybe these can be optimized to speed up the world gen quite a bit. Sampling the noise for only every second point and then lerp?
-		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
-
+		//this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
+		
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
 				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
@@ -388,17 +387,19 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				for (int heightMapY = 0; heightMapY < 33; ++heightMapY) {
 					double densityOffset = ((double)heightMapY * 8.0D - biomeDepth - (depthPerturbation * biomeVariation / 256.0D)) / 256.0D;
 
-					double maxGenDensity16 = 0.0D;
+					double maxGenDensity16 = 32767.0D;
+					/*double maxGenDensity16 = 0.0D;
 					for(int i = 0; i < 16 - 1; i++) {
 						maxGenDensity16 += 2 * Math.pow(2.0D, i);
 					}
-					maxGenDensity16 /= 2.0D;
+					maxGenDensity16 /= 2.0D;*/
 
-					double maxGenDensity8 = 0.0D;
+					double maxGenDensity8 = 127.0;
+					/*double maxGenDensity8 = 0.0D;
 					for(int i = 0; i < 8 - 1; i++) {
 						maxGenDensity8 += 2 * Math.pow(2.0D, i);
 					}
-					maxGenDensity8 /= 2.0D;
+					maxGenDensity8 /= 2.0D;*/
 
 					double minDensity = (this.minLimitRegion[noiseIndex] / maxGenDensity16) * biomeVariation / 256.0D;
 					double maxDensity = (this.maxLimitRegion[noiseIndex] / maxGenDensity16) * biomeVariation / 256.0D;
@@ -425,7 +426,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
 
-		this.initializedNoiseGenerators.clear();
+
+		List<BiomeGenerator> foundGenerators = new ArrayList<BiomeGenerator>();
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
 				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
@@ -434,21 +436,19 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				Biome biome = biomesIn[z + x * 16];
 				if(biome instanceof BiomeBetweenlands) {
 					BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
-					if(!this.initializedGenerators.contains(generator))
-						generator.initializeGenerators(this.seed);
-					if(!this.initializedNoiseGenerators.contains(generator)) {
-						//X and Z seem to be swapped, don't ask...
-						generator.generateNoise(chunkZ, chunkX);
-						this.initializedNoiseGenerators.add(generator);
-					}
+					generator.initializeGenerators(this.seed);
+					generator.generateNoise(chunkZ, chunkX);
+					foundGenerators.add(generator);
 					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS);
 					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights);
 					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
 				} else {
 					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
 				}
-
 			}
+		}
+		for(BiomeGenerator gen : foundGenerators) {
+			gen.resetNoise();
 		}
 	}
 

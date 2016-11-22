@@ -3,6 +3,7 @@ package thebetweenlands.common.world.gen.biome.generator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.SplittableRandom;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -33,9 +34,11 @@ public class BiomeGenerator {
 
 	private final List<BiomeFeature> biomeFeatures = new ArrayList<BiomeFeature>();
 
-	protected final Random rng = new Random();
 	protected IChunkGenerator chunkGenerator;
 	protected Biome[] biomesForGeneration;
+
+	protected boolean noiseGeneratorsInitialized = false;
+	protected boolean noiseGenerated = false;
 
 	protected BiomeDecoratorBetweenlands decorator = new BiomeDecoratorBetweenlands();
 
@@ -162,29 +165,46 @@ public class BiomeGenerator {
 	}
 
 	/**
-	 * Initializes additional noise generators.
+	 * Initializes additional noise generators if necessary
 	 * @param rng Seeded Random
 	 */
 	public void initializeGenerators(long seed) {
-		this.rng.setSeed(seed);
-		if(this.baseBlockLayerVariationNoiseGen == null) {
+		if(!this.noiseGeneratorsInitialized) {
 			this.baseBlockLayerVariationNoiseGen = new NoiseGeneratorPerlin(new Random(seed), 4);
-		}
-		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.initializeGenerators(seed, this.biome);
+			for(BiomeFeature feature : this.biomeFeatures) {
+				feature.initializeGenerators(seed, this.biome);
+			}
+			this.noiseGeneratorsInitialized = true;
 		}
 	}
 
 	/**
-	 * Generates the noise fields.
+	 * Generates the noise fields if necessary
 	 * @param chunkX
 	 * @param chunkZ
 	 */
-	public void generateNoise(int chunkX, int chunkZ) { 
-		this.baseBlockLayerVariationNoise = this.baseBlockLayerVariationNoiseGen.getRegion(this.baseBlockLayerVariationNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
-		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.generateNoise(chunkX, chunkZ, this.biome);
+	public void generateNoise(int chunkX, int chunkZ) {
+		if(!this.noiseGenerated) {
+			this.baseBlockLayerVariationNoise = this.baseBlockLayerVariationNoiseGen.getRegion(this.baseBlockLayerVariationNoise, (double) (chunkX * 16), (double) (chunkZ * 16), 16, 16, 0.08D * 2.0D, 0.08D * 2.0D, 1.0D);
+			for(BiomeFeature feature : this.biomeFeatures) {
+				feature.generateNoise(chunkX, chunkZ, this.biome);
+			}
+			this.noiseGenerated = true;
 		}
+	}
+	
+	/**
+	 * Resets the noise generators at the next {@link BiomeGenerator#initializeGenerators(long)} call
+	 */
+	public void resetNoiseGenerators() {
+		this.noiseGeneratorsInitialized = false;
+	}
+	
+	/**
+	 * Resets and regenerates the noise at the next {@link BiomeGenerator#generateNoise(int, int)} call
+	 */
+	public void resetNoise() {
+		this.noiseGenerated = false;
 	}
 
 	public static enum EnumGeneratorPass {
@@ -233,7 +253,6 @@ public class BiomeGenerator {
 			double baseBlockNoise, Random rng, long seed, ChunkPrimer chunkPrimer, 
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
 			float terrainWeight, float[] terrainWeights) {
-		this.rng.setSeed((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
 
@@ -241,8 +260,10 @@ public class BiomeGenerator {
 			return;
 		}
 
+		SplittableRandom fastRng = new SplittableRandom((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
+
 		//Random number for base block patch generation based on the base block noise
-		int baseBlockNoiseRN = (int) (baseBlockNoise / 3.0D + 3.0D + rng.nextDouble() * 0.25D);
+		int baseBlockNoiseRN = (int) (baseBlockNoise / 3.0D + 3.0D + fastRng.nextDouble() * 0.25D);
 
 		//Amount of blocks below the surface
 		int blocksBelow = -1;
@@ -251,7 +272,7 @@ public class BiomeGenerator {
 
 		for(int y = 255; y >= 0; --y) {
 			//Generate bottom block
-			if(y <= this.bottomBlockHeight + rng.nextInt(this.bottomBlockFuzz)) {
+			if(y <= this.bottomBlockHeight + this.bottomBlockFuzz && y >= this.bottomBlockHeight && y - this.bottomBlockHeight <= fastRng.nextInt(this.bottomBlockFuzz)) {
 				chunkPrimer.setBlockState(inChunkX, y, inChunkZ, this.bottomBlockState);
 				continue;
 			}
@@ -307,9 +328,6 @@ public class BiomeGenerator {
 				//Generate base block
 				chunkPrimer.setBlockState(inChunkX, y, inChunkZ, this.getBaseBlockState(layerBlockY));
 			}
-
-			/*if(y < 70 && inChunkX <= 8 && inChunkZ <= 8)
-				chunkPrimer.setBlockState(inChunkX, y, inChunkZ, BlockRegistry.BETWEENSTONE.getDefaultState());*/
 		}
 
 		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
