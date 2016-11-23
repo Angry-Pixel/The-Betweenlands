@@ -29,11 +29,15 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	public EntityDragonFly(World world) {
 		super(world);
 		setSize(0.9F, 0.5F);
+	}
+
+	@Override
+	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(2, new EntityAILookIdle(this));
 	}
-
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();

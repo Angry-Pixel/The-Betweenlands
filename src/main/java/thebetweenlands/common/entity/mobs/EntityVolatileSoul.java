@@ -24,7 +24,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.particle.BLParticles;
 import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
 
-public class EntityVolatileSoul extends Entity implements IProjectile {
+public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL {
 	private Entity target = null;
 	private int strikes = 0;
 	private int ticksInAir;

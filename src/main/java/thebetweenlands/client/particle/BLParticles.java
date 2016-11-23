@@ -72,6 +72,7 @@ public enum BLParticles {
 			.getBaseArgsBuilder()
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
+	TAR_BEAST_DRIP(new ParticleTarBeastDrip.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
 	GAS_CLOUD(new ParticleGasCloud.Factory());

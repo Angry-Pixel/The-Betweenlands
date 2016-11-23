@@ -23,7 +23,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
+		this.tasks.addTask(5, new EntityAIFlyRandomly<EntityFirefly>(this) {
 			@Override
 			protected double getTargetY(Random rand, double distanceMultiplier) {
 				int worldHeight = MathHelper.floor_double(EntityFirefly.this.aboveLayer);

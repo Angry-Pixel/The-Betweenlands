@@ -36,6 +36,11 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		super(world);
 		setSize(0.7F, 0.5F);
 		stepHeight = 0.0F;
+		
+	}
+	
+	@Override
+	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
 		tasks.addTask(2, new EntityAIWander(this, 0.5D));

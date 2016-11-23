@@ -77,8 +77,6 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 * @param weight
 	 */
 	protected final BiomeBetweenlands setWeight(int weight) {
-		if (this.biomeWeight != 0)
-			throw new RuntimeException("Cannot set biome weight twice!");
 		this.biomeWeight = (short) weight;
 		return this;
 	}

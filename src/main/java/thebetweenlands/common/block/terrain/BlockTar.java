@@ -16,6 +16,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -43,7 +44,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		if (entity instanceof EntityLivingBase /*&& !(entity instanceof EntityTarBeast)*/ && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)) {
+		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast) && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)) {
 			entity.motionX *= 0.005D;
 			entity.motionZ *= 0.005D;
 			if(entity.motionY < 0)

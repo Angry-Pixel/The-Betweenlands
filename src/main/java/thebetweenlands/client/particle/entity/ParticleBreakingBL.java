@@ -22,7 +22,7 @@ public class ParticleBreakingBL extends ParticleBreaking {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
+		protected void setBaseArguments(ParticleArgs<?> args) {
 			args.withData(Items.SLIME_BALL, 0);
 		}
 	}

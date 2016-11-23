@@ -88,7 +88,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIWightAttack(this, 0.5D, false));
+		this.tasks.addTask(1, new EntityAIWightAttack(this, 0.58D, false));
 		this.tasks.addTask(2, new EntityAIMoveToDirect<EntityWight>(this, 0.1D) {
 			@Override
 			protected Vec3d getTarget() {
@@ -101,7 +101,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				return null;
 			}
 		});
-		this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
+		this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 0.4D));
 		this.tasks.addTask(5, new EntityAIWander(this, 0.3D));
 		this.tasks.addTask(9, new EntityAIFlyRandomly<EntityWight>(this) {
 			@Override
@@ -128,7 +128,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.58D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(76.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(80.0D);

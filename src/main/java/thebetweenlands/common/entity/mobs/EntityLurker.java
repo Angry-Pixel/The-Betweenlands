@@ -64,9 +64,13 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     public EntityLurker(World world) {
         super(world);
         setSize(1.9F, 0.9F);
-        tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
     }
 
+    @Override
+	protected void initEntityAI() {
+		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
+	}
+    
     @Override
     protected void entityInit() {
         super.entityInit();

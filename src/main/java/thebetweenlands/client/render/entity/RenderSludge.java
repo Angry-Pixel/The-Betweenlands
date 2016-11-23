@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
@@ -14,15 +15,34 @@ public class RenderSludge extends RenderLiving<EntitySludge> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/sludge.png");
 
 	public RenderSludge(RenderManager renderManager) {
-		super(renderManager, new ModelSludge(), 1.0F);
+		super(renderManager, new ModelSludge(), 0.0F);
 	}
 
 	@Override
-	protected void preRenderCallback(EntitySludge sludge, float partialTickTime) {
-		float squishFactor = (sludge.prevSquishFactor + (sludge.squishFactor - sludge.prevSquishFactor) * partialTickTime) / 1.5F;
+	public void doRender(EntitySludge entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		GlStateManager.pushMatrix();
+		float squishFactor = entity.getSquishFactor(partialTicks) / 1.5F;
 		float scale = 1.0F / (squishFactor + 1.0F);
+
+		GlStateManager.translate(x, y, z);
 		GlStateManager.scale(scale, 1.0F / scale, scale);
+
 		GlStateManager.depthMask(false);
+
+		GlStateManager.cullFace(CullFace.FRONT);
+		super.doRender(entity, 0, 0, 0, entityYaw, partialTicks);
+		
+		GlStateManager.cullFace(CullFace.BACK);
+		super.doRender(entity, 0, 0, 0, entityYaw, partialTicks);
+
+		GlStateManager.depthMask(true);
+		GlStateManager.colorMask(false, false, false, false);
+
+		super.doRender(entity, 0, 0, 0, entityYaw, partialTicks);
+
+		GlStateManager.colorMask(true, true, true, true);
+
+		GlStateManager.popMatrix();
 	}
 
 	@Override

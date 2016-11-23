@@ -39,7 +39,7 @@ public class ConfigHandler {
 
 	public void loadConfig(FMLPreInitializationEvent event) {
 		path = event.getSuggestedConfigurationFile().getPath();
-		config = new Configuration(new File(path.replace("thebetweenlands.cfg", "thebetweenlands/mainConfig.cfg")));
+		config = new Configuration(new File(path.replace("thebetweenlands.cfg", "thebetweenlands/config.cfg")));
 		config.load();
 		syncConfigs();
 	}

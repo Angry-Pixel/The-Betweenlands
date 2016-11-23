@@ -82,7 +82,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(5, new EntityAIFlyRandomly(this) {
+		this.tasks.addTask(5, new EntityAIFlyRandomly<EntityGasCloud>(this) {
 			@Override
 			protected double getTargetY(Random rand, double distanceMultiplier) {
 				if(this.entity.posY <= 0.0D) {
@@ -125,6 +125,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 				return 0.015D;
 			}
 		});
+		
 		this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
 	}
 

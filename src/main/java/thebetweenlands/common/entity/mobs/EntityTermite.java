@@ -1,7 +1,8 @@
 package thebetweenlands.common.entity.mobs;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -12,14 +13,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.SoundRegistry;
 
-import javax.annotation.Nullable;
-
 public class EntityTermite extends EntityMob implements IEntityBL{
     public EntityTermite(World worldIn) {
         super(worldIn);
         setSize(0.9F, 0.6F);
-        tasks.addTask(1, new EntityAIAttackMelee(this, 1d, false));
     }
+    
+    @Override
+	protected void initEntityAI() {
+		tasks.addTask(1, new EntityAIAttackMelee(this, 1d, false));
+	}
 
     @Override
     protected void applyEntityAttributes() {

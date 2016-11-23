@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.common.registries.BlockRegistry;
 
 /**
  * For entities that spawn in/on tar
@@ -21,6 +22,6 @@ public class TarSpawnEntry extends SurfaceSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-		return /*blockState.getBlock() == BlockRegistry.TAR*/false; //TODO: Requires tar
+		return blockState.getBlock() == BlockRegistry.TAR;
 	}
 }

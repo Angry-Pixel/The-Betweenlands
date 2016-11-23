@@ -2,6 +2,8 @@ package thebetweenlands.common.world.biome;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.*;
@@ -20,7 +22,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 	public BiomeMarsh(int type) {
 		super(new BiomeProperties("marsh_" + type).setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
-		//this.setWeight(10);
+		this.setWeight(10);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator()
 				.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
@@ -32,7 +34,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		this.setFoliageColors(0x627017, 0x627017);
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 4).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 14).setHostile(true).setSpawnCheckRadius(64.0D));
@@ -40,8 +42,10 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 54).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setHostile(true).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 8).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 8).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
+		
+		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
 	private float fogRangeInterpolateStart = 0.0F;

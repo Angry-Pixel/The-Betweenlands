@@ -71,6 +71,7 @@ import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
 import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
 import thebetweenlands.client.render.entity.RenderSwordEnergy;
+import thebetweenlands.client.render.entity.RenderTarBeast;
 import thebetweenlands.client.render.entity.RenderTermite;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWight;
@@ -118,6 +119,7 @@ import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWight;
@@ -369,7 +371,8 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, RenderBLArrow::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, RenderDarkDruid::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityVolatileSoul.class, RenderVolatileSoul::new);
-
+        RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, RenderTarBeast::new);
+        
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
     }
 

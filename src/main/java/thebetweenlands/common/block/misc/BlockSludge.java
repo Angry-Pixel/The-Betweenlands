@@ -68,6 +68,7 @@ public class BlockSludge extends Block {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return blockAccess.getBlockState(pos) != this && super.shouldSideBeRendered(state, blockAccess, pos, side);
@@ -93,6 +94,16 @@ public class BlockSludge extends Block {
 		return false;
 	}
 
+	@Override
+	public boolean isFullBlock(IBlockState state) {
+        return false;
+    }
+	
+	@Override
+	public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+	
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		return world.isSideSolid(pos.down(), EnumFacing.UP);

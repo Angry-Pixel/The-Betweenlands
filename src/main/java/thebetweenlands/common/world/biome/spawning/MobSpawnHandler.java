@@ -41,7 +41,7 @@ public class MobSpawnHandler {
 	public static final MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	//How many times a chunk should be populated with mobs when it generates
-	private static final int CHUNK_GEN_SPAWN_RUNS = 64;
+	private static final int CHUNK_GEN_SPAWN_RUNS = 128;
 
 	//Distance from the player where mobs spawn (middle of the spawner chunk rim)
 	private static final byte SPAWN_CHUNK_DISTANCE = 4;
@@ -287,10 +287,8 @@ public class MobSpawnHandler {
 
 			//long start = System.nanoTime();
 			int spawnedEntities = 0;
-			for(int i = 0; i < CHUNK_GEN_SPAWN_RUNS; i++) {
-				spawnedEntities += this.populateChunk(world, new ChunkPos(chunkX, chunkZ), spawnHostiles, spawnAnimals, false, true,
-						SPAWNING_ATTEMPTS_PER_CHUNK, 60, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT, 1.0F);
-			}
+			spawnedEntities += this.populateChunk(world, new ChunkPos(chunkX, chunkZ), spawnHostiles, spawnAnimals, false, true,
+					SPAWNING_ATTEMPTS_PER_CHUNK * CHUNK_GEN_SPAWN_RUNS, 60, SPAWNING_ATTEMPTS_PER_GROUP, HARD_ENTITY_LIMIT, 1.0F);
 			//System.out.println("Spawned: " + spawnedEntities + " Time: " + (System.nanoTime() - start) / 1000000.0F);
 		}
 	}

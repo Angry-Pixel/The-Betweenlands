@@ -31,7 +31,12 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	public EntityMireSnail(World world) {
 		super(world);
 		setPathPriority(PathNodeType.WATER, -1.0f);
-
+		setSize(0.75F, 0.6F);
+		stepHeight = 0.0F;
+	}
+	
+	@Override
+	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIPanic(this, 0.4D));
 		tasks.addTask(2, new EntityAIMate(this, 0.4D));
@@ -40,8 +45,6 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 		tasks.addTask(5, new EntityAIWander(this, 0.4D));
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
-		setSize(0.75F, 0.6F);
-		stepHeight = 0.0F;
 	}
 
 	@Override

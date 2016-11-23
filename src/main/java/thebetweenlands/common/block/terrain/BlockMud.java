@@ -1,5 +1,9 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -19,113 +23,71 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.registries.ItemRegistry;
 
-import javax.annotation.Nullable;
-import java.util.List;
-
 
 public class BlockMud extends Block {
-    public BlockMud() {
-        super(BLMaterialRegistry.MUD);
-        setHardness(0.5F);
-        setSoundType(SoundType.GROUND);
-        setHarvestLevel("shovel", 0);
-        setCreativeTab(BLCreativeTabs.BLOCKS);
-        //setBlockName("thebetweenlands.mud");
-        //setBlockTextureName("thebetweenlands:mud");
-    }
+	public BlockMud() {
+		super(BLMaterialRegistry.MUD);
+		setHardness(0.5F);
+		setSoundType(SoundType.GROUND);
+		setHarvestLevel("shovel", 0);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
+	}
 
-    public boolean canEntityWalkOnMud(Entity entity) {
-        //TODO: REIMPLEMENT WHEN POTIONS ARE READDED
-        //if(entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase)entity)) return false;
-        boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
-        boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && ((EntityPlayer) entity).inventory.armorInventory[0] != null && ((EntityPlayer) entity).inventory.armorInventory[0].getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
-        return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && ((EntityPlayer)entity).capabilities.isFlying);
-    }
+	public boolean canEntityWalkOnMud(Entity entity) {
+		//TODO: REIMPLEMENT WHEN POTIONS ARE READDED
+		//if(entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase)entity)) return false;
+		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null && ((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
+		boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && ((EntityPlayer) entity).inventory.armorInventory[0] != null && ((EntityPlayer) entity).inventory.armorInventory[0].getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
+		return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode && ((EntityPlayer)entity).capabilities.isFlying);
+	}
 
-    @Override
-    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabblist, @Nullable Entity entity) {
-        AxisAlignedBB blockAABB = this.getCollisionBoundingBox(state, world, pos);
-        if (blockAABB != null && aabb.intersectsWith(blockAABB) && this.canEntityWalkOnMud(entity)) {
-            if(entity instanceof IEntityBL || entity instanceof EntityItem) {
-                aabblist.add(blockAABB);
-            } else {
-                if(world.isRemote) aabblist.add(new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX()+1, pos.getY()+1-0.125, pos.getZ()+1));
-            }
-        }
-    }
+	@SuppressWarnings("deprecation")
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabblist, @Nullable Entity entity) {
+		AxisAlignedBB blockAABB = this.getCollisionBoundingBox(state, world, pos).offset(pos);
+		if (blockAABB != null && aabb.intersectsWith(blockAABB) && this.canEntityWalkOnMud(entity)) {
+			if(entity instanceof IEntityBL || entity instanceof EntityItem) {
+				aabblist.add(blockAABB);
+			}
+		}
+	}
 
-    @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
-        if (!this.canEntityWalkOnMud(entity)) {
-            entity.motionX *= 0.08D;
-            if(!entity.isInWater() && entity.motionY < 0 && entity.onGround) entity.motionY = -0.1D;
-            entity.motionZ *= 0.08D;
-            if(!entity.isInWater()) {
-                entity.setInWeb();
-            } else {
-                entity.motionY *= 0.02D;
-            }
-            entity.onGround = true;
-            if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterialRegistry.MUD)) {
-                entity.attackEntityFrom(DamageSource.inWall, 2.0F);
-            }
-        }
-    }
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
+		if (!this.canEntityWalkOnMud(entity)) {
+			entity.motionX *= 0.08D;
+			if(!entity.isInWater() && entity.motionY < 0 && entity.onGround) entity.motionY = -0.1D;
+			entity.motionZ *= 0.08D;
+			if(!entity.isInWater()) {
+				entity.setInWeb();
+			} else {
+				entity.motionY *= 0.02D;
+			}
+			entity.onGround = true;
+			if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterialRegistry.MUD)) {
+				entity.attackEntityFrom(DamageSource.inWall, 2.0F);
+			}
+		}
+	}
 
-    @Override
-    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
-        return true;
-    }
+	@Override
+	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+		return true;
+	}
 
-    @Override
-    public boolean isNormalCube(IBlockState blockState) {
-        return true;
-    }
+	@Override
+	public boolean isNormalCube(IBlockState blockState) {
+		return true;
+	}
 
-    @Override
-    public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
-        return true;
-    }
+	@Override
+	public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+		return true;
+	}
 
 
-    @Override
-    public boolean isOpaqueCube(IBlockState blockState) {
-        return true;
-    }
-
-    /*@Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockState state, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        Block block = blockAccess.getBlockState(pos).getBlock();
-        AxisAlignedBB axisalignedbb = state.getBoundingBox(blockAccess, pos);
-        if(block == this) return false;
-        switch (side)
-        {
-            case DOWN:
-                if (axisalignedbb.minY > 0.0D) {return true;}
-                break;
-
-            case UP:
-                if (axisalignedbb.maxY < 1.0D) {return true;}
-                break;
-
-            case NORTH:
-                if (axisalignedbb.minZ > 0.0D) {return true;}
-                break;
-
-            case SOUTH:
-                if (axisalignedbb.maxZ < 1.0D) {return true;}
-                break;
-
-            case WEST:
-                if (axisalignedbb.minX > 0.0D) {return true;}
-                break;
-
-            case EAST:
-                if (axisalignedbb.maxX < 1.0D) {return true;}
-                break;
-        }
-
-        return !blockAccess.getBlockState(pos).getBlock().isOpaqueCube(state);
-    }*/
+	@Override
+	public boolean isOpaqueCube(IBlockState blockState) {
+		return true;
+	}
 }

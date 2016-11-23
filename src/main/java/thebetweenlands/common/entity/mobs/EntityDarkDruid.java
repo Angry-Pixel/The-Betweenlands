@@ -50,6 +50,12 @@ public class EntityDarkDruid extends EntityMob {
 	public EntityDarkDruid(World world) {
 		super(world);
 		((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
+		setSize(0.9F, 1.9F);
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIBreakDoor(this));
 		tasks.addTask(2, meleeAI);
@@ -57,9 +63,9 @@ public class EntityDarkDruid extends EntityMob {
 		tasks.addTask(4, wanderAI);
 		tasks.addTask(5, watchAI);
 		tasks.addTask(6, new EntityAIDruidTeleport(this));
+		
 		targetTasks.addTask(1, new EntityAIHurtByTargetDruid(this));
 		targetTasks.addTask(2, new EntityAINearestAttackableTargetDruid(this));
-		setSize(0.9F, 1.9F);
 	}
 
 	@Override

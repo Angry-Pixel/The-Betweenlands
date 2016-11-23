@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.biome;
 
+import net.minecraftforge.common.BiomeDictionary;
+import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
@@ -14,7 +16,7 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 
 	public BiomeDeepWaters() {
 		super(new BiomeProperties("deep_waters").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 12).setHeightVariation(5.0F).setWaterColor(0x1b3944).setTemperature(0.8F).setRainfall(0.9F));
-		//this.setWeight(15);
+		this.setWeight(12);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorDeepWaters())
 		.addFeature(new DeepWatersFeature())
@@ -23,14 +25,16 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 10).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 35).setHostile(true).setSpawnCheckRadius(16.0D));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 45).setHostile(true).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 30).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		
+		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WATER);
 	}
 
 }

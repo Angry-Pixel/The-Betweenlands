@@ -39,15 +39,19 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	public EntityGecko(World worldObj) {
 		super(worldObj);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
-		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 0.5));
-		this.tasks.addTask(5, new EntityAIWander(this, 0.3));
-		this.tasks.addTask(2, new EntityAIBLAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.3, 0.5));
-		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
-		this.tasks.addTask(7, new EntityAILookIdle(this));
 		this.setSize(0.75F, 0.35F);
 	}
 
+	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIPanic(this, 0.5));
+		this.tasks.addTask(2, new EntityAIBLAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.3, 0.5));
+		this.tasks.addTask(3, new EntityAIWander(this, 0.3));
+		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
+		this.tasks.addTask(5, new EntityAILookIdle(this));
+	}
+	
 	@Override
 	protected void entityInit() {
 		super.entityInit();
