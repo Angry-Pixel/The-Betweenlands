@@ -11,6 +11,7 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBetweenlands {
 		super.decorate(world, generator, rand, x, z);
 
 		//TODO: Implement missing generators
+		
 		this.generate(60, DecorationHelper::generateTarPoolSurface);
 		this.generate(0.25F, DecorationHelper::generateSpawnerStructure);
 		this.generate(15, DecorationHelper::generateSmallHollowLog);

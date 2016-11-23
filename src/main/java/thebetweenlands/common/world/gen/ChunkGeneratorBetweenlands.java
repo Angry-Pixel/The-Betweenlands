@@ -120,7 +120,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.rand.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
 
 		ChunkPrimer chunkprimer = new ChunkPrimer();
-		
+
+
 		this.setBlocksInChunk(chunkX, chunkZ, chunkprimer);
 
 		//Interpolate biome weights
@@ -153,7 +154,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.caveGenerator.setBiomeTerrainWeights(this.interpolatedTerrainBiomeWeights);
 		//TODO: Maybe these can be optimized to speed up the world gen quite a bit. Sampling the noise for only every second point and then lerp?
 		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
-		
+
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
 				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
