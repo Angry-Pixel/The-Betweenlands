@@ -24,7 +24,7 @@ public class RenderSludge extends RenderLiving<EntitySludge> {
 		float squishFactor = entity.getSquishFactor(partialTicks) / 1.5F;
 		float scale = 1.0F / (squishFactor + 1.0F);
 
-		GlStateManager.translate(x, y, z);
+		GlStateManager.translate(x, y - (1.0F - entity.scale.getAnimationProgressSin(partialTicks)) * 2.5F, z);
 		GlStateManager.scale(scale, 1.0F / scale, scale);
 
 		GlStateManager.depthMask(false);

@@ -95,10 +95,8 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 		this.prevSquishFactor = this.squishFactor;
 
-		super.onUpdate();
-
 		if (!this.worldObj.isRemote) {
-			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.worldObj.rand.nextInt(1900) == 0) {
+			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.worldObj.rand.nextInt(2200) == 0) {
 				if (!this.isActive()) {
 					this.setActive(true);
 					this.motionY += 0.6;
@@ -114,14 +112,16 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 				if (this.getAttackTarget() == null && this.onGround && this.worldObj.rand.nextInt(350) == 0 && !this.isInWater()) {
 					this.setActive(false);
 				}
-			} else if(this.isInWater()) {
+			} else if(this.isInWater() || !this.onGround) {
 				this.setActive(true);
 			} else {
 				this.motionX = 0;
-				this.motionY = 0;
+				this.motionY -= 0.1;
 				this.motionZ = 0;
 			}
 		}
+
+		super.onUpdate();
 
 		if(this.isActive()) {
 			this.setSize(1.1F, 1.2F);
@@ -141,6 +141,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 		//Update animation
 		if (this.worldObj.isRemote) {
+			this.scale.updateTimer();
 			if (this.isActive()) {
 				this.scale.increaseTimer();
 			} else {

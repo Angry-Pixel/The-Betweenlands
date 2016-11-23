@@ -99,7 +99,7 @@ public class ModelSludge extends MowzieModelBase {
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float f, float f1, float partialTicks) {
 		setToInitPose();
-		scale = ((EntitySludge) entity).scale.getAnimationProgressSinSqrt(1);
+		scale = ((EntitySludge) entity).scale.getAnimationProgressSinSqrt(partialTicks);
 		float frame = entity.ticksExisted + partialTicks;
 		MowzieModelRenderer[] spineParts = new MowzieModelRenderer[]{spine, spinepiece};
 		float controller = (float) (0.5 * Math.sin(frame * 0.1f) * Math.sin(frame * 0.1f)) + 0.5f;
