@@ -66,10 +66,20 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	private boolean canTurnVolatileOnTarget = false;
 
+	protected final EntityMoveHelper flightMoveHelper;
+	protected final EntityMoveHelper groundMoveHelper;
+	
 	public EntityWight(World world) {
 		super(world);
 		setSize(0.7F, 2.2F);
 		this.setPathPriority(PathNodeType.WATER, 0.2F);
+		this.flightMoveHelper = new FlightMoveHelper(this) {
+			@Override
+			protected double getFlightSpeed() {
+				return 0.1D;
+			}
+		};
+		this.moveHelper = this.groundMoveHelper = new EntityMoveHelper(this);
 	}
 
 	@Override
@@ -232,9 +242,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			}
 
 			this.setSize(0.7F, 0.7F);
+			this.moveHelper = this.flightMoveHelper;
 		} else {
 			this.setSize(0.7F, 2.2F);
 			this.noClip = false;
+			this.moveHelper = this.groundMoveHelper;
 		}
 
 		this.lastHidingAnimationTicks = this.hidingAnimationTicks;
@@ -440,16 +452,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	public void setVolatile(boolean isVolatile) {
 		this.dataManager.set(VOLATILE_STATE_DW, isVolatile);
 
-		if(isVolatile) {
-			this.moveHelper = new FlightMoveHelper(this) {
-				@Override
-				protected double getFlightSpeed() {
-					return 0.1D;
-				}
-			};
-		} else {
-			this.moveHelper = new EntityMoveHelper(this);
-
+		if(!isVolatile) {
 			Entity ridingEntity = this.getRidingEntity();
 			if(ridingEntity != null) {
 				this.dismountRidingEntity();
