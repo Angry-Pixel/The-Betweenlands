@@ -37,7 +37,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import thebetweenlands.common.event.AttachChunkCapabilitiesEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
-import thebetweenlands.common.world.storage.chunk.storage.ChunkStorage;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 
@@ -102,7 +101,6 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 
 	private Chunk chunk;
 	private WorldDataBase<?> worldStorage;
-	private final List<ChunkStorage> storage = new ArrayList<ChunkStorage>();
 	private final List<EntityPlayerMP> watchers = new ArrayList<EntityPlayerMP>();
 	private CapabilityDispatcher capabilities;
 	private final List<SharedStorageReference> sharedStorageReferences = new ArrayList<>();
@@ -234,7 +232,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 			if(uuid.equals(ref.getUUID()))
 				return false;
 		}
-		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), uuid);
+		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), uuid, storage.getRegion());
 		if(this.sharedStorageReferences.add(ref)) {
 			this.markDirty();
 			return true;
@@ -338,8 +336,6 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	protected void readFromNBT(NBTTagCompound nbt) {
 		if (this.capabilities != null && nbt.hasKey("ForgeCaps")) this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 
-		this.readStorageFromNBT(nbt, false);
-
 		this.sharedStorageReferences.clear();
 		NBTTagList sharedReferenceList = nbt.getTagList("SharedStorageReferences", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < sharedReferenceList.tagCount(); i++) {
@@ -376,41 +372,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 			sharedReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
 		}
 		nbt.setTag("SharedStorageReferences", sharedReferenceList);
-		return this.writeStorageToNBT(nbt, false);
-	}
-
-	protected NBTTagCompound writeStorageToNBT(NBTTagCompound nbt, boolean packet) {
-		if (!this.storage.isEmpty()) {
-			NBTTagList storageList = new NBTTagList();
-			for (ChunkStorage storage : this.storage) {
-				NBTTagCompound storageCompound = new NBTTagCompound();
-				try {
-					ChunkStorage.save(storage, storageCompound, packet);
-					storageList.appendTag(storageCompound);
-				} catch(Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-			nbt.setTag("storage", storageList);
-		}
 		return nbt;
-	}
-
-	protected void readStorageFromNBT(NBTTagCompound nbt, boolean packet) {
-		if (nbt.hasKey("storage")) {
-			this.storage.clear();
-			NBTTagList storageList = nbt.getTagList("storage", Constants.NBT.TAG_COMPOUND);
-			for (int i = 0; i < storageList.tagCount(); i++) {
-				NBTTagCompound storageCompound = storageList.getCompoundTagAt(i);
-				try {
-					ChunkStorage storage = ChunkStorage.load(this.worldStorage.getWorld(), this, storageCompound, packet);
-					this.storage.add(storage);
-				} catch (Exception ex) {
-					this.markDirty();
-					ex.printStackTrace();
-				}
-			}
-		}
 	}
 
 	/**
@@ -424,19 +386,13 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 * Called after the chunk data has loaded
 	 */
 	protected void onLoaded() {
-		for(ChunkStorage storage : this.storage) {
-			storage.onLoaded();
-		}
+
 	}
 
 	/**
 	 * Called when the chunk is unloaded
 	 */
 	protected void onUnloaded() {
-		for(ChunkStorage storage : this.storage) {
-			storage.onUnloaded();
-		}
-
 		for(SharedStorageReference ref : this.sharedStorageReferences) {
 			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getUUIDString());
 			if(sharedStorage != null) {
@@ -460,9 +416,6 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 				sharedStorage.onWatched(this, player);
 			}
 		}
-		for(ChunkStorage storage : this.storage) {
-			storage.onWatched(player);
-		}
 	}
 
 	/**
@@ -476,9 +429,6 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 			if(sharedStorage != null && sharedStorage.getWatchers().contains(player)) {
 				sharedStorage.onUnwatched(this, player);
 			}
-		}
-		for(ChunkStorage storage : this.storage) {
-			storage.onUnwatched(player);
 		}
 	}
 
@@ -495,14 +445,6 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 */
 	public void markDirty() {
 		this.chunk.setChunkModified();
-	}
-
-	/**
-	 * Returns the storage list
-	 * @return
-	 */
-	public List<ChunkStorage> getStorage() {
-		return this.storage;
 	}
 
 	public static final class ChunkEventHandler {
