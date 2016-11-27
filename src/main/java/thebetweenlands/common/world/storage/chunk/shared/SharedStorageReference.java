@@ -2,8 +2,6 @@ package thebetweenlands.common.world.storage.chunk.shared;
 
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 
@@ -11,14 +9,12 @@ public class SharedStorageReference {
 	private ChunkPos chunkPos;
 	private UUID storageUUID;
 	private String storageUUIDString;
-	private String region;
 
 	private SharedStorageReference() { }
 
-	public SharedStorageReference(ChunkPos chunkPos, UUID uuid, String region) {
+	public SharedStorageReference(ChunkPos chunkPos, UUID uuid) {
 		this.setUUID(uuid);
 		this.chunkPos = chunkPos;
-		this.region = region;
 	}
 
 	/**
@@ -30,11 +26,6 @@ public class SharedStorageReference {
 		SharedStorageReference reference = new SharedStorageReference();
 		reference.setUUID(nbt.getUniqueId("uuid"));
 		reference.chunkPos = new ChunkPos(nbt.getInteger("x"), nbt.getInteger("z"));
-		if(nbt.hasKey("region")) {
-			reference.setRegion(nbt.getString("region"));
-		} else {
-			reference.setRegion(null);
-		}
 		return reference;
 	}
 
@@ -47,37 +38,7 @@ public class SharedStorageReference {
 		nbt.setUniqueId("uuid", this.storageUUID);
 		nbt.setInteger("x", this.chunkPos.chunkXPos);
 		nbt.setInteger("z", this.chunkPos.chunkZPos);
-		String region = this.getRegion();
-		if(region != null) {
-			nbt.setString("region", region);
-		}
 		return nbt;
-	}
-
-	/**
-	 * Sets the storage region. Storages with the same region identifier are
-	 * saved in the same file
-	 * @param region
-	 */
-	public void setRegion(@Nullable String region) {
-		this.region = region;
-	}
-
-	/**
-	 * Returns whether this reference is attached to a region
-	 * @return
-	 */
-	public boolean hasRegion() {
-		return this.region != null;
-	}
-
-	/**
-	 * Returns the region
-	 * @return
-	 */
-	@Nullable 
-	public String getRegion() {
-		return this.region;
 	}
 
 	/**

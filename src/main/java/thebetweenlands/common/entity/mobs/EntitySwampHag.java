@@ -81,7 +81,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.checkNoEntityCollision(getEntityBoundingBox()) && worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(getEntityBoundingBox());
+		return super.getCanSpawnHere();
 	}
 
 	@Override

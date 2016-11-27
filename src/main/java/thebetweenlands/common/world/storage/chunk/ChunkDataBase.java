@@ -26,7 +26,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.ChunkDataEvent;
 import net.minecraftforge.event.world.ChunkEvent;
 import net.minecraftforge.event.world.ChunkWatchEvent;
@@ -107,7 +106,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 
 	public ChunkDataBase() {
 		//Gather capabilities
-		AttachCapabilitiesEvent event = new AttachChunkCapabilitiesEvent(this);
+		AttachChunkCapabilitiesEvent event = new AttachChunkCapabilitiesEvent(this);
 		MinecraftForge.EVENT_BUS.post(event);
 		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
 	}
@@ -232,7 +231,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 			if(uuid.equals(ref.getUUID()))
 				return false;
 		}
-		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), uuid, storage.getRegion());
+		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), uuid);
 		if(this.sharedStorageReferences.add(ref)) {
 			this.markDirty();
 			return true;

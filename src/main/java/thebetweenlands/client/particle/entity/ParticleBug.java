@@ -5,17 +5,20 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.ParticleTextureStitcher;
 import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.sprite.TextureAnimation;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 
 public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
-	private float scale;
 	private float jitter;
 	private float speed;
 	private boolean underwater;
 	private double tx, ty, tz;
+
+	protected TextureAnimation animation;
 
 	protected ParticleBug(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float speed, float jitter, float scale, boolean underwater) {
 		super(world, x, y, z, 0, 0, 0);
@@ -27,10 +30,11 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		this.motionZ = mz;
 		this.particleMaxAge = maxAge;
 		//this.noClip = true;
-		this.scale = scale;
+		this.particleScale = scale;
 		this.jitter = jitter;
 		this.speed = speed;
 		this.underwater = underwater;
+		this.animation = new TextureAnimation().setRandomFrame(this.rand);
 	}
 
 	@Override
@@ -39,8 +43,20 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 	}
 
 	@Override
+	public void setStitchedSprites(Frame[][] frames) {
+		this.animation.setFrames(frames[0]);
+		if(this.particleTexture == null) {
+			this.setParticleTexture(frames[0][0].getSprite());
+		}
+	}
+
+	@Override
 	public void onUpdate() {
+		this.animation.update();
+		this.setParticleTexture(this.animation.getCurrentSprite());
+
 		super.onUpdate();
+
 		this.moveEntity(this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter);
 		double distToTarget = Math.sqrt((this.tx-this.posX)*(this.tx-this.posX)+(this.ty-this.posY)*(this.ty-this.posY)+(this.tz-this.posZ)*(this.tz-this.posZ));
 		Block currBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getBlock();
@@ -79,13 +95,13 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
-			args.withScale(0.06F).withData(400, 0.05F, 0.025F, false);
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withScale(0.25F).withData(400, 0.05F, 0.025F, false);
 		}
 
 		@Override
-		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
-			args.withScale(0.06F * world.rand.nextFloat());
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
+			args.withScale(0.25F * world.rand.nextFloat());
 		}
 	}
 
@@ -100,13 +116,13 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
-			args.withScale(0.1F).withData(400, 0.05F, 0.025F, false);
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withScale(0.4F).withData(400, 0.05F, 0.025F, false);
 		}
 
 		@Override
-		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
-			args.withScale(0.1F * world.rand.nextFloat());
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
+			args.withScale(0.4F * world.rand.nextFloat());
 		}
 	}
 
@@ -121,13 +137,13 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
-			args.withScale(0.2F).withData(400, 0.03F, 0.002F, true);
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withScale(0.6F).withData(400, 0.03F, 0.002F, true);
 		}
 
 		@Override
-		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
-			args.withScale(0.2F * world.rand.nextFloat());
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
+			args.withScale(0.6F * world.rand.nextFloat());
 		}
 	}
 }

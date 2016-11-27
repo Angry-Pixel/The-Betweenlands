@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -24,7 +22,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import thebetweenlands.common.event.AttachSharedStorageCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
@@ -87,11 +84,6 @@ public abstract class SharedStorage implements ICapabilityProvider {
 				throw new Exception("Shared storage type not mapped");
 			Constructor<? extends SharedStorage> ctor = storageClass.getConstructor(WorldDataBase.class, UUID.class);
 			SharedStorage storage = ctor.newInstance(worldStorage, uuid);
-			if(nbt.hasKey("region")) {
-				storage.setRegion(nbt.getString("region"));
-			} else {
-				storage.setRegion(null);
-			}
 			if(packet) {
 				storage.readFromPacketNBT(nbt.getCompoundTag("data"));
 			} else {
@@ -114,10 +106,6 @@ public abstract class SharedStorage implements ICapabilityProvider {
 			throw new RuntimeException("Shared storage type not mapped");
 		nbt.setString("type", type.toString());
 		nbt.setUniqueId("uuid", sharedStorage.getUUID());
-		String region = sharedStorage.getRegion();
-		if(region != null) {
-			nbt.setString("region", region);
-		}
 		if(packet) {
 			nbt.setTag("data", sharedStorage.writeToPacketNBT(new NBTTagCompound()));
 		} else {
@@ -132,7 +120,6 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	private final List<SharedStorageReference> loadedReferences = new ArrayList<>();
 	private final UUID uuid;
 	private final String uuidString;
-	private String region;
 	private CapabilityDispatcher capabilities;
 	private boolean dirty = false;
 
@@ -142,7 +129,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		this.uuidString = uuid.toString();
 
 		//Gather capabilities
-		AttachCapabilitiesEvent event = new AttachSharedStorageCapabilitiesEvent(this);
+		AttachSharedStorageCapabilitiesEvent event = new AttachSharedStorageCapabilitiesEvent(this);
 		MinecraftForge.EVENT_BUS.post(event);
 		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
 	}
@@ -155,34 +142,6 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return this.capabilities == null ? null : this.capabilities.getCapability(capability, facing);
-	}
-
-	/**
-	 * Sets the storage region. Storages with the same region identifier are
-	 * saved in the same file
-	 * @param region
-	 * @return
-	 */
-	public SharedStorage setRegion(@Nullable String region) {
-		this.region = region;
-		return this;
-	}
-
-	/**
-	 * Returns whether this storage is attached to a region
-	 * @return
-	 */
-	public boolean hasRegion() {
-		return this.region != null;
-	}
-
-	/**
-	 * Returns the storage region
-	 * @return
-	 */
-	@Nullable 
-	public String getRegion() {
-		return this.region;
 	}
 
 	/**

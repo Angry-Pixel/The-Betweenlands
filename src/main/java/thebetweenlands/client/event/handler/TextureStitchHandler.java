@@ -5,11 +5,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
+
+import javax.annotation.Nullable;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.PngSizeInfo;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.TextureStitchEvent;
@@ -18,9 +26,8 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import thebetweenlands.client.particle.BLParticles;
-import thebetweenlands.client.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
+import thebetweenlands.client.render.sprite.TextureFromData;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -31,6 +38,16 @@ public class TextureStitchHandler {
 	private static final Field f_mapRegisteredSprites = ReflectionHelper.findField(TextureMap.class, "mapRegisteredSprites", "field_110574_e", "j");
 
 	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
+
+	private final List<TextureFrameSplitter> splitters = new ArrayList<TextureFrameSplitter>();
+
+	/**
+	 * Registers a texture frame splitter
+	 * @param splitter
+	 */
+	public void registerTextureFrameSplitter(TextureFrameSplitter splitter) {
+		this.splitters.add(splitter);
+	}
 
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
@@ -86,19 +103,64 @@ public class TextureStitchHandler {
 			}
 		}
 
-		//Particles
-		BLParticles[] particles = BLParticles.values();
-		for(BLParticles particle : particles) {
-			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
-			if(stitcher != null) {
-				ResourceLocation[] textures = stitcher.getTextures();
-				TextureAtlasSprite[] sprites = new TextureAtlasSprite[textures.length];
-				for(int i = 0; i < textures.length; i++) {
-					sprites[i] = e.getMap().registerSprite(textures[i]);
+		//Split animated textures into seperate frames
+		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
+		for(TextureFrameSplitter splitter : this.splitters) {
+			ResourceLocation[] textures = splitter.getTextures();
+			Frame[][] frames = new Frame[textures.length][];
+
+			for(int i = 0; i < textures.length; i++) {
+				TextureAtlasSprite sprite = e.getMap().registerSprite(textures[i]);
+
+				try {
+					//Load frame data
+					ResourceLocation resourceLocation = this.getResourceLocation(e.getMap().getBasePath(), sprite);
+					IResource resource = null;
+					if (sprite.hasCustomLoader(resourceManager, resourceLocation)) {
+						sprite.load(resourceManager, resourceLocation);
+					} else {
+						PngSizeInfo pngSizeInfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourceLocation));
+						resource = resourceManager.getResource(resourceLocation);
+						boolean hasAnimation = resource.getMetadata("animation") != null;
+						sprite.loadSprite(pngSizeInfo, hasAnimation);
+					}
+					sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels());
+
+					//Set sprites or split into seperate frames
+					if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
+						//Single frame
+						frames[i] = new Frame[]{ new Frame(sprite, 0) };
+					} else {
+						//Multiple frames, parse metadata and store seperate frames
+						AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
+						boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
+						int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
+						frames[i] = new Frame[frameCount];
+						for(int frame = 0; frame < frameCount; frame++) {
+							int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
+							int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
+							int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
+							TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
+							e.getMap().setTextureEntry(frameSprite);
+							frames[i][frame] = new Frame(frameSprite, duration);
+						}
+					}
+				} catch(Exception ex) {
+					throw new RuntimeException("Failed splitting texture animation", ex);
 				}
-				stitcher.setSprites(sprites);
+			}
+
+			splitter.frames = frames;
+
+			if(splitter.callback != null) {
+				splitter.callback.accept(splitter);
 			}
 		}
+	}
+
+	private ResourceLocation getResourceLocation(String basePath, TextureAtlasSprite sprite) {
+		ResourceLocation resourcelocation = new ResourceLocation(sprite.getIconName());
+		return new ResourceLocation(resourcelocation.getResourceDomain(), String.format("%s/%s%s", new Object[] {basePath, resourcelocation.getResourcePath(), ".png"}));
 	}
 
 	@SubscribeEvent
@@ -136,5 +198,62 @@ public class TextureStitchHandler {
 			}
 		}
 		return foundDependencies;
+	}
+
+	public static final class TextureFrameSplitter {
+		private final Consumer<TextureFrameSplitter> callback;
+		private final ResourceLocation[] textures;
+		private Frame[][] frames;
+
+		public TextureFrameSplitter(ResourceLocation... textures) {
+			this(null, textures);
+		}
+
+		public TextureFrameSplitter(@Nullable Consumer<TextureFrameSplitter> callback, ResourceLocation... textures) {
+			this.textures = textures;
+			this.callback = callback;
+		}
+
+		/**
+		 * Returns the texture locations
+		 * @return
+		 */
+		public ResourceLocation[] getTextures() {
+			return this.textures;
+		}
+
+		/**
+		 * Returns the seperate frames of the animated texture
+		 * @return
+		 */
+		public Frame[][] getFrames() {
+			return this.frames;
+		}
+	}
+
+	public static final class Frame {
+		private final TextureAtlasSprite sprite;
+		private final int duration;
+
+		protected Frame(TextureAtlasSprite sprite, int duration) {
+			this.sprite = sprite;
+			this.duration = duration;
+		}
+
+		/**
+		 * Returns the sprite of this frame
+		 * @return
+		 */
+		public TextureAtlasSprite getSprite() {
+			return this.sprite;
+		}
+
+		/**
+		 * Returns the duration of this frame in ticks
+		 * @return
+		 */
+		public int getDuration() {
+			return this.duration;
+		}
 	}
 }

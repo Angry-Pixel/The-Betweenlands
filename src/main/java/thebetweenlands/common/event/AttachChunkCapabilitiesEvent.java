@@ -3,11 +3,11 @@ package thebetweenlands.common.event;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 
-public class AttachChunkCapabilitiesEvent extends AttachCapabilitiesEvent {
+public class AttachChunkCapabilitiesEvent extends AttachCapabilitiesEvent<ChunkDataBase> {
 	private final ChunkDataBase storage;
 
 	public AttachChunkCapabilitiesEvent(ChunkDataBase storage) {
-		super(storage);
+		super(ChunkDataBase.class, storage);
 		this.storage = storage;
 	}
 
