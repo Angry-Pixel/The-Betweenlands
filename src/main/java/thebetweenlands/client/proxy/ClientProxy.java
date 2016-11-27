@@ -39,6 +39,7 @@ import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
 import thebetweenlands.client.event.handler.TextureStitchHandler;
+import thebetweenlands.client.event.handler.TextureStitchHandler.TextureFrameSplitter;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
@@ -47,6 +48,8 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.particle.BLParticles;
+import thebetweenlands.client.particle.ParticleTextureStitcher;
 import thebetweenlands.client.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -374,6 +377,16 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, RenderTarBeast::new);
         
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
+        
+        BLParticles[] particles = BLParticles.values();
+		for(BLParticles particle : particles) {
+			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
+			if(stitcher != null) {
+				TextureStitchHandler.INSTANCE.registerTextureFrameSplitter(new TextureFrameSplitter((splitter) -> {
+					stitcher.setFrames(splitter.getFrames());
+				}, stitcher.getTextures()));
+			}
+		}
     }
 
     @SuppressWarnings("deprecation")

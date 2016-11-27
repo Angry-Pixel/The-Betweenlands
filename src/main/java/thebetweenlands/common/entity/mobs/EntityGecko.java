@@ -1,8 +1,14 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -20,8 +26,6 @@ import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntityGecko;
 import thebetweenlands.common.message.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import java.util.List;
 
 public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBushUncollidableEntity {
 	private static final DataParameter<Boolean> HIDING = EntityDataManager.createKey(EntityGecko.class, DataSerializers.BOOLEAN);
@@ -51,7 +55,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
 		this.tasks.addTask(5, new EntityAILookIdle(this));
 	}
-	
+
 	@Override
 	protected void entityInit() {
 		super.entityInit();
@@ -100,7 +104,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 
 	private boolean hasValidHiding() {
-		return worldObj.getBlockState(this.hidingBush) == BlockRegistry.WEEDWOOD_BUSH;
+		return worldObj.getBlockState(this.hidingBush).getBlock() == BlockRegistry.WEEDWOOD_BUSH;
 	}
 
 	private void sendRustleEffect(float strength) {
@@ -149,7 +153,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 
 	@Override
 	public boolean isAIDisabled() {
-		return true;
+		return false;
 	}
 
 	@Override

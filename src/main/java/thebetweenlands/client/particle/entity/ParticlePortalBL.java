@@ -3,11 +3,15 @@ package thebetweenlands.client.particle.entity;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.ParticleTextureStitcher;
 import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.sprite.TextureAnimation;
 
 public class ParticlePortalBL extends Particle implements IParticleSpriteReceiver {
+	private TextureAnimation animation;
+
 	public ParticlePortalBL(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale) {
 		super(world, x, y, z);
 		this.posX = this.prevPosX = x;
@@ -17,8 +21,8 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 		this.motionY = my;
 		this.motionZ = mz;
 		this.particleMaxAge = maxAge;
-		//this.noClip = false;
 		this.particleScale = scale;
+		this.animation = new TextureAnimation().setRandomFrame(this.rand);
 	}
 
 	@Override
@@ -26,9 +30,25 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 		return 1;
 	}
 
+	@Override
+	public void setStitchedSprites(Frame[][] frames) {
+		this.animation.setFrames(frames[0]);
+		if(this.particleTexture == null) {
+			this.setParticleTexture(frames[0][0].getSprite());
+		}
+	}
+
+	@Override
+	public void onUpdate() {
+		this.animation.update();
+		this.setParticleTexture(this.animation.getCurrentSprite());
+
+		super.onUpdate();
+	}
+
 	public static final class Factory extends ParticleFactory<Factory, ParticlePortalBL> {
 		public Factory() {
-			super(ParticlePortalBL.class, ParticleTextureStitcher.create(ParticlePortalBL.class, new ResourceLocation("thebetweenlands:particle/portal")));
+			super(ParticlePortalBL.class, ParticleTextureStitcher.create(ParticlePortalBL.class, new ResourceLocation("thebetweenlands:particle/portal")).setSplitAnimations(true));
 		}
 
 		@Override
@@ -37,7 +57,7 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
+		protected void setBaseArguments(ParticleArgs<?> args) {
 			args.withData(40);
 		}
 	}

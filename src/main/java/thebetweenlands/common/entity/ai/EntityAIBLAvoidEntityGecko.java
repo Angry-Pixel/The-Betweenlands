@@ -1,6 +1,14 @@
 package thebetweenlands.common.entity.ai;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Random;
+
 import com.google.common.base.Predicate;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -11,12 +19,10 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import java.util.*;
 
 public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 	public final Predicate<Entity> viableSelector = new Predicate<Entity>() {
@@ -110,7 +116,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 	private boolean doesGeckoNeighborBush(BlockPos target) {
 		BlockPos geckoPos = new BlockPos(gecko);
 		for (EnumFacing facing : EnumFacing.values()) {
-			if (geckoPos.distanceSq(target.offset(facing)) == 0) {
+			if (target.offset(facing).equals(geckoPos)) {
 				return true;
 			}
 		}
@@ -133,13 +139,14 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 		BlockPos center = new BlockPos(gecko);
 		Random rand = gecko.getRNG();
 		List<BlockPos> bushes = new ArrayList<>();
+		MutableBlockPos pos = new MutableBlockPos();
 		for (int dx = -radius; dx <= radius; dx++) {
 			for (int dy = -radius / 2; dy <= radius; dy++) {
 				for (int dz = -radius; dz <= radius; dz++) {
-					BlockPos pos = center.add(dx, dy, dz);
+					pos.setPos(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
 					IBlockState state = gecko.worldObj.getBlockState(pos);
 					if (state.getBlock() == BlockRegistry.WEEDWOOD_BUSH && gecko.worldObj.isBlockNormalCube(pos.down(), false)) {
-						bushes.add(pos);
+						bushes.add(pos.subtract(center));
 					}
 				}
 			}

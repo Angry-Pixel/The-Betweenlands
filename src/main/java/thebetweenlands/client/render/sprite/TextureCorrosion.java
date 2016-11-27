@@ -188,9 +188,6 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		this.width = width;
 		this.height = height;
 
-		mipmappedFrames[0] = new int[spriteTexture.getWidth() * spriteTexture.getHeight()];
-		spriteTexture.getRGB(0, 0, spriteTexture.getWidth(), spriteTexture.getHeight(), mipmappedFrames[0], 0, spriteTexture.getWidth());
-
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				if(y % width == 0) {

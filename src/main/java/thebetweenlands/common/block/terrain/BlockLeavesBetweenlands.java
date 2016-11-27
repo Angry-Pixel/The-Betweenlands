@@ -23,6 +23,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.particle.BLParticles;
+import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap;
@@ -99,9 +101,9 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-		if(world.rand.nextInt(200) == 0) {
+		if(world.rand.nextInt(160) == 0) {
 			if(world.isAirBlock(pos.down())) {
-				//	BLParticle.LEAF.spawn(world, pos.add(rand.nextFloat(), 0, rand.nextFloat()));
+				BLParticles.WEEDWOOD_LEAF.spawn(world, pos.getX() + rand.nextFloat(), pos.getY(), pos.getZ() + rand.nextFloat(), ParticleArgs.get().withScale(1.0F + rand.nextFloat() * 1.25F));
 			}
 		}
 	}

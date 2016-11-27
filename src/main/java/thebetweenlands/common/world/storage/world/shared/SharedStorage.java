@@ -22,7 +22,6 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
 import thebetweenlands.common.event.AttachSharedStorageCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
@@ -130,7 +129,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		this.uuidString = uuid.toString();
 
 		//Gather capabilities
-		AttachCapabilitiesEvent event = new AttachSharedStorageCapabilitiesEvent(this);
+		AttachSharedStorageCapabilitiesEvent event = new AttachSharedStorageCapabilitiesEvent(this);
 		MinecraftForge.EVENT_BUS.post(event);
 		this.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
 	}

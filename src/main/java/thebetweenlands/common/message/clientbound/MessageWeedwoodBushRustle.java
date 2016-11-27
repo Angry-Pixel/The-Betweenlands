@@ -7,6 +7,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.client.particle.BLParticles;
+import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.message.BLMessage;
 
 public class MessageWeedwoodBushRustle extends BLMessage {
@@ -42,7 +43,11 @@ public class MessageWeedwoodBushRustle extends BLMessage {
 			float y = this.getPos().getY() + 0.5F;
 			float z = this.getPos().getZ() + 0.5F;
 			while (leafCount-- > 0) {
-				BLParticles.SPLASH_TAR.spawn(world, x, y, z); //TODO WEEDWOOD_EAF
+				float dx = world.rand.nextFloat() * 2 - 1;
+				float dy = world.rand.nextFloat() * 2 - 0.5F;
+				float dz = world.rand.nextFloat() * 2 - 1;
+				float mag = 0.01F + world.rand.nextFloat() * 0.07F;
+				BLParticles.WEEDWOOD_LEAF.spawn(world, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 			}
 		}
 		return null;

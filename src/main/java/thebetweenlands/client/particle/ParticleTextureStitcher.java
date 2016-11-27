@@ -1,8 +1,8 @@
 package thebetweenlands.client.particle;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
 
 public final class ParticleTextureStitcher<T> {
 	/**
@@ -28,10 +28,37 @@ public final class ParticleTextureStitcher<T> {
 	}
 
 	private final ResourceLocation[] textures;
-	private TextureAtlasSprite[] loadedSprites;
+	private Frame[][] loadedFrames;
+	private boolean splitAnimations = false;
 
 	private ParticleTextureStitcher(ResourceLocation[] textures) {
 		this.textures = textures;
+	}
+
+	/**
+	 * Makes the texture stitcher split animated textures into single frames
+	 * @param split
+	 * @return
+	 */
+	public ParticleTextureStitcher<T> setSplitAnimations(boolean split) {
+		this.splitAnimations = true;
+		return this;
+	}
+
+	/**
+	 * Sets the frames
+	 * @param frames
+	 */
+	public void setFrames(Frame[][] frames) {
+		this.loadedFrames = frames;
+	}
+
+	/**
+	 * Returns whether animated textures should be split into single frames
+	 * @return
+	 */
+	public boolean shouldSplitAnimations() {
+		return this.splitAnimations;
 	}
 
 	/**
@@ -43,19 +70,11 @@ public final class ParticleTextureStitcher<T> {
 	}
 
 	/**
-	 * Sets the particle sprites
-	 * @param sprites
-	 */
-	public void setSprites(TextureAtlasSprite[] sprites) {
-		this.loadedSprites = sprites;
-	}
-
-	/**
 	 * Returns the particle sprites
 	 * @return
 	 */
-	public TextureAtlasSprite[] getSprites() {
-		return this.loadedSprites;
+	public Frame[][] getSprites() {
+		return this.loadedFrames;
 	}
 
 	/**
@@ -64,11 +83,11 @@ public final class ParticleTextureStitcher<T> {
 	 */
 	public static interface IParticleSpriteReceiver {
 		/**
-		 * Sets the stitched particle sprites.
-		 * @param sprites
+		 * Sets the stitched particle frames
+		 * @param frames
 		 */
-		default void setStitchedSprites(TextureAtlasSprite[] sprites) {
-			((Particle)this).setParticleTexture(sprites[0]);
+		default void setStitchedSprites(Frame[][] frames) {
+			((Particle)this).setParticleTexture(frames[0][0].getSprite());
 		}
 	}
 }

@@ -1,8 +1,8 @@
 package thebetweenlands.client.particle.entity;
 
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.particle.ParticleFactory;
 import thebetweenlands.client.particle.ParticleTextureStitcher;
 
@@ -15,8 +15,11 @@ public class ParticleMoth extends ParticleBug {
 	}
 
 	@Override
-	public void setStitchedSprites(TextureAtlasSprite[] sprites) {
-		this.setParticleTexture(sprites[this.mothTexture]);
+	public void setStitchedSprites(Frame[][] frames) {
+		this.animation.setFrames(frames[this.mothTexture]);
+		if(this.particleTexture == null) {
+			this.setParticleTexture(frames[this.mothTexture][0].getSprite());
+		}
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleMoth> {
@@ -34,13 +37,13 @@ public class ParticleMoth extends ParticleBug {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
-			args.withScale(0.18F).withData(400, 0.02F, 0.005F, 0);
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withScale(1F).withData(400, 0.02F, 0.005F, 0);
 		}
 
 		@Override
-		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs args) {
-			args.withScale(0.18F * world.rand.nextFloat()).withDataBuilder().setData(3, world.rand.nextInt(2)).buildData();
+		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
+			args.withScale(1F * world.rand.nextFloat()).withDataBuilder().setData(3, world.rand.nextInt(2)).buildData();
 		}
 	}
 }

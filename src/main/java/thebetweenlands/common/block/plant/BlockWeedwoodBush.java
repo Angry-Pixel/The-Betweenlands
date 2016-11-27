@@ -2,6 +2,8 @@ package thebetweenlands.common.block.plant;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
@@ -11,16 +13,20 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
+import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
 
@@ -127,5 +133,14 @@ public class BlockWeedwoodBush extends Block implements /*IShearable,*/ ISickleH
 	@Override
 	public BlockRenderLayer getBlockLayer() {
 		return Blocks.LEAVES.getBlockLayer();
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabblist, @Nullable Entity entity) {
+		if (entity instanceof WeedWoodBushUncollidableEntity) {
+			return;
+		}
+		super.addCollisionBoxToList(state, world, pos, aabb, aabblist, entity);
 	}
 }
