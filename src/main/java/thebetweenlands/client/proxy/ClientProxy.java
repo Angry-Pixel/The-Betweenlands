@@ -69,6 +69,7 @@ import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderShockwaveBlock;
 import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
+import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
 import thebetweenlands.client.render.entity.RenderSporeling;
@@ -119,6 +120,7 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
@@ -375,9 +377,11 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, RenderDarkDruid::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityVolatileSoul.class, RenderVolatileSoul::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, RenderTarBeast::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, RenderSiltCrab::new);
         
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
         
+        //Register particle stitchers
         BLParticles[] particles = BLParticles.values();
 		for(BLParticles particle : particles) {
 			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();

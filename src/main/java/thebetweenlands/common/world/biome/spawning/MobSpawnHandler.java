@@ -41,7 +41,7 @@ public class MobSpawnHandler {
 	public static final MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	//How many times a chunk should be populated with mobs when it generates
-	private static final int CHUNK_GEN_SPAWN_RUNS = 128;
+	private static final int CHUNK_GEN_SPAWN_RUNS = 64;
 
 	//Distance from the player where mobs spawn (middle of the spawner chunk rim)
 	private static final byte SPAWN_CHUNK_DISTANCE = 4;
@@ -104,8 +104,8 @@ public class MobSpawnHandler {
 		 * @param x
 		 * @param y
 		 * @param z
-		 * @param block
-		 * @param surfaceBlock
+		 * @param blockState The block the entity will spawn
+		 * @param surfaceBlock The block below where the entity will spawn
 		 */
 		public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
 			return surfaceBlockState.isNormalCube();

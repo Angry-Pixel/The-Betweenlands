@@ -2,7 +2,6 @@ package thebetweenlands.common.world.biome.spawning.spawners;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -54,8 +53,8 @@ public class CaveSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState spawnBlockState, IBlockState surfaceBlockState) {
-		return SurfaceType.MIXED.matches(spawnBlockState) || 
-				(this.canSpawnInWater && surfaceBlockState.getMaterial().isLiquid()) || 
-				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && chunk.getBlockState(pos.up()).getBlock() == Blocks.AIR);
+		return (SurfaceType.MIXED_AND_UNDERGROUND.matches(surfaceBlockState) && !spawnBlockState.getMaterial().isLiquid()) ||
+				(this.canSpawnInWater && spawnBlockState.getMaterial().isLiquid()) || 
+				(this.canSpawnOnWater && surfaceBlockState.getMaterial().isLiquid() && !spawnBlockState.getMaterial().isLiquid());
 	}
 }

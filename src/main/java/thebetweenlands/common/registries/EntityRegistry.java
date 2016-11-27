@@ -21,6 +21,7 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
@@ -63,6 +64,7 @@ public class EntityRegistry {
 		registerEntity(EntityGasCloud.class, "gas_cloud", 0xFFB300, 0xFFD000);
 		registerEntity(EntityVolatileSoul.class, "volatile_soul");
 		registerEntity(EntityTarBeast.class, "tar_beast", 0x000000, 0x202020);
+		registerEntity(EntitySiltCrab.class, "silt_crab", 0x086A87, 0xB43104);
 	}
 	
 	private static int id = 0;

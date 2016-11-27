@@ -2,7 +2,22 @@ package thebetweenlands.common.world.biome;
 
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -37,7 +52,7 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
-//		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySiltCrab.class, (short) 50).setHostile(true).setGroupSize(2, 8)); TODO
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySiltCrab.class, (short) 50).setSurfacePredicate((state) -> state.getBlock() == BlockRegistry.SILT).setHostile(true).setGroupSize(2, 8));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityBloodSnail.class, (short) 30).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));

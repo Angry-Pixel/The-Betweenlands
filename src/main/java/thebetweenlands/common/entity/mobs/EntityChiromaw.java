@@ -7,6 +7,7 @@ import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,8 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAIMoveToDirect<EntityChiromaw>(this, 0.1D) {
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIMoveToDirect<EntityChiromaw>(this, 0.1D) {
 			@Override
 			protected Vec3d getTarget() {
 				if(!this.entity.getIsHanging()) {
@@ -51,7 +53,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 				return null;
 			}
 		});
-		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityChiromaw>(this) {
+		this.tasks.addTask(2, new EntityAIFlyRandomly<EntityChiromaw>(this) {
 			@Override
 			protected double getTargetX(Random rand, double distanceMultiplier) {
 				return this.entity.posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 10.0F * distanceMultiplier);
@@ -98,6 +100,11 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			}
 		}
 
+		if(this.isJumping && this.isInWater()) {
+			//Moving out of water
+			this.getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
+		}
+		
 		if (this.getIsHanging()) {
 			this.motionX = this.motionY = this.motionZ = 0.0D;
 			this.posY = (double) MathHelper.floor_double(this.posY) + 1.0D - (double) this.height;

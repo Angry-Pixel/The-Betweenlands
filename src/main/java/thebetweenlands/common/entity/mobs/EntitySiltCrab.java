@@ -1,0 +1,111 @@
+package thebetweenlands.common.entity.mobs;
+
+import net.minecraft.block.Block;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+
+public class EntitySiltCrab extends EntityMob implements IEntityBL {
+
+	private EntityAIAttackMelee aiAttack;
+	private EntityAIAvoidEntity<EntityPlayer> aiRunAway;
+	private EntityAINearestAttackableTarget<EntityPlayer> aiTarget;
+
+	private int aggroCooldown = 200;
+	private boolean canAttack = false;
+
+	public EntitySiltCrab(World world) {
+		super(world);
+		this.setSize(0.8F, 0.6F);
+		this.stepHeight = 2;
+	}
+
+	@Override
+	protected void initEntityAI() {
+		this.aiAttack = new EntityAIAttackMelee(this, 0.7D, true);
+		this.aiRunAway = new EntityAIAvoidEntity<EntityPlayer>(this, EntityPlayer.class, 10.0F, 0.7D, 0.7D);
+		this.aiTarget =  new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true);
+
+		this.tasks.addTask(0, this.aiAttack);
+		this.tasks.addTask(1, this.aiRunAway);
+		this.tasks.addTask(2, new EntityAIWander(this, 0.7D));
+		this.tasks.addTask(3, new EntityAILookIdle(this));
+		this.tasks.addTask(4, new EntityAIAttackOnCollide(this));
+
+		this.targetTasks.addTask(0, new EntityAIHurtByTarget(this, true));
+		this.targetTasks.addTask(1, this.aiTarget);
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	}
+
+	@Override
+	public int getMaxSpawnedInChunk() {
+		return 5;
+	}
+
+	@Override
+	protected void playStepSound(BlockPos pos, Block blockIn) {
+		this.playSound(SoundEvents.ENTITY_SPIDER_STEP, 0.15F, 1.0F);
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		if (!this.worldObj.isRemote) {
+			if (this.aggroCooldown == 200 && !this.canAttack) {
+				this.tasks.removeTask(this.aiRunAway);
+				this.tasks.addTask(0, this.aiAttack);
+				this.targetTasks.addTask(1, this.aiTarget);
+				this.canAttack = true;
+			}
+
+			if (this.aggroCooldown == 0 && this.canAttack) {
+				this.tasks.removeTask(this.aiAttack);
+				this.targetTasks.removeTask(this.aiTarget);
+				this.tasks.addTask(1, this.aiRunAway);
+				this.canAttack = false;
+			}
+
+			if (this.aggroCooldown < 201)
+				this.aggroCooldown++;
+		}
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float damage) {
+		if (source.equals(DamageSource.drown))
+			return false;
+		return super.attackEntityFrom(source, damage);
+	}
+
+	@Override
+	public void onCollideWithPlayer(EntityPlayer player) {
+		if (!this.worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && this.canAttack) {
+			this.aggroCooldown = 0;
+		}
+	}
+
+	@Override
+	protected boolean canDespawn() {
+		return false;
+	}
+}

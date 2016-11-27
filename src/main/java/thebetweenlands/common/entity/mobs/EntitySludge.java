@@ -327,6 +327,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		public void updateTask() {
 			if (this.sludge.getRNG().nextFloat() < 0.8F) {
 				this.sludge.getJumpHelper().setJumping();
+				this.sludge.motionY += 0.01D;
 			}
 
 			((EntitySludge.SludgeMoveHelper)this.sludge.getMoveHelper()).setSpeed(1.2D);
