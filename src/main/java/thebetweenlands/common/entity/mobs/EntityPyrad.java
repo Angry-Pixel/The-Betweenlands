@@ -31,7 +31,7 @@ import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityPyrad extends EntityMob {
+public class EntityPyrad extends EntityMob implements IEntityBL {
 	private static final DataParameter<Boolean> ACTIVE = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 
 	private int glowTicks = 0;

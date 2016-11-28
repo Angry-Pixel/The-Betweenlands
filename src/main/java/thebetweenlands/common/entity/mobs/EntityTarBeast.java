@@ -9,6 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveToBlock;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -71,10 +72,16 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.35D, false));
-		this.tasks.addTask(2, new EntityAIMoveTowardsRestriction(this, 0.35D));
-		this.tasks.addTask(3, new EntityAIWander(this, 0.3D));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
-		this.tasks.addTask(5, new EntityAILookIdle(this));
+		this.tasks.addTask(2, new EntityAIMoveToBlock(this, 0.3D, 32) {
+			@Override
+			protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
+				return worldIn.getBlockState(pos).getBlock() == BlockRegistry.TAR;
+			}
+		});
+		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.35D));
+		this.tasks.addTask(4, new EntityAIWander(this, 0.3D));
+		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
+		this.tasks.addTask(6, new EntityAILookIdle(this));
 
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true));
