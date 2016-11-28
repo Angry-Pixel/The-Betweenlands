@@ -21,6 +21,8 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
@@ -65,8 +67,10 @@ public class EntityRegistry {
 		registerEntity(EntityVolatileSoul.class, "volatile_soul");
 		registerEntity(EntityTarBeast.class, "tar_beast", 0x000000, 0x202020);
 		registerEntity(EntitySiltCrab.class, "silt_crab", 0x086A87, 0xB43104);
+		registerEntity(EntityPyrad.class, "pyrad", 0x5E4726, 0x2D4231, 64, 3, true);
+		registerEntity(EntityPyradFlame.class, "pyrad_flame");
 	}
-	
+
 	private static int id = 0;
 
 	private static void registerEntity(Class<? extends Entity> entityClass, String name, int trackingRange, int trackingFrequency, boolean velocityUpdates) {

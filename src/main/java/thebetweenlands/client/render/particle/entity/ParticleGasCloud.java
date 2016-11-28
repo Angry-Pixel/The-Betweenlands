@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
@@ -7,8 +7,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 
 public class ParticleGasCloud extends Particle implements ParticleTextureStitcher.IParticleSpriteReceiver {
 	protected boolean rotateReversed = false;

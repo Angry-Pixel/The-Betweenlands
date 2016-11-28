@@ -1,10 +1,10 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
-import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 
 public class ParticleFish extends ParticleBug {
 	public final int fishTexture;

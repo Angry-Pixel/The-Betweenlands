@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle;
+package thebetweenlands.client.render.particle;
 
 import javax.annotation.Nullable;
 
@@ -7,20 +7,21 @@ import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.particle.entity.ParticleAltarCrafting;
-import thebetweenlands.client.particle.entity.ParticleBreakingBL;
-import thebetweenlands.client.particle.entity.ParticleBubbleBL;
-import thebetweenlands.client.particle.entity.ParticleBug;
-import thebetweenlands.client.particle.entity.ParticleCaveWaterDrip;
-import thebetweenlands.client.particle.entity.ParticleDruidCasting;
-import thebetweenlands.client.particle.entity.ParticleFish;
-import thebetweenlands.client.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.particle.entity.ParticleMoth;
-import thebetweenlands.client.particle.entity.ParticlePortalBL;
-import thebetweenlands.client.particle.entity.ParticleTarBeastDrip;
-import thebetweenlands.client.particle.entity.ParticleWeedwoodLeaf;
-import thebetweenlands.client.particle.entity.ParticleWisp;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
+import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
+import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
+import thebetweenlands.client.render.particle.entity.ParticleBug;
+import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
+import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.render.particle.entity.ParticleFish;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
+import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticlePortalBL;
+import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
+import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
+import thebetweenlands.client.render.particle.entity.ParticleWisp;
 
 public enum BLParticles {
 
@@ -88,7 +89,8 @@ public enum BLParticles {
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
 	GAS_CLOUD(new ParticleGasCloud.Factory()),
-	WEEDWOOD_LEAF(new ParticleWeedwoodLeaf.Factory());
+	WEEDWOOD_LEAF(new ParticleWeedwoodLeaf.Factory()),
+	LEAF_SWIRL(new ParticleLeafSwirl.Factory());
 
 
 

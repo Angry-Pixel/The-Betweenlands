@@ -3,7 +3,10 @@ package thebetweenlands.common.entity.movement;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 
 public class FlightMoveHelper extends EntityMoveHelper {
 	protected int courseChangeCooldown;
@@ -19,18 +22,18 @@ public class FlightMoveHelper extends EntityMoveHelper {
 			double dx = this.posX - this.entity.posX;
 			double dy = this.posY - this.entity.posY;
 			double dz = this.posZ - this.entity.posZ;
-			double distSq = dx * dx + dy * dy + dz * dz;
+			double dist = dx * dx + dy * dy + dz * dz;
 
 			if(this.courseChangeCooldown-- <= 0) {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
-				distSq = (double)MathHelper.sqrt_double(distSq);
+				dist = (double)MathHelper.sqrt_double(dist);
 
-				if(this.isNotColliding(this.posX, this.posY, this.posZ, distSq)) {
+				if(this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
 					double speed = this.getFlightSpeed();
-					this.entity.motionX += dx / distSq * speed;
-					this.entity.motionY += dy / distSq * speed;
-					this.entity.motionZ += dz / distSq * speed;
+					this.entity.motionX += dx / dist * speed;
+					this.entity.motionY += dy / dist * speed;
+					this.entity.motionZ += dz / dist * speed;
 					this.blocked = false;
 				} else {
 					this.action = EntityMoveHelper.Action.WAIT;
@@ -67,7 +70,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	protected boolean isNotColliding(double x, double y, double z, double step) {
 		if(this.entity.noClip)
 			return true;
-		
+
 		double stepX = (x - this.entity.posX) / step;
 		double stepY = (y - this.entity.posY) / step;
 		double stepZ = (z - this.entity.posZ) / step;
@@ -92,12 +95,37 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	protected boolean isBlocked(AxisAlignedBB aabb) {
 		return !this.entity.worldObj.getCollisionBoxes(this.entity, aabb).isEmpty();
 	}
-	
+
 	/**
 	 * Returns the flight speed
 	 * @return
 	 */
 	protected double getFlightSpeed() {
 		return this.speed;
+	}
+
+	/**
+	 * Returns the ground height at the specified block position
+	 * @param world
+	 * @param pos
+	 * @param maxIter
+	 * @param fallback
+	 * @return
+	 */
+	public static BlockPos getGroundHeight(World world, BlockPos pos, int maxIter, BlockPos fallback) {
+		if(world.canSeeSky(pos)) {
+			return world.getHeight(pos);
+		}
+		MutableBlockPos mutablePos = new MutableBlockPos();
+		int i = 0;
+		for(; i < maxIter; i++) {
+			mutablePos.setPos(pos.getX(), pos.getY() - i, pos.getZ());
+			if(!world.isAirBlock(mutablePos))
+				break;
+		}
+		if(i < maxIter) {
+			return new BlockPos(pos.getX(), pos.getY() - i, pos.getZ());
+		}
+		return fallback;
 	}
 }

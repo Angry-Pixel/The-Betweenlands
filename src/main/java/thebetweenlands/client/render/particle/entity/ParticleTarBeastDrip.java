@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -9,7 +9,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory;
 
 @SideOnly(Side.CLIENT)
 public class ParticleTarBeastDrip extends Particle {

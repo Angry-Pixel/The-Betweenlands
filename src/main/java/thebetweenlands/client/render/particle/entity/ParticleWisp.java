@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -7,9 +7,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ParticleTextureStitcher;
-import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.util.MathUtils;
 

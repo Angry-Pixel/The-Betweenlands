@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle;
+package thebetweenlands.client.render.particle;
 
 import java.util.Arrays;
 

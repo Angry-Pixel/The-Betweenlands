@@ -2,6 +2,8 @@ package thebetweenlands.client.render.sprite;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
 
@@ -12,11 +14,11 @@ public class TextureAnimation {
 	private Random rand;
 
 	/**
-	 * If set a random frame is set when the frames are updated for the first time
+	 * If not null the animation will start at a random frame
 	 * @param random
 	 * @return
 	 */
-	public TextureAnimation setRandomFrame(Random random) {
+	public TextureAnimation setRandomStart(@Nullable Random random) {
 		this.rand = random;
 		return this;
 	}

@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle;
+package thebetweenlands.client.render.particle;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,7 +11,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 
 public abstract class ParticleFactory<F extends ParticleFactory<?, T>, T extends Particle> {
 	/**

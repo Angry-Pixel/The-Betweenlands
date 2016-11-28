@@ -3,6 +3,7 @@ package thebetweenlands.client.event.handler;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -40,6 +41,8 @@ public class TextureStitchHandler {
 	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
 
 	private final List<TextureFrameSplitter> splitters = new ArrayList<TextureFrameSplitter>();
+
+	private final Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<ResourceLocation, Frame[]>();
 
 	/**
 	 * Registers a texture frame splitter
@@ -104,6 +107,7 @@ public class TextureStitchHandler {
 		}
 
 		//Split animated textures into seperate frames
+		this.animationFramesCache.clear();
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		for(TextureFrameSplitter splitter : this.splitters) {
 			ResourceLocation[] textures = splitter.getTextures();
@@ -113,37 +117,48 @@ public class TextureStitchHandler {
 				TextureAtlasSprite sprite = e.getMap().registerSprite(textures[i]);
 
 				try {
-					//Load frame data
 					ResourceLocation resourceLocation = this.getResourceLocation(e.getMap().getBasePath(), sprite);
-					IResource resource = null;
-					if (sprite.hasCustomLoader(resourceManager, resourceLocation)) {
-						sprite.load(resourceManager, resourceLocation);
-					} else {
-						PngSizeInfo pngSizeInfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourceLocation));
-						resource = resourceManager.getResource(resourceLocation);
-						boolean hasAnimation = resource.getMetadata("animation") != null;
-						sprite.loadSprite(pngSizeInfo, hasAnimation);
-					}
-					sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels());
 
-					//Set sprites or split into seperate frames
-					if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
-						//Single frame
-						frames[i] = new Frame[]{ new Frame(sprite, 0) };
+					Frame[] cachedFrames = this.animationFramesCache.get(resourceLocation);
+					if(cachedFrames != null) {
+						//Use cached frames
+						frames[i] = cachedFrames;
 					} else {
-						//Multiple frames, parse metadata and store seperate frames
-						AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
-						boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
-						int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
-						frames[i] = new Frame[frameCount];
-						for(int frame = 0; frame < frameCount; frame++) {
-							int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
-							int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
-							int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
-							TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
-							e.getMap().setTextureEntry(frameSprite);
-							frames[i][frame] = new Frame(frameSprite, duration);
+						//Load sprite
+						IResource resource = null;
+						if (sprite.hasCustomLoader(resourceManager, resourceLocation)) {
+							sprite.load(resourceManager, resourceLocation);
+						} else {
+							PngSizeInfo pngSizeInfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourceLocation));
+							resource = resourceManager.getResource(resourceLocation);
+							boolean hasAnimation = resource.getMetadata("animation") != null;
+							sprite.loadSprite(pngSizeInfo, hasAnimation);
 						}
+
+						//Necessary to initialize animation metadata
+						sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels());
+
+						//Set sprites or split into seperate frames
+						if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
+							//Single frame
+							frames[i] = new Frame[]{ new Frame(sprite, 0) };
+						} else {
+							//Multiple frames, parse metadata and store seperate frames
+							AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
+							boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
+							int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
+							frames[i] = new Frame[frameCount];
+							for(int frame = 0; frame < frameCount; frame++) {
+								int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
+								int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
+								int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
+								TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
+								e.getMap().setTextureEntry(frameSprite);
+								frames[i][frame] = new Frame(frameSprite, duration);
+							}
+						}
+
+						this.animationFramesCache.put(resourceLocation, frames[i]);
 					}
 				} catch(Exception ex) {
 					throw new RuntimeException("Failed splitting texture animation", ex);
@@ -151,10 +166,6 @@ public class TextureStitchHandler {
 			}
 
 			splitter.frames = frames;
-
-			if(splitter.callback != null) {
-				splitter.callback.accept(splitter);
-			}
 		}
 	}
 
@@ -172,6 +183,13 @@ public class TextureStitchHandler {
 			TextureAtlasSprite parentSprite = map.getTextureExtry(parentIconName);
 			if(parentSprite != null)
 				corrosionSprite.setParentSprite(parentSprite);
+		}
+
+		//Frame splitters
+		for(TextureFrameSplitter splitter : this.splitters) {
+			if(splitter.callback != null) {
+				splitter.callback.accept(splitter);
+			}
 		}
 	}
 

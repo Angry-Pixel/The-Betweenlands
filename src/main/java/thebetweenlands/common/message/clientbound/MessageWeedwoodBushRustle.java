@@ -6,8 +6,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import thebetweenlands.client.particle.BLParticles;
-import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.message.BLMessage;
 
 public class MessageWeedwoodBushRustle extends BLMessage {

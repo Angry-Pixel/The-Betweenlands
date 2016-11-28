@@ -22,9 +22,9 @@ import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.BLParticles;
-import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 

@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import javax.vecmath.Vector3d;
 
@@ -6,7 +6,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class ParticleAltarCrafting extends Particle {

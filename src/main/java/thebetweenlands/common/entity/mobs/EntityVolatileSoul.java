@@ -21,8 +21,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.BLParticles;
-import thebetweenlands.client.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 
 public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL {
 	private Entity target = null;

@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.particle.Particle;
@@ -6,9 +6,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
-import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ParticleTextureStitcher;
-import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 import thebetweenlands.client.render.sprite.TextureAnimation;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 
@@ -34,7 +34,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		this.jitter = jitter;
 		this.speed = speed;
 		this.underwater = underwater;
-		this.animation = new TextureAnimation().setRandomFrame(this.rand);
+		this.animation = new TextureAnimation().setRandomStart(this.rand);
 	}
 
 	@Override

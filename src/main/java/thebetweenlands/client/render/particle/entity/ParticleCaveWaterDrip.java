@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
@@ -7,7 +7,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 
 public class ParticleCaveWaterDrip extends Particle {

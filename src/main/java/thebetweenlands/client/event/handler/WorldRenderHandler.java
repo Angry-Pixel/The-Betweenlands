@@ -15,8 +15,9 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
-import thebetweenlands.client.particle.entity.ParticleWisp;
+
 import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.tile.RenderWisp;

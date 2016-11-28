@@ -1,4 +1,4 @@
-package thebetweenlands.client.particle;
+package thebetweenlands.client.render.particle;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;

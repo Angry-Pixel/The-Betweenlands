@@ -1,10 +1,10 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.ParticleBreaking;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory;
 
 public class ParticleBreakingBL extends ParticleBreaking {
 	protected ParticleBreakingBL(World worldIn, double posXIn, double posYIn, double posZIn, Item itemIn, int meta) {

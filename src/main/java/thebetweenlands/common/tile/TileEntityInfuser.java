@@ -19,7 +19,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import thebetweenlands.client.particle.BLParticles;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;

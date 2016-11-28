@@ -1,8 +1,8 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory;
 
 public class ParticleBubbleBL extends Particle {
 	protected ParticleBubbleBL(World world, double x, double y, double z, double vecX, double vecY, double vecZ) {

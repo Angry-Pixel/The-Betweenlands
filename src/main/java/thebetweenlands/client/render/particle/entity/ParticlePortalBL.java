@@ -1,12 +1,12 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
-import thebetweenlands.client.particle.ParticleFactory;
-import thebetweenlands.client.particle.ParticleTextureStitcher;
-import thebetweenlands.client.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 import thebetweenlands.client.render.sprite.TextureAnimation;
 
 public class ParticlePortalBL extends Particle implements IParticleSpriteReceiver {
@@ -22,7 +22,7 @@ public class ParticlePortalBL extends Particle implements IParticleSpriteReceive
 		this.motionZ = mz;
 		this.particleMaxAge = maxAge;
 		this.particleScale = scale;
-		this.animation = new TextureAnimation().setRandomFrame(this.rand);
+		this.animation = new TextureAnimation().setRandomStart(this.rand);
 	}
 
 	@Override

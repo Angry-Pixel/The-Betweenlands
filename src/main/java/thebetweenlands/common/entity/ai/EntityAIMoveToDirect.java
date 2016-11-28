@@ -15,6 +15,10 @@ public abstract class EntityAIMoveToDirect<T extends EntityLiving> extends Entit
 		this.speed = speed;
 	}
 
+	public void setSpeed(double speed) {
+		this.speed = speed;
+	}
+
 	@Override
 	public boolean shouldExecute() {
 		return this.getTarget() != null;
@@ -28,7 +32,9 @@ public abstract class EntityAIMoveToDirect<T extends EntityLiving> extends Entit
 	@Override
 	public void updateTask() {
 		Vec3d target = this.getTarget();
-		this.entity.getMoveHelper().setMoveTo(target.xCoord, target.yCoord, target.zCoord, this.speed);
+		if(target != null) {
+			this.entity.getMoveHelper().setMoveTo(target.xCoord, target.yCoord, target.zCoord, this.speed);
+		}
 	}
 
 	/**

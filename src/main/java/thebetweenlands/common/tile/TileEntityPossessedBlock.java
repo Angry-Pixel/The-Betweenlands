@@ -16,7 +16,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
-import thebetweenlands.client.particle.BLParticles;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;

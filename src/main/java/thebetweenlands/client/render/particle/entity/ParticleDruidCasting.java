@@ -1,8 +1,8 @@
-package thebetweenlands.client.particle.entity;
+package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleFactory;
 
 public class ParticleDruidCasting extends Particle {
 	public float portalParticleScale;

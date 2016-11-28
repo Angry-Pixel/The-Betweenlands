@@ -6,8 +6,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.particle.BLParticles;
-import thebetweenlands.client.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.message.MessageEntity;
 
 public class MessageWightVolatileParticles extends MessageEntity {
