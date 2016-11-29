@@ -8,6 +8,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.IItemPropertyGetter;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagInt;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -46,14 +48,23 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
 		super.onAttackBlocked(stack, attacked, damage, source);
-		if(!attacked.worldObj.isRemote && source.getEntity() instanceof EntityLivingBase && attacked.worldObj.rand.nextFloat() < 0.25F) {
-			EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
-			ItemStack activeItem = attacker.getActiveItemStack();
-			if(activeItem != null) {
-				Item item = activeItem.getItem();
-				if(item == ItemRegistry.OCTINE_AXE || item == ItemRegistry.OCTINE_PICKAXE || item == ItemRegistry.OCTINE_SHIELD || 
-						item == ItemRegistry.OCTINE_SHOVEL || item == ItemRegistry.OCTINE_SWORD)
-					stack.setTagInfo("burningTicks", new NBTTagInt(120));
+		if(!attacked.worldObj.isRemote && source.getEntity() != null) {
+			Entity attacker;
+			if(source instanceof EntityDamageSourceIndirect) {
+				attacker = ((EntityDamageSourceIndirect)source).getSourceOfDamage();
+			} else {
+				attacker = source.getEntity();
+			}
+			if((attacker.isBurning() || attacker instanceof EntitySmallFireball) && attacked.worldObj.rand.nextFloat() < 0.5F) {
+				stack.setTagInfo("burningTicks", new NBTTagInt(80));
+			} else if(attacker instanceof EntityLivingBase && attacked.worldObj.rand.nextFloat() < 0.25F) {
+				ItemStack activeItem = ((EntityLivingBase)attacker).getActiveItemStack();
+				if(activeItem != null) {
+					Item item = activeItem.getItem();
+					if(item == ItemRegistry.OCTINE_AXE || item == ItemRegistry.OCTINE_PICKAXE || item == ItemRegistry.OCTINE_SHIELD || 
+							item == ItemRegistry.OCTINE_SHOVEL || item == ItemRegistry.OCTINE_SWORD)
+						stack.setTagInfo("burningTicks", new NBTTagInt(120));
+				}
 			}
 		}
 	}
@@ -128,6 +139,6 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		boolean isBurning = itemStackIn.getTagCompound() != null && itemStackIn.getTagCompound().getInteger("burningTicks") > 0;
-		return isBurning ? new ActionResult(EnumActionResult.PASS, itemStackIn) : super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+		return isBurning ? new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn) : super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
 	}
 }

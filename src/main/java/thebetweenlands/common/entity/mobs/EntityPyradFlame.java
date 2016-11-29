@@ -50,7 +50,9 @@ public class EntityPyradFlame extends EntitySmallFireball {
 		velY = (rand.nextFloat() - 0.5D) * 0.125D;
 		velZ = rand.nextFloat() * 0.1F * motionZ;
 		velX = rand.nextFloat() * 0.1F * motionX;
-		BLParticles.FLAME.spawn(worldObj, x, y, z, ParticleArgs.get().withMotion(velX, velY, velZ));
+		if(rand.nextInt(4) == 0) {
+			BLParticles.FLAME.spawn(worldObj, x, y, z, ParticleArgs.get().withMotion(velX, velY, velZ));
+		}
+		BLParticles.WEEDWOOD_LEAF.spawn(worldObj, x, y + this.height / 2.0F, z, ParticleArgs.get().withMotion(velX, velY, velZ).withColor(1F, 0.25F, 0.0F, 1.0F).withData(40));
 	}
-
 }

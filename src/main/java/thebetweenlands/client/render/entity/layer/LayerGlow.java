@@ -54,7 +54,7 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	 * @param entityLivingIn
 	 * @param partialTicks
 	 */
-	private void setLightmap(T entityLivingIn, float partialTicks) {
+	protected void setLightmap(T entityLivingIn, float partialTicks) {
 		int i = entityLivingIn.getBrightnessForRender(partialTicks);
 		int j = i % 65536;
 		int k = i / 65536;

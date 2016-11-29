@@ -189,23 +189,31 @@ public class ModelPyrad extends ModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-		bodybase.setRotationPoint(0.0F, 4.0F, -1.5F);
 		bodybase.render(0.0625F);
 	}
 
 	@Override
 	public void setRotationAngles(float limbSwing, float prevLimbSwing, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
 		headbase.rotateAngleY = rotationYaw / (180F / (float) Math.PI);
-		headbase.rotateAngleX = rotationPitch / (180F / (float) Math.PI);
 	}
 
 	@Override
 	public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
 		EntityPyrad pyrad = (EntityPyrad) entity;
-		float flap = MathHelper.sin((pyrad.ticksExisted + partialRenderTicks) * 0.05F ) * 0.5F;
+		float flap = MathHelper.sin((pyrad.ticksExisted + partialRenderTicks) * 0.05F) * 0.5F * pyrad.getActiveTicks(partialRenderTicks) / 60.0F - 0.4F * (1F - pyrad.getActiveTicks(partialRenderTicks) / 60.0F);
 		plate_back1.rotateAngleX = 0.22759093446006054F + flap;
 		plate_right1.rotateAngleZ = 0.36425021489121656F + flap;
 		plate_left1.rotateAngleZ = -0.36425021489121656F - flap;
+		
+		plate_left1.offsetX = -0.1F * (1F - pyrad.getActiveTicks(partialRenderTicks) / 60.0F);
+		plate_right1.offsetX = 0.1F * (1F - pyrad.getActiveTicks(partialRenderTicks) / 60.0F);
+		plate_back1.offsetZ = -0.05F * (1F - pyrad.getActiveTicks(partialRenderTicks) / 60.0F);
+		
+		headbase.offsetY = 0.125F * (1F - pyrad.getActiveTicks(partialRenderTicks) / 60.0F);
+		
+		leaf_headleft1.isHidden = !pyrad.isActive();
+		leaf_headright1.isHidden = !pyrad.isActive();
+		staffleaf1.isHidden = !pyrad.isActive();
 	}
 
 	private void setRotation(ModelRenderer model, float x, float y, float z) {

@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.entity.layer.LayerGlow;
+import thebetweenlands.client.render.entity.layer.LayerPyradEffects;
 import thebetweenlands.client.render.model.entity.ModelPyrad;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -18,7 +18,7 @@ public class RenderPyrad extends RenderLiving<EntityPyrad> {
 
 	public RenderPyrad(RenderManager manager) {
 		super(manager, new ModelPyrad(), 0.5F);
-		this.addLayer(new LayerGlow<EntityPyrad>(this, new ResourceLocation("thebetweenlands:textures/entity/pyrad_glow.png")));
+		this.addLayer(new LayerPyradEffects(this, new ResourceLocation("thebetweenlands:textures/entity/pyrad_glow.png")));
 	}
 
 	@Override
@@ -29,20 +29,31 @@ public class RenderPyrad extends RenderLiving<EntityPyrad> {
 	@Override
 	public void doRender(EntityPyrad entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		GlStateManager.pushMatrix();
-		GlStateManager.translate(0, Math.sin((entity.ticksExisted + partialTicks) / 10.0F) / 4.0F - 0.25D, 0);
+		GlStateManager.translate(0, (Math.sin((entity.ticksExisted + partialTicks) / 10.0F) / 4.0F - 0.25D) * entity.getActiveTicks(partialTicks) / 60.0D - 0.9D * (1.0D - entity.getActiveTicks(partialTicks) / 60.0D), 0);
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 		GlStateManager.popMatrix();
 
+		double rx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
+		double ry = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+		double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
+		
+		if(!entity.isActive() && entity.getHitTicks(partialTicks) > 8) {
+			float hitTicks = entity.getHitTicks(partialTicks);
+			float brightness = 1.0F - (float)(Math.cos((hitTicks - 8) / 12.0F * 2.0F * Math.PI) + 1.0F) / 2.0F;
+			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry + 0.5D, rz,
+					1.8f,
+					134.0f / 255.0f * 3.0F * brightness,
+					214.0f / 255.0f * 3.0F * brightness,
+					55.0f / 255.0f * 3.0F * brightness));
+		}
+		
 		if(entity.getGlowTicks(partialTicks) > 0 && ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			double rx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
-			double ry = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
-			double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
-			float brightness = entity.getGlowTicks(partialTicks) / 10.0F;
+			float glow = entity.getGlowTicks(partialTicks) / 10.0F;
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry + entity.getEyeHeight(), rz,
-					5.75f,
-					134.0f / 255.0f * 10.0F * brightness,
-					214.0f / 255.0f * 10.0F * brightness,
-					55.0f / 255.0f * 10.0F * brightness));
+					4.75F * glow + 1.0F,
+					134.0f / 255.0f * 10.0F * glow,
+					214.0f / 255.0f * 10.0F * glow,
+					55.0f / 255.0f * 10.0F * glow));
 		}
 	}
 }
