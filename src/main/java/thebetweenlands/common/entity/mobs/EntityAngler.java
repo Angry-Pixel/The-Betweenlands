@@ -207,6 +207,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 					motionY = 0.8D;
 				}
 			}
+			this.playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
 			return true;
 		}
 		return false;

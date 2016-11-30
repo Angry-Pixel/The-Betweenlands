@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -15,6 +16,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
@@ -102,6 +104,15 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 		if (!this.worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && this.canAttack) {
 			this.aggroCooldown = 0;
 		}
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		boolean attacked;
+		if(attacked = super.attackEntityAsMob(entityIn)) {
+			this.playSound(SoundRegistry.CRAB_SNIP, 1, 1);
+		}
+		return attacked;
 	}
 
 	@Override

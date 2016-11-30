@@ -6,7 +6,15 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
@@ -25,12 +33,12 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		this.setWeight(10);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator()
-				.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
-				.addFeature(new PatchFeature(0.03125D * 3.5D, 0.03125D * 3.5D, BlockRegistry.PEAT.getDefaultState()))
-				.addFeature(new PatchFeature(0.03125D * 12.5D, 0.03125D * 12.5D, BlockRegistry.PEAT.getDefaultState()))
-				.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
-				.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
-				.setDecorator(new BiomeDecoratorMarsh());
+		.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
+		.addFeature(new PatchFeature(0.03125D * 3.5D, 0.03125D * 3.5D, BlockRegistry.PEAT.getDefaultState()))
+		.addFeature(new PatchFeature(0.03125D * 12.5D, 0.03125D * 12.5D, BlockRegistry.PEAT.getDefaultState()))
+		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
+		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
+		.setDecorator(new BiomeDecoratorMarsh());
 		this.setFoliageColors(0x627017, 0x627017);
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
@@ -38,13 +46,13 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 4).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 14).setHostile(true).setSpawnCheckRadius(64.0D));
-//		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D)); TODO
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 54).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 8).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
-		
+
 		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
