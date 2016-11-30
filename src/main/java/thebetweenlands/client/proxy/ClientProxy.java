@@ -37,6 +37,7 @@ import thebetweenlands.client.event.handler.CameraPositionHandler;
 import thebetweenlands.client.event.handler.DebugHandlerSharedLocation;
 import thebetweenlands.client.event.handler.DecayRenderHandler;
 import thebetweenlands.client.event.handler.FogHandler;
+import thebetweenlands.client.event.handler.MusicHandler;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
 import thebetweenlands.client.event.handler.TextureStitchHandler;
@@ -495,6 +496,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
         MinecraftForge.EVENT_BUS.register(CameraPositionHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(MusicHandler.INSTANCE);
 
         if (ConfigHandler.debug) {
             MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);

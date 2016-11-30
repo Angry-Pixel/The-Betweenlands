@@ -13,8 +13,8 @@ public class SoundRegistry {
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
 
     // Music
-    public static final BLSoundEvent BL_MUSIC = reg("bl_menu");
-    public static final BLSoundEvent BL_DIMENSION = reg("bl_dimension");
+    public static final BLSoundEvent BL_MUSIC_MENU = reg("bl_menu");
+    public static final BLSoundEvent BL_MUSIC_DIMENSION = reg("bl_dimension");
 
     // Records
     public static final BLSoundEvent _16612 = reg("16612");
