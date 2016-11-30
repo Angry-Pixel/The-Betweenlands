@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -14,13 +15,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
@@ -41,7 +42,8 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIMoveToDirect<EntityChiromaw>(this, 0.1D) {
+		this.tasks.addTask(1, new EntityAIAttackOnCollide(this));
+		this.tasks.addTask(2, new EntityAIMoveToDirect<EntityChiromaw>(this, 0.1D) {
 			@Override
 			protected Vec3d getTarget() {
 				if(!this.entity.getIsHanging()) {
@@ -53,7 +55,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 				return null;
 			}
 		});
-		this.tasks.addTask(2, new EntityAIFlyRandomly<EntityChiromaw>(this) {
+		this.tasks.addTask(3, new EntityAIFlyRandomly<EntityChiromaw>(this) {
 			@Override
 			protected double getTargetX(Random rand, double distanceMultiplier) {
 				return this.entity.posX + (double)((rand.nextFloat() * 2.0F - 1.0F) * 10.0F * distanceMultiplier);
@@ -104,7 +106,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			//Moving out of water
 			this.getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
 		}
-		
+
 		if (this.getIsHanging()) {
 			this.motionX = this.motionY = this.motionZ = 0.0D;
 			this.posY = (double) MathHelper.floor_double(this.posY) + 1.0D - (double) this.height;
@@ -143,15 +145,6 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void onCollideWithPlayer(EntityPlayer player) {
-		super.onCollideWithPlayer(player);
-		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player))
-			if (getDistanceToEntity(player) <= 1.5F)
-				if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY)
-					player.attackEntityFrom(DamageSource.causeMobDamage(this), 2F);
 	}
 
 	@Override
@@ -195,6 +188,13 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(20.0D);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entityIn) {
+		return EntityAIAttackOnCollide.useStandardAttack(this, entityIn);
 	}
 
 	@Override

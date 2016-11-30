@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFlame;
+import net.minecraft.client.particle.ParticleRedstone;
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.world.World;
@@ -90,7 +91,8 @@ public enum BLParticles {
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
 	GAS_CLOUD(new ParticleGasCloud.Factory()),
 	WEEDWOOD_LEAF(new ParticleWeedwoodLeaf.Factory()),
-	LEAF_SWIRL(new ParticleLeafSwirl.Factory());
+	LEAF_SWIRL(new ParticleLeafSwirl.Factory()),
+	REDSTONE_DUST(VanillaParticleFactory.create(ParticleRedstone.class, new ParticleRedstone.Factory()));
 
 
 

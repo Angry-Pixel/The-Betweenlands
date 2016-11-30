@@ -1,14 +1,16 @@
 package thebetweenlands.common.entity.mobs;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityWaterMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -19,15 +21,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.entity.ai.EntityAINearestAttackableTargetNonCreature;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
-
-import javax.annotation.Nullable;
 
 public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAngler.class, DataSerializers.BOOLEAN);
@@ -37,7 +36,7 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 
 	public EntityAngler(World world) {
 		super(world);
-		setSize(1F, 0.7F);
+		setSize(0.8F, 0.7F);
 		setAir(80);
 	}
 
@@ -48,11 +47,24 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	}
 
 	@Override
+	protected void initEntityAI() {
+		this.tasks.addTask(0, new EntityAIAttackOnCollide(this) {
+			@Override
+			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+				return 0.8D + attackTarget.width;
+			}
+		});
+		this.targetTasks.addTask(0, new EntityAINearestAttackableTargetNonCreature<EntityPlayer>(this, EntityPlayer.class, true));
+	}
+
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(34.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 	}
 
 	@Override
@@ -74,7 +86,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	protected float getSoundVolume() {
 		return 0.4F;
 	}
-
 
 	@Nullable
 	@Override
@@ -101,8 +112,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		super.onLivingUpdate();
 
 		if (!this.worldObj.isRemote) {
-			EntityPlayer target = worldObj.getClosestPlayerToEntity(this, 16.0D);
-			setAttackTarget(target);
 			if (isInWater()) {
 				if (!worldObj.isRemote) {
 					if (getAttackTarget() != null) {
@@ -184,31 +193,22 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 	}
 
 	@Override
-	public void onCollideWithPlayer(EntityPlayer player) {
-		super.onCollideWithPlayer(player);
-		if (!player.capabilities.isCreativeMode && !worldObj.isRemote && getEntitySenses().canSee(player)) {
-			if (getDistanceToEntity(player) <= 1.5F)
-				if (player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY) {
-					player.attackEntityFrom(DamageSource.causeMobDamage(this), 2F);
-				}
-		}
-	}
-
-
-	@Override
 	public boolean attackEntityAsMob(Entity entityIn) {
-		Double distance = this.getPosition().getDistance((int) entityIn.posX, (int) entityIn.posY, (int) entityIn.posZ);
-		if (distance > 2.0F && distance < 6.0F && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
-			if (isInWater() && worldObj.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
-				setIsLeaping(true);
-				double distanceX = entityIn.posX - posX;
-				double distanceZ = entityIn.posZ - posZ;
-				float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
-				motionX = distanceX / distanceSqrRoot * 1.5D * 0.900000011920929D + motionX * 2.70000000298023224D;
-				motionZ = distanceZ / distanceSqrRoot * 1.5D * 0.900000011920929D + motionZ * 2.70000000298023224D;
-				motionY = 0.8D;
-				return true;
+		if(EntityAIAttackOnCollide.useStandardAttack(this, entityIn)) {
+			double distance = this.getPosition().getDistance((int) entityIn.posX, (int) entityIn.posY, (int) entityIn.posZ);
+			if (distance > 2.0F && distance < 6.0F && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0) {
+				if (isInWater() && worldObj.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
+					setIsLeaping(true);
+					double distanceX = entityIn.posX - posX;
+					double distanceZ = entityIn.posZ - posZ;
+					float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
+					motionX = distanceX / distanceSqrRoot * 1.5D * 0.900000011920929D + motionX * 2.70000000298023224D;
+					motionZ = distanceZ / distanceSqrRoot * 1.5D * 0.900000011920929D + motionZ * 2.70000000298023224D;
+					motionY = 0.8D;
+				}
 			}
+			return true;
+		}
 		return false;
 	}
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,6 +16,8 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +28,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -36,6 +41,8 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityPyrad extends EntityMob implements IEntityBL {
+	public static final IAttribute FLAMES_PER_ATTACK = (new RangedAttribute(null, "bl.flamesPerAttack", 6.0D, 1.0D, 64.0D)).setDescription("Number range of flames per attack");
+	
 	private static final DataParameter<Boolean> CHARGING = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ACTIVE = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 
@@ -50,6 +57,8 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 
 	private int hitTicks = 0;
 	private int prevHitTicks = 0;
+
+	private int deathTicks = 0;
 
 	public EntityPyrad(World worldIn) {
 		super(worldIn);
@@ -133,6 +142,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.04D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(28.0D);
+		this.getAttributeMap().registerAttribute(FLAMES_PER_ATTACK);
 	}
 
 	@Override
@@ -173,8 +183,12 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			this.motionY *= 0.6D;
 		}
 
-		if(!this.worldObj.isRemote && this.isInWater() && !this.isActive()) {
+		if(!this.worldObj.isRemote && this.isEntityAlive() && this.isInWater() && !this.isActive()) {
 			this.setActive(true);
+		}
+
+		if(!this.worldObj.isRemote && this.isEntityAlive() && this.isActive() && this.getAttackTarget() == null && this.rand.nextInt(800) == 0) {
+			this.setActive(false);
 		}
 
 		this.prevGlowTicks = this.glowTicks;
@@ -196,8 +210,11 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			this.hitTicks--;
 		}
 
-		if(!this.worldObj.isRemote && this.isActive() && this.getAttackTarget() == null && this.rand.nextInt(800) == 0) {
-			this.setActive(false);
+		if(!this.isActive() && this.activeTicks == 0) {
+			this.setSize(0.7F, 1.2F);
+			this.rotationYawHead = (float) (this.interpTargetYaw = this.rotationYaw);
+		} else {
+			this.setSize(0.7F, 2F);
 		}
 
 		if (this.worldObj.isRemote && this.isActive()) {
@@ -252,6 +269,18 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+	}
+
+	@Override
+	@Nullable
+	public AxisAlignedBB getCollisionBox(Entity entity) {
+		return !this.isActive() && this.activeTicks == 0 ? entity.getEntityBoundingBox() : super.getCollisionBox(entity);
+	}
+
+	@Override
+	@Nullable
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return !this.isActive() && this.activeTicks == 0 ? this.getEntityBoundingBox() : super.getCollisionBoundingBox();
 	}
 
 	@Override
@@ -315,7 +344,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
-		if(!this.isActive()) {
+		if(!this.isActive() && this.isEntityAlive()) {
 			if(this.hitTicks <= 0) {
 				if(!this.worldObj.isRemote && (this.rand.nextInt(12) == 0 || amount > 3.0F)) {
 					this.setActive(true);
@@ -346,6 +375,34 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 	@Override
 	public boolean canBePushed() {
 		return super.canBePushed() && this.isActive();
+	}
+
+	@Override
+	protected void onDeathUpdate() {
+		if(this.isActive()) {
+			this.setActive(false);
+		} else if(this.onGround && this.activeTicks < 20) {
+			this.deathTicks++;
+			if(this.deathTicks > 10) {
+				if(this.worldObj.isRemote) {
+					for(int i = 0; i < 10; i++) {
+						ParticleArgs<?> args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F).withScale(2.0F);
+						args.withColor(1F, 0.25F + this.rand.nextFloat() * 0.5F, 0.05F + this.rand.nextFloat() * 0.25F, 1);
+						BLParticles.WEEDWOOD_LEAF.spawn(this.worldObj, this.posX, this.posY + 0.8D, this.posZ, args);
+						args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F);
+						BLParticles.SWAMP_SMOKE.spawn(this.worldObj, this.posX, this.posY + 0.8D, this.posZ, args);
+					}
+				}
+				if(this.deathTicks > 30 && !this.worldObj.isRemote) {
+					for(int i = 0; i < 10; i++) {
+						this.playSound(SoundRegistry.PYRAD_HURT, 0.18F, 0.1F + this.rand.nextFloat() * 0.2F);
+						this.playSound(SoundRegistry.PYRAD_DEATH, 0.08F, 0.1F + this.rand.nextFloat() * 0.2F);
+					}
+					this.setDead();
+				}
+			}
+		}
+
 	}
 
 	public boolean isCharging() {
@@ -443,7 +500,9 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 						float f = MathHelper.sqrt_float(MathHelper.sqrt_double(distSq)) * 0.8F;
 						this.pyrad.worldObj.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
 
-						for (int i = 0; i < this.pyrad.rand.nextInt(6) + 1; ++i) {
+						int numberFlames = (int)this.pyrad.getEntityAttribute(FLAMES_PER_ATTACK).getAttributeValue();
+						
+						for (int i = 0; i < (numberFlames > 1 ? this.pyrad.rand.nextInt(numberFlames) : 0) + 1; ++i) {
 							EntityPyradFlame flame = new EntityPyradFlame(this.pyrad.worldObj, this.pyrad, dx + this.pyrad.getRNG().nextGaussian() * (double)f, dy, dz + this.pyrad.getRNG().nextGaussian() * (double)f);
 							flame.posY = this.pyrad.posY + (double)(this.pyrad.height / 2.0F) + 0.5D;
 							this.pyrad.worldObj.spawnEntityInWorld(flame);

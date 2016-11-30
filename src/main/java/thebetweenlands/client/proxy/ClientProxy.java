@@ -33,6 +33,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.event.handler.AmbienceSoundPlayHandler;
+import thebetweenlands.client.event.handler.CameraPositionHandler;
 import thebetweenlands.client.event.handler.DebugHandlerSharedLocation;
 import thebetweenlands.client.event.handler.DecayRenderHandler;
 import thebetweenlands.client.event.handler.FogHandler;
@@ -64,6 +65,7 @@ import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderPyradFlame;
 import thebetweenlands.client.render.entity.RenderShockwaveBlock;
@@ -122,6 +124,7 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
@@ -384,6 +387,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, RenderSiltCrab::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityPyrad.class, RenderPyrad::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, RenderPyradFlame::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, RenderPeatMummy::new);
         
         ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
         
@@ -490,6 +494,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
         MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
+        MinecraftForge.EVENT_BUS.register(CameraPositionHandler.INSTANCE);
 
         if (ConfigHandler.debug) {
             MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);

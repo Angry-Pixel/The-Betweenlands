@@ -74,7 +74,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 			return false;
 		}
 		if (avoidingEntityClass == EntityPlayer.class) {
-			closestLivingEntity = gecko.worldObj.getClosestPlayerToEntity(gecko, distance);
+			closestLivingEntity = gecko.worldObj.getNearestPlayerNotCreative(gecko, distance);
 			if (closestLivingEntity == null) {
 				return false;
 			}
