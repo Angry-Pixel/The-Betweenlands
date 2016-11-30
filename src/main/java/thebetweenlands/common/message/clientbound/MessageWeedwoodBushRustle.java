@@ -6,6 +6,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.message.BLMessage;
@@ -37,20 +39,25 @@ public class MessageWeedwoodBushRustle extends BLMessage {
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if (ctx.side.isClient()) {
-			World world = FMLClientHandler.instance().getWorldClient();
-			int leafCount = (int) (47 * this.getStrength()) + 1;
-			float x = this.getPos().getX() + 0.5F;
-			float y = this.getPos().getY() + 0.5F;
-			float z = this.getPos().getZ() + 0.5F;
-			while (leafCount-- > 0) {
-				float dx = world.rand.nextFloat() * 2 - 1;
-				float dy = world.rand.nextFloat() * 2 - 0.5F;
-				float dz = world.rand.nextFloat() * 2 - 1;
-				float mag = 0.01F + world.rand.nextFloat() * 0.07F;
-				BLParticles.WEEDWOOD_LEAF.spawn(world, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
-			}
+			this.handle();
 		}
 		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void handle() {
+		World world = FMLClientHandler.instance().getWorldClient();
+		int leafCount = (int) (47 * this.getStrength()) + 1;
+		float x = this.getPos().getX() + 0.5F;
+		float y = this.getPos().getY() + 0.5F;
+		float z = this.getPos().getZ() + 0.5F;
+		while (leafCount-- > 0) {
+			float dx = world.rand.nextFloat() * 2 - 1;
+			float dy = world.rand.nextFloat() * 2 - 0.5F;
+			float dz = world.rand.nextFloat() * 2 - 1;
+			float mag = 0.01F + world.rand.nextFloat() * 0.07F;
+			BLParticles.WEEDWOOD_LEAF.spawn(world, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+		}
 	}
 
 	public BlockPos getPos() {
