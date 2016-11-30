@@ -55,7 +55,6 @@ public class MusicHandler {
 				}
 			} else if(this.timeUntilMusic-- <= 0) {
 				//Start new sound track
-				this.currentSound = PositionedSoundRecord.getMusicRecord(SoundRegistry.BL_MUSIC_DIMENSION);
 				this.timeUntilMusic = MathHelper.getRandomIntegerInRange(this.RNG, MIN_WAIT, MAX_WAIT);
 				this.playRandomSoundTrack();
 			}
