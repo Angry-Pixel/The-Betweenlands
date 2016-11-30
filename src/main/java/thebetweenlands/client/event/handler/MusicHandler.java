@@ -9,6 +9,7 @@ import java.util.Random;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.ISoundEventAccessor;
+import net.minecraft.client.audio.ITickableSound;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
@@ -135,7 +136,7 @@ public class MusicHandler {
 				} while (choice >= 0);
 				this.previousSound = sound;
 				ISound parentSound = PositionedSoundRecord.getMusicRecord(SoundRegistry.BL_MUSIC_DIMENSION);
-				ISound playingSound = new SoundWrapper(parentSound, sound);
+				ISound playingSound = SoundWrapper.wrap(parentSound, sound);
 				this.currentSound = playingSound;
 				this.mc.getSoundHandler().playSound(playingSound);
 			}
@@ -146,13 +147,27 @@ public class MusicHandler {
 		return this.mc.thePlayer;
 	}
 
-	protected static class SoundWrapper implements ISound {
+	public static class SoundWrapper implements ISound {
 		private final ISound parent;
 		private final Sound sound;
 
-		public SoundWrapper(ISound parent, Sound sound) {
+		private SoundWrapper(ISound parent, Sound sound) {
 			this.parent = parent;
 			this.sound = sound;
+		}
+
+		/**
+		 * Creates a new sound with the properties of the specified parent sound (-pool) but only
+		 * the specified sound is played
+		 * @param parent
+		 * @param sound
+		 * @return
+		 */
+		public static ISound wrap(ISound parent, Sound sound) {
+			if(parent instanceof ITickableSound) {
+				return new SoundWrapperTickable((ITickableSound) parent, sound);
+			}
+			return new SoundWrapper(parent, sound);
 		}
 
 		@Override
@@ -216,6 +231,25 @@ public class MusicHandler {
 		@Override
 		public AttenuationType getAttenuationType() {
 			return this.parent.getAttenuationType();
+		}
+	}
+
+	protected static class SoundWrapperTickable extends SoundWrapper implements ITickableSound {
+		private final ITickableSound parent;
+
+		private SoundWrapperTickable(ITickableSound parent, Sound sound) {
+			super(parent, sound);
+			this.parent = parent;
+		}
+
+		@Override
+		public void update() {
+			this.parent.update();
+		}
+
+		@Override
+		public boolean isDonePlaying() {
+			return this.parent.isDonePlaying();
 		}
 	}
 }
