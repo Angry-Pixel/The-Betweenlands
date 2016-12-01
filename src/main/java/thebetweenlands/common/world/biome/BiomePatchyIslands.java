@@ -29,7 +29,7 @@ import thebetweenlands.common.world.gen.biome.feature.SiltBeachFeature;
 public class BiomePatchyIslands extends BiomeBetweenlands {
 
 	public BiomePatchyIslands() {
-		super(new BiomeProperties("patchy_islands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 2).setHeightVariation(4.0F).setWaterColor(0x184220).setTemperature(0.8F).setRainfall(0.9F));
+		super(new BiomeProperties("patchy_islands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1.25F).setHeightVariation(4.75F).setWaterColor(0x184220).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(20);
 		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorPatchyIslands())

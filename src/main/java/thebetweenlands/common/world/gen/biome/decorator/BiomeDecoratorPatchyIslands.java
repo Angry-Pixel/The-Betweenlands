@@ -10,25 +10,23 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 	public void decorate(World world, ChunkGeneratorBetweenlands generator, Random rand, int x, int z) {
 		super.decorate(world, generator, rand, x, z);
 
-		//TODO: Implement missing generators
 		this.generate(50, DecorationHelper::generateWeedwoodTree);
 		this.generate(10, DecorationHelper::generateSapTree);
 		this.generate(0.5F, DecorationHelper::generateSunkenIdolHead);
 		this.generate(5, DecorationHelper::generateCattailCluster);
-		this.generate(40, DecorationHelper::generateTallCattail);
+		this.generate(50, DecorationHelper::generateTallCattail);
 		this.generate(8, DecorationHelper::generateBigBulbCappedMushroom);
-		this.generate(50, DecorationHelper::generateSwampTallgrassCluster);
-		this.generate(100, DecorationHelper::generateSwampTallgrassCluster);
+		this.generate(90, DecorationHelper::generateSwampTallgrassCluster);
 		this.generate(20, DecorationHelper::generateSwampReedCluster);
 		this.generate(0.4F, DecorationHelper::generateMireCoralCluster);
 		this.generate(25, DecorationHelper::generateMossCluster);
-		this.generate(10, DecorationHelper::generateMilkweedCluster);
-		this.generate(10, DecorationHelper::generateShootsCluster);
-		this.generate(10, DecorationHelper::generateCardinalFlower);
-		this.generate(10, DecorationHelper::generateBlueEyedGrassCluster);
-		this.generate(10, DecorationHelper::generateBonesetCluster);
-		this.generate(14, DecorationHelper::generateMarshMarigold);
-		this.generate(14, DecorationHelper::generateGoldenClub);
-		this.generate(14, DecorationHelper::generateBogBean);
+		this.generate(1.5F, DecorationHelper::generateMilkweedCluster);
+		this.generate(1.5F, DecorationHelper::generateShootsCluster);
+		this.generate(1.5F, DecorationHelper::generateCardinalFlower);
+		this.generate(1.5F, DecorationHelper::generateBlueEyedGrassCluster);
+		this.generate(1.5F, DecorationHelper::generateBonesetCluster);
+		this.generate(6, DecorationHelper::generateMarshMarigold);
+		this.generate(6, DecorationHelper::generateGoldenClub);
+		this.generate(6, DecorationHelper::generateBogBean);
 	}
 }
