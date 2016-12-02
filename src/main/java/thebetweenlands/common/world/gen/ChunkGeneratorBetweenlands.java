@@ -25,6 +25,7 @@ import net.minecraft.world.gen.NoiseGeneratorSimplex;
 import net.minecraftforge.event.ForgeEventFactory;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
@@ -62,7 +63,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private final float[] biomeWeights;
 	private double[] surfaceNoiseBuffer = new double[256];
 	private float[] terrainBiomeWeights = new float[25];
-	private float[] interpolatedTerrainBiomeWeights = new float[256];
+	private float[] interpolatedTerrainBiomeWeightsS = new float[256];
 	private Biome[] biomesForGeneration;
 	private double[] mainNoiseRegion;
 	private double[] minLimitRegion;
@@ -143,26 +144,27 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				float interpZAxisXN = weightXNZC + (weightXNZN - weightXNZC) * fractionZ;
 				float currentVal = interpZAxisXC + (interpZAxisXN - interpZAxisXC) * fractionX;
 
-				this.interpolatedTerrainBiomeWeights[x + z * 16] = currentVal;
+				this.interpolatedTerrainBiomeWeightsS[x + z * 16] = currentVal;
 			}
 		}
 
+		BiomeWeights biomeWeights = new BiomeWeights(this.interpolatedTerrainBiomeWeightsS);
+
 		this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
-		this.replaceBiomeBlocks(chunkX, chunkZ, chunkprimer, this.biomesForGeneration);
+		this.replaceBiomeBlocks(chunkX, chunkZ, chunkprimer, this.biomesForGeneration, biomeWeights);
 
 		//Gen caves
-		this.caveGenerator.setBiomeTerrainWeights(this.interpolatedTerrainBiomeWeights);
+		this.caveGenerator.setBiomeTerrainWeights(biomeWeights);
 		//TODO: Maybe these can be optimized to speed up the world gen quite a bit. Sampling the noise for only every second point and then lerp?
 		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
 
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
-				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
 				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
 				Biome biome = this.biomesForGeneration[z + x * 16];
 				if(biome instanceof BiomeBetweenlands) {
 					BiomeGenerator generator = ((BiomeBetweenlands)biome).getBiomeGenerator();
-					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, chunkprimer, this, this.biomesForGeneration, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.POST_GEN_CAVES);
+					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, chunkprimer, this, this.biomesForGeneration, biomeWeights, EnumGeneratorPass.POST_GEN_CAVES);
 				}
 			}
 		}
@@ -421,7 +423,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 * @param primer
 	 * @param biomesIn
 	 */
-	public void replaceBiomeBlocks(int chunkX, int chunkZ, ChunkPrimer primer, Biome[] biomesIn) {
+	public void replaceBiomeBlocks(int chunkX, int chunkZ, ChunkPrimer primer, Biome[] biomesIn, BiomeWeights biomeWeights) {
 		if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, chunkX, chunkZ, primer, this.worldObj))
 			return;
 
@@ -431,8 +433,6 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		List<BiomeGenerator> foundGenerators = new ArrayList<BiomeGenerator>();
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
-				float terrainBiomeWeight = this.interpolatedTerrainBiomeWeights[x + z * 16];
-
 				double baseBlockNoise = this.surfaceNoiseBuffer[z + x * 16];
 				Biome biome = biomesIn[z + x * 16];
 				if(biome instanceof BiomeBetweenlands) {
@@ -440,9 +440,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 					generator.initializeGenerators(this.seed);
 					generator.generateNoise(chunkZ, chunkX);
 					foundGenerators.add(generator);
-					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS);
-					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights);
-					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, terrainBiomeWeight, this.terrainBiomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
+					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, biomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS);
+					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, biomeWeights);
+					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, biomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
 				} else {
 					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
 				}

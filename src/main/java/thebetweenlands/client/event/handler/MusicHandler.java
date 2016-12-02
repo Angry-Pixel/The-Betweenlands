@@ -47,7 +47,7 @@ public class MusicHandler {
 	public void onTick(ClientTickEvent event) {
 		EntityPlayer player = getPlayer();
 
-		if(player != null && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
+		if(player != null && player.dimension == ConfigHandler.dimensionId && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
 			if(this.currentSound != null) {
 				//Wait for sound track to finish
 				if(!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {

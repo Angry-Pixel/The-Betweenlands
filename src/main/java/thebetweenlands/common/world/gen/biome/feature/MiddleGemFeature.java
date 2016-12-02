@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
@@ -32,10 +33,11 @@ public class MiddleGemFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, BiomeWeights biomeWeights,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
-			if(terrainWeight >= 1.0F && this.rand.nextInt(60) == 0) {
+			float biomeWeight = biomeWeights.get(x, z);
+			if(biomeWeight >= 1.0F && this.rand.nextInt(60) == 0) {
 				int y = 255;
 				for(;y > 1; y--) {
 					IBlockState state = chunkPrimer.getBlockState(x, y, z);

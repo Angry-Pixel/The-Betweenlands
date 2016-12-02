@@ -163,8 +163,10 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 			}
 
 			BlockPos pos2 = new BlockPos(x2, pos.getY(), z2);
-			boolean isUnderwaterBlock = world.getBlockState(pos).getBlock() instanceof BlockSwampWater && ((BlockSwampWater)world.getBlockState(pos).getBlock()).isUnderwaterBlock;
-			boolean isOtherUnderwaterBlock = world.getBlockState(pos2).getBlock() instanceof BlockSwampWater && ((BlockSwampWater)world.getBlockState(pos2).getBlock()).isUnderwaterBlock;
+			IBlockState blockState1 = world.getBlockState(pos);
+			IBlockState blockState2 = world.getBlockState(pos2);
+			boolean isUnderwaterBlock = blockState1.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)blockState1.getBlock()).isUnderwaterBlock;
+			boolean isOtherUnderwaterBlock = blockState2.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)blockState2.getBlock()).isUnderwaterBlock;
 			if(!isUnderwaterBlock && !isOtherUnderwaterBlock) {
 				int otherDecay = quantaPerBlock - getQuantaValue(world, pos2);
 				if (otherDecay >= quantaPerBlock)

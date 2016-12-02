@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
@@ -15,6 +16,7 @@ import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGener
  */
 public class FlatLandFeature extends BiomeFeature {
 	private final int waterHeight;
+	private final int terrainOffset;
 
 	private NoiseGeneratorPerlin landNoiseGen;
 	private double[] landNoise = new double[256];
@@ -22,8 +24,9 @@ public class FlatLandFeature extends BiomeFeature {
 	private NoiseGeneratorPerlin riverNoiseGen;
 	private double[] riverNoise = new double[256];
 
-	public FlatLandFeature(int waterHeight) {
+	public FlatLandFeature(int waterHeight, int terrainOffset) {
 		this.waterHeight = waterHeight;
+		this.terrainOffset = terrainOffset;
 	}
 
 	@Override
@@ -41,9 +44,10 @@ public class FlatLandFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, BiomeWeights biomeWeights,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
+			float biomeWeight = biomeWeights.get(x, z, 0, 10);
 			//Flatten terrain
 			int lowestBlock = 0;
 			for(int yOff = 0; yOff < this.waterHeight; yOff++) {
@@ -58,10 +62,10 @@ public class FlatLandFeature extends BiomeFeature {
 			double riverNoise = Math.abs(this.riverNoise[x * 16 + z]) * 4.0D;
 			riverNoise *= riverNoise * riverNoise * riverNoise * riverNoise;
 			riverNoise *= 25.0D;
-			int terrainHeight = (int)Math.ceil(Math.abs(noise * (this.waterHeight - lowestBlock)));
+			int terrainHeight = (int)Math.ceil(Math.abs(noise * (this.waterHeight - lowestBlock + this.terrainOffset)));
 			float riverThreshold = 6.0f * (terrainHeight + 2);
 			double riverPercentage = 1.0D - (riverNoise / riverThreshold);
-			float weight = (Math.min(terrainWeight + 0.5F, 1.0F) - 0.5F) * 2.0F;
+			float weight = (Math.min(biomeWeight + 0.5F, 1.0F) - 0.5F) * 2.0F;
 			if(riverNoise < riverThreshold) {
 				for(int y = lowestBlock; y < lerp((this.waterHeight + terrainHeight - riverPercentage * (terrainHeight + ((riverThreshold - riverNoise) / 16.0D))), lowestBlock, weight); y++) {
 					chunkPrimer.setBlockState(x, y, z, chunkGenerator.baseBlockState);

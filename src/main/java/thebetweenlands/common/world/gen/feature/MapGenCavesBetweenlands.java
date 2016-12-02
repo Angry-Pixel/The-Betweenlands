@@ -16,6 +16,7 @@ import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.OpenSimplexNoise;
 
@@ -54,7 +55,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 
 	private List<BiomeBetweenlands> noBreakBiomes;
 
-	private float terrainWeights[];
+	private BiomeWeights biomeWeights;
 
 	private double[] noiseField = new double[9 * 9 * 129];
 	private double[] seaBreakNoiseField = new double[16 * 16];
@@ -72,8 +73,8 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 				BiomeRegistry.SLUDGE_PLAINS);
 	}
 
-	public void setBiomeTerrainWeights(float[] terrainWeights) {
-		this.terrainWeights = terrainWeights;
+	public void setBiomeTerrainWeights(BiomeWeights biomeWeights) {
+		this.biomeWeights = biomeWeights;
 	}
 
 	@Override
@@ -157,7 +158,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 							Biome biome = world.getBiomeGenForCoords(pos.setPos(cx + bx, 0, cz + bz));
 
 							// Only break in correct biomes and don't generate in biome transitions
-							double shouldntBreak = noBreakBiomes.contains(biome) ? SHOULDNT_BREAK : (1 - terrainWeights[bz + bx * 16]) * SHOULDNT_BREAK;
+							double shouldntBreak = noBreakBiomes.contains(biome) ? SHOULDNT_BREAK : (1 - this.biomeWeights.get(bx, bz)) * SHOULDNT_BREAK;
 
 							int level = 0;
 

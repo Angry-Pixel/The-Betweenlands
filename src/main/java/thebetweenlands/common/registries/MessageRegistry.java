@@ -46,7 +46,7 @@ public class MessageRegistry {
 		public IMessage onMessage(BLMessage message, MessageContext ctx) {
 			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 			try {
-				return server.callFromMainThread(() -> message.process(ctx)).get();
+				server.callFromMainThread(() -> message.process(ctx));
 			} catch (Exception e) {
 				e.printStackTrace(); // TODO: proper logging
 			}
@@ -59,7 +59,7 @@ public class MessageRegistry {
 		public IMessage onMessage(BLMessage message, MessageContext ctx) {
 			Minecraft mc = FMLClientHandler.instance().getClient();
 			try {
-				return mc.addScheduledTask(() -> message.process(ctx)).get();
+				mc.addScheduledTask(() -> message.process(ctx));
 			} catch (Exception e) {
 				e.printStackTrace(); // TODO: proper logging
 			}

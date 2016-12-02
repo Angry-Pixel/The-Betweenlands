@@ -10,6 +10,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
@@ -42,10 +43,11 @@ public class SiltBeachFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, BiomeWeights biomeWeights,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.POST_GEN_CAVES) {
-			if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && terrainWeight <= this.terrainWeightThreshold) {
+			float biomeWeight = biomeWeights.get(x, z);
+			if(this.siltNoise[x * 16 + z] / 1.6f + 1.5f <= 0 && biomeWeight <= this.terrainWeightThreshold) {
 				int y = WorldProviderBetweenlands.LAYER_HEIGHT;
 				Block currentBlock = chunkPrimer.getBlockState(x, y, z).getBlock();
 				Block blockAbove = chunkPrimer.getBlockState(x, y + 1, z).getBlock();

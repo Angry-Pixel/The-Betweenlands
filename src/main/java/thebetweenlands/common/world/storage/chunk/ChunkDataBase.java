@@ -365,12 +365,19 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 * Writes the data to the NBT
 	 */
 	protected NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		if (this.capabilities != null) nbt.setTag("ForgeCaps", this.capabilities.serializeNBT());
-		NBTTagList sharedReferenceList = new NBTTagList();
-		for(SharedStorageReference ref : this.sharedStorageReferences) {
-			sharedReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
+		if (this.capabilities != null) {
+			NBTTagCompound caps = this.capabilities.serializeNBT();
+			if(caps.getSize() > 0) {
+				nbt.setTag("ForgeCaps", caps);
+			}
 		}
-		nbt.setTag("SharedStorageReferences", sharedReferenceList);
+		if(this.sharedStorageReferences.size() > 0) {
+			NBTTagList sharedReferenceList = new NBTTagList();
+			for(SharedStorageReference ref : this.sharedStorageReferences) {
+				sharedReferenceList.appendTag(ref.writeToNBT(new NBTTagCompound()));
+			}
+			nbt.setTag("SharedStorageReferences", sharedReferenceList);
+		}
 		return nbt;
 	}
 

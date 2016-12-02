@@ -8,6 +8,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 public class DeepWatersFeature extends BiomeFeature {
@@ -28,9 +29,10 @@ public class DeepWatersFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, BiomeWeights biomeWeights,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
+			float biomeWeight = biomeWeights.get(x, z);
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			//Flatten terrain
 			int lowestBlock = 0;
@@ -43,7 +45,7 @@ public class DeepWatersFeature extends BiomeFeature {
 				}
 			}
 			double noise = this.terrainNoise[x * 16 + z] / 12.0f;
-			for(int y = lowestBlock; y < lerp(layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) - 2, lowestBlock, terrainWeight); y++) {
+			for(int y = lowestBlock; y < lerp(layerHeight - (layerHeight - lowestBlock) / 2.5f + noise * (layerHeight - lowestBlock) - 2, lowestBlock, biomeWeight); y++) {
 				chunkPrimer.setBlockState(x, y, z, chunkGenerator.baseBlockState);
 			}
 		}

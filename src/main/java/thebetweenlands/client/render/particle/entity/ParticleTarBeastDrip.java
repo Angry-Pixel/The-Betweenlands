@@ -29,7 +29,7 @@ public class ParticleTarBeastDrip extends Particle {
 		setParticleTextureIndex(113);
 		particleGravity = 0.01F;
 		bobTimer = 5;
-		particleMaxAge = (int) (64.0D / (Math.random() * 0.8D + 0.2D));
+		particleMaxAge = 40 + (int)(Math.random() * 40);
 	}
 
 	public void onUpdate() {

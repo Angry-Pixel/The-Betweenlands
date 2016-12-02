@@ -12,6 +12,7 @@ import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 /**
@@ -38,10 +39,11 @@ public class CragSpiresFeature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, BiomeWeights biomeWeights,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
-			double noise = this.spireNoise[x * 16 + z] / 1.5f * terrainWeight + 2.4f;
+			float biomeWeight = biomeWeights.get(x, z);
+			double noise = this.spireNoise[x * 16 + z] / 1.5f * biomeWeight + 2.4f;
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			if(chunkPrimer.getBlockState(x, layerHeight, z).getBlock() != chunkGenerator.layerBlock) {
 				return;
@@ -81,7 +83,7 @@ public class CragSpiresFeature extends BiomeFeature {
 						int nz = z + zo;
 						nx = nx < 0 ? 0 : (nx > 15 ? 15 : nx);
 						nz = nz < 0 ? 0 : (nz > 15 ? 15 : nz);
-						double sNoise = this.spireNoise[nx * 16 + nz] * terrainWeight / 1.5f + 2.4f;
+						double sNoise = this.spireNoise[nx * 16 + nz] * biomeWeight / 1.5f + 2.4f;
 						if(-sNoise * 12 >= 1) {
 							validSpire = true;
 							break;

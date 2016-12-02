@@ -1,7 +1,10 @@
 {
-  "variants": { 
-    "normal": {
-      "model": "thebetweenlands:silt"
-    } 
+  "variants": {
+    "normal": [
+      { "model": "thebetweenlands:silt" },
+      { "model": "thebetweenlands:silt", "y": 90 },
+      { "model": "thebetweenlands:silt", "y": 180 },
+      { "model": "thebetweenlands:silt", "y": 270 }
+    ]
   } 
 }

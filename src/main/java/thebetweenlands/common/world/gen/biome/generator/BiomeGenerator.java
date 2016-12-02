@@ -14,6 +14,7 @@ import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.feature.BiomeFeature;
 
@@ -192,14 +193,14 @@ public class BiomeGenerator {
 			this.noiseGenerated = true;
 		}
 	}
-	
+
 	/**
 	 * Resets the noise generators at the next {@link BiomeGenerator#initializeGenerators(long)} call
 	 */
 	public void resetNoiseGenerators() {
 		this.noiseGeneratorsInitialized = false;
 	}
-	
+
 	/**
 	 * Resets and regenerates the noise at the next {@link BiomeGenerator#generateNoise(int, int)} call
 	 */
@@ -223,16 +224,15 @@ public class BiomeGenerator {
 	 * @param chunkPrimer
 	 * @param chunkGenerator
 	 * @param biomesForGeneration
-	 * @param terrainWeight
-	 * @param terrainWeights
+	 * @param biomeWeights
 	 * @param pass
 	 */
 	public final void runBiomeFeatures(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			float terrainWeight, float[] terrainWeights, EnumGeneratorPass pass) {
+			BiomeWeights biomeWeights, EnumGeneratorPass pass) {
 		for(BiomeFeature feature : this.biomeFeatures) {
-			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, terrainWeights, terrainWeight, pass);
+			feature.replaceStackBlocks(inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, this.biome, biomeWeights, pass);
 		}
 	}
 
@@ -244,19 +244,21 @@ public class BiomeGenerator {
 	 * @param inChunkZ
 	 * @param baseBlockNoise
 	 * @param rng
+	 * @param seed
 	 * @param chunkPrimer
 	 * @param chunkGenerator
 	 * @param biomesForGeneration
+	 * @param biomeWeights
 	 */
 	public final void replaceBiomeBlocks(
 			int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, Random rng, long seed, ChunkPrimer chunkPrimer, 
 			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration,
-			float terrainWeight, float[] terrainWeights) {
+			BiomeWeights biomeWeights) {
 		this.chunkGenerator = chunkGenerator;
 		this.biomesForGeneration = biomesForGeneration;
 
-		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS)) {
+		if(!this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, biomeWeights, EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS)) {
 			return;
 		}
 
@@ -330,7 +332,7 @@ public class BiomeGenerator {
 			}
 		}
 
-		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, terrainWeights, terrainWeight, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
+		this.replaceStackBlocks(blockX, blockZ, inChunkX, inChunkZ, baseBlockNoise, chunkPrimer, chunkGenerator, biomesForGeneration, biomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
 	}
 
 	/**
@@ -349,16 +351,16 @@ public class BiomeGenerator {
 	 * @param inChunkX
 	 * @param inChunkZ
 	 * @param baseBlockNoise
-	 * @param rng
 	 * @param chunkPrimer
 	 * @param chunkGenerator
 	 * @param biomesForGeneration
+	 * @param biomeWeights
 	 * @param pass
 	 * @return
 	 */
 	protected boolean replaceStackBlocks(int blockX, int blockZ, int inChunkX, int inChunkZ, 
 			double baseBlockNoise, ChunkPrimer chunkPrimer, 
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, float[] terrainWeights, float terrainWeight, EnumGeneratorPass pass) {
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, BiomeWeights biomeWeights, EnumGeneratorPass pass) {
 		return true;
 	}
 }

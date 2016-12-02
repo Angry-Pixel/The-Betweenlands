@@ -29,11 +29,13 @@ import thebetweenlands.common.entity.mobs.EntitySludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
+import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
+import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
 
 public class EntityRegistry {
 	private EntityRegistry() {
@@ -71,6 +73,8 @@ public class EntityRegistry {
 		registerEntity(EntityPyrad.class, "pyrad", 0x5E4726, 0x2D4231, 64, 3, true);
 		registerEntity(EntityPyradFlame.class, "pyrad_flame");
 		registerEntity(EntityPeatMummy.class, "peat_mummy", 0x524D3A, 0x69463F, 64, 1, true);
+		registerEntity(EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 1, true);
+		registerEntity(EntityThrownTarminion.class, "thrown_tarminion", 64, 10, true);
 	}
 
 	private static int id = 0;

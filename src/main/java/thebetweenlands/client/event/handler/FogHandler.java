@@ -149,8 +149,10 @@ public class FogHandler {
 
 		//Dense fog
 		if(hasDenseFog()) {
-			defaultFogStart = fogStart = defaultFogStart / Math.max(5.0f / (1.0F + uncloudedStrength * 4.0F) * lowViewDistanceFogReduction, 1);
-			defaultFogEnd = fogEnd = defaultFogEnd / Math.max(3.0f / (1.0F + uncloudedStrength * 2.0F) * lowViewDistanceFogReduction, 1);
+			float denseFogStart = defaultFogStart / Math.max(5.0f / (1.0F + uncloudedStrength * 4.0F) * lowViewDistanceFogReduction, 1);
+			float denseFogEnd = defaultFogEnd / Math.max(3.0f / (1.0F + uncloudedStrength * 2.0F) * lowViewDistanceFogReduction, 1);
+			defaultFogStart = fogStart = Math.min(denseFogStart, fogStart);
+			defaultFogEnd = fogEnd = Math.min(denseFogEnd, fogEnd);
 		}
 
 		//Underground fog

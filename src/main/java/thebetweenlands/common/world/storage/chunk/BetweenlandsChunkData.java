@@ -35,18 +35,21 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	@Override
 	public void markDirty() {
 		super.markDirty();
-		this.sendDataToAllWatchers();
+		this.sendDataToAllWatchers(true);
 	}
 
 	/**
 	 * Sends the chunk data to all watching players
+	 * @param sendEmpty
 	 */
-	protected void sendDataToAllWatchers() {
+	protected void sendDataToAllWatchers(boolean sendEmpty) {
 		if (FMLCommonHandler.instance().getEffectiveSide() == Side.SERVER) {
 			if (!this.getWatchers().isEmpty()) {
 				NBTTagCompound nbt = this.writeToNBT(new NBTTagCompound());
-				for (EntityPlayerMP watcher : this.getWatchers()) {
-					TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), nbt), watcher);
+				if(sendEmpty || nbt.getSize() > 0) {
+					for (EntityPlayerMP watcher : this.getWatchers()) {
+						TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), nbt), watcher);
+					}
 				}
 			}
 		}
@@ -55,15 +58,19 @@ public class BetweenlandsChunkData extends ChunkDataBase {
 	/**
 	 * Sends the chunk data to a player
 	 * @param player
+	 * @param sendEmpty
 	 */
-	protected void sendDataToPlayer(EntityPlayerMP player) {
-		TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), this.writeToNBT(new NBTTagCompound())), player);
+	protected void sendDataToPlayer(EntityPlayerMP player, boolean sendEmpty) {
+		NBTTagCompound nbt = this.writeToNBT(new NBTTagCompound());
+		if(sendEmpty || nbt.getSize() > 0) {
+			TheBetweenlands.networkWrapper.sendTo(new MessageSyncChunkData(this.getChunk(), nbt), player);
+		}
 	}
 
 	@Override
 	protected void onWatched(EntityPlayerMP player) {
 		super.onWatched(player);
-		this.sendDataToPlayer(player);
+		this.sendDataToPlayer(player, false /*Empty chunks don't have to be sent*/);
 	}
 
 

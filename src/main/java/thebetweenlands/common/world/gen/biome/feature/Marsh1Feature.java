@@ -8,6 +8,7 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
+import thebetweenlands.common.world.gen.biome.BiomeWeights;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 
 public class Marsh1Feature extends BiomeFeature {
@@ -31,11 +32,12 @@ public class Marsh1Feature extends BiomeFeature {
 
 	@Override
 	public void replaceStackBlocks(int x, int z, double baseBlockNoise, ChunkPrimer chunkPrimer,
-			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, float[] terrainWeights, float terrainWeight,
+			ChunkGeneratorBetweenlands chunkGenerator, Biome[] biomesForGeneration, Biome biome, BiomeWeights biomeWeights,
 			EnumGeneratorPass pass) {
 		if(pass == EnumGeneratorPass.PRE_REPLACE_BIOME_BLOCKS) {
+			float biomeWeight = biomeWeights.get(x, z, 0, 5);
 			double noise = (this.islandNoise[x * 16 + z] / 1.4f +
-					this.fuzzNoise[x * 16 + z] / 1.4f) * Math.pow(terrainWeight, 4) + 1.8f;
+					this.fuzzNoise[x * 16 + z] / 1.4f) * Math.pow(biomeWeight, 4) + 1.8f;
 			int layerHeight = WorldProviderBetweenlands.LAYER_HEIGHT;
 			if(noise <= 0 && chunkPrimer.getBlockState(x, layerHeight, z).getBlock() == chunkGenerator.layerBlock) {
 				int waterHeight = 2;
