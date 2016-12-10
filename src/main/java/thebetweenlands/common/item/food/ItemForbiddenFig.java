@@ -1,16 +1,16 @@
 package thebetweenlands.common.item.food;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.util.TranslationHelper;
-
-import java.util.List;
 
 
 public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
@@ -39,8 +39,8 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
                 player.addChatMessage(new TextComponentTranslation("chat.item.forbiddenfig"));
                 //world.playSoundAtEntity(player, "thebetweenlands:fig", 0.7F, 0.8F);
             } else {
-                player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("blindness"), 1200, 1));
-                player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("weakness"), 1200, 1));
+                player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200, 1));
+                player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 1200, 1));
             }
         }
     }

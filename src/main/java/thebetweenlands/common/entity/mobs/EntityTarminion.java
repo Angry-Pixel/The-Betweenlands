@@ -21,8 +21,8 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -52,10 +52,10 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true));
-		this.tasks.addTask(1, new EntityAIFollowOwner(this, 0.7D, 3.0F, 40.0F));
-		this.tasks.addTask(2, new EntityAIWander(this, 0.5D));
-		this.tasks.addTask(3, new EntityAISwimming(this));
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.7D, true));
+		this.tasks.addTask(2, new EntityAIFollowOwner(this, 0.7D, 3.0F, 40.0F));
+		this.tasks.addTask(3, new EntityAIWander(this, 0.5D));
 
 		this.targetTasks.addTask(0, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtTarget(this));
@@ -144,7 +144,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 						if(e == this || e.getDistanceToEntity(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarminion) continue;
 						double dst = e.getDistanceToEntity(this);
 						e.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
-						e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), (int)(20 + (1.0F - dst / 5.25F) * 150), 1));
+						e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int)(20 + (1.0F - dst / 5.25F) * 150), 1));
 					}
 				}
 			}
@@ -203,7 +203,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			}
 			entity.attackEntityFrom(damageSource, (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 			this.playSound(SoundRegistry.TAR_BEAST_STEP, 1.0F, 2.0F);
-			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), worldObj.getDifficulty().getDifficultyId() * 50, 0));
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, worldObj.getDifficulty().getDifficultyId() * 50, 0));
 			return true;
 		}
 		return true;

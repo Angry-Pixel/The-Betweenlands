@@ -14,11 +14,11 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -114,8 +114,8 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 					duration = 15;
 
 				if (duration > 0) {
-					((EntityLiving) entity).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("poison"), duration * 20, 0));
-					((EntityLiving) entity).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("nausea"), duration * 20, 0));
+					((EntityLiving) entity).addPotionEffect(new PotionEffect(MobEffects.POISON, duration * 20, 0));
+					((EntityLiving) entity).addPotionEffect(new PotionEffect(MobEffects.NAUSEA, duration * 20, 0));
 				}
 			}
 			return true;

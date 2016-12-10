@@ -19,11 +19,11 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -260,7 +260,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 							double dst = e.getDistanceToEntity(this);
 							float dmg = (float) (this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / dst * 7.0F);
 							e.attackEntityFrom(DamageSource.causeMobDamage(this), dmg);
-							e.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), (int)(20 + (1.0F - dst / 6.0F) * 150), 1));
+							e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int)(20 + (1.0F - dst / 6.0F) * 150), 1));
 						}
 					}
 				}
@@ -312,8 +312,8 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 							if(((EntityPlayer)e).isActiveItemStackBlocking()) mod *= 0.18F;
 						}
 						if(dst < 1.0F && e instanceof EntityLivingBase) {
-							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("weakness"), 20, 3));
-							((EntityLivingBase) e).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 20, 3));
+							((EntityLivingBase) e).addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 20, 3));
+							((EntityLivingBase) e).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 20, 3));
 							e.motionX *= 0.008F;
 							e.motionY *= 0.008F;
 							e.motionZ *= 0.008F;

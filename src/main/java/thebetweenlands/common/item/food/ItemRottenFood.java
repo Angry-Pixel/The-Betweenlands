@@ -1,9 +1,9 @@
 package thebetweenlands.common.item.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import thebetweenlands.util.TranslationHelper;
@@ -18,8 +18,8 @@ public class ItemRottenFood extends ItemBLFood {
         super.onFoodEaten(stack, world, player);
 
         if (player != null) {
-            player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("hunger"), 200, 1));
-            player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("poison"), 200, 1));
+            player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 200, 1));
+            player.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 1));
         }
     }
 

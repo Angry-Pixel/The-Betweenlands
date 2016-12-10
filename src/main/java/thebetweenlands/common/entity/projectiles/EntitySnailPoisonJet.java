@@ -6,7 +6,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
-import net.minecraft.potion.Potion;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.RayTraceResult;
@@ -52,7 +52,7 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 
 			if (result.entityHit instanceof EntityLivingBase && !(result.entityHit instanceof EntityBloodSnail)) {
 				if (!worldObj.isRemote) {
-					((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("poison"), 5 * 20, 0));
+					((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
 					result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);
 				}
 				setDead();

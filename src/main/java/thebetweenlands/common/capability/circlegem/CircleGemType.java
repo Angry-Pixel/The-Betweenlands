@@ -2,7 +2,7 @@ package thebetweenlands.common.capability.circlegem;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.potion.Potion;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.MathHelper;
 
@@ -93,10 +93,10 @@ public enum CircleGemType {
 						defender.motionY = 0.4D;
 					}
 					if(attacker instanceof EntityLivingBase) {
-						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("strength"), 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
+						((EntityLivingBase)attacker).addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
 					}
 					if(source != attacker && source instanceof EntityLivingBase) {
-						((EntityLivingBase)source).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("strength"), 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
+						((EntityLivingBase)source).addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 90, Math.min(MathHelper.floor_float(strength * 0.2F), 2)));
 					}
 					return true;
 				}
@@ -119,7 +119,7 @@ public enum CircleGemType {
 		case AQUA:
 			if(!isAttacker) {
 				if(defender instanceof EntityLivingBase) {
-					((EntityLivingBase)defender).addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("resistance"), 90, Math.min(MathHelper.floor_float(strength * 0.3F), 2)));
+					((EntityLivingBase)defender).addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 90, Math.min(MathHelper.floor_float(strength * 0.3F), 2)));
 					return true;
 				}
 			}

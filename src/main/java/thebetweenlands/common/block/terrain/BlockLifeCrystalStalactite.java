@@ -1,9 +1,8 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -27,11 +26,13 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockLifeCrystalStalactite extends BlockSwampWater implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlock, IStateMappedBlock {
@@ -77,20 +78,17 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		ExtendedBlockState state = (ExtendedBlockState) super.createBlockState();
-		Collection<IProperty> properties = new ArrayList<IProperty>();
-		properties.addAll(state.getProperties());
-		properties.add(VARIANT);
-		Collection<IUnlistedProperty> unlistedProperties = new ArrayList<IUnlistedProperty>();
-		unlistedProperties.addAll(state.getUnlistedProperties());
-		unlistedProperties.add(POS_X);
-		unlistedProperties.add(POS_Y);
-		unlistedProperties.add(POS_Z);
-		unlistedProperties.add(NO_BOTTOM);
-		unlistedProperties.add(NO_TOP);
-		unlistedProperties.add(DIST_UP);
-		unlistedProperties.add(DIST_DOWN);
-		return new ExtendedBlockState(this, properties.toArray(new IProperty[0]), unlistedProperties.toArray(new IUnlistedProperty[0]));
+		return BlockStateContainerHelper.extendBlockstateContainer((ExtendedBlockState) super.createBlockState(), 
+				new IProperty<?>[]{ VARIANT }, 
+				new IUnlistedProperty<?>[] {
+					POS_X,
+					POS_Y,
+					POS_Z,
+					NO_BOTTOM,
+					NO_TOP,
+					DIST_UP,
+					DIST_DOWN
+				});
 	}
 
 	@Override
@@ -198,4 +196,15 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	public String getSubtypeName(int meta) {
 		return "%s_" + EnumLifeCrystalType.values()[meta].getName();
 	}
+
+	@Override
+	public int quantityDropped(Random random) {
+		return 1;
+	}
+
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return state.getValue(VARIANT) == EnumLifeCrystalType.ORE ? ItemRegistry.LIFE_CRYSTAL : null;
+	}
+
 }

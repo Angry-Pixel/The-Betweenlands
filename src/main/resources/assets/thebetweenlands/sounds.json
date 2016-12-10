@@ -610,6 +610,26 @@
       "thebetweenlands:pyrad_death"
     ]
   },
+  "gas_cloud_living": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gas_cloud_living_1",
+      "thebetweenlands:gas_cloud_living_2"
+    ]
+  },
+  "gas_cloud_hurt": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gas_cloud_hurt_1",
+      "thebetweenlands:gas_cloud_hurt_2"
+    ]
+  },
+  "gas_cloud_death": {
+    "category": "hostile",
+    "sounds": [
+      "thebetweenlands:gas_cloud_death"
+    ]
+  },
   "sorry": {
     "category": "player",
     "sounds": [

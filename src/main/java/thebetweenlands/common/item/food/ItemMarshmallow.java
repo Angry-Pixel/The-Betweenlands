@@ -1,8 +1,8 @@
 package thebetweenlands.common.item.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
@@ -15,7 +15,7 @@ public class ItemMarshmallow extends ItemBLFood {
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
         if (player != null) {
-            player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("speed"), 400, 1));
+            player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 400, 1));
         }
     }
 

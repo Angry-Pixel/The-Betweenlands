@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
+import java.util.Collection;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
@@ -7,6 +9,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenBigBulbCappedMushroom;
@@ -662,5 +665,21 @@ public class DecorationHelper {
 			}
 		}
 		return generated;
+	}
+
+	public static boolean generateWisp(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.WATER.matches(decorator.getWorld(), pos.down())) {
+			Collection<Integer> allowedValues = BlockWisp.COLOR.getAllowedValues();
+			int color = 0;
+			int rand = decorator.getRand().nextInt(allowedValues.size());
+			for(Integer c : allowedValues) {
+				if(rand-- < 0) {
+					color = c;
+				}
+			}
+			return decorator.getWorld().setBlockState(pos, BlockRegistry.WISP.getDefaultState().withProperty(BlockWisp.COLOR, color));
+		}
+		return false;
 	}
 }

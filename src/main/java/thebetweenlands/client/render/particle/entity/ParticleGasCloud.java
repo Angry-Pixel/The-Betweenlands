@@ -68,16 +68,19 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 		int fadeInDuration = 15;
 		int fadeOutStart = 45;
 		int fadeOutDuration = this.particleMaxAge - fadeOutStart;
+		
+		float alpha;
+		
 		if(this.particleAge < fadeOutStart) {
-			this.particleAlpha = Math.min((float)this.particleAge / (float)fadeInDuration, 1.0F);
+			alpha = this.particleAlpha * Math.min((float)this.particleAge / (float)fadeInDuration, 1.0F);
 		} else {
-			this.particleAlpha = 1.0F - Math.min((float)(this.particleAge - fadeOutStart) / (float)fadeOutDuration, 1.0F);
+			alpha = this.particleAlpha * (1.0F - Math.min((float)(this.particleAge - fadeOutStart) / (float)fadeOutDuration, 1.0F));
 		}
 		
-		worldRendererIn.pos((double)interpX + scaledRotations[0].xCoord, (double)interpY + scaledRotations[0].yCoord, (double)interpZ + scaledRotations[0].zCoord).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		worldRendererIn.pos((double)interpX + scaledRotations[1].xCoord, (double)interpY + scaledRotations[1].yCoord, (double)interpZ + scaledRotations[1].zCoord).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		worldRendererIn.pos((double)interpX + scaledRotations[2].xCoord, (double)interpY + scaledRotations[2].yCoord, (double)interpZ + scaledRotations[2].zCoord).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		worldRendererIn.pos((double)interpX + scaledRotations[3].xCoord, (double)interpY + scaledRotations[3].yCoord, (double)interpZ + scaledRotations[3].zCoord).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[0].xCoord, (double)interpY + scaledRotations[0].yCoord, (double)interpZ + scaledRotations[0].zCoord).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[1].xCoord, (double)interpY + scaledRotations[1].yCoord, (double)interpZ + scaledRotations[1].zCoord).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[2].xCoord, (double)interpY + scaledRotations[2].yCoord, (double)interpZ + scaledRotations[2].zCoord).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[3].xCoord, (double)interpY + scaledRotations[3].yCoord, (double)interpZ + scaledRotations[3].zCoord).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
 	}
 
 	@Override

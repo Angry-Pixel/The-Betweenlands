@@ -132,6 +132,10 @@ public class SoundRegistry {
     public static final BLSoundEvent WIGHT_ATTACK = reg("wight_attack");
 
     public static final BLSoundEvent CRAB_SNIP = reg("crab_snip");
+    
+    public static final BLSoundEvent GAS_CLOUD_LIVING = reg("gas_cloud_living");
+    public static final BLSoundEvent GAS_CLOUD_HURT = reg("gas_cloud_hurt");
+    public static final BLSoundEvent GAS_CLOUD_DEATH = reg("gas_cloud_death");
 
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");

@@ -44,36 +44,47 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 
 		Tessellator tessellator = Tessellator.getInstance();
 		VertexBuffer buffer = tessellator.getBuffer();
-		
+
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		this.renderGasParticles(buffer, entity, partialTicks);
 		tessellator.draw();
-		
+
 		GlStateManager.depthMask(true);
-		GlStateManager.color(0.0F, 1.0F, 0.0F, 1.0F);
-		
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			//Render particles to gas fbo
 			ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer().bind();
-			
+
 			//GlStateManager.disableBlend();
-			
+
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 			this.renderGasParticles(buffer, entity, partialTicks);
 			tessellator.draw();
-			
+
 			//GlStateManager.enableBlend();
-			
+
 			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
 		}
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.enableLighting();
 	}
-	
+
 	private void renderGasParticles(VertexBuffer buffer, EntityGasCloud entity, float partialTicks) {
 		for (Object obj: entity.gasParticles) {
 			ParticleGasCloud particle = (ParticleGasCloud) obj;
+
+			if(!entity.isEntityAlive()) {
+				float alpha = 1.0F - (entity.deathTime / 80.0F);
+				particle.setAlphaF((float)Math.pow(alpha, 2));
+				int gasColor = entity.getGasColor();
+				float red = (gasColor >> 16 & 0xff) / 255F;
+				float green = (gasColor >> 8 & 0xff) / 255F;
+				float blue = (gasColor & 0xff) / 255F;
+				particle.setRBGColorF(red * alpha, green * alpha, blue * alpha);
+			}
+
 			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,
 					ActiveRenderInfo.getRotationX(),
 					ActiveRenderInfo.getRotationXZ(),

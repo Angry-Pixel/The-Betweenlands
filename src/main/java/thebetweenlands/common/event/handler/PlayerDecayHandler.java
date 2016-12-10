@@ -2,8 +2,8 @@ package thebetweenlands.common.event.handler;
 
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -38,13 +38,13 @@ public class PlayerDecayHandler {
 				int decay = capability.getDecayStats().getDecayLevel();
 
 				if (decay >= 16) {
-					event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 1, 2, true, false));
+					event.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 2, true, false));
 					event.player.jumpMovementFactor = 0.001F;
 				} else if (decay >= 13) {
-					event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 1, 1, true, false));
+					event.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 1, true, false));
 					event.player.jumpMovementFactor = 0.002F;
 				} else if (decay >= 10) {
-					event.player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("slowness"), 1, 0, true, false));
+					event.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 0, true, false));
 				}
 
 				capability.getDecayStats().onUpdate(player);

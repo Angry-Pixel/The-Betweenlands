@@ -10,6 +10,7 @@ import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,6 +19,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
@@ -27,6 +29,7 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	public static final DataParameter<Integer> GAS_CLOUD_COLOR = EntityDataManager.createKey(EntityGasCloud.class, DataSerializers.VARINT);
@@ -98,7 +101,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
 						return this.entity.posY;
-					
+
 					if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
 						worldHeight = checkPos.getY();
 						break;
@@ -125,7 +128,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 				return 0.015D;
 			}
 		});
-		
+
 		this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
 	}
 
@@ -230,5 +233,52 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		return source != DamageSource.inWall && super.attackEntityFrom(source, damage);
+	}
+
+	@Override
+	protected SoundEvent getAmbientSound() {
+		return SoundRegistry.GAS_CLOUD_LIVING;
+	}
+
+	@Override
+	protected SoundEvent getHurtSound() {
+		return SoundRegistry.GAS_CLOUD_HURT;
+	}
+
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.GAS_CLOUD_DEATH;
+	}
+
+	@Override
+	protected void onDeathUpdate() {
+		++this.deathTime;
+
+		if(this.worldObj.isRemote) {
+			for(int i = 0; i < 6; i++) {
+				double x = this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
+				double y = this.posY + this.height / 2.0D + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
+				double z = this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
+				ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
+						.create(this.worldObj, x, y, z, ParticleFactory.ParticleArgs.get()
+								.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
+								.withColor(this.getGasColor()));
+				this.gasParticles.add(particle);
+			}
+		}
+
+		if (this.deathTime >= 80) {
+			if (!this.worldObj.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.worldObj.getGameRules().getBoolean("doMobLoot"))) {
+				int i = this.getExperiencePoints(this.attackingPlayer);
+				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
+				while (i > 0) {
+					int j = EntityXPOrb.getXPSplit(i);
+					i -= j;
+					this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
+				}
+			}
+
+			this.setDead();
+		}
 	}
 }

@@ -1,8 +1,8 @@
 package thebetweenlands.common.item.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
@@ -16,7 +16,7 @@ public class ItemMarshmallowPink extends ItemBLFood {
         super.onFoodEaten(stack, world, player);
 
         if (player != null) {
-            player.addPotionEffect(new PotionEffect(Potion.getPotionFromResourceLocation("jump_boost"), 400, 1));
+            player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, 400, 1));
         }
     }
 }
