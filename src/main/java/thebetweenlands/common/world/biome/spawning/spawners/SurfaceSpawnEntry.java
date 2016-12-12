@@ -20,7 +20,7 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 	private Predicate<IBlockState> surfaceBlockPredicate = new Predicate<IBlockState>() {
 		@Override
 		public boolean apply(IBlockState input) {
-			return SurfaceType.MIXED.matches(input);
+			return SurfaceType.MIXED_GROUND.matches(input);
 		}
 	};
 

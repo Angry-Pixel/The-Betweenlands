@@ -25,7 +25,7 @@ public class WorldGenSwampReedCluster extends WorldGenerator {
 			if(SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
 				this.generateReedStack(world, rand, pos.up());
 				generated = true;
-			} else if(SurfaceType.MIXED.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
+			} else if(SurfaceType.MIXED_GROUND.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
 				this.generateReedStack(world, rand, pos.up());
 				generated = true;
 			}

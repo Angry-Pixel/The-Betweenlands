@@ -197,9 +197,10 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		if(this.currentFogColor == null || this.lastFogColor == null)
 			this.initFogColors(Minecraft.getMinecraft().thePlayer);
 
-		double r = this.currentFogColor[0] + (this.currentFogColor[0] - this.lastFogColor[0]) * partialTickTime;
-		double g = this.currentFogColor[1] + (this.currentFogColor[1] - this.lastFogColor[1]) * partialTickTime;
-		double b = this.currentFogColor[2] + (this.currentFogColor[2] - this.lastFogColor[2]) * partialTickTime;
+		double r = this.lastFogColor[0] + (this.currentFogColor[0] - this.lastFogColor[0]) * partialTickTime;
+		double g = this.lastFogColor[1] + (this.currentFogColor[1] - this.lastFogColor[1]) * partialTickTime;
+		double b = this.lastFogColor[2] + (this.currentFogColor[2] - this.lastFogColor[2]) * partialTickTime;
+
 		return new Vec3d(r / 255D, g / 255D, b / 255D);
 	}
 
@@ -259,40 +260,40 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 		final int transitionStart = WorldProviderBetweenlands.CAVE_START;
 		final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
-		float m = 0;
+		float fogBrightness = 0;
 		if(FogHandler.hasDenseFog()) {
 			float y = (float) player.posY;
 			if (y < transitionStart) {
 				if (transitionEnd < y) {
-					m = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
+					fogBrightness = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
 				}
 			} else {
-				m = 80;
+				fogBrightness = 80;
 			}
 		}
 
 		LocationAmbience ambience = LocationStorage.getAmbience(player);
 
 		if(ambience != null && ambience.hasFogBrightness()) {
-			m = ambience.getFogBrightness();
+			fogBrightness = ambience.getFogBrightness();
 		}
 
 		if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			if(WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().BLOODSKY.isActive()
 					|| WorldProviderBetweenlands.getProvider(this.worldObj).getEnvironmentEventRegistry().SPOOPY.isActive()) {
-				m = 0;
+				fogBrightness = 0;
 			}
 		}
 
 		if(ambience != null && ambience.hasFogColor()) {
 			for(int i = 0; i < 3; i++) {
 				int diff = 255 - ambience.getFogColor()[i];
-				targetFogColor[i] = (int) (ambience.getFogColor()[i] + (diff / 255.0D * m));
+				targetFogColor[i] = (int) (ambience.getFogColor()[i] + (diff / 255.0D * fogBrightness));
 			}
 		} else {
 			for(int i = 0; i < 3; i++) {
 				int diff = 255 - targetFogColor[i];
-				targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * m));
+				targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * fogBrightness));
 			}
 		}
 

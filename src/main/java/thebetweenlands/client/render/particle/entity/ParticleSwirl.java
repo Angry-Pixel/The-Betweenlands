@@ -29,6 +29,8 @@ public class ParticleSwirl extends Particle {
 		this.endRadius = 0.35F + this.rand.nextFloat() * 0.35F;
 
 		this.particleMaxAge = maxAge;
+		
+		this.particleScale = scale;
 	}
 
 	public void setOffset(double x, double y, double z) {

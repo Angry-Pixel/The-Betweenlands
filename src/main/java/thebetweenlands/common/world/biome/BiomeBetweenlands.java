@@ -34,6 +34,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.topBlock = BlockRegistry.SWAMP_GRASS.getDefaultState();
 		this.fillerBlock = BlockRegistry.SWAMP_DIRT.getDefaultState();
 
+		this.setFogColor(10, 30, 12);
+		
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), "bloodSky").setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), "bloodSky").setHostile(true));
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D));
@@ -137,7 +139,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 */
 	@SideOnly(Side.CLIENT)
 	public float getFogStart(float farPlaneDistance, int mode) {
-		return mode == -1 ? 0.0F : farPlaneDistance * 0.75F;
+		return mode == -1 ? 0.0F : farPlaneDistance * 0.5F;
 	}
 
 	/**

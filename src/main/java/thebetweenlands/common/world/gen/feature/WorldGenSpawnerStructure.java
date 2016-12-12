@@ -31,7 +31,7 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 		for (int xx = x; xx < x + 5; xx++) {
 			for (int zz = z; zz < z + 5; zz++) {
 				for (int yy = y; yy < y + 5; yy++) {
-					if(yy == y && SurfaceType.MIXED.matches(world.getBlockState(checkPos.setPos(xx, y - 1, zz))))
+					if(yy == y && SurfaceType.MIXED_GROUND.matches(world.getBlockState(checkPos.setPos(xx, y - 1, zz))))
 						surfaceBlocks++;
 					if (!world.isAirBlock(checkPos.setPos(xx, yy, zz)) && !world.getBlockState(checkPos.setPos(xx, yy, zz)).getBlock().isReplaceable(world, checkPos.setPos(xx, yy, zz)))
 						return false;

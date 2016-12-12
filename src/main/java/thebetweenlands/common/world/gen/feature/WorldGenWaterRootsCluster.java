@@ -23,7 +23,7 @@ public class WorldGenWaterRootsCluster extends WorldGenerator {
 		for (int i = 0; i < 128; ++i) {
 			BlockPos pos = position.add(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
 
-			if(SurfaceType.WATER.matches(world, pos.up()) && SurfaceType.MIXED.matches(world, pos)) {
+			if(SurfaceType.WATER.matches(world, pos.up()) && SurfaceType.MIXED_GROUND.matches(world, pos)) {
 				if(this.generateWaterRootsStack(world, rand, pos.up()))
 					generated = true;
 			}

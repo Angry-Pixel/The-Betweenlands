@@ -175,7 +175,7 @@ public class DecorationHelper {
 
 	public static boolean generateSmallHollowLog(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down()))
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()))
 			return GEN_SMALL_HOLLOW_LOG.generate(decorator.getWorld(), decorator.getRand(), pos);
 		return false;
 	}
@@ -293,7 +293,7 @@ public class DecorationHelper {
 		int y = 6 + decorator.getRand().nextInt(WorldProviderBetweenlands.LAYER_HEIGHT + 20);
 		int z = decorator.getRandomPosZ();
 		BlockPos pos = new BlockPos(x, y, z);
-		if(SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos) || SurfaceType.MIXED.matches(decorator.getWorld(), pos)) {
+		if(SurfaceType.UNDERGROUND.matches(decorator.getWorld(), pos) || SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos)) {
 			return GEN_TAR_POOL_SURFACE.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
@@ -304,7 +304,7 @@ public class DecorationHelper {
 		World world = decorator.getWorld();
 		if(SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
 			return GEN_SWAMP_REED.generate(decorator.getWorld(), decorator.getRand(), pos);
-		} else if(SurfaceType.MIXED.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
+		} else if(SurfaceType.MIXED_GROUND.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
 			return GEN_SWAMP_REED.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
@@ -522,7 +522,7 @@ public class DecorationHelper {
 
 	public static boolean generateRootsCluster(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_ROOTS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
@@ -549,7 +549,7 @@ public class DecorationHelper {
 
 	public static boolean generateCragrockTower(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPosSeaGround(10);
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_CRAGROCK_TOWER.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
@@ -605,7 +605,7 @@ public class DecorationHelper {
 
 	public static boolean generateSpawnerStructure(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_SPAWNER_STRUCTURE.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
@@ -613,7 +613,7 @@ public class DecorationHelper {
 
 	public static boolean generateSunkenIdolHead(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(SurfaceType.MIXED.matches(decorator.getWorld(), pos.down()) &&
+		if(SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down()) &&
 				SurfaceType.WATER.matches(decorator.getWorld(), pos.up())) {
 			return GEN_IDOL_HEAD.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
@@ -622,7 +622,7 @@ public class DecorationHelper {
 
 	public static boolean generateSmallRuinsCluster(BiomeDecoratorBetweenlands decorator) {
 		BlockPos pos = decorator.getRandomPos();
-		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED.matches(decorator.getWorld(), pos.down())) {
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_SMALL_RUINS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;

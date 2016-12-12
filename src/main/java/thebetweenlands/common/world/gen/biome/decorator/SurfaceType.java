@@ -41,7 +41,7 @@ public enum SurfaceType implements Predicate<IBlockState> {
 	PEAT(ImmutableList.of(
 			BlockMatcher.forBlock(BlockRegistry.PEAT)
 			)),
-	MIXED(GRASS, DIRT, SAND, PEAT),
+	MIXED_GROUND(GRASS, DIRT, SAND, PEAT),
 	UNDERGROUND(ImmutableList.of(
 			BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE),
 			BlockMatcher.forBlock(BlockRegistry.PITSTONE),
@@ -54,7 +54,7 @@ public enum SurfaceType implements Predicate<IBlockState> {
 			BlockMatcher.forBlock(BlockRegistry.VALONITE_ORE)
 			)),
 	GRASS_AND_DIRT(GRASS, DIRT),
-	MIXED_AND_UNDERGROUND(MIXED, UNDERGROUND);
+	MIXED_GROUND_AND_UNDERGROUND(MIXED_GROUND, UNDERGROUND);
 
 	private final List<Predicate<IBlockState>> matchers;
 	private final SurfaceType types[];

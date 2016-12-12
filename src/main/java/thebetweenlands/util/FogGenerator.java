@@ -6,9 +6,31 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 
 public class FogGenerator {
-	private static int lastCX, lastCZ;
-	private static NoiseGeneratorPerlin fogNoiseGen;
-	private static double[] fogChunkNoise = new double[256];
+	private int lastCX, lastCZ;
+	private NoiseGeneratorPerlin fogNoiseGen;
+	private double[] fogChunkNoise = new double[256];
+	private double scaleX;
+	private double scaleZ;
+	private double octaveScale;
+	private long seed;
+
+	public FogGenerator(int octaves, double scaleX, double scaleZ, double octaveScale, long seed) {
+		this.seed = seed;
+		Random rnd = new Random();
+		rnd.setSeed(seed);
+		this.fogNoiseGen = new NoiseGeneratorPerlin(rnd, octaves);
+		this.scaleX = scaleX;
+		this.scaleZ = scaleZ;
+		this.octaveScale = octaveScale;
+	}
+
+	public FogGenerator(long seed) {
+		this(4, 0.003D, 0.003D, 0.003D, seed);
+	}
+
+	public long getSeed() {
+		return this.seed;
+	}
 
 	/**
 	 * Returns the fog range based on the player position.
@@ -17,30 +39,25 @@ public class FogGenerator {
 	 * @param rng
 	 * @return
 	 */
-	public static float[] getFogRange(float min, float max, long seed) {
+	public float[] getFogRange(float min, float max) {
 		if(Minecraft.getMinecraft().thePlayer == null)
 			return new float[]{min, max};
 		double x = Minecraft.getMinecraft().thePlayer.posX;
 		double z = Minecraft.getMinecraft().thePlayer.posZ;
 		int cx = (int)((x - ((int)(Math.floor(x)) & 15)) / 16) - 1;
 		int cz = (int)((z - ((int)(Math.floor(z)) & 15)) / 16);
-		if(fogNoiseGen == null) {
-			Random rnd = new Random();
-			rnd.setSeed(seed);
-			fogNoiseGen = new NoiseGeneratorPerlin(rnd, 4);
-		}
-		if(fogChunkNoise == null || lastCX != cx || lastCZ != cz) {
-			lastCX = cx;
-			lastCZ = cz;
-			fogChunkNoise = fogNoiseGen.getRegion(
-					fogChunkNoise, 
+		if(this.fogChunkNoise == null || this.lastCX != cx || this.lastCZ != cz) {
+			this.lastCX = cx;
+			this.lastCZ = cz;
+			this.fogChunkNoise = this.fogNoiseGen.getRegion(
+					this.fogChunkNoise, 
 					(double) (cx * 16), (double) (cz * 16), 
-					16, 16, 0.003D, 0.003D, 0.003D);
+					16, 16, this.scaleX, this.scaleZ, this.octaveScale);
 		}
 		int ix = (int)(Math.floor(x)) & 15;
 		int iz = (int)(Math.floor(z)) & 15;
 
-		double noise = (Math.abs(fogChunkNoise[iz * 16 + ix]));
+		double noise = (Math.abs(this.fogChunkNoise[iz * 16 + ix]));
 
 		float diff = max - min;
 

@@ -47,7 +47,7 @@ public class WorldGenMudStructures extends WorldGenHelper{
 
         if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 2, depth, direction))
             return false;
-        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
+        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
             return false;
 
         rotatedCubeVolume(world, x, y, z, 0, 0, 0, MUD_BRICKS, 4, 1, 1, direction);
@@ -76,7 +76,7 @@ public class WorldGenMudStructures extends WorldGenHelper{
 
         if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 2, depth, direction))
             return false;
-        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
+        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
             return false;
 
         rotatedCubeVolume(world, x, y, z, 1, 0, 0, MUD_BRICKS, 1, 1, 1, direction);
@@ -111,7 +111,7 @@ public class WorldGenMudStructures extends WorldGenHelper{
 
         if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 2, depth, direction))
             return false;
-        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
+        if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
             return false;
         rotatedCubeVolume(world, x, y, z, 1, 0, 1, MUD_BRICKS, 4, 1, 1, direction);
         rotatedCubeVolume(world, x, y, z, 1, 1, 1, getStateFromRotation(3, direction, MUD_BRICK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);

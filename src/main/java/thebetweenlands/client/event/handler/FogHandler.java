@@ -14,6 +14,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
@@ -30,6 +31,7 @@ import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.util.FogGenerator;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class FogHandler {
@@ -44,6 +46,7 @@ public class FogHandler {
 	private static float lastFogColorMultiplier = -1.0F;
 	private static float farPlaneDistance = 0.0F;
 	private static int fogMode;
+	private static FogGenerator fogGenerator;
 
 	/**
 	 * Returns the current fog start
@@ -149,29 +152,33 @@ public class FogHandler {
 
 		//Dense fog
 		if(hasDenseFog()) {
-			float denseFogStart = defaultFogStart / Math.max(5.0f / (1.0F + uncloudedStrength * 4.0F) * lowViewDistanceFogReduction, 1);
-			float denseFogEnd = defaultFogEnd / Math.max(3.0f / (1.0F + uncloudedStrength * 2.0F) * lowViewDistanceFogReduction, 1);
+			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
+				fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
+			}
+			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);
+			float denseFogStart = defaultFogStart / Math.max(8.0f / (1.0F + uncloudedStrength * 4.0F) * lowViewDistanceFogReduction, 1) * range[0];
+			float denseFogEnd = defaultFogEnd / Math.max(3.0f / (1.0F + uncloudedStrength * 2.0F) * lowViewDistanceFogReduction, 1) * range[1];
 			defaultFogStart = fogStart = Math.min(denseFogStart, fogStart);
 			defaultFogEnd = fogEnd = Math.min(denseFogEnd, fogEnd);
 		}
 
 		//Underground fog
-		float multiplier = 1.0F;
+		float fogColorMultiplier = 1.0F;
 		if(player.posY < WorldProviderBetweenlands.CAVE_START) {
-			multiplier = ((float)(WorldProviderBetweenlands.CAVE_START - player.posY) / WorldProviderBetweenlands.CAVE_START);
-			multiplier = 1.0F - multiplier;
-			multiplier *= Math.pow(multiplier, 8.5);
-			multiplier = multiplier * 0.95F + 0.05F;
+			fogColorMultiplier = ((float)(WorldProviderBetweenlands.CAVE_START - player.posY) / WorldProviderBetweenlands.CAVE_START);
+			fogColorMultiplier = 1.0F - fogColorMultiplier;
+			fogColorMultiplier *= Math.pow(fogColorMultiplier, 8.5);
+			fogColorMultiplier = fogColorMultiplier * 0.95F + 0.05F;
 			if(player.posY <= WorldProviderBetweenlands.PITSTONE_HEIGHT) {
 				float targettedMultiplier = 0.3F;
-				if(multiplier < targettedMultiplier) {
-					multiplier += Math.pow(((targettedMultiplier - multiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - player.posY)), 0.85F);
+				if(fogColorMultiplier < targettedMultiplier) {
+					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - player.posY)), 0.85F);
 				}
 			}
-			multiplier = MathHelper.clamp_float(multiplier, 0, 1);
-			multiplier = Math.min(multiplier / (float)Math.pow(lowViewDistanceFogReduction, 1.0F + (1.0F - multiplier) * 1.5F), 1.0F);
-			defaultFogStart = fogStart = defaultFogStart * Math.min(multiplier * (1.0F + uncloudedStrength * (1.0F / multiplier - 1.0F)), 1.0F);
-			defaultFogEnd = fogEnd = defaultFogEnd * Math.min((multiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (multiplier * 1.5F) - 1.0F)), 1.0F);
+			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0, 1);
+			fogColorMultiplier = Math.min(fogColorMultiplier / (float)Math.pow(lowViewDistanceFogReduction, 1.0F + (1.0F - fogColorMultiplier) * 1.5F), 1.0F);
+			defaultFogStart = fogStart = defaultFogStart * Math.min(fogColorMultiplier * (1.0F + uncloudedStrength * (1.0F / fogColorMultiplier - 1.0F)), 1.0F);
+			defaultFogEnd = fogEnd = defaultFogEnd * Math.min((fogColorMultiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (fogColorMultiplier * 1.5F) - 1.0F)), 1.0F);
 		}
 
 		//Location fog
@@ -189,7 +196,7 @@ public class FogHandler {
 				fogEnd *= ambience.getFogRangeMultiplier();
 			}
 			if(ambience.hasFogColorMultiplier()) {
-				multiplier = ambience.getFogColorMultiplier();
+				fogColorMultiplier = ambience.getFogColorMultiplier();
 			}
 		}
 
@@ -222,7 +229,7 @@ public class FogHandler {
 			}
 		}
 
-		float targettedFogColorMultiplier = MathHelper.clamp_float(multiplier * 2.0F, 0.0F, 1.0F);
+		float targettedFogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier * 2.0F, 0.0F, 1.0F);
 		if(currentFogColorMultiplier < 0.0F) {
 			currentFogColorMultiplier = targettedFogColorMultiplier;
 			lastFogColorMultiplier = targettedFogColorMultiplier;
@@ -252,7 +259,7 @@ public class FogHandler {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
 				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.worldObj, pos, 0);
 				if(renderView.dimension == ConfigHandler.dimensionId) {
-					double waterFogColorMultiplier = Math.pow(fogColorMultiplier, 6);
+					double waterFogColorMultiplier = fogColorMultiplier / 2.0F;
 					event.setRed((float)(colorMultiplier >> 16 & 255) / 255.0F * (float)waterFogColorMultiplier);
 					event.setGreen((float)(colorMultiplier >> 8 & 255) / 255.0F * (float)waterFogColorMultiplier);
 					event.setBlue((float)(colorMultiplier & 255) / 255.0F * (float)waterFogColorMultiplier);
@@ -262,9 +269,11 @@ public class FogHandler {
 					event.setBlue((float)(colorMultiplier & 255) / 255.0F);
 				}
 			} else if(renderView.dimension == ConfigHandler.dimensionId) {
-				event.setRed(event.getRed() * fogColorMultiplier);
-				event.setGreen(event.getGreen() * fogColorMultiplier);
-				event.setBlue(event.getBlue() * fogColorMultiplier);
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) renderView.getEntityWorld().provider;
+				Vec3d fogColor = provider.getFogColor(renderView.getEntityWorld().getCelestialAngle((float)event.getRenderPartialTicks()), (float)event.getRenderPartialTicks());
+				event.setRed((float)fogColor.xCoord * fogColorMultiplier);
+				event.setGreen((float)fogColor.yCoord * fogColorMultiplier);
+				event.setBlue((float)fogColor.zCoord * fogColorMultiplier);
 			}
 		}
 	}

@@ -138,7 +138,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int direction = random.nextInt(4);
 		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, height, depth, direction))
 			return false;
-		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
 
 		if (doGen) {
@@ -174,7 +174,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int direction = random.nextInt(4);
 		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, height, depth, direction))
 			return false;
-		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, location);
@@ -217,7 +217,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int direction = random.nextInt(4);
 		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 7, depth, direction))
 			return false;
-		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 2, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, 6, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED))
+		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 2, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 7, depth, direction, location);
@@ -267,7 +267,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 					if (!(world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == Blocks.AIR || (world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_WATER && yy < y + height - 2)))
 						return false;
 
-		if (!SurfaceType.MIXED.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + 1))) || !SurfaceType.MIXED.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + width - 1))) || !SurfaceType.MIXED.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))) || !SurfaceType.MIXED.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))))
+		if (!SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + width - 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))))
 			return false;
 		if (doGen) {
 			//TODO: World locations
@@ -363,7 +363,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int direction = 0;
 		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, height, depth, direction))
 			return false;
-		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, location);
@@ -382,7 +382,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int direction = random.nextInt(4);
 		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 1, depth, direction))
 			return false;
-		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED) || !rotatedCubeMatches(world, x, y, z, width - 1, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED))
+		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, width - 1, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 1, depth, direction, location);
@@ -402,9 +402,9 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		depth = 12;
 		int direction = random.nextInt(4);
 		int originalY = y;
-		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED)) {
+		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND)) {
 			y--;
-			if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED))
+			if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
 				return false;
 		}
 

@@ -118,8 +118,8 @@ public class WorldGenCragrockTower extends WorldGenHelper {
         
         if (!canGenerate(world, x, y, z, direction))
             return false;
-        if (!rotatedCubeMatches(world, x, y, z, 1, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED)
-                || !rotatedCubeMatches(world, x, y, z, 14, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED))
+        if (!rotatedCubeMatches(world, x, y, z, 1, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED_GROUND)
+                || !rotatedCubeMatches(world, x, y, z, 14, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED_GROUND))
             return false;
 
         rotatedCubeVolume(world, x, y, z, 0, 0, 3, Blocks.AIR.getDefaultState(), width, height, depth - 3, direction);

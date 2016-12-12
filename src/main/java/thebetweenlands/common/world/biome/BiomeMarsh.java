@@ -27,11 +27,11 @@ import thebetweenlands.common.world.gen.biome.feature.PatchFeature;
 import thebetweenlands.util.FogGenerator;
 
 public class BiomeMarsh extends BiomeBetweenlands {
-
+	private FogGenerator fogGenerator;
+	
 	public BiomeMarsh(int type) {
 		super(new BiomeProperties("marsh_" + type).setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(10);
-		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator()
 		.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
 		.addFeature(new PatchFeature(0.03125D * 3.5D, 0.03125D * 3.5D, BlockRegistry.PEAT.getDefaultState()))
@@ -61,7 +61,10 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 	@Override
 	public void updateFog() {
-		float[] range = FogGenerator.getFogRange(0.0F, 1.0F, Minecraft.getMinecraft().theWorld.getSeed());
+		if(this.fogGenerator == null || this.fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
+			this.fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
+		}
+		float[] range = this.fogGenerator.getFogRange(0.0F, 1.0F);
 		this.fogRangeInterpolateStart = range[0];
 		this.fogRangeInterpolateEnd = range[1];
 	}

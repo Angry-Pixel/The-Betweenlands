@@ -33,7 +33,6 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 	public BiomeSwamplands() {
 		super(new BiomeProperties("swamplands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 2).setHeightVariation(1F).setWaterColor(0x184220).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(25);
-		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setFillerBlockState(BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState())
 		.setTopBlockState(BlockRegistry.DEAD_GRASS.getDefaultState())
 		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT, 8))

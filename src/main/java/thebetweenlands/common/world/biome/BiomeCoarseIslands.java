@@ -16,7 +16,6 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 	public BiomeCoarseIslands() {
 		super(new BiomeProperties("coarse_islands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 5).setHeightVariation(4.0F).setWaterColor(0x1b3944).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(16);
-		this.setFogColor(10, 30, 12);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorCoarseIslands())
 		.addFeature(new CoarseIslandsFeature())
 		.addFeature(new AlgaeFeature());
