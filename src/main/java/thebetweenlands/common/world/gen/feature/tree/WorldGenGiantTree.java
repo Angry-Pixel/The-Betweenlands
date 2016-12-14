@@ -49,15 +49,18 @@ public abstract class WorldGenGiantTree implements IWorldGenerator {
 			Biome biomeBase = world.getBiomeGenForCoords(new BlockPos(blockX, 0, blockZ));
 			if (isValidBiome(biomeBase)) {
 				if (world.rand.nextInt(100) == 0) {
-					generateTree(world, world.rand, blockX, 76, blockZ);
+					generateTree(world, world.rand, new BlockPos(blockX, 76, blockZ));
 				}
 			}
 		}
 	}
 
-	public boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
+	public boolean generateTree(World world, Random rand, BlockPos pos) {
 		int baseRadius = rand.nextInt(6) + 13;
 		int height = rand.nextInt(getRadiusHeightRatio() * 4 + 1) + baseRadius * getRadiusHeightRatio() + 3;
+		int blockX = pos.getX();
+		int blockY = pos.getY();
+		int blockZ = pos.getZ();
 		if (isSpaceOccupied(world, blockX, blockY, blockZ, baseRadius, height)) {
 			return false;
 		}

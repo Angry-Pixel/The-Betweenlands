@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeAlive;
 
 //MINE!!
 public class TestItem extends Item {
@@ -29,11 +29,11 @@ public class TestItem extends Item {
             smallRuins.generate(world, itemRand, pos.up());
         }*/
 		
-		if (!world.isRemote) {
+	/*	if (!world.isRemote) {
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(world, itemRand, pos.up());
 		}
-
+*/
 //		if(!world.isRemote) {
 //			/*if(playerIn.isSneaking()) {
 //				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
@@ -58,6 +58,11 @@ public class TestItem extends Item {
 //				System.out.println("Drained: " + container.drain(AspectRegistry.AZUWYNN, 8));
 //			}
 //		}
+		
+		if (!world.isRemote) {
+			WorldGenGiantTreeAlive live_tree = new WorldGenGiantTreeAlive();
+			live_tree.generateTree(world, itemRand, pos.up());
+		}
 
 		return EnumActionResult.SUCCESS;
 	}

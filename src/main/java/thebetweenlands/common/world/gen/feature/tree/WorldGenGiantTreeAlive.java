@@ -13,8 +13,8 @@ public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 	private static final EnumFacing[] SHUFFLED_DIRECTIONS = DIRECTIONS.clone();
 
 	@Override
-	public boolean generateTree(World world, Random rand, int blockX, int blockY, int blockZ) {
-		boolean gen = super.generateTree(world, rand, blockX, blockY, blockZ);
+	public boolean generateTree(World world, Random rand, BlockPos pos) {
+		boolean gen = super.generateTree(world, rand, pos);
 		/*if(gen) {
 			List<LocationStorage> addedLocations = StorageHelper.addArea(world, "giantTree", AxisAlignedBB.getBoundingBox(blockX - 32, blockY - 10, blockZ - 32, blockX + 32, blockY + 80, blockZ + 32), EnumLocationType.GIANT_TREE, 0);
 			for(LocationStorage location : addedLocations) {
