@@ -2,6 +2,7 @@ package thebetweenlands.client.render.particle.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
@@ -9,7 +10,9 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -129,8 +132,17 @@ public class ParticleThem extends Particle {
 			}
 			Vec3d dir = diff.normalize();
 			this.motionX = dir.xCoord * 0.05D;
-			this.motionY = dir.yCoord * 0.05D;
 			this.motionZ = dir.zCoord * 0.05D;
+		}
+
+		BlockPos checkPos = new BlockPos(this.posX, this.posY - 2, this.posZ);
+		IBlockState blockStateBelow = this.worldObj.getBlockState(checkPos);
+		if(blockStateBelow.getBlock() == Blocks.AIR) {
+			this.motionY = -0.01D;
+		} else {
+			if(this.worldObj.getBlockState(checkPos.up()).getBlock() != Blocks.AIR) {
+				this.motionY = 0.01D;
+			}
 		}
 
 		this.moveEntity(this.motionX, this.motionY, this.motionZ);

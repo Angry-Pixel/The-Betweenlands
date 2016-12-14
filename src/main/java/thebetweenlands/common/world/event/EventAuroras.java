@@ -2,7 +2,7 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
-import io.netty.buffer.ByteBuf;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
 public class EventAuroras extends TimedEnvironmentEvent {
@@ -24,28 +24,28 @@ public class EventAuroras extends TimedEnvironmentEvent {
 
 	@Override
 	public int getOnTime(Random rnd) {
-		this.auroraType = (short)rnd.nextInt(3);
 		return rnd.nextInt(20000) + 8000;
 	}
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
-		if(active && this.getRegistry().getActiveEvents().size() <= 1) {
+		if((active && this.getRegistry().getActiveEvents().size() <= 1) || !active) {
 			super.setActive(active, markDirty);
-			return;
-		} else if(!active) {
-			super.setActive(active, markDirty);
+			if(active && !this.getWorld().isRemote) {
+				this.auroraType = (short)this.getWorld().rand.nextInt(3);
+			}
 		}
 	}
 
 	@Override
 	public void update(World world) {
 		super.update(world);
-		if(this.getRegistry().getActiveEvents().size() > 1) {
-			this.setActive(false, true);
+		if(!world.isRemote && this.getRegistry().getActiveEvents().size() > 1 && this.ticks > 500) {
+			this.ticks = 500; //Start fading out
+			this.setDirty(true);
 		}
 	}
-	
+
 	@Override
 	public void saveEventData() {
 		super.saveEventData();
@@ -59,12 +59,14 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void loadEventPacket(ByteBuf buffer) { 
+	public void loadEventPacket(PacketBuffer buffer) {
+		super.loadEventPacket(buffer);
 		this.auroraType = buffer.readShort();
 	}
 
 	@Override
-	public void sendEventPacket(ByteBuf buffer) { 
+	public void sendEventPacket(PacketBuffer buffer) { 
+		super.sendEventPacket(buffer);
 		buffer.writeShort(this.auroraType);
 	}
 

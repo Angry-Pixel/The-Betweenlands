@@ -2,10 +2,12 @@ package thebetweenlands.common.world.event;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
 public abstract class EnvironmentEvent {
 	private final EnvironmentEventRegistry registry;
+	private final World world;
 	private NBTTagCompound nbtt = new NBTTagCompound();
 	private boolean active = false;
 	private boolean dirty = false;
@@ -13,8 +15,17 @@ public abstract class EnvironmentEvent {
 
 	public EnvironmentEvent(EnvironmentEventRegistry registry) {
 		this.registry = registry;
+		this.world = registry.getWorld();
 	}
 
+	/**
+	 * Returns the world
+	 * @return
+	 */
+	public World getWorld() {
+		return this.world;
+	}
+	
 	/**
 	 * Returns whether this event is currently active.
 	 * @return
@@ -117,13 +128,13 @@ public abstract class EnvironmentEvent {
 	 * Loads event data from the sync packet.
 	 * @param buffer
 	 */
-	public void loadEventPacket(ByteBuf buffer) { }
+	public void loadEventPacket(PacketBuffer buffer) { }
 
 	/**
 	 * Saves event data to the sync packet.
 	 * @param buffer
 	 */
-	public void sendEventPacket(ByteBuf buffer) { }
+	public void sendEventPacket(PacketBuffer buffer) { }
 
 	/**
 	 * Returns whether the data of this event has already been loaded.

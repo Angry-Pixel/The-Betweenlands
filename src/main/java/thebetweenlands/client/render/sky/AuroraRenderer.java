@@ -10,6 +10,9 @@ import javax.vecmath.Vector4f;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -77,14 +80,19 @@ public class AuroraRenderer {
 		int segments = this.tiles;
 		int subSegments = 5;
 		double segmentWidth = 15.0D;
-		double segmentHeight = 40.0D;
+		double segmentHeight = 25.0D;
 		int cGradients = colorGradients.size();
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glShadeModel(GL11.GL_SMOOTH);
-		GL11.glDisable(GL11.GL_LIGHTING);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+		GlStateManager.disableCull();
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		GlStateManager.disableLighting();
+
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(this.x, 0, this.z);
 
 		Random rand = new Random();
 		rand.setSeed((long)(((int)(this.x + this.y + this.z))^((int)(this.x * this.y * this.z))));
@@ -144,8 +152,8 @@ public class AuroraRenderer {
 
 					float[][] interpolatedUVs = ATLAS.getInterpolatedUVs(textureSegment, (float)relUMin, (float)vmin, (float)relUMax, (float)vmax);
 
-					vmin = interpolatedUVs[0][1];
-					vmax = interpolatedUVs[1][1];
+					vmin = 1 - interpolatedUVs[0][1];
+					vmax = 1 - interpolatedUVs[1][1];
 
 					float umin = interpolatedUVs[0][0];
 					float umax = interpolatedUVs[1][0];
@@ -154,26 +162,29 @@ public class AuroraRenderer {
 					Vector4f topGradient = colorGradients.get(gi+1);
 
 					double camDist = Minecraft.getMinecraft().getRenderViewEntity().getDistance(segStopX, Minecraft.getMinecraft().getRenderViewEntity().posY, segStopZ);
+					double camDistNext = Minecraft.getMinecraft().getRenderViewEntity().getDistance(segStartX, Minecraft.getMinecraft().getRenderViewEntity().posY, segStartZ);
 					float alphaGradMultiplier = (float) (salphaGradMultiplier);
 					float alphaGradMultiplierNext = (float) (salphaGradMultiplierNext);
 					float viewDist = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16.0F - 10.0F;
 
+					if(camDistNext > viewDist) {
+						alphaGradMultiplier *= 10.0F / (camDistNext - (viewDist - 10.0F));
+					}
 					if(camDist > viewDist) {
-						alphaGradMultiplier *= 10.0F / (camDist - (viewDist - 10.0F));
 						alphaGradMultiplierNext *= 10.0F / (camDist - (viewDist - 10.0F));
 					}
 
 					//Front face
-					vertexBuffer.pos(segStartX, segStopY, segStartZ).tex(umax, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
-					vertexBuffer.pos(segStopX, segStopY, segStopZ).tex(umin, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
-					vertexBuffer.pos(segStopX, segStartY, segStopZ).tex(umin, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
-					vertexBuffer.pos(segStartX, segStartY, segStartZ).tex(umax, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStartX - this.x, segStopY, segStartZ - this.z).tex(umax, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStopX - this.x, segStopY, segStopZ - this.z).tex(umin, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStopX - this.x, segStartY, segStopZ - this.z).tex(umin, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStartX - this.x, segStartY, segStartZ - this.z).tex(umax, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
 
 					//Back face
-					vertexBuffer.pos(segStartX, segStopY, segStartZ).tex(umax, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
-					vertexBuffer.pos(segStartX, segStartY, segStartZ).tex(umax, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
-					vertexBuffer.pos(segStopX, segStartY, segStopZ).tex(umin, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
-					vertexBuffer.pos(segStopX, segStopY, segStopZ).tex(umin, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStartX - this.x, segStopY, segStartZ - this.z).tex(umax, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStartX - this.x, segStartY, segStartZ - this.z).tex(umax, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplier * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStopX - this.x, segStartY, segStopZ - this.z).tex(umin, vmin).lightmap(238, 238).color(bottomGradient.x, bottomGradient.y, bottomGradient.z, bottomGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
+					vertexBuffer.pos(segStopX - this.x, segStopY, segStopZ - this.z).tex(umin, vmax).lightmap(238, 238).color(topGradient.x, topGradient.y, topGradient.z, topGradient.w * alphaGradMultiplierNext * alphaMultiplier).endVertex();
 				}
 			}
 		}
@@ -185,6 +196,12 @@ public class AuroraRenderer {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+		GlStateManager.disableLighting();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		GlStateManager.enableCull();
+
+		GlStateManager.popMatrix();
 	}
 }

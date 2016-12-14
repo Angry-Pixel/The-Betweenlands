@@ -30,7 +30,8 @@ public class MessageSyncEnvironmentEvent extends BLMessage {
 	public void serialize(PacketBuffer buffer) {
 		buffer.writeString(this.eventName);
 		buffer.writeBoolean(this.active);
-		this.event.sendEventPacket(buffer);
+		PacketBuffer pkt = new PacketBuffer(buffer);
+		this.event.sendEventPacket(pkt);
 	}
 
 	@Override
@@ -56,7 +57,7 @@ public class MessageSyncEnvironmentEvent extends BLMessage {
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			EnvironmentEvent eevent = eeRegistry.forName(this.eventName);
 			if(eevent != null) {
-				eevent.loadEventPacket(this.receivedBuffer);
+				eevent.loadEventPacket(new PacketBuffer(this.receivedBuffer));
 				eevent.setActive(this.active, false);
 				eevent.setLoaded();
 			}

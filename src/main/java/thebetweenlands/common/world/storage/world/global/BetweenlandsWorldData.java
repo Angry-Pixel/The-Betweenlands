@@ -9,7 +9,7 @@ import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
 
 public class BetweenlandsWorldData extends WorldDataBase<BetweenlandsChunkData> {
-	private EnvironmentEventRegistry environmentEventRegistry = new EnvironmentEventRegistry();
+	private EnvironmentEventRegistry environmentEventRegistry;
 	private AspectManager aspectManager = new AspectManager();
 
 	public BetweenlandsWorldData() {
@@ -33,6 +33,7 @@ public class BetweenlandsWorldData extends WorldDataBase<BetweenlandsChunkData> 
 	 */
 	@Override
 	protected void init() {
+		this.environmentEventRegistry = new EnvironmentEventRegistry(this.getWorld());
 		this.environmentEventRegistry.init();
 	}
 

@@ -6,12 +6,30 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.world.World;
+
 public class EnvironmentEventRegistry {
-	public final EventDenseFog DENSE_FOG = new EventDenseFog(this);
-	public final EnvironmentEvent HEAVY_RAIN = new EventHeavyRain(this);
-	public final EventAuroras AURORAS = new EventAuroras(this);
-	public final EventBloodSky BLOODSKY = new EventBloodSky(this);
-	public final EventSpoopy SPOOPY = new EventSpoopy(this);
+	public final EventDenseFog DENSE_FOG;
+	public final EnvironmentEvent HEAVY_RAIN;
+	public final EventAuroras AURORAS;
+	public final EventBloodSky BLOODSKY;
+	public final EventSpoopy SPOOPY;
+
+	private World world;
+
+	public EnvironmentEventRegistry(World world) {
+		this.world = world;
+
+		DENSE_FOG = new EventDenseFog(this);
+		HEAVY_RAIN = new EventHeavyRain(this);
+		AURORAS = new EventAuroras(this);
+		BLOODSKY = new EventBloodSky(this);
+		SPOOPY = new EventSpoopy(this);
+	}
+
+	public World getWorld() {
+		return this.world;
+	}
 
 	public void init() {
 		register(DENSE_FOG);

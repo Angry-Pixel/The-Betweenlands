@@ -325,7 +325,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glPopMatrix();
 	}
 
-	private void renderAuroras(Minecraft mc) {
+	private void renderAuroras(Minecraft mc, float partialTicks) {
 		Random rand = mc.theWorld.rand;
 		double newAuroraPosX = mc.thePlayer.posX + rand.nextInt(160) - 80;
 		double newAuroraPosZ = mc.thePlayer.posZ + rand.nextInt(160) - 80;
@@ -385,8 +385,17 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glPushMatrix();
 		GL11.glTranslated(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ);
+		float alpha = 0.4F;
+		float ticksElapsed = event.getTicksElapsed() + partialTicks;
+		if(ticksElapsed < 500) {
+			alpha *= ticksElapsed / 500.0F;
+		}
+		float ticksRemaining = event.getTicks() - partialTicks;
+		if(ticksRemaining < 500) {
+			alpha *= ticksRemaining / 500.0F;
+		}
 		for(AuroraRenderer aurora : this.auroras) {
-			aurora.render(0.4F, gradients);
+			aurora.render(alpha, gradients);
 		}
 		GL11.glPopMatrix();
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
@@ -722,7 +731,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
 			if(((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
 				GL11.glDisable(GL11.GL_FOG);
-				this.renderAuroras(mc);
+				this.renderAuroras(mc, partialTicks);
 				GL11.glEnable(GL11.GL_FOG);
 			}
 		}

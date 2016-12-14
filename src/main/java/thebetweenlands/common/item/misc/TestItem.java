@@ -1,7 +1,5 @@
 package thebetweenlands.common.item.misc;
 
-import java.util.List;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -10,12 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
-import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedStorage;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 //MINE!!
 public class TestItem extends Item {
@@ -35,31 +28,36 @@ public class TestItem extends Item {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(world, itemRand, pos.up());
         }*/
-
-		if(!world.isRemote) {
-			/*if(playerIn.isSneaking()) {
-				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-				List<SharedStorage> storages = worldStorage.getSharedStorageAt(SharedStorage.class, (storage) -> {
-					if(storage instanceof LocationStorage) {
-						return ((LocationStorage)storage).isInside(pos);
-					}
-					return true;
-				}, pos.getX(), pos.getZ());
-				for(SharedStorage storage : storages) {
-					worldStorage.removeSharedStorage(storage);
-				}
-			} else {
-				WorldGenWightFortress fortress = new WorldGenWightFortress();
-				fortress.generate(world, itemRand, pos.up());
-			}*/
-			ItemAspectContainer container = ItemAspectContainer.fromItem(stack);
-			if(!playerIn.isSneaking()) {
-				container.add(AspectRegistry.AZUWYNN, 10);
-				System.out.println("Added: 10");
-			} else {
-				System.out.println("Drained: " + container.drain(AspectRegistry.AZUWYNN, 8));
-			}
+		
+		if (!world.isRemote) {
+			WorldGenWightFortress fortress = new WorldGenWightFortress();
+			fortress.generate(world, itemRand, pos.up());
 		}
+
+//		if(!world.isRemote) {
+//			/*if(playerIn.isSneaking()) {
+//				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+//				List<SharedStorage> storages = worldStorage.getSharedStorageAt(SharedStorage.class, (storage) -> {
+//					if(storage instanceof LocationStorage) {
+//						return ((LocationStorage)storage).isInside(pos);
+//					}
+//					return true;
+//				}, pos.getX(), pos.getZ());
+//				for(SharedStorage storage : storages) {
+//					worldStorage.removeSharedStorage(storage);
+//				}
+//			} else {
+//				WorldGenWightFortress fortress = new WorldGenWightFortress();
+//				fortress.generate(world, itemRand, pos.up());
+//			}*/
+//			ItemAspectContainer container = ItemAspectContainer.fromItem(stack);
+//			if(!playerIn.isSneaking()) {
+//				container.add(AspectRegistry.AZUWYNN, 10);
+//				System.out.println("Added: 10");
+//			} else {
+//				System.out.println("Drained: " + container.drain(AspectRegistry.AZUWYNN, 8));
+//			}
+//		}
 
 		return EnumActionResult.SUCCESS;
 	}

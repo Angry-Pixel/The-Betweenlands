@@ -2,6 +2,7 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
+import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 
 public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
@@ -9,52 +10,101 @@ public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
 		super(registry);
 	}
 
-	private int time = 0;
-	private Random rnd = null;
+	protected int ticks = 0;
+	protected int startTicks = 0;
 
 	@Override
 	public void update(World world) {
-		if(world.isRemote || this.getRegistry().isDisabled()) return;
-		this.rnd = world.rand;
-		this.time--;
-		if(this.time <= 0) {
-			if(this.isActive()) {
-				this.time = this.getOffTime(this.rnd);
-			} else {
-				this.time = this.getOnTime(this.rnd);
+		if(!this.getRegistry().isDisabled()) {
+			this.ticks--;
+
+			if(!world.isRemote && this.ticks % 20 == 0) {
+				this.setDirty(true);
 			}
-			this.setActive(!this.isActive(), true);
+
+			if(!world.isRemote && this.ticks <= 0) {
+				if(this.isActive()) {
+					this.startTicks = this.ticks = this.getOffTime(world.rand);
+				} else {
+					this.startTicks = this.ticks = this.getOnTime(world.rand);
+				}
+				this.setActive(!this.isActive(), true);
+			}
 		}
+	}
+
+	/**
+	 * Returns the time in ticks this event stays on/off
+	 * @return
+	 */
+	public int getTicks() {
+		return this.ticks;
+	}
+
+	/**
+	 * Returns the maximum ticks
+	 * @return
+	 */
+	public int getStartTicks() {
+		return this.startTicks;
+	}
+
+	/**
+	 * Returns how many ticks have elapsed since changing state
+	 * @return
+	 */
+	public int getTicksElapsed() {
+		return this.startTicks - this.ticks;
 	}
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
 		super.setActive(active, false);
-		if(this.rnd != null) {
+		if(!this.getWorld().isRemote) {
 			if(!this.isActive()) {
-				this.time = this.getOffTime(this.rnd);
+				this.startTicks = this.ticks = this.getOffTime(this.getWorld().rand);
 			} else {
-				this.time = this.getOnTime(this.rnd);
+				this.startTicks = this.ticks = this.getOnTime(this.getWorld().rand);
+			}
+			if(markDirty) {
+				this.markDirty();
 			}
 		}
-		if(markDirty) this.markDirty();
 	}
-	
+
 	@Override
 	public void saveEventData() {
-		this.getData().setInteger("time", this.time);
+		super.saveEventData();
+		this.getData().setInteger("ticks", this.ticks);
+		this.getData().setInteger("startTicks", this.startTicks);
 	}
 
 	@Override
 	public void loadEventData() {
-		this.time = this.getData().getInteger("time");
+		super.loadEventData();
+		this.ticks = this.getData().getInteger("ticks");
+		this.startTicks = this.getData().getInteger("startTicks");
+	}
+
+	@Override
+	public void loadEventPacket(PacketBuffer buffer) {
+		super.loadEventPacket(buffer);
+		this.ticks = buffer.readInt();
+		this.startTicks = buffer.readInt();
+	}
+
+	@Override
+	public void sendEventPacket(PacketBuffer buffer) {
+		super.sendEventPacket(buffer);
+		buffer.writeInt(this.ticks);
+		buffer.writeInt(this.startTicks);
 	}
 
 	@Override
 	public void setDefaults() {
-		this.time = this.getOffTime(new Random());
+		this.ticks = this.getOffTime(new Random());
 	}
-	
+
 	/**
 	 * Returns how many ticks the event is not active.
 	 * @param rnd
