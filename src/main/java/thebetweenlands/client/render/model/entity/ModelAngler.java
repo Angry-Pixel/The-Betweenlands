@@ -4,6 +4,8 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -112,15 +114,19 @@ public class ModelAngler extends ModelBase {
     }
 
     @Override
-    public void setRotationAngles(float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel, Entity entity) {
-        super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
-        EntityAngler angler = (EntityAngler) entity;
-        this.jaw.rotateAngleX = 1.5F + angler.moveProgress;
-        this.bottomTeeth.rotateAngleX = 1.5F + angler.moveProgress;
-        pectoralFinL.rotateAngleY = -0.5F - angler.moveProgress;
-        pectoralFinR.rotateAngleY = 0.5F + angler.moveProgress;
-        dorsalFin.rotateAngleY = midSection.rotateAngleY = -0.05F + angler.moveProgress * 0.2F;
-        tail.rotateAngleY = midSection.rotateAngleY * 1.2F;
-        tailFin.rotateAngleY = midSection.rotateAngleY * 1.4F;
+    public void setLivingAnimations(EntityLivingBase entity, float swing, float speed, float partialRenderTicks) {
+    	EntityAngler angler = (EntityAngler) entity;
+
+            float flap = MathHelper.sin((angler.ticksExisted + partialRenderTicks) * 0.5F) * 0.6F;
+            if (angler.isGrounded())
+            	flap = MathHelper.sin((angler.ticksExisted + partialRenderTicks) * 1.5F) * 0.6F;
+            jaw.rotateAngleX = 1.5F + flap*0.5F;
+            bottomTeeth.rotateAngleX = 1.5F + flap*0.5F;
+    		dorsalFin.rotateAngleY = midSection.rotateAngleY = -0.05F + flap * 0.2F;
+    		pectoralFinR.rotateAngleY = 0.5F - flap;
+    		pectoralFinL.rotateAngleY = -0.5F + flap;
+    		tail.rotateAngleY = midSection.rotateAngleY * 1.2F;
+    		tail.rotateAngleY = midSection.rotateAngleY * 1.4F;
+    		tailFin.rotateAngleY = midSection.rotateAngleY * 1.6F;
     }
 }

@@ -4,40 +4,52 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.IMob;
-import net.minecraft.entity.passive.EntityWaterMob;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityLookHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
-import thebetweenlands.common.entity.ai.EntityAINearestAttackableTargetNonCreature;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.util.AnimationMathHelper;
 
-public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
+public class EntityAngler extends EntityMob implements IEntityBL {
 	private static final DataParameter<Boolean> IS_LEAPING = EntityDataManager.createKey(EntityAngler.class, DataSerializers.BOOLEAN);
-	public float moveProgress;
-	AnimationMathHelper animation = new AnimationMathHelper();
-	private BlockPos currentSwimTarget;
 
 	public EntityAngler(World world) {
 		super(world);
 		setSize(0.8F, 0.7F);
-		setAir(80);
+		this.moveHelper = new EntityAngler.AnglerMoveHelper(this);
+		tasks.addTask(0, new EntityAIAttackMelee(this, 0.75D, true));
+		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.75D));
+		tasks.addTask(2, new EntityAIWander(this, 0.75D, 80));
+		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(4, new EntityAILookIdle(this));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, true, null));
+		targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 	}
 
 	@Override
@@ -46,15 +58,12 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		dataManager.register(IS_LEAPING, false);
 	}
 
-	@Override
-	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAIAttackOnCollide(this) {
-			@Override
-			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-				return 0.8D + attackTarget.width;
-			}
-		});
-		this.targetTasks.addTask(0, new EntityAINearestAttackableTargetNonCreature<EntityPlayer>(this, EntityPlayer.class, true));
+	public boolean isLeaping() {
+		return dataManager.get(IS_LEAPING);
+	}
+
+	private void setIsLeaping(boolean leaping) {
+		dataManager.set(IS_LEAPING, leaping);
 	}
 
 	@Override
@@ -63,7 +72,6 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(34.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
-		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 	}
 
@@ -98,127 +106,161 @@ public class EntityAngler extends EntityWaterMob implements IEntityBL, IMob {
 		return worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
 	}
 
-	@Override
-	public boolean isInWater() {
-		return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
-	}
-
 	public boolean isGrounded() {
 		return !isInWater() && worldObj.isAirBlock(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 1), MathHelper.floor_double(posZ))) && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ))).getBlock().isCollidable();
 	}
 
 	@Override
-	public void onLivingUpdate() {
-		super.onLivingUpdate();
+    protected PathNavigate getNewNavigator(World world){
+        return new PathNavigateSwimmer(this, world);
+    }
 
-		if (!this.worldObj.isRemote) {
+	@Override
+    protected boolean isValidLightLevel() {
+        return true;
+    }
+
+	@Override
+    public boolean isNotColliding() {
+		 return this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty();
+    }
+
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return worldObj.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + worldObj.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+    }
+
+	@Override
+	public void onLivingUpdate() {
+		if (worldObj.isRemote) {
 			if (isInWater()) {
-				if (!worldObj.isRemote) {
-					if (getAttackTarget() != null) {
-						currentSwimTarget = new BlockPos((int) getAttackTarget().posX, (int) ((int) getAttackTarget().posY + getAttackTarget().getEyeHeight()), (int) getAttackTarget().posZ);
-						swimToTarget();
-					} else
-						swimAbout();
-				}
-			} else {
-				if (!worldObj.isRemote) {
-					if (!onGround) {
-						motionX = 0.0D;
-						motionY -= 0.08D;
-						motionY *= 0.9800000190734863D;
-						motionZ = 0.0D;
-					} else {
-						setIsLeaping(false);
-						motionY += 0.4F;
-						motionX += (rand.nextFloat() - rand.nextFloat()) * 0.3F;
-						motionZ += (rand.nextFloat() - rand.nextFloat()) * 0.3F;
-					}
-				}
-			}
-		} else {
-			if (isInWater()) {
-				moveProgress = animation.swing(1.2F, 0.4F, false);
-				renderYawOffset += (-((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI - renderYawOffset) * 0.1F;
-				rotationYaw = renderYawOffset;
-			} else {
-				moveProgress = animation.swing(2F, 0.4F, false);
+				Vec3d vec3d = getLook(0.0F);
+				for (int i = 0; i < 2; ++i)
+					worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.xCoord * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.yCoord * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.zCoord * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
 			}
 		}
 
+		if (inWater) {
+			setAir(300);
+		} else if (onGround) {
+			motionY += 0.5D;
+			motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
+			motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
+			rotationYaw = rand.nextFloat() * 360.0F;
+			if(isLeaping())
+				setIsLeaping(false);
+			onGround = false;
+			isAirBorne = true;
+			if(worldObj.getWorldTime()%5==0)
+				worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				this.damageEntity(DamageSource.drown, 0.5F);
+		}
+		super.onLivingUpdate();
 	}
 
 	@Override
 	public void onUpdate() {
-		super.onUpdate();
-		if (worldObj.getDifficulty() == EnumDifficulty.PEACEFUL)
-			setDead();
-	}
-
-	@Override
-	public void onEntityUpdate() {
-		int air = getAir();
-		super.onEntityUpdate();
-
-		if (isEntityAlive() && !isInWater()) {
-			--air;
-			setAir(air);
-
-			if (getAir() == -20) {
-				setAir(0);
-				attackEntityFrom(DamageSource.drown, 2.0F);
-			}
-		} else
-			setAir(80);
-	}
-
-	private void swimAbout() {
-		if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.SWAMP_WATER && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
-			currentSwimTarget = null;
-
-		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10.0F)
-			currentSwimTarget = new BlockPos((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(6) + 2, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
-
-		swimToTarget();
-	}
-
-	private void swimToTarget() {
-		double targetX = currentSwimTarget.getX() + 0.5D - posX;
-		double targetY = currentSwimTarget.getY() + 0.5D - posY;
-		double targetZ = currentSwimTarget.getZ() + 0.5D - posZ;
-		motionX += (Math.signum(targetX) * 0.3D - motionX) * 0.1D;
-		motionY += (Math.signum(targetY) * 0.4D - motionY) * 0.08D;
-		motionY -= 0.01D;
-		motionZ += (Math.signum(targetZ) * 0.3D - motionZ) * 0.1D;
-		moveForward = 0.5F;
-	}
-
-	@Override
-	public boolean attackEntityAsMob(Entity entityIn) {
-		if(EntityAIAttackOnCollide.useStandardAttack(this, entityIn)) {
-			double distance = this.getPosition().getDistance((int) entityIn.posX, (int) entityIn.posY, (int) entityIn.posZ);
-			if (distance > 2.0F && distance < 6.0F && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0) {
+		if(!worldObj.isRemote) {
+		if(getAttackTarget() != null && !worldObj.containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
+			Double distance = this.getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
+			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
 				if (isInWater() && worldObj.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
-					setIsLeaping(true);
-					double distanceX = entityIn.posX - posX;
-					double distanceZ = entityIn.posZ - posZ;
+					if(!isLeaping()) {
+						setIsLeaping(true);
+						worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
+					}
+					double distanceX = getAttackTarget().posX - posX;
+					double distanceZ = getAttackTarget().posZ - posZ;
 					float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
-					motionX = distanceX / distanceSqrRoot * 1.5D * 0.900000011920929D + motionX * 2.70000000298023224D;
-					motionZ = distanceZ / distanceSqrRoot * 1.5D * 0.900000011920929D + motionZ * 2.70000000298023224D;
-					motionY = 0.8D;
-				}
+					motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
+					motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
+					motionY = 0.4D;
+					}
 			}
-			this.playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
-			return true;
 		}
+		super.onUpdate();
+	}
+
+	@Override
+	public void moveEntityWithHeading(float strafe, float forward) {
+		if (isServerWorld()) {
+			if (isInWater()) {
+				moveRelative(strafe, forward, 0.1F);
+				moveEntity(motionX, motionY, motionZ);
+				motionX *= 0.8999999761581421D;
+				motionY *= 0.8999999761581421D;
+				motionZ *= 0.8999999761581421D;
+
+				if (getAttackTarget() == null) {
+					motionY -= 0.005D;
+				}
+			} else {
+				super.moveEntityWithHeading(strafe, forward);
+			}
+		} else {
+			super.moveEntityWithHeading(strafe, forward);
+		}
+	}
+
+	@Override
+	public boolean attackEntityAsMob(Entity entity) {
+			if (super.attackEntityAsMob(entity)) {
+				this.playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
+				return true;
+			}
 		return false;
 	}
+	
+	//AIs
+	
+	static class AnglerMoveHelper extends EntityMoveHelper {
+		private final EntityAngler angler;
 
-	public boolean isLeaping() {
-		return dataManager.get(IS_LEAPING);
-	}
+		public AnglerMoveHelper(EntityAngler angler) {
+			super(angler);
+			this.angler = angler;
+		}
 
-	private void setIsLeaping(boolean leaping) {
-		dataManager.set(IS_LEAPING, leaping);
+		public void onUpdateMoveHelper() {
+			if (action == EntityMoveHelper.Action.MOVE_TO && !angler.getNavigator().noPath()) {
+				double d0 = posX - angler.posX;
+				double d1 = posY - angler.posY;
+				double d2 = posZ - angler.posZ;
+				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+				d3 = (double) MathHelper.sqrt_double(d3);
+				d1 = d1 / d3;
+				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+				angler.rotationYaw = limitAngle(angler.rotationYaw, f, 90.0F);
+				angler.renderYawOffset = angler.rotationYaw;
+				float f1 = (float) (speed * angler.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+				angler.setAIMoveSpeed(angler.getAIMoveSpeed() + (f1 - angler.getAIMoveSpeed()) * 0.125F);
+				double d4 = Math.sin((double) (angler.ticksExisted + angler.getEntityId()) * 0.5D) * 0.05D;
+				double d5 = Math.cos((double) (angler.rotationYaw * 0.017453292F));
+				double d6 = Math.sin((double) (angler.rotationYaw * 0.017453292F));
+				angler.motionX += d4 * d5;
+				angler.motionZ += d4 * d6;
+				d4 = Math.sin((double) (angler.ticksExisted + angler.getEntityId()) * 0.75D) * 0.05D;
+				angler.motionY += d4 * (d6 + d5) * 0.25D;
+				angler.motionY += (double) angler.getAIMoveSpeed() * d1 * 0.1D;
+				EntityLookHelper entitylookhelper = angler.getLookHelper();
+				double d7 = angler.posX + d0 / d3 * 2.0D;
+				double d8 = (double) angler.getEyeHeight() + angler.posY + d1 / d3;
+				double d9 = angler.posZ + d2 / d3 * 2.0D;
+				double d10 = entitylookhelper.getLookPosX();
+				double d11 = entitylookhelper.getLookPosY();
+				double d12 = entitylookhelper.getLookPosZ();
+
+				if (!entitylookhelper.getIsLooking()) {
+					d10 = d7;
+					d11 = d8;
+					d12 = d9;
+				}
+
+				angler.getLookHelper().setLookPosition(d10 + (d7 - d10) * 0.125D, d11 + (d8 - d11) * 0.125D, d12 + (d9 - d12) * 0.125D, 10.0F, 40.0F);
+			} else {
+				angler.setAIMoveSpeed(0.0F);
+			}
+		}
 	}
 
 }
