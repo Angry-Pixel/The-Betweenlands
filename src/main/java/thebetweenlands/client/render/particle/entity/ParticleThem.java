@@ -33,7 +33,7 @@ public class ParticleThem extends Particle {
 		this.posY = this.prevPosY = y;
 		this.posZ = this.prevPosZ = z;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
-		this.particleMaxAge = (int)500;
+		this.particleMaxAge = (int)1200;
 		this.field_190017_n = false;
 		this.particleScale = scale;
 		this.startY = this.posY;
@@ -95,8 +95,8 @@ public class ParticleThem extends Particle {
 
 		alpha = Math.min(alpha * 1.75F, 1.0F);
 
-		if(angle < 20.0F) {
-			alpha *= Math.pow((angle / 20.0F), 2);
+		if(angle < 30.0F) {
+			alpha *= Math.pow((angle / 30.0F), 2);
 		}
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);

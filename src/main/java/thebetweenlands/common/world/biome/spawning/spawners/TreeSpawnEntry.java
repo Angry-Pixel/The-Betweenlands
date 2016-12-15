@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 
@@ -34,6 +35,6 @@ public class TreeSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
-		return /*surfaceBlockState.getBlock() == BlockRegistry.TREE_FUNGUS*/false;//TODO: Requires tree fungus
+		return surfaceBlockState.getBlock() == BlockRegistry.SHELF_FUNGUS;
 	}
 }

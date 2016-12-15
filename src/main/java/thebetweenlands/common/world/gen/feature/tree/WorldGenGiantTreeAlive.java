@@ -1,13 +1,18 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
+import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 	private static final EnumFacing[] SHUFFLED_DIRECTIONS = DIRECTIONS.clone();
@@ -15,12 +20,17 @@ public class WorldGenGiantTreeAlive extends WorldGenGiantTree {
 	@Override
 	public boolean generateTree(World world, Random rand, BlockPos pos) {
 		boolean gen = super.generateTree(world, rand, pos);
-		/*if(gen) {
-			List<LocationStorage> addedLocations = StorageHelper.addArea(world, "giantTree", AxisAlignedBB.getBoundingBox(blockX - 32, blockY - 10, blockZ - 32, blockX + 32, blockY + 80, blockZ + 32), EnumLocationType.GIANT_TREE, 0);
-			for(LocationStorage location : addedLocations) {
-			location.setVisible(false).getChunkData().markDirty();
-			}}	
-		*/
+		if(gen) {
+			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+
+			LocationStorage fortressLocation = new LocationStorage(worldStorage, UUID.randomUUID(), "giantTree", EnumLocationType.GIANT_TREE);
+			fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 32, pos.getY() - 10, pos.getZ() - 32, pos.getX() + 32, pos.getY() + 80, pos.getZ() + 32));
+			fortressLocation.linkChunks();
+			fortressLocation.setDirty(true);
+			fortressLocation.setSeed(rand.nextLong());
+			worldStorage.addSharedStorage(fortressLocation);
+		}	
+
 		return gen;
 	}
 

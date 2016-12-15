@@ -197,6 +197,7 @@ public class AuroraRenderer {
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableBlend();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.disableLighting();
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);

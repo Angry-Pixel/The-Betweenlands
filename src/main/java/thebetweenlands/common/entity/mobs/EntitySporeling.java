@@ -84,16 +84,6 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public boolean getCanSpawnHere() {
-		return this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this.getEntityBoundingBox()).isEmpty() && isOnShelfFungus();
-	}
-
-	private boolean isOnShelfFungus() {
-		//TODO add shelf fungus
-		return true;//worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(getEntityBoundingBox().minY) - 1, MathHelper.floor_double(posZ))).getBlock() == Registries.INSTANCE.blockRegistry.treeFungus;
-	}
-
-	@Override
 	public void fall(float distance, float damageMultiplier) {
 	}
 

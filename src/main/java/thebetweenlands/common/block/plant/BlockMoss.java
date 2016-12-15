@@ -105,7 +105,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 	private boolean canPlaceAt(World worldIn, BlockPos pos, EnumFacing facing) {
 		BlockPos blockPos = pos.offset(facing.getOpposite());
 		boolean flag = facing.getAxis().isHorizontal();
-		return flag && worldIn.isSideSolid(blockPos, facing, true) || facing.equals(EnumFacing.UP) && this.canPlaceOn(worldIn, blockPos);
+		return flag && worldIn.isSideSolid(blockPos, facing, true) || ((facing.equals(EnumFacing.DOWN) || facing.equals(EnumFacing.UP)) && this.canPlaceOn(worldIn, blockPos));
 	}
 
 	private boolean canPlaceOn(World worldIn, BlockPos pos) {

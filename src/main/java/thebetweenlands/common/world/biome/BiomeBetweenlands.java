@@ -9,12 +9,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.EventSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.LocationSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
+import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
 import thebetweenlands.util.IWeightProvider;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {
@@ -35,12 +38,12 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.fillerBlock = BlockRegistry.SWAMP_DIRT.getDefaultState();
 
 		this.setFogColor(10, 30, 12);
-		
+
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), "bloodSky").setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), "bloodSky").setHostile(true));
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D));
 
-		//this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
+		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
 	}
 
 	/**

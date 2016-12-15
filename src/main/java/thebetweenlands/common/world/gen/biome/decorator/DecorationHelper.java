@@ -86,6 +86,8 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_BIG_BULB_CAPPED_MUSHROOM = new WorldGenBigBulbCappedMushroom();
 	private static final WorldGenerator GEN_MOSS = new WorldGenMossCluster(BlockRegistry.MOSS.getDefaultState());
 	private static final WorldGenerator GEN_LICHEN = new WorldGenMossCluster(BlockRegistry.LICHEN.getDefaultState());
+	private static final WorldGenerator GEN_MOSS_UNDERGROUND = new WorldGenMossCluster(BlockRegistry.MOSS.getDefaultState(), 4, 80);
+	private static final WorldGenerator GEN_LICHEN_UNDERGROUND = new WorldGenMossCluster(BlockRegistry.LICHEN.getDefaultState(), 3, 40);
 	private static final WorldGenerator GEN_SPAWNER_STRUCTURE = new WorldGenSpawnerStructure();
 	private static final WorldGenerator GEN_IDOL_HEAD = new WorldGenIdolHeads();
 	private static final WorldGenerator GEN_SMALL_RUINS = new WorldGenSmallRuins();
@@ -101,7 +103,7 @@ public class DecorationHelper {
 	}
 
 	private static int getSpeleothemAttemptAdditive(BiomeDecoratorBetweenlands decorator) {
-		return (int) ((decorator.getChunkGenerator().evalSpeleothemDensityNoise(decorator.getX() * 0.03, decorator.getZ() * 0.03) * 0.5 + 0.5) * 80);
+		return (int) ((decorator.getChunkGenerator().evalSpeleothemDensityNoise(decorator.getX() * 0.03, decorator.getZ() * 0.03) * 0.5 + 0.5) * 25);
 	}
 
 	public static boolean generatePhragmites(BiomeDecoratorBetweenlands decorator) {
@@ -114,12 +116,29 @@ public class DecorationHelper {
 	}
 
 	public static boolean populateCaves(BiomeDecoratorBetweenlands decorator) {
-		decorator.generate(40 + getSpeleothemAttemptAdditive(decorator), DecorationHelper::generateSpeleothem);
+		decorator.generate(2 + getSpeleothemAttemptAdditive(decorator), DecorationHelper::generateSpeleothemCluster);
 		decorator.generate(decorator.getRand().nextInt(3) == 0 ? 2 : 1, DecorationHelper::generateCavePotsCluster);
-		decorator.generate(200, DecorationHelper::generateCaveThornsCluster);
-		decorator.generate(100, DecorationHelper::generateCaveMossCluster);
+		decorator.generate(140, DecorationHelper::generateCaveThornsCluster);
+		decorator.generate(120, DecorationHelper::generateCaveMossCluster);
+		decorator.generate(25, DecorationHelper::generateUndergroundMossCluster);
+		decorator.generate(5, DecorationHelper::generateUndergroundLichenCluster);
 		decorator.generate(120, DecorationHelper::generateCaveGrassCluster);
 		return true;
+	}
+
+	public static boolean generateSpeleothemCluster(BiomeDecoratorBetweenlands decorator) {
+		int x = decorator.getRandomPosX();
+		float v = SPELEOTHEM_Y_CDF.eval(decorator.getRand().nextFloat());
+		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int z = decorator.getRandomPosZ();
+		boolean generated = false;
+		for(int i = 0; i < 35; i++) {
+			int gx = x + decorator.getRand().nextInt(7) - 3;
+			int gy = y + decorator.getRand().nextInt(7) - 3;
+			int gz = z + decorator.getRand().nextInt(7) - 3;
+			generated |= GEN_SPELEOTHEM.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(gx, gy, gz));
+		}
+		return generated;
 	}
 
 	public static boolean generateSpeleothem(BiomeDecoratorBetweenlands decorator) {
@@ -152,6 +171,22 @@ public class DecorationHelper {
 		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_MOSS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+
+	public static boolean generateUndergroundMossCluster(BiomeDecoratorBetweenlands decorator) {
+		int x = decorator.getRandomPosX();
+		float v = CAVE_MOSS_Y_CDF.eval(decorator.getRand().nextFloat());
+		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int z = decorator.getRandomPosZ();
+		return GEN_MOSS_UNDERGROUND.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+
+	public static boolean generateUndergroundLichenCluster(BiomeDecoratorBetweenlands decorator) {
+		int x = decorator.getRandomPosX();
+		float v = CAVE_MOSS_Y_CDF.eval(decorator.getRand().nextFloat());
+		int y = (int) (v * (WorldProviderBetweenlands.CAVE_START - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int z = decorator.getRandomPosZ();
+		return GEN_LICHEN_UNDERGROUND.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 
 	public static boolean generateCaveGrassCluster(BiomeDecoratorBetweenlands decorator) {

@@ -6,6 +6,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.plant.BlockMoss;
@@ -35,26 +36,28 @@ public class WorldGenMossCluster extends WorldGenerator {
 			position = position.down();
 		}
 
+		PooledMutableBlockPos mutablePos = PooledMutableBlockPos.retain();
 		for (int i = 0; i < this.attempts; ++i) {
-			BlockPos pos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
+			mutablePos.setPos(position.getX() + rand.nextInt(this.offset) - rand.nextInt(this.offset), position.getY() + rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), position.getZ() + rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
-			if (worldIn.isAirBlock(pos) && this.block.canPlaceBlockAt(worldIn, pos)) {
+			if (worldIn.isAirBlock(mutablePos) && this.block.canPlaceBlockAt(worldIn, mutablePos)) {
 				EnumFacing facing = EnumFacing.getFront(rand.nextInt(EnumFacing.VALUES.length));
 				EnumFacing.Axis axis = facing.getAxis();
 				EnumFacing oppositeFacing = facing.getOpposite();
 				boolean isInvalid = false;
-				if (axis.isHorizontal() && !worldIn.isSideSolid(pos.offset(oppositeFacing), facing, true)) {
+				if (axis.isHorizontal() && !worldIn.isSideSolid(mutablePos.offset(oppositeFacing), facing, true)) {
 					isInvalid = true;
-				} else if (axis.isVertical() && !this.canPlaceOn(worldIn, pos.offset(oppositeFacing))) {
+				} else if (axis.isVertical() && !this.canPlaceOn(worldIn, mutablePos.offset(oppositeFacing))) {
 					isInvalid = true;
 				}
 				if (!isInvalid) {
 					IBlockState state = this.blockState.withProperty(BlockMoss.FACING, facing);
-					this.setBlockAndNotifyAdequately(worldIn, pos, state);
+					this.setBlockAndNotifyAdequately(worldIn, mutablePos.toImmutable(), state);
 					generated = true;
 				}
 			}
 		}
+		mutablePos.release();
 
 		return generated;
 	}

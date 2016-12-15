@@ -104,7 +104,7 @@ public class MobSpawnHandler {
 		 * @param x
 		 * @param y
 		 * @param z
-		 * @param blockState The block the entity will spawn
+		 * @param blockState The block where the entity will spawn
 		 * @param surfaceBlock The block below where the entity will spawn
 		 */
 		public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
