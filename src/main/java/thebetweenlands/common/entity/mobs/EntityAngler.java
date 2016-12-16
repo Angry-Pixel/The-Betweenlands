@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -43,12 +44,21 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 		super(world);
 		setSize(0.8F, 0.7F);
 		this.moveHelper = new EntityAngler.AnglerMoveHelper(this);
-		tasks.addTask(0, new EntityAIAttackMelee(this, 0.75D, true));
-		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.75D));
-		tasks.addTask(2, new EntityAIWander(this, 0.75D, 80));
+	}
+	
+	@Override
+	protected void initEntityAI() {
+		tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true) {
+			@Override
+			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
+		        return 0.85D + attackTarget.width;
+		    }
+		});
+		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
+		tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(4, new EntityAILookIdle(this));
-		targetTasks.addTask(0, new EntityAINearestAttackableTarget(this, EntityPlayer.class, 0, true, true, null));
+		targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, true, null));
 		targetTasks.addTask(1, new EntityAIHurtByTarget(this, false));
 	}
 
@@ -70,8 +80,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(34.0D);
-		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(12.0D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 	}
 
@@ -134,7 +144,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	public void onLivingUpdate() {
 		if (worldObj.isRemote) {
 			if (isInWater()) {
-				Vec3d vec3d = getLook(0.0F);
+				Vec3d vec3d = this.getVectorForRotation(this.rotationPitch, this.renderYawOffset);
 				for (int i = 0; i < 2; ++i)
 					worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.xCoord * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.yCoord * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.zCoord * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
 			}
