@@ -101,17 +101,23 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 		this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
 
-		if(!this.isGlowActive() && this.rand.nextInt(400) == 0) {
-			this.setGlow(true);
-		} else if(this.isGlowActive() && this.rand.nextInt(1200) == 0) {
-			this.setGlow(false);
-		}
-
 		this.prevGlowTicks = this.glowTicks;
-		if(this.isGlowActive() && this.glowTicks < 20) {
-			this.glowTicks++;
-		} else if(!this.isGlowActive() && this.glowTicks > 0) {
-			this.glowTicks--;
+		
+		if(this.isEntityAlive()) {
+			if(!this.isGlowActive() && this.rand.nextInt(400) == 0) {
+				this.setGlow(true);
+			} else if(this.isGlowActive() && this.rand.nextInt(1200) == 0) {
+				this.setGlow(false);
+			}
+
+			if(this.isGlowActive() && this.glowTicks < 20) {
+				this.glowTicks++;
+			} else if(!this.isGlowActive() && this.glowTicks > 0) {
+				this.glowTicks--;
+			}
+		} else {
+			this.setGlow(false);
+			this.glowTicks = 0;
 		}
 	}
 
