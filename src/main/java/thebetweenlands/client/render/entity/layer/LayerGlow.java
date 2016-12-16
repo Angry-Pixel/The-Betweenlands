@@ -17,6 +17,8 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	public final RenderLivingBase<T> renderer;
 	public final ResourceLocation glowTexture;
 
+	private float alpha = 1.0F;
+
 	public LayerGlow(RenderLivingBase<T> renderer, ResourceLocation glowTexture) {
 		this.renderer = renderer;
 		this.glowTexture = glowTexture;
@@ -25,20 +27,30 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	@Override
 	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 		this.renderer.bindTexture(this.glowTexture);
+		ModelBase mainModel = this.renderer.getMainModel();
+		mainModel.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
+		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+
+		float alpha = this.getAlpha();
+
 		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
-		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		GlStateManager.depthMask(!entity.isInvisible());
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+
+		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+
+		GlStateManager.color(alpha, alpha, alpha, alpha);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		int i = 61680;
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
 		GlStateManager.enableLighting();
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-		ModelBase mainModel = this.renderer.getMainModel();
-		mainModel.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
-		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
+
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
+
 		this.setLightmap(entity, partialTicks);
 		GlStateManager.depthMask(true);
 		GlStateManager.disableBlend();
@@ -59,5 +71,23 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+	}
+
+	/**
+	 * Sets the layer alpha
+	 * @param alpha
+	 * @return
+	 */
+	public LayerGlow<T> setAlpha(float alpha) {
+		this.alpha = alpha;
+		return this;
+	}
+
+	/**
+	 * Returns the layer alpha
+	 * @return
+	 */
+	public float getAlpha() {
+		return this.alpha;
 	}
 }

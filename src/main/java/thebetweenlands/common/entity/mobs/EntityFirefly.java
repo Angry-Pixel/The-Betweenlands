@@ -4,7 +4,12 @@ import java.util.Random;
 
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -13,6 +18,11 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 
 public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	protected double aboveLayer = 6.0D;
+
+	protected int glowTicks = 0;
+	protected int prevGlowTicks = 0;
+
+	private static final DataParameter<Boolean> GLOW = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 
 	public EntityFirefly(World world) {
 		super(world);
@@ -35,7 +45,7 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 
 					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
 						return this.entity.posY;
-					
+
 					if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
 						worldHeight = checkPos.getY();
 						break;
@@ -71,6 +81,12 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	}
 
 	@Override
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(GLOW, true);
+	}
+
+	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
 	}
@@ -78,13 +94,55 @@ public class EntityFirefly extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
 		if (this.isInWater()) {
 			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.1D);
+		}
+
+		this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
+
+		if(!this.isGlowActive() && this.rand.nextInt(400) == 0) {
+			this.setGlow(true);
+		} else if(this.isGlowActive() && this.rand.nextInt(1200) == 0) {
+			this.setGlow(false);
+		}
+
+		this.prevGlowTicks = this.glowTicks;
+		if(this.isGlowActive() && this.glowTicks < 20) {
+			this.glowTicks++;
+		} else if(!this.isGlowActive() && this.glowTicks > 0) {
+			this.glowTicks--;
 		}
 	}
 
 	@Override
 	protected boolean canDespawn() {
-		return false;
+		return true;
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		nbt.setBoolean("glowing", this.isGlowActive());
+
+		super.writeEntityToNBT(nbt);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		this.setGlow(nbt.getBoolean("glowing"));
+
+		super.readEntityFromNBT(nbt);
+	}
+
+	public boolean isGlowActive() {
+		return this.getDataManager().get(GLOW);
+	}
+
+	public void setGlow(boolean glowing) {
+		this.getDataManager().set(GLOW, glowing);
+	}
+
+	public float getGlowTicks(float partialTicks) {
+		return this.prevGlowTicks + (this.glowTicks - this.prevGlowTicks) * partialTicks;
 	}
 }
