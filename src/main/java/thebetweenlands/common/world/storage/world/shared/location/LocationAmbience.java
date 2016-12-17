@@ -25,7 +25,7 @@ public class LocationAmbience {
 	public final EnumLocationAmbience type;
 	private float fogStart = -1, fogEnd = -1;
 	private float fogRangeMultiplier = -1;
-	private byte[] fogColor = null;
+	private int[] fogColor = null;
 	private int fogBrightness = -1;
 	private float fogColorMultiplier = -1;
 
@@ -73,7 +73,7 @@ public class LocationAmbience {
 		return this.fogRangeMultiplier;
 	}
 
-	public LocationAmbience setFogColor(byte[] color) {
+	public LocationAmbience setFogColor(int[] color) {
 		this.fogColor = color;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class LocationAmbience {
 		return this.fogColor != null && this.fogColor.length == 3;
 	}
 
-	public byte[] getFogColor() {
+	public int[] getFogColor() {
 		return this.fogColor;
 	}
 
@@ -121,7 +121,7 @@ public class LocationAmbience {
 				ambience.setFogRange(nbt.getFloat("fogStart"), nbt.getFloat("fogEnd"));
 			}
 			if(nbt.hasKey("fogColor")) {
-				ambience.setFogColor(nbt.getByteArray("fogColor"));
+				ambience.setFogColor(nbt.getIntArray("fogColor"));
 			}
 			if(nbt.hasKey("fogBrightness")) {
 				ambience.setFogBrightness(nbt.getInteger("fogBrightness"));
@@ -144,7 +144,7 @@ public class LocationAmbience {
 			nbt.setFloat("fogEnd", this.fogEnd);
 		}
 		if(this.hasFogColor()) {
-			nbt.setByteArray("fogColor", this.fogColor);
+			nbt.setIntArray("fogColor", this.fogColor);
 		}
 		if(this.hasFogBrightness()) {
 			nbt.setInteger("fogBrightness", this.fogBrightness);

@@ -14,6 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
@@ -291,6 +292,20 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	}
 
 	/**
+	 * Returns whether the specified position is inside this location
+	 * @param pos
+	 * @return
+	 */
+	public boolean isInside(Vec3d pos) {
+		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+			if(boundingBox.isVecInside(pos)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Returns the location name
 	 * @return
 	 */
@@ -328,10 +343,20 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Entity entity) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.worldObj);
+		return getLocations(entity.worldObj, entity.getPositionVector());
+	}
+
+	/**
+	 * Returns a list of all locations at the specified position
+	 * @param world
+	 * @param entity
+	 * @return
+	 */
+	public static List<LocationStorage> getLocations(World world, Vec3d position) {
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		return worldStorage.getSharedStorageAt(LocationStorage.class, (location) -> {
-			return location.isInside(entity);
-		}, entity.posX, entity.posZ);
+			return location.isInside(position);
+		}, position.xCoord, position.zCoord);
 	}
 
 	/**
@@ -340,7 +365,17 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public static LocationAmbience getAmbience(Entity entity) {
-		List<LocationStorage> locations = LocationStorage.getLocations(entity);
+		return getAmbience(entity.worldObj, entity.getPositionVector());
+	}
+
+	/**
+	 * Returns the highest priority ambience at the specified position
+	 * @param world
+	 * @param entity
+	 * @return
+	 */
+	public static LocationAmbience getAmbience(World world, Vec3d position) {
+		List<LocationStorage> locations = LocationStorage.getLocations(world, position);
 		if(locations.isEmpty())
 			return null;
 		Collections.sort(locations, LAYER_SORTER);

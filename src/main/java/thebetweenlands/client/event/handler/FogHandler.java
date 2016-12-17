@@ -13,10 +13,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
@@ -24,10 +22,14 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.UpdateFogEvent;
+import thebetweenlands.client.render.Fog;
+import thebetweenlands.client.render.Fog.MutableFog;
+import thebetweenlands.client.render.FogState;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
@@ -38,15 +40,20 @@ public class FogHandler {
 	private FogHandler() { }
 
 	////// Biome specific fog + smooth transition //////
+	private static FogState state = new FogState();
 	private static float currentFogStart = -1.0F;
 	private static float currentFogEnd = -1.0F;
-	private static float lastFogStart = -1.0F;
-	private static float lastFogEnd = -1.0F;
-	private static float currentFogColorMultiplier = -1.0F;
-	private static float lastFogColorMultiplier = -1.0F;
 	private static float farPlaneDistance = 0.0F;
 	private static int fogMode;
 	private static FogGenerator fogGenerator;
+
+	/**
+	 * Returns the fog state
+	 * @return
+	 */
+	public static FogState getFogState() {
+		return state;
+	}
 
 	/**
 	 * Returns the current fog start
@@ -95,15 +102,29 @@ public class FogHandler {
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderView != null && renderView.dimension == ConfigHandler.dimensionId) {
 			float partialTicks = (float) event.getRenderPartialTicks();
-			float fogStart = currentFogStart + (currentFogStart - lastFogStart) * partialTicks;
-			float fogEnd = currentFogEnd + (currentFogEnd - lastFogEnd) * partialTicks;
-			fogMode = GL11.GL_LINEAR;
-			GlStateManager.setFog(FogMode.LINEAR);
+			Fog fog = state.getFog(partialTicks);
+			float fogStart = currentFogStart = fog.getStart();
+			float fogEnd = currentFogEnd = fog.getEnd();
+			fogMode = fog.getGlFogType();
+			switch(fog.getFogType()) {
+			default:
+			case LINEAR:
+				GlStateManager.setFog(FogMode.LINEAR);
+				break;
+			case EXP:
+				GlStateManager.setFog(FogMode.EXP);
+				GlStateManager.setFogDensity(fog.getDensity());
+				break;
+			case EXP2:
+				GlStateManager.setFog(FogMode.EXP2);
+				GlStateManager.setFogDensity(fog.getDensity());
+				break;
+			}
 			GlStateManager.setFogStart(fogStart);
 			GlStateManager.setFogEnd(fogEnd);
 		} else {
-			lastFogStart = currentFogStart = farPlaneDistance * 0.75F;
-			currentFogStart = currentFogEnd = farPlaneDistance;
+			currentFogStart = farPlaneDistance * 0.75F;
+			currentFogEnd = farPlaneDistance;
 			fogMode = GL11.GL_LINEAR;
 		}
 	}
@@ -114,136 +135,8 @@ public class FogHandler {
 		World world = TheBetweenlands.proxy.getClientWorld();
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
-		if(world == null || player == null || farPlaneDistance == 0.0F || player.dimension != ConfigHandler.dimensionId) return;
-
-		if(world.provider instanceof WorldProviderBetweenlands) {
-			((WorldProviderBetweenlands)world.provider).updateFogColors();
-		}
-
-		Biome biome = world.getBiomeGenForCoords(player.getPosition());
-
-		float fogStart = farPlaneDistance * 0.75F;
-		float fogEnd = farPlaneDistance;
-
-		//Use the same values regardless the view distance for fairness
-		float defaultFogStart = Math.min(192.0F * 0.75F, fogStart);
-		float defaultFogEnd = Math.min(192.0F, fogEnd);
-
-		if(biome instanceof BiomeBetweenlands) {
-			BiomeBetweenlands biomeBetweenlands = (BiomeBetweenlands) biome;
-			fogStart = biomeBetweenlands.getFogStart(farPlaneDistance, 0);
-			fogEnd = biomeBetweenlands.getFogEnd(farPlaneDistance, 0);
-		}
-
-		//TODO: Elixirs
-		float uncloudedStrength = 0.0F;
-		/*if(ElixirEffectRegistry.EFFECT_UNCLOUDED.isActive(player)) {
-			uncloudedStrength += Math.min((ElixirEffectRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
-		}
-
-		if(ElixirEffectRegistry.EFFECT_FOGGEDMIND.isActive(player)) {
-			float additionalFogStrength = (ElixirEffectRegistry.EFFECT_FOGGEDMIND.getStrength(player) + 1) * 0.85F;
-			fogStart /= additionalFogStrength * 2.0F;
-			fogEnd /= additionalFogStrength;
-		}*/
-
-		//Reduced fog for those players with really low view distance
-		float lowViewDistanceFogReduction = fogEnd > 64 ? 1.0F : (64.0F - fogEnd) / 64.0F;
-
-		//Dense fog
-		if(hasDenseFog()) {
-			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
-				fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
-			}
-			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);
-			float denseFogStart = defaultFogStart / Math.max(8.0f / (1.0F + uncloudedStrength * 4.0F) * lowViewDistanceFogReduction, 1) * range[0];
-			float denseFogEnd = defaultFogEnd / Math.max(3.0f / (1.0F + uncloudedStrength * 2.0F) * lowViewDistanceFogReduction, 1) * range[1];
-			defaultFogStart = fogStart = Math.min(denseFogStart, fogStart);
-			defaultFogEnd = fogEnd = Math.min(denseFogEnd, fogEnd);
-		}
-
-		//Underground fog
-		float fogColorMultiplier = 1.0F;
-		if(player.posY < WorldProviderBetweenlands.CAVE_START) {
-			fogColorMultiplier = ((float)(WorldProviderBetweenlands.CAVE_START - player.posY) / WorldProviderBetweenlands.CAVE_START);
-			fogColorMultiplier = 1.0F - fogColorMultiplier;
-			fogColorMultiplier *= Math.pow(fogColorMultiplier, 8.5);
-			fogColorMultiplier = fogColorMultiplier * 0.95F + 0.05F;
-			if(player.posY <= WorldProviderBetweenlands.PITSTONE_HEIGHT) {
-				float targettedMultiplier = 0.3F;
-				if(fogColorMultiplier < targettedMultiplier) {
-					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - player.posY)), 0.85F);
-				}
-			}
-			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0, 1);
-			fogColorMultiplier = Math.min(fogColorMultiplier / (float)Math.pow(lowViewDistanceFogReduction, 1.0F + (1.0F - fogColorMultiplier) * 1.5F), 1.0F);
-			defaultFogStart = fogStart = defaultFogStart * Math.min(fogColorMultiplier * (1.0F + uncloudedStrength * (1.0F / fogColorMultiplier - 1.0F)), 1.0F);
-			defaultFogEnd = fogEnd = defaultFogEnd * Math.min((fogColorMultiplier * 1.5F) * (1.0F + uncloudedStrength * (1.0F / (fogColorMultiplier * 1.5F) - 1.0F)), 1.0F);
-		}
-
-		//Location fog
-		LocationAmbience ambience = LocationStorage.getAmbience(player);
-		if(ambience != null) {
-			if(ambience.hasFogRange()) {
-				fogStart = ambience.getFogStart();
-				fogEnd = ambience.getFogEnd();
-			}
-			if(ambience.hasFogRangeMultiplier()) {
-				float rangeMultiplier = ambience.getFogRangeMultiplier();
-				if(rangeMultiplier < 1.0F)
-					rangeMultiplier = Math.min(rangeMultiplier / (float)Math.pow(lowViewDistanceFogReduction, 2.0F - rangeMultiplier), 1.0F);
-				fogStart *= ambience.getFogRangeMultiplier();
-				fogEnd *= ambience.getFogRangeMultiplier();
-			}
-			if(ambience.hasFogColorMultiplier()) {
-				fogColorMultiplier = ambience.getFogColorMultiplier();
-			}
-		}
-
-
-		fogEnd = MathHelper.clamp_float(fogEnd, 3, farPlaneDistance);
-		fogStart = MathHelper.clamp_float(fogStart, 1, fogEnd);
-
-		if(currentFogStart < 0.0F || currentFogEnd < 0.0F) {
-			currentFogStart = fogStart;
-			currentFogEnd = fogEnd;
-		}
-
-		float fogDistIncrMultiplier = player.posY <= WorldProviderBetweenlands.CAVE_START ? 2.0F : 1.0F;
-		lastFogStart = currentFogStart;
-		lastFogEnd = currentFogEnd;
-		if(Math.abs(currentFogStart - fogStart) > fogDistIncrMultiplier) {
-			float currentFogStartIncr = Math.abs(currentFogStart - fogStart)/farPlaneDistance/2.0f*fogDistIncrMultiplier;
-			if(currentFogStart > fogStart) {
-				currentFogStart-=currentFogStartIncr;
-			} else if(currentFogStart < fogStart) {
-				currentFogStart+=currentFogStartIncr;
-			}
-		}
-		if(Math.abs(currentFogEnd - fogEnd) > fogDistIncrMultiplier) {
-			float currentFogEndIncr = Math.abs(currentFogEnd - fogEnd)/farPlaneDistance/2.0f*fogDistIncrMultiplier;
-			if(currentFogEnd > fogEnd) {
-				currentFogEnd-=currentFogEndIncr;
-			} else if(currentFogEnd < fogEnd) {
-				currentFogEnd+=currentFogEndIncr;
-			}
-		}
-
-		float targettedFogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier * 2.0F, 0.0F, 1.0F);
-		if(currentFogColorMultiplier < 0.0F) {
-			currentFogColorMultiplier = targettedFogColorMultiplier;
-			lastFogColorMultiplier = targettedFogColorMultiplier;
-		}
-		lastFogColorMultiplier = currentFogColorMultiplier;
-		float fogColorMultiplierIncr = 0.005F;
-		if(Math.abs(currentFogColorMultiplier - targettedFogColorMultiplier) > fogColorMultiplierIncr) {
-			if(currentFogColorMultiplier > targettedFogColorMultiplier) {
-				currentFogColorMultiplier-=fogColorMultiplierIncr;
-			} else if(currentFogColorMultiplier < targettedFogColorMultiplier) {
-				currentFogColorMultiplier+=fogColorMultiplierIncr;
-			}
-		} else {
-			currentFogColorMultiplier = targettedFogColorMultiplier;
+		if(world != null && player != null && farPlaneDistance != 0.0F && player.dimension == ConfigHandler.dimensionId) {
+			state.update(world, player.getPositionVector(), farPlaneDistance, 0);
 		}
 	}
 
@@ -254,7 +147,8 @@ public class FogHandler {
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderView != null) {
 			IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.worldObj, renderView, (float) event.getRenderPartialTicks());
-			float fogColorMultiplier = (float) (currentFogColorMultiplier + (currentFogColorMultiplier - lastFogColorMultiplier) * event.getRenderPartialTicks());
+			Fog fog = state.getFog((float)event.getRenderPartialTicks());
+			float fogColorMultiplier = fog.getColorMultiplier();
 			if(blockState.getBlock() instanceof BlockSwampWater) {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
 				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.worldObj, pos, 0);
@@ -271,9 +165,9 @@ public class FogHandler {
 			} else if(renderView.dimension == ConfigHandler.dimensionId) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) renderView.getEntityWorld().provider;
 				Vec3d fogColor = provider.getFogColor(renderView.getEntityWorld().getCelestialAngle((float)event.getRenderPartialTicks()), (float)event.getRenderPartialTicks());
-				event.setRed((float)fogColor.xCoord * fogColorMultiplier);
-				event.setGreen((float)fogColor.yCoord * fogColorMultiplier);
-				event.setBlue((float)fogColor.zCoord * fogColorMultiplier);
+				event.setRed((float)fogColor.xCoord);
+				event.setGreen((float)fogColor.yCoord);
+				event.setBlue((float)fogColor.zCoord);
 			}
 		}
 	}
@@ -295,5 +189,92 @@ public class FogHandler {
 				event.setCanceled(true);
 			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void updateFog(UpdateFogEvent event) {
+		Vec3d position = event.getPosition();
+		World world = event.getWorld();
+		FogState state = event.getFogState();
+		Fog biomeFog = event.getBiomeFog();
+		MutableFog fog = new MutableFog(event.getAmbientFog());
+
+		float fogBrightness = 0;
+
+		if(hasDenseFog()) {
+			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
+				fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
+			}
+			float lowViewDistanceFogReduction = state.getLowDistanceFogReduction(biomeFog.getEnd());
+			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);
+			float denseFogStart = state.getFixedFogStart(biomeFog.getStart()) / Math.max(8.0f * lowViewDistanceFogReduction, 1) * range[0];
+			float denseFogEnd = state.getFixedFogStart(biomeFog.getEnd()) / Math.max(3.0f * lowViewDistanceFogReduction, 1) * range[1];
+
+			fog.setStart(Math.min(fog.getStart(), denseFogStart));
+			fog.setEnd(Math.min(fog.getEnd(), denseFogEnd));
+
+			final int transitionStart = WorldProviderBetweenlands.CAVE_START;
+			final int transitionEnd = WorldProviderBetweenlands.CAVE_START - 15;
+			float y = (float) event.getPosition().yCoord;
+
+			if (y < transitionStart) {
+				if (transitionEnd < y) {
+					fogBrightness = (y - transitionEnd) / (transitionStart - transitionEnd) * 80;
+				}
+			} else {
+				fogBrightness = 80;
+			}
+		}
+
+		LocationAmbience ambience = LocationStorage.getAmbience(world, position);
+
+		if(ambience != null) {
+			if(ambience.hasFogBrightness()) {
+				fogBrightness = ambience.getFogBrightness();
+			}
+
+			if(ambience.hasFogColor()) {
+				int[] color = ambience.getFogColor();
+				fog.setRed(color[0] / 255.0F).setGreen(color[1] / 255.0F).setBlue(color[2] / 255.0F);
+			}
+
+			if(ambience.hasFogColorMultiplier()) {
+				fog.setColorMultiplier(ambience.getFogColorMultiplier());
+			}
+
+			if(ambience.hasFogRange()) {
+				fog.setStart(ambience.getFogStart());
+				fog.setEnd(ambience.getFogEnd());
+			}
+
+			if(ambience.hasFogRangeMultiplier()) {
+				fog.setStart(fog.getStart() * ambience.getFogRangeMultiplier());
+				fog.setStart(fog.getEnd() * ambience.getFogRangeMultiplier());
+			}
+		}
+
+		if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().BLOODSKY.isActive()) {
+			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
+				fog.setRed(0.74F).setGreen(0.18F).setBlue(0.08F);
+			} else {
+				fogBrightness = 0;
+			}
+		} else if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().SPOOPY.isActive()) {
+			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
+				fog.setRed(0.4F).setGreen(0.22F).setBlue(0.08F);
+			} else {
+				fogBrightness = 0;
+			}
+		}
+
+		float[] color = new float[] { fog.getRed(), fog.getGreen(), fog.getBlue() };
+		for(int i = 0; i < 3; i++) {
+			float diff = 1.0F - color[i];
+			color[i] = color[i] + (diff * fogBrightness / 255.0F);
+		}
+		fog.setRed(color[0]).setGreen(color[1]).setBlue(color[2]);
+
+		state.setTargetFog(fog);
 	}
 }

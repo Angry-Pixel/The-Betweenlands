@@ -94,7 +94,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 		float fogStart = Math.min(10, super.getFogStart(farPlaneDistance, mode));
 
-		return fogStart + (fogEnd - fogStart) * this.fogRangeInterpolateEnd;
+		return fogStart + ((fogEnd - fogStart) * this.fogRangeInterpolateEnd + 16.0F);
 	}
 
 	@Override
@@ -105,16 +105,16 @@ public class BiomeMarsh extends BiomeBetweenlands {
 			return super.getFogRGB();
 
 		int[] targetFogColor = super.getFogRGB().clone();
-		float m = 150.0F - this.fogRangeInterpolateEnd * 150.0F;
+		float fogBrightness = 110.0F - this.fogRangeInterpolateEnd * 110.0F;
 
-		if (m < 0) {
-			m = 0.0f;
-		} else if (m > 150) {
-			m = 150;
+		if (fogBrightness < 0) {
+			fogBrightness = 0.0f;
+		} else if (fogBrightness > 110) {
+			fogBrightness = 110;
 		}
 		for (int i = 0; i < 3; i++) {
 			int diff = 255 - targetFogColor[i];
-			targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * m));
+			targetFogColor[i] = (int) (targetFogColor[i] + (diff / 255.0D * fogBrightness));
 		}
 
 		return targetFogColor;

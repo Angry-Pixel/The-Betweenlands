@@ -2,6 +2,7 @@
 
 //Definitions
 #define CONST_EXP 2048
+#define CONST_EXP2 2049
 #define CONST_LINEAR 9729
 
 //Sampler that holds the rendered world
@@ -63,6 +64,9 @@ float getFogMultiplier(vec3 fragPos) {
     } else if(u_fogMode == CONST_EXP) {
         //Calculate exponential fog
         return 1.0F - clamp(exp(-gl_Fog.density * length(fragPos)), 0.0F, 1.0F);
+    } else if(u_fogMode == CONST_EXP2) {
+        //Calculate exponential^2 fog
+        return 1.0F - clamp(exp(-pow(gl_Fog.density * length(fragPos), 2.0F)), 0.0F, 1.0F);
     }
     return 0.0F;
 }
