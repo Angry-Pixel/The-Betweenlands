@@ -32,7 +32,7 @@ public class LocationSpawnEntry extends BLSpawnEntry {
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, pos.getX(), pos.getZ());
 		for(LocationStorage location : locations) {
-			if(this.locationType.equals(location.getType())) {
+			if(this.locationType.equals(location.getType()) && location.isInside(pos)) {
 				inLocation = true;
 				break;
 			}
