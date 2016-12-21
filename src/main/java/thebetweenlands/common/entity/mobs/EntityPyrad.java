@@ -42,7 +42,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityPyrad extends EntityMob implements IEntityBL {
 	public static final IAttribute FLAMES_PER_ATTACK = (new RangedAttribute(null, "bl.flamesPerAttack", 6.0D, 1.0D, 64.0D)).setDescription("Number range of flames per attack");
-	
+
 	private static final DataParameter<Boolean> CHARGING = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ACTIVE = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 
@@ -183,12 +183,18 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			this.motionY *= 0.6D;
 		}
 
-		if(!this.worldObj.isRemote && this.isEntityAlive() && this.isInWater() && !this.isActive()) {
-			this.setActive(true);
-		}
+		if(!this.worldObj.isRemote) {
+			if(this.isEntityAlive() && this.isInWater() && !this.isActive()) {
+				this.setActive(true);
+			}
 
-		if(!this.worldObj.isRemote && this.isEntityAlive() && this.isActive() && this.getAttackTarget() == null && this.rand.nextInt(800) == 0) {
-			this.setActive(false);
+			if(this.isEntityAlive() && this.isActive() && this.getAttackTarget() == null && this.rand.nextInt(800) == 0) {
+				this.setActive(false);
+			}
+
+			if(this.isInWater() && this.isActive()) {
+				this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 1.0D);
+			}
 		}
 
 		this.prevGlowTicks = this.glowTicks;
@@ -501,7 +507,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 						this.pyrad.worldObj.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
 
 						int numberFlames = (int)this.pyrad.getEntityAttribute(FLAMES_PER_ATTACK).getAttributeValue();
-						
+
 						for (int i = 0; i < (numberFlames > 1 ? this.pyrad.rand.nextInt(numberFlames) : 0) + 1; ++i) {
 							EntityPyradFlame flame = new EntityPyradFlame(this.pyrad.worldObj, this.pyrad, dx + this.pyrad.getRNG().nextGaussian() * (double)f, dy, dz + this.pyrad.getRNG().nextGaussian() * (double)f);
 							flame.posY = this.pyrad.posY + (double)(this.pyrad.height / 2.0F) + 0.5D;

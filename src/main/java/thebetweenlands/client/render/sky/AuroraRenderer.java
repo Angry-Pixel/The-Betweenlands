@@ -70,6 +70,18 @@ public class AuroraRenderer {
 	public double getDistance(double x, double y, double z) {
 		return Math.sqrt((this.x-x)*(this.x-x)+(this.y-y)*(this.y-y)+(this.z-z)*(this.z-z));
 	}
+	
+	public double getX() {
+		return this.x;
+	}
+	
+	public double getY() {
+		return this.y;
+	}
+	
+	public double getZ() {
+		return this.z;
+	}
 
 	public void render(float alphaMultiplier, List<Vector4f> colorGradients) {
 		//TODO: Only generate vertices once per tick and then interpolate

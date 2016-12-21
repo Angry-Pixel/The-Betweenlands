@@ -329,13 +329,13 @@ public class BLSkyRenderer extends IRenderHandler {
 		Random rand = mc.theWorld.rand;
 		double newAuroraPosX = mc.thePlayer.posX + rand.nextInt(160) - 80;
 		double newAuroraPosZ = mc.thePlayer.posZ + rand.nextInt(160) - 80;
-		double newAuroraPosY = 180;
+		double newAuroraPosY = 260;
 		double minDist = 0.0D;
 
 		Iterator<AuroraRenderer> auroraIT = this.auroras.iterator();
 		while(auroraIT.hasNext()) {
 			AuroraRenderer aurora = auroraIT.next();
-			if(aurora.getDistance(mc.thePlayer.posX, mc.thePlayer.posY, mc.thePlayer.posZ) > 180) {
+			if(aurora.getDistance(mc.thePlayer.posX, aurora.getY(), mc.thePlayer.posZ) > 180) {
 				auroraIT.remove();
 				this.auroras.remove(aurora);
 			}
@@ -345,7 +345,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			}
 		}
 		if(minDist > 150 || this.auroras.size() == 0) {
-			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY, newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(40) + 15));
+			this.auroras.add(new AuroraRenderer(newAuroraPosX, newAuroraPosY + rand.nextInt(100), newAuroraPosZ, new Vector2d(rand.nextFloat()*2.0F-1.0F, rand.nextFloat()*2.0F-1.0F), rand.nextInt(40) + 15));
 		}
 
 		List<Vector4f> gradients = new ArrayList<Vector4f>();
