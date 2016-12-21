@@ -11,7 +11,7 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		super.decorate(world, generator, rand, x, z);
 
 		//TODO: Implement missing generators
-		//this.generate(70, DecorationHelper::generateGiantWeedwoodTree);
+		this.generate(0.25F, DecorationHelper::generateGiantTree);
 		//this.generate(10, DecorationHelper::generateWightFortress);
 		this.generate(1, DecorationHelper::generateWeedwoodTree);
 		this.generate(0.5F, DecorationHelper::generateSpawnerStructure);

@@ -54,7 +54,7 @@ public class Fungus {
 				if (world.getBlockState(coord).getMaterial().isReplaceable() || world.getBlockState(coord.up()).getMaterial().isReplaceable()) {
 					world.setBlockState(coord, BlockRegistry.SHELF_FUNGUS.getDefaultState());
 				}
-				for (EnumFacing direction : WorldGenGiantTree.DIRECTIONS) {
+				for (EnumFacing direction : WorldGenGiantTreeTrunk.DIRECTIONS) {
 					BlockPos neighborCoord = new BlockPos(coord.getX() + direction.getFrontOffsetX(), coord.getY(), coord.getZ() + direction.getFrontOffsetZ());
 					IBlockState block = world.getBlockState(neighborCoord);
 					IBlockState above = world.getBlockState(neighborCoord.up());

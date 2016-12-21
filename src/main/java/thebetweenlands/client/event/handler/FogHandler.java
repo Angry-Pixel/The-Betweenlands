@@ -15,6 +15,7 @@ import net.minecraft.potion.Potion;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogColors;
 import net.minecraftforge.client.event.EntityViewRenderEvent.FogDensity;
 import net.minecraftforge.client.event.EntityViewRenderEvent.RenderFogEvent;
@@ -30,6 +31,7 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
@@ -135,8 +137,15 @@ public class FogHandler {
 		World world = TheBetweenlands.proxy.getClientWorld();
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
-		if(world != null && player != null && farPlaneDistance != 0.0F && player.dimension == ConfigHandler.dimensionId) {
-			state.update(world, player.getPositionVector(), farPlaneDistance, 0);
+		if(world != null && player != null) {
+			if(farPlaneDistance != 0.0F && player.dimension == ConfigHandler.dimensionId) {
+				state.update(world, player.getPositionVector(), farPlaneDistance, 0);
+			}
+			
+			Biome biome = world.getBiomeForCoordsBody(player.getPosition());
+			if(biome instanceof BiomeBetweenlands) {
+				((BiomeBetweenlands)biome).updateFog();
+			}
 		}
 	}
 

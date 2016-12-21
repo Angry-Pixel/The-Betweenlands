@@ -12,7 +12,7 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 
 		//TODO: Implement missing generators
 		this.generate(8, DecorationHelper::generateTarPoolSurface);
-		//this.generate(30, DecorationHelper::generateGiantWeedwoodTree);
+		this.generate(0.75F, DecorationHelper::generateGiantTree);
 		//this.generate(10, DecorationHelper::generateDeadTree);
 		//this.generate(2, DecorationHelper::generateRottenLogStructure);
 		this.generate(4, DecorationHelper::generateSmallHollowLog);

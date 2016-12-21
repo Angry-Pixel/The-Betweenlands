@@ -60,10 +60,12 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	}
 
 	private static WorldDataBase<?> getMatchingData(World world, Class<? extends WorldDataBase<?>> clazz) {
-		for (Entry<WorldDataTypePair, WorldDataBase<?>> cacheEntry : CACHE.entrySet()) {
-			WorldDataTypePair pair = cacheEntry.getKey();
-			if (pair.world == world && pair.data.equals(clazz)) {
-				return cacheEntry.getValue();
+		synchronized(CACHE) {
+			for (Entry<WorldDataTypePair, WorldDataBase<?>> cacheEntry : CACHE.entrySet()) {
+				WorldDataTypePair pair = cacheEntry.getKey();
+				if (pair.world == world && pair.data.equals(clazz)) {
+					return cacheEntry.getValue();
+				}
 			}
 		}
 		return null;
@@ -106,11 +108,13 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 		result.sharedStorageDir = new File(world.getSaveHandler().getWorldDirectory(), "data" + File.separator + "shared_storage" + File.separator);
 
 		//Gather capabilities
-		AttachCapabilitiesEvent event = new AttachWorldCapabilitiesEvent(result);
+		AttachCapabilitiesEvent<WorldDataBase<?>> event = new AttachWorldCapabilitiesEvent(result);
 		MinecraftForge.EVENT_BUS.post(event);
 		result.capabilities = event.getCapabilities().size() > 0 ? new CapabilityDispatcher(event.getCapabilities(), null) : null;
 
-		CACHE.put(new WorldDataTypePair(world, clazz), result);
+		synchronized(CACHE) {
+			CACHE.put(new WorldDataTypePair(world, clazz), result);
+		}
 
 		return (T) result;
 	}
@@ -415,36 +419,40 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 
 		@SubscribeEvent
 		public void onWorldUnload(WorldEvent.Unload event) {
-			Iterator<Entry<WorldDataTypePair, WorldDataBase<?>>> cacheIT = CACHE.entrySet().iterator();
-			while(cacheIT.hasNext()) {
-				Entry<WorldDataTypePair, WorldDataBase<?>> entry = cacheIT.next();
-				World world = entry.getKey().world;
-				if(world.equals(event.getWorld())) {
-					//Unload and save shared storages
-					WorldDataBase<?> worldStorage = entry.getValue();
-					List<SharedStorage> sharedStorages = new ArrayList<>();
-					sharedStorages.addAll(worldStorage.getSharedStorage());
-					for(SharedStorage sharedStorage : sharedStorages) {
-						worldStorage.unloadSharedStorage(sharedStorage);
-					}
+			synchronized(CACHE) {
+				Iterator<Entry<WorldDataTypePair, WorldDataBase<?>>> cacheIT = CACHE.entrySet().iterator();
+				while(cacheIT.hasNext()) {
+					Entry<WorldDataTypePair, WorldDataBase<?>> entry = cacheIT.next();
+					World world = entry.getKey().world;
+					if(world.equals(event.getWorld())) {
+						//Unload and save shared storages
+						WorldDataBase<?> worldStorage = entry.getValue();
+						List<SharedStorage> sharedStorages = new ArrayList<>();
+						sharedStorages.addAll(worldStorage.getSharedStorage());
+						for(SharedStorage sharedStorage : sharedStorages) {
+							worldStorage.unloadSharedStorage(sharedStorage);
+						}
 
-					//Remove entry
-					cacheIT.remove();
+						//Remove entry
+						cacheIT.remove();
+					}
 				}
 			}
 		}
 
 		@SubscribeEvent
 		public void onWorldSave(WorldEvent.Save event) {
-			for(WorldDataBase<?> worldStorage : CACHE.values()) {
-				//Save shared storages
-				List<SharedStorage> sharedStorages = new ArrayList<>();
-				sharedStorages.addAll(worldStorage.getSharedStorage());
-				for(SharedStorage sharedStorage : sharedStorages) {
-					//Only save if dirty
-					if(sharedStorage.isDirty()) {
-						worldStorage.saveSharedStorageFile(sharedStorage);
-						sharedStorage.setDirty(false);
+			synchronized(CACHE) {
+				for(WorldDataBase<?> worldStorage : CACHE.values()) {
+					//Save shared storages
+					List<SharedStorage> sharedStorages = new ArrayList<>();
+					sharedStorages.addAll(worldStorage.getSharedStorage());
+					for(SharedStorage sharedStorage : sharedStorages) {
+						//Only save if dirty
+						if(sharedStorage.isDirty()) {
+							worldStorage.saveSharedStorageFile(sharedStorage);
+							sharedStorage.setDirty(false);
+						}
 					}
 				}
 			}
@@ -452,9 +460,12 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 
 		@SubscribeEvent
 		public void onWorldTick(WorldTickEvent event) {
-			for(WorldDataBase<?> worldStorage : CACHE.values()) {
-				for(SharedStorage sharedStorage : worldStorage.tickableSharedStorage) {
-					((ITickable)sharedStorage).update();
+			synchronized(CACHE) {
+				for(WorldDataBase<?> worldStorage : CACHE.values()) {
+					for(int i = 0; i < worldStorage.tickableSharedStorage.size(); i++) {
+						SharedStorage sharedStorage = worldStorage.tickableSharedStorage.get(i);
+						((ITickable)sharedStorage).update();
+					}
 				}
 			}
 		}

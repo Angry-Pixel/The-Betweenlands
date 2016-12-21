@@ -8,7 +8,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.plant.BlockVineBL;
 
-public class WorldGenGiantTreeDead extends WorldGenGiantTree {
+public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 	private static final float TILT_SCALE = 0.2F;
 
 	private float tiltOffsetX;

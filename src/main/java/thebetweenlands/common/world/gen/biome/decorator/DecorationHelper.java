@@ -1,6 +1,8 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
 import java.util.Collection;
+import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
@@ -34,8 +36,10 @@ import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
@@ -91,6 +95,7 @@ public class DecorationHelper {
 	private static final WorldGenerator GEN_SPAWNER_STRUCTURE = new WorldGenSpawnerStructure();
 	private static final WorldGenerator GEN_IDOL_HEAD = new WorldGenIdolHeads();
 	private static final WorldGenerator GEN_SMALL_RUINS = new WorldGenSmallRuins();
+	private static final WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -714,6 +719,23 @@ public class DecorationHelper {
 				}
 			}
 			return decorator.getWorld().setBlockState(pos, BlockRegistry.WISP.getDefaultState().withProperty(BlockWisp.COLOR, color));
+		}
+		return false;
+	}
+
+	public static boolean generateGiantTree(BiomeDecoratorBetweenlands decorator) {
+		BlockPos pos = decorator.getRandomPosSeaGround();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld().getBlockState(pos.down()))) {
+			long seed = decorator.getRand().nextLong();
+			pos = pos.add(0, -8, 0);
+			if(GEN_GIANT_TREE.canGenerateAt(decorator.getWorld(), new Random(seed), pos)) {
+				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(decorator.getWorld());
+				WorldGenGiantTree.ChunkMaker marker = new WorldGenGiantTree.ChunkMaker(worldStorage, UUID.randomUUID(), pos, seed);
+				marker.linkChunk(decorator.getWorld().getChunkFromBlockCoords(pos));
+				marker.setDirty(true);
+				worldStorage.addSharedStorage(marker);
+				return true;
+			}
 		}
 		return false;
 	}
