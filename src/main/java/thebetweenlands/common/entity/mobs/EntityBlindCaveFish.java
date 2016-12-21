@@ -17,119 +17,124 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntityBlindCaveFish extends EntityWaterMob implements IEntityBL, IMob {
-    public float moveProgress;
-    private BlockPos currentSwimTarget;
-    private AnimationMathHelper animation = new AnimationMathHelper();
+	public float moveProgress;
+	private BlockPos currentSwimTarget;
+	private AnimationMathHelper animation = new AnimationMathHelper();
 
-    public EntityBlindCaveFish(World world) {
-        super(world);
-        setSize(0.3F, 0.2F);
-        setAir(80);
-    }
+	public EntityBlindCaveFish(World world) {
+		super(world);
+		setSize(0.3F, 0.2F);
+		setAir(80);
+	}
 
-    @Override
-    protected void entityInit() {
-        super.entityInit();
-    }
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+	}
 
-    @Override
-    protected void applyEntityAttributes() {
-        super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1D);
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
-    }
-
-
-    @Override
-    protected SoundEvent getHurtSound() {
-        return SoundRegistry.ANGLER_ATTACK;
-    }
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
+	}
 
 
-    @Override
-    protected SoundEvent getDeathSound() {
-        return SoundRegistry.ANGLER_DEATH;
-    }
+	@Override
+	protected SoundEvent getHurtSound() {
+		return SoundRegistry.ANGLER_ATTACK;
+	}
 
-    @Override
-    @MethodsReturnNonnullByDefault
-    protected SoundEvent getSwimSound() {
-        return SoundEvents.ENTITY_HOSTILE_SWIM;
-    }
 
-    @Override
-    protected float getSoundVolume() {
-        return 0.4F;
-    }
+	@Override
+	protected SoundEvent getDeathSound() {
+		return SoundRegistry.ANGLER_DEATH;
+	}
 
-    @Override
-    public boolean getCanSpawnHere() {
-        return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
-    }
+	@Override
+	@MethodsReturnNonnullByDefault
+	protected SoundEvent getSwimSound() {
+		return SoundEvents.ENTITY_HOSTILE_SWIM;
+	}
 
-    @Override
-    public boolean isInWater() {
-        return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
-    }
+	@Override
+	protected float getSoundVolume() {
+		return 0.4F;
+	}
 
-    @Override
-    public void onLivingUpdate() {
-        super.onLivingUpdate();
+	@Override
+	public boolean getCanSpawnHere() {
+		return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+	}
 
-        if (!this.worldObj.isRemote) {
-            if (isInWater()) {
-                if (!worldObj.isRemote) {
-                    swimAbout();
-                }
-                this.velocityChanged = true;
-            }
-        } else {
-            if (isInWater()) {
-                moveProgress = animation.swing(1.2F, 0.4F, false);
-                renderYawOffset += (-((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI - renderYawOffset) * 0.1F;
-                rotationYaw = renderYawOffset;
-            } else {
-                moveProgress = animation.swing(2F, 0.4F, false);
-            }
-        }
-    }
+	@Override
+	public boolean isInWater() {
+		return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+	}
 
-    @Override
-    public void onEntityUpdate() {
-        int air = getAir();
-        super.onEntityUpdate();
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
 
-        if (isEntityAlive() && !isInWater()) {
-            --air;
-            setAir(air);
+		if (!this.worldObj.isRemote) {
+			if (isInWater()) {
+				if (!worldObj.isRemote) {
+					swimAbout();
+				}
+				this.velocityChanged = true;
+			}
+		} else {
+			if (isInWater()) {
+				moveProgress = animation.swing(1.2F, 0.4F, false);
+				renderYawOffset += (-((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI - renderYawOffset) * 0.1F;
+				rotationYaw = renderYawOffset;
+			} else {
+				moveProgress = animation.swing(2F, 0.4F, false);
+			}
+		}
+	}
 
-            if (getAir() == -20) {
-                setAir(0);
-                attackEntityFrom(DamageSource.drown, 2.0F);
-            }
-        } else
-            setAir(80);
-    }
+	@Override
+	public void onEntityUpdate() {
+		int air = getAir();
+		super.onEntityUpdate();
 
-    public void swimAbout() {
-        if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.SWAMP_WATER && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
-            currentSwimTarget = null;
+		if (isEntityAlive() && !isInWater()) {
+			--air;
+			setAir(air);
 
-        if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10.0F)
-            currentSwimTarget = new BlockPos((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(5) + 2, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
+			if (getAir() == -20) {
+				setAir(0);
+				attackEntityFrom(DamageSource.drown, 2.0F);
+			}
+		} else
+			setAir(80);
+	}
 
-        swimToTarget();
-    }
+	@Override
+	public boolean isNotColliding() {
+		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+	}
 
-    protected void swimToTarget() {
-        double targetX = currentSwimTarget.getX() + 0.5D - posX;
-        double targetY = currentSwimTarget.getY() + 0.5D - posY;
-        double targetZ = currentSwimTarget.getZ() + 0.5D - posZ;
-        double dist = Math.sqrt(targetX * targetX + targetY * targetY + targetZ * targetZ);
-        motionX = (targetX / dist) * 0.06D;
-        motionY = (targetY / dist) * 0.06D;
-        motionY -= 0.03D;
-        motionZ = (targetZ / dist) * 0.06D;
-        moveForward = 0.5F;
-    }
+	public void swimAbout() {
+		if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getBlock() != BlockRegistry.SWAMP_WATER && worldObj.getBlockState(currentSwimTarget).getBlock() != Blocks.WATER || currentSwimTarget.getY() < 1))
+			currentSwimTarget = null;
+
+		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10.0F)
+			currentSwimTarget = new BlockPos((int) posX + rand.nextInt(10) - rand.nextInt(10), (int) posY - rand.nextInt(5) + 2, (int) posZ + rand.nextInt(10) - rand.nextInt(10));
+
+		swimToTarget();
+	}
+
+	protected void swimToTarget() {
+		double targetX = currentSwimTarget.getX() + 0.5D - posX;
+		double targetY = currentSwimTarget.getY() + 0.5D - posY;
+		double targetZ = currentSwimTarget.getZ() + 0.5D - posZ;
+		double dist = Math.sqrt(targetX * targetX + targetY * targetY + targetZ * targetZ);
+		motionX = (targetX / dist) * 0.06D;
+		motionY = (targetY / dist) * 0.06D;
+		motionY -= 0.03D;
+		motionZ = (targetZ / dist) * 0.06D;
+		moveForward = 0.5F;
+	}
 }

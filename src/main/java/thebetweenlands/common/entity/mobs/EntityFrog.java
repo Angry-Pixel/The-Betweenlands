@@ -148,9 +148,9 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 			}
 		}
 
-        if (worldObj.isRemote && getSkin() == 4 && worldObj.getWorldTime() % 10 == 0) {
-            BLParticles.DIRT_DECAY.spawn(worldObj, posX, posY + 0.5D, posZ);
-        }
+		if (worldObj.isRemote && getSkin() == 4 && worldObj.getWorldTime() % 10 == 0) {
+			BLParticles.DIRT_DECAY.spawn(worldObj, posX, posY + 0.5D, posZ);
+		}
 	}
 
 	@Override
@@ -172,6 +172,11 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 					player.addPotionEffect(new PotionEffect(MobEffects.POISON, duration * 20, 0));
 			}
 		}
+	}
+
+	@Override
+	public boolean isNotColliding() {
+		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
 	}
 
 	public int getSkin() {
@@ -222,7 +227,6 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 				entityDropItem(EnumItemMisc.POISON_GLAND.create(1), 0.0F);
 		}
 	}
-
 
 	@SideOnly(Side.CLIENT)
 	@Override

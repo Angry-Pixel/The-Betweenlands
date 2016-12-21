@@ -45,14 +45,14 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 		setSize(0.8F, 0.7F);
 		this.moveHelper = new EntityAngler.AnglerMoveHelper(this);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true) {
 			@Override
 			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-		        return 0.85D + attackTarget.width;
-		    }
+				return 0.85D + attackTarget.width;
+			}
 		});
 		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
 		tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));
@@ -121,24 +121,19 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-    protected PathNavigate getNewNavigator(World world){
-        return new PathNavigateSwimmer(this, world);
-    }
+	protected PathNavigate getNewNavigator(World world){
+		return new PathNavigateSwimmer(this, world);
+	}
 
 	@Override
-    protected boolean isValidLightLevel() {
-        return true;
-    }
+	protected boolean isValidLightLevel() {
+		return true;
+	}
 
 	@Override
-    public boolean isNotColliding() {
-		 return this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty();
-    }
-
-	@Override
-    public float getBlockPathWeight(BlockPos pos) {
-        return worldObj.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + worldObj.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
-    }
+	public float getBlockPathWeight(BlockPos pos) {
+		return worldObj.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + worldObj.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+	}
 
 	@Override
 	public void onLivingUpdate() {
@@ -163,7 +158,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 			isAirBorne = true;
 			if(worldObj.getWorldTime()%5==0)
 				worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
-				this.damageEntity(DamageSource.drown, 0.5F);
+			this.damageEntity(DamageSource.drown, 0.5F);
 		}
 		super.onLivingUpdate();
 	}
@@ -171,20 +166,20 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		if(!worldObj.isRemote) {
-		if(getAttackTarget() != null && !worldObj.containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
-			Double distance = this.getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
-			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
-				if (isInWater() && worldObj.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
-					if(!isLeaping()) {
-						setIsLeaping(true);
-						worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
-					}
-					double distanceX = getAttackTarget().posX - posX;
-					double distanceZ = getAttackTarget().posZ - posZ;
-					float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
-					motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
-					motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
-					motionY = 0.4D;
+			if(getAttackTarget() != null && !worldObj.containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
+				Double distance = this.getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
+				if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
+					if (isInWater() && worldObj.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
+						if(!isLeaping()) {
+							setIsLeaping(true);
+							worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
+						}
+						double distanceX = getAttackTarget().posX - posX;
+						double distanceZ = getAttackTarget().posZ - posZ;
+						float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
+						motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
+						motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
+						motionY = 0.4D;
 					}
 			}
 		}
@@ -214,15 +209,20 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityAsMob(Entity entity) {
-			if (super.attackEntityAsMob(entity)) {
-				this.playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
-				return true;
-			}
+		if (super.attackEntityAsMob(entity)) {
+			this.playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
+			return true;
+		}
 		return false;
 	}
-	
+
+	@Override
+	public boolean isNotColliding() {
+		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+	}
+
 	//AIs
-	
+
 	static class AnglerMoveHelper extends EntityMoveHelper {
 		private final EntityAngler angler;
 

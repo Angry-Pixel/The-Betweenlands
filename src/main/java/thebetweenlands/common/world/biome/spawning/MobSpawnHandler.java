@@ -494,7 +494,7 @@ public class MobSpawnHandler {
 								newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
 
 								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz);
-								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere())) {
+								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere() && newEntity.isNotColliding())) {
 									groupSpawnedEntities++;
 									chunkSpawnedEntities++;
 

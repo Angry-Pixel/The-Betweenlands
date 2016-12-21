@@ -130,6 +130,11 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public boolean isNotColliding() {
+		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+	}
+
+	@Override
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
