@@ -12,7 +12,7 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 
 		this.generate(50, DecorationHelper::generateWeedwoodTree);
 		this.generate(10, DecorationHelper::generateSapTree);
-		this.generate(0.5F, DecorationHelper::generateSunkenIdolHead);
+		this.generate(0.15F, DecorationHelper::generateSunkenIdolHead);
 		this.generate(5, DecorationHelper::generateCattailCluster);
 		this.generate(50, DecorationHelper::generateTallCattail);
 		this.generate(8, DecorationHelper::generateBigBulbCappedMushroom);

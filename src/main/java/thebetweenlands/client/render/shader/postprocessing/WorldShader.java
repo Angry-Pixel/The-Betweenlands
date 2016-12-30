@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
@@ -233,7 +234,9 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.uploadInt(this.lightSourceAmountUniformID, renderedLightSources);
 		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
 		this.uploadFloat(this.worldTimeUniformID, Minecraft.getMinecraft().theWorld.getWorldTime() + partialTicks);
-		this.uploadFloat(this.camPosUniformID, (float)renderPosX, (float)renderPosY, (float)renderPosZ);
+
+		Vec3d camPos = ActiveRenderInfo.projectViewFromEntity(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+		this.uploadFloat(this.camPosUniformID, (float)camPos.xCoord, (float)camPos.yCoord, (float)camPos.zCoord);
 	}
 
 	/**
