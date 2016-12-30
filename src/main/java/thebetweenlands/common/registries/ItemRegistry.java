@@ -61,6 +61,7 @@ import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
+import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSwampReed;
@@ -92,9 +93,10 @@ import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemRegistry {
     public final static List<Item> ITEMS = new ArrayList<Item>();
+    
     private ItemRegistry() {
+    	
     }
-
 
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
@@ -268,8 +270,9 @@ public class ItemRegistry {
     public static final Item FIREFLY = new ItemMob("firefly");
     public static final Item SHIMMER_STONE = new ItemShimmerStone();
     public static final Item TARMINION = new ItemTarminion();
+    public static final Item MOSS_BED_ITEM = new ItemMossBed();
     
-    public final static ItemDentrothystVial DENTROTHYST_VIAL = new ItemDentrothystVial();
+    public static final ItemDentrothystVial DENTROTHYST_VIAL = new ItemDentrothystVial();
     public static final ItemAspectVial ASPECT_VIAL = new ItemAspectVial();
     public static final Item WEEDWOOD_BUCKET_INFUSION = new ItemWeedwoodBucketInfusion();
 

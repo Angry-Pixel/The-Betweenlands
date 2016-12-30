@@ -67,7 +67,7 @@ public class Warp extends PostProcessingEffect<Warp> {
 	}
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		this.uploadFloat(this.timeUniformID, System.nanoTime() / 1000000.0F);
 		this.uploadFloat(this.scaleUniformID, this.scale);
 		this.uploadFloat(this.timeScaleUniformID, this.timeScale);

@@ -58,7 +58,7 @@ public class Starfield extends PostProcessingEffect<Starfield> {
 	}
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		this.uploadFloat(this.timeUniformID, System.nanoTime() / 1000000.0F);
 		this.uploadFloat(this.timeScaleUniformID, this.timeScale);
 		this.uploadFloat(this.zoomUniformID, this.zoom);

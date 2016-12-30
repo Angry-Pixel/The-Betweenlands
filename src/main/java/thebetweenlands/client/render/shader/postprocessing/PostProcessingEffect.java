@@ -312,7 +312,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 		}
 
 		//Uploads additional uniforms
-		this.uploadUniforms();
+		this.uploadUniforms(partialTicks);
 
 		//Render texture
 		GlStateManager.enableTexture2D();
@@ -521,7 +521,7 @@ public abstract class PostProcessingEffect<T extends PostProcessingEffect<?>> {
 	/**
 	 * Uploads any additional uniforms
 	 */
-	protected void uploadUniforms() {}
+	protected void uploadUniforms(float partialTicks) {}
 
 	/**
 	 * Returns additional stages.

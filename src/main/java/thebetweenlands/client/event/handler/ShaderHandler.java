@@ -33,8 +33,9 @@ public class ShaderHandler {
 
 	@SubscribeEvent
 	public void onPreRenderShaders(PreRenderShadersEvent event) {
-		if(ShaderHelper.INSTANCE.canUseShaders())
+		if(ShaderHelper.INSTANCE.canUseShaders()) {
 			ShaderHelper.INSTANCE.renderShaders(event.getPartialTicks());
+		}
 	}
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)

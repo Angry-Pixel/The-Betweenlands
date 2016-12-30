@@ -54,7 +54,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 			float radius = entity.getGlowTicks(partialTicks) / 20.0F * 7.0F;
 			if(radius > 0.1F) {
 				double interpX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
-				double interpY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
+				double interpY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - 0.5D;
 				double interpZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 
 				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ,

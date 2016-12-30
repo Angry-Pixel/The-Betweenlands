@@ -47,6 +47,7 @@ import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
+import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockRubberTap;
@@ -507,6 +508,7 @@ public class BlockRegistry {
 	public static final Block MORTAR = new BlockMortar();
 	public static final Block ANIMATOR = new BlockAnimator();
 	public static final Block ALEMBIC = new BlockAlembic();
+	public static final Block MOSS_BED = new BlockMossBed();
 	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 

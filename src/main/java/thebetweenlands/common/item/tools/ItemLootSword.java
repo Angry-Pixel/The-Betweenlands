@@ -17,7 +17,8 @@ public class ItemLootSword extends ItemBLSword {
         setCreativeTab(BLCreativeTabs.GEARS);
     }
 
-    public ItemLootSword addInstantKills(Class<? extends EntityLivingBase>... instantKills) {
+    @SafeVarargs
+	public final ItemLootSword addInstantKills(Class<? extends EntityLivingBase>... instantKills) {
         this.instantKills.addAll(Arrays.asList(instantKills));
         return this;
     }

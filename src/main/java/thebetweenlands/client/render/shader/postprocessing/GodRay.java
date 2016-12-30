@@ -64,7 +64,7 @@ public class GodRay extends PostProcessingEffect<GodRay> {
 	}
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		//Override diffuse sampler
 		this.uploadSampler(this.occlusionMapUniformID, this.occlusionMap.framebufferTexture, 0);
 

@@ -33,7 +33,7 @@ public class Tonemapper extends PostProcessingEffect<Tonemapper> {
 	}
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		this.uploadFloat(this.gammaUniformID, this.gamma);
 		this.uploadFloat(this.exposureUniformID, this.exposure);
 	}

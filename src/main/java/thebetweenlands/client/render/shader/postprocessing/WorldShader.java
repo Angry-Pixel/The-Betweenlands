@@ -66,6 +66,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private int[] lightSourceRadiusUniformIDs = new int[MAX_LIGHT_SOURCES_PER_PASS];
 	private int lightSourceAmountUniformID = -1;
 	private int msTimeUniformID = -1;
+	private int worldTimeUniformID = -1;
+	private int camPosUniformID = -1;
 
 	//Shader textures
 	private Framebuffer gasTextureBaseFramebuffer = null;
@@ -138,6 +140,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.invMVPUniformID = this.getUniform("u_INVMVP");
 		this.fogModeUniformID = this.getUniform("u_fogMode");
 		this.msTimeUniformID = this.getUniform("u_msTime");
+		this.worldTimeUniformID = this.getUniform("u_worldTime");
+		this.camPosUniformID = this.getUniform("u_camPos");
 
 		for (int i = 0; i < MAX_LIGHT_SOURCES_PER_PASS; i++) {
 			this.lightSourcePositionUniformIDs[i] = this.getUniform("u_lightSources[" + i + "].position");
@@ -200,7 +204,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	};
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		this.uploadSampler(this.depthUniformID, this.depthBuffer.getTexture(), 1);
 		this.uploadSampler(this.repellerDiffuseUniformID, this.repellerShieldBuffer.getDiffuseTexture(), 2);
 		this.uploadSampler(this.repellerDepthUniformID, this.repellerShieldBuffer.getDepthTexture(), 3);
@@ -228,6 +232,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		this.uploadInt(this.lightSourceAmountUniformID, renderedLightSources);
 		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
+		this.uploadFloat(this.worldTimeUniformID, Minecraft.getMinecraft().theWorld.getWorldTime() + partialTicks);
+		this.uploadFloat(this.camPosUniformID, (float)renderPosX, (float)renderPosY, (float)renderPosZ);
 	}
 
 	/**
@@ -334,7 +340,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	public GeometryBuffer getGasParticleBuffer() {
 		return this.gasParticlesBuffer;
 	}
-	
+
 	/**
 	 * Adds a dynamic light source for this frame
 	 *
@@ -627,7 +633,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
 			.render(partialTicks);
 		}
-		
+
 		//Update gas particles depth buffer
 		this.gasParticlesBuffer.updateDepthBuffer();
 	}
@@ -642,7 +648,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
 		.render(partialTicks);
 	}
-	
+
 	@Override
 	public void postRender(float partialTicks) {
 		//Clear gas particles buffer after rendering the shader for the next frame

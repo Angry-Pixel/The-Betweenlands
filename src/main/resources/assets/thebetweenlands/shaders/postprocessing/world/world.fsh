@@ -35,8 +35,8 @@ uniform int u_fogMode;
 //Cam pos
 uniform vec3 u_camPos;
 
-//Time in milliseconds
-uniform float u_msTime;
+//World time in ticks
+uniform float u_worldTime;
 
 //Fragment position [0.0, 1.0][0.0, 1.0]
 varying vec2 v_texCoord;
@@ -75,6 +75,44 @@ float getFogMultiplier(vec3 fragPos) {
 vec4 applyFog(vec3 fragPos, vec4 color) {
     return mix(color, vec4(0.0F, 0.0F, 0.0F, 0.0F), getFogMultiplier(fragPos));
 }
+
+//http://iquilezles.org/www/articles/spheredensity/spheredensity.htm
+/*float computeFog(vec3  ro, vec3  rd,   // ray origin, ray direction
+                 vec3  sc, float sr,   // sphere center, sphere radius
+                 float dbuffer) {
+    // normalize the problem to the canonical sphere
+    float ndbuffer = dbuffer / sr;
+    vec3  rc = (ro - sc) / sr;
+	
+    // find intersection with sphere
+    float b = dot(rd, rc);
+    float c = dot(rc, rc) - 1.0f;
+    float h = b*b - c;
+
+    // not intersecting
+    if(h<0.0f) {
+    	return 0.0f;
+	}
+	
+    h = sqrt( h );
+    float t1 = -b - h;
+    float t2 = -b + h;
+
+    // not visible (behind camera or behind ndbuffer)
+    if(t2<0.0f || t1>ndbuffer) {
+    	return 0.0f;
+	}
+
+    // clip integration segment from camera to ndbuffer
+    t1 = max(t1, 0.0f);
+    t2 = min(t2, ndbuffer);
+
+    // analytical integration of an inverse squared density
+    float i1 = -(c*t1 + b*t1*t1 + t1*t1*t1/3.0f);
+    float i2 = -(c*t2 + b*t2*t2 + t2*t2*t2/3.0f);
+    
+    return (i2 - i1) * (3.0f / 4.0f);
+}*/
 
 void main() {
     //Get fragment world position
@@ -138,7 +176,7 @@ void main() {
             
             //Calculate color distortion
             float fragDistortion = (shieldFragPos.y + u_camPos.y + (cos(shieldFragPos.x + u_camPos.x) * sin(shieldFragPos.z + u_camPos.z)) * 2.0F) * 8.0F;
-            float colorDistortion = ((sin(fragDistortion + u_msTime / 300.0F) + 1.0F) / 800.0F);
+            float colorDistortion = ((sin(fragDistortion + u_worldTime * 50.0F / 300.0F) + 1.0F) / 800.0F);
             shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 0.0F);
         }
         
@@ -188,7 +226,7 @@ void main() {
         color += sourceColor;
     } else {
         float fragDistortion = (fragPos.y + u_camPos.y + (cos(fragPos.x + u_camPos.x) * sin(fragPos.z + u_camPos.z))) * 5.0F;
-        sourceColor = vec4(texture2D(s_diffuse, v_texCoord + vec2(sin(fragDistortion + u_msTime / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
+        sourceColor = vec4(texture2D(s_diffuse, v_texCoord + vec2(sin(fragDistortion + u_worldTime * 50.0F / 300.0F) / 800.0F, 0.0F) * distortionMultiplier));
         color += sourceColor;
     }
     
@@ -200,8 +238,9 @@ void main() {
         vec3 lightPos = light.position;
         float dist = distance(lightPos, fragPos);
         float radius = light.radius;
+        vec3 lightColor = light.color;
+        
         if(dist < radius) {
-            vec3 lightColor = light.color;
             if(lightColor.r != -1 || lightColor.g != -1 || lightColor.b != -1) {
                 color += sourceColor * (vec4(lightColor * pow(1.0F - dist / radius, 2), 0.0F) * lightingFogMultiplier);
             }

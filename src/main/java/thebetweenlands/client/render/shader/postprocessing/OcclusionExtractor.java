@@ -28,7 +28,7 @@ public class OcclusionExtractor extends PostProcessingEffect<OcclusionExtractor>
 	}
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		//Override diffuse sampler
 		this.uploadSampler(this.worldDepthFBOUniformID, this.worldDepth, 0);
 		this.uploadSampler(this.clipPlaneDepthFBOUniformID, this.clipPlaneDepth, 1);

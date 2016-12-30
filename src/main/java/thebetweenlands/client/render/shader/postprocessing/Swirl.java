@@ -24,7 +24,7 @@ public class Swirl extends PostProcessingEffect<Swirl> {
 	}
 
 	@Override
-	protected void uploadUniforms() {
+	protected void uploadUniforms(float partialTicks) {
 		this.uploadFloat(this.angleUniformID, this.angle);
 	}
 }

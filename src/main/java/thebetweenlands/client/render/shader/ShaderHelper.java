@@ -31,6 +31,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	private boolean floatBufferSupported = false;
 	private boolean arbFloatBufferSupported = false;
 
+	private Exception shaderError = null;
 	private WorldShader worldShader = null;
 	private Tonemapper toneMappingShader = null;
 	private ResizableFramebuffer blitBuffer = null;
@@ -50,7 +51,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 */
 	public boolean canUseShaders() {
 		if(this.isShaderSupported()) {
-			return OpenGlHelper.isFramebufferEnabled() && ConfigHandler.useShader;
+			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && ConfigHandler.useShader;
 		} else {
 			//Shaders not supported, disable in config
 			ConfigHandler.useShader = false;
@@ -132,19 +133,24 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 */
 	public void updateShaders(float partialTicks) {
 		if(this.isRequired() && this.canUseShaders()) {
-			if(this.worldShader == null) {
-				this.worldShader = new WorldShader().init();
-			}
-			if(this.blitBuffer == null) {
-				this.blitBuffer = new ResizableFramebuffer(false);
-			}
-			if(this.toneMappingShader == null && this.isHDRActive()) {
-				this.toneMappingShader = new Tonemapper().init();
-			}
+			try {
+				if(this.worldShader == null) {
+					this.worldShader = new WorldShader().init();
+				}
+				if(this.blitBuffer == null) {
+					this.blitBuffer = new ResizableFramebuffer(false);
+				}
+				if(this.toneMappingShader == null && this.isHDRActive()) {
+					this.toneMappingShader = new Tonemapper().init();
+				}
 
-			this.worldShader.updateDepthBuffer();
-			this.worldShader.updateMatrices();
-			this.worldShader.updateTextures(partialTicks);
+				this.worldShader.updateDepthBuffer();
+				this.worldShader.updateMatrices();
+				this.worldShader.updateTextures(partialTicks);
+			} catch(Exception ex) {
+				this.shaderError = ex;
+				ex.printStackTrace();
+			}
 		}
 	}
 
@@ -249,6 +255,8 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 * Deletes the main shader
 	 */
 	public void deleteShaders() {
+		this.shaderError = null;
+		
 		if(this.worldShader != null)
 			this.worldShader.delete();
 		this.worldShader = null;
