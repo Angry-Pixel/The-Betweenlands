@@ -76,13 +76,10 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 			ParticleGasCloud particle = (ParticleGasCloud) obj;
 
 			if(!entity.isEntityAlive()) {
-				float alpha = 1.0F - (entity.deathTime / 80.0F);
-				particle.setAlphaF((float)Math.pow(alpha, 2));
-				int gasColor = entity.getGasColor();
-				float red = (gasColor >> 16 & 0xff) / 255F;
-				float green = (gasColor >> 8 & 0xff) / 255F;
-				float blue = (gasColor & 0xff) / 255F;
-				particle.setRBGColorF(red * alpha, green * alpha, blue * alpha);
+				int[] gasColor = entity.getGasColor();
+				float fade = (1.0F - (entity.deathTime / 80.0F));
+				particle.setAlphaF((float)Math.pow(fade, 2) * gasColor[3] / 255.0F);
+				particle.setRBGColorF(gasColor[0] / 255.0F * fade, gasColor[1] / 255.0F * fade, gasColor[2] / 255.0F * fade);
 			}
 
 			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,

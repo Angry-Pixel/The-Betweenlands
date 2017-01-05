@@ -11,14 +11,13 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -30,15 +29,17 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBloodSnail extends EntityMob implements IEntityBL {
-	private static final DataParameter<Integer> RANGE_ATTACK_TIMER = EntityDataManager.createKey(EntityBloodSnail.class, DataSerializers.VARINT);
+	public static final IAttribute RANGED_ATTACK_MIN_DIST_ATTRIB = (new RangedAttribute(null, "bl.rangedAttackMinDist", 3.0D, 0, Double.MAX_VALUE)).setDescription("Minimum range at which the ranged attack is used");
+	public static final IAttribute RANGED_ATTACK_COOLDOWN_ATTRIB = (new RangedAttribute(null, "bl.rangedAttackCooldown", 50, 0, Integer.MAX_VALUE)).setDescription("Ranged attack cooldown in ticks");
+
+	protected int rangedAttackTimer = 0;
 
 	public EntityBloodSnail(World world) {
 		super(world);
 		setSize(0.7F, 0.5F);
 		stepHeight = 0.0F;
-		
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
@@ -51,18 +52,14 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void entityInit() {
-		super.entityInit();
-		dataManager.register(RANGE_ATTACK_TIMER, 0);
-	}
-
-	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+		getAttributeMap().registerAttribute(RANGED_ATTACK_MIN_DIST_ATTRIB);
+		getAttributeMap().registerAttribute(RANGED_ATTACK_COOLDOWN_ATTRIB);
 	}
 
 	@Override
@@ -128,10 +125,17 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		super.onUpdate();
 		if (getAttackTarget() != null && this.isEntityAlive()) {
 			float distance = (float) getDistance(getAttackTarget().posX, getAttackTarget().getEntityBoundingBox().minY, getAttackTarget().posZ);
-			if (getRangeAttackTimer() < 100 && distance > 3)
-				setRangeAttackTimer(getRangeAttackTimer() + 2);
-			if (getRangeAttackTimer() == 100 && distance > 3)
-				shootMissile(getAttackTarget(), distance);
+			double minDist = this.getEntityAttribute(RANGED_ATTACK_MIN_DIST_ATTRIB).getAttributeValue();
+
+			if(distance > minDist) {
+				int cooldown = (int) this.getEntityAttribute(RANGED_ATTACK_COOLDOWN_ATTRIB).getAttributeValue();
+
+				if (getRangeAttackTimer() < cooldown) {
+					setRangeAttackTimer(getRangeAttackTimer() + 1);
+				} else if (getRangeAttackTimer() >= cooldown) {
+					shootMissile(getAttackTarget(), distance);
+				}
+			}
 		}
 	}
 
@@ -139,6 +143,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		setRangeAttackTimer(0);
 		if (canEntityBeSeen(entity)) {
 			EntityThrowable missile = new EntitySnailPoisonJet(worldObj, this);
+			missile.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 			missile.rotationPitch -= -20.0F;
 			double targetX = entity.posX + entity.motionX - posX;
 			double targetY = entity.posY + entity.getEyeHeight() - 1.100000023841858D - posY;
@@ -150,10 +155,10 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	public int getRangeAttackTimer() {
-		return dataManager.get(RANGE_ATTACK_TIMER);
+		return rangedAttackTimer;
 	}
 
 	public void setRangeAttackTimer(int size) {
-		dataManager.set(RANGE_ATTACK_TIMER, size);
+		rangedAttackTimer = size;
 	}
 }

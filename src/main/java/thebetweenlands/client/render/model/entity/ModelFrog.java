@@ -100,6 +100,16 @@ public class ModelFrog extends ModelBase {
         EntityFrog frog = (EntityFrog) entity;
         float leapProgress = frog.prevJumpAnimationTicks + (frog.jumpAnimationTicks - frog.prevJumpAnimationTicks) * partialRenderTicks;
 
+        //Reset legs to default
+        legbackleft1.rotateAngleX = -0.296705972839036F;
+        legbackright1.rotateAngleX = -0.296705972839036F;
+        legbackleft2.rotateAngleX = 0.45378560551852565F;
+        legbackright2.rotateAngleX = 0.45378560551852565F;
+        legfrontleft1.rotateAngleZ = -0.3717860877513886F;
+        legfrontright1.rotateAngleZ = 0.37178999185562134F;
+        legfrontleft2.rotateAngleZ = 0.5948578119277954F;
+        legfrontright2.rotateAngleZ = -0.5948606133460999F;
+        
         if (!frog.isInWater()) {
             //Idle animation
             this.torso.rotateAngleX = -0.55F - (float) (Math.sin((entity.ticksExisted + partialRenderTicks) / 10.0F) + 1) / 35.0F;

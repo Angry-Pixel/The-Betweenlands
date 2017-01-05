@@ -41,7 +41,9 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 
 	@Override
 	public void doRender(EntityFirefly entity, double x, double y, double z, float yaw, float partialTicks) {
-		this.glow.setAlpha(entity.getGlowTicks(partialTicks) / 20.0F);
+		double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
+
+		this.glow.setAlpha(entity.getGlowTicks(partialTicks) / 20.0F * (float)Math.min(glowStrength, 1.0D));
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F, 0);
@@ -51,7 +53,8 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		WorldRenderHandler.fireflies.add(new SimpleEntry<>(new SimpleEntry<>(this, entity), new Vector3d(x, y, z)));
 
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			float radius = entity.getGlowTicks(partialTicks) / 20.0F * 7.0F;
+			float radius = entity.getGlowTicks(partialTicks) / 20.0F * 7.0F * (float)glowStrength;
+
 			if(radius > 0.1F) {
 				double interpX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 				double interpY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks - 0.5D;
@@ -97,7 +100,10 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		double ipx = x;
 		double ipy = y + 0.25D + Math.sin((entity.ticksExisted + partialTicks) / 10.0F) * 0.15F;
 		double ipz = z;
-		double scale = entity.getGlowTicks(partialTicks) / 20.0F;
+
+		double glowStrength = (float)entity.getEntityAttribute(EntityFirefly.GLOW_STRENGTH_ATTRIB).getAttributeValue();
+
+		double scale = entity.getGlowTicks(partialTicks) / 20.0F * glowStrength;
 
 		float red = 0.4F;
 		float green = 0.2F;

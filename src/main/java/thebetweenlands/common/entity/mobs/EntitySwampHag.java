@@ -27,6 +27,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	private static final DataParameter<Byte> TALK_SOUND = EntityDataManager.createKey(EntitySwampHag.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> SHOULD_JAW_MOVE = EntityDataManager.createKey(EntitySwampHag.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Integer> LIVING_SOUND_TIMER = EntityDataManager.createKey(EntitySwampHag.class, DataSerializers.VARINT);
+	
 	public float jawFloat;
 	public float breatheFloat;
 	AnimationMathHelper animationTalk = new AnimationMathHelper();

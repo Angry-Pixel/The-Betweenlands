@@ -1,6 +1,5 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -42,6 +41,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BYTE);
 	private static final DataParameter<Boolean> DW_TAMED = EntityDataManager.createKey(EntityGiantToad.class, DataSerializers.BOOLEAN);
+
 	private int temper = 0;
 	private int ticksOnGround = 0;
 	private int strokeTicks = 0;
@@ -49,11 +49,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private ControlledAnimation leapingAnim = new ControlledAnimation(4);
 	private ControlledAnimation swimmingAnim = new ControlledAnimation(8);
 	private ControlledAnimation waterStanceAnim = new ControlledAnimation(4);
-	private List<EntityLivingBase> trackedTargets = new ArrayList<EntityLivingBase>();
 
 	public EntityGiantToad(World worldObj) {
 		super(worldObj);
-		this.setPathPriority(PathNodeType.WATER, -1.0F);
+		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(1.6F, 1.5F);
 	}
 
@@ -163,6 +162,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
 							}
+						} else {
+							path.incrementPathIndex();
 						}
 					}
 				} else if (onGround) {
@@ -184,6 +185,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
 							}
+						} else {
+							path.incrementPathIndex();
 						}
 					}
 				}

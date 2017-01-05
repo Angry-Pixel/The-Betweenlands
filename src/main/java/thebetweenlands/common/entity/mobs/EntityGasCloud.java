@@ -10,13 +10,11 @@ import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.init.MobEffects;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -32,11 +30,17 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
-	public static final DataParameter<Integer> GAS_CLOUD_COLOR = EntityDataManager.createKey(EntityGasCloud.class, DataSerializers.VARINT);
+	public static final IAttribute GAS_CLOUD_COLOR_R = (new RangedAttribute(null, "bl.gasCloudColorRed", 104, 0, 255)).setDescription("Gas cloud color red component").setShouldWatch(true);
+	public static final IAttribute GAS_CLOUD_COLOR_G = (new RangedAttribute(null, "bl.gasCloudColorGreen", 196, 0, 255)).setDescription("Gas cloud color green component").setShouldWatch(true);
+	public static final IAttribute GAS_CLOUD_COLOR_B = (new RangedAttribute(null, "bl.gasCloudColorBlue", 179, 0, 255)).setDescription("Gas cloud color blue component").setShouldWatch(true);
+	public static final IAttribute GAS_CLOUD_COLOR_A = (new RangedAttribute(null, "bl.gasCloudColorAlpha", 170, 0, 255)).setDescription("Gas cloud color alpha component").setShouldWatch(true);
 
 	public List<Object> gasParticles = new ArrayList<>();
 
 	protected double aboveLayer = 6.0D;
+	protected int targetBlockedTicks = 0;
+
+	public static final DamageSource damageSourceSuffocation = (new DamageSource("suffocation")).setDamageBypassesArmor();
 
 	public EntityGasCloud(World world) {
 		super(world);
@@ -132,25 +136,41 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 		this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
 	}
 
-	public void setGasColor(int color) {
-		this.dataManager.set(GAS_CLOUD_COLOR, color);
+	/**
+	 * Sets the gas color
+	 * @param r
+	 * @param g
+	 * @param b
+	 * @param a
+	 */
+	public void setGasColor(int r, int g, int b, int a) {
+		this.getEntityAttribute(GAS_CLOUD_COLOR_R).setBaseValue(r);
+		this.getEntityAttribute(GAS_CLOUD_COLOR_G).setBaseValue(g);
+		this.getEntityAttribute(GAS_CLOUD_COLOR_B).setBaseValue(b);
+		this.getEntityAttribute(GAS_CLOUD_COLOR_A).setBaseValue(a);
 	}
 
-	public int getGasColor() {
-		return this.dataManager.get(GAS_CLOUD_COLOR);
-	}
+	/**
+	 * Returns the gas color in an array [red, green, blue, alpha]
+	 * @return
+	 */
+	public int[] getGasColor() {
+		return new int[] { (int)this.getEntityAttribute(GAS_CLOUD_COLOR_R).getAttributeValue(),
+				(int)this.getEntityAttribute(GAS_CLOUD_COLOR_G).getAttributeValue(),
+				(int)this.getEntityAttribute(GAS_CLOUD_COLOR_B).getAttributeValue(),
+				(int)this.getEntityAttribute(GAS_CLOUD_COLOR_A).getAttributeValue() };
+	};
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-	}
-
-	@Override
-	protected void entityInit() {
-		super.entityInit();
-		this.dataManager.register(GAS_CLOUD_COLOR, 0xAA68C4B3);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_R);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_G);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_B);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_A);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
 	}
 
 	@Override
@@ -178,10 +198,11 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			double mx = this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F;
 			double my = this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F;
 			double mz = this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F;
+			int[] color = this.getGasColor();
 			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
 					.create(this.worldObj, x, y, z, ParticleFactory.ParticleArgs.get()
 							.withMotion(mx, my, mz)
-							.withColor(this.getGasColor()));
+							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
 			this.gasParticles.add(particle);
 
 			for (int i = 0; i < this.gasParticles.size(); i++) {
@@ -197,7 +218,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.1D);
 		} else {
 			if(this.getAttackTarget() != null) {
-				this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().posY, this.getAttackTarget().posZ, 0.06D);
+				this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().posY + this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, 0.06D);
 			}
 		}
 
@@ -207,22 +228,10 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 				if (!(target instanceof EntityGasCloud) && !(target instanceof IEntityBL)) {
 					target.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
 					if (target.ticksExisted % 10 == 0)
-						target.attackEntityFrom(DamageSource.drown, 2.0F);
+						target.attackEntityFrom(damageSourceSuffocation, (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue());
 				}
 			}
 		}
-	}
-
-	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
-		nbt.setInteger("gasColor", this.getGasColor());
-	}
-
-	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
-		this.setGasColor(nbt.getInteger("gasColor"));
 	}
 
 	@Override
@@ -259,10 +268,11 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 				double x = this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
 				double y = this.posY + this.height / 2.0D + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
 				double z = this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
+				int[] color = this.getGasColor();
 				ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
 						.create(this.worldObj, x, y, z, ParticleFactory.ParticleArgs.get()
 								.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
-								.withColor(this.getGasColor()));
+								.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
 				this.gasParticles.add(particle);
 			}
 		}

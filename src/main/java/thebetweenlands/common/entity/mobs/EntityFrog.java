@@ -6,10 +6,11 @@ import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -30,8 +31,10 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityFrog extends EntityCreature implements IEntityBL {
+	public static final IAttribute FROG_SKIN_ATTRIB = (new RangedAttribute(null, "bl.frogSkin", 0, 0, 5)).setDescription("Frog skin").setShouldWatch(true);
+
 	private static final DataParameter<Byte> DW_SWIM_STROKE = EntityDataManager.createKey(EntityFrog.class, DataSerializers.BYTE);
-	private static final DataParameter<Integer> SKIN = EntityDataManager.createKey(EntityFrog.class, DataSerializers.VARINT);
+
 	public int jumpAnimationTicks;
 	public int prevJumpAnimationTicks;
 	private int ticksOnGround = 0;
@@ -39,7 +42,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 
 	public EntityFrog(World worldIn) {
 		super(worldIn);
-		this.setPathPriority(PathNodeType.WATER, 1.0F);
+		this.setPathPriority(PathNodeType.WATER, 4.0F);
+		this.getNavigator().getNodeProcessor().setCanSwim(true);
 		setSize(0.7F, 0.5F);
 		this.stepHeight = 1.0F;
 	}
@@ -47,7 +51,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAIPanic(this, 0.1D));
-		this.tasks.addTask(1, new EntityAIWander(this, 0.0D));
+		this.tasks.addTask(1, new EntityAIWander(this, 0.1D, 40));
 		this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(3, new EntityAILookIdle(this));
 	}
@@ -55,8 +59,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataManager.register(DW_SWIM_STROKE, (byte) 0);
-		dataManager.register(SKIN, rand.nextInt(5));
+		this.dataManager.register(DW_SWIM_STROKE, (byte) 0);
 	}
 
 	@Override
@@ -69,6 +72,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0);
 		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3);
+		getAttributeMap().registerAttribute(FROG_SKIN_ATTRIB);
+		this.setSkin(this.rand.nextInt(5));
 	}
 
 	@Override
@@ -112,18 +117,20 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 					float z = (float) (nextHopSpot.zCoord - posZ);
 					float angle = (float) (Math.atan2(z, x));
 					float distance = (float) Math.sqrt(x * x + z * z);
-					if (distance > 1) {
+					double speedMultiplier = Math.min(distance / 2.0D, 1);
+					if (distance > 0.5D) {
 						if (!this.isInWater()) {
 							if (this.ticksOnGround > 5) {
-								this.motionY += 0.5;
-								this.motionX += 0.3 * MathHelper.cos(angle);
-								this.motionZ += 0.3 * MathHelper.sin(angle);
+								this.motionY += 0.4;
+								this.motionX += 0.4 * MathHelper.cos(angle) * speedMultiplier;
+								this.motionZ += 0.4 * MathHelper.sin(angle) * speedMultiplier;
 								this.velocityChanged = true;
 							}
 						} else {
 							if (this.strokeTicks == 0) {
-								this.motionX += 0.3 * MathHelper.cos(angle);
-								this.motionZ += 0.3 * MathHelper.sin(angle);
+								this.motionY += (nextHopSpot.yCoord < this.posY ? -0.2D : 0.2D) * speedMultiplier;
+								this.motionX += 0.45 * MathHelper.cos(angle) * speedMultiplier;
+								this.motionZ += 0.45 * MathHelper.sin(angle) * speedMultiplier;
 								this.velocityChanged = true;
 								this.strokeTicks = 40;
 								this.worldObj.setEntityState(this, (byte) 8);
@@ -132,6 +139,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 								motionZ += 0.01 * MathHelper.sin(angle);
 							}
 						}
+					} else {
+						path.incrementPathIndex();
 					}
 				}
 			}
@@ -141,7 +150,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 					this.motionY *= 0.1F;
 					this.velocityChanged = true;
 				}
-				if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.5D), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid()) {
+
+				if ((path == null || path.isFinished()) && this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.5D), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid()) {
 					this.motionY += 0.04F;
 					this.velocityChanged = true;
 				}
@@ -180,26 +190,11 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	}
 
 	public int getSkin() {
-		return dataManager.get(SKIN);
+		return (int) this.getEntityAttribute(FROG_SKIN_ATTRIB).getAttributeValue();
 	}
 
 	public void setSkin(int skinType) {
-		dataManager.set(SKIN, skinType);
-	}
-
-	@Override
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		super.writeEntityToNBT(nbt);
-		nbt.setInteger("skin", getSkin());
-	}
-
-	@Override
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		super.readEntityFromNBT(nbt);
-		if (nbt.hasKey("skin"))
-			setSkin(nbt.getInteger("skin"));
-		else
-			setSkin(rand.nextInt(5));
+		this.getEntityAttribute(FROG_SKIN_ATTRIB).setBaseValue(skinType);
 	}
 
 	@Override
@@ -234,5 +229,10 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		if (id == 8) {
 			this.strokeTicks = 0;
 		}
+	}
+
+	@Override
+	public boolean isPushedByWater() {
+		return false;
 	}
 }
