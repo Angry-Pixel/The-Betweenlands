@@ -41,10 +41,11 @@ public class BiomeGenerator {
 	protected boolean noiseGeneratorsInitialized = false;
 	protected boolean noiseGenerated = false;
 
-	protected BiomeDecoratorBetweenlands decorator = new BiomeDecoratorBetweenlands();
+	protected BiomeDecoratorBetweenlands decorator;
 
 	public BiomeGenerator(Biome biome) {
 		this.biome = biome;
+		this.decorator = new BiomeDecoratorBetweenlands(biome);
 	}
 
 	/**
@@ -61,6 +62,8 @@ public class BiomeGenerator {
 	 * @return
 	 */
 	public BiomeGenerator setDecorator(BiomeDecoratorBetweenlands decorator) {
+		if(decorator.getBiome() != this.getBiome())
+			throw new RuntimeException("Decorator was assigned to a different biome!");
 		this.decorator = decorator;
 		return this;
 	}

@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +32,11 @@ import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.event.AttachWorldCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
@@ -460,11 +465,30 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 
 		@SubscribeEvent
 		public void onWorldTick(WorldTickEvent event) {
+			if(event.phase == Phase.END && !event.world.isRemote) {
+				this.tickWorld(event.world);
+			}
+		}
+
+		@SideOnly(Side.CLIENT)
+		@SubscribeEvent
+		public void onClientTick(ClientTickEvent event) {
+			if(event.phase == Phase.END) {
+				World world = Minecraft.getMinecraft().theWorld;
+				if(world != null && !Minecraft.getMinecraft().isGamePaused()) {
+					this.tickWorld(world);
+				}
+			}
+		}
+
+		private void tickWorld(World world) {
 			synchronized(CACHE) {
 				for(WorldDataBase<?> worldStorage : CACHE.values()) {
-					for(int i = 0; i < worldStorage.tickableSharedStorage.size(); i++) {
-						SharedStorage sharedStorage = worldStorage.tickableSharedStorage.get(i);
-						((ITickable)sharedStorage).update();
+					if(worldStorage.getWorld() == world) {
+						for(int i = 0; i < worldStorage.tickableSharedStorage.size(); i++) {
+							SharedStorage sharedStorage = worldStorage.tickableSharedStorage.get(i);
+							((ITickable)sharedStorage).update();
+						}
 					}
 				}
 			}

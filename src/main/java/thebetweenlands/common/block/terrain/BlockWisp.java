@@ -25,6 +25,8 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockWisp extends BlockContainer implements IStateMappedBlock {
@@ -40,7 +42,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 		setHardness(0);
 	}
 
-	public static boolean canSee(World world) {
+	public static boolean canSee(World world, BlockPos pos) {
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
@@ -48,6 +50,12 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 				return true;
 			}
 		}
+
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		if(!worldStorage.getSharedStorageAt(LocationCragrockTower.class, location -> location.isInside(pos), pos.getX(), pos.getZ()).isEmpty()) {
+			return true;
+		}
+
 		return false;
 	}
 
@@ -64,7 +72,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	@SuppressWarnings("deprecation")
 	@Override
 	public RayTraceResult collisionRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d start, Vec3d end){
-		if(canSee(world))
+		if(canSee(world, pos))
 			return super.collisionRayTrace(blockState, world, pos, start, end);
 		return null;
 	}
@@ -76,7 +84,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 
 	@Override
 	public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state) {
-		if(!world.isRemote && canSee(world)) {
+		if(!world.isRemote && canSee(world, pos)) {
 			EntityItem wispItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(Item.getItemFromBlock(this), 1));
 			world.spawnEntityInWorld(wispItem);
 		}

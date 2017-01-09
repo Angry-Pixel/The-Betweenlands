@@ -28,16 +28,9 @@ public class LocationSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public void update(World world, BlockPos pos) {
-		boolean inLocation = false;
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, pos.getX(), pos.getZ());
-		for(LocationStorage location : locations) {
-			if(this.locationType.equals(location.getType()) && location.isInside(pos)) {
-				inLocation = true;
-				break;
-			}
-		}
-		if(!inLocation) {
+		List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos) && this.locationType.equals(location.getType()), pos.getX(), pos.getZ());
+		if(locations.isEmpty()) {
 			this.setWeight((short) 0);
 		} else {
 			this.setWeight(this.getBaseWeight());

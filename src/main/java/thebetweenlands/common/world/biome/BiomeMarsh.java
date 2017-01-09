@@ -28,7 +28,7 @@ import thebetweenlands.util.FogGenerator;
 
 public class BiomeMarsh extends BiomeBetweenlands {
 	private FogGenerator fogGenerator;
-	
+
 	public BiomeMarsh(int type) {
 		super(new BiomeProperties("marsh_" + type).setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(10);
@@ -38,8 +38,14 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 12.5D, 0.03125D * 12.5D, BlockRegistry.PEAT.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
-		.setDecorator(new BiomeDecoratorMarsh());
+		.setDecorator(new BiomeDecoratorMarsh(this));
 		this.setFoliageColors(0x627017, 0x627017);
+
+		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
+	}
+
+	@Override
+	protected void addSpawnEntries() {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
@@ -52,8 +58,6 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 8).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
 	private float fogRangeInterpolateStart = 0.0F;

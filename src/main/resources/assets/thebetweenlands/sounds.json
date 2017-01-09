@@ -998,5 +998,11 @@
     "sounds": [
       "thebetweenlands:possessed_scream"
     ]
+  },
+  "ignite": {
+    "catagory": "ambient",
+    "sounds": [
+      "thebetweenlands:ignite"
+    ]
   }
 }

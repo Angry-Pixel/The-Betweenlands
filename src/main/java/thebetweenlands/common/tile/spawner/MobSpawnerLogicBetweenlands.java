@@ -11,6 +11,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -41,6 +42,8 @@ public abstract class MobSpawnerLogicBetweenlands {
 	private double checkRange = 8.0D;
 	private boolean hasParticles = true;
 
+	private boolean spawnInAir = true;
+
 	/**
 	 * Gets the entity name that should be spawned.
 	 */
@@ -48,57 +51,130 @@ public abstract class MobSpawnerLogicBetweenlands {
 		return this.entityTypeName;
 	}
 
+	/**
+	 * Sets whether entities can spawn in the air
+	 * @param spawnInAir
+	 * @return
+	 */
+	public MobSpawnerLogicBetweenlands setSpawnInAir(boolean spawnInAir) {
+		this.spawnInAir = spawnInAir;
+		return this;
+	}
+
+	/**
+	 * Returns whether entities can spawn in the air
+	 * @return
+	 */
+	public boolean canSpawnInAir() {
+		return this.spawnInAir;
+	}
+
+	/**
+	 * Sets whether the spawner creates particles
+	 * @param hasParticles
+	 * @return
+	 */
 	public MobSpawnerLogicBetweenlands setHasParticles(boolean hasParticles) {
 		this.hasParticles = hasParticles;
 		return this;
 	}
 
+	/**
+	 * Returns whether the spawner creates particles
+	 * @return
+	 */
 	public boolean hasParticles() {
 		return this.hasParticles;
 	}
 
+	/**
+	 * Sets the maximum allowed entities within the check radius
+	 * @param maxEntities
+	 * @return
+	 */
 	public MobSpawnerLogicBetweenlands setMaxEntities(int maxEntities) {
 		this.maxNearbyEntities = maxEntities;
 		return this;
 	}
 
+	/**
+	 * Returns the maximum allowed entities within the spawn radius
+	 * @return
+	 */
 	public int getMaxEntities() {
 		return this.maxNearbyEntities;
 	}
 
+	/**
+	 * Sets the spawn delay
+	 * @param minDelay
+	 * @param maxDelay
+	 * @return
+	 */
 	public MobSpawnerLogicBetweenlands setDelay(int minDelay, int maxDelay) {
 		this.minSpawnDelay = minDelay;
 		this.maxSpawnDelay = maxDelay;
 		return this;
 	}
 
+	/**
+	 * Returns the mimumum spawn delay
+	 * @return
+	 */
 	public int getMinDelay() {
 		return this.minSpawnDelay;
 	}
 
+	/**
+	 * Returns the maximum spawn delay
+	 * @return
+	 */
 	public int getMaxDelay() {
 		return this.maxSpawnDelay;
 	}
 
+	/**
+	 * Sets the entity name
+	 * @param name
+	 * @return
+	 */
 	public MobSpawnerLogicBetweenlands setEntityName(String name) {
 		this.entityTypeName = name;
 		return this;
 	}
 
+	/**
+	 * Sets the spawn range
+	 * @param range
+	 * @return
+	 */
 	public MobSpawnerLogicBetweenlands setSpawnRange(int range) {
 		this.spawnRange = range;
 		return this;
 	}
 
+	/**
+	 * Returns the spawn range
+	 * @return
+	 */
 	public int getSpawnRange() {
 		return this.spawnRange;
 	}
 
+	/**
+	 * Sets the check range
+	 * @param range
+	 * @return
+	 */
 	public MobSpawnerLogicBetweenlands setCheckRange(double range) {
 		this.checkRange = range;
 		return this;
 	}
 
+	/**
+	 * Returns the check range
+	 * @return
+	 */
 	public double getCheckRange() {
 		return this.checkRange;
 	}
@@ -110,6 +186,9 @@ public abstract class MobSpawnerLogicBetweenlands {
 		return this.getSpawnerWorld().getClosestPlayer((double) this.getSpawnerX() + 0.5D, (double) this.getSpawnerY() + 0.5D, (double) this.getSpawnerZ() + 0.5D, (double) this.activatingRangeFromPlayer, false) != null;
 	}
 
+	/**
+	 * Updates the spawner logic
+	 */
 	public void updateSpawner() {
 		if (this.isActivated()) {
 			if (this.getSpawnerWorld().isRemote) {
@@ -159,28 +238,34 @@ public abstract class MobSpawnerLogicBetweenlands {
 						return;
 					}
 
-					double rx = (double) this.getSpawnerX() + (this.getSpawnerWorld().rand.nextDouble() - this.getSpawnerWorld().rand.nextDouble()) * (double) this.spawnRange;
-					double ry = (double) (this.getSpawnerY() + this.getSpawnerWorld().rand.nextInt(3) - 1);
-					double rz = (double) this.getSpawnerZ() + (this.getSpawnerWorld().rand.nextDouble() - this.getSpawnerWorld().rand.nextDouble()) * (double) this.spawnRange;
+					double rx = 1.0D - this.getSpawnerWorld().rand.nextDouble() * 2.0D;
+					double ry = 1.0D - this.getSpawnerWorld().rand.nextDouble() * 2.0D;
+					double rz = 1.0D - this.getSpawnerWorld().rand.nextDouble() * 2.0D;
+					double len = Math.sqrt(rx*rx + ry*ry + rz*rz);
+					rx = this.getSpawnerX() + rx / len * this.spawnRange;
+					ry = this.getSpawnerY() + ry / len * this.spawnRange;
+					rz = this.getSpawnerZ() + rz / len * this.spawnRange;
 
-					EntityLiving entityLiving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
-					entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
+					if(this.canSpawnInAir() || !this.getSpawnerWorld().isAirBlock(new BlockPos(rx, ry, rz).down())) {
+						EntityLiving entityLiving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
+						entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
 
-					if (entityLiving == null || net.minecraftforge.event.ForgeEventFactory.canEntitySpawnSpawner(entityLiving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
-						if (entity instanceof EntityLiving) {
-							if (!net.minecraftforge.event.ForgeEventFactory.doSpecialSpawn(entityLiving, this.getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
-								((EntityLiving)entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData)null);
+						if (entityLiving == null || ForgeEventFactory.canEntitySpawnSpawner(entityLiving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
+							if (entityLiving != null) {
+								if (!ForgeEventFactory.doSpecialSpawn(entityLiving, this.getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
+									((EntityLiving)entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData)null);
+								}
 							}
+
+							AnvilChunkLoader.spawnEntity(entity, this.getSpawnerWorld());
+							this.getSpawnerWorld().playEvent(2004, entity.getPosition(), 0);
+
+							if (entityLiving != null) {
+								entityLiving.spawnExplosionParticle();
+							}
+
+							entitySpawned = true;
 						}
-
-						AnvilChunkLoader.spawnEntity(entity, this.getSpawnerWorld());
-						this.getSpawnerWorld().playEvent(2004, entity.getPosition(), 0);
-
-						if (entityLiving != null) {
-							entityLiving.spawnExplosionParticle();
-						}
-
-						entitySpawned = true;
 					}
 				}
 				if (entitySpawned) {
@@ -243,6 +328,10 @@ public abstract class MobSpawnerLogicBetweenlands {
 			this.hasParticles = nbt.getBoolean("HasParticles");
 		}
 
+		if(nbt.hasKey("SpawnInAir")) {
+			this.spawnInAir = nbt.getBoolean("SpawnInAir");
+		}
+
 		if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
 			this.cachedEntity = null;
 		}
@@ -259,6 +348,7 @@ public abstract class MobSpawnerLogicBetweenlands {
 		nbt.setShort("SpawnRange", (short) this.spawnRange);
 		nbt.setDouble("CheckRange", this.checkRange);
 		nbt.setBoolean("HasParticles", this.hasParticles);
+		nbt.setBoolean("SpawnInAir", this.spawnInAir);
 	}
 
 	/**

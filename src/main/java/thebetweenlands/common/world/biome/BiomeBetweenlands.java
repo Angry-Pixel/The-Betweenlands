@@ -36,9 +36,16 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.biomeWeight = 100;
 		this.topBlock = BlockRegistry.SWAMP_GRASS.getDefaultState();
 		this.fillerBlock = BlockRegistry.SWAMP_DIRT.getDefaultState();
+		this.biomeGenerator = new BiomeGenerator(this);
 
 		this.setFogColor(10, 30, 12);
+		this.addSpawnEntries();
+	}
 
+	/**
+	 * Adds the entity spawn entries
+	 */
+	protected void addSpawnEntries() {
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), "bloodSky").setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), "bloodSky").setHostile(true));
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D));
@@ -52,7 +59,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 * @return
 	 */
 	protected final BiomeBetweenlands setBiomeGenerator(BiomeGenerator generator) {
-		if(this.biomeGenerator.getBiome() != this)
+		if(generator.getBiome() != this)
 			throw new RuntimeException("Generator was assigned to a different biome!");
 		this.biomeGenerator = generator;
 		return this;
@@ -64,7 +71,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 * @return
 	 */
 	public final BiomeGenerator getBiomeGenerator() {
-		return this.biomeGenerator != null ? this.biomeGenerator : (this.biomeGenerator = new BiomeGenerator(this));
+		return this.biomeGenerator;
 	}
 
 	/**

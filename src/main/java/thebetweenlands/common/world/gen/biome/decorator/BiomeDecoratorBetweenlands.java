@@ -1,26 +1,43 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.UUID;
 import java.util.function.Function;
 
+import net.minecraft.profiler.Profiler;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
-import thebetweenlands.common.world.gen.progressivegen.ProgressiveGenChunkMarker;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class BiomeDecoratorBetweenlands {
+	private final Biome biome;
 	private World world;
 	private int x, y, z, seaGroundY;
 	private Random rand;
 	private ChunkGeneratorBetweenlands generator;
+
+	private static final List<String> profiledGenerators = new ArrayList<String>();
+	private static boolean decorating;
+
+	public BiomeDecoratorBetweenlands(Biome biome) {
+		this.biome = biome;
+	}
+
+	/**
+	 * Returns the biome
+	 * @return
+	 */
+	public Biome getBiome() {
+		return this.biome;
+	}
 
 	/**
 	 * Returns a random X/Z offset for generating a feature with a padding of 8 blocks
@@ -166,7 +183,7 @@ public class BiomeDecoratorBetweenlands {
 	 * @param x
 	 * @param z
 	 */
-	public void decorate(World world, ChunkGeneratorBetweenlands generator, Random rand, int x, int z) {
+	public final void decorate(World world, ChunkGeneratorBetweenlands generator, Random rand, int x, int z) {
 		this.x = x;
 		this.z = z;
 		this.y = world.getHeight(new BlockPos(x, 0, z)).getY();
@@ -185,10 +202,44 @@ public class BiomeDecoratorBetweenlands {
 		this.world = world;
 		this.generator = generator;
 
+		boolean wasDecorating = decorating;
+		decorating = true;
+
+		if(!wasDecorating) {
+			profiledGenerators.clear();
+			this.getProfiler().startSection(this.getBiome().getBiomeName());
+		}
+
+		this.decorate();
+
+		if(!wasDecorating) {
+			this.getProfiler().endSection();
+		}
+
+		if(!wasDecorating) {
+			decorating = false;
+		}
+	}
+
+	/**
+	 * Decorates the terrain
+	 */
+	protected void decorate() {
+		this.startProfilerSection("ores");
 		this.generateOres();
+		this.endProfilerSection();
+
+		this.startProfilerSection("caves");
 		this.generate(DecorationHelper::populateCaves);
+		this.endProfilerSection();
+
+		this.startProfilerSection("stagnantWater");
 		this.generate(2, DecorationHelper::generateStagnantWaterPool);
+		this.endProfilerSection();
+
+		this.startProfilerSection("undergroundRuins");
 		this.generate(120, DecorationHelper::generateUndergroundRuins);
+		this.endProfilerSection();
 	}
 
 	/**
@@ -196,7 +247,7 @@ public class BiomeDecoratorBetweenlands {
 	 */
 	protected void generateOres() {
 		//TODO: Tweak these values for new terrain height
-		this.generateOre(22, 10, OreGens.SULFUR, 0, 128);
+		this.generateOre(22, 14, OreGens.SULFUR, 0, 128);
 		this.generateOre(10, 8, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, 8, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, 8, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);	
@@ -215,11 +266,10 @@ public class BiomeDecoratorBetweenlands {
 				int yy = this.world.getHeight(new BlockPos(xx, 0, zz)).getY() - 1;
 				boolean hasMud = false;
 				for(int yo = 0; yo < 16; yo++) {
-					int bx = yy + yo;
 					if(this.world.getBlockState(new BlockPos(xx, yy + yo, zz)).getBlock() == BlockRegistry.SWAMP_WATER
 							&& this.world.getBlockState(new BlockPos(xx, yy + yo - 1, zz)).getBlock() == BlockRegistry.MUD) {
 						hasMud = true;
-						yy = bx - 1;
+						yy = yy + yo - 1;
 					}
 				}
 				if(hasMud) {
@@ -266,12 +316,16 @@ public class BiomeDecoratorBetweenlands {
 	public boolean generate(float tries, Function<BiomeDecoratorBetweenlands, Boolean> generator) {
 		boolean generated = false;
 		if(tries < 1.0F) {
-			if(this.rand.nextFloat() <= tries)
+			if(this.rand.nextFloat() <= tries) {
 				generated = generator.apply(this);
+			}
 		} else {
 			float remainder = tries % 1.0F;
-			if(this.rand.nextFloat() <= remainder)
+
+			if(this.rand.nextFloat() <= remainder) {
 				tries++;
+			}
+
 			for(int i = 0; i < tries; i++) {
 				if(generator.apply(this))
 					generated = true;
@@ -287,5 +341,61 @@ public class BiomeDecoratorBetweenlands {
 	 */
 	public boolean generate(Function<BiomeDecoratorBetweenlands, Boolean> generator) {
 		return this.generate(1, generator);
+	}
+
+	/**
+	 * Returns the profiler
+	 * @return
+	 */
+	public Profiler getProfiler() {
+		return this.world.theProfiler;
+	}
+
+	/**
+	 * Returns whether profiling is enabled
+	 * @return
+	 */
+	public boolean isProfilingEnabled() {
+		return ConfigHandler.debug;
+	}
+
+	/**
+	 * Returns whether recursive profiling should be enabled
+	 * @return
+	 */
+	public boolean isRecursiveProfilingEnabled() {
+		return false;
+	}
+
+	/**
+	 * Starts a profiler section if enabled
+	 * @param name
+	 */
+	public void startProfilerSection(String name) {
+		if(this.isProfilingEnabled() && this.getProfiler().profilingEnabled && (this.isRecursiveProfilingEnabled() || !profiledGenerators.contains(this.getProfiler().getNameOfLastSection()))) {
+			this.getProfiler().startSection(name);
+
+			if(!this.isRecursiveProfilingEnabled()) {
+				String section = this.getProfiler().getNameOfLastSection();
+				profiledGenerators.add(section);
+			}
+		}
+	}
+
+	/**
+	 * Stops a profiler section if enabled
+	 */
+	public void endProfilerSection() {
+		if(this.isProfilingEnabled() && this.getProfiler().profilingEnabled) {
+			if(!this.isRecursiveProfilingEnabled()) {
+				String section = this.getProfiler().getNameOfLastSection();
+				boolean contained = profiledGenerators.remove(section);
+				if(!"[UNKNOWN]".equals(section) && contained) {
+					this.getProfiler().endSection();
+				}
+			} else {
+				this.getProfiler().endSection();
+			}
+		}
 	}
 }

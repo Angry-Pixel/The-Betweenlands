@@ -1,5 +1,14 @@
 package thebetweenlands.client.event.handler;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.vecmath.Vector3d;
+
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -13,9 +22,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.LightSource;
@@ -26,11 +32,6 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.util.MathUtils;
-
-import javax.vecmath.Vector3d;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 
 public class WorldRenderHandler {
@@ -80,7 +81,7 @@ public class WorldRenderHandler {
 				double rz = pos.zCoord + renderViewZ + 0.5D;
 
 				float size = 3.0F;
-				if (!BlockWisp.canSee(te.getWorld())) {
+				if (!BlockWisp.canSee(te.getWorld(), te.getPos())) {
 					size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp_float(ParticleWisp.getDistanceToViewer(rx, ry, rz, event.getPartialTicks()), 10, 20))) * 1.2F;
 				}
 
@@ -94,9 +95,9 @@ public class WorldRenderHandler {
 					if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
 						ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz,
 								i == 0 ? size : size * 0.5F,
-								r * (i == 0 ? 3.5F : 1.0F),
-								g * (i == 0 ? 3.5F : 1.0F),
-								b * (i == 0 ? 3.5F : 1.0F)));
+										r * (i == 0 ? 3.5F : 1.0F),
+										g * (i == 0 ? 3.5F : 1.0F),
+										b * (i == 0 ? 3.5F : 1.0F)));
 					}
 				}
 			}
@@ -117,7 +118,7 @@ public class WorldRenderHandler {
 		fireflies.clear();
 
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		
+
 		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, prevMinFilter);
 		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, prevMagFilter);
 

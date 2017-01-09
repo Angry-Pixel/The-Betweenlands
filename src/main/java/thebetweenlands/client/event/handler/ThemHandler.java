@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -24,7 +25,7 @@ public class ThemHandler {
 
 	@SubscribeEvent
 	public static void onTick(ClientTickEvent event) {
-		if(!Minecraft.getMinecraft().isGamePaused()) {
+		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
 			World world = TheBetweenlands.proxy.getClientWorld();
 			Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
 			if(world != null && viewer != null && viewer.dimension == ConfigHandler.dimensionId && FogHandler.hasDenseFog() && FogHandler.getCurrentFogEnd() < 60.0F) {

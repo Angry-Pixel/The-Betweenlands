@@ -1,12 +1,16 @@
 package thebetweenlands.common.event.handler;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.message.clientbound.MessageSyncEnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -31,7 +35,7 @@ public class EnvironmentEventHandler {
 	//Update events on the server side
 	@SubscribeEvent
 	public static void onWorldTick(WorldTickEvent event) {
-		if(event.world.provider instanceof WorldProviderBetweenlands && !event.world.isRemote) {
+		if(event.phase == Phase.END && event.world.provider instanceof WorldProviderBetweenlands && !event.world.isRemote) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)event.world.provider;
 
 			//Always save the world data
@@ -63,16 +67,19 @@ public class EnvironmentEventHandler {
 	}
 
 	//Update events on the client side
+	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event) {
-		World world = TheBetweenlands.proxy.getClientWorld();
-		if(world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();
-			for(EnvironmentEvent eevent : reg.getEvents().values()) {
-				if(!eevent.isLoaded()) 
-					continue;
-				eevent.update(world);
+		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
+			World world = Minecraft.getMinecraft().theWorld;
+			if(world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+				EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();
+				for(EnvironmentEvent eevent : reg.getEvents().values()) {
+					if(!eevent.isLoaded()) 
+						continue;
+					eevent.update(world);
+				}
 			}
 		}
 	}

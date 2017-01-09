@@ -136,7 +136,7 @@ public class TextureStitchHandler {
 						}
 
 						//Necessary to initialize animation metadata
-						sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels());
+						sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels() + 1);
 
 						//Set sprites or split into seperate frames
 						if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {

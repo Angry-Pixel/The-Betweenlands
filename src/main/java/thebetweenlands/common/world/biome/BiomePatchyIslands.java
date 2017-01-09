@@ -31,11 +31,16 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 	public BiomePatchyIslands() {
 		super(new BiomeProperties("patchy_islands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1.25F).setHeightVariation(4.75F).setWaterColor(0x184220).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(20);
-		this.getBiomeGenerator().setDecorator(new BiomeDecoratorPatchyIslands())
+		this.getBiomeGenerator().setDecorator(new BiomeDecoratorPatchyIslands(this))
 		.addFeature(new SiltBeachFeature())
 		.addFeature(new AlgaeFeature());
 		this.setFoliageColors(0x1FC66D, 0x1FC66D);
 
+		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
+	}
+
+	@Override
+	protected void addSpawnEntries() {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityDragonFly.class, (short) 35).setCanSpawnOnWater(true).setGroupSize(1, 2).setSpawnCheckRadius(32.0D).setSpawningInterval(400));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityMireSnail.class, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(800));
@@ -56,8 +61,5 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
-		
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
-
 }

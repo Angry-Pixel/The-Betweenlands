@@ -5,6 +5,7 @@ import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
@@ -47,7 +48,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		float currentZ = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks);
 		this.particleScale = (this.prevFlameScale + (this.flameScale - this.prevFlameScale) * partialTicks);
 		float distance = 0.0F;
-		if(!BlockWisp.canSee(this.worldObj)) {
+		if(!BlockWisp.canSee(this.worldObj, new BlockPos(this.posX, this.posY, this.posZ))) {
 			distance = MathHelper.clamp_float(getDistanceToViewer(currentX, currentY, currentZ, partialTicks), 10, 20);
 		}
 		this.setAlphaF(1.0F - MathHelper.sin(MathUtils.PI / 20 * distance));

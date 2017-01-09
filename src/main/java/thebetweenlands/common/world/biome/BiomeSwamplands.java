@@ -42,7 +42,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D))
 		.addFeature(new AlgaeFeature())
 		.addFeature(new SiltBeachFeature(0.98F))
-		.setDecorator(new BiomeDecoratorSwamplands());
+		.setDecorator(new BiomeDecoratorSwamplands(this));
 		this.setFoliageColors(0x2AFF00, 0x2AFF00);
 
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
@@ -69,4 +69,8 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
 	}
 
+	@Override
+	protected void addSpawnEntries() {
+		
+	}
 }

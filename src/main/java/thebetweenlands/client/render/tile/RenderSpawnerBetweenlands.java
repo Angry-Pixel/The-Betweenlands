@@ -41,7 +41,6 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
         LightingUtil.INSTANCE.setLighting(255);
-
         float counter1 = interpolatedCounter;
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.475F, y + 0.38F + (float) Math.sin(counter1) / 5.0F, z + 0.475F);
@@ -49,7 +48,9 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
         if (te != null)
             renderSpawnerMob(te.getSpawnerLogic(), 0, 0, 0, partialTicks);
         GlStateManager.popMatrix();
-
+        LightingUtil.INSTANCE.revert();
+        
+        LightingUtil.INSTANCE.setLighting(255);
         this.bindTexture(TEXTURE);
 
         GlStateManager.pushMatrix();

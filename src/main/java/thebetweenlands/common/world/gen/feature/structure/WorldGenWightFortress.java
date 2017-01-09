@@ -103,6 +103,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 
+		long locationSeed = rand.nextLong();
+		
 		LocationStorage fortressLocation = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:wightTower", EnumLocationType.WIGHT_TOWER);
 		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
 		fortressLocation.linkChunks();
@@ -110,7 +112,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		fortressLocation.setLayer(0);
 		fortressLocation.setGuarded(true);
 		fortressLocation.setDirty(true);
-		fortressLocation.setSeed(rand.nextLong());
+		fortressLocation.setSeed(locationSeed);
 		worldStorage.addSharedStorage(fortressLocation);
 
 		LocationStorage puzzleLocation = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:wightTowerPuzzle", EnumLocationType.WIGHT_TOWER);
@@ -119,7 +121,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		puzzleLocation.setLayer(1);
 		puzzleLocation.setGuarded(true);
 		puzzleLocation.setDirty(true);
-		puzzleLocation.setSeed(rand.nextLong());
+		puzzleLocation.setSeed(locationSeed);
 		worldStorage.addSharedStorage(puzzleLocation);
 
 		LocationStorage teleporterLocation = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:wightTowerTeleporter", EnumLocationType.WIGHT_TOWER);
@@ -128,7 +130,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		teleporterLocation.setLayer(2);
 		teleporterLocation.setGuarded(true);
 		teleporterLocation.setDirty(true);
-		teleporterLocation.setSeed(rand.nextLong());
+		teleporterLocation.setSeed(locationSeed);
 		worldStorage.addSharedStorage(teleporterLocation);
 
 		LocationStorage bossLocation = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:wightTowerBoss", EnumLocationType.WIGHT_TOWER);
@@ -138,7 +140,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		bossLocation.setLayer(3);
 		bossLocation.setGuarded(true);
 		bossLocation.setDirty(true);
-		bossLocation.setSeed(rand.nextLong());
+		bossLocation.setSeed(locationSeed);
 		worldStorage.addSharedStorage(bossLocation);
 
 		return generateStructure(world, rand, pos);

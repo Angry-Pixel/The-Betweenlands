@@ -27,7 +27,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 	public BiomeSludgePlains() {
 		super(new BiomeProperties("sludge_plains").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 5).setHeightVariation(3F).setWaterColor(0x3A2F0B).setTemperature(0.8F).setRainfall(0.9F));
 		this.setWeight(5);
-		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlains())
+		this.getBiomeGenerator().setTopBlockState(BlockRegistry.MUD.getDefaultState()).setFillerBlockHeight(1).setDecorator(new BiomeDecoratorSludgePlains(this))
 		.addFeature(new FlatLandFeature(WorldProviderBetweenlands.LAYER_HEIGHT, 5))
 		.addFeature(new PatchFeature(0.03125D * 5.75D, 0.03125D * 5.75D, BlockRegistry.SLUDGY_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))
@@ -35,6 +35,11 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		.addFeature(new MiddleGemFeature());
 		this.setFoliageColors(0x5B3522, 0x5B3522);
 
+		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WASTELAND, Type.DEAD);
+	}
+
+	@Override
+	protected void addSpawnEntries() {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5));
 
@@ -48,8 +53,5 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WASTELAND, Type.DEAD);
 	}
-
 }

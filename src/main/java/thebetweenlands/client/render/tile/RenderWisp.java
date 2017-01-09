@@ -32,7 +32,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 		double renderViewY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
 		double renderViewZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
 
-		if(!BlockWisp.canSee(tileEntity.getWorld())) {
+		if(!BlockWisp.canSee(tileEntity.getWorld(), tileEntity.getPos())) {
 			double dist = Minecraft.getMinecraft().getRenderViewEntity().getDistance(x + renderViewX, y + renderViewY, z + renderViewZ);
 			if(dist > 50 || dist < 10) {
 				return;

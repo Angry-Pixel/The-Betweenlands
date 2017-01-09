@@ -50,7 +50,8 @@ public class SoundRegistry {
     public static final BLSoundEvent REJECTED = reg("rejected");
     public static final BLSoundEvent SHOCKWAVE_SWORD = reg("shockwave_sword");
     public static final BLSoundEvent SQUISH = reg("squish");
-
+    public static final BLSoundEvent IGNITE = reg("ignite");
+    
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");

@@ -18,6 +18,7 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.client.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -40,24 +41,26 @@ public class ShaderHandler {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onPreRenderWorld(TickEvent.RenderTickEvent event) {
-		Minecraft mc = Minecraft.getMinecraft();
+		if(event.phase == Phase.START) {
+			Minecraft mc = Minecraft.getMinecraft();
 
-		if(ShaderHelper.INSTANCE.isShaderSupported() && ConfigHandler.useShader) {
-			Framebuffer framebuffer = mc.getFramebuffer();
+			if(ShaderHelper.INSTANCE.isShaderSupported() && ConfigHandler.useShader) {
+				Framebuffer framebuffer = mc.getFramebuffer();
 
-			if(!mc.gameSettings.fboEnable) {
-				//Enable FBOs
-				mc.gameSettings.fboEnable = true;
-				framebuffer.createBindFramebuffer(mc.displayWidth, mc.displayHeight);
-			}
+				if(!mc.gameSettings.fboEnable) {
+					//Enable FBOs
+					mc.gameSettings.fboEnable = true;
+					framebuffer.createBindFramebuffer(mc.displayWidth, mc.displayHeight);
+				}
 
-			//Use float buffer for HDR
-			if(ShaderHelper.INSTANCE.isHDRActive()) {
-				int colorFormat = ShaderHelper.INSTANCE.isFloatBufferSupported() ? GL30.GL_RGBA16F : ShaderHelper.INSTANCE.isARBFloatBufferSupported() ? ARBTextureFloat.GL_RGB16F_ARB : -1;
-				if(colorFormat != -1) {
-					//Use float buffers for HDR
-					GlStateManager.bindTexture(framebuffer.framebufferTexture);
-					GlStateManager.glTexImage2D(GL11.GL_TEXTURE_2D, 0, colorFormat, framebuffer.framebufferTextureWidth, framebuffer.framebufferTextureHeight, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (IntBuffer)null);
+				//Use float buffer for HDR
+				if(ShaderHelper.INSTANCE.isHDRActive()) {
+					int colorFormat = ShaderHelper.INSTANCE.isFloatBufferSupported() ? GL30.GL_RGBA16F : ShaderHelper.INSTANCE.isARBFloatBufferSupported() ? ARBTextureFloat.GL_RGB16F_ARB : -1;
+					if(colorFormat != -1) {
+						//Use float buffers for HDR
+						GlStateManager.bindTexture(framebuffer.framebufferTexture);
+						GlStateManager.glTexImage2D(GL11.GL_TEXTURE_2D, 0, colorFormat, framebuffer.framebufferTextureWidth, framebuffer.framebufferTextureHeight, 0, GL11.GL_RGBA, GL11.GL_FLOAT, (IntBuffer)null);
+					}
 				}
 			}
 		}
@@ -95,7 +98,8 @@ public class ShaderHandler {
 
 	@SubscribeEvent
 	public void onPostRender(TickEvent.RenderTickEvent event) {
-		if(ShaderHelper.INSTANCE.getWorldShader() != null)
+		if(event.phase == Phase.START && ShaderHelper.INSTANCE.getWorldShader() != null) {
 			ShaderHelper.INSTANCE.getWorldShader().clearLights();
+		}
 	}
 }
