@@ -3,6 +3,7 @@ package thebetweenlands.client.event.handler;
 import java.util.Random;
 import java.util.stream.StreamSupport;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -30,7 +31,7 @@ public class DebugHandlerSharedLocation {
 					LocationStorage location = (LocationStorage) sharedStorage;
 					for(AxisAlignedBB bb : location.getBounds()) {
 						GlStateManager.pushMatrix();
-						if(Minecraft.getMinecraft().thePlayer.isSneaking()) {
+						if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 							GlStateManager.disableDepth();
 						}
 						GlStateManager.disableTexture2D();
@@ -38,7 +39,9 @@ public class DebugHandlerSharedLocation {
 						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
 						GlStateManager.color(1, 1, 1, 1);
-						GlStateManager.glLineWidth(1.2F);
+						GlStateManager.glLineWidth(1F);
+						GlStateManager.depthMask(false);
+						GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
 						Random rnd = new Random(location.getSeed());
 
@@ -47,22 +50,14 @@ public class DebugHandlerSharedLocation {
 						float blue = 0.25F + rnd.nextFloat() * 0.75F - location.getLayer() / 5.0F;
 						float alpha = 0.25F;
 
-						GlStateManager.color(red / 1.5f, green / 1.5f, blue / 1.5f, alpha / 1.5f);
-						GlStateManager.depthMask(false);
-						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
-						GlStateManager.depthMask(true);
-						GlStateManager.colorMask(false, false, false, false);
-						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
-						GlStateManager.colorMask(true, true, true, true);
-
 						GlStateManager.color(red, green, blue, alpha);
-						GlStateManager.depthMask(false);
-						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
-						GlStateManager.depthMask(true);
-						GlStateManager.colorMask(false, false, false, false);
-						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
-						GlStateManager.colorMask(true, true, true, true);
+						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 
+						GlStateManager.color(red / 2.0F, green / 2.0F, blue / 2.0F, 0.8F);
+						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+
+						GL11.glDisable(GL11.GL_LINE_SMOOTH);
+						GlStateManager.depthMask(true);
 						GlStateManager.enableTexture2D();
 						GlStateManager.enableDepth();
 						GlStateManager.popMatrix();

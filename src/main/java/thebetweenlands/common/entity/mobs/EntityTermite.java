@@ -35,7 +35,7 @@ public class EntityTermite extends EntityMob implements IEntityBL{
 
     @Override
     public boolean getCanSpawnHere() {
-        return worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+        return super.getCanSpawnHere();
     }
 
     @Override

@@ -16,7 +16,7 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 
 	private final MobSpawnerLogicBetweenlands spawnerLogic = new MobSpawnerLogicBetweenlands() {
 		@Override
-		public void sendBlockEvent(int eventID) {
+		public void broadcastEvent(int eventID) {
 			TileEntityMobSpawnerBetweenlands.this.worldObj.addBlockEvent(TileEntityMobSpawnerBetweenlands.this.getPos(), BlockRegistry.MOB_SPAWNER, eventID, 0);
 		}
 
@@ -74,7 +74,7 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
 		if (packet.getNbtCompound().hasKey("entityType")) {
 			String entityType = packet.getNbtCompound().getString("entityType");
-			this.getSpawnerLogic().setEntityName(entityType);
+			this.getSpawnerLogic().setNextEntityName(entityType);
 		}
 	}
 

@@ -7,12 +7,16 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -133,6 +137,8 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 
 		List<BlockPos> inactiveGlowingCragrockBlocks = new ArrayList<BlockPos>();
 		List<BlockPos> inactiveWisps = new ArrayList<BlockPos>();
+		List<BlockPos> blockades = new ArrayList<BlockPos>();
+		BlockPos[][] levelBlockades = new BlockPos[5][];
 
 		//FLOOR 0
 		//WALLS
@@ -405,6 +411,10 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 9, 13, 13, CRAGROCK_BRICKS, 2, 3, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 13, 14, CRAGROCK_BRICKS, 1, 3, 1, direction);
 
+		//BLOCKADE 1
+		blockades.clear();
+		rotatedCubeVolume(world, x, y, z, 7, 14, 12, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 4, 1, 1, direction, pos -> blockades.add(pos));
+		levelBlockades[0] = blockades.toArray(new BlockPos[0]);
 
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 5, 10, 7, SMOOTH_BETWEENSTONE_WALL, 1, 2, 1, direction);
@@ -521,6 +531,12 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 
 		//CEILING
 		rotatedCubeVolume(world, x, y, z, 7, 23, 7, SMOOTH_CRAGROCK, 4, 1, 7, direction);
+
+		//BLOCKADE 2
+		blockades.clear();
+		rotatedCubeVolume(world, x, y, z, 6, 23, 9, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 4, direction, pos -> blockades.add(pos));
+		levelBlockades[1] = blockades.toArray(new BlockPos[0]);
+
 		rotatedCubeVolume(world, x, y, z, 7, 23, 12, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 23, 10, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 23, 10, SMOOTH_CRAGROCK, 1, 1, 1, direction);
@@ -643,11 +659,31 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 6, 32, 9, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 32, 13, SMOOTH_CRAGROCK, 3, 1, 1, direction);
 
+		//BLOCKADE 3
+		blockades.clear();
+		rotatedCubeVolume(world, x, y, z, 6, 32, 8, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 4, 1, 1, direction, pos -> blockades.add(pos));
+		rotatedCubeVolume(world, x, y, z, 7, 32, 7, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 3, 1, 1, direction, pos -> blockades.add(pos));
+		levelBlockades[2] = blockades.toArray(new BlockPos[0]);
+
 		//FLOOR 5
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 33, 10, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 34, 10, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands.pyrad").setMaxEntities(3).setCheckRange(16.0D).setDelay(180, 500).setSpawnInAir(false);
+
+		NBTTagCompound nbt = new NBTTagCompound();
+		NBTTagCompound entityNbt = new NBTTagCompound();
+		entityNbt.setString("id", "thebetweenlands.pyrad");
+		EntityPyrad pyrad = new EntityPyrad(world);
+		pyrad.getEntityAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
+		entityNbt.setTag("Attributes", SharedMonsterAttributes.writeBaseAttributeMapToNBT(pyrad.getAttributeMap()));
+		nbt.setTag("Entity", entityNbt);
+		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands.pyrad")
+		.setMaxEntities(3)
+		.setCheckRange(16.0D)
+		.setDelay(180, 500)
+		.setSpawnInAir(false)
+		.setNextEntity(new WeightedSpawnerEntity(nbt));
+
 		rotatedCubeVolume(world, x, y, z, 10, 33, 12, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 9, 33, 12, SMOOTH_CRAGROCK, 1, 1, 2, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 33, 12, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 2, direction);
@@ -696,6 +732,12 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 6, 41, 7, SMOOTH_CRAGROCK, 4, 1, 7, direction);
 		rotatedCubeVolume(world, x, y, z, 9, 41, 8, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 41, 9, SMOOTH_CRAGROCK, 1, 1, 3, direction);
+
+		//BLOCKADE 4
+		blockades.clear();
+		rotatedCubeVolume(world, x, y, z, 10, 41, 8, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 4, direction, pos -> blockades.add(pos));
+		rotatedCubeVolume(world, x, y, z, 11, 41, 9, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 3, direction, pos -> blockades.add(pos));
+		levelBlockades[3] = blockades.toArray(new BlockPos[0]);
 
 		//FLOOR 6
 		//INTERIOR
@@ -751,6 +793,12 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 5, 50, 8, SMOOTH_CRAGROCK, 7, 1, 4, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 50, 11, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 50, 7, SMOOTH_CRAGROCK, 3, 1, 1, direction);
+
+		//BLOCKADE 5
+		blockades.clear();
+		rotatedCubeVolume(world, x, y, z, 7, 50, 12, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 4, 1, 1, direction, pos -> blockades.add(pos));
+		rotatedCubeVolume(world, x, y, z, 7, 50, 13, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 3, 1, 1, direction, pos -> blockades.add(pos));
+		levelBlockades[4] = blockades.toArray(new BlockPos[0]);
 
 		//TOP FLOOR
 		rotatedCubeVolume(world, x, y, z, 7, 51, 6, SMOOTH_CRAGROCK_SLAB, 3, 1, 1, direction);
@@ -1317,6 +1365,9 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		}
 		for(BlockPos pos : inactiveWisps) {
 			towerLocation.addInactiveWisp(pos);
+		}
+		for(int i = 0; i < 5; i++) {
+			towerLocation.setLevelBlockadeBlocks(i, levelBlockades[i]);
 		}
 		towerLocation.setDirty(true);
 		worldStorage.addSharedStorage(towerLocation);

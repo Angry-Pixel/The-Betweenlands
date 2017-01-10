@@ -27,7 +27,7 @@ public class BlockBreakHandler {
 			//Wake up nearby Pyrads
 			if(blockState.getBlock() == BlockRegistry.WEEDWOOD || blockState.getBlock() == BlockRegistry.LOG_WEEDWOOD) {
 				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(event.getWorld());
-				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, pos.getX(), pos.getZ());
+				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
 
 				for(LocationStorage location : locations) {
 					if(location.getType() == EnumLocationType.GIANT_TREE) {

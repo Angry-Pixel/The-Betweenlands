@@ -32,7 +32,7 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 		if (te != null && te instanceof TileEntityMobSpawnerBetweenlands) {
 			MobSpawnerLogicBetweenlands spawnerLogic = ((TileEntityMobSpawnerBetweenlands) te).getSpawnerLogic();
 			String prevMob = spawnerLogic.getEntityNameToSpawn();
-			spawnerLogic.setEntityName(mobName);
+			spawnerLogic.setNextEntityName(mobName);
 			//resets the rendered entity
 			if (world.isRemote && !Objects.equals(prevMob, mobName)) {
 				NBTTagCompound nbt = new NBTTagCompound();

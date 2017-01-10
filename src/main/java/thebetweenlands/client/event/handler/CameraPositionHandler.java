@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.IEntityCameraOffset;
 import thebetweenlands.common.entity.IEntityScreenShake;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
 
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
@@ -51,6 +53,16 @@ public class CameraPositionHandler {
 					offsetEntities.add((IEntityCameraOffset)entity);
 			}
 
+			World world = renderViewEntity.worldObj;
+			BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
+
+			//Crumbling cragrock tower
+			List<LocationCragrockTower> towers = worldData.getSharedStorageAt(LocationCragrockTower.class, location -> location.getInnerBoundingBox().expand(4, 4, 4).isVecInside(renderViewEntity.getPositionVector()), renderViewEntity.posX, renderViewEntity.posZ);
+			for(LocationCragrockTower tower : towers) {
+				if(tower.isCrumbling()) {
+					shakeStrength += Math.min(Math.pow((tower.getCrumblingTicks() + event.renderTickTime) / 400.0f, 4) * 0.08f, 0.08f);
+				}
+			}
 
 			//TODO Ring of Summoning
 			/*for(EntityPlayer player : (List<EntityPlayer>)renderViewEntity.worldObj.playerEntities) {

@@ -466,6 +466,6 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	public boolean canPossess(EntityLivingBase entity) {
-		return entity instanceof EntityPlayer && (((EntityPlayer) entity).inventory.getStackInSlot(103) == null || ((EntityPlayer) entity).inventory.getStackInSlot(103).getItem() == ItemRegistry.SKULL_MASK);
+		return entity instanceof EntityPlayer && (((EntityPlayer) entity).inventory.getStackInSlot(103) == null || ((EntityPlayer) entity).inventory.getStackInSlot(103).getItem() != ItemRegistry.SKULL_MASK);
 	}
 }

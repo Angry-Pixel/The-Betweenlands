@@ -37,11 +37,13 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
+import thebetweenlands.common.entity.attributes.BooleanAttribute;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityPyrad extends EntityMob implements IEntityBL {
 	public static final IAttribute FLAMES_PER_ATTACK = (new RangedAttribute(null, "bl.flamesPerAttack", 6.0D, 1.0D, 64.0D)).setDescription("Number range of flames per attack");
+	public static final IAttribute AGRESSIVE = (new BooleanAttribute(null, "bl.pyradAgressive", false)).setDescription("Whether the Pyrad is agressive and doesn't go inactive");
 
 	private static final DataParameter<Boolean> CHARGING = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Boolean> ACTIVE = EntityDataManager.<Boolean>createKey(EntityBlaze.class, DataSerializers.BOOLEAN);
@@ -143,6 +145,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.04D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(28.0D);
 		this.getAttributeMap().registerAttribute(FLAMES_PER_ATTACK);
+		this.getAttributeMap().registerAttribute(AGRESSIVE);
 	}
 
 	@Override
@@ -184,11 +187,11 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		}
 
 		if(!this.worldObj.isRemote) {
-			if(this.isEntityAlive() && this.isInWater() && !this.isActive()) {
+			if(this.isEntityAlive() && (this.getEntityAttribute(AGRESSIVE).getAttributeValue() == 1 || this.isInWater()) && !this.isActive()) {
 				this.setActive(true);
 			}
 
-			if(this.isEntityAlive() && this.isActive() && this.getAttackTarget() == null && this.rand.nextInt(800) == 0) {
+			if(this.getEntityAttribute(AGRESSIVE).getAttributeValue() == 0 && this.isEntityAlive() && this.isActive() && this.getAttackTarget() == null && this.rand.nextInt(800) == 0) {
 				this.setActive(false);
 			}
 

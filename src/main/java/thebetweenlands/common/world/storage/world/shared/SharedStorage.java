@@ -345,7 +345,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	}
 
 	/**
-	 * Sets whether the data is dirty and needs to be saved to the file or sent to the client
+	 * Sets whether the data is dirty and needs to be saved to the file
 	 * @param dirty
 	 * @return
 	 */

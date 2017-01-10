@@ -19,11 +19,31 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage implements
 		super(worldStorage, uuid);
 	}
 
+
+	/**
+	 * Sets whether the data is dirty and needs to be saved to the file and sent to the client
+	 * @param dirty
+	 * @return
+	 */
 	@Override
 	public void setDirty(boolean dirty) {
 		super.setDirty(dirty);
 		if(dirty) {
 			this.requiresSync = true;
+		}
+	}
+
+	/**
+	 * Sets whether the data is dirty and needs to be saved to the file and/or sent to the client
+	 * @param dirty
+	 * @param sendUpdate
+	 * @return
+	 */
+	public void setDirty(boolean dirty, boolean sendUpdate) {
+		if(sendUpdate) {
+			this.setDirty(dirty);
+		} else {
+			super.setDirty(dirty);
 		}
 	}
 
@@ -35,6 +55,13 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage implements
 
 	@Override
 	public void update() {
+		this.updateTracker();
+	}
+
+	/**
+	 * Updates the tracker and sends packets to watchers if necessary
+	 */
+	protected void updateTracker() {
 		if(this.requiresSync) {
 			if(!this.getWorldStorage().getWorld().isRemote) {
 				if (!this.getWatchers().isEmpty()) {
