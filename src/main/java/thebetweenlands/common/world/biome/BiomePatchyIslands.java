@@ -41,6 +41,8 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 
 	@Override
 	protected void addSpawnEntries() {
+		super.addSpawnEntries();
+
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityDragonFly.class, (short) 35).setCanSpawnOnWater(true).setGroupSize(1, 2).setSpawnCheckRadius(32.0D).setSpawningInterval(400));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityMireSnail.class, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(800));

@@ -45,6 +45,13 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.setDecorator(new BiomeDecoratorSwamplands(this));
 		this.setFoliageColors(0x2AFF00, 0x2AFF00);
 
+		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
+	}
+
+	@Override
+	protected void addSpawnEntries() {
+		super.addSpawnEntries();
+
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityMireSnail.class, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(800));
@@ -65,12 +72,5 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityBloodSnail.class, (short) 25).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
-	}
-
-	@Override
-	protected void addSpawnEntries() {
-		
 	}
 }
