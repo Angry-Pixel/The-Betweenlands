@@ -42,7 +42,7 @@ public class EntityRegistry {
 	}
 
 	public static void preInit() {
-		registerEntity(EntityDarkDruid.class, "darkDruid", 0x000000, 0xFF0000);
+		registerEntity(EntityDarkDruid.class, "dark_druid", 0x000000, 0xFF0000);
 		registerEntity(EntityAngler.class, "angler", 0x243B0B, 0x00FFFF);
 		registerEntity(EntitySludge.class, "sludge", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntitySwampHag.class, "swamp_hag", 0x0B3B0B, 0xDBA901);

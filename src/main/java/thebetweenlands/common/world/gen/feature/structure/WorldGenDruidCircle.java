@@ -2,13 +2,10 @@ package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 
-import thebetweenlands.common.block.structure.BlockDruidStone;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.util.config.ConfigHandler;
-
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -19,6 +16,11 @@ import net.minecraft.world.chunk.IChunkGenerator;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
     private static final IBlockState[] DRUID_STONES = {
@@ -92,7 +94,12 @@ public class WorldGenDruidCircle implements IWorldGenerator {
             }
         }
         world.setBlockState(altar, BlockRegistry.DRUID_ALTAR.getDefaultState());
-        world.setBlockState(altar.down(), BlockRegistry.DRUID_SPAWNER.getDefaultState());
+        world.setBlockState(altar.down(), BlockRegistry.MOB_SPAWNER.getDefaultState());
+        TileEntity te = world.getTileEntity(altar.down());
+        if(te instanceof TileEntityMobSpawnerBetweenlands) {
+        	MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
+        	logic.setNextEntityName("thebetweenlands.dark_druid").setCheckRange(32.0D).setSpawnRange(6).setMaxEntities(1 + world.rand.nextInt(3));
+        }
         return true;
     }
 

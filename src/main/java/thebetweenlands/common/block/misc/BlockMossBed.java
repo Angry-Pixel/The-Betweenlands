@@ -17,12 +17,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class BlockMossBed extends BlockBed implements IStateMappedBlock {
+public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustomItemBlock {
 	public BlockMossBed() { 
 		this.setCreativeTab(null);
 		this.setSoundType(SoundType.WOOD);
@@ -61,5 +64,11 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock {
 		} else {
 			return super.onBlockActivated(world, pos, state, player, hand, heldItem, side, hitX, hitY, hitZ);
 		}
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public Item getRenderedItem() {
+		return ItemRegistry.MOSS_BED_ITEM;
 	}
 }

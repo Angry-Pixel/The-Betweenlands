@@ -9,9 +9,9 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -95,25 +95,15 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		IInventory tile = (IInventory) world.getTileEntity(pos);
-		if (tile != null) {
-			for (int i = 0; i < tile.getSizeInventory(); i++) {
-				ItemStack stack = tile.getStackInSlot(i);
-				if (stack != null) {
-					if (!world.isRemote && world.getGameRules().getBoolean("doTileDrops")) {
-						float f = 0.7F;
-						double xOffset = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-						double yOffset = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-						double zOffset = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
-						EntityItem item = new EntityItem(world, pos.getX() + xOffset, pos.getY() + yOffset, pos.getZ() + zOffset, stack);
-						item.setDefaultPickupDelay();
-						world.spawnEntityInWorld(item);
-					}
-				}
-			}
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+
+		if (tileEntity instanceof IInventory) {
+			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileEntity);
+			worldIn.updateComparatorOutputLevel(pos, this);
 		}
-		super.breakBlock(world, pos, state);
+
+		super.breakBlock(worldIn, pos, state);
 	}
 
 	@Override
@@ -144,9 +134,9 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 				//BLParticle.STEAM_PURIFIER.spawn(world, (double) (x + randomOffset), (double) y + 0.5D, (double) (z + fixedOffset), 0.0D, 0.0D, 0.0D, 0);
 				world.spawnParticle(EnumParticleTypes.FLAME, (double) (x + randomOffset), (double) y, (double) (z + fixedOffset), 0.0D, 0.0D, 0.0D);
 
-				//                if (world.isAirBlock(pos.up())) {
-				//                    BLParticle.BUBBLE_PRUIFIER.spawn(world, x, y + 1, z, 0.1D, 0.0D, 0.1D, 0);
-				//                }
+				if (world.isAirBlock(pos.up())) {
+					BLParticles.BUBBLE_PURIFIER.spawn(world, x, y + 1, z);
+				}
 			}
 		}
 	}

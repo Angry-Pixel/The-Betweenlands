@@ -93,6 +93,7 @@ import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderChestBetweenlands;
+import thebetweenlands.client.render.tile.RenderCompostBin;
 import thebetweenlands.client.render.tile.RenderDruidAltar;
 import thebetweenlands.client.render.tile.RenderGeckoCage;
 import thebetweenlands.client.render.tile.RenderInfuser;
@@ -179,109 +180,109 @@ import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
 
-    //Please turn this off again after using
-    private static final boolean createJSONFile = false;
+	//Please turn this off again after using
+	private static final boolean createJSONFile = false;
 
-    public static Render<EntityDragonFly> dragonFlyRenderer;
+	public static Render<EntityDragonFly> dragonFlyRenderer;
 
-    @Override
-    public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-        switch (id) {
-            case GUI_DRUID_ALTAR: {
-                if (tile instanceof TileEntityDruidAltar)
-                    return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tile);
-                break;
-            }
-            case GUI_PURIFIER: {
-                if (tile instanceof TileEntityPurifier) {
-                    return new GuiPurifier(player.inventory, (TileEntityPurifier) tile);
-                }
-                break;
-            }
-            case GUI_WEEDWOOD_CRAFT: {
-                if (tile instanceof TileEntityWeedwoodWorkbench) {
-                    return new GuiWeedwoodWorkbench(player.inventory, (TileEntityWeedwoodWorkbench) tile);
-                }
-                break;
-            }
-            case GUI_HL: {
-                return new GuiManualHerblore(player);
-            }
-            case GUI_BL_FURNACE: {
-                if (tile instanceof TileEntityBLFurnace) {
-                    return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tile);
-                }
-                break;
-            }
-            case GUI_BL_DUAL_FURNACE: {
-                if (tile instanceof TileEntityBLDualFurnace) {
-                    return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tile);
-                }
-                break;
-            }
-            case GUI_PESTLE_AND_MORTAR: {
-                if (tile instanceof TileEntityMortar)
-                    return new GuiMortar(player.inventory, (TileEntityMortar) tile);
-            }
-            case GUI_ANIMATOR: {
-                if (tile instanceof TileEntityAnimator)
-                    return new GuiAnimator(player, (TileEntityAnimator) tile);
-            }
-        }
-        return null;
-    }
+	@Override
+	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
+		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+		switch (id) {
+		case GUI_DRUID_ALTAR: {
+			if (tile instanceof TileEntityDruidAltar)
+				return new GuiDruidAltar(player.inventory, (TileEntityDruidAltar) tile);
+			break;
+		}
+		case GUI_PURIFIER: {
+			if (tile instanceof TileEntityPurifier) {
+				return new GuiPurifier(player.inventory, (TileEntityPurifier) tile);
+			}
+			break;
+		}
+		case GUI_WEEDWOOD_CRAFT: {
+			if (tile instanceof TileEntityWeedwoodWorkbench) {
+				return new GuiWeedwoodWorkbench(player.inventory, (TileEntityWeedwoodWorkbench) tile);
+			}
+			break;
+		}
+		case GUI_HL: {
+			return new GuiManualHerblore(player);
+		}
+		case GUI_BL_FURNACE: {
+			if (tile instanceof TileEntityBLFurnace) {
+				return new GuiBLFurnace(player.inventory, (TileEntityBLFurnace) tile);
+			}
+			break;
+		}
+		case GUI_BL_DUAL_FURNACE: {
+			if (tile instanceof TileEntityBLDualFurnace) {
+				return new GuiBLDualFurnace(player.inventory, (TileEntityBLDualFurnace) tile);
+			}
+			break;
+		}
+		case GUI_PESTLE_AND_MORTAR: {
+			if (tile instanceof TileEntityMortar)
+				return new GuiMortar(player.inventory, (TileEntityMortar) tile);
+		}
+		case GUI_ANIMATOR: {
+			if (tile instanceof TileEntityAnimator)
+				return new GuiAnimator(player, (TileEntityAnimator) tile);
+		}
+		}
+		return null;
+	}
 
-    @Override
-    public EntityPlayer getClientPlayer() {
-        return Minecraft.getMinecraft().thePlayer;
-    }
+	@Override
+	public EntityPlayer getClientPlayer() {
+		return Minecraft.getMinecraft().thePlayer;
+	}
 
-    @Override
-    public World getClientWorld() {
-        return Minecraft.getMinecraft().theWorld;
-    }
+	@Override
+	public World getClientWorld() {
+		return Minecraft.getMinecraft().theWorld;
+	}
 
-    @Override
-    public void registerItemAndBlockRenderers() {
-        CustomModelManager.INSTANCE.registerLoader();
-        //TODO ItemRegistry.registerRenderers();
-        registerBlockRenderers();
-    }
+	@Override
+	public void registerItemAndBlockRenderers() {
+		CustomModelManager.INSTANCE.registerLoader();
+		//TODO ItemRegistry.registerRenderers();
+		registerBlockRenderers();
+	}
 
-    private static void registerBlockRenderers() {
-        for (Block block : BlockRegistry.BLOCKS) {
-            if (block instanceof IStateMappedBlock) {
-                AdvancedStateMap.Builder builder = new AdvancedStateMap.Builder();
-                ((IStateMappedBlock) block).setStateMapper(builder);
-                ModelLoader.setCustomStateMapper(block, builder.build());
-            }
-            if (block instanceof ICustomItemBlock) {
-                ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
-                if (customItemBlock.getRenderedItem() != null) {
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(customItemBlock.getRenderedItem().getRegistryName(), "inventory"));
-                    continue;
-                }
-            }
-            ResourceLocation name = block.getRegistryName();
-            if (block instanceof ISubtypeBlock) {
-                ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
-                for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
-                    int meta = subtypeBlock.getSubtypeMeta(i);
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
-                }
-            } else {
-                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(name, "inventory"));
-            }
-        }
-    }
+	private static void registerBlockRenderers() {
+		for (Block block : BlockRegistry.BLOCKS) {
+			if (block instanceof IStateMappedBlock) {
+				AdvancedStateMap.Builder builder = new AdvancedStateMap.Builder();
+				((IStateMappedBlock) block).setStateMapper(builder);
+				ModelLoader.setCustomStateMapper(block, builder.build());
+			}
+			if (block instanceof ICustomItemBlock) {
+				ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
+				if (customItemBlock.getRenderedItem() != null) {
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(customItemBlock.getRenderedItem().getRegistryName(), "inventory"));
+					continue;
+				}
+			}
+			ResourceLocation name = block.getRegistryName();
+			if (block instanceof ISubtypeBlock) {
+				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
+				for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
+					int meta = subtypeBlock.getSubtypeMeta(i);
+					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
+				}
+			} else {
+				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(name, "inventory"));
+			}
+		}
+	}
 
-    @Override
-    public void setCustomStateMap(Block block, StateMap stateMap) {
-        ModelLoader.setCustomStateMapper(block, stateMap);
-    }
+	@Override
+	public void setCustomStateMap(Block block, StateMap stateMap) {
+		ModelLoader.setCustomStateMapper(block, stateMap);
+	}
 
-    /*
+	/*
         @Override
         public void registerDefaultBlockItemRenderer(Block block) {
             if (block instanceof BlockRegistry.ISubBlocksBlock) {
@@ -302,105 +303,105 @@ public class ClientProxy extends CommonProxy {
                 ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name, "inventory"));
             }
         }
-     */
-    @Override
-    public void registerDefaultItemRenderer(Item item) {
-        if (item instanceof ItemRegistry.ISubItemsItem) {
-            Set<Entry<Integer, ResourceLocation>> models = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet();
-            Iterator<Entry<Integer, ResourceLocation>> modelsIT = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet().iterator();
-            while (modelsIT.hasNext()) {
-                Entry<Integer, ResourceLocation> model = modelsIT.next();
-                if (ConfigHandler.debug && createJSONFile)
-                    JsonRenderGenerator.createJSONForItem(item, model.getValue().getResourcePath());
-                ModelLoader.setCustomModelResourceLocation(item, model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
-            }
-        } else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
-            List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
-            for (int i = 0; i < types.size(); i++) {
-                //if (ConfigHandler.debug && createJSONFile)
-                //JsonRenderGenerator.createJSONForItem(item, types.get(i)); //TODO: Make this work. Tomorrow, (hopefully), so don't panic
-                ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + item.getRegistryName().getResourcePath(), types.get(i)));
-            }
-        } else {
-            String itemName = item.getRegistryName().toString().replace("thebetweenlands:", "");
-            if (ConfigHandler.debug && createJSONFile)
-                JsonRenderGenerator.createJSONForItem(item, itemName);
-            ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
-        }
-    }
+	 */
+	@Override
+	public void registerDefaultItemRenderer(Item item) {
+		if (item instanceof ItemRegistry.ISubItemsItem) {
+			Set<Entry<Integer, ResourceLocation>> models = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet();
+			Iterator<Entry<Integer, ResourceLocation>> modelsIT = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet().iterator();
+			while (modelsIT.hasNext()) {
+				Entry<Integer, ResourceLocation> model = modelsIT.next();
+				if (ConfigHandler.debug && createJSONFile)
+					JsonRenderGenerator.createJSONForItem(item, model.getValue().getResourcePath());
+				ModelLoader.setCustomModelResourceLocation(item, model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
+			}
+		} else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
+			List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
+			for (int i = 0; i < types.size(); i++) {
+				//if (ConfigHandler.debug && createJSONFile)
+				//JsonRenderGenerator.createJSONForItem(item, types.get(i)); //TODO: Make this work. Tomorrow, (hopefully), so don't panic
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + item.getRegistryName().getResourcePath(), types.get(i)));
+			}
+		} else {
+			String itemName = item.getRegistryName().toString().replace("thebetweenlands:", "");
+			if (ConfigHandler.debug && createJSONFile)
+				JsonRenderGenerator.createJSONForItem(item, itemName);
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+		}
+	}
 
 
-    //Probably will only be used while updating
-    @Override
-    public void changeFileNames() {
-        File textures = new File(TheBetweenlands.sourceFile, "assets/thebetweenlands/sounds");
-        if (textures.listFiles() != null)
-            for (File file : textures.listFiles()) {
-                if (file.getName().contains(".ogg")) {
-                    CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+	//Probably will only be used while updating
+	@Override
+	public void changeFileNames() {
+		File textures = new File(TheBetweenlands.sourceFile, "assets/thebetweenlands/sounds");
+		if (textures.listFiles() != null)
+			for (File file : textures.listFiles()) {
+				if (file.getName().contains(".ogg")) {
+					CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 
-                    String text = file.getName();
-                    for (int i = 0; i < sequence.length(); i++) {
-                        text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
-                    }
-                    File newFile = new File(file.getPath().replace(file.getName(), "") + text);
-                    System.out.println(file.renameTo(newFile));
-                } else
-                    for (File file2 : file.listFiles()) {
-                        if (file2.getName().contains(".ogg")) {
-                            CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
+					String text = file.getName();
+					for (int i = 0; i < sequence.length(); i++) {
+						text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
+					}
+					File newFile = new File(file.getPath().replace(file.getName(), "") + text);
+					System.out.println(file.renameTo(newFile));
+				} else
+					for (File file2 : file.listFiles()) {
+						if (file2.getName().contains(".ogg")) {
+							CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
 
-                            String text = file2.getName();
-                            for (int i = 0; i < sequence.length(); i++) {
-                                text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
-                            }
-                            File newFile = new File(file2.getPath().replace(file2.getName(), "") + text);
-                            System.out.println(file2.renameTo(newFile));
-                        }
-                    }
-            }
-    }
+							String text = file2.getName();
+							for (int i = 0; i < sequence.length(); i++) {
+								text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
+							}
+							File newFile = new File(file2.getPath().replace(file2.getName(), "") + text);
+							System.out.println(file2.renameTo(newFile));
+						}
+					}
+			}
+	}
 
-    @Override
-    public void preInit() {
-        RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, RenderAngler::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, RenderBlindCaveFish::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, RenderMireSnail::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, RenderMireSnailEgg::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, RenderBloodSnail::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, RenderSnailPoisonJet::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, RenderSwampHag::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, RenderChiromaw::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, RenderDragonFly::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityLurker.class, RenderLurker::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, RenderFrog::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, RenderGiantToad::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, RenderSporeling::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, RenderTermite::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, RenderLeech::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySwordEnergy.class, RenderSwordEnergy::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, RenderShockwaveBlock::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityGecko.class, RenderGecko::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, RenderWight::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, (RenderManager manager) -> new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem()));
-        RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, RenderBLArrow::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, RenderDarkDruid::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityVolatileSoul.class, RenderVolatileSoul::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, RenderTarBeast::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, RenderSiltCrab::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityPyrad.class, RenderPyrad::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, RenderPyradFlame::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, RenderPeatMummy::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityTarminion.class, RenderTarminion::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
-        
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
-        
-        //Register particle stitchers
-        BLParticles[] particles = BLParticles.values();
+	@Override
+	public void preInit() {
+		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, RenderAngler::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, RenderBlindCaveFish::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, RenderMireSnail::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnailEgg.class, RenderMireSnailEgg::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBloodSnail.class, RenderBloodSnail::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySnailPoisonJet.class, RenderSnailPoisonJet::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySwampHag.class, RenderSwampHag::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityChiromaw.class, RenderChiromaw::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDragonFly.class, RenderDragonFly::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLurker.class, RenderLurker::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFrog.class, RenderFrog::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGiantToad.class, RenderGiantToad::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySporeling.class, RenderSporeling::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTermite.class, RenderTermite::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityLeech.class, RenderLeech::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySwordEnergy.class, RenderSwordEnergy::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, RenderShockwaveBlock::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGecko.class, RenderGecko::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, RenderWight::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, (RenderManager manager) -> new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityBLArrow.class, RenderBLArrow::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityDarkDruid.class, RenderDarkDruid::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityVolatileSoul.class, RenderVolatileSoul::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTarBeast.class, RenderTarBeast::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntitySiltCrab.class, RenderSiltCrab::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPyrad.class, RenderPyrad::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPyradFlame.class, RenderPyradFlame::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, RenderPeatMummy::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityTarminion.class, RenderTarminion::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
+
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
+
+		//Register particle stitchers
+		BLParticles[] particles = BLParticles.values();
 		for(BLParticles particle : particles) {
 			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
 			if(stitcher != null) {
@@ -409,125 +410,130 @@ public class ClientProxy extends CommonProxy {
 				}, stitcher.getTextures()));
 			}
 		}
-    }
+	}
 
-    @SuppressWarnings("deprecation")
-    @Override
-    public void postInit() {
-        dragonFlyRenderer = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityDragonFly.class);
-        //Tile entities
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RenderDruidAltar());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodWorkbench.class, new RenderWeedwoodWorkbench());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot.class, new RenderLootPot());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMobSpawnerBetweenlands.class, new RenderSpawnerBetweenlands());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlands.class, new RenderChestBetweenlands());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new RenderSpikeTrap());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new RenderPossessedBlock());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new RenderItemCage());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodSign.class, new RenderWeedwoodSign());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new RenderWisp());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new RenderInfuser());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMortar.class, new RenderPestleAndMortar());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnimator.class, new RenderAnimator());
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new RenderAlembic());
+	@SuppressWarnings("deprecation")
+	@Override
+	public void postInit() {
+		dragonFlyRenderer = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityDragonFly.class);
+		
+		//Tile entities
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDruidAltar.class, new RenderDruidAltar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodWorkbench.class, new RenderWeedwoodWorkbench());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityLootPot.class, new RenderLootPot());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMobSpawnerBetweenlands.class, new RenderSpawnerBetweenlands());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChestBetweenlands.class, new RenderChestBetweenlands());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySpikeTrap.class, new RenderSpikeTrap());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPossessedBlock.class, new RenderPossessedBlock());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemCage.class, new RenderItemCage());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWeedwoodSign.class, new RenderWeedwoodSign());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMudFlowerPot.class, new RenderMudFlowerPot());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeckoCage.class, new RenderGeckoCage());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWisp.class, new RenderWisp());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityInfuser.class, new RenderInfuser());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMortar.class, new RenderPestleAndMortar());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAnimator.class, new RenderAnimator());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new RenderAlembic());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCompostBin.class, new RenderCompostBin());
 
-        //item models
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
-        //ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_SPAWNER), 0, TileEntityDruidSpawner.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.PURIFIER), 0, TileEntityPurifier.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_1.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_2.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_3.getMetadata(EnumFacing.NORTH), TileEntityLootPot.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP), 0, TileEntitySpikeTrap.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.INFUSER), 0, TileEntityInfuser.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MORTAR), 0, TileEntityMortar.class);
-        ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ANIMATOR), 0, TileEntityAnimator.class);
+		//item models
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.COMPOST_BIN), 0, TileEntityCompostBin.class);
+		//ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_SPAWNER), 0, TileEntityDruidSpawner.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.PURIFIER), 0, TileEntityPurifier.class);
+		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_1.getMetadata(facing), TileEntityLootPot.class);
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityLootPot.class);
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.LOOT_POT), EnumLootPot.POT_3.getMetadata(facing), TileEntityLootPot.class);
+		}
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MOB_SPAWNER), 0, TileEntityMobSpawnerBetweenlands.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.SPIKE_TRAP), 0, TileEntitySpikeTrap.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.POSSESSED_BLOCK), 0, TileEntityPossessedBlock.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_CAGE), 0, TileEntityItemCage.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.GECKO_CAGE), 0, TileEntityGeckoCage.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.INFUSER), 0, TileEntityInfuser.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.MORTAR), 0, TileEntityMortar.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ANIMATOR), 0, TileEntityAnimator.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ALEMBIC), 0, TileEntityAlembic.class);
 
-        //Block colors
-        for (Block block : BlockRegistry.BLOCKS) {
-            if (block instanceof ITintedBlock) {
-                final ITintedBlock tintedBlock = (ITintedBlock) block;
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-                    @Override
-                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                        IBlockState blockState = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
-                        return tintedBlock.getColorMultiplier(blockState, null, null, tintIndex);
-                    }
-                }, block);
-                Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
-                    @Override
-                    public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-                        return tintedBlock.getColorMultiplier(state, worldIn, pos, tintIndex);
-                    }
-                }, block);
-            }
-        }
+		//Block colors
+		for (Block block : BlockRegistry.BLOCKS) {
+			if (block instanceof ITintedBlock) {
+				final ITintedBlock tintedBlock = (ITintedBlock) block;
+				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+					@Override
+					public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+						IBlockState blockState = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
+						return tintedBlock.getColorMultiplier(blockState, null, null, tintIndex);
+					}
+				}, block);
+				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
+					@Override
+					public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+						return tintedBlock.getColorMultiplier(state, worldIn, pos, tintIndex);
+					}
+				}, block);
+			}
+		}
 
-        //Item colors
-        for (Item item : ItemRegistry.ITEMS) {
-            if (item instanceof ITintedItem) {
-                final ITintedItem tintedItem = (ITintedItem) item;
-                Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-                    @Override
-                    public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-                        return tintedItem.getColorMultiplier(stack, tintIndex);
-                    }
-                }, item);
-            }
-        }
+		//Item colors
+		for (Item item : ItemRegistry.ITEMS) {
+			if (item instanceof ITintedItem) {
+				final ITintedItem tintedItem = (ITintedItem) item;
+				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
+					@Override
+					public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+						return tintedItem.getColorMultiplier(stack, tintIndex);
+					}
+				}, item);
+			}
+		}
 
-        pixelLove = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getMinecraft().renderEngine, false);
-        if (Minecraft.getMinecraft().gameSettings.language != null) {
-            pixelLove.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
-        }
-        ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
-        HLEntryRegistry.init();
-    }
+		pixelLove = new FontRenderer(Minecraft.getMinecraft().gameSettings, new ResourceLocation("thebetweenlands:textures/gui/manual/font_atlas.png"), Minecraft.getMinecraft().renderEngine, false);
+		if (Minecraft.getMinecraft().gameSettings.language != null) {
+			pixelLove.setBidiFlag(Minecraft.getMinecraft().getLanguageManager().isCurrentLanguageBidirectional());
+		}
+		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
+		HLEntryRegistry.init();
+	}
 
-    @Override
-    public void registerEventHandlers() {
-        MinecraftForge.EVENT_BUS.register(TextureStitchHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(FogHandler.class);
-        MinecraftForge.EVENT_BUS.register(AmbienceSoundPlayHandler.class);
-        MinecraftForge.EVENT_BUS.register(GLUProjection.getInstance());
-        MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
-        MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
-        MinecraftForge.EVENT_BUS.register(CameraPositionHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(MusicHandler.INSTANCE);
-        MinecraftForge.EVENT_BUS.register(ThemHandler.class);
+	@Override
+	public void registerEventHandlers() {
+		MinecraftForge.EVENT_BUS.register(TextureStitchHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(FogHandler.class);
+		MinecraftForge.EVENT_BUS.register(AmbienceSoundPlayHandler.class);
+		MinecraftForge.EVENT_BUS.register(GLUProjection.getInstance());
+		MinecraftForge.EVENT_BUS.register(WorldRenderHandler.class);
+		MinecraftForge.EVENT_BUS.register(ScreenRenderHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(DecayRenderHandler.class);
+		MinecraftForge.EVENT_BUS.register(CameraPositionHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(MusicHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(ThemHandler.class);
 
-        if (ConfigHandler.debug) {
-            MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);
-        }
-    }
+		if (ConfigHandler.debug) {
+			MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);
+		}
+	}
 
-    @Override
-    public void updateWispParticles(TileEntityWisp te) {
-        Iterator<Object> it = te.particleList.iterator();
-        while (it.hasNext()) {
-            ParticleWisp wisp = (ParticleWisp) it.next();
-            if (!wisp.isAlive()) {
-                it.remove();
-            } else {
-                wisp.onUpdate();
-            }
-        }
-    }
+	@Override
+	public void updateWispParticles(TileEntityWisp te) {
+		Iterator<Object> it = te.particleList.iterator();
+		while (it.hasNext()) {
+			ParticleWisp wisp = (ParticleWisp) it.next();
+			if (!wisp.isAlive()) {
+				it.remove();
+			} else {
+				wisp.onUpdate();
+			}
+		}
+	}
 
-    private static FontRenderer pixelLove;
+	private static FontRenderer pixelLove;
 
-    @Override
-    public FontRenderer getCustomFontRenderer() {
-        return pixelLove;
-    }
+	@Override
+	public FontRenderer getCustomFontRenderer() {
+		return pixelLove;
+	}
 }

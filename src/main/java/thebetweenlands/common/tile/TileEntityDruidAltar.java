@@ -10,11 +10,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -88,7 +86,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
     }
 
     private void removeSpawner() {
-        if (this.worldObj.getBlockState(this.pos.down()).getBlock() == BlockRegistry.DRUID_SPAWNER) {
+        if (this.worldObj.getBlockState(this.pos.down()).getBlock() == BlockRegistry.MOB_SPAWNER) {
             this.worldObj.setBlockState(this.pos.down(), Blocks.GRASS.getDefaultState());
         }
     }

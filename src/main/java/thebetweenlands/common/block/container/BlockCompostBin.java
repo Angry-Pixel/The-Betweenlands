@@ -11,13 +11,19 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -35,7 +41,6 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 	}
-
 
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -75,56 +80,35 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (world.isRemote) return true;
-		if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
-			TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
+		if (!world.isRemote) {
+			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
+				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
 
-			boolean open = tile.open;
+				boolean open = tile.isOpen();
 
-			if (!player.isSneaking() && player.getHeldItem(hand) == null && tile.getTotalCompostedAmount() == 0) {
-				if (open) {
-					if (tile.hasCompostableItems()) {
-						player.addChatMessage(new TextComponentTranslation("chat.compost.close"));
-					} else {
-						player.addChatMessage(new TextComponentTranslation("chat.compost.add"));
-					}
-				} else {
-					if (tile.hasCompostableItems()) {
-						player.addChatMessage(new TextComponentTranslation("chat.compost.composting"));
-					} else {
-						player.addChatMessage(new TextComponentTranslation("chat.compost.add"));
-					}
-				}
-			} else if (player.isSneaking()) {
-				tile.open = !tile.open;
-				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
-				tile.markDirty();
-			} else {
-				if (player.getHeldItem(hand) != null) {
-					if (open) {
-						ItemStack stack = player.getHeldItem(hand);
-						CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(stack);
-						if (compostRecipe != null) {
-							switch (tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, true)) {
-							case 1:
-								tile.addItemToBin(stack, compostRecipe.compostAmount, compostRecipe.compostTime, false);
-								if (!player.capabilities.isCreativeMode)
-									player.inventory.decrStackSize(player.inventory.currentItem, 1);
-								break;
-							case -1:
-							default:
-								player.addChatMessage(new TextComponentTranslation("chat.compost.full"));
-								break;
+				if((heldItem == null && (!open || player.isSneaking() || tile.getCompostedAmount() == 0)) || (heldItem != null && !open)) {
+					tile.setOpen(!open);
+					world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+					tile.markDirty();
+				} else if(open && heldItem != null) {
+					CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(heldItem);
+					if (compostRecipe != null) {
+						switch (tile.addItemToBin(heldItem, compostRecipe.compostAmount, compostRecipe.compostTime, true)) {
+						case 1:
+							tile.addItemToBin(heldItem, compostRecipe.compostAmount, compostRecipe.compostTime, false);
+							if (!player.capabilities.isCreativeMode) {
+								player.inventory.decrStackSize(player.inventory.currentItem, 1);
 							}
-						} else {
-							player.addChatMessage(new TextComponentTranslation("chat.compost.not.compostable"));
+							break;
+						case -1:
+						default:
+							player.addChatMessage(new TextComponentTranslation("chat.compost.full"));
+							break;
 						}
 					} else {
-						player.addChatMessage(new TextComponentTranslation("chat.compost.open.add"));
+						player.addChatMessage(new TextComponentTranslation("chat.compost.not.compostable"));
 					}
-				} else if (!open && tile.getTotalCompostedAmount() != 0) {
-					player.addChatMessage(new TextComponentTranslation("chat.compost.open.get"));
-				} else if (open && tile.getTotalCompostedAmount() != 0) {
+				} else if(tile.getCompostedAmount() > 0 && open) {
 					if (tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {
 						world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, EnumItemMisc.COMPOST.create(1)));
 					}
@@ -132,5 +116,38 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 			}
 		}
 		return true;
+	}
+
+	@Override
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return EnumBlockRenderType.MODEL;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public boolean isFullCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		TileEntity tileEntity = worldIn.getTileEntity(pos);
+
+		if (tileEntity instanceof IInventory) {
+			InventoryHelper.dropInventoryItems(worldIn, pos, (IInventory)tileEntity);
+			worldIn.updateComparatorOutputLevel(pos, this);
+		}
+
+		super.breakBlock(worldIn, pos, state);
 	}
 }

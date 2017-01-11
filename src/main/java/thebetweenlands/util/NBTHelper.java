@@ -9,6 +9,11 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class NBTHelper {
+	/**
+	 * Returns the ItemStack NBT and creates a new NBTTagCompound if necessary
+	 * @param stack
+	 * @return
+	 */
 	public static NBTTagCompound getStackNBTSafe(ItemStack stack) {
 		if(stack.getTagCompound() == null)
 			stack.setTagCompound(new NBTTagCompound());

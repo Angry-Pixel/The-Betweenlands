@@ -84,7 +84,6 @@ import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
-import thebetweenlands.common.block.structure.BlockDruidSpawner;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
@@ -462,7 +461,6 @@ public class BlockRegistry {
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
 	public static final Block TREE_PORTAL = new BlockTreePortal();
 	public static final Block PORTAL_FRAME = new BlockPortalFrame();
-	public static final Block DRUID_SPAWNER = new BlockDruidSpawner();
 	public static final Block DRUID_ALTAR = new BlockDruidAltar();
 	public static final Block PURIFIER = new BlockPurifier();
 	public static final Block WEEDWOOD_WORKBENCH = new BlockWeedwoodWorkbench();
