@@ -198,7 +198,9 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 								//if (y == level) {   
 								//    primer.setBlockState(bx, 150, bz, Blocks.STAINED_GLASS.getDefaultState().withProperty(BlockStainedGlass.COLOR, EnumDyeColor.byMetadata((int) MathUtils.linearTransformd(noise, -0.5F, 1, 0, 15))));
 								//}
-								if (noise < limit) {
+								if(primer.getBlockState(bx, by, bz).getBlock() == BlockRegistry.SWAMP_WATER && noise < limit + 0.25 && noise > limit) {
+									primer.setBlockState(bx, by, bz, BlockRegistry.COARSE_SWAMP_DIRT.getDefaultState());
+								} else if (noise < limit) {
 									primer.setBlockState(bx, by, bz, by > WorldProviderBetweenlands.CAVE_WATER_HEIGHT ? Blocks.AIR.getDefaultState() : BlockRegistry.SWAMP_WATER.getDefaultState());
 								}
 							}

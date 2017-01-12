@@ -48,7 +48,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		// this.tasks.addTask(2, new EntityAIBLBreakDoor(this, Blocks.iron_door, 20));
 		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1D, false));
 		this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
-		this.tasks.addTask(5, new EntityAIWander(this, 1D));
+		this.tasks.addTask(5, new EntityAIWander(this, 0.75D));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(7, new EntityAILookIdle(this));
 

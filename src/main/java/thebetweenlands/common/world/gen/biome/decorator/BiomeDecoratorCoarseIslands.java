@@ -72,7 +72,7 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("cragrockTower");
-		this.generate(5, DecorationHelper::generateCragrockTower);
+		this.generate(0.45F, DecorationHelper::generateCragrockTower);
 		this.endProfilerSection();
 	}
 }

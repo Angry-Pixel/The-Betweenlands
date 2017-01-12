@@ -10,6 +10,7 @@ import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
+import thebetweenlands.client.render.particle.entity.ParticleAnimated;
 import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.render.particle.entity.ParticleBug;
@@ -19,7 +20,6 @@ import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
-import thebetweenlands.client.render.particle.entity.ParticlePortalBL;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
@@ -27,7 +27,8 @@ import thebetweenlands.client.render.particle.entity.ParticleWisp;
 
 public enum BLParticles {
 
-	PORTAL(new ParticlePortalBL.Factory()),
+	PORTAL(new ParticleAnimated.PortalFactory()),
+	SPAWNER(new ParticleAnimated.SpawnerFactory()),
 	ALTAR_CRAFTING(new ParticleAltarCrafting.Factory()),
 	SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
 	SWAMP_SMOKE(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())

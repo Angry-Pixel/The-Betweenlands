@@ -26,6 +26,7 @@ import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -68,7 +69,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	protected final EntityMoveHelper flightMoveHelper;
 	protected final EntityMoveHelper groundMoveHelper;
-	
+
 	public EntityWight(World world) {
 		super(world);
 		setSize(0.7F, 2.2F);
@@ -151,8 +152,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				this.setHiding(false);
 
 				if (!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatileOnTarget) {
-					if (this.volatileCooldownTicks > 0)
+					if (this.volatileCooldownTicks > 0) {
 						this.volatileCooldownTicks--;
+					}
 
 					if (this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldownTicks <= 0) {
 						this.setVolatile(true);
@@ -333,7 +335,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean isEntityInvulnerable(DamageSource source) {
-		return this.isHiding();
+		boolean isCreative = source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect)source).getEntity() instanceof EntityPlayer && ((EntityPlayer)((EntityDamageSourceIndirect)source).getEntity()).isCreative();
+		return this.isHiding() && isCreative;
 	}
 
 	@Override
@@ -360,8 +363,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 				this.setVolatile(false);
 			}
 		}
-		if (this.getAttackTarget() != null && source instanceof EntityDamageSource && source.getEntity() == this.getAttackTarget())
+		if (this.getAttackTarget() != null && source instanceof EntityDamageSource && source.getEntity() == this.getAttackTarget()) {
 			this.canTurnVolatileOnTarget = true;
+		}
 		return ret;
 	}
 
@@ -371,8 +375,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			return false;
 		}
 		if (super.attackEntityAsMob(entity)) {
-			if (entity == this.getAttackTarget())
+			if (entity == this.getAttackTarget()) {
 				this.canTurnVolatileOnTarget = true;
+			}
 			return true;
 		}
 		return false;
@@ -406,11 +411,22 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		this.setVolatile(nbt.getBoolean("volatileState"));
-		this.volatileCooldownTicks = nbt.getInteger("volatileCooldown");
-		this.volatileTicks = nbt.getInteger("volatileTicks");
-		this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
-		this.canTurnVolatileOnTarget = nbt.getBoolean("canTurnVolatileOnTarget");
+		
+		if(nbt.hasKey("volatileState")) {
+			this.setVolatile(nbt.getBoolean("volatileState"));
+		}
+		if(nbt.hasKey("volatileCooldown")) {
+			this.volatileCooldownTicks = nbt.getInteger("volatileCooldown");
+		}
+		if(nbt.hasKey("volatileTicks")) {
+			this.volatileTicks = nbt.getInteger("volatileTicks");
+		}
+		if(nbt.hasKey("volatileReceivedDamage")) {
+			this.volatileReceivedDamage = nbt.getFloat("volatileReceivedDamage");
+		}
+		if(nbt.hasKey("canTurnVolatileOnTarget")) {
+			this.canTurnVolatileOnTarget = nbt.getBoolean("canTurnVolatileOnTarget");
+		}
 	}
 
 	@SideOnly(Side.CLIENT)

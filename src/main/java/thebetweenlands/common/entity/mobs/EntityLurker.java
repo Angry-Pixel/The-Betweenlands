@@ -475,6 +475,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tagCompound) {
 		super.readEntityFromNBT(tagCompound);
-		anger = tagCompound.getShort("Anger");
+		if(tagCompound.hasKey("Anger")) {
+			anger = tagCompound.getShort("Anger");
+		}
 	}
 }

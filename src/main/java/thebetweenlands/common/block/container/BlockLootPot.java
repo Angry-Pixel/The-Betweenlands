@@ -182,12 +182,14 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public void onBlockDestroyedByPlayer(World worldIn, BlockPos pos, IBlockState state) {
-		if (!worldIn.isRemote)
+		if (!worldIn.isRemote) {
 			if (worldIn.rand.nextInt(3) == 0) {
 				EntityTermite entity = new EntityTermite(worldIn);
-				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getZ(), pos.getZ() + 0.5D, 0.0F, 0.0F);
+				entity.getEntityAttribute(EntityTermite.SMALL).setBaseValue(1);
+				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
 				worldIn.spawnEntityInWorld(entity);
 			}
+		}
 		super.onBlockDestroyedByPlayer(worldIn, pos, state);
 	}
 

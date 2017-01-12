@@ -193,10 +193,18 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		this.setSpawningTicks(nbt.getInteger("spawningTicks"));
-		this.chargingPreparation = nbt.getInteger("chargingPreparation");
-		this.getDataManager().set(CHARGING_STATE, nbt.getByte("chargingState"));
-		this.carryShimmerstone = nbt.getBoolean("carryShimmerstone");
+		if(nbt.hasKey("spawningTicks")) {
+			this.setSpawningTicks(nbt.getInteger("spawningTicks"));
+		}
+		if(nbt.hasKey("chargingPreparation")) {
+			this.chargingPreparation = nbt.getInteger("chargingPreparation");
+		}
+		if(nbt.hasKey("chargingState")) {
+			this.getDataManager().set(CHARGING_STATE, nbt.getByte("chargingState"));
+		}
+		if(nbt.hasKey("carryShimmerstone")) {
+			this.carryShimmerstone = nbt.getBoolean("carryShimmerstone");
+		}
 
 		super.readEntityFromNBT(nbt);
 	}

@@ -170,14 +170,27 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		this.shedCooldown = nbt.getInteger("shedCooldown");
-		this.sheddingProgress = nbt.getInteger("sheddingProgress");
-		this.getDataManager().set(SHEDDING_STATE_DW, nbt.getBoolean("sheddingState"));
-
-		this.suckingCooldown = nbt.getInteger("suckingCooldown");
-		this.suckingPreparation = nbt.getInteger("suckingPreparation");
-		this.suckingProgress = nbt.getInteger("suckingProgress");
-		this.getDataManager().set(SUCKING_STATE_DW, nbt.getByte("suckingState"));
+		if(nbt.hasKey("shedCooldown")) {
+			this.shedCooldown = nbt.getInteger("shedCooldown");
+		}
+		if(nbt.hasKey("sheddingProgress")) {
+			this.sheddingProgress = nbt.getInteger("sheddingProgress");
+		}
+		if(nbt.hasKey("sheddingState")) {
+			this.getDataManager().set(SHEDDING_STATE_DW, nbt.getBoolean("sheddingState"));
+		}
+		if(nbt.hasKey("suckingCooldown")) {
+			this.suckingCooldown = nbt.getInteger("suckingCooldown");
+		}
+		if(nbt.hasKey("suckingPreparation")) {
+			this.suckingPreparation = nbt.getInteger("suckingPreparation");
+		}
+		if(nbt.hasKey("suckingProgress")) {
+			this.suckingProgress = nbt.getInteger("suckingProgress");
+		}
+		if(nbt.hasKey("suckingState")) {
+			this.getDataManager().set(SUCKING_STATE_DW, nbt.getByte("suckingState"));
+		}
 
 		super.readEntityFromNBT(nbt);
 	}

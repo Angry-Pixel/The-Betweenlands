@@ -10,7 +10,7 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 	@Override
 	public void decorate() {
 		super.decorate();
-
+		
 		//TODO: Implement missing generators
 		//this.generate(10, DecorationHelper::generateDeadTree);
 		//this.generate(2, DecorationHelper::generateRottenLogStructure);
@@ -53,6 +53,10 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 
 		this.startProfilerSection("swampTallgrassCluster");
 		this.generate(100, DecorationHelper::generateSwampTallgrassCluster);
+		this.endProfilerSection();
+		
+		this.startProfilerSection("swampDoubleTallgrassCluster");
+		this.generate(200, DecorationHelper::generateSwampDoubleTallgrass);
 		this.endProfilerSection();
 
 		this.startProfilerSection("venusFlyTrapCluster");

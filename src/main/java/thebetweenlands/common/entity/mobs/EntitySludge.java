@@ -83,7 +83,9 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		this.wasOnGround = compound.getBoolean("wasOnGround");
+		if(compound.hasKey("wasOnGround")) {
+			this.wasOnGround = compound.getBoolean("wasOnGround");
+		}
 	}
 
 	@Override

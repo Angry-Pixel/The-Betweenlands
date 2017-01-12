@@ -190,9 +190,11 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	@Override
 	public void readEntityFromNBT(NBTTagCompound compound) {
 		super.readEntityFromNBT(compound);
-		setHiding(compound.getBoolean("isHiding"));
-		if (isHiding()) {
-			setHidingBush(new BlockPos(compound.getInteger("hidingBushX"), compound.getInteger("hidingBushY"), compound.getInteger("hidingBushZ")));
+		if(compound.hasKey("isHiding")) {
+			setHiding(compound.getBoolean("isHiding"));
+			if (isHiding()) {
+				setHidingBush(new BlockPos(compound.getInteger("hidingBushX"), compound.getInteger("hidingBushY"), compound.getInteger("hidingBushZ")));
+			}
 		}
 	}
 

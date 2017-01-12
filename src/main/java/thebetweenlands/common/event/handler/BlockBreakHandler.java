@@ -1,11 +1,9 @@
 package thebetweenlands.common.event.handler;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -31,11 +29,7 @@ public class BlockBreakHandler {
 
 				for(LocationStorage location : locations) {
 					if(location.getType() == EnumLocationType.GIANT_TREE) {
-						List<EntityPyrad> pyrads = new ArrayList<EntityPyrad>();
-
-						for(AxisAlignedBB bounds : location.getBounds()) {
-							pyrads.addAll(event.getWorld().getEntitiesWithinAABB(EntityPyrad.class, bounds));
-						}
+						List<EntityPyrad> pyrads = event.getWorld().getEntitiesWithinAABB(EntityPyrad.class, location.getEnclosingBounds(), pyrad -> location.isInside(pyrad));
 
 						for(EntityPyrad pyrad : pyrads) {
 							if(!pyrad.isActive() && event.getWorld().rand.nextInt(10) == 0) {

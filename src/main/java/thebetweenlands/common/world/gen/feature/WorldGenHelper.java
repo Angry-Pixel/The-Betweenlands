@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -138,7 +139,120 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			break;
 		}
 	}
+	
+	/**
+	 * Returns a rotated AABB
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param offsetX
+	 * @param offsetY
+	 * @param offsetZ
+	 * @param sizeWidth
+	 * @param sizeHeight
+	 * @param sizeDepth
+	 * @param rotation
+	 * @return
+	 */
+	public final AxisAlignedBB rotatedAABB(World world, double x, double y, double z, double offsetX, double offsetY, double offsetZ, double sizeWidth, double sizeHeight, double sizeDepth, int rotation) {
+		x -= width / 2;
+		z -= depth / 2;
+		switch (rotation) {
+		default:
+		case 0:
+			return new AxisAlignedBB(
+					x + offsetX, y + offsetY, z + offsetZ,
+					x + offsetX + sizeWidth, y + offsetY + sizeHeight, z + offsetZ + sizeDepth
+					);
+		case 1:
+			return new AxisAlignedBB(
+					x + offsetZ, y + offsetY, z + depth - offsetX - sizeWidth - 1,
+					x + offsetZ + sizeDepth, y + offsetY + sizeHeight, z + depth - offsetX - 1
+					);
+		case 2:
+			return new AxisAlignedBB(
+					x + width - offsetX - sizeWidth - 1, y + offsetY, z + depth - offsetZ - sizeDepth - 1,
+					x + width - offsetX - 1, y + offsetY + sizeHeight, z + depth - offsetZ - 1
+					);
+		case 3:
+			return new AxisAlignedBB(
+					x + width - offsetZ - sizeDepth - 1, y + offsetY, z + offsetX,
+					x + width - offsetZ - 1, y + offsetY + sizeHeight, z + offsetX + sizeWidth
+					);
+		}
+	}
 
+	/**
+	 * Rotates the specified position
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param offsetX
+	 * @param offsetY
+	 * @param offsetZ
+	 * @param rotation
+	 * @return
+	 */
+	public final BlockPos rotatePos(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation) {
+		x -= width / 2;
+		z -= depth / 2;
+		switch (rotation) {
+		default:
+		case 0:
+			return new BlockPos(x + offsetX, y + offsetY, z + offsetZ);
+		case 1:
+			return new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1);
+		case 2:
+			return new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1);
+		case 3:
+			return new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX);
+		}
+	}
+	
+	/**
+	 * Rotates the specified position
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param offsetX
+	 * @param offsetY
+	 * @param offsetZ
+	 * @param rotation
+	 * @return
+	 */
+	public final BlockPos rotatePosNoOffsets(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation) {
+		x -= width / 2;
+		z -= depth / 2;
+		switch (rotation) {
+		default:
+		case 0:
+			return new BlockPos(x + offsetX, y + offsetY, z + offsetZ);
+		case 1:
+			return new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX);
+		case 2:
+			return new BlockPos(x + width - offsetX, y + offsetY, z + depth - offsetZ);
+		case 3:
+			return new BlockPos(x + width - offsetZ, y + offsetY, z + offsetX);
+		}
+	}
+	
+	/**
+	 * Rotates the specified position
+	 * @param world
+	 * @param pos
+	 * @param offsetX
+	 * @param offsetY
+	 * @param offsetZ
+	 * @param rotation
+	 * @return
+	 */
+	public final BlockPos rotatePos(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation) {
+		return this.rotatePos(world, pos.getX(), pos.getY(), pos.getZ(), offsetX, offsetY, offsetZ, rotation);
+	}
+	
 
 	/**
 	 * Creates a WorldGenHelper#rotatedCubeVolume that also extends down until it hits a non replaceable block
@@ -158,7 +272,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 */
 	@SafeVarargs
 	public final void rotatedCubeVolumeExtendedDown(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation, Consumer<BlockPos>... callbacks) {
-		while (isReplaceable(world, x, y, z, offsetX, offsetY - 1, offsetZ, rotation)) {
+		while (y + offsetY > 0 && isReplaceable(world, x, y, z, offsetX, offsetY - 1, offsetZ, rotation)) {
 			offsetY--;
 			sizeHeight++;
 		}

@@ -17,20 +17,51 @@ import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 
 public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
-	public static String[] entityList = new String[]{"thebetweenlands.swamp_hag", "thebetweenlands.wight", "thebetweenlands.blood_snail", "thebetweenlands.termite", "thebetweenlands.leech"};
+
+	public static enum RandomSpawnerMob {
+		SWAMP_HAG("thebetweenlands.swamp_hag", 200, 500, 4), 
+		WIGHT("thebetweenlands.wight", 400, 800, 2), 
+		BLOOD_SNAIL("thebetweenlands.blood_snail", 100, 400, 4), 
+		TERMITE("thebetweenlands.termite", 100, 300, 6), 
+		LEECH("thebetweenlands.leech", 150, 500, 3);
+
+		private String name;
+		private int minDelay, maxDelay, maxEntities;
+
+		private RandomSpawnerMob(String name, int minDelay, int maxDelay, int maxEntities) {
+			this.name = name;
+			this.minDelay = minDelay;
+			this.maxDelay = maxDelay;
+			this.maxEntities = maxEntities;
+		}
+
+		public String getName() {
+			return this.name;
+		}
+
+		public int getMinDelay() {
+			return this.minDelay;
+		}
+
+		public int getMaxDelay() {
+			return this.maxDelay;
+		}
+
+		public int getMaxEntities() {
+			return this.maxEntities;
+		}
+	}
 
 	public BlockMobSpawnerBetweenlands(){
 		super();
-		setHardness(10.0F);
-		setHarvestLevel("pickaxe", 0);
-		setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setHardness(10.0F);
+		this.setHarvestLevel("pickaxe", 0);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-
-	public static void setMob(World world, BlockPos pos, String mobName) {
-		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityMobSpawnerBetweenlands) {
-			MobSpawnerLogicBetweenlands spawnerLogic = ((TileEntityMobSpawnerBetweenlands) te).getSpawnerLogic();
+	public static MobSpawnerLogicBetweenlands setMob(World world, BlockPos pos, String mobName) {
+		MobSpawnerLogicBetweenlands spawnerLogic = getLogic(world, pos);
+		if(spawnerLogic != null) {
 			String prevMob = spawnerLogic.getEntityNameToSpawn();
 			spawnerLogic.setNextEntityName(mobName);
 			//resets the rendered entity
@@ -40,17 +71,24 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 				spawnerLogic.readFromNBT(nbt);
 			}
 		}
+		return spawnerLogic;
 	}
 
-
-	public static void setRandomMob(World world, BlockPos pos, Random random) {
-		setMob(world, pos, entityList[random.nextInt(entityList.length)]);
+	public static MobSpawnerLogicBetweenlands setRandomMob(World world, BlockPos pos, Random random) {
+		RandomSpawnerMob mob = RandomSpawnerMob.values()[random.nextInt(RandomSpawnerMob.values().length)];
+		MobSpawnerLogicBetweenlands logic = setMob(world, pos, mob.getName());
+		if(logic != null) {
+			logic.setDelay(mob.getMinDelay(), mob.getMaxDelay());
+			logic.setMaxEntities(mob.getMaxEntities());
+		}
+		return logic;
 	}
 
 	public static MobSpawnerLogicBetweenlands getLogic(World world, BlockPos pos) {
 		TileEntity te = world.getTileEntity(pos);
-		if (te != null && te instanceof TileEntityMobSpawnerBetweenlands)
+		if (te != null && te instanceof TileEntityMobSpawnerBetweenlands) {
 			return ((TileEntityMobSpawnerBetweenlands) te).getSpawnerLogic();
+		}
 		return null;
 	}
 
@@ -66,7 +104,6 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 		return new TileEntityMobSpawnerBetweenlands();
 	}
 
-
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
@@ -76,6 +113,4 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.ENTITYBLOCK_ANIMATED;
 	}
-
-
 }

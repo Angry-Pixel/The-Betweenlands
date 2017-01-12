@@ -175,7 +175,9 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
-		this.setActive(nbt.getBoolean("active"));
+		if(nbt.hasKey("active")) {
+			this.setActive(nbt.getBoolean("active"));
+		}
 
 		super.readEntityFromNBT(nbt);
 	}

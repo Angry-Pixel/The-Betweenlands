@@ -33,8 +33,9 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
     @Override
     public void renderTileEntityAt(TileEntityMobSpawnerBetweenlands te, double x, double y, double z, float partialTicks, int destroyStage) {
         float interpolatedCounter = 0;
-        if (te != null)
-            interpolatedCounter = -(te.counter + (te.counter - te.lastCounter) * partialTicks);
+        if (te != null) {
+            interpolatedCounter = -(te.lastCounter + (te.counter - te.lastCounter) * partialTicks);
+        }
 
         GlStateManager.enableBlend();
         GlStateManager.enableTexture2D();
@@ -45,8 +46,9 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.pushMatrix();
         GlStateManager.translate(x + 0.475F, y + 0.38F + (float) Math.sin(counter1) / 5.0F, z + 0.475F);
         GlStateManager.scale(0.3F, 0.3F, 0.3F);
-        if (te != null)
+        if (te != null) {
             renderSpawnerMob(te.getSpawnerLogic(), 0, 0, 0, partialTicks);
+        }
         GlStateManager.popMatrix();
         LightingUtil.INSTANCE.revert();
         

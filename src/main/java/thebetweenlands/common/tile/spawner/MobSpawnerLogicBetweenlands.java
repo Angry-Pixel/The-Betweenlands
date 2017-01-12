@@ -13,6 +13,7 @@ import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -230,13 +231,7 @@ public abstract class MobSpawnerLogicBetweenlands {
 				}
 
 				if (this.hasParticles()) {
-					double rx = (double) (this.getSpawnerWorld().rand.nextFloat());
-					double ry = (double) (this.getSpawnerWorld().rand.nextFloat());
-					double rz = (double) (this.getSpawnerWorld().rand.nextFloat());
-					double len = Math.sqrt(rx * rx + ry * ry + rz * rz);
-					BLParticles.PORTAL.spawn(this.getSpawnerWorld(),
-							(float) this.getSpawnerX() + rx, (float) this.getSpawnerY() + ry, (float) this.getSpawnerZ() + rz,
-							ParticleFactory.ParticleArgs.get().withMotion((rx - 0.5D) / len * 0.05D, (ry - 0.5D) / len * 0.05D, (rz - 0.5D) / len * 0.05D));
+					this.spawnParticles();
 				}
 
 				this.lastEntityRotation = this.entityRotation;
@@ -286,6 +281,10 @@ public abstract class MobSpawnerLogicBetweenlands {
 					}
 
 					if(this.canSpawnInAir() || !this.getSpawnerWorld().isAirBlock(new BlockPos(rx, ry, rz).down())) {
+						if(!this.canSpawnInAir()) {
+							ry = MathHelper.floor_double(ry);
+						}
+						
 						EntityLiving entityLiving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
 						entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
 
@@ -313,6 +312,19 @@ public abstract class MobSpawnerLogicBetweenlands {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Spawns the particles
+	 */
+	protected void spawnParticles() {
+		double rx = (double) (this.getSpawnerWorld().rand.nextFloat());
+		double ry = (double) (this.getSpawnerWorld().rand.nextFloat());
+		double rz = (double) (this.getSpawnerWorld().rand.nextFloat());
+		double len = Math.sqrt(rx * rx + ry * ry + rz * rz);
+		BLParticles.SPAWNER.spawn(this.getSpawnerWorld(),
+				(float) this.getSpawnerX() + rx, (float) this.getSpawnerY() + ry, (float) this.getSpawnerZ() + rz,
+				ParticleFactory.ParticleArgs.get().withMotion((rx - 0.5D) / len * 0.05D, (ry - 0.5D) / len * 0.05D, (rz - 0.5D) / len * 0.05D));
 	}
 
 	/**

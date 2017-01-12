@@ -149,7 +149,9 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		setHasMated(nbt.getBoolean("hasMated"));
+		if(nbt.hasKey("hasMated")) {
+			setHasMated(nbt.getBoolean("hasMated"));
+		}
 	}
 
 }

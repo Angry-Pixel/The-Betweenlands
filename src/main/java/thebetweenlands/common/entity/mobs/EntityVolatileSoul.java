@@ -249,8 +249,12 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.setOwner(nbt.getUniqueId("ownerUUID"));
-		this.strikes = nbt.getInteger("strikes");
+		if(nbt.hasKey("ownerUUID")) {
+			this.setOwner(nbt.getUniqueId("ownerUUID"));
+		}
+		if(nbt.hasKey("strikes")) {
+			this.strikes = nbt.getInteger("strikes");
+		}
 	}
 
 	@Override

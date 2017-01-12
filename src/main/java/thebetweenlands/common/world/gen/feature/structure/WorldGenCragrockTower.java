@@ -124,9 +124,22 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 	}
 
 	private boolean tower(World world, Random random, int x, int y, int z) {
-		int direction = random.nextInt(4);
+		int direction = random.nextInt(4); //TODO
 
-		if (!canGenerate(world, x, y, z, direction, 14, 16))
+		BlockPos highestPoint = new BlockPos(x, y, z);
+		for(int xo = -8; xo <= 8; xo++) {
+			for(int zo = -8; zo <= 8; zo++) {
+				BlockPos localPoint = world.getHeight(new BlockPos(x + xo, y, z + zo));
+				if(localPoint.getY() - y >= 0 && localPoint.getY() - y <= 5 && localPoint.getY() > highestPoint.getY()) {
+					highestPoint = localPoint;
+				}
+			}
+		}
+		x = highestPoint.getX();
+		y = highestPoint.getY();
+		z = highestPoint.getZ();
+
+		if (!canGenerate(world, x, y, z, direction, 17, 19))
 			return false;
 
 		if (!rotatedCubeMatches(world, x, y, z, 1, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED_GROUND_OR_REPLACEABLE)
@@ -1029,6 +1042,115 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 11, 9, 17, getStateFromRotation(1, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 10, 17, getStateFromRotation(3, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 11, 17, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
+
+		//STAIRS 1
+		int stair1Length = 16;
+		for(int steps = 0; steps < 17; steps++) {
+			BlockPos stairPosRight = this.rotatePos(world, x, y, z, 1, -1 - steps, 8 - steps*2, direction);
+			BlockPos stairPosLeft = this.rotatePos(world, x, y, z, 2, -1 - steps, 8 - steps*2, direction);
+			IBlockState stairBlockRight = world.getBlockState(stairPosRight);
+			IBlockState stairBlockLeft = world.getBlockState(stairPosLeft);
+			if(!stairBlockRight.getBlock().isReplaceable(world, stairPosRight) || stairBlockRight.getMaterial().isLiquid() ||
+					!stairBlockLeft.getBlock().isReplaceable(world, stairPosLeft) || stairBlockLeft.getMaterial().isLiquid() || steps == 16) {
+				stair1Length = steps;
+				
+				if(world.getBlockState(stairPosRight).getBlock().isReplaceable(world, stairPosRight)) {
+					world.setBlockState(stairPosRight, CRAGROCK_BRICKS);
+				}
+				
+				if(world.getBlockState(stairPosLeft).getBlock().isReplaceable(world, stairPosLeft)) {
+					world.setBlockState(stairPosLeft, SMOOTH_CRAGROCK);
+				}
+				
+				break;
+			}
+
+			if(steps % 2 == 0) {
+				rotatedCubeVolumeExtendedDown(world, x, y, z, 0,  - steps, 6 - steps*2, CRAGROCK_PILLAR, 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 0, 1 - steps, 6 - steps*2, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 0, 2 - steps, 6 - steps*2, getStateFromRotation(2, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 0, 3 - steps, 6 - steps*2, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
+
+				rotatedCubeVolumeExtendedDown(world, x, y, z, 3,  - steps, 6 - steps*2, CRAGROCK_PILLAR, 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 3, 1 - steps, 6 - steps*2, getStateFromRotation(2, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 3, 2 - steps, 6 - steps*2, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 3, 3 - steps, 6 - steps*2, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
+			}
+
+			rotatedCubeVolume(world, x, y, z, 1, -1 - steps, 8 - steps*2, CRAGROCK_BRICK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 2, -1 - steps, 8 - steps*2, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 1, -1 - steps, 7 - steps*2, CRAGROCK_BRICKS, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 2, -1 - steps, 7 - steps*2, SMOOTH_CRAGROCK, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 1, -1 - steps, 6 - steps*2, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 2, -1 - steps, 6 - steps*2, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
+		}
+
+		//STAIRS 2
+		int stair2Length = 16;
+		for(int steps = 0; steps < 17; steps++) {
+			BlockPos stairPosRight = this.rotatePos(world, x, y, z, 1 + 13, -1 - steps, 8 - steps*2, direction);
+			BlockPos stairPosLeft = this.rotatePos(world, x, y, z, 2 + 13, -1 - steps, 8 - steps*2, direction);
+			IBlockState stairBlockRight = world.getBlockState(stairPosRight);
+			IBlockState stairBlockLeft = world.getBlockState(stairPosLeft);
+			if(!stairBlockRight.getBlock().isReplaceable(world, stairPosRight) || stairBlockRight.getMaterial().isLiquid() ||
+					!stairBlockLeft.getBlock().isReplaceable(world, stairPosLeft) || stairBlockLeft.getMaterial().isLiquid() || steps == 16) {
+				stair2Length = steps;
+				
+				if(world.getBlockState(stairPosRight).getBlock().isReplaceable(world, stairPosRight)) {
+					world.setBlockState(stairPosRight, SMOOTH_CRAGROCK);
+				}
+				
+				if(world.getBlockState(stairPosLeft).getBlock().isReplaceable(world, stairPosLeft)) {
+					world.setBlockState(stairPosLeft, CRAGROCK_BRICKS);
+				}
+				
+				break;
+			}
+
+			if(steps % 2 == 0) {
+				rotatedCubeVolumeExtendedDown(world, x, y, z, 0 + 13,  - steps, 6 - steps*2, CRAGROCK_PILLAR, 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 0 + 13, 1 - steps, 6 - steps*2, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 0 + 13, 2 - steps, 6 - steps*2, getStateFromRotation(2, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 0 + 13, 3 - steps, 6 - steps*2, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
+
+				rotatedCubeVolumeExtendedDown(world, x, y, z, 3 + 13,  - steps, 6 - steps*2, CRAGROCK_PILLAR, 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 3 + 13, 1 - steps, 6 - steps*2, getStateFromRotation(2, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 3 + 13, 2 - steps, 6 - steps*2, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
+				rotatedCubeVolume(world, x, y, z, 3 + 13, 3 - steps, 6 - steps*2, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
+			}
+			
+			rotatedCubeVolume(world, x, y, z, 2 + 13, -1 - steps, 8 - steps*2, CRAGROCK_BRICK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 1 + 13, -1 - steps, 8 - steps*2, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 2 + 13, -1 - steps, 7 - steps*2, CRAGROCK_BRICKS, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 1 + 13, -1 - steps, 7 - steps*2, SMOOTH_CRAGROCK, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 2 + 13, -1 - steps, 6 - steps*2, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 1 + 13, -1 - steps, 6 - steps*2, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
+		}
+
+		int stairsLength = Math.max(stair2Length, stair1Length);
+		
+		
+		//TODO
+		AxisAlignedBB stairsAABB;
+		
+		switch(direction) {
+		default:
+		case 0:
+			stairsAABB = new AxisAlignedBB(x - 8, y - stairsLength - 8, z - stairsLength * 2 - 1, x + 9, y, z);
+			break;
+		case 1:
+			stairsAABB = new AxisAlignedBB(x - stairsLength * 2, y - stairsLength - 8, z - 7, x + 1, y, z + 10);
+			break;
+		case 2:
+			stairsAABB = new AxisAlignedBB(x - 8, y - stairsLength - 8, z + stairsLength * 2 + 2, x + 9, y, z);
+			break;
+		case 3:
+			stairsAABB = new AxisAlignedBB(x + stairsLength * 2 + 1, y - stairsLength - 8, z - 9, x, y, z + 8);
+			break;
+		}
+		
+		stairsAABB = stairsAABB.expand(4, 0, 4);
+		
 		rotatedCubeVolume(world, x, y, z, 1, 0, 8, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 9, CRAGROCK_BRICKS, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 10, CRAGROCK_BRICK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
@@ -1060,6 +1182,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 12, 3, 16, CRAGROCK_BRICKS, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 3, 16, CRAGROCK_BRICK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 4, 16, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
+
 		rotatedCubeVolume(world, x, y, z, 2, 0, 8, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 2, 0, 9, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 2, 0, 10, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
@@ -1093,6 +1216,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 12, 3, 15, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 3, 15, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 11, 4, 15, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
+
 		rotatedCubeVolume(world, x, y, z, 7, 13, 5, getStateFromRotation(3, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 3, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 13, 6, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 9, 13, 6, getStateFromRotation(2, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
@@ -1334,28 +1458,33 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		switch (direction) {
 		default:
 		case 0:
-			locationBounds = new AxisAlignedBB(x - 1, y, z + 1, x + width + 1, y + height, z + depth + 1).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x - 1, y - 8, z + 1, x + width + 1, y + height, z + depth + 1).expand(6, 6, 6);
 			entrance = new BlockPos(x + width / 2, y + 5, z + depth / 2 + 8);
 			break;
 		case 1:
-			locationBounds = new AxisAlignedBB(x + 1, y, z + depth - width - 1, x + depth + 1, y + height, z + depth + 1).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x + 1, y - 8, z + depth - width - 1, x + depth + 1, y + height, z + depth + 1).expand(6, 6, 6);
 			entrance = new BlockPos(x + width / 2 + 9, y + 5, z + depth / 2 + 1);
 			break;
 		case 2:
-			locationBounds = new AxisAlignedBB(x - 1 + width - width, y, z + depth - depth - 1, x + 1 + width, y + height, z + depth - 1).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x - 1 + width - width, y - 8, z + depth - depth - 1, x + 1 + width, y + height, z + depth - 1).expand(6, 6, 6);
 			entrance = new BlockPos(x + width / 2, y + 5, z + depth / 2 - 8);
 			break;
 		case 3:
-			locationBounds = new AxisAlignedBB(x - 1 + width - depth, y, z - 1, x - 1 + width, y + height, z + 1 + width).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x - 1 + width - depth, y - 8, z - 1, x - 1 + width, y + height, z + 1 + width).expand(6, 6, 6);
 			entrance = new BlockPos(x + width / 2 - 9, y + 5, z + depth / 2 - 1);
 			break;
 		}
 		x += width / 2;
 		z += depth / 2;
+		
+		if(stairsAABB.minY < locationBounds.minY) {
+			double addY = (locationBounds.minY - stairsAABB.minY) / 2;
+			locationBounds = locationBounds.expand(0, addY, 0).offset(0, -addY, 0);
+		}
 
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		LocationCragrockTower towerLocation = new LocationCragrockTower(worldStorage, UUID.randomUUID());
-		towerLocation.addBounds(locationBounds, locationBounds.expand(-12, -10, -12));
+		towerLocation.addBounds(locationBounds, locationBounds.expand(-12, -10, -12), stairsAABB);
 		towerLocation.linkChunks();
 		towerLocation.setLayer(0);
 		towerLocation.setSeed(random.nextLong());

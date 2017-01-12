@@ -22,6 +22,10 @@ import thebetweenlands.common.registries.BlockRegistry;
 public class BlockAlgae extends BlockPlant {
 	protected static final AxisAlignedBB ALGAE_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 0.125D, 1D);
 
+	public BlockAlgae() {
+		this.setReplaceable(true);
+	}
+	
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		//if(entityIn instanceof EntityWeedwoodRowboat == false) {

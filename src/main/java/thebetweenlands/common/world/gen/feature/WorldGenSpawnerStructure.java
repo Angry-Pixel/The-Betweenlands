@@ -1,8 +1,10 @@
 package thebetweenlands.common.world.gen.feature;
 
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -10,9 +12,13 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
-import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.tile.TileEntityChestBetweenlands;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
+import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 public class WorldGenSpawnerStructure extends WorldGenerator {
 	@Override
@@ -75,7 +81,10 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 					else {
 						world.setBlockState(new BlockPos(x + 2, yy, zz), BlockRegistry.BETWEENSTONE_CHISELED.getDefaultState(), 2);
 						world.setBlockState(new BlockPos(x + 2, yy + 2, zz), BlockRegistry.MOB_SPAWNER.getDefaultState(), 2);
-						BlockMobSpawnerBetweenlands.setRandomMob(world, new BlockPos(x + 2, yy + 2, zz), random);
+						MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.setRandomMob(world, new BlockPos(x + 2, yy + 2, zz), random);
+						if(logic != null) {
+							logic.setSpawnInAir(false);
+						}
 					}
 					world.setBlockState(new BlockPos(x + 3, yy, zz), BlockRegistry.BETWEENSTONE_TILES.getDefaultState(), 2);
 					world.setBlockState(new BlockPos(x + 4, yy, zz), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST), 2);
@@ -129,9 +138,15 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 			}
 		}
 
-		//TODO: World locations
-		//StorageHelper.addArea(world, "translate:smallDungeon", AxisAlignedBB.getBoundingBox(x, y, z, x + 5, y + 5, z + 5).expand(2, 2, 2), EnumLocationType.DUNGEON, 0);
-
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:smallDungeon", EnumLocationType.DUNGEON);
+		location.addBounds(new AxisAlignedBB(x, y, z, x + 5, y + 5, z + 5).expand(2, 2, 2));
+		location.linkChunks();
+		location.setLayer(0);
+		location.setSeed(random.nextLong());
+		location.setDirty(true);
+		worldStorage.addSharedStorage(location);
+		
 		return true;
 	}
 }

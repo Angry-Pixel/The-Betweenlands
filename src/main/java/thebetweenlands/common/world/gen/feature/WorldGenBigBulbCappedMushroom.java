@@ -10,12 +10,11 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.biome.decorator.DecorationHelper;
 
 public class WorldGenBigBulbCappedMushroom extends WorldGenerator {
 	private IBlockState head;
 	private IBlockState stalk;
-
-	private WorldGenerator genMushrooms = new WorldGenPlantCluster(BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState(), 5, 40);
 
 	public void generateHead(World world, BlockPos pos){
 		world.setBlockState(pos, head, 2);
@@ -80,7 +79,7 @@ public class WorldGenBigBulbCappedMushroom extends WorldGenerator {
 				generateHead(world, new BlockPos(x, yy, z));
 
 		}
-		this.genMushrooms.generate(world, rand, position);
+		DecorationHelper.GEN_BULB_CAPPED_MUSHROOMS.generate(world, rand, position);
 		return true;
 	}
 

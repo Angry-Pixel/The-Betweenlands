@@ -7,7 +7,6 @@ import java.util.function.Function;
 
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -17,163 +16,18 @@ import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class BiomeDecoratorBetweenlands {
-	private final Biome biome;
-	private World world;
-	private int x, y, z, seaGroundY;
-	private Random rand;
-	private ChunkGeneratorBetweenlands generator;
-
+public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 	private static final List<String> profiledGenerators = new ArrayList<String>();
 	private static boolean decorating;
+	private final Biome biome;
 
 	public BiomeDecoratorBetweenlands(Biome biome) {
 		this.biome = biome;
 	}
 
-	/**
-	 * Returns the biome
-	 * @return
-	 */
+	@Override
 	public Biome getBiome() {
 		return this.biome;
-	}
-
-	/**
-	 * Returns a random X/Z offset for generating a feature with a padding of 8 blocks
-	 * @return
-	 */
-	public final int offsetXZ() {
-		return this.rand.nextInt(16) + 8;
-	}
-
-	/**
-	 * Returns a random X/Z offset for generating a feature with a custom padding
-	 * @param padding Block padding from chunk borders, from 0 to 15
-	 * @return
-	 */
-	public final int offsetXZ(int padding) {
-		return this.rand.nextInt(32 - padding * 2) + padding;
-	}
-
-	/**
-	 * Returns a random Y offset in the range of -8 to 8
-	 * @return
-	 */
-	public final int offsetY() {
-		return this.rand.nextInt(16) - 8;
-	}
-
-	/**
-	 * Returns a random position near the surface with a padding of 8 blocks
-	 * @return
-	 */
-	public final BlockPos getRandomPos() {
-		return new BlockPos(this.x + this.offsetXZ(), this.y + this.offsetY(), this.z + this.offsetXZ());
-	}
-
-	/**
-	 * Returns a random position near the surface with a custom padding
-	 * @param padding Block padding from chunk borders, from 0 to 15
-	 * @return
-	 */
-	public final BlockPos getRandomPos(int padding) {
-		return new BlockPos(this.x + this.offsetXZ(padding), this.y + this.offsetY(), this.z + this.offsetXZ(padding));
-	}
-
-	/**
-	 * Returns a random position near the sea ground (or surface if there's no water) with a padding of 8 blocks
-	 * @return
-	 */
-	public final BlockPos getRandomPosSeaGround() {
-		return new BlockPos(this.x + this.offsetXZ(), this.seaGroundY + this.offsetY(), this.z + this.offsetXZ());
-	}
-
-	/**
-	 * Returns a random position near the sea ground (or surface if there's no water) with a custom padding
-	 * @param padding Block padding from chunk borders, from 0 to 15
-	 * @return
-	 */
-	public final BlockPos getRandomPosSeaGround(int padding) {
-		return new BlockPos(this.x + this.offsetXZ(padding), this.seaGroundY + this.offsetY(), this.z + this.offsetXZ(padding));
-	}
-
-	/**
-	 * Returns a random X position with a padding of 8 blocks
-	 * @return
-	 */
-	public final int getRandomPosX() {
-		return this.x + this.offsetXZ();
-	}
-
-	/**
-	 * Returns a random X position with a custom padding
-	 * @param padding Block padding from chunk borders, from 0 to 15
-	 * @return
-	 */
-	public final int getRandomPosX(int padding) {
-		return this.x + this.offsetXZ(padding);
-	}
-
-	/**
-	 * Returns a random Z position with a padding of 8 blocks
-	 * @return
-	 */
-	public final int getRandomPosZ() {
-		return this.z + this.offsetXZ();
-	}
-
-	/**
-	 * Returns a random Z position with a custom padding
-	 * @param padding Block padding from chunk borders, from 0 to 15
-	 * @return
-	 */
-	public final int getRandomPosZ(int padding) {
-		return this.z + this.offsetXZ(padding);
-	}
-
-	/**
-	 * Returns a random Y position near the surface
-	 * @return
-	 */
-	public final int getRandomPosY() {
-		return this.y + this.offsetY();
-	}
-
-	/**
-	 * Returns a random Y position near the sea ground (or surface if there's no water)
-	 * @return
-	 */
-	public final int getRandomPosYSeaGround() {
-		return this.seaGroundY + this.offsetY();
-	}
-
-	public final World getWorld() {
-		return this.world;
-	}
-
-	public final ChunkGeneratorBetweenlands getChunkGenerator() {
-		return this.generator;
-	}
-
-	public final int getX() {
-		return this.x;
-	}
-
-	public final int getY() {
-		return this.y;
-	}
-
-	public final int getSeaGroundY() {
-		return this.seaGroundY;
-	}
-
-	public final int getZ() {
-		return this.z;
-	}
-
-	public final Random getRand() {
-		return this.rand;
 	}
 
 	/**
@@ -184,23 +38,7 @@ public class BiomeDecoratorBetweenlands {
 	 * @param z
 	 */
 	public final void decorate(World world, ChunkGeneratorBetweenlands generator, Random rand, int x, int z) {
-		this.x = x;
-		this.z = z;
-		this.y = world.getHeight(new BlockPos(x, 0, z)).getY();
-		this.seaGroundY = this.y;
-		if(this.y <= WorldProviderBetweenlands.LAYER_HEIGHT && world.getBlockState(new BlockPos(this.x, this.y, this.z)).getMaterial().isLiquid()) {
-			MutableBlockPos offsetPos = new MutableBlockPos();
-			for(int oy = this.y; oy > 0; oy--) {
-				offsetPos.setPos(this.x, oy, this.z);
-				if(!world.getBlockState(offsetPos).getMaterial().isLiquid()) {
-					this.seaGroundY = oy;
-					break;
-				}
-			}
-		}
-		this.rand = rand;
-		this.world = world;
-		this.generator = generator;
+		this.init(world, this.biome, generator, rand, x, z);
 
 		boolean wasDecorating = decorating;
 		decorating = true;
@@ -240,6 +78,10 @@ public class BiomeDecoratorBetweenlands {
 		this.startProfilerSection("undergroundRuins");
 		this.generate(120, DecorationHelper::generateUndergroundRuins);
 		this.endProfilerSection();
+		
+		this.startProfilerSection("undergroundSpawners");
+		this.generate(2.5F, DecorationHelper::generateSpawner);
+		this.endProfilerSection();
 	}
 
 	/**
@@ -257,31 +99,34 @@ public class BiomeDecoratorBetweenlands {
 		this.generateOre(4, 8, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(80, 8, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
+		Random rand = this.getRand();
+		World world = this.getWorld();
+
 		//Generate middle gems
-		int cycles = 1 + (this.rand.nextBoolean() ? this.rand.nextInt(2) : 0);
+		int cycles = 1 + (rand.nextBoolean() ? rand.nextInt(2) : 0);
 		for(int i = 0; i < cycles; i++) {
-			if(this.rand.nextInt(9 / cycles + 1) == 0) {
-				int xx = this.x + this.offsetXZ();
-				int zz = this.z + this.offsetXZ();
-				int yy = this.world.getHeight(new BlockPos(xx, 0, zz)).getY() - 1;
+			if(rand.nextInt(9 / cycles + 1) == 0) {
+				int xx = this.getX() + this.offsetXZ();
+				int zz = this.getZ() + this.offsetXZ();
+				int yy = world.getHeight(new BlockPos(xx, 0, zz)).getY() - 1;
 				boolean hasMud = false;
 				for(int yo = 0; yo < 16; yo++) {
-					if(this.world.getBlockState(new BlockPos(xx, yy + yo, zz)).getBlock() == BlockRegistry.SWAMP_WATER
-							&& this.world.getBlockState(new BlockPos(xx, yy + yo - 1, zz)).getBlock() == BlockRegistry.MUD) {
+					if(world.getBlockState(new BlockPos(xx, yy + yo, zz)).getBlock() == BlockRegistry.SWAMP_WATER
+							&& world.getBlockState(new BlockPos(xx, yy + yo - 1, zz)).getBlock() == BlockRegistry.MUD) {
 						hasMud = true;
 						yy = yy + yo - 1;
 					}
 				}
 				if(hasMud) {
-					switch(this.rand.nextInt(3)) {
+					switch(rand.nextInt(3)) {
 					case 0:
-						this.world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.AQUA_MIDDLE_GEM_ORE.getDefaultState());
+						world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.AQUA_MIDDLE_GEM_ORE.getDefaultState());
 						break;
 					case 1:
-						this.world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.CRIMSON_MIDDLE_GEM_ORE.getDefaultState());
+						world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.CRIMSON_MIDDLE_GEM_ORE.getDefaultState());
 						break;
 					case 2:
-						this.world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.GREEN_MIDDLE_GEM_ORE.getDefaultState());
+						world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.GREEN_MIDDLE_GEM_ORE.getDefaultState());
 						break;
 					}
 				}
@@ -298,12 +143,12 @@ public class BiomeDecoratorBetweenlands {
 	 * @param maxY
 	 */
 	protected void generateOre(float tries, int padding, WorldGenerator oreGen, int minY, int maxY) {
-		tries = tries >= 1.0F ? tries : (this.rand.nextFloat() <= tries ? 1 : 0);
+		tries = tries >= 1.0F ? tries : (this.getRand().nextFloat() <= tries ? 1 : 0);
 		for (int i = 0; i < tries; i++) {
-			int xx = this.x + this.offsetXZ(padding);
-			int yy = minY + this.rand.nextInt(maxY - minY);
-			int zz = this.z + this.offsetXZ(padding);
-			oreGen.generate(this.world, this.rand, new BlockPos(xx, yy, zz));
+			int xx = this.getX() + this.offsetXZ(padding);
+			int yy = minY + this.getRand().nextInt(maxY - minY);
+			int zz = this.getZ() + this.offsetXZ(padding);
+			oreGen.generate(this.getWorld(), this.getRand(), new BlockPos(xx, yy, zz));
 		}
 	}
 
@@ -316,13 +161,13 @@ public class BiomeDecoratorBetweenlands {
 	public boolean generate(float tries, Function<BiomeDecoratorBetweenlands, Boolean> generator) {
 		boolean generated = false;
 		if(tries < 1.0F) {
-			if(this.rand.nextFloat() <= tries) {
+			if(this.getRand().nextFloat() <= tries) {
 				generated = generator.apply(this);
 			}
 		} else {
 			float remainder = tries % 1.0F;
 
-			if(this.rand.nextFloat() <= remainder) {
+			if(this.getRand().nextFloat() <= remainder) {
 				tries++;
 			}
 
@@ -348,7 +193,7 @@ public class BiomeDecoratorBetweenlands {
 	 * @return
 	 */
 	public Profiler getProfiler() {
-		return this.world.theProfiler;
+		return this.getWorld().theProfiler;
 	}
 
 	/**

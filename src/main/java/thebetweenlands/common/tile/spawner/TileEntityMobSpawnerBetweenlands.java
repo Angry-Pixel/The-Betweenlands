@@ -7,7 +7,10 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITickable {
@@ -39,8 +42,26 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 		public int getSpawnerZ() {
 			return TileEntityMobSpawnerBetweenlands.this.getPos().getZ();
 		}
-	};
 
+		@Override
+		protected void spawnParticles() {
+			if(this.getSpawnerWorld().rand.nextInt(2) == 0) {
+				double rx = (double) (this.getSpawnerWorld().rand.nextFloat());
+				double ry = (double) (this.getSpawnerWorld().rand.nextFloat());
+				double rz = (double) (this.getSpawnerWorld().rand.nextFloat());
+
+				double len = Math.sqrt(rx * rx + ry * ry + rz * rz);
+
+				float counter = -TileEntityMobSpawnerBetweenlands.this.counter;
+
+				BLParticles.SPAWNER.spawn(this.getSpawnerWorld(),
+						(float) this.getSpawnerX() + rx, (float) this.getSpawnerY() + ry, (float) this.getSpawnerZ() + rz,
+						ParticleFactory.ParticleArgs.get()
+						.withMotion((rx - 0.5D) / len * 0.05D, (ry - 0.5D) / len * 0.05D, (rz - 0.5D) / len * 0.05D)
+						.withColor(1.0F, MathHelper.clamp_float(4 + (float) Math.sin(counter) * 3, 0, 1), MathHelper.clamp_float((float) Math.sin(counter) * 2, 0, 1), 0.65F));
+			}
+		}
+	};
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {

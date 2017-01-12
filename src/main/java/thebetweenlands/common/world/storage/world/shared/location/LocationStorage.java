@@ -23,6 +23,7 @@ import thebetweenlands.common.world.storage.world.shared.BetweenlandsSharedStora
 
 public class LocationStorage extends BetweenlandsSharedStorage {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
+	private AxisAlignedBB enclosingBoundingBox;
 	private String name;
 	private EnumLocationType type;
 	private int layer;
@@ -59,6 +60,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		for(AxisAlignedBB boundingBox : boundingBoxes) {
 			this.boundingBoxes.add(boundingBox);
 		}
+		this.updateEnclosingBounds();
 		return this;
 	}
 
@@ -67,7 +69,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public List<AxisAlignedBB> getBounds() {
-		return this.boundingBoxes;
+		return Collections.unmodifiableList(this.boundingBoxes);
 	}
 
 	/**
@@ -78,6 +80,32 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		for(AxisAlignedBB boundingBox : boundingBoxes) {
 			this.boundingBoxes.remove(boundingBox);
 		}
+		this.updateEnclosingBounds();
+	}
+
+	/**
+	 * Updates the enclosing bounding box
+	 */
+	protected void updateEnclosingBounds() {
+		if(this.boundingBoxes.isEmpty()) {
+			this.enclosingBoundingBox = null;
+		} else if(this.boundingBoxes.size() == 1) {
+			this.enclosingBoundingBox = this.boundingBoxes.get(0);
+		} else {
+			AxisAlignedBB union = this.boundingBoxes.get(0);
+			for(AxisAlignedBB box : this.boundingBoxes) {
+				union.union(box);
+			}
+			this.enclosingBoundingBox = union;
+		}
+	}
+	
+	/**
+	 * Returns a bounding box that encloses all bounds
+	 * @return
+	 */
+	public AxisAlignedBB getEnclosingBounds() {
+		return this.enclosingBoundingBox;
 	}
 
 	/**
@@ -223,6 +251,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 			double maxZ = boxNbt.getDouble("maxZ");
 			this.boundingBoxes.add(new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
 		}
+		this.updateEnclosingBounds();
 		this.type = EnumLocationType.fromName(nbt.getString("type"));
 		this.layer = nbt.getInteger("layer");
 		if(nbt.hasKey("ambience")) {

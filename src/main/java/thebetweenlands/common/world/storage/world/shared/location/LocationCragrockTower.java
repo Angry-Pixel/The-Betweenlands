@@ -317,29 +317,31 @@ public class LocationCragrockTower extends LocationStorage implements ITickable 
 
 					this.wispUpdateTicks = 0;
 
-					Vec3i src = player != null ? player.getPosition() : this.structurePos;
-
-					BlockPos closest = this.inactiveWisps.get(0);
-					for(BlockPos pos : this.inactiveWisps) {
-						if(pos.distanceSq(src) < closest.distanceSq(src)) {
-							closest = pos;
+					for(int i = 0; i < 4; i++) {
+						Vec3i src = player != null ? player.getPosition() : this.structurePos;
+	
+						BlockPos closest = this.inactiveWisps.get(0);
+						for(BlockPos pos : this.inactiveWisps) {
+							if(pos.distanceSq(src) < closest.distanceSq(src)) {
+								closest = pos;
+							}
 						}
-					}
-
-					boolean canLightUp = false;
-
-					if((closest.getY() - this.structurePos.getY() < 16 && player.posY - this.structurePos.getY() < 45) || 
-							(closest.getY() - this.structurePos.getY() >= 16 && player.posY - this.structurePos.getY() >= 45)) {
-						canLightUp = true;
-					}
-
-					if(canLightUp) {
-						world.setBlockState(closest, BlockRegistry.WISP.getDefaultState().withProperty(BlockWisp.COLOR, world.rand.nextInt(4)));
-						world.playSound(null, closest.getX(), closest.getY(), closest.getZ(), SoundRegistry.IGNITE, SoundCategory.AMBIENT, 1.6F + world.rand.nextFloat() * 0.45F, 1.0F + world.rand.nextFloat() * 0.4F);
-
-						this.inactiveWisps.remove(closest);
-
-						this.setDirty(true);
+	
+						boolean canLightUp = false;
+	
+						if((closest.getY() - this.structurePos.getY() < 16 && player.posY - this.structurePos.getY() < 45) || 
+								(closest.getY() - this.structurePos.getY() >= 16 && player.posY - this.structurePos.getY() >= 45)) {
+							canLightUp = true;
+						}
+	
+						if(canLightUp) {
+							world.setBlockState(closest, BlockRegistry.WISP.getDefaultState().withProperty(BlockWisp.COLOR, world.rand.nextInt(4)));
+							world.playSound(null, closest.getX(), closest.getY(), closest.getZ(), SoundRegistry.IGNITE, SoundCategory.AMBIENT, 1.6F + world.rand.nextFloat() * 0.45F, 1.0F + world.rand.nextFloat() * 0.4F);
+	
+							this.inactiveWisps.remove(closest);
+	
+							this.setDirty(true);
+						}
 					}
 				}
 			}
@@ -446,7 +448,7 @@ public class LocationCragrockTower extends LocationStorage implements ITickable 
 		}
 
 		if(!world.isRemote) {
-			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getBounds().get(0), player -> !player.isCreative());
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEnclosingBounds(), player -> this.isInside(player) && !player.isCreative());
 			if(!players.isEmpty()) {
 				EntityPlayer closest = players.get(0);
 				for(EntityPlayer player : players) {

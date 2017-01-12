@@ -75,8 +75,12 @@ public class TestItem extends Item {
 		//		}
 
 		if (!world.isRemote) {
+			/*WorldGenSpawner spawner = new WorldGenSpawner();
+			if(spawner.generate(world, itemRand, pos)) {
+				//playerIn.setHeldItem(hand, null);
+			}*/
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
-			if(tower.generate(world, itemRand, pos.up())) {
+			if(tower.generate(world, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
 		}
