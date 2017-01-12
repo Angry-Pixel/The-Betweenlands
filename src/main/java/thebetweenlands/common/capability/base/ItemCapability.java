@@ -2,8 +2,8 @@ package thebetweenlands.common.capability.base;
 
 import com.google.common.base.Preconditions;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**
@@ -14,7 +14,7 @@ import net.minecraftforge.common.capabilities.Capability;
  * @param <F> The default implementation of the capability
  * @param <T> The capability
  */
-public abstract class ItemCapability<F extends ItemCapability<F, T>, T> {
+public abstract class ItemCapability<F extends ItemCapability<F, T>, T> extends AbstractCapability<F, T, Item> {
 	private ItemStack stack;
 
 	protected ItemCapability() {
@@ -41,36 +41,4 @@ public abstract class ItemCapability<F extends ItemCapability<F, T>, T> {
 	public final ItemStack getItemStack() {
 		return this.stack;
 	}
-
-	/**
-	 * Returns the capability ID
-	 * @return
-	 */
-	public abstract ResourceLocation getID();
-
-	/**
-	 * Returns a <b>new</b> instance of the capability with the default state
-	 * @return
-	 */
-	protected abstract F getDefaultCapabilityImplementation();
-
-	/**
-	 * Returns the capability instance.
-	 * <p>Use the {@link net.minecraftforge.common.capabilities.CapabilityInject} annotation to retrieve the capability
-	 * @return
-	 */
-	protected abstract Capability<T> getCapability();
-
-	/**
-	 * Returns the capability class
-	 * @return
-	 */
-	protected abstract Class<T> getCapabilityClass();
-
-	/**
-	 * Returns whether this capability is applicable to the specified item stack
-	 * @param stack
-	 * @return
-	 */
-	public abstract boolean isApplicable(ItemStack stack);
 }

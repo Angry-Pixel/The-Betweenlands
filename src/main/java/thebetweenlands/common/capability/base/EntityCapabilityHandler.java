@@ -105,6 +105,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onAttachCapabilities(AttachCapabilitiesEvent.Entity event) {
+		Entity entity = event.getEntity();
 		for(EntityCapability<?, ?, ?> entityCapability : REGISTERED_CAPABILITIES) {
 			if(entityCapability.isApplicable(event.getEntity())) {
 				final Capability<?> capabilityInstance = entityCapability.getCapability();

@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**
@@ -16,7 +15,7 @@ import net.minecraftforge.common.capabilities.Capability;
  * @param <T> The capability
  * @param <E> The entity type
  */
-public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E extends Entity> {
+public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E extends Entity> extends AbstractCapability<F, T, E> {
 	private E entity;
 	private boolean dirty = false;
 
@@ -46,30 +45,6 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 		return this.entity;
 	}
 
-	/**
-	 * Returns the capability ID
-	 * @return
-	 */
-	public abstract ResourceLocation getID();
-
-	/**
-	 * Returns a <b>new</b> instance of the capability with the default state
-	 * @return
-	 */
-	protected abstract F getDefaultCapabilityImplementation();
-
-	/**
-	 * Returns the capability instance.
-	 * <p>Use the {@link net.minecraftforge.common.capabilities.CapabilityInject} annotation to retrieve the capability
-	 * @return
-	 */
-	protected abstract Capability<T> getCapability();
-
-	/**
-	 * Returns the capability class
-	 * @return
-	 */
-	protected abstract Class<T> getCapabilityClass();
 
 	/**
 	 * Returns the entity capability that is specific to the specified entity
@@ -98,13 +73,6 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	public void readTrackingDataFromNBT(NBTTagCompound nbt) {
 
 	}
-
-	/**
-	 * Returns whether this capability is applicable to the specified entity
-	 * @param entity
-	 * @return
-	 */
-	public abstract boolean isApplicable(Entity entity);
 
 	/**
 	 * Marks the data as dirty
@@ -142,6 +110,11 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 * @return
 	 */
 	public boolean isPersistent() {
+		return false;
+	}
+	
+	@Override
+	public boolean isApplicable(Entity obj) {
 		return false;
 	}
 }

@@ -1,5 +1,6 @@
 package thebetweenlands.common.tile;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,7 +12,13 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
@@ -19,16 +26,52 @@ import thebetweenlands.common.registries.FluidRegistry;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler, ITickable {
 	private static final int MAX_TIME = 432;
-	public final FluidTank waterTank = new FluidTank(FluidContainerRegistry.BUCKET_VOLUME * 16);
 	public int time = 0;
 	public boolean lightOn = false;
 	private int prevStackSize = 0;
 	private Item prevItem;
 	private boolean isPurifyingClient = false;
 
+	public final FluidTank waterTank;
+
+	private final IFluidTankProperties[] properties = new IFluidTankProperties[] { 
+			new IFluidTankProperties() {
+				@Override
+				public FluidStack getContents() {
+					return TileEntityPurifier.this.waterTank.getFluid();
+				}
+
+				@Override
+				public int getCapacity() {
+					return TileEntityPurifier.this.waterTank.getCapacity();
+				}
+
+				@Override
+				public boolean canFill() {
+					return TileEntityPurifier.this.waterTank.canFill();
+				}
+
+				@Override
+				public boolean canDrain() {
+					return TileEntityPurifier.this.waterTank.canDrain();
+				}
+
+				@Override
+				public boolean canFillFluidType(FluidStack fluidStack) {
+					return TileEntityPurifier.this.waterTank.canFillFluidType(fluidStack);
+				}
+
+				@Override
+				public boolean canDrainFluidType(FluidStack fluidStack) {
+					return TileEntityPurifier.this.waterTank.canDrainFluidType(fluidStack);
+				}
+			}
+	};
+
 	public TileEntityPurifier() {
 		super(3, "container.purifier");
-		waterTank.setFluid(new FluidStack(FluidRegistry.SWAMP_WATER, 0));
+		this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 16);
+		this.waterTank.setTileEntity(this);
 	}
 
 	@Override
@@ -50,21 +93,30 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
-		NBTTagCompound compound = new NBTTagCompound();
-		compound.setBoolean("state", lightOn);
-		compound.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
-		NBTTagCompound itemStackCompound = new NBTTagCompound();
-		if (inventory[2] != null) {
-			inventory[2].writeToNBT(itemStackCompound);
-		}
-		compound.setTag("outputItem", itemStackCompound);
-		compound.setBoolean("isPurifying", this.isPurifying());
-		return new SPacketUpdateTileEntity(pos, 0, compound);
+		NBTTagCompound nbt = new NBTTagCompound();
+		this.writePacketNbt(nbt);
+		return new SPacketUpdateTileEntity(pos, 0, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-		NBTTagCompound compound = packet.getNbtCompound();
+		this.readPacketNbt(packet.getNbtCompound());
+	}
+
+	protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
+		nbt.setBoolean("state", lightOn);
+		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
+		NBTTagCompound itemStackCompound = new NBTTagCompound();
+		if (inventory[2] != null) {
+			inventory[2].writeToNBT(itemStackCompound);
+		}
+		nbt.setTag("outputItem", itemStackCompound);
+		nbt.setBoolean("isPurifying", this.isPurifying());
+		return nbt;
+	}
+
+	protected void readPacketNbt(NBTTagCompound nbt) {
+		NBTTagCompound compound = nbt;
 		lightOn = compound.getBoolean("state");
 		waterTank.readFromNBT(compound.getCompoundTag("waterTank"));
 		NBTTagCompound itemStackCompound = compound.getCompoundTag("outputItem");
@@ -74,6 +126,19 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			inventory[2] = null;
 		}
 		isPurifyingClient = compound.getBoolean("isPurifying");
+	}
+
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		this.writePacketNbt(nbt);
+		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound nbt) {
+		super.handleUpdateTag(nbt);
+		this.readPacketNbt(nbt);
 	}
 
 	public int getPurifyingProgress() {
@@ -132,7 +197,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 						if (inventory[i] != null)
 							if (--inventory[i].stackSize <= 0)
 								inventory[i] = null;
-					extractFluids(new FluidStack(thebetweenlands.common.registries.FluidRegistry.SWAMP_WATER, FluidContainerRegistry.BUCKET_VOLUME));
+					extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
 					if (inventory[2] == null) {
 						inventory[2] = output.copy();
 					} else if (inventory[2].isItemEqual(output)) {
@@ -203,8 +268,9 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		return new int[]{0};
 	}
 
-	public ItemStack fillTankWithBucket(ItemStack bucket) {
+	/*public ItemStack fillTankWithBucket(ItemStack bucket) {
 		FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(bucket);
+		System.out.println(fluid);
 		if (fluid == null && bucket.getItem() instanceof IFluidContainerItem) {
 			fluid = ((IFluidContainerItem)bucket.getItem()).getFluid(bucket);
 			int amountFilled = fill(null, fluid, false);
@@ -223,42 +289,53 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			}
 		}
 		return bucket;
+	}*/
+
+	@Override
+	public IFluidTankProperties[] getTankProperties() {
+		return this.properties;
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
-		if (resource == null)
-			return 0;
-		else if (resource.getFluid() == FluidRegistry.SWAMP_WATER)
-			return waterTank.fill(resource, doFill);
-		else
-			return 0;
+	public int fill(FluidStack resource, boolean doFill) {
+		if(doFill) {
+			this.markDirty();
+			IBlockState stat = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
+		return this.waterTank.fill(resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
-		return null;
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
+		if(doDrain) {
+			this.markDirty();
+			IBlockState stat = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
+		return this.waterTank.drain(resource, doDrain);
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
-		return null;
+	public FluidStack drain(int maxDrain, boolean doDrain) {
+		if(doDrain) {
+			this.markDirty();
+			IBlockState stat = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+		}
+		return this.waterTank.drain(maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return true;
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return false;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
-		FluidTankInfo[] infos = new FluidTankInfo[1];
-		infos[0] = new FluidTankInfo(waterTank.getFluid(), waterTank.getCapacity());
-		return infos;
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+			return (T) this;
+		return super.getCapability(capability, facing);
 	}
 }

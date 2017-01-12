@@ -1,6 +1,6 @@
 package thebetweenlands.common.capability.corrosion;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -32,8 +32,8 @@ public class CorrosionItemCapability extends ItemCapability<CorrosionItemCapabil
 	}
 
 	@Override
-	public boolean isApplicable(ItemStack stack) {
-		return stack.getItem() instanceof ICorrodible;
+	public boolean isApplicable(Item item) {
+		return item instanceof ICorrodible;
 	}
 
 

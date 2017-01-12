@@ -28,19 +28,21 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class CircleGemHelper {
 	/**
-	 * Returns true if gems are applicable to the object
-	 * @param obj
+	 * Returns true if gems are applicable to the item
+	 * @param item
 	 * @return
 	 */
-	public static boolean isApplicable(Object obj) {
-		if(obj instanceof ItemStack) {
-			ItemStack stack = (ItemStack)obj;
-			Item item = stack.getItem();
-			return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool;
-		} else if(obj instanceof EntityLivingBase) {
-			return true;
-		}
-		return false;
+	public static boolean isApplicable(Item item) {
+		return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool;
+	}
+	
+	/**
+	 * Returns true if gems are applicable to the entity
+	 * @param entity
+	 * @return
+	 */
+	public static boolean isApplicable(Entity entity) {
+		return entity instanceof EntityLivingBase;
 	}
 
 	/**

@@ -22,6 +22,10 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -29,6 +33,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
 
 public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
@@ -66,13 +71,21 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 			}
 
 			if (heldItem != null) {
-				ItemStack newItem = tile.fillTankWithBucket(heldItem.copy());
-				world.markChunkDirty(pos, tile);
-				if (!ItemStack.areItemStacksEqual(heldItem, newItem)) {
-					if (!player.capabilities.isCreativeMode) {
-						player.inventory.setInventorySlotContents(player.inventory.currentItem, newItem);
+				if(heldItem.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+					Fluid fluid = FluidRegistry.SWAMP_WATER;
+					IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+					FluidStack bucketFluid = handler.drain(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);
+					if(bucketFluid != null) {
+						int toFill = tile.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);
+						if(toFill > 0) {
+							ItemStack prevItem = heldItem.copy();
+							tile.fill(handler.drain(new FluidStack(fluid, toFill), true), true);
+							if (player.capabilities.isCreativeMode) {
+								player.inventory.setInventorySlotContents(player.inventory.currentItem, prevItem);
+							}
+							return true;
+						}
 					}
-					return true;
 				}
 			}
 			if (tile != null) {

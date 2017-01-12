@@ -38,7 +38,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.fillerBlock = BlockRegistry.SWAMP_DIRT.getDefaultState();
 		this.biomeGenerator = new BiomeGenerator(this);
 
-		this.setFogColor(10, 30, 12);
+		this.setFogColor(10, 30, 22);
 		this.addSpawnEntries();
 	}
 

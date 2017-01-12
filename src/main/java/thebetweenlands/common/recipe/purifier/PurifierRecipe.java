@@ -1,14 +1,17 @@
 package thebetweenlands.common.recipe.purifier;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
+
 public abstract class PurifierRecipe {
 	private static final List<PurifierRecipe> RECIPES = new ArrayList<PurifierRecipe>();
 
+	private static final PurifierRecipeCorrodible CORRODIBLE_ITEMS_RECIPE = new PurifierRecipeCorrodible();
+	//private static final PurifierRecipeAspectVial ASPECT_VIAL_ITEMS_RECIPE = new PurifierRecipeAspectVial();
+	
 	public abstract ItemStack getOutput(ItemStack input);
 	public abstract ItemStack getInput(ItemStack output);
 
@@ -16,6 +19,7 @@ public abstract class PurifierRecipe {
 	public abstract boolean matchesOutput(ItemStack stack);
 
 	static {
+		addRecipe(CORRODIBLE_ITEMS_RECIPE);
 	}
 
 	/**
@@ -26,6 +30,10 @@ public abstract class PurifierRecipe {
 		RECIPES.add(new PurifierRecipeStandard(output, input));
 	}
 
+	public static void addRecipe(PurifierRecipe recipe) {
+		RECIPES.add(recipe);
+	}
+	
 	public static ItemStack getRecipeOutput(ItemStack input) {
 		for (PurifierRecipe recipe : RECIPES) {
 			if (recipe.matches(input)) {

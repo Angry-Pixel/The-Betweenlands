@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -45,16 +49,18 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-		super.addInformation(stack, player, list, flag);
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedItemTooltips) {
+		super.addInformation(stack, player, list, advancedItemTooltips);
 		list.add(I18n.format("shockwaveSword.usage"));
+		CorrosionHelper.addInformation(stack, player, list, advancedItemTooltips);
 	}
 
 	@Override
-	public void onUpdate(ItemStack stack, World world, Entity entity, int par4, boolean par5) {
+	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isHeldItem) {
+		CorrosionHelper.onUpdate(stack, world, entity, slot, isHeldItem);
+		
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		if (!stack.getTagCompound().hasKey("cooldown"))
@@ -134,5 +140,20 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 		boolean wasCharging = oldStack.getTagCompound() != null && oldStack.getTagCompound().getInteger("cooldown") < 60;
 		boolean isCharging = newStack.getTagCompound() != null && newStack.getTagCompound().getInteger("cooldown") < 60;
 		return (super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !isCharging || isCharging != wasCharging) || !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
+	}
+	
+	@Override
+	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return CorrosionHelper.shouldCauseBlockBreakReset(oldStack, newStack);
+	}
+	
+	@Override
+	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+		return CorrosionHelper.getDigSpeed(super.getStrVsBlock(stack, state), stack, state); 
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+        return CorrosionHelper.getAttributeModifiers(slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.getDamageVsEntity());
 	}
 }

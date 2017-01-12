@@ -22,7 +22,15 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        NBTTagList tags = nbt.getTagList("Items", 10);
+        this.readInventoryNBT(nbt);
+    }
+    
+    /**
+     * Reads the inventory from NBT
+     * @param nbt
+     */
+    protected void readInventoryNBT(NBTTagCompound nbt) {
+    	NBTTagList tags = nbt.getTagList("Items", 10);
         this.inventory = new ItemStack[getSizeInventory()];
 
         for (int i = 0; i < tags.tagCount(); i++) {
@@ -39,7 +47,16 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
     @MethodsReturnNonnullByDefault
     public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
-        NBTTagList tags = new NBTTagList();
+        this.writeInventoryNBT(nbt);
+        return nbt;
+    }
+    
+    /**
+     * Writes the inventory to NBT
+     * @param nbt
+     */
+    protected void writeInventoryNBT(NBTTagCompound nbt) {
+    	NBTTagList tags = new NBTTagList();
 
         for (int i = 0; i < this.inventory.length; i++) {
             if (this.inventory[i] != null) {
@@ -51,7 +68,6 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
         }
 
         nbt.setTag("Items", tags);
-        return nbt;
     }
 
     @Override

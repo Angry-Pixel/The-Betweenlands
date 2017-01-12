@@ -3,17 +3,19 @@ package thebetweenlands.common.tile.spawner;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -246,8 +248,15 @@ public abstract class MobSpawnerLogicBetweenlands {
 					return;
 				}
 
+				int spawnCount = this.spawnCount > 1 ? this.getSpawnerWorld().rand.nextInt(this.spawnCount) + 1 : this.spawnCount;
+
 				boolean entitySpawned = false;
-				for (int i = 0; i < this.spawnCount; ++i) {
+
+				for (int i = 0; i < 128; ++i) {
+					if(spawnCount <= 0) {
+						break;
+					}
+
 					double rx = 1.0D - this.getSpawnerWorld().rand.nextDouble() * 2.0D;
 					double ry = 1.0D - this.getSpawnerWorld().rand.nextDouble() * 2.0D;
 					double rz = 1.0D - this.getSpawnerWorld().rand.nextDouble() * 2.0D;
@@ -258,10 +267,10 @@ public abstract class MobSpawnerLogicBetweenlands {
 					NBTTagCompound entityNbt = this.randomEntity.getNbt();
 					NBTTagList posNbt = entityNbt.getTagList("Pos", 6);
 					World world = this.getSpawnerWorld();
-					int j = posNbt.tagCount();
-					rx = j >= 1 ? posNbt.getDoubleAt(0) : rx;
-					ry = j >= 2 ? posNbt.getDoubleAt(1) : ry;
-					rz = j >= 3 ? posNbt.getDoubleAt(2) : rz;
+					int tags = posNbt.tagCount();
+					rx = tags >= 1 ? posNbt.getDoubleAt(0) : rx;
+					ry = tags >= 2 ? posNbt.getDoubleAt(1) : ry;
+					rz = tags >= 3 ? posNbt.getDoubleAt(2) : rz;
 					Entity entity = AnvilChunkLoader.readWorldEntityPos(entityNbt, world, rx, ry, rz, false);
 
 					if (entity == null) {
@@ -271,8 +280,9 @@ public abstract class MobSpawnerLogicBetweenlands {
 					List<Entity> entitiesInReach = this.getSpawnerWorld().getEntitiesWithinAABB(entity.getClass(), new AxisAlignedBB((double) this.getSpawnerX(), (double) this.getSpawnerY(), (double) this.getSpawnerZ(), (double) (this.getSpawnerX() + 1), (double) (this.getSpawnerY() + 1), (double) (this.getSpawnerZ() + 1)).expand(this.checkRange, this.checkRange, this.checkRange));
 					int nearbyEntities = 0;
 					for (Entity e : entitiesInReach) {
-						if (e.getDistance(this.getSpawnerX() + 0.5D, this.getSpawnerY() + 0.5D, this.getSpawnerZ() + 0.5D) <= this.checkRange)
+						if (e.getDistance(this.getSpawnerX() + 0.5D, this.getSpawnerY() + 0.5D, this.getSpawnerZ() + 0.5D) <= this.checkRange) {
 							nearbyEntities++;
+						}
 					}
 
 					if (nearbyEntities >= this.maxNearbyEntities) {
@@ -280,13 +290,29 @@ public abstract class MobSpawnerLogicBetweenlands {
 						return;
 					}
 
-					if(this.canSpawnInAir() || !this.getSpawnerWorld().isAirBlock(new BlockPos(rx, ry, rz).down())) {
-						if(!this.canSpawnInAir()) {
-							ry = MathHelper.floor_double(ry);
+					entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
+
+					boolean canSpawn = this.canSpawnInAir() || entity.getEntityBoundingBox() == null;
+
+					//Check if entity can stand on block below and set position
+					if(!canSpawn) {
+						BlockPos down = new BlockPos(rx, ry, rz).down();
+						IBlockState blockState = this.getSpawnerWorld().getBlockState(down);
+						if(blockState.getBlock() != Blocks.AIR) {
+							AxisAlignedBB boundingBox = blockState.getCollisionBoundingBox(this.getSpawnerWorld(), down).offset(down);
+							AxisAlignedBB entityBoundingBox = entity.getEntityBoundingBox();
+							if(boundingBox != null && boundingBox.intersects(entityBoundingBox.minX, boundingBox.minY, entityBoundingBox.minZ, entityBoundingBox.maxX, boundingBox.maxY, entityBoundingBox.maxZ)) {
+								RayTraceResult intercept = boundingBox.calculateIntercept(entity.getPositionVector(), entity.getPositionVector().addVector(0, -2, 0));
+								if(intercept != null) {
+									canSpawn = true;
+									entity.setLocationAndAngles(entity.posX, intercept.hitVec.yCoord + 0.1D, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								}
+							}
 						}
-						
+					}
+
+					if(canSpawn) {
 						EntityLiving entityLiving = entity instanceof EntityLiving ? (EntityLiving) entity : null;
-						entity.setLocationAndAngles(rx, ry, rz, this.getSpawnerWorld().rand.nextFloat() * 360.0F, 0.0F);
 
 						if (entityLiving == null || ForgeEventFactory.canEntitySpawnSpawner(entityLiving, getSpawnerWorld(), (float)entity.posX, (float)entity.posY, (float)entity.posZ)) {
 							if (entityLiving != null) {
@@ -301,6 +327,8 @@ public abstract class MobSpawnerLogicBetweenlands {
 							if (entityLiving != null) {
 								entityLiving.spawnExplosionParticle();
 							}
+
+							spawnCount--;
 
 							entitySpawned = true;
 						}

@@ -1,9 +1,23 @@
 package thebetweenlands.common.item.corrosion;
 
+import java.util.List;
+import java.util.UUID;
+
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.inventory.EntityEquipmentSlot.Type;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,7 +26,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.capability.corrosion.ICorrosionCapability;
+import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.NBTHelper;
+import thebetweenlands.util.config.ConfigHandler;
 
 public final class CorrosionHelper {
 	public static final int MAX_CORROSION = 255;
@@ -103,28 +120,54 @@ public final class CorrosionHelper {
 	 * @param meta
 	 * @return
 	 */
-	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, Block block, int meta) {
+	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, IBlockState blockState) {
 		return normalDigSpeed * getModifier(itemStack);
 	}
 
-	/*public static Multimap getAttributeModifiers(ItemStack stack, UUID uuid, float damageVsEntity) {
-		Multimap multimap = HashMultimap.create();
-		multimap.put(SharedMonsterAttributes.attackDamage.getAttributeUnlocalizedName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
-		return multimap;
-	}*/
+	/**
+	 * Returns whether the block breaking should reset, excludes corrosion changes
+	 * @param oldStack
+	 * @param newStack
+	 * @return
+	 */
+	public static boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return !(newStack.getItem() == oldStack.getItem() && areItemStackTagsEqual(newStack, oldStack) && (newStack.isItemStackDamageable() || newStack.getMetadata() == oldStack.getMetadata()));
+	}
 
-	/*public static void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		if (world.isRemote || !BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) {
-			return;
+	/**
+	 * Returns whether the item stack NBT is the same, excludes corrosion changes
+	 * @param oldStack
+	 * @param newStack
+	 * @return
+	 */
+	public static boolean areItemStackTagsEqual(ItemStack oldStack, ItemStack newStack) {
+		return NBTHelper.areItemStackTagsEqual(newStack, oldStack, ImmutableList.of("ForgeCaps.thebetweenlands:item_corrosion"));
+	}
+
+	public static Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack, UUID uuid, float damageVsEntity) {
+		Multimap<String, AttributeModifier> multimap = HashMultimap.create();
+		if(slot.getSlotType() == Type.HAND) {
+			multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
 		}
-		if(world.provider instanceof WorldProviderBetweenlands) {
+		return multimap;
+	}
+
+	public static void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
+		/*if (world.isRemote || !BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) { TODO: BLGamerules
+			return;
+		}*/
+		if(!world.isRemote && holder.dimension == ConfigHandler.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
 			int corrosion = getCorrosion(itemStack);
 			if (corrosion < MAX_CORROSION) {
 				float probability = holder.isInWater() ? 0.0014F : 0.0007F;
 				if (holder instanceof EntityPlayer) {
-					probability *= ((((EntityPlayer) holder).isUsingItem() || ((EntityPlayer) holder).isSwingInProgress) && isHeldItem) ? 2.8F : 1.0F;
-					float playerCorruption = DecayManager.getCorruptionLevel((EntityPlayer) holder) / 10F;
-					probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
+					EntityPlayer player = (EntityPlayer) holder;
+					probability *= (isHeldItem && player.getActiveItemStack() != null ? 2.8F : 1.0F);
+					if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+						IDecayCapability decay = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+						float playerCorruption = decay.getDecayStats().getDecayLevel() / 20.0F;
+						probability *= (1 - Math.pow(playerCorruption, 2) * 0.9F);
+					}
 				}
 				if (world.rand.nextFloat() < probability) {
 					int coating = getCoating(itemStack);
@@ -136,14 +179,14 @@ public final class CorrosionHelper {
 				}
 			}
 		}
-	}*/
+	}
 
-	/*public static void addInformation(ItemStack itemStack, EntityPlayer player, List lines, boolean advancedItemTooltips) {
+	public static void addInformation(ItemStack itemStack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
 		int corrosion = getCorrosion(itemStack);
 		int coating = getCoating(itemStack);
-		StringBuilder corrosionInfo = new StringBuilder("corrosion.");
+		StringBuilder corrosionInfo = new StringBuilder("tooltip.corrosion.");
 		corrosionInfo.append(getCorrosionStage(corrosion));
-		corrosionInfo.replace(0, corrosionInfo.length(), StatCollector.translateToLocal(corrosionInfo.toString()));
+		corrosionInfo.replace(0, corrosionInfo.length(), I18n.format(corrosionInfo.toString()));
 		if (advancedItemTooltips) {
 			corrosionInfo.append(" (");
 			corrosionInfo.append(corrosion);
@@ -151,9 +194,9 @@ public final class CorrosionHelper {
 		}
 		lines.add(corrosionInfo.toString());
 		if(coating > 0) {
-			lines.add(StatCollector.translateToLocal("tooltip.coated"));
+			lines.add(I18n.format("tooltip.coated"));
 		}
-	}*/
+	}
 
 	/**
 	 * Returns the corrosion stage of the specified item. Ranges from [0, 5]

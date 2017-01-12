@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -41,8 +41,8 @@ public class CircleGemItemCapability extends ItemCapability<CircleGemItemCapabil
 	}
 
 	@Override
-	public boolean isApplicable(ItemStack stack) {
-		return CircleGemHelper.isApplicable(stack);
+	public boolean isApplicable(Item item) {
+		return CircleGemHelper.isApplicable(item);
 	}
 
 
