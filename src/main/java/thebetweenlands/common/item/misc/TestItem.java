@@ -59,26 +59,11 @@ public class TestItem extends Item {
 		//			}
 		//		}
 
-		//		if (!world.isRemote) {
-		//			/*WorldGenGiantTreeAlive live_tree = new WorldGenGiantTreeAlive();
-		//			live_tree.generate(world, itemRand, pos.up());*/
-		//
-		//			for(int i = 0; i < 1; i++) {
-		//				for(int j = 0; j < 1; j++) {
-		//					BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		//					WorldGenGiantTree.ChunkMaker marker = new WorldGenGiantTree.ChunkMaker(worldStorage, UUID.randomUUID(), pos.add(30 + j * 60, 0, i * 60), world.rand.nextLong());
-		//					marker.linkChunk();
-		//					marker.setDirty(true);
-		//					worldStorage.addSharedStorage(marker);
-		//				}
-		//			}
-		//		}
-
 		if (!world.isRemote) {
 			/*WorldGenSpawner spawner = new WorldGenSpawner();
-			if(spawner.generate(world, itemRand, pos)) {
-				//playerIn.setHeldItem(hand, null);
-			}*/
+					if(spawner.generate(world, itemRand, pos)) {
+						//playerIn.setHeldItem(hand, null);
+					}*/
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(world, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);

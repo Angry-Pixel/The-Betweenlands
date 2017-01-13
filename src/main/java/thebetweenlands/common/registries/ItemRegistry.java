@@ -68,6 +68,7 @@ import thebetweenlands.common.item.misc.ItemSwampReed;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
 import thebetweenlands.common.item.misc.ItemWeedwoodSign;
+import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.ItemBLAxe;
@@ -264,7 +265,7 @@ public class ItemRegistry {
 	public static final Item PESTLE = new ItemPestle();
 	public static final Item LIFE_CRYSTAL = new ItemLifeCrystal();
 	public static final Item TEST_ITEM = new TestItem();
-	public static final Item LOCATION_DEBUG = new Item().setCreativeTab(null);
+	public static final Item LOCATION_DEBUG = new LocationDebugItem().setCreativeTab(null);
 	public static final Item PYRAD_FLAME = new ItemPyradFlame();
 	public static final Item NET = new ItemNet();
 	public static final Item GECKO = new ItemMob("gecko");

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -226,12 +225,12 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 * @return
 	 */
 	public final boolean linkSharedStorage(SharedStorage storage) {
-		UUID uuid = storage.getUUID();
+		String id = storage.getID();
 		for(SharedStorageReference ref : this.sharedStorageReferences) {
-			if(uuid.equals(ref.getUUID()))
+			if(id.equals(ref.getID()))
 				return false;
 		}
-		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), uuid);
+		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), id, storage.getRegion());
 		if(this.sharedStorageReferences.add(ref)) {
 			this.markDirty();
 			return true;
@@ -245,12 +244,12 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 * @return
 	 */
 	public final boolean unlinkSharedStorage(SharedStorage storage) {
-		UUID uuid = storage.getUUID();
+		String id = storage.getID();
 		List<SharedStorageReference> unlinkedReferences = new ArrayList<>();
 		Iterator<SharedStorageReference> referenceIT = this.sharedStorageReferences.iterator();
 		while(referenceIT.hasNext()) {
 			SharedStorageReference ref = referenceIT.next();
-			if(uuid.equals(ref.getUUID())) {
+			if(id.equals(ref.getID())) {
 				unlinkedReferences.add(ref);
 				referenceIT.remove();
 			}
@@ -277,14 +276,14 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	}
 
 	/**
-	 * Returns the reference with the specified UUID
-	 * @param uuid
+	 * Returns the reference with the specified ID
+	 * @param id
 	 * @return
 	 */
 	@Nullable
-	public final SharedStorageReference getReference(UUID uuid) {
+	public final SharedStorageReference getReference(String id) {
 		for(SharedStorageReference ref : this.sharedStorageReferences) {
-			if(uuid.equals(ref.getUUID()))
+			if(id.equals(ref.getID()))
 				return ref;
 		}
 		return null;
@@ -344,7 +343,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 		Iterator<SharedStorageReference> refIT = this.sharedStorageReferences.iterator();
 		while(refIT.hasNext()) {
 			SharedStorageReference ref = refIT.next();
-			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getUUIDString());
+			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getID());
 
 			//Not cached, load from file
 			if(!this.worldStorage.getWorld().isRemote && sharedStorage == null) {
@@ -400,7 +399,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 */
 	protected void onUnloaded() {
 		for(SharedStorageReference ref : this.sharedStorageReferences) {
-			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getUUIDString());
+			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getID());
 			if(sharedStorage != null) {
 				sharedStorage.unloadReference(ref);
 				if(sharedStorage.getReferences().isEmpty()) {
@@ -417,7 +416,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	protected void onWatched(EntityPlayerMP player) {
 		this.watchers.add(player);
 		for(SharedStorageReference ref : this.sharedStorageReferences) {
-			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getUUIDString());
+			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getID());
 			if(sharedStorage != null && !sharedStorage.getWatchers().contains(player)) {
 				sharedStorage.onWatched(this, player);
 			}
@@ -431,7 +430,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	protected void onUnwatched(EntityPlayerMP player) {
 		this.watchers.remove(player);
 		for(SharedStorageReference ref : this.sharedStorageReferences) {
-			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getUUIDString());
+			SharedStorage sharedStorage = this.getWorldStorage().getSharedStorage(ref.getID());
 			if(sharedStorage != null && sharedStorage.getWatchers().contains(player)) {
 				sharedStorage.onUnwatched(this, player);
 			}

@@ -3,7 +3,6 @@ package thebetweenlands.common.world.storage.world.shared.location;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -31,6 +30,7 @@ import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 
 public class LocationCragrockTower extends LocationStorage implements ITickable {
 	private List<BlockPos> glowingCragrockBlocks = new ArrayList<BlockPos>();
@@ -49,8 +49,8 @@ public class LocationCragrockTower extends LocationStorage implements ITickable 
 	private boolean crumbling = false;
 	private int crumblingTicks = 0;
 
-	public LocationCragrockTower(WorldDataBase<?> worldStorage, UUID uuid) {
-		super(worldStorage, uuid, "translate:cragrockTower", EnumLocationType.DUNGEON);
+	public LocationCragrockTower(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
+		super(worldStorage, id, region, "translate:cragrockTower", EnumLocationType.DUNGEON);
 	}
 
 	/**

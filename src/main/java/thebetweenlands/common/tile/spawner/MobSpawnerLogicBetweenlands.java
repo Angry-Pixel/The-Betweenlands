@@ -299,13 +299,16 @@ public abstract class MobSpawnerLogicBetweenlands {
 						BlockPos down = new BlockPos(rx, ry, rz).down();
 						IBlockState blockState = this.getSpawnerWorld().getBlockState(down);
 						if(blockState.getBlock() != Blocks.AIR) {
-							AxisAlignedBB boundingBox = blockState.getCollisionBoundingBox(this.getSpawnerWorld(), down).offset(down);
-							AxisAlignedBB entityBoundingBox = entity.getEntityBoundingBox();
-							if(boundingBox != null && boundingBox.intersects(entityBoundingBox.minX, boundingBox.minY, entityBoundingBox.minZ, entityBoundingBox.maxX, boundingBox.maxY, entityBoundingBox.maxZ)) {
-								RayTraceResult intercept = boundingBox.calculateIntercept(entity.getPositionVector(), entity.getPositionVector().addVector(0, -2, 0));
-								if(intercept != null) {
-									canSpawn = true;
-									entity.setLocationAndAngles(entity.posX, intercept.hitVec.yCoord + 0.1D, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							AxisAlignedBB boundingBox = blockState.getCollisionBoundingBox(this.getSpawnerWorld(), down);
+							if(boundingBox != null) {
+								boundingBox = boundingBox.offset(down);
+								AxisAlignedBB entityBoundingBox = entity.getEntityBoundingBox();
+								if(boundingBox.intersects(entityBoundingBox.minX, boundingBox.minY, entityBoundingBox.minZ, entityBoundingBox.maxX, boundingBox.maxY, entityBoundingBox.maxZ)) {
+									RayTraceResult intercept = boundingBox.calculateIntercept(entity.getPositionVector(), entity.getPositionVector().addVector(0, -2, 0));
+									if(intercept != null) {
+										canSpawn = true;
+										entity.setLocationAndAngles(entity.posX, intercept.hitVec.yCoord + 0.1D, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+									}
 								}
 							}
 						}

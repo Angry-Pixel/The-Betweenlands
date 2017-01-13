@@ -1,6 +1,6 @@
 package thebetweenlands.common.world.storage.world.shared;
 
-import java.util.UUID;
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,8 +15,8 @@ import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 public abstract class BetweenlandsSharedStorage extends SharedStorage implements ITickable {
 	protected boolean requiresSync = false;
 
-	public BetweenlandsSharedStorage(WorldDataBase<?> worldStorage, UUID uuid) {
-		super(worldStorage, uuid);
+	public BetweenlandsSharedStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
+		super(worldStorage, id, region);
 	}
 
 
@@ -78,7 +78,7 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage implements
 		//Notify clients if shared storage is removed
 		if(!this.getWorldStorage().getWorld().isRemote) {
 			if (!this.getWatchers().isEmpty()) {
-				this.sendDataToAllWatchers(new MessageRemoveSharedStorage(this.getUUID()));
+				this.sendDataToAllWatchers(new MessageRemoveSharedStorage(this.getID()));
 			}
 		}
 	}

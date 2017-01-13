@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -20,6 +21,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 import thebetweenlands.common.world.storage.world.shared.BetweenlandsSharedStorage;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 
 public class LocationStorage extends BetweenlandsSharedStorage {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
@@ -33,18 +35,18 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	private long locationSeed = 0L;
 	private boolean guarded = false;
 
-	public LocationStorage(WorldDataBase<?> worldStorage, UUID uuid) {
-		super(worldStorage, uuid);
+	public LocationStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
+		super(worldStorage, id, region);
 	}
 
 	/**
 	 * Creates a new location
 	 * @param worldStorage
-	 * @param uuid
+	 * @param id
 	 * @param boundingBox
 	 */
-	public LocationStorage(WorldDataBase<?> worldStorage, UUID uuid, String name, EnumLocationType type) {
-		super(worldStorage, uuid);
+	public LocationStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region, String name, EnumLocationType type) {
+		super(worldStorage, id, region);
 		this.name = name;
 		if(type == null)
 			type = EnumLocationType.NONE;

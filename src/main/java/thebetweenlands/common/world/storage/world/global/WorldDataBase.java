@@ -40,6 +40,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.event.AttachWorldCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
+import thebetweenlands.common.world.storage.world.shared.SharedRegionCache;
+import thebetweenlands.common.world.storage.world.shared.SharedRegionData;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 
 /**
@@ -59,6 +61,7 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	private final List<SharedStorage> tickableSharedStorage = new ArrayList<>();
 	private File sharedStorageDir;
 	private CapabilityDispatcher capabilities;
+	private SharedRegionCache regionCache;
 
 	public WorldDataBase(String name) {
 		super(name);
@@ -96,9 +99,14 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 
 		WorldDataBase<?> result = (WorldDataBase<?>) storage.getOrLoadData(clazz, newInstance.mapName);
 
+		File sharedStorageDir = new File(world.getSaveHandler().getWorldDirectory(), "data" + File.separator + "shared_storage" + File.separator);
+		SharedRegionCache regionCache = new SharedRegionCache(new File(sharedStorageDir, "region"));
+
 		if (result == null) {
 			result = newInstance;
 			result.world = world;
+			result.sharedStorageDir = sharedStorageDir;
+			result.regionCache = regionCache;
 			result.init();
 			result.setDefaults();
 			result.save();
@@ -106,11 +114,11 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 			storage.setData(result.mapName, result);
 		} else {
 			result.world = world;
+			result.sharedStorageDir = sharedStorageDir;
+			result.regionCache = regionCache;
 			result.init();
 			result.load();
 		}
-
-		result.sharedStorageDir = new File(world.getSaveHandler().getWorldDirectory(), "data" + File.separator + "shared_storage" + File.separator);
 
 		//Gather capabilities
 		AttachCapabilitiesEvent<WorldDataBase<?>> event = new AttachWorldCapabilitiesEvent(result);
@@ -202,8 +210,8 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 * @return True if the storage was successfully added
 	 */
 	public boolean addSharedStorage(SharedStorage storage) {
-		if(!this.sharedStorage.containsKey(storage.getUUIDString()) && !storage.getLinkedChunks().isEmpty()) {
-			this.sharedStorage.put(storage.getUUIDString(), storage);
+		if(!this.sharedStorage.containsKey(storage.getID()) && !storage.getLinkedChunks().isEmpty()) {
+			this.sharedStorage.put(storage.getID(), storage);
 
 			if(storage instanceof ITickable) {
 				this.tickableSharedStorage.add(storage);
@@ -215,7 +223,7 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 				if(chunk != null) {
 					ChunkDataBase chunkData = ChunkDataBase.forChunk(this, chunk);
 					if(chunkData != null) {
-						SharedStorageReference reference = chunkData.getReference(storage.getUUID());
+						SharedStorageReference reference = chunkData.getReference(storage.getID());
 						if(reference != null && !storage.getReferences().contains(reference)) {
 							//Add reference
 							storage.loadReference(reference);
@@ -244,18 +252,18 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 * @return True if the storage was successfully removed
 	 */
 	public boolean removeSharedStorage(SharedStorage storage) {
-		if(this.sharedStorage.containsKey(storage.getUUIDString())) {
+		if(this.sharedStorage.containsKey(storage.getID())) {
 			if(!this.world.isRemote) {
 				storage.unlinkAllChunks();
 			}
 
-			this.sharedStorage.remove(storage.getUUIDString());
+			this.sharedStorage.remove(storage.getID());
 
 			Iterator<SharedStorage> it = this.tickableSharedStorage.iterator();
 			SharedStorage tickableStorage = null;
 			while(it.hasNext()) {
 				tickableStorage = it.next();
-				if(storage.getUUIDString().equals(tickableStorage.getUUIDString())) {
+				if(storage.getID().equals(tickableStorage.getID())) {
 					it.remove();
 				}
 			}
@@ -274,12 +282,12 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	}
 
 	/**
-	 * Returns the shared storage with the specified UUID
-	 * @param uuid
+	 * Returns the shared storage with the specified ID
+	 * @param id
 	 * @return
 	 */
-	public SharedStorage getSharedStorage(String uuid) {
-		return this.sharedStorage.get(uuid);
+	public SharedStorage getSharedStorage(String id) {
+		return this.sharedStorage.get(id);
 	}
 
 	/**
@@ -296,22 +304,19 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 */
 	@Nullable
 	public SharedStorage loadSharedStorage(SharedStorageReference reference) {
-		SharedStorage storage = null;
-		NBTTagCompound nbt = null;
-		File file = new File(this.getSharedStorageDirectory(), reference.getUUIDString() + ".dat");
-		if(file.exists()) {
-			try {
-				nbt = CompressedStreamTools.read(file);
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
+		SharedStorage storage = this.loadSharedStorageFile(reference);
+		if(storage != null) {
+			this.addSharedStorage(storage);
+			storage.onLoaded();
+
+			if(storage.hasRegion()) {
+				SharedRegionData data = this.regionCache.getOrCreateRegion(reference.getRegion());
+				data.incrRefCounter();
 			}
-			storage = SharedStorage.load(this, nbt, false);
-		} else {
-			return null;
+
+			return storage;
 		}
-		this.addSharedStorage(storage);
-		storage.onLoaded();
-		return storage;
+		return null;
 	}
 
 	/**
@@ -320,29 +325,68 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 * @return True if the storage was successfully unloaded
 	 */
 	public boolean unloadSharedStorage(SharedStorage storage) {
-		if(this.sharedStorage.containsKey(storage.getUUIDString())) {
+		if(this.sharedStorage.containsKey(storage.getID())) {
 			//Only save if dirty
-			if(storage.isDirty() && !this.world.isRemote) {
+			if(!this.world.isRemote && storage.isDirty()) {
 				this.saveSharedStorageFile(storage);
 				storage.setDirty(false);
 			}
 
-			this.sharedStorage.remove(storage.getUUIDString());
+			this.sharedStorage.remove(storage.getID());
 
 			Iterator<SharedStorage> it = this.tickableSharedStorage.iterator();
 			SharedStorage tickableStorage = null;
 			while(it.hasNext()) {
 				tickableStorage = it.next();
-				if(storage.getUUIDString().equals(tickableStorage.getUUIDString())) {
+				if(storage.getID().equals(tickableStorage.getID())) {
 					it.remove();
 				}
 			}
 
 			storage.onUnloaded();
 
+			if(!this.world.isRemote && storage.hasRegion()) {
+				SharedRegionData data = this.regionCache.getOrCreateRegion(storage.getRegion());
+				data.decrRefCounter();
+
+				if(!data.hasReferences()) {
+					if(data.isDirty()) {
+						data.saveRegion(this.regionCache.getDir());
+					}
+					this.regionCache.removeRegion(storage.getRegion());
+				}
+			}
+
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Loads the the specified shared storage from a file
+	 * @param reference
+	 * @return
+	 */
+	@Nullable
+	public SharedStorage loadSharedStorageFile(SharedStorageReference reference) {
+		if(!reference.hasRegion()) {
+			File file = new File(this.getSharedStorageDirectory(), reference.getID() + ".dat");
+			if(file.exists()) {
+				try {
+					NBTTagCompound nbt = CompressedStreamTools.read(file);
+					return SharedStorage.load(this, nbt, null, false);
+				} catch(Exception ex) {
+					throw new RuntimeException(ex);
+				}
+			}
+		} else {
+			SharedRegionData region = this.regionCache.getOrCreateRegion(reference.getRegion());
+			NBTTagCompound nbt = region.getSharedStorageNBT(reference.getID());
+			if(nbt != null) {
+				return SharedStorage.load(this, nbt, reference.getRegion(), false);
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -351,13 +395,18 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 */
 	public void saveSharedStorageFile(SharedStorage storage) {
 		NBTTagCompound nbt = SharedStorage.save(storage, new NBTTagCompound(), false);
-		try {
-			File savePath = this.getSharedStorageDirectory();
-			savePath.mkdirs();
-			File file = new File(savePath, storage.getUUIDString() + ".dat");
-			CompressedStreamTools.safeWrite(nbt, file);
-		} catch(Exception ex) {
-			throw new RuntimeException(ex);
+		if(!storage.hasRegion()) {
+			try {
+				File savePath = this.getSharedStorageDirectory();
+				savePath.mkdirs();
+				File file = new File(savePath, storage.getID() + ".dat");
+				CompressedStreamTools.safeWrite(nbt, file);
+			} catch(Exception ex) {
+				throw new RuntimeException(ex);
+			}
+		} else {
+			SharedRegionData region = this.regionCache.getOrCreateRegion(storage.getRegion());
+			region.setSharedStorageNBT(storage.getID(), nbt);
 		}
 	}
 
@@ -366,9 +415,16 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 * @param storage
 	 */
 	public void deleteSharedStorageFile(SharedStorage storage) {
-		File file = new File(this.getSharedStorageDirectory(), storage.getUUIDString() + ".dat");
-		if(file.exists()) {
-			file.delete();
+		if(!storage.hasRegion()) {
+			File file = new File(this.getSharedStorageDirectory(), storage.getID() + ".dat");
+			if(file.exists()) {
+				file.delete();
+			}
+		} else {
+			SharedRegionData regionData = this.regionCache.getOrCreateRegion(storage.getRegion());
+			if(regionData != null) {
+				regionData.deleteSharedStorage(this.regionCache.getDir(), storage.getID());
+			}
 		}
 	}
 
@@ -390,7 +446,7 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 		ChunkDataBase chunkStorage = ChunkDataBase.forChunk(this, chunk);
 		if(chunkStorage != null) {
 			for(SharedStorageReference ref : chunkStorage.getSharedStorageReferences()) {
-				SharedStorage storage = this.getSharedStorage(ref.getUUIDString());
+				SharedStorage storage = this.getSharedStorage(ref.getID());
 				if(storage != null && storageClass.isAssignableFrom(storage.getClass()) && (selector == null || selector.test((F) storage))) {
 					storages.add((F) storage);
 				}
@@ -459,6 +515,8 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 							sharedStorage.setDirty(false);
 						}
 					}
+
+					worldStorage.regionCache.saveAllRegions();
 				}
 			}
 		}

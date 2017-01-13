@@ -20,6 +20,7 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
@@ -52,7 +53,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int z;
 
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage locationStorage = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:ruins", EnumLocationType.RUINS);
+		LocationStorage locationStorage = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "translate:ruins", EnumLocationType.RUINS);
 
 		List<RuinLocation> ruinLocations = new ArrayList<>();
 		int attempts = 40;

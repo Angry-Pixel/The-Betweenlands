@@ -78,9 +78,9 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 		this.startProfilerSection("undergroundRuins");
 		this.generate(120, DecorationHelper::generateUndergroundRuins);
 		this.endProfilerSection();
-		
+
 		this.startProfilerSection("undergroundSpawners");
-		this.generate(2.5F, DecorationHelper::generateSpawner);
+		this.generate(1.0F, DecorationHelper::generateSpawner);
 		this.endProfilerSection();
 	}
 

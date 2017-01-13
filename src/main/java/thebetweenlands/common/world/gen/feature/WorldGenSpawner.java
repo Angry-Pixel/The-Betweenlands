@@ -19,6 +19,7 @@ import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.DecorationHelper;
 import thebetweenlands.common.world.gen.biome.decorator.DecoratorPositionProvider;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
@@ -191,7 +192,7 @@ public class WorldGenSpawner extends WorldGenerator {
 			}
 
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-			LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID(), "translate:undergroundDungeon", EnumLocationType.DUNGEON);
+			LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "translate:undergroundDungeon", EnumLocationType.DUNGEON);
 			location.addBounds(new AxisAlignedBB(center).expand(5, 4, 5));
 			location.linkChunks();
 			location.setLayer(0);

@@ -23,6 +23,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
 
 public class WorldGenCragrockTower extends WorldGenHelper {
@@ -1483,7 +1484,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		}
 
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationCragrockTower towerLocation = new LocationCragrockTower(worldStorage, UUID.randomUUID());
+		LocationCragrockTower towerLocation = new LocationCragrockTower(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(x, z));
 		towerLocation.addBounds(locationBounds, locationBounds.expand(-12, -10, -12), stairsAABB);
 		towerLocation.linkChunks();
 		towerLocation.setLayer(0);

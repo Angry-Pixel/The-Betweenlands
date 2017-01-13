@@ -42,6 +42,7 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
@@ -753,7 +754,7 @@ public class DecorationHelper {
 			pos = pos.add(0, -8, 0);
 			if(GEN_GIANT_TREE.canGenerateAt(decorator.getWorld(), new Random(seed), pos)) {
 				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(decorator.getWorld());
-				WorldGenGiantTree.ChunkMaker marker = new WorldGenGiantTree.ChunkMaker(worldStorage, UUID.randomUUID(), pos, seed);
+				WorldGenGiantTree.ChunkMaker marker = new WorldGenGiantTree.ChunkMaker(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), pos, seed);
 				marker.linkChunk(decorator.getWorld().getChunkFromBlockCoords(pos));
 				marker.setDirty(true);
 				worldStorage.addSharedStorage(marker);

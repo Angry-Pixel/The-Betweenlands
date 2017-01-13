@@ -8,7 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -75,15 +76,14 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * @param nbt
 	 * @return
 	 */
-	public static SharedStorage load(WorldDataBase<?> worldStorage, NBTTagCompound nbt, boolean packet) {
+	public static SharedStorage load(WorldDataBase<?> worldStorage, NBTTagCompound nbt, @Nullable SharedRegion region, boolean packet) {
 		try {
 			ResourceLocation type = new ResourceLocation(nbt.getString("type"));
-			UUID uuid = nbt.getUniqueId("uuid");
 			Class<? extends SharedStorage> storageClass = SharedStorage.getStorageType(type);
 			if (storageClass == null)
 				throw new Exception("Shared storage type not mapped");
-			Constructor<? extends SharedStorage> ctor = storageClass.getConstructor(WorldDataBase.class, UUID.class);
-			SharedStorage storage = ctor.newInstance(worldStorage, uuid);
+			Constructor<? extends SharedStorage> ctor = storageClass.getConstructor(WorldDataBase.class, String.class, SharedRegion.class);
+			SharedStorage storage = ctor.newInstance(worldStorage, nbt.getString("id"), region);
 			if(packet) {
 				storage.readFromPacketNBT(nbt.getCompoundTag("data"));
 			} else {
@@ -105,7 +105,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		if (type == null)
 			throw new RuntimeException("Shared storage type not mapped");
 		nbt.setString("type", type.toString());
-		nbt.setUniqueId("uuid", sharedStorage.getUUID());
+		nbt.setString("id", sharedStorage.getID());
 		if(packet) {
 			nbt.setTag("data", sharedStorage.writeToPacketNBT(new NBTTagCompound()));
 		} else {
@@ -118,15 +118,21 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	private final WorldDataBase<?> worldStorage;
 	private final List<ChunkPos> linkedChunks = new ArrayList<>();
 	private final List<SharedStorageReference> loadedReferences = new ArrayList<>();
-	private final UUID uuid;
-	private final String uuidString;
+	private final String id;
+	private final SharedRegion region;
 	private CapabilityDispatcher capabilities;
 	private boolean dirty = false;
 
-	public SharedStorage(WorldDataBase<?> worldStorage, UUID uuid) {
+	/**
+	 * Creates a new shared storage
+	 * @param worldStorage World storage
+	 * @param id Storage ID. <b>Must be a unique ID per region!</b>
+	 * @param region Optional shared region. <b>Shared regions stay loaded until all references are unloaded, make sure the linked chunks are within a reasonable distance if a region is used!</b>
+	 */
+	public SharedStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
 		this.worldStorage = worldStorage;
-		this.uuid = uuid;
-		this.uuidString = uuid.toString();
+		this.id = id;
+		this.region = region;
 
 		//Gather capabilities
 		AttachSharedStorageCapabilitiesEvent event = new AttachSharedStorageCapabilitiesEvent(this);
@@ -254,19 +260,28 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	}
 
 	/**
-	 * Returns the UUID
+	 * Returns the ID
 	 * @return
 	 */
-	public final UUID getUUID() {
-		return this.uuid;
+	public final String getID() {
+		return this.id;
 	}
 
 	/**
-	 * Returns the UUID string
+	 * Returns the region
 	 * @return
 	 */
-	public final String getUUIDString() {
-		return this.uuidString;
+	@Nullable
+	public final SharedRegion getRegion() {
+		return this.region;
+	}
+
+	/**
+	 * Returns whether this storage is assigned to a region
+	 * @return
+	 */
+	public final boolean hasRegion() {
+		return this.region != null;
 	}
 
 	/**
@@ -341,7 +356,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * @return
 	 */
 	public List<EntityPlayerMP> getWatchers() {
-		return this.watchers;
+		return Collections.unmodifiableList(this.watchers);
 	}
 
 	/**

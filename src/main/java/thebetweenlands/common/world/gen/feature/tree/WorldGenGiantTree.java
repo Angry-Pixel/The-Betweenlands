@@ -13,6 +13,7 @@ import thebetweenlands.common.world.gen.progressivegen.ProgressiveGenChunkMarker
 import thebetweenlands.common.world.gen.progressivegen.ProgressiveGenerator;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
@@ -195,7 +196,7 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements Progres
 
 	protected void generateWorldLocation(World world, Random rand, BlockPos pos) {
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage treeLocation = new LocationStorage(worldStorage, UUID.randomUUID(), "giantTree", EnumLocationType.GIANT_TREE);
+		LocationStorage treeLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "giantTree", EnumLocationType.GIANT_TREE);
 		treeLocation.addBounds(new AxisAlignedBB(pos.getX() - 32, pos.getY() - 10, pos.getZ() - 32, pos.getX() + 32, pos.getY() + 80, pos.getZ() + 32));
 		treeLocation.linkChunks();
 		treeLocation.setDirty(true);
@@ -214,12 +215,12 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements Progres
 	}
 
 	public static class ChunkMaker extends ProgressiveGenChunkMarker<WorldGenGiantTree> {
-		public ChunkMaker(WorldDataBase<?> worldStorage, UUID uuid) {
-			super(worldStorage, uuid);
+		public ChunkMaker(WorldDataBase<?> worldStorage, String id, SharedRegion region) {
+			super(worldStorage, id, region);
 		}
 
-		public ChunkMaker(WorldDataBase<?> worldStorage, UUID uuid, BlockPos pos, long seed) {
-			super(worldStorage, uuid, pos, seed);
+		public ChunkMaker(WorldDataBase<?> worldStorage, String id, SharedRegion region, BlockPos pos, long seed) {
+			super(worldStorage, id, region, pos, seed);
 		}
 
 		@Override
