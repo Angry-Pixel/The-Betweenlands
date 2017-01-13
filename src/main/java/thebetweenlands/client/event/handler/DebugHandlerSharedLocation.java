@@ -29,39 +29,45 @@ public class DebugHandlerSharedLocation {
 			for(SharedStorage sharedStorage : worldStorage.getSharedStorage()) {
 				if(sharedStorage instanceof LocationStorage) {
 					LocationStorage location = (LocationStorage) sharedStorage;
-					for(AxisAlignedBB bb : location.getBounds()) {
-						GlStateManager.pushMatrix();
-						if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
-							GlStateManager.disableDepth();
-						}
-						GlStateManager.disableTexture2D();
-						GlStateManager.enableBlend();
-						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
-						GlStateManager.color(1, 1, 1, 1);
-						GlStateManager.glLineWidth(1F);
-						GlStateManager.depthMask(false);
-						GL11.glEnable(GL11.GL_LINE_SMOOTH);
 
-						Random rnd = new Random(location.getSeed());
-
-						float red = 0.25F + rnd.nextFloat() / 2.0F * 0.75F + location.getLayer() / 5.0F;
-						float green = 0.25F + rnd.nextFloat() / 2.0F * 0.75F;
-						float blue = 0.25F + rnd.nextFloat() * 0.75F - location.getLayer() / 5.0F;
-						float alpha = 0.25F;
-
-						GlStateManager.color(red, green, blue, alpha);
-						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
-
-						GlStateManager.color(red / 2.0F, green / 2.0F, blue / 2.0F, 0.8F);
-						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
-
-						GL11.glDisable(GL11.GL_LINE_SMOOTH);
-						GlStateManager.depthMask(true);
-						GlStateManager.enableTexture2D();
-						GlStateManager.enableDepth();
-						GlStateManager.popMatrix();
+					GlStateManager.pushMatrix();
+					if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+						GlStateManager.disableDepth();
 					}
+					GlStateManager.disableTexture2D();
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0f);
+					GlStateManager.color(1, 1, 1, 1);
+					GlStateManager.glLineWidth(1F);
+					GlStateManager.depthMask(false);
+					GL11.glEnable(GL11.GL_LINE_SMOOTH);
+
+					Random rnd = new Random(location.getSeed());
+
+					float red = 0.25F + rnd.nextFloat() / 2.0F * 0.75F + location.getLayer() / 5.0F;
+					float green = 0.25F + rnd.nextFloat() / 2.0F * 0.75F;
+					float blue = 0.25F + rnd.nextFloat() * 0.75F - location.getLayer() / 5.0F;
+					float alpha = 0.25F;
+
+					GlStateManager.color(red, green, blue, alpha);
+					for(AxisAlignedBB bb : location.getBounds()) {
+						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					}
+
+					GlStateManager.color(red / 1.5F, green / 1.5F, blue / 1.5F, 1.0F);
+					for(AxisAlignedBB bb : location.getBounds()) {
+						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					}
+
+					GlStateManager.color(red, green, blue, 1.0F);
+					drawBoundingBoxOutline(location.getEnclosingBounds().offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+
+					GL11.glDisable(GL11.GL_LINE_SMOOTH);
+					GlStateManager.depthMask(true);
+					GlStateManager.enableTexture2D();
+					GlStateManager.enableDepth();
+					GlStateManager.popMatrix();
 				}
 			}
 		}

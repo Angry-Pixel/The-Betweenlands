@@ -94,7 +94,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		} else {
 			AxisAlignedBB union = this.boundingBoxes.get(0);
 			for(AxisAlignedBB box : this.boundingBoxes) {
-				union.union(box);
+				union = union.union(box);
 			}
 			this.enclosingBoundingBox = union;
 		}
