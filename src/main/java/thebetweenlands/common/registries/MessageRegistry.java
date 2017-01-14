@@ -9,8 +9,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.message.BLMessage;
-import thebetweenlands.common.message.clientbound.*;
+import thebetweenlands.common.network.message.BLMessage;
+import thebetweenlands.common.network.message.clientbound.*;
 
 public class MessageRegistry {
 	private MessageRegistry() { }

@@ -1,4 +1,4 @@
-package thebetweenlands.common.message.clientbound;
+package thebetweenlands.common.network.message.clientbound;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.message.BLMessage;
+import thebetweenlands.common.network.message.BLMessage;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 
@@ -26,9 +26,8 @@ public class MessageSyncSharedStorage extends BLMessage {
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
-		PacketBuffer packetBuffer = new PacketBuffer(buf);
 		try {
-			this.nbt = packetBuffer.readNBTTagCompoundFromBuffer();
+			this.nbt = buf.readNBTTagCompoundFromBuffer();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -36,8 +35,7 @@ public class MessageSyncSharedStorage extends BLMessage {
 
 	@Override
 	public void serialize(PacketBuffer buf) {
-		PacketBuffer packetBuffer = new PacketBuffer(buf);
-		packetBuffer.writeNBTTagCompoundToBuffer(this.nbt);
+		buf.writeNBTTagCompoundToBuffer(this.nbt);
 	}
 
 	@Override

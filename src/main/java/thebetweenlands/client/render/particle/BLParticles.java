@@ -3,6 +3,7 @@ package thebetweenlands.client.render.particle;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleCrit;
 import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleRedstone;
 import net.minecraft.client.particle.ParticleSmokeNormal;
@@ -95,7 +96,8 @@ public enum BLParticles {
 	WEEDWOOD_LEAF(new ParticleWeedwoodLeaf.Factory()),
 	LEAF_SWIRL(new ParticleLeafSwirl.Factory()),
 	REDSTONE_DUST(VanillaParticleFactory.create(ParticleRedstone.class, new ParticleRedstone.Factory())),
-	THEM(new ParticleThem.Factory());
+	THEM(new ParticleThem.Factory()),
+	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory()));
 
 
 

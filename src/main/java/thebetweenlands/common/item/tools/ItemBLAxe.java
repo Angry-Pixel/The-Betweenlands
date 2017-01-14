@@ -30,13 +30,18 @@ public class ItemBLAxe extends ItemTool implements ICorrodible {
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 		Material material = state.getMaterial();
 		float str = material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getStrVsBlock(stack, state) : this.efficiencyOnProperMaterial;
-		str = CorrosionHelper.getDigSpeed(str, stack, state);
+		str = CorrosionHelper.getStrVsBlock(str, stack, state);
 		return str; 
 	}
 	
 	@Override
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
 		return CorrosionHelper.shouldCauseBlockBreakReset(oldStack, newStack);
+	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return CorrosionHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
 	}
 	
 	@Override

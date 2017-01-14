@@ -23,7 +23,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntityGecko;
-import thebetweenlands.common.message.clientbound.MessageWeedwoodBushRustle;
+import thebetweenlands.common.network.message.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 

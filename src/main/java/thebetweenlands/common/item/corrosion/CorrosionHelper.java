@@ -114,14 +114,14 @@ public final class CorrosionHelper {
 
 	/**
 	 * Returns the dig speed of an item at the amount of corrosion of the specified item
-	 * @param normalDigSpeed
+	 * @param normalStrength
 	 * @param itemStack
 	 * @param block
 	 * @param meta
 	 * @return
 	 */
-	public static float getDigSpeed(float normalDigSpeed, ItemStack itemStack, IBlockState blockState) {
-		return normalDigSpeed * getModifier(itemStack);
+	public static float getStrVsBlock(float normalStrength, ItemStack itemStack, IBlockState blockState) {
+		return normalStrength * getModifier(itemStack);
 	}
 
 	/**
@@ -131,6 +131,16 @@ public final class CorrosionHelper {
 	 * @return
 	 */
 	public static boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return !(newStack.getItem() == oldStack.getItem() && areItemStackTagsEqual(newStack, oldStack) && (newStack.isItemStackDamageable() || newStack.getMetadata() == oldStack.getMetadata()));
+	}
+
+	/**
+	 * Returns whether the item reequip animation should be played
+	 * @param oldStack
+	 * @param newStack
+	 * @return
+	 */
+	public static boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return !(newStack.getItem() == oldStack.getItem() && areItemStackTagsEqual(newStack, oldStack) && (newStack.isItemStackDamageable() || newStack.getMetadata() == oldStack.getMetadata()));
 	}
 

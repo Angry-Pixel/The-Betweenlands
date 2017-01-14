@@ -16,7 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.structure.BlockDruidStone;
-import thebetweenlands.common.message.clientbound.MessageDruidAltarProgress;
+import thebetweenlands.common.network.message.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 

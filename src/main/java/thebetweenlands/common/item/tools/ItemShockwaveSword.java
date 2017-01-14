@@ -149,7 +149,7 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 	
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getDigSpeed(super.getStrVsBlock(stack, state), stack, state); 
+		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
 	}
 
 	@Override

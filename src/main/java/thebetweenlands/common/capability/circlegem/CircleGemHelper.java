@@ -9,6 +9,7 @@ import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
@@ -20,10 +21,15 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
+import thebetweenlands.common.network.message.clientbound.MessageGemProc;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class CircleGemHelper {
@@ -35,7 +41,7 @@ public class CircleGemHelper {
 	public static boolean isApplicable(Item item) {
 		return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool;
 	}
-	
+
 	/**
 	 * Returns true if gems are applicable to the entity
 	 * @param entity
@@ -269,21 +275,19 @@ public class CircleGemHelper {
 				}
 
 				if(attackerProcd || defenderProcd) {
-					/*Random rnd = source.worldObj.rand;
 					World world = attackedEntity.worldObj;
 					int dim = 0;
 					if (world instanceof WorldServer) {
-						dim = ((WorldServer)world).provider.dimensionId;
+						dim = ((WorldServer)world).provider.getDimension();
 					}
 					if(attackerProcd) {
-						TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketGemProc((byte)0, attackedEntity.getEntityId())), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64D));
+						TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, (byte) 0), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
 					}
 					if(defenderProcd) {
-						TheBetweenlands.networkWrapper.sendToAllAround(TheBetweenlands.sidedPacketHandler.wrapPacket(new PacketGemProc((byte)1, attackedEntity.getEntityId())), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64D));
+						TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, (byte) 1), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
 					}
-					source.worldObj.playSoundAtEntity(source, "random.successful_hit", 1, 1);
-					attackedEntity.worldObj.playSoundAtEntity(attackedEntity, "random.successful_hit", 1, 1);*/
-					//TODO: Proc packet
+					source.worldObj.playSound(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.worldObj.playSound(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
 				}
 			}
 		}

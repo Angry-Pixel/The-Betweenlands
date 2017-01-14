@@ -43,7 +43,7 @@ import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.ai.EntityAITargetNonSneaking;
 import thebetweenlands.common.entity.ai.EntityAIWightAttack;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
-import thebetweenlands.common.message.clientbound.MessageWightVolatileParticles;
+import thebetweenlands.common.network.message.clientbound.MessageWightVolatileParticles;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 

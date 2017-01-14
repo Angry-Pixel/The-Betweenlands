@@ -1,4 +1,4 @@
-package thebetweenlands.common.message.clientbound;
+package thebetweenlands.common.network.message.clientbound;
 
 import java.io.IOException;
 
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.message.BLMessage;
+import thebetweenlands.common.network.message.BLMessage;
 
 public class MessageSyncStaticAspects extends BLMessage {
 	private NBTTagCompound nbt;

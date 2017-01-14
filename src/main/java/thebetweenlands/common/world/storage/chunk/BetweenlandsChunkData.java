@@ -9,7 +9,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.message.clientbound.MessageSyncChunkData;
+import thebetweenlands.common.network.message.clientbound.MessageSyncChunkData;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 
 

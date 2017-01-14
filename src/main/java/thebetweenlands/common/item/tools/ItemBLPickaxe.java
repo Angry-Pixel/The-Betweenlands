@@ -22,17 +22,22 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
-	
+
 	@Override
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
 		return CorrosionHelper.shouldCauseBlockBreakReset(oldStack, newStack);
 	}
-	
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return CorrosionHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+	}
+
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getDigSpeed(super.getStrVsBlock(stack, state), stack, state); 
+		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
 	}
-	
+
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
 		CorrosionHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
@@ -40,7 +45,7 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return CorrosionHelper.getAttributeModifiers(slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.damageVsEntity);
+		return CorrosionHelper.getAttributeModifiers(slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.damageVsEntity);
 	}
 
 	@Override

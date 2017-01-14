@@ -5,7 +5,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.message.clientbound.MessageSyncStaticAspects;
+import thebetweenlands.common.network.message.clientbound.MessageSyncStaticAspects;
 
 public class AspectSyncHandler {
 	@SubscribeEvent

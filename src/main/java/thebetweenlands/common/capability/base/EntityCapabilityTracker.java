@@ -2,7 +2,7 @@ package thebetweenlands.common.capability.base;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.message.clientbound.MessageSyncEntityCapabilities;
+import thebetweenlands.common.network.message.clientbound.MessageSyncEntityCapabilities;
 
 public class EntityCapabilityTracker {
 	private final EntityCapability<?, ?, ?> entityCapability;

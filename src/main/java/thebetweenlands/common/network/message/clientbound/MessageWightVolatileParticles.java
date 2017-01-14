@@ -1,4 +1,4 @@
-package thebetweenlands.common.message.clientbound;
+package thebetweenlands.common.network.message.clientbound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -8,7 +8,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.common.message.MessageEntity;
+import thebetweenlands.common.network.message.MessageEntity;
 
 public class MessageWightVolatileParticles extends MessageEntity {
 	public MessageWightVolatileParticles() { }

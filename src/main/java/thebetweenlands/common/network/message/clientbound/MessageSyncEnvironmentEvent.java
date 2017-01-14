@@ -1,4 +1,4 @@
-package thebetweenlands.common.message.clientbound;
+package thebetweenlands.common.network.message.clientbound;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
@@ -7,7 +7,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.message.BLMessage;
+import thebetweenlands.common.network.message.BLMessage;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;

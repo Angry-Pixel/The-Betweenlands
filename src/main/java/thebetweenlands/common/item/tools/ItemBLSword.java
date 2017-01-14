@@ -31,8 +31,13 @@ public class ItemBLSword extends ItemSword implements ICorrodible {
 	}
 	
 	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return CorrosionHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+	}
+	
+	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getDigSpeed(super.getStrVsBlock(stack, state), stack, state); 
+		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
 	}
 	
 	@Override

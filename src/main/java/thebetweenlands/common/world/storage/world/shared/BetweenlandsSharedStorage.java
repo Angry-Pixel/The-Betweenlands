@@ -7,8 +7,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.message.clientbound.MessageRemoveSharedStorage;
-import thebetweenlands.common.message.clientbound.MessageSyncSharedStorage;
+import thebetweenlands.common.network.message.clientbound.MessageRemoveSharedStorage;
+import thebetweenlands.common.network.message.clientbound.MessageSyncSharedStorage;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 

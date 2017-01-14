@@ -1,4 +1,4 @@
-package thebetweenlands.common.message;
+package thebetweenlands.common.network.message;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.PacketBuffer;

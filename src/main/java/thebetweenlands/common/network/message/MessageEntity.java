@@ -1,4 +1,4 @@
-package thebetweenlands.common.message;
+package thebetweenlands.common.network.message;
 
 import javax.annotation.Nullable;
 
