@@ -12,6 +12,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.audio.AnimatorSound;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -88,12 +90,17 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 			updateContainingBlockInfo();
 		} else {
 			if(this.isRunning() && !this.soundPlaying) {
-				Minecraft.getMinecraft().getSoundHandler().playSound(new AnimatorSound(SoundRegistry.ANIMATOR, SoundCategory.BLOCKS, this));
+				this.playAnimatorSound();
 				this.soundPlaying = true;
 			} else if(!this.isRunning()) {
 				this.soundPlaying = false;
 			}
 		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void playAnimatorSound() {
+		Minecraft.getMinecraft().getSoundHandler().playSound(new AnimatorSound(SoundRegistry.ANIMATOR, SoundCategory.BLOCKS, this));
 	}
 
 	@Override

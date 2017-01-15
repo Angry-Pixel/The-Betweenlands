@@ -1,6 +1,5 @@
 package thebetweenlands.common.item.tools;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -41,11 +40,6 @@ public class ItemBLShield extends ItemShield {
     public CreativeTabs getCreativeTab() {
         return BLCreativeTabs.GEARS; //Minecraft seems to override the creative tab for some reason...
     }
-	
-	@Override
-	public String getItemStackDisplayName(ItemStack stack) {
-		return (I18n.format(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
-	}
 
 	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {

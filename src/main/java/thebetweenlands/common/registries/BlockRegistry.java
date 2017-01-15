@@ -366,9 +366,6 @@ public class BlockRegistry {
 	public static final Block MOSSY_BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(MOSSY_BETWEENSTONE_BRICKS.getDefaultState());
 	public static final Block MOSSY_SMOOTH_BETWEENSTONE_WALL = new BlockWallBetweenlands(MOSSY_SMOOTH_BETWEENSTONE.getDefaultState());
 	public static final Block CRACKED_BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(CRACKED_BETWEENSTONE_BRICKS.getDefaultState());
-	//public static final Block SMOOTH_PITSTONE_WALL = new BlockWallBetweenlands(SMOOTH_PITSTONE);
-	//public static final Block TEMPLE_BRICK_BRICK_WALL = new BlockWallBetweenlands(TEMPLE_BRICKS);
-	//public static final Block SOLID_TAR_BRICK_WALL = new BlockWallBetweenlands(SOLID_TAR);
 
 	public static final Block WEEDWOOD_PLANK_FENCE = new BlockFenceBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
 	public static final Block WEEDWOOD_LOG_FENCE = new BlockFenceBetweenlands(WEEDWOOD.getDefaultState());
