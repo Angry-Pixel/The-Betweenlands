@@ -17,7 +17,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidContainerRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.IFluidBlock;
+import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -52,9 +56,10 @@ public abstract class ItemBLBucketEmpty extends Item {
                     IBlockState iblockstate = worldIn.getBlockState(blockpos);
                     Block block = iblockstate.getBlock();
 
+                    //TODO: Move this to infuser
                     if (!worldIn.isRemote && block == BlockRegistry.INFUSER && playerIn.isSneaking()) {
                         TileEntityInfuser tile = (TileEntityInfuser) worldIn.getTileEntity(blockpos);
-                        if (tile != null && tile.hasInfusion() && tile.getWaterAmount() >= FluidContainerRegistry.BUCKET_VOLUME) {
+                        if (tile != null && tile.hasInfusion() && tile.getWaterAmount() >= Fluid.BUCKET_VOLUME) {
                             ItemStack infusionBucket = new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_INFUSION);
                             NBTTagCompound nbtCompound = new NBTTagCompound();
                             infusionBucket.setTagCompound(nbtCompound);
@@ -68,7 +73,7 @@ public abstract class ItemBLBucketEmpty extends Item {
                             }
                             nbtCompound.setTag("ingredients", nbtList);
                             nbtCompound.setInteger("infusionTime", tile.getInfusionTime());
-                            tile.extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, FluidContainerRegistry.BUCKET_VOLUME));
+                            tile.extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
                             if (itemStackIn.stackSize == 1)
                                 return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, infusionBucket);
                             else {

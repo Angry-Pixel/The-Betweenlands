@@ -24,22 +24,22 @@ public class ItemBLSword extends ItemSword implements ICorrodible {
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 		CircleGemHelper.addGemPropertyOverrides(this);
 	}
-	
+
 	@Override
 	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
 		return CorrosionHelper.shouldCauseBlockBreakReset(oldStack, newStack);
 	}
-	
+
 	@Override
 	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
 		return CorrosionHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
 	}
-	
+
 	@Override
 	public float getStrVsBlock(ItemStack stack, IBlockState state) {
 		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
 	}
-	
+
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
 		CorrosionHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
@@ -47,7 +47,7 @@ public class ItemBLSword extends ItemSword implements ICorrodible {
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return CorrosionHelper.getAttributeModifiers(slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.getDamageVsEntity());
+		return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, 3.0F + this.getDamageVsEntity());
 	}
 
 	@Override

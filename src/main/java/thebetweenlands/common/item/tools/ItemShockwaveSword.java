@@ -4,20 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -37,7 +32,7 @@ import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
 
-public class ItemShockwaveSword extends ItemSword implements ICorrodible {
+public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	public ItemShockwaveSword(ToolMaterial material) {
 		super(material);
 		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
@@ -46,7 +41,6 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 				return stack.getTagCompound() != null && stack.getTagCompound().getInteger("cooldown") < 60 ? 1 : 0;
 			}
 		});
-		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
 
 	@Override
@@ -140,20 +134,5 @@ public class ItemShockwaveSword extends ItemSword implements ICorrodible {
 		boolean wasCharging = oldStack.getTagCompound() != null && oldStack.getTagCompound().getInteger("cooldown") < 60;
 		boolean isCharging = newStack.getTagCompound() != null && newStack.getTagCompound().getInteger("cooldown") < 60;
 		return (super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !isCharging || isCharging != wasCharging) || !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
-	}
-	
-	@Override
-	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
-		return CorrosionHelper.shouldCauseBlockBreakReset(oldStack, newStack);
-	}
-	
-	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
-	}
-
-	@Override
-	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return CorrosionHelper.getAttributeModifiers(slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.getDamageVsEntity());
 	}
 }

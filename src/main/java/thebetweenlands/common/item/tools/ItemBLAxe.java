@@ -3,15 +3,14 @@ package thebetweenlands.common.item.tools;
 import java.util.List;
 
 import com.google.common.collect.Multimap;
-import com.google.common.collect.Sets;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
@@ -19,9 +18,9 @@ import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.item.corrosion.ICorrodible;
 
 
-public class ItemBLAxe extends ItemTool implements ICorrodible {
+public class ItemBLAxe extends ItemAxe implements ICorrodible {
 	public ItemBLAxe(ToolMaterial material) {
-		super(8.0F, -3.2F, material, Sets.newHashSet(new Block[]{}));
+		super(material, 5.0F + material.getDamageVsEntity(), -3.2F);
 
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
@@ -51,7 +50,7 @@ public class ItemBLAxe extends ItemTool implements ICorrodible {
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return CorrosionHelper.getAttributeModifiers(slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.damageVsEntity);
+        return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.damageVsEntity);
 	}
 
 	@Override

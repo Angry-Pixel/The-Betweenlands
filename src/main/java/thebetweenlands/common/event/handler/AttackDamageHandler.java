@@ -29,7 +29,7 @@ public class AttackDamageHandler {
 
 				//BL mobs overworld item resistance
 				EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
-				ItemStack heldItem = entityPlayer.getActiveItemStack();
+				ItemStack heldItem = entityPlayer.getHeldItem(entityPlayer.getActiveHand());
 				if (heldItem != null) {
 					boolean isUsingBLWeapon = heldItem.getItem() instanceof ItemBLSword || heldItem.getItem() instanceof ItemBLAxe || heldItem.getItem() instanceof ItemBLPickaxe || heldItem.getItem() instanceof ItemBLShovel;
 					if (!isUsingBLWeapon) {

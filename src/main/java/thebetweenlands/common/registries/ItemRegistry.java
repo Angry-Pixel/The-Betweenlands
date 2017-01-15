@@ -88,6 +88,7 @@ import thebetweenlands.common.item.tools.ItemShockwaveSword;
 import thebetweenlands.common.item.tools.ItemSickle;
 import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.item.tools.ItemVoodooDoll;
+import thebetweenlands.common.item.tools.ItemWeedwoodBucketEmpty;
 import thebetweenlands.common.item.tools.ItemWeedwoodBucketInfusion;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.item.tools.bow.ItemBLArrow;
@@ -183,15 +184,43 @@ public class ItemRegistry {
 	public static final Item OCTINE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_OCTINE) {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+			super.hitEntity(stack, target, attacker);
 			if (attacker.worldObj.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 3 : 4) == 0) {
 				target.setFire(10);
 			}
 			return false;
 		}
 	}.setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item OCTINE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item OCTINE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item OCTINE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item OCTINE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_OCTINE){
+		@Override
+		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+			super.hitEntity(stack, target, attacker);
+			if (attacker.worldObj.rand.nextInt(4) == 0) {
+				target.setFire(10);
+			}
+			return false;
+		}
+	}.setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item OCTINE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_OCTINE){
+		@Override
+		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+			super.hitEntity(stack, target, attacker);
+			if (attacker.worldObj.rand.nextInt(4) == 0) {
+				target.setFire(10);
+			}
+			return false;
+		}
+	}.setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item OCTINE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_OCTINE){
+		@Override
+		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+			super.hitEntity(stack, target, attacker);
+			if (attacker.worldObj.rand.nextInt(4) == 0) {
+				target.setFire(10);
+			}
+			return false;
+		}
+	}.setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item VALONITE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item VALONITE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item VALONITE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
@@ -210,12 +239,7 @@ public class ItemRegistry {
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 	public static final Item SICKLE = new ItemSickle();
 	public static final Item SHOCKWAVE_SWORD = new ItemShockwaveSword(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemBLBucketEmpty() {
-		@Override
-		protected UniversalBucket getFilledBucket() {
-			return WEEDWOOD_BUCKET_FILLED;
-		}
-	};
+	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemWeedwoodBucketEmpty();
 	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET_EMPTY);
 	public static final Item SYRMORITE_BUCKET_EMPTY = new ItemBLBucketEmpty() {
 		@Override

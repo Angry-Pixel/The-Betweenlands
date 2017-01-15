@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.world.gen.feature.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.AdvancedStateMap;
@@ -90,9 +91,9 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 			case "SAP":
 				worldGen = new WorldGenSapTree();
 				break;
-		/*	case "RUBBER":
+			case "RUBBER":
 				worldGen = new WorldGenRubberTree();
-				break; */
+				break; 
 			default:
 				break;
 		}
