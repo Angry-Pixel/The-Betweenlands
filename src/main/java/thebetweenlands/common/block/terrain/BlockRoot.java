@@ -1,10 +1,14 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -15,6 +19,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.property.PropertyBoolUnlisted;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockRoot extends BasicBlock {
 	public static final PropertyBoolUnlisted NO_BOTTOM = new PropertyBoolUnlisted("no_bottom");
@@ -26,12 +31,18 @@ public class BlockRoot extends BasicBlock {
 	public static final PropertyIntegerUnlisted POS_Z = new PropertyIntegerUnlisted("pos_z");
 
 	public BlockRoot() {
-		super(Material.ROCK);
+		super(Material.WOOD);
+		this.setSoundType(SoundType.WOOD);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 
+	@Override
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		return ItemRegistry.TANGLED_ROOT;
+	}
+	
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[] {POS_X, POS_Y, POS_Z, NO_BOTTOM, NO_TOP, DIST_UP, DIST_DOWN});

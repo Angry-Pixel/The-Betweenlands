@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.container;
 
 import net.minecraft.block.BlockHopper;
+import net.minecraft.block.SoundType;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -12,6 +13,9 @@ public class BlockHopperBetweenlands extends BlockHopper implements BlockRegistr
 	public BlockHopperBetweenlands() {
 		super();
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setHardness(3.0F);
+		this.setResistance(8.0F);
+		this.setSoundType(SoundType.METAL);
 	}
 	
     public TileEntity createNewTileEntity(World worldIn, int meta) {

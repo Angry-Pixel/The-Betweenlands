@@ -20,6 +20,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class BlockVineBL extends BlockVine implements ISickleHarvestable, IShearable {
 	public BlockVineBL(){
 		this.setSoundType(SoundType.PLANT);
+		this.setHardness(0.2F);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
 

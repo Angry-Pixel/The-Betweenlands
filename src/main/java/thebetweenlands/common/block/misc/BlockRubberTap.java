@@ -41,6 +41,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	 */
 	public final int ticksPerStep;
 
+	@SuppressWarnings("deprecation")
 	public BlockRubberTap(IBlockState material, int ticksPerStep) {
 		super(material.getMaterial());
 		this.setDefaultState(this.getBlockState().getBaseState().withProperty(AMOUNT, 0));

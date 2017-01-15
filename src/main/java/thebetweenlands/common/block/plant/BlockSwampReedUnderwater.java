@@ -19,6 +19,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class BlockSwampReedUnderwater extends BlockStackablePlantUnderwater {
 	public BlockSwampReedUnderwater() {
 		super(false);
+		this.setHardness(0.0F);
 	}
 
 	@Override

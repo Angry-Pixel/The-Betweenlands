@@ -444,7 +444,7 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_REED_ITEM);
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.ITEMS_MISC, EnumItemMisc.DRIED_SWAMP_REED.getID());
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.ITEMS_MISC, EnumItemMisc.SWAMP_REED_ROPE.getID());
-		CompostRecipe.addRecipe(5, 8000, ItemRegistry.ITEMS_MISC, EnumItemMisc.TANGLED_ROOT.getID());
+		CompostRecipe.addRecipe(5, 8000, ItemRegistry.TANGLED_ROOT);
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_KELP_ITEM);
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM);
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.BLACK_HAT_MUSHROOM_ITEM);
@@ -506,7 +506,7 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_SUNDEW.create(1)), (ItemPlantDrop.EnumItemPlantDrop.SUNDEW_HEAD.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_SWAMP_KELP.create(1)), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_SWAMP_GRASS_TALL.create(1)), (ItemPlantDrop.EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES.create(1)));
-		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_TANGLED_ROOTS.create(1)), (EnumItemMisc.TANGLED_ROOT.create(1)));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_TANGLED_ROOTS.create(1)), new ItemStack(ItemRegistry.TANGLED_ROOT));
 		//TODO add when bark is added PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), (BlockRegistry.BARK));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_HANGER.create(1)), (ItemPlantDrop.EnumItemPlantDrop.HANGER.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WATER_WEEDS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1)));

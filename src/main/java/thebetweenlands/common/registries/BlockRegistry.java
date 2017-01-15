@@ -18,7 +18,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -54,39 +53,43 @@ import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
-import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
+import thebetweenlands.common.block.misc.BlockSyrmoriteRubberTap;
 import thebetweenlands.common.block.misc.BlockTrapDoorBetweenlands;
+import thebetweenlands.common.block.misc.BlockWeedwoodRubberTap;
 import thebetweenlands.common.block.plant.BlockAlgae;
+import thebetweenlands.common.block.plant.BlockBlackHatMushroom;
 import thebetweenlands.common.block.plant.BlockBladderwortFlower;
 import thebetweenlands.common.block.plant.BlockBladderwortStalk;
 import thebetweenlands.common.block.plant.BlockBogBeanFlower;
 import thebetweenlands.common.block.plant.BlockBogBeanStalk;
+import thebetweenlands.common.block.plant.BlockBulbCappedMushroom;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomCap;
 import thebetweenlands.common.block.plant.BlockBulbCappedMushroomStalk;
 import thebetweenlands.common.block.plant.BlockCaveGrass;
 import thebetweenlands.common.block.plant.BlockCaveMoss;
 import thebetweenlands.common.block.plant.BlockDoublePlantBL;
+import thebetweenlands.common.block.plant.BlockFlatheadMushroom;
 import thebetweenlands.common.block.plant.BlockGoldenClubFlower;
 import thebetweenlands.common.block.plant.BlockGoldenClubStalk;
 import thebetweenlands.common.block.plant.BlockHollowLog;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldFlower;
 import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockMoss;
-import thebetweenlands.common.block.plant.BlockMushroomBetweenlands;
 import thebetweenlands.common.block.plant.BlockNettle;
 import thebetweenlands.common.block.plant.BlockNettleFlowered;
 import thebetweenlands.common.block.plant.BlockPlant;
 import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockSaplingBetweenlands;
-import thebetweenlands.common.block.plant.BlockStackablePlantUnderwater;
+import thebetweenlands.common.block.plant.BlockSwampKelp;
 import thebetweenlands.common.block.plant.BlockSwampReed;
 import thebetweenlands.common.block.plant.BlockSwampReedUnderwater;
 import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
+import thebetweenlands.common.block.plant.BlockWeepingBlue;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
@@ -116,6 +119,7 @@ import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
+import thebetweenlands.common.block.terrain.BlockLogSap;
 import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockRoot;
@@ -177,7 +181,7 @@ public class BlockRegistry {
 			.setHardness(1.2F)
 			.setResistance(8.0F);
 	public static final Block SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
-	public static final Block COARSE_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND).setItemDropped(Item.getItemFromBlock(SWAMP_DIRT));
+	public static final Block COARSE_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND).setItemDropped(() -> Item.getItemFromBlock(BlockRegistry.SWAMP_DIRT));
 	public static final Block SWAMP_GRASS = new BlockSwampGrass();
 	public static final Block WISP = new BlockWisp();
 	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.875F);
@@ -229,7 +233,7 @@ public class BlockRegistry {
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
 	public static final Block LOG_RUBBER = new BlockRubberLog();
 	public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
-	public static final Block LOG_SAP = new BlockLogBetweenlands();
+	public static final Block LOG_SAP = new BlockLogSap();
 	public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
 	public static final Block SAPLING_SAP = new BlockSaplingBetweenlands("SAP");
 	public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands("RUBBER");
@@ -395,23 +399,11 @@ public class BlockRegistry {
 
 	//Plants
 	public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
-	public static final BlockDoublePlantBL WEEPING_BLUE = new BlockDoublePlantBL();
+	public static final BlockDoublePlantBL WEEPING_BLUE = new BlockWeepingBlue();
 	public static final BlockDoublePlantBL SUNDEW = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.SUNDEW_HEAD.create(1));
-	public static final Block BLACK_HAT_MUSHROOM = new BlockMushroomBetweenlands();
-	public static final Block BULB_CAPPED_MUSHROOM = new BlockMushroomBetweenlands() {
-		@Override
-		@SideOnly(Side.CLIENT)
-		public Block.EnumOffsetType getOffsetType() {
-			return Block.EnumOffsetType.XZ;
-		}
-
-		@Override
-		@SideOnly(Side.CLIENT)
-		public BlockRenderLayer getBlockLayer() {
-			return BlockRenderLayer.TRANSLUCENT;
-		}
-	}.setLightLevel(1.0F);
-	public static final Block FLAT_HEAD_MUSHROOM = new BlockMushroomBetweenlands();
+	public static final Block BLACK_HAT_MUSHROOM = new BlockBlackHatMushroom();
+	public static final Block BULB_CAPPED_MUSHROOM = new BlockBulbCappedMushroom();
+	public static final Block FLAT_HEAD_MUSHROOM = new BlockFlatheadMushroom();
 	public static final Block VENUS_FLY_TRAP = new BlockVenusFlyTrap().setSickleDrop(EnumItemPlantDrop.VENUS_FLY_TRAP_ITEM.create(1));
 	public static final BlockDoublePlantBL VOLARPAD = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.VOLARPAD_ITEM.create(1));
 	public static final Block SWAMP_PLANT = new BlockPlant() {
@@ -421,7 +413,7 @@ public class BlockRegistry {
 			return Block.EnumOffsetType.XZ;
 		}
 	}.setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1)).setReplaceable(true);
-	public static final Block SWAMP_KELP = new BlockStackablePlantUnderwater().setLightLevel(0.2F);
+	public static final Block SWAMP_KELP = new BlockSwampKelp();
 	public static final Block MIRE_CORAL = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.MIRE_CORAL_ITEM.create(1)).setLightLevel(1F);
 	public static final Block DEEP_WATER_CORAL = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.DEEP_WATER_CORAL_ITEM.create(1)).setLightLevel(1F);
 	public static final Block WATER_WEEDS = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1)).setReplaceable(true);
@@ -475,10 +467,10 @@ public class BlockRegistry {
 	public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
 
 	public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
-	public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false);
-	public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(true);
-	public static final Block DUG_SWAMP_GRASS = new BlockDugGrass(false);
-	public static final Block DUG_PURIFIED_SWAMP_GRASS = new BlockDugGrass(true);
+	public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
+	public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
+	public static final Block DUG_SWAMP_GRASS = new BlockDugGrass(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
+	public static final Block DUG_PURIFIED_SWAMP_GRASS = new BlockDugGrass(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
 
 	//Misc
 	public static final Block LOG_PORTAL = new BlockLogBetweenlands();
@@ -494,8 +486,8 @@ public class BlockRegistry {
 	public static final Block SULFUR_FURNACE_DUAL = new BlockBLDualFurnace(false);
 	public static final Block SULFUR_FURNACE_DUAL_ACTIVE = new BlockBLDualFurnace(true).setLightLevel(0.875F);
 	public static final Block WEEDWOOD_CHEST = new BlockChestBetweenlands(BlockChestBetweenlands.WEEDWOOD_CHEST);
-	public static final Block WEEDWOOD_RUBBER_TAP = new BlockRubberTap(WEEDWOOD_PLANKS.getDefaultState(), 540);
-	public static final Block SYRMORITE_RUBBER_TAP = new BlockRubberTap(SYRMORITE_BLOCK.getDefaultState(), 260);
+	public static final Block WEEDWOOD_RUBBER_TAP = new BlockWeedwoodRubberTap();
+	public static final Block SYRMORITE_RUBBER_TAP = new BlockSyrmoriteRubberTap();
 	public static final BlockSludge SLUDGE = new BlockSludge();
 	public static final Block FALLEN_LEAVES = new BlockFallenLeaves("fallenLeaves");
 	public static final Block ENERGY_BARRIER = new BlockEnergyBarrier();

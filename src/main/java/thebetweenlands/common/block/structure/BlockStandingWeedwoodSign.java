@@ -5,6 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockStandingSign;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +21,11 @@ import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockStandingWeedwoodSign extends BlockStandingSign implements ICustomItemBlock, IStateMappedBlock {
+	public BlockStandingWeedwoodSign() {
+		this.setHardness(1.0F);
+		this.setSoundType(SoundType.WOOD);
+	}
+	
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityWeedwoodSign();

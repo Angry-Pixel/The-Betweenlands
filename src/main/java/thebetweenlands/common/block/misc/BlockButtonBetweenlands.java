@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.misc;
 
 import net.minecraft.block.BlockButton;
+import net.minecraft.block.SoundType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
@@ -15,7 +16,13 @@ public class BlockButtonBetweenlands extends BlockButton {
 
     public BlockButtonBetweenlands(boolean wooden) {
         super(wooden);
+        this.setHardness(0.5F);
         this.wooden = wooden;
+        if(wooden) {
+        	this.setSoundType(SoundType.WOOD);
+        } else {
+        	this.setSoundType(SoundType.STONE);
+        }
         this.setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 

@@ -135,10 +135,10 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 		if (state.getValue(HALF) == BlockDoublePlantBL.EnumBlockHalf.UPPER) {
 			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
 				if (!player.capabilities.isCreativeMode) {
-					worldIn.destroyBlock(pos.down(), true);
-				} else {
-					worldIn.setBlockToAir(pos.down());
+					//Stupid workarounds...
+					this.harvestBlock(worldIn, player, pos.down(), state, worldIn.getTileEntity(pos), player.getHeldItemMainhand());
 				}
+				worldIn.setBlockToAir(pos.down());
 			}
 		} else if (worldIn.getBlockState(pos.up()).getBlock() == this) {
 			worldIn.setBlockState(pos.up(), Blocks.AIR.getDefaultState(), 2);
@@ -176,10 +176,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		//Forge: Break both parts on the client to prevent the top part flickering as default type for a few frames.
-		if (state.getBlock() ==  this && state.getValue(HALF) == EnumBlockHalf.LOWER && world.getBlockState(pos.up()).getBlock() == this)
-			world.setBlockToAir(pos.up());
-		return world.setBlockToAir(pos);
+		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	public static enum EnumBlockHalf implements IStringSerializable {

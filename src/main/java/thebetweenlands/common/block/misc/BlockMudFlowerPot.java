@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockTallGrass;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
@@ -47,6 +48,8 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public BlockMudFlowerPot() {
 		super(Material.CIRCUITS);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setHardness(0.3F);
+		this.setSoundType(SoundType.STONE);
 	}
 
 	@Override

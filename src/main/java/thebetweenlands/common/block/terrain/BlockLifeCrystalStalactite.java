@@ -48,10 +48,11 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 	public BlockLifeCrystalStalactite(Fluid fluid, Material materialIn) {
 		super(fluid, materialIn);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumLifeCrystalType.DEFAULT));
-		this.setHardness(1.5F);
+		this.setHardness(2.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setHarvestLevel("pickaxe", 2);
 	}
 
 	@Override

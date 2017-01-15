@@ -48,8 +48,13 @@ public class BlockSwampReed extends BlockStackablePlant {
 	}
 
 	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
+	
+	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return ImmutableList.of(new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
+		return ImmutableList.of();
 	}
 
 	@Override

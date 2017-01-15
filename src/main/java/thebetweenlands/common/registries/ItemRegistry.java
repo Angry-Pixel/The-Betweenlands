@@ -49,6 +49,7 @@ import thebetweenlands.common.item.food.ItemNettleSoup;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemSapBall;
 import thebetweenlands.common.item.food.ItemSapJello;
+import thebetweenlands.common.item.food.ItemTangledRoot;
 import thebetweenlands.common.item.food.ItemWeepingBluePetal;
 import thebetweenlands.common.item.food.ItemWightHeart;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
@@ -151,6 +152,8 @@ public class ItemRegistry {
 	public static final Item CANDY_RED = new ItemBLFood(3, 1.0F, false);
 	public static final Item CANDY_YELLOW = new ItemBLFood(3, 1.0F, false);
 	public static final Item CHIROMAW_WING = new ItemChiromawWing();
+	public static final Item TANGLED_ROOT = new ItemTangledRoot();
+	
 	//armor
 	public static final Item SYRMORITE_HELMET = new ItemBLArmor(BLMaterialRegistry.ARMOR_SYRMORITE, 0, EntityEquipmentSlot.HEAD, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item SYRMORITE_CHESTPLATE = new ItemBLArmor(BLMaterialRegistry.ARMOR_SYRMORITE, 1, EntityEquipmentSlot.CHEST, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);

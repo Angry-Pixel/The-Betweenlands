@@ -27,8 +27,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShearable {
 	public static final PropertyBool IS_TOP = PropertyBool.create("is_top");
@@ -109,7 +109,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	}
 
 	protected boolean isValidBlock(IBlockState blockState) {
-		return blockState.getBlock() == BlockRegistry.BETWEENSTONE || blockState.getBlock() == this;
+		return SurfaceType.UNDERGROUND.matches(blockState) || blockState.getBlock() == this;
 	}
 
 	@Override
