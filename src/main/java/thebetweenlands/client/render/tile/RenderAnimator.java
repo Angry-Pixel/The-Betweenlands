@@ -73,7 +73,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 
 		if(te != null) {
 			SplittableRandom rand = new SplittableRandom((long) (te.getPos().getX() + te.getPos().getY() + te.getPos().getZ()));
-			double viewRot = 180D + Math.toDegrees(Math.atan2(x - 0.5D, z - 0.5D));
+			double viewRot = 180D + Math.toDegrees(Math.atan2(x + 0.5D, z + 0.5D));
 
 			// Sulfur rendering
 			if (te.getStackInSlot(2) != null) {

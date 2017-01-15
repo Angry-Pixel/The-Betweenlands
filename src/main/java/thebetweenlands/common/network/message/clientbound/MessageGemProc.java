@@ -1,8 +1,10 @@
 package thebetweenlands.common.network.message.clientbound;
 
+import java.io.IOException;
 import java.util.Random;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -11,32 +13,39 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.capability.circlegem.CircleGem;
+import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
+import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.network.message.MessageEntity;
 
 public class MessageGemProc extends MessageEntity {
-	private byte type;
+	private CircleGem gem;
 
 	public MessageGemProc() { }
 
-	public MessageGemProc(Entity entity, byte type) {
+	public MessageGemProc(Entity entity, boolean offensive, CircleGemType gem) {
 		super(entity);
-		this.type = type;
+		this.gem = new CircleGem(gem, offensive ? CombatType.OFFENSIVE : CombatType.DEFENSIVE);
 	}
 
-	public byte getType() {
-		return this.type;
+	public CircleGem getGem() {
+		return this.gem;
 	}
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		super.deserialize(buf);
-		this.type = buf.readByte();
+		try {
+			this.gem = CircleGem.readFromNBT(buf.readNBTTagCompoundFromBuffer());
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
 	public void serialize(PacketBuffer buf) {
 		super.serialize(buf);
-		buf.writeByte(this.type);
+		buf.writeNBTTagCompoundToBuffer(this.gem.writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
@@ -52,7 +61,7 @@ public class MessageGemProc extends MessageEntity {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		byte type = this.getType();
+		CircleGem gem = this.getGem();
 		Entity entityHit = this.getEntity();
 		if(entityHit != null) {
 			Random rnd = entityHit.worldObj.rand;
@@ -61,19 +70,34 @@ public class MessageGemProc extends MessageEntity {
 				double y = entityHit.getEntityBoundingBox().minY + rnd.nextFloat() * entityHit.height;
 				double z = entityHit.posZ + rnd.nextFloat() * entityHit.width * 2.0F - entityHit.width;
 				double dx = x - entityHit.posX;
-				double dy = y - entityHit.posY;
+				double dy = y - (entityHit.posY + entityHit.height / 2.0F);
 				double dz = z - entityHit.posZ;
 				double len = Math.sqrt(dx*dx + dy*dy + dz*dz);
 				ParticleArgs<?> args = ParticleArgs.get();
-				switch(type) {
-				case 0:
+
+				switch(gem.getCombatType()) {
+				case OFFENSIVE:
 				default:
 					args.withMotion(dx/len, dy/len, dz/len);
 					break;
-				case 1:
+				case DEFENSIVE:
 					args.withMotion(-dx/len, -dy/len, -dz/len);
 					break;
 				}
+
+				switch(gem.getGemType()) {
+				default:
+				case AQUA:
+					args.withColor(0.35F, 0.35F, 1, 1);
+					break;
+				case CRIMSON:
+					args.withColor(1, 0, 0, 1);
+					break;
+				case GREEN:
+					args.withColor(0.3F, 1.0F, 0.3F, 1.0F);
+					break;
+				}
+
 				BLParticles.GEM_PROC.spawn(entityHit.worldObj, x, y, z, args);
 			}
 		}

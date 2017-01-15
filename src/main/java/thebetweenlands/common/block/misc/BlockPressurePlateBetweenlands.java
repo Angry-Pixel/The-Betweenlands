@@ -12,6 +12,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.EnumHelper;
+import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class BlockPressurePlateBetweenlands extends BlockPressurePlate {
 
@@ -32,6 +33,7 @@ public class BlockPressurePlateBetweenlands extends BlockPressurePlate {
 	public BlockPressurePlateBetweenlands(Material material, PressurePlateSensitivity sensitivity) {
 		super(material, sensitivity.sensitivity);
 		this.sensitivity = sensitivity.sensitivity;
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

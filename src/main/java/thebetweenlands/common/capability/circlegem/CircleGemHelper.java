@@ -169,7 +169,7 @@ public class CircleGemHelper {
 				}
 				CircleGemType attackerItemGem = CircleGemType.NONE;
 				if(attacker instanceof EntityLivingBase) {
-					ItemStack heldItem = ((EntityLivingBase)attacker).getActiveItemStack();
+					ItemStack heldItem = getActiveItem(attacker);
 					if(heldItem != null) attackerItemGem = CircleGemHelper.getGem(heldItem);
 				}
 				//At this point either userGem or attackerItemGem are set because either there's a user shooting a (non-living) projectile (user != attacker) or the user is attacking directly (user == attacker)
@@ -212,7 +212,7 @@ public class CircleGemHelper {
 				if(attackedEntity instanceof EntityLivingBase) {
 					Iterable<ItemStack> equipment = ((EntityLivingBase)attackedEntity).getEquipmentAndArmor();
 					for(ItemStack equipmentStack : equipment) {
-						if(equipmentStack != null && !equipmentStack.equals(((EntityLivingBase)attackedEntity).getActiveHand()) && equipmentStack.getItem() instanceof ItemArmor) {
+						if(equipmentStack != null && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
 							CircleGemType armorGem = CircleGemHelper.getGem(equipmentStack);
 							for(CircleGem gem : attackerGems) {
 								if(gem.matchCombatType(CircleGem.CombatType.OFFENSIVE)) {
@@ -239,6 +239,9 @@ public class CircleGemHelper {
 				boolean attackerProcd = false;
 				boolean defenderProcd = false;
 
+				List<CircleGemType> attackerProcdGems = new ArrayList<CircleGemType>();
+				List<CircleGemType> defenderProcdGems = new ArrayList<CircleGemType>();
+
 				//Attacker gems
 				TObjectIntHashMap<CircleGemType> attackerGemCounts = new TObjectIntHashMap<CircleGemType>();
 				for(CircleGem gem : attackerGems) {
@@ -248,7 +251,12 @@ public class CircleGemHelper {
 				}
 				attackerGemCounts.adjustOrPutValue(attackerItemGem, 1, 1);
 				for(CircleGemType gem : attackerGemCounts.keySet()) {
-					attackerProcd |= applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage));
+					if(applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage))) {
+						attackerProcd = true;
+						if(!attackerProcdGems.contains(gem)){
+							attackerProcdGems.add(gem);
+						}
+					}
 				}
 
 				//Defender gems
@@ -256,7 +264,7 @@ public class CircleGemHelper {
 				if(attackedEntity instanceof EntityLivingBase) {
 					Iterable<ItemStack> equipment = ((EntityLivingBase)attackedEntity).getEquipmentAndArmor();
 					for(ItemStack equipmentStack : equipment) {
-						if(equipmentStack != null && !equipmentStack.equals(((EntityLivingBase)attackedEntity).getActiveHand()) && equipmentStack.getItem() instanceof ItemArmor) {
+						if(equipmentStack != null && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
 							CircleGemType armorGem = CircleGemHelper.getGem(equipmentStack);
 							if(armorGem != CircleGemType.NONE) {
 								defenderGemCounts.adjustOrPutValue(armorGem, 1, 1);
@@ -271,7 +279,12 @@ public class CircleGemHelper {
 				}
 				defenderGemCounts.adjustOrPutValue(attackedBlockingItemGem, 1, 1);
 				for(CircleGemType gem : defenderGemCounts.keySet()) {
-					defenderProcd |= applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage));
+					if(applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage))) {
+						defenderProcd = true;
+						if(!defenderProcdGems.contains(gem)){
+							defenderProcdGems.add(gem);
+						}
+					}
 				}
 
 				if(attackerProcd || defenderProcd) {
@@ -281,10 +294,14 @@ public class CircleGemHelper {
 						dim = ((WorldServer)world).provider.getDimension();
 					}
 					if(attackerProcd) {
-						TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, (byte) 0), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
+						for(CircleGemType gem : attackerProcdGems) {
+							TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, true, gem), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
+						}
 					}
 					if(defenderProcd) {
-						TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, (byte) 1), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
+						for(CircleGemType gem : defenderProcdGems) {
+							TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, false, gem), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
+						}
 					}
 					source.worldObj.playSound(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
 					source.worldObj.playSound(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
@@ -292,6 +309,17 @@ public class CircleGemHelper {
 			}
 		}
 		return damage;
+	}
+
+	private static ItemStack getActiveItem(Entity entity) {
+		if(entity instanceof EntityLivingBase) {
+			EntityLivingBase living = (EntityLivingBase) entity;
+			if(living.getActiveItemStack() != null) {
+				return living.getActiveItemStack();
+			}
+			return living.getHeldItem(living.getActiveHand());
+		}
+		return null;
 	}
 
 	private static float getMultipleProcStrength(int procs, float strength) {

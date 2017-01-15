@@ -684,6 +684,12 @@
       "thebetweenlands:purifier"
     ]
   },
+  "animator": {
+    "category": "block",
+    "sounds": [
+      "thebetweenlands:animator"
+    ]
+  },
   "grind": {
     "category": "block",
     "sounds": [

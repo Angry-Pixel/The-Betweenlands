@@ -61,7 +61,7 @@ public interface IGenericItem {
 	}
 
 	static class TypeContainer {
-		private final Map<Class<? extends Enum>, List<IGenericItem>> typeToItems = new HashMap<Class<? extends Enum>, List<IGenericItem>>();
+		private final Map<Class<? extends Enum<?>>, List<IGenericItem>> typeToItems = new HashMap<Class<? extends Enum<?>>, List<IGenericItem>>();
 	}
 	static TypeContainer TYPE_CONTAINER = new TypeContainer();
 	
@@ -70,7 +70,7 @@ public interface IGenericItem {
 	 * @param type
 	 * @return
 	 */
-	public static List<IGenericItem> getGenericItems(Class<? extends Enum> type) {
+	public static List<IGenericItem> getGenericItems(Class<? extends Enum<?>> type) {
 		List<IGenericItem> genericItems = TYPE_CONTAINER.typeToItems.get(type);
 		if(genericItems == null) {
 			if(!IGenericItem.class.isAssignableFrom(type))
@@ -88,7 +88,7 @@ public interface IGenericItem {
 	 * @param id
 	 * @return
 	 */
-	public static IGenericItem getFromID(Class<? extends Enum> type, int id) {
+	public static IGenericItem getFromID(Class<? extends Enum<?>> type, int id) {
 		for(IGenericItem item : getGenericItems(type)) {
 			if(item.getID() == id)
 				return item;
@@ -102,7 +102,7 @@ public interface IGenericItem {
 	 * @param stack
 	 * @return
 	 */
-	public static IGenericItem getFromStack(Class<? extends Enum> type, ItemStack stack) {
+	public static IGenericItem getFromStack(Class<? extends Enum<?>> type, ItemStack stack) {
 		return stack == null ? null : getFromID(type, stack.getItemDamage());
 	}
 }

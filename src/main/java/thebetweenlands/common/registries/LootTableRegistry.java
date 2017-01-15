@@ -19,5 +19,4 @@ public class LootTableRegistry {
     private static ResourceLocation register(String id) {
         return LootTableList.register(new ResourceLocation("thebetweenlands", id));
     }
-
 }

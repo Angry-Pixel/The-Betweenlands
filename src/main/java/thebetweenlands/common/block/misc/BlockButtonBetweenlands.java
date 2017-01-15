@@ -6,6 +6,7 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.client.tab.BLCreativeTabs;
 
 import javax.annotation.Nullable;
 
@@ -15,6 +16,7 @@ public class BlockButtonBetweenlands extends BlockButton {
     public BlockButtonBetweenlands(boolean wooden) {
         super(wooden);
         this.wooden = wooden;
+        this.setCreativeTab(BLCreativeTabs.BLOCKS);
     }
 
     @Override

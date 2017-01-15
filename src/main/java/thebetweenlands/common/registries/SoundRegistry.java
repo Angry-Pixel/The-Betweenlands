@@ -176,6 +176,8 @@ public class SoundRegistry {
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");
 
     public static final BLSoundEvent PURIFIER = reg("purifier");
+    
+    public static final BLSoundEvent ANIMATOR = reg("animator");
 
     public static final BLSoundEvent PORTAL = reg("portal");
     public static final BLSoundEvent PORTAL_ACTIVATE = reg("portal_activate");

@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.render.particle.entity.ParticleAnimated;
+import thebetweenlands.client.render.particle.entity.ParticleAnimator;
 import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.render.particle.entity.ParticleBug;
@@ -97,7 +98,8 @@ public enum BLParticles {
 	LEAF_SWIRL(new ParticleLeafSwirl.Factory()),
 	REDSTONE_DUST(VanillaParticleFactory.create(ParticleRedstone.class, new ParticleRedstone.Factory())),
 	THEM(new ParticleThem.Factory()),
-	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory()));
+	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
+	ANIMATOR(new ParticleAnimator.Factory());
 
 
 

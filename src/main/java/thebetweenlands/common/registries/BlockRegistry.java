@@ -45,10 +45,14 @@ import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
+import thebetweenlands.common.block.misc.BlockDentrothystPane;
+import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
 import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
 import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
 import thebetweenlands.common.block.misc.BlockMossBed;
 import thebetweenlands.common.block.misc.BlockMudFlowerPot;
+import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
+import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.misc.BlockSludge;
@@ -305,14 +309,33 @@ public class BlockRegistry {
 	public static final Block MOSSY_BETWEENSTONE_BRICK_STAIRS = new BlockStairsBetweenlands(MOSSY_BETWEENSTONE_BRICKS.getDefaultState());
 	public static final Block MOSSY_SMOOTH_BETWEENSTONE_STAIRS = new BlockStairsBetweenlands(MOSSY_SMOOTH_BETWEENSTONE.getDefaultState());
 	public static final Block CRACKED_BETWEENSTONE_BRICK_STAIRS = new BlockStairsBetweenlands(CRACKED_BETWEENSTONE_BRICKS.getDefaultState());
+	public static final Block SULFUR_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block TEMPLE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block SMOOTH_PITSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block MIRE_CORAL_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block DEEP_WATER_CORAL_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block SLIMY_BONE_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block AQUA_MIDDLE_GEM_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block CRIMSON_MIDDLE_GEM_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block GREEN_MIDDLE_GEM_BLOCK = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+	public static final Block COMPOST_BLOCK = new BasicBlock(Material.PLANTS).setSoundType2(SoundType.PLANT).setHardness(0.5F).setResistance(10.0F);
+	public static final Block POLISHED_DENTROTHYST = new BlockPolishedDentrothyst().setHardness(0.3F);
+	public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
+	public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
+	public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
+	public static final Block SMOOTH_PITSTONE_STAIRS = new BlockStairsBetweenlands(SMOOTH_PITSTONE.getDefaultState());
+	public static final Block TAR_SOLID_STAIRS = new BlockStairsBetweenlands(TAR_SOLID.getDefaultState());
+	public static final Block TEMPLE_BRICK_STAIRS = new BlockStairsBetweenlands(TEMPLE_BRICKS.getDefaultState());
 	public static final Block SPIKE_TRAP = new BlockSpikeTrap();
 	public static final Block WEEDWOOD_PLANK_STAIRS = new BlockStairsBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
 	public static final Block RUBBER_TREE_PLANK_STAIRS = new BlockStairsBetweenlands(RUBBER_TREE_PLANKS.getDefaultState());
 	public static final Block POSSESSED_BLOCK = new BlockPossessedBlock();
 	public static final Block ITEM_CAGE = new BlockItemCage();
-	//public static final Block SOLID_TAR_STAIRS = new BlockStairsBetweenlands(SOLID_TAR.getDefaultState());
-	//public static final Block TEMPLE_BRICK_STAIRS = new BlockStairsBetweenlands(TEMPLE_BRICK.getDefaultState());
 
+
+	public static final Block SMOOTH_PITSTONE_SLAB = new BlockSlabBetweenlands(SMOOTH_PITSTONE);
+	public static final Block TAR_SOLID_SLAB = new BlockSlabBetweenlands(TAR_SOLID);
+	public static final Block TEMPLE_BRICK_SLAB = new BlockSlabBetweenlands(TEMPLE_BRICKS);
 	public static final Block BETWEENSTONE_BRICK_SLAB = new BlockSlabBetweenlands(BETWEENSTONE_BRICKS);
 	public static final Block MUD_BRICK_SLAB = new BlockSlabBetweenlands(MUD_BRICKS);
 	public static final Block CRAGROCK_BRICK_SLAB = new BlockSlabBetweenlands(CRAGROCK_BRICKS);
@@ -328,6 +351,9 @@ public class BlockRegistry {
 	public static final Block WEEDWOOD_PLANK_SLAB = new BlockSlabBetweenlands(WEEDWOOD_PLANKS);
 	public static final Block RUBBER_TREE_PLANK_SLAB = new BlockSlabBetweenlands(RUBBER_TREE_PLANKS);
 
+	public static final Block TAR_SOLID_WALL = new BlockWallBetweenlands(TAR_SOLID.getDefaultState());
+	public static final Block TEMPLE_BRICK_WALL = new BlockWallBetweenlands(TEMPLE_BRICKS.getDefaultState());
+	public static final Block SMOOTH_PITSTONE_WALL = new BlockWallBetweenlands(SMOOTH_PITSTONE.getDefaultState());
 	public static final Block BETWEENSTONE_BRICK_WALL = new BlockWallBetweenlands(BETWEENSTONE_BRICKS.getDefaultState());
 	public static final Block MUD_BRICK_WALL = new BlockWallBetweenlands(MUD_BRICKS.getDefaultState());
 	public static final Block CRAGROCK_WALL = new BlockWallBetweenlands(CRAGROCK.getDefaultState());
@@ -508,7 +534,7 @@ public class BlockRegistry {
 	public static final Block ANIMATOR = new BlockAnimator();
 	public static final Block ALEMBIC = new BlockAlembic();
 	public static final Block MOSS_BED = new BlockMossBed();
-	
+
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
 	public static void preInit() {

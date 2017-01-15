@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.misc;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,7 +25,7 @@ public abstract class ItemPlantable extends Item {
 			BlockPos newPos = isReplacing ? pos : facingOffset;
 			block = worldIn.getBlockState(newPos).getBlock();
 			Block placeBlock = this.getBlock(stack, playerIn, worldIn, newPos);
-			if (block != placeBlock && placeBlock.canPlaceBlockAt(worldIn, newPos)) {
+			if (placeBlock != null && block != placeBlock && placeBlock.canPlaceBlockAt(worldIn, newPos)) {
 				if (!worldIn.isRemote) {
 					worldIn.setBlockState(newPos, this.getBlockState(placeBlock, stack, playerIn, worldIn, newPos));
 					worldIn.playSound((EntityPlayer)null, (float)pos.getX() + 0.5F, (float)pos.getY() + 0.5F, (float)pos.getZ() + 0.5F, placeBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (placeBlock.getSoundType().getVolume() + 1.0F) / 2.0F, placeBlock.getSoundType().getPitch() * 0.8F);
@@ -35,6 +37,7 @@ public abstract class ItemPlantable extends Item {
 		return EnumActionResult.FAIL;
 	}
 
+	@Nullable
 	protected abstract Block getBlock(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos);
 
 	protected IBlockState getBlockState(Block block, ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos) {

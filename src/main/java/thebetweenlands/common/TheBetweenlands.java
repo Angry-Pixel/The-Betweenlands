@@ -25,6 +25,7 @@ import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.event.handler.AnvilEventHandler;
 import thebetweenlands.common.event.handler.AspectSyncHandler;
+import thebetweenlands.common.event.handler.AttackDamageHandler;
 import thebetweenlands.common.event.handler.BlockBreakHandler;
 import thebetweenlands.common.event.handler.EnvironmentEventHandler;
 import thebetweenlands.common.event.handler.LocationHandler;
@@ -160,5 +161,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(MobSpawnHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BlockBreakHandler.class);
 		MinecraftForge.EVENT_BUS.register(LocationHandler.class);
+		MinecraftForge.EVENT_BUS.register(AttackDamageHandler.class);
 	}
 }

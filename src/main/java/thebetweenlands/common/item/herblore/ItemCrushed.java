@@ -77,7 +77,7 @@ public class ItemCrushed extends Item implements ICustomJsonGenerationItem, Item
 
 	@Override
 	public Map<Integer, ResourceLocation> getModels() {
-		Map<Integer, ResourceLocation> models = new HashMap();
+		Map<Integer, ResourceLocation> models = new HashMap<>();
 		for(EnumItemCrushed type : EnumItemCrushed.values())
 			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
 		return models;
@@ -135,7 +135,9 @@ public class ItemCrushed extends Item implements ICustomJsonGenerationItem, Item
 		GROUND_VENUS_FLY_TRAP(48),
 		GROUND_VOLARPAD(49),
 		GROUND_THORNS(50),
-		GROUND_POISON_IVY(51);
+		GROUND_POISON_IVY(51),
+		GROUND_BLADDERWORT_FLOWER(52),
+		GROUND_BLADDERWORT_STALK(53);
 
 		private final int id;
 		private final String unlocalizedName;

@@ -10,7 +10,17 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.message.BLMessage;
-import thebetweenlands.common.network.message.clientbound.*;
+import thebetweenlands.common.network.message.clientbound.MessageDruidAltarProgress;
+import thebetweenlands.common.network.message.clientbound.MessageDruidTeleportParticles;
+import thebetweenlands.common.network.message.clientbound.MessageGemProc;
+import thebetweenlands.common.network.message.clientbound.MessageRemoveSharedStorage;
+import thebetweenlands.common.network.message.clientbound.MessageSyncChunkData;
+import thebetweenlands.common.network.message.clientbound.MessageSyncEntityCapabilities;
+import thebetweenlands.common.network.message.clientbound.MessageSyncEnvironmentEvent;
+import thebetweenlands.common.network.message.clientbound.MessageSyncSharedStorage;
+import thebetweenlands.common.network.message.clientbound.MessageSyncStaticAspects;
+import thebetweenlands.common.network.message.clientbound.MessageWeedwoodBushRustle;
+import thebetweenlands.common.network.message.clientbound.MessageWightVolatileParticles;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -28,6 +38,7 @@ public class MessageRegistry {
 		registerMessage(MessageRemoveSharedStorage.class, Side.CLIENT);
 		registerMessage(MessageDruidTeleportParticles.class, Side.CLIENT);
 		registerMessage(MessageWightVolatileParticles.class, Side.CLIENT);
+		registerMessage(MessageGemProc.class, Side.CLIENT);
     }
 
 	private static void registerMessage(Class<? extends BLMessage> messageType, Side toSide) {

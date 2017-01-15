@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.tools;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +20,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -28,11 +31,17 @@ public class ItemBLShield extends ItemShield {
 	private ToolMaterial material;
 
 	public ItemBLShield(ToolMaterial material) {
+		super();
 		this.material = material;
 		this.setMaxDamage(material.getMaxUses() * 2);
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
+	@SideOnly(Side.CLIENT)
+    public CreativeTabs getCreativeTab() {
+        return BLCreativeTabs.GEARS; //Minecraft seems to override the creative tab for some reason...
+    }
+	
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		return (I18n.format(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();

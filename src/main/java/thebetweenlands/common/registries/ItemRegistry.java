@@ -9,6 +9,7 @@ import java.util.Map;
 import com.google.common.base.CaseFormat;
 
 import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
@@ -64,6 +66,7 @@ import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
+import thebetweenlands.common.item.misc.ItemSwampKelp;
 import thebetweenlands.common.item.misc.ItemSwampReed;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
@@ -140,6 +143,7 @@ public class ItemRegistry {
 	public static final Item BLACK_HAT_MUSHROOM_ITEM = new ItemBlackHatMushroom();
 	public static final Item BULB_CAPPED_MUSHROOM_ITEM = new ItemBulbCappedMushroom();
 	public static final Item SWAMP_REED_ITEM = new ItemSwampReed();
+	public static final Item SWAMP_KELP_ITEM = new ItemSwampKelp();
 	public static final Item FRIED_SWAMP_KELP = new ItemBLFood(5, 0.6F, false);
 	public static final Item FORBIDDEN_FIG = new ItemForbiddenFig();
 	public static final Item CANDY_BLUE = new ItemBLFood(3, 1.0F, false);
@@ -176,7 +180,15 @@ public class ItemRegistry {
 	public static final Item BONE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item BONE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item BONE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item OCTINE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item OCTINE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_OCTINE) {
+		@Override
+		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+			if (attacker.worldObj.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 3 : 4) == 0) {
+				target.setFire(10);
+			}
+			return false;
+		}
+	}.setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item OCTINE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item OCTINE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item OCTINE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
