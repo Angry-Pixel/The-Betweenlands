@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -38,6 +41,7 @@ import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockStackablePlant;
 import thebetweenlands.common.block.property.PropertyBlockStateUnlisted;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 
 public class BlockMudFlowerPot extends BlockContainer {
@@ -45,11 +49,22 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 	public static final PropertyBlockStateUnlisted FLOWER = new PropertyBlockStateUnlisted("flower");
 
+	protected Map<Item, Function<ItemStack, IBlockState>> plants = new HashMap<>();
+
 	public BlockMudFlowerPot() {
 		super(Material.CIRCUITS);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setHardness(0.3F);
 		this.setSoundType(SoundType.STONE);
+	}
+
+	/**
+	 * Registers a plant so it can be placed in the pot
+	 * @param item
+	 * @param provider
+	 */
+	public void registerPlant(Item item, Function<ItemStack, IBlockState> provider) {
+		this.plants.put(item, provider);
 	}
 
 	@Override
@@ -86,12 +101,9 @@ public class BlockMudFlowerPot extends BlockContainer {
 		if(te != null && te instanceof TileEntityMudFlowerPot) {
 			TileEntityMudFlowerPot flowerPot = (TileEntityMudFlowerPot) te;
 
-			if(flowerPot.getFlowerPotItem() instanceof ItemBlock) {
-				Block flowerBlock = ((ItemBlock)flowerPot.getFlowerPotItem()).getBlock();
-
-				if(flowerBlock != null) {
-					@SuppressWarnings("deprecation")
-					IBlockState blockState = flowerBlock.getStateFromMeta(flowerPot.getFlowerPotData());
+			if(flowerPot.getFlowerItemStack() != null) {
+				IBlockState blockState = this.getPlantBlockStateFromItem(flowerPot.getFlowerItemStack());
+				if(blockState != null) {
 					state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
 				}
 			}
@@ -99,60 +111,74 @@ public class BlockMudFlowerPot extends BlockContainer {
 		return state;
 	}
 
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
-	{
-		if (heldItem != null && heldItem.getItem() instanceof ItemBlock)
-		{
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		if (heldItem != null) {
 			TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
-			if (te == null)
-			{
+			if (te == null) {
 				return false;
-			}
-			else if (te.getFlowerPotItem() != null)
-			{
+			} else if (te.getFlowerPotItem() != null) {
 				return false;
-			}
-			else
-			{
-				Block block = Block.getBlockFromItem(heldItem.getItem());
-
-				if (!this.canContain(block, heldItem.getMetadata()))
-				{
-					return false;
-				}
-				else
-				{
+			} else {
+				if (this.getPlantBlockStateFromItem(heldItem) != null) {
 					te.setFlowerPotData(heldItem.getItem(), heldItem.getMetadata());
 					te.markDirty();
 					worldIn.notifyBlockUpdate(pos, state, state, 3);
 					playerIn.addStat(StatList.FLOWER_POTTED);
 
-					if (!playerIn.capabilities.isCreativeMode)
-					{
+					if (!playerIn.capabilities.isCreativeMode) {
 						--heldItem.stackSize;
 					}
 
 					return true;
 				}
 			}
-		}
-		else
-		{
+		} else {
 			return false;
 		}
+
+		return false;
 	}
 
-	private boolean canContain(@Nullable Block blockIn, int meta) {
-		if(blockIn == Blocks.YELLOW_FLOWER || blockIn == Blocks.RED_FLOWER || 
-				blockIn == Blocks.CACTUS || blockIn == Blocks.BROWN_MUSHROOM || 
-				blockIn == Blocks.RED_MUSHROOM || blockIn == Blocks.SAPLING || 
-				blockIn == Blocks.DEADBUSH ||
-				(blockIn == Blocks.TALLGRASS && meta == BlockTallGrass.EnumType.FERN.getMeta())
-				|| (blockIn instanceof BlockPlant && blockIn instanceof BlockPlantUnderwater == false && blockIn instanceof BlockStackablePlant == false)) {
-			return true;
+	/**
+	 * Returns the blockstate that should be used for the specified item.
+	 * Return null if item can't be contained in pot
+	 * @param itemStack
+	 * @return
+	 */
+	@Nullable
+	protected IBlockState getPlantBlockStateFromItem(ItemStack itemStack) {
+		if(itemStack != null) {
+			Item item = itemStack.getItem();
+
+			if(item instanceof ItemBlock) {
+				Block blockIn = Block.getBlockFromItem((ItemBlock) item);
+
+				if(blockIn == Blocks.YELLOW_FLOWER || blockIn == Blocks.RED_FLOWER || 
+						blockIn == Blocks.CACTUS || blockIn == Blocks.BROWN_MUSHROOM || 
+						blockIn == Blocks.RED_MUSHROOM || blockIn == Blocks.SAPLING || 
+						blockIn == Blocks.DEADBUSH ||
+						(blockIn == Blocks.TALLGRASS && itemStack.getMetadata() == BlockTallGrass.EnumType.FERN.getMeta())
+						|| (blockIn instanceof BlockPlant && blockIn instanceof BlockPlantUnderwater == false && blockIn instanceof BlockStackablePlant == false)) {
+
+					return blockIn.getDefaultState();
+				}
+			} else if(item == ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM) {
+				return BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
+			} else if(item == ItemRegistry.BLACK_HAT_MUSHROOM_ITEM) {
+				return BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
+			} else if(item == ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM) {
+				return BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState();
+			}
+
+			Function<ItemStack, IBlockState> provider = this.plants.get(item);
+			if(provider != null) {
+				return provider.apply(itemStack);
+			}
 		}
-		return false;
+
+		return null;
 	}
 
 	@Override

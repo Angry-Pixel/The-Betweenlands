@@ -69,4 +69,10 @@ public class ItemBLBucketFilled extends UniversalBucket {
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
 		return new FluidBucketWrapperFixed(stack);
 	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		FluidStack fluidStack = this.getFluid(stack);
+		return super.getUnlocalizedName() + "." + (fluidStack == null ? "unknown" : fluidStack.getFluid().getUnlocalizedName(fluidStack));
+	}
 }

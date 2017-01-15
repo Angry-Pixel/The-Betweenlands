@@ -23,6 +23,11 @@ public class ItemTangledRoot extends Item {
 	}
 
 	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 32;
+	}
+	
+	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 		if (player.canEat(true)) {
 			player.setActiveHand(hand);
