@@ -141,7 +141,7 @@ public class CircleGemHelper {
 	}
 
 	public static final float MAX_GEM_DAMAGE_VARIATION = 8.0F;
-	public static final float GEM_PROC_CHANCE = 0.1F;
+	public static final float GEM_PROC_CHANCE = 0.15F;
 
 	/**
 	 * Handles an attack and returns the new damage

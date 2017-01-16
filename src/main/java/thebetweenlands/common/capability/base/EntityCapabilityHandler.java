@@ -227,7 +227,7 @@ public class EntityCapabilityHandler {
 		EntityPlayer newPlayer = event.getEntityPlayer();
 		List<EntityCapability<?, ?, EntityPlayer>> capabilities = getEntityCapabilities(oldPlayer);
 		for(EntityCapability<?, ?, EntityPlayer> capability : capabilities) {
-			if(capability.isPersistent() && capability instanceof ISerializableCapability) {
+			if(capability.isPersistent(oldPlayer, newPlayer) && capability instanceof ISerializableCapability) {
 				NBTTagCompound nbt = new NBTTagCompound();
 				((ISerializableCapability)capability).writeToNBT(nbt);
 				EntityCapability<?, ?, EntityPlayer> newCapability = capability.getEntityCapability(newPlayer);

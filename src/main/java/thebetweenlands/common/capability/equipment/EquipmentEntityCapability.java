@@ -1,6 +1,7 @@
 package thebetweenlands.common.capability.equipment;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -39,7 +40,12 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public boolean isApplicable(Entity entity) {
-		return entity instanceof EntityPlayer;
+		return entity instanceof EntityLivingBase;
+	}
+
+	@Override
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
+		return this.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
 	}
 
 

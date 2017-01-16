@@ -38,6 +38,7 @@ import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.armor.ItemSkullMask;
 import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
+import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -326,6 +327,8 @@ public class ItemRegistry {
 	public static final ItemAspectVial ASPECT_VIAL = new ItemAspectVial();
 
 	public static final Item GLUE = new ItemGlue();
+	
+	public static final Item AMULET = new ItemAmulet();
 	
 	public static void preInit() {
 		try {

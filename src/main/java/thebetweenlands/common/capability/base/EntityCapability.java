@@ -3,6 +3,7 @@ package thebetweenlands.common.capability.base;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
 
@@ -109,7 +110,7 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 * Returns whether this capability is persistent for players
 	 * @return
 	 */
-	public boolean isPersistent() {
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
 		return false;
 	}
 	

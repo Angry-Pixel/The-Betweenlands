@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -44,7 +45,7 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 	}
 
 	@Override
-	public boolean isPersistent() {
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
 		return this.getEntity().getEntityWorld().getGameRules().getBoolean("keepInventory");
 	}
 
