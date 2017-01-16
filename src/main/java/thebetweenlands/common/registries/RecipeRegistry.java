@@ -31,6 +31,7 @@ import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
@@ -113,9 +114,9 @@ public class RecipeRegistry {
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.NET, 1), "SRR", "SRR", "S  ", 'S', EnumItemMisc.WEEDWOOD_STICK.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 
-		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.lurkerSkinPouch, 1), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN), 'R', EnumItemMisc.SWAMP_REED_ROPE));
-		//GameRegistry.addRecipe(new RecipeLurkerSkinPouchUpgrades());
-
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_POUCH), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new RecipeLurkerSkinPouchUpgrades());
+		
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.SWAMP_TALISMAN, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), EnumItemMisc.SLIMY_BONE.create(1), new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1));
 

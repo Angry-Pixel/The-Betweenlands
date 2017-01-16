@@ -78,7 +78,9 @@ public class Categories {
 							if(res == null || res.stackSize != item.stackSize) {
 								TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(this.slot, sender));
 
-								sender.inventory.setInventorySlotContents(this.slot, res);
+								if(!sender.capabilities.isCreativeMode) {
+									sender.inventory.setInventorySlotContents(this.slot, res);
+								}
 
 								RadialMenuHandler.INSTANCE.updateMenu();
 							}

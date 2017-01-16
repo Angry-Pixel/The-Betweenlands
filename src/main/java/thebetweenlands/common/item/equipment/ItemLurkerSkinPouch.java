@@ -32,7 +32,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	public ItemLurkerSkinPouch() {
 		this.setMaxStackSize(1);
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
-		this.setMaxDamage(4);
+		this.setMaxDamage(3);
 
 		this.addPropertyOverride(new ResourceLocation("pouch_size"), new IItemPropertyGetter() {
 			@Override
@@ -45,6 +45,11 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 1;
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return false;
 	}
 
 	@Override
