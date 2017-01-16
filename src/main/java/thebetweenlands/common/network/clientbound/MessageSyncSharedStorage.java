@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.message.clientbound;
+package thebetweenlands.common.network.clientbound;
 
 import java.io.IOException;
 
@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.network.message.BLMessage;
+import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 
-public class MessageSyncSharedStorage extends BLMessage {
+public class MessageSyncSharedStorage extends MessageBase {
 	private NBTTagCompound nbt;
 
 	public MessageSyncSharedStorage() {}

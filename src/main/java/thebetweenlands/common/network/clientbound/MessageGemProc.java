@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.message.clientbound;
+package thebetweenlands.common.network.clientbound;
 
 import java.io.IOException;
 import java.util.Random;
@@ -15,8 +15,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.capability.circlegem.CircleGem;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
+import thebetweenlands.common.network.MessageEntity;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
-import thebetweenlands.common.network.message.MessageEntity;
 
 public class MessageGemProc extends MessageEntity {
 	private CircleGem gem;
@@ -24,7 +24,7 @@ public class MessageGemProc extends MessageEntity {
 	public MessageGemProc() { }
 
 	public MessageGemProc(Entity entity, boolean offensive, CircleGemType gem) {
-		super(entity);
+		this.addEntity(entity);
 		this.gem = new CircleGem(gem, offensive ? CombatType.OFFENSIVE : CombatType.DEFENSIVE);
 	}
 
@@ -62,7 +62,7 @@ public class MessageGemProc extends MessageEntity {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		CircleGem gem = this.getGem();
-		Entity entityHit = this.getEntity();
+		Entity entityHit = this.getEntity(0);
 		if(entityHit != null) {
 			Random rnd = entityHit.worldObj.rand;
 			for(int i = 0; i < 40; i++) {

@@ -8,10 +8,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.capability.base.ISerializableCapability;
+import thebetweenlands.common.event.EquipmentChangedEvent;
 import thebetweenlands.common.inventory.InventoryEquipment;
 import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
@@ -96,6 +98,9 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
+		for(EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
+			this.inventories[inventory.id] = new ItemStack[inventory.maxSize];
+		}
 		if(nbt.hasKey("inventories")) {
 			NBTTagList inventoryList = nbt.getTagList("inventories", Constants.NBT.TAG_COMPOUND);
 			for(int i = 0; i < inventoryList.tagCount(); i++) {
@@ -131,5 +136,11 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	@Override
 	public int getTrackingTime() {
 		return 0;
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		MinecraftForge.EVENT_BUS.post(new EquipmentChangedEvent(this.getEntity(), this));
 	}
 }

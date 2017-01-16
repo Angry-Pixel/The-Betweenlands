@@ -1,5 +1,7 @@
 package thebetweenlands.common.capability.equipment;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.inventory.IInventory;
 
 public enum EnumEquipmentInventory {
@@ -18,5 +20,15 @@ public enum EnumEquipmentInventory {
 	private EnumEquipmentInventory(int id, int maxSize) {
 		this.id = id;
 		this.maxSize = maxSize;
+	}
+
+	@Nullable
+	public static EnumEquipmentInventory fromID(int id) {
+		for(EnumEquipmentInventory inv : EnumEquipmentInventory.values()) {
+			if(inv.id == id) {
+				return inv;
+			}
+		}
+		return null;
 	}
 }

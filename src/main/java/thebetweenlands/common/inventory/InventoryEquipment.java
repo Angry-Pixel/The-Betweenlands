@@ -11,6 +11,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
+import thebetweenlands.common.item.equipment.IEquippable;
 
 public class InventoryEquipment implements IInventory, ITickable {
 	protected final ItemStack[] inventory;
@@ -137,8 +138,10 @@ public class InventoryEquipment implements IInventory, ITickable {
 	public void update() {
 		for(int i = 0; i < this.inventory.length; i++) {
 			ItemStack stack = this.inventory[i];
-			if(stack != null)
-				stack.getItem().onUpdate(stack, this.capability.getEntity().getEntityWorld(), this.capability.getEntity(), i, false);
+
+			if(stack != null && stack.getItem() instanceof IEquippable) {
+				((IEquippable) stack.getItem()).onEquipmentTick(stack, this.capability.getEntity(), this);
+			}
 		}
 	}
 }

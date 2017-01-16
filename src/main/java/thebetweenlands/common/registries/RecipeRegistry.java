@@ -20,6 +20,8 @@ import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
+import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
@@ -176,7 +178,8 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.CAVE_MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(EnumItemMisc.PARCHMENT.create(3), "###", '#', EnumItemMisc.ROTTEN_BARK.create(1));
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN)); 
-		//GameRegistry.addRecipe(ItemAmulet.createStack(CircleGem.NONE), "XXX", "X X", " # ", '#', EnumItemMisc.AMULET_SOCKET), 'X', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE)); TODO: Amulets and volarkite
+		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGemType.NONE), "XXX", "X X", " # ", '#', EnumItemMisc.AMULET_SOCKET.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		//TODO: Volarkite
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
 
@@ -345,9 +348,6 @@ public class RecipeRegistry {
 
 		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
-
-		RecipeSorter.register("thebetweenlands:recipeAmulets", RecipesAmulets.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipesAmulets());
 
 		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipeSummonMummy());

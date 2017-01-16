@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.message.clientbound;
+package thebetweenlands.common.network.clientbound;
 
 import java.io.IOException;
 
@@ -14,9 +14,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
-import thebetweenlands.common.network.message.BLMessage;
+import thebetweenlands.common.network.MessageBase;
 
-public class MessageSyncEntityCapabilities extends BLMessage {
+public class MessageSyncEntityCapabilities extends MessageBase {
 	private ResourceLocation capability;
 	private NBTTagCompound nbt;
 	private int entityID;

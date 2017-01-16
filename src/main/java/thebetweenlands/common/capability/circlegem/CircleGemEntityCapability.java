@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -40,7 +41,7 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 	}
 
 	@Override
-	public boolean isApplicable(EntityLivingBase entity) {
+	public boolean isApplicable(Entity entity) {
 		return CircleGemHelper.isApplicable(entity);
 	}
 

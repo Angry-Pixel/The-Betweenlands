@@ -4,8 +4,11 @@ import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
 
 /**
  * Internal representation and wrapper of entity capabilities.
@@ -18,7 +21,7 @@ import net.minecraftforge.common.capabilities.Capability;
  */
 public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E extends Entity> extends AbstractCapability<F, T, E> {
 	private E entity;
-	private boolean dirty = false;
+	protected boolean dirty = false;
 
 	protected EntityCapability() {
 		//Make sure the entity capability is the implementation of the capability
@@ -46,6 +49,14 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 		return this.entity;
 	}
 
+	/**
+	 * Returns whether this capability is applicable to the entity
+	 * @param obj
+	 * @return
+	 */
+	public boolean isApplicable(Entity entity) {
+		return false;
+	}
 
 	/**
 	 * Returns the entity capability that is specific to the specified entity
@@ -78,23 +89,15 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	/**
 	 * Marks the data as dirty
 	 */
-	public final void markDirty() {
+	public void markDirty() {
 		this.dirty = true;
-	}
-
-	/**
-	 * Sets whether the data is dirty
-	 * @param dirty
-	 */
-	public final void setDirty(boolean dirty) {
-		this.dirty = dirty;
 	}
 
 	/**
 	 * Returns whether the data is dirty
 	 * @return
 	 */
-	public final boolean isDirty() {
+	public boolean isDirty() {
 		return this.dirty;
 	}
 
@@ -113,9 +116,13 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
 		return false;
 	}
-	
-	@Override
-	public boolean isApplicable(Entity obj) {
-		return false;
+
+	/**
+	 * Sends a packet with all the tracking sensitive data
+	 */
+	public void sendPacket(EntityPlayerMP player) {
+		this.dirty = false;
+		MessageSyncEntityCapabilities message = new MessageSyncEntityCapabilities(this);
+		TheBetweenlands.networkWrapper.sendTo(message, player);
 	}
 }

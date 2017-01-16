@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.message.clientbound;
+package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.MathHelper;
@@ -9,9 +9,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
-import thebetweenlands.common.network.message.BLMessage;
+import thebetweenlands.common.network.MessageBase;
 
-public class MessageDruidTeleportParticles extends BLMessage {
+public class MessageDruidTeleportParticles extends MessageBase {
 	public MessageDruidTeleportParticles() {
 	}
 

@@ -28,11 +28,4 @@ public abstract class AbstractCapability<F extends AbstractCapability<F, T, A>, 
 	 * @return
 	 */
 	protected abstract Class<T> getCapabilityClass();
-
-	/**
-	 * Returns whether this capability is applicable to the specified item
-	 * @param item The item
-	 * @return
-	 */
-	public abstract boolean isApplicable(A obj);
 }

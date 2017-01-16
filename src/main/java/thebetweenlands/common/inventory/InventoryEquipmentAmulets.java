@@ -20,6 +20,6 @@ public class InventoryEquipmentAmulets extends InventoryEquipment {
 				amuletSlots++;
 			}
 		}
-		return amuletSlots;
+		return Math.min(amuletSlots, EnumEquipmentInventory.AMULET.maxSize);
 	}
 }

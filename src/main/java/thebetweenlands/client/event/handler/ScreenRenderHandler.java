@@ -20,13 +20,17 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.common.capability.decay.IDecayCapability;
+import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
@@ -54,106 +58,107 @@ public class ScreenRenderHandler extends Gui {
 			int width = event.getResolution().getScaledWidth();
 			int height = event.getResolution().getScaledHeight();
 
-			/*EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(this.mc.thePlayer);
-			int yOffset = 0;
-			for(EnumEquipmentCategory category : EnumEquipmentCategory.TYPES) {
-				List<Equipment> equipmentList = equipmentInventory.getEquipment(category);
-				int posX = (width / 2) - (20) + 113;
-				int posY = height - 19 + yOffset;
-				if(equipmentList.size() > 0) {
-					if(category == EnumEquipmentCategory.AMULET) {
-						EntityPropertiesCircleGem properties = BLEntityPropertiesRegistry.HANDLER.getProperties(this.mc.thePlayer, EntityPropertiesCircleGem.class);
-						if(properties != null) {
-							for(int a = 0; a < properties.getAmuletSlots(); a++) {
-								GL11.glPushMatrix();
-								GL11.glTranslated(posX, posY, 0);
-								GL11.glColor4f(1, 1, 1, 1);
-								GL11.glEnable(GL11.GL_BLEND);
-								GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			Minecraft mc = Minecraft.getMinecraft();
+			EntityPlayer player = mc.thePlayer;
+
+			if(player != null) {
+				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+
+					int yOffset = 0;
+
+					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
+						IInventory inv = capability.getInventory(type);
+
+						int posX = width / 2 + 93;
+						int posY = height + yOffset - 19;
+
+						boolean hadItem = false;
+
+						for(int i = 0; i < inv.getSizeInventory(); i++) {
+							ItemStack stack = inv.getStackInSlot(i);
+
+							if(stack != null) {
 								float scale = 1.0F;
-								GL11.glScaled(scale, scale, scale);
-								GL11.glColor4f(0, 0, 0, 0.4F);
-								ItemRenderHelper.drawItemStack(new ItemStack(BLItemRegistry.amulet), 0, 0, null, false);
-								GL11.glColor4f(1, 1, 1, 1);
-								GL11.glPopMatrix();
+
+								GlStateManager.pushMatrix();
+								GlStateManager.translate(posX, posY, 0);
+								GlStateManager.color(1, 1, 1, 1);
+								GlStateManager.enableBlend();
+								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+								GlStateManager.scale(scale, scale, scale);
+
+								mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+
+								GlStateManager.color(1, 1, 1, 1);
+								GlStateManager.popMatrix();
+
 								posX += 8;
+
+								hadItem = true;
 							}
 						}
+
+						if(hadItem) {
+							yOffset -= 13;
+						}
 					}
-					posX = (width / 2) - (20) + 113;
-					for(int a = 0; a < equipmentList.size(); a++) {
-						Equipment equipment = equipmentList.get(a);
-						GL11.glPushMatrix();
-						GL11.glTranslated(posX, posY, 0);
-						GL11.glColor4f(1, 1, 1, 1);
-						GL11.glEnable(GL11.GL_BLEND);
-						GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-						float scale = 1.0F;
-						GL11.glScaled(scale, scale, scale);
-						ItemRenderHelper.drawItemStack(equipment.item, 0, 0, null, true);
-						GL11.glColor4f(1, 1, 1, 1);
-						GL11.glPopMatrix();
-						posX += 8;
-					}
-					yOffset -= 13;
 				}
-			}*/
 
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+				if (player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
-			if (player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+					if(capability.isDecayEnabled()) {
+						int startX = (width / 2) - (27 / 2) + 23;
+						int startY = height - 49;
 
-				if(capability.isDecayEnabled()) {
-					int startX = (width / 2) - (27 / 2) + 23;
-					int startY = height - 49;
-
-					//Erebus compatibility
-					if (player.getEntityData().hasKey("antivenomDuration")) {
-						int duration = player.getEntityData().getInteger("antivenomDuration");
-						if (duration > 0) {
-							startY -= 12;
+						//Erebus compatibility
+						if (player.getEntityData().hasKey("antivenomDuration")) {
+							int duration = player.getEntityData().getInteger("antivenomDuration");
+							if (duration > 0) {
+								startY -= 12;
+							}
 						}
-					}
 
-					//Ridden entity hearts offset
-					Entity ridingEntity = player.getRidingEntity();
-					if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
-						EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
-						float maxEntityHealth = riddenEntity.getMaxHealth();
-						int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
-						if (maxHealthHearts > 30) {
-							maxHealthHearts = 30;
+						//Ridden entity hearts offset
+						Entity ridingEntity = player.getRidingEntity();
+						if(ridingEntity != null && ridingEntity instanceof EntityLivingBase) {
+							EntityLivingBase riddenEntity = (EntityLivingBase)ridingEntity;
+							float maxEntityHealth = riddenEntity.getMaxHealth();
+							int maxHealthHearts = (int)(maxEntityHealth + 0.5F) / 2;
+							if (maxHealthHearts > 30) {
+								maxHealthHearts = 30;
+							}
+							int guiOffsetY = 0;
+							while(maxHealthHearts > 0) {
+								int renderedHearts = Math.min(maxHealthHearts, 10);
+								maxHealthHearts -= renderedHearts;
+								guiOffsetY -= 10;
+							}
+							startY += guiOffsetY + 10;
 						}
-						int guiOffsetY = 0;
-						while(maxHealthHearts > 0) {
-							int renderedHearts = Math.min(maxHealthHearts, 10);
-							maxHealthHearts -= renderedHearts;
-							guiOffsetY -= 10;
+
+						int decay = 20 - capability.getDecayStats().getDecayLevel();
+
+						Minecraft.getMinecraft().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
+
+						for (int i = 0; i < 10; i++) {
+							int offsetY = player.isInsideOfMaterial(Material.WATER) ? -10 : 0;
+
+							if (this.updateCounter % (decay * 3 + 1) == 0) 
+								offsetY += this.random.nextInt(3) - 1;
+
+							GlStateManager.enableBlend();
+							GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+							GlStateManager.color(1, 1, 1, 1);
+
+							drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 18, 0, 9, 9);
+							if (i * 2 + 1 < decay) 
+								drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 0, 0, 9, 9);
+
+							if (i * 2 + 1 == decay) 
+								drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
 						}
-						startY += guiOffsetY + 10;
-					}
-
-					int decay = 20 - capability.getDecayStats().getDecayLevel();
-
-					Minecraft.getMinecraft().getTextureManager().bindTexture(DECAY_BAR_TEXTURE);
-
-					for (int i = 0; i < 10; i++) {
-						int offsetY = player.isInsideOfMaterial(Material.WATER) ? -10 : 0;
-
-						if (this.updateCounter % (decay * 3 + 1) == 0) 
-							offsetY += this.random.nextInt(3) - 1;
-
-						GlStateManager.enableBlend();
-						GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-						GlStateManager.color(1, 1, 1, 1);
-
-						drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 18, 0, 9, 9);
-						if (i * 2 + 1 < decay) 
-							drawTexturedModalRect(startX + 71 - i * 8, startY + offsetY, 0, 0, 9, 9);
-
-						if (i * 2 + 1 == decay) 
-							drawTexturedModalRect(startX + 72 - i * 8, startY + offsetY, 9, 0, 9, 9);
 					}
 				}
 			}

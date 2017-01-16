@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.message.clientbound;
+package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -10,9 +10,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.network.message.BLMessage;
+import thebetweenlands.common.network.MessageBase;
 
-public class MessageWeedwoodBushRustle extends BLMessage {
+public class MessageWeedwoodBushRustle extends MessageBase {
 	private BlockPos pos;
 	private float strength;
 

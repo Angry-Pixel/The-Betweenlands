@@ -21,6 +21,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
 
 @SideOnly(Side.CLIENT)
@@ -44,6 +45,11 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 		}
 
 		IBlockState blockState = tile.getWorld().getBlockState(tile.getPos());
+		
+		if(blockState.getBlock() != BlockRegistry.PURIFIER) {
+			return;
+		}
+		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);

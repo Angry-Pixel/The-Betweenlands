@@ -170,12 +170,12 @@ public class EntityCapabilityHandler {
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
 				for(EntityCapabilityTracker tracker : trackers) {
-					tracker.sendPacket();
+					tracker.getEntityCapability().sendPacket(tracker.getWatcher());
 				}
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onEntityStartTracking(StartTracking event) {
 		if(event.getEntityPlayer() instanceof EntityPlayerMP) {
@@ -213,8 +213,9 @@ public class EntityCapabilityHandler {
 				while(it.hasNext()) {
 					Entry<EntityPlayerMP, List<EntityCapabilityTracker>> entry = it.next();
 					EntityPlayerMP player = entry.getKey();
-					if(!player.getServerWorld().getMinecraftServer().getPlayerList().getPlayerList().contains(player))
+					if(!player.getServerWorld().getMinecraftServer().getPlayerList().getPlayerList().contains(player)) {
 						it.remove();
+					}
 				}
 			}
 		}
@@ -247,8 +248,9 @@ public class EntityCapabilityHandler {
 		List<EntityCapability<?, ?, E>> capabilities = new ArrayList<EntityCapability<?, ?, E>>();
 
 		for(EntityCapability<?, ?, ?> capability : REGISTERED_CAPABILITIES) {
-			if(entity.hasCapability(capability.getCapability(), null))
+			if(entity.hasCapability(capability.getCapability(), null)) {
 				capabilities.add((EntityCapability<?, ?, E>) entity.getCapability(capability.getCapability(), null));
+			}
 		}
 
 		return capabilities;
@@ -264,9 +266,13 @@ public class EntityCapabilityHandler {
 		for(EntityCapability<?, ?, Entity> capability : entityCapabilities) {
 			if(capability.getTrackingTime() >= 0) {
 				List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(watcher);
-				if(trackers == null)
+				if(trackers == null) {
 					TRACKER_MAP.put(watcher, trackers = new ArrayList<EntityCapabilityTracker>());
+				}
 				trackers.add(new EntityCapabilityTracker(capability, watcher));
+
+				//Send initial packet
+				capability.sendPacket(watcher);
 			}
 		}
 	}

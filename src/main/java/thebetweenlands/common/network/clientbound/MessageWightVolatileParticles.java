@@ -1,4 +1,4 @@
-package thebetweenlands.common.network.message.clientbound;
+package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -8,13 +8,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.common.network.message.MessageEntity;
+import thebetweenlands.common.network.MessageEntity;
 
 public class MessageWightVolatileParticles extends MessageEntity {
 	public MessageWightVolatileParticles() { }
 
 	public MessageWightVolatileParticles(Entity entity) {
-		super(entity);
+		this.addEntity(entity);
 	}
 
 	@Override
@@ -30,7 +30,7 @@ public class MessageWightVolatileParticles extends MessageEntity {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		Entity entity = this.getEntity();
+		Entity entity = this.getEntity(0);
 		if(entity != null) {
 			for (int i = 0; i < 80; i++) {
 				double px = entity.posX + entity.worldObj.rand.nextFloat() * 0.7F;

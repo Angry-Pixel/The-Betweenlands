@@ -235,7 +235,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								ForgeHooks.onLivingJump(this);
 							this.onGround = false;
 						}
-						closestTarget.knockBack(this, attackDamage, -x, -z);
+						closestTarget.knockBack(this, attackDamage / 2.5F, -x, -z);
 					}
 				}
 			}

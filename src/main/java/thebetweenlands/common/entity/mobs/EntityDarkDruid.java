@@ -23,7 +23,7 @@ import thebetweenlands.common.entity.ai.EntityAIDruidTeleport;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetDruid;
 import thebetweenlands.common.entity.ai.EntityAINearestAttackableTargetDruid;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
-import thebetweenlands.common.network.message.clientbound.MessageDruidTeleportParticles;
+import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 

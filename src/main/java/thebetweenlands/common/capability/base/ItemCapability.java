@@ -41,4 +41,13 @@ public abstract class ItemCapability<F extends ItemCapability<F, T>, T> extends 
 	public final ItemStack getItemStack() {
 		return this.stack;
 	}
+
+	/**
+	 * Returns whether this capability is applicable to the item
+	 * @param obj
+	 * @return
+	 */
+	public boolean isApplicable(Item item) {
+		return false;
+	}
 }

@@ -334,5 +334,6 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
 		renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
+		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
 	}
 }

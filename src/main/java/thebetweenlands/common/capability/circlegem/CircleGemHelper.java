@@ -29,7 +29,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
-import thebetweenlands.common.network.message.clientbound.MessageGemProc;
+import thebetweenlands.common.item.equipment.ItemAmulet;
+import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class CircleGemHelper {
@@ -39,7 +40,7 @@ public class CircleGemHelper {
 	 * @return
 	 */
 	public static boolean isApplicable(Item item) {
-		return item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool;
+		return item instanceof ItemAmulet || item instanceof ItemArmor || item instanceof ItemSword || item instanceof ItemBow || item instanceof ItemTool;
 	}
 
 	/**

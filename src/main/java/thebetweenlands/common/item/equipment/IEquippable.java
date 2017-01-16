@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.equipment;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -16,33 +18,33 @@ public interface IEquippable {
 
 	/**
 	 * Returns whether this item should be equipped on right click
-	 * @param stack
-	 * @param player
-	 * @param entity
-	 * @param inventory
+	 * @param stack Item to equip
+	 * @param player Player that is interacting
+	 * @param target Entity that will be equipped
+	 * @param inventory Equipment inventory
 	 * @return
 	 */
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity entity, IInventory inventory);
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory);
 
 	/**
 	 * Returns whether this item can be equipped
 	 * @param stack Item to equip
 	 * @param player Player that is interacting
-	 * @param entity Entity that will be equipped with this item
+	 * @param target Entity that will be equipped
 	 * @param inventory Equipment inventory
 	 * @return
 	 */
-	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity entity, IInventory inventory);
+	public boolean canEquip(ItemStack stack, @Nullable EntityPlayer player, Entity target, IInventory inventory);
 
 	/**
 	 * Returns whether this item can be unequipped by a player
 	 * @param stack Item to unequip
 	 * @param player Player that is interacting
-	 * @param entity Entity that will be unequipped
+	 * @param target Entity that will be unequipped
 	 * @param inventory Equipment inventory
 	 * @return
 	 */
-	public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity entity, IInventory inventory);
+	public boolean canUnequip(ItemStack stack, @Nullable EntityPlayer player, Entity target, IInventory inventory);
 
 	/**
 	 * Returns whether this item can drop on death
@@ -74,5 +76,5 @@ public interface IEquippable {
 	 * @param stack
 	 * @param entity
 	 */
-	public void onEquipmentTick(ItemStack stack, Entity entity);
+	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory);
 }

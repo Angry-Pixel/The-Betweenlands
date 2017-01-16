@@ -8,6 +8,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -19,6 +20,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.EquipmentHelper;
 import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.registries.CapabilityRegistry;
@@ -29,7 +31,7 @@ public class ItemEquipmentHandler {
 	@SubscribeEvent
 	public static void onWorldTick(TickEvent.WorldTickEvent event) {
 		if(event.phase == Phase.END) {
-			tickEquipment(event.world);
+			tickEquipmentInventories(event.world);
 		}
 	}
 
@@ -39,24 +41,21 @@ public class ItemEquipmentHandler {
 		if(event.phase == Phase.END) {
 			World world = TheBetweenlands.proxy.getClientWorld();
 			if(world != null && !Minecraft.getMinecraft().isGamePaused()) {
-				tickEquipment(world);
+				tickEquipmentInventories(world);
 			}
 		}
 	}
 
-	private static void tickEquipment(World world) {
-		for(int i = 0; i < world.loadedEntityList.size(); i++) {
-			Entity entity = (Entity) world.loadedEntityList.get(i);
-			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+	private static void tickEquipmentInventories(World world) {
+		for(Entity entity : world.loadedEntityList) {
+			if(entity instanceof EntityLivingBase && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+
 				for(EnumEquipmentInventory invType : EnumEquipmentInventory.values()) {
 					IInventory inventory = cap.getInventory(invType);
-					int items = inventory.getSizeInventory();
-					for(int c = 0; c < items; c++) {
-						ItemStack item = inventory.getStackInSlot(c);
-						if(item != null && item.getItem() instanceof IEquippable) {
-							((IEquippable)item.getItem()).onEquipmentTick(item, entity);
-						}
+
+					if(inventory instanceof ITickable) {
+						((ITickable) inventory).update();
 					}
 				}
 			}
@@ -79,18 +78,21 @@ public class ItemEquipmentHandler {
 						IEquippable equippable = (IEquippable) heldItem.getItem();
 
 						if(equippable.canEquipOnRightClick(heldItem, player, target, cap.getInventory(equippable.getEquipmentCategory(heldItem)))) {
-							if(tryPlayerEquip(player, event.getHand(), target, heldItem)) {
-								event.setCanceled(true);
-							}
+							ItemStack result = EquipmentHelper.equipItem(player, target, heldItem, false);
 
-							if(heldItem.stackSize <= 0) {
-								player.setHeldItem(event.getHand(), null);
+							if(result == null || result.stackSize != heldItem.stackSize) {
+								if(!player.capabilities.isCreativeMode) {
+									player.setHeldItem(event.getHand(), result);
+								}
+
+								player.swingArm(event.getHand());
 							}
 						}
 					}
 				}
 			} else if(player.isSneaking() && heldItem == null) {
-				if(tryPlayerUnequip(player, target)) {
+				if(EquipmentHelper.tryPlayerUnequip(player, target)) {
+					player.swingArm(EnumHand.MAIN_HAND);
 					event.setCanceled(true);
 				}
 			}
@@ -99,7 +101,7 @@ public class ItemEquipmentHandler {
 
 	@SubscribeEvent
 	public static void onItemUse(PlayerInteractEvent event) {
-		if(event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickEmpty) {
+		if(event instanceof PlayerInteractEvent.RightClickBlock /*|| event instanceof PlayerInteractEvent.RightClickEmpty only on client side :(*/) {
 			EntityPlayer player = event.getEntityPlayer();
 			ItemStack heldItem = event.getItemStack();
 
@@ -109,40 +111,19 @@ public class ItemEquipmentHandler {
 					IEquippable equippable = (IEquippable) heldItem.getItem();
 
 					if(equippable.canEquipOnRightClick(heldItem, player, player, cap.getInventory(equippable.getEquipmentCategory(heldItem)))) {
-						tryPlayerEquip(player, event.getHand(), player, heldItem);
+						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
+
+						if(result == null || result.stackSize != heldItem.stackSize) {
+							if(!player.capabilities.isCreativeMode) {
+								player.setHeldItem(event.getHand(), result);
+							}
+
+							player.swingArm(event.getHand());
+						}
 					}
 				}
 			}
 		}
-	}
-
-	public static boolean tryPlayerEquip(EntityPlayer player, EnumHand hand, Entity target, ItemStack stack) {
-		ItemStack equipped = IEquipmentCapability.equipItem(player, target, stack);
-		if(equipped == null || equipped.stackSize != stack.stackSize) {
-			if(!player.capabilities.isCreativeMode) {
-				player.setHeldItem(hand, equipped);
-			}
-
-			player.swingArm(hand);
-
-			return true;
-		}
-
-		return false;
-	}
-
-	public static boolean tryPlayerUnequip(EntityPlayer player, Entity target) {
-		ItemStack unequipped = IEquipmentCapability.unequipItem(player, target);
-		if(unequipped != null) {
-			if(!player.inventory.addItemStackToInventory(unequipped)) {
-				target.entityDropItem(unequipped, target.getEyeHeight());
-			}
-
-			player.swingArm(EnumHand.MAIN_HAND);
-
-			return true;
-		}
-		return false;
 	}
 
 	@SubscribeEvent
@@ -173,42 +154,4 @@ public class ItemEquipmentHandler {
 			}
 		}
 	}
-
-	/*@SubscribePacket
-	public static void onPacketEquipment(PacketEquipment packet) {
-		if(packet.getContext().getServerHandler() != null) {
-			EntityPlayer sender = packet.getContext().getServerHandler().playerEntity;
-			if(sender != null) {
-				EquipmentInventory equipmentInventory = EquipmentInventory.getEquipmentInventory(sender);
-				switch(packet.getMode()) {
-				default:
-				case 0:
-					if(packet.getSlot() < sender.inventory.getSizeInventory()) {
-						ItemStack item = sender.inventory.getStackInSlot(packet.getSlot());
-						if(item != null) {
-							if(item.getItem() instanceof IEquippable) {
-								IEquippable equippable = (IEquippable) item.getItem();
-								if(equippable.canEquip(item, sender, sender, equipmentInventory)) {
-									tryPlayerEquip(sender, sender, item);
-									if(item.stackSize <= 0)
-										sender.inventory.setInventorySlotContents(packet.getSlot(), null);
-								}
-							}
-						}
-					}
-					break;
-				case 1:
-					if(packet.getSlot() < equipmentInventory.getEquipment().size()) {
-						Equipment equipment = equipmentInventory.getEquipment().get(packet.getSlot());
-						if(equipment != null && equipment.equippable.canUnequip(equipment.item, sender, sender, equipmentInventory)) {
-							EquipmentInventory.unequipItem(sender, equipment);
-							if(!sender.inventory.addItemStackToInventory(equipment.item))
-								sender.entityDropItem(equipment.item, sender.getEyeHeight());
-						}
-					}
-					break;
-				}
-			}
-		}
-	}*/
 }

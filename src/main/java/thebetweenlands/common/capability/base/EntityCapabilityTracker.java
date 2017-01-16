@@ -1,14 +1,12 @@
 package thebetweenlands.common.capability.base;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.message.clientbound.MessageSyncEntityCapabilities;
 
 public class EntityCapabilityTracker {
 	private final EntityCapability<?, ?, ?> entityCapability;
 	private final EntityPlayerMP watcher;
 
-	private boolean trackerReady = true;
+	private boolean trackerReady = false;
 	private int lastUpdate = 0;
 
 	public EntityCapabilityTracker(EntityCapability<?, ?, ?> entityCapability, EntityPlayerMP watcher) {
@@ -45,16 +43,7 @@ public class EntityCapabilityTracker {
 		if(this.trackerReady && this.entityCapability.isDirty()) {
 			this.lastUpdate = 0;
 			this.trackerReady = false;
-			this.entityCapability.setDirty(false);
-			this.sendPacket();
+			this.entityCapability.sendPacket(this.watcher);
 		}
-	}
-
-	/**
-	 * Sends a packet with all the tracking sensitive data
-	 */
-	public void sendPacket() {
-		MessageSyncEntityCapabilities message = new MessageSyncEntityCapabilities(this.entityCapability);
-		TheBetweenlands.networkWrapper.sendTo(message, this.watcher);
 	}
 }

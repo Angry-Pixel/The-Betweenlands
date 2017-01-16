@@ -39,6 +39,7 @@ import thebetweenlands.common.item.armor.ItemSkullMask;
 import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
+import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -329,6 +330,7 @@ public class ItemRegistry {
 	public static final Item GLUE = new ItemGlue();
 	
 	public static final Item AMULET = new ItemAmulet();
+	public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
 	
 	public static void preInit() {
 		try {
