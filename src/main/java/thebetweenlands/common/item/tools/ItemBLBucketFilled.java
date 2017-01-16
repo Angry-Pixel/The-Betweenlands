@@ -1,7 +1,10 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +16,8 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 public class ItemBLBucketFilled extends UniversalBucket {
@@ -73,6 +78,21 @@ public class ItemBLBucketFilled extends UniversalBucket {
 	@Override
 	public String getUnlocalizedName(ItemStack stack) {
 		FluidStack fluidStack = this.getFluid(stack);
-		return super.getUnlocalizedName() + "." + (fluidStack == null ? "unknown" : fluidStack.getFluid().getUnlocalizedName(fluidStack));
+		return this.getEmpty().getUnlocalizedName() + "." + (fluidStack == null ? "unknown" : fluidStack.getFluid().getUnlocalizedName(fluidStack));
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+			if (fluid != FluidRegistry.WATER && fluid != FluidRegistry.LAVA && !fluid.getName().equals("milk") && !ItemSpecificBucket.hasSpecificBucket(this.getEmpty().getItem(), fluid)) {
+				// add all fluids that the bucket can be filled  with
+				FluidStack fs = new FluidStack(fluid, getCapacity());
+				ItemStack stack = new ItemStack(this);
+				if (fill(stack, fs, true) == fs.amount) {
+					subItems.add(stack);
+				}
+			}
+		}
 	}
 }

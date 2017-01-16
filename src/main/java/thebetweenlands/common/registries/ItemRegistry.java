@@ -14,7 +14,6 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.UniversalBucket;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -33,9 +32,12 @@ import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
-import thebetweenlands.common.item.armor.ItemBLArmor;
+import thebetweenlands.common.item.armor.ItemBoneArmor;
+import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.armor.ItemSkullMask;
+import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
+import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -60,6 +62,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
+import thebetweenlands.common.item.misc.ItemGlue;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -76,7 +79,6 @@ import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.ItemBLAxe;
-import thebetweenlands.common.item.tools.ItemBLBucketEmpty;
 import thebetweenlands.common.item.tools.ItemBLBucketFilled;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShield;
@@ -87,6 +89,9 @@ import thebetweenlands.common.item.tools.ItemNet;
 import thebetweenlands.common.item.tools.ItemPestle;
 import thebetweenlands.common.item.tools.ItemShockwaveSword;
 import thebetweenlands.common.item.tools.ItemSickle;
+import thebetweenlands.common.item.tools.ItemSpecificBucket;
+import thebetweenlands.common.item.tools.ItemSyrmoriteBucketEmpty;
+import thebetweenlands.common.item.tools.ItemSyrmoriteBucketSolidRubber;
 import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
 import thebetweenlands.common.item.tools.ItemVoodooDoll;
 import thebetweenlands.common.item.tools.ItemWeedwoodBucketEmpty;
@@ -153,27 +158,27 @@ public class ItemRegistry {
 	public static final Item CANDY_YELLOW = new ItemBLFood(3, 1.0F, false);
 	public static final Item CHIROMAW_WING = new ItemChiromawWing();
 	public static final Item TANGLED_ROOT = new ItemTangledRoot();
-	
+
 	//armor
-	public static final Item SYRMORITE_HELMET = new ItemBLArmor(BLMaterialRegistry.ARMOR_SYRMORITE, 0, EntityEquipmentSlot.HEAD, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item SYRMORITE_CHESTPLATE = new ItemBLArmor(BLMaterialRegistry.ARMOR_SYRMORITE, 1, EntityEquipmentSlot.CHEST, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item SYRMORITE_LEGGINGS = new ItemBLArmor(BLMaterialRegistry.ARMOR_SYRMORITE, 2, EntityEquipmentSlot.LEGS, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item SYRMORITE_BOOTS = new ItemBLArmor(BLMaterialRegistry.ARMOR_SYRMORITE, 3, EntityEquipmentSlot.FEET, "syrmorite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item LURKER_SKIN_HELMET = new ItemBLArmor(BLMaterialRegistry.ARMOR_LURKER_SKIN, 0, EntityEquipmentSlot.HEAD, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item LURKER_SKIN_CHESTPLATE = new ItemBLArmor(BLMaterialRegistry.ARMOR_LURKER_SKIN, 1, EntityEquipmentSlot.CHEST, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item LURKER_SKIN_LEGGINGS = new ItemBLArmor(BLMaterialRegistry.ARMOR_LURKER_SKIN, 2, EntityEquipmentSlot.LEGS, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item LURKER_SKIN_BOOTS = new ItemBLArmor(BLMaterialRegistry.ARMOR_LURKER_SKIN, 3, EntityEquipmentSlot.FEET, "lurkerSkin").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item BONE_HELMET = new ItemBLArmor(BLMaterialRegistry.ARMOR_BONE, 0, EntityEquipmentSlot.HEAD, "bone").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item BONE_CHESTPLATE = new ItemBLArmor(BLMaterialRegistry.ARMOR_BONE, 1, EntityEquipmentSlot.CHEST, "bone").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item BONE_LEGGINGS = new ItemBLArmor(BLMaterialRegistry.ARMOR_BONE, 2, EntityEquipmentSlot.LEGS, "bone").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item BONE_BOOTS = new ItemBLArmor(BLMaterialRegistry.ARMOR_BONE, 3, EntityEquipmentSlot.FEET, "bone").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item VALONITE_HELMET = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 0, EntityEquipmentSlot.HEAD, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item VALONITE_CHESTPLATE = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 1, EntityEquipmentSlot.CHEST, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item VALONITE_LEGGINGS = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 2, EntityEquipmentSlot.LEGS, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item VALONITE_BOOTS = new ItemBLArmor(BLMaterialRegistry.ARMOR_VALONITE, 3, EntityEquipmentSlot.FEET, "valonite").setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item RUBBER_BOOTS = new ItemRubberBoots().setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
+	public static final Item BONE_CHESTPLATE = new ItemBoneArmor(EntityEquipmentSlot.CHEST);
+	public static final Item BONE_LEGGINGS = new ItemBoneArmor(EntityEquipmentSlot.LEGS);
+	public static final Item BONE_BOOTS = new ItemBoneArmor(EntityEquipmentSlot.FEET);
+	public static final Item LURKER_SKIN_HELMET = new ItemLurkerSkinArmor(EntityEquipmentSlot.HEAD);
+	public static final Item LURKER_SKIN_CHESTPLATE = new ItemLurkerSkinArmor(EntityEquipmentSlot.CHEST);
+	public static final Item LURKER_SKIN_LEGGINGS = new ItemLurkerSkinArmor(EntityEquipmentSlot.LEGS);
+	public static final Item LURKER_SKIN_BOOTS = new ItemLurkerSkinArmor(EntityEquipmentSlot.FEET);
+	public static final Item SYRMORITE_HELMET = new ItemSyrmoriteArmor(EntityEquipmentSlot.HEAD);
+	public static final Item SYRMORITE_CHESTPLATE = new ItemSyrmoriteArmor(EntityEquipmentSlot.CHEST);
+	public static final Item SYRMORITE_LEGGINGS = new ItemSyrmoriteArmor(EntityEquipmentSlot.LEGS);
+	public static final Item SYRMORITE_BOOTS = new ItemSyrmoriteArmor(EntityEquipmentSlot.FEET);
+	public static final Item VALONITE_HELMET = new ItemValoniteArmor(EntityEquipmentSlot.HEAD);
+	public static final Item VALONITE_CHESTPLATE = new ItemValoniteArmor(EntityEquipmentSlot.CHEST);
+	public static final Item VALONITE_LEGGINGS = new ItemValoniteArmor(EntityEquipmentSlot.LEGS);
+	public static final Item VALONITE_BOOTS = new ItemValoniteArmor(EntityEquipmentSlot.FEET);
+	public static final Item RUBBER_BOOTS = new ItemRubberBoots();
 	//TODO actuall do this...
-	public static final Item SKULL_MASK = new ItemSkullMask().setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item SKULL_MASK = new ItemSkullMask();
 
 	//TOOLS
 	public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
@@ -242,15 +247,6 @@ public class ItemRegistry {
 	public static final Item SYRMORITE_SHEARS = new ItemSyrmoriteShears();
 	public static final Item SICKLE = new ItemSickle();
 	public static final Item SHOCKWAVE_SWORD = new ItemShockwaveSword(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
-	public static final Item WEEDWOOD_BUCKET_EMPTY = new ItemWeedwoodBucketEmpty();
-	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET_EMPTY);
-	public static final Item SYRMORITE_BUCKET_EMPTY = new ItemBLBucketEmpty() {
-		@Override
-		protected UniversalBucket getFilledBucket() {
-			return SYRMORITE_BUCKET_FILLED;
-		}
-	};
-	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET_EMPTY);
 	public static final Item ANGLER_TOOTH_ARROW = new ItemBLArrow(EnumArrowType.DEFAULT).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item POISONED_ANGLER_TOOTH_ARROW = new ItemBLArrow(EnumArrowType.ANGLER_POISON).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item OCTINE_ARROW = new ItemBLArrow(EnumArrowType.OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
@@ -261,6 +257,19 @@ public class ItemRegistry {
 	public static final Item CRITTER_CRUNCHER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityBloodSnail.class, EntityDragonFly.class, EntityFirefly.class, EntityLeech.class, EntityMireSnail.class, EntitySporeling.class, EntityTermite.class).setMaxDamage(32);
 	public static final Item HAG_HACKER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntitySwampHag.class).setMaxDamage(32);
 	public static final Item VOODOO_DOLL = new ItemVoodooDoll();
+
+	//BUCKETS
+	public static final Item WEEDWOOD_BUCKET = new ItemWeedwoodBucketEmpty();
+	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET);
+
+	public static final Item WEEDWOOD_BUCKET_RUBBER = new ItemSpecificBucket(WEEDWOOD_BUCKET, FluidRegistry.RUBBER);
+	public static final Item WEEDWOOD_BUCKET_INFUSION = new ItemWeedwoodBucketInfusion();
+
+	public static final Item SYRMORITE_BUCKET = new ItemSyrmoriteBucketEmpty();
+	public static final ItemBLBucketFilled SYRMORITE_BUCKET_FILLED = new ItemBLBucketFilled(SYRMORITE_BUCKET);
+
+	public static final Item SYRMORITE_BUCKET_RUBBER = new ItemSpecificBucket(SYRMORITE_BUCKET, FluidRegistry.RUBBER);
+	public static final Item SYRMORITE_BUCKET_SOLID_RUBBER = new ItemSyrmoriteBucketSolidRubber();
 
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
@@ -315,8 +324,9 @@ public class ItemRegistry {
 
 	public static final ItemDentrothystVial DENTROTHYST_VIAL = new ItemDentrothystVial();
 	public static final ItemAspectVial ASPECT_VIAL = new ItemAspectVial();
-	public static final Item WEEDWOOD_BUCKET_INFUSION = new ItemWeedwoodBucketInfusion();
 
+	public static final Item GLUE = new ItemGlue();
+	
 	public static void preInit() {
 		try {
 			for (Field field : ItemRegistry.class.getDeclaredFields()) {

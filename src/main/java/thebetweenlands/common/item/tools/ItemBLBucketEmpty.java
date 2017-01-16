@@ -18,7 +18,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fluids.UniversalBucket;
@@ -38,7 +37,9 @@ public abstract class ItemBLBucketEmpty extends Item {
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, itemStackIn, raytraceresult);
-        if (ret != null) return ret;
+        if (ret != null) {
+        	return ret;
+        }
 
         if (raytraceresult == null) {
             return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);

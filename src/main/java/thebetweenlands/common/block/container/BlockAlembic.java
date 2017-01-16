@@ -62,7 +62,7 @@ public class BlockAlembic extends BlockContainer {
                         if (!tile.isFull()) {
                             tile.addInfusion(heldStack);
                             if (!player.capabilities.isCreativeMode)
-                                player.setHeldItem(hand, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_EMPTY, 1));
+                                player.setHeldItem(hand, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET, 1));
                         }
                     } else if (heldStack.getItem() == ItemRegistry.DENTROTHYST_VIAL && (heldStack.getItemDamage() == 0 || heldStack.getItemDamage() == 2)) {
                         if (tile.hasFinished()) {

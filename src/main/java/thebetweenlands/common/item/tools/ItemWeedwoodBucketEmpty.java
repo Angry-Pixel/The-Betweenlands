@@ -26,23 +26,24 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
-		RayTraceResult result = this.rayTrace(world, player, true);
+			RayTraceResult result = this.rayTrace(world, player, true);
 
-		if(result != null && result.typeOfHit == Type.BLOCK && result.sideHit.getAxis() != Axis.Y) {
-			BlockPos pos = result.getBlockPos();
+			if(result != null && result.typeOfHit == Type.BLOCK && result.sideHit.getAxis() != Axis.Y) {
+				BlockPos pos = result.getBlockPos();
 
-			if(player.canPlayerEdit(pos, result.sideHit, itemStack)) {
-				IBlockState blockState = world.getBlockState(pos);
+				if(player.canPlayerEdit(pos, result.sideHit, itemStack)) {
+					IBlockState blockState = world.getBlockState(pos);
 
-				if(blockState.getBlock() == BlockRegistry.LOG_RUBBER && blockState.getValue(BlockRubberLog.NATURAL)) {
-					if(world.getBlockState(pos.offset(result.sideHit)).getBlock().isReplaceable(world, pos.offset(result.sideHit))) {
-						world.setBlockState(pos.offset(result.sideHit), BlockRegistry.WEEDWOOD_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
-						itemStack.stackSize--;
-						return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+					if(blockState.getBlock() == BlockRegistry.LOG_RUBBER && blockState.getValue(BlockRubberLog.NATURAL)) {
+						if(world.getBlockState(pos.offset(result.sideHit)).getBlock().isReplaceable(world, pos.offset(result.sideHit))
+								&& BlockRegistry.WEEDWOOD_RUBBER_TAP.canPlaceBlockAt(world, pos.offset(result.sideHit))) {
+							world.setBlockState(pos.offset(result.sideHit), BlockRegistry.WEEDWOOD_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
+							itemStack.stackSize--;
+							return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+						}
 					}
 				}
 			}
-		}
 		}
 
 		return super.onItemRightClick(itemStack, world, player, hand);

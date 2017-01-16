@@ -148,7 +148,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL), "xxx", "xfx", "xxx", 'x', BlockRegistry.BETWEENSTONE, 'f', BlockRegistry.SULFUR_FURNACE);
 		GameRegistry.addRecipe(EnumItemMisc.SWAMP_REED_ROPE.create(4), "p", "p" , "p", 'p', new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
 		GameRegistry.addRecipe(EnumItemMisc.WEEDWOOD_BOWL.create(4), "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_EMPTY), " X ", "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET), " X ", "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LADDER, 3), "X X", "xxx", "X X", 'x', EnumItemMisc.WEEDWOOD_STICK.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_BUTTON), new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BUTTON), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
@@ -356,27 +356,28 @@ public class RecipeRegistry {
 	}
 
 	private static void registerSmelting() {
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.SYRMORITE_ORE), EnumItemMisc.SYRMORITE_INGOT.create(1), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.OCTINE_ORE), EnumItemMisc.OCTINE_INGOT.create(1), 0F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.SYRMORITE_ORE), EnumItemMisc.SYRMORITE_INGOT.create(1), 0.7F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.OCTINE_ORE), EnumItemMisc.OCTINE_INGOT.create(1), 0.7F);
 		//GameRegistry.addSmelting(new ItemStack(BlockRegistry.DAMP_TORCH), new ItemStack(Blocks.torch), 0F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_REED_ITEM), EnumItemMisc.DRIED_SWAMP_REED.create(1), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD), EnumItemMisc.MUD_BRICK.create(1), 0F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.KRAKEN_TENTACLE), new ItemStack(ItemRegistry.KRAKEN_CALAMARI, 5), 0F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.FRIED_SWAMP_KELP), 5F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANGLER_MEAT_RAW), new ItemStack(ItemRegistry.ANGLER_MEAT_COOKED), 0F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(ItemRegistry.FROG_LEGS_COOKED), 0F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.PITSTONE), new ItemStack(BlockRegistry.SMOOTH_PITSTONE), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK), new ItemStack(BlockRegistry.SMOOTH_CRAGROCK), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.LIMESTONE), new ItemStack(BlockRegistry.POLISHED_LIMESTONE), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 0F);
-		GameRegistry.addSmelting(EnumItemMisc.SLUDGE_BALL.create(1), new ItemStack(ItemRegistry.SLUDGE_JELLO), 0F);
-		//GameRegistry.addSmelting(ItemGeneric.createStack(ItemRegistry.WEEDWOOD_BUCKET_EMPTY, 1, 0), ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL), 0F); TODO Fluid bucket recipes
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.SILT_GLASS), 0F);	
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_TILES), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_TILES), 0F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICKS), 0F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_REED_ITEM), EnumItemMisc.DRIED_SWAMP_REED.create(1), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD), EnumItemMisc.MUD_BRICK.create(1), 0.2F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.KRAKEN_TENTACLE), new ItemStack(ItemRegistry.KRAKEN_CALAMARI, 5), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_KELP_ITEM), new ItemStack(ItemRegistry.FRIED_SWAMP_KELP), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.ANGLER_MEAT_RAW), new ItemStack(ItemRegistry.ANGLER_MEAT_COOKED), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.FROG_LEGS_RAW), new ItemStack(ItemRegistry.FROG_LEGS_COOKED), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW), new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.PITSTONE), new ItemStack(BlockRegistry.SMOOTH_PITSTONE), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.CRAGROCK), new ItemStack(BlockRegistry.SMOOTH_CRAGROCK), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.LIMESTONE), new ItemStack(BlockRegistry.POLISHED_LIMESTONE), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 0.3F);
+		GameRegistry.addSmelting(EnumItemMisc.SLUDGE_BALL.create(1), new ItemStack(ItemRegistry.SLUDGE_JELLO), 0.3F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.SILT_GLASS), 0.2F);	
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_TILES), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_TILES), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICKS), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_RUBBER), EnumItemMisc.RUBBER_BALL.create(1), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SYRMORITE_BUCKET_RUBBER), new ItemStack(ItemRegistry.SYRMORITE_BUCKET_SOLID_RUBBER), 0.5F);
 	}
 
 	private static void registerDruidAltarRecipes() {

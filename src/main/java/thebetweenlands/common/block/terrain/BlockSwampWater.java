@@ -17,7 +17,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;

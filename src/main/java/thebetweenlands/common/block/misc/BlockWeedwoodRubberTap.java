@@ -11,9 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.UniversalBucket;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 
@@ -33,9 +31,9 @@ public class BlockWeedwoodRubberTap extends BlockRubberTap {
 			FluidStack drained = tap.drain(Fluid.BUCKET_VOLUME, false);
 
 			if(drained != null && drained.amount == Fluid.BUCKET_VOLUME) {
-				spawnAsEntity(worldIn, pos, UniversalBucket.getFilledBucket(ItemRegistry.WEEDWOOD_BUCKET_FILLED, FluidRegistry.RUBBER));
+				spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_RUBBER));
 			} else {
-				spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_EMPTY));
+				spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET));
 			}
 		}
 	}
