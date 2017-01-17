@@ -17,6 +17,7 @@ import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -24,6 +25,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,8 +34,11 @@ import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.NBTHelper;
 
 public class CircleGemHelper {
+	public static final String ITEM_GEM_NBT_TAG = "Gem";
+
 	/**
 	 * Returns true if gems are applicable to the item
 	 * @param item
@@ -58,11 +63,8 @@ public class CircleGemHelper {
 	 * @param gem
 	 */
 	public static void setGem(ItemStack stack, CircleGemType gem) {
-		if(stack.hasCapability(CapabilityRegistry.CAPABILITY_ITEM_CIRCLE_GEM, null)) {
-			ICircleGemCapability capability = stack.getCapability(CapabilityRegistry.CAPABILITY_ITEM_CIRCLE_GEM, null);
-			capability.removeAll();
-			capability.addGem(new CircleGem(gem, CombatType.BOTH));
-		}
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setInteger(ITEM_GEM_NBT_TAG, gem.id);
 	}
 
 	/**
@@ -71,12 +73,9 @@ public class CircleGemHelper {
 	 * @return
 	 */
 	public static CircleGemType getGem(ItemStack stack) {
-		if(stack.hasCapability(CapabilityRegistry.CAPABILITY_ITEM_CIRCLE_GEM, null)) {
-			ICircleGemCapability capability = stack.getCapability(CapabilityRegistry.CAPABILITY_ITEM_CIRCLE_GEM, null);
-			List<CircleGem> gems = capability.getGems();
-			if(!gems.isEmpty()) {
-				return gems.get(0).getGemType();
-			}
+		NBTTagCompound nbt = stack.getTagCompound();
+		if(nbt != null && nbt.hasKey(ITEM_GEM_NBT_TAG, Constants.NBT.TAG_INT)) {
+			return CircleGemType.fromID(nbt.getInteger(ITEM_GEM_NBT_TAG));
 		}
 		return CircleGemType.NONE;
 	}

@@ -11,6 +11,9 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
@@ -19,34 +22,34 @@ public class GuiUtils {
 	public static void drawLine(float xPos1, float yPos1, float xPos2, float yPos2, int colour) {
 		float[] colors = ColorUtils.getRGBA(colour);
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(colors[0], colors[1], colors[2], colors[3]);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(colors[0], colors[1], colors[2], colors[3]);
 
 		GL11.glBegin(GL11.GL_LINES);
 		GL11.glVertex2d(xPos1, yPos1);
 		GL11.glVertex2d(xPos2, yPos2);
 		GL11.glEnd();
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 	}
 
 	public static void drawRect(float xPos1, float yPos1, float xPos2, float yPos2, int colour) {
 		float[] colors = ColorUtils.getRGBA(colour);
 
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(colors[0], colors[1], colors[2], colors[3]);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(colors[0], colors[1], colors[2], colors[3]);
 
 		GL11.glBegin(GL11.GL_QUADS);
 		GL11.glVertex2d(xPos1, yPos1);
@@ -55,14 +58,14 @@ public class GuiUtils {
 		GL11.glVertex2d(xPos2, yPos1);
 		GL11.glEnd();
 
-		GL11.glPopMatrix();
-		GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.popMatrix();
+		GlStateManager.disableBlend();
 		GL11.glDisable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 	}
 
 	public static void drawPartialCircle(int x, int y, double radius, int startAngle, int endAngle) {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
 		GL11.glBegin(GL11.GL_QUAD_STRIP);
 		startAngle -= 90;
 		endAngle -= 90;
@@ -74,13 +77,13 @@ public class GuiUtils {
 			GL11.glVertex3f(x, y, 0.0F);
 		}
 		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 	}
 
 	public static void drawCircle(int x, int y, double radius) {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
 		GL11.glBegin(6);
 		for(int i = 0; i <= 360; i++) {
 			double sin = Math.sin(((double)i * Math.PI) / 180D) * radius;
@@ -88,13 +91,14 @@ public class GuiUtils {
 			GL11.glVertex2d((double)x + sin, (double)y + cos);
 		}
 		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LINE_SMOOTH);
+		GlStateManager.enableTexture2D();
 	}
 
 	public static void drawCircleOutline(int x, int y, double radius) {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.enableTexture2D();
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
 		float rotation = (float)(Math.PI * 2D / 360D);
 		float moveX = (float)Math.cos(rotation);
 		float moveY = (float)Math.sin(rotation);
@@ -108,13 +112,14 @@ public class GuiUtils {
 			yOffset = moveY * prevXOffset + moveX * yOffset;
 		}
 		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LINE_SMOOTH);
+		GlStateManager.enableTexture2D();
 	}
 
 	public static void drawCircleOutline(int x, int y, double radius, int corners) {
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
 		GL11.glEnable(GL11.GL_LINE_SMOOTH);
-		GL11.glEnable(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
 		float rotation = (float)(Math.PI * 2D / (double)corners);
 		float moveX = (float)Math.cos(rotation);
 		float moveY = (float)Math.sin(rotation);
@@ -128,11 +133,12 @@ public class GuiUtils {
 			yOffset = moveY * prevXOffset + moveX * yOffset;
 		}
 		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		GL11.glDisable(GL11.GL_LINE_SMOOTH);
+		GlStateManager.enableTexture2D();
 	}
 
 	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		GlStateManager.disableCull();
 		GL11.glBegin(GL11.GL_QUADS);
 		for(int i = 0; i < segments; i++) {
 			double angle = i * (maxAngle / segments);
@@ -199,6 +205,7 @@ public class GuiUtils {
 			}
 		}
 		GL11.glEnd();
+		GlStateManager.enableCull();
 	}
 
 	public static void renderTexturedCircleSegment(int segments, double maxAngle, double wrapAngle, double wrapRadius, double radius, double innerRadius, double minU, double maxU, double minV, double maxV) {
@@ -226,33 +233,6 @@ public class GuiUtils {
 			renderTexturedCircleSegment(segments, maxAngle, wrapAngle, renderOuterRadius + innerRadius, renderInnerRadius + innerRadius, minU, maxU, textureV, textureVOuter);
 		}
 	}
-
-	/**
-	 * Renders a texture mapped circle segment.
-	 * UVs in the range [0,textureWidth][0,textureHeight]
-	 * @param segments Number of sub segments to render
-	 * @param maxAngle Circle segment angle
-	 * @param radius Circle segment radius
-	 * @param innerRadius Inner circle segment radius
-	 * @param borderWidth Border width
-	 * @param textureWidth Texture width
-	 * @param textureHeight Texture height
-	 */
-	/*public static void renderMappedCircleSegment(int segments, double maxAngle, double radius, 
-			double innerRadius, double borderWidth, double textureWidth, double textureHeight,
-			double sminU, double smaxU, double sminV, double smaxV,
-			double b1minU, double b1maxU, double b1minV, double b1maxV,
-			double b2minU, double b2maxU, double b2minV, double b2maxV,
-			double b3minU, double b3maxU, double b3minV, double b3maxV,
-			double b4minU, double b4maxU, double b4minV, double b4maxV,
-			double c1minU, double c1maxU, double c1minV, double c1maxV,
-			double c2minU, double c2maxU, double c2minV, double c2maxV,
-			double c3minU, double c3maxU, double c3minV, double c3maxV,
-			double c4minU, double c4maxU, double c4minV, double c4maxV) {
-		double circumference = Math.PI * radius * 2.0D;
-		double straightBorderAspect = (b1maxU - b1minU) / (b1maxV - b1minV);
-		double angularBorderAspect = (b2maxU - b2minU) / (b2maxV - b2minV);
-	}*/
 
 	/**
 	 * Renders a texture mapped circle segment with wrapping textures.
@@ -283,19 +263,19 @@ public class GuiUtils {
 		double innerSegmentMaxAngle = maxAngle - 2.0D * borderAngle;
 		double wrapAngleInner = wrapAngle * (Math.PI * radius * 2.0D) / (Math.PI * innerRadius * 2.0D);
 
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 
 		//Inner segment
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngle, wrapRadius, radius - borderWidth, innerRadius + borderWidth, sminU, smaxU, sminV, smaxV);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 		//Border 1
 		if(initialMaxAngle < 360.0D) {
-			GL11.glPushMatrix();
-			GL11.glRotated(-maxAngle+borderAngle*2, 0, 0, 1);
-			GL11.glTranslated(0, innerRadius + borderWidth, 0);
-			GL11.glDisable(GL11.GL_CULL_FACE);
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate((float)(-maxAngle+borderAngle*2), 0, 0, 1);
+			GlStateManager.translate(0, innerRadius + borderWidth, 0);
+			GlStateManager.disableCull();
 			GL11.glBegin(GL11.GL_QUADS);
 
 			double borderLength = (radius - innerRadius);
@@ -330,18 +310,18 @@ public class GuiUtils {
 			}
 
 			GL11.glEnd();
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		}
 
 		//Border 2
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngle, radius, radius - borderWidth, b2minU, b2maxU, b2maxV, b2minV);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 		//Border 3
 		if(initialMaxAngle < 360.0D) {
-			GL11.glPushMatrix();
-			GL11.glTranslated(0.05D, innerRadius + borderWidth, 0);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0.05D, innerRadius + borderWidth, 0);
 			GL11.glBegin(GL11.GL_QUADS);
 
 			double borderLength = (radius - innerRadius);
@@ -376,19 +356,20 @@ public class GuiUtils {
 			}
 
 			GL11.glEnd();
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 		}
 
 		//Border 4
-		GL11.glPushMatrix();
+		GlStateManager.pushMatrix();
 		renderTexturedCircleSegment(segments, innerSegmentMaxAngle, wrapAngleInner, innerRadius + borderWidth + 0.05D, innerRadius, b4minU, b4maxU, b4maxV, b4minV);
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 
 		if(initialMaxAngle < 360.0D) {
 			//Corner 1
-			GL11.glPushMatrix();
-			GL11.glRotated(-maxAngle+borderAngle*2, 0, 0, 1);
-			GL11.glTranslated(0, innerRadius, 0);
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate((float)(-maxAngle+borderAngle*2), 0, 0, 1);
+			GlStateManager.translate(0, innerRadius, 0);
+
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glTexCoord2d(c1maxU, c1maxV);
 			GL11.glVertex2d(0, borderWidth);
@@ -399,12 +380,14 @@ public class GuiUtils {
 			GL11.glTexCoord2d(c1maxU, c1minV);
 			GL11.glVertex2d(0, 0);
 			GL11.glEnd();
-			GL11.glPopMatrix();
+
+			GlStateManager.popMatrix();
 
 			//Corner 2
-			GL11.glPushMatrix();
-			GL11.glRotated(-maxAngle+borderAngle*2, 0, 0, 1);
-			GL11.glTranslated(0, innerRadius, 0);
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate((float)(-maxAngle+borderAngle*2), 0, 0, 1);
+			GlStateManager.translate(0, innerRadius, 0);
+
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glTexCoord2d(c2maxU, c2minV);
 			GL11.glVertex2d(0, radius-innerRadius);
@@ -415,11 +398,13 @@ public class GuiUtils {
 			GL11.glTexCoord2d(c2maxU, c2maxV);
 			GL11.glVertex2d(0, radius-innerRadius-borderWidth);
 			GL11.glEnd();
-			GL11.glPopMatrix();
+
+			GlStateManager.popMatrix();
 
 			//Corner 3
-			GL11.glPushMatrix();
-			GL11.glTranslated(-borderWidth, innerRadius, 0);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(-borderWidth, innerRadius, 0);
+
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glTexCoord2d(c3minU, c3minV);
 			GL11.glVertex2d(0, radius-innerRadius);
@@ -430,11 +415,13 @@ public class GuiUtils {
 			GL11.glTexCoord2d(c3minU, c3maxV);
 			GL11.glVertex2d(0, radius-innerRadius-borderWidth);
 			GL11.glEnd();
-			GL11.glPopMatrix();
+
+			GlStateManager.popMatrix();
 
 			//Corner 4
-			GL11.glPushMatrix();
-			GL11.glTranslated(-borderWidth, innerRadius, 0);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(-borderWidth, innerRadius, 0);
+
 			GL11.glBegin(GL11.GL_QUADS);
 			GL11.glTexCoord2d(c4minU, c4maxV);
 			GL11.glVertex2d(0, borderWidth);
@@ -445,11 +432,12 @@ public class GuiUtils {
 			GL11.glTexCoord2d(c4minU, c4minV);
 			GL11.glVertex2d(0, 0);
 			GL11.glEnd();
-			GL11.glPopMatrix();
+
+			GlStateManager.popMatrix();
 		}
 
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 
 	/**

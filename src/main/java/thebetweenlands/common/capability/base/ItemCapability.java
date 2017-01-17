@@ -7,6 +7,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.capabilities.Capability;
 
 /**
+ * <b>THIS IS CURRENTLY BROKEN AND DOES _NOT_ SYNC ON SERVERS</b>
+ * 
+ * <p>
  * Internal representation and wrapper of item capabilities.
  * <p>Use their respective {@link Capability} to interface with the data.
  * <p><b>Note:</b> This class <b>must</b> be an implementation of the capability it provides!
@@ -14,6 +17,7 @@ import net.minecraftforge.common.capabilities.Capability;
  * @param <F> The default implementation of the capability
  * @param <T> The capability
  */
+@Deprecated
 public abstract class ItemCapability<F extends ItemCapability<F, T>, T> extends AbstractCapability<F, T, Item> {
 	private ItemStack stack;
 

@@ -101,10 +101,10 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@Override
 	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
-		/*if(CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
+		if(CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
 			return false;
-		}*/
-
+		}
+		
 		return true;
 	}
 

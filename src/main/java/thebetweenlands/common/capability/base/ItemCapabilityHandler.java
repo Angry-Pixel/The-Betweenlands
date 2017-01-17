@@ -73,11 +73,11 @@ public class ItemCapabilityHandler {
 	public static void onAttachCapabilities(AttachCapabilitiesEvent.Item event) {
 		@SuppressWarnings("deprecation")
 		Item item = event.getItem(); //I don't know what to use... getItemStack returns a stack with a null item...
-		
+
 		for(ItemCapability<?, ?> itemCapability : REGISTERED_CAPABILITIES) {
 			if(itemCapability.isApplicable(item)) {
 				final Capability<?> capabilityInstance = itemCapability.getCapability();
-				
+
 				event.addCapability(itemCapability.getID(), new ICapabilitySerializable<NBTTagCompound>() {
 					private Object itemCapability = this.getNewInstance();
 

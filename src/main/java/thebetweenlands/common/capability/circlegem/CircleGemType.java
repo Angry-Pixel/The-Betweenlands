@@ -142,4 +142,18 @@ public enum CircleGemType {
 		}
 		return NONE;
 	}
+
+	/**
+	 * Returns the gem for the specified ID
+	 * @param id
+	 * @return
+	 */
+	public static CircleGemType fromID(int id) {
+		for(CircleGemType gem : TYPES) {
+			if(gem.id == id) {
+				return gem;
+			}
+		}
+		return NONE;
+	}
 }

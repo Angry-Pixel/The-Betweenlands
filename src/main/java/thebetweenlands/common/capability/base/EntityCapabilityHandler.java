@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.Callable;
 
 import com.google.common.base.Preconditions;
@@ -196,7 +197,20 @@ public class EntityCapabilityHandler {
 			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
-				for(EntityCapabilityTracker tracker : trackers) {
+				Iterator<EntityCapabilityTracker> trackerIT = trackers.iterator();
+				while(trackerIT.hasNext()) {
+					EntityCapabilityTracker tracker = trackerIT.next();
+
+					//Don't remove own tracker
+					if(tracker.getEntityCapability().getEntity() != player) {
+						Set<? extends EntityPlayer> vanillaTrackingPlayers = player.getServerWorld().getEntityTracker().getTrackingPlayers(tracker.getEntityCapability().getEntity());
+
+						if(vanillaTrackingPlayers == null || vanillaTrackingPlayers.isEmpty() || !vanillaTrackingPlayers.contains(player)) {
+							//Welp, seems like StopTracking isn't called sometimes...
+							trackerIT.remove();
+						}
+					}
+
 					tracker.update();
 				}
 			}
@@ -213,6 +227,9 @@ public class EntityCapabilityHandler {
 				while(it.hasNext()) {
 					Entry<EntityPlayerMP, List<EntityCapabilityTracker>> entry = it.next();
 					EntityPlayerMP player = entry.getKey();
+
+					//System.out.println(entry.getValue().size() + " " + player.getServerWorld().loadedEntityList.size());
+
 					if(!player.getServerWorld().getMinecraftServer().getPlayerList().getPlayerList().contains(player)) {
 						it.remove();
 					}
@@ -263,6 +280,7 @@ public class EntityCapabilityHandler {
 	 */
 	private static void addTrackers(EntityPlayerMP watcher, Entity target) {
 		List<EntityCapability<?, ?, Entity>> entityCapabilities = getEntityCapabilities(target);
+
 		for(EntityCapability<?, ?, Entity> capability : entityCapabilities) {
 			if(capability.getTrackingTime() >= 0) {
 				List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(watcher);
@@ -283,22 +301,26 @@ public class EntityCapabilityHandler {
 	 * @param target
 	 */
 	private static void removeTrackers(EntityPlayerMP watcher, Entity target) {
-		List<EntityCapability<?, ?, Entity>> entityCapabilities = getEntityCapabilities(target);
-		for(EntityCapability<?, ?, Entity> capability : entityCapabilities) {
-			if(capability.getTrackingTime() >= 0) {
-				List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(watcher);
-				if(trackers != null) {
+		List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(watcher);
+
+		if(trackers != null) {
+			List<EntityCapability<?, ?, Entity>> entityCapabilities = getEntityCapabilities(target);
+
+			for(EntityCapability<?, ?, Entity> capability : entityCapabilities) {
+				if(capability.getTrackingTime() >= 0) {
 					Iterator<EntityCapabilityTracker> it = trackers.iterator();
 					while(it.hasNext()) {
 						EntityCapabilityTracker tracker = it.next();
-						if(tracker.getWatcher() == watcher)
-							it.remove();
-					}
 
-					if(trackers.isEmpty()) {
-						TRACKER_MAP.remove(watcher);
+						if(tracker.getEntityCapability() == capability) {
+							it.remove();
+						}
 					}
 				}
+			}
+
+			if(trackers.isEmpty()) {
+				TRACKER_MAP.remove(watcher);
 			}
 		}
 	}

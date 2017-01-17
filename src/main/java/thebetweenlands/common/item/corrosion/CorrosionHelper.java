@@ -19,11 +19,12 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.capability.corrosion.ICorrosionCapability;
 import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.NBTHelper;
@@ -33,6 +34,9 @@ public final class CorrosionHelper {
 	public static final int MAX_CORROSION = 255;
 	public static final String TOOLTIP_PART = "/" + MAX_CORROSION + ")";
 	public static final int CORROSION_STAGE_COUNT = 6;
+	public static final String ITEM_CORROSION_NBT_TAG = "Corrosion";
+	public static final String ITEM_COATING_NBT_TAG = "Coating";
+
 
 	private CorrosionHelper() {
 	}
@@ -57,9 +61,9 @@ public final class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCoating(ItemStack itemStack) {
-		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
-			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
-			return capability.getCoating();
+		NBTTagCompound nbt = itemStack.getTagCompound();
+		if(nbt != null && nbt.hasKey(ITEM_COATING_NBT_TAG, Constants.NBT.TAG_INT)) {
+			return nbt.getInteger(ITEM_COATING_NBT_TAG);
 		}
 		return 0;
 	}
@@ -70,9 +74,9 @@ public final class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCorrosion(ItemStack itemStack) {
-		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
-			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
-			return capability.getCorrosion();
+		NBTTagCompound nbt = itemStack.getTagCompound();
+		if(nbt != null && nbt.hasKey(ITEM_CORROSION_NBT_TAG, Constants.NBT.TAG_INT)) {
+			return nbt.getInteger(ITEM_CORROSION_NBT_TAG);
 		}
 		return 0;
 	}
@@ -83,10 +87,8 @@ public final class CorrosionHelper {
 	 * @param coating
 	 */
 	public static void setCoating(ItemStack itemStack, int coating) {
-		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
-			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
-			capability.setCoating(coating);
-		}
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(itemStack);
+		nbt.setInteger(ITEM_COATING_NBT_TAG, coating);
 	}
 
 	/**
@@ -95,10 +97,8 @@ public final class CorrosionHelper {
 	 * @param corrosion
 	 */
 	public static void setCorrosion(ItemStack itemStack, int corrosion) {
-		if(itemStack.hasCapability(CapabilityRegistry.CAPABILITY_CORROSION, null)) {
-			ICorrosionCapability capability = itemStack.getCapability(CapabilityRegistry.CAPABILITY_CORROSION, null);
-			capability.setCorrosion(corrosion);
-		}
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(itemStack);
+		nbt.setInteger(ITEM_CORROSION_NBT_TAG, corrosion);
 	}
 
 	/**

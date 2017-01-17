@@ -47,9 +47,11 @@ public class DecayStats {
 				this.decaySaturationLevel = Math.max(this.decaySaturationLevel - 1.0F, 0.0F);
 			} else if (difficulty != EnumDifficulty.PEACEFUL) {
 				this.decaySaturationLevel = 0.0F;
-				this.decayLevel = Math.max(this.decayLevel - 1, 0);
-				if(this.capability != null)
+				this.decayLevel = Math.min(this.decayLevel + 1, 20);
+
+				if(this.capability != null) {
 					this.capability.markDirty();
+				}
 			}
 		}
 
