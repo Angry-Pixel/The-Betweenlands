@@ -8,6 +8,7 @@ import net.minecraft.client.particle.ParticleFlame;
 import net.minecraft.client.particle.ParticleRedstone;
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.particle.ParticleSpell;
+import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
@@ -99,7 +100,8 @@ public enum BLParticles {
 	REDSTONE_DUST(VanillaParticleFactory.create(ParticleRedstone.class, new ParticleRedstone.Factory())),
 	THEM(new ParticleThem.Factory()),
 	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
-	ANIMATOR(new ParticleAnimator.Factory());
+	ANIMATOR(new ParticleAnimator.Factory()),
+	SPLASH(VanillaParticleFactory.create(ParticleSplash.class, new ParticleSplash.Factory()));
 
 
 

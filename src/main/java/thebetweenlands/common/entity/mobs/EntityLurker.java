@@ -4,10 +4,18 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityLookHelper;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -15,11 +23,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathNavigateSwimmer;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -30,8 +44,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	private static final DataParameter<Boolean> SHOULD_MOUTH_BE_OPEN = EntityDataManager.createKey(EntityLurker.class, DataSerializers.BOOLEAN);
 	private static final DataParameter<Float> MOUTH_MOVE_SPEED = EntityDataManager.createKey(EntityLurker.class, DataSerializers.FLOAT);
 	private static final int MOUTH_OPEN_TICKS = 20;
-
-	private BlockPos currentSwimTarget;
 
 	private int attackTime;
 
@@ -60,14 +72,46 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	private int leapRiseTime;
 	private int leapFallTime;
 
+	private PathNavigate pathNavigateWater;
+	private PathNavigate pathNavigateLand;
+	private EntityMoveHelper moveHelperWater;
+	private EntityMoveHelper moveHelperLand;
+
 	public EntityLurker(World world) {
 		super(world);
-		setSize(1.9F, 0.9F);
+
+		this.setPathPriority(PathNodeType.WATER, 30);
+
+		this.moveHelperWater = new EntityLurker.LurkerMoveHelper(this);
+		this.moveHelperLand = new EntityMoveHelper(this);
+
+		if(this.isInWater()) {
+			this.moveHelper = this.moveHelperWater;
+		} else {
+			this.moveHelper = this.moveHelperLand;
+		}
+
+		this.pathNavigateWater = this.getNewNavigator(world);
+		this.pathNavigateLand = new PathNavigateGround(this, world);
+
+		if(this.isInWater()) {
+			this.navigator = this.pathNavigateWater;
+		} else {
+			this.navigator = this.pathNavigateLand;
+		}
+
+		setSize(1.6F, 0.9F);
 	}
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(1, new EntityAIAttackMelee(this, 0.5D, false));
+		tasks.addTask(0, new EntityAIAttackMelee(this, 0.5D, false));
+		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
+		tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));
+		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+		tasks.addTask(4, new EntityAILookIdle(this));
+
+		targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
 	}
 
 	@Override
@@ -98,6 +142,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
 	}
 
+	@Override
+	protected PathNavigate getNewNavigator(World world){
+		return new PathNavigateSwimmer(this, world);
+	}
+
 	private Block getRelativeBlock(int offsetY) {
 		return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(getEntityBoundingBox().minY) + offsetY, MathHelper.floor_double(posZ))).getBlock();
 	}
@@ -107,19 +156,10 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		super.onLivingUpdate();
 		if (isInWater()) {
 			if (!worldObj.isRemote) {
-				Entity entityToAttack = getAttackTarget();
-				if (entityToAttack == null) {
-					swimAbout();
-				} else {
-					currentSwimTarget = new BlockPos(MathHelper.floor_double(entityToAttack.posX), MathHelper.floor_double(entityToAttack.posY), MathHelper.floor_double(entityToAttack.posZ));
-					swimToTarget();
-				}
 				if (motionY < 0 && isLeaping()) {
 					setIsLeaping(false);
 				}
 			}
-			renderYawOffset += (-((float) Math.atan2(motionX, motionZ)) * 180.0F / (float) Math.PI - renderYawOffset) * 0.1F;
-			rotationYaw = renderYawOffset;
 		} else {
 			if (worldObj.isRemote) {
 				if (prevInWater && isLeaping()) {
@@ -149,11 +189,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			}
 		}
 		float magnitude = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ) * (onGround ? 0 : 1);
-		float motionPitch = (float) Math.atan2(magnitude, motionY) / (float) Math.PI * 180 - 90;
+		float motionPitch = MathHelper.clamp_float((float) Math.atan2(magnitude, motionY) / (float) Math.PI * 180 - 90, -10.0F, 10.0F);
 		if (magnitude > 1) {
 			magnitude = 1;
 		}
-		float newRotationPitch = isLeaping() ? 90 : leapFallTime > 0 ? -45 : (rotationPitchBody - motionPitch) * magnitude * 4 * (inWater ? 1 : 0);
+		float newRotationPitch = isLeaping() ? 90 : leapFallTime > 0 ? -45 :  MathHelper.clamp_float((rotationPitchBody - motionPitch) * magnitude * 4 * (inWater ? 1 : 0), -30.0F, 30.0F);
 		tailPitch += (rotationPitchBody - newRotationPitch) * 0.75F;
 		rotationPitchBody += (newRotationPitch - rotationPitchBody) * 0.3F;
 		if (Math.abs(rotationPitchBody) < 0.05F) {
@@ -176,8 +216,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				double motionX = dx * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
 				double motionY = ring * 0.3F + rand.nextDouble() * 0.1;
 				double motionZ = dz * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
-				//TODO add splash particle
-				//BLParticle.SPLASH.spawn(worldObj, x, y, z, motionX, motionY, motionZ, 1, waterColorMultiplier);
+				BLParticles.SPLASH.spawn(this.worldObj, x, y, z, ParticleArgs.get().withMotion(motionX, motionY, motionZ).withColor(waterColorMultiplier));
 			}
 		}
 	}
@@ -187,24 +226,24 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		int y = 0;
 		while (getRelativeBlock(y--) == Blocks.AIR && posY - y > 0) ;
 		int blockY = MathHelper.floor_double(getEntityBoundingBox().minY + y);
-		Block block = worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
-		if (block.getMaterial(worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ))).isLiquid()) {
+		IBlockState blockState = worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ));
+		if (blockState.getMaterial().isLiquid()) {
 			int r = 255, g = 255, b = 255;
 			// TODO: automatically build a map of all liquid blocks to the average color of there texture to get color from
-			if (block == BlockRegistry.SWAMP_WATER) {
+			if (blockState.getBlock() == BlockRegistry.SWAMP_WATER) {
 				r = 147;
 				g = 132;
 				b = 83;
-			} else if (block == Blocks.WATER || block == Blocks.FLOWING_WATER) {
+			} else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_WATER) {
 				r = 49;
 				g = 70;
 				b = 245;
-			} else if (block == Blocks.WATER || block == Blocks.FLOWING_LAVA) {
+			} else if (blockState.getBlock() == Blocks.WATER || blockState.getBlock() == Blocks.FLOWING_LAVA) {
 				r = 207;
 				g = 85;
 				b = 16;
 			}
-			int multiplier = block.getMapColor(worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ))).getMapColor(1);
+			int multiplier = blockState.getMapColor().getMapColor(1);
 			return 0xFF000000 | (r * (multiplier >> 16 & 0xFF) / 255) << 16 | (g * (multiplier >> 8 & 0xFF) / 255) << 8 | (b * (multiplier & 0xFF) / 255);
 		}
 		return 0xFFFFFFFF;
@@ -212,6 +251,34 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
+		if(this.isInWater()) {
+			this.moveHelper = this.moveHelperWater;
+		} else {
+			this.moveHelper = this.moveHelperLand;
+		}
+
+		if(this.isInWater()) {
+			this.navigator = this.pathNavigateWater;
+		} else {
+			this.navigator = this.pathNavigateLand;
+		}
+
+		if(!this.worldObj.isRemote) {
+			Entity target = this.getAttackTarget();
+			if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistanceToEntity(this) < 3.2D && target.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && target.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+				setShouldMouthBeOpen(true);
+				setMouthMoveSpeed(10);
+				ticksUntilBiteDamage = 10;
+				attackTime = 20;
+				entityBeingBit = target;
+
+				if (isLeaping() && target instanceof EntityDragonFly) {
+					target.startRiding(this, true);
+					setAttackTarget((EntityDragonFly) target);
+				}
+			}
+		}
+
 		prevRotationPitchBody = rotationPitchBody;
 		prevTailPitch = tailPitch;
 		prevTailYaw = tailYaw;
@@ -235,7 +302,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		}
 		prevMouthOpenTicks = mouthOpenTicks;
 		prevInWater = inWater;
+
 		super.onUpdate();
+
 		if (shouldMouthBeOpen()) {
 			if (mouthOpenTicks < MOUTH_OPEN_TICKS) {
 				mouthOpenTicks += getMouthMoveSpeed();
@@ -283,6 +352,27 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	}
 
 	@Override
+	public void moveEntityWithHeading(float strafe, float forward) {
+		if (isServerWorld()) {
+			if (isInWater()) {
+				moveRelative(strafe, forward, 0.1F);
+				moveEntity(motionX, motionY, motionZ);
+				motionX *= 0.8999999761581421D;
+				motionY *= 0.8999999761581421D;
+				motionZ *= 0.8999999761581421D;
+
+				if (getAttackTarget() == null) {
+					motionY -= 0.005D;
+				}
+			} else {
+				super.moveEntityWithHeading(strafe, forward);
+			}
+		} else {
+			super.moveEntityWithHeading(strafe, forward);
+		}
+	}
+
+	@Override
 	protected void updateAITasks() {
 		super.updateAITasks();
 		attackTime--;
@@ -303,35 +393,10 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		}
 	}
 
-
-	public void swimAbout() {
-		if (currentSwimTarget != null && (worldObj.getBlockState(currentSwimTarget).getMaterial() != Material.WATER || currentSwimTarget.getY() < 1)) {
-			currentSwimTarget = null;
-		}
-		int x = MathHelper.floor_double(posX);
-		int y = MathHelper.floor_double(getEntityBoundingBox().minY);
-		int z = MathHelper.floor_double(posZ);
-		if (currentSwimTarget == null || rand.nextInt(30) == 0 || currentSwimTarget.getDistance(x, y, z) < 4) {
-			currentSwimTarget = new BlockPos(x + rand.nextInt(10) - rand.nextInt(10), y - rand.nextInt(4) + 1, z + rand.nextInt(10) - rand.nextInt(10));
-		}
-		swimToTarget();
-	}
-
-	private void swimToTarget() {
-		if (getRidingEntity() != null) {
-			return;
-		}
-		double targetX = currentSwimTarget.getX() + 0.5 - posX;
-		double targetY = currentSwimTarget.getY() - posY;
-		double targetZ = currentSwimTarget.getZ() + 0.5 - posZ;
-		motionX += (Math.signum(targetX) * 0.2 - motionX) * 0.2;
-		motionY += (Math.signum(targetY) * 0.4 - motionY) * 0.01;
-		motionY -= 0.01;
-		motionZ += (Math.signum(targetZ) * 0.2 - motionZ) * 0.2;
-		moveForward = 0.5F;
-	}
-
 	private EntityLivingBase findEnemyToAttack() {
+		if(this.getAttackTarget() != null) {
+			return this.getAttackTarget();
+		}
 		List<Entity> nearEntities = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(8, 10, 8));
 		for (int i = 0; i < nearEntities.size(); i++) {
 			Entity entity = nearEntities.get(i);
@@ -365,18 +430,13 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			motionY += 0.9;
 			motionZ += distanceZ / magnitude * 0.8;
 		}
-		if (attackTime <= 0 && distance < 3 && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+
+		if (attackTime <= 0 && distance < 3.2D && entityIn.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && entityIn.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
 			setShouldMouthBeOpen(true);
 			setMouthMoveSpeed(10);
 			ticksUntilBiteDamage = 10;
 			attackTime = 20;
 			entityBeingBit = entityIn;
-
-			//TODO // FIXME: 10/04/2016 doesn't seem to work atm
-			if (isLeaping() && entityIn instanceof EntityDragonFly) {
-				entityIn.startRiding(this, true);
-				setAttackTarget(null);
-			}
 		}
 		return true;
 	}
@@ -477,6 +537,64 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		super.readEntityFromNBT(tagCompound);
 		if(tagCompound.hasKey("Anger")) {
 			anger = tagCompound.getShort("Anger");
+		}
+	}
+
+	@Override
+	public boolean isPushedByWater() {
+		return false;
+	}
+
+	//AIs
+	static class LurkerMoveHelper extends EntityMoveHelper {
+		private final EntityLurker lurker;
+
+		public LurkerMoveHelper(EntityLurker lurker) {
+			super(lurker);
+			this.lurker = lurker;
+		}
+
+		public void onUpdateMoveHelper() {
+			if (action == EntityMoveHelper.Action.MOVE_TO && !lurker.getNavigator().noPath()) {
+				double d0 = posX - lurker.posX;
+				double d1 = posY - lurker.posY;
+				double d2 = posZ - lurker.posZ;
+				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
+				d3 = (double) MathHelper.sqrt_double(d3);
+				d1 = d1 / d3;
+				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
+				lurker.rotationYaw = limitAngle(lurker.rotationYaw, f, 90.0F);
+				lurker.renderYawOffset = lurker.rotationYaw;
+				float f1 = (float) (speed * lurker.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue());
+				lurker.setAIMoveSpeed(lurker.getAIMoveSpeed() + (f1 - lurker.getAIMoveSpeed()) * 0.125F);
+				double d4 = Math.sin((double) (lurker.ticksExisted + lurker.getEntityId()) * 0.5D) * 0.05D;
+				double d5 = Math.cos((double) (lurker.rotationYaw * 0.017453292F));
+				double d6 = Math.sin((double) (lurker.rotationYaw * 0.017453292F));
+				lurker.motionX += d4 * d5;
+				lurker.motionZ += d4 * d6;
+				d4 = Math.sin((double) (lurker.ticksExisted + lurker.getEntityId()) * 0.75D) * 0.05D;
+				lurker.motionY += d4 * (d6 + d5) * 0.25D;
+				if(Math.abs(lurker.motionY) < 0.35) {
+					lurker.motionY += (double) lurker.getAIMoveSpeed() * d1 * 0.1D * (2 + (d1 > 0 ? 0.4 : 0) + (lurker.isCollidedHorizontally ? 20 : 0));
+				}
+				EntityLookHelper entitylookhelper = lurker.getLookHelper();
+				double d7 = lurker.posX + d0 / d3 * 2.0D;
+				double d8 = (double) lurker.getEyeHeight() + lurker.posY + d1 / d3;
+				double d9 = lurker.posZ + d2 / d3 * 2.0D;
+				double d10 = entitylookhelper.getLookPosX();
+				double d11 = entitylookhelper.getLookPosY();
+				double d12 = entitylookhelper.getLookPosZ();
+
+				if (!entitylookhelper.getIsLooking()) {
+					d10 = d7;
+					d11 = d8;
+					d12 = d9;
+				}
+
+				lurker.getLookHelper().setLookPosition(d10 + (d7 - d10) * 0.125D, d11 + (d8 - d11) * 0.125D, d12 + (d9 - d12) * 0.125D, 10.0F, 40.0F);
+			} else {
+				lurker.setAIMoveSpeed(0.0F);
+			}
 		}
 	}
 }

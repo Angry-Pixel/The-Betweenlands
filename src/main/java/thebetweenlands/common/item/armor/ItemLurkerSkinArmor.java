@@ -60,9 +60,7 @@ public class ItemLurkerSkinArmor extends ItemBLArmor {
 			}
 
 			if(armorPieces >= 4) {
-				if (!player.isPotionActive(MobEffects.WATER_BREATHING)) {
-					player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 0));
-				}
+				player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 10));
 
 				if(player.ticksExisted % 3 == 0) {
 					player.setAir(player.getAir() - 1);

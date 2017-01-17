@@ -70,13 +70,13 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 		//Up
 		int height;
 		for (height = 1; this.isSamePlant(worldIn.getBlockState(pos.up(height)).getBlock()); ++height);
-		for (int offset = height; offset > 0; offset--) {
+		for (int offset = height - 1; offset > 0; offset--) {
 			if (!player.capabilities.isCreativeMode) {
 				BlockPos offsetPos = pos.up(offset);
 				IBlockState blockState = worldIn.getBlockState(offsetPos);
 				blockState.getBlock().dropBlockAsItem(worldIn, offsetPos, blockState, 0);
 			}
-			worldIn.setBlockToAir(pos.up(offset));
+			worldIn.setBlockState(pos.up(offset), this.getReplacementBlock(worldIn, pos.up(offset), worldIn.getBlockState(pos.up(offset))));
 		}
 		if(this.breaksLower) {
 			//Down
@@ -86,7 +86,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 					IBlockState blockState = worldIn.getBlockState(offsetPos);
 					blockState.getBlock().dropBlockAsItem(worldIn, offsetPos, blockState, 0);
 				}
-				worldIn.setBlockToAir(offsetPos);
+				worldIn.setBlockState(offsetPos, this.getReplacementBlock(worldIn, offsetPos, worldIn.getBlockState(offsetPos)));
 			}
 		}
 		super.onBlockHarvested(worldIn, pos, state, player);

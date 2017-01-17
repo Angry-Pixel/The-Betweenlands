@@ -15,7 +15,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class BlockSwampKelp extends BlockStackablePlantUnderwater {
 	public BlockSwampKelp() {
 		this.setLightLevel(0.2F);
-		this.setHardness(0.0F);
+		this.setHardness(0.1F);
 	}
 
 	@Override

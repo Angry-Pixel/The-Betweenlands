@@ -51,7 +51,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 		tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true) {
 			@Override
 			protected double getAttackReachSqr(EntityLivingBase attackTarget) {
-				return 0.85D + attackTarget.width;
+				return 0.75D + attackTarget.width;
 			}
 		});
 		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
@@ -148,9 +148,9 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 		if (inWater) {
 			setAir(300);
 		} else if (onGround) {
-			motionY += 0.5D;
-			motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
-			motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
+			motionY += 0.25D;
+			motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.2F);
+			motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.2F);
 			rotationYaw = rand.nextFloat() * 360.0F;
 			if(isLeaping())
 				setIsLeaping(false);
@@ -219,6 +219,11 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 	@Override
 	public boolean isNotColliding() {
 		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+	}
+	
+	@Override
+	public boolean isPushedByWater() {
+		return false;
 	}
 
 	//AIs

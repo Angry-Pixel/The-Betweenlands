@@ -11,7 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -28,6 +28,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -35,12 +36,13 @@ import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
-	
+
 	protected ItemStack sickleHarvestableDrop;
 	protected boolean isReplaceable = false;
-	
+
 	public BlockPlantUnderwater() {
 		this(FluidRegistry.SWAMP_WATER, Material.WATER);
+		this.setHardness(0.5F);
 	}
 
 	public BlockPlantUnderwater(Fluid fluid, Material materialIn) {
@@ -57,17 +59,21 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 		this.sickleHarvestableDrop = drop;
 		return this;
 	}
-	
+
 	public BlockPlantUnderwater setReplaceable(boolean replaceable) {
 		this.isReplaceable = replaceable;
 		return this;
 	}
-	
+
+	protected IBlockState getReplacementBlock(IBlockAccess world, BlockPos pos, IBlockState state) {
+		return BlockRegistry.SWAMP_WATER.getDefaultState();
+	}
+
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
 		return this.isReplaceable;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return PLANT_AABB;
@@ -134,7 +140,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+			worldIn.setBlockState(pos, this.getReplacementBlock(worldIn, pos, state), 3);
 		}
 	}
 
@@ -150,6 +156,12 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 
 	protected boolean canSustainPlant(IBlockState state) {
 		return SoilHelper.canSustainUnderwaterPlant(state);
+	}
+
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		this.onBlockHarvested(world, pos, state, player);
+		return world.setBlockState(pos, this.getReplacementBlock(world, pos, state), world.isRemote ? 11 : 3);
 	}
 
 	@Override
