@@ -41,4 +41,16 @@ public interface IEquipmentCapability {
 	 */
 	@Nonnull
 	public IInventory getInventory(EnumEquipmentInventory inventory);
+
+	/**
+	 * Returns how many amulets can be equipped
+	 * @return
+	 */
+	public int getAmuletSlots();
+
+	/**
+	 * Sets how many amulets can be equipped
+	 * @param slots
+	 */
+	public void setAmuletSlots(int slots);
 }

@@ -61,6 +61,7 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
@@ -330,6 +331,7 @@ public class ItemRegistry {
 	public static final Item GLUE = new ItemGlue();
 	
 	public static final Item AMULET = new ItemAmulet();
+	public static final Item AMULET_SLOT = new ItemAmuletSlot();
 	public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
 	
 	public static void preInit() {

@@ -53,6 +53,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 
 	private ItemStack[][] inventories;
+	private int amuletSlots = 1;
 
 	public EquipmentEntityCapability() {
 		this.inventories = new ItemStack[EnumEquipmentInventory.values().length][];
@@ -73,6 +74,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
+		nbt.setInteger("amuletSlots", this.amuletSlots);
 		NBTTagList inventoryList = new NBTTagList();
 		for(int i = 0; i < this.inventories.length; i++) {
 			NBTTagCompound inventoryNbt = new NBTTagCompound();
@@ -100,6 +102,9 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	public void readFromNBT(NBTTagCompound nbt) {
 		for(EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
 			this.inventories[inventory.id] = new ItemStack[inventory.maxSize];
+		}
+		if(nbt.hasKey("amuletSlots")) {
+			this.amuletSlots = nbt.getInteger("amuletSlots");
 		}
 		if(nbt.hasKey("inventories")) {
 			NBTTagList inventoryList = nbt.getTagList("inventories", Constants.NBT.TAG_COMPOUND);
@@ -142,5 +147,15 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	public void markDirty() {
 		super.markDirty();
 		MinecraftForge.EVENT_BUS.post(new EquipmentChangedEvent(this.getEntity(), this));
+	}
+
+	@Override
+	public int getAmuletSlots() {
+		return this.amuletSlots;
+	}
+
+	@Override
+	public void setAmuletSlots(int slots) {
+		this.amuletSlots = slots;
 	}
 }

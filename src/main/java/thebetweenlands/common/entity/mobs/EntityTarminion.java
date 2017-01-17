@@ -59,7 +59,14 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 		this.targetTasks.addTask(0, new EntityAIOwnerHurtByTarget(this));
 		this.targetTasks.addTask(1, new EntityAIOwnerHurtTarget(this));
-		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false));
+		this.targetTasks.addTask(2, new EntityAIHurtByTarget(this, false) {
+			@Override
+			protected void setEntityAttackTarget(EntityCreature ally, EntityLivingBase target) {
+				if(target instanceof EntityTarminion == false) {
+					super.setEntityAttackTarget(ally, target);
+				}
+			}
+		});
 		this.targetTasks.addTask(3, new EntityAINearestAttackableTarget<EntityMob>(this, EntityMob.class, true));
 	}
 
