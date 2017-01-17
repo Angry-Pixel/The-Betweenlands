@@ -200,8 +200,17 @@ public final class CorrosionHelper {
 			corrosionInfo.append(TOOLTIP_PART);
 		}
 		lines.add(corrosionInfo.toString());
-		if(coating > 0) {
-			lines.add(I18n.format("tooltip.coated"));
+		
+		StringBuilder coatingInfo = new StringBuilder("tooltip.coated.");
+		coatingInfo.append(coating / 120);
+		coatingInfo.replace(0, coatingInfo.length(), I18n.format(coatingInfo.toString()));
+		if(coating > 0 || advancedItemTooltips) {
+			if (advancedItemTooltips) {
+				coatingInfo.append(" (");
+				coatingInfo.append(coating);
+				coatingInfo.append("/600)");
+			}
+			lines.add(coatingInfo.toString());
 		}
 	}
 

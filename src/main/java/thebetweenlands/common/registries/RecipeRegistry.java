@@ -33,6 +33,8 @@ import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
+import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 
@@ -116,7 +118,7 @@ public class RecipeRegistry {
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_POUCH), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new RecipeLurkerSkinPouchUpgrades());
-		
+
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.SWAMP_TALISMAN, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), EnumItemMisc.SLIMY_BONE.create(1), new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1));
 
@@ -351,13 +353,13 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
 
 		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipeSummonMummy());
+		GameRegistry.addRecipe(new RecipeSummonMummy());*/
 
-		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, Category.SHAPED, "before:minecraft:shapeless");
+		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, SHAPELESS, "before:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesCoating());
 
 		RecipeSorter.register("thebetweenlands:recipesLifeCrystal", RecipesLifeCrystal.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipesLifeCrystal());*/
+		GameRegistry.addRecipe(new RecipesLifeCrystal());
 	}
 
 	private static void registerSmelting() {

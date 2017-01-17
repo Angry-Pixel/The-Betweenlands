@@ -35,7 +35,7 @@ public class OreGens {
 			new WorldGenMinable(BlockRegistry.VALONITE_ORE.getDefaultState(), 2, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
 
 	public static final WorldGenerator SCABYST = 
-			new WorldGenMinable(BlockRegistry.SCABYST_ORE.getDefaultState(), 2, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
+			new WorldGenMinable(BlockRegistry.SCABYST_ORE.getDefaultState(), 5, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
 
 	public static final WorldGenerator LIFE_GEM = 
 			new WorldGenerator() {
