@@ -40,6 +40,8 @@ import thebetweenlands.common.item.armor.ItemSyrmoriteArmor;
 import thebetweenlands.common.item.armor.ItemValoniteArmor;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.common.item.equipment.ItemRingOfFlight;
+import thebetweenlands.common.item.equipment.ItemRingOfPower;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -337,6 +339,8 @@ public class ItemRegistry {
 	public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
 	public static final Item CAVING_ROPE = new ItemCavingRope();
 	public static final Item ROPE_ITEM = new ItemRope();
+	public static final Item RING_OF_POWER = new ItemRingOfPower();
+	public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();
 	
 	public static void preInit() {
 		try {

@@ -12,6 +12,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -90,6 +91,15 @@ public class ItemAmulet extends Item implements IEquippable {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+		list.add(createStack(CircleGemType.NONE));
+		list.add(createStack(CircleGemType.AQUA));
+		list.add(createStack(CircleGemType.CRIMSON));
+		list.add(createStack(CircleGemType.GREEN));
+	}
+
+	@Override
 	public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
 		return EnumEquipmentInventory.AMULET;
 	}
@@ -104,7 +114,7 @@ public class ItemAmulet extends Item implements IEquippable {
 		if(CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

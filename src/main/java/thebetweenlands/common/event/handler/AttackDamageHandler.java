@@ -1,17 +1,27 @@
 package thebetweenlands.common.event.handler;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
+import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
+import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class AttackDamageHandler {
 	public static final float DAMAGE_REDUCTION = 0.3F;
@@ -41,6 +51,41 @@ public class AttackDamageHandler {
 
 		damage = CircleGemHelper.handleAttack(source, attackedEntity, damage);
 
+		if(source.getEntity() instanceof EntityLivingBase) {
+			EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
+
+			if(attacker.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+				IEquipmentCapability cap = attacker.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+				IInventory inv = cap.getInventory(EnumEquipmentInventory.RING);
+				int rings = 0;
+
+				for(int i = 0; i < inv.getSizeInventory(); i++) {
+					ItemStack stack = inv.getStackInSlot(i);
+					if(stack != null && stack.getItem() == ItemRegistry.RING_OF_POWER) {
+						rings++;
+					}
+				}
+
+				if(rings > 0) {
+					spawnPowerRingParticles(attackedEntity);
+				}
+
+				damage *= 1.0F + 0.5F * rings;
+			}
+		}
+
 		event.setAmount(damage);
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static void spawnPowerRingParticles(Entity entityHit) {
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX + entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(0.08D, 0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ + entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, 0.05D, 0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX - entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(-0.08D, 0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ - entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, 0.05D, -0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX + entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(0.08D, -0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ + entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, -0.05D, 0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX - entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(-0.08D, -0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ - entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, -0.05D, -0.08D));
 	}
 }

@@ -18,7 +18,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -37,9 +36,16 @@ public class EntityRopeNode extends Entity {
 
 	private boolean canExtend = true;
 	private boolean pickUp = false;
-	private String prevNodeUUID = "";
-	private String nextNodeUUID = "";
 	private int despawnTimer = 0;
+
+	private UUID nextNodeUUID;
+	private UUID prevNodeUUID;
+
+	private int cachedPrevNodeDW;
+	private int cachedNextNodeDW;
+
+	private Entity cachedNextNodeEntity;
+	private Entity cachedPrevNodeEntity;
 
 	public EntityRopeNode(World world) {
 		super(world);
@@ -49,13 +55,15 @@ public class EntityRopeNode extends Entity {
 	@Override
 	protected void entityInit() {
 		this.getDataManager().register(DW_PREV_NODE, -1);
+		this.cachedPrevNodeDW = -1;
 		this.getDataManager().register(DW_NEXT_NODE, -1);
+		this.cachedNextNodeDW = -1;
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.setNextNodeUUID(nbt.hasKey("nextNodeUUID") ? nbt.getString("nextNodeUUID") : null);
-		this.setPreviousNodeUUID(nbt.hasKey("previousNodeUUID") ? nbt.getString("previousNodeUUID") : null);
+		this.setNextNodeUUID(nbt.hasKey("nextNodeUUID") ? UUID.fromString(nbt.getString("nextNodeUUID")) : null);
+		this.setPreviousNodeUUID(nbt.hasKey("previousNodeUUID") ? UUID.fromString(nbt.getString("previousNodeUUID")) : null);
 		this.pickUp = nbt.getBoolean("pickUp");
 		this.canExtend = nbt.getBoolean("canExtend");
 		this.despawnTimer = nbt.getInteger("despawnTimer");
@@ -63,8 +71,12 @@ public class EntityRopeNode extends Entity {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setString("nextNodeUUID", this.getNextNodeUUID());
-		nbt.setString("previousNodeUUID", this.getPreviousNodeUUID());
+		if(this.getNextNodeUUID() != null) {
+			nbt.setString("nextNodeUUID", this.getNextNodeUUID().toString());
+		}
+		if(this.getPreviousNodeUUID() != null) {
+			nbt.setString("previousNodeUUID", this.getPreviousNodeUUID().toString());
+		}
 		nbt.setBoolean("pickUp", this.pickUp);
 		nbt.setBoolean("canExtend", this.canExtend);
 		nbt.setInteger("despawnTimer", this.despawnTimer);
@@ -76,32 +88,53 @@ public class EntityRopeNode extends Entity {
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 
-		this.handleWaterMovement();
+		boolean attached = this.isAttached();
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
-
-		if(!this.worldObj.isRemote) {
-			if(this.getNextNodeByUUID() != null) {
-				this.getDataManager().set(DW_NEXT_NODE, this.getNextNodeByUUID().getEntityId());
-			} else {
-				this.getDataManager().set(DW_NEXT_NODE, -1);
-			}
-			if(this.getPreviousNodeByUUID() != null) {
-				this.getDataManager().set(DW_PREV_NODE, this.getPreviousNodeByUUID().getEntityId());
-			} else {
-				this.getDataManager().set(DW_PREV_NODE, -1);
-			}
+		if(!attached) {
+			this.handleWaterMovement();
+			this.moveEntity(this.motionX, this.motionY, this.motionZ);
 		}
 
-		Entity nextNode = this.getNextNode();
-		Entity prevNode = this.getPreviousNode();
+		boolean prevAttached = attached;
+		attached = this.isAttached();
+
+		if(attached && !prevAttached) {
+			this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+		}
+
+		Entity nextNode;
+		Entity prevNode;
 
 		if(!this.worldObj.isRemote) {
-			if(nextNode != null && nextNode instanceof EntityPlayer) {
+			nextNode = this.getNextNodeByUUID();
+			prevNode = this.getPreviousNodeByUUID();
+
+			if(nextNode != null && nextNode.getEntityId() != this.cachedNextNodeDW) {
+				this.getDataManager().set(DW_NEXT_NODE, nextNode.getEntityId());
+				this.cachedNextNodeDW = nextNode.getEntityId();
+			} else if(nextNode == null && this.cachedNextNodeDW != -1) {
+				this.getDataManager().set(DW_NEXT_NODE, -1);
+				this.cachedNextNodeDW = -1;
+			}
+
+			if(prevNode != null && prevNode.getEntityId() != this.cachedPrevNodeDW) {
+				this.getDataManager().set(DW_PREV_NODE, prevNode.getEntityId());
+				this.cachedPrevNodeDW = prevNode.getEntityId();
+			} else if(prevNode == null && this.cachedPrevNodeDW != -1) {
+				this.getDataManager().set(DW_PREV_NODE, -1);
+				this.cachedPrevNodeDW = -1;
+			}
+		} else {
+			nextNode = this.getNextNode();
+			prevNode = this.getPreviousNode();
+		}
+
+		if(!this.worldObj.isRemote) {
+			if(nextNode instanceof EntityPlayer) {
 				if(nextNode.getDistanceToEntity(this) > 1.5D) {
 					this.pickUp = true;
 				}
-				if(this.pickUp && nextNode.getDistanceToEntity(this) < 1.4D) {
+				if(this.pickUp && nextNode.getEntityBoundingBox().expand(0.3D, 0.3D, 0.3D).intersectsWith(this.getEntityBoundingBox())) {
 					this.removeNode(nextNode);
 					EntityPlayer player = (EntityPlayer) nextNode;
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
@@ -129,7 +162,10 @@ public class EntityRopeNode extends Entity {
 							if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
 								newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector()).normalize().scale(0.1D));
 							}
-							this.extendRope(nextNode, newPos.xCoord, newPos.yCoord, newPos.zCoord);
+							EntityRopeNode rope = this.extendRope(nextNode, newPos.xCoord, newPos.yCoord, newPos.zCoord);
+							if(rope.isAttached()) {
+								this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+							}
 							break;
 						}
 					}
@@ -147,13 +183,20 @@ public class EntityRopeNode extends Entity {
 		this.motionX *= 0.88D;
 		this.motionZ *= 0.88D;
 
-		if(!this.isAttached() && !this.onGround && !this.inWater) {
+		if(!attached && !this.onGround && !this.inWater) {
 			boolean isFloating = false;
+
 			if(nextNode != null && this.getDistanceToEntity(nextNode) >= ROPE_LENGTH) {
 				Vec3d connection = this.getConnectionToNext();
-				double mx = MathHelper.clamp_double(connection.xCoord * 0.02D, -0.5D, 0.5D);
-				double my = MathHelper.clamp_double(connection.yCoord * 0.02D, -0.5D, 0.5D);
-				double mz = MathHelper.clamp_double(connection.zCoord * 0.02D, -0.5D, 0.5D);
+				double mx = connection.xCoord * 0.02D;
+				double my = connection.yCoord * 0.02D;
+				double mz = connection.zCoord * 0.02D;
+				double len = Math.sqrt(mx*mx + my*my + mz*mz);
+				if(len > 0.5D) {
+					mx /= len * 0.5D;
+					my /= len * 0.5D;
+					mz /= len * 0.5D;
+				}
 				if(prevNode != null && prevNode.getDistance(this.posX + mx, this.posY + my, this.posZ + mz) < ROPE_LENGTH + 1) {
 					this.motionX += mx;
 					this.motionZ += mz;
@@ -161,8 +204,9 @@ public class EntityRopeNode extends Entity {
 					isFloating = true;
 				}
 			}
+
 			if(!isFloating) {
-				this.motionY -= 0.1D;
+				this.motionY -= 0.28D;
 			}
 
 			if(nextNode != null) {
@@ -183,6 +227,7 @@ public class EntityRopeNode extends Entity {
 					this.motionZ = -diff.zCoord;
 				}
 			}
+
 			if(prevNode != null) {
 				double mx = this.motionX;
 				double my = this.motionY;
@@ -201,6 +246,11 @@ public class EntityRopeNode extends Entity {
 					this.motionZ = -diff.zCoord;
 				}
 			}
+
+			double speed = Math.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+			this.motionX *= Math.min(speed, 0.05D) / 0.05D;
+			this.motionY *= Math.min(speed, 0.05D) / 0.05D;
+			this.motionZ *= Math.min(speed, 0.05D) / 0.05D;
 		} else {
 			this.motionX = 0.0D;
 			this.motionY = 0.0D;
@@ -230,56 +280,60 @@ public class EntityRopeNode extends Entity {
 
 	@Override
 	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-		Entity nextNode = this.getNextNode();
-		Entity prevNode = this.getPreviousNode();
-		if(prevNode != null) {
-			if(nextNode == null) {
-				EntityRopeNode connectedRopeNode = null;
-				for(Entity e : (List<Entity>) player.worldObj.loadedEntityList) {
-					if(e instanceof EntityRopeNode) {
-						EntityRopeNode ropeNode = (EntityRopeNode) e;
-						if(ropeNode.getNextNode() == player) {
-							connectedRopeNode = ropeNode;
-							break;
+		if(!this.worldObj.isRemote) {
+			Entity prevNode = this.getPreviousNodeByUUID();
+			Entity nextNode = this.getNextNodeByUUID();
+
+			if(prevNode != null) {
+				if(nextNode == null) {
+					EntityRopeNode connectedRopeNode = null;
+					for(Entity e : (List<Entity>) player.worldObj.loadedEntityList) {
+						if(e instanceof EntityRopeNode) {
+							EntityRopeNode ropeNode = (EntityRopeNode) e;
+							if(ropeNode.getNextNodeByUUID() == player) {
+								connectedRopeNode = ropeNode;
+								break;
+							}
 						}
 					}
-				}
-				if(connectedRopeNode != null) {
-					if(player.worldObj.isRemote) {
+					if(connectedRopeNode != null) {
 						player.addChatMessage(new TextComponentTranslation("chat.rope.already_connected"));
+						return false;
 					}
-					return false;
-				}
-				if(!player.worldObj.isRemote) {
+
 					this.setNextNode(player);
+
+					return true;
+				} else if(nextNode instanceof EntityRopeNode == false) {
+					this.setNextNode(null);
+					return true;
 				}
-				return true;
-			} else if(nextNode instanceof EntityRopeNode == false) {
-				if(!player.worldObj.isRemote) this.setNextNode(null);
-				return true;
 			}
+
+			if(nextNode instanceof EntityRopeNode) {
+				EntityRopeNode endNode = (EntityRopeNode) nextNode;
+				while(endNode.getNextNodeByUUID() instanceof EntityRopeNode && endNode.getNextNode() != this) {
+					endNode = (EntityRopeNode) endNode.getNextNodeByUUID();
+				}
+				if(endNode.getNextNodeByUUID() == null) {
+					((EntityRopeNode) endNode.getPreviousNodeByUUID()).setNextNode(null);
+					endNode.setDead();
+
+					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
+						this.worldObj.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+					} else {
+						EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
+						itemEntity.setPickupDelay(0);
+						this.worldObj.spawnEntityInWorld(itemEntity);
+					}
+
+					return true;
+				}
+			}
+		} else {
+			return true;
 		}
 
-		if(nextNode instanceof EntityRopeNode) {
-			EntityRopeNode endNode = (EntityRopeNode) nextNode;
-			while(endNode.getNextNode() instanceof EntityRopeNode && endNode.getNextNode() != this) {
-				endNode = (EntityRopeNode) endNode.getNextNode();
-			}
-			if(endNode.getNextNode() == null) {
-				((EntityRopeNode) endNode.getPreviousNode()).setNextNode(null);
-				endNode.setDead();
-
-				if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
-					this.worldObj.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-				} else {
-					EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
-					itemEntity.setPickupDelay(0);
-					this.worldObj.spawnEntityInWorld(itemEntity);
-				}
-
-				return true;
-			}
-		}
 		return false;
 	}
 
@@ -295,7 +349,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public void removeNode(Entity nextConnectionNode) {
-		Entity prevNode = this.getPreviousNode();
+		Entity prevNode = this.getPreviousNodeByUUID();
 		if(prevNode != null && prevNode instanceof EntityRopeNode) {
 			((EntityRopeNode)prevNode).setNextNode(nextConnectionNode);
 			((EntityRopeNode)prevNode).canExtend = false;
@@ -322,61 +376,90 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public Vec3d getConnectionToNext() {
-		Entity nextNode = this.getNextNode();
+		Entity nextNode;
+		if(this.worldObj.isRemote) {
+			nextNode = this.getNextNode();
+		} else {
+			nextNode = this.getNextNodeByUUID();
+		}
 		if(nextNode != null) {
 			return new Vec3d(nextNode.posX - this.posX, nextNode.posY - this.posY, nextNode.posZ - this.posZ);
 		}
 		return null;
 	}
 
-	public void setNextNodeUUID(String uuid) {
+	public void setNextNodeUUID(UUID uuid) {
 		this.nextNodeUUID = uuid;
+		if(this.cachedNextNodeEntity != null && !this.cachedNextNodeEntity.getUniqueID().equals(uuid)) {
+			this.cachedNextNodeEntity = null;
+		}
 	}
 
-	public String getNextNodeUUID() {
+	public UUID getNextNodeUUID() {
 		return this.nextNodeUUID;
 	}
 
 	public void setNextNode(Entity entity) {
-		this.setNextNodeUUID(entity == null ? "" : entity.getUniqueID().toString());
+		this.cachedNextNodeEntity = entity;
+		this.setNextNodeUUID(entity == null ? null : entity.getUniqueID());
 	}
 
 	private Entity getNextNodeByUUID() {
-		try {
-			UUID uuid = UUID.fromString(this.getNextNodeUUID());
-			return uuid == null ? null : this.getEntityByUUID(uuid);
-		} catch (IllegalArgumentException illegalargumentexception) {
-			return null;
+		if(this.cachedNextNodeEntity != null && this.cachedNextNodeEntity.getUniqueID().equals(this.nextNodeUUID)) {
+			return this.cachedNextNodeEntity;
+		} else {
+			UUID uuid = this.nextNodeUUID;
+			Entity entity = uuid == null ? null : this.getEntityByUUID(uuid);
+			this.cachedNextNodeEntity = entity;
+			return entity;
 		}
 	}
 
-	public void setPreviousNodeUUID(String uuid) {
-		this.prevNodeUUID = uuid;;
+	public void setPreviousNodeUUID(UUID uuid) {
+		this.prevNodeUUID = uuid;
+		if(this.cachedPrevNodeEntity != null && !this.cachedPrevNodeEntity.getUniqueID().equals(uuid)) {
+			this.cachedPrevNodeEntity = null;
+		}
 	}
 
-	public String getPreviousNodeUUID() {
+	public UUID getPreviousNodeUUID() {
 		return this.prevNodeUUID;
 	}
 
 	public void setPreviousNode(Entity entity) {
-		this.setPreviousNodeUUID(entity == null ? "" : entity.getUniqueID().toString());
+		this.cachedPrevNodeEntity = entity;
+		this.setPreviousNodeUUID(entity == null ? null : entity.getUniqueID());
 	}
 
 	private Entity getPreviousNodeByUUID() {
-		try {
-			UUID uuid = UUID.fromString(this.getPreviousNodeUUID());
-			return uuid == null ? null : this.getEntityByUUID(uuid);
-		} catch (IllegalArgumentException illegalargumentexception) {
-			return null;
+		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.getUniqueID().equals(this.cachedPrevNodeEntity)) {
+			return this.cachedPrevNodeEntity;
+		} else {
+			UUID uuid = this.prevNodeUUID;
+			Entity entity = uuid == null ? null : this.getEntityByUUID(uuid);
+			this.cachedPrevNodeEntity = entity;
+			return entity;
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	public Entity getNextNode() {
-		return this.worldObj.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
+		if(this.cachedNextNodeEntity == null || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
+			Entity entity = this.worldObj.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
+			this.cachedNextNodeEntity = entity;
+			return entity;
+		}
+		return this.cachedNextNodeEntity;
 	}
 
+	@SideOnly(Side.CLIENT)
 	public Entity getPreviousNode() {
-		return this.worldObj.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
+		if(this.cachedPrevNodeEntity == null || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
+			Entity entity = this.worldObj.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
+			this.cachedPrevNodeEntity = entity;
+			return entity;
+		}
+		return this.cachedPrevNodeEntity;
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
