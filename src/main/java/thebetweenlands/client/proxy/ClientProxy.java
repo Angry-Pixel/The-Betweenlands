@@ -76,6 +76,7 @@ import thebetweenlands.client.render.entity.RenderMireSnailEgg;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderPyradFlame;
+import thebetweenlands.client.render.entity.RenderRopeNode;
 import thebetweenlands.client.render.entity.RenderShockwaveBlock;
 import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
 import thebetweenlands.client.render.entity.RenderSiltCrab;
@@ -117,6 +118,7 @@ import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
@@ -437,7 +439,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityPeatMummy.class, RenderPeatMummy::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityTarminion.class, RenderTarminion::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
-
+		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, RenderRopeNode::new);
+		
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
 
 		//Register particle stitchers

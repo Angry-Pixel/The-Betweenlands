@@ -53,6 +53,7 @@ import thebetweenlands.common.block.misc.BlockMudFlowerPot;
 import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
 import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
 import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
+import thebetweenlands.common.block.misc.BlockRope;
 import thebetweenlands.common.block.misc.BlockSludge;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.misc.BlockSyrmoriteRubberTap;
@@ -116,6 +117,7 @@ import thebetweenlands.common.block.terrain.BlockGenericCollapsing;
 import thebetweenlands.common.block.terrain.BlockGenericMirage;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
+import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
@@ -465,7 +467,8 @@ public class BlockRegistry {
 	public static final Block CAVE_MOSS = new BlockCaveMoss();
 	public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
 	public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
-
+	public static final Block HANGER = new BlockHanger();
+	
 	public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
 	public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
 	public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
@@ -523,7 +526,8 @@ public class BlockRegistry {
 	public static final Block ANIMATOR = new BlockAnimator();
 	public static final Block ALEMBIC = new BlockAlembic();
 	public static final Block MOSS_BED = new BlockMossBed();
-
+	public static final Block ROPE = new BlockRope();
+	
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
 
 	public static void preInit() {

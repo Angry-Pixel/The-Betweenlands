@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.common.base.CaseFormat;
 
@@ -49,13 +47,13 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		}
 	}
 
-    @Override
-    public Map<Integer, ResourceLocation> getModels() {
-    	Map<Integer, ResourceLocation> models = new HashMap();
-    	for(EnumItemPlantDrop type : EnumItemPlantDrop.values())
-    		models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
-        return models;
-    }
+	@Override
+	public Map<Integer, ResourceLocation> getModels() {
+		Map<Integer, ResourceLocation> models = new HashMap<>();
+		for(EnumItemPlantDrop type : EnumItemPlantDrop.values())
+			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
+		return models;
+	}
 
 	public enum EnumItemPlantDrop implements IGenericItem {
 		GENERIC_LEAF(0),
@@ -90,7 +88,7 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 		CAVE_MOSS_ITEM(29),
 		MOSS_ITEM(30),
 		MILKWEED_ITEM(31),
-		HANGER(32),
+		HANGER_ITEM(32),
 		PITCHER_PLANT_TRAP(33),
 		WATER_WEEDS_ITEM(34),
 		VENUS_FLY_TRAP_ITEM(35),
@@ -102,7 +100,7 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 
 		private final int id;
 		private final String unlocalizedName;
-        private final String modelName;
+		private final String modelName;
 
 		EnumItemPlantDrop(int id) {
 			this.id = id;
@@ -115,10 +113,10 @@ public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, It
 			return this.unlocalizedName;
 		}
 
-        @Override
-        public String getModelName() {
-            return this.modelName;
-        }
+		@Override
+		public String getModelName() {
+			return this.modelName;
+		}
 
 		@Override
 		public int getID() {

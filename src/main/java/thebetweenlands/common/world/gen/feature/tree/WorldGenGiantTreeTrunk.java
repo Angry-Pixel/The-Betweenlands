@@ -31,7 +31,7 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 	public static IBlockState WOOD = BlockRegistry.WEEDWOOD.getDefaultState();
 	public static IBlockState LEAVES = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 	public static IBlockState IVY = BlockRegistry.POISON_IVY.getDefaultState();
-	//public static IBlockState HANGER = BlockRegistry.HANGER.getDefaultState();
+	public static IBlockState HANGER = BlockRegistry.HANGER.getDefaultState();
 
 	static {
 		initTrunkLayers();

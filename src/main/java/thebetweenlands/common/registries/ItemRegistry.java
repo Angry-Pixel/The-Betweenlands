@@ -63,6 +63,7 @@ import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemBLRecord;
+import thebetweenlands.common.item.misc.ItemCavingRope;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGlue;
@@ -72,6 +73,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMossBed;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
+import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSwampKelp;
 import thebetweenlands.common.item.misc.ItemSwampReed;
@@ -333,6 +335,8 @@ public class ItemRegistry {
 	public static final Item AMULET = new ItemAmulet();
 	public static final Item AMULET_SLOT = new ItemAmuletSlot();
 	public static final Item LURKER_SKIN_POUCH = new ItemLurkerSkinPouch();
+	public static final Item CAVING_ROPE = new ItemCavingRope();
+	public static final Item ROPE_ITEM = new ItemRope();
 	
 	public static void preInit() {
 		try {

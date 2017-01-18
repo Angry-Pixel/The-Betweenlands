@@ -1,7 +1,11 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -18,6 +22,16 @@ import thebetweenlands.common.world.storage.world.shared.location.EnumLocationTy
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 
 public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements ProgressiveGenerator {
+	private final ChunkMaker marker;
+
+	public WorldGenGiantTree(@Nullable ChunkMaker marker) {
+		this.marker = marker;
+	}
+
+	public WorldGenGiantTree() {
+		this.marker = null;
+	}
+
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		boolean gen = super.generate(world, rand, pos);
@@ -186,7 +200,11 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements Progres
 			int length = rand.nextInt(10) + 10;
 			for (int y = startY; y > startY - length; y--) {
 				if (world.getBlockState(new BlockPos(x, y, z)).getMaterial().isReplaceable()) {
-					//this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER);
+					if(this.marker != null) {
+						this.marker.addHanger(new BlockPos(x, y, z));
+					} else {
+						this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER);
+					}
 				} else {
 					break;
 				}
@@ -212,9 +230,18 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements Progres
 	@Override
 	public void post(World world, Random rand, BlockPos pos) {
 		this.generateWorldLocation(world, rand, pos);
+
+		if(this.marker != null) {
+			for(Long hangerPos : this.marker.hangers) {
+				world.setBlockState(BlockPos.fromLong(hangerPos), HANGER);
+			}
+			this.marker.hangers.clear();
+		}
 	}
 
 	public static class ChunkMaker extends ProgressiveGenChunkMarker<WorldGenGiantTree> {
+		private final List<Long> hangers = new ArrayList<>();
+
 		public ChunkMaker(WorldDataBase<?> worldStorage, String id, SharedRegion region) {
 			super(worldStorage, id, region);
 		}
@@ -223,9 +250,13 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements Progres
 			super(worldStorage, id, region, pos, seed);
 		}
 
+		public void addHanger(BlockPos pos) {
+			this.hangers.add(pos.toLong());
+		}
+
 		@Override
 		protected WorldGenGiantTree getGenerator() {
-			return new WorldGenGiantTree();
+			return new WorldGenGiantTree(this);
 		}
 	}
 }
