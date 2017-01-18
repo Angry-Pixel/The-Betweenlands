@@ -259,6 +259,27 @@ public class EntityRopeNode extends Entity {
 				return true;
 			}
 		}
+
+		if(nextNode instanceof EntityRopeNode) {
+			EntityRopeNode endNode = (EntityRopeNode) nextNode;
+			while(endNode.getNextNode() instanceof EntityRopeNode && endNode.getNextNode() != this) {
+				endNode = (EntityRopeNode) endNode.getNextNode();
+			}
+			if(endNode.getNextNode() == null) {
+				((EntityRopeNode) endNode.getPreviousNode()).setNextNode(null);
+				endNode.setDead();
+
+				if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
+					this.worldObj.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+				} else {
+					EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
+					itemEntity.setPickupDelay(0);
+					this.worldObj.spawnEntityInWorld(itemEntity);
+				}
+
+				return true;
+			}
+		}
 		return false;
 	}
 
