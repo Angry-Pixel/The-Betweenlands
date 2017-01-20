@@ -39,7 +39,7 @@ import thebetweenlands.client.event.handler.CameraPositionHandler;
 import thebetweenlands.client.event.handler.DebugHandlerSharedLocation;
 import thebetweenlands.client.event.handler.DecayRenderHandler;
 import thebetweenlands.client.event.handler.FogHandler;
-import thebetweenlands.client.event.handler.KeyInputHandler;
+import thebetweenlands.client.event.handler.InputHandler;
 import thebetweenlands.client.event.handler.MusicHandler;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
@@ -73,6 +73,7 @@ import thebetweenlands.client.render.entity.RenderLeech;
 import thebetweenlands.client.render.entity.RenderLurker;
 import thebetweenlands.client.render.entity.RenderMireSnail;
 import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderMummyArm;
 import thebetweenlands.client.render.entity.RenderPeatMummy;
 import thebetweenlands.client.render.entity.RenderPyrad;
 import thebetweenlands.client.render.entity.RenderPyradFlame;
@@ -137,6 +138,7 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
@@ -440,6 +442,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTarminion.class, RenderTarminion::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, RenderRopeNode::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, RenderMummyArm::new);
 		
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
 
@@ -561,7 +564,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(ThemHandler.class);
 		MinecraftForge.EVENT_BUS.register(RadialMenuHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemAmulet.class);
-		MinecraftForge.EVENT_BUS.register(KeyInputHandler.class);
+		MinecraftForge.EVENT_BUS.register(InputHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemLurkerSkinPouch.class);
 
 		if (ConfigHandler.debug) {

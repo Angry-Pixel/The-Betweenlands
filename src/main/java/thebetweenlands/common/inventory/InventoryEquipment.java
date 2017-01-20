@@ -15,11 +15,17 @@ import thebetweenlands.common.item.equipment.IEquippable;
 
 public class InventoryEquipment implements IInventory, ITickable {
 	protected final ItemStack[] inventory;
+	protected final ItemStack[] prevTickStacks;
 	protected final EquipmentEntityCapability capability;
 
 	public InventoryEquipment(EquipmentEntityCapability capability, ItemStack[] inventory) {
 		this.capability = capability;
 		this.inventory = inventory;
+		this.prevTickStacks = new ItemStack[inventory.length];
+		for (int i = 0; i < this.inventory.length; ++i) {
+			ItemStack stack = this.inventory[i];
+			this.prevTickStacks[i] = stack == null ? null : stack.copy();
+		}
 	}
 
 	@Override
@@ -121,6 +127,7 @@ public class InventoryEquipment implements IInventory, ITickable {
 		for (int i = 0; i < this.inventory.length; ++i) {
 			this.inventory[i] = null;
 		}
+		this.markDirty();
 	}
 
 	@Override
@@ -141,6 +148,20 @@ public class InventoryEquipment implements IInventory, ITickable {
 
 			if(stack != null && stack.getItem() instanceof IEquippable) {
 				((IEquippable) stack.getItem()).onEquipmentTick(stack, this.capability.getEntity(), this);
+			}
+		}
+
+		this.detectChangesAndMarkDirty();
+	}
+
+	protected void detectChangesAndMarkDirty() {
+		for (int i = 0; i < this.inventory.length; ++i) {
+			ItemStack stack = this.inventory[i];
+			ItemStack prevStack = this.prevTickStacks[i];
+
+			if (!ItemStack.areItemStacksEqual(prevStack, stack)) {
+				prevStack = this.prevTickStacks[i] = stack == null ? null : stack.copy();
+				this.markDirty();
 			}
 		}
 	}

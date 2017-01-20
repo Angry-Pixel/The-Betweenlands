@@ -2,6 +2,7 @@ package thebetweenlands.common.network.serverbound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -88,7 +89,7 @@ public class MessageEquipItem extends MessageEntity {
 		super.process(ctx);
 
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer source = ctx.getServerHandler().playerEntity;
+			EntityPlayer sender = ctx.getServerHandler().playerEntity;
 			Entity target = this.getEntity(0);
 
 			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
@@ -98,18 +99,18 @@ public class MessageEquipItem extends MessageEntity {
 				default:
 				case 0:
 					//Equip
-					if(this.sourceSlot < source.inventory.getSizeInventory()) {
-						ItemStack stack = source.inventory.getStackInSlot(this.sourceSlot);
+					if(this.sourceSlot < sender.inventory.getSizeInventory()) {
+						ItemStack stack = sender.inventory.getStackInSlot(this.sourceSlot);
 
 						if(stack != null && stack.getItem() instanceof IEquippable) {
 							IEquippable equippable = (IEquippable) stack.getItem();
 
-							if(equippable.canEquip(stack, source, target, cap.getInventory(equippable.getEquipmentCategory(stack)))) {
-								ItemStack result = EquipmentHelper.equipItem(source, target, stack, false);
+							if(equippable.canEquip(stack, sender, target, cap.getInventory(equippable.getEquipmentCategory(stack)))) {
+								ItemStack result = EquipmentHelper.equipItem(sender, target, stack, false);
 
 								if(result == null || result.stackSize != stack.stackSize) {
-									if(!source.capabilities.isCreativeMode) {
-										source.inventory.setInventorySlotContents(this.sourceSlot, result);
+									if(!sender.capabilities.isCreativeMode) {
+										sender.inventory.setInventorySlotContents(this.sourceSlot, result);
 									}
 								}
 							}
@@ -118,7 +119,27 @@ public class MessageEquipItem extends MessageEntity {
 					break;
 				case 1:
 					//Unequip
-					EquipmentHelper.tryPlayerUnequip(source, this.getEntity(0));
+					IInventory inv = cap.getInventory(this.inventory);
+					if(this.sourceSlot < inv.getSizeInventory()) {
+						ItemStack stack = inv.getStackInSlot(this.sourceSlot);
+
+						if(stack != null) {
+							if(stack.getItem() instanceof IEquippable && 
+									!((IEquippable) stack.getItem()).canUnequip(stack, sender, target, inv)) {
+								break;
+							}
+
+							if(stack.getItem() instanceof IEquippable) {
+								((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
+							}
+
+							inv.setInventorySlotContents(this.sourceSlot, null);
+
+							if(!sender.inventory.addItemStackToInventory(stack)) {
+								target.entityDropItem(stack, target.getEyeHeight());
+							}
+						}
+					}
 					break;
 				}
 			}

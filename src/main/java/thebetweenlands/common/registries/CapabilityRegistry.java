@@ -16,6 +16,8 @@ import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
 import thebetweenlands.common.capability.recruitment.IPuppetCapability;
 import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
+import thebetweenlands.common.capability.summoning.EntitySummoningCapability;
+import thebetweenlands.common.capability.summoning.ISummoningCapability;
 
 public class CapabilityRegistry {
 	private CapabilityRegistry() { }
@@ -38,6 +40,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(IPuppeteerCapability.class)
 	public static final Capability<IPuppeteerCapability> CAPABILITY_PUPPETEER = null;
 
+	@CapabilityInject(ISummoningCapability.class)
+	public static final Capability<ISummoningCapability> CAPABILITY_SUMMON = null;
+	
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -45,7 +50,8 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new FlightEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new EntityPuppetCapability());
 		EntityCapabilityHandler.registerEntityCapability(new EntityPuppeteerCapability());
-
+		EntityCapabilityHandler.registerEntityCapability(new EntitySummoningCapability());
+		
 		EntityCapabilityHandler.registerCapabilities();
 		//ItemCapabilityHandler.registerCapabilities();
 	}

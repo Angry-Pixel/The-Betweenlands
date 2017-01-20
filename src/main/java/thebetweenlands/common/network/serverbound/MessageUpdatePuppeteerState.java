@@ -8,29 +8,29 @@ import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class MessageUpdateUseButtonState extends MessageBase {
-	private boolean pressed;
+public class MessageUpdatePuppeteerState extends MessageBase {
+	private boolean active;
 
-	public MessageUpdateUseButtonState() { }
+	public MessageUpdatePuppeteerState() { }
 
-	public MessageUpdateUseButtonState(boolean pressed) {
-		this.pressed = pressed;
+	public MessageUpdatePuppeteerState(boolean active) {
+		this.active = active;
 	}
 
 	@Override
 	public void serialize(PacketBuffer buf) {
-		buf.writeBoolean(this.pressed);
+		buf.writeBoolean(this.active);
 	}
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
-		this.pressed = buf.readBoolean();
+		this.active = buf.readBoolean();
 	}
 
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
-			if(!this.pressed) {
+			if(!this.active) {
 				EntityPlayer player = ctx.getServerHandler().playerEntity;
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
 					IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);

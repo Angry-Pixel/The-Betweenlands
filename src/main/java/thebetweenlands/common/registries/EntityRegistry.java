@@ -22,6 +22,7 @@ import thebetweenlands.common.entity.mobs.EntityLeech;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntityMireSnail;
 import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
@@ -77,6 +78,7 @@ public class EntityRegistry {
 		registerEntity(EntityTarminion.class, "tarminion", 0x000000, 0x2E2E2E, 64, 1, true);
 		registerEntity(EntityThrownTarminion.class, "thrown_tarminion", 64, 10, true);
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
+		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 	}
 
 	private static int id = 0;

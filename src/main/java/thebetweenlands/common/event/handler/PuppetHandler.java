@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -24,14 +23,10 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.recruitment.IPuppetCapability;
 import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
@@ -39,7 +34,6 @@ import thebetweenlands.common.entity.ai.puppet.EntityAIGoTo;
 import thebetweenlands.common.entity.ai.puppet.EntityAIPuppet;
 import thebetweenlands.common.entity.ai.puppet.EntityAIStay;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
-import thebetweenlands.common.network.serverbound.MessageUpdateUseButtonState;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class PuppetHandler {
@@ -286,25 +280,6 @@ public class PuppetHandler {
 					}
 				}
 			}
-		}
-	}
-
-	private static boolean wasPressed = false;
-
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
-	public static void onInput(InputEvent event) {
-		updateButtonState();
-	}
-
-	@SideOnly(Side.CLIENT)
-	private static void updateButtonState() {
-		if(!wasPressed && Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
-			wasPressed = true;
-			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateUseButtonState(true));
-		} else if(wasPressed && !Minecraft.getMinecraft().gameSettings.keyBindUseItem.isKeyDown()) {
-			wasPressed = false;
-			TheBetweenlands.networkWrapper.sendToServer(new MessageUpdateUseButtonState(false));
 		}
 	}
 }

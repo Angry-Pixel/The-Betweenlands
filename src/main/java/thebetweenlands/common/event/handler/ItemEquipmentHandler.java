@@ -47,7 +47,9 @@ public class ItemEquipmentHandler {
 	}
 
 	private static void tickEquipmentInventories(World world) {
-		for(Entity entity : world.loadedEntityList) {
+		for(int i = 0; i < world.loadedEntityList.size(); i++) {
+			Entity entity = world.loadedEntityList.get(i);
+			
 			if(entity instanceof EntityLivingBase && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 

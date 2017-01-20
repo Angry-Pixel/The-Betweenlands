@@ -88,9 +88,12 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 								GlStateManager.scale(scale, scale, scale);
 
-								mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, 0, 0, null);
 								mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+								mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, 0, 0, null);
 
+								GlStateManager.disableAlpha();
+								GlStateManager.disableRescaleNormal();
+								GlStateManager.disableLighting();
 								GlStateManager.color(1, 1, 1, 1);
 								GlStateManager.enableBlend();
 								GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);

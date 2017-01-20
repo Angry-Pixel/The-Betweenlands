@@ -25,7 +25,8 @@ import thebetweenlands.common.network.serverbound.MessageEquipItem;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessagePouchNaming;
-import thebetweenlands.common.network.serverbound.MessageUpdateUseButtonState;
+import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
+import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -49,7 +50,8 @@ public class MessageRegistry {
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
 		registerMessage(MessagePouchNaming.class, Side.SERVER);
 		registerMessage(MessageFlightState.class, Side.SERVER);
-		registerMessage(MessageUpdateUseButtonState.class, Side.SERVER);
+		registerMessage(MessageUpdatePuppeteerState.class, Side.SERVER);
+		registerMessage(MessageUpdateSummoningState.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

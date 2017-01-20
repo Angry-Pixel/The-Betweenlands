@@ -43,6 +43,7 @@ import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.equipment.ItemRingOfPower;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
+import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -344,6 +345,7 @@ public class ItemRegistry {
 	public static final Item RING_OF_POWER = new ItemRingOfPower();
 	public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();
 	public static final Item RING_OF_RECRUITMENT = new ItemRingOfRecruitment();
+	public static final Item RING_OF_SUMMONING = new ItemRingOfSummoning();
 	
 	public static void preInit() {
 		try {
