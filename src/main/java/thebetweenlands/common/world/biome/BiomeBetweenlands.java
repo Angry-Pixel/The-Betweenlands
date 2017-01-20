@@ -3,7 +3,10 @@ package thebetweenlands.common.world.biome;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -47,8 +50,24 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 */
 	protected void addSpawnEntries() {
 		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), "bloodSky").setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), "bloodSky").setHostile(true));
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), "bloodSky").setHostile(true).setSpawnCheckRadius(20.0D));
+		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), "bloodSky") {
+			@Override
+			protected EntityLiving createEntity(World world) {
+				EntityLiving entity = super.createEntity(world);
+				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.32D);
+				entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+				return entity;
+			}
+		}.setHostile(true));
+		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), "bloodSky") {
+			@Override
+			protected EntityLiving createEntity(World world) {
+				EntityLiving entity = super.createEntity(world);
+				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(EntityPeatMummy.BASE_SPEED + 0.075D);
+				entity.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(EntityPeatMummy.BASE_DAMAGE + 2.0D);
+				return entity;
+			}
+		}.setHostile(true).setSpawnCheckRadius(20.0D));
 
 		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
 	}
