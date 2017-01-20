@@ -149,7 +149,7 @@ public final class CorrosionHelper {
 	 * @return
 	 */
 	public static boolean areItemStackTagsEqual(ItemStack oldStack, ItemStack newStack) {
-		return NBTHelper.areItemStackTagsEqual(newStack, oldStack, ImmutableList.of("ForgeCaps.thebetweenlands:item_corrosion"));
+		return NBTHelper.areItemStackTagsEqual(newStack, oldStack, ImmutableList.of(ITEM_CORROSION_NBT_TAG, ITEM_COATING_NBT_TAG));
 	}
 
 	public static Multimap<String, AttributeModifier> getAttributeModifiers(Multimap<String, AttributeModifier> map, EntityEquipmentSlot slot, ItemStack stack, UUID uuid, float damageVsEntity) {
