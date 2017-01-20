@@ -1,5 +1,6 @@
 package thebetweenlands.common.world;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
@@ -37,7 +38,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
 
-	public float[] originalLightBrightnessTable = new float[16];
+	protected float[] originalLightBrightnessTable = new float[16];
 
 	private boolean allowHostiles, allowAnimals;
 	private BetweenlandsWorldData worldData;
@@ -176,6 +177,21 @@ public class WorldProviderBetweenlands extends WorldProvider {
 				}
 			}
 			this.worldObj.rainingStrength = rainingStrength;
+		}
+	}
+
+	/**
+	 * Updates the brightness table relative to the specified player
+	 * @param player
+	 */
+	public void updateLightTable(EntityPlayer player) {
+		double diff = Math.max(WorldProviderBetweenlands.CAVE_START - player.posY, 0.0D);
+		float multiplier = (float) diff / WorldProviderBetweenlands.CAVE_START;
+		multiplier = 1.0F - multiplier;
+		multiplier *= Math.pow(multiplier, 6);
+		multiplier = multiplier * 0.9F + 0.1F;
+		for(int i = 0; i < 16; i++) {
+			this.lightBrightnessTable[i] = this.originalLightBrightnessTable[i] * (multiplier + (float)Math.pow(i, (1.0F - multiplier) * 2.2F) / 32.0F + multiplier * 0.5F);
 		}
 	}
 

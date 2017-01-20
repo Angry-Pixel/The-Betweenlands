@@ -164,7 +164,7 @@ public class FogState {
 					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - position.yCoord)), 0.85F);
 				}
 			}
-			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0, 1);
+			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0.1F, 1);
 			fogColorMultiplier = Math.min(fogColorMultiplier / (float)Math.pow(lowViewDistanceFogReduction, 1.0F + (1.0F - fogColorMultiplier) * 1.5F), 1.0F);
 			defaultAmbientFog.setStart(fixedFogStart * fogColorMultiplier);
 			defaultAmbientFog.setEnd(fixedFogEnd * fogColorMultiplier);

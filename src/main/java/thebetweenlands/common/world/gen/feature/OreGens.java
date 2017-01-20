@@ -42,7 +42,7 @@ public class OreGens {
 		@Override
 		public boolean generate(World world, Random rand, BlockPos pos) {
 			if(world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER && world.getBlockState(pos.down()).getBlock() == BlockRegistry.PITSTONE) {
-				boolean genOre = rand.nextInt(14) == 0;
+				boolean genOre = rand.nextInt(36) == 0;
 				int height = 0;
 				while(world.getBlockState(pos.add(0, ++height, 0)).getBlock() == BlockRegistry.SWAMP_WATER && height < 8);
 				height--;
