@@ -40,7 +40,7 @@ public class MessageUpdateSummoningState extends MessageBase {
 				if(!this.active && cap.isActive()) {
 					cap.setActive(false);
 					cap.setCooldownTicks(ItemRingOfSummoning.USE_COOLDOWN);
-				} else if(this.active && !cap.isActive() && cap.getCooldownTicks() <= 0) {
+				} else if(this.active && !cap.isActive() && cap.getCooldownTicks() <= 0 && ItemRingOfSummoning.isRingActive(player)) {
 					cap.setActive(true);
 					cap.setActiveTicks(0);
 					player.worldObj.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.PEAT_MUMMY_CHARGE, SoundCategory.PLAYERS, 0.4F, (player.worldObj.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
