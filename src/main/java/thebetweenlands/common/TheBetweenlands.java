@@ -33,6 +33,7 @@ import thebetweenlands.common.event.handler.EnvironmentEventHandler;
 import thebetweenlands.common.event.handler.ItemEquipmentHandler;
 import thebetweenlands.common.event.handler.LocationHandler;
 import thebetweenlands.common.event.handler.PlayerDecayHandler;
+import thebetweenlands.common.event.handler.PuppetHandler;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
@@ -172,5 +173,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ArmorHandler.class);
 		MinecraftForge.EVENT_BUS.register(PacketInterceptor.class);
 		MinecraftForge.EVENT_BUS.register(ItemRingOfFlight.class);
+		MinecraftForge.EVENT_BUS.register(PuppetHandler.class);
 	}
 }

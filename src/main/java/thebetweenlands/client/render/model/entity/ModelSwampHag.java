@@ -209,6 +209,8 @@ public class ModelSwampHag extends MowzieModelBase {
         super.setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         EntitySwampHag hag = (EntitySwampHag) entity;
 
+        limbSwingAngle = Math.min(limbSwingAngle, 0.25F);
+        
         jaw.rotateAngleX = hag.jawFloat;
 //		head2.rotateAngleX = hag.jawFloat - 0.8196066167365371F;
         head2.rotateAngleX = -0.8196066167365371F;

@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.misc;
 
+import java.util.Random;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -18,10 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.item.BLMaterialRegistry;
-import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.Random;
 
 public class BlockSludge extends Block {
 	private static final AxisAlignedBB BOUNDS = new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
@@ -81,12 +80,7 @@ public class BlockSludge extends Block {
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rnd, int fortune) {
-		return ItemRegistry.ITEMS_MISC;
-	}
-
-	@Override
-	public int damageDropped(IBlockState state) {
-		return ItemMisc.EnumItemMisc.SLUDGE_BALL.getID();
+		return ItemRegistry.SLUDGE_BALL;
 	}
 
 	@Override

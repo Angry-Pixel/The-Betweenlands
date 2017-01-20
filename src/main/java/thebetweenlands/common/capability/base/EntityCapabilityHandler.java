@@ -85,7 +85,7 @@ public class EntityCapabilityHandler {
 					((ISerializableCapability)instance).writeToNBT(nbt);
 					return nbt;
 				}
-				return null;
+				return new NBTTagCompound(); //This is broken, the doc says returning null if not required, but causes a NPE
 			}
 
 			@Override

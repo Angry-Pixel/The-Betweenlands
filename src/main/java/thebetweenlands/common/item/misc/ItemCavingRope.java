@@ -29,7 +29,7 @@ public class ItemCavingRope extends Item {
 			for(Entity e : (List<Entity>) world.loadedEntityList) {
 				if(e instanceof EntityRopeNode) {
 					EntityRopeNode ropeNode = (EntityRopeNode) e;
-					if(ropeNode.getNextNode() == player) {
+					if(ropeNode.getNextNodeByUUID() == player) {
 						connectedRopeNode = ropeNode;
 						break;
 					}

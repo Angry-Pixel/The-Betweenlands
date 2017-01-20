@@ -62,8 +62,8 @@ public class EntityRopeNode extends Entity {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.setNextNodeUUID(nbt.hasKey("nextNodeUUID") ? UUID.fromString(nbt.getString("nextNodeUUID")) : null);
-		this.setPreviousNodeUUID(nbt.hasKey("previousNodeUUID") ? UUID.fromString(nbt.getString("previousNodeUUID")) : null);
+		this.setNextNodeUUID(nbt.hasUniqueId("nextNodeUUID") ? nbt.getUniqueId("nextNodeUUID") : null);
+		this.setPreviousNodeUUID(nbt.hasUniqueId("previousNodeUUID") ? nbt.getUniqueId("previousNodeUUID") : null);
 		this.pickUp = nbt.getBoolean("pickUp");
 		this.canExtend = nbt.getBoolean("canExtend");
 		this.despawnTimer = nbt.getInteger("despawnTimer");
@@ -72,10 +72,10 @@ public class EntityRopeNode extends Entity {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		if(this.getNextNodeUUID() != null) {
-			nbt.setString("nextNodeUUID", this.getNextNodeUUID().toString());
+			nbt.setUniqueId("nextNodeUUID", this.getNextNodeUUID());
 		}
 		if(this.getPreviousNodeUUID() != null) {
-			nbt.setString("previousNodeUUID", this.getPreviousNodeUUID().toString());
+			nbt.setUniqueId("previousNodeUUID", this.getPreviousNodeUUID());
 		}
 		nbt.setBoolean("pickUp", this.pickUp);
 		nbt.setBoolean("canExtend", this.canExtend);
@@ -134,7 +134,7 @@ public class EntityRopeNode extends Entity {
 				if(nextNode.getDistanceToEntity(this) > 1.5D) {
 					this.pickUp = true;
 				}
-				if(this.pickUp && nextNode.getEntityBoundingBox().expand(0.3D, 0.3D, 0.3D).intersectsWith(this.getEntityBoundingBox())) {
+				if(this.pickUp && nextNode.getEntityBoundingBox().expand(0.4D, 0.4D, 0.4D).intersectsWith(this.getEntityBoundingBox())) {
 					this.removeNode(nextNode);
 					EntityPlayer player = (EntityPlayer) nextNode;
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
@@ -157,16 +157,18 @@ public class EntityRopeNode extends Entity {
 							--stack.stackSize;
 							inventory.setInventorySlotContents(i, stack.stackSize > 0 ? stack : null);
 							Vec3d connection = this.getConnectionToNext();
-							Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).addVector(0, 0.1D, 0);
-							RayTraceResult result = this.worldObj.rayTraceBlocks(nextNode.getPositionVector(), newPos, false);
-							if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
-								newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector()).normalize().scale(0.1D));
+							if(connection != null) {
+								Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).addVector(0, 0.1D, 0);
+								RayTraceResult result = this.worldObj.rayTraceBlocks(nextNode.getPositionVector(), newPos, false);
+								if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
+									newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector()).normalize().scale(0.1D));
+								}
+								EntityRopeNode rope = this.extendRope(nextNode, newPos.xCoord, newPos.yCoord, newPos.zCoord);
+								if(rope.isAttached()) {
+									this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+								}
+								break;
 							}
-							EntityRopeNode rope = this.extendRope(nextNode, newPos.xCoord, newPos.yCoord, newPos.zCoord);
-							if(rope.isAttached()) {
-								this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
-							}
-							break;
 						}
 					}
 				}
@@ -188,20 +190,22 @@ public class EntityRopeNode extends Entity {
 
 			if(nextNode != null && this.getDistanceToEntity(nextNode) >= ROPE_LENGTH) {
 				Vec3d connection = this.getConnectionToNext();
-				double mx = connection.xCoord * 0.02D;
-				double my = connection.yCoord * 0.02D;
-				double mz = connection.zCoord * 0.02D;
-				double len = Math.sqrt(mx*mx + my*my + mz*mz);
-				if(len > 0.5D) {
-					mx /= len * 0.5D;
-					my /= len * 0.5D;
-					mz /= len * 0.5D;
-				}
-				if(prevNode != null && prevNode.getDistance(this.posX + mx, this.posY + my, this.posZ + mz) < ROPE_LENGTH + 1) {
-					this.motionX += mx;
-					this.motionZ += mz;
-					this.motionY += my;
-					isFloating = true;
+				if(connection != null) {
+					double mx = connection.xCoord * 0.02D;
+					double my = connection.yCoord * 0.02D;
+					double mz = connection.zCoord * 0.02D;
+					double len = Math.sqrt(mx*mx + my*my + mz*mz);
+					if(len > 0.5D) {
+						mx /= len * 0.5D;
+						my /= len * 0.5D;
+						mz /= len * 0.5D;
+					}
+					if(prevNode != null && prevNode.getDistance(this.posX + mx, this.posY + my, this.posZ + mz) < ROPE_LENGTH + 1) {
+						this.motionX += mx;
+						this.motionZ += mz;
+						this.motionY += my;
+						isFloating = true;
+					}
 				}
 			}
 
@@ -362,7 +366,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public boolean isAttached() {
-		return !this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D)).isEmpty();
+		return !this.worldObj.getCollisionBoxes(this.getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D)).isEmpty();
 	}
 
 	public EntityRopeNode extendRope(Entity entity, double x, double y, double z) {
@@ -404,7 +408,7 @@ public class EntityRopeNode extends Entity {
 		this.setNextNodeUUID(entity == null ? null : entity.getUniqueID());
 	}
 
-	private Entity getNextNodeByUUID() {
+	public Entity getNextNodeByUUID() {
 		if(this.cachedNextNodeEntity != null && this.cachedNextNodeEntity.getUniqueID().equals(this.nextNodeUUID)) {
 			return this.cachedNextNodeEntity;
 		} else {
@@ -431,7 +435,7 @@ public class EntityRopeNode extends Entity {
 		this.setPreviousNodeUUID(entity == null ? null : entity.getUniqueID());
 	}
 
-	private Entity getPreviousNodeByUUID() {
+	public Entity getPreviousNodeByUUID() {
 		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.getUniqueID().equals(this.cachedPrevNodeEntity)) {
 			return this.cachedPrevNodeEntity;
 		} else {

@@ -71,15 +71,15 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.35D, false));
-		this.tasks.addTask(2, new EntityAIMoveToBlock(this, 0.3D, 32) {
+		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, false));
+		this.tasks.addTask(2, new EntityAIMoveToBlock(this, 0.85D, 32) {
 			@Override
 			protected boolean shouldMoveTo(World worldIn, BlockPos pos) {
 				return worldIn.getBlockState(pos).getBlock() == BlockRegistry.TAR;
 			}
 		});
-		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.35D));
-		this.tasks.addTask(4, new EntityAIWander(this, 0.3D));
+		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.85D));
+		this.tasks.addTask(4, new EntityAIWander(this, 0.85D));
 		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 
@@ -97,7 +97,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.65D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.22D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(100.0D);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(25.0D);
