@@ -22,6 +22,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import thebetweenlands.client.render.entity.RenderFirefly;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.LightSource;
@@ -40,6 +42,19 @@ public class WorldRenderHandler {
 	public static final List<Pair<Pair<RenderWisp, TileEntityWisp>, Vec3d>> WISP_TILE_LIST = new ArrayList<>();
 	public static final List<Map.Entry<Map.Entry<RenderFirefly, EntityFirefly>, Vector3d>> fireflies = new ArrayList<>();
 
+	private static float partialTicks;
+	
+	@SubscribeEvent
+	public static void onRenderTick(RenderTickEvent event) {
+		if(event.phase == Phase.START) {
+			partialTicks = event.renderTickTime;
+		}
+	}
+	
+	public static float getPartialTicks() {
+		return partialTicks;
+	}
+	
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
 		double renderViewX = MC.getRenderManager().viewerPosX;

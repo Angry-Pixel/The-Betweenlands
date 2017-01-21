@@ -316,7 +316,7 @@ public class EntityRopeNode extends Entity {
 
 			if(nextNode instanceof EntityRopeNode) {
 				EntityRopeNode endNode = (EntityRopeNode) nextNode;
-				while(endNode.getNextNodeByUUID() instanceof EntityRopeNode && endNode.getNextNode() != this) {
+				while(endNode.getNextNodeByUUID() instanceof EntityRopeNode && endNode.getNextNodeByUUID() != this) {
 					endNode = (EntityRopeNode) endNode.getNextNodeByUUID();
 				}
 				if(endNode.getNextNodeByUUID() == null) {
@@ -409,7 +409,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public Entity getNextNodeByUUID() {
-		if(this.cachedNextNodeEntity != null && this.cachedNextNodeEntity.getUniqueID().equals(this.nextNodeUUID)) {
+		if(this.cachedNextNodeEntity != null && this.cachedNextNodeEntity.isEntityAlive() && this.cachedNextNodeEntity.getUniqueID().equals(this.nextNodeUUID)) {
 			return this.cachedNextNodeEntity;
 		} else {
 			UUID uuid = this.nextNodeUUID;
@@ -436,7 +436,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public Entity getPreviousNodeByUUID() {
-		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.getUniqueID().equals(this.cachedPrevNodeEntity)) {
+		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.isEntityAlive() && this.cachedPrevNodeEntity.getUniqueID().equals(this.cachedPrevNodeEntity)) {
 			return this.cachedPrevNodeEntity;
 		} else {
 			UUID uuid = this.prevNodeUUID;
@@ -448,7 +448,7 @@ public class EntityRopeNode extends Entity {
 
 	@SideOnly(Side.CLIENT)
 	public Entity getNextNode() {
-		if(this.cachedNextNodeEntity == null || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
+		if(this.cachedNextNodeEntity == null || !this.cachedNextNodeEntity.isEntityAlive() || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
 			Entity entity = this.worldObj.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
 			this.cachedNextNodeEntity = entity;
 			return entity;
@@ -458,7 +458,7 @@ public class EntityRopeNode extends Entity {
 
 	@SideOnly(Side.CLIENT)
 	public Entity getPreviousNode() {
-		if(this.cachedPrevNodeEntity == null || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
+		if(this.cachedPrevNodeEntity == null || !this.cachedPrevNodeEntity.isEntityAlive() || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
 			Entity entity = this.worldObj.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
 			this.cachedPrevNodeEntity = entity;
 			return entity;

@@ -24,6 +24,7 @@ import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.circlegem.CircleGem;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
@@ -160,7 +161,7 @@ public class ItemAmulet extends Item implements IEquippable {
 	@SubscribeEvent
 	public static void onRenderLiving(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		if(event.getEntity() != null) {
-			renderAmulet(event.getEntity(), event.getX(), event.getY(), event.getZ(), 0.0F);
+			renderAmulet(event.getEntity(), event.getX(), event.getY(), event.getZ(), WorldRenderHandler.getPartialTicks());
 		}
 	}
 

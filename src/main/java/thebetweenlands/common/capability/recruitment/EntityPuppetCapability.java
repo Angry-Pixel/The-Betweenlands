@@ -59,7 +59,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 	public Entity getPuppeteer() {
 		if(this.puppeteerUUID == null) {
 			this.puppeteer = null;
-		} else if(this.puppeteer == null || !this.puppeteer.getUniqueID().equals(this.puppeteerUUID)) {
+		} else if(this.puppeteer == null || !this.puppeteer.isEntityAlive() || !this.puppeteer.getUniqueID().equals(this.puppeteerUUID)) {
 			for(Entity entity : this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getEntityBoundingBox().expandXyz(24.0D))) {
 				if(entity.getUniqueID().equals(this.puppeteerUUID)) {
 					this.puppeteer = entity;

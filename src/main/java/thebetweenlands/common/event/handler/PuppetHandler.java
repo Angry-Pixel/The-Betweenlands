@@ -1,9 +1,17 @@
 package thebetweenlands.common.event.handler;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
@@ -16,8 +24,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
@@ -25,6 +35,11 @@ import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.handler.WorldRenderHandler;
+import thebetweenlands.client.render.entity.RenderSwordEnergy;
+import thebetweenlands.client.render.entity.layer.LayerAnimatedOverlay;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.capability.recruitment.IPuppetCapability;
@@ -37,6 +52,8 @@ import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class PuppetHandler {
+	public static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/puppet_overlay.png");
+
 	private PuppetHandler() { }
 
 	@SubscribeEvent
@@ -91,7 +108,7 @@ public class PuppetHandler {
 								aiFollow.setMutexBits(1);
 
 								EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), creature, creature.targetTasks,
-										ImmutableList.of(aiFollow, aiStay, aiGoTo/*, aiTarget*/, aiMelee));
+										ImmutableList.of(aiStay, aiFollow, aiGoTo/*, aiTarget*/, aiMelee));
 							} else {
 								EntityAIPuppet.addPuppetAI(() -> cap.getPuppeteer(), creature, creature.targetTasks,
 										ImmutableList.of(aiStay, aiGoTo/*, aiTarget*/, aiMelee));
@@ -278,6 +295,96 @@ public class PuppetHandler {
 											).withData(30).withColor(0.2F, 0.8F, 0.25F, 1));
 						}
 					}
+				}
+			}
+		}
+	}
+
+	private static final Deque<LayerAnimatedOverlay<EntityLivingBase>> LAYER_STACK = new ArrayDeque<>();
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onRenderLivingPre(RenderLivingEvent.Pre<EntityLivingBase> event) {
+		EntityLivingBase living = event.getEntity();
+
+		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
+			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+			if(cap.hasPuppeteer()) {
+				LayerAnimatedOverlay<EntityLivingBase> layer = new LayerAnimatedOverlay<EntityLivingBase>(event.getRenderer(), OVERLAY_TEXTURE);
+				LAYER_STACK.push(layer);
+				event.getRenderer().addLayer(layer);
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onRenderLivingPost(RenderLivingEvent.Post<EntityLivingBase> event) {
+		EntityLivingBase living = event.getEntity();
+
+		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
+			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
+			if(cap.hasPuppeteer()) {
+				event.getRenderer().removeLayer(LAYER_STACK.pop());
+
+				Entity puppeteer = cap.getPuppeteer();
+				if(puppeteer != null) {
+					event.getRenderer().bindTexture(OVERLAY_TEXTURE);
+
+					GlStateManager.matrixMode(GL11.GL_TEXTURE);
+					GlStateManager.loadIdentity();
+					GlStateManager.translate((living.ticksExisted + WorldRenderHandler.getPartialTicks()) / 40.0F, 0, 0.0F);
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+					GlStateManager.enableBlend();
+					GlStateManager.color(1, 1, 1, 0.25F);
+					GlStateManager.disableLighting();
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.enableTexture2D();
+					GlStateManager.disableCull();
+					GlStateManager.depthMask(false);
+
+					double dx = puppeteer.lastTickPosX + (puppeteer.posX - puppeteer.lastTickPosX) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosX + (living.posX - living.lastTickPosX) * WorldRenderHandler.getPartialTicks());
+					double dy = -living.height / 2.0F + puppeteer.height / 2.0D + puppeteer.lastTickPosY + (puppeteer.posY - puppeteer.lastTickPosY) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosY + (living.posY - living.lastTickPosY) * WorldRenderHandler.getPartialTicks());
+					double dz = puppeteer.lastTickPosZ + (puppeteer.posZ - puppeteer.lastTickPosZ) * WorldRenderHandler.getPartialTicks() - (living.lastTickPosZ + (living.posZ - living.lastTickPosZ) * WorldRenderHandler.getPartialTicks());
+
+					double sx = event.getX();
+					double sy = event.getY() + living.height / 2.0F;
+					double sz = event.getZ();
+
+					float sw = 0.03F;
+					float ew = 0.01F;
+
+					double ticks = (living.ticksExisted + WorldRenderHandler.getPartialTicks()) / 5.0F;
+
+					double prevXOffset = 0.0D;
+					double prevYOffset = 0.0D;
+					double prevZOffset = 0.0D;
+
+					int iter = Minecraft.isFancyGraphicsEnabled() ? 8 : 4;
+					for(int i = 0; i < iter; i++) {
+						double multiplier = (1.0D - Math.abs((i + 1) - iter / 2.0D) / iter * 2.0D) * 0.15D;
+						double xOffset = Math.cos((i + 1) * 4.0F / iter + ticks) * multiplier;
+						double yOffset = Math.cos((i + 1) * 4.0F / iter + ticks + Math.PI) * multiplier;
+						double zOffset = Math.sin((i + 1) * 4.0F / iter + ticks) * multiplier;
+
+						RenderSwordEnergy.renderBeam(
+								new Vec3d(sx + prevXOffset + dx / iter * i, sy + prevYOffset + dy / iter * i, sz + prevZOffset + dz / iter * i), 
+								new Vec3d(sx + xOffset + dx / iter * (i + 1), sy + yOffset + dy / iter * (i + 1), sz + zOffset + dz / iter * (i + 1)), 
+								ew + sw - sw / iter * i, ew + sw - sw / iter * (i + 1), i == 0, i == iter - 1);
+
+						prevXOffset = xOffset;
+						prevYOffset = yOffset;
+						prevZOffset = zOffset;
+					}
+
+					GlStateManager.depthMask(true);
+					GlStateManager.enableCull();
+					GlStateManager.enableTexture2D();
+					GlStateManager.matrixMode(GL11.GL_TEXTURE);
+					GlStateManager.loadIdentity();
+					GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+					GlStateManager.enableLighting();
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 				}
 			}
 		}
