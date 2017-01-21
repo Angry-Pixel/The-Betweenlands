@@ -57,6 +57,7 @@ import thebetweenlands.common.item.food.ItemNettleSoup;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemSapBall;
 import thebetweenlands.common.item.food.ItemSapJello;
+import thebetweenlands.common.item.food.ItemTaintedPotion;
 import thebetweenlands.common.item.food.ItemTangledRoot;
 import thebetweenlands.common.item.food.ItemWeepingBluePetal;
 import thebetweenlands.common.item.food.ItemWightHeart;
@@ -78,6 +79,7 @@ import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
 import thebetweenlands.common.item.misc.ItemMossBed;
+import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
@@ -351,6 +353,8 @@ public class ItemRegistry {
 	public static final Item RING_OF_SUMMONING = new ItemRingOfSummoning();
 	public static final Item ANGRY_PEBBLE = new ItemAngryPebble();
 	public static final Item LORE_SCRAP = new ItemLoreScrap();
+	public static final ItemTaintedPotion TAINTED_POTION = new ItemTaintedPotion();
+	public static final Item OCTINE_INGOT = new ItemOctineIngot();
 	
 	public static void preInit() {
 		try {
@@ -397,7 +401,7 @@ public class ItemRegistry {
 		ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.VALONITE_ORE)));
 		//ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.LIFE_CRYSTAL_STALACTITE)));
 
-		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.OCTINE_INGOT.getID()));
+		INGOTS.add(new ItemStack(ItemRegistry.OCTINE_INGOT));
 		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SYRMORITE_INGOT.getID()));
 		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.SULFUR.getID()));
 		INGOTS.add(new ItemStack(ITEMS_MISC, 1, EnumItemMisc.VALONITE_SHARD.getID()));

@@ -79,7 +79,7 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM));
 
 		OreDictionary.registerOre("ingotSyrmorite", EnumItemMisc.SYRMORITE_INGOT.create(1));
-		OreDictionary.registerOre("ingotOctine", EnumItemMisc.OCTINE_INGOT.create(1));
+		OreDictionary.registerOre("ingotOctine", new ItemStack(ItemRegistry.OCTINE_INGOT));
 	}
 
 	private static void registerRecipes() {
@@ -94,10 +94,10 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.OCTINE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.OCTINE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.OCTINE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.OCTINE_INGOT.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
@@ -106,7 +106,7 @@ public class RecipeRegistry {
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW, 1), " #X", "# X", " #X", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.ANGLER_TOOTH.create(1), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.OCTINE_INGOT.create(1), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, 1), EnumItemMisc.POISON_GLAND.create(1), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW));
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHEARS, 1), " #", "# ", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
@@ -172,7 +172,7 @@ public class RecipeRegistry {
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 4), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', EnumItemMisc.OCTINE_INGOT.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 4), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_HOPPER), "s s", "scs", " s ", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'c', new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SIGN_ITEM, 3), "SSS", "SSS", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
@@ -187,12 +187,12 @@ public class RecipeRegistry {
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
 
 		//Machine Blocks
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PURIFIER), "x x", "xxx", "ooo", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'o', EnumItemMisc.OCTINE_INGOT.create(1));
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PURIFIER), "x x", "xxx", "ooo", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.COMPOST_BIN), "bxb", "x x", "x x", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'b', EnumItemMisc.SYRMORITE_INGOT.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.ANIMATOR), "xxx", "shs", "bbb", 'x', BlockRegistry.WEEDWOOD_PLANKS, 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'h', new ItemStack(ItemRegistry.WIGHT_HEART), 'b' ,new ItemStack(BlockRegistry.BETWEENSTONE));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MORTAR), "x x", "xxx", "s s", 'x', BlockRegistry.CRAGROCK, 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.ALEMBIC), " o ", " dv", "coc", 'o', EnumItemMisc.OCTINE_INGOT.create(1), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Dentrothyst vials
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.INFUSER), "o o", "opo", "sos", 'o', EnumItemMisc.OCTINE_INGOT.create(1), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'p', new ItemStack(ItemRegistry.PESTLE), 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.ALEMBIC), " o ", " dv", "coc", 'o', new ItemStack(ItemRegistry.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Dentrothyst vials
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.INFUSER), "o o", "opo", "sos", 'o', new ItemStack(ItemRegistry.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'p', new ItemStack(ItemRegistry.PESTLE), 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.GECKO_CAGE), "sps", "rrr", "sps", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'p', new ItemStack(Item.getItemFromBlock(BlockRegistry.WEEDWOOD_PLANK_SLAB)), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.REPELLER), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Repeller
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_JUKEBOX), "xxx", "xVx", "xxx", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS), 'V', EnumItemMisc.VALONITE_SHARD.create(1));
@@ -213,10 +213,10 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.LIMESTONE_BRICK_SLAB));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SULFUR_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SULFUR.create(1));
 		GameRegistry.addShapelessRecipe(EnumItemMisc.SULFUR.create(9), new ItemStack(BlockRegistry.SULFUR_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.OCTINE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.OCTINE_INGOT.create(1));
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.OCTINE_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1));
 		GameRegistry.addShapelessRecipe(EnumItemMisc.SYRMORITE_INGOT.create(9), new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.OCTINE_INGOT.create(9), new ItemStack(BlockRegistry.OCTINE_BLOCK));
+		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.OCTINE_INGOT, 9), new ItemStack(BlockRegistry.OCTINE_BLOCK));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.VALONITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.VALONITE_SHARD.create(1));
 		GameRegistry.addShapelessRecipe(EnumItemMisc.VALONITE_SHARD.create(9), new ItemStack(BlockRegistry.VALONITE_BLOCK));
 		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.thatch, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED)); //TODO: Thatch
@@ -364,7 +364,7 @@ public class RecipeRegistry {
 
 	private static void registerSmelting() {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.SYRMORITE_ORE), EnumItemMisc.SYRMORITE_INGOT.create(1), 0.7F);
-		GameRegistry.addSmelting(new ItemStack(BlockRegistry.OCTINE_ORE), EnumItemMisc.OCTINE_INGOT.create(1), 0.7F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.OCTINE_ORE), new ItemStack(ItemRegistry.OCTINE_INGOT), 0.7F);
 		//GameRegistry.addSmelting(new ItemStack(BlockRegistry.DAMP_TORCH), new ItemStack(Blocks.torch), 0F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SWAMP_REED_ITEM), EnumItemMisc.DRIED_SWAMP_REED.create(1), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.MUD), EnumItemMisc.MUD_BRICK.create(1), 0.2F);

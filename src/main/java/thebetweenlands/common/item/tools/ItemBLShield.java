@@ -25,6 +25,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemBLShield extends ItemShield {
 	private ToolMaterial material;
@@ -48,7 +49,7 @@ public class ItemBLShield extends ItemShield {
 		} else if (material == BLMaterialRegistry.TOOL_BONE) {
 			return repair.getItem() == Item.getItemFromBlock(BlockRegistry.BETWEENSTONE);
 		} else if (material == BLMaterialRegistry.TOOL_OCTINE) {
-			return EnumItemMisc.OCTINE_INGOT.isItemOf(repair);
+			return repair.getItem() == ItemRegistry.OCTINE_INGOT;
 		} else if (material == BLMaterialRegistry.TOOL_VALONITE) {
 			return EnumItemMisc.VALONITE_SHARD.isItemOf(repair);
 		}

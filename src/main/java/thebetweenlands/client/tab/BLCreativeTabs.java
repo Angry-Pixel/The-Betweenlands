@@ -2,10 +2,10 @@ package thebetweenlands.client.tab;
 
 public class BLCreativeTabs
 {
-	public static CreativeTabBetweenlands BLOCKS = new TabBlocks();
-	public static CreativeTabBetweenlands ITEMS = new TabItems();
-	public static CreativeTabBetweenlands GEARS = new TabGears();
-	public static CreativeTabBetweenlands SPECIALS = new TabSpecialItems();
-	public static CreativeTabBetweenlands PLANTS = new TabPlants();
-	public static CreativeTabBetweenlands HERBLORE = new TabHerblore();
+	public static final CreativeTabBetweenlands BLOCKS = new TabBlocks();
+	public static final CreativeTabBetweenlands ITEMS = new TabItems();
+	public static final CreativeTabBetweenlands GEARS = new TabGears();
+	public static final CreativeTabBetweenlands SPECIALS = new TabSpecialItems();
+	public static final CreativeTabBetweenlands PLANTS = new TabPlants();
+	public static final CreativeTabBetweenlands HERBLORE = new TabHerblore();
 }
