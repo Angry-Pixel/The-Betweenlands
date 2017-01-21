@@ -3,10 +3,19 @@ package thebetweenlands.common.item.equipment;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.IEquipmentCapability;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public interface IEquippable {
 	/**
@@ -77,4 +86,27 @@ public interface IEquippable {
 	 * @param entity
 	 */
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory);
+	
+	/**
+	 * Adds the equipped property overrides to the specified item
+	 * @param item
+	 */
+	public static void addEquippedPropertyOverrides(Item item) {
+		item.addPropertyOverride(new ResourceLocation("equipped"), new IItemPropertyGetter() {
+			@Override
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World world, @Nullable EntityLivingBase entity) {
+				if(stack.getItem() instanceof IEquippable && entity != null && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+					IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+					IInventory inv = cap.getInventory(((IEquippable) stack.getItem()).getEquipmentCategory(stack));
+					for(int i = 0; i < inv.getSizeInventory(); i++) {
+						if(stack == inv.getStackInSlot(i)) {
+							return 1;
+						}
+					}
+				}
+				return 0;
+			}
+		});
+	}
 }

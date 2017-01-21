@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
@@ -27,6 +28,7 @@ import thebetweenlands.common.capability.flight.IFlightCapability;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfFlight extends ItemRing {
 	public ItemRingOfFlight() {
@@ -58,10 +60,14 @@ public class ItemRingOfFlight extends ItemRing {
 					if(player.worldObj.isRemote || cap.isFlying())
 						player.capabilities.allowFlying = true;
 					boolean isFlying = cap.isFlying();
+					NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 					if(!entity.onGround) {
 						if(isFlying) {
-							if(!entity.worldObj.isRemote && entity.ticksExisted % 20 == 0)
+							if(!entity.worldObj.isRemote && entity.ticksExisted % 20 == 0) {
 								this.removeXp((EntityPlayer)entity, 2);
+							}
+
+							nbt.setBoolean("ringActive", true);
 
 							if(entity.isSneaking()) {
 								entity.motionY = -0.2F;
@@ -106,9 +112,12 @@ public class ItemRingOfFlight extends ItemRing {
 									}
 								}
 							}
+						} else {
+							nbt.setBoolean("ringActive", false);
 						}
 					} else {
 						cap.setFlying(false);
+						nbt.setBoolean("ringActive", false);
 					}
 				} else if(cap.isFlying() && !player.onGround && player.worldObj.isRemote) {
 					if(cap.getFlightTime() > 40) {
@@ -193,5 +202,17 @@ public class ItemRingOfFlight extends ItemRing {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) { 
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setBoolean("ringActive", false);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
 	}
 }

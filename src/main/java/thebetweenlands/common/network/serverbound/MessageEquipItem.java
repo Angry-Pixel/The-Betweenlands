@@ -2,15 +2,12 @@ package thebetweenlands.common.network.serverbound;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
-import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.network.MessageEntity;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -93,51 +90,24 @@ public class MessageEquipItem extends MessageEntity {
 			Entity target = this.getEntity(0);
 
 			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-
 				switch(this.mode) {
 				default:
 				case 0:
 					//Equip
-					if(this.sourceSlot < sender.inventory.getSizeInventory()) {
+					if(this.sourceSlot >= 0 && this.sourceSlot < sender.inventory.getSizeInventory()) {
 						ItemStack stack = sender.inventory.getStackInSlot(this.sourceSlot);
-
-						if(stack != null && stack.getItem() instanceof IEquippable) {
-							IEquippable equippable = (IEquippable) stack.getItem();
-
-							if(equippable.canEquip(stack, sender, target, cap.getInventory(equippable.getEquipmentCategory(stack)))) {
-								ItemStack result = EquipmentHelper.equipItem(sender, target, stack, false);
-
-								if(result == null || result.stackSize != stack.stackSize) {
-									if(!sender.capabilities.isCreativeMode) {
-										sender.inventory.setInventorySlotContents(this.sourceSlot, result);
-									}
-								}
-							}
+						ItemStack result = EquipmentHelper.equipItem(sender, target, stack, false);
+						if(!sender.capabilities.isCreativeMode) {
+							sender.inventory.setInventorySlotContents(this.sourceSlot, result);
 						}
 					}
 					break;
 				case 1:
 					//Unequip
-					IInventory inv = cap.getInventory(this.inventory);
-					if(this.sourceSlot < inv.getSizeInventory()) {
-						ItemStack stack = inv.getStackInSlot(this.sourceSlot);
-
-						if(stack != null) {
-							if(stack.getItem() instanceof IEquippable && 
-									!((IEquippable) stack.getItem()).canUnequip(stack, sender, target, inv)) {
-								break;
-							}
-
-							if(stack.getItem() instanceof IEquippable) {
-								((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
-							}
-
-							inv.setInventorySlotContents(this.sourceSlot, null);
-
-							if(!sender.inventory.addItemStackToInventory(stack)) {
-								target.entityDropItem(stack, target.getEyeHeight());
-							}
+					if(this.sourceSlot >= 0) {
+						ItemStack stack = EquipmentHelper.unequipItem(sender, target, this.inventory, this.sourceSlot, false);
+						if(!sender.inventory.addItemStackToInventory(stack)) {
+							target.entityDropItem(stack, target.getEyeHeight());
 						}
 					}
 					break;

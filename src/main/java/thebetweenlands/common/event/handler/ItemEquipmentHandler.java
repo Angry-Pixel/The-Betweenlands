@@ -49,7 +49,7 @@ public class ItemEquipmentHandler {
 	private static void tickEquipmentInventories(World world) {
 		for(int i = 0; i < world.loadedEntityList.size(); i++) {
 			Entity entity = world.loadedEntityList.get(i);
-			
+
 			if(entity instanceof EntityLivingBase && entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
@@ -143,8 +143,12 @@ public class ItemEquipmentHandler {
 						ItemStack stack = inv.getStackInSlot(i);
 
 						if(stack != null) {
-							if(stack.getItem() instanceof IEquippable && !((IEquippable) stack.getItem()).canDrop(stack, entity, inv)) {
-								continue;
+							if(stack.getItem() instanceof IEquippable) {
+								IEquippable equippable = (IEquippable) stack.getItem();
+								equippable.onUnequip(stack, entity, inv);
+								if(!equippable.canDrop(stack, entity, inv)) {
+									continue;
+								}
 							}
 
 							EntityItem equipmentDrop = new EntityItem(entity.worldObj, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ, stack.copy());

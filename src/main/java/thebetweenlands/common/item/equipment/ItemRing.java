@@ -17,9 +17,11 @@ public class ItemRing extends Item implements IEquippable {
 	public ItemRing() {
 		this.setMaxStackSize(1);
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+
+		IEquippable.addEquippedPropertyOverrides(this);
 	}
 
-	public boolean isActive(ItemStack stack) {
+	public boolean canBeUsed(ItemStack stack) {
 		return stack.getItemDamage() < stack.getMaxDamage();
 	}
 
@@ -29,7 +31,7 @@ public class ItemRing extends Item implements IEquippable {
 	}
 
 	public void drainPower(ItemStack stack, Entity entity) {
-		if(stack.getItemDamage() < stack.getMaxDamage() && stack.getItem() instanceof ItemRing && ((ItemRing)stack.getItem()).isActive(stack)) {
+		if(stack.getItemDamage() < stack.getMaxDamage() && stack.getItem() instanceof ItemRing && ((ItemRing)stack.getItem()).canBeUsed(stack)) {
 			stack.setItemDamage(stack.getItemDamage() + 1);
 		}
 	}

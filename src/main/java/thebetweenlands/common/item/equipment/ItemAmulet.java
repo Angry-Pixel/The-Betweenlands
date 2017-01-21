@@ -53,6 +53,7 @@ public class ItemAmulet extends Item implements IEquippable {
 		this.setMaxStackSize(1);
 
 		CircleGemHelper.addGemPropertyOverrides(this);
+		IEquippable.addEquippedPropertyOverrides(this);
 	}
 
 	/**

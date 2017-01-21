@@ -9,6 +9,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
@@ -16,6 +17,7 @@ import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfRecruitment extends ItemRing {
 	public ItemRingOfRecruitment() {
@@ -43,10 +45,13 @@ public class ItemRingOfRecruitment extends ItemRing {
 			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
 				IPuppeteerCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 				int puppets = cap.getPuppets().size();
+				NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 				if(puppets == 0) {
 					tickRate = 0;
+					nbt.setBoolean("ringActive", false);
 				} else {
 					tickRate = (int) Math.max(1, 30 - Math.pow(puppets, 0.5D) * 14);
+					nbt.setBoolean("ringActive", true);
 				}
 			}
 
@@ -55,6 +60,18 @@ public class ItemRingOfRecruitment extends ItemRing {
 				this.removeXp((EntityPlayer)entity, 1);
 			}
 		}
+	}
+
+	@Override
+	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) { 
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setBoolean("ringActive", false);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
 	}
 
 	public static boolean isRingActive(Entity entity) {

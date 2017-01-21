@@ -5,10 +5,14 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfPower extends ItemRing {
 	public ItemRingOfPower() {
@@ -28,4 +32,21 @@ public class ItemRingOfPower extends ItemRing {
 		}
 	}
 
+	@Override
+	public void onEquip(ItemStack stack, Entity entity, IInventory inventory) { 
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setBoolean("ringActive", true);
+	}
+
+	@Override
+	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) { 
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setBoolean("ringActive", false);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
+	}
 }

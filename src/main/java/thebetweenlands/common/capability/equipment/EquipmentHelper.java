@@ -54,6 +54,50 @@ public class EquipmentHelper {
 	}
 
 	/**
+	 * Tries to equip the specified item in the specified slot, returns the leftover stack
+	 * @param player
+	 * @param target
+	 * @param stack
+	 * @param slot
+	 * @param simulate
+	 * @return
+	 */
+	@Nullable
+	public static ItemStack equipItem(@Nullable EntityPlayer player, Entity target, ItemStack stack, int slot, boolean simulate) {
+		if(slot >= 0 && stack.getItem() instanceof IEquippable) {
+			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+				IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+
+				IEquippable equippable = (IEquippable) stack.getItem();
+
+				if(equippable.canEquip(stack, player, target, cap.getInventory(equippable.getEquipmentCategory(stack)))) {
+					EnumEquipmentInventory type = equippable.getEquipmentCategory(stack);
+
+					IInventory inv = cap.getInventory(type);
+					if(slot < inv.getSizeInventory()) {
+						IItemHandler wrapper = new InvWrapper(inv);
+
+						stack = stack.copy();
+
+						ItemStack result = wrapper.insertItem(slot, stack, simulate);
+
+						if(simulate) {
+							return result;
+						}
+
+						if(result == null || result.stackSize != stack.stackSize) {
+							equippable.onEquip(stack, target, inv);
+							return ItemHandlerHelper.insertItem(wrapper, stack, false);
+						}
+					}
+				}
+			}
+		}
+
+		return stack;
+	}
+
+	/**
 	 * Tries to unequip the first item found
 	 * @param player
 	 * @param target
@@ -102,7 +146,7 @@ public class EquipmentHelper {
 	 * @return
 	 */
 	@Nullable
-	public static ItemStack unequipItem(Entity target, EnumEquipmentInventory type, int slot, boolean simulate) {
+	public static ItemStack unequipItem(@Nullable EntityPlayer player, Entity target, EnumEquipmentInventory type, int slot, boolean simulate) {
 		if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 			IInventory inv = cap.getInventory(type);
@@ -110,14 +154,19 @@ public class EquipmentHelper {
 			if(slot >= 0 && slot < inv.getSizeInventory()) {
 				ItemStack stack = inv.getStackInSlot(slot);
 
-				if(simulate) {
+				if(stack != null && stack.getItem() instanceof IEquippable && 
+						!((IEquippable) stack.getItem()).canUnequip(stack, player, target, cap.getInventory(((IEquippable) stack.getItem()).getEquipmentCategory(stack)))) {
 					return stack;
 				}
 				
+				if(simulate) {
+					return stack;
+				}
+
 				if(stack.getItem() instanceof IEquippable) {
 					((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
 				}
-				
+
 				inv.setInventorySlotContents(slot, null);
 
 				return stack;

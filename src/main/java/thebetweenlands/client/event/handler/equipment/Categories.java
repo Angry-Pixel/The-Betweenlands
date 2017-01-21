@@ -5,14 +5,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.client.event.handler.equipment.RadialMenuHandler.Category;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
-import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.network.serverbound.MessageEquipItem;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -63,29 +60,16 @@ public class Categories {
 			EntityPlayer sender = Minecraft.getMinecraft().thePlayer;
 
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = sender.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+				ItemStack res = EquipmentHelper.equipItem(sender, sender, item, false);
 
-				if(this.slot < sender.inventory.getSizeInventory()) {
-					ItemStack item = sender.inventory.getStackInSlot(this.slot);
+				if(res == null || res.stackSize != item.stackSize) {
+					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(this.slot, sender));
 
-					if(item != null && item.getItem() instanceof IEquippable) {
-						IEquippable equippable = (IEquippable) item.getItem();
-						IInventory inv = cap.getInventory(equippable.getEquipmentCategory(item));
-
-						if(equippable.canEquip(item, sender, sender, inv)) {
-							ItemStack res = EquipmentHelper.equipItem(sender, sender, item, false);
-
-							if(res == null || res.stackSize != item.stackSize) {
-								TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(this.slot, sender));
-
-								if(!sender.capabilities.isCreativeMode) {
-									sender.inventory.setInventorySlotContents(this.slot, res);
-								}
-
-								RadialMenuHandler.INSTANCE.updateMenu();
-							}
-						}
+					if(!sender.capabilities.isCreativeMode) {
+						sender.inventory.setInventorySlotContents(this.slot, res);
 					}
+
+					RadialMenuHandler.INSTANCE.updateMenu();
 				}
 			}
 
@@ -111,28 +95,14 @@ public class Categories {
 			EntityPlayer sender = Minecraft.getMinecraft().thePlayer;
 
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-				IEquipmentCapability cap = sender.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-				IInventory inv = cap.getInventory(this.inventory);
+				ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);
 
-				if(this.slot < inv.getSizeInventory()) {
-					ItemStack stack = inv.getStackInSlot(this.slot);
+				if(unequipped != null) {
+					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(sender, this.inventory, this.slot));
 
-					if(stack != null) {
-						if(stack.getItem() instanceof IEquippable &&
-								!((IEquippable) stack.getItem()).canUnequip(stack, sender, sender, inv)) {
-							return mouseButton == 0;
-						}
+					sender.inventory.addItemStackToInventory(unequipped);
 
-						ItemStack unequipped = EquipmentHelper.unequipItem(sender, this.inventory, this.slot, false);
-
-						if(unequipped != null) {
-							TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(sender, this.inventory, this.slot));
-
-							sender.inventory.addItemStackToInventory(unequipped);
-
-							RadialMenuHandler.INSTANCE.updateMenu();
-						}
-					}
+					RadialMenuHandler.INSTANCE.updateMenu();
 				}
 			}
 

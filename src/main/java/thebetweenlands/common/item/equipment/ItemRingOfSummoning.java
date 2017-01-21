@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -22,6 +23,7 @@ import thebetweenlands.common.capability.summoning.ISummoningCapability;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfSummoning extends ItemRing {
 	public static final int MAX_USE_TIME = 100;
@@ -50,11 +52,16 @@ public class ItemRingOfSummoning extends ItemRing {
 		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer && entity.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
 			ISummoningCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
 
+			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+
 			if(cap.getCooldownTicks() > 0) {
 				cap.setCooldownTicks(cap.getCooldownTicks() - 1);
+				nbt.setBoolean("ringActive", false);
 			} else {
 				if(cap.isActive()) {
 					cap.setActiveTicks(cap.getActiveTicks() + 1);
+
+					nbt.setBoolean("ringActive", true);
 
 					if(cap.getActiveTicks() > MAX_USE_TIME) {
 						cap.setActive(false);
@@ -99,9 +106,23 @@ public class ItemRingOfSummoning extends ItemRing {
 							}
 						}
 					}
+				} else {
+					nbt.setBoolean("ringActive", false);
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) { 
+		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+		nbt.setBoolean("ringActive", false);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public boolean hasEffect(ItemStack stack) {
+		return stack.hasTagCompound() && stack.getTagCompound().getBoolean("ringActive");
 	}
 
 	public static boolean isRingActive(Entity entity) {
@@ -113,7 +134,7 @@ public class ItemRingOfSummoning extends ItemRing {
 
 			for(int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && stack.getItem() == ItemRegistry.RING_OF_SUMMONING && ((ItemRing) stack.getItem()).isActive(stack)) {
+				if(stack != null && stack.getItem() == ItemRegistry.RING_OF_SUMMONING && ((ItemRing) stack.getItem()).canBeUsed(stack)) {
 					hasRing = true;
 					break;
 				}

@@ -40,6 +40,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 				return stack.getItemDamage();
 			}
 		});
+		IEquippable.addEquippedPropertyOverrides(this);
 	}
 
 	@Override
