@@ -59,6 +59,7 @@ import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
 import thebetweenlands.client.render.entity.RenderBlindCaveFish;
 import thebetweenlands.client.render.entity.RenderBloodSnail;
@@ -120,6 +121,7 @@ import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
@@ -428,7 +430,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveBlock.class, RenderShockwaveBlock::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGecko.class, RenderGecko::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityWight.class, RenderWight::new);
-		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, (RenderManager manager) -> new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem()));
+		RenderingRegistry.registerEntityRenderingHandler(EntityShockwaveSwordItem.class, manager -> new RenderShockwaveSwordItem(manager, Minecraft.getMinecraft().getRenderItem()));
 		RenderingRegistry.registerEntityRenderingHandler(EntityFirefly.class, RenderFirefly::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityGasCloud.class, RenderGasCloud::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySludge.class, RenderSludge::new);
@@ -444,6 +446,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityThrownTarminion.class, RenderThrownTarminion::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, RenderRopeNode::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, RenderMummyArm::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getMinecraft().getRenderItem()));
 		
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
 

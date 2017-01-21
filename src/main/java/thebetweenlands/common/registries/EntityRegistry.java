@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
@@ -79,6 +80,7 @@ public class EntityRegistry {
 		registerEntity(EntityThrownTarminion.class, "thrown_tarminion", 64, 10, true);
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
+		registerEntity(EntityAngryPebble.class, "angry_pebble");
 	}
 
 	private static int id = 0;

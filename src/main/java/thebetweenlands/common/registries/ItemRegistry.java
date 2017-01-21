@@ -66,6 +66,7 @@ import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
+import thebetweenlands.common.item.misc.ItemAngryPebble;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemCavingRope;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
@@ -99,6 +100,7 @@ import thebetweenlands.common.item.tools.ItemPestle;
 import thebetweenlands.common.item.tools.ItemShockwaveSword;
 import thebetweenlands.common.item.tools.ItemSickle;
 import thebetweenlands.common.item.tools.ItemSpecificBucket;
+import thebetweenlands.common.item.tools.ItemSwiftPick;
 import thebetweenlands.common.item.tools.ItemSyrmoriteBucketEmpty;
 import thebetweenlands.common.item.tools.ItemSyrmoriteBucketSolidRubber;
 import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
@@ -186,7 +188,6 @@ public class ItemRegistry {
 	public static final Item VALONITE_LEGGINGS = new ItemValoniteArmor(EntityEquipmentSlot.LEGS);
 	public static final Item VALONITE_BOOTS = new ItemValoniteArmor(EntityEquipmentSlot.FEET);
 	public static final Item RUBBER_BOOTS = new ItemRubberBoots();
-	//TODO actuall do this...
 	public static final Item SKULL_MASK = new ItemSkullMask();
 
 	//TOOLS
@@ -266,7 +267,8 @@ public class ItemRegistry {
 	public static final Item CRITTER_CRUNCHER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityBloodSnail.class, EntityDragonFly.class, EntityFirefly.class, EntityLeech.class, EntityMireSnail.class, EntitySporeling.class, EntityTermite.class).setMaxDamage(32);
 	public static final Item HAG_HACKER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntitySwampHag.class).setMaxDamage(32);
 	public static final Item VOODOO_DOLL = new ItemVoodooDoll();
-
+	public static final Item SWIFT_PICK = new ItemSwiftPick();
+	
 	//BUCKETS
 	public static final Item WEEDWOOD_BUCKET = new ItemWeedwoodBucketEmpty();
 	public static final ItemBLBucketFilled WEEDWOOD_BUCKET_FILLED = new ItemBLBucketFilled(WEEDWOOD_BUCKET);
@@ -346,6 +348,7 @@ public class ItemRegistry {
 	public static final Item RING_OF_FLIGHT = new ItemRingOfFlight();
 	public static final Item RING_OF_RECRUITMENT = new ItemRingOfRecruitment();
 	public static final Item RING_OF_SUMMONING = new ItemRingOfSummoning();
+	public static final Item ANGRY_PEBBLE = new ItemAngryPebble();
 	
 	public static void preInit() {
 		try {
