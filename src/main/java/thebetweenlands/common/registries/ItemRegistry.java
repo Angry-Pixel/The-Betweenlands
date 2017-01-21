@@ -73,6 +73,7 @@ import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGlue;
 import thebetweenlands.common.item.misc.ItemLifeCrystal;
+import thebetweenlands.common.item.misc.ItemLoreScrap;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemMob;
@@ -349,6 +350,7 @@ public class ItemRegistry {
 	public static final Item RING_OF_RECRUITMENT = new ItemRingOfRecruitment();
 	public static final Item RING_OF_SUMMONING = new ItemRingOfSummoning();
 	public static final Item ANGRY_PEBBLE = new ItemAngryPebble();
+	public static final Item LORE_SCRAP = new ItemLoreScrap();
 	
 	public static void preInit() {
 		try {

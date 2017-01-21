@@ -15,7 +15,6 @@ import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.entity.player.EntityPlayer;
@@ -49,6 +48,7 @@ import thebetweenlands.client.event.handler.TextureStitchHandler.TextureFrameSpl
 import thebetweenlands.client.event.handler.ThemHandler;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.event.handler.equipment.RadialMenuHandler;
+import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiPouchNaming;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
 import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
@@ -276,7 +276,10 @@ public class ClientProxy extends CommonProxy {
 			}
 			break;
 
+		case GUI_LORE:
+			return new GuiLorePage(player.getHeldItem(x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
 		}
+
 		return null;
 	}
 
@@ -447,7 +450,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityRopeNode.class, RenderRopeNode::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, RenderMummyArm::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getMinecraft().getRenderItem()));
-		
+
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
 
 		//Register particle stitchers
