@@ -54,14 +54,15 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		super(worldObj);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(1.6F, 1.5F);
+		this.stepHeight = 1.0F;
 	}
 
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 0.1D));
-		this.tasks.addTask(2, new EntityAIWander(this, 0));
+		this.tasks.addTask(1, new EntityAIPanic(this, 1.0D));
+		this.tasks.addTask(2, new EntityAIWander(this, 1.0D));
 		this.tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(4, new EntityAILookIdle(this));
 	}
@@ -69,6 +70,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 	}
@@ -177,7 +179,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 						if (distance > 1) {
 							if (this.ticksOnGround > 20) {
 								double speedMultiplier = (Math.min(distance, 2.0F) / 2.0F * 0.8F + 0.2F);
-								motionY += speedMultiplier * 0.6;
+								motionY += speedMultiplier * 0.6 + MathHelper.clamp_double((nextHopSpot.yCoord - this.posY) / 6.0D, 0.0D, 0.3D);
 								motionX += speedMultiplier * 0.5 * MathHelper.cos(angle);
 								motionZ += speedMultiplier * 0.5 * MathHelper.sin(angle);
 								ForgeHooks.onLivingJump(this);
@@ -357,7 +359,6 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	public void moveEntityWithHeading(float strafing, float forward) {
 		Entity controllingPassenger = this.getControllingPassenger();
 		if (this.isBeingRidden() && controllingPassenger != null && controllingPassenger instanceof EntityLivingBase) {
-			this.stepHeight = 1F;
 			this.prevRotationYaw = this.rotationYaw = controllingPassenger.rotationYaw;
 			this.rotationPitch = controllingPassenger.rotationPitch * 0.5F;
 			this.setRotation(this.rotationYaw, this.rotationPitch);
@@ -419,7 +420,6 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 			super.moveEntityWithHeading(0, 0);
 		} else {
-			this.stepHeight = 0.5F;
 			this.jumpMovementFactor = 0.02F;
 			super.moveEntityWithHeading(strafing, forward);
 		}
@@ -462,6 +462,12 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	public boolean canPassengerSteer() {
 		//TODO: onGround only updates properly if this return false??
 		return false;
+	}
+	
+	@Override
+	public void fall(float distance, float damageMultiplier) { 
+		distance = Math.max(0, distance - 6.0F);
+		super.fall(distance, damageMultiplier);
 	}
 }
 

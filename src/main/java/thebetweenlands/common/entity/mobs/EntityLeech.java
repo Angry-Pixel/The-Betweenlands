@@ -67,9 +67,9 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		this.aiAttackTarget = new EntityAINearestAttackableTarget<EntityLivingBase>(this, EntityLivingBase.class, true, true);
-		this.aiWander = new EntityAIWander(this, 0.5);
-		this.aiAttackOnCollide = new EntityAIAttackMelee(this, 0.5, false);
-		this.aiAvoidHarmer = new EntityAIBLAvoidEntity(this, EntityPlayer.class, 6, 0.5, 0.6);
+		this.aiWander = new EntityAIWander(this, 0.8D);
+		this.aiAttackOnCollide = new EntityAIAttackMelee(this, 1.0D, false);
+		this.aiAvoidHarmer = new EntityAIBLAvoidEntity(this, EntityPlayer.class, 6, 0.5D, 0.6D);
 
 		tasks.addTask(0, aiAttackOnCollide);
 		tasks.addTask(1, aiWander);
@@ -88,7 +88,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20);
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0);

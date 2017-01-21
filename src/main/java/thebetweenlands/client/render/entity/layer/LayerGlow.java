@@ -37,7 +37,7 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
 
-		mainModel.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
+		mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
 		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 

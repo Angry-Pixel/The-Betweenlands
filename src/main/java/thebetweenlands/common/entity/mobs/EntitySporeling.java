@@ -9,6 +9,8 @@ import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNodeType;
@@ -33,9 +35,9 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	protected void initEntityAI() {
 		super.initEntityAI();
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, 10.0F, 0.7D, 0.5D));
-		tasks.addTask(2, new EntityAIPanic(this, 0.7D));
-		tasks.addTask(3, new EntityAIWander(this, 0.5D));
+		tasks.addTask(1, new EntityAIAvoidEntity<EntityLivingBase>(this, EntityLivingBase.class, entity -> entity instanceof EntityMob || entity instanceof IMob || (entity instanceof EntityPlayer && !((EntityPlayer) entity).isCreative()), 10.0F, 1.0D, 0.5D));
+		tasks.addTask(2, new EntityAIPanic(this, 1.0D));
+		tasks.addTask(3, new EntityAIWander(this, 0.6D));
 		tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(5, new EntityAILookIdle(this));
 	}
@@ -43,7 +45,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.7D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.49D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}

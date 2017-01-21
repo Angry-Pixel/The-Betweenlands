@@ -89,8 +89,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true));
 
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIWightAttack(this, 0.58D, false));
-		this.tasks.addTask(2, new EntityAIMoveToDirect<EntityWight>(this, 0.1D) {
+		this.tasks.addTask(1, new EntityAIWightAttack(this, 1.0D, false));
+		this.tasks.addTask(2, new EntityAIMoveToDirect<EntityWight>(this, 0.6D) {
 			@Override
 			protected Vec3d getTarget() {
 				if(this.entity.volatileTicks >= 20) {
@@ -129,7 +129,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.58D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.33D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(76.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(80.0D);

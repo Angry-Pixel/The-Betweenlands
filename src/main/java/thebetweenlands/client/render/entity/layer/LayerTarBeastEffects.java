@@ -39,13 +39,13 @@ public class LayerTarBeastEffects implements LayerRenderer<EntityTarBeast> {
 		mainModel.drippingtar1_keepstraight.showModel = false;
 		mainModel.drippingtar2_keepstraight.showModel = false;
 		mainModel.teeth_keepstraight.showModel = false;
-		mainModel.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
+		mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
 		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 		mainModel.drippingtar1_keepstraight.showModel = true;
 		mainModel.drippingtar2_keepstraight.showModel = true;
 		mainModel.teeth_keepstraight.showModel = true;
-		
+
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);

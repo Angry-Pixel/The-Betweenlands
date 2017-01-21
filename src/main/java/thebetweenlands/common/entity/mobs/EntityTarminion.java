@@ -53,8 +53,8 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIAttackMelee(this, 0.7D, true));
-		this.tasks.addTask(2, new EntityAIFollowOwner(this, 0.7D, 3.0F, 40.0F));
+		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
+		this.tasks.addTask(2, new EntityAIFollowOwner(this, 1.0D, 3.0F, 40.0F));
 		this.tasks.addTask(3, new EntityAIWander(this, 0.5D));
 
 		this.targetTasks.addTask(0, new EntityAIOwnerHurtByTarget(this));
@@ -73,7 +73,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.85D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D);

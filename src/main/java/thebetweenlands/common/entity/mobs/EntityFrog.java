@@ -50,8 +50,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(0, new EntityAIPanic(this, 0.1D));
-		this.tasks.addTask(1, new EntityAIWander(this, 0.1D, 40));
+		this.tasks.addTask(0, new EntityAIPanic(this, 1.0D));
+		this.tasks.addTask(1, new EntityAIWander(this, 1.0D, 40));
 		this.tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		this.tasks.addTask(3, new EntityAILookIdle(this));
 	}
@@ -70,8 +70,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(3.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
 		getAttributeMap().registerAttribute(FROG_SKIN_ATTRIB);
 		this.setSkin(this.rand.nextInt(5));
 	}

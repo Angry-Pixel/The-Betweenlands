@@ -35,13 +35,13 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.aiAttack = new EntityAIAttackMelee(this, 0.7D, true);
+		this.aiAttack = new EntityAIAttackMelee(this, 1.0D, true);
 		this.aiRunAway = new EntityAIAvoidEntity<EntityPlayer>(this, EntityPlayer.class, 10.0F, 0.7D, 0.7D);
 		this.aiTarget =  new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true);
 
 		this.tasks.addTask(0, this.aiAttack);
 		this.tasks.addTask(1, this.aiRunAway);
-		this.tasks.addTask(2, new EntityAIWander(this, 0.7D));
+		this.tasks.addTask(2, new EntityAIWander(this, 1.0D));
 		this.tasks.addTask(3, new EntityAILookIdle(this));
 		this.tasks.addTask(4, new EntityAIAttackOnCollide(this));
 
@@ -52,7 +52,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(3.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);

@@ -49,9 +49,9 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
-		this.tasks.addTask(1, new EntityAIPanic(this, 0.5));
+		this.tasks.addTask(1, new EntityAIPanic(this, 1.0D));
 		this.tasks.addTask(2, new EntityAIBLAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.3, 0.5));
-		this.tasks.addTask(3, new EntityAIWander(this, 0.3));
+		this.tasks.addTask(3, new EntityAIWander(this, 0.6D));
 		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
 		this.tasks.addTask(5, new EntityAILookIdle(this));
 	}
@@ -65,6 +65,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(12.0D);
 	}
 

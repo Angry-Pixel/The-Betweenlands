@@ -105,9 +105,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAIAttackMelee(this, 0.5D, false));
-		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
-		tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));
+		tasks.addTask(0, new EntityAIAttackMelee(this, 1.0D, false));
+		tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.8D));
+		tasks.addTask(2, new EntityAIWander(this, 0.7D, 80));
 		tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(4, new EntityAILookIdle(this));
 
@@ -128,7 +128,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.5);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
 		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.5);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(55);
 	}
 

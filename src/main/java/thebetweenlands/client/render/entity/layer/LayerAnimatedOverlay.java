@@ -20,6 +20,7 @@ public class LayerAnimatedOverlay<T extends EntityLivingBase> implements LayerRe
 
 	@Override
 	public void doRenderLayer(T entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -36,7 +37,7 @@ public class LayerAnimatedOverlay<T extends EntityLivingBase> implements LayerRe
 		GlStateManager.color(colour, colour, colour, 1.0F);
 
 		ModelBase mainModel = this.renderer.getMainModel();
-		mainModel.setLivingAnimations(entity, limbSwingAmount, ageInTicks, partialTicks);
+		mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
 		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
@@ -45,6 +46,7 @@ public class LayerAnimatedOverlay<T extends EntityLivingBase> implements LayerRe
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.depthMask(true);
 		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.entity;
 
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -21,7 +20,7 @@ public class RenderLeech extends RenderLiving<EntityLeech> {
     @Override
     protected void preRenderCallback(EntityLeech leech, float partialTickTime) {
         if(!leech.isRiding())
-            GlStateManager.scale(1 + leech.getBloodConsumed() * 0.1F, 1 + leech.getBloodConsumed() * 0.1F, leech.moveProgress + 1F);
+            GlStateManager.scale(1 + leech.getBloodConsumed() * 0.1F, 1 + leech.getBloodConsumed() * 0.1F, (leech.moveProgress + 3F) / 3F);
 
         if(leech.isRiding()) {
             GlStateManager.scale(leech.moveProgress*leech.moveProgress/2 + 0.5F, leech.moveProgress*leech.moveProgress/2 + 0.5F, 1F);

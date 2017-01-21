@@ -38,10 +38,10 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIPanic(this, 0.4D));
-		tasks.addTask(2, new EntityAIMate(this, 0.4D));
-		tasks.addTask(3, new EntityAITempt(this, 0.4D, ItemRegistry.SLUDGE_BALL, false));
-		tasks.addTask(5, new EntityAIWander(this, 0.4D));	
+		tasks.addTask(1, new EntityAIPanic(this, 1.2D));
+		tasks.addTask(2, new EntityAIMate(this, 1.0D));
+		tasks.addTask(3, new EntityAITempt(this, 1.0D, ItemRegistry.SLUDGE_BALL, false));
+		tasks.addTask(5, new EntityAIWander(this, 0.85D));	
 		tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
 		tasks.addTask(7, new EntityAILookIdle(this));
 	}
@@ -60,7 +60,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.4D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.18D);
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(5.0D);
 		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
 	}

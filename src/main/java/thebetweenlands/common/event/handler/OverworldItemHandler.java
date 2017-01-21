@@ -10,11 +10,13 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
@@ -32,7 +34,7 @@ public class OverworldItemHandler {
 	private OverworldItemHandler() { }
 
 	@SubscribeEvent
-	public void onPlayerTorchPlacement(PlaceEvent event) {
+	public static void onPlayerTorchPlacement(PlaceEvent event) {
 		ItemStack itemstack = event.getPlayer().inventory.getCurrentItem();
 		if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.TORCH)) {
 			if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
@@ -44,6 +46,7 @@ public class OverworldItemHandler {
 								EnumFacing facing = block.getValue(BlockTorch.FACING);
 								IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
 								event.getWorld().setBlockState(event.getPos().add(x, y, z), dampTorch);
+								event.getWorld().playSound(null, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
 							}
 						}
 					}

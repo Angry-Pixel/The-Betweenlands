@@ -1,32 +1,18 @@
 package thebetweenlands.client.render.model.entity;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.proxy.ClientProxy;
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
-import thebetweenlands.client.render.model.IModelRenderCallback;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.util.MathUtils;
 
 @SideOnly(Side.CLIENT)
-public class ModelLurker extends ModelBase implements IModelRenderCallback {
-	private FloatBuffer colorBuffer = ByteBuffer.allocateDirect(16 * 4).order(ByteOrder.LITTLE_ENDIAN).asFloatBuffer();
-
+public class ModelLurker extends ModelBase {
 	private ModelRenderer trunk;
 	private ModelRenderer lumbarVertebrae;
 	private ModelRenderer tailFirst;
@@ -46,10 +32,6 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
 
 	private ModelRenderer[] tail;
 	private float[] restingTailRotationAngleXs;
-
-	private EntityLurker currentLurker;
-
-	private float delta;
 
 	public ModelLurker() {
 		textureWidth = 256;
@@ -101,7 +83,6 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
 		mandable = new AdvancedModelRenderer(this, 95, 15);
 		mandable.addBox(-4.5F, -2F, -15F, 9, 4, 16);
 		mandable.setRotationPoint(0F, 3F, -2F);
-		mandable.addCallback(this);
 		head.addChild(mandable);
 
 		ModelRenderer tooth = new ModelRenderer(this, 95, 53);
@@ -245,43 +226,10 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
-		currentLurker = (EntityLurker) entity;
 		rotationYaw = MathHelper.clamp_float(rotationYaw, -60, 60);
 		head.rotateAngleY = rotationYaw * MathUtils.DEG_TO_RAD;
 		head.rotateAngleX += rotationPitch * MathUtils.DEG_TO_RAD;
 		trunk.render(scale);
-		currentLurker = null;
-	}
-
-	@Override
-	public void render(AdvancedModelRenderer advancedModelRenderer, float scale) {
-//		if (!currentLurker.getPassengers().isEmpty() && currentLurker.getPassengers().get(0) instanceof EntityDragonFly) {
-//			GL11.glGetFloat(GL11.GL_CURRENT_COLOR, colorBuffer);
-//			boolean texture2D = GL11.glGetBoolean(GL11.GL_TEXTURE_2D);
-//			int textureBinding2D = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
-//			GlStateManager.pushMatrix();
-//			GlStateManager.rotate(180, 1, 0, 0);
-//			GlStateManager.translate(0, 0, 0.5F);
-//			GlStateManager.color(1, 1, 1, 1);
-//			GlStateManager.enableTexture2D();
-//			EntityDragonFly dragonfly = (EntityDragonFly) currentLurker.getPassengers().get(0);
-//			dragonfly.prevRenderYawOffset = dragonfly.renderYawOffset = 0;
-//			dragonfly.prevRotationYaw = dragonfly.rotationYaw = 0;
-//			dragonfly.prevRotationYawHead = dragonfly.rotationYawHead = 0;
-//			ClientProxy.dragonFlyRenderer.doRender(dragonfly, 0, 0, 0, 0, delta);
-//			 GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureBinding2D);
-//			GlStateManager.popMatrix();
-//			if (texture2D) {
-//                GL11.glEnable(GL11.GL_TEXTURE_2D);
-//            } else {
-//                GL11.glDisable(GL11.GL_TEXTURE_2D);
-//            }
-//			GlStateManager.enableBlend();
-//			GlStateManager.enableRescaleNormal();
-//			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-//			GL11.glColor4f(colorBuffer.get(), colorBuffer.get(), colorBuffer.get(), colorBuffer.get());
-//			colorBuffer.clear();
-//		}
 	}
 
 	@Override
@@ -312,6 +260,5 @@ public class ModelLurker extends ModelBase implements IModelRenderCallback {
 			segment.rotateAngleY = yaw + MathHelper.sin(swing * 0.4F - i * 1.6F) * speed * ((i / (float) tail.length * 2 + 0.1F)) * 0.6F;
 			segment.rotateAngleZ = -trunk.rotateAngleZ / tail.length;
 		}
-		this.delta = delta;
 	}
 }
