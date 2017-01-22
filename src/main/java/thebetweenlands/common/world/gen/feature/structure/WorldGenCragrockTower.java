@@ -57,6 +57,25 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		super(17, 64, 19);
 	}
 
+	protected boolean isProtectedBlock(IBlockState state) {
+		Block block = state.getBlock();
+		if(block != Blocks.AIR && block != BlockRegistry.MOB_SPAWNER && block != BlockRegistry.LOOT_POT
+				&& block != BlockRegistry.ROOT) {
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
+		if(this.isProtectedBlock(state)) {
+			this.guard.setGuarded(worldIn, pos, true);
+		} else {
+			this.guard.setGuarded(worldIn, pos, false);
+		}
+		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+	}
+	
 	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos pos) {
 		CRAGROCK = BlockRegistry.CRAGROCK.getDefaultState();
@@ -1511,17 +1530,5 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		this.worldStorage.addSharedStorage(this.towerLocation);
 
 		return true;
-	}
-
-	@Override
-	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
-		Block block = state.getBlock();
-		if(block != Blocks.AIR && block != BlockRegistry.MOB_SPAWNER && block != BlockRegistry.LOOT_POT
-				&& block != BlockRegistry.ROOT) {
-			this.guard.setGuarded(worldIn, pos, true);
-		} else if(block == Blocks.AIR) {
-			this.guard.setGuarded(worldIn, pos, false);
-		}
-		super.setBlockAndNotifyAdequately(worldIn, pos, state);
 	}
 }

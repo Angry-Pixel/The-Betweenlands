@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 
 //MINE!!
 public class TestItem extends Item {
@@ -29,11 +29,11 @@ public class TestItem extends Item {
             smallRuins.generate(world, itemRand, pos.up());
         }*/
 
-		/*	if (!world.isRemote) {
+			if (!world.isRemote) {
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(world, itemRand, pos.up());
 		}
-		 */
+		 
 		//		if(!world.isRemote) {
 		//			/*if(playerIn.isSneaking()) {
 		//				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
@@ -59,16 +59,16 @@ public class TestItem extends Item {
 		//			}
 		//		}
 
-		if (!world.isRemote) {
-			/*WorldGenSpawner spawner = new WorldGenSpawner();
-					if(spawner.generate(world, itemRand, pos)) {
-						//playerIn.setHeldItem(hand, null);
-					}*/
-			WorldGenCragrockTower tower = new WorldGenCragrockTower();
-			if(tower.generate(world, itemRand, pos.up(8).add(8, 0, 0))) {
-				//playerIn.setHeldItem(hand, null);
-			}
-		}
+//		if (!world.isRemote) {
+//			/*WorldGenSpawner spawner = new WorldGenSpawner();
+//					if(spawner.generate(world, itemRand, pos)) {
+//						//playerIn.setHeldItem(hand, null);
+//					}*/
+//			WorldGenCragrockTower tower = new WorldGenCragrockTower();
+//			if(tower.generate(world, itemRand, pos.up(8).add(8, 0, 0))) {
+//				//playerIn.setHeldItem(hand, null);
+//			}
+//		}
 
 		return EnumActionResult.SUCCESS;
 	}

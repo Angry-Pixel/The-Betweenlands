@@ -95,7 +95,7 @@ public class BlockLocationGuard implements ILocationGuard {
 
 	protected static class GuardChunkSection {
 		private final byte[] data; //8 blocks per byte, 2 bytes per row, 2*16*16 bytes in total
-		private int blocks = 0;
+		private int blockRefCount = 0;
 
 		protected GuardChunkSection() {
 			this.data = new byte[512];
@@ -103,25 +103,32 @@ public class BlockLocationGuard implements ILocationGuard {
 
 		protected GuardChunkSection(byte[] data) {
 			this.data = data;
+			this.updateBlockRefCount();
 		}
 
 		protected int getByteIndex(int x, int y, int z) {
 			return (x >> 3) + (z << 1) + (y << 5);
 		}
 
+		public void updateBlockRefCount() {
+			this.blockRefCount = 0;
+			for(int i = 0; i < this.data.length; i++) {
+				this.blockRefCount += Integer.bitCount(this.data[i] & 0xFF);
+			}
+		}
+
 		public void setGuarded(int x, int y, int z, boolean guarded) {
 			int byteIndex = this.getByteIndex(x, y, z);
 			byte mask = (byte)(1 << (x % 8));
-			//System.out.println(x + " " + y + " " + z);
 			byte data = this.data[byteIndex];
 
 			if(((data & mask) != 0) != guarded) {
 				this.data[byteIndex] = (byte) (guarded ? (data | mask) : (data & (~mask)));
 
 				if(guarded) {
-					this.blocks++;
+					this.blockRefCount++;
 				} else {
-					this.blocks--;
+					this.blockRefCount--;
 				}
 			}
 		}
@@ -133,7 +140,7 @@ public class BlockLocationGuard implements ILocationGuard {
 		}
 
 		public boolean isEmpty() {
-			return this.blocks == 0;
+			return this.blockRefCount == 0;
 		}
 
 		public void clear() {
@@ -157,17 +164,19 @@ public class BlockLocationGuard implements ILocationGuard {
 		}
 
 		public void setGuarded(int x, int y, int z, boolean guarded) {
-			int sectionId = y >> 4;
-			GuardChunkSection section = this.sections[sectionId];
-			if(guarded) {
-				if(section == null) {
-					this.sections[sectionId] = section = new GuardChunkSection();
-				}
-				section.setGuarded(x, y % 16, z, true);
-			} else if(section != null) {
-				section.setGuarded(x, y % 16, z, false);
-				if(section.isEmpty()) {
-					this.sections[sectionId] = null;
+			if(y >= 0 && y < 256) {
+				int sectionId = y >> 4;
+				GuardChunkSection section = this.sections[sectionId];
+				if(guarded) {
+					if(section == null) {
+						this.sections[sectionId] = section = new GuardChunkSection();
+					}
+					section.setGuarded(x, y % 16, z, true);
+				} else if(section != null) {
+					section.setGuarded(x, y % 16, z, false);
+					if(section.isEmpty()) {
+						this.sections[sectionId] = null;
+					}
 				}
 			}
 		}

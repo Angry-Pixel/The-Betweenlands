@@ -31,10 +31,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.guard.BlockLocationGuard;
-import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
 
-public class LocationCragrockTower extends LocationStorage implements ITickable {
+public class LocationCragrockTower extends LocationGuarded implements ITickable {
 	private List<BlockPos> glowingCragrockBlocks = new ArrayList<BlockPos>();
 	private List<BlockPos> wisps = new ArrayList<BlockPos>();
 	private List<BlockPos> inactiveWisps = new ArrayList<BlockPos>();
@@ -51,15 +49,8 @@ public class LocationCragrockTower extends LocationStorage implements ITickable 
 	private boolean crumbling = false;
 	private int crumblingTicks = 0;
 
-	private BlockLocationGuard guard = new BlockLocationGuard();
-
 	public LocationCragrockTower(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
 		super(worldStorage, id, region, "translate:cragrockTower", EnumLocationType.DUNGEON);
-	}
-
-	@Override
-	public ILocationGuard getGuard() {
-		return this.guard;
 	}
 
 	/**
