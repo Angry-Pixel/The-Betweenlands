@@ -7,6 +7,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class MessagePouchNaming extends MessageBase {
 	private String name;
@@ -36,7 +37,7 @@ public class MessagePouchNaming extends MessageBase {
 		if(ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().playerEntity;
 			ItemStack heldItem = player.getHeldItem(this.hand);
-			if(heldItem != null) {
+			if(heldItem != null && heldItem.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
 				heldItem.setStackDisplayName(this.name);
 			}
 		}

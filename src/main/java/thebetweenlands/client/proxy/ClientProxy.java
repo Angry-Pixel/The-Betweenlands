@@ -574,10 +574,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(InputHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemLurkerSkinPouch.class);
 		MinecraftForge.EVENT_BUS.register(BrightnessHandler.class);
-
-		if (ConfigHandler.debug) {
-			MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);
-		}
+		MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);
 	}
 
 	@Override
