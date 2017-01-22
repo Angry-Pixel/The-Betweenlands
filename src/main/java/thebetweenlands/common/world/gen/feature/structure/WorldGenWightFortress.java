@@ -110,7 +110,8 @@ public class WorldGenWightFortress extends WorldGenerator {
 		
 		SharedRegion region = SharedRegion.getFromBlockPos(pos);
 		
-		LocationStorage fortressLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wightTower", EnumLocationType.WIGHT_TOWER);
+		//TODO: Update this with new location guard
+		/*LocationStorage fortressLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wightTower", EnumLocationType.WIGHT_TOWER);
 		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
 		fortressLocation.linkChunks();
 		fortressLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRangeMultiplier(0.2F).setFogBrightness(80));
@@ -146,7 +147,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		bossLocation.setGuarded(true);
 		bossLocation.setDirty(true);
 		bossLocation.setSeed(locationSeed);
-		worldStorage.addSharedStorage(bossLocation);
+		worldStorage.addSharedStorage(bossLocation);*/
 
 		return generateStructure(world, rand, pos);
 	}

@@ -214,11 +214,11 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 			if (this.isLocationGuard() && (this.getViolator() == null || !this.getViolator().isEntityAlive())) {
 				this.setDead();
 			} else if (this.isLocationGuard() && this.getViolator() != null) {
-				if (!LocationStorage.isLocationGuarded(this.getViolator())) {
+				/*if (!LocationStorage.isLocationGuarded(this.getViolator())) {
 					this.setDead();
 				} else {
 					this.setAttackTarget(this.getViolator());
-				}
+				}*/
 			}
 		}
 

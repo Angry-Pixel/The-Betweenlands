@@ -61,13 +61,14 @@ public class LocationDebugItem extends Item {
 						}
 					}
 					playerIn.addChatMessage(new TextComponentString(String.format("Marked %s locations as dirty and queued update packets to %s watchers:", locations.size(), watchers.size())));
-					playerIn.addChatMessage(new TextComponentString(String.format("  Locations:", locations.size(), watchers.size())));
+					playerIn.addChatMessage(new TextComponentString("  Locations:"));
 					for(LocationStorage location : locations) {
 						playerIn.addChatMessage(new TextComponentString("    " + location.getName()));
-					}
-					playerIn.addChatMessage(new TextComponentString(String.format("  Watchers:", locations.size(), watchers.size())));
-					for(EntityPlayerMP watcher : watchers) {
-						playerIn.addChatMessage(new TextComponentString("    " + watcher.getName()));
+						playerIn.addChatMessage(new TextComponentString(String.format("      Guarded at %s: %s", "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos)))));
+						playerIn.addChatMessage(new TextComponentString("      Watchers:"));
+						for(EntityPlayerMP watcher : location.getWatchers()) {
+							playerIn.addChatMessage(new TextComponentString("        " + watcher.getName()));
+						}
 					}
 				}
 			}

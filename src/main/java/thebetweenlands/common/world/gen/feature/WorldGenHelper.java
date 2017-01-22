@@ -98,7 +98,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
 					for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -109,7 +109,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + depth - offsetX - 1; zz > z + depth - offsetX - sizeWidth - 1; zz--)
 					for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -120,7 +120,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + width - offsetX - 1; xx > x + width - offsetX - sizeWidth - 1; xx--)
 					for (int zz = z + depth - offsetZ - 1; zz > z + depth - offsetZ - sizeDepth - 1; zz--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -131,7 +131,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
 					for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -464,23 +464,23 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		switch (rotation) {
 		case 0:
 			pos = pos.add(offsetX, offsetY, offsetZ);
-			world.setBlockState(pos, spawner);
+			this.setBlockAndNotifyAdequately(world, pos, spawner);
 			BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
 			return BlockMobSpawnerBetweenlands.getLogic(world, pos);
 		case 1:
 			pos = pos.add(offsetZ, offsetY, depth - offsetX - 1);
-			world.setBlockState(pos, spawner);
+			this.setBlockAndNotifyAdequately(world, pos, spawner);
 			BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
 			return BlockMobSpawnerBetweenlands.getLogic(world, pos);
 		case 2:
 			pos = pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1);
-			world.setBlockState(pos, spawner);
+			this.setBlockAndNotifyAdequately(world, pos, spawner);
 			BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
 			return BlockMobSpawnerBetweenlands.getLogic(world, pos);
 		default:
 		case 3:
 			pos = pos.add(width - offsetZ - 1, offsetY, offsetX);
-			world.setBlockState(pos, spawner);
+			this.setBlockAndNotifyAdequately(world, pos, spawner);
 			BlockMobSpawnerBetweenlands.setMob(world, pos, mob);
 			return BlockMobSpawnerBetweenlands.getLogic(world, pos);
 		}
@@ -561,7 +561,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param max    The maximum amount of items
 	 */
 	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, ResourceLocation list) {
-		world.setBlockState(pos, getRandomLootPot(random), 3);
+		this.setBlockAndNotifyAdequately(world, pos, getRandomLootPot(random));
 		TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
 		if (lootPot != null)
 			lootPot.setLootTable(LootTableRegistry.COMMON_CHEST_LOOT, random.nextLong());
@@ -577,7 +577,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param max    The maximum amount of items
 	 */
 	public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state, ResourceLocation lootTable) {
-		world.setBlockState(pos, state, 3);
+		this.setBlockAndNotifyAdequately(world, pos, state);
 		TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
 
 		if (chest != null)

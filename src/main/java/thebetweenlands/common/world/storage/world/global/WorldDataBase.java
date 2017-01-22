@@ -19,6 +19,7 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -433,7 +434,6 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 * @param storageClass
 	 * @param selector
 	 * @param x
-	 * @param y
 	 * @param z
 	 * @return
 	 */
@@ -456,6 +456,37 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	}
 
 	/**
+	 * Returns a list of shared storages at the specified AABB
+	 * @param storageClass
+	 * @param selector
+	 * @param aabb
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, @Nullable Predicate<F> selector, AxisAlignedBB aabb) {
+		List<F> storages = new ArrayList<>();
+		int sx = MathHelper.floor_double(aabb.minX / 16.0D);
+		int sz = MathHelper.floor_double(aabb.minZ / 16.0D);
+		int ex = MathHelper.ceiling_double_int(aabb.maxX / 16.0D);
+		int ez = MathHelper.ceiling_double_int(aabb.maxZ / 16.0D);
+		for(int cx = sx; cx <= ex; cx++) {
+			for(int cz = sz; cz <= ez; cz++) {
+				Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);
+				ChunkDataBase chunkStorage = ChunkDataBase.forChunk(this, chunk);
+				if(chunkStorage != null) {
+					for(SharedStorageReference ref : chunkStorage.getSharedStorageReferences()) {
+						SharedStorage storage = this.getSharedStorage(ref.getID());
+						if(storage != null && storageClass.isAssignableFrom(storage.getClass()) && (selector == null || selector.test((F) storage))) {
+							storages.add((F) storage);
+						}
+					}
+				}
+			}
+		}
+		return storages;
+	}
+
+	/**
 	 * Returns a list of shared storages at the specified position
 	 * @param storageClass
 	 * @param x
@@ -464,6 +495,16 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	 */
 	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, double x, double z) {
 		return this.getSharedStorageAt(storageClass, null, x, z);
+	}
+
+	/**
+	 * Returns a list of shared storages at the specified AABB
+	 * @param storageClass
+	 * @param aabb
+	 * @return
+	 */
+	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, AxisAlignedBB aabb) {
+		return this.getSharedStorageAt(storageClass, null, aabb);
 	}
 
 	private static class WorldDataTypePair {

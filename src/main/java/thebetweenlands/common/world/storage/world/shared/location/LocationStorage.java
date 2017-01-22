@@ -12,6 +12,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
@@ -22,6 +23,7 @@ import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;
 import thebetweenlands.common.world.storage.world.shared.BetweenlandsSharedStorage;
 import thebetweenlands.common.world.storage.world.shared.SharedRegion;
+import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
 
 public class LocationStorage extends BetweenlandsSharedStorage {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
@@ -33,7 +35,6 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	private boolean visible = true;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
-	private boolean guarded = false;
 
 	public LocationStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
 		super(worldStorage, id, region);
@@ -101,7 +102,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 			this.enclosingBoundingBox = union;
 		}
 	}
-	
+
 	/**
 	 * Returns a bounding box that encloses all bounds
 	 * @return
@@ -131,21 +132,13 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	}
 
 	/**
-	 * Returns whether this location is guarded
+	 * Returns the location guard. Must be created before
+	 * {@link #readFromNBT(NBTTagCompound)} is called
 	 * @return
 	 */
-	public boolean isGuarded() {
-		return this.guarded;
-	}
-
-	/**
-	 * Sets whether this location is guarded
-	 * @param guarded
-	 * @return
-	 */
-	public LocationStorage setGuarded(boolean guarded) {
-		this.guarded = guarded;
-		return this;
+	@Nullable
+	public ILocationGuard getGuard() {
+		return null;
 	}
 
 	/**
@@ -261,8 +254,10 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 			this.ambience = LocationAmbience.readFromNBT(this, ambienceTag);
 		}
 		this.visible = nbt.getBoolean("visible");
-		this.guarded = nbt.getBoolean("guarded");
 		this.locationSeed = nbt.getLong("seed");
+		if(this.getGuard() != null) {
+			this.getGuard().readFromNBT(nbt.getCompoundTag("guard"));
+		}
 	}
 
 	@Override
@@ -289,8 +284,10 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 			nbt.setTag("ambience", ambienceTag);
 		}
 		nbt.setBoolean("visible", this.visible);
-		nbt.setBoolean("guarded", this.guarded);
 		nbt.setLong("seed", this.locationSeed);
+		if(this.getGuard() != null) {
+			nbt.setTag("guard", this.getGuard().writeToNBT(new NBTTagCompound()));
+		}
 		return nbt;
 	}
 
@@ -330,6 +327,20 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	public boolean isInside(Vec3d pos) {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
 			if(boundingBox.isVecInside(pos)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns whether this location intersects with the specified AABB
+	 * @param aabb
+	 * @return
+	 */
+	public boolean intersects(AxisAlignedBB aabb) {
+		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
+			if(boundingBox.intersectsWith(aabb)) {
 				return true;
 			}
 		}
@@ -391,6 +402,19 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	}
 
 	/**
+	 * Returns a list of all locations that intersect the specified AABB
+	 * @param world
+	 * @param aabb
+	 * @return
+	 */
+	public static List<LocationStorage> getLocations(World world, AxisAlignedBB aabb) {
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		return worldStorage.getSharedStorageAt(LocationStorage.class, (location) -> {
+			return location.intersects(aabb);
+		}, aabb);
+	}
+
+	/**
 	 * Returns the highest priority ambience at the specified entity
 	 * @param entity
 	 * @return
@@ -449,10 +473,10 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @param entity
 	 * @return
 	 */
-	public static boolean isLocationGuarded(Entity entity) {
-		List<LocationStorage> locations = getLocations(entity);
+	public static boolean isLocationGuarded(World world, @Nullable Entity entity, BlockPos pos) {
+		List<LocationStorage> locations = getLocations(world, new Vec3d(pos));
 		for(LocationStorage location : locations) {
-			if(location.isGuarded())
+			if(location.getGuard() != null && location.getGuard().isGuarded(world, entity, pos))
 				return true;
 		}
 		return false;

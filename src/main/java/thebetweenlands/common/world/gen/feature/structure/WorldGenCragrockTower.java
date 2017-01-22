@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
@@ -25,6 +26,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
 
 public class WorldGenCragrockTower extends WorldGenHelper {
 	private static IBlockState CRAGROCK;
@@ -46,6 +48,10 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 	private static IBlockState SMOOTH_CRAGROCK_WALL;
 	private static IBlockState INACTIVE_GLOWING_SMOOTH_CRAGROCK;
 	private static IBlockState AIR;
+
+	private ILocationGuard guard;
+	private LocationCragrockTower towerLocation;
+	private BetweenlandsWorldData worldStorage;
 
 	public WorldGenCragrockTower() {
 		super(17, 64, 19);
@@ -76,6 +82,10 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		while (worldIn.isAirBlock(pos) && pos.getY() > WorldProviderBetweenlands.LAYER_HEIGHT)
 			pos = pos.add(0, -1, 0);
 
+
+		this.worldStorage = BetweenlandsWorldData.forWorld(worldIn);
+		this.towerLocation = new LocationCragrockTower(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos));
+		this.guard = this.towerLocation.getGuard();
 
 		return tower(worldIn, rand, pos.getX(), pos.getY(), pos.getZ());
 	}
@@ -1054,15 +1064,15 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			if(!stairBlockRight.getBlock().isReplaceable(world, stairPosRight) || stairBlockRight.getMaterial().isLiquid() ||
 					!stairBlockLeft.getBlock().isReplaceable(world, stairPosLeft) || stairBlockLeft.getMaterial().isLiquid() || steps == 16) {
 				stair1Length = steps;
-				
+
 				if(world.getBlockState(stairPosRight).getBlock().isReplaceable(world, stairPosRight)) {
-					world.setBlockState(stairPosRight, CRAGROCK_BRICKS);
+					this.setBlockAndNotifyAdequately(world, stairPosRight, CRAGROCK_BRICKS);
 				}
-				
+
 				if(world.getBlockState(stairPosLeft).getBlock().isReplaceable(world, stairPosLeft)) {
-					world.setBlockState(stairPosLeft, SMOOTH_CRAGROCK);
+					this.setBlockAndNotifyAdequately(world, stairPosLeft, SMOOTH_CRAGROCK);
 				}
-				
+
 				break;
 			}
 
@@ -1096,15 +1106,15 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			if(!stairBlockRight.getBlock().isReplaceable(world, stairPosRight) || stairBlockRight.getMaterial().isLiquid() ||
 					!stairBlockLeft.getBlock().isReplaceable(world, stairPosLeft) || stairBlockLeft.getMaterial().isLiquid() || steps == 16) {
 				stair2Length = steps;
-				
+
 				if(world.getBlockState(stairPosRight).getBlock().isReplaceable(world, stairPosRight)) {
-					world.setBlockState(stairPosRight, SMOOTH_CRAGROCK);
+					this.setBlockAndNotifyAdequately(world, stairPosRight, SMOOTH_CRAGROCK);
 				}
-				
+
 				if(world.getBlockState(stairPosLeft).getBlock().isReplaceable(world, stairPosLeft)) {
-					world.setBlockState(stairPosLeft, CRAGROCK_BRICKS);
+					this.setBlockAndNotifyAdequately(world, stairPosLeft, CRAGROCK_BRICKS);
 				}
-				
+
 				break;
 			}
 
@@ -1119,7 +1129,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 				rotatedCubeVolume(world, x, y, z, 3 + 13, 2 - steps, 6 - steps*2, getStateFromRotation(0, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.STAIR), 1, 1, 1, direction);
 				rotatedCubeVolume(world, x, y, z, 3 + 13, 3 - steps, 6 - steps*2, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
 			}
-			
+
 			rotatedCubeVolume(world, x, y, z, 2 + 13, -1 - steps, 8 - steps*2, CRAGROCK_BRICK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 1 + 13, -1 - steps, 8 - steps*2, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 2 + 13, -1 - steps, 7 - steps*2, CRAGROCK_BRICKS, 1, 1, 1, direction);
@@ -1129,11 +1139,11 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		}
 
 		int stairsLength = Math.max(stair2Length, stair1Length);
-		
-		
+
+
 		//TODO
 		AxisAlignedBB stairsAABB;
-		
+
 		switch(direction) {
 		default:
 		case 0:
@@ -1149,9 +1159,9 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			stairsAABB = new AxisAlignedBB(x + stairsLength * 2 + 1, y - stairsLength - 8, z - 9, x, y, z + 8);
 			break;
 		}
-		
+
 		stairsAABB = stairsAABB.expand(4, 0, 4);
-		
+
 		rotatedCubeVolume(world, x, y, z, 1, 0, 8, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 9, CRAGROCK_BRICKS, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 10, CRAGROCK_BRICK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
@@ -1477,31 +1487,41 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		}
 		x += width / 2;
 		z += depth / 2;
-		
+
 		if(stairsAABB.minY < locationBounds.minY) {
 			double addY = (locationBounds.minY - stairsAABB.minY) / 2;
 			locationBounds = locationBounds.expand(0, addY, 0).offset(0, -addY, 0);
 		}
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationCragrockTower towerLocation = new LocationCragrockTower(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(x, z));
-		towerLocation.addBounds(locationBounds, locationBounds.expand(-12, -10, -12), stairsAABB);
-		towerLocation.linkChunks();
-		towerLocation.setLayer(0);
-		towerLocation.setSeed(random.nextLong());
-		towerLocation.setStructurePos(entrance);
+		this.towerLocation.addBounds(locationBounds, locationBounds.expand(-12, -10, -12), stairsAABB);
+		this.towerLocation.linkChunks();
+		this.towerLocation.setLayer(0);
+		this.towerLocation.setSeed(random.nextLong());
+		this.towerLocation.setStructurePos(entrance);
 		for(BlockPos pos : inactiveGlowingCragrockBlocks) {
-			towerLocation.addGlowingCragrock(pos);
+			this.towerLocation.addGlowingCragrock(pos);
 		}
 		for(BlockPos pos : inactiveWisps) {
-			towerLocation.addInactiveWisp(pos);
+			this.towerLocation.addInactiveWisp(pos);
 		}
 		for(int i = 0; i < 5; i++) {
-			towerLocation.setLevelBlockadeBlocks(i, levelBlockades[i]);
+			this.towerLocation.setLevelBlockadeBlocks(i, levelBlockades[i]);
 		}
-		towerLocation.setDirty(true);
-		worldStorage.addSharedStorage(towerLocation);
+		this.towerLocation.setDirty(true);
+		this.worldStorage.addSharedStorage(this.towerLocation);
 
 		return true;
+	}
+
+	@Override
+	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
+		Block block = state.getBlock();
+		if(block != Blocks.AIR && block != BlockRegistry.MOB_SPAWNER && block != BlockRegistry.LOOT_POT
+				&& block != BlockRegistry.ROOT) {
+			this.guard.setGuarded(worldIn, pos, true);
+		} else if(block == Blocks.AIR) {
+			this.guard.setGuarded(worldIn, pos, false);
+		}
+		super.setBlockAndNotifyAdequately(worldIn, pos, state);
 	}
 }
