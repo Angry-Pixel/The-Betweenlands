@@ -1,11 +1,14 @@
 package thebetweenlands.common.herblore.book.widgets.text;
-import com.mojang.realmsclient.gui.ChatFormatting;
-import net.minecraft.client.gui.FontRenderer;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.herblore.book.widgets.text.TextContainer.*;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.util.text.TextFormatting;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer.RangedTag;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer.Tag;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextArea;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TooltipArea;
 
 public class FormatTags {
     public static class TagNewLine extends Tag {
@@ -152,10 +155,10 @@ public class FormatTags {
     }
 
     public static class TagSimple extends RangedTag {
-        private final ChatFormatting format;
+        private final TextFormatting format;
         private final String name;
 
-        public TagSimple(String name, ChatFormatting format) {
+        public TagSimple(String name, TextFormatting format) {
             super(name);
             this.name = name;
             this.format = format;

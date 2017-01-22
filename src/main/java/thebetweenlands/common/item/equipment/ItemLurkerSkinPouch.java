@@ -2,8 +2,6 @@ package thebetweenlands.common.item.equipment;
 
 import java.util.List;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,6 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -58,8 +57,8 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean showAdvancedInfo) {
 		int slots = 9 + (stack.getItemDamage() * 9);
-		list.add(ChatFormatting.GRAY + I18n.format("lurkerSkinPouch.size", slots));
-		list.add(ChatFormatting.GRAY + I18n.format("lurkerSkinPouch.info"));
+		list.add(TextFormatting.GRAY + I18n.format("lurkerSkinPouch.size", slots));
+		list.add(TextFormatting.GRAY + I18n.format("lurkerSkinPouch.info"));
 	}
 
 	@Override

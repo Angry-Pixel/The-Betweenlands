@@ -219,6 +219,7 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk implements Progres
 		treeLocation.linkChunks();
 		treeLocation.setDirty(true);
 		treeLocation.setSeed(rand.nextLong());
+		treeLocation.setVisible(false);
 		worldStorage.addSharedStorage(treeLocation);
 	}
 

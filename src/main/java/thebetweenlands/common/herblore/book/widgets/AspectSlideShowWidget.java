@@ -1,8 +1,12 @@
 package thebetweenlands.common.herblore.book.widgets;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.Aspect;
@@ -11,10 +15,6 @@ import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.util.AspectIconRenderer;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class AspectSlideShowWidget extends ManualWidgetBase {
@@ -51,8 +51,8 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
             if (mouseX >= xStart + width && mouseX <= xStart + 16 + width && mouseY >= yStart && mouseY <= yStart + 16) {
                 List<String> tooltipData = new ArrayList<>();
                 tooltipData.add(aspect.getName());
-                tooltipData.add(ChatFormatting.GRAY + aspect.getType());
-                tooltipData.add(ChatFormatting.GRAY + "Open guide book entry");
+                tooltipData.add(TextFormatting.GRAY + aspect.getType());
+                tooltipData.add(TextFormatting.GRAY + "Open guide book entry");
                 renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
             }
             width += 18;

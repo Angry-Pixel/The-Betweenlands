@@ -3,8 +3,7 @@ package thebetweenlands.common.herblore.book.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
-
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
@@ -33,7 +32,7 @@ public class AspectWidget extends ManualWidgetBase {
         if (mouseX >= xStart && mouseX <= xStart + 16 * scale && mouseY >= yStart && mouseY <= yStart + 16 * scale) {
             List<String> tooltipData = new ArrayList<>();
             tooltipData.add(aspect.getName());
-            tooltipData.add(ChatFormatting.GRAY + aspect.getType());
+            tooltipData.add(TextFormatting.GRAY + aspect.getType());
             renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
         }
     }

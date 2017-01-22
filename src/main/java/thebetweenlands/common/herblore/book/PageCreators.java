@@ -1,21 +1,25 @@
 package thebetweenlands.common.herblore.book;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.ArrayList;
+
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
-import thebetweenlands.common.herblore.book.widgets.*;
+import thebetweenlands.common.herblore.book.widgets.AspectItemSlideShowWidget;
+import thebetweenlands.common.herblore.book.widgets.AspectSlideShowWidget;
+import thebetweenlands.common.herblore.book.widgets.AspectWidget;
+import thebetweenlands.common.herblore.book.widgets.ButtonWidget;
+import thebetweenlands.common.herblore.book.widgets.ItemWidget;
+import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextWidget;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.util.TranslationHelper;
-
-import java.util.ArrayList;
 
 public class PageCreators {
 
@@ -224,11 +228,11 @@ public class PageCreators {
         textContainer.registerTag(new FormatTags.TagScale(1.0F));
         textContainer.registerTag(new FormatTags.TagColor(0x808080));
         textContainer.registerTag(new FormatTags.TagTooltip("N/A"));
-        textContainer.registerTag(new FormatTags.TagSimple("bold", ChatFormatting.BOLD));
-        textContainer.registerTag(new FormatTags.TagSimple("obfuscated", ChatFormatting.OBFUSCATED));
-        textContainer.registerTag(new FormatTags.TagSimple("italic", ChatFormatting.ITALIC));
-        textContainer.registerTag(new FormatTags.TagSimple("strikethrough", ChatFormatting.STRIKETHROUGH));
-        textContainer.registerTag(new FormatTags.TagSimple("underline", ChatFormatting.UNDERLINE));
+        textContainer.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
+        textContainer.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+        textContainer.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
+        textContainer.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+        textContainer.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
         textContainer.registerTag(new FormatTags.TagPagelink());
         textContainer.registerTag(new FormatTags.TagRainbow());
         try {

@@ -297,12 +297,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public boolean isInside(Entity entity) {
-		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			if(boundingBox.isVecInside(entity.getPositionVector())) {
-				return true;
-			}
-		}
-		return false;
+		return this.intersects(entity.getEntityBoundingBox());
 	}
 
 	/**

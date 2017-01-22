@@ -1,16 +1,16 @@
 package thebetweenlands.common.herblore.book.widgets;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ItemWidget extends ManualWidgetBase {
@@ -66,7 +66,7 @@ public class ItemWidget extends ManualWidgetBase {
                 for (String s : tooltipData) {
                     String s_ = s;
                     if (!first)
-                        s_ = ChatFormatting.GRAY + s;
+                        s_ = TextFormatting.GRAY + s;
                     parsedTooltip.add(s_);
                     first = false;
                 }

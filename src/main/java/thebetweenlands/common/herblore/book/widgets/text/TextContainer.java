@@ -1,12 +1,20 @@
 package thebetweenlands.common.herblore.book.widgets.text;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EmptyStackException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.util.text.TextFormatting;
 import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
-
-import java.util.*;
 
 public class TextContainer {
     private final double pageWidth, pageHeight;
@@ -617,7 +625,7 @@ public class TextContainer {
         this.pages.addAll(this.build(wrapSegments));
     }
 
-    private final List<ChatFormatting> textFormatList = new ArrayList<ChatFormatting>();
+    private final List<TextFormatting> textFormatList = new ArrayList<TextFormatting>();
     private final List<TextArea> textAreas = new ArrayList<TextArea>();
     private float currentScale = 1.0F;
     private int currentColor = 0;
@@ -694,7 +702,7 @@ public class TextContainer {
                     if(this.textFormatList.size() > 0) {
                         this.sortFormatList(this.textFormatList);
                         StringBuilder formatStringBuilder = new StringBuilder();
-                        for(ChatFormatting format : this.textFormatList) {
+                        for(TextFormatting format : this.textFormatList) {
                             formatStringBuilder.append(format.toString());
                         }
                         prefixed = formatStringBuilder.toString();
@@ -847,7 +855,7 @@ public class TextContainer {
      * @param format
      * @return
      */
-    public TextContainer addFormatting(ChatFormatting format) {
+    public TextContainer addFormatting(TextFormatting format) {
         this.textFormatList.add(format);
         return this;
     }
@@ -857,7 +865,7 @@ public class TextContainer {
      * @param format
      * @return
      */
-    public TextContainer removeFormatting(ChatFormatting format) {
+    public TextContainer removeFormatting(TextFormatting format) {
         this.textFormatList.remove(format);
         return this;
     }
@@ -909,10 +917,10 @@ public class TextContainer {
         return stack;
     }
 
-    private void sortFormatList(List<ChatFormatting> list) {
-        Comparator<ChatFormatting> formatComparator = new Comparator<ChatFormatting>() {
+    private void sortFormatList(List<TextFormatting> list) {
+        Comparator<TextFormatting> formatComparator = new Comparator<TextFormatting>() {
             @Override
-            public int compare(ChatFormatting f1, ChatFormatting f2) {
+            public int compare(TextFormatting f1, TextFormatting f2) {
                 if(f1.isColor() && f2.isColor()) {
                     return 0;
                 } else if(f1.isColor()) {

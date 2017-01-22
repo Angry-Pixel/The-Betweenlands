@@ -6,6 +6,7 @@ import java.util.Random;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -17,6 +18,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,18 +29,30 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
+import thebetweenlands.util.ColorUtils;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -47,9 +64,97 @@ public class ScreenRenderHandler extends Gui {
 	private Random random = new Random();
 	private int updateCounter;
 
+	private TextContainer titleContainer = null;
+	private String currentLocation = "";
+	private int titleTicks = 0;
+	private int maxTitleTicks = 120;
+
+	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
+
+	public static List<LocationStorage> getVisibleLocations(Entity entity) {
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.worldObj);
+		return worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(entity) && location.isVisible(entity), entity.posX, entity.posZ);
+	}
+
 	@SubscribeEvent
 	public void onClientTick(ClientTickEvent event) {
-		this.updateCounter++;
+		if(event.phase == Phase.START && !Minecraft.getMinecraft().isGamePaused()) {
+			this.updateCounter++;
+
+			if(this.titleTicks > 0) {
+				this.titleTicks--;
+			}
+
+			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			if(player != null) {
+				String prevLocation = this.currentLocation;
+
+				List<LocationStorage> locations = getVisibleLocations(player);
+				if(locations.isEmpty()) {
+					String location;
+					if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+						String strippedName = I18n.format("location.wilderness.name");
+						if(strippedName.contains(":")) {
+							int startIndex = strippedName.indexOf(":");
+							strippedName = strippedName.substring(startIndex+1, strippedName.length());
+						}
+						if(this.currentLocation.equals(strippedName)) {
+							prevLocation = "";
+						}
+						location = I18n.format("location.caverns.name");
+					} else {
+						String strippedName = I18n.format("location.caverns.name");
+						if(strippedName.contains(":")) {
+							int startIndex = strippedName.indexOf(":");
+							strippedName = strippedName.substring(startIndex+1, strippedName.length());
+						}
+						if(this.currentLocation.equals(strippedName)) {
+							prevLocation = "";
+						}
+						location = I18n.format("location.wilderness.name");
+					}
+					this.currentLocation = location;
+				} else {
+					LocationStorage highestLocation = null;
+					for(LocationStorage storage : locations) {
+						if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
+							highestLocation = storage;
+					}
+					this.currentLocation = highestLocation.getLocalizedName();
+				}
+
+				if(this.currentLocation.length() > 0) {
+					if(this.currentLocation.contains(":")) {
+						int startIndex = this.currentLocation.indexOf(":");
+						String ticks = this.currentLocation.substring(0, startIndex);
+						this.currentLocation = this.currentLocation.substring(startIndex+1, this.currentLocation.length());
+						try {
+							this.maxTitleTicks = Integer.parseInt(ticks);
+						} catch(Exception ex) {
+							this.maxTitleTicks = 80;
+						}
+					}
+					if(prevLocation != null && !prevLocation.equals(this.currentLocation)) {
+						this.titleTicks = this.maxTitleTicks;
+						this.titleContainer = new TextContainer(2048, 2048, this.currentLocation, TheBetweenlands.proxy.getCustomFontRenderer());
+						this.titleContainer.setCurrentScale(2.0f).setCurrentColor(0xFFFFFFFF);
+						this.titleContainer.registerTag(new FormatTags.TagNewLine());
+						this.titleContainer.registerTag(new FormatTags.TagScale(2.0F));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+						this.titleContainer.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
+						try {
+							this.titleContainer.parse();
+						} catch (Exception e) {
+							this.titleContainer = null;
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		}
 	}
 
 	@SubscribeEvent
@@ -170,7 +275,59 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 			}
+		} else if(event.getType() == ElementType.TEXT) {
+			if(this.titleTicks > 0 && this.titleContainer != null && !this.titleContainer.getPages().isEmpty()) {
+				TextPage page = this.titleContainer.getPages().get(0);
+				int width = event.getResolution().getScaledWidth();
+				int height = event.getResolution().getScaledHeight();
+				double strWidth = page.getTextWidth();
+				double strHeight = page.getTextHeight();
+				double strX = width / 2.0D - strWidth / 2.0F;
+				double strY = height / 5.0D;
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(strX, strY, 0);
+				float fade = Math.min(1.0F, ((float)this.maxTitleTicks - (float)this.titleTicks) / Math.min(40.0F, this.maxTitleTicks - 5.0F) + 0.02F) - Math.max(0, (-this.titleTicks + 5) / 5.0F);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+				GlStateManager.enableBlend();
+				float averageScale = 0F;
+				for(TextSegment segment : page.getSegments()) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(segment.x, segment.y, 0.0D);
+					GlStateManager.scale(segment.scale, segment.scale, 1.0F);
+					float[] rgba = ColorUtils.getRGBA(segment.color);
+					segment.font.drawString(segment.text, 0, 0, ColorUtils.toHex(rgba[0], rgba[1], rgba[2], rgba[3] * fade));
+					GlStateManager.color(1, 1, 1, 1);
+					GlStateManager.popMatrix();
+					averageScale += segment.scale;
+				}
+				averageScale /= page.getSegments().size();
+				GlStateManager.popMatrix();
+				Minecraft.getMinecraft().renderEngine.bindTexture(TITLE_TEXTURE);
+				GlStateManager.color(1, 1, 1, fade);
+				GlStateManager.disableCull();
+				double sidePadding = 6;
+				double yOffset = 5;
+				double sy = strY + strHeight - yOffset*averageScale;
+				double ey = strY + strHeight - yOffset*averageScale + 16*averageScale;
+				Tessellator tessellator = Tessellator.getInstance();
+				VertexBuffer buffer = tessellator.getBuffer();
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				this.renderTexturedRect(buffer, strX - sidePadding*averageScale, sy, strX - sidePadding*averageScale + 9*averageScale, ey, 0, 9 / 128.0D, 0, 1);
+				this.renderTexturedRect(buffer, strX - sidePadding*averageScale + 9*averageScale, sy, strX + strWidth / 2.0D - 6*averageScale, ey, 9 / 128.0D, 58 / 128.0D, 0, 1);
+				this.renderTexturedRect(buffer, strX + strWidth / 2.0D - 6*averageScale, sy, strX + strWidth / 2.0D + 6*averageScale, ey, 58 / 128.0D, 70 / 128.0D, 0, 1);
+				this.renderTexturedRect(buffer, strX + strWidth / 2.0D + 6*averageScale, sy, strX + strWidth + sidePadding*averageScale - 9*averageScale, ey, 70 / 128.0D, 119 / 128.0D, 0, 1);
+				this.renderTexturedRect(buffer, strX + strWidth + sidePadding*averageScale - 9*averageScale, sy, strX + strWidth + sidePadding*averageScale, ey, 119 / 128.0D, 1, 0, 1);
+				tessellator.draw();
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			}
 		}
+	}
+
+	private void renderTexturedRect(VertexBuffer buffer, double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
+		buffer.pos(x, y, 0).tex(umin, vmin).endVertex();
+		buffer.pos(x, y2, 0).tex(umin, vmax).endVertex();
+		buffer.pos(x2, y2, 0).tex(umax, vmax).endVertex();
+		buffer.pos(x2, y, 0).tex(umax, vmin).endVertex();
 	}
 
 	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");

@@ -1,15 +1,22 @@
 package thebetweenlands.common.item.tools;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.input.Keyboard;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -17,12 +24,6 @@ import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
-
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ItemWeedwoodBucketInfusion extends Item {
 
@@ -38,8 +39,8 @@ public class ItemWeedwoodBucketInfusion extends Item {
             if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
                 int infusionTime = stack.getTagCompound().getInteger("infusionTime");
                 String infusionTimeSeconds = BigDecimal.valueOf(infusionTime / 20.0F).setScale(1, BigDecimal.ROUND_HALF_UP).toPlainString();
-                list.add(ChatFormatting.GREEN + "Infusion time: " + ChatFormatting.RESET + infusionTimeSeconds);
-                list.add(ChatFormatting.GREEN + "Ingredients:");
+                list.add(TextFormatting.GREEN + "Infusion time: " + TextFormatting.RESET + infusionTimeSeconds);
+                list.add(TextFormatting.GREEN + "Ingredients:");
                 // The properties will be retrieved in the Alembic's TE logic
                 NBTTagList nbtList = (NBTTagList)stack.getTagCompound().getTag("ingredients");
                 Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();

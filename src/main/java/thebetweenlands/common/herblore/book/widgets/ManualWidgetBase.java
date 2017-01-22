@@ -1,28 +1,31 @@
 package thebetweenlands.common.herblore.book.widgets;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.lwjgl.opengl.GL11;
-
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.herblore.book.ManualCategory;
 import thebetweenlands.common.herblore.book.Page;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ManualWidgetBase {
@@ -272,7 +275,7 @@ public class ManualWidgetBase {
                 for (String s : tooltipData) {
                     String s_ = s;
                     if (!first)
-                        s_ = ChatFormatting.GRAY + s;
+                        s_ = TextFormatting.GRAY + s;
                     parsedTooltip.add(s_);
                     first = false;
                 }
@@ -305,7 +308,7 @@ public class ManualWidgetBase {
                 for (String s : tooltipData) {
                     String s_ = s;
                     if (!first)
-                        s_ = ChatFormatting.GRAY + s;
+                        s_ = TextFormatting.GRAY + s;
                     parsedTooltip.add(s_);
                     first = false;
                 }

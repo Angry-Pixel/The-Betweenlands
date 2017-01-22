@@ -1,9 +1,12 @@
 package thebetweenlands.common.herblore.book.widgets;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
@@ -13,9 +16,6 @@ import thebetweenlands.common.herblore.book.Page;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.util.AspectIconRenderer;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @SideOnly(Side.CLIENT)
 public class ButtonWidget extends ManualWidgetBase {
@@ -81,11 +81,11 @@ public class ButtonWidget extends ManualWidgetBase {
         this.textContainer.registerTag(new FormatTags.TagScale(1.0F));
         this.textContainer.registerTag(new FormatTags.TagColor(0x808080));
         this.textContainer.registerTag(new FormatTags.TagTooltip("N/A"));
-        this.textContainer.registerTag(new FormatTags.TagSimple("bold", ChatFormatting.BOLD));
-        this.textContainer.registerTag(new FormatTags.TagSimple("obfuscated", ChatFormatting.OBFUSCATED));
-        this.textContainer.registerTag(new FormatTags.TagSimple("italic", ChatFormatting.ITALIC));
-        this.textContainer.registerTag(new FormatTags.TagSimple("strikethrough", ChatFormatting.STRIKETHROUGH));
-        this.textContainer.registerTag(new FormatTags.TagSimple("underline", ChatFormatting.UNDERLINE));
+        this.textContainer.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
+        this.textContainer.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+        this.textContainer.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
+        this.textContainer.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+        this.textContainer.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
 
         try {
             this.textContainer.parse();
@@ -121,7 +121,7 @@ public class ButtonWidget extends ManualWidgetBase {
             if (mouseX >= xStart && mouseX <= xStart + 16 && mouseY >= yStart && mouseY <= yStart + 16) {
                 List<String> tooltipData = new ArrayList<>();
                 tooltipData.add(aspect.getName());
-                tooltipData.add(ChatFormatting.GRAY + aspect.getType());
+                tooltipData.add(TextFormatting.GRAY + aspect.getType());
                 renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
             }
         }

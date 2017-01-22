@@ -1,13 +1,20 @@
 package thebetweenlands.common.herblore.book.widgets.text;
 
-import com.mojang.realmsclient.gui.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
-import net.minecraft.client.resources.I18n;
-import thebetweenlands.common.herblore.book.widgets.text.FormatTags.*;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagColor;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagFont;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagNewLine;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagNewPage;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagPagelink;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagRainbow;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagScale;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagSimple;
+import thebetweenlands.common.herblore.book.widgets.text.FormatTags.TagTooltip;
 import thebetweenlands.util.TranslationHelper;
 
 @SideOnly(Side.CLIENT)
@@ -102,11 +109,11 @@ public class TextWidget extends ManualWidgetBase {
         this.textContainer.registerTag(new TagScale(1.0F));
         this.textContainer.registerTag(new TagColor(0x808080));
         this.textContainer.registerTag(new TagTooltip("N/A"));
-        this.textContainer.registerTag(new TagSimple("bold", ChatFormatting.BOLD));
-        this.textContainer.registerTag(new TagSimple("obfuscated", ChatFormatting.OBFUSCATED));
-        this.textContainer.registerTag(new TagSimple("italic", ChatFormatting.ITALIC));
-        this.textContainer.registerTag(new TagSimple("strikethrough", ChatFormatting.STRIKETHROUGH));
-        this.textContainer.registerTag(new TagSimple("underline", ChatFormatting.UNDERLINE));
+        this.textContainer.registerTag(new TagSimple("bold", TextFormatting.BOLD));
+        this.textContainer.registerTag(new TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+        this.textContainer.registerTag(new TagSimple("italic", TextFormatting.ITALIC));
+        this.textContainer.registerTag(new TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+        this.textContainer.registerTag(new TagSimple("underline", TextFormatting.UNDERLINE));
         this.textContainer.registerTag(new TagPagelink());
         this.textContainer.registerTag(new TagRainbow());
         this.textContainer.registerTag(new TagFont());
