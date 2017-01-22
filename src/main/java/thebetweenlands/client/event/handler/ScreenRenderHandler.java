@@ -94,8 +94,8 @@ public class ScreenRenderHandler extends Gui {
 					String location;
 					if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
 						String strippedName = I18n.format("location.wilderness.name");
-						if(strippedName.contains(":")) {
-							int startIndex = strippedName.indexOf(":");
+						if(strippedName.startsWith("translate:")) {
+							int startIndex = strippedName.indexOf("translate:");
 							strippedName = strippedName.substring(startIndex+1, strippedName.length());
 						}
 						if(this.currentLocation.equals(strippedName)) {
@@ -104,8 +104,8 @@ public class ScreenRenderHandler extends Gui {
 						location = I18n.format("location.caverns.name");
 					} else {
 						String strippedName = I18n.format("location.caverns.name");
-						if(strippedName.contains(":")) {
-							int startIndex = strippedName.indexOf(":");
+						if(strippedName.startsWith("translate:")) {
+							int startIndex = strippedName.indexOf("translate:");
 							strippedName = strippedName.substring(startIndex+1, strippedName.length());
 						}
 						if(this.currentLocation.equals(strippedName)) {
@@ -126,10 +126,10 @@ public class ScreenRenderHandler extends Gui {
 				if(this.currentLocation.length() > 0) {
 					if(this.currentLocation.contains(":")) {
 						int startIndex = this.currentLocation.indexOf(":");
-						String ticks = this.currentLocation.substring(0, startIndex);
-						this.currentLocation = this.currentLocation.substring(startIndex+1, this.currentLocation.length());
 						try {
+							String ticks = this.currentLocation.substring(0, startIndex);
 							this.maxTitleTicks = Integer.parseInt(ticks);
+							this.currentLocation = this.currentLocation.substring(startIndex+1, this.currentLocation.length());
 						} catch(Exception ex) {
 							this.maxTitleTicks = 80;
 						}

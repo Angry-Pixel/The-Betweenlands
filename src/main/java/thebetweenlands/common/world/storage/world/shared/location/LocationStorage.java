@@ -307,7 +307,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public boolean isInside(Vec3i pos) {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			if(boundingBox.isVecInside(new Vec3d(pos.getX(), pos.getY(), pos.getZ()))) {
+			if(this.isVecInsideOrEdge(boundingBox, new Vec3d(pos.getX(), pos.getY(), pos.getZ()))) {
 				return true;
 			}
 		}
@@ -321,7 +321,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public boolean isInside(Vec3d pos) {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			if(boundingBox.isVecInside(pos)) {
+			if(this.isVecInsideOrEdge(boundingBox, pos)) {
 				return true;
 			}
 		}
@@ -340,6 +340,16 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Returns whether the vector touches the AABB or is fully inside
+	 * @param aabb
+	 * @param vec
+	 * @return
+	 */
+	protected final boolean isVecInsideOrEdge(AxisAlignedBB aabb, Vec3d vec) {
+		return vec.xCoord >= aabb.minX && vec.xCoord <= aabb.maxX ? (vec.yCoord >= aabb.minY && vec.yCoord <= aabb.maxY ? vec.zCoord >= aabb.minZ && vec.zCoord <= aabb.maxZ : false) : false;
 	}
 
 	/**
@@ -380,7 +390,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Entity entity) {
-		return getLocations(entity.worldObj, entity.getPositionVector());
+		return getLocations(entity.worldObj, entity.getEntityBoundingBox());
 	}
 
 	/**
@@ -410,15 +420,6 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	}
 
 	/**
-	 * Returns the highest priority ambience at the specified entity
-	 * @param entity
-	 * @return
-	 */
-	public static LocationAmbience getAmbience(Entity entity) {
-		return getAmbience(entity.worldObj, entity.getPositionVector());
-	}
-
-	/**
 	 * Returns the highest priority ambience at the specified position
 	 * @param world
 	 * @param entity
@@ -426,6 +427,35 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public static LocationAmbience getAmbience(World world, Vec3d position) {
 		List<LocationStorage> locations = LocationStorage.getLocations(world, position);
+		if(locations.isEmpty())
+			return null;
+		Collections.sort(locations, LAYER_SORTER);
+		LocationStorage highestLocation = null;
+		for(int i = 0; i < locations.size(); i++) {
+			LocationStorage storage = locations.get(i);
+			if(storage.hasAmbience() || storage.inheritAmbience)
+				highestLocation = storage;
+		}
+		if(highestLocation != null) {
+			if(highestLocation.ambience == null && highestLocation.inheritAmbience) {
+				for(int i = 0; i < locations.size(); i++) {
+					LocationStorage storage = locations.get(i);
+					if(storage.hasAmbience())
+						return storage.ambience;
+				}
+			}
+			return highestLocation.ambience;
+		}
+		return null;
+	}
+
+	/**
+	 * Returns the highest priority ambience at the specified entity
+	 * @param entity
+	 * @return
+	 */
+	public static LocationAmbience getAmbience(Entity entity) {
+		List<LocationStorage> locations = getLocations(entity);
 		if(locations.isEmpty())
 			return null;
 		Collections.sort(locations, LAYER_SORTER);

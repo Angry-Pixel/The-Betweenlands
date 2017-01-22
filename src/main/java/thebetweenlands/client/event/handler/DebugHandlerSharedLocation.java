@@ -45,9 +45,9 @@ public class DebugHandlerSharedLocation {
 
 					Random rnd = new Random(location.getSeed());
 
-					float red = 0.25F + rnd.nextFloat() / 2.0F * 0.75F + location.getLayer() / 5.0F;
-					float green = 0.25F + rnd.nextFloat() / 2.0F * 0.75F;
-					float blue = 0.25F + rnd.nextFloat() * 0.75F - location.getLayer() / 5.0F;
+					float red = (0.25F + rnd.nextFloat() / 2.0F * 0.75F) * (location.getLayer() + 2) / 2.0F;
+					float green = (0.25F + rnd.nextFloat() / 2.0F * 0.75F) * (location.getLayer() + 2) / 2.0F;
+					float blue = (0.25F + rnd.nextFloat() * 0.75F) * (location.getLayer() + 2) / 2.0F;
 					float alpha = 0.25F;
 
 					GlStateManager.color(red, green, blue, alpha);
