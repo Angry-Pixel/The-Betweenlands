@@ -41,6 +41,7 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.ItemBlockEnum.IGenericMetaSelector;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityLootPot;
 
@@ -121,40 +122,43 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 		TileEntity tile = worldIn.getTileEntity(pos);
 		if (tile instanceof TileEntityLootPot) {
 			((TileEntityLootPot) tile).setModelRotationOffset(worldIn.rand.nextInt(41) - 20);
+			((TileEntityLootPot) tile).setLootTable(LootTableRegistry.COMMON_POT_LOOT, worldIn.rand.nextLong());
 			tile.markDirty();
 		}
 	}
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (worldIn.getTileEntity(pos) instanceof TileEntityLootPot) {
-			TileEntityLootPot tile = (TileEntityLootPot) worldIn.getTileEntity(pos);
-			InvWrapper wrapper = new InvWrapper(tile);
-			if (playerIn.getHeldItem(hand) != null) {
-				ItemStack stack = playerIn.getHeldItem(hand);
-				ItemStack prevStack = stack.copy();
-				for(int i = 0; i < wrapper.getSlots() && stack != null; i++) {
-					stack = wrapper.insertItem(i, stack, worldIn.isRemote);
-				}
-				if(stack == null || stack.stackSize != prevStack.stackSize) {
-					if(!worldIn.isRemote && !playerIn.isCreative()) {
-						playerIn.setHeldItem(hand, stack);
+		if(!worldIn.isRemote) {
+			if (worldIn.getTileEntity(pos) instanceof TileEntityLootPot) {
+				TileEntityLootPot tile = (TileEntityLootPot) worldIn.getTileEntity(pos);
+				InvWrapper wrapper = new InvWrapper(tile);
+				if (playerIn.getHeldItem(hand) != null) {
+					ItemStack stack = playerIn.getHeldItem(hand);
+					ItemStack prevStack = stack.copy();
+					for(int i = 0; i < wrapper.getSlots() && stack != null; i++) {
+						stack = wrapper.insertItem(i, stack, false);
 					}
-					return true;
-				}
-			} else if(playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
-				for(int i = 0; i < wrapper.getSlots(); i++) {
-					ItemStack extracted = wrapper.extractItem(i, 1, worldIn.isRemote);
-					if(extracted != null) {
-						if(!worldIn.isRemote) {
-							EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
-							item.motionX = item.motionY = item.motionZ = 0D;
-							worldIn.spawnEntityInWorld(item);
+					if(stack == null || stack.stackSize != prevStack.stackSize) {
+						if(!playerIn.isCreative()) {
+							playerIn.setHeldItem(hand, stack);
 						}
 						return true;
 					}
+				} else if(playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
+					for(int i = 0; i < wrapper.getSlots(); i++) {
+						ItemStack extracted = wrapper.extractItem(i, 1, false);
+						if(extracted != null) {
+							EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
+							item.motionX = item.motionY = item.motionZ = 0D;
+							worldIn.spawnEntityInWorld(item);
+							return true;
+						}
+					}
 				}
 			}
+		} else {
+			return true;
 		}
 		return false;
 	}

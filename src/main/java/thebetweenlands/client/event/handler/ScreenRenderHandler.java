@@ -53,6 +53,7 @@ import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -73,7 +74,7 @@ public class ScreenRenderHandler extends Gui {
 
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.worldObj);
-		return worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(entity) && location.isVisible(entity), entity.posX, entity.posZ);
+		return worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity), entity.posX, entity.posZ);
 	}
 
 	@SubscribeEvent
@@ -86,7 +87,7 @@ public class ScreenRenderHandler extends Gui {
 			}
 
 			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			if(player != null) {
+			if(player != null && player.dimension == ConfigHandler.dimensionId) {
 				String prevLocation = this.currentLocation;
 
 				List<LocationStorage> locations = getVisibleLocations(player);
