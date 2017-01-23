@@ -1,5 +1,9 @@
 package thebetweenlands.common.tile;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -8,67 +12,102 @@ import net.minecraft.world.storage.loot.ILootContainer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 
-import javax.annotation.Nullable;
-import java.util.Random;
-
 public class TileEntityLootInventory extends TileEntityBasicInventory implements ILootContainer {
-    public ResourceLocation lootTable;
-    public long lootTableSeed;
+	public ResourceLocation lootTable;
+	public long lootTableSeed;
 
-    public TileEntityLootInventory(int invtSize, String name) {
-        super(invtSize, name);
-    }
+	public TileEntityLootInventory(int invtSize, String name) {
+		super(invtSize, name);
+	}
 
-    public void fillWithLoot(@Nullable EntityPlayer player) {
-        if (this.lootTable != null) {
-            LootTable loottable = this.worldObj.getLootTableManager().getLootTableFromLocation(this.lootTable);
-            this.lootTable = null;
-            Random random;
+	public void fillWithLoot(@Nullable EntityPlayer player) {
+		if (this.lootTable != null) {
+			LootTable loottable = this.worldObj.getLootTableManager().getLootTableFromLocation(this.lootTable);
+			this.lootTable = null;
+			Random random;
 
-            if (this.lootTableSeed == 0L) {
-                random = new Random();
-            } else {
-                random = new Random(this.lootTableSeed);
-            }
+			if (this.lootTableSeed == 0L) {
+				random = new Random();
+			} else {
+				random = new Random(this.lootTableSeed);
+			}
 
-            LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) this.worldObj);
+			LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) this.worldObj);
 
-            if (player != null) {
-                lootBuilder.withLuck(player.getLuck());
-            }
+			if (player != null) {
+				lootBuilder.withLuck(player.getLuck());
+			}
 
-            loottable.fillInventory(this, random, lootBuilder.build());
-        }
-    }
+			loottable.fillInventory(this, random, lootBuilder.build());
+		}
+	}
 
-    public void setLootTable(ResourceLocation lootTable, long lootTableSeed) {
-        this.lootTable = lootTable;
-        this.lootTableSeed = lootTableSeed;
-    }
+	public void setLootTable(ResourceLocation lootTable, long lootTableSeed) {
+		this.lootTable = lootTable;
+		this.lootTableSeed = lootTableSeed;
+	}
 
-    @Override
-    public ResourceLocation getLootTable() {
-        return lootTable;
-    }
+	@Override
+	public ResourceLocation getLootTable() {
+		return lootTable;
+	}
 
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        if (nbt.hasKey("LootTable", 8)) {
-            this.lootTable = new ResourceLocation(nbt.getString("LootTable"));
-            this.lootTableSeed = nbt.getLong("LootTableSeed");
-        }
-    }
+	@Override
+	protected void writeInventoryNBT(NBTTagCompound nbt) {
+		if(!this.checkLootAndWrite(nbt)) {
+			super.writeInventoryNBT(nbt);
+		}
+	}
 
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        if (this.lootTable != null) {
-            nbt.setString("LootTable", this.lootTable.toString());
-            if (this.lootTableSeed != 0L) {
-                nbt.setLong("LootTableSeed", this.lootTableSeed);
-            }
+	@Override
+	protected void readInventoryNBT(NBTTagCompound nbt) {
+		if(!this.checkLootAndRead(nbt)) {
+			super.readInventoryNBT(nbt);
+		}
+	}
 
-        }
-        return super.writeToNBT(nbt);
-    }
+	/**
+	 * Tries to read a loot table from the NBT. Returns true if found loot table != null
+	 * @param compound
+	 * @return
+	 */
+	protected boolean checkLootAndRead(NBTTagCompound compound) {
+		if (compound.hasKey("LootTable", 8)) {
+			this.lootTable = new ResourceLocation(compound.getString("LootTable"));
+			this.lootTableSeed = compound.getLong("LootTableSeed");
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Writes the loot table to NBT. Returns true if loot table != null
+	 * @param compound
+	 * @return
+	 */
+	protected boolean checkLootAndWrite(NBTTagCompound compound) {
+		if (this.lootTable != null) {
+			compound.setString("LootTable", this.lootTable.toString());
+
+			if (this.lootTableSeed != 0L) {
+				compound.setLong("LootTableSeed", this.lootTableSeed);
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	@Override
+	protected void accessSlot(int slot) {
+		this.fillWithLoot(null);
+	}
+
+	@Override
+	public void clear() {
+		this.fillWithLoot(null);
+		super.clear();
+	}
 }

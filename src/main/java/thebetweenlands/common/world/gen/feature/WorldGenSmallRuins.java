@@ -41,7 +41,8 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 	private static final IBlockState WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN = WEEDWOOD_PLANK_SLAB.withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
 	private static final IBlockState BETWEENSTONE_BRICK_WALL = BlockRegistry.BETWEENSTONE_BRICK_WALL.getDefaultState();
 	private static final IBlockState WEEDWOOD_FENCE = BlockRegistry.WEEDWOOD_PLANK_FENCE.getDefaultState();
-
+	private static final IBlockState ROPE = BlockRegistry.ROPE.getDefaultState();
+	
 	public WorldGenSmallRuins(){
 		super(BlockRegistry.MUD.getDefaultState(), BlockRegistry.SWAMP_GRASS.getDefaultState());
 	}
@@ -454,8 +455,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			rotatedCubeVolume(world, x, y, z, 6, 5, 4, WEEDWOOD_PLANK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 6, 8, 4, BETWEENSTONE_BRICK_SLAB_UPSIDE_DOWN, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 6, 9, 4, BETWEENSTONE_BRICK_SLAB, 1, 1, 1, direction);
-			//TODO Stupid rope
-			//rotatedCubeVolume(world, x, y, z, 7, 3, 4, BLBlockRegistry.rope, 0, 1, 2, 1, direction);
+			rotatedCubeVolume(world, x, y, z, 7, 3, 4, ROPE, 1, 2, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 7, 5, 4, getStateFromRotation(0, direction, WEEDWOOD_LOG, EnumRotationSequence.LOG_SIDEWAYS), 5, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 9, 4, 4, WEEDWOOD_FENCE, 1, 1, 1, direction);
 			rotatedCubeVolume(world, x, y, z, 10, 2, 4, CHISELED_BETWEENSTONE, 1, 1, 1, direction);
@@ -570,9 +570,8 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 
 	private void generateLoot(World world, Random random, int x, int y, int z) {
 		world.setBlockState(new BlockPos(x, y, z), getRandomBlock(random, EnumFacing.getHorizontal(random.nextInt(4))), 2);
-		TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(new BlockPos(x, y, z));
+		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, new BlockPos(x, y, z));
 		if (lootPot != null) {
-			// LootUtil.generateLoot(lootPot, random, LootTables.COMMON_POT_LOOT, 1, 2);
 			lootPot.setLootTable(LootTableRegistry.COMMON_POT_LOOT, random.nextLong());
 		}
 	}

@@ -1,131 +1,366 @@
 {
-  "pools": [
-    {
-      "name": "common_chest_loot", //idk why this exists, don't know if the name does anything
-      //amount of diferent items
-      "rolls": {
-        "min": 1,
-        "max": 4
-      },
-      //amount of posible extra rolls per level of the new luck enchant that might be implemented
-      "bonus_rolls": {
-        "min": 0,
-        "max": 2
-      },
-      "entries": [
+    "pools": [
         {
-          "type": "item",
-          "name": "minecraft:golden_apple",
-          "weight": 20,                          //the amount of times it counts
-          "quality": 5 							 //the higher the level the more it's seen as treasure, the lower the level the more it's seen as junk (negative numbers are accepted). used for luck effect
-        },
-        {
-          "type": "item",
-          "name": "minecraft:name_tag",
-          "weight": 30
-        },
-        {
-          "type": "item",
-          "name": "minecraft:book",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "enchant_randomly"   //we can make custom functions for stuff like lore, enchantments, random chance for smelting, random damage, etc.
-            }
-          ]
-        },
-        {
-          "type": "item",
-          "name": "minecraft:iron_pickaxe",
-          "weight": 5
-        },
-        {
-          //an extra chance for nothing to appear
-          "type": "empty",
-          "weight": 5
-        },
-        {
-          "type": "item",
-          "name": "thebetweenlands:items_misc",
-          "functions": [
-            {
-              "function": "set_count",        //the quantity the item appears in
-              "count": {
-                "min": 1,
-                "max": 5
-              }
+            "name": "common_chest",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:marshmallow_pink",
+                    "functions": [],
+                    "weight": 24,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "lurker_skin",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 4
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 4
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "sulfur",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 16
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 18
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "swamp_reed_rope",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 8
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 7
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:angler_tooth_arrow",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 12,
+                                "max": 16
+                            }
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "syrmorite_ingot",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 16
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 11
+                        }
+                    ],
+                    "weight": 30,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:octine_ingot",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 16
+                            }
+                        }
+                    ],
+                    "weight": 30,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:marshmallow",
+                    "functions": [],
+                    "weight": 18,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:reed_donut",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "weight": 18,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:jam_donut",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "weight": 18,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "amulet_socket",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 38
+                        }
+                    ],
+                    "weight": 18,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "scroll",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 40
+                        }
+                    ],
+                    "weight": 16,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:sap_ball",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 16
+                            }
+                        }
+                    ],
+                    "weight": 13,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:poisoned_angler_tooth_arrow",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 16
+                            }
+                        }
+                    ],
+                    "weight": 13,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:wight_heart",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 12,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:weeping_blue_petal",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 2,
+                                "max": 8
+                            }
+                        }
+                    ],
+                    "weight": 11,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:octine_arrow",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 8,
+                                "max": 16
+                            }
+                        }
+                    ],
+                    "weight": 11,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:basilisk_arrow",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 6,
+                                "max": 8
+                            }
+                        }
+                    ],
+                    "weight": 11,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "valonite_shard",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 19
+                        }
+                    ],
+                    "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:lore_scrap",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": {
+                                "min": 0,
+                                "max": 9
+                            }
+                        }
+                    ],
+                    "weight": 1,
+                    "quality": 0
+                }
+            ],
+            "rolls": {
+                "min": 4,
+                "max": 6
             },
-            {
-              "function": "set_data",		//sets meta data
-              "data":12
-            }
-          ],
-          "weight": 10
-        }
-      ]
-    },
-    {
-      //you can make a secound pool that will also add items to the loot, you can for example make one with treasure and one with useless stuff to make sure it both generates
-      "name": "common_chest_loot",
-      "rolls": {
-        "min": 1,
-        "max": 4
-      },
-      "conditions":[
-        {
-          "condition":"random_chance",   //gives this specific pool a smaller chance to happen
-          "chance":0.45
-        }
-      ],
-      "entries": [
-        {
-          "type": "item",
-          "name": "minecraft:golden_apple",
-          "weight": 20
-        },
-        {
-          "type": "item",
-          "name": "minecraft:name_tag",
-          "weight": 30
-        },
-        {
-          "type": "item",
-          "name": "minecraft:book",
-          "weight": 10,
-          "functions": [
-            {
-              "function": "enchant_randomly"
-            }
-          ]
-        },
-        {
-          "type": "item",
-          "name": "minecraft:iron_pickaxe",
-          "weight": 5
-        },
-        {
-          "type": "empty",
-          "weight": 5
-        },
-        {
-          "type": "item",
-          "name": "thebetweenlands:items_misc",
-          "functions": [
-            {
-              "function": "set_count",
-              "count": {
+            "bonus_rolls": {
                 "min": 1,
-                "max": 5
-              }
-            },
-            {
-              "function": "set_data",
-              "data":12
+                "max": 2
             }
-          ],
-          "weight": 10
         }
-      ]
-    }
-  ]
+    ]
 }

@@ -3,6 +3,8 @@ package thebetweenlands.common.world.gen.feature;
 import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +15,6 @@ import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
@@ -91,31 +92,35 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 					world.setBlockState(new BlockPos(x + 4, yy, zz), BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState().withProperty(BlockStairsBetweenlands.FACING, EnumFacing.WEST), 2);
 				}
 				int randomInt = random.nextInt(4);
-				TileEntityChestBetweenlands lootChest;
+				TileEntity tile;
 				switch (randomInt) {
 				case 0:
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
-					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 1));
-					if (lootChest != null)
-						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					tile = world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 1));
+					if (tile instanceof TileEntityChest) {
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					}
 					break;
 				case 1:
 					world.setBlockState(new BlockPos(x + 1, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
-					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 3));
-					if (lootChest != null)
-						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					tile = world.getTileEntity(new BlockPos(x + 1, yy + 1, z + 3));
+					if (tile instanceof TileEntityChest) {
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					}
 					break;
 				case 2:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 1), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
-					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 1));
-					if (lootChest != null)
-						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					tile = world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 1));
+					if (tile instanceof TileEntityChest) {
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					}
 					break;
 				case 3:
 					world.setBlockState(new BlockPos(x + 3, yy + 1, z + 3), BlockRegistry.WEEDWOOD_CHEST.getDefaultState(), 2);
-					lootChest = (TileEntityChestBetweenlands) world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 3));
-					if (lootChest != null)
-						lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					tile = world.getTileEntity(new BlockPos(x + 3, yy + 1, z + 3));
+					if (tile instanceof TileEntityChest) {
+						((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, random.nextLong());
+					}
 					break;
 				}
 			} else if (yy < y + 4) {

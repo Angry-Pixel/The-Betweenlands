@@ -7,6 +7,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -23,7 +25,6 @@ import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
@@ -1072,9 +1073,9 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 	private void placeChest(World world, Random rand, BlockPos pos, int blockMeta) {
 		this.setBlockAndNotifyAdequately(world, pos, getWeedWoodChestRotations(chest, blockMeta));
-		TileEntityChestBetweenlands lootChest = (TileEntityChestBetweenlands) world.getTileEntity(pos);
-		if (lootChest != null) {
-			lootChest.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileEntityChest) {
+			((TileEntityChest) tile).setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
 		}
 	}
 
@@ -1083,7 +1084,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return;
 		else {
 			this.setBlockAndNotifyAdequately(world, pos, getLootPotRotations(blockType, blockMeta));
-			TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
+			TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
 			if (lootPot != null) {
 				lootPot.setLootTable(LootTableRegistry.DUNGEON_CHEST_LOOT, rand.nextLong());
 				lootPot.setModelRotationOffset(world.rand.nextInt(41) - 20);

@@ -3,50 +3,51 @@ package thebetweenlands.common.tile;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.storage.loot.ILootContainer;
 
 public class TileEntityLootPot extends TileEntityLootInventory {
-    private byte modelType;
-    private int rotationOffset;
-    private boolean updated = false;
+	private int rotationOffset;
 
+	public TileEntityLootPot() {
+		super(3, "container.lootPot");
+	}
 
-    public TileEntityLootPot() {
-        super(3, "container.lootPot");
-    }
+	public void setModelRotationOffset(int rotation) {
+		this.rotationOffset = rotation;
+	}
 
-    public void setModelRotationOffset(int rotation) {
-        rotationOffset = rotation;
-    }
+	public int getModelRotationOffset() {
+		return this.rotationOffset;
+	}
 
-    public int getModelRotationOffset() {
-        return rotationOffset;
-    }
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		super.readFromNBT(nbt);
+		this.rotationOffset = nbt.getInteger("rotationOffset");
+	}
 
-    @Override
-    public void readFromNBT(NBTTagCompound nbt) {
-        super.readFromNBT(nbt);
-        rotationOffset = nbt.getInteger("rotationOffset");
-    }
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
+		nbt.setInteger("rotationOffset", this.rotationOffset);
+		return nbt;
+	}
 
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-        super.writeToNBT(nbt);
-        nbt.setInteger("rotationOffset", rotationOffset);
-        return nbt;
-    }
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("rotationOffset", this.rotationOffset);
+		return new SPacketUpdateTileEntity(this.pos, 0, nbt);
+	}
 
-    @Override
-    public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbt = new NBTTagCompound();
-        nbt.setInteger("rotationOffset", rotationOffset);
-        return new SPacketUpdateTileEntity(pos, 0, nbt);
-    }
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
+		this.rotationOffset = packet.getNbtCompound().getInteger("rotationOffset");
+	}
 
-    @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        rotationOffset = packet.getNbtCompound().getInteger("rotationOffset");
-    }
-
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setInteger("rotationOffset", this.rotationOffset);
+		return nbt;
+	}
 }

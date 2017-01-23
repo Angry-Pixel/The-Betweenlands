@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -395,7 +396,6 @@ public abstract class WorldGenHelper extends WorldGenerator {
 		switch (rotation) {
 		case 0:
 			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
-
 			break;
 		case 1:
 			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
@@ -562,9 +562,10 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 */
 	public void generateLootPot(World world, Random random, BlockPos pos, int min, int max, ResourceLocation list) {
 		this.setBlockAndNotifyAdequately(world, pos, getRandomLootPot(random));
-		TileEntityLootPot lootPot = (TileEntityLootPot) world.getTileEntity(pos);
-		if (lootPot != null)
-			lootPot.setLootTable(LootTableRegistry.COMMON_CHEST_LOOT, random.nextLong());
+		TileEntityLootPot lootPot = BlockLootPot.getTileEntity(world, pos);
+		if(lootPot != null) {
+			lootPot.setLootTable(list, random.nextLong());
+		}
 	}
 
 	/**
@@ -578,10 +579,11 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 */
 	public void generateLootChest(World world, Random random, BlockPos pos, int min, int max, IBlockState state, ResourceLocation lootTable) {
 		this.setBlockAndNotifyAdequately(world, pos, state);
-		TileEntityChest chest = (TileEntityChest) world.getTileEntity(pos);
+		TileEntity chest = world.getTileEntity(pos);
 
-		if (chest != null)
-			chest.setLootTable(lootTable, random.nextLong());
+		if (chest instanceof TileEntityChest) {
+			((TileEntityChest)chest).setLootTable(lootTable, random.nextLong());
+		}
 	}
 
 
