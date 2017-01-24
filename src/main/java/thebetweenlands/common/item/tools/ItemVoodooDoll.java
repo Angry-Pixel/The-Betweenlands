@@ -35,7 +35,7 @@ public class ItemVoodooDoll extends Item {
                 } else if (!entity.isEntityInvulnerable(DamageSource.magic)) {
                     attacked = true;
                     for (int i = 0; i < 20; i++)
-                        BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F));
+                        BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F).withColor(1, 1, 1, 1));
                 }
             }
         }
@@ -44,7 +44,7 @@ public class ItemVoodooDoll extends Item {
                 player.addChatMessage(new TextComponentTranslation("chat.voodoo.no.mobs"));
             } else if (attacked) {
                 stack.damageItem(1, player);
-                world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 1.0F, 1.0F - world.rand.nextFloat() * 0.3F);
+                world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.VOODOO_DOLL, SoundCategory.PLAYERS, 0.5F, 1.0F - world.rand.nextFloat() * 0.3F);
             }
         }
         return new ActionResult<>(EnumActionResult.SUCCESS, stack);

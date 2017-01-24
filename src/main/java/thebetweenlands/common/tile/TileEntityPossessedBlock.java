@@ -35,7 +35,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 			if (active) {
 				activateBlock();
 				if (animationTicks == 0)
-					worldObj.playSound(null, getPos(), SoundRegistry.POSSESSED_SCREAM, SoundCategory.BLOCKS, 0.25F, 1.25F);
+					worldObj.playSound(null, getPos(), SoundRegistry.POSSESSED_SCREAM, SoundCategory.BLOCKS, 0.25F, 1.25F - this.worldObj.rand.nextFloat() * 0.5F);
 				if (animationTicks <= 24)
 					animationTicks++;
 				if (animationTicks == 24) {

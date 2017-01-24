@@ -51,7 +51,7 @@ public class BlockItemCage extends BlockContainer {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
-		return NULL_AABB;
+		return FULL_BLOCK_AABB;
 	}
 
 	@Override

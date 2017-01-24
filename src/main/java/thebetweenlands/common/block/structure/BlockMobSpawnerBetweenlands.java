@@ -2,6 +2,7 @@ package thebetweenlands.common.block.structure;
 
 import java.util.Objects;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import net.minecraft.block.BlockMobSpawner;
 import net.minecraft.block.state.IBlockState;
@@ -59,7 +60,8 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-	public static MobSpawnerLogicBetweenlands setMob(World world, BlockPos pos, String mobName) {
+	@SafeVarargs
+	public static MobSpawnerLogicBetweenlands setMob(World world, BlockPos pos, String mobName, Consumer<MobSpawnerLogicBetweenlands>... consumers) {
 		MobSpawnerLogicBetweenlands spawnerLogic = getLogic(world, pos);
 		if(spawnerLogic != null) {
 			String prevMob = spawnerLogic.getEntityNameToSpawn();
@@ -70,16 +72,23 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 				spawnerLogic.writeToNBT(nbt);
 				spawnerLogic.readFromNBT(nbt);
 			}
+			for(Consumer<MobSpawnerLogicBetweenlands> c : consumers) {
+				c.accept(spawnerLogic);
+			}
 		}
 		return spawnerLogic;
 	}
 
-	public static MobSpawnerLogicBetweenlands setRandomMob(World world, BlockPos pos, Random random) {
+	@SafeVarargs
+	public static MobSpawnerLogicBetweenlands setRandomMob(World world, BlockPos pos, Random random, Consumer<MobSpawnerLogicBetweenlands>... consumers) {
 		RandomSpawnerMob mob = RandomSpawnerMob.values()[random.nextInt(RandomSpawnerMob.values().length)];
 		MobSpawnerLogicBetweenlands logic = setMob(world, pos, mob.getName());
 		if(logic != null) {
 			logic.setDelay(mob.getMinDelay(), mob.getMaxDelay());
 			logic.setMaxEntities(mob.getMaxEntities());
+			for(Consumer<MobSpawnerLogicBetweenlands> c : consumers) {
+				c.accept(logic);
+			}
 		}
 		return logic;
 	}

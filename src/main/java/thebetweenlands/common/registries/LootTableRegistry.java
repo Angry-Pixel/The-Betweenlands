@@ -10,7 +10,8 @@ public class LootTableRegistry {
     public static final ResourceLocation DUNGEON_CHEST_LOOT = register("loot/dungeon_chest_loot");
     public static final ResourceLocation COMMON_CHEST_LOOT = register("loot/common_chest_loot");
     public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
-
+    public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
+    
     public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
 
     //MOBS

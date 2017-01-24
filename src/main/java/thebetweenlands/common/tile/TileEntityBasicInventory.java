@@ -5,7 +5,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.text.ITextComponent;
@@ -87,18 +86,8 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	 * @param nbt
 	 */
 	protected void writeInventoryNBT(NBTTagCompound nbt) {
-		NBTTagList tags = new NBTTagList();
-
-		for (int i = 0; i < this.inventoryHandler.getSlots(); i++) {
-			if (this.inventoryHandler.getStackInSlot(i) != null) {
-				NBTTagCompound data = new NBTTagCompound();
-				data.setByte("Slot", (byte) i);
-				this.inventoryHandler.getStackInSlot(i).writeToNBT(data);
-				tags.appendTag(data);
-			}
-		}
-
-		nbt.setTag("Items", tags);
+		NBTTagCompound inventoryNbt = this.inventoryHandler.serializeNBT();
+		nbt.setTag("Inventory", inventoryNbt);
 	}
 
 	@Override
