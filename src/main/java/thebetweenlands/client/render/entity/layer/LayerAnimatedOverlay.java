@@ -36,11 +36,16 @@ public class LayerAnimatedOverlay<T extends EntityLivingBase> implements LayerRe
 		float colour = 0.5F;
 		GlStateManager.color(colour, colour, colour, 1.0F);
 
+		GlStateManager.enablePolygonOffset();
+		GlStateManager.doPolygonOffset(0.0F, -5.0F);
+		
 		ModelBase mainModel = this.renderer.getMainModel();
 		mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
 		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
+		GlStateManager.disablePolygonOffset();
+		
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
