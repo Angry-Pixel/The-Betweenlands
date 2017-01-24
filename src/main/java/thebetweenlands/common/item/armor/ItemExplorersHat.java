@@ -17,7 +17,7 @@ public class ItemExplorersHat extends ItemArmor {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/armor/explorers_hat.png");
 
 	@SideOnly(Side.CLIENT)
-	public static final ModelBiped MODEL = new ModelExplorersHat();
+	private static ModelBiped model;
 
 	public ItemExplorersHat() {
 		super(BLMaterialRegistry.ARMOR_BL_CLOTH, 2, EntityEquipmentSlot.HEAD);
@@ -41,6 +41,9 @@ public class ItemExplorersHat extends ItemArmor {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase entityLiving, ItemStack itemStack, EntityEquipmentSlot armorSlot, ModelBiped defaultModel) {
-		return MODEL;
+		if(model == null) {
+			model = new ModelExplorersHat();
+		}
+		return model;
 	}
 }
