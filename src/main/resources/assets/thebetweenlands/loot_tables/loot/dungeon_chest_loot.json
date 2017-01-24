@@ -284,6 +284,14 @@
                 {
                     "conditions": [],
                     "type": "item",
+                    "name": "thebetweenlands:explorers_hat",
+                    "functions": [],
+                    "weight": 4,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
                     "name": "thebetweenlands:voodoo_doll",
                     "functions": [],
                     "weight": 10,

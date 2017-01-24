@@ -33,6 +33,7 @@ import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
+import thebetweenlands.common.item.armor.ItemExplorersHat;
 import thebetweenlands.common.item.armor.ItemLurkerSkinArmor;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.item.armor.ItemSkullMask;
@@ -192,6 +193,7 @@ public class ItemRegistry {
 	public static final Item VALONITE_BOOTS = new ItemValoniteArmor(EntityEquipmentSlot.FEET);
 	public static final Item RUBBER_BOOTS = new ItemRubberBoots();
 	public static final Item SKULL_MASK = new ItemSkullMask();
+	public static final Item EXPLORERS_HAT = new ItemExplorersHat();
 
 	//TOOLS
 	public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
