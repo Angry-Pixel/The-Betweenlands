@@ -20,11 +20,12 @@ import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntity;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
@@ -234,9 +235,8 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean hit, int amount) {
-		int count = 1 + getBloodConsumed();
-		dropItem(ItemRegistry.SAP_BALL, count);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.LEECH;
 	}
 
 	@Override

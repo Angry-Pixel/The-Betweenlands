@@ -1,0 +1,35 @@
+{
+  "pools": [
+    {
+      "name": "wight",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 2
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:wight_heart",
+          "functions": [
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

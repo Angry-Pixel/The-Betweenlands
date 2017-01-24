@@ -18,10 +18,11 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityMireSnail extends EntityAnimal implements IEntityBL {
@@ -96,14 +97,8 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		if (isBurning())
-			entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED, 1, 0), 0.0F);
-		else
-			entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW, 1, 0), 0.0F);
-
-		if (rand.nextBoolean())
-			entityDropItem(EnumItemMisc.MIRE_SNAIL_SHELL.create(1), 0.0F);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.MIRE_SNAIL;
 	}
 
 	@Override

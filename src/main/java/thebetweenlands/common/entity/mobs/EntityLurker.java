@@ -28,14 +28,15 @@ import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 
@@ -522,8 +523,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(EnumItemMisc.LURKER_SKIN.create(3), 0F);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.LURKER;
 	}
 
 	@Override

@@ -1,0 +1,70 @@
+{
+  "pools": [
+    {
+      "name": "peat_mummy",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        }
+      ],
+      "entries": [
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 8
+        },
+        {
+          "type": "item",
+          "entryName": "shimmer_stone_single",
+          "name": "thebetweenlands:shimmer_stone",
+          "functions": [],
+          "weight": 6
+        },
+        {
+          "type": "item",
+          "entryName": "shimmer_stone_multi",
+          "name": "thebetweenlands:shimmer_stone",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 2,
+                "max": 5
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "carried_shimmerstone",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:has_shimmerstone": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:shimmer_stone",
+          "functions": [],
+          "weight": 9
+        }
+      ]
+    }
+  ]
+}

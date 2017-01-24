@@ -28,6 +28,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -41,6 +42,7 @@ import thebetweenlands.common.entity.ai.EntityAIApproachItem;
 import thebetweenlands.common.entity.ai.EntityAIPeatMummyCharge;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScreenShake {
@@ -120,7 +122,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				if(entity.isCharging()) {
 					entity.stopCharging();
 				}
-				entity.setCarryShimmerStone(true);
+				entity.setCarryShimmerstone(true);
 			}
 		});
 		this.tasks.addTask(2, new EntityAIAttackMelee(this, 1.0D, true) {
@@ -623,19 +625,24 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	}
 
 	@Override
-	protected void dropFewItems(boolean wasRecentlyHit, int lootingModifier) {
-		if(this.carryShimmerstone) {
-			this.dropItem(ItemRegistry.SHIMMER_STONE, 1);
-		}
-		super.dropFewItems(wasRecentlyHit, lootingModifier);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.PEAT_MUMMY;
 	}
 
 	/**
 	 * Sets whether the peat mummy is carrying a shimmer stone
 	 * @param shimmerStone
 	 */
-	public void setCarryShimmerStone(boolean shimmerStone) {
+	public void setCarryShimmerstone(boolean shimmerStone) {
 		this.carryShimmerstone = shimmerStone;
+	}
+	
+	/**
+	 * Returns whether the Peat Mummy is holding a Shimmerstone
+	 * @return
+	 */
+	public boolean doesCarryShimmerstone() {
+		return this.carryShimmerstone;
 	}
 
 	@Override

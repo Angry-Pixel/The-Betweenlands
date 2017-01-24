@@ -3,7 +3,12 @@ package thebetweenlands.common.entity.mobs;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
+import net.minecraft.entity.ai.EntityAIBreakDoor;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,6 +16,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -22,8 +28,8 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIDruidTeleport;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetDruid;
 import thebetweenlands.common.entity.ai.EntityAINearestAttackableTargetDruid;
-import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.MathUtils;
 
@@ -35,9 +41,9 @@ public class EntityDarkDruid extends EntityMob {
 
 	private static final int MAX_ATTACK_ANIMATION_TIME = 8;
 
-	private EntityAIAttackMelee meleeAI = new EntityAIAttackMelee(this, 0.23F, false);
-	private EntityAIWander wanderAI = new EntityAIWander(this, 0.23F);
-	private EntityAIWatchClosest watchAI = new EntityAIWatchClosest(this, EntityPlayer.class, 16);
+	private EntityAIAttackMelee meleeAI;
+	private EntityAIWander wanderAI;
+	private EntityAIWatchClosest watchAI;
 
 	private int attackDelayCounter;
 	private int attackCounter;
@@ -55,6 +61,9 @@ public class EntityDarkDruid extends EntityMob {
 	
 	@Override
 	protected void initEntityAI() {
+		this.meleeAI = new EntityAIAttackMelee(this, 0.23F, false);
+		this.wanderAI = new EntityAIWander(this, 0.23F);
+		this.watchAI = new EntityAIWatchClosest(this, EntityPlayer.class, 16);
 		
 		tasks.addTask(0, new EntityAISwimming(this));
 		tasks.addTask(1, new EntityAIBreakDoor(this));
@@ -262,27 +271,8 @@ public class EntityDarkDruid extends EntityMob {
 	}
 
 	@Override
-	protected void dropEquipment(boolean wasRecentlyHit, int lootingModifier) {
-		entityDropItem(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_0.create(1), 0);
-	}
-
-	@Override
-	public void dropFewItems(boolean recentlyHit, int looting) {
-		int randomPiece = rand.nextInt(4);
-		switch (randomPiece) {
-			case 0:
-				entityDropItem(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_1.create(1), 0);
-				break;
-			case 1:
-				entityDropItem(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_2.create(1), 0);
-				break;
-			case 2:
-				entityDropItem(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_3.create(1), 0);
-				break;
-			case 3:
-				entityDropItem(ItemSwampTalisman.EnumTalisman.SWAMP_TALISMAN_4.create(1), 0);
-				break;
-		}
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.DARK_DRUID;
 	}
 
 	@Override

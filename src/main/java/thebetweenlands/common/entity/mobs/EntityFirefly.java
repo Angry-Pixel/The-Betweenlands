@@ -10,11 +10,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntityFirefly extends EntityFlying implements IEntityBL {
 	public static final IAttribute GLOW_STRENGTH_ATTRIB = (new RangedAttribute(null, "bl.fireflyGlowStrength", 1, 0, 8)).setDescription("Firefly glow strength").setShouldWatch(true);
@@ -93,6 +95,11 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 		this.dataManager.register(GLOW_STRENGTH, (float)GLOW_STRENGTH_ATTRIB.getDefaultValue());
 	}
 
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.FIREFLY;
+	}
+	
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;

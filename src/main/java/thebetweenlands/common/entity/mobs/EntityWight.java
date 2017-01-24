@@ -17,7 +17,6 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -27,6 +26,7 @@ import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -45,6 +45,7 @@ import thebetweenlands.common.entity.ai.EntityAIWightAttack;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityWight extends EntityMob implements IEntityBL {
@@ -345,8 +346,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		entityDropItem(new ItemStack(ItemRegistry.WIGHT_HEART), 0F);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.WIGHT;
 	}
 
 	@Override

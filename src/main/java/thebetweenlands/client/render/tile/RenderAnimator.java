@@ -146,6 +146,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 						entity.setWorld(te.getWorld());
 						entity.setRotationYawHead(0F);
 						entity.rotationPitch = 0F;
+						entity.ticksExisted = (int) this.getWorld().getWorldTime();
 						renderManager.doRenderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
 					}
 					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

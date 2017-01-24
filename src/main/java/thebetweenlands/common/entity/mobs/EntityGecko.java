@@ -15,6 +15,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -25,6 +26,7 @@ import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntityGecko;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBushUncollidableEntity {
@@ -207,5 +209,10 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	@Override
 	public boolean canBeCollidedWith() {
 		return !this.isHiding();
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.GECKO;
 	}
 }

@@ -10,7 +10,6 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -18,6 +17,7 @@ import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -26,8 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityFrog extends EntityCreature implements IEntityBL {
@@ -213,14 +212,8 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		if (isBurning())
-			entityDropItem(new ItemStack(ItemRegistry.FROG_LEGS_COOKED, 1, 0), 0.0F);
-		else {
-			entityDropItem(new ItemStack(ItemRegistry.FROG_LEGS_RAW, 1, 0), 0.0F);
-			if (getSkin() == 4)
-				entityDropItem(EnumItemMisc.POISON_GLAND.create(1), 0.0F);
-		}
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.FROG;
 	}
 
 	@SideOnly(Side.CLIENT)

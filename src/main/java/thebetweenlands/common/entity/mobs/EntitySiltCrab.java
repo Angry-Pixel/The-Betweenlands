@@ -13,9 +13,11 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySiltCrab extends EntityMob implements IEntityBL {
@@ -118,5 +120,10 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	@Override
 	protected boolean canDespawn() {
 		return false;
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.SILT_CRAB;
 	}
 }

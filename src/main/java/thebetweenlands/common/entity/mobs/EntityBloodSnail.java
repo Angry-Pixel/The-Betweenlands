@@ -17,15 +17,14 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityBloodSnail extends EntityMob implements IEntityBL {
@@ -68,16 +67,8 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		if (isBurning())
-			entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_COOKED, 1, 0), 0.0F);
-		else
-			entityDropItem(new ItemStack(ItemRegistry.SNAIL_FLESH_RAW, 1, 0), 0.0F);
-
-		if (rand.nextBoolean())
-			entityDropItem(EnumItemMisc.BLOOD_SNAIL_SHELL.create(1), 0.0F);
-		else
-			entityDropItem(EnumItemMisc.POISON_GLAND.create(1), 0.0F);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.BLOOD_SNAIL;
 	}
 
 	@Override

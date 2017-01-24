@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "firefly",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

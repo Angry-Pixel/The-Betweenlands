@@ -149,8 +149,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 			setAir(300);
 		} else if (onGround) {
 			motionY += 0.25D;
-			motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.2F);
-			motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.2F);
+			motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.1F);
+			motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.1F);
 			rotationYaw = rand.nextFloat() * 360.0F;
 			if(isLeaping())
 				setIsLeaping(false);

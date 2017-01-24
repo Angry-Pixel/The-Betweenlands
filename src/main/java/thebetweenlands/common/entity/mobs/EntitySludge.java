@@ -20,6 +20,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -29,6 +30,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	public static final DataParameter<Boolean> IS_ACTIVE = EntityDataManager.createKey(EntitySludge.class, DataSerializers.BOOLEAN);
@@ -201,6 +203,11 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		this.isAirBorne = true;
 	}
 
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.SLUDGE;
+	}
+	
 	protected SoundEvent getJumpSound() {
 		return SoundEvents.ENTITY_SLIME_JUMP;
 	}

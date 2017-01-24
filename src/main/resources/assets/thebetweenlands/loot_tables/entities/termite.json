@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "termite",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

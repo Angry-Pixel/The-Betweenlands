@@ -26,6 +26,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -35,7 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityTarminion extends EntityTameable implements IEntityBL {
@@ -157,7 +158,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 			}
 
 			if(!this.worldObj.isRemote) {
-				this.entityDropItem(EnumItemMisc.INANIMATE_TARMINION.create(1), 0F);
+				this.dropLoot(false, 0, DamageSource.generic);
 			}
 
 			this.playSound(SoundRegistry.TAR_BEAST_STEP, 2.5F, 0.5F);
@@ -229,5 +230,15 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	@Override
 	public EntityAgeable createChild(EntityAgeable entity) {
 		return null;
+	}
+
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.TARMINION;
+	}
+
+	@Override
+	protected boolean canDropLoot() {
+		return false; //Loot dropping is handled in death update
 	}
 }

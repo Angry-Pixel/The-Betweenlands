@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "toad",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

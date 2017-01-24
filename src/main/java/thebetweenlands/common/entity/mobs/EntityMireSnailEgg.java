@@ -7,7 +7,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
 public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
@@ -102,4 +104,9 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
         	setHatchTime(nbt.getInteger("hatchTicks"));
         }
     }
+    
+    @Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.MIRE_SNAIL_EGG;
+	}
 }

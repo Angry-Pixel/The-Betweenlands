@@ -13,13 +13,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
@@ -81,12 +82,8 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		int chance = rand.nextInt(4) + rand.nextInt(1 + looting);
-		int amount;
-		for (amount = 0; amount < chance; ++amount) {
-			entityDropItem(EnumItemMisc.DRAGONFLY_WING.create(4), 0.0F);
-		}
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.DRAGONFLY;
 	}
 
 	public boolean isFlying() {

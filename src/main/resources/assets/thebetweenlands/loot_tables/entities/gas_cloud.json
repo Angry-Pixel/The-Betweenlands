@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "gas_cloud",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

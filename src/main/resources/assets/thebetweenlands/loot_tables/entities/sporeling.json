@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "sporeling",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

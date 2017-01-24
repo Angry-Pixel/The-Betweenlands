@@ -1,0 +1,28 @@
+{
+  "pools": [
+    {
+      "name": "sludge",
+      "rolls": {
+        "min": 0,
+        "max": 2
+      },
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:sludge_ball",
+          "functions": [
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

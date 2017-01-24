@@ -15,12 +15,14 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.AnimationMathHelper;
@@ -133,8 +135,8 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 				setAir(300);
 			} else if (onGround) {
 				motionY += 0.25D;
-				motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.2F);
-				motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.2F);
+				motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.075F);
+				motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.075F);
 				rotationYaw = rand.nextFloat() * 360.0F;
 				onGround = false;
 				isAirBorne = true;
@@ -165,6 +167,11 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 	@Override
 	public boolean isNotColliding() {
 		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+	}
+	
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.BLIND_CAVE_FISH;
 	}
 
 	static class BlindFishMoveHelper extends EntityMoveHelper {

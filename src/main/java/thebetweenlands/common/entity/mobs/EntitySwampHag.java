@@ -16,10 +16,11 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.AnimationMathHelper;
 
@@ -176,7 +177,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected void dropFewItems(boolean recentlyHit, int looting) {
-		this.entityDropItem(EnumItemMisc.SLIMY_BONE.create(this.worldObj.rand.nextInt(3) + 1), 0F);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.SWAMP_HAG;
 	}
 }

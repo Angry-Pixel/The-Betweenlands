@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "gecko",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

@@ -1,0 +1,97 @@
+{
+  "pools": [
+    {
+      "name": "blood_snail",
+      "rolls": 1,
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:snail_flesh_raw",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            },
+            {
+              "function": "furnace_smelt",
+              "conditions": [
+                {
+                  "condition": "entity_properties",
+                  "entity": "this",
+                  "properties": {
+                    "on_fire": true
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "shell",
+      "rolls": 1,
+      "conditions": [],
+      "entries": [
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [
+            {
+              "function": "set_data",
+              "data": 0
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "entryName": "blood_snail_shell",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_data",
+              "data": 0
+            }
+          ],
+          "weight": 2
+        },
+        {
+          "type": "item",
+          "entryName": "poison_gland",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 30
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}
