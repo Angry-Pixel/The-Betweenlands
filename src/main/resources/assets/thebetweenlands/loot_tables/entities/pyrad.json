@@ -48,6 +48,44 @@
           "weight": 1
         }
       ]
+    },
+    {
+      "name": "pyrad_flames",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "killed_by_player"
+        },
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:pyrad_charging": "true"
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "empty",
+          "name": "nothing",
+          "functions": [],
+          "weight": 3
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:pyrad_flame",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 6
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
     }
   ]
 }

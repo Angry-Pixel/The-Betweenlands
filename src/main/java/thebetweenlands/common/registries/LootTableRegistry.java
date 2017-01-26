@@ -6,6 +6,7 @@ import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import thebetweenlands.common.entity.loot.LootPropertyFrogType;
 import thebetweenlands.common.entity.loot.LootPropertyPeatMummyShimmerstone;
+import thebetweenlands.common.entity.loot.LootPropertyPyradCharging;
 import thebetweenlands.common.lib.ModInfo;
 
 public class LootTableRegistry {
@@ -48,6 +49,7 @@ public class LootTableRegistry {
 	//LOOT PROPERTIES
 	public static final ResourceLocation PROPERTY_FROG_TYPE = register(new LootPropertyFrogType.Serializer());
 	public static final ResourceLocation PROPERTY_PEAT_MUMMY_SHIMMERSTONE = register(new LootPropertyPeatMummyShimmerstone.Serializer());
+	public static final ResourceLocation PROPERTY_PYRAD_CHARGING = register(new LootPropertyPyradCharging.Serializer());
 
 
 	private static ResourceLocation register(String id) {
