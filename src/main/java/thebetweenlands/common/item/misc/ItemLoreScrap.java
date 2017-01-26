@@ -30,7 +30,7 @@ public class ItemLoreScrap extends Item implements ItemRegistry.ISubItemsItem {
 
 	public ItemLoreScrap() {
 		this.maxStackSize = 1;
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 
 		this.addPropertyOverride(new ResourceLocation("page"), new IItemPropertyGetter() {
 			@Override

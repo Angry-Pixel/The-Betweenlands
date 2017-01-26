@@ -50,7 +50,7 @@ public class ItemAmulet extends Item implements IEquippable {
 	}
 
 	public ItemAmulet() {
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 		this.setMaxStackSize(1);
 
 		CircleGemHelper.addGemPropertyOverrides(this);

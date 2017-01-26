@@ -84,7 +84,7 @@ public class GuiPouchNaming extends GuiContainer {
 		if (button instanceof GuiPouchNamingButton) {
 			if (button.id == 1) {
 				if (StringUtils.isNullOrEmpty(this.textFieldName.getText())) {
-					TheBetweenlands.networkWrapper.sendToServer(new MessagePouchNaming(I18n.format("container.lurkerSkinPouch"), this.hand));
+					TheBetweenlands.networkWrapper.sendToServer(new MessagePouchNaming("", this.hand));
 				} else {
 					TheBetweenlands.networkWrapper.sendToServer(new MessagePouchNaming(this.textFieldName.getText(), this.hand));
 				}

@@ -4,6 +4,8 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.CaseFormat;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
@@ -49,6 +51,8 @@ public class FluidRegistry {
 				Object obj = f.get(null);
 				if (obj instanceof Fluid) {
 					Fluid fluid = (Fluid) obj;
+					String unlocName = fluid.getUnlocalizedName().substring("fluid.".length());
+					fluid.setUnlocalizedName(CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, unlocName));
 					net.minecraftforge.fluids.FluidRegistry.registerFluid(fluid);
 					net.minecraftforge.fluids.FluidRegistry.addBucketForFluid(fluid);
 					REGISTERED_FLUIDS.add((Fluid)obj);

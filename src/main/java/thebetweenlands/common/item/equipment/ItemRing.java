@@ -16,7 +16,7 @@ import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 public class ItemRing extends Item implements IEquippable {
 	public ItemRing() {
 		this.setMaxStackSize(1);
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 
 		IEquippable.addEquippedPropertyOverrides(this);
 	}

@@ -18,7 +18,7 @@ public class ItemAmuletSlot extends Item {
 	public ItemAmuletSlot() {
 		this.setMaxStackSize(1);
 		this.setMaxDamage(30);
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override

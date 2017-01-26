@@ -10,7 +10,7 @@ import thebetweenlands.common.item.corrosion.CorrosionHelper;
 public class ItemSwiftPick extends ItemBLPickaxe {
 	public ItemSwiftPick() {
 		super(BLMaterialRegistry.TOOL_VALONITE);
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
 	@Override
