@@ -22,7 +22,7 @@ public class ParticleAltarCrafting extends Particle {
 		BlockPos pos = target.getPos();
 		this.endPoint = new Vector3d(pos.getX() + 0.5D, pos.getY() + TileEntityDruidAltar.FINAL_HEIGHT + 1.05D, pos.getZ() + 0.5D);
 		float colorMulti = this.rand.nextFloat() * 0.3F;
-		this.particleScale = 1.0f;
+		this.particleScale = scale;
 		this.particleRed = this.particleGreen = this.particleBlue = 1.0F * colorMulti;
 		this.particleMaxAge = TileEntityDruidAltar.CRAFTING_TIME + 200000;
 		this.setParticleTextureIndex((int) (Math.random() * 26.0D + 1.0D + 224.0D));
@@ -44,13 +44,11 @@ public class ParticleAltarCrafting extends Particle {
 		Vector3d yDiff = new Vector3d(this.endPoint.x, this.endPoint.y, this.endPoint.z);
 		yDiff.sub(new Vector3d(this.endPoint.x, this.startPoint.y, this.endPoint.z));
 		xzDiff.scale(craftingProgress);
-		yDiff.scale(Math.pow(craftingProgress, 6));
+		yDiff.scale(Math.pow(craftingProgress, 0.5F));
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.setPosition(this.startPoint.x + xzDiff.x, this.startPoint.y + yDiff.y, this.startPoint.z + xzDiff.z);
-		particleGreen = (float) (1F - craftingProgress);
-		particleBlue = (float) (1F - craftingProgress);
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleAltarCrafting> {
@@ -64,7 +62,7 @@ public class ParticleAltarCrafting extends Particle {
 		}
 
 		@Override
-		protected void setBaseArguments(ParticleArgs args) {
+		protected void setBaseArguments(ParticleArgs<?> args) {
 			args.withData((TileEntityDruidAltar)null);
 		}
 	}

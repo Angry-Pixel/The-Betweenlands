@@ -1,7 +1,12 @@
 package thebetweenlands.client.gui.inventory;
 
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +35,6 @@ public class GuiDruidAltar extends GuiContainer {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public void initGui() {
         super.initGui();
     }
@@ -55,33 +59,45 @@ public class GuiDruidAltar extends GuiContainer {
             renderSlot(new ItemStack(ghostIcon),  81 + xStart,  35 + yStart);
         }*/
 
+        int dmg = stack.getItemDamage();
+        
         if (tile.getStackInSlot(1) == null) {
+        	stack.setItemDamage((0 + (dmg - 1)) % 4 + 1);
             renderSlot(stack, 53 + xStart, 7 + yStart);
         }
 
         if (tile.getStackInSlot(2) == null) {
+        	stack.setItemDamage((1 + (dmg - 1)) % 4 + 1);
             renderSlot(stack, 109 + xStart, 7 + yStart);
         }
 
         if (tile.getStackInSlot(3) == null) {
+        	stack.setItemDamage((2 + (dmg - 1)) % 4 + 1);
             renderSlot(stack, 53 + xStart, 63 + yStart);
         }
 
         if (tile.getStackInSlot(4) == null) {
+        	stack.setItemDamage((3 + (dmg - 1)) % 4 + 1);
             renderSlot(stack, 109 + xStart, 63 + yStart);
         }
 
+        stack.setItemDamage(dmg);
 
     }
 
     private void renderSlot(ItemStack stack, int x, int y) {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        //TODO fix alpha because minecraft just changes it to 1 in it's item render code
-        GlStateManager.color(1f, 1f, 1f, 0.2f);
-        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
+    	GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GL14.glBlendColor(0, 0, 0, 0.35f);
+		GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
+		GlStateManager.pushMatrix();
+		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+		GlStateManager.popMatrix();
+		GL14.glBlendColor(1, 1, 1, 1);
+		GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA); //ugly
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
     }
 
     @Override

@@ -14,7 +14,7 @@ public class ItemLootSword extends ItemBLSword {
 
     public ItemLootSword(ToolMaterial material) {
         super(material);
-        setCreativeTab(BLCreativeTabs.GEARS);
+        setCreativeTab(BLCreativeTabs.SPECIALS);
     }
 
     @SafeVarargs

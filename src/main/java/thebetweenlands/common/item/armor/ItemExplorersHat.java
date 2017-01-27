@@ -10,6 +10,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelExplorersHat;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -21,6 +22,7 @@ public class ItemExplorersHat extends ItemArmor {
 
 	public ItemExplorersHat() {
 		super(BLMaterialRegistry.ARMOR_BL_CLOTH, 2, EntityEquipmentSlot.HEAD);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override

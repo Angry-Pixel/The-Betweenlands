@@ -25,7 +25,7 @@ public class ItemSkullMask extends ItemBLArmor {
 
 	public ItemSkullMask() {
 		super(BLMaterialRegistry.ARMOR_BONE, 2, EntityEquipmentSlot.HEAD, "skull_mask");
-		this.setCreativeTab(BLCreativeTabs.GEARS);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@SideOnly(Side.CLIENT)

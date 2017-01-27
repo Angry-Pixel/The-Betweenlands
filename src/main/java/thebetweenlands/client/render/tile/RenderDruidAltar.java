@@ -2,12 +2,16 @@ package thebetweenlands.client.render.tile;
 
 import java.util.Random;
 
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.texture.TextureMap;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.Vector3d;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -139,7 +143,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(midVec.x, y + yOff, midVec.z);
 					GlStateManager.scale(0.3f, 0.3f, 0.3f);
-					GlStateManager.rotate(-renderRotation * 2.0f, 0, (float) y, 0);
+					GlStateManager.rotate(-renderRotation * 2.0f, 0, 1, 0);
 					renderItem(item);
 					GlStateManager.popMatrix();
 				}
@@ -271,7 +275,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		float step = 360.0f / (float) faces;
 
 		GlStateManager.disableTexture2D();
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 		GlStateManager.disableAlpha();
@@ -289,29 +293,25 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 			double sin2 = Math.sin(Math.toRadians(i + step));
 			double cos2 = Math.cos(Math.toRadians(i + step));
 
-			buffer.begin(6, DefaultVertexFormats.POSITION);
-			buffer.color(255, 255, 255, 0);
-			buffer.pos(sin * lr, 0, cos * lr).endVertex();
-			buffer.pos(sin2 * lr, 0, cos2 * lr).endVertex();
+			buffer.begin(6, DefaultVertexFormats.POSITION_COLOR);
+			buffer.pos(sin * lr, 0, cos * lr).color(255, 255, 255, 0).endVertex();
+			buffer.pos(sin2 * lr, 0, cos2 * lr).color(255, 255, 255, 0).endVertex();
 
-			buffer.color(0, 0, 255, 60);
-			buffer.pos(sin2 * ur, height, cos2 * ur).endVertex();
-			buffer.pos(sin * ur, height, cos * ur).endVertex();
+			buffer.pos(sin2 * ur, height, cos2 * ur).color(0, 0, 255, 60).endVertex();
+			buffer.pos(sin * ur, height, cos * ur).color(0, 0, 255, 60).endVertex();
 
-			buffer.color(0, 0, 255, 60);
-			buffer.pos(sin * ur, height, cos * ur).endVertex();
-			buffer.pos(sin2 * ur, height, cos2 * ur).endVertex();
+			buffer.pos(sin * ur, height, cos * ur).color(0, 0, 255, 60).endVertex();
+			buffer.pos(sin2 * ur, height, cos2 * ur).color(0, 0, 255, 60).endVertex();
 
-			buffer.color(255, 255, 255, 0);
-			buffer.pos(sin2 * lr, 0, cos2 * lr).endVertex();
-			buffer.pos(sin * lr, 0, cos * lr).endVertex();
+			buffer.pos(sin2 * lr, 0, cos2 * lr).color(255, 255, 255, 0).endVertex();
+			buffer.pos(sin * lr, 0, cos * lr).color(255, 255, 255, 0).endVertex();
 			tessellator.draw();
 		}
 
 		GlStateManager.depthMask(true);
 		GlStateManager.disableCull();
 		GlStateManager.disableBlend();
-		GL11.glShadeModel(GL11.GL_FLAT);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableAlpha();
