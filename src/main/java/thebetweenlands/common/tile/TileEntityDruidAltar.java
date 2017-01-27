@@ -55,7 +55,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 				this.craftingProgress++;
 			}
 			this.prevRenderYOffset = this.renderYOffset;
-			this.renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * FINAL_HEIGHT + 1.0D);
+			this.renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * (FINAL_HEIGHT - 0.2D) + 1.2D);
 		} else {
 			if (this.craftingProgress != 0) {
 				DruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);

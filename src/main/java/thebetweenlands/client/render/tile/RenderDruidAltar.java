@@ -103,11 +103,10 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		LightingUtil.INSTANCE.setLighting(255);
 
 		//Animate the 4 talisman pieces
+		double yOff = 1.2D;
 		if (tile.getWorld().getBlockState(tile.getPos()).getValue(BlockDruidAltar.ACTIVE) && tile.craftingProgress != 0) {
-			double yOff = tile.renderYOffset + (tile.renderYOffset - tile.prevRenderYOffset) * partialTicks;
-			if (yOff > TileEntityDruidAltar.FINAL_HEIGHT + 1.0D) {
-				yOff = TileEntityDruidAltar.FINAL_HEIGHT + 1.0D;
-			}
+			yOff = Math.min(tile.renderYOffset + (tile.renderYOffset - tile.prevRenderYOffset) * partialTicks, TileEntityDruidAltar.FINAL_HEIGHT + 1.0D);
+
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, y + 3.1D, z + 0.5D);
 			GlStateManager.rotate(renderRotation * 2.0f, 0f, 1f, 0f);
@@ -115,41 +114,36 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 			GlStateManager.scale(shineScale, shineScale, shineScale);
 			this.renderShine((float) Math.sin(Math.toRadians(renderRotation)) / 2.0f - 0.2f, (int) (80 * Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 12)));
 			GlStateManager.popMatrix();
-			boolean exit = false;
-			for (int xi = 0; xi < 2; xi++) {
-				for (int zi = 0; zi < 2; zi++) {
-					ItemStack item = tile.getStackInSlot(zi * 2 + xi + 1);
-					if (item == null) {
-						exit = true;
-						break;
-					}
-					float xOff = xi == 0 ? -0.18f : 1.18f;
-					float zOff = zi == 0 ? -0.18f : 1.18f;
-					GlStateManager.pushMatrix();
-					GlStateManager.translate(x + xOff, y + 1, z + zOff);
-					this.renderCone(5);
-					GlStateManager.popMatrix();
-					Vector3d midVec = new Vector3d();
-					midVec.x = (float) x + 0.5f;
-					midVec.z = (float) z + 0.5f;
-					Vector3d diffVec = new Vector3d();
-					diffVec.x = (float) x + xOff - midVec.x;
-					diffVec.z = (float) z + zOff - midVec.z;
-					double rProgress = 1.0D - Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 6);
-					diffVec.x *= rProgress;
-					diffVec.z *= rProgress;
-					midVec.x += diffVec.x;
-					midVec.z += diffVec.z;
-					GlStateManager.pushMatrix();
-					GlStateManager.translate(midVec.x, y + yOff, midVec.z);
-					GlStateManager.scale(0.3f, 0.3f, 0.3f);
-					GlStateManager.rotate(-renderRotation * 2.0f, 0, 1, 0);
-					renderItem(item);
-					GlStateManager.popMatrix();
+		}
+		for (int xi = 0; xi < 2; xi++) {
+			for (int zi = 0; zi < 2; zi++) {
+				ItemStack item = tile.getStackInSlot(zi * 2 + xi + 1);
+				if (item == null) {
+					continue;
 				}
-				if (exit) {
-					break;
-				}
+				float xOff = xi == 0 ? -0.18f : 1.18f;
+				float zOff = zi == 0 ? -0.18f : 1.18f;
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(x + xOff, y + 1, z + zOff);
+				this.renderCone(5);
+				GlStateManager.popMatrix();
+				Vector3d midVec = new Vector3d();
+				midVec.x = (float) x + 0.5f;
+				midVec.z = (float) z + 0.5f;
+				Vector3d diffVec = new Vector3d();
+				diffVec.x = (float) x + xOff - midVec.x;
+				diffVec.z = (float) z + zOff - midVec.z;
+				double rProgress = 1.0D - Math.pow(1.0D - (TileEntityDruidAltar.FINAL_HEIGHT + 1.0D - yOff) / TileEntityDruidAltar.FINAL_HEIGHT, 6);
+				diffVec.x *= rProgress;
+				diffVec.z *= rProgress;
+				midVec.x += diffVec.x;
+				midVec.z += diffVec.z;
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(midVec.x, y + yOff, midVec.z);
+				GlStateManager.scale(0.3f, 0.3f, 0.3f);
+				GlStateManager.rotate(-renderRotation * 2.0f, 0, 1, 0);
+				renderItem(item);
+				GlStateManager.popMatrix();
 			}
 		}
 
@@ -164,7 +158,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 			this.renderShine((float) Math.sin(Math.toRadians(renderRotation)) / 2.0f - 0.2f, 80);
 			GlStateManager.popMatrix();
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(x + 0.5D, y + 3.0D, z + 0.5D);
+			GlStateManager.translate(x + 0.5D, y + 3.1D, z + 0.5D);
 			GlStateManager.scale(0.3f, 0.3f, 0.3f);
 			GlStateManager.rotate(-renderRotation * 2.0f, 0, 1, 0);
 			renderItem(itemTalisman);
@@ -333,7 +327,9 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 	private void renderItem(ItemStack stack){
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+		RenderHelper.disableStandardItemLighting();
 		renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
+		RenderHelper.enableStandardItemLighting();
 		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
 	}
 }

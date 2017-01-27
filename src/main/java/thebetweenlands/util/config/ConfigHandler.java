@@ -46,7 +46,7 @@ public class ConfigHandler {
 
 	private void syncConfigs() {
 		dimensionId = config.get(CATEGORIES[0], "The Betweenlands Dimension ID", 20).getInt(20);
-		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 10).getInt(10);
+		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 80).getInt(80);
 		biomeIdSwamplands = config.get(CATEGORIES[0], "Swamplands Biome ID", 50).getInt(50);
 		biomeIdCoarseIslands = config.get(CATEGORIES[0], "Coarse Islands Biome ID", 51).getInt(51);
 		biomeIdDeepWater = config.get(CATEGORIES[0], "Deep Water Biome ID", 52).getInt(52);
