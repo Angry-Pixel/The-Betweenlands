@@ -308,8 +308,8 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.disableCull();
 				double sidePadding = 6;
 				double yOffset = 5;
-				double sy = strY + strHeight - yOffset*averageScale;
-				double ey = strY + strHeight - yOffset*averageScale + 16*averageScale;
+				double sy = Math.ceil(strY + strHeight - yOffset * averageScale);
+				double ey = Math.ceil(strY + strHeight + (-yOffset + 16) * averageScale);
 				Tessellator tessellator = Tessellator.getInstance();
 				VertexBuffer buffer = tessellator.getBuffer();
 				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

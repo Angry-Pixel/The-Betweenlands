@@ -8,7 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 
 //MINE!!
 public class TestItem extends Item {
@@ -18,8 +18,10 @@ public class TestItem extends Item {
 
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		/*   WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
-        worldGenDruidCircle.generateStructure(worldIn, itemRand, pos.getX(), pos.getY() + 1, pos.getZ());*/
+		if (!world.isRemote) {  
+			WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
+			worldGenDruidCircle.generateStructure(world, itemRand, pos.up());
+		}
 		/*if (!world.isRemote) {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(world, itemRand, pos.up());
@@ -29,11 +31,11 @@ public class TestItem extends Item {
             smallRuins.generate(world, itemRand, pos.up());
         }*/
 
-			if (!world.isRemote) {
+		/*if (!world.isRemote) {
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(world, itemRand, pos.up());
-		}
-		 
+		}*/
+
 		//		if(!world.isRemote) {
 		//			/*if(playerIn.isSneaking()) {
 		//				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
@@ -59,16 +61,16 @@ public class TestItem extends Item {
 		//			}
 		//		}
 
-//		if (!world.isRemote) {
-//			/*WorldGenSpawner spawner = new WorldGenSpawner();
-//					if(spawner.generate(world, itemRand, pos)) {
-//						//playerIn.setHeldItem(hand, null);
-//					}*/
-//			WorldGenCragrockTower tower = new WorldGenCragrockTower();
-//			if(tower.generate(world, itemRand, pos.up(8).add(8, 0, 0))) {
-//				//playerIn.setHeldItem(hand, null);
-//			}
-//		}
+		//		if (!world.isRemote) {
+		//			/*WorldGenSpawner spawner = new WorldGenSpawner();
+		//					if(spawner.generate(world, itemRand, pos)) {
+		//						//playerIn.setHeldItem(hand, null);
+		//					}*/
+		//			WorldGenCragrockTower tower = new WorldGenCragrockTower();
+		//			if(tower.generate(world, itemRand, pos.up(8).add(8, 0, 0))) {
+		//				//playerIn.setHeldItem(hand, null);
+		//			}
+		//		}
 
 		return EnumActionResult.SUCCESS;
 	}

@@ -148,7 +148,6 @@ public class RecipeRegistry {
 
 		// Miscellaneous
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.SULFUR_TORCH, 4), EnumItemMisc.WEEDWOOD_STICK.create(1), EnumItemMisc.SULFUR.create(1));
-		//GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), new ItemStack(BlockRegistry.WEEDWOOD_BARK, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addRecipe(EnumItemMisc.WEEDWOOD_STICK.create(4), "p", "p", 'p', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
@@ -394,7 +393,7 @@ public class RecipeRegistry {
 
 	private static void registerCompostRecipes() {
 		CompostRecipe.addRecipe(30, 12000, ItemRegistry.ITEMS_MISC, EnumItemMisc.ROTTEN_BARK.getID());
-		//        CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BlockRegistry.rottenWeedwoodBark));
+		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BlockRegistry.HOLLOW_LOG));
 		CompostRecipe.addRecipe(10, 8000, Item.getItemFromBlock(BlockRegistry.SUNDEW));
 		CompostRecipe.addRecipe(6, 10000, Item.getItemFromBlock(BlockRegistry.SWAMP_DOUBLE_TALLGRASS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.PHRAGMITES));
@@ -517,7 +516,8 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_SWAMP_KELP.create(1)), new ItemStack(ItemRegistry.SWAMP_KELP_ITEM));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_SWAMP_GRASS_TALL.create(1)), (ItemPlantDrop.EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_TANGLED_ROOTS.create(1)), new ItemStack(ItemRegistry.TANGLED_ROOT));
-		//TODO add when bark is added PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), (BlockRegistry.BARK));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), new ItemStack(BlockRegistry.LOG_WEEDWOOD));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), EnumItemMisc.ROTTEN_BARK.create(1));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_HANGER.create(1)), (ItemPlantDrop.EnumItemPlantDrop.HANGER_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WATER_WEEDS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_VENUS_FLY_TRAP.create(1)), (ItemPlantDrop.EnumItemPlantDrop.VENUS_FLY_TRAP_ITEM.create(1)));

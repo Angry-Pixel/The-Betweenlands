@@ -192,11 +192,12 @@ public class WorldGenSpawner extends WorldGenerator {
 			}
 
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-			LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "translate:undergroundDungeon", EnumLocationType.DUNGEON);
+			LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "undergroundDungeon", EnumLocationType.DUNGEON);
 			location.addBounds(new AxisAlignedBB(center).expand(6, 4, 6));
 			location.linkChunks();
 			location.setLayer(0);
 			location.setSeed(rand.nextLong());
+			location.setVisible(false);
 			location.setDirty(true);
 			worldStorage.addSharedStorage(location);
 

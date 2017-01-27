@@ -100,7 +100,8 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 
 		WorldDataBase<?> result = (WorldDataBase<?>) storage.getOrLoadData(clazz, newInstance.mapName);
 
-		File sharedStorageDir = new File(world.getSaveHandler().getWorldDirectory(), "data" + File.separator + "shared_storage" + File.separator);
+		String dimFolder = world.provider.getSaveFolder();
+		File sharedStorageDir = new File(world.getSaveHandler().getWorldDirectory(), (dimFolder != null && dimFolder.length() > 0 ? dimFolder + File.separator : "") + "data" + File.separator + "shared_storage" + File.separator);
 		SharedRegionCache regionCache = new SharedRegionCache(new File(sharedStorageDir, "region"));
 
 		if (result == null) {

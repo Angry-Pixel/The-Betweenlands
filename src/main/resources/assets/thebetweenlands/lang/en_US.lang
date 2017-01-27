@@ -591,3 +591,16 @@ container.furnaceBL=Sulfur Furnace
 container.dualFurnaceBL=Dual Sulfur Furnace
 container.lurkerSkinPouch=Lurker Skin Pouch
 pouch.naming.save=Save
+
+
+# Locations
+location.wilderness.name=80:<scale:1.75>Wilderness</scale>
+location.caverns.name=80:<scale:1.75>Caverns</scale>
+location.ruins.name=80:<scale:1.75>Ruins</scale>
+location.smallDungeon.name=80:<scale:1.75>Shrine</scale>
+location.tarPoolDungeon.name=80:<scale:1.75>Tar Pool Dungeon</scale>
+location.cragrockTower.name=80:Cragrock Tower
+location.wightTower.name=80:Wight Fortress
+location.wightTowerPuzzle.name=80:Armory
+location.wightTowerTeleporter.name=200:<scale:1>Beware that, when fighting monsters, you yourself do not become a monster... <nl>for when you gaze long into the abyss. The abyss gazes also into you.</scale>
+location.wightTowerBoss.name=80:Primordial Malevolence

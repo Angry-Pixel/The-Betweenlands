@@ -5,37 +5,46 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.capability.portal.IPortalCapability;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class BlockTreePortal extends BasicBlock {
+	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.<EnumFacing.Axis>create("axis", EnumFacing.Axis.class, new EnumFacing.Axis[] {EnumFacing.Axis.X, EnumFacing.Axis.Z});
+
+	protected static final AxisAlignedBB X_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 1.0D, 1.0D, 0.625D);
+	protected static final AxisAlignedBB Z_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.0D, 1.0D);
+	protected static final AxisAlignedBB Y_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.0D, 0.625D);
+
 	public BlockTreePortal() {
 		super(Material.PORTAL);
 		setLightLevel(1.0F);
 		setBlockUnbreakable();
 		setSoundType2(SoundType.GLASS);
+		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.X));
 	}
-	/*
-	 * PORTAL_CORNER_TOP_LEFT,
-        PORTAL_TOP,
-        PORTAL_CORNER_TOP_RIGHT,
-        PORTAL_SIDE_RIGHT,
-        PORTAL_SIDE_LEFT,
-        PORTAL_CORNER_BOTTOM_LEFT,
-        PORTAL_BOTTOM,
-        PORTAL_CORNER_BOTTOM_RIGHT;getStateFromMeta(8), 2);
-	 */
+
 	public static boolean makePortalX(World world, BlockPos pos) {
 		world.setBlockState(pos.add(0, 2, - 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_TOP_RIGHT).withProperty(BlockPortalFrame.X_AXIS, true));
 		world.setBlockState(pos.add(0, 2, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.TOP).withProperty(BlockPortalFrame.X_AXIS, true));
@@ -49,8 +58,8 @@ public class BlockTreePortal extends BasicBlock {
 		world.setBlockState(pos.add(0, - 1, 1), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_LEFT).withProperty(BlockPortalFrame.X_AXIS, true));
 
 		if (isPatternValidX(world, pos)) {
-			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getStateFromMeta(0), 2);//TODO Add variants to THIS Block
-			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getStateFromMeta(0), 2);//TODO Add variants to THIS Block
+			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.Z), 2);
+			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.Z), 2);
 			return true;
 		}
 		return false;
@@ -69,89 +78,131 @@ public class BlockTreePortal extends BasicBlock {
 		world.setBlockState(pos.add(1, - 1, 0), BlockRegistry.PORTAL_FRAME.getDefaultState().withProperty(BlockPortalFrame.FRAME_POSITION, BlockPortalFrame.EnumPortalFrame.CORNER_BOTTOM_LEFT).withProperty(BlockPortalFrame.X_AXIS, false));
 
 		if (isPatternValidZ(world, pos)) {
-			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getStateFromMeta(1), 2);//TODO Add variants to THIS Block
-			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getStateFromMeta(1), 2);//TODO Add variants to THIS Block
+			world.setBlockState(pos, BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.X), 2);
+			world.setBlockState(pos.up(), BlockRegistry.TREE_PORTAL.getDefaultState().withProperty(AXIS, EnumFacing.Axis.X), 2);
 			return true;
 		}
+
 		return false;
 	}
 
-	public static boolean isPatternValidX(World world, BlockPos pos) {
+	public static boolean isPatternValidX(IBlockAccess world, BlockPos pos) {
 		// Layer 0
-		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, 0))
+		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.Z)) {
 			return false;
+		}
 
 		// Layer 1
-		if (!check(world, pos.north(), BlockRegistry.PORTAL_FRAME))
+		if (!check(world, pos.north(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
-		if (!check(world, pos.south(), BlockRegistry.PORTAL_FRAME))
+		}
+		if (!check(world, pos.south(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
+		}
 
 		// Layer 2
-		if (!check(world, pos.up().north(), BlockRegistry.PORTAL_FRAME))
+		if (!check(world, pos.up().north(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
-		if (!check(world, pos.up().south(), BlockRegistry.PORTAL_FRAME))
+		}
+		if (!check(world, pos.up().south(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
+		}
 
 		// Layer 3
-		if (!check(world, pos.up(2), BlockRegistry.PORTAL_FRAME))
+		if (!check(world, pos.up(2), BlockRegistry.PORTAL_FRAME)) {
 			return false;
+		}
 
 		return true;
 	}
 
-	public static boolean isPatternValidZ(World world, BlockPos pos) {
+	public static boolean isPatternValidZ(IBlockAccess world, BlockPos pos) {
 		// Layer 0
-		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, 1))
+		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME) && !checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.X)) {
 			return false;
+		}
 
 		// Layer 1
-		if (!check(world, pos.down(), BlockRegistry.PORTAL_FRAME))
+		if (!check(world, pos.west(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
-		if (!check(world, pos.east(), BlockRegistry.PORTAL_FRAME))
+		}
+		if (!check(world, pos.east(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
+		}
 
 		// Layer 2
-		if (!check(world, pos.west().up(), BlockRegistry.PORTAL_FRAME))
+		if (!check(world, pos.up().west(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
-		if (!check(world, pos.east().up(), BlockRegistry.PORTAL_FRAME))
+		}
+		if (!check(world, pos.up().east(), BlockRegistry.PORTAL_FRAME)) {
 			return false;
+		}
 
 		// Layer 3
-		if (!check(world, pos.up(2), BlockRegistry.PORTAL_FRAME))
+		if (!check(world, pos.up(2), BlockRegistry.PORTAL_FRAME)) {
 			return false;
+		}
 
 		return true;
 	}
 
-	private static boolean check(World world, BlockPos pos, Block target) {
+	private static boolean check(IBlockAccess world, BlockPos pos, Block target) {
 		return world.getBlockState(pos).getBlock() == target;
 	}
 
-	private static boolean checkPortal(World world, BlockPos pos, Block target, int meta) {
+	private static boolean checkPortal(IBlockAccess world, BlockPos pos, Block target, EnumFacing.Axis axis) {
 		IBlockState state = world.getBlockState(pos);
-		return state.getBlock() == target && state.getBlock().getMetaFromState(state) == meta;
+		return state.getBlock() == target && state.getValue(AXIS) == axis;
 	}
 
 	@Override
-	public void onNeighborChange(IBlockAccess world, BlockPos pos, BlockPos neighbor) {
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		switch ((EnumFacing.Axis)state.getValue(AXIS)) {
+		case X:
+			return X_AABB;
+		case Y:
+		default:
+			return Y_AABB;
+		case Z:
+			return Z_AABB;
+		}
+	}
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
 		canBlockStay(world, pos);
 	}
 
-	public boolean canBlockStay(IBlockAccess world, BlockPos pos) {
-		/*if(checkPortal(world, x, y + 1, z, BlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y, z))
-            return true;
-        if(checkPortal(world, x, y - 1, z, BlockRegistry.treePortalBlock, 0) && isPatternValidX(world, x, y - 1, z))
-            return true;
-        if(checkPortal(world, x, y + 1, z, BlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y, z))
-            return true;
-        if(checkPortal(world, x, y - 1, z, BlockRegistry.treePortalBlock, 1) && isPatternValidZ(world, x, y - 1, z))
-            return true;
-        else {
-            world.playAuxSFXAtEntity(null, 2001, x, y, z, Block.getIdFromBlock(world.getBlock(x, y, z)));
-            world.setBlockToAir(x, y, z);
-        }*/
+	protected boolean canBlockStay(World world, BlockPos pos) {
+		if(checkPortal(world, pos.up(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.Z) && isPatternValidX(world, pos))
+			return true;
+		if(checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.Z) && isPatternValidX(world, pos.down()))
+			return true;
+		if(checkPortal(world, pos.up(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.X) && isPatternValidZ(world, pos))
+			return true;
+		if(checkPortal(world, pos.down(), BlockRegistry.TREE_PORTAL, EnumFacing.Axis.X) && isPatternValidZ(world, pos.down()))
+			return true;
+		else {
+			world.playEvent(null, 2001, pos, Block.getIdFromBlock(BlockRegistry.TREE_PORTAL));
+			world.setBlockToAir(pos);
+		}
 		return true;
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[]{ AXIS });
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		EnumFacing.Axis axis = state.getValue(AXIS);
+		return axis == EnumFacing.Axis.X ? 1 : (axis == EnumFacing.Axis.Z ? 2 : 0);
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(AXIS, (meta & 3) == 2 ? EnumFacing.Axis.Z : EnumFacing.Axis.X);
 	}
 
 	@Override
@@ -160,26 +211,33 @@ public class BlockTreePortal extends BasicBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return FULL_BLOCK_AABB;
-	}
-
-	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
 		return NULL_AABB;
 	}
 
-
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0) {
-			if (entityIn.dimension == 0)
-				TeleporterHandler.transferToBL(entityIn);
-			else
-				TeleporterHandler.transferToOverworld(entityIn);
-			if (entityIn != null)
-				entityIn.timeUntilPortal = 10;
-			return;
+			AxisAlignedBB aabb = state.getBoundingBox(worldIn, pos);
+			if(aabb != null && aabb.offset(pos).intersectsWith(entityIn.getEntityBoundingBox())) {
+				if(entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
+					IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+
+					if(worldIn.provider.getDimensionType() == DimensionType.OVERWORLD || entityIn.dimension == ConfigHandler.dimensionId) {
+						cap.setInPortal(true);
+					}
+				} else if(!worldIn.isRemote) {
+					if (worldIn.provider.getDimensionType() == DimensionType.OVERWORLD) {
+						TeleporterHandler.transferToBL(entityIn);
+					} else if(entityIn.dimension == ConfigHandler.dimensionId) {
+						TeleporterHandler.transferToOverworld(entityIn);
+					}
+
+					if (entityIn != null) {
+						entityIn.timeUntilPortal = entityIn.getPortalCooldown();
+					}
+				}
+			}
 		}
 	}
 
@@ -210,9 +268,9 @@ public class BlockTreePortal extends BasicBlock {
 			double motionZ;
 			int multi = rand.nextInt(2) * 2 - 1;
 
-			motionX = (rand.nextFloat() - 0.5D) * 0.5D;
-			motionY = (rand.nextFloat() - 0.5D) * 0.5D;
-			motionZ = (rand.nextFloat() - 0.5D) * 0.5D;
+			motionX = (rand.nextFloat() - 0.5D) * 0.25D;
+			motionY = (rand.nextFloat() - 0.5D) * 0.25D;
+			motionZ = (rand.nextFloat() - 0.5D) * 0.25D;
 
 			if (worldIn.getBlockState(pos.add(-1, 0, 0)).getBlock() != this && worldIn.getBlockState(pos.add(1, 0, 0)).getBlock() != this) {
 				particleX = pos.getX() + 0.5D + 0.25D * multi;
@@ -222,10 +280,11 @@ public class BlockTreePortal extends BasicBlock {
 				motionZ = rand.nextFloat() * 2.0F * multi;
 			}
 
-			//BLParticle.PORTAL.spawn(worldIn, particleX, particleY, particleZ, motionX, motionY, motionZ, 0);
+			BLParticles.PORTAL.spawn(worldIn, particleX, particleY, particleZ, ParticleArgs.get().withMotion(motionX, motionY, motionZ));
 		}
+
 		if (rand.nextInt(100) == 0) {
-			//world.playSound((double)x + .5, (double)y + .5, (double)z + .5, "thebetweenlands:portal", 0.2F, rand.nextFloat() * 0.4F + 0.8F, false);
+			worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL, SoundCategory.BLOCKS, 0.2F, rand.nextFloat() * 0.4F + 0.8F);
 		}
 	}
 }
