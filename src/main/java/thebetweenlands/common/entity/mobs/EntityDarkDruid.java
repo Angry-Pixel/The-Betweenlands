@@ -1,5 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.UUID;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -58,23 +60,23 @@ public class EntityDarkDruid extends EntityMob {
 		((PathNavigateGround) this.getNavigator()).setBreakDoors(true);
 		setSize(0.9F, 1.9F);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
-		this.meleeAI = new EntityAIAttackMelee(this, 0.23F, false);
-		this.wanderAI = new EntityAIWander(this, 0.23F);
+		this.meleeAI = new EntityAIAttackMelee(this, 0.6F, true);
+		this.wanderAI = new EntityAIWander(this, 0.8F);
 		this.watchAI = new EntityAIWatchClosest(this, EntityPlayer.class, 16);
-		
-		tasks.addTask(0, new EntityAISwimming(this));
-		tasks.addTask(1, new EntityAIBreakDoor(this));
-		tasks.addTask(2, meleeAI);
-		tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.23F));
-		tasks.addTask(4, wanderAI);
-		tasks.addTask(5, watchAI);
-		tasks.addTask(6, new EntityAIDruidTeleport(this));
-		
-		targetTasks.addTask(1, new EntityAIHurtByTargetDruid(this));
-		targetTasks.addTask(2, new EntityAINearestAttackableTargetDruid(this));
+
+		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(1, new EntityAIBreakDoor(this));
+		this.tasks.addTask(2, this.meleeAI);
+		this.tasks.addTask(3, new EntityAIMoveTowardsRestriction(this, 0.23F));
+		this.tasks.addTask(4, this.wanderAI);
+		this.tasks.addTask(5, this.watchAI);
+		this.tasks.addTask(6, new EntityAIDruidTeleport(this));
+
+		this.targetTasks.addTask(0, new EntityAIHurtByTargetDruid(this));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTargetDruid(this));
 	}
 
 	@Override
@@ -96,42 +98,44 @@ public class EntityDarkDruid extends EntityMob {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getAttackTarget() != null) {
-			if (this.attackDelayCounter > 0 && !this.isCasting() && getAttackTarget().getDistanceToEntity(this) < 10.0D) {
-				this.attackDelayCounter--;
-			}
-			if (this.attackDelayCounter <= 0 || this.attackCounter > 0) {
-				if (getEntitySenses().canSee(getAttackTarget())) {
-					if (attackCounter == 0) {
-						if (getAttackTarget().onGround) {
-							attackCounter++;
-							if (!worldObj.isRemote) {
-								tasks.removeTask(meleeAI);
+		if (!worldObj.isRemote) {
+			if (getAttackTarget() != null) {
+				if (this.attackDelayCounter > 0 && !this.isCasting() && getAttackTarget().getDistanceToEntity(this) < 10.0D) {
+					this.attackDelayCounter--;
+				}
+				if (this.attackDelayCounter <= 0 || this.attackCounter > 0) {
+					if (getEntitySenses().canSee(getAttackTarget())) {
+						if (attackCounter == 0) {
+							if (getAttackTarget().onGround) {
+								attackCounter++;
+								if (!worldObj.isRemote) {
+									tasks.removeTask(meleeAI);
+								}
 							}
-						}
-					} else if (attackCounter < MAX_ATTACK_TIME) {
-						attackCounter++;
-						startCasting();
-						if (!worldObj.isRemote) {
-							chargeSpell(getAttackTarget());
-						}
-					} else if (attackCounter >= MAX_ATTACK_TIME) {
-						this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
-						attackCounter = 0;
-						stopCasting();
-						if (!worldObj.isRemote) {
-							castSpell(getAttackTarget());
-							tasks.addTask(2, meleeAI);
+						} else if (attackCounter < MAX_ATTACK_TIME) {
+							attackCounter++;
+							startCasting();
+							if (!worldObj.isRemote) {
+								chargeSpell(getAttackTarget());
+							}
+						} else if (attackCounter >= MAX_ATTACK_TIME) {
+							this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
+							attackCounter = 0;
+							stopCasting();
+							if (!worldObj.isRemote) {
+								castSpell(getAttackTarget());
+								tasks.addTask(2, meleeAI);
+							}
 						}
 					}
 				}
+			} else if (isCasting() || attackCounter != 0) {
+				if (this.attackDelayCounter <= 0) {
+					this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
+				}
+				attackCounter = 0;
+				stopCasting();
 			}
-		} else if (isCasting() || attackCounter != 0) {
-			if (this.attackDelayCounter <= 0) {
-				this.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
-			}
-			attackCounter = 0;
-			stopCasting();
 		}
 		if (worldObj.isRemote) {
 			prevRenderYawOffset = prevRotationYaw;
@@ -180,14 +184,13 @@ public class EntityDarkDruid extends EntityMob {
 		double z = posZ;
 		boolean successful = false;
 		BlockPos pos = this.getPosition();
-		if (!worldObj.isAirBlock(pos)) {
+		if (worldObj.isBlockLoaded(pos)) {
 			boolean validBlock = false;
 			while (!validBlock && pos.getY() > 0) {
 				IBlockState block = worldObj.getBlockState(pos.down());
 				if (block.getMaterial().blocksMovement()) {
 					validBlock = true;
 				} else {
-					posY--;
 					pos = pos.down();
 				}
 			}
@@ -195,8 +198,10 @@ public class EntityDarkDruid extends EntityMob {
 				teleportCooldown = rand.nextInt(20 * 2) + 20 * 2;
 				EntityDarkDruid newDruid = new EntityDarkDruid(worldObj);
 				newDruid.copyDataFromOld(this);
+				newDruid.setUniqueId(UUID.randomUUID());
 				newDruid.setPosition(targetX, targetY, targetZ);
 				newDruid.faceEntity(entity, 100, 100);
+				newDruid.setAttackTarget(this.getAttackTarget());
 				newDruid.attackDelayCounter = MIN_ATTACK_DELAY + this.rand.nextInt(MAX_ATTACK_DELAY - MIN_ATTACK_DELAY + 1) + 1;
 				if (worldObj.getCollisionBoxes(newDruid, newDruid.getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(newDruid.getEntityBoundingBox())) {
 					successful = true;
