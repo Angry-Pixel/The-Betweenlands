@@ -325,10 +325,10 @@ public class ScreenRenderHandler extends Gui {
 	}
 
 	private void renderTexturedRect(VertexBuffer buffer, double x, double y, double x2, double y2, double umin, double umax, double vmin, double vmax) {
-		buffer.pos(x, y, 0).tex(umin, vmin).endVertex();
-		buffer.pos(x, y2, 0).tex(umin, vmax).endVertex();
-		buffer.pos(x2, y2, 0).tex(umax, vmax).endVertex();
-		buffer.pos(x2, y, 0).tex(umax, vmin).endVertex();
+		buffer.pos(x, y2, 0.0D).tex(umin, vmax).endVertex();
+		buffer.pos(x2, y2, 0.0D).tex(umax, vmax).endVertex();
+		buffer.pos(x2, y, 0.0D).tex(umax, vmin).endVertex();
+		buffer.pos(x, y, 0.0D).tex(umin, vmin).endVertex();
 	}
 
 	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");

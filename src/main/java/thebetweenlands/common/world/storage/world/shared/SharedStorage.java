@@ -122,6 +122,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	private final SharedRegion region;
 	private CapabilityDispatcher capabilities;
 	private boolean dirty = false;
+	private int version = 0;
 
 	/**
 	 * Creates a new shared storage
@@ -186,7 +187,8 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
 		if(this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
-			if(chunkData != null && chunkData.unlinkSharedStorage(this)) {
+			if(chunkData != null) {
+				chunkData.unlinkSharedStorage(this);
 				if(this.linkedChunks.remove(chunkPos)) {
 					this.setDirty(true);
 					return true;
@@ -203,7 +205,9 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	public final boolean unlinkAllChunks() {
 		boolean changed = false;
 		boolean allUnlinked = true;
-		Iterator<ChunkPos> it = this.linkedChunks.iterator();
+		List<ChunkPos> chunks = new ArrayList<>(this.linkedChunks.size());
+		chunks.addAll(this.linkedChunks);
+		Iterator<ChunkPos> it = chunks.iterator();
 		ChunkPos pos = null;
 		while(it.hasNext()) {
 			pos = it.next();
@@ -212,13 +216,13 @@ public abstract class SharedStorage implements ICapabilityProvider {
 			if(chunkData == null || !chunkData.unlinkSharedStorage(this)) {
 				allUnlinked = false;
 			} else if(chunkData != null) {
-				it.remove();
 				changed = true;
 			}
 		}
 		if(changed) {
 			this.setDirty(true);
 		}
+		this.linkedChunks.clear();
 		return allUnlinked;
 	}
 
@@ -298,6 +302,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 			referenceChunkList.appendTag(referenceChunkNbt);
 		}
 		nbt.setTag("ReferenceChunks", referenceChunkList);
+		nbt.setInteger("Version", this.version);
 		if (this.capabilities != null) nbt.setTag("ForgeCaps", this.capabilities.serializeNBT());
 		return nbt;
 	}
@@ -312,6 +317,9 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		for(int i = 0; i < referenceChunkList.tagCount(); i++) {
 			NBTTagCompound referenceChunkNbt = referenceChunkList.getCompoundTagAt(i);
 			this.linkedChunks.add(new ChunkPos(referenceChunkNbt.getInteger("x"), referenceChunkNbt.getInteger("z")));
+		}
+		if(nbt.hasKey("Version", Constants.NBT.TAG_INT)) {
+			this.version = nbt.getInteger("Version");
 		}
 		if (this.capabilities != null && nbt.hasKey("ForgeCaps")) this.capabilities.deserializeNBT(nbt.getCompoundTag("ForgeCaps"));
 	}

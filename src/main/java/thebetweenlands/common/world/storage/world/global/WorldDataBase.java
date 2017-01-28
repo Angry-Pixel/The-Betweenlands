@@ -466,10 +466,10 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	@SuppressWarnings("unchecked")
 	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, @Nullable Predicate<F> selector, AxisAlignedBB aabb) {
 		List<F> storages = new ArrayList<>();
-		int sx = MathHelper.floor_double(aabb.minX / 16.0D);
-		int sz = MathHelper.floor_double(aabb.minZ / 16.0D);
-		int ex = MathHelper.ceiling_double_int(aabb.maxX / 16.0D);
-		int ez = MathHelper.ceiling_double_int(aabb.maxZ / 16.0D);
+		int sx = MathHelper.floor_double(aabb.minX) / 16;
+		int sz = MathHelper.floor_double(aabb.minZ) / 16;
+		int ex = MathHelper.floor_double(aabb.maxX) / 16;
+		int ez = MathHelper.floor_double(aabb.maxZ) / 16;
 		for(int cx = sx; cx <= ex; cx++) {
 			for(int cz = sz; cz <= ez; cz++) {
 				Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);

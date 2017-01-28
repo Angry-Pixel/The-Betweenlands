@@ -28,7 +28,6 @@ public class TileEntitySound<T extends TileEntity> extends MovingSound {
 		this.xPosF = this.pos.getX() + 0.5F;
 		this.yPosF = this.pos.getY() + 0.5F;
 		this.zPosF = this.pos.getZ() + 0.5F;
-		this.volume = 0.4F;
 	}
 
 	@Override

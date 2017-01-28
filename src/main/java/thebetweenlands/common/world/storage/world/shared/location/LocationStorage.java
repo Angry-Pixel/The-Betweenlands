@@ -117,10 +117,10 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public LocationStorage linkChunks() {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			int sx = MathHelper.floor_double(boundingBox.minX / 16.0D);
-			int sz = MathHelper.floor_double(boundingBox.minZ / 16.0D);
-			int ex = MathHelper.ceiling_double_int(boundingBox.maxX / 16.0D);
-			int ez = MathHelper.ceiling_double_int(boundingBox.maxZ / 16.0D);
+			int sx = MathHelper.floor_double(boundingBox.minX) / 16;
+			int sz = MathHelper.floor_double(boundingBox.minZ) / 16;
+			int ex = MathHelper.floor_double(boundingBox.maxX) / 16;
+			int ez = MathHelper.floor_double(boundingBox.maxZ) / 16;
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
 					Chunk chunk = this.getWorldStorage().getWorld().getChunkFromChunkCoords(cx, cz);

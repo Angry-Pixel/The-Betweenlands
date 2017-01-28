@@ -10,5 +10,6 @@ import thebetweenlands.common.tile.TileEntityAnimator;
 public class AnimatorSound extends TileEntitySound<TileEntityAnimator> {
 	public AnimatorSound(SoundEvent sound, SoundCategory category, TileEntityAnimator animator) {
 		super(sound, category, animator, (tile) -> tile.isRunning());
+		this.volume = 0.4F;
 	}
 }

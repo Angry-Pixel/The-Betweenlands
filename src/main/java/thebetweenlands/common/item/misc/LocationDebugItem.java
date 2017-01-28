@@ -54,6 +54,8 @@ public class LocationDebugItem extends Item {
 				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
 				List<EntityPlayerMP> watchers = new ArrayList<EntityPlayerMP>();
 				for(LocationStorage location : locations) {
+					location.unlinkAllChunks();
+					location.linkChunks();
 					location.setDirty(true, true);
 					for(EntityPlayerMP watcher : location.getWatchers()) {
 						if(!watchers.contains(watcher)) {
