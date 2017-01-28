@@ -133,7 +133,7 @@ public class FogState {
 	 * @return
 	 */
 	public float getLowDistanceFogReduction(float end) {
-		return end > 64 ? 1.0F : (64.0F - end) / 64.0F;
+		return end > 128 ? 0.0F : (1.0F - end / 128.0F);
 	}
 
 	/**
@@ -165,7 +165,8 @@ public class FogState {
 				}
 			}
 			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0.1F, 1);
-			fogColorMultiplier = Math.min(fogColorMultiplier / (float)Math.pow(lowViewDistanceFogReduction, 1.0F + (1.0F - fogColorMultiplier) * 1.5F), 1.0F);
+			fogColorMultiplier = Math.min(fogColorMultiplier, 1.0F);
+			fogColorMultiplier = fogColorMultiplier + (1.0F - fogColorMultiplier) * (float)Math.pow(lowViewDistanceFogReduction, 2.25D);
 			defaultAmbientFog.setStart(fixedFogStart * fogColorMultiplier);
 			defaultAmbientFog.setEnd(fixedFogEnd * fogColorMultiplier);
 			defaultAmbientFog.setColorMultiplier(fogColorMultiplier);
