@@ -1,10 +1,10 @@
 package thebetweenlands.common.registries;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -530,7 +530,7 @@ public class BlockRegistry {
 	public static final Block ROPE = new BlockRope();
 	public static final Block DAMP_TORCH = new BlockDampTorch();
 	
-	public static final List<Block> BLOCKS = new ArrayList<Block>();
+	public static final Set<Block> BLOCKS = new HashSet<Block>();
 
 	public static void preInit() {
 		try {

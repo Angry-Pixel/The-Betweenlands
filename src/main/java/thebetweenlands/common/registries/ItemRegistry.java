@@ -2,9 +2,11 @@ package thebetweenlands.common.registries;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 
 import com.google.common.base.CaseFormat;
 
@@ -118,7 +120,7 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemRegistry {
-	public final static List<Item> ITEMS = new ArrayList<Item>();
+	public final static Set<Item> ITEMS = new HashSet<Item>();
 
 	private ItemRegistry() {
 

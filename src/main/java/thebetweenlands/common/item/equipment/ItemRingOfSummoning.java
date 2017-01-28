@@ -17,6 +17,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.capability.summoning.ISummoningCapability;
@@ -40,7 +41,7 @@ public class ItemRingOfSummoning extends ItemRing {
 		list.add(I18n.format("ring.summoning.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = I18n.format("item.thebetweenlands.ringOfSummoning.tooltip");
-			//list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
+			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 			list.add(toolTip);
 		} else {
 			list.add(I18n.format("item.thebetweenlands.press.shift"));

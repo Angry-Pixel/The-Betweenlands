@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfPower extends ItemRing {
@@ -25,7 +26,7 @@ public class ItemRingOfPower extends ItemRing {
 		list.add(I18n.format("ring.power.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = I18n.format("item.thebetweenlands.ringOfPower.tooltip");
-			//list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
+			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 			list.add(toolTip);
 		} else {
 			list.add(I18n.format("item.thebetweenlands.press.shift"));

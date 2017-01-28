@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
@@ -41,7 +42,7 @@ public class ItemRingOfFlight extends ItemRing {
 		list.add(I18n.format("ring.flight.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = I18n.format("item.thebetweenlands.ringOfFlight.tooltip");
-			//list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
+			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 			list.add(toolTip);
 		} else {
 			list.add(I18n.format("item.thebetweenlands.press.shift"));

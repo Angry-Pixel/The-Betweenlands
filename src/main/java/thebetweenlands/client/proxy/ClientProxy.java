@@ -41,6 +41,7 @@ import thebetweenlands.client.event.handler.DecayRenderHandler;
 import thebetweenlands.client.event.handler.DruidAltarSoundHandler;
 import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.event.handler.InputHandler;
+import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.client.event.handler.MusicHandler;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
@@ -122,6 +123,7 @@ import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.entity.EntityAngryPebble;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
@@ -452,7 +454,9 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityMummyArm.class, RenderMummyArm::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngryPebble.class, manager -> new RenderAngryPebble(manager, Minecraft.getMinecraft().getRenderItem()));
 
-		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(ShaderHelper.INSTANCE);
+		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
+		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
+		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
 
 		//Register particle stitchers
 		BLParticles[] particles = BLParticles.values();
@@ -577,6 +581,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(BrightnessHandler.class);
 		MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);
 		MinecraftForge.EVENT_BUS.register(DruidAltarSoundHandler.class);
+		MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
 	}
 
 	@Override
