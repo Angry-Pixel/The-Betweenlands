@@ -19,6 +19,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
@@ -26,6 +27,7 @@ import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	public ItemLurkerSkinPouch() {
@@ -57,8 +59,9 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean showAdvancedInfo) {
 		int slots = 9 + (stack.getItemDamage() * 9);
-		list.add(TextFormatting.GRAY + I18n.format("lurkerSkinPouch.size", slots));
-		list.add(TextFormatting.GRAY + I18n.format("lurkerSkinPouch.info"));
+		list.add(TextFormatting.GRAY + I18n.format("tooltip.lurkerSkinPouch.size", slots));
+		String info = I18n.format("tooltip.lurkerSkinPouch.info", KeyBindRegistry.OPEN_POUCH.getDisplayName());
+		list.addAll(ItemTooltipHandler.splitTooltip(info, 0));
 	}
 
 	@Override
@@ -174,12 +177,12 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	}
 
 	@Override
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
 		return false;
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
 		return target == player;
 	}
 

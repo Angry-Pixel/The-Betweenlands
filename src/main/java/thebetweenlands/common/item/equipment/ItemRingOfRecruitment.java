@@ -18,6 +18,7 @@ import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfRecruitment extends ItemRing {
@@ -28,13 +29,12 @@ public class ItemRingOfRecruitment extends ItemRing {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedTooltips) {
-		list.add(I18n.format("ring.recruitment.bonus"));
+		list.add(I18n.format("tooltip.ring.recruitment.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			String toolTip = I18n.format("item.thebetweenlands.ringOfRecruitment.tooltip");
+			String toolTip = I18n.format("tooltip.ring.recruitment", KeyBindRegistry.RADIAL_MENU.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
-			list.add(toolTip);
 		} else {
-			list.add(I18n.format("item.thebetweenlands.press.shift"));
+			list.add(I18n.format("tooltip.press.shift"));
 		}
 	}
 

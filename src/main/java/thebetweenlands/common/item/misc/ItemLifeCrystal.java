@@ -35,7 +35,7 @@ public class ItemLifeCrystal extends Item {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-        list.add(String.format(TranslationHelper.translateToLocal("lifeCrystal.remaining"), Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));
+        list.add(TranslationHelper.translateToLocal("tooltip.lifeCrystal.remaining", Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));
     }
 
     @Override

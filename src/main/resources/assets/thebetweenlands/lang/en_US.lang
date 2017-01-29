@@ -568,6 +568,8 @@ item.thebetweenlands.voodooDoll.name=Voodoo Doll
 item.thebetweenlands.weedwoodSignItem.name=Weedwood Sign
 item.thebetweenlands.scroll.name=Scroll
 item.thebetweenlands.explorersHat.name=Explorer's Hat
+item.thebetweenlands.rottenFood.name=Rotten Food (%s)
+item.thebetweenlands.taintedPotion.name=Tainted Potion (%s)
 
 
 # Fluids
@@ -590,7 +592,7 @@ itemGroup.thebetweenlands.herbLore=The Betweenlands Herblore
 container.furnaceBL=Sulfur Furnace
 container.dualFurnaceBL=Dual Sulfur Furnace
 container.lurkerSkinPouch=Lurker Skin Pouch
-pouch.naming.save=Save
+container.lurkerSkinPouch.naming.save=Save
 
 
 # Locations
@@ -604,3 +606,89 @@ location.wightTower.name=80:Wight Fortress
 location.wightTowerPuzzle.name=80:Armory
 location.wightTowerTeleporter.name=200:<scale:1>Beware that, when fighting monsters, you yourself do not become a monster... <nl>for when you gaze long into the abyss. The abyss gazes also into you.</scale>
 location.wightTowerBoss.name=80:Primordial Malevolence
+
+
+
+# Tooltips
+tooltip.corrosion.0=Good as new!
+tooltip.corrosion.1=Slightly corroded
+tooltip.corrosion.2=Moderately corroded
+tooltip.corrosion.3=Very corroded
+tooltip.corrosion.4=Extremely corroded
+tooltip.corrosion.5=Completely corroded
+tooltip.coated.0=Barely any coating left
+tooltip.coated.1=Slightly coated
+tooltip.coated.2=Moderately coated
+tooltip.coated.3=Moderately coated
+tooltip.coated.4=Well coated
+tooltip.coated.5=Well coated
+tooltip.ring.power.bonus=Grants a bonus to all stats
+tooltip.ring.recruitment.bonus=Grants the power to recruit enemies
+tooltip.ring.flight.bonus=Grants the gift of levitation
+tooltip.ring.summoning.bonus=Grants the ability to summon allies from the depths
+tooltip.item.equippable=Equippable
+tooltip.ring.summoning=Equip using the radial \nmenu [press '%s'], \nscream using '%s'
+tooltip.ring.flight=Equip using the radial \nmenu [press '%s'], \ndouble tap '%s' to activate
+tooltip.ring.power=Equip using the radial \nmenu [press '%s']
+tooltip.ring.recruitment=Equip using the radial \nmenu [press '%s'], \nright click on mobs to activate
+tooltip.press.shift=Hold 'shift' to view more
+tooltip.lifeCrystal.remaining=%d remaining
+tooltip.shockwaveSword.usage=Right-click on the ground to create a shockwave
+tooltip.compost.compostable=Compostable
+tooltip.foodSickness.state.fine=Tastes good
+tooltip.foodSickness.state.half=Tastes plain
+tooltip.foodSickness.state.sick=Can't eat this anymore
+tooltip.circlegem.green=§aGreen Gem§r
+tooltip.circlegem.crimson=§cCrimson Gem§r
+tooltip.circlegem.aqua=§9Aqua Gem§r
+tooltip.lurkerSkinPouch.size=%d inventory slots
+tooltip.lurkerSkinPouch.info=Craft surrounded with Lurker Skin to upgrade\nPress '%s' to open the Pouch
+
+# Chat
+chat.foodSickness.fine.0=Ah, that was refreshing
+chat.foodSickness.fine.1=Finally, something different to eat
+chat.foodSickness.fine.2=Finally, something new
+chat.foodSickness.fine.3=Finally, something that isn't just brown slime
+chat.foodSickness.fine.4=That actually tasted alright
+chat.foodSickness.fine.5=Well at least it doesn't taste like mud
+chat.foodSickness.fine.6=Slimy, yet satisfying
+chat.foodSickness.fine.7=Mmm... not bad
+chat.foodSickness.fine.8=I could get used to eating this
+chat.foodSickness.fine.9=I suppose it beats eating moss
+chat.foodSickness.fine.10=It's great to have something different for a change
+chat.foodSickness.fine.11=At last, I was getting sick of that other stuff
+chat.foodSickness.fine.12=This is kinda tasty
+chat.foodSickness.fine.13=It's not quite golden apples, but it'll do
+chat.foodSickness.fine.14=That tasted good
+chat.foodSickness.fine.15=Tastes alright, hopefully it's not poisonous
+chat.foodSickness.half.0=I'm getting a bit sick of eating this
+chat.foodSickness.half.1=Isn't there anything else to eat around here?
+chat.foodSickness.half.2=It's edible I suppose
+chat.foodSickness.half.3=I don't think I can eat much more of this
+chat.foodSickness.half.4=This stuff tastes pretty terrible
+chat.foodSickness.half.5=Hopefully there is more food around here
+chat.foodSickness.half.6=I should probably try finding something different to eat
+chat.foodSickness.half.7=I think I need a more varied diet
+chat.foodSickness.half.8=I'm feeling a bit off, maybe I should find another food source
+chat.foodSickness.half.9=This food is getting pretty repetitive
+chat.foodSickness.half.10=I wish I had more food options
+chat.foodSickness.half.11=I should find something else to eat soon
+chat.foodSickness.half.12=This food is starting to make me ill
+chat.foodSickness.half.13=I don't feel too good, is there anything else to eat?
+chat.foodSickness.half.14=This food is bland, I need some more variety
+chat.foodSickness.half.15=Eating the same thing all the time can't be good for me
+chat.foodSickness.sick.0=I can't eat any more of this
+chat.foodSickness.sick.1=I feel terrible, I can't eat this
+chat.foodSickness.sick.2=Ugh, I'm not eating that
+chat.foodSickness.sick.3=I'm not eating any more of that
+chat.foodSickness.sick.4=I'm sick of eating this, I need to find something else
+chat.foodSickness.sick.5=I'm not putting that anywhere near my mouth
+chat.foodSickness.sick.6=I think I'll be ill if I eat any more of that, I need something different
+chat.foodSickness.sick.7=I don't think I can face any more of that, I'll have to find something else
+chat.foodSickness.sick.8=No way am I eating any more of that
+chat.foodSickness.sick.9=That stuff can't be good for me, I need something different
+chat.foodSickness.sick.10=I need a more varied diet, I can't eat more of that
+chat.foodSickness.sick.11=I think I'll need a rest before I eat more of that
+chat.foodSickness.sick.12=No thanks, I'll have something else for a change
+chat.foodSickness.sick.13=It smells even worse than it looks, I'll find something else to eat
+chat.foodSickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here

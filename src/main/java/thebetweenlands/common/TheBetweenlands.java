@@ -30,6 +30,7 @@ import thebetweenlands.common.event.handler.AttackDamageHandler;
 import thebetweenlands.common.event.handler.BlockBreakHandler;
 import thebetweenlands.common.event.handler.EntitySpawnHandler;
 import thebetweenlands.common.event.handler.EnvironmentEventHandler;
+import thebetweenlands.common.event.handler.FoodSicknessHandler;
 import thebetweenlands.common.event.handler.ItemEquipmentHandler;
 import thebetweenlands.common.event.handler.LocationHandler;
 import thebetweenlands.common.event.handler.OverworldItemHandler;
@@ -178,5 +179,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(PuppetHandler.class);
 		MinecraftForge.EVENT_BUS.register(OverworldItemHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerPortalHandler.class);
+		MinecraftForge.EVENT_BUS.register(FoodSicknessHandler.class);
 	}
 }

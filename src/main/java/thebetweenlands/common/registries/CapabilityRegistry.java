@@ -12,6 +12,8 @@ import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
 import thebetweenlands.common.capability.flight.IFlightCapability;
+import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
+import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
 import thebetweenlands.common.capability.portal.IPortalCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
@@ -44,10 +46,13 @@ public class CapabilityRegistry {
 
 	@CapabilityInject(ISummoningCapability.class)
 	public static final Capability<ISummoningCapability> CAPABILITY_SUMMON = null;
-	
+
 	@CapabilityInject(IPortalCapability.class)
 	public static final Capability<IPortalCapability> CAPABILITY_PORTAL = null;
-	
+
+	@CapabilityInject(IFoodSicknessCapability.class)
+	public static final Capability<IFoodSicknessCapability> CAPABILITY_FOOD_SICKNESS = null;
+
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -57,7 +62,8 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new EntityPuppeteerCapability());
 		EntityCapabilityHandler.registerEntityCapability(new EntitySummoningCapability());
 		EntityCapabilityHandler.registerEntityCapability(new PortalEntityCapability());
-		
+		EntityCapabilityHandler.registerEntityCapability(new FoodSicknessEntityCapability());
+
 		EntityCapabilityHandler.registerCapabilities();
 		//ItemCapabilityHandler.registerCapabilities();
 	}

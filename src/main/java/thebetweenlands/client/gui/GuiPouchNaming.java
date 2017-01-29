@@ -50,7 +50,7 @@ public class GuiPouchNaming extends GuiContainer {
 		this.buttonList.clear();
 		int xOffSet = (width - xSize) / 2;
 		int yOffSet = (height - ySize) / 2;
-		this.buttonList.add(new GuiPouchNamingButton(1, xOffSet, yOffSet - 18, 46, 18, I18n.format("pouch.naming.save")));
+		this.buttonList.add(new GuiPouchNamingButton(1, xOffSet, yOffSet - 18, 46, 18, I18n.format("container.lurkerSkinPouch.naming.save")));
 	}
 
 	@Override

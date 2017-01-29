@@ -34,11 +34,12 @@ public class ItemTaintedPotion extends Item {
 		return EnumAction.DRINK;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		ItemStack originalStack = this.getOriginalStack(stack);
 		if(originalStack != null && originalStack.getItem() != null) {
-			return super.getItemStackDisplayName(stack) + " (" + originalStack.getDisplayName() + ")";
+			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getDisplayName()).trim();
 		}
 		return super.getItemStackDisplayName(stack);
 	}

@@ -75,7 +75,7 @@ public class DecayRenderHandler {
 		onRenderPlayer(event);
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(receiveCanceled = true)
 	public static void onPostRenderPlayer(RenderPlayerEvent.Post event) {
 		onRenderPlayer(event);
 	}

@@ -30,27 +30,25 @@ public interface IEquippable {
 	 * @param stack Item to equip
 	 * @param player Player that is interacting
 	 * @param target Entity that will be equipped
-	 * @param inventory Equipment inventory
 	 * @return
 	 */
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory);
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target);
 
 	/**
 	 * Returns whether this item can be equipped
 	 * @param stack Item to equip
 	 * @param player Player that is interacting
 	 * @param target Entity that will be equipped
-	 * @param inventory Equipment inventory
 	 * @return
 	 */
-	public boolean canEquip(ItemStack stack, @Nullable EntityPlayer player, Entity target, IInventory inventory);
+	public boolean canEquip(ItemStack stack, @Nullable EntityPlayer player, Entity target);
 
 	/**
 	 * Returns whether this item can be unequipped by a player
 	 * @param stack Item to unequip
 	 * @param player Player that is interacting
 	 * @param target Entity that will be unequipped
-	 * @param inventory Equipment inventory
+	 * @param inventory Equipment inventory 
 	 * @return
 	 */
 	public boolean canUnequip(ItemStack stack, @Nullable EntityPlayer player, Entity target, IInventory inventory);
@@ -59,7 +57,7 @@ public interface IEquippable {
 	 * Returns whether this item can drop on death
 	 * @param stack Equipped item
 	 * @param entity Entity that died
-	 * @param inventory Equipment inventory
+	 * @param inventory Equipment inventory 
 	 * @return
 	 */
 	public boolean canDrop(ItemStack stack, Entity entity, IInventory inventory);

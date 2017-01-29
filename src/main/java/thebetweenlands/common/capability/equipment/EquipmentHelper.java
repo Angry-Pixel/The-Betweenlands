@@ -28,7 +28,7 @@ public class EquipmentHelper {
 
 				IEquippable equippable = (IEquippable) stack.getItem();
 
-				if(equippable.canEquip(stack, player, target, cap.getInventory(equippable.getEquipmentCategory(stack)))) {
+				if(equippable.canEquip(stack, player, target)) {
 					EnumEquipmentInventory type = equippable.getEquipmentCategory(stack);
 
 					stack = stack.copy();
@@ -70,7 +70,7 @@ public class EquipmentHelper {
 
 				IEquippable equippable = (IEquippable) stack.getItem();
 
-				if(equippable.canEquip(stack, player, target, cap.getInventory(equippable.getEquipmentCategory(stack)))) {
+				if(equippable.canEquip(stack, player, target)) {
 					EnumEquipmentInventory type = equippable.getEquipmentCategory(stack);
 
 					IInventory inv = cap.getInventory(type);

@@ -74,21 +74,17 @@ public class ItemEquipmentHandler {
 
 			if(!player.isSneaking() && heldItem != null) {
 				if(heldItem.getItem() instanceof IEquippable) {
-					if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-						IEquipmentCapability cap = target.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+					IEquippable equippable = (IEquippable) heldItem.getItem();
 
-						IEquippable equippable = (IEquippable) heldItem.getItem();
+					if(equippable.canEquipOnRightClick(heldItem, player, target)) {
+						ItemStack result = EquipmentHelper.equipItem(player, target, heldItem, false);
 
-						if(equippable.canEquipOnRightClick(heldItem, player, target, cap.getInventory(equippable.getEquipmentCategory(heldItem)))) {
-							ItemStack result = EquipmentHelper.equipItem(player, target, heldItem, false);
-
-							if(result == null || result.stackSize != heldItem.stackSize) {
-								if(!player.capabilities.isCreativeMode) {
-									player.setHeldItem(event.getHand(), result);
-								}
-
-								player.swingArm(event.getHand());
+						if(result == null || result.stackSize != heldItem.stackSize) {
+							if(!player.capabilities.isCreativeMode) {
+								player.setHeldItem(event.getHand(), result);
 							}
+
+							player.swingArm(event.getHand());
 						}
 					}
 				}
@@ -108,20 +104,17 @@ public class ItemEquipmentHandler {
 			ItemStack heldItem = event.getItemStack();
 
 			if(player != null && heldItem != null && heldItem.getItem() instanceof IEquippable) {
-				if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-					IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-					IEquippable equippable = (IEquippable) heldItem.getItem();
+				IEquippable equippable = (IEquippable) heldItem.getItem();
 
-					if(equippable.canEquipOnRightClick(heldItem, player, player, cap.getInventory(equippable.getEquipmentCategory(heldItem)))) {
-						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
+				if(equippable.canEquipOnRightClick(heldItem, player, player)) {
+					ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
 
-						if(result == null || result.stackSize != heldItem.stackSize) {
-							if(!player.capabilities.isCreativeMode) {
-								player.setHeldItem(event.getHand(), result);
-							}
-
-							player.swingArm(event.getHand());
+					if(result == null || result.stackSize != heldItem.stackSize) {
+						if(!player.capabilities.isCreativeMode) {
+							player.setHeldItem(event.getHand(), result);
 						}
+
+						player.swingArm(event.getHand());
 					}
 				}
 			}

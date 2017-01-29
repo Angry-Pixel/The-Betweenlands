@@ -47,8 +47,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedItemTooltips) {
 		super.addInformation(stack, player, list, advancedItemTooltips);
-		list.add(I18n.format("shockwaveSword.usage"));
-		CorrosionHelper.addInformation(stack, player, list, advancedItemTooltips);
+		list.add(I18n.format("tooltip.shockwaveSword.usage"));
 	}
 
 	@Override

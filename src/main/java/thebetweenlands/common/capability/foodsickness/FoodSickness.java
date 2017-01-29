@@ -44,7 +44,11 @@ public enum FoodSickness {
 
 	@SideOnly(Side.CLIENT)
 	public String getRandomLine(Random rnd) {
-		return getLines().get(rnd.nextInt(getLines().size()));
+		List<String> lines = this.getLines();
+		if(lines.isEmpty()) {
+			return "chat.foodSickness.nolines";
+		}
+		return lines.get(rnd.nextInt(lines.size()));
 	}
 
 	public static FoodSickness getSicknessForHatred(int hatred) {

@@ -107,12 +107,12 @@ public class ItemAmulet extends Item implements IEquippable {
 	}
 
 	@Override
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
 		return true;
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
 		if(CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
 			return false;
 		}

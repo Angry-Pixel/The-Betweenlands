@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
@@ -13,8 +14,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
 import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemTooltipHandler {
@@ -23,38 +27,36 @@ public class ItemTooltipHandler {
 		ItemStack stack = event.getItemStack();
 		List<String> toolTip = event.getToolTip();
 
-		if(CompostRecipe.getCompostRecipe(stack) != null) {
-			toolTip.add(I18n.format("compost.compostable"));
+		CompostRecipe recipe = CompostRecipe.getCompostRecipe(stack);
+		if(recipe != null) {
+			String debug = "";
+			if(event.isShowAdvancedItemTooltips()) {
+				debug = " (T: " + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(recipe.compostTime / 20.0F) + "s A: " + recipe.compostAmount + ")";
+			}
+			toolTip.add(I18n.format("tooltip.compost.compostable") + debug);
 		}
 
 		CircleGemType circleGem = CircleGemHelper.getGem(stack);
 		if(circleGem != CircleGemType.NONE) {
-			String colorPrefix = "";
-			switch(circleGem){
-			case AQUA:
-				colorPrefix = "\u00A79";
-				break;
-			case CRIMSON:
-				colorPrefix = "\u00A7c";
-				break;
-			case GREEN:
-				colorPrefix = "\u00A7a";
-				break;
-			default:
-			}
-			toolTip.add(colorPrefix + I18n.format("circlegem." + circleGem.name));
+			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
 		}
 
 		if(stack.getItem() instanceof ItemFood && stack.getItem() != ItemRegistry.CHIROMAW_WING && stack.getItem() != ItemRegistry.ROTTEN_FOOD && ItemRegistry.ITEMS.contains(stack.getItem())) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			if(player != null) {
-				/*EntityPropertiesFood property = BLEntityPropertiesRegistry.HANDLER.getProperties(event.getEntityPlayer(), EntityPropertiesFood.class);
-				Sickness sickness = property.getSickness((ItemFood)stack.getItem());
-				toolTip.add(I18n.format("foodSickness.state." + sickness.name().toLowerCase()));*/
+			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
+				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+				FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
+				String debug = "";
+				if(event.isShowAdvancedItemTooltips()) {
+					debug = " (" + cap.getFoodHatred((ItemFood)stack.getItem()) + "/" + sickness.maxHatred + ")";
+				}
+				toolTip.add(I18n.format("tooltip.foodSickness.state." + sickness.name().toLowerCase()) + debug);
 			}
 		}
-		if(stack.getItem() instanceof IEquippable) {
-			toolTip.add(I18n.format("item.equippable"));
+
+		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		if(stack.getItem() instanceof IEquippable && player != null && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
+			toolTip.add(I18n.format("tooltip.item.equippable"));
 		}
 	}
 

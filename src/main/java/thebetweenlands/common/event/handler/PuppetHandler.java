@@ -318,7 +318,7 @@ public class PuppetHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
+	@SubscribeEvent(receiveCanceled = true)
 	public static void onRenderLivingPost(RenderLivingEvent.Post<EntityLivingBase> event) {
 		EntityLivingBase living = event.getEntity();
 

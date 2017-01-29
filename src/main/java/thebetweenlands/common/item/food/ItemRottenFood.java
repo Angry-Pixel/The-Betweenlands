@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
-import thebetweenlands.util.TranslationHelper;
 
 public class ItemRottenFood extends ItemBLFood {
 	public ItemRottenFood() {
@@ -24,11 +23,12 @@ public class ItemRottenFood extends ItemBLFood {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		ItemStack originalStack = this.getOriginalStack(stack);
 		if (originalStack != null && originalStack.getItem() != null) {
-			return super.getItemStackDisplayName(stack) + " (" + TranslationHelper.translateToLocal(originalStack.getItem().getUnlocalizedName(originalStack) + ".name") + ")";
+			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getDisplayName()).trim();
 		}
 		return super.getItemStackDisplayName(stack);
 	}

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -29,6 +30,7 @@ import thebetweenlands.common.capability.flight.IFlightCapability;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
 public class ItemRingOfFlight extends ItemRing {
@@ -39,13 +41,12 @@ public class ItemRingOfFlight extends ItemRing {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedTooltips) {
-		list.add(I18n.format("ring.flight.bonus"));
+		list.add(I18n.format("tooltip.ring.flight.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			String toolTip = I18n.format("item.thebetweenlands.ringOfFlight.tooltip");
+			String toolTip = I18n.format("tooltip.ring.flight", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindJump.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
-			list.add(toolTip);
 		} else {
-			list.add(I18n.format("item.thebetweenlands.press.shift"));
+			list.add(I18n.format("tooltip.press.shift"));
 		}
 	}
 

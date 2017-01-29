@@ -79,12 +79,12 @@ public class ItemRing extends Item implements IEquippable {
 	}
 
 	@Override
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
 		return stack.getItemDamage() == 0 || player.experienceTotal == 0 || player.isSneaking();
 	}
 
 	@Override
-	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
 		return target instanceof EntityPlayer;
 	}
 

@@ -146,7 +146,7 @@ public class RadialMenuHandler {
 							IEquippable equippable = (IEquippable) stack.getItem();
 
 							if(equippable.getEquipmentCategory(stack) == type) {
-								if(equippable.canEquip(stack, player, player, cap.getInventory(type))) {
+								if(equippable.canEquip(stack, player, player)) {
 									ItemStack res = EquipmentHelper.equipItem(player, player, stack, true);
 
 									if(res == null || res.stackSize != stack.stackSize) {
