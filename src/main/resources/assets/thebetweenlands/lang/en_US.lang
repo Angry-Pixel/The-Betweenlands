@@ -610,6 +610,8 @@ location.wightTowerBoss.name=80:Primordial Malevolence
 
 
 # Tooltips
+tooltip.chiromawWing.eat=Anything will taste better after eating this...
+tooltip.chiromawWing.dontEat=I probably shouldn't eat this anymore...
 tooltip.corrosion.0=Good as new!
 tooltip.corrosion.1=Slightly corroded
 tooltip.corrosion.2=Moderately corroded
