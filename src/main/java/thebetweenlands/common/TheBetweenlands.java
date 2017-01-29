@@ -110,18 +110,6 @@ public class TheBetweenlands {
 		this.registerEventHandlers();
 
 		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
-
-
-		//TODO: Test
-		/*StringWriter strWriter = new StringWriter();
-		JsonWriter jsonWriter = new JsonWriter(strWriter);
-		ModelConverter converter = new ModelConverter(new ModelSundew(), 0.065D, false);
-		Model model = converter.getModel();
-		for(Box box : model.getBoxes()) {
-			for(AlignedQuad quad : box.getAlignedQuads()) {
-				System.out.println("C: " + quad.x + " " + quad.y + " " + quad.z + " D: " + quad.width + " " + quad.height + " R: " + quad.rx + " " + quad.ry + " " + quad.rz);
-			}
-		}*/
 	}
 
 	@EventHandler

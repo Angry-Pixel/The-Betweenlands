@@ -5,10 +5,8 @@ import java.util.UUID;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -24,13 +22,11 @@ import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityBLArrow extends EntityArrow {
-
 	private static final DataParameter<String> DW_TYPE = EntityDataManager.<String>createKey(EntityArrow.class, DataSerializers.STRING);
 	private static final DataParameter<String> DW_UUID = EntityDataManager.<String>createKey(EntityArrow.class, DataSerializers.STRING);
 	private boolean checkedShooter = false;
 	private boolean inGround = false;
 	private int inGroundTicks = 0;
-
 
 	public EntityBLArrow(World worldIn) {
 		super(worldIn);
@@ -52,8 +48,6 @@ public class EntityBLArrow extends EntityArrow {
 		this.dataManager.register(DW_UUID, "");
 	}
 
-
-
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
@@ -66,7 +60,7 @@ public class EntityBLArrow extends EntityArrow {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 		this.inGroundTicks = nbt.getInteger("inGroundTicks");
-		this.setType(nbt.getString("arrowType"));
+		this.setType(EnumArrowType.getEnumFromString(nbt.getString("arrowType")));
 		this.dataManager.set(DW_UUID, "shooter");
 	}
 
@@ -82,13 +76,16 @@ public class EntityBLArrow extends EntityArrow {
 				this.checkedShooter = true;
 			}
 		}
+
 		if(this.inGround) {
 			this.inGroundTicks++;
 		}
+
 		if(!this.worldObj.isRemote && !this.inGround) {
 			RayTraceResult collision = getCollision(this);
 			if(collision != null && collision.typeOfHit == RayTraceResult.Type.ENTITY && collision.entityHit instanceof EntityLivingBase) {
 				EntityLivingBase hitEntity = (EntityLivingBase) collision.entityHit;
+
 				switch(this.getArrowType()) {
 				case ANGLER_POISON:
 					hitEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 200, 2));
@@ -112,35 +109,6 @@ public class EntityBLArrow extends EntityArrow {
 		super.onEntityUpdate();
 	}
 
-	@Override
-	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!this.worldObj.isRemote && this.inGround && this.inGroundTicks > 20 && this.arrowShake <= 0) {
-			boolean canPickUp = this.pickupStatus == EntityArrow.PickupStatus.ALLOWED || this.pickupStatus == EntityArrow.PickupStatus.CREATIVE_ONLY && player.capabilities.isCreativeMode;
-			if (canPickUp && !this.pickUp(player)) {
-				canPickUp = false;
-			}
-			if (canPickUp) {
-				playSound(SoundEvents.ENTITY_ITEM_PICKUP, 0.2F, ((rand.nextFloat() - rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
-				player.onItemPickup(this, 1);
-				setDead();
-			}
-		}
-	}
-
-	private boolean pickUp(EntityPlayer player) {
-		switch(this.getArrowType()) {
-		case ANGLER_POISON:
-			return player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, 1));
-		case OCTINE:
-			return player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.OCTINE_ARROW, 1));
-		case BASILISK:
-			return player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.BASILISK_ARROW, 1));
-		case DEFAULT:
-		default:
-			return player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW, 1));
-		}
-	}
-
 	private static RayTraceResult getCollision(EntityArrow ea) {
 		Vec3d start = new Vec3d(ea.posX, ea.posY, ea.posZ);
 		Vec3d dest = new Vec3d(ea.posX + ea.motionX, ea.posY + ea.motionY, ea.posZ + ea.motionZ);
@@ -150,6 +118,7 @@ public class EntityBLArrow extends EntityArrow {
 		if (hit != null) {
 			dest = new Vec3d(hit.hitVec.xCoord, hit.hitVec.yCoord, hit.hitVec.zCoord);
 		}
+
 		Entity collidedEntity = null;
 		List<Entity> entityList = ea.worldObj.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().addCoord(ea.motionX, ea.motionY, ea.motionZ).expand(1.05D, 1.05D, 1.05D));
 		double lastDistance = 0.0D;
@@ -168,22 +137,42 @@ public class EntityBLArrow extends EntityArrow {
 				}
 			}
 		}
+
 		if (collidedEntity != null) {
 			hit = new RayTraceResult(collidedEntity);
 		}
+
 		return hit;
 	}
 
-	public void setType(String type) {
-		dataManager.set(DW_TYPE, type);
+	/**
+	 * Sets the arrow type
+	 * @param type
+	 */
+	public void setType(EnumArrowType type) {
+		this.dataManager.set(DW_TYPE, type.getName());
 	}
 
+	/**
+	 * Returns the arrow type
+	 * @return
+	 */
 	public EnumArrowType getArrowType(){
-		return EnumArrowType.getEnumFromString(dataManager.get(DW_TYPE));
+		return EnumArrowType.getEnumFromString(this.dataManager.get(DW_TYPE));
 	}
 
 	@Override
 	protected ItemStack getArrowStack() {
-		return null;
+		switch(this.getArrowType()) {
+		case ANGLER_POISON:
+			return new ItemStack(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW);
+		case OCTINE:
+			return new ItemStack(ItemRegistry.OCTINE_ARROW);
+		case BASILISK:
+			return new ItemStack(ItemRegistry.BASILISK_ARROW);
+		case DEFAULT:
+		default:
+			return new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
+		}
 	}
 }

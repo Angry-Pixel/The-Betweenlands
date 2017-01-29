@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.tools.bow;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -7,173 +9,153 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
-import net.minecraft.item.IItemPropertyGetter;
+import net.minecraft.item.ItemArrow;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.entity.projectiles.EntityBLArrow;
-import thebetweenlands.common.item.BasicItem;
+import net.minecraftforge.event.ForgeEventFactory;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.registries.ItemRegistry;
 
-import javax.annotation.Nullable;
+public class ItemBLBow extends ItemBow implements ICorrodible {
+	public ItemBLBow() {
+		this.maxStackSize = 1;
+		this.setMaxDamage(600);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
 
-//TODO add corrotion
-public class ItemBLBow extends BasicItem {
+		CorrosionHelper.addCorrosionPropertyOverrides(this);
+	}
 
-    public ItemBLBow() {
+	protected ItemStack findArrows(EntityPlayer player) {
+		if (this.isArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
+			return player.getHeldItem(EnumHand.OFF_HAND);
+		} else if (this.isArrow(player.getHeldItem(EnumHand.MAIN_HAND))) {
+			return player.getHeldItem(EnumHand.MAIN_HAND);
+		} else {
+			for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
+				ItemStack stack = player.inventory.getStackInSlot(i);
+				if (this.isArrow(stack)) {
+					return stack;
+				}
+			}
+			return null;
+		}
+	}
 
-        this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                if (entityIn == null) {
-                    return 0.0F;
-                } else {
-                    ItemStack itemstack = entityIn.getActiveItemStack();
-                    return itemstack != null && itemstack.getItem() instanceof ItemBLBow ? (float) (stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
-                }
-            }
-        });
-        this.addPropertyOverride(new ResourceLocation("pulling"), new IItemPropertyGetter() {
-            @SideOnly(Side.CLIENT)
-            public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-                return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack ? 1.0F : 0.0F;
-            }
-        });
-    }
+	protected boolean isArrow(@Nullable ItemStack stack) {
+		return stack != null && stack.getItem() instanceof ItemArrow;
+	}
 
+	@Override
+	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
+		if (entityLiving instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entityLiving;
+			boolean infiniteArrows = player.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
+			ItemStack arrow = this.findArrows(player);
 
-    private ItemStack findAmmo(EntityPlayer player) {
-        if (this.isArrow(player.getHeldItem(EnumHand.OFF_HAND))) {
-            return player.getHeldItem(EnumHand.OFF_HAND);
-        } else if (this.isArrow(player.getHeldItem(EnumHand.MAIN_HAND))) {
-            return player.getHeldItem(EnumHand.MAIN_HAND);
-        } else {
-            for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
-                ItemStack itemstack = player.inventory.getStackInSlot(i);
+			int usedTicks = this.getMaxItemUseDuration(stack) - timeLeft;
+			usedTicks = ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) entityLiving, usedTicks, arrow != null || infiniteArrows);
 
-                if (this.isArrow(itemstack)) {
-                    return itemstack;
-                }
-            }
+			if (usedTicks < 0) {
+				return;
+			}
 
-            return null;
-        }
-    }
+			if (arrow != null || infiniteArrows) {
+				if (arrow == null) {
+					arrow = new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
+				}
 
+				float strength = getArrowVelocity(usedTicks);
 
-    private boolean isArrow(@Nullable ItemStack stack) {
-        return stack != null && stack.getItem() instanceof ItemBLArrow;
-    }
+				strength *= CorrosionHelper.getModifier(stack);
 
+				if (strength >= 0.1F) {
+					if (!world.isRemote) {
+						ItemArrow itemArrow = (ItemArrow)arrow.getItem();
+						EntityArrow entityArrow = itemArrow.createArrow(world, arrow, player);
+						entityArrow.setAim(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
 
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-        if (entityLiving instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer) entityLiving;
-            boolean flag = entityplayer.capabilities.isCreativeMode || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-            ItemStack itemstack = this.findAmmo(entityplayer);
+						if (strength == 1.0F) {
+							entityArrow.setIsCritical(true);
+						}
 
-            int i = this.getMaxItemUseDuration(stack) - timeLeft;
-            i = net.minecraftforge.event.ForgeEventFactory.onArrowLoose(stack, worldIn, (EntityPlayer) entityLiving, i, itemstack != null || flag);
-            if (i < 0) return;
+						int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
 
-            if (itemstack != null || flag) {
-                if (itemstack == null) {
-                    itemstack = new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
-                }
+						if (j > 0) {
+							entityArrow.setDamage(entityArrow.getDamage() + (double) j * 0.5D + 0.5D);
+						}
 
-                float f = getArrowVelocity(i);
+						int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
 
-                if ((double) f >= 0.1D) {
+						if (k > 0) {
+							entityArrow.setKnockbackStrength(k);
+						}
 
-                    if (!worldIn.isRemote) {
-                        ItemBLArrow itemarrow = (ItemBLArrow) ((itemstack.getItem() instanceof ItemBLArrow ? itemstack.getItem() : ItemRegistry.ANGLER_TOOTH_ARROW));
-                        EntityBLArrow entityarrow = itemarrow.createArrow(worldIn, itemstack, entityplayer);
-                        entityarrow.setAim(entityplayer, entityplayer.rotationPitch, entityplayer.rotationYaw, 0.0F, f * 3.0F, 1.0F);
+						if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
+							entityArrow.setFire(100);
+						}
 
-                        if (f == 1.0F) {
-                            entityarrow.setIsCritical(true);
-                        }
+						stack.damageItem(1, player);
 
-                        entityarrow.setType(itemarrow.getType().getName());
-                        int j = EnchantmentHelper.getEnchantmentLevel(Enchantments.POWER, stack);
+						if (infiniteArrows) {
+							entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
+						}
 
-                        if (j > 0) {
-                            entityarrow.setDamage(entityarrow.getDamage() + (double) j * 0.5D + 0.5D);
-                        }
+						world.spawnEntityInWorld(entityArrow);
+					}
 
-                        int k = EnchantmentHelper.getEnchantmentLevel(Enchantments.PUNCH, stack);
+					world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
 
-                        if (k > 0) {
-                            entityarrow.setKnockbackStrength(k);
-                        }
+					if (!infiniteArrows) {
+						--arrow.stackSize;
 
-                        if (EnchantmentHelper.getEnchantmentLevel(Enchantments.FLAME, stack) > 0) {
-                            entityarrow.setFire(100);
-                        }
+						if (arrow.stackSize == 0) {
+							player.inventory.deleteStack(arrow);
+						}
+					}
 
-                        stack.damageItem(1, entityplayer);
+					player.addStat(StatList.getObjectUseStats(this));
+				}
+			}
+		}
+	}
 
-                        if (flag) {
-                            entityarrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
-                        }
+	public static float getArrowVelocity(int charge) {
+		float strength = (float) charge / 20.0F;
+		strength = (strength * strength + strength * 2.0F) / 3.0F * 1.15F;
+		if (strength > 1.0F) {
+			strength = 1.0F;
+		}
+		return strength;
+	}
 
-                        worldIn.spawnEntityInWorld(entityarrow);
-                    }
+	@Override
+	public int getMaxItemUseDuration(ItemStack stack) {
+		return 100000;
+	}
 
-                    worldIn.playSound((EntityPlayer) null, entityplayer.posX, entityplayer.posY, entityplayer.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + f * 0.5F);
+	@Override
+	public EnumAction getItemUseAction(ItemStack stack) {
+		return EnumAction.BOW;
+	}
 
-                    if (!flag) {
-                        --itemstack.stackSize;
-
-                        if (itemstack.stackSize == 0) {
-                            entityplayer.inventory.deleteStack(itemstack);
-                        }
-                    }
-
-                    entityplayer.addStat(StatList.getObjectUseStats(this));
-                }
-            }
-        }
-    }
-
-
-    public static float getArrowVelocity(int charge) {
-        float f = (float) charge / 20.0F;
-        f = (f * f + f * 2.0F) / 3.0F;
-        if (f > 1.0F) {
-            f = 1.0F;
-        }
-        return f;
-    }
-
-    public int getMaxItemUseDuration(ItemStack stack) {
-        return 100000;
-    }
-
-    public EnumAction getItemUseAction(ItemStack stack) {
-        return EnumAction.BOW;
-    }
-
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
-        boolean flag = this.findAmmo(playerIn) != null;
-        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
-        if (ret != null) return ret;
-        if (!playerIn.capabilities.isCreativeMode && !flag) {
-            return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStackIn) : new ActionResult<>(EnumActionResult.PASS, itemStackIn);
-        } else {
-            playerIn.setActiveHand(hand);
-            return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
-        }
-    }
-
-    /**
-     * Return the enchantability factor of the item, most of the time is based on material.
-     */
-    public int getItemEnchantability() {
-        return 1;
-    }
-
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		boolean flag = this.findArrows(playerIn) != null;
+		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
+		if (ret != null) return ret;
+		if (!playerIn.capabilities.isCreativeMode && !flag) {
+			return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStackIn) : new ActionResult<>(EnumActionResult.PASS, itemStackIn);
+		} else {
+			playerIn.setActiveHand(hand);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+		}
+	}
 }

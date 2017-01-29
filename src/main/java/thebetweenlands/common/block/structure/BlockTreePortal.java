@@ -266,7 +266,7 @@ public class BlockTreePortal extends BasicBlock {
 			double motionX;
 			double motionY;
 			double motionZ;
-			int multi = rand.nextInt(2) * 2 - 1;
+			float multi = (rand.nextFloat() * 2.0F - 1.0F) / 4.0F;
 
 			motionX = (rand.nextFloat() - 0.5D) * 0.25D;
 			motionY = (rand.nextFloat() - 0.5D) * 0.25D;

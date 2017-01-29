@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
 
-//TODO: Use capabilities for performance
 public final class ItemAspectContainer extends AspectContainer {
 	public static final String ASPECTS_NBT_TAG = "blHerbloreAspects";
 

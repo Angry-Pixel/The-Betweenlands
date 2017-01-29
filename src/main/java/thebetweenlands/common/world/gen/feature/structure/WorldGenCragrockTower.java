@@ -154,7 +154,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 	}
 
 	private boolean tower(World world, Random random, int x, int y, int z) {
-		int direction = random.nextInt(4); //TODO
+		int direction = random.nextInt(4);
 
 		BlockPos highestPoint = new BlockPos(x, y, z);
 		for(int xo = -8; xo <= 8; xo++) {
@@ -1160,7 +1160,6 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		int stairsLength = Math.max(stair2Length, stair1Length);
 
 
-		//TODO
 		AxisAlignedBB stairsAABB;
 
 		switch(direction) {

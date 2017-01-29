@@ -610,6 +610,8 @@ location.wightTowerBoss.name=80:Primordial Malevolence
 
 
 # Tooltips
+tooltip.arrow.octine=Use with caution!
+tooltip.arrow.basilisk=Causes paralysis
 tooltip.chiromawWing.eat=Anything will taste better after eating this...
 tooltip.chiromawWing.dontEat=I probably shouldn't eat this anymore...
 tooltip.corrosion.0=Good as new!

@@ -272,9 +272,8 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		if (!SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + width - 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))))
 			return false;
 		if (doGen) {
-			//TODO: World locations
-			//generatedLocations.addAll(StorageHelper.addArea(world, "translate:ruins", AxisAlignedBB.getBoundingBox(x - width, y, z, x, y + height, z + width).expand(6, 6, 6), EnumLocationType.RUINS, 0));
-
+			location.addBounds(new AxisAlignedBB(x - width, y, z, x, y + height, z + width).expand(6, 6, 6));
+			
 			for (int yy = y; yy < y + height; yy++) {
 				if (yy <= y + height - 5) {
 					if (yy == y)

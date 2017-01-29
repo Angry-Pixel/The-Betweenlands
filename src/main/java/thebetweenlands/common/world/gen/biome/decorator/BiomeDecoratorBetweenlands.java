@@ -88,7 +88,6 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 	 * Generates the default ores
 	 */
 	protected void generateOres() {
-		//TODO: Tweak these values for new terrain height
 		this.generateOre(22, 14, OreGens.SULFUR, 0, 128);
 		this.generateOre(10, 8, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(10, 8, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
