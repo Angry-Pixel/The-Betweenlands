@@ -1,12 +1,14 @@
 package thebetweenlands.common.tile;
 
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -18,9 +20,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
+import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.location.LocationGuarded;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory implements ITickable {
 	public final static double FINAL_HEIGHT = 2.0D;
@@ -89,7 +96,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
 	private void removeSpawner() {
 		if (this.worldObj.getBlockState(this.pos.down()).getBlock() == BlockRegistry.MOB_SPAWNER) {
-			this.worldObj.setBlockState(this.pos.down(), Blocks.GRASS.getDefaultState());
+			this.worldObj.setBlockState(this.pos.down(), this.worldObj.getBiomeGenForCoords(this.pos).topBlock);
 		}
 	}
 
@@ -116,6 +123,18 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, 1), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
 		// Does the metadata stuff for the circle animated textures
 		checkDruidCircleBlocks(world);
+
+		AxisAlignedBB aabb = new AxisAlignedBB(this.pos).expand(8, 6, 8);
+		List<EntityDarkDruid> druids = this.worldObj.getEntitiesWithinAABB(EntityDarkDruid.class, aabb);
+		for(EntityDarkDruid druid : druids) {
+			druid.attackEntityFrom(DamageSource.generic, druid.getHealth());
+		}
+
+		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(this.worldObj, this.pos.down());
+		if(logic != null) {
+			//Don't spawn druids while crafting
+			logic.setDelay(CRAFTING_TIME + 20, CRAFTING_TIME + 20);
+		}
 	}
 
 	private void stopCraftingProcess() {
@@ -129,6 +148,21 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, 0), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
 		// Does the metadata stuff for the circle animated textures
 		checkDruidCircleBlocks(world);
+
+		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(this.worldObj, this.pos.down());
+		if(logic != null) {
+			logic.setDelay(600, 800);
+		}
+
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		List<LocationGuarded> locations = worldStorage.getSharedStorageAt(LocationGuarded.class, (location) -> {
+			return location.isInside(this.pos);
+		}, this.pos.getX(), this.pos.getZ());
+		for(LocationGuarded location : locations) {
+			if("druidAltar".equals(location.getName())) {
+				worldStorage.removeSharedStorage(location);
+			}
+		}
 	}
 
 	public void sendCraftingProgressPacket() {

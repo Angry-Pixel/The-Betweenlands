@@ -1,12 +1,14 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.DimensionType;
@@ -20,6 +22,11 @@ import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.world.shared.SharedRegion;
+import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
+import thebetweenlands.common.world.storage.world.shared.location.LocationGuarded;
+import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
@@ -84,7 +91,20 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		return true;
 	}
 
+	private ILocationGuard guard;
+
 	public void generateStructure(World world, Random rand, BlockPos altar) {
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		LocationGuarded location = new LocationGuarded(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(altar), "druidAltar", EnumLocationType.NONE);
+		this.guard = location.getGuard();
+		location.addBounds(new AxisAlignedBB(new BlockPos(altar)).expand(8, 10, 8));
+		location.linkChunks();
+		location.setLayer(0);
+		location.setSeed(rand.nextLong());
+		location.setVisible(false);
+		location.setDirty(true);
+		worldStorage.addSharedStorage(location);
+
 		// circle
 		MutableBlockPos pos = new MutableBlockPos();
 		IBlockState ground = world.getBiomeGenForCoords(altar).topBlock;
@@ -113,6 +133,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 
 					pos.setY(altarY - 1);
 					world.setBlockState(pos.toImmutable(), ground);
+					this.guard.setGuarded(world, pos, true);
 
 					int offset = world.rand.nextInt(2);
 					if(world.isAirBlock(pos.down(2)) || world.getBlockState(pos.down(2)).getMaterial().isLiquid()) {
@@ -121,10 +142,8 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 					for(int yo = 0; yo < 10; yo++) {
 						if (dSq <= this.baseRadius / 10.0F * (10 - yo) + offset) {
 							pos.setY(altarY - 2 - yo);
-							IBlockState blockState = world.getBlockState(pos);
-							if(blockState.getBlock() == Blocks.AIR || blockState.getBlock().isReplaceable(world, pos)) {
-								world.setBlockState(pos.toImmutable(), filler);
-							}
+							world.setBlockState(pos.toImmutable(), filler);
+							this.guard.setGuarded(world, pos, true);
 						}
 					}
 				}
@@ -137,6 +156,8 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 			MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
 			logic.setNextEntityName("thebetweenlands.dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
 		}
+		this.guard.setGuarded(world, altar, true);
+		this.guard.setGuarded(world, altar.down(), true);
 	}
 
 	private void placeAir(World world, MutableBlockPos pos) {
@@ -150,6 +171,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	private void placePillar(World world, MutableBlockPos pos, Random rand) {
 		int height = rand.nextInt(3) + 3;
 		for (int k = 0, y = pos.getY(); k <= height; k++, pos.setY(y + k)) {
+			this.guard.setGuarded(world, pos, true);
 			EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
 			if (rand.nextBoolean()) {
 				world.setBlockState(pos.toImmutable(), getRandomBlock(rand).withProperty(BlockDruidStone.FACING, facing), 3);

@@ -287,7 +287,17 @@ public class EntityDarkDruid extends EntityMob {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+		return super.getCanSpawnHere() && !this.worldObj.containsAnyLiquid(this.getEntityBoundingBox());
+	}
+
+	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return 0.0F;
+	}
+
+	@Override
+	protected boolean isValidLightLevel() {
+		return true;
 	}
 
 	@Override

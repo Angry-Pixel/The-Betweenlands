@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 
 public class BlockLocationGuard implements ILocationGuard {
-	protected final Long2ObjectMap<GuardChunk> chunkMap = new Long2ObjectOpenHashMap<>(8192);
+	protected final Long2ObjectMap<GuardChunk> chunkMap = new Long2ObjectOpenHashMap<>(16);
 
 	@Override
 	public void setGuarded(World world, BlockPos pos, boolean guarded) {
