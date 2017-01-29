@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.block.BlockVine;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -122,13 +123,13 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 					}
 				}
 				if (dSq <= this.baseRadius) {
-					for(int yo = 0; yo < 4; yo++) {
+					for(int yo = 0; yo < 16; yo++) {
 						Biome biome = world.getBiomeForCoordsBody(pos);
 						IBlockState blockState = world.getBlockState(pos);
-						if(blockState == biome.fillerBlock || blockState == biome.topBlock) {
+						if(blockState == biome.fillerBlock || blockState == biome.topBlock || blockState.getMaterial() == Material.ROCK || blockState.getMaterial() == Material.GROUND) {
 							world.setBlockToAir(pos.toImmutable());
-							pos.setY(pos.getY() + 1);
 						}
+						pos.setY(pos.getY() + 1);
 					}
 
 					pos.setY(altarY - 1);
@@ -161,8 +162,10 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	}
 
 	private void placeAir(World world, MutableBlockPos pos) {
+		Biome biome = world.getBiomeGenForCoords(pos);
 		for (int k = 0, y = pos.getY(); k <= this.height; k++, pos.setY(y + k)) {
-			if(!world.getBlockState(pos).getBlock().isReplaceable(world, pos)) {
+			IBlockState blockState = world.getBlockState(pos);
+			if(blockState == biome.fillerBlock || blockState == biome.topBlock || blockState.getMaterial() == Material.ROCK || blockState.getMaterial() == Material.GROUND) {
 				world.setBlockToAir(pos.toImmutable());
 			}
 		}

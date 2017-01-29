@@ -509,10 +509,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, pos, 5, 16, 8, betweenstoneTiles, 0, 3, 1, 1, direction);
 
 			rotatedCubeVolume(world, rand, pos, 6, 19, 6, spawner, 0, 1, 1, 1, direction);
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 6), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelay(3000, 5000).setMaxEntities(3));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 6), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelay(3000, 5000).setMaxEntities(3));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 25), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelay(3000, 5000).setMaxEntities(3));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 25), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelay(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 6), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 6), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 25), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 25), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
 
 			if (rand.nextBoolean())
 				rotatedCubeVolume(world, rand, pos, 16, 26, 16, spawner, 0, 1, 1, 1, direction);

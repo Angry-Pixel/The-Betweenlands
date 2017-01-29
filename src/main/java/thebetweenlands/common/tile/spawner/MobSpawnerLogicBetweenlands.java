@@ -32,7 +32,7 @@ public abstract class MobSpawnerLogicBetweenlands {
 	public double entityRotation;
 	public double lastEntityRotation;
 
-	public int spawnDelay = 20;
+	private int spawnDelay = 20;
 	private int minSpawnDelay = 200;
 	private int maxSpawnDelay = 800;
 	private int spawnCount = 4;
@@ -150,17 +150,27 @@ public abstract class MobSpawnerLogicBetweenlands {
 	}
 
 	/**
-	 * Sets the spawn delay
+	 * Sets the spawn delay range
 	 * @param minDelay
 	 * @param maxDelay
 	 * @return
 	 */
-	public MobSpawnerLogicBetweenlands setDelay(int minDelay, int maxDelay) {
+	public MobSpawnerLogicBetweenlands setDelayRange(int minDelay, int maxDelay) {
 		this.minSpawnDelay = minDelay;
 		this.maxSpawnDelay = maxDelay;
 		return this;
 	}
 
+	/**
+	 * Sets the current spawn delay
+	 * @param delay
+	 * @return
+	 */
+	public MobSpawnerLogicBetweenlands setDelay(int delay) {
+		this.spawnDelay = delay;
+		return this;
+	}
+	
 	/**
 	 * Returns the mimumum spawn delay
 	 * @return

@@ -84,7 +84,7 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 		RandomSpawnerMob mob = RandomSpawnerMob.values()[random.nextInt(RandomSpawnerMob.values().length)];
 		MobSpawnerLogicBetweenlands logic = setMob(world, pos, mob.getName());
 		if(logic != null) {
-			logic.setDelay(mob.getMinDelay(), mob.getMaxDelay());
+			logic.setDelayRange(mob.getMinDelay(), mob.getMaxDelay());
 			logic.setMaxEntities(mob.getMaxEntities());
 			for(Consumer<MobSpawnerLogicBetweenlands> c : consumers) {
 				c.accept(logic);

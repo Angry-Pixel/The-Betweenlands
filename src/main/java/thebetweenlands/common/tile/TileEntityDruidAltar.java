@@ -133,7 +133,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(this.worldObj, this.pos.down());
 		if(logic != null) {
 			//Don't spawn druids while crafting
-			logic.setDelay(CRAFTING_TIME + 20, CRAFTING_TIME + 20);
+			logic.setDelay(CRAFTING_TIME + 20);
 		}
 	}
 
@@ -148,11 +148,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, 0), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
 		// Does the metadata stuff for the circle animated textures
 		checkDruidCircleBlocks(world);
-
-		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(this.worldObj, this.pos.down());
-		if(logic != null) {
-			logic.setDelay(600, 800);
-		}
 
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		List<LocationGuarded> locations = worldStorage.getSharedStorageAt(LocationGuarded.class, (location) -> {
