@@ -38,6 +38,8 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 
 	public LocationStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
 		super(worldStorage, id, region);
+		this.name = "";
+		this.type = EnumLocationType.NONE;
 	}
 
 	/**

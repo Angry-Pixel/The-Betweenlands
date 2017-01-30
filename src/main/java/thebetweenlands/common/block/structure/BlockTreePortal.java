@@ -43,6 +43,7 @@ public class BlockTreePortal extends BasicBlock {
 		setBlockUnbreakable();
 		setSoundType2(SoundType.GLASS);
 		setDefaultState(this.blockState.getBaseState().withProperty(AXIS, EnumFacing.Axis.X));
+		setCreativeTab(null);
 	}
 
 	public static boolean makePortalX(World world, BlockPos pos) {
