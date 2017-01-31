@@ -44,16 +44,20 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 	@Override
 	public void setStitchedSprites(Frame[][] frames) {
-		this.animation.setFrames(frames[0]);
-		if(this.particleTexture == null) {
-			this.setParticleTexture(frames[0][0].getSprite());
+		if(this.animation != null) {
+			this.animation.setFrames(frames[0]);
+			if(this.particleTexture == null) {
+				this.setParticleTexture(frames[0][0].getSprite());
+			}
 		}
 	}
 
 	@Override
 	public void onUpdate() {
-		this.animation.update();
-		this.setParticleTexture(this.animation.getCurrentSprite());
+		if(this.animation != null) {
+			this.animation.update();
+			this.setParticleTexture(this.animation.getCurrentSprite());
+		}
 
 		super.onUpdate();
 
@@ -61,7 +65,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 		double distToTarget = Math.sqrt((this.tx-this.posX)*(this.tx-this.posX)+(this.ty-this.posY)*(this.ty-this.posY)+(this.tz-this.posZ)*(this.tz-this.posZ));
 		Block currBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getBlock();
 		if(this.underwater == (currBlock instanceof BlockSwampWater == false)) {
-			this.motionY -= 0.08D;
+			this.motionY += 0.08D;
 			if(this.isCollided)
 				this.motionY += 0.25D;
 			this.tx = this.posX;
@@ -86,7 +90,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 	public static final class FlyFactory extends ParticleFactory<FlyFactory, ParticleBug> {
 		public FlyFactory() {
-			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/fly")));
+			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/fly")).setSplitAnimations(true));
 		}
 
 		@Override
@@ -101,13 +105,13 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 		@Override
 		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
-			args.withScale(0.25F * world.rand.nextFloat());
+			args.withScale(0.25F * world.rand.nextFloat() + 0.1F);
 		}
 	}
 
 	public static final class MosquitoFactory extends ParticleFactory<MosquitoFactory, ParticleBug> {
 		public MosquitoFactory() {
-			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/mosquito")));
+			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/mosquito")).setSplitAnimations(true));
 		}
 
 		@Override
@@ -122,13 +126,13 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 		@Override
 		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
-			args.withScale(0.4F * world.rand.nextFloat());
+			args.withScale(0.4F * world.rand.nextFloat() + 0.1F);
 		}
 	}
 
 	public static final class WaterBugFactory extends ParticleFactory<WaterBugFactory, ParticleBug> {
 		public WaterBugFactory() {
-			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/water_bug")));
+			super(ParticleBug.class, ParticleTextureStitcher.create(ParticleBug.class, new ResourceLocation("thebetweenlands:particle/water_bug")).setSplitAnimations(true));
 		}
 
 		@Override
@@ -143,7 +147,7 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 		@Override
 		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
-			args.withScale(0.6F * world.rand.nextFloat());
+			args.withScale(0.6F * world.rand.nextFloat() + 0.1F);
 		}
 	}
 }

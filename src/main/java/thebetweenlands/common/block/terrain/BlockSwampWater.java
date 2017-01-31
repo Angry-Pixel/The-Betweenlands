@@ -17,6 +17,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -491,5 +492,21 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		g = (int) (g * depth + DEEP_COLOR_G * (1 - depth) + 0.5F);
 		b = (int) (b * depth + DEEP_COLOR_B * (1 - depth) + 0.5F);
 		return r << 16 | g << 8 | b;
+	}
+	
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if(rand.nextInt(1500) == 0) {
+			if(world.getBlockState(pos.up(2)).getMaterial().isLiquid()) {
+				BLParticles.FISH.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D);
+			} else if(world.getBlockState(pos.down()).getBlock() == BlockRegistry.MUD) {
+				if(rand.nextInt(2) == 0) {
+					BLParticles.MOSQUITO.spawn(world, pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
+				} else {
+					BLParticles.FLY.spawn(world, pos.getX() + 0.5D, pos.getY() + 1.5D, pos.getZ() + 0.5D);
+				}
+			}
+		}
 	}
 }

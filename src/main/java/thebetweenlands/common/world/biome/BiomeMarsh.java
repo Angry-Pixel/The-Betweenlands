@@ -31,7 +31,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 	public BiomeMarsh(int type) {
 		super(new BiomeProperties("marsh_" + type).setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
-		this.setWeight(10);
+		this.setWeight(type == 0 ? 10 : 4);
 		this.getBiomeGenerator()
 		.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())
 		.addFeature(new PatchFeature(0.03125D * 3.5D, 0.03125D * 3.5D, BlockRegistry.PEAT.getDefaultState()))

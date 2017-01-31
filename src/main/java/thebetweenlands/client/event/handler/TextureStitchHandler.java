@@ -27,6 +27,8 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
@@ -103,6 +105,20 @@ public class TextureStitchHandler {
 						throw new RuntimeException("Failed to load corrosion texture", ex);
 					}
 				}
+			}
+		}
+
+		//Stitch particle textures that aren't split
+		BLParticles[] particles = BLParticles.values();
+		for(BLParticles particle : particles) {
+			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
+			if(stitcher != null && !stitcher.shouldSplitAnimations()) {
+				ResourceLocation[] textures = stitcher.getTextures();
+				Frame[][] frames = new Frame[textures.length][];
+				for(int i = 0; i < textures.length; i++) {
+					frames[i] = new Frame[]{ new Frame(e.getMap().registerSprite(textures[i]), -1) };
+				}
+				stitcher.setFrames(frames);
 			}
 		}
 

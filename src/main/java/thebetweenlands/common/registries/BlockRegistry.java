@@ -81,15 +81,18 @@ import thebetweenlands.common.block.plant.BlockMarshMarigoldStalk;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.plant.BlockNettle;
 import thebetweenlands.common.block.plant.BlockNettleFlowered;
+import thebetweenlands.common.block.plant.BlockPhragmites;
 import thebetweenlands.common.block.plant.BlockPlant;
 import thebetweenlands.common.block.plant.BlockPlantUnderwater;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.plant.BlockSaplingBetweenlands;
+import thebetweenlands.common.block.plant.BlockSundew;
 import thebetweenlands.common.block.plant.BlockSwampKelp;
 import thebetweenlands.common.block.plant.BlockSwampReed;
 import thebetweenlands.common.block.plant.BlockSwampReedUnderwater;
 import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
+import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
@@ -403,7 +406,7 @@ public class BlockRegistry {
 	//Plants
 	public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
 	public static final BlockDoublePlantBL WEEPING_BLUE = new BlockWeepingBlue();
-	public static final BlockDoublePlantBL SUNDEW = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.SUNDEW_HEAD.create(1));
+	public static final BlockDoublePlantBL SUNDEW = new BlockSundew();
 	public static final Block BLACK_HAT_MUSHROOM = new BlockBlackHatMushroom();
 	public static final Block BULB_CAPPED_MUSHROOM = new BlockBulbCappedMushroom();
 	public static final Block FLAT_HEAD_MUSHROOM = new BlockFlatheadMushroom();
@@ -419,7 +422,7 @@ public class BlockRegistry {
 	public static final Block SWAMP_KELP = new BlockSwampKelp();
 	public static final Block MIRE_CORAL = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.MIRE_CORAL_ITEM.create(1)).setLightLevel(1F);
 	public static final Block DEEP_WATER_CORAL = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.DEEP_WATER_CORAL_ITEM.create(1)).setLightLevel(1F);
-	public static final Block WATER_WEEDS = new BlockPlantUnderwater().setSickleDrop(EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1)).setReplaceable(true);
+	public static final Block WATER_WEEDS = new BlockWaterWeeds();
 	public static final Block BULB_CAPPED_MUSHROOM_CAP = new BlockBulbCappedMushroomCap();
 	public static final Block BULB_CAPPED_MUSHROOM_STALK = new BlockBulbCappedMushroomStalk();
 	public static final Block SHELF_FUNGUS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.CLOTH).setHardness(0.2F);
@@ -453,7 +456,7 @@ public class BlockRegistry {
 	public static final Block NETTLE = new BlockNettle().setSickleDrop(EnumItemPlantDrop.NETTLE_LEAF.create(1));
 	public static final Block NETTLE_FLOWERED = new BlockNettleFlowered().setSickleDrop(EnumItemPlantDrop.NETTLE_LEAF.create(1));
 	public static final Block PICKEREL_WEED = new BlockPlant().setSickleDrop(EnumItemPlantDrop.PICKEREL_WEED_FLOWER.create(1));
-	public static final BlockDoublePlantBL PHRAGMITES = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PHRAGMITE_STEMS.create(1));
+	public static final BlockDoublePlantBL PHRAGMITES = new BlockPhragmites();
 	public static final Block SHOOTS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SHOOT_LEAVES.create(1)).setReplaceable(true);
 	public static final Block SLUDGECREEP = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SLUDGECREEP_LEAVES.create(1)).setReplaceable(true);
 	public static final Block SOFT_RUSH = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SOFT_RUSH_LEAVES.create(1));

@@ -70,6 +70,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		if(existingPortal != null) {
 			//Portal exists already
 			entity.setLocationAndAngles(existingPortal.getX() + 0.5D, existingPortal.getY() + 3.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
+			this.setDefaultPlayerSpawnLocation(entity);
 			return true;
 		}
 

@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
+import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 
 public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
@@ -10,6 +12,15 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 	@Override
 	public void decorate() {
 		super.decorate();
+
+		this.startProfilerSection("fire");
+		for (int i = 0; i < 10; i++) {
+			BlockPos pos = this.getRandomPos();
+			if (SurfaceType.PEAT.matches(this.getWorld().getBlockState(pos))) {
+				this.getWorld().setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
+			}
+		}
+		this.endProfilerSection();
 
 		//TODO: Implement missing generators
 		//this.generate(10, DecorationHelper::generateWightFortress);

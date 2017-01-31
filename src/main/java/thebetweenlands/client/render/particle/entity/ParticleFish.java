@@ -12,6 +12,7 @@ public class ParticleFish extends ParticleBug {
 	protected ParticleFish(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float speed, float jitter, float scale, int texture) {
 		super(world, x, y, z, mx, my, mz, maxAge, speed, jitter, scale, true);
 		this.fishTexture = texture;
+		this.animation = null;
 	}
 
 	@Override
@@ -41,7 +42,7 @@ public class ParticleFish extends ParticleBug {
 
 		@Override
 		protected void setDefaultArguments(World world, double x, double y, double z, ParticleArgs<?> args) {
-			args.withScale(0.18F * world.rand.nextFloat()).withDataBuilder().setData(3, world.rand.nextInt(3)).buildData();
+			args.withScale(0.18F * world.rand.nextFloat() + 0.1F).withDataBuilder().setData(3, world.rand.nextInt(3)).buildData();
 		}
 	}
 }
