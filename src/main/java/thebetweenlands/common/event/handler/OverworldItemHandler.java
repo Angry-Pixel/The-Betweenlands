@@ -19,6 +19,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
+import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
@@ -65,6 +66,23 @@ public class OverworldItemHandler {
 				if(event.getWorld().isRemote) {
 					event.getEntityPlayer().addChatMessage(new TextComponentTranslation("chat.flintandsteel", new TextComponentTranslation(item.getUnlocalizedName() + ".name")));
 				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onBonemeal(BonemealEvent event) {
+		//ffs why does this event not pass on the item stack...
+		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
+			ItemStack mainHand = event.getEntityPlayer().getHeldItemMainhand();
+			ItemStack offHand = event.getEntityPlayer().getHeldItemOffhand();
+			if(mainHand != null && mainHand.getItem() == Items.DYE) {
+				event.setResult(Result.DENY);
+				event.setCanceled(true);
+			}
+			if(offHand != null && offHand.getItem() == Items.DYE) {
+				event.setResult(Result.DENY);
+				event.setCanceled(true);
 			}
 		}
 	}

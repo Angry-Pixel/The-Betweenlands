@@ -23,6 +23,8 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
+import thebetweenlands.common.world.gen.biome.decorator.DecorationHelper;
+import thebetweenlands.common.world.gen.biome.decorator.DecoratorPositionProvider;
 
 public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlock {
 	public BlockSwampGrass() {
@@ -130,17 +132,32 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		return false;
+		return true;
 	}
 
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		//TODO: Bonemeal growing
+		DecoratorPositionProvider provider = new DecoratorPositionProvider();
+		provider.init(worldIn, worldIn.getBiomeGenForCoords(pos), null, rand, pos.getX(), pos.getY() + 1, pos.getZ());
+		provider.setOffsetXZ(-4, 4);
+		provider.setOffsetY(-2, 2);
+
+		for(int i = 0; i < 4; i++) {
+			DecorationHelper.generateSwampDoubleTallgrass(provider);
+			DecorationHelper.generateTallCattail(provider);
+			DecorationHelper.generateSwampTallgrassCluster(provider);
+			if(rand.nextInt(5) == 0) {
+				DecorationHelper.generateCattailCluster(provider);
+			}
+			if(rand.nextInt(3) == 0) {
+				DecorationHelper.generateShootsCluster(provider);
+			}
+		}
 	}
 
 	@Override

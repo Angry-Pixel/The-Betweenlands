@@ -16,10 +16,10 @@ import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
+import thebetweenlands.common.item.IFoodSickness;
 import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemTooltipHandler {
 	@SubscribeEvent
@@ -41,16 +41,13 @@ public class ItemTooltipHandler {
 			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
 		}
 
-		if(stack.getItem() instanceof ItemFood && stack.getItem() != ItemRegistry.CHIROMAW_WING && stack.getItem() != ItemRegistry.ROTTEN_FOOD && ItemRegistry.ITEMS.contains(stack.getItem())) {
+		if(stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSickness && ((IFoodSickness)stack.getItem()).canGetSickOf(stack)) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
-				String debug = "";
-				if(event.isShowAdvancedItemTooltips()) {
-					debug = " (" + cap.getFoodHatred((ItemFood)stack.getItem()) + "/" + sickness.maxHatred + ")";
-				}
-				toolTip.add(I18n.format("tooltip.foodSickness.state." + sickness.name().toLowerCase()) + debug);
+				int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
+				((IFoodSickness)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.isShowAdvancedItemTooltips(), toolTip);
 			}
 		}
 

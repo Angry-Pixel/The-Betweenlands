@@ -40,4 +40,9 @@ public class ItemRottenFood extends ItemBLFood {
 	public ItemStack getOriginalStack(ItemStack stack) {
 		return stack.getTagCompound() != null ? ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("originalStack")) : null;
 	}
+
+	@Override
+	public boolean canGetSickOf(ItemStack stack) {
+		return false;
+	}
 }

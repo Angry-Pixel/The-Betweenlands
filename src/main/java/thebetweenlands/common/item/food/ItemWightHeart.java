@@ -27,4 +27,9 @@ public class ItemWightHeart extends ItemBLFood {
 		super.onFoodEaten(stack, world, player);
 		player.heal(8.0F);
 	}
+
+	@Override
+	public boolean canGetSickOf(ItemStack stack) {
+		return false;
+	}
 }

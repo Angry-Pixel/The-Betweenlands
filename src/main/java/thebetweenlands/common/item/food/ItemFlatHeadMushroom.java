@@ -28,4 +28,9 @@ public class ItemFlatHeadMushroom extends ItemPlantableFood {
 	protected Block getBlock(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos) {
 		return BlockRegistry.FLAT_HEAD_MUSHROOM;
 	}
+
+	@Override
+	public boolean canGetSickOf(ItemStack stack) {
+		return false;
+	}
 }

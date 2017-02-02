@@ -27,4 +27,9 @@ public class ItemBlackHatMushroom extends ItemPlantableFood {
 	protected Block getBlock(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos) {
 		return BlockRegistry.BLACK_HAT_MUSHROOM;
 	}
+
+	@Override
+	public boolean canGetSickOf(ItemStack stack) {
+		return false;
+	}
 }

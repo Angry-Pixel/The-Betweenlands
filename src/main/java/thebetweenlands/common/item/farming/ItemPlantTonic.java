@@ -20,7 +20,8 @@ public class ItemPlantTonic extends Item {
 
 	public ItemPlantTonic(ItemStack empty) {
 		this.empty = empty;
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
+		this.setCreativeTab(BLCreativeTabs.GEARS);
+		this.setMaxStackSize(1);
 	}
 
 	@Override

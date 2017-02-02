@@ -49,4 +49,9 @@ public class ItemChiromawWing extends ItemBLFood {
 			}
 		}
 	}
+
+	@Override
+	public boolean canGetSickOf(ItemStack stack) {
+		return false;
+	}
 }

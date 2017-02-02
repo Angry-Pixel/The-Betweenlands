@@ -16,9 +16,9 @@ import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
+import thebetweenlands.common.item.IFoodSickness;
 import thebetweenlands.common.item.food.IDecayFood;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class FoodSicknessHandler {
@@ -51,7 +51,7 @@ public class FoodSicknessHandler {
 		EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && player.dimension == ConfigHandler.dimensionId && itemStack != null && itemStack.getItem() instanceof ItemFood && ItemRegistry.ITEMS.contains(itemStack.getItem())) {
+		if (player != null && player.dimension == ConfigHandler.dimensionId && itemStack != null && itemStack.getItem() instanceof IFoodSickness && ((IFoodSickness)itemStack.getItem()).canGetSickOf(itemStack)) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				ItemFood food = (ItemFood) itemStack.getItem();
@@ -69,7 +69,7 @@ public class FoodSicknessHandler {
 		EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && player.dimension == ConfigHandler.dimensionId && itemStack != null && itemStack.getItem() instanceof ItemFood && ItemRegistry.ITEMS.contains(itemStack.getItem())) {
+		if (player != null && player.dimension == ConfigHandler.dimensionId && itemStack != null && itemStack.getItem() instanceof IFoodSickness && ((IFoodSickness)itemStack.getItem()).canGetSickOf(itemStack)) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 
