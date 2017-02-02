@@ -28,8 +28,8 @@ public class BlockSwampReed extends BlockStackablePlant {
 	}
 
 	@Override
-	protected boolean isSamePlant(Block block) {
-		return super.isSamePlant(block) || block == BlockRegistry.SWAMP_REED_UNDERWATER;
+	protected boolean isSamePlant(IBlockState blockState) {
+		return super.isSamePlant(blockState) || blockState.getBlock() == BlockRegistry.SWAMP_REED_UNDERWATER;
 	}
 
 	@Override

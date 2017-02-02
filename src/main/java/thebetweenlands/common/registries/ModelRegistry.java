@@ -27,6 +27,11 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom
 import thebetweenlands.client.render.model.baked.modelbase.ModelBulbCappedMushroom;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom1;
 import thebetweenlands.client.render.model.baked.modelbase.ModelFlatHeadMushroom2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4;
+import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decayed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
@@ -72,7 +77,14 @@ public class ModelRegistry {
 	public static final IModel WEEPING_BLUE = new ModelFromModelBase(new ModelWeepingBlue(), new ResourceLocation("thebetweenlands:blocks/weeping_blue"), 64, 64);
 	public static final IModel SWAMP_PLANT = new ModelFromModelBase(new ModelSwampPlant(), new ResourceLocation("thebetweenlands:blocks/swamp_plant"), 64, 64);
 	public static final IModel WEEDWOOD_BUSH = new ModelWeedwoodBush();
-
+	
+	//Crops
+	public static final IModel FUNGUS_CROP_1 = new ModelFromModelBase(new ModelFungusCrop1(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_1"), 32, 32);
+	public static final IModel FUNGUS_CROP_2 = new ModelFromModelBase(new ModelFungusCrop2(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_2"), 32, 32);
+	public static final IModel FUNGUS_CROP_3 = new ModelFromModelBase(new ModelFungusCrop3(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_3"), 64, 64);
+	public static final IModel FUNGUS_CROP_4 = new ModelFromModelBase(new ModelFungusCrop4(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_4"), 64, 64);
+	public static final IModel FUNGUS_CROP_4_DECAYED = new ModelFromModelBase(new ModelFungusCrop4Decayed(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_4_decayed"), 64, 64);
+	
 	//Items
 	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
 		@Override

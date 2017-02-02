@@ -30,14 +30,16 @@ public class AdvancedStateMap extends StateMapperBase {
 	private final List<IProperty<?>> ignored;
 	private final Map<IProperty<?>, Function<?, String>> suffixProperties;
 	private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions;
+	private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> propertyExclusions;
 
 	private AdvancedStateMap(@Nullable Function<PropertiesMap, String> nameMapper, @Nullable String suffix, List<IProperty<?>> ignored, Map<IProperty<?>, Function<?, String>> suffixProperties,
-			List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions) {
+			List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions, List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> propertyExclusions) {
 		this.nameMapper = nameMapper;
 		this.suffix = suffix;
 		this.ignored = ignored;
 		this.suffixProperties = suffixProperties;
 		this.suffixExclusions = suffixExclusions;
+		this.propertyExclusions = propertyExclusions;
 	}
 
 	@Override
@@ -67,6 +69,16 @@ public class AdvancedStateMap extends StateMapperBase {
 			}
 		}
 
+		List<IProperty<?>> propertyExclusions = new ArrayList<>();
+
+		for(Function<UnmodifiablePropertiesMap, List<IProperty<?>>> exclusion : this.propertyExclusions) {
+			List<IProperty<?>> excludedProperties = exclusion.apply(wrappedPropertiesMap);
+			for(IProperty<?> excludedProperty : excludedProperties) {
+				if(!propertyExclusions.contains(excludedProperty))
+					propertyExclusions.add(excludedProperty);
+			}
+		}
+
 		List<String> propertySuffixes = new ArrayList<String>();
 		for(Entry<IProperty<?>, Comparable<?>> propertyPair : propertiesMap.entrySet()) {
 			if(!suffixExclusions.contains(propertyPair.getKey())) {
@@ -88,6 +100,10 @@ public class AdvancedStateMap extends StateMapperBase {
 			fileName = strBuilder.toString();
 		}
 
+		for(IProperty<?> iproperty : propertyExclusions) {
+			propertiesMap.remove(iproperty);
+		}
+
 		for(IProperty<?> iproperty : this.ignored) {
 			propertiesMap.remove(iproperty);
 		}
@@ -102,6 +118,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		private final List<IProperty<?>> ignored = Lists.newArrayList();
 		private final Map<IProperty<?>, Function<?, String>> suffixProperties = new HashMap<>();
 		private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> suffixExclusions = new ArrayList<>();
+		private final List<Function<UnmodifiablePropertiesMap, List<IProperty<?>>>> propertyExclusions = new ArrayList<>();
 
 		/**
 		 * Sets the state mapper to use the value of the specified property as name
@@ -157,6 +174,26 @@ public class AdvancedStateMap extends StateMapperBase {
 		}
 
 		/**
+		 * See {@link AdvancedStateMap.Builder#withPropertySuffix(IProperty, Function)}
+		 * @param property
+		 * @param nameTrue
+		 * @return
+		 */
+		public AdvancedStateMap.Builder withPropertySuffixTrue(IProperty<Boolean> property, String nameTrue) {
+			return this.withPropertySuffix(property, b -> b ? nameTrue : null);
+		}
+
+		/**
+		 * See {@link AdvancedStateMap.Builder#withPropertySuffix(IProperty, Function)}
+		 * @param property
+		 * @param nameFalse
+		 * @return
+		 */
+		public AdvancedStateMap.Builder withPropertySuffixFalse(IProperty<Boolean> property, String nameFalse) {
+			return this.withPropertySuffix(property, b -> !b ? nameFalse : null);
+		}
+
+		/**
 		 * Sets the state mapper to exclude certain suffixes if a condition is met.
 		 * Return all properties whose suffixes should be ignored.
 		 * @param exclusions
@@ -164,6 +201,17 @@ public class AdvancedStateMap extends StateMapperBase {
 		 */
 		public AdvancedStateMap.Builder withPropertySuffixExclusions(Function<UnmodifiablePropertiesMap, List<IProperty<?>>> exclusions) {
 			this.suffixExclusions.add(exclusions);
+			return this;
+		}
+
+		/**
+		 * Sets the state mapper to exclude certain properties if a condition is met.
+		 * Return all properties which should be ignored.
+		 * @param exclusions
+		 * @return
+		 */
+		public AdvancedStateMap.Builder withPropertyExclusions(Function<UnmodifiablePropertiesMap, List<IProperty<?>>> exclusions) {
+			this.propertyExclusions.add(exclusions);
 			return this;
 		}
 
@@ -177,7 +225,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		}
 
 		public AdvancedStateMap build() {
-			return new AdvancedStateMap(this.nameMapper, this.suffix, this.ignored, this.suffixProperties, this.suffixExclusions);
+			return new AdvancedStateMap(this.nameMapper, this.suffix, this.ignored, this.suffixProperties, this.suffixExclusions, this.propertyExclusions);
 		}
 	}
 

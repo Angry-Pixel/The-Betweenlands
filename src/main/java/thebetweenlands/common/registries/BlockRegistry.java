@@ -42,6 +42,7 @@ import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
+import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockDampTorch;
@@ -473,6 +474,8 @@ public class BlockRegistry {
 	public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
 	public static final Block HANGER = new BlockHanger();
 	
+	
+	public static final Block FUNGUS_CROP = new BlockFungusCrop();
 	public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
 	public static final Block DUG_SWAMP_DIRT = new BlockDugDirt(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
 	public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));

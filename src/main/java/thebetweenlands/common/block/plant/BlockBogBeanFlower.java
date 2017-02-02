@@ -19,8 +19,8 @@ public class BlockBogBeanFlower extends BlockStackablePlant {
 	}
 
 	@Override
-	protected boolean isSamePlant(Block block) {
-		return super.isSamePlant(block) || block == BlockRegistry.BOG_BEAN_STALK;
+	protected boolean isSamePlant(IBlockState blockState) {
+		return super.isSamePlant(blockState) || blockState.getBlock() == BlockRegistry.BOG_BEAN_STALK;
 	}
 
 	@Override

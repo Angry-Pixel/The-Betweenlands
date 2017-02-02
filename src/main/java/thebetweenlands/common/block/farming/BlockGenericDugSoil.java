@@ -28,6 +28,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -37,7 +38,7 @@ import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.BlockStatePropertiesMatcher;
 
-public abstract class BlockGenericDugSoil extends BasicBlock implements  ITileEntityProvider, ISubtypeBlock, IStateMappedBlock, ICustomItemBlock {
+public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeBlock, IStateMappedBlock, ICustomItemBlock {
 	//-1, +1, -1, quadrant 0
 	public static final PropertyInteger TOP_NORTH_WEST_INDEX = PropertyInteger.create("top_north_west_index", 0, 4);
 	//+1, +1, -1, quadrant 1
@@ -54,11 +55,11 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements  ITileEn
 
 	public BlockGenericDugSoil(Material material) {
 		this(material, false);
-		this.setTickRandomly(true);
 	}
 
 	public BlockGenericDugSoil(Material material, boolean purified) {
 		super(material);
+		this.setTickRandomly(true);
 		this.setSoundType(SoundType.GROUND);
 		this.setHardness(0.5F);
 		this.setHarvestLevel("shovel", 0);
@@ -301,7 +302,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements  ITileEn
 			return ImmutableList.of();
 		});
 		if(!this.purified) {
-			builder.withPropertySuffix(DECAYED, null, "decayed");
+			builder.withPropertySuffixTrue(DECAYED, "decayed");
 		}
 	}
 
@@ -374,5 +375,13 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements  ITileEn
 			return (TileEntityDugSoil) te;
 		}
 		return null;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if(stateIn.getValue(DECAYED)) {
+			BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + 0.5F);
+		}
 	}
 }

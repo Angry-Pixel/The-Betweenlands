@@ -19,8 +19,8 @@ public class BlockMarshMarigoldFlower extends BlockStackablePlant {
 	}
 
 	@Override
-	protected boolean isSamePlant(Block block) {
-		return super.isSamePlant(block) || block == BlockRegistry.MARSH_MARIGOLD_STALK;
+	protected boolean isSamePlant(IBlockState blockState) {
+		return super.isSamePlant(blockState) || blockState.getBlock() == BlockRegistry.MARSH_MARIGOLD_STALK;
 	}
 
 	@Override

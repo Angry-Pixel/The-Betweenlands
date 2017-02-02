@@ -19,8 +19,8 @@ public class BlockGoldenClubFlower extends BlockStackablePlant {
 	}
 
 	@Override
-	protected boolean isSamePlant(Block block) {
-		return super.isSamePlant(block) || block == BlockRegistry.GOLDEN_CLUB_STALK;
+	protected boolean isSamePlant(IBlockState blockState) {
+		return super.isSamePlant(blockState) || blockState.getBlock() == BlockRegistry.GOLDEN_CLUB_STALK;
 	}
 
 	@Override

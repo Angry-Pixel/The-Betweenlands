@@ -33,7 +33,7 @@ public class BlockStateContainerHelper {
 	 * @param newProperties
 	 * @return
 	 */
-	public static BlockStateContainer extendBlockstateContainer(BlockStateContainer original, IProperty<?>[] newProperties) {
+	public static BlockStateContainer extendBlockstateContainer(BlockStateContainer original, IProperty<?>... newProperties) {
 		Collection<IProperty<?>> properties = new ArrayList<IProperty<?>>();
 		properties.addAll(original.getProperties());
 		properties.addAll(Arrays.asList(newProperties));
