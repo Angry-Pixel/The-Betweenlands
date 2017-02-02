@@ -9,11 +9,13 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.SoilHelper;
@@ -29,21 +31,16 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 
 	protected int maxHeight = 3;
 	protected boolean harvestAll = false;
+	protected boolean resetAge = true;
 
 	public BlockStackablePlant() {
-		this(false);
-	}
-
-	public BlockStackablePlant(boolean harvestAll) {
-		super();
-		this.harvestAll = harvestAll;
 		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Block.EnumOffsetType getOffsetType() {
-		return this.maxHeight > 1 ? Block.EnumOffsetType.NONE : Block.EnumOffsetType.XZ;
+		return this.maxHeight != 1 ? Block.EnumOffsetType.NONE : Block.EnumOffsetType.XZ;
 	}
 
 	@Override
@@ -64,34 +61,30 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
-	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
-		//Up
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		super.onBlockHarvested(world, pos, state, player);
+
 		int height;
-		for (height = 1; this.isSamePlant(worldIn.getBlockState(pos.up(height))); ++height);
-		for (int offset = height; offset > 0; offset--) {
-			BlockPos offsetPos = pos.up(offset);
-			IBlockState blockState = worldIn.getBlockState(offsetPos);
-			boolean canHarvest = player.isCreative() ? false : blockState.getBlock().canHarvestBlock(worldIn, offsetPos, player);
-			boolean removed = this.removeBlock(worldIn, offsetPos, player, canHarvest);
-			if(removed && canHarvest) {
-				ItemStack stack = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().copy();
-				blockState.getBlock().harvestBlock(worldIn, player, offsetPos, blockState, worldIn.getTileEntity(offsetPos), stack);
-			}
-		}
-		if(this.harvestAll) {
-			//Down
-			BlockPos offsetPos;
-			for (int offset = 1; this.isSamePlant(worldIn.getBlockState(offsetPos = pos.down(offset))); offset++) {
-				IBlockState blockState = worldIn.getBlockState(offsetPos);
-				boolean canHarvest = player.isCreative() ? false : blockState.getBlock().canHarvestBlock(worldIn, offsetPos, player);
-				boolean removed = this.removeBlock(worldIn, offsetPos, player, canHarvest);
+		for (height = 1; this.isSamePlant(world.getBlockState(pos.up(height))); ++height);
+		for (int offset = height - 1; (this.harvestAll && this.isSamePlant(world.getBlockState(pos.up(offset)))) || (!this.harvestAll && offset >= 0); offset--) {
+			if(offset != 0) {
+				BlockPos offsetPos = pos.up(offset);
+				IBlockState blockState = world.getBlockState(offsetPos);
+				boolean canHarvest = player.isCreative() ? false : blockState.getBlock().canHarvestBlock(world, offsetPos, player);
+				boolean removed = this.removeBlock(world, offsetPos, player, canHarvest);
 				if(removed && canHarvest) {
 					ItemStack stack = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().copy();
-					blockState.getBlock().harvestBlock(worldIn, player, offsetPos, blockState, worldIn.getTileEntity(offsetPos), stack);
+					blockState.getBlock().harvestBlock(world, player, offsetPos, blockState, world.getTileEntity(offsetPos), stack);
 				}
+			} else {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
 			}
 		}
-		super.onBlockHarvested(worldIn, pos, state, player);
+	}
+
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		return super.removedByPlayer(state, world, pos, player, willHarvest);
 	}
 
 	protected boolean removeBlock(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
@@ -132,30 +125,60 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 
 	@Override
 	protected boolean canSustainBush(IBlockState state) {
-		return (this.maxHeight > 1 && this.isSamePlant(state)) || SoilHelper.canSustainPlant(state);
+		return ((this.maxHeight == -1 || this.maxHeight > 1) && this.isSamePlant(state)) || SoilHelper.canSustainPlant(state);
 	}
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		this.checkAndDropBlock(worldIn, pos, state);
 
-		int height;
-		for (height = 1; worldIn.getBlockState(pos.down(height)).getBlock() == this; ++height);
+		if(this.canGrow(worldIn, pos, state)) {
+			if(ForgeHooks.onCropsGrowPre(worldIn, pos, state, rand.nextFloat() <= this.getGrowthChance(worldIn, pos, state, rand))) {
+				int currentAge = ((Integer)state.getValue(AGE)).intValue();
 
-		if (this.canGrowUp(worldIn, pos, state, height)) {
-			int currentAge = ((Integer)state.getValue(AGE)).intValue();
+				if (currentAge >= 15) {
+					int height;
+					for (height = 1; this.isSamePlant(worldIn.getBlockState(pos.down(height))); ++height);
 
-			if (currentAge == 15) {
-				this.growUp(worldIn, pos);
-				worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(0)), 4);
-			} else {
-				worldIn.setBlockState(pos, state.withProperty(AGE, Integer.valueOf(currentAge + 1)), 4);
+					if (this.canGrowUp(worldIn, pos, state, height)) {
+						this.growUp(worldIn, pos);
+					}
+
+					worldIn.setBlockState(pos, state.withProperty(AGE, this.resetAge ? 0 : 15));
+				} else {
+					worldIn.setBlockState(pos, state.withProperty(AGE, currentAge + 1));
+				}
+
+				ForgeHooks.onCropsGrowPost(worldIn, pos, state, worldIn.getBlockState(pos));
 			}
 		}
 	}
 
 	/**
-	 * Returns whether the plant can grow higher
+	 * Returns the growth chance
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @param rand
+	 * @return
+	 */
+	protected float getGrowthChance(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 0.5F;
+	}
+
+	/**
+	 * Returns whether the plant can grow
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @return
+	 */
+	protected boolean canGrow(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+
+	/**
+	 * Returns whether the plant can grow a block higher
 	 * @param world
 	 * @param pos
 	 * @param state
@@ -178,7 +201,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		int height;
-		for (height = 1; worldIn.getBlockState(pos.down(height)).getBlock() == this; ++height);
+		for (height = 1; this.isSamePlant(worldIn.getBlockState(pos.down(height))); ++height);
 		return super.canPlaceBlockAt(worldIn, pos) && (this.maxHeight == -1 || height - 1 < this.maxHeight);
 	}
 
@@ -195,7 +218,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	@Override
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(AGE);
-		if(this.maxHeight <= 1) {
+		if(this.maxHeight == 1) {
 			builder.ignore(IS_TOP, IS_BOTTOM);
 		}
 	}

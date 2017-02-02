@@ -7,7 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.item.misc.ItemPlantableFood;
+import thebetweenlands.common.item.farming.ItemPlantableFood;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class ItemBulbCappedMushroom extends ItemPlantableFood {

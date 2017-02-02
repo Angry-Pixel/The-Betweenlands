@@ -54,7 +54,6 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		LURKER_SKIN(4),
 		DRIED_SWAMP_REED(6),
 		SWAMP_REED_ROPE(7),
-		PLANT_TONIC(9),
 		MUD_BRICK(10),
 		SYRMORITE_INGOT(11),
 		ROTTEN_BARK(13),

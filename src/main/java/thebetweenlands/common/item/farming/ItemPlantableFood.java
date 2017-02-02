@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.misc;
+package thebetweenlands.common.item.farming;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -18,6 +18,7 @@ public abstract class ItemPlantableFood extends ItemBLFood {
 		super(healAmount, saturation, false);
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		Block block = worldIn.getBlockState(pos).getBlock();

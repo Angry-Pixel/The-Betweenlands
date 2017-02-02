@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.misc;
+package thebetweenlands.common.item.farming;
 
 import javax.annotation.Nullable;
 

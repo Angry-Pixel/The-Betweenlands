@@ -570,6 +570,10 @@ item.thebetweenlands.scroll.name=Scroll
 item.thebetweenlands.explorersHat.name=Explorer's Hat
 item.thebetweenlands.rottenFood.name=Rotten Food (%s)
 item.thebetweenlands.taintedPotion.name=Tainted Potion (%s)
+item.thebetweenlands.middleFruitBushSeeds.name=Purple Pear Seeds
+item.thebetweenlands.spores.name=Spores
+item.thebetweenlands.syrmoriteBucketPlantTonic.name=Plant Tonic
+item.thebetweenlands.weedwoodBucketPlantTonic.name=Plant Tonic
 
 
 # Fluids

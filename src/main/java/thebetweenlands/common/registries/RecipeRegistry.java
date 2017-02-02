@@ -22,6 +22,7 @@ import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
@@ -36,6 +37,7 @@ import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
 import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
+import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 
@@ -161,7 +163,6 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LADDER, 3), "X X", "xxx", "X X", 'x', EnumItemMisc.WEEDWOOD_STICK.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_BUTTON), new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BUTTON), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-		//GameRegistry.addShapelessRecipe(EnumItemMisc.PLANT_TONIC.create(1), new ItemStack(ItemRegistry.WEEDWOOD), new ItemStack(ItemRegistry.sapBall)); TODO: Water bucket recipe
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_PRESSURE_PLATE), "xx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_PRESSURE_PLATE), "xx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_PRESSURE_PLATE), "xx", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1));
@@ -360,6 +361,9 @@ public class RecipeRegistry {
 
 		RecipeSorter.register("thebetweenlands:recipesLifeCrystal", RecipesLifeCrystal.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesLifeCrystal());
+
+		RecipeSorter.register("thebetweenlands:recipesPlantTonic", RecipesPlantTonic.class, SHAPELESS, "after:minecraft:shapeless");
+		GameRegistry.addRecipe(new RecipesPlantTonic());
 	}
 
 	private static void registerSmelting() {
@@ -575,8 +579,7 @@ public class RecipeRegistry {
 				return false;
 			}
 		});
-		//TODO add spores
-		//AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity("thebetweenlands.sporeling"));
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity("thebetweenlands.sporeling"));
 	}
 
 	private static void registerPurifierRecipes() {

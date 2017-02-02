@@ -9,12 +9,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockMarshMarigoldFlower extends BlockStackablePlant {
 	public BlockMarshMarigoldFlower() {
-		super(true);
+		this.harvestAll = true;
 		this.setMaxHeight(1);
 	}
 
@@ -43,7 +44,7 @@ public class BlockMarshMarigoldFlower extends BlockStackablePlant {
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
-		return worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
+		return worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && SoilHelper.canSustainUnderwaterPlant(soil);
 	}
 	
 	@Override

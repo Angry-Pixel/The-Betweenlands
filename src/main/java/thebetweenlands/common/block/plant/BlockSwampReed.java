@@ -23,7 +23,6 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class BlockSwampReed extends BlockStackablePlant {
 	public BlockSwampReed() {
-		super(false);
 		this.setMaxHeight(4);
 	}
 
@@ -52,7 +51,7 @@ public class BlockSwampReed extends BlockStackablePlant {
 	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
 		return false;
 	}
-	
+
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of();
@@ -93,7 +92,7 @@ public class BlockSwampReed extends BlockStackablePlant {
 		}
 		return false;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {

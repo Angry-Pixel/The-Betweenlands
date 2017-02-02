@@ -11,6 +11,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import thebetweenlands.common.block.ITintedBlock;
+import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
@@ -54,6 +55,8 @@ public class BlockDugGrass extends BlockGenericDugSoil implements ITintedBlock {
 					}
 				}
 			}
+
+			BlockSwampGrass.updateGrass(world, pos, rand);
 		}
 	}
 }

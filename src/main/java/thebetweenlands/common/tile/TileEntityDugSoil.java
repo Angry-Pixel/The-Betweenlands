@@ -7,6 +7,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 
 public class TileEntityDugSoil extends TileEntity {
@@ -54,6 +55,9 @@ public class TileEntityDugSoil extends TileEntity {
 	}
 
 	public void setCompost(int compost) {
+		if(compost < 0) {
+			compost = 0;
+		}
 		boolean wasComposted = this.isComposted();
 		this.compost = compost;
 		if(wasComposted != this.isComposted()) {
@@ -63,6 +67,9 @@ public class TileEntityDugSoil extends TileEntity {
 			} else {
 				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false));
 			}
+		} else {
+			IBlockState state = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
 		}
 	}
 
@@ -75,6 +82,9 @@ public class TileEntityDugSoil extends TileEntity {
 	}
 
 	public void setDecay(int decay) {
+		if(decay < 0) {
+			decay = 0;
+		}
 		boolean wasDecayed = this.isFullyDecayed();
 		this.decay = decay;
 		if(wasDecayed != this.isFullyDecayed()) {
@@ -86,23 +96,26 @@ public class TileEntityDugSoil extends TileEntity {
 			}
 			this.worldObj.setBlockState(this.pos, blockState);
 
-			/*IBlockState blockUp = this.worldObj.getBlockState(this.pos.up());
+			IBlockState blockUp = this.worldObj.getBlockState(this.pos.up());
 			if(blockUp.getBlock() instanceof BlockGenericCrop) {
 				BlockPos pos = this.pos.up();
 				for(int i = 0; i < ((BlockGenericCrop)blockUp.getBlock()).getMaxHeight(); i++) {
 					IBlockState cropBlockState = this.worldObj.getBlockState(pos);
 					if(cropBlockState.getBlock() instanceof BlockGenericCrop) {
-						if(wasDecayed) {
-							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false));
-						} else {
+						if(this.isFullyDecayed()) {
 							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, true));
+						} else {
+							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false));
 						}
 					} else {
 						break;
 					}
 					pos = pos.up();
 				}
-			}*/
+			}
+		} else {
+			IBlockState state = this.worldObj.getBlockState(this.pos);
+			this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
 		}
 	}
 

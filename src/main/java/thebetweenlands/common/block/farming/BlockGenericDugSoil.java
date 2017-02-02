@@ -3,6 +3,8 @@ package thebetweenlands.common.block.farming;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import com.google.common.base.Predicate;
 import com.google.common.collect.ImmutableList;
 
@@ -16,12 +18,16 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -31,12 +37,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockMeta;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
-import thebetweenlands.util.BlockStatePropertiesMatcher;
 
 public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeBlock, IStateMappedBlock, ICustomItemBlock {
 	//-1, +1, -1, quadrant 0
@@ -94,7 +100,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		boolean[] connectionArray = getConnectionArray(worldIn, pos, EnumFacing.UP, BlockStatePropertiesMatcher.forBlockState(state, COMPOSTED, DECAYED));
+		boolean[] connectionArray = getConnectionArray(worldIn, pos, EnumFacing.UP, s -> s.getBlock() instanceof BlockGenericDugSoil/*BlockStatePropertiesMatcher.forBlockState(state, COMPOSTED, DECAYED)*/);
 		int[] quadrantIndices = getQuadrantIndices(connectionArray);
 		state = state.withProperty(TOP_NORTH_WEST_INDEX, quadrantIndices[0]);
 		state = state.withProperty(TOP_NORTH_EAST_INDEX, quadrantIndices[1]);
@@ -341,7 +347,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 			TileEntityDugSoil te = getTile(world, pos);
 
 			if(te != null) {
-				if(!this.purified && !te.isFullyDecayed() && rand.nextInt(10) == 0) {
+				if(!this.purified && !te.isFullyDecayed() && rand.nextInt(4) == 0) {
 					te.setDecay(te.getDecay() + 1);
 				}
 
@@ -378,10 +384,33 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 	}
 
 	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntityDugSoil te = getTile(world, pos);
+		if(te != null && te.getCompost() == 0 && heldItem != null && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
+			if(!world.isRemote) {
+				world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
+				te.setCompost(3);
+				if(!player.isCreative()) {
+					heldItem.stackSize--;
+				}
+			}
+			return true;
+		}
+		return false;
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if(stateIn.getValue(DECAYED)) {
-			BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + 0.5F);
+			BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
+		} else {
+			TileEntityDugSoil te = getTile(worldIn, pos);
+			if(te.getDecay() >= 14) {
+				if(rand.nextInt(Math.max(80 - (te.getDecay() - 14) * 12, 2)) == 0) {
+					BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
+				}
+			}
 		}
 	}
 }

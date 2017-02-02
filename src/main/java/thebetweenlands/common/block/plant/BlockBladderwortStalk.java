@@ -8,7 +8,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockBladderwortStalk extends BlockStackablePlantUnderwater {
 	@Override
-	protected boolean canGrow(World world, BlockPos pos, IBlockState state, int height) {
+	protected boolean canGrowUp(World world, BlockPos pos, IBlockState state, int height) {
 		return world.getBlockState(pos.up()) != this && 
 				(world.getBlockState(pos.up()).getMaterial() == Material.WATER || (world.getBlockState(pos).getMaterial() == Material.WATER && world.isAirBlock(pos.up()))) 
 				&& (this.maxHeight == -1 || height < this.maxHeight);

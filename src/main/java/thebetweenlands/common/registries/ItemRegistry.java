@@ -47,6 +47,11 @@ import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.equipment.ItemRingOfPower;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
+import thebetweenlands.common.item.farming.ItemMiddleFruitBushSeeds;
+import thebetweenlands.common.item.farming.ItemPlantTonic;
+import thebetweenlands.common.item.farming.ItemSpores;
+import thebetweenlands.common.item.farming.ItemSwampKelp;
+import thebetweenlands.common.item.farming.ItemSwampReed;
 import thebetweenlands.common.item.food.ItemBLFood;
 import thebetweenlands.common.item.food.ItemBlackHatMushroom;
 import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
@@ -86,8 +91,6 @@ import thebetweenlands.common.item.misc.ItemOctineIngot;
 import thebetweenlands.common.item.misc.ItemPyradFlame;
 import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
-import thebetweenlands.common.item.misc.ItemSwampKelp;
-import thebetweenlands.common.item.misc.ItemSwampReed;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
 import thebetweenlands.common.item.misc.ItemWeedwoodSign;
@@ -136,8 +139,8 @@ public class ItemRegistry {
 	//food
 	public static final Item SAP_BALL = new ItemSapBall();
 	public static final ItemRottenFood ROTTEN_FOOD = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();
-	//public static final Item middleFruitSeeds = new ItemBLGenericSeed(0, 0F, BLBlockRegistry.middleFruitBush, BLBlockRegistry.farmedDirt).setUnlocalizedName(ModInfo.NAME_PREFIX + ".middleFruitSeeds");
-	//public static final Item spores = new ItemBLGenericSeed(0, 0F, BLBlockRegistry.fungusCrop, BLBlockRegistry.farmedDirt).setUnlocalizedName(ModInfo.NAME_PREFIX + ".spores");
+	public static final Item MIDDLE_FRUIT_BUSH_SEEDS = new ItemMiddleFruitBushSeeds();
+	public static final Item SPORES = new ItemSpores();
 	//public static final Item aspectrusCropSeed = new ItemAspectrusCropSeed(0, 0F).setUnlocalizedName(ModInfo.NAME_PREFIX + ".aspectrusSeeds");
 	public static final Item ANGLER_MEAT_RAW = new ItemBLFood(4, 0.4F, false);
 	public static final Item ANGLER_MEAT_COOKED = new ItemBLFood(8, 0.8F, false);
@@ -289,6 +292,9 @@ public class ItemRegistry {
 	public static final Item SYRMORITE_BUCKET_RUBBER = new ItemSpecificBucket(SYRMORITE_BUCKET, FluidRegistry.RUBBER);
 	public static final Item SYRMORITE_BUCKET_SOLID_RUBBER = new ItemSyrmoriteBucketSolidRubber();
 
+	public static final Item SYRMORITE_BUCKET_PLANT_TONIC = new ItemPlantTonic(new ItemStack(SYRMORITE_BUCKET));
+	public static final Item WEEDWOOD_BUCKET_PLANT_TONIC = new ItemPlantTonic(new ItemStack(WEEDWOOD_BUCKET));
+	
 	//RECORDS
 	public static final Item ASTATOS = new ItemBLRecord(SoundRegistry.ASTATOS);
 	public static final Item BETWEEN_YOU_AND_ME = new ItemBLRecord(SoundRegistry.BETWEEN_YOU_AND_ME);
