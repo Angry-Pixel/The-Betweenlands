@@ -23,7 +23,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityRubberTap;
@@ -48,7 +47,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 		this.setSoundType(material.getBlock().getSoundType());
 		this.setHardness(2.0F);
 		this.ticksPerStep = ticksPerStep;
-		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setCreativeTab(null);
 	}
 
 	@Override

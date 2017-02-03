@@ -2,12 +2,14 @@ package thebetweenlands.common.item.farming;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -23,6 +25,7 @@ public class ItemPlantTonic extends Item {
 		this.empty = empty;
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 		this.setMaxStackSize(1);
+		this.setMaxDamage(3);
 	}
 
 	@Override
@@ -55,8 +58,13 @@ public class ItemPlantTonic extends Item {
 			}
 
 			if(!world.isRemote && !player.isCreative()) {
-				player.setHeldItem(hand, this.empty != null ? this.empty.copy() : null);
+				stack.setItemDamage(stack.getItemDamage() + 1);
+				if(stack.getItemDamage() >= stack.getMaxDamage()) {
+					player.setHeldItem(hand, this.empty != null ? this.empty.copy() : null);
+				}
 			}
+
+			world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1, 1);
 
 			return EnumActionResult.SUCCESS;
 		}

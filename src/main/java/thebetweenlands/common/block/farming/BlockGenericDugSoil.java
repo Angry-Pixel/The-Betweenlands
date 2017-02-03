@@ -348,7 +348,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 			TileEntityDugSoil te = getTile(world, pos);
 
 			if(te != null) {
-				if(!this.purified && !te.isFullyDecayed() && rand.nextInt(4) == 0) {
+				if(!this.purified && te.isComposted() && !te.isFullyDecayed() && rand.nextInt(4) == 0) {
 					te.setDecay(te.getDecay() + 1);
 				}
 
