@@ -15,9 +15,13 @@ import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -157,5 +161,15 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 			return;
 		}
 		super.addCollisionBoxToList(state, world, pos, aabb, aabblist, entity);
+	}
+	
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+		if(!worldIn.isRemote && stack != null && stack.getItem() instanceof ItemShears) {
+			player.addStat(StatList.getBlockStats(this));
+			player.addExhaustion(0.025F);
+		} else {
+			super.harvestBlock(worldIn, player, pos, state, te, stack);
+		}
 	}
 }

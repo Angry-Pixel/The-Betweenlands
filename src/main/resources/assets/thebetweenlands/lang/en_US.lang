@@ -574,6 +574,7 @@ item.thebetweenlands.middleFruitBushSeeds.name=Purple Pear Seeds
 item.thebetweenlands.spores.name=Spores
 item.thebetweenlands.syrmoriteBucketPlantTonic.name=Plant Tonic
 item.thebetweenlands.weedwoodBucketPlantTonic.name=Plant Tonic
+item.thebetweenlands.syrmoriteBucketSolidRubber.name=Syrmorite Bucket with Solid Rubber
 
 
 # Fluids
@@ -700,7 +701,8 @@ chat.foodSickness.sick.11=I think I'll need a rest before I eat more of that
 chat.foodSickness.sick.12=No thanks, I'll have something else for a change
 chat.foodSickness.sick.13=It smells even worse than it looks, I'll find something else to eat
 chat.foodSickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here
-
+chat.compost.full=The compost bin is full
+chat.compost.not.compostable=This item is not compostable
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

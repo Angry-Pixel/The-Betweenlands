@@ -333,6 +333,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 			}
 			if(state.getValue(DECAYED)) {
 				te.setDecay(20);
+				te.setCompost(30);
 			}
 		}
 	}

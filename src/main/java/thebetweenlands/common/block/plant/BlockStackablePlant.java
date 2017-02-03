@@ -84,7 +84,8 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		return super.removedByPlayer(state, world, pos, player, willHarvest);
+		super.removedByPlayer(state, world, pos, player, willHarvest);
+		return true;
 	}
 
 	protected boolean removeBlock(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
