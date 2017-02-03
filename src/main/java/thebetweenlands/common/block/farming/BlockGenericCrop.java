@@ -79,9 +79,9 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 				this.harvesters.set(null);
 			}
 
-			//Remove 1 compost after harvesting fully grown crop
+			//Remove 10 compost after harvesting fully grown crop
 			if(state.getValue(AGE) >= 15) {
-				this.consumeCompost(worldIn, pos);
+				this.consumeCompost(worldIn, pos, 10);
 			}
 		}
 
@@ -89,16 +89,17 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	}
 
 	/**
-	 * Tries to consume 1 compost if the block below is dug soil
+	 * Tries to consume compost if the block below is dug soil
 	 * @param world
 	 * @param pos
+	 * @param compost
 	 */
-	protected void consumeCompost(World world, BlockPos pos) {
+	protected void consumeCompost(World world, BlockPos pos, int compost) {
 		IBlockState stateDown = world.getBlockState(pos.down());
 		if(stateDown.getBlock() instanceof BlockGenericDugSoil) {
 			TileEntityDugSoil te = BlockGenericDugSoil.getTile(world, pos.down());
 			if(te != null && te.isComposted()) {
-				te.setCompost(te.getCompost() - 1);
+				te.setCompost(Math.max(te.getCompost() - compost, 0));
 			}
 		}
 	}
@@ -258,5 +259,11 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(DECAYED).withPropertySuffixTrue(DECAYED, "decayed");
+	}
+
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		//Crops shouldn't spread
+		return false;
 	}
 }

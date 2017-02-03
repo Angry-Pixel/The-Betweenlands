@@ -31,7 +31,7 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 				sporeling.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, rand.nextFloat() * 360.0F, 0.0F);
 				worldIn.spawnEntityInWorld(sporeling);
 				worldIn.setBlockToAir(pos);
-				this.consumeCompost(worldIn, pos);
+				this.consumeCompost(worldIn, pos, 5);
 			}
 		}
 	}

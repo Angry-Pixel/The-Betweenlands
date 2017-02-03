@@ -36,6 +36,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.IFarmablePlant;
 import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -328,7 +329,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 		if(tile instanceof TileEntityDugSoil) {
 			TileEntityDugSoil te = (TileEntityDugSoil) tile;
 			if(state.getValue(COMPOSTED)) {
-				te.setCompost(3);
+				te.setCompost(30);
 			}
 			if(state.getValue(DECAYED)) {
 				te.setDecay(20);
@@ -351,20 +352,60 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 					te.setDecay(te.getDecay() + 1);
 				}
 
-				if(te.isFullyDecayed() && rand.nextInt(20) == 0) {
-					for(int xo = -1; xo <= 1; xo++) {
-						for(int zo = -1; zo <= 1; zo++) {
-							if((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) {
-								continue;
+				if(te.isComposted()) {
+					IBlockState stateUp = world.getBlockState(pos.up());
+					if(stateUp.getBlock() instanceof IFarmablePlant) {
+						IFarmablePlant plant = (IFarmablePlant)stateUp.getBlock();
+						if(plant.isFarmable(world, pos.up(), stateUp)) {
+							BlockPos offsetPos = pos.up();
+							switch(rand.nextInt(4)) {
+							case 0: offsetPos = offsetPos.north(); break;
+							case 1: offsetPos = offsetPos.south(); break;
+							case 2: offsetPos = offsetPos.east(); break;
+							case 3: offsetPos = offsetPos.west(); break;
 							}
-							BlockPos offset = pos.add(xo, 0, zo);
-							IBlockState offsetState = world.getBlockState(offset);
-							if(offsetState.getBlock() instanceof BlockGenericDugSoil) {
-								BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
-								if(!dugDirt.purified) {
-									TileEntityDugSoil offsetTe = getTile(world, offset);
-									if(offsetTe != null && !offsetTe.isFullyDecayed()) {
-										offsetTe.setDecay(offsetTe.getDecay() + 1);
+							if(plant.canSpreadTo(world, pos.up(), stateUp, offsetPos, rand)) {
+								plant.spreadTo(world, pos.up(), stateUp, offsetPos, rand);
+								te.setCompost(Math.max(te.getCompost() - plant.getCompostCost(world, pos.up(), stateUp, rand), 0));
+							}
+						}
+					}
+				}
+
+				if(te.isFullyDecayed()) {
+					for(int i = 0; i < 1 + rand.nextInt(6); i++) {
+						BlockPos offsetPos = pos.up();
+						switch(rand.nextInt(5)) {
+						case 0: offsetPos = offsetPos.north(); break;
+						case 1: offsetPos = offsetPos.south(); break;
+						case 2: offsetPos = offsetPos.east(); break;
+						case 3: offsetPos = offsetPos.west(); break;
+						}
+						IBlockState stateOffset = world.getBlockState(offsetPos);
+						if(stateOffset.getBlock() instanceof IFarmablePlant) {
+							IFarmablePlant plant = (IFarmablePlant)stateOffset.getBlock();
+							if(plant.isFarmable(world, offsetPos, stateOffset)) {
+								plant.decayPlant(world, offsetPos, stateOffset, rand);
+							}
+						}
+					}
+
+					if(rand.nextInt(20) == 0) {
+						//Spread decay
+						for(int xo = -1; xo <= 1; xo++) {
+							for(int zo = -1; zo <= 1; zo++) {
+								if((xo == 0 && zo == 0) || (zo != 0 && xo != 0) || rand.nextInt(3) != 0) {
+									continue;
+								}
+								BlockPos offset = pos.add(xo, 0, zo);
+								IBlockState offsetState = world.getBlockState(offset);
+								if(offsetState.getBlock() instanceof BlockGenericDugSoil) {
+									BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
+									if(!dugDirt.purified) {
+										TileEntityDugSoil offsetTe = getTile(world, offset);
+										if(offsetTe != null && !offsetTe.isFullyDecayed()) {
+											offsetTe.setDecay(offsetTe.getDecay() + 1);
+										}
 									}
 								}
 							}
@@ -389,7 +430,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 		if(te != null && te.getCompost() == 0 && heldItem != null && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
 			if(!world.isRemote) {
 				world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
-				te.setCompost(3);
+				te.setCompost(30);
 				if(!player.isCreative()) {
 					heldItem.stackSize--;
 				}
@@ -404,11 +445,39 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
 		if(stateIn.getValue(DECAYED)) {
 			BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
+
+			for(int i = 0; i < 5; i++) {
+				BlockPos offsetPos = pos.up();
+				switch(i) {
+				case 0: offsetPos = offsetPos.north(); break;
+				case 1: offsetPos = offsetPos.south(); break;
+				case 2: offsetPos = offsetPos.east(); break;
+				case 3: offsetPos = offsetPos.west(); break;
+				}
+				IBlockState stateOffset = worldIn.getBlockState(offsetPos);
+				if(stateOffset.getBlock() instanceof IFarmablePlant && ((IFarmablePlant)stateOffset.getBlock()).isFarmable(worldIn, offsetPos, stateOffset)) {
+					BLParticles.DIRT_DECAY.spawn(worldIn, offsetPos.getX() + rand.nextFloat(), offsetPos.getY(), offsetPos.getZ() + rand.nextFloat());
+				}
+			}
 		} else {
 			TileEntityDugSoil te = getTile(worldIn, pos);
 			if(te.getDecay() >= 14) {
 				if(rand.nextInt(Math.max(80 - (te.getDecay() - 14) * 12, 2)) == 0) {
 					BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
+
+					for(int i = 0; i < 5; i++) {
+						BlockPos offsetPos = pos.up();
+						switch(i) {
+						case 0: offsetPos = offsetPos.north(); break;
+						case 1: offsetPos = offsetPos.south(); break;
+						case 2: offsetPos = offsetPos.east(); break;
+						case 3: offsetPos = offsetPos.west(); break;
+						}
+						IBlockState stateOffset = worldIn.getBlockState(offsetPos);
+						if(stateOffset.getBlock() instanceof IFarmablePlant && ((IFarmablePlant)stateOffset.getBlock()).isFarmable(worldIn, offsetPos, stateOffset)) {
+							BLParticles.DIRT_DECAY.spawn(worldIn, offsetPos.getX() + rand.nextFloat(), offsetPos.getY(), offsetPos.getZ() + rand.nextFloat());
+						}
+					}
 				}
 			}
 		}

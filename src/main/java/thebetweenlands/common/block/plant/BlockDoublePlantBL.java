@@ -32,13 +32,14 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.IFarmablePlant;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable {
+public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable, IFarmablePlant {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1.0D, 0.9D);
 
 	public static final PropertyEnum<BlockDoublePlantBL.EnumBlockHalf> HALF = PropertyEnum.<BlockDoublePlantBL.EnumBlockHalf>create("half", BlockDoublePlantBL.EnumBlockHalf.class);
@@ -220,5 +221,32 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	@Override
 	protected boolean canSustainBush(IBlockState state) {
 		return super.canSustainBush(state) || SoilHelper.canSustainPlant(state);
+	}
+
+	@Override
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && world.isAirBlock(targetPos.up()) && this.canPlaceBlockAt(world, targetPos);
+	}
+
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		world.setBlockState(targetPos, this.getDefaultState().withProperty(BlockDoublePlantBL.HALF, BlockDoublePlantBL.EnumBlockHalf.LOWER));
+		world.setBlockState(targetPos.up(), this.getDefaultState().withProperty(BlockDoublePlantBL.HALF, BlockDoublePlantBL.EnumBlockHalf.UPPER));
+	}
+
+	@Override
+	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 8;
+	}
+
+	@Override
+	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
+		world.setBlockToAir(pos.up());
+		world.setBlockToAir(pos);
+	}
+
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return true;
 	}
 }

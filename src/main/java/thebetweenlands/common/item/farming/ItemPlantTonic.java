@@ -11,6 +11,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.IFarmablePlant;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
@@ -28,8 +29,8 @@ public class ItemPlantTonic extends Item {
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState state = world.getBlockState(pos);
 
-		if(state.getBlock() instanceof BlockGenericCrop) {
-			while(world.getBlockState(pos).getBlock() instanceof BlockGenericCrop) {
+		if(state.getBlock() instanceof BlockGenericCrop || state.getBlock() instanceof IFarmablePlant) {
+			while(world.getBlockState(pos).getBlock() instanceof BlockGenericCrop || world.getBlockState(pos).getBlock() instanceof IFarmablePlant) {
 				pos = pos.down();
 			}
 		}

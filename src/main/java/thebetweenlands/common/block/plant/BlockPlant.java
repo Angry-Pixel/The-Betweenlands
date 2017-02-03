@@ -23,11 +23,12 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.IFarmablePlant;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable {
+public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable, IFarmablePlant {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
 
 	protected ItemStack sickleHarvestableDrop;
@@ -113,5 +114,30 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 	@Override
 	public List<ItemStack> getHarvestableDrops(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return this.sickleHarvestableDrop != null ? ImmutableList.of(this.sickleHarvestableDrop.copy()) : ImmutableList.of();
+	}
+
+	@Override
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		return rand.nextFloat() <= 0.25F && world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+	}
+
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		world.setBlockState(targetPos, this.getDefaultState());
+	}
+
+	@Override
+	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
+		world.setBlockToAir(pos);
+	}
+
+	@Override
+	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 4;
+	}
+
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return true;
 	}
 }
