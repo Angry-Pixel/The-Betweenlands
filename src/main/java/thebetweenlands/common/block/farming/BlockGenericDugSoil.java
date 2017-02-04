@@ -474,8 +474,8 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 			}
 		} else {
 			TileEntityDugSoil te = getTile(worldIn, pos);
-			if(te.getDecay() >= 14) {
-				if(rand.nextInt(Math.max(80 - (te.getDecay() - 14) * 12, 2)) == 0) {
+			if(te.getDecay() >= 11) {
+				if(rand.nextInt(Math.max(120 - (te.getDecay() - 11) * 14, 2)) == 0) {
 					BLParticles.DIRT_DECAY.spawn(worldIn, pos.getX() + rand.nextFloat(), pos.getY() + 1.0F, pos.getZ() + rand.nextFloat());
 
 					for(int i = 0; i < 5; i++) {

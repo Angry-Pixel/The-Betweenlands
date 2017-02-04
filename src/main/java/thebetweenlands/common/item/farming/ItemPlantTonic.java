@@ -40,13 +40,16 @@ public class ItemPlantTonic extends Item {
 
 		state = world.getBlockState(pos);
 
-		if(state.getBlock() instanceof BlockGenericDugSoil && BlockGenericDugSoil.getTile(world, pos) != null && BlockGenericDugSoil.getTile(world, pos).getDecay() > 0){
-			for(int xo = -1; xo <= 1; xo++) {
-				for(int yo = -1; yo <= 1; yo++) {
-					for(int zo = -1; zo <= 1; zo++) {
+		if(state.getBlock() instanceof BlockGenericDugSoil && BlockGenericDugSoil.getTile(world, pos) != null) {
+			boolean cured = false;
+
+			for(int xo = -2; xo <= 2; xo++) {
+				for(int yo = -2; yo <= 2; yo++) {
+					for(int zo = -2; zo <= 2; zo++) {
 						BlockPos offsetPos = pos.add(xo, yo, zo);
 						TileEntityDugSoil te = BlockGenericDugSoil.getTile(world, offsetPos);
-						if(te != null) {
+						if(te != null && te.getDecay() > 0) {
+							cured = true;
 							if(!world.isRemote) {
 								te.setDecay(0);
 							} else {
@@ -57,16 +60,18 @@ public class ItemPlantTonic extends Item {
 				}
 			}
 
-			if(!world.isRemote && !player.isCreative()) {
-				stack.setItemDamage(stack.getItemDamage() + 1);
-				if(stack.getItemDamage() >= stack.getMaxDamage()) {
-					player.setHeldItem(hand, this.empty != null ? this.empty.copy() : null);
+			if(cured) {
+				if(!world.isRemote && !player.isCreative()) {
+					stack.setItemDamage(stack.getItemDamage() + 1);
+					if(stack.getItemDamage() >= stack.getMaxDamage()) {
+						player.setHeldItem(hand, this.empty != null ? this.empty.copy() : null);
+					}
 				}
+
+				world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1, 1);
+
+				return EnumActionResult.SUCCESS;
 			}
-
-			world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, SoundEvents.ITEM_BUCKET_EMPTY, SoundCategory.PLAYERS, 1, 1);
-
-			return EnumActionResult.SUCCESS;
 		}
 
 		return EnumActionResult.PASS;
