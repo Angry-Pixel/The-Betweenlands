@@ -63,9 +63,9 @@ public class TileEntityDugSoil extends TileEntity {
 		if(wasComposted != this.isComposted()) {
 			IBlockState blockState = this.worldObj.getBlockState(this.pos);
 			if(!this.isFullyDecayed()) {
-				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted()));
+				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted()), 3);
 			} else {
-				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false));
+				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false), 3);
 			}
 		} else {
 			IBlockState state = this.worldObj.getBlockState(this.pos);
@@ -94,7 +94,7 @@ public class TileEntityDugSoil extends TileEntity {
 			} else {
 				blockState = blockState.withProperty(BlockGenericDugSoil.DECAYED, false).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted());
 			}
-			this.worldObj.setBlockState(this.pos, blockState);
+			this.worldObj.setBlockState(this.pos, blockState, 3);
 
 			IBlockState blockUp = this.worldObj.getBlockState(this.pos.up());
 			if(blockUp.getBlock() instanceof BlockGenericCrop) {
@@ -103,9 +103,9 @@ public class TileEntityDugSoil extends TileEntity {
 					IBlockState cropBlockState = this.worldObj.getBlockState(pos);
 					if(cropBlockState.getBlock() instanceof BlockGenericCrop) {
 						if(this.isFullyDecayed()) {
-							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, true));
+							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, true), 3);
 						} else {
-							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false));
+							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false), 3);
 						}
 					} else {
 						break;

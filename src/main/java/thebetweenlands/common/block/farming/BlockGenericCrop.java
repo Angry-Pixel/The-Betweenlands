@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.farming;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -29,7 +30,8 @@ import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	public static final PropertyBool DECAYED = PropertyBool.create("decayed");
-	public static final PropertyInteger STAGE = PropertyInteger.create("stage", 0, 3);
+
+	private PropertyInteger stageProperty;
 
 	public BlockGenericCrop() {
 		this.harvestAll = true;
@@ -38,11 +40,50 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		this.setDefaultState(this.getDefaultState().withProperty(DECAYED, false));
 	}
 
+	/**
+	 * Creates the growth stage property. Can be used to change the number of stages (max 15)
+	 * @return
+	 */
+	protected PropertyInteger createStageProperty() {
+		return PropertyInteger.create("stage", 0, 3);
+	}
+
+	/**
+	 * Returns the growth stage property
+	 * @return
+	 */
+	public PropertyInteger getStageProperty() {
+		return this.stageProperty;
+	}
+
+	/**
+	 * Returns whether the soil is decayed
+	 * @param world
+	 * @param pos
+	 * @return
+	 */
 	public boolean isDecayed(IBlockAccess world, BlockPos pos) {
 		for(int i = 0; i < this.maxHeight + 1; i++) {
 			IBlockState blockState = world.getBlockState(pos);
 			if(blockState.getBlock() instanceof BlockGenericDugSoil) {
 				return blockState.getValue(BlockGenericDugSoil.DECAYED);
+			}
+			pos = pos.down();
+		}
+		return false;
+	}
+
+	/**
+	 * Returns twhether the soil is composted
+	 * @param world
+	 * @param pos
+	 * @return
+	 */
+	public boolean isComposted(IBlockAccess world, BlockPos pos) {
+		for(int i = 0; i < this.maxHeight + 1; i++) {
+			IBlockState blockState = world.getBlockState(pos);
+			if(blockState.getBlock() instanceof BlockGenericDugSoil) {
+				return blockState.getValue(BlockGenericDugSoil.COMPOSTED);
 			}
 			pos = pos.down();
 		}
@@ -148,7 +189,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 */
 	public int getSeedDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
-		return 1 + (state.getValue(AGE) >= 15 ? (rand.nextInt(3) == 0 ? 1 : 0) + fortune : 0);
+		return 1 + (state.getValue(AGE) >= 15 ? (rand.nextInt(Math.max(3 - fortune, 1)) == 0 ? 1 : 0) : 0);
 	}
 
 	/**
@@ -162,7 +203,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	public int getCropDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
 		IBlockState state = world.getBlockState(pos);
 		if(state.getValue(AGE) >= 15) {
-			return 2 + rand.nextInt(3) + fortune;
+			return 2 + rand.nextInt(3 + fortune);
 		}
 		return 0;
 	}
@@ -192,12 +233,13 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		state = super.getActualState(state, worldIn, pos);
-		return state.withProperty(DECAYED, this.isDecayed(worldIn, pos)).withProperty(STAGE, MathHelper.floor_float(state.getValue(AGE) / 15.0f * 3.0f));
+		return state.withProperty(DECAYED, this.isDecayed(worldIn, pos)).withProperty(this.stageProperty, MathHelper.floor_float(state.getValue(AGE) / 15.0f * Collections.max(this.stageProperty.getAllowedValues())));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return BlockStateContainerHelper.extendBlockstateContainer(super.createBlockState(), DECAYED, STAGE);
+		this.stageProperty = this.createStageProperty();
+		return BlockStateContainerHelper.extendBlockstateContainer(super.createBlockState(), DECAYED, this.stageProperty);
 	}
 
 	@Override
@@ -215,7 +257,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 
 	@Override
 	protected boolean canGrow(World world, BlockPos pos, IBlockState state) {
-		return !state.getValue(DECAYED);
+		return !state.getValue(DECAYED) && this.isComposted(world, pos);
 	}
 
 	@Override
@@ -225,7 +267,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 
 	@Override
 	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
-		if(this.isDecayed(worldIn, pos)) {
+		if(!this.canGrow(worldIn, pos, state)) {
 			return false;
 		}
 		if(state.getValue(AGE) < 15) {

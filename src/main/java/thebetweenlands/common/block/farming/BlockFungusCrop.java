@@ -37,6 +37,20 @@ public class BlockFungusCrop extends BlockGenericCrop implements ICustomItemBloc
 	}
 
 	@Override
+	protected float getGrowthChance(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 0.9F;
+	}
+
+	@Override
+	public int getCropDrops(IBlockAccess world, BlockPos pos, Random rand, int fortune) {
+		IBlockState state = world.getBlockState(pos);
+		if(state.getValue(AGE) >= 15) {
+			return 1 + (fortune > 0 ? rand.nextInt(1 + fortune) : 0);
+		}
+		return 0;
+	}
+
+	@Override
 	public ItemStack getSeedDrop(IBlockAccess world, BlockPos pos, Random rand) {
 		return new ItemStack(ItemRegistry.SPORES);	
 	}

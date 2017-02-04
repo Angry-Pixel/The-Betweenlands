@@ -40,6 +40,13 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVolarpad;
 import thebetweenlands.client.render.model.baked.modelbase.ModelWeepingBlue;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop1;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop2;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop3;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop4;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop5;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop6;
+import thebetweenlands.client.render.model.baked.modelbase.ModelWhitePearCrop6Decayed;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelBoneShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelDentrothystShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelLurkerSkinShield;
@@ -77,14 +84,21 @@ public class ModelRegistry {
 	public static final IModel WEEPING_BLUE = new ModelFromModelBase(new ModelWeepingBlue(), new ResourceLocation("thebetweenlands:blocks/weeping_blue"), 64, 64);
 	public static final IModel SWAMP_PLANT = new ModelFromModelBase(new ModelSwampPlant(), new ResourceLocation("thebetweenlands:blocks/swamp_plant"), 64, 64);
 	public static final IModel WEEDWOOD_BUSH = new ModelWeedwoodBush();
-	
+
 	//Crops
 	public static final IModel FUNGUS_CROP_1 = new ModelFromModelBase(new ModelFungusCrop1(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_1"), 32, 32);
 	public static final IModel FUNGUS_CROP_2 = new ModelFromModelBase(new ModelFungusCrop2(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_2"), 32, 32);
 	public static final IModel FUNGUS_CROP_3 = new ModelFromModelBase(new ModelFungusCrop3(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_3"), 64, 64);
 	public static final IModel FUNGUS_CROP_4 = new ModelFromModelBase(new ModelFungusCrop4(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_4"), 64, 64);
 	public static final IModel FUNGUS_CROP_4_DECAYED = new ModelFromModelBase(new ModelFungusCrop4Decayed(), new ResourceLocation("thebetweenlands:blocks/fungus_crop_4_decayed"), 64, 64);
-	
+	public static final IModel WHITE_PEAR_CROP_1 = new ModelFromModelBase(new ModelWhitePearCrop1(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_1"), 16, 16);
+	public static final IModel WHITE_PEAR_CROP_2 = new ModelFromModelBase(new ModelWhitePearCrop2(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_2"), 32, 32);
+	public static final IModel WHITE_PEAR_CROP_3 = new ModelFromModelBase(new ModelWhitePearCrop3(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_3"), 64, 64);
+	public static final IModel WHITE_PEAR_CROP_4 = new ModelFromModelBase(new ModelWhitePearCrop4(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_4"), 64, 64);
+	public static final IModel WHITE_PEAR_CROP_5 = new ModelFromModelBase(new ModelWhitePearCrop5(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_5"), 64, 64);
+	public static final IModel WHITE_PEAR_CROP_6 = new ModelFromModelBase(new ModelWhitePearCrop6(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_6"), 64, 64);
+	public static final IModel WHITE_PEAR_CROP_6_DECAYED = new ModelFromModelBase(new ModelWhitePearCrop6Decayed(), new ResourceLocation("thebetweenlands:blocks/white_pear_crop_6_decayed"), 64, 64);
+
 	//Items
 	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
 		@Override
