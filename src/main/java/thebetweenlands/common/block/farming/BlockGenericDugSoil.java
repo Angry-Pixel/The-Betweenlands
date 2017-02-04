@@ -349,7 +349,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 			TileEntityDugSoil te = getTile(world, pos);
 
 			if(te != null) {
-				if(!this.purified && te.isComposted() && !te.isFullyDecayed() && rand.nextInt(4) == 0) {
+				if(!this.purified && te.isComposted() && !te.isFullyDecayed() && rand.nextFloat() <= this.getDecayChance(world, pos, state, rand)) {
 					te.setDecay(te.getDecay() + 1);
 				}
 
@@ -404,7 +404,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 									BlockGenericDugSoil dugDirt = (BlockGenericDugSoil) offsetState.getBlock();
 									if(!dugDirt.purified) {
 										TileEntityDugSoil offsetTe = getTile(world, offset);
-										if(offsetTe != null && !offsetTe.isFullyDecayed()) {
+										if(offsetTe != null && !offsetTe.isFullyDecayed() && offsetTe.isComposted()) {
 											offsetTe.setDecay(offsetTe.getDecay() + 1);
 										}
 									}
@@ -415,6 +415,18 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns the decay chance
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @param rand
+	 * @return
+	 */
+	protected float getDecayChance(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 0.15F;
 	}
 
 	public static TileEntityDugSoil getTile(World world, BlockPos pos) {
