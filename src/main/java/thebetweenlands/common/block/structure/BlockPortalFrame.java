@@ -37,7 +37,7 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 		super(Material.WOOD);
 		setHardness(2.0F);
 		setSoundType(SoundType.WOOD);
-		setCreativeTab(BLCreativeTabs.PLANTS);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(this.blockState.getBaseState().withProperty(FRAME_POSITION, EnumPortalFrame.CORNER_TOP_LEFT));
 	}
 

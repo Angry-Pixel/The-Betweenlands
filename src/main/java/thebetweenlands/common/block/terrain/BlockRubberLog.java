@@ -120,7 +120,7 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 		this.setHardness(2.0F);
 		this.setSoundType(SoundType.WOOD);
 		this.setHarvestLevel("axe", 0);
-		this.setCreativeTab(BLCreativeTabs.PLANTS);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		setDefaultState(this.blockState.getBaseState().withProperty(NATURAL, false));
 	}
 
