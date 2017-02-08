@@ -35,6 +35,7 @@ import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.container.BlockGeckoCage;
 import thebetweenlands.common.block.container.BlockHopperBetweenlands;
 import thebetweenlands.common.block.container.BlockInfuser;
+import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockPurifier;
@@ -343,6 +344,7 @@ public class BlockRegistry {
 	public static final Block RUBBER_TREE_PLANK_STAIRS = new BlockStairsBetweenlands(RUBBER_TREE_PLANKS.getDefaultState());
 	public static final Block POSSESSED_BLOCK = new BlockPossessedBlock();
 	public static final Block ITEM_CAGE = new BlockItemCage();
+	public static final Block ITEM_SHELF = new BlockItemShelf();
 
 
 	public static final Block SMOOTH_PITSTONE_SLAB = new BlockSlabBetweenlands(SMOOTH_PITSTONE);

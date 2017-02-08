@@ -169,7 +169,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_FLOWER_POT), "x x", " x " , 'x', EnumItemMisc.MUD_BRICK.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LEVER), "X", "x", 'x', new ItemStack(BlockRegistry.LOG_WEEDWOOD), 'X', EnumItemMisc.WEEDWOOD_STICK.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.PESTLE), "X", "x", "x", 'x', new ItemStack(BlockRegistry.CRAGROCK), 'X', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.itemShelf, 3), "xxx", "   ", "xxx", 'x', BlockRegistry.weedwoodPlankSlab); TODO: Item shelf
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.ITEM_SHELF), "xxx", "   ", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANK_SLAB);
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));

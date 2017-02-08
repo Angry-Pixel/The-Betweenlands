@@ -12,6 +12,7 @@ import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.common.tile.TileEntityItemCage;
+import thebetweenlands.common.tile.TileEntityItemShelf;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
@@ -51,6 +52,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityAnimator.class, "animator");
 		registerTileEntity(TileEntityAlembic.class, "alembic");
 		registerTileEntity(TileEntityDugSoil.class, "dug_soil");
+		registerTileEntity(TileEntityItemShelf.class, "item_shelf");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {
