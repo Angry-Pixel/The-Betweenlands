@@ -8,7 +8,7 @@
 	"updateUrl": "",
 	"authorList": [ "Angry Pixel" ],
 	"credits": "Angry Pixel",
-	"logoFile": "",
+	"logoFile": "assets/thebetweenlands/logo.png",
 	"screenshots": [],
 	"dependencies": []
 }]

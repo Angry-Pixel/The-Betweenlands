@@ -57,6 +57,8 @@ processResources {
 //Builds the universal jar
 jar {
     classifier = 'universal'
+    exclude("**/pack.mcmeta");
+    exclude("**/pack.png");
     addManifestAttributes(manifest)
 }
 
@@ -91,11 +93,28 @@ task serverJar(type: Jar, dependsOn: classes) {
 	addManifestAttributes(manifest)
 }
 
+//Builds a zip file with all client side assets
+task assetsZip(type: Zip) {
+	dependsOn jar
+	classifier = 'assets'
+	destinationDir = file("$rootDir/build/libs")	
+	
+	from (sourceSets.main.output) {
+		
+		exclude("mcmod.info")
+		exclude("thebetweenlands/**")
+		exclude("**/assets/" + modid + "/blockstates/**")
+		exclude("**/assets/" + modid + "/loot_tables/**")
+		
+	}
+}
+
 build.finalizedBy serverJar
 
-/*artifacts {
-    archives sourcesJar, devJar
-}*/
+artifacts {
+    //archives sourcesJar, devJar
+    archives assetsZip
+}
 
 
 //Returns the current version by reading directly from the ModInfo.java file
