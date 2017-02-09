@@ -44,7 +44,7 @@ public class ItemCavingRope extends Item {
 				--stack.stackSize;
 			} else {
 				if(connectedRopeNode.getDistance(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ) > EntityRopeNode.ROPE_LENGTH) {
-					player.addChatMessage(new TextComponentTranslation("chat.rope.too_far"));
+					player.addChatMessage(new TextComponentTranslation("chat.rope.tooFar"));
 					
 					return EnumActionResult.FAIL;
 				} else {

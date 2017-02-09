@@ -704,6 +704,9 @@ chat.foodSickness.sick.13=It smells even worse than it looks, I'll find somethin
 chat.foodSickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
+chat.rope.alreadyConnected=Already connected to another climbing rope
+chat.rope.disconnected=You were disconnected from the climbing rope
+chat.rope.tooFar=You're too far away from the last anchor point
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

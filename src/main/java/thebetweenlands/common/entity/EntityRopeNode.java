@@ -301,7 +301,7 @@ public class EntityRopeNode extends Entity {
 						}
 					}
 					if(connectedRopeNode != null) {
-						player.addChatMessage(new TextComponentTranslation("chat.rope.already_connected"));
+						player.addChatMessage(new TextComponentTranslation("chat.rope.alreadyConnected"));
 						return false;
 					}
 
