@@ -1,4 +1,3 @@
-
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -12,27 +11,23 @@ buildscript {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle.forge'
 
 project.ext.buildnumber = ''
 if (System.getenv().BUILD_NUMBER) project.buildnumber = '-' + System.getenv().BUILD_NUMBER
 
-version = /*getVersionFromJava() + */project.buildnumber
-group = "net.angrypixel"
-archivesBaseName = "TheBetweenlands"
-sourceCompatibility = targetCompatibility = "1.8"
-
-/*
-// for people who want stable - not yet functional for MC 1.8.8 - we require the forgegradle 2.1 snapshot
-plugins {
-    id "net.minecraftforge.gradle.forge" version "2.0.2"
-}
-*/
+def modid = getModIdFromJava()
+version = getVersionFromJava() + project.buildnumber
+group = 'net.angrypixel'
+archivesBaseName = 'TheBetweenlands'
+sourceCompatibility = targetCompatibility = '1.8'
 
 minecraft {
     version = "1.10.2-12.18.2.2151"
     runDir = 'minecraft'
     replace '${version}', project.version
+    replace '${mcversion}', project.minecraft.version
     replace '/*!*/true/*!*/', 'false'
 	
     // the mappings can be changed at any time, and must be in the following format.
@@ -41,81 +36,75 @@ minecraft {
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20160518"
-    // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-dependencies {
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
+//Processes the resources of sourceSets.main
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
 
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
-}
-
-processResources
-{
-    // this will ensure that this task is redone when the versions change.
-    inputs.property "version", project.version
-    inputs.property "mcversion", project.minecraft.version
-
-    // replace stuff in mcmod.info, nothing else
-    from(sourceSets.main.resources.srcDirs) {
+    from (sourceSets.main.resources.srcDirs) {
         include 'mcmod.info'
-                
-        // replace version and mcversion
         expand 'version':project.version, 'mcversion':project.minecraft.version
     }
-        
-    // copy everything else, thats not the mcmod.info
-    from(sourceSets.main.resources.srcDirs) {
+
+    from (sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
 }
 
+//Builds the universal jar
 jar {
     classifier = 'universal'
-    manifest {
-        attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
-        attributes ('FMLCorePluginContainsFMLMod': 'true')
-    }
+    addManifestAttributes(manifest)
 }
 
-task sourcesJar(type: Jar, dependsOn: classes) {
+//Builds the source jar with all the source files of sourceSets.main
+task sourcesJar(type: Jar, dependsOn: classes) << {
     classifier = 'src'
     from sourceSets.main.allSource
 }
 
-task devJar(type: Jar) {
+//Builds the dev jar with all the output files of sourceSets.main
+task devJar(type: Jar) << {
     classifier = 'dev'
     from sourceSets.main.output
 }
 
-artifacts {
-    archives sourcesJar, devJar
+//Builds the server jar
+task serverJar(type: Jar, dependsOn: classes) {
+	dependsOn jar
+	classifier = 'server'
+	//sourceSets.main.output.classesDir does not work here because it contains the deobfuscated classes which we can't use
+	from (zipTree(jar.archivePath)) {
+	
+		//A list of files or folders to be excluded from the server build
+		exclude("**/assets/" + modid + "/lang/**")
+		exclude("**/assets/" + modid + "/models/**")
+		exclude("**/assets/" + modid + "/shaders/**")
+		exclude("**/assets/" + modid + "/sounds/**")
+		exclude("**/assets/" + modid + "/textures/**")
+		exclude("**/assets/" + modid + "/sounds.json")
+		
+	}
+	addManifestAttributes(manifest)
 }
 
-/*String getVersionFromJava() {
+build.finalizedBy serverJar
+
+/*artifacts {
+    archives sourcesJar, devJar
+}*/
+
+
+//Returns the current version by reading directly from the ModInfo.java file
+String getVersionFromJava() {
     String major = "0";
     String revision = "0";
     String patch = "0";
     String prefix = "public static final String VERSION = \"";
-    File file = file("java/thebetweenlands/lib/ModInfo.java")
+    File file = file("src/main/java/thebetweenlands/common/lib/ModInfo.java")
     file.eachLine { String s ->
         s = s.trim();
         if (s.startsWith(prefix)) {
@@ -129,4 +118,25 @@ artifacts {
     }
 
     return "$major.$revision.$patch";
-}*/
+}
+
+//Returns the mod ID by reading directly from the ModInfo.java file
+String getModIdFromJava() {
+    String id = "N/A";
+    String prefix = "public static final String ID = \"";
+    File file = file("src/main/java/thebetweenlands/common/lib/ModInfo.java")
+    file.eachLine { String s ->
+        s = s.trim();
+        if (s.startsWith(prefix)) {
+            id = s.substring(prefix.length(), s.length() - 2);
+        }
+    }
+
+    return "$id";
+}
+
+//Adds the manifest attributes to the specified Manifest
+def addManifestAttributes(Manifest m) {
+	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
+    m.attributes ('FMLCorePluginContainsFMLMod': 'true')
+}
