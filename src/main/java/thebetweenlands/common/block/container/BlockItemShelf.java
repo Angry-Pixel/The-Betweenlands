@@ -128,7 +128,6 @@ public class BlockItemShelf extends BlockContainer {
 				} else {
 					ItemStack result = wrapper.extractItem(slot, 1, true);
 					if(result != null && result.stackSize > 0) {
-						System.out.println(result);
 						if(!world.isRemote) {
 							result = wrapper.extractItem(slot, 1, false);
 							world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
