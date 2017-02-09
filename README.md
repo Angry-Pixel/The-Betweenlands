@@ -51,10 +51,10 @@
 > Use of this MOD to be installed, manually or automatically, is given to the USER without restriction.
 
 > 3. REDISTRIBUTION
-> This MOD may only be distributed where uploaded, mirrored, or otherwise linked to by the OWNER solely with the exception of CurseForge > modpacks. All other mirrors of this mod must have advance written permission from the OWNER under the joint agreement of the Angry Pixel modding group. ANY attempts to make money off of this MOD (selling, selling modified versions, adfly, sharecash, etc.) are STRICTLY FORBIDDEN, and the OWNER may claim damages or take other action to rectify the situation. In any cases, full credit to the Angry Pixel modding group must be given.
+> This MOD may only be distributed where uploaded, mirrored, or otherwise linked to by the OWNER solely with the exception of CurseForge modpacks. All other mirrors of this mod must have advance written permission from the OWNER under the joint agreement of the Angry Pixel modding group. ANY attempts to make money off of this MOD (selling, selling modified versions, adfly, sharecash, etc.) are STRICTLY FORBIDDEN, and the OWNER may claim damages or take other action to rectify the situation. In any cases, full credit to the Angry Pixel modding group must be given.
 
 > 4. DERIVATIVE WORKS/MODIFICATION
-> This mod is provided freely and may be decompiled and modified for private use, either with a decompiler or a bytecode editor. Public > distribution of modified versions of this MOD require advance written permission of the OWNER and may be subject to certain terms. Use > of small sections of code is allowed as long as the result is transformation. The code may also be viewed and learned from for educational purposes.
+> This mod is provided freely and may be decompiled and modified for private use, either with a decompiler or a bytecode editor. Public distribution of modified versions of this MOD require advance written permission of the OWNER and may be subject to certain terms. Use of small sections of code is allowed as long as the result is transformation. The code may also be viewed and learned from for educational purposes.
 
 </body>
 </html>
