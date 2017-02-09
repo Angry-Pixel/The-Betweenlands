@@ -56,9 +56,9 @@ public class DecayStats {
 		}
 
 		if(player.isInWater()) {
-			this.addDecayAcceleration(0.00076F);
+			this.addDecayAcceleration(0.001F);
 		} else {
-			this.addDecayAcceleration(0.00048F);
+			this.addDecayAcceleration(0.00075F);
 		}
 	}
 

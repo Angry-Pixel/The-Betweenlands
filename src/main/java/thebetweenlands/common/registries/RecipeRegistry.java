@@ -116,7 +116,8 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SICKLE, 1), " vv", "v s", "  r", 'v', EnumItemMisc.VALONITE_SHARD.create(1), 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', new ItemStack(BlockRegistry.HANGER));
-
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.NET, 1), "SRR", "SRR", "S  ", 'S', EnumItemMisc.WEEDWOOD_STICK.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_POUCH), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
@@ -173,7 +174,7 @@ public class RecipeRegistry {
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 4), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 8), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_HOPPER), "s s", "scs", " s ", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'c', new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SIGN_ITEM, 3), "SSS", "SSS", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
