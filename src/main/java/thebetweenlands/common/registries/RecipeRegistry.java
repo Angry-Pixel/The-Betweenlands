@@ -10,7 +10,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
@@ -107,6 +106,18 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
 
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHIELD), "XXX", "XXX", " X ", 'X', ItemRegistry.OCTINE_INGOT);
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', EnumItemMisc.LURKER_SKIN.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.SLIMY_BONE.create(1), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.LURKER_SKIN.create(1), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW, 1), " #X", "# X", " #X", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.ANGLER_TOOTH.create(1), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
@@ -551,17 +562,7 @@ public class RecipeRegistry {
 				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
 				List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
 				if(!loot.isEmpty()) {
-					ItemStack result = loot.get(0);
-
-					int minStackSize = MathHelper.ceiling_double_int(result.stackSize / 2.0D);
-					int maxStackSize = result.stackSize;
-					result = result.copy();
-					if (maxStackSize > minStackSize) {
-						result.stackSize = minStackSize + (maxStackSize - minStackSize);
-					} else {
-						result.stackSize = minStackSize;
-					}
-					return result;
+					return loot.get(world.rand.nextInt(loot.size()));
 				}
 				return null;
 			}

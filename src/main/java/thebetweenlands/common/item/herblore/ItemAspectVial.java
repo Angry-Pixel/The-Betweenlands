@@ -3,12 +3,13 @@ package thebetweenlands.common.item.herblore;
 import java.util.List;
 
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
-import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.herblore.aspect.type.IAspectType;
@@ -17,8 +18,6 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedRecipeHelper;
 
 public class ItemAspectVial extends Item {
-
-
     public ItemAspectVial() {
         this.setUnlocalizedName("item.thebetweenlands.aspectVial");
 
@@ -26,10 +25,15 @@ public class ItemAspectVial extends Item {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
 
-        setCreativeTab(BLCreativeTabs.HERBLORE);
+        setCreativeTab(null);
         this.setContainerItem(ItemRegistry.DENTROTHYST_VIAL);
     }
 
+    @Override
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		tooltip.add(TextFormatting.RED + "Not yet implemented!");
+	}
+    
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();

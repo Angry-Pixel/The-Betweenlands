@@ -141,7 +141,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 					}
 					if (entity != null) {
 						GlStateManager.translate(0.0D, -entity.height / 4.0D, 0.0D);
-						GlStateManager.rotate((float) viewRot + 180f, 0, 1, 0);
+						GlStateManager.rotate((float) viewRot, 0, 1, 0);
 						GlStateManager.scale(0.75D, 0.75D, 0.75D);
 						entity.setWorld(te.getWorld());
 						entity.setRotationYawHead(0F);

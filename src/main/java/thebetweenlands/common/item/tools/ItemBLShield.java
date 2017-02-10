@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +18,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,6 +30,7 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
+@SuppressWarnings("deprecation")
 public class ItemBLShield extends ItemShield {
 	private ToolMaterial material;
 
@@ -37,10 +41,22 @@ public class ItemBLShield extends ItemShield {
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 	}
 
+	@Override
+	public String getItemStackDisplayName(ItemStack stack) {
+		return ("" + I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
-    public CreativeTabs getCreativeTab() {
-        return BLCreativeTabs.GEARS; //Minecraft seems to override the creative tab for some reason...
-    }
+	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+		//no op
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public CreativeTabs getCreativeTab() {
+		return BLCreativeTabs.GEARS; //Minecraft seems to override the creative tab for some reason...
+	}
 
 	@Override
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {

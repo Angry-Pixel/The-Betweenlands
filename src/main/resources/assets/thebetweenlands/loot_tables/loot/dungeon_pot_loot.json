@@ -260,6 +260,23 @@
                     "functions": [],
                     "weight": 28,
                     "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:aspectrus_seeds",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 4
+                            }
+                        }
+                    ],
+                    "weight": 2,
+                    "quality": 0
                 }
             ],
             "rolls": {

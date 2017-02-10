@@ -72,7 +72,6 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		LIMESTONE_FLUX(27),
 		INANIMATE_TARMINION(29),
 		POISON_GLAND(30),
-		ASPECTRUS_FRUIT(31),
 		PARCHMENT(32),
 		SHOCKWAVE_SWORD_1(33),
 		SHOCKWAVE_SWORD_2(34),

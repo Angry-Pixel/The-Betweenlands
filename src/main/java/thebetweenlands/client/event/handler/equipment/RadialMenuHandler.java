@@ -150,7 +150,7 @@ public class RadialMenuHandler {
 									ItemStack res = EquipmentHelper.equipItem(player, player, stack, true);
 
 									if(res == null || res.stackSize != stack.stackSize) {
-										categories.add(new Categories.EquipCategory(I18n.format("equipment.menu.equip"), 0x6010AA10, 0xDD10AA10, stack, type, i));
+										categories.add(new Categories.EquipCategory(I18n.format("equipment.menu.equip", stack.getDisplayName()), 0x6010AA10, 0xDD10AA10, stack, type, i));
 									}
 								}
 							}
@@ -171,7 +171,7 @@ public class RadialMenuHandler {
 								continue;
 							}
 
-							categories.add(new Categories.UnequipCategory(I18n.format("equipment.menu.unequip"), 0x60AA1010, 0xDDAA1010, stack, type, i));
+							categories.add(new Categories.UnequipCategory(I18n.format("equipment.menu.unequip", stack.getDisplayName()), 0x60AA1010, 0xDDAA1010, stack, type, i));
 						}
 					}
 				}
@@ -185,7 +185,7 @@ public class RadialMenuHandler {
 			for(Category category : categories) {
 				if(currentCategory.getCategories().size() > categoryLimit) {
 					page++;
-					Category newPage = new Category(String.format(I18n.format("equipment.menu.page"), page), 0x80101010, 0xEE202020);
+					Category newPage = new Category(I18n.format("equipment.menu.page", page), 0x80101010, 0xEE202020);
 					currentCategory.addCategory(newPage);
 					currentCategory = newPage;
 					pages.add(newPage);
