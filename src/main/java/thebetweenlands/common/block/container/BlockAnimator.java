@@ -25,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -70,8 +71,8 @@ public class BlockAnimator extends BlockContainer {
 			if (animator.fuelConsumed < animator.requiredFuelCount) {
 				playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 			} else {
-				AnimatorRecipe recipe = AnimatorRecipe.getRecipe(animator.itemToAnimate);
-				if (recipe == null || recipe.onRetrieved(animator, world, pos.getX(), pos.getY(), pos.getZ())) {
+				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(animator.itemToAnimate);
+				if (recipe == null || recipe.onRetrieved(animator, world, pos, animator.itemToAnimate)) {
 					playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 				}
 				animator.fuelConsumed = 0;

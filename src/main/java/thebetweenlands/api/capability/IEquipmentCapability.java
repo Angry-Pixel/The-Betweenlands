@@ -1,4 +1,4 @@
-package thebetweenlands.common.capability.equipment;
+package thebetweenlands.api.capability;
 
 import javax.annotation.Nonnull;
 
@@ -7,7 +7,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ITickable;
-import thebetweenlands.common.item.equipment.IEquippable;
+import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.capability.equipment.EquipmentHelper;
 
 public interface IEquipmentCapability {
 	/**

@@ -3,7 +3,7 @@ package thebetweenlands.common.herblore.elixir.effects;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.common.capability.decay.IDecayCapability;
+import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ElixirDecay extends ElixirEffect {

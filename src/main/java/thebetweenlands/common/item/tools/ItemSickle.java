@@ -15,9 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.block.ISickleHarvestable;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 
 public class ItemSickle extends Item implements ICorrodible {
 	public ItemSickle() {

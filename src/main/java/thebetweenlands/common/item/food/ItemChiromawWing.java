@@ -9,9 +9,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.TranslationHelper;
 

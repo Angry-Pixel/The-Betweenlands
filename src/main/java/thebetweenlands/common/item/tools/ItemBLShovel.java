@@ -21,8 +21,8 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class ItemBLShovel extends ItemSpade implements ICorrodible {

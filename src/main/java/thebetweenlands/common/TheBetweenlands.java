@@ -17,7 +17,6 @@ import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import thebetweenlands.api.BetweenlandsAPI;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.command.CommandAspectDiscovery;
@@ -54,7 +53,7 @@ import thebetweenlands.common.world.teleporter.TeleporterHandler;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 import thebetweenlands.util.config.ConfigHandler;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI)
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI, acceptedMinecraftVersions = ModInfo.MC_VERSIONS)
 public class TheBetweenlands {
 	public static final Registries REGISTRIES = new Registries();
 	@Instance(ModInfo.ID)
@@ -74,7 +73,7 @@ public class TheBetweenlands {
 		configDir = event.getModConfigurationDirectory();
 		sourceFile = event.getSourceFile();
 
-		BetweenlandsAPI.init(new BetweenlandsAPIImp());
+		BetweenlandsAPI.init();
 
 		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
 		DimensionManager.registerDimension(ConfigHandler.dimensionId, dimensionType);

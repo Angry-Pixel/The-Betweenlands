@@ -31,11 +31,11 @@ import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
-import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarvestable {

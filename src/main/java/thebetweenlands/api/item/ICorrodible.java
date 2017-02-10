@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.corrosion;
+package thebetweenlands.api.item;
 
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;

@@ -18,6 +18,7 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.api.capability.ISerializableCapability;
 
 public class ItemCapabilityHandler {
 	private static final List<ItemCapability<?, ?>> REGISTERED_CAPABILITIES = new ArrayList<ItemCapability<?, ?>>();

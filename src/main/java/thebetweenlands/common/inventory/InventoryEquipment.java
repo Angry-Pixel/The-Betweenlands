@@ -10,8 +10,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
-import thebetweenlands.common.item.equipment.IEquippable;
 
 public class InventoryEquipment implements IInventory, ITickable {
 	protected final ItemStack[] inventory;

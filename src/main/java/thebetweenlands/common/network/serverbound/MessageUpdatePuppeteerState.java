@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
+import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.registries.CapabilityRegistry;
 

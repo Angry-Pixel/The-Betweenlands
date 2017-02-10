@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.equipment;
+package thebetweenlands.api.item;
 
 import javax.annotation.Nullable;
 
@@ -13,8 +13,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public interface IEquippable {
@@ -84,7 +84,7 @@ public interface IEquippable {
 	 * @param entity
 	 */
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory);
-	
+
 	/**
 	 * Adds the equipped property overrides to the specified item
 	 * @param item

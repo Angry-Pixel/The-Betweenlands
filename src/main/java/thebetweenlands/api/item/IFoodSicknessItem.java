@@ -1,4 +1,4 @@
-package thebetweenlands.common.item;
+package thebetweenlands.api.item;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 
-public interface IFoodSickness {
+public interface IFoodSicknessItem {
 	/**
 	 * Returns whether the player can get sick of the specified item stack
 	 * @param stack

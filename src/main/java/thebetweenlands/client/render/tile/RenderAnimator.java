@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemMonsterPlacer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.client.render.model.tile.ModelAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
@@ -119,38 +120,41 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 1.43D, z + 0.5D);
 
-				AnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
+				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
 
-				if (!(input.getItem() instanceof ItemMonsterPlacer) && (recipe == null || recipe.getRenderEntity() == null)) {
-					GlStateManager.scale(0.3D, 0.3D, 0.3D);
-					GlStateManager.rotate((float) viewRot, 0, 1, 0);
-					ItemStack stack = te.getStackInSlot(0);
-					Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-					renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
-					Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
-				} else {
-					GlStateManager.enableBlend();
-					GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-					GlStateManager.color(1.0F, 1.0F, 1.0F, 0.65F);
-					Entity entity = null;
-					if (recipe.getRenderEntity() != null) {
-						entity = recipe.getRenderEntity();
-					} else if (input.getItem() instanceof ItemMonsterPlacer) {
-						entity = EntityList.createEntityByID(input.getItemDamage(), te.getWorld());
-					}
-					if (entity != null) {
-						GlStateManager.translate(0.0D, -entity.height / 4.0D, 0.0D);
+				if(recipe != null) {
+					if (!(input.getItem() instanceof ItemMonsterPlacer) && (recipe == null || recipe.getRenderEntity(input) == null)) {
+						GlStateManager.scale(0.3D, 0.3D, 0.3D);
 						GlStateManager.rotate((float) viewRot, 0, 1, 0);
-						GlStateManager.scale(0.75D, 0.75D, 0.75D);
-						entity.setWorld(te.getWorld());
-						entity.setRotationYawHead(0F);
-						entity.rotationPitch = 0F;
-						entity.ticksExisted = (int) this.getWorld().getWorldTime();
-						renderManager.doRenderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
+						ItemStack stack = te.getStackInSlot(0);
+						Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+						Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
+						renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
+						Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+					} else {
+						GlStateManager.enableBlend();
+						GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+						GlStateManager.color(1.0F, 1.0F, 1.0F, 0.65F);
+						Entity entity = null;
+						if (recipe.getRenderEntity(input) != null) {
+							entity = recipe.getRenderEntity(input);
+						} else if (input.getItem() instanceof ItemMonsterPlacer) {
+							entity = EntityList.createEntityByID(input.getItemDamage(), te.getWorld());
+						}
+						if (entity != null) {
+							GlStateManager.translate(0.0D, -entity.height / 4.0D, 0.0D);
+							GlStateManager.rotate((float) viewRot, 0, 1, 0);
+							GlStateManager.scale(0.75D, 0.75D, 0.75D);
+							entity.setWorld(te.getWorld());
+							entity.setRotationYawHead(0F);
+							entity.rotationPitch = 0F;
+							entity.ticksExisted = (int) this.getWorld().getWorldTime();
+							renderManager.doRenderEntity(entity, 0D, 0D, 0D, 0F, 0F, true);
+						}
+						GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 					}
-					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 				}
+
 				GlStateManager.popMatrix();
 			}
 		}

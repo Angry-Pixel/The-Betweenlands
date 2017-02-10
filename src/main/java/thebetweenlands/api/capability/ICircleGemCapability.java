@@ -1,8 +1,10 @@
-package thebetweenlands.common.capability.circlegem;
+package thebetweenlands.api.capability;
 
 import java.util.List;
 
 import javax.annotation.Nonnull;
+
+import thebetweenlands.common.capability.circlegem.CircleGem;
 
 public interface ICircleGemCapability {
 	/**

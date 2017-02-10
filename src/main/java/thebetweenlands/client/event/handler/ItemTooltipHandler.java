@@ -11,13 +11,14 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.api.item.IFoodSicknessItem;
+import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
-import thebetweenlands.common.item.IFoodSickness;
-import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
@@ -27,11 +28,11 @@ public class ItemTooltipHandler {
 		ItemStack stack = event.getItemStack();
 		List<String> toolTip = event.getToolTip();
 
-		CompostRecipe recipe = CompostRecipe.getCompostRecipe(stack);
+		ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
 		if(recipe != null) {
 			String debug = "";
 			if(event.isShowAdvancedItemTooltips()) {
-				debug = " (T: " + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(recipe.compostTime / 20.0F) + "s A: " + recipe.compostAmount + ")";
+				debug = " (T: " + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(recipe.getCompostingTime(stack) / 20.0F) + "s A: " + recipe.getCompostAmount(stack) + ")";
 			}
 			toolTip.add(I18n.format("tooltip.compost.compostable") + debug);
 		}
@@ -41,13 +42,13 @@ public class ItemTooltipHandler {
 			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
 		}
 
-		if(stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSickness && ((IFoodSickness)stack.getItem()).canGetSickOf(stack)) {
+		if(stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(stack)) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
 				int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
-				((IFoodSickness)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.isShowAdvancedItemTooltips(), toolTip);
+				((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.isShowAdvancedItemTooltips(), toolTip);
 			}
 		}
 

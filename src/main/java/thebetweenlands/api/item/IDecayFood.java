@@ -1,4 +1,4 @@
-package thebetweenlands.common.item.food;
+package thebetweenlands.api.item;
 
 import net.minecraft.item.ItemStack;
 

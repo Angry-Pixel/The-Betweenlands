@@ -108,8 +108,8 @@ public class RecipeRegistry {
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHIELD), "XXX", "XXX", " X ", 'X', ItemRegistry.OCTINE_INGOT);
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', EnumItemMisc.LURKER_SKIN.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.SLIMY_BONE.create(1), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
@@ -408,7 +408,7 @@ public class RecipeRegistry {
 	}
 
 	private static void registerCompostRecipes() {
-		CompostRecipe.addRecipe(30, 12000, ItemRegistry.ITEMS_MISC, EnumItemMisc.ROTTEN_BARK.getID());
+		CompostRecipe.addRecipe(30, 12000, EnumItemMisc.ROTTEN_BARK.create(1));
 		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BlockRegistry.HOLLOW_LOG));
 		CompostRecipe.addRecipe(10, 8000, Item.getItemFromBlock(BlockRegistry.SUNDEW));
 		CompostRecipe.addRecipe(6, 10000, Item.getItemFromBlock(BlockRegistry.SWAMP_DOUBLE_TALLGRASS));
@@ -475,8 +475,8 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_WEEDWOOD_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES));
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_REED_ITEM);
-		CompostRecipe.addRecipe(3, 5000, ItemRegistry.ITEMS_MISC, EnumItemMisc.DRIED_SWAMP_REED.getID());
-		CompostRecipe.addRecipe(5, 8000, ItemRegistry.ITEMS_MISC, EnumItemMisc.SWAMP_REED_ROPE.getID());
+		CompostRecipe.addRecipe(3, 5000, EnumItemMisc.DRIED_SWAMP_REED.create(1));
+		CompostRecipe.addRecipe(5, 8000, EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.TANGLED_ROOT);
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_KELP_ITEM);
 		CompostRecipe.addRecipe(5, 8000, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM);
@@ -485,11 +485,11 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(12, 10000, ItemRegistry.YELLOW_DOTTED_FUNGUS);
 
 		for (ItemCrushed.EnumItemCrushed type : ItemCrushed.EnumItemCrushed.values()) {
-			CompostRecipe.addRecipe(3, 4000, ItemRegistry.ITEMS_CRUSHED, type.getID());
+			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_CRUSHED, type.getID()));
 		}
 
 		for (ItemPlantDrop.EnumItemPlantDrop type : ItemPlantDrop.EnumItemPlantDrop.values()) {
-			CompostRecipe.addRecipe(3, 4000, ItemRegistry.ITEMS_PLANT_DROP, type.getID());
+			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_PLANT_DROP, type.getID()));
 		}
 	}
 
@@ -557,7 +557,7 @@ public class RecipeRegistry {
 	private static void registerAnimatorRecipes() {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16) {
 			@Override
-			public ItemStack onAnimated(World world, BlockPos pos) {
+			public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
 				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.ANIMATOR_SCROLL);
 				LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
 				List<ItemStack> loot = lootTable.generateLootForPools(world.rand, lootBuilder.build());
@@ -571,8 +571,8 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_TARMINION.create(1), 8, 8, new ItemStack(ItemRegistry.TARMINION)).setRenderEntity("thebetweenlands.tarminion"));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.TEST_ITEM), 2, 1) {
 			@Override
-			public boolean onRetrieved(TileEntityAnimator tile, World world, int x, int y, int z) {
-				EntityItem entityitem = new EntityItem(world, x, y + 1D, z, new ItemStack(ItemRegistry.TEST_ITEM));
+			public boolean onRetrieved(TileEntityAnimator tile, World world, BlockPos pos, ItemStack stack) {
+				EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, new ItemStack(ItemRegistry.TEST_ITEM));
 				entityitem.motionX = 0;
 				entityitem.motionZ = 0;
 				entityitem.motionY = 0.11000000298023224D;

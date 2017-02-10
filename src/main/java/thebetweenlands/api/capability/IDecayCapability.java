@@ -1,4 +1,6 @@
-package thebetweenlands.common.capability.decay;
+package thebetweenlands.api.capability;
+
+import thebetweenlands.common.capability.decay.DecayStats;
 
 public interface IDecayCapability {
 	/**

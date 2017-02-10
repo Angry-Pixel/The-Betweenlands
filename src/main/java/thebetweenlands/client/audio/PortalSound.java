@@ -5,7 +5,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.capability.portal.IPortalCapability;
+import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 @SideOnly(Side.CLIENT)

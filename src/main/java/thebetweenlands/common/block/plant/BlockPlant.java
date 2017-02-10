@@ -22,10 +22,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IFarmablePlant;
+import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.IFarmablePlant;
 import thebetweenlands.common.block.SoilHelper;
-import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable, IFarmablePlant {

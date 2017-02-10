@@ -1,18 +1,13 @@
 package thebetweenlands.common.recipe.purifier;
 
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 
 class PurifierRecipeCorrodible extends PurifierRecipe {
 	@Override
-	public boolean matches(ItemStack stack) {
+	public boolean matchesInput(ItemStack stack) {
 		return stack != null && stack.getItem() instanceof ICorrodible && CorrosionHelper.getCorrosion(stack) > 0;
-	}
-
-	@Override
-	public boolean matchesOutput(ItemStack stack) {
-		return false;
 	}
 
 	@Override
@@ -21,10 +16,5 @@ class PurifierRecipeCorrodible extends PurifierRecipe {
 		output.stackSize = 1;
 		CorrosionHelper.setCorrosion(output, 0);
 		return output;
-	}
-
-	@Override
-	public ItemStack getInput(ItemStack input) {
-		return input;
 	}
 }

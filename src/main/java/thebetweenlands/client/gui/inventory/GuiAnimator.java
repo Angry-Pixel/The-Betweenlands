@@ -12,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
@@ -110,9 +111,9 @@ public class GuiAnimator extends GuiContainer {
 		boolean shouldClose = false;
 		ItemStack input = tile.getStackInSlot(0);
 		if (input != null) {
-			AnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
+			IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
 			if(recipe != null)
-				shouldClose = recipe.getCloseOnFinish();
+				shouldClose = recipe.getCloseOnFinish(input);
 		}
 		if (tile.itemAnimated && shouldClose)
 			playerSent.closeScreen();

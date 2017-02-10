@@ -9,7 +9,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
-import thebetweenlands.common.item.equipment.IEquippable;
+import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class EquipmentHelper {

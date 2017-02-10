@@ -13,9 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 
 public class ItemBLSword extends ItemSword implements ICorrodible {
 	public ItemBLSword(ToolMaterial material) {

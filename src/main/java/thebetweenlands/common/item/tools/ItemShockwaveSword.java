@@ -25,9 +25,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 

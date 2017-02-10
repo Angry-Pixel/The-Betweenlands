@@ -13,8 +13,8 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 
 public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 	public ItemBLPickaxe(ToolMaterial material) {

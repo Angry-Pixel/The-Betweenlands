@@ -9,8 +9,8 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import thebetweenlands.common.capability.decay.IDecayCapability;
-import thebetweenlands.common.item.food.IDecayFood;
+import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class PlayerDecayHandler {

@@ -29,8 +29,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.tools.ISickleHarvestable;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockMoss extends BlockDirectional implements IShearable, ISickleHarvestable {

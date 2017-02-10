@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.capability.decay.IDecayCapability;
+import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.config.ConfigHandler;

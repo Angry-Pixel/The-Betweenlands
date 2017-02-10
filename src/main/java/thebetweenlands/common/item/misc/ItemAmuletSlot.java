@@ -9,8 +9,8 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.registries.CapabilityRegistry;
 

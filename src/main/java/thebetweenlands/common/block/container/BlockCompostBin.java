@@ -24,6 +24,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -49,12 +50,12 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 
 	@Override
 	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().rotateYCCW());
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()), 2);
+		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().rotateYCCW()), 2);
 	}
 
 	@Override
@@ -91,11 +92,13 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 					world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
 					tile.markDirty();
 				} else if(open && heldItem != null) {
-					CompostRecipe compostRecipe = CompostRecipe.getCompostRecipe(heldItem);
+					ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(heldItem);
 					if (compostRecipe != null) {
-						switch (tile.addItemToBin(heldItem, compostRecipe.compostAmount, compostRecipe.compostTime, true)) {
+						int amount = compostRecipe.getCompostAmount(heldItem);
+						int time = compostRecipe.getCompostingTime(heldItem);
+						switch (tile.addItemToBin(heldItem, amount, time, true)) {
 						case 1:
-							tile.addItemToBin(heldItem, compostRecipe.compostAmount, compostRecipe.compostTime, false);
+							tile.addItemToBin(heldItem, amount, time, false);
 							if (!player.capabilities.isCreativeMode) {
 								player.inventory.decrStackSize(player.inventory.currentItem, 1);
 							}

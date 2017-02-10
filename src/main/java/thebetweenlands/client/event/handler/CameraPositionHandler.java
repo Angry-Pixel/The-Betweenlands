@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.capability.summoning.ISummoningCapability;
+import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.common.entity.IEntityCameraOffset;
 import thebetweenlands.common.entity.IEntityScreenShake;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;

@@ -1,4 +1,4 @@
-package thebetweenlands.common.block;
+package thebetweenlands.api.block;
 
 import java.util.Random;
 

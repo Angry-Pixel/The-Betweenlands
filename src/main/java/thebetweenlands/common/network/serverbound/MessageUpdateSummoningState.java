@@ -5,7 +5,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import thebetweenlands.common.capability.summoning.ISummoningCapability;
+import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.registries.CapabilityRegistry;

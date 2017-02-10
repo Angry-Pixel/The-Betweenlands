@@ -2,7 +2,7 @@ package thebetweenlands.common.event;
 
 import net.minecraft.entity.Entity;
 import net.minecraftforge.event.entity.EntityEvent;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
+import thebetweenlands.api.capability.IEquipmentCapability;
 
 public class EquipmentChangedEvent extends EntityEvent {
 	private final IEquipmentCapability cap;

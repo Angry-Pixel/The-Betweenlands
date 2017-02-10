@@ -2,26 +2,26 @@ package thebetweenlands.common.registries;
 
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
+import thebetweenlands.api.capability.ICircleGemCapability;
+import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.capability.IEntityCircleGemCapability;
+import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.capability.IFlightCapability;
+import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.capability.IPortalCapability;
+import thebetweenlands.api.capability.IPuppetCapability;
+import thebetweenlands.api.capability.IPuppeteerCapability;
+import thebetweenlands.api.capability.ISummoningCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
-import thebetweenlands.common.capability.circlegem.ICircleGemCapability;
-import thebetweenlands.common.capability.circlegem.IEntityCircleGemCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
-import thebetweenlands.common.capability.decay.IDecayCapability;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
 import thebetweenlands.common.capability.flight.FlightEntityCapability;
-import thebetweenlands.common.capability.flight.IFlightCapability;
 import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
-import thebetweenlands.common.capability.foodsickness.IFoodSicknessCapability;
-import thebetweenlands.common.capability.portal.IPortalCapability;
 import thebetweenlands.common.capability.portal.PortalEntityCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
 import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
-import thebetweenlands.common.capability.recruitment.IPuppetCapability;
-import thebetweenlands.common.capability.recruitment.IPuppeteerCapability;
 import thebetweenlands.common.capability.summoning.EntitySummoningCapability;
-import thebetweenlands.common.capability.summoning.ISummoningCapability;
 
 public class CapabilityRegistry {
 	private CapabilityRegistry() { }

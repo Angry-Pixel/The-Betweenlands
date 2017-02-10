@@ -18,11 +18,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
-import thebetweenlands.common.capability.equipment.IEquipmentCapability;
-import thebetweenlands.common.item.equipment.IEquippable;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemEquipmentHandler {

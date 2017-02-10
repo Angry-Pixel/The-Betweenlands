@@ -14,6 +14,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.client.audio.AnimatorSound;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -38,10 +39,10 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 	@Override
 	public void update() {
 		if(this.itemToAnimate != null) {
-			AnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
+			IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
 			if(recipe != null) {
-				this.requiredFuelCount = recipe.requiredFuel;
-				this.requiredLifeCount = recipe.requiredLife;
+				this.requiredFuelCount = recipe.getRequiredFuel(this.itemToAnimate);
+				this.requiredLifeCount = recipe.getRequiredLife(this.itemToAnimate);
 			}
 		}
 		if(!worldObj.isRemote) {
@@ -71,14 +72,14 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 			}
 
 			if (fuelConsumed >= requiredFuelCount && isSlotInUse(0) && isSlotInUse(1) && !this.itemAnimated) {
-				AnimatorRecipe recipe = AnimatorRecipe.getRecipe(inventory[0]);
-				ItemStack result = recipe.onAnimated(this.worldObj, getPos());
-				if(result == null) result = recipe.getResult();
+				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(inventory[0]);
+				ItemStack result = recipe.onAnimated(this.worldObj, getPos(), inventory[0]);
+				if(result == null) result = recipe.getResult(inventory[0]);
 				if(result != null) {
 					setInventorySlotContents(0, result.copy());
 					worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
 				}
-				inventory[1].setItemDamage(inventory[1].getItemDamage() + recipe.requiredLife);
+				inventory[1].setItemDamage(inventory[1].getItemDamage() + recipe.getRequiredLife(inventory[0]));
 				this.itemAnimated = true;
 			}
 			if (prevStackSize != (isSlotInUse(0) ? inventory[0].stackSize : 0))

@@ -14,6 +14,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 
@@ -272,8 +273,11 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 
 	@Override
 	public boolean canInsertItem(int index, ItemStack itemStackIn, EnumFacing direction) {
-		CompostRecipe recipe = CompostRecipe.getCompostRecipe(itemStackIn);
-		return recipe != null && this.open && this.inventory[index] != null && itemStackIn != null && direction == EnumFacing.UP && addItemToBin(itemStackIn, recipe.compostAmount, recipe.compostTime, true) == 1;
+		ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(itemStackIn);
+		if(recipe == null) {
+			return false;
+		}
+		return recipe != null && this.open && this.inventory[index] != null && itemStackIn != null && direction == EnumFacing.UP && addItemToBin(itemStackIn, recipe.getCompostAmount(itemStackIn), recipe.getCompostingTime(itemStackIn), true) == 1;
 	}
 
 	@Override
@@ -342,9 +346,9 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 	@Override
 	public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
 		if (index < MAX_ITEMS) {
-			CompostRecipe recipe = CompostRecipe.getCompostRecipe(stack);
+			ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
 			if (recipe != null) {
-				this.addItemToBin(stack, recipe.compostAmount, recipe.compostTime, false);
+				this.addItemToBin(stack, recipe.getCompostAmount(stack), recipe.getCompostingTime(stack), false);
 				this.markDirty();
 			}
 		}
@@ -372,8 +376,11 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 
 	@Override
 	public boolean isItemValidForSlot(int index, ItemStack stack) {
-		CompostRecipe recipe = CompostRecipe.getCompostRecipe(stack);
-		return recipe != null && addItemToBin(stack, recipe.compostAmount, recipe.compostAmount, true) == 1;
+		ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
+		if(recipe == null) {
+			return false;
+		}
+		return recipe != null && addItemToBin(stack, recipe.getCompostAmount(stack), recipe.getCompostingTime(stack), true) == 1;
 	}
 
 	@Override

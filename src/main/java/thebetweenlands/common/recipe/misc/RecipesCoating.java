@@ -6,8 +6,8 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
-import thebetweenlands.common.item.corrosion.ICorrodible;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
 public class RecipesCoating implements IRecipe {

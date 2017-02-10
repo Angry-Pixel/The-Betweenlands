@@ -1,4 +1,4 @@
-package thebetweenlands.common.capability.circlegem;
+package thebetweenlands.api.capability;
 
 public interface IEntityCircleGemCapability extends ICircleGemCapability {
 

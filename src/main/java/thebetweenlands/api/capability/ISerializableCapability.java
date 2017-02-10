@@ -1,4 +1,4 @@
-package thebetweenlands.common.capability.base;
+package thebetweenlands.api.capability;
 
 import net.minecraft.nbt.NBTTagCompound;
 
