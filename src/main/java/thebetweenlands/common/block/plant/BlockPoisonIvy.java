@@ -13,7 +13,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.mobs.IEntityBL;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 
 public class BlockPoisonIvy extends BlockVineBL {

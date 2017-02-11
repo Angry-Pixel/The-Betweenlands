@@ -17,8 +17,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 

@@ -13,9 +13,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.item.IDiscoveryProvider;
 import thebetweenlands.common.herblore.aspect.AspectManager.AspectItem;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
 
 public class DiscoveryContainer<T> {
 	private final Map<AspectItem, List<IAspectType>> discoveredStaticAspects = new HashMap<AspectItem, List<IAspectType>>();

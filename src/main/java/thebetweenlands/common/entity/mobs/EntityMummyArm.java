@@ -25,6 +25,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
 
 public class EntityMummyArm extends EntityCreature implements IEntityBL {

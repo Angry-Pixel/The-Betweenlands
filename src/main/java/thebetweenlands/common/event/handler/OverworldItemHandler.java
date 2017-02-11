@@ -1,10 +1,9 @@
 package thebetweenlands.common.event.handler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
-import com.google.common.collect.ImmutableList;
-
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,6 +11,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
@@ -34,10 +34,17 @@ import thebetweenlands.util.config.ConfigHandler;
 public class OverworldItemHandler {
 	private OverworldItemHandler() { }
 
+	public static final Set<Item> WHITELIST = new HashSet<Item>();
+
+	static {
+		WHITELIST.add(Items.ROTTEN_FLESH);
+		WHITELIST.addAll(ItemRegistry.ITEMS);
+	}
+
 	@SubscribeEvent
 	public static void onPlayerTorchPlacement(PlaceEvent event) {
 		ItemStack itemstack = event.getPlayer().inventory.getCurrentItem();
-		if (itemstack != null && itemstack.getItem() == Item.getItemFromBlock(Blocks.TORCH)) {
+		if (itemstack != null && Block.getBlockFromItem(itemstack.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(itemstack.getItem())) && !WHITELIST.contains(itemstack.getItem())) {
 			if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
 				for(int x = -2; x <= 2; x++) {
 					for(int y = -2; y <= 2; y++) {
@@ -60,7 +67,7 @@ public class OverworldItemHandler {
 	public static void onUseItem(PlayerInteractEvent.RightClickBlock event) {
 		ItemStack item = event.getItemStack();
 		if(item != null && event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
-			if(item.getItem() == Items.FLINT_AND_STEEL) {
+			if(item.getItem() instanceof ItemFlintAndSteel && !WHITELIST.contains(item.getItem())) {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
 				if(event.getWorld().isRemote) {
@@ -76,25 +83,15 @@ public class OverworldItemHandler {
 		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
 			ItemStack mainHand = event.getEntityPlayer().getHeldItemMainhand();
 			ItemStack offHand = event.getEntityPlayer().getHeldItemOffhand();
-			if(mainHand != null && mainHand.getItem() == Items.DYE) {
+			if(mainHand != null && mainHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 			}
-			if(offHand != null && offHand.getItem() == Items.DYE) {
+			if(offHand != null && offHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 			}
 		}
-	}
-
-	private static final ImmutableList<Item> EXCEPTION_INSTS;
-
-	static {
-		List<Item> items = new ArrayList<Item>();
-		items.add(Items.ROTTEN_FLESH);
-		items.addAll(ItemRegistry.ITEMS);
-
-		EXCEPTION_INSTS = ImmutableList.copyOf(items);
 	}
 
 	@SubscribeEvent
@@ -196,10 +193,10 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isRotting(ItemStack stack) {
-		return stack.getItem() instanceof ItemFood && !EXCEPTION_INSTS.contains(stack.getItem());
+		return stack.getItem() instanceof ItemFood && !WHITELIST.contains(stack.getItem());
 	}
 
 	public static boolean isTainting(ItemStack stack) {
-		return stack.getItem() instanceof ItemPotion && !EXCEPTION_INSTS.contains(stack.getItem());
+		return stack.getItem() instanceof ItemPotion && !WHITELIST.contains(stack.getItem());
 	}
 }

@@ -14,6 +14,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;

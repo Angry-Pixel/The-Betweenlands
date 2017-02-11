@@ -8,10 +8,10 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.entity.IBLBoss;
 import thebetweenlands.common.registries.SoundRegistry;
 
 import java.util.List;

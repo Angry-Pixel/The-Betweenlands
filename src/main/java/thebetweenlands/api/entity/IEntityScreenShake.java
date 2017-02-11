@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity;
+package thebetweenlands.api.entity;
 
 import net.minecraft.entity.Entity;
 

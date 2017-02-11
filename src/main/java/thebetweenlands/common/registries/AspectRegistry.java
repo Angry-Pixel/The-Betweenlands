@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.AspectManager.AspectGroup;
@@ -23,7 +24,6 @@ import thebetweenlands.common.herblore.aspect.type.AspectOrdaniis;
 import thebetweenlands.common.herblore.aspect.type.AspectYeowynn;
 import thebetweenlands.common.herblore.aspect.type.AspectYihinren;
 import thebetweenlands.common.herblore.aspect.type.AspectYunugaz;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 
 public class AspectRegistry {

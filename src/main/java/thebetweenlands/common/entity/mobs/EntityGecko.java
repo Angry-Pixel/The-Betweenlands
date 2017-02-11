@@ -21,6 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntityGecko;

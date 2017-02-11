@@ -9,6 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -571,14 +572,19 @@ public class RecipeRegistry {
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_TARMINION.create(1), 8, 8, new ItemStack(ItemRegistry.TARMINION)).setRenderEntity("thebetweenlands.tarminion"));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.TEST_ITEM), 2, 1) {
 			@Override
-			public boolean onRetrieved(TileEntityAnimator tile, World world, BlockPos pos, ItemStack stack) {
-				EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, new ItemStack(ItemRegistry.TEST_ITEM));
-				entityitem.motionX = 0;
-				entityitem.motionZ = 0;
-				entityitem.motionY = 0.11000000298023224D;
-				world.spawnEntityInWorld(entityitem);
-				tile.setInventorySlotContents(0, null);
-				return false;
+			public boolean onRetrieved(World world, BlockPos pos, ItemStack stack) {
+				TileEntity te = world.getTileEntity(pos);
+				if(te instanceof TileEntityAnimator) {
+					TileEntityAnimator animator = (TileEntityAnimator) te;
+					EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, new ItemStack(ItemRegistry.TEST_ITEM));
+					entityitem.motionX = 0;
+					entityitem.motionZ = 0;
+					entityitem.motionY = 0.11000000298023224D;
+					world.spawnEntityInWorld(entityitem);
+					animator.setInventorySlotContents(0, null);
+					return false;
+				}
+				return true;
 			}
 		});
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity("thebetweenlands.sporeling"));

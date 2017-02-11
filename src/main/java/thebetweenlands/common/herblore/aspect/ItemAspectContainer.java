@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.api.aspect.IAspectType;
 
 public final class ItemAspectContainer extends AspectContainer {
 	public static final String ASPECTS_NBT_TAG = "blHerbloreAspects";

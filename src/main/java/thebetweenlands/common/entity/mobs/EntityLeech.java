@@ -23,6 +23,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntity;
 import thebetweenlands.common.registries.LootTableRegistry;

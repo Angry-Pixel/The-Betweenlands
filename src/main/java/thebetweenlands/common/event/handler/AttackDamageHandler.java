@@ -11,11 +11,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
-import thebetweenlands.common.entity.mobs.IEntityBL;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShovel;
@@ -41,8 +41,8 @@ public class AttackDamageHandler {
 				EntityPlayer entityPlayer = (EntityPlayer) source.getSourceOfDamage();
 				ItemStack heldItem = entityPlayer.getHeldItem(entityPlayer.getActiveHand());
 				if (heldItem != null) {
-					boolean isUsingBLWeapon = heldItem.getItem() instanceof ItemBLSword || heldItem.getItem() instanceof ItemBLAxe || heldItem.getItem() instanceof ItemBLPickaxe || heldItem.getItem() instanceof ItemBLShovel;
-					if (!isUsingBLWeapon) {
+					boolean isWhitelisted = heldItem.getItem() instanceof ItemBLSword || heldItem.getItem() instanceof ItemBLAxe || heldItem.getItem() instanceof ItemBLPickaxe || heldItem.getItem() instanceof ItemBLShovel || OverworldItemHandler.WHITELIST.contains(heldItem.getItem());
+					if (!isWhitelisted) {
 						damage = damage * DAMAGE_REDUCTION;
 					}
 				}

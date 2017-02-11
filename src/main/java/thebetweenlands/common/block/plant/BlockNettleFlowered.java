@@ -8,7 +8,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.mobs.IEntityBL;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockNettleFlowered extends BlockPlant {

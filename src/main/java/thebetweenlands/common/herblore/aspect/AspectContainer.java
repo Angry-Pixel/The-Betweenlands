@@ -15,7 +15,7 @@ import com.google.common.collect.ImmutableSet;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
 
 /**

@@ -72,7 +72,7 @@ public class BlockAnimator extends BlockContainer {
 				playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 			} else {
 				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(animator.itemToAnimate);
-				if (recipe == null || recipe.onRetrieved(animator, world, pos, animator.itemToAnimate)) {
+				if (recipe == null || recipe.onRetrieved(world, pos, animator.itemToAnimate)) {
 					playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 				}
 				animator.fuelConsumed = 0;

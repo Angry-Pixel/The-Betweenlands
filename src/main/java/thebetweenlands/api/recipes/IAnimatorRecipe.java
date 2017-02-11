@@ -8,8 +8,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.recipe.misc.AnimatorRecipe;
-import thebetweenlands.common.tile.TileEntityAnimator;
 
 public interface IAnimatorRecipe {
 	/**
@@ -59,7 +57,7 @@ public interface IAnimatorRecipe {
 	public Class<? extends Entity> getSpawnEntityClass(ItemStack stack);
 
 	/**
-	 * Called when the item is animated. Can return the resulting ItemStack (overrides {@link AnimatorRecipe#getResult()}).
+	 * Called when the item is animated. Can return the resulting ItemStack (overrides {@link IAnimatorRecipe#getResult()}).
 	 * Also used to spawn entities from animator once animated
 	 * @param world
 	 * @param pos
@@ -76,7 +74,7 @@ public interface IAnimatorRecipe {
 	 * @param pos
 	 * @param stack
 	 */
-	public boolean onRetrieved(TileEntityAnimator tile, World world, BlockPos pos, ItemStack stack);
+	public boolean onRetrieved(World world, BlockPos pos, ItemStack stack);
 
 	/**
 	 * Returns whether the GUI should close when the animator has finished

@@ -17,11 +17,11 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 

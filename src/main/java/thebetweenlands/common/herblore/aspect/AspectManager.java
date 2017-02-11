@@ -19,8 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.Constants;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 
 public class AspectManager {

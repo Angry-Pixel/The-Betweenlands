@@ -8,10 +8,10 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
+import thebetweenlands.api.item.IDiscoveryProvider;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-import thebetweenlands.common.herblore.aspect.IDiscoveryProvider;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.registries.ItemRegistry;
 

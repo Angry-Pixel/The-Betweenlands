@@ -6,7 +6,7 @@ import java.util.List;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.util.AspectIconRenderer;
 
 @SideOnly(Side.CLIENT)

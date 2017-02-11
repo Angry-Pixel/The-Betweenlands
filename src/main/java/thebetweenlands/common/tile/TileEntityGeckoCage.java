@@ -6,7 +6,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public class TileEntityGeckoCage extends TileEntity implements ITickable {

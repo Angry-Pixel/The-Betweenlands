@@ -10,6 +10,7 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.registries.LootTableRegistry;

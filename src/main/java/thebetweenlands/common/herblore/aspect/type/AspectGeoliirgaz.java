@@ -1,6 +1,7 @@
 package thebetweenlands.common.herblore.aspect.type;
 
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.lib.ModInfo;
 
 public class AspectGeoliirgaz implements IAspectType {

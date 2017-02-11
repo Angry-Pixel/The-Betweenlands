@@ -1,6 +1,6 @@
 package thebetweenlands.common.herblore.elixir;
 
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
 public class ElixirRecipe {

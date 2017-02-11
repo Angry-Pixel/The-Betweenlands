@@ -4,10 +4,10 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-import thebetweenlands.common.herblore.aspect.type.IAspectType;
 
 import java.util.ArrayList;
 import java.util.List;

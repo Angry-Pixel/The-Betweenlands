@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -89,20 +90,25 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	 * @param z
 	 */
 	@Override
-	public boolean onRetrieved(TileEntityAnimator tile, World world, BlockPos pos, ItemStack stack) {
-		Class<? extends Entity> spawnEntity = this.getSpawnEntityClass(stack);
-		if(spawnEntity != null) {
-			Entity entity = null;
-			try {
-				entity = (Entity)spawnEntity.getConstructor(new Class[] {World.class}).newInstance(new Object[] {world});
-			} catch (Exception exception) {
-				exception.printStackTrace();
-				return true;
+	public boolean onRetrieved(World world, BlockPos pos, ItemStack stack) {
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityAnimator) {
+			TileEntityAnimator animator = (TileEntityAnimator) te;
+			Class<? extends Entity> spawnEntity = this.getSpawnEntityClass(stack);
+			if(spawnEntity != null) {
+				Entity entity = null;
+				try {
+					entity = (Entity)spawnEntity.getConstructor(new Class[] {World.class}).newInstance(new Object[] {world});
+				} catch (Exception exception) {
+					exception.printStackTrace();
+					return true;
+				}
+				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
+				world.spawnEntityInWorld(entity);
+				animator.setInventorySlotContents(0, null);
+				return false;
 			}
-			entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
-			world.spawnEntityInWorld(entity);
-			tile.setInventorySlotContents(0, null);
-			return false;
+			return true;
 		}
 		return true;
 	}
@@ -150,7 +156,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	public static void removeRecipe(IAnimatorRecipe recipe) {
 		RECIPES.remove(recipe);
 	}
-	
+
 	public static List<IAnimatorRecipe> getRecipes() {
 		return RECIPES;
 	}
