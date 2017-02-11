@@ -1,3 +1,5 @@
+[![Build Status](https://img.shields.io/travis/Angry-Pixel/The-Betweenlands.svg?style=flat-square)]()
+
 <html>
 <body>
 <a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1441135-the-betweenlands-a-dark-hostile-environment-1-10-2"><img src="http://i.imgur.com/Q3JTGqu.png" 
