@@ -33,6 +33,7 @@ public class ConfigHandler {
 	public static boolean rowboatView;
 	public static int maxEntitiesPerLoadedArea;
 	public static int hardEntityLimit;
+	public static boolean blMainMenu;
 
 	public Configuration config;
 	public static String path = "";
@@ -66,6 +67,8 @@ public class ConfigHandler {
 		debug = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
 		debugMenuOnStart = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");
 
+		blMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
+		
 		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
 
 		maxEntitiesPerLoadedArea = config.get(CATEGORIES[5], "Max. entities per loaded area", 100, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);

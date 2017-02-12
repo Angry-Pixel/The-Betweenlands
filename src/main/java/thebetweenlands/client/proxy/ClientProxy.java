@@ -50,6 +50,7 @@ import thebetweenlands.client.event.handler.TextureStitchHandler.TextureFrameSpl
 import thebetweenlands.client.event.handler.ThemHandler;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.event.handler.equipment.RadialMenuHandler;
+import thebetweenlands.client.gui.GuiBLMainMenu;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiPouchNaming;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
@@ -586,6 +587,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(DebugHandlerSharedLocation.class);
 		MinecraftForge.EVENT_BUS.register(DruidAltarSoundHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
+		MinecraftForge.EVENT_BUS.register(GuiBLMainMenu.class);
 	}
 
 	@Override
