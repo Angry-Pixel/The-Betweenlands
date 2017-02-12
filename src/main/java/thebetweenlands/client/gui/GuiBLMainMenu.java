@@ -169,11 +169,6 @@ public class GuiBLMainMenu extends GuiMainMenu {
 			tessellator.draw();
 		}
 
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
-
 		GlStateManager.disableTexture2D();
 		drawRect(0, this.height - 30, this.width, this.height, 0x60000000);
 		GlStateManager.enableTexture2D();
