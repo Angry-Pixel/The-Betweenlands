@@ -41,6 +41,7 @@ import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
+import thebetweenlands.common.block.farming.BlockConnectedTextureTest;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
@@ -538,6 +539,8 @@ public class BlockRegistry {
 	public static final Block MOSS_BED = new BlockMossBed();
 	public static final Block ROPE = new BlockRope();
 	public static final Block DAMP_TORCH = new BlockDampTorch();
+	
+	public static final Block CONNECTED_TEXTURE_TEST = new BlockConnectedTextureTest();
 	
 	public static final Set<Block> BLOCKS = new HashSet<Block>();
 

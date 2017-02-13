@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "variants": { 
+    "normal": {
+      "model": "thebetweenlands:internal/connected_texture",
+      "custom": {
+        "texture_0": "thebetweenlands:blocks/dug_swamp_dirt_0",
+        "texture_1": "thebetweenlands:blocks/dug_swamp_dirt_1",
+        "texture_2": "thebetweenlands:blocks/dug_swamp_dirt_2",
+        "texture_3": "thebetweenlands:blocks/dug_swamp_dirt_3",
+        "texture_4": "thebetweenlands:blocks/dug_swamp_dirt_4",
+        "index_0": "top_north_west_index",
+        "index_1": "top_south_west_index",
+        "index_2": "top_south_east_index",
+        "index_3": "top_north_east_index",
+        "vertex_0": { "x": 0.0, "y": 1.0, "z": 0.0 },
+        "vertex_1": { "x": 0.0, "y": 1.0, "z": 1.0 },
+        "vertex_2": { "x": 1.0, "y": 1.0, "z": 1.0 },
+        "vertex_3": { "x": 1.0, "y": 1.0, "z": 0.0 }
+      }
+    } 
+  } 
+}
