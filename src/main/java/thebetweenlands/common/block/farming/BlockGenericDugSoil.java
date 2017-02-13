@@ -13,7 +13,6 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
-import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -32,11 +31,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
@@ -47,13 +50,13 @@ import thebetweenlands.util.AdvancedStateMap;
 
 public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeBlock, IStateMappedBlock, ICustomItemBlock {
 	//-1, +1, -1, quadrant 0
-	public static final PropertyInteger TOP_NORTH_WEST_INDEX = PropertyInteger.create("top_north_west_index", 0, 4);
+	public static final IUnlistedProperty<Integer> TOP_NORTH_WEST_INDEX = new PropertyIntegerUnlisted("top_north_west_index");
 	//+1, +1, -1, quadrant 1
-	public static final PropertyInteger TOP_NORTH_EAST_INDEX = PropertyInteger.create("top_north_east_index", 0, 4);
+	public static final IUnlistedProperty<Integer> TOP_NORTH_EAST_INDEX = new PropertyIntegerUnlisted("top_north_east_index");
 	//-1, +1, +1, quadrant 2
-	public static final PropertyInteger TOP_SOUTH_WEST_INDEX = PropertyInteger.create("top_south_west_index", 0, 4);
+	public static final IUnlistedProperty<Integer> TOP_SOUTH_WEST_INDEX = new PropertyIntegerUnlisted("top_south_west_index");
 	//+1, +1, +1, quadrant 3
-	public static final PropertyInteger TOP_SOUTH_EAST_INDEX = PropertyInteger.create("top_south_east_index", 0, 4);
+	public static final IUnlistedProperty<Integer> TOP_SOUTH_EAST_INDEX = new PropertyIntegerUnlisted("top_south_east_index");
 
 	public static final PropertyBool COMPOSTED = PropertyBool.create("composted");
 	public static final PropertyBool DECAYED = PropertyBool.create("decayed");
@@ -76,7 +79,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{TOP_NORTH_WEST_INDEX, TOP_NORTH_EAST_INDEX, TOP_SOUTH_WEST_INDEX, TOP_SOUTH_EAST_INDEX, COMPOSTED, DECAYED});
+		return new ExtendedBlockState(this, new IProperty[] {COMPOSTED, DECAYED}, new IUnlistedProperty[] {TOP_NORTH_WEST_INDEX, TOP_NORTH_EAST_INDEX, TOP_SOUTH_WEST_INDEX, TOP_SOUTH_EAST_INDEX});
 	}
 
 	@Override
@@ -100,8 +103,9 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		boolean[] connectionArray = getConnectionArray(worldIn, pos, EnumFacing.UP, s -> s.getBlock() instanceof BlockGenericDugSoil/*BlockStatePropertiesMatcher.forBlockState(state, COMPOSTED, DECAYED)*/);
+	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState state = (IExtendedBlockState) oldState;
+		boolean[] connectionArray = getConnectionArray(worldIn, pos, EnumFacing.UP, s -> s.getBlock() instanceof BlockGenericDugSoil /*TODO: Add canConnectTo similar to fence?*/);
 		int[] quadrantIndices = getQuadrantIndices(connectionArray);
 		state = state.withProperty(TOP_NORTH_WEST_INDEX, quadrantIndices[0]);
 		state = state.withProperty(TOP_NORTH_EAST_INDEX, quadrantIndices[1]);

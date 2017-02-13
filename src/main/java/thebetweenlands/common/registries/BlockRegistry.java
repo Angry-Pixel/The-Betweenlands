@@ -41,7 +41,6 @@ import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
-import thebetweenlands.common.block.farming.BlockConnectedTextureTest;
 import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
@@ -477,7 +476,7 @@ public class BlockRegistry {
 	public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
 	public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
 	public static final Block HANGER = new BlockHanger();
-	
+
 	public static final Block MIDDLE_FRUIT_BUSH = new BlockMiddleFruitBush();
 	public static final Block FUNGUS_CROP = new BlockFungusCrop();
 	public static final Block PURIFIED_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND);
@@ -539,9 +538,7 @@ public class BlockRegistry {
 	public static final Block MOSS_BED = new BlockMossBed();
 	public static final Block ROPE = new BlockRope();
 	public static final Block DAMP_TORCH = new BlockDampTorch();
-	
-	public static final Block CONNECTED_TEXTURE_TEST = new BlockConnectedTextureTest();
-	
+
 	public static final Set<Block> BLOCKS = new HashSet<Block>();
 
 	public static void preInit() {

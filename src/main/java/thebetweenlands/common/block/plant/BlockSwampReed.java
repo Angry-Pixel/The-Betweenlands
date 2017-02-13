@@ -63,7 +63,7 @@ public class BlockSwampReed extends BlockStackablePlant {
 		boolean canPlace = worldIn.getBlockState(pos).getBlock().isReplaceable(worldIn, pos) &&
 				soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
 		if(canPlace) {
-			if(worldIn.getBlockState(pos.down()).getBlock() == this)
+			if(this.isSamePlant(worldIn.getBlockState(pos.down())))
 				return true;
 			BlockPos blockpos = pos.down();
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
@@ -80,7 +80,7 @@ public class BlockSwampReed extends BlockStackablePlant {
 	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
 		if(soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this)) {
-			if(worldIn.getBlockState(pos.down()).getBlock() == this)
+			if(this.isSamePlant(worldIn.getBlockState(pos.down())))
 				return true;
 			BlockPos blockpos = pos.down();
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {

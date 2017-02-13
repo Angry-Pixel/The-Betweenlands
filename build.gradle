@@ -88,6 +88,7 @@ task serverJar(type: Jar, dependsOn: classes) {
 		exclude("**/assets/" + modid + "/sounds/**")
 		exclude("**/assets/" + modid + "/textures/**")
 		exclude("**/assets/" + modid + "/sounds.json")
+		exclude("**/assets/" + modid + "/blockstates/**")
 		
 	}
 	addManifestAttributes(manifest)
@@ -103,7 +104,6 @@ task assetsZip(type: Zip) {
 		
 		exclude("mcmod.info")
 		exclude("thebetweenlands/**")
-		exclude("**/assets/" + modid + "/blockstates/**")
 		exclude("**/assets/" + modid + "/loot_tables/**")
 		
 	}

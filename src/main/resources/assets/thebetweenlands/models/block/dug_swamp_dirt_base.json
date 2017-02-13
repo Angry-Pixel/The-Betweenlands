@@ -1,0 +1,6 @@
+{
+  "parent": "thebetweenlands:block/dug_dirt_base_all",
+  "textures": {
+    "all": "thebetweenlands:blocks/swamp_dirt"
+  }
+}

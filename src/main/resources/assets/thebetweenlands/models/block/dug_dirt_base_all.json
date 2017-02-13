@@ -1,0 +1,11 @@
+{
+  "parent": "thebetweenlands:block/dug_dirt_base",
+  "textures": {
+    "down": "#all",
+    "north": "#all",
+    "south": "#all",
+    "east": "#all",
+    "west": "#all",
+    "particle": "#all"
+  }
+}
