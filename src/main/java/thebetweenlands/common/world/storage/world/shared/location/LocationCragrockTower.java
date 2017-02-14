@@ -175,6 +175,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 				world.playEvent(null, 2001, pos.down(), Block.getIdFromBlock(world.getBlockState(pos).getBlock()));
 
 				world.setBlockToAir(pos);
+				this.getGuard().setGuarded(world, pos, false);
 			}
 		}
 
@@ -194,6 +195,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 
 			for(BlockPos pos : blocks) {
 				world.setBlockState(pos, BlockRegistry.SMOOTH_CRAGROCK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, BlockSlabBetweenlands.EnumBlockHalfBL.TOP));
+				this.getGuard().setGuarded(world, pos, true);
 			}
 		}
 
@@ -445,6 +447,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 					this.crumblingTicks = -1;
 					this.setCrumbling(false);
 					this.destroyBlockade(4);
+					this.getGuard().clear(world);
 				} else {
 					this.setDirty(true, world.getWorldTime() % 20 == 0 /*meh? dunno*/);
 				}

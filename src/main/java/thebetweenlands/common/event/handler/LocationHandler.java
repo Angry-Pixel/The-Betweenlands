@@ -53,7 +53,6 @@ public class LocationHandler {
 					if(location.getInnerBoundingBox().isVecInside(player.getPositionVector()) && player.posY - structurePos.getY() >= 45) {
 						if(!location.isTopReached()) {
 							location.setTopReached(true);
-							location.getGuard().clear(player.worldObj);
 						}
 					} else if(!location.isTopReached() && !location.getInnerBoundingBox().expand(0.5D, 0.5D, 0.5D).isVecInside(player.getPositionVector()) && player.posY - structurePos.getY() > 12) {
 						//Player trying to bypass tower, teleport to entrance
