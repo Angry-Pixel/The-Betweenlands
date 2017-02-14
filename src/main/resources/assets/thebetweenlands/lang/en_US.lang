@@ -774,3 +774,10 @@ item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Wandering Wisps
 item.thebetweenlands.record.lonely_fire.desc=Voog2 - Lonely Fire
 item.thebetweenlands.record.ancient.desc=Voog2 - Ancient
+
+
+# Signs
+sign.fortress.line1=Only The
+sign.fortress.line2=Sword Keeper
+sign.fortress.line3=May Pass
+sign.fortress.line4=This Point

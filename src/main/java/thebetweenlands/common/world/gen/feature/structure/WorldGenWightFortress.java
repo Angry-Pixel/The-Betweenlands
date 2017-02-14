@@ -1135,10 +1135,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile instanceof TileEntityWeedwoodSign) {
 			TileEntityWeedwoodSign sign = (TileEntityWeedwoodSign) tile;
-			sign.signText[0] = new TextComponentTranslation("fortress.line1");
-			sign.signText[1] = new TextComponentTranslation("fortress.line2");
-			sign.signText[2] = new TextComponentTranslation("fortress.line3");
-			sign.signText[3] = new TextComponentTranslation("fortress.line4");
+			sign.signText[0] = new TextComponentTranslation("sign.fortress.line1");
+			sign.signText[1] = new TextComponentTranslation("sign.fortress.line2");
+			sign.signText[2] = new TextComponentTranslation("sign.fortress.line3");
+			sign.signText[3] = new TextComponentTranslation("sign.fortress.line4");
 			sign.markDirty();
 			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
 		}
