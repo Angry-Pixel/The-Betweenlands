@@ -3,6 +3,7 @@ package thebetweenlands.common.proxy;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -167,10 +168,18 @@ public class CommonProxy implements IGuiHandler {
 	}
 
 	public void updateWispParticles(TileEntityWisp te) {
+
 	}
 
-	@SideOnly(Side.CLIENT)
 	public FontRenderer getCustomFontRenderer() {
 		return null;
 	}
+
+    public void onPilotEnterWeedwoodRowboat(Entity pilot) {
+
+    }
+
+    public void onPilotExitWeedwoodRowboat(Entity pilot) {
+
+    }
 }

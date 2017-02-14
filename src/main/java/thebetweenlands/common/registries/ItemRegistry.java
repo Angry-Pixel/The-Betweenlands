@@ -95,6 +95,7 @@ import thebetweenlands.common.item.misc.ItemRope;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.item.misc.ItemSwampTalisman;
 import thebetweenlands.common.item.misc.ItemTarminion;
+import thebetweenlands.common.item.misc.ItemWeedwoodRowboat;
 import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
@@ -138,6 +139,7 @@ public class ItemRegistry {
 	public static final Item ITEMS_CRUSHED = new ItemCrushed().setCreativeTab(BLCreativeTabs.HERBLORE);
 	public static final Item ITEMS_PLANT_DROP = new ItemPlantDrop().setCreativeTab(BLCreativeTabs.HERBLORE);
 	public static final Item SWAMP_TALISMAN = new ItemSwampTalisman().setCreativeTab(BLCreativeTabs.ITEMS);
+	public static final Item WEEDWOOD_ROWBOAT = new ItemWeedwoodRowboat();
 	//food
 	public static final Item SAP_BALL = new ItemSapBall();
 	public static final ItemRottenFood ROTTEN_FOOD = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();

@@ -9,7 +9,7 @@ import thebetweenlands.common.sound.BLSoundEvent;
 
 public class SoundRegistry {
 	private SoundRegistry() { }
-	
+
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
 
     // Music
@@ -51,7 +51,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SHOCKWAVE_SWORD = reg("shockwave_sword");
     public static final BLSoundEvent SQUISH = reg("squish");
     public static final BLSoundEvent IGNITE = reg("ignite");
-    
+
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");
@@ -133,7 +133,7 @@ public class SoundRegistry {
     public static final BLSoundEvent WIGHT_ATTACK = reg("wight_attack");
 
     public static final BLSoundEvent CRAB_SNIP = reg("crab_snip");
-    
+
     public static final BLSoundEvent GAS_CLOUD_LIVING = reg("gas_cloud_living");
     public static final BLSoundEvent GAS_CLOUD_HURT = reg("gas_cloud_hurt");
     public static final BLSoundEvent GAS_CLOUD_DEATH = reg("gas_cloud_death");
@@ -161,13 +161,15 @@ public class SoundRegistry {
     public static final BLSoundEvent SPORELING_DEATH = reg("sporeling_death");
     public static final BLSoundEvent SPORELING_HURT = reg("sporeling_hurt");
     public static final BLSoundEvent SPORELING_LIVING = reg("sporeling_living");
-    
+
     public static final BLSoundEvent TERMITE_LIVING = reg("termite_living");
 
     // Items
-    public static final BLSoundEvent ROWBOAT_ROW = reg("rowboat_row");
-    public static final BLSoundEvent ROWBOAT_ROW_START = reg("rowboat_row_start");
-    
+    public static final BLSoundEvent ROWBOAT_ROW_STARBOARD = reg("rowboat_row_starboard");
+    public static final BLSoundEvent ROWBOAT_ROW_PORT = reg("rowboat_row_port");
+    public static final BLSoundEvent ROWBOAT_ROW_START_STARBOARD = reg("rowboat_row_start_starboard");
+    public static final BLSoundEvent ROWBOAT_ROW_START_PORT = reg("rowboat_row_start_port");
+
     public static final BLSoundEvent VOODOO_DOLL = reg("voodoo_doll");
 
     // Blocks
@@ -176,7 +178,7 @@ public class SoundRegistry {
     public static final BLSoundEvent INFUSER_FINISHED = reg("infuser_finished");
 
     public static final BLSoundEvent PURIFIER = reg("purifier");
-    
+
     public static final BLSoundEvent ANIMATOR = reg("animator");
 
     public static final BLSoundEvent PORTAL = reg("portal");

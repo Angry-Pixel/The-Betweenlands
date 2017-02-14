@@ -39,6 +39,7 @@ import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 
 public class EntityRegistry {
 	private EntityRegistry() {
@@ -81,6 +82,7 @@ public class EntityRegistry {
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
+        registerEntity(EntityWeedwoodRowboat.class, "weedwood_rowboat");
 	}
 
 	private static int id = 0;
