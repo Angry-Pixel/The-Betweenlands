@@ -53,24 +53,36 @@ public class LocationDebugItem extends Item {
 			} else {
 				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
 				List<EntityPlayerMP> watchers = new ArrayList<EntityPlayerMP>();
+				boolean guard = false;
 				for(LocationStorage location : locations) {
-					location.unlinkAllChunks();
-					location.linkChunks();
-					location.setDirty(true, true);
-					for(EntityPlayerMP watcher : location.getWatchers()) {
-						if(!watchers.contains(watcher)) {
-							watchers.add(watcher);
-						}
+					if(hand == EnumHand.OFF_HAND && location.getGuard() != null) {
+						boolean guarded = location.getGuard().isGuarded(world, playerIn, pos);
+						location.getGuard().setGuarded(world, pos, !guarded);
+						playerIn.addChatMessage(new TextComponentString(String.format("Set block guard to %s at %s for location %s", !guarded, "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), location.getName())));
+						location.setDirty(true, true);
+						guard = true;
 					}
 				}
-				playerIn.addChatMessage(new TextComponentString(String.format("Marked %s locations as dirty and queued update packets to %s watchers:", locations.size(), watchers.size())));
-				playerIn.addChatMessage(new TextComponentString("  Locations:"));
-				for(LocationStorage location : locations) {
-					playerIn.addChatMessage(new TextComponentString("    " + location.getName()));
-					playerIn.addChatMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getUnlocalizedName() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
-					playerIn.addChatMessage(new TextComponentString("      Watchers:"));
-					for(EntityPlayerMP watcher : location.getWatchers()) {
-						playerIn.addChatMessage(new TextComponentString("        " + watcher.getName()));
+				if(!guard) {
+					for(LocationStorage location : locations) {
+						location.unlinkAllChunks();
+						location.linkChunks();
+						location.setDirty(true, true);
+						for(EntityPlayerMP watcher : location.getWatchers()) {
+							if(!watchers.contains(watcher)) {
+								watchers.add(watcher);
+							}
+						}
+					}
+					playerIn.addChatMessage(new TextComponentString(String.format("Marked %s locations as dirty and queued update packets to %s watchers:", locations.size(), watchers.size())));
+					playerIn.addChatMessage(new TextComponentString("  Locations:"));
+					for(LocationStorage location : locations) {
+						playerIn.addChatMessage(new TextComponentString("    " + location.getName()));
+						playerIn.addChatMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getUnlocalizedName() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
+						playerIn.addChatMessage(new TextComponentString("      Watchers:"));
+						for(EntityPlayerMP watcher : location.getWatchers()) {
+							playerIn.addChatMessage(new TextComponentString("        " + watcher.getName()));
+						}
 					}
 				}
 			}

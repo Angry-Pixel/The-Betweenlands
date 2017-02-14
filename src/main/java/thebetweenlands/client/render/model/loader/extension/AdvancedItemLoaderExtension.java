@@ -118,7 +118,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 
 			if(context.hasCustomData()) {
 				//Makes the loader process the model with custom data
-				replacementModelLocation = CustomModelLoader.CUSTOM_DATA_LOADER_EXTENSION.getLocationWithExtension(replacementModelLocation, context.customData);
+				replacementModelLocation = CustomModelLoader.MODEL_PROCESSOR_LOADER_EXTENSION.getLocationWithExtension(replacementModelLocation, "{\"custom\": " + context.customData + "}");
 			}
 
 			//Retrieve replacement model

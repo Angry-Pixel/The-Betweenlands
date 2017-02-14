@@ -35,7 +35,7 @@ public class BlockRoot extends BasicBlock {
 		this.setSoundType(SoundType.WOOD);
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
-		this.setCreativeTab(BLCreativeTabs.PLANTS);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

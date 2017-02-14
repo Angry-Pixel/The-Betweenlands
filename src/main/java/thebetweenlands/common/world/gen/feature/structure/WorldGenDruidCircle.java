@@ -104,7 +104,6 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		location.setSeed(rand.nextLong());
 		location.setVisible(false);
 		location.setDirty(true);
-		worldStorage.addSharedStorage(location);
 
 		// circle
 		MutableBlockPos pos = new MutableBlockPos();
@@ -159,6 +158,8 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		}
 		this.guard.setGuarded(world, altar, true);
 		this.guard.setGuarded(world, altar.down(), true);
+
+		worldStorage.addSharedStorage(location);
 	}
 
 	private void placeAir(World world, MutableBlockPos pos) {

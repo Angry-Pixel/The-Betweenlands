@@ -756,3 +756,21 @@ entity.thebetweenlands.gas_cloud.name=Gas Cloud
 equipment.menu.equip=Equip %s
 equipment.menu.unequip=Unequip %s
 equipment.menu.page=Page %d
+
+
+# Music Discs
+item.thebetweenlands.record.astatos.desc=Voog2 - Astatos
+item.thebetweenlands.record.between_you_and_me.desc=Voog2 - Between You And Me
+item.thebetweenlands.record.christmas_on_the_marsh.desc=Voog2 - Christmas On The Marsh
+item.thebetweenlands.record.the_explorer.desc=Voog2 - The Explorer
+item.thebetweenlands.record.hag_dance.desc=Voog2 - Hag Dance
+item.thebetweenlands.record.lonely_fire.desc=Voog2 - Lonely Fire
+item.thebetweenlands.record.16612.desc=...
+item.thebetweenlands.record.beneath_a_green_sky.desc=Voog2 - Beneath A Green Sky
+item.thebetweenlands.record.onwards.desc=Voog2 - Onwards
+item.thebetweenlands.record.dj_wights_mixtape.desc=Voog2 - Rave In A Cave
+item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 - Stuck In The Mud
+item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
+item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Wandering Wisps
+item.thebetweenlands.record.lonely_fire.desc=Voog2 - Lonely Fire
+item.thebetweenlands.record.ancient.desc=Voog2 - Ancient

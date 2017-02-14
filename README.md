@@ -1,10 +1,9 @@
 <html>
 <body>
-<a href="https://travis-ci.org/Angry-Pixel/The-Betweenlands"><img src="https://img.shields.io/travis/Angry-Pixel/The-Betweenlands.svg?style=flat-square" 
-  alt="Build Status"/></a>
+<a href="https://travis-ci.org/Angry-Pixel/The-Betweenlands"><img src="https://img.shields.io/travis/Angry-Pixel/The-Betweenlands.svg" alt="Build Status"/></a>
+<a href="https://minecraft.curseforge.com/projects/angry-pixel-the-betweenlands-mod"><img src="http://cf.way2muchnoise.eu/short_angry-pixel-the-betweenlands-mod.svg" alt="CurseForge Project"/></a>
 
-<a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1441135-the-betweenlands-a-dark-hostile-environment-1-10-2"><img src="http://i.imgur.com/Q3JTGqu.png" 
-  alt="The Betweenlands"/></a>
+<a href="http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1441135-the-betweenlands-a-dark-hostile-environment-1-10-2"><img src="http://i.imgur.com/Q3JTGqu.png" alt="The Betweenlands"/></a>
 
 <p align="center">
   <b>The Betweenlands is a mod developed by the 

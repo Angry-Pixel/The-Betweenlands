@@ -29,16 +29,15 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.client.render.model.loader.extension.AdvancedItemLoaderExtension;
-import thebetweenlands.client.render.model.loader.extension.CustomDataLoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtensionException;
+import thebetweenlands.client.render.model.loader.extension.ModelProcessorLoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.SimpleItemLoaderExtension;
 
 public final class CustomModelLoader implements ICustomModelLoader {
 	private static enum LoaderType {
 		NORMAL,
-		EXTENSION,
-		NONE
+		EXTENSION
 	}
 
 	private static class LoaderResult {
@@ -74,7 +73,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	//Default loader extensions
 	public static final LoaderExtension SIMPLE_ITEM_LOADER_EXTENSION = new SimpleItemLoaderExtension();
 	public static final LoaderExtension ADVANCED_ITEM_LOADER_EXTENSION = new AdvancedItemLoaderExtension();
-	public static final LoaderExtension CUSTOM_DATA_LOADER_EXTENSION = new CustomDataLoaderExtension();
+	public static final LoaderExtension MODEL_PROCESSOR_LOADER_EXTENSION = new ModelProcessorLoaderExtension();
 
 	CustomModelLoader(CustomModelManager manager) {
 		this.manager = manager;
@@ -82,7 +81,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		//Item model loader extensions
 		this.registerExtension(SIMPLE_ITEM_LOADER_EXTENSION);
 		this.registerExtension(ADVANCED_ITEM_LOADER_EXTENSION);
-		this.registerExtension(CUSTOM_DATA_LOADER_EXTENSION);
+		this.registerExtension(MODEL_PROCESSOR_LOADER_EXTENSION);
 	}
 
 	/**
@@ -114,88 +113,110 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 	@Override
 	public boolean accepts(ResourceLocation modelLocation) {
-		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
-			if(this.getLoaderResult(entry.getKey(), modelLocation).type != LoaderType.NONE) {
+		//Check for loader extensions
+		if(modelLocation.getResourcePath().contains("$")) {
+			LoaderResult result = this.getLoaderResult(modelLocation);
+			if(result.type != LoaderType.NORMAL) {
 				return true;
 			}
 		}
+
+		//Check for registered model providers
+		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+			ResourceLocation registeredModel = entry.getKey();
+			if(registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath())) {
+				String suffix = modelLocation.getResourcePath().substring(registeredModel.getResourcePath().length());
+
+				//Only accept if path fully matches or is a variant
+				if(suffix.length() == 0 || suffix.startsWith("#")) {
+					return true;
+				}
+			}
+		}
+
 		return false;
 	}
 
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
-		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
-			LoaderResult match = this.getLoaderResult(entry.getKey(), modelLocation);
-			if(match.type == LoaderType.NORMAL) {
-				return entry.getValue().apply(match.actualLocation);
-			} else if(match.type == LoaderType.EXTENSION) {
-				LoaderExtension loaderExtension = match.extension;
-				String loaderArgs = match.args;
+		//Check for loader extensions
+		if(modelLocation.getResourcePath().contains("$")) {
+			LoaderResult result = this.getLoaderResult(modelLocation);
+
+			if(result.type == LoaderType.EXTENSION) {
+				//Load actual model
+				IModel model = ModelLoaderRegistry.getModel(result.actualLocation);
+
+				//Let the extension process the model
+				LoaderExtension loaderExtension = result.extension;
+				String loaderArgs = result.args;
 				try {
-					return loaderExtension.loadModel(entry.getValue().apply(match.actualLocation), match.actualLocation, loaderArgs);
+					return loaderExtension.loadModel(model, result.actualLocation, loaderArgs);
 				} catch(Exception ex) {
-					if(ex instanceof LoaderExtensionException == false)
+					if(ex instanceof LoaderExtensionException == false) {
 						this.throwLoaderException(loaderExtension, ex);
-					else
+					} else {
 						throw ex;
+					}
 				}
 			}
 		}
+
+		//Check for registered model providers
+		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+			ResourceLocation registeredModel = entry.getKey();
+			if(registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath())) {
+				String suffix = modelLocation.getResourcePath().substring(registeredModel.getResourcePath().length());
+
+				//Only accept if path fully matches or is a variant
+				if(suffix.length() == 0 || suffix.startsWith("#")) {
+					return entry.getValue().apply(modelLocation);
+				}
+			}
+		}
+
 		return null;
 	}
 
 	/**
-	 * Compares two model locations and returns how they should be handled if they match
-	 * @param registeredModel
+	 * Returns how the specified model should be handled
 	 * @param modelLocation
 	 * @return
 	 */
-	private LoaderResult getLoaderResult(ResourceLocation registeredModel, ResourceLocation modelLocation) {
-		//Not in the same domain, can't match
-		if(!registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()))
-			return new LoaderResult(LoaderType.NONE, null, null, null);
+	private LoaderResult getLoaderResult(ResourceLocation modelLocation) {
+		String fullModelPath = modelLocation.getResourcePath();
+		String modelPath = fullModelPath.substring(0, fullModelPath.indexOf("$"));
+		String suffix = fullModelPath.substring(fullModelPath.indexOf("$"));
 
-		String registeredPath = registeredModel.getResourcePath();
-		String modelPath = modelLocation.getResourcePath();
-
-		if(modelPath.startsWith(registeredPath)) {
-			String suffix = modelPath.substring(registeredPath.length());
-
-			//Find loader extension in suffix
-			LoaderExtension loaderExtension = null;
-			for(LoaderExtension arg : this.loaderExtensions) {
-				String argPrefix = "$" + arg.getName() + "(";
-				if(suffix.startsWith(argPrefix)) {
-					loaderExtension = arg;
-					break;
-				}
-			}
-
-			//Find loader args in suffix
-			String loaderArgs = null;
-			if(loaderExtension != null) {
-				suffix = suffix.substring(loaderExtension.getName().length() + 2);
-				loaderArgs = suffix.substring(0, suffix.indexOf(")"));
-				suffix = suffix.substring(loaderArgs.length() + 1);
-				if(loaderArgs.length() == 0)
-					loaderArgs = null;
-			}
-
-			//Only accept if path fully matches or is a variant
-			if(suffix.length() == 0 || suffix.startsWith("#")) {
-				ResourceLocation actualLocation = new ResourceLocation(modelLocation.getResourceDomain(), registeredPath + suffix);
-
-				//Extension loader
-				if(loaderExtension != null)
-					return new LoaderResult(actualLocation, loaderExtension, loaderArgs);
-
-				//Normal loader
-				return new LoaderResult(actualLocation); 
+		//Find loader extension in suffix
+		LoaderExtension loaderExtension = null;
+		for(LoaderExtension arg : this.loaderExtensions) {
+			String argPrefix = "$" + arg.getName() + "(";
+			if(suffix.startsWith(argPrefix)) {
+				loaderExtension = arg;
+				break;
 			}
 		}
 
-		//No match
-		return new LoaderResult(LoaderType.NONE, null, null, null);
+		//Find loader args in suffix
+		String loaderArgs = null;
+		if(loaderExtension != null) {
+			suffix = suffix.substring(loaderExtension.getName().length() + 2);
+			loaderArgs = suffix.substring(0, suffix.indexOf(")"));
+			suffix = suffix.substring(loaderArgs.length() + 1);
+			if(loaderArgs.length() == 0)
+				loaderArgs = null;
+		}
+
+		ResourceLocation actualLocation = new ResourceLocation(modelLocation.getResourceDomain(), modelPath + suffix);
+
+		//Extension loader
+		if(loaderExtension != null) {
+			return new LoaderResult(actualLocation, loaderExtension, loaderArgs);
+		}
+
+		//Normal loader
+		return new LoaderResult(actualLocation); 
 	}
 
 	@SubscribeEvent

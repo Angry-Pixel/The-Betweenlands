@@ -16,6 +16,33 @@ import net.minecraftforge.common.util.Constants;
 public class BlockLocationGuard implements ILocationGuard {
 	protected final Long2ObjectMap<GuardChunk> chunkMap = new Long2ObjectOpenHashMap<>(16);
 
+	/**
+	 * Returns the chunk at the specified position
+	 * @param pos
+	 * @return
+	 */
+	@Nullable
+	public GuardChunk getChunk(BlockPos pos) {
+		int x = pos.getX();
+		int z = pos.getZ();
+		long id = ChunkPos.chunkXZ2Int(x / 16, z / 16);
+		return this.chunkMap.get(id);
+	}
+
+	/**
+	 * Returns the chunk section at the specified position
+	 * @param pos
+	 * @return
+	 */
+	@Nullable
+	public GuardChunkSection getSection(BlockPos pos) {
+		GuardChunk chunk = this.getChunk(pos);
+		if(chunk != null) {
+			return chunk.getSection(pos.getY());
+		}
+		return null;
+	}
+
 	@Override
 	public void setGuarded(World world, BlockPos pos, boolean guarded) {
 		int x = pos.getX();
@@ -35,13 +62,15 @@ public class BlockLocationGuard implements ILocationGuard {
 
 	@Override
 	public boolean isGuarded(World world, @Nullable Entity entity, BlockPos pos) {
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		long id = ChunkPos.chunkXZ2Int(x / 16, z / 16);
-		GuardChunk chunk = this.chunkMap.get(id);
-		if(chunk != null && chunk.isGuarded(x & 15, y, z & 15)) {
-			return true;
+		if(pos.getY() >= 0) {
+			int x = pos.getX();
+			int y = pos.getY();
+			int z = pos.getZ();
+			long id = ChunkPos.chunkXZ2Int(x / 16, z / 16);
+			GuardChunk chunk = this.chunkMap.get(id);
+			if(chunk != null && chunk.isGuarded(x & 15, y, z & 15)) {
+				return true;
+			}
 		}
 		return false;
 	}
@@ -93,15 +122,15 @@ public class BlockLocationGuard implements ILocationGuard {
 		}
 	}
 
-	protected static class GuardChunkSection {
+	public static class GuardChunkSection {
 		private final byte[] data; //8 blocks per byte, 2 bytes per row, 2*16*16 bytes in total
 		private int blockRefCount = 0;
 
-		protected GuardChunkSection() {
+		private GuardChunkSection() {
 			this.data = new byte[512];
 		}
 
-		protected GuardChunkSection(byte[] data) {
+		private GuardChunkSection(byte[] data) {
 			this.data = data;
 			this.updateBlockRefCount();
 		}
@@ -115,6 +144,10 @@ public class BlockLocationGuard implements ILocationGuard {
 			for(int i = 0; i < this.data.length; i++) {
 				this.blockRefCount += Integer.bitCount(this.data[i] & 0xFF);
 			}
+		}
+
+		public int getBlockRefCount() {
+			return this.blockRefCount;
 		}
 
 		public void setGuarded(int x, int y, int z, boolean guarded) {
@@ -149,33 +182,41 @@ public class BlockLocationGuard implements ILocationGuard {
 			}
 		}
 
-		public byte[] getData() {
-			return this.data;
+		public void loadData(byte[] arr) {
+			System.arraycopy(arr, 0, this.data, 0, 512);
+			this.updateBlockRefCount();
+		}
+
+		public void writeData(byte[] arr) {
+			System.arraycopy(this.data, 0, arr, 0, 512);
 		}
 	}
 
-	protected static class GuardChunk {
+	public static class GuardChunk {
 		private final GuardChunkSection[] sections = new GuardChunkSection[16];
 		public final int x, z;
 
-		public GuardChunk(int x, int z) {
+		private GuardChunk(int x, int z) {
 			this.x = x;
 			this.z = z;
 		}
 
+		public GuardChunkSection getSection(int y) {
+			return this.sections[y >> 4];
+		}
+
 		public void setGuarded(int x, int y, int z, boolean guarded) {
 			if(y >= 0 && y < 256) {
-				int sectionId = y >> 4;
-				GuardChunkSection section = this.sections[sectionId];
+				GuardChunkSection section = this.sections[y >> 4];
 				if(guarded) {
 					if(section == null) {
-						this.sections[sectionId] = section = new GuardChunkSection();
+						this.sections[y >> 4] = section = new GuardChunkSection();
 					}
 					section.setGuarded(x, y & 15, z, true);
 				} else if(section != null) {
 					section.setGuarded(x, y & 15, z, false);
 					if(section.isEmpty()) {
-						this.sections[sectionId] = null;
+						this.sections[y >> 4] = null;
 					}
 				}
 			}
@@ -183,9 +224,11 @@ public class BlockLocationGuard implements ILocationGuard {
 
 		public boolean isGuarded(int x, int y, int z) {
 			int sectionId = y >> 4;
-			GuardChunkSection section = this.sections[sectionId];
-			if(section != null && section.isGuarded(x, y & 15, z)) {
-				return true;
+			if(sectionId >= 0) {
+				GuardChunkSection section = this.sections[sectionId];
+				if(section != null && section.isGuarded(x, y & 15, z)) {
+					return true;
+				}
 			}
 			return false;
 		}
@@ -201,7 +244,8 @@ public class BlockLocationGuard implements ILocationGuard {
 			for(int i = 0; i < this.sections.length; i++) {
 				GuardChunkSection section = this.sections[i];
 				if(section != null) {
-					byte[] data = section.getData();
+					byte[] data = new byte[512];
+					section.writeData(data);
 					NBTTagCompound sectionNbt = new NBTTagCompound();
 					sectionNbt.setByte("Y", (byte)i);
 					sectionNbt.setByteArray("Data", data);

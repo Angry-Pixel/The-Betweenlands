@@ -159,6 +159,16 @@ public abstract class LoaderExtension {
 	protected static ImmutableMap<String, String> parseJsonElementList(JsonParser parser, String json) {
 		JsonElement element = parser.parse(json);
 		JsonObject jsonObj = element.getAsJsonObject();
+		return parseJsonElementList(jsonObj);
+	}
+
+	/**
+	 * Parses a json object into a map
+	 * @param parser
+	 * @param json
+	 * @return
+	 */
+	protected static ImmutableMap<String, String> parseJsonElementList(JsonObject jsonObj) {
 		Builder<String, String> parsedElements = ImmutableMap.<String, String>builder();
 		for(Entry<String, JsonElement> elementEntry : jsonObj.entrySet()) {
 			parsedElements.put(elementEntry.getKey(), elementEntry.getValue().toString());

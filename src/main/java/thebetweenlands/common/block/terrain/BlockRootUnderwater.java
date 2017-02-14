@@ -30,7 +30,7 @@ public class BlockRootUnderwater extends BlockSwampWater {
 		this.setHardness(1.5F);
 		this.setResistance(10.0F);
 		this.setUnderwaterBlock(true);
-		this.setCreativeTab(BLCreativeTabs.PLANTS);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setHarvestLevel("axe", 0);
 	}
 

@@ -10,6 +10,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
+import thebetweenlands.common.network.clientbound.MessageBlockGuardSectionChange;
+import thebetweenlands.common.network.clientbound.MessageClearBlockGuard;
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
@@ -47,6 +50,9 @@ public class MessageRegistry {
 		registerMessage(MessageWightVolatileParticles.class, Side.CLIENT);
 		registerMessage(MessageGemProc.class, Side.CLIENT);
 		registerMessage(MessageMireSnailEggHatching.class, Side.CLIENT);
+		registerMessage(MessageBlockGuardSectionChange.class, Side.CLIENT);
+		registerMessage(MessageBlockGuardData.class, Side.CLIENT);
+		registerMessage(MessageClearBlockGuard.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

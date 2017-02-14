@@ -24,6 +24,7 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 public class BlockSwampReed extends BlockStackablePlant {
 	public BlockSwampReed() {
 		this.setMaxHeight(4);
+		this.setCreativeTab(null);
 	}
 
 	@Override

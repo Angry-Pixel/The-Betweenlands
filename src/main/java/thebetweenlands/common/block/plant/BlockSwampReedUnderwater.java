@@ -19,6 +19,7 @@ public class BlockSwampReedUnderwater extends BlockStackablePlantUnderwater {
 	public BlockSwampReedUnderwater() {
 		this.resetAge = true;
 		this.setHardness(0.1F);
+		this.setCreativeTab(null);
 	}
 
 	@Override

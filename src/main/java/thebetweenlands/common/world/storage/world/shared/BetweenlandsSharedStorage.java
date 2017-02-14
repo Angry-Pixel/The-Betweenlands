@@ -50,7 +50,7 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage implements
 	@Override
 	public void onWatched(ChunkDataBase chunkStorage, EntityPlayerMP player) {
 		super.onWatched(chunkStorage, player);
-		this.sendDataToPlayer(player);
+		this.sendDataToPlayer(new MessageSyncSharedStorage(SharedStorage.save(this, new NBTTagCompound(), true)), player);
 	}
 
 	@Override
@@ -88,15 +88,15 @@ public abstract class BetweenlandsSharedStorage extends SharedStorage implements
 	 */
 	protected void sendDataToAllWatchers(IMessage message) {
 		for (EntityPlayerMP watcher : this.getWatchers()) {
-			TheBetweenlands.networkWrapper.sendTo(message, watcher);
+			this.sendDataToPlayer(message, watcher);
 		}
 	}
 
 	/**
-	 * Sends the shared storage data to a player
+	 * Sends the message to a player
 	 * @param player
 	 */
-	protected void sendDataToPlayer(EntityPlayerMP player) {
-		TheBetweenlands.networkWrapper.sendTo(new MessageSyncSharedStorage(SharedStorage.save(this, new NBTTagCompound(), true)), player);
+	protected void sendDataToPlayer(IMessage message, EntityPlayerMP player) {
+		TheBetweenlands.networkWrapper.sendTo(message, player);
 	}
 }

@@ -21,6 +21,7 @@ public class BlockSwampKelp extends BlockStackablePlantUnderwater {
 		this.resetAge = true;
 		this.setLightLevel(0.2F);
 		this.setHardness(0.1F);
+		this.setCreativeTab(null);
 	}
 
 	@Override

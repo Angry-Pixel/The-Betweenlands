@@ -127,7 +127,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	/**
 	 * Creates a new shared storage
 	 * @param worldStorage World storage
-	 * @param id Storage ID. <b>Must be a unique ID per region!</b>
+	 * @param id Storage ID. <b>Must be a unique ID!</b>
 	 * @param region Optional shared region. <b>Shared regions stay loaded until all references are unloaded, make sure the linked chunks are within a reasonable distance if a region is used!</b>
 	 */
 	public SharedStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
@@ -270,7 +270,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	public final String getID() {
 		return this.id;
 	}
-
+	
 	/**
 	 * Returns the region
 	 * @return

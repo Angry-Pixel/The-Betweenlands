@@ -152,7 +152,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 		fortressLocation.setLayer(0);
 		fortressLocation.setDirty(true);
 		fortressLocation.setSeed(locationSeed);
-		worldStorage.addSharedStorage(fortressLocation);
 
 		LocationStorage puzzleLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wightTowerPuzzle", EnumLocationType.WIGHT_TOWER);
 		puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
@@ -160,7 +159,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 		puzzleLocation.setLayer(1);
 		puzzleLocation.setDirty(true);
 		puzzleLocation.setSeed(locationSeed);
-		worldStorage.addSharedStorage(puzzleLocation);
 
 		LocationStorage teleporterLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wightTowerTeleporter", EnumLocationType.WIGHT_TOWER);
 		teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
@@ -168,7 +166,6 @@ public class WorldGenWightFortress extends WorldGenerator {
 		teleporterLocation.setLayer(2);
 		teleporterLocation.setDirty(true);
 		teleporterLocation.setSeed(locationSeed);
-		worldStorage.addSharedStorage(teleporterLocation);
 
 		LocationStorage bossLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wightTowerBoss", EnumLocationType.WIGHT_TOWER);
 		bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
@@ -177,9 +174,16 @@ public class WorldGenWightFortress extends WorldGenerator {
 		bossLocation.setLayer(3);
 		bossLocation.setDirty(true);
 		bossLocation.setSeed(locationSeed);
-		worldStorage.addSharedStorage(bossLocation);
 
-		return generateStructure(world, rand, pos);
+		if(generateStructure(world, rand, pos)) {
+			worldStorage.addSharedStorage(fortressLocation);
+			worldStorage.addSharedStorage(puzzleLocation);
+			worldStorage.addSharedStorage(teleporterLocation);
+			worldStorage.addSharedStorage(bossLocation);
+			return true;
+		}
+		
+		return false;
 	}
 
 	public IBlockState getRandomWall(Random rand) {

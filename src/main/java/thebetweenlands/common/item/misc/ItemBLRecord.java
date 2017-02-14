@@ -49,7 +49,7 @@ public class ItemBLRecord extends ItemRecord {
     @SideOnly(Side.CLIENT)
     @Override
     public String getRecordNameLocal() {
-        return I18n.translateToLocal("thebetweenlands.item.record." + name + ".desc");
+        return I18n.translateToLocal("item.thebetweenlands.record." + name + ".desc");
     }
 
 }

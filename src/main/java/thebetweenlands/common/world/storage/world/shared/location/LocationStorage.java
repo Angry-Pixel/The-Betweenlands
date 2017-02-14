@@ -257,6 +257,13 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		}
 		this.visible = nbt.getBoolean("visible");
 		this.locationSeed = nbt.getLong("seed");
+	}
+
+	/**
+	 * Reads the guard data from NBT
+	 * @param nbt
+	 */
+	public void readGuardNBT(NBTTagCompound nbt) {
 		if(this.getGuard() != null) {
 			this.getGuard().readFromNBT(nbt.getCompoundTag("guard"));
 		}
@@ -287,6 +294,15 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 		}
 		nbt.setBoolean("visible", this.visible);
 		nbt.setLong("seed", this.locationSeed);
+		return nbt;
+	}
+
+	/**
+	 * Writes the guard data to NBT
+	 * @param nbt
+	 * @return
+	 */
+	public NBTTagCompound writeGuardNBT(NBTTagCompound nbt) {
 		if(this.getGuard() != null) {
 			nbt.setTag("guard", this.getGuard().writeToNBT(new NBTTagCompound()));
 		}

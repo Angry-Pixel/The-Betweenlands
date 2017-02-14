@@ -35,7 +35,7 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	public BlockLeavesBetweenlands() {
 		setHardness(0.2F);
 		setLightOpacity(1);
-		setCreativeTab(BLCreativeTabs.PLANTS);
+		setCreativeTab(BLCreativeTabs.BLOCKS);
 		setSoundType(SoundType.PLANT);
 		setDefaultState(blockState.getBaseState().withProperty(CHECK_DECAY, true).withProperty(DECAYABLE, true));
 	}
