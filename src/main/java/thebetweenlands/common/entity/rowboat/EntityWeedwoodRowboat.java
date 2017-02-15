@@ -303,10 +303,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             double wz = normal.zCoord;
             double mag = Math.sqrt(wx * wx + wz * wz);
             double strength = mag / Math.min(((1 - normal.yCoord) * 1.8 * roughness), 0.00125);
-//            motionX += wx / strength;
-//            motionZ += wz / strength;
+            motionX += wx / strength;
+            motionZ += wz / strength;
             double dir = Math.atan2(wz, wx) * MathUtils.RAD_TO_DEG;
-//            rotationalVelocity += Math.signum(MathHelper.wrapDegrees(dir - 90) - rotationYaw) * Math.min((1 - normal.yCoord) * 60 * roughness, roughness);
+            rotationalVelocity += Math.signum(MathHelper.wrapDegrees(dir - 90) - rotationYaw) * Math.min((1 - normal.yCoord) * 60 * roughness, roughness);
             rotationYaw += rotationalVelocity;
             if (worldObj.isRemote) {
                 if (motion != null) {

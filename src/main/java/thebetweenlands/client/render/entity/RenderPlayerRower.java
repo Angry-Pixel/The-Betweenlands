@@ -32,7 +32,8 @@ public class RenderPlayerRower extends RenderPlayer {
             model.bipedBody.rotateAngleY = bodyRotateAngleY;
             model.bipedHead.rotateAngleX = -bodyRotateAngleX * 0.75F;
             model.bipedHead.rotateAngleY = -bodyRotateAngleY * 0.75F;
-            // model.bipedLeftArm.rotationPointZ = 
+            model.bipedLeftArm.rotationPointZ = leftArm.shoulderZ * 16;
+            model.bipedRightArm.rotationPointZ = rightArm.shoulderZ * 16;
         }
         float yaw = pilot.prevRotationYaw + (pilot.rotationYaw - pilot.prevRotationYaw) * delta;
         doRender(pilot, x, y, z, yaw, delta);

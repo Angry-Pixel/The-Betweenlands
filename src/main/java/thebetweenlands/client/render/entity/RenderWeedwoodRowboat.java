@@ -22,6 +22,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+
 import thebetweenlands.client.render.model.entity.ModelWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;
@@ -240,37 +241,35 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     private void articulateBody(EntityWeedwoodRowboat rowboat, float delta) {
-        float port = rowboat.getRowProgress(ShipSide.PORT, delta);
-
+        float pow = rowboat.getPilotPower(delta);
         float leftZ = (float) grips.get(ShipSide.STARBOARD).zCoord;
         float rightZ = (float) grips.get(ShipSide.PORT).zCoord;
-        float tilt = (float) Math.atan2(leftZ, rightZ) + 3 * MathUtils.PI / 4;
-        float generalY = tilt * 0.75F;
-        float z = (leftZ + rightZ) / 2;
-        float y = (float) (grips.get(ShipSide.STARBOARD).yCoord + grips.get(ShipSide.PORT).yCoord) / 2;
-        float forward = -z * MathUtils.linearTransformf(Math.abs(leftZ + rightZ), 0, 0.05F, 1.1F, 1);
-        float downward = (-y - 0.3F) / 0.35F;
-        if (downward > 1) {
-            downward = 1;
+        float generalX = 0, generalY = 0, powerX = 0;
+        if (pow != 0) {
+            float port = rowboat.getRowProgress(ShipSide.PORT, delta);
+            powerX = MathHelper.sin((port + 0.03F) * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.32F + 0.05F;
         }
-        if (downward < 0) {
-            downward = 0;
+        if (pow != 1) {
+            float tilt = (float) Math.atan2(leftZ, rightZ) + 3 * MathUtils.PI / 4;
+            generalY = tilt * 0.75F;
+            float z = (leftZ + rightZ) / 2;
+            float y = (float) (grips.get(ShipSide.STARBOARD).yCoord + grips.get(ShipSide.PORT).yCoord) / 2;
+            float forward = -z * MathUtils.linearTransformf(Math.abs(leftZ + rightZ), 0, 0.05F, 1.1F, 1);
+            float downward = MathHelper.clamp_float((-y - 0.3F) / 0.35F, 0, 1);
+            float upward;
+            if (downward < 0.6F) {
+                upward = MathUtils.linearTransformf(downward, 0, 0.6F, 1, 0);
+                upward = PULL_CURVE.eval(upward) * 0.6F;
+            } else {
+                upward = 0;
+            }
+            float lean = (forward + (downward * 0.1F)) * (1 - upward) + upward * 0.2F;
+            generalX = MathUtils.linearTransformf(lean, 0.2F, 0.72F, -0.45F, 0.5F);
         }
-        float upward = 0;
-        if (downward < 0.6F) {
-            upward = MathUtils.linearTransformf(downward, 0, 0.6F, 1, 0);
-            upward = PULL_CURVE.eval(upward) * 0.6F;
-        }
-        float lean = (forward + (downward * 0.1F)) * (1 - upward) + upward * 0.2F;
-        float generalX = MathUtils.linearTransformf(lean, 0.2F, 0.72F, -0.45F, 0.5F);
-
-        float powerY = 0;
-        float powerX = MathHelper.sin((port + 0.04F) * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.35F + 0.05F;
-        float pow = rowboat.getPilotPower(delta);
         bodyRotateAngleX = generalX + (powerX - generalX) * pow;
-        bodyRotateAngleY = generalY + (powerY - generalY) * pow;
-        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp_float(leftZ * 0.6F + 0.3F, -2, 2));
-        shoulderZ.put(ShipSide.PORT, MathHelper.clamp_float(rightZ * 0.6F + 0.3F, -2, 2));
+        bodyRotateAngleY = generalY * (1 - pow);
+        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp_float((leftZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
+        shoulderZ.put(ShipSide.PORT,MathHelper.clamp_float((rightZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
     }
 
     private void articulateArm(ShipSide side, float yaw) {
@@ -296,6 +295,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         armArt.shoulderAngleX = (shoulderAngle != shoulderAngle ? -MathUtils.PI / 2 - targetPitch : (shoulderAngle - MathUtils.PI / 2 - targetPitch)) - bodyRotateAngleX;
         armArt.shoulderAngleY = (float) Math.atan2(targetZ, targetX) + MathUtils.PI / 2 - bodyRotateAngleY;
         armArt.flexionAngle = shoulderAngle != shoulderAngle ? 0 : (flexionAngle - MathUtils.PI) * MathUtils.RAD_TO_DEG;
+        armArt.shoulderZ = shoulderZ.get(side);
     }
 
     private void createBodyTransformationMatrix() {
@@ -361,5 +361,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         public float shoulderAngleY;
 
         public float flexionAngle;
+
+        public float shoulderZ;
     }
 }
