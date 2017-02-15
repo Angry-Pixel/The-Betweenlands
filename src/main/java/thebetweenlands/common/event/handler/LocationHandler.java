@@ -19,6 +19,7 @@ import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.BlockSnapshot;
 import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent.LeftClickBlock;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.RightClickBlock;
 import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.event.world.BlockEvent.MultiPlaceEvent;
@@ -27,6 +28,8 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
@@ -182,6 +185,23 @@ public class LocationHandler {
 
 		for(LocationStorage location : affectedLocations) {
 			location.getGuard().handleExplosion(world, explosion);
+		}
+	}
+
+	@SubscribeEvent
+	public static void onLeftClickBlock(LeftClickBlock event) {
+		if(!event.getEntityPlayer().isCreative()) {
+			List<LocationStorage> locations = LocationStorage.getLocations(event.getWorld(), new Vec3d(event.getPos()));
+			for(LocationStorage location : locations) {
+				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(event.getWorld(), event.getEntityPlayer(), event.getPos())) {
+					if(event.getWorld().isRemote && event.getEntityPlayer().swingProgressInt == 0) {
+						Vec3d hitVec = event.getHitVec();
+						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.xCoord + event.getFace().getFrontOffsetX() * 0.025F, hitVec.yCoord + event.getFace().getFrontOffsetY() * 0.025F, hitVec.zCoord + event.getFace().getFrontOffsetZ() * 0.025F, ParticleArgs.get().withData(event.getFace()));
+					}
+					event.setCanceled(true);
+					break;
+				}
+			}
 		}
 	}
 }

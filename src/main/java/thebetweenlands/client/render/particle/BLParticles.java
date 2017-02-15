@@ -14,6 +14,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
 import thebetweenlands.client.render.particle.entity.ParticleAnimated;
 import thebetweenlands.client.render.particle.entity.ParticleAnimator;
+import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
 import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
 import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
 import thebetweenlands.client.render.particle.entity.ParticleBug;
@@ -101,7 +102,8 @@ public enum BLParticles {
 	THEM(new ParticleThem.Factory()),
 	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
 	ANIMATOR(new ParticleAnimator.Factory()),
-	SPLASH(VanillaParticleFactory.create(ParticleSplash.class, new ParticleSplash.Factory()));
+	SPLASH(VanillaParticleFactory.create(ParticleSplash.class, new ParticleSplash.Factory())),
+	BLOCK_PROTECTION(new ParticleBlockProtection.Factory());
 
 
 
