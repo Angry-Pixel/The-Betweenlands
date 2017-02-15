@@ -10,14 +10,10 @@ import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,7 +22,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-
 import thebetweenlands.client.render.model.entity.ModelWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;
@@ -34,7 +29,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.CubicBezier;
 import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.Matrix;
-import thebetweenlands.util.OpenSimplexNoise;
 import thebetweenlands.util.Quat;
 
 public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
@@ -53,6 +47,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private EnumMap<ShipSide, Vec3d> grips = ShipSide.newEnumMap(Vec3d.class, Vec3d.ZERO, Vec3d.ZERO);
 
     private EnumMap<ShipSide, ArmArticulation> arms = ShipSide.newEnumMap(ArmArticulation.class, new ArmArticulation(), new ArmArticulation());
+
+    private EnumMap<ShipSide, Float> shoulderZ = ShipSide.newEnumMap(float.class);
 
     private Vec3d arm = Vec3d.ZERO;
 
@@ -244,10 +240,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     private void articulateBody(EntityWeedwoodRowboat rowboat, float delta) {
-        float starboard = rowboat.getRowProgress(ShipSide.STARBOARD, delta);
         float port = rowboat.getRowProgress(ShipSide.PORT, delta);
-        float dif = Math.abs(starboard - port);
-        float sync = MathUtils.linearTransformf(dif > EntityWeedwoodRowboat.ROW_PROGRESS_PERIOD / 2 ? EntityWeedwoodRowboat.ROW_PROGRESS_PERIOD - dif : dif, 0, 0.07F, 1, 0);
 
         float leftZ = (float) grips.get(ShipSide.STARBOARD).zCoord;
         float rightZ = (float) grips.get(ShipSide.PORT).zCoord;
@@ -273,8 +266,11 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
         float powerY = 0;
         float powerX = MathHelper.sin((port + 0.04F) * EntityWeedwoodRowboat.OAR_ROTATION_SCALE) * 0.35F + 0.05F;
-        bodyRotateAngleX = generalX + (powerX - generalX) * sync;
-        bodyRotateAngleY = generalY + (powerY - generalY) * sync; 
+        float pow = rowboat.getPilotPower(delta);
+        bodyRotateAngleX = generalX + (powerX - generalX) * pow;
+        bodyRotateAngleY = generalY + (powerY - generalY) * pow;
+        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp_float(leftZ * 0.6F + 0.3F, -2, 2));
+        shoulderZ.put(ShipSide.PORT, MathHelper.clamp_float(rightZ * 0.6F + 0.3F, -2, 2));
     }
 
     private void articulateArm(ShipSide side, float yaw) {
@@ -283,7 +279,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         final float ps = 0.9375F;
         createBodyTransformationMatrix();
         // move to shoulder joint
-        matrix.translate(-6 / 16F * dir, -10 / 16F, 0);
+        matrix.translate(-6 / 16F * dir, -10 / 16F, shoulderZ.get(side));
         arm = matrix.transform(Vec3d.ZERO);
         Vec3d grip = grips.get(side);
         float targetX = (float) (grip.xCoord - arm.xCoord);

@@ -129,6 +129,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private double waveHeight;
 
+    private float prevPilotPower;
+
+    private float pilotPower;
+
     public EntityWeedwoodRowboat(World world) {
         super(world);
         setSize(2, 0.9F);
@@ -253,6 +257,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         boolean right = getAppropriateOarState(ShipSide.PORT);
         updateRowForce(ShipSide.STARBOARD, left, prevOarStrokeLeft);
         updateRowForce(ShipSide.PORT, right, prevOarStrokeRight);
+        updatePilotPull();
         prevOarStrokeLeft = left;
         prevOarStrokeRight = right;
         // TODO: custom smooth sync total world time
@@ -328,6 +333,25 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         }
         rotationYaw = MathHelper.wrapDegrees(rotationYaw);
         prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
+    }
+
+    private void updatePilotPull() {
+        prevPilotPower = pilotPower;
+        int timeStarboard = rowTime.get(ShipSide.STARBOARD);
+        int timePort = rowTime.get(ShipSide.PORT);
+        if (timeStarboard > 20 && timePort > 20 && getAppropriateOarState(ShipSide.STARBOARD) && getAppropriateOarState(ShipSide.PORT)) {
+            if (pilotPower < 1) {
+                pilotPower += 0.2F;
+                if (pilotPower > 1) {
+                    pilotPower = 1;
+                }
+            }
+        } else if (pilotPower > 0) {
+            pilotPower -= 0.4F;
+            if (pilotPower < 0) {
+                pilotPower = 0;
+            }
+        }
     }
 
     private void pullOarByWave(ShipSide side, Vec3d normal) {
@@ -569,10 +593,13 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         setRowProgress(side, getAppropriateRowProgress(side) + value);
     }
 
-    public boolean updateRowForce(ShipSide side, boolean oarStroke, boolean prevOarStroke) {
+    public float getPilotPower(float delta) {
+        return prevPilotPower + (pilotPower - prevPilotPower) * delta;
+    }
+
+    public void updateRowForce(ShipSide side, boolean oarStroke, boolean prevOarStroke) {
         float force = rowForce.get(side);
         int time = rowTime.get(side) + 1;
-        boolean appliedForce = false;
         if (oarStroke || time < FORCE_SETTLE_DURATION) {
             if (!prevOarStroke && oarStroke && time >= FORCE_SETTLE_DURATION) {
                 force = 1;
@@ -582,11 +609,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             }
         } else {
             force = Math.max(force - 0.1F, 0);
-            appliedForce = force > 0;
         }
         rowTime.put(side, time);
         rowForce.put(side, force);
-        return appliedForce;
     }
 
     private void animateHullWaterInteraction() {
