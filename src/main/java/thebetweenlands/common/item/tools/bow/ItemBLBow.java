@@ -9,6 +9,7 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemArrow;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
@@ -16,9 +17,12 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
@@ -31,6 +35,18 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
+
+		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+			@SideOnly(Side.CLIENT)
+			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
+				if (entityIn == null) {
+					return 0.0F;
+				} else {
+					ItemStack itemStack = entityIn.getActiveItemStack();
+					return itemStack != null && itemStack == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+				}
+			}
+		});
 	}
 
 	protected ItemStack findArrows(EntityPlayer player) {
