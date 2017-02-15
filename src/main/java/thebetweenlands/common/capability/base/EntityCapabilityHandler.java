@@ -24,7 +24,6 @@ import net.minecraftforge.common.capabilities.CapabilityManager;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
-import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.StartTracking;
 import net.minecraftforge.event.entity.player.PlayerEvent.StopTracking;
@@ -33,7 +32,9 @@ import net.minecraftforge.fml.common.LoaderState;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerChangedDimensionEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.capability.ISerializableCapability;
 
 public class EntityCapabilityHandler {
@@ -193,9 +194,9 @@ public class EntityCapabilityHandler {
 	}
 
 	@SubscribeEvent
-	public static void onEntityUpdate(LivingUpdateEvent event) {
-		if(!event.getEntity().getEntityWorld().isRemote && event.getEntity() instanceof EntityPlayerMP)  {
-			EntityPlayerMP player = (EntityPlayerMP) event.getEntity();
+	public static void onEntityUpdate(PlayerTickEvent event) {
+		if(!event.player.worldObj.isRemote && event.side == Side.SERVER)  {
+			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
 				Iterator<EntityCapabilityTracker> trackerIT = trackers.iterator();
@@ -209,6 +210,7 @@ public class EntityCapabilityHandler {
 						if(vanillaTrackingPlayers == null || vanillaTrackingPlayers.isEmpty() || !vanillaTrackingPlayers.contains(player)) {
 							//Welp, seems like StopTracking isn't called sometimes...
 							trackerIT.remove();
+							tracker.remove();
 						}
 					}
 
@@ -233,6 +235,9 @@ public class EntityCapabilityHandler {
 
 					if(!player.getServerWorld().getMinecraftServer().getPlayerList().getPlayerList().contains(player)) {
 						it.remove();
+						for(EntityCapabilityTracker tracker : entry.getValue()) {
+							tracker.remove();
+						}
 					}
 				}
 			}
@@ -289,7 +294,9 @@ public class EntityCapabilityHandler {
 				if(trackers == null) {
 					TRACKER_MAP.put(watcher, trackers = new ArrayList<EntityCapabilityTracker>());
 				}
-				trackers.add(new EntityCapabilityTracker(capability, watcher));
+				EntityCapabilityTracker tracker = new EntityCapabilityTracker(capability, watcher);
+				trackers.add(tracker);
+				tracker.add();
 
 				//Send initial packet
 				capability.sendPacket(watcher);
@@ -316,6 +323,7 @@ public class EntityCapabilityHandler {
 
 						if(tracker.getEntityCapability() == capability) {
 							it.remove();
+							tracker.remove();
 						}
 					}
 				}

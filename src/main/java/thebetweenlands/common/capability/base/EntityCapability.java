@@ -1,5 +1,8 @@
 package thebetweenlands.common.capability.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.Entity;
@@ -22,7 +25,7 @@ import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
  */
 public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E extends Entity> extends AbstractCapability<F, T, E> {
 	private E entity;
-	protected boolean dirty = false;
+	private List<EntityCapabilityTracker> trackers = new ArrayList<>();
 
 	protected EntityCapability() {
 		//Make sure the entity capability is the implementation of the capability
@@ -40,6 +43,22 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 */
 	protected void init() {
 
+	}
+
+	/**
+	 * Adds a tracker
+	 * @param tracker
+	 */
+	public final void addTracker(EntityCapabilityTracker tracker) {
+		this.trackers.add(tracker);
+	}
+
+	/**
+	 * Removes a tracker
+	 * @param tracker
+	 */
+	public final void removeTracker(EntityCapabilityTracker tracker) {
+		this.trackers.remove(tracker);
 	}
 
 	/**
@@ -91,15 +110,9 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 * Marks the data as dirty
 	 */
 	public void markDirty() {
-		this.dirty = true;
-	}
-
-	/**
-	 * Returns whether the data is dirty
-	 * @return
-	 */
-	public boolean isDirty() {
-		return this.dirty;
+		for(EntityCapabilityTracker tracker : this.trackers) {
+			tracker.markDirty();
+		}
 	}
 
 	/**
@@ -138,7 +151,6 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 * Sends a packet with all the tracking sensitive data
 	 */
 	public void sendPacket(EntityPlayerMP player) {
-		this.dirty = false;
 		MessageSyncEntityCapabilities message = new MessageSyncEntityCapabilities(this);
 		TheBetweenlands.networkWrapper.sendTo(message, player);
 	}

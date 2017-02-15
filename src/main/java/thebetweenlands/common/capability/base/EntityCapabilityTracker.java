@@ -8,10 +8,32 @@ public class EntityCapabilityTracker {
 
 	private boolean trackerReady = false;
 	private int lastUpdate = 0;
+	private boolean dirty = false;
 
 	public EntityCapabilityTracker(EntityCapability<?, ?, ?> entityCapability, EntityPlayerMP watcher) {
 		this.entityCapability = entityCapability;
 		this.watcher = watcher;
+	}
+
+	/**
+	 * Called when the tracker is added
+	 */
+	public void add() {
+		this.entityCapability.addTracker(this);
+	}
+
+	/**
+	 * Called when the tracker is removed
+	 */
+	public void remove() {
+		this.entityCapability.removeTracker(this);
+	}
+
+	/**
+	 * Marks the data as dirty
+	 */
+	public void markDirty() {
+		this.dirty = true;
 	}
 
 	/**
@@ -40,10 +62,11 @@ public class EntityCapabilityTracker {
 			this.trackerReady = true;
 		}
 
-		if(this.trackerReady && this.entityCapability.isDirty()) {
+		if(this.trackerReady && this.dirty) {
 			this.lastUpdate = 0;
 			this.trackerReady = false;
 			this.entityCapability.sendPacket(this.watcher);
+			this.dirty = false;
 		}
 	}
 }

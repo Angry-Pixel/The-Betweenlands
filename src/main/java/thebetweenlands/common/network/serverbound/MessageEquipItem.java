@@ -89,7 +89,7 @@ public class MessageEquipItem extends MessageEntity {
 			EntityPlayer sender = ctx.getServerHandler().playerEntity;
 			Entity target = this.getEntity(0);
 
-			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+			if(target != null && target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				switch(this.mode) {
 				default:
 				case 0:
