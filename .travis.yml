@@ -18,3 +18,8 @@ notifications:
   email: false
  
 script: ./gradlew build
+
+addons:
+  apt:
+    packages:
+      - oracle-java8-installer
