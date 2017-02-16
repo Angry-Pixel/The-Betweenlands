@@ -1,8 +1,6 @@
 package thebetweenlands.common.world.gen.biome.decorator;
 
 import java.util.Collection;
-import java.util.Random;
-import java.util.UUID;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLeaves;
@@ -41,8 +39,6 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRui
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
@@ -223,7 +219,7 @@ public class DecorationHelper {
 			World world = decorator.getWorld();
 			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) ||
 					(SurfaceType.WATER.matches(world, pos) && world.getBlockState(pos.down()) == BlockRegistry.MUD))
-				return GEN_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos);
+				return GEN_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
 		}
 		return false;
 	}
@@ -750,16 +746,8 @@ public class DecorationHelper {
 	public static boolean generateGiantTree(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPosSeaGround();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld().getBlockState(pos.down()))) {
-			long seed = decorator.getRand().nextLong();
 			pos = pos.add(0, -8, 0);
-			if(GEN_GIANT_TREE.canGenerateAt(decorator.getWorld(), new Random(seed), pos)) {
-				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(decorator.getWorld());
-				WorldGenGiantTree.ChunkMaker marker = new WorldGenGiantTree.ChunkMaker(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), pos, seed);
-				marker.linkChunk(decorator.getWorld().getChunkFromBlockCoords(pos));
-				marker.setDirty(true);
-				worldStorage.addSharedStorage(marker);
-				return true;
-			}
+			return GEN_GIANT_TREE.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}

@@ -265,7 +265,7 @@ public class BiomeGenerator {
 			return;
 		}
 
-		SplittableRandom fastRng = new SplittableRandom((long)(blockX - inChunkX) * 341873128712L + (long)(blockZ - inChunkZ) * 132897987541L);
+		SplittableRandom fastRng = new SplittableRandom(blockX * 341873128712L + blockZ * 132897987541L);
 
 		//Random number for base block patch generation based on the base block noise
 		int baseBlockNoiseRN = (int) (baseBlockNoise / 3.0D + 3.0D + fastRng.nextDouble() * 0.25D);

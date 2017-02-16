@@ -19,6 +19,7 @@ import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.MapGenBase;
 import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.NoiseGeneratorSimplex;
@@ -30,6 +31,7 @@ import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlan
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.gen.feature.MapGenCavesBetweenlands;
+import thebetweenlands.common.world.gen.feature.MapGenRavineBetweenlands;
 
 public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	/**
@@ -73,6 +75,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private final int layerHeight;
 
 	private MapGenCavesBetweenlands caveGenerator;
+	private MapGenBase ravineGenerator;
 
 	private NoiseGeneratorSimplex treeNoise;
 	private NoiseGeneratorSimplex speleothemDensityNoise;
@@ -114,6 +117,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.speleothemDensityNoise = ctx.getSpeleothemDensityNoise();
 		world.setSeaLevel(layerHeight);
 		this.caveGenerator = new MapGenCavesBetweenlands(seed);
+		this.ravineGenerator = new MapGenRavineBetweenlands();
 	}
 
 	@Override
@@ -156,6 +160,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.caveGenerator.setBiomeTerrainWeights(biomeWeights);
 		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
 
+		//Gen ravines
+		this.ravineGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
+		
 		//Add biome features (post cave)
 		for(int z = 0; z < 16; z++) {
 			for(int x = 0; x < 16; x++) {
