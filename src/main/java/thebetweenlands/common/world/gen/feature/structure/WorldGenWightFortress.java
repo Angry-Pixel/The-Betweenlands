@@ -15,12 +15,15 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
+import thebetweenlands.common.block.plant.BlockDoublePlantBL;
 import thebetweenlands.common.block.plant.BlockPlant;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
@@ -30,6 +33,7 @@ import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityItemCage;
@@ -128,16 +132,48 @@ public class WorldGenWightFortress extends WorldGenerator {
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
 	}
 
-	@Override
-	public boolean generate(World world, Random rand, BlockPos pos) {
-		for (int xa = 0; xa <= 32; ++xa) {
-			for(int za = 0; za <= 32; ++za) {
+	protected boolean canGenerateAt(World world, Random rand, BlockPos pos) {
+		MutableBlockPos checkPos = new MutableBlockPos();
+
+		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(32, 0, 0)))) {
+			return false;
+		}
+
+		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(32, 0, 32)))) {
+			return false;
+		}
+
+		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(0, 0, 32)))) {
+			return false;
+		}
+
+		for (int xa = 0; xa <= 31; ++xa) {
+			for(int za = 0; za <= 31; ++za) {
 				for(int ya = 0; ya < 42; ++ya ) {
-					if(!world.isAirBlock(pos.add(xa, ya, za)))
+					checkPos.setPos(pos.getX() + xa, pos.getY() + ya, pos.getZ() + za);
+					IBlockState state = world.getBlockState(checkPos);
+					boolean replaceable = state.getBlock() == Blocks.AIR || state.getBlock().isReplaceable(world, checkPos) || state.getBlock() instanceof BlockPlant ||
+							state.getBlock() instanceof BlockDoublePlantBL;
+					if(!replaceable) {
 						return false;
+					}
 				}
 			}
 		}
+
+		return true;
+	}
+
+	public boolean isBiomeValid(Biome biome) {
+		return biome == BiomeRegistry.MARSH_0 || biome == BiomeRegistry.MARSH_1;
+	}
+
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos) {
+		if(!this.canGenerateAt(world, rand, pos)) {
+			return false;
+		}
+
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 
 		long locationSeed = rand.nextLong();
@@ -182,7 +218,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			worldStorage.addSharedStorage(bossLocation);
 			return true;
 		}
-		
+
 		return false;
 	}
 

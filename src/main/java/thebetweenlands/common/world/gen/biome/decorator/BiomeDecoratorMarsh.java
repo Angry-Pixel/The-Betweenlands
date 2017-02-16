@@ -22,9 +22,10 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		}
 		this.endProfilerSection();
 
-		//TODO: Implement missing generators
-		//this.generate(10, DecorationHelper::generateWightFortress);
-
+		this.startProfilerSection("wightFortress");
+		this.generate(0.05F, DecorationHelper::generateWightFortress);
+		this.endProfilerSection();
+		
 		this.startProfilerSection("giantTree");
 		this.generate(0.25F, DecorationHelper::generateGiantTree);
 		this.endProfilerSection();

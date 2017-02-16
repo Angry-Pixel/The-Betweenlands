@@ -46,7 +46,8 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	public static final PropertyEnum<EnumFacing> FACING = BlockHorizontal.FACING;
 
 	protected ItemStack sickleHarvestableDrop;
-
+	protected boolean replaceable;
+	
 	public BlockDoublePlantBL() {
 		super(Material.PLANTS);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.LOWER).withProperty(FACING, EnumFacing.NORTH));
@@ -57,6 +58,11 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 
 	public BlockDoublePlantBL setSickleDrop(ItemStack drop) {
 		this.sickleHarvestableDrop = drop;
+		return this;
+	}
+	
+	public BlockDoublePlantBL setReplaceable(boolean replaceable) {
+		this.replaceable = replaceable;
 		return this;
 	}
 
@@ -72,7 +78,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos) {
-		return false;
+		return this.replaceable;
 	}
 
 	@Override

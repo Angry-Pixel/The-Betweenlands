@@ -8,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -36,6 +37,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
@@ -97,6 +99,7 @@ public class DecorationHelper {
 	public static final WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();
 	public static final WorldGenerator GEN_BULB_CAPPED_MUSHROOMS = new WorldGenPlantCluster(BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_SPAWNER = new WorldGenSpawner();
+	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -748,6 +751,17 @@ public class DecorationHelper {
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld().getBlockState(pos.down()))) {
 			pos = pos.add(0, -8, 0);
 			return GEN_GIANT_TREE.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateWightFortress(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos(1);
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
+			Biome biome = decorator.getWorld().getBiomeGenForCoords(pos);
+			if(GEN_WIGHT_FORTRESS.isBiomeValid(biome)) {
+				return GEN_WIGHT_FORTRESS.generate(decorator.getWorld(), decorator.getRand(), pos);
+			}
 		}
 		return false;
 	}
