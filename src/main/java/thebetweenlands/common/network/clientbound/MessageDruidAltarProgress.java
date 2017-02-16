@@ -8,6 +8,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.event.handler.DruidAltarSoundHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -45,6 +47,14 @@ public class MessageDruidAltarProgress extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
+		if(ctx.side == Side.CLIENT) {
+			this.handle();
+		}
+		return null;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void handle() {
 		World world = FMLClientHandler.instance().getWorldClient();
 		TileEntity te = world.getTileEntity(this.pos);
 		if (te instanceof TileEntityDruidAltar) {
@@ -71,6 +81,5 @@ public class MessageDruidAltarProgress extends MessageBase {
 				DruidAltarSoundHandler.stopAltarSound(altar);
 			}
 		}
-		return null;
 	}
 }

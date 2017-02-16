@@ -139,6 +139,10 @@ public class LocationHandler {
 			for(LocationStorage location : locations) {
 				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.worldObj, player, resultingPos)) {
 					event.setUseItem(Result.DENY);
+					if(event.getWorld().isRemote) {
+						Vec3d hitVec = event.getHitVec();
+						BLParticles.BLOCK_PROTECTION.spawn(event.getWorld(), hitVec.xCoord + event.getFace().getFrontOffsetX() * 0.025F, hitVec.yCoord + event.getFace().getFrontOffsetY() * 0.025F, hitVec.zCoord + event.getFace().getFrontOffsetZ() * 0.025F, ParticleArgs.get().withData(event.getFace()));
+					}
 					return;
 				}
 			}

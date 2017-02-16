@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -59,7 +58,7 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 
 	@Override
 	public IMessage process(MessageContext ctx) {
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if(ctx.side == Side.CLIENT) {
 			this.handle();
 		}
 		return null;

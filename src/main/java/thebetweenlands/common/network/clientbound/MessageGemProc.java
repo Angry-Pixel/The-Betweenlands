@@ -6,7 +6,6 @@ import java.util.Random;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
@@ -15,8 +14,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.capability.circlegem.CircleGem;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;
-import thebetweenlands.common.network.MessageEntity;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.network.MessageEntity;
 
 public class MessageGemProc extends MessageEntity {
 	private CircleGem gem;
@@ -52,7 +51,7 @@ public class MessageGemProc extends MessageEntity {
 	public IMessage process(MessageContext ctx) {
 		super.process(ctx);
 
-		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+		if(ctx.side == Side.CLIENT) {
 			this.handle();
 		}
 

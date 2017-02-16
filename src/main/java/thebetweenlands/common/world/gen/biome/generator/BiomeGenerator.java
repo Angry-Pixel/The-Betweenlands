@@ -307,7 +307,7 @@ public class BiomeGenerator {
 			//Generate base block patch
 			if(this.hasBaseBlockPatches && baseBlockNoiseRN <= 0) {
 				chunkPrimer.setBlockState(inChunkX, y, inChunkZ, this.getBaseBlockState(layerBlockY));
-				return;
+				continue;
 			}
 
 			//Block above current block
