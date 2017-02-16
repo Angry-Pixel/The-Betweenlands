@@ -15,6 +15,7 @@ import thebetweenlands.common.entity.mobs.EntityChiromaw;
 import thebetweenlands.common.entity.mobs.EntityDarkDruid;
 import thebetweenlands.common.entity.mobs.EntityDragonFly;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityGecko;
@@ -81,6 +82,7 @@ public class EntityRegistry {
 		registerEntity(EntityRopeNode.class, "rope_node", 64, 1, true);
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
+		registerEntity(EntityFortressBoss.class, "fortress_boss", 0x000000, 0x00FFFA, 64, 1, true);
 	}
 
 	private static int id = 0;
