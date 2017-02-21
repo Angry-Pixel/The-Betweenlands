@@ -67,6 +67,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	private int volatileTicks = 0;
 	private float volatileReceivedDamage = 0.0F;
 
+	private boolean canTurnVolatile = true;
 	private boolean canTurnVolatileOnTarget = false;
 
 	protected final EntityMoveHelper flightMoveHelper;
@@ -153,7 +154,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 			} else {
 				this.setHiding(false);
 
-				if (!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatileOnTarget) {
+				if (this.canTurnVolatile && !this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatileOnTarget) {
 					if (this.volatileCooldownTicks > 0) {
 						this.volatileCooldownTicks--;
 					}
@@ -408,12 +409,13 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		nbt.setInteger("volatileTicks", this.volatileTicks);
 		nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
 		nbt.setBoolean("canTurnVolatileOnTarget", this.canTurnVolatileOnTarget);
+		nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
-		
+
 		if(nbt.hasKey("volatileState")) {
 			this.setVolatile(nbt.getBoolean("volatileState"));
 		}
@@ -428,6 +430,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 		}
 		if(nbt.hasKey("canTurnVolatileOnTarget")) {
 			this.canTurnVolatileOnTarget = nbt.getBoolean("canTurnVolatileOnTarget");
+		}
+		if(nbt.hasKey("canTurnVolatile")) {
+			this.canTurnVolatile = nbt.getBoolean("canTurnVolatile");
 		}
 	}
 
@@ -485,5 +490,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
 	public boolean canPossess(EntityLivingBase entity) {
 		return entity instanceof EntityPlayer && (((EntityPlayer) entity).inventory.getStackInSlot(103) == null || ((EntityPlayer) entity).inventory.getStackInSlot(103).getItem() != ItemRegistry.SKULL_MASK);
+	}
+	
+	public void setCanTurnVolatile(boolean canTurnVolatile) {
+		this.canTurnVolatile = canTurnVolatile;
 	}
 }

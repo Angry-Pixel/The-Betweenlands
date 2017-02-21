@@ -17,6 +17,7 @@ import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
+import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.network.clientbound.MessageRemoveSharedStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkData;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
@@ -53,6 +54,7 @@ public class MessageRegistry {
 		registerMessage(MessageBlockGuardSectionChange.class, Side.CLIENT);
 		registerMessage(MessageBlockGuardData.class, Side.CLIENT);
 		registerMessage(MessageClearBlockGuard.class, Side.CLIENT);
+		registerMessage(MessagePlayEntityIdle.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
