@@ -46,7 +46,7 @@ import thebetweenlands.client.event.handler.MusicHandler;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
 import thebetweenlands.client.event.handler.TextureStitchHandler;
-import thebetweenlands.client.event.handler.TextureStitchHandler.TextureFrameSplitter;
+import thebetweenlands.client.event.handler.TextureStitchHandler.TextureStitcher;
 import thebetweenlands.client.event.handler.ThemHandler;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.event.handler.equipment.RadialMenuHandler;
@@ -74,6 +74,7 @@ import thebetweenlands.client.render.entity.RenderFortressBoss;
 import thebetweenlands.client.render.entity.RenderFortressBossBlockade;
 import thebetweenlands.client.render.entity.RenderFortressBossProjectile;
 import thebetweenlands.client.render.entity.RenderFortressBossSpawner;
+import thebetweenlands.client.render.entity.RenderFortressBossTeleporter;
 import thebetweenlands.client.render.entity.RenderFortressBossTurret;
 import thebetweenlands.client.render.entity.RenderFrog;
 import thebetweenlands.client.render.entity.RenderGasCloud;
@@ -147,6 +148,7 @@ import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
 import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
 import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
@@ -471,6 +473,7 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossBlockade.class, RenderFortressBossBlockade::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossProjectile.class, RenderFortressBossProjectile::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTurret.class, RenderFortressBossTurret::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTeleporter.class, RenderFortressBossTeleporter::new);
 		
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -481,9 +484,9 @@ public class ClientProxy extends CommonProxy {
 		for(BLParticles particle : particles) {
 			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
 			if(stitcher != null) {
-				TextureStitchHandler.INSTANCE.registerTextureFrameSplitter(new TextureFrameSplitter((splitter) -> {
+				TextureStitchHandler.INSTANCE.registerTextureStitcher(new TextureStitcher((splitter) -> {
 					stitcher.setFrames(splitter.getFrames());
-				}, stitcher.getTextures()));
+				}, stitcher.getTextures()).setSplitFrames(stitcher.shouldSplitAnimations()));
 			}
 		}
 	}

@@ -28,6 +28,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -96,18 +97,21 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		state = ((IExtendedBlockState)state).withProperty(FLOWER, Blocks.AIR.getDefaultState());
 
-		TileEntity te = world.getTileEntity(pos);
+		if(world instanceof ChunkCache) {
+			TileEntity te = world.getTileEntity(pos);
 
-		if(te != null && te instanceof TileEntityMudFlowerPot) {
-			TileEntityMudFlowerPot flowerPot = (TileEntityMudFlowerPot) te;
+			if(te != null && te instanceof TileEntityMudFlowerPot) {
+				TileEntityMudFlowerPot flowerPot = (TileEntityMudFlowerPot) te;
 
-			if(flowerPot.getFlowerItemStack() != null) {
-				IBlockState blockState = this.getPlantBlockStateFromItem(flowerPot.getFlowerItemStack());
-				if(blockState != null) {
-					state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
+				if(flowerPot.getFlowerItemStack() != null) {
+					IBlockState blockState = this.getPlantBlockStateFromItem(flowerPot.getFlowerItemStack());
+					if(blockState != null) {
+						state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
+					}
 				}
 			}
 		}
+
 		return state;
 	}
 

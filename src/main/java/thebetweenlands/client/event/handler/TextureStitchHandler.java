@@ -28,8 +28,6 @@ import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.item.ICorrodible;
-import thebetweenlands.client.render.particle.BLParticles;
-import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
 import thebetweenlands.common.item.corrosion.CorrosionHelper;
@@ -42,16 +40,16 @@ public class TextureStitchHandler {
 
 	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
 
-	private final List<TextureFrameSplitter> splitters = new ArrayList<TextureFrameSplitter>();
+	private final List<TextureStitcher> stitchers = new ArrayList<TextureStitcher>();
 
 	private final Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<ResourceLocation, Frame[]>();
 
 	/**
-	 * Registers a texture frame splitter
+	 * Registers a texture stitcher
 	 * @param splitter
 	 */
-	public void registerTextureFrameSplitter(TextureFrameSplitter splitter) {
-		this.splitters.add(splitter);
+	public void registerTextureStitcher(TextureStitcher splitter) {
+		this.stitchers.add(splitter);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -108,80 +106,70 @@ public class TextureStitchHandler {
 			}
 		}
 
-		//Stitch particle textures that aren't split
-		BLParticles[] particles = BLParticles.values();
-		for(BLParticles particle : particles) {
-			ParticleTextureStitcher<?> stitcher = particle.getFactory().getStitcher();
-			if(stitcher != null && !stitcher.shouldSplitAnimations()) {
-				ResourceLocation[] textures = stitcher.getTextures();
-				Frame[][] frames = new Frame[textures.length][];
-				for(int i = 0; i < textures.length; i++) {
-					frames[i] = new Frame[]{ new Frame(e.getMap().registerSprite(textures[i]), -1) };
-				}
-				stitcher.setFrames(frames);
-			}
-		}
-
-		//Split animated textures into seperate frames
+		//Stitch textures and split animations if necessary
 		this.animationFramesCache.clear();
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
-		for(TextureFrameSplitter splitter : this.splitters) {
-			ResourceLocation[] textures = splitter.getTextures();
+		for(TextureStitcher stitcher : this.stitchers) {
+			ResourceLocation[] textures = stitcher.getTextures();
 			Frame[][] frames = new Frame[textures.length][];
 
 			for(int i = 0; i < textures.length; i++) {
 				TextureAtlasSprite sprite = e.getMap().registerSprite(textures[i]);
 
-				try {
-					ResourceLocation resourceLocation = this.getResourceLocation(e.getMap().getBasePath(), sprite);
+				if(stitcher.splitFrames) {
+					try {
+						ResourceLocation resourceLocation = this.getResourceLocation(e.getMap().getBasePath(), sprite);
 
-					Frame[] cachedFrames = this.animationFramesCache.get(resourceLocation);
-					if(cachedFrames != null) {
-						//Use cached frames
-						frames[i] = cachedFrames;
-					} else {
-						//Load sprite
-						IResource resource = null;
-						if (sprite.hasCustomLoader(resourceManager, resourceLocation)) {
-							sprite.load(resourceManager, resourceLocation);
+						Frame[] cachedFrames = this.animationFramesCache.get(resourceLocation);
+						if(cachedFrames != null) {
+							//Use cached frames
+							frames[i] = cachedFrames;
 						} else {
-							PngSizeInfo pngSizeInfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourceLocation));
-							resource = resourceManager.getResource(resourceLocation);
-							boolean hasAnimation = resource.getMetadata("animation") != null;
-							sprite.loadSprite(pngSizeInfo, hasAnimation);
-						}
-
-						//Necessary to initialize animation metadata
-						sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels() + 1);
-
-						//Set sprites or split into seperate frames
-						if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
-							//Single frame
-							frames[i] = new Frame[]{ new Frame(sprite, 0) };
-						} else {
-							//Multiple frames, parse metadata and store seperate frames
-							AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
-							boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
-							int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
-							frames[i] = new Frame[frameCount];
-							for(int frame = 0; frame < frameCount; frame++) {
-								int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
-								int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
-								int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
-								TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
-								e.getMap().setTextureEntry(frameSprite);
-								frames[i][frame] = new Frame(frameSprite, duration);
+							//Load sprite
+							IResource resource = null;
+							if (sprite.hasCustomLoader(resourceManager, resourceLocation)) {
+								sprite.load(resourceManager, resourceLocation);
+							} else {
+								PngSizeInfo pngSizeInfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourceLocation));
+								resource = resourceManager.getResource(resourceLocation);
+								boolean hasAnimation = resource.getMetadata("animation") != null;
+								sprite.loadSprite(pngSizeInfo, hasAnimation);
 							}
-						}
 
-						this.animationFramesCache.put(resourceLocation, frames[i]);
+							//Necessary to initialize animation metadata
+							sprite.loadSpriteFrames(resource, e.getMap().getMipmapLevels() + 1);
+
+							//Set sprites or split into seperate frames
+							if(!sprite.hasAnimationMetadata() || sprite.getFrameCount() == 1) {
+								//Single frame
+								frames[i] = new Frame[]{ new Frame(sprite, 0) };
+							} else {
+								//Multiple frames, parse metadata and store seperate frames
+								AnimationMetadataSection animationMetadata = resource.getMetadata("animation");
+								boolean hasFrameMeta = animationMetadata.getFrameCount() > 0;
+								int frameCount = hasFrameMeta ? animationMetadata.getFrameCount() : sprite.getFrameCount();
+								frames[i] = new Frame[frameCount];
+								for(int frame = 0; frame < frameCount; frame++) {
+									int duration = hasFrameMeta ? animationMetadata.getFrameTimeSingle(frame) : animationMetadata.getFrameTime();
+									int index = hasFrameMeta ? animationMetadata.getFrameIndex(frame) : frame;
+									int frameData[] = sprite.getFrameTextureData(index)[0]; //Use original non-mipmap frame
+									TextureAtlasSprite frameSprite = new TextureFromData(sprite.getIconName() + "_frame_" + frame, frameData, sprite.getIconWidth(), sprite.getIconHeight());
+									e.getMap().setTextureEntry(frameSprite);
+									frames[i][frame] = new Frame(frameSprite, duration);
+								}
+							}
+
+							this.animationFramesCache.put(resourceLocation, frames[i]);
+						}
+					} catch(Exception ex) {
+						throw new RuntimeException("Failed splitting texture animation", ex);
 					}
-				} catch(Exception ex) {
-					throw new RuntimeException("Failed splitting texture animation", ex);
+				} else {
+					frames[i] = new Frame[]{ new Frame(sprite, 0) };
 				}
 			}
 
-			splitter.frames = frames;
+			stitcher.frames = frames;
 		}
 	}
 
@@ -202,7 +190,7 @@ public class TextureStitchHandler {
 		}
 
 		//Frame splitters
-		for(TextureFrameSplitter splitter : this.splitters) {
+		for(TextureStitcher splitter : this.stitchers) {
 			if(splitter.callback != null) {
 				splitter.callback.accept(splitter);
 			}
@@ -234,18 +222,29 @@ public class TextureStitchHandler {
 		return foundDependencies;
 	}
 
-	public static final class TextureFrameSplitter {
-		private final Consumer<TextureFrameSplitter> callback;
+	public static final class TextureStitcher {
+		private final Consumer<TextureStitcher> callback;
 		private final ResourceLocation[] textures;
 		private Frame[][] frames;
+		private boolean splitFrames;
 
-		public TextureFrameSplitter(ResourceLocation... textures) {
+		public TextureStitcher(ResourceLocation... textures) {
 			this(null, textures);
 		}
 
-		public TextureFrameSplitter(@Nullable Consumer<TextureFrameSplitter> callback, ResourceLocation... textures) {
+		public TextureStitcher(@Nullable Consumer<TextureStitcher> callback, ResourceLocation... textures) {
 			this.textures = textures;
 			this.callback = callback;
+		}
+
+		/**
+		 * Sets whether texture animations should be split into separate sprites
+		 * @param split
+		 * @return
+		 */
+		public TextureStitcher setSplitFrames(boolean split) {
+			this.splitFrames = split;
+			return this;
 		}
 
 		/**

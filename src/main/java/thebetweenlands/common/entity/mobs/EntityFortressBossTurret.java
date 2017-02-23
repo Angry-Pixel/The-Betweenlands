@@ -195,7 +195,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 				}
 			}
 			if(this.worldObj.rand.nextInt(6) == 0) {
-				BLParticles.GREEN_FLAME.spawn(this.worldObj, this.posX, this.posY + 0.2F, this.posZ, ParticleArgs.get().withMotion((this.worldObj.rand.nextFloat() - 0.5F) / 5.0F, (this.worldObj.rand.nextFloat() - 0.5F) / 5.0F, (this.worldObj.rand.nextFloat() - 0.5F) / 5.0F));
+				this.spawnFlameParticles();
 			}
 		}
 
@@ -229,12 +229,11 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 						bullet.setThrowableHeading(-diff.xCoord, -diff.yCoord, -diff.zCoord, speed, 0.0F);
 						this.worldObj.spawnEntityInWorld(bullet);
 					}
-					this.setDead();
 				} else {
 					for(int i = 0; i < 6; i++)
 						this.spawnVolatileParticles();
-					this.setDead();
 				}
+				this.setDead();
 			}
 		} else {
 			this.attackTicks = 0;
@@ -267,6 +266,11 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			return false;
 		}
 		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void spawnFlameParticles() {
+		BLParticles.GREEN_FLAME.spawn(this.worldObj, this.posX, this.posY + 0.2F, this.posZ, ParticleArgs.get().withMotion((this.worldObj.rand.nextFloat() - 0.5F) / 5.0F, (this.worldObj.rand.nextFloat() - 0.5F) / 5.0F, (this.worldObj.rand.nextFloat() - 0.5F) / 5.0F));
 	}
 
 	@SideOnly(Side.CLIENT)

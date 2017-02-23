@@ -164,7 +164,7 @@ public class EquipmentHelper {
 					return stack;
 				}
 
-				if(stack.getItem() instanceof IEquippable) {
+				if(stack != null && stack.getItem() instanceof IEquippable) {
 					((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
 				}
 

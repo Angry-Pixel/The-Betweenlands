@@ -23,6 +23,7 @@ import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.capability.equipment.EquipmentHelper;
+import thebetweenlands.common.network.serverbound.MessageEquipItem;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemEquipmentHandler {
@@ -99,9 +100,13 @@ public class ItemEquipmentHandler {
 
 	@SubscribeEvent
 	public static void onItemUse(PlayerInteractEvent event) {
-		if(event instanceof PlayerInteractEvent.RightClickBlock /*|| event instanceof PlayerInteractEvent.RightClickEmpty only on client side :(*/) {
+		if(event instanceof PlayerInteractEvent.RightClickBlock || event instanceof PlayerInteractEvent.RightClickEmpty) {
 			EntityPlayer player = event.getEntityPlayer();
 			ItemStack heldItem = event.getItemStack();
+
+			if(event instanceof PlayerInteractEvent.RightClickEmpty) {
+				heldItem = player.getHeldItemMainhand();
+			}
 
 			if(player != null && heldItem != null && heldItem.getItem() instanceof IEquippable) {
 				IEquippable equippable = (IEquippable) heldItem.getItem();
@@ -115,6 +120,14 @@ public class ItemEquipmentHandler {
 						}
 
 						player.swingArm(event.getHand());
+
+						if(event instanceof PlayerInteractEvent.RightClickEmpty) {
+							//RightClickEmpty is client side only, must send packet
+							int slot = player.inventory.getSlotFor(heldItem);
+							if(slot >= 0) {
+								TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(player.inventory.currentItem, player));
+							}
+						}
 					}
 				}
 			}

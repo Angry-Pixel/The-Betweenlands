@@ -51,7 +51,7 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 					60.0f / 255.0f * 13.0F));
 		}
 
-		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
+		float ticks = energyBall.ticksExisted + partialTickTime;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y - 0.0625D - energyBall.pulseFloat, z);
 		float f1 = ticks;

@@ -30,7 +30,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	private int strikes = 0;
 	private int ticksInAir;
 
-	protected static final DataParameter<Optional<UUID>> OWNER_UUID_DW = EntityDataManager.createKey(EntityWight.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Optional<UUID>> OWNER_UUID_DW = EntityDataManager.createKey(EntityVolatileSoul.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public EntityVolatileSoul(World world) {
 		super(world);

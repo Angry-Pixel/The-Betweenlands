@@ -17,6 +17,7 @@ import net.minecraft.util.Mirror;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -157,14 +158,16 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-		TileEntity te = worldIn.getTileEntity(pos);
-		if(te != null && te instanceof TileEntityRubberTap) {
-			FluidStack drained = ((TileEntityRubberTap)te).drain(Fluid.BUCKET_VOLUME, false);
-			if(drained != null) {
-				int amount = (int)((float)drained.amount / (float)Fluid.BUCKET_VOLUME * 15.0F);
-				state = state.withProperty(AMOUNT, amount);
-			} else {
-				state = state.withProperty(AMOUNT, 0);
+		if(worldIn instanceof ChunkCache) {
+			TileEntity te = worldIn.getTileEntity(pos);
+			if(te != null && te instanceof TileEntityRubberTap) {
+				FluidStack drained = ((TileEntityRubberTap)te).drain(Fluid.BUCKET_VOLUME, false);
+				if(drained != null) {
+					int amount = (int)((float)drained.amount / (float)Fluid.BUCKET_VOLUME * 15.0F);
+					state = state.withProperty(AMOUNT, amount);
+				} else {
+					state = state.withProperty(AMOUNT, 0);
+				}
 			}
 		}
 		return state;

@@ -19,6 +19,7 @@ import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
 import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
 import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
 import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
@@ -87,10 +88,11 @@ public class EntityRegistry {
 		registerEntity(EntityMummyArm.class, "mummy_arm", 64, 20, false);
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
 		registerEntity(EntityFortressBoss.class, "fortress_boss", 0x000000, 0x00FFFA, 64, 1, true);
-		registerEntity(EntityFortressBossSpawner.class, "fortress_boss_spawner", 0x000000, 0x00FFFA, 64, 20, false);
+		registerEntity(EntityFortressBossSpawner.class, "fortress_boss_spawner", 64, 20, false);
 		registerEntity(EntityFortressBossBlockade.class, "fortress_boss_blockade", 0x000000, 0x00FFFA, 64, 20, false);
 		registerEntity(EntityFortressBossProjectile.class, "fortress_boss_projectile", 64, 5, true);
 		registerEntity(EntityFortressBossTurret.class, "fortress_boss_turret", 64, 20, false);
+		registerEntity(EntityFortressBossTeleporter.class, "fortress_boss_teleporter", 64, 5, false);
 	}
 
 	private static int id = 0;

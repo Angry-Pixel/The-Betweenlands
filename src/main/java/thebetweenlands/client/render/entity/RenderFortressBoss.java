@@ -13,9 +13,13 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.render.model.entity.ModelFortressBoss;
 import thebetweenlands.client.render.model.entity.ModelSwordEnergy;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.entity.mobs.EntityFortressBoss;
 import thebetweenlands.util.LightingUtil;
 
@@ -37,7 +41,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 	public void doRender(EntityFortressBoss entity, double x, double y, double z, float yaw, float partialTicks) {
 		EntityFortressBoss boss = (EntityFortressBoss) entity;
 
-		/*if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
 			if(boss.hurtResistantTime == 0) {
 				float lightIntensity = 0.0F;
@@ -53,7 +57,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 			} else {
 				shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 1.5F / boss.maxHurtResistantTime * (boss.hurtResistantTime + partialTicks), 0, 0));
 			}
-		}*/
+		}
 
 		/*if(this.getRenderManager().isDebugBoundingBox()) {
 			GlStateManager.depthMask(false);

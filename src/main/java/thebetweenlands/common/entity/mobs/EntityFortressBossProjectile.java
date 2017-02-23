@@ -17,7 +17,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -175,10 +177,11 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			if(this.isDeflectable()) {
 				this.setBeenAttacked();
 				if (source.getEntity() instanceof EntityPlayer) {
-					ItemStack heldItem = ((EntityPlayer)source.getEntity()).getActiveItemStack();
+					ItemStack heldItem = ((EntityPlayer)source.getEntity()).getHeldItem(EnumHand.MAIN_HAND);
 					if(heldItem != null && heldItem.getItem() instanceof ItemSword) {
 						if(!this.worldObj.isRemote && source.getEntity().getPassengers().isEmpty()) {
-							this.startRiding(source.getEntity());
+							this.startRiding(source.getEntity(), true);
+							this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(source.getEntity()));
 							return true;
 						}
 					}
@@ -248,7 +251,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			} else {
 				if(this.getRidingEntity() instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) this.getRidingEntity();
-					ItemStack heldItem = player.getActiveItemStack();
+					ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
 					if(!this.isDeflectable() || heldItem == null || heldItem.getItem() instanceof ItemSword == false) {
 						if(!this.worldObj.isRemote) {
 							this.setDead();

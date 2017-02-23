@@ -24,7 +24,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 
 public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
-	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossBlockade.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossSpawner.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public int spawnDelay = 40;
 	public final int maxSpawnDelay = 40;

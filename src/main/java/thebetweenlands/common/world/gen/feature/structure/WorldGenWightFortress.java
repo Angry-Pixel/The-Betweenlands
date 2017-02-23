@@ -16,6 +16,7 @@ import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
@@ -32,6 +33,7 @@ import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHal
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.entity.EntitySwordEnergy;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -135,6 +137,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 	protected boolean canGenerateAt(World world, Random rand, BlockPos pos) {
 		MutableBlockPos checkPos = new MutableBlockPos();
 
+		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos))) {
+			return false;
+		}
+		
 		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(32, 0, 0)))) {
 			return false;
 		}
@@ -174,6 +180,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			return false;
 		}
 
+		
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 
 		long locationSeed = rand.nextLong();
@@ -1093,12 +1100,12 @@ public class WorldGenWightFortress extends WorldGenerator {
 		//floor2
 		rotatedCubeVolume(world, rand, pos, 13, 28, 13, limestonePolished, 0, 6, 1, 6, 0);
 
-		/*	EntityFortressBossTeleporter tp = new EntityFortressBossTeleporter(world);
-		tp.setLocationAndAngles(xx + 16, yy + 30, zz + 16, 0, 0);
-		tp.setTeleportDestination(Vec3.createVectorHelper(xx + 16, yy + 17 + 19.2D, zz + 16));
-		tp.setBossSpawnPosition(Vec3.createVectorHelper(xx + 16, yy + 17 + 19 + 5.2D, zz + 16));
+		EntityFortressBossTeleporter tp = new EntityFortressBossTeleporter(world);
+		tp.setLocationAndAngles(pos.getX() + 16, pos.getY() + 30, pos.getZ() + 16, 0, 0);
+		tp.setTeleportDestination(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19.2D, pos.getZ() + 16));
+		tp.setBossSpawnPosition(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19 + 5.2D, pos.getZ() + 16));
 		world.spawnEntityInWorld(tp);
-		 */
+		 
 		//floor3 (Boss fight Floor)
 		rotatedCubeVolume(world, rand, pos, 13, 35, 13, betweenstoneTiles, 0, 6, 1, 6, 0);
 		rotatedCubeVolume(world, rand, pos, 14, 35, 12, betweenstoneTiles, 0, 4, 1, 1, 0);

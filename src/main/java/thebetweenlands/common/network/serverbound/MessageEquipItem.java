@@ -106,7 +106,7 @@ public class MessageEquipItem extends MessageEntity {
 					//Unequip
 					if(this.sourceSlot >= 0) {
 						ItemStack stack = EquipmentHelper.unequipItem(sender, target, this.inventory, this.sourceSlot, false);
-						if(!sender.inventory.addItemStackToInventory(stack)) {
+						if(stack != null && !sender.inventory.addItemStackToInventory(stack)) {
 							target.entityDropItem(stack, target.getEyeHeight());
 						}
 					}

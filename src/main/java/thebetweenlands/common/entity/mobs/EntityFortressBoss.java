@@ -128,7 +128,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		super.entityInit();
 		this.getDataManager().register(SHIELD_STATE, 0);
 		this.getDataManager().register(SHIELD_ROTATION, 0.0F);
-		this.getDataManager().register(FLOATING_STATE, false);
+		this.getDataManager().register(FLOATING_STATE, true);
 		this.getDataManager().register(GROUND_ATTACK_STATE, false);
 		this.getDataManager().register(ANCHOR, Vec3d.ZERO);
 		this.getDataManager().register(ANCHOR_RADIUS, 0.0F);
@@ -415,8 +415,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		super.onUpdate();
 
 		EntityPlayer closestPlayer = this.worldObj.getNearestAttackablePlayer(this, 32.0D, 16.0D);
-		if(closestPlayer != null)
+		if(closestPlayer != null) {
 			this.faceEntity(closestPlayer, 360.0F, 360.0F);
+			this.setAttackTarget(closestPlayer);
+		}
 
 		this.lastShieldRotationYaw = this.shieldRotationYaw;
 		this.lastShieldRotationPitch = this.shieldRotationPitch;
@@ -545,6 +547,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 										EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(this.worldObj, this);
 										blockade.setLocationAndAngles(this.posX, spawnY, this.posZ, 0, 0);
 										blockade.setTriangleSize(1.2F + this.worldObj.rand.nextFloat() * 1.6F);
+										blockade.setOwner(this);
 										blockade.setMaxDespawnTicks(400);
 										this.worldObj.spawnEntityInWorld(blockade);
 									}

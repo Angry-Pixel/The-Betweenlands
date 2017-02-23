@@ -12,7 +12,7 @@ import thebetweenlands.common.tile.TileEntitySpikeTrap;
 public class RenderSpikeTrap extends TileEntitySpecialRenderer<TileEntitySpikeTrap> {
 	private static final ResourceLocation ACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spike_block_active.png");
 	private static final ResourceLocation INACTIVE_TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/spike_block_inactive.png");
-	private final ModelSpikeBlock model = new ModelSpikeBlock();
+	private static final ModelSpikeBlock MODEL = new ModelSpikeBlock();
 
 	@Override
 	public final void renderTileEntityAt(TileEntitySpikeTrap tile, double x, double y, double z, float partialTicks, int destroyStage) {
@@ -25,9 +25,8 @@ public class RenderSpikeTrap extends TileEntitySpecialRenderer<TileEntitySpikeTr
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(-1, -1, 1);
 		GlStateManager.disableCull();
-		model.renderSpikes(tile, partialTicks);
+		MODEL.renderSpikes(tile, partialTicks);
 		GlStateManager.enableCull();;
 		GlStateManager.popMatrix();
-
 	}
 }

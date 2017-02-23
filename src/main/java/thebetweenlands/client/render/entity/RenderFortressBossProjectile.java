@@ -25,15 +25,14 @@ public class RenderFortressBossProjectile extends Render<EntityFortressBossProje
 	}
 
 	public void renderProjectile(EntityFortressBossProjectile entity, double x, double y, double z, float rotationYaw, float partialTickTime) {
-		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
+		float ticks = entity.ticksExisted + partialTickTime;
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y - 0.6D * 0.6D, z);
 		this.bindTexture(TEXTURE);
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.loadIdentity();
-		float interpTicks = ticks + partialTickTime;
-		float uOffset = interpTicks * 0.01F;
-		float vOffset = interpTicks * 0.01F;
+		float uOffset = ticks * 0.01F;
+		float vOffset = ticks * 0.01F;
 		GlStateManager.translate(uOffset, vOffset, 0.0F);
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 		GlStateManager.enableBlend();
