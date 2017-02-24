@@ -1,4 +1,4 @@
-package thebetweenlands.client.render.model.entity;
+package thebetweenlands.client.render.model.entity.rowboat;
 
 import java.util.EnumMap;
 

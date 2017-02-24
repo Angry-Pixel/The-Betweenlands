@@ -1,24 +1,29 @@
-package thebetweenlands.client.render.model.entity;
+package thebetweenlands.client.render.model.entity.rowboat;
 
 import java.util.EnumMap;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
-import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
+import thebetweenlands.client.render.model.entity.ModelBipedLimb;
+import thebetweenlands.client.render.model.entity.ModelBoxCustomizable;
 import thebetweenlands.common.entity.rowboat.ShipSide;
 import thebetweenlands.util.MathUtils;
 
-public class ModelPlayerRower extends ModelPlayer {
+public class ModelBipedRower extends ModelBiped {
     private EnumMap<ShipSide, ModelBipedLimb> arms;
 
     private ModelRenderer leftForearm, rightForearm;
 
-    public ModelPlayerRower(float expand, boolean smallArms) {
-        super(expand, smallArms);
+    public ModelBipedRower(float expand) {
+        this(expand, 64, 32);
+    }
+
+    public ModelBipedRower(float expand, int textureWidth, int textureHeight) {
+        super(expand, 0, textureWidth, textureHeight);
         boxList.remove(bipedBody.cubeList.remove(0));
         bipedBody = new AdvancedModelRenderer(this, 16, 16);
         bipedBody.setRotationPoint(0, 12, 0);
@@ -119,9 +124,6 @@ public class ModelPlayerRower extends ModelPlayer {
         bipedRightLeg.render(scale);
         bipedLeftLeg.render(scale);
     }
-
-    @Override
-    public void renderDeadmau5Head(float scale) {}
 
     @Override
     public void setRotationAngles(float speed, float swing, float ticksExisted, float yaw, float pitch, float scale, Entity entity) {}

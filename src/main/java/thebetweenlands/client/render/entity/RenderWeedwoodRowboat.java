@@ -23,7 +23,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import thebetweenlands.client.render.model.entity.ModelWeedwoodRowboat;
+import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.entity.rowboat.ShipSide;
 import thebetweenlands.common.lib.ModInfo;
@@ -37,7 +37,9 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     private static final CubicBezier PULL_CURVE = new CubicBezier(1, 0, 1, 0.25F);
 
-    private RenderPlayerRower rowerRenderer;
+    private RenderPlayerRower rowerDefaultRender;
+
+    private RenderPlayerRower rowerSlimRender;
 
     private ModelWeedwoodRowboat model = new ModelWeedwoodRowboat();
 
@@ -59,7 +61,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     public RenderWeedwoodRowboat(RenderManager mgr) {
         super(mgr);
-        rowerRenderer = new RenderPlayerRower(mgr, false); // TODO: slim arms
+        rowerDefaultRender = new RenderPlayerRower(mgr, false);
+        rowerSlimRender = new RenderPlayerRower(mgr, true);
     }
 
     @Override
@@ -201,7 +204,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             return;
         }
         Entity riding = e.getRidingEntity();
-        if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e && event.getRenderer() != (Render<?>) rowerRenderer) {
+        if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e && !(((Render<?>) event.getRenderer()) instanceof RenderPlayerRower)) {
             event.setCanceled(true);
             EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) riding;
             float delta = Minecraft.getMinecraft().getRenderPartialTicks();
@@ -213,7 +216,9 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             float yaw = rowboat.prevRotationYaw + (rowboat.rotationYaw - rowboat.prevRotationYaw) * delta;
             articulateArm(ShipSide.STARBOARD, yaw);
             articulateArm(ShipSide.PORT, yaw);
-            rowerRenderer.renderPilot((AbstractClientPlayer) e, arms.get(ShipSide.STARBOARD), arms.get(ShipSide.PORT), bodyRotateAngleX, bodyRotateAngleY, event.getX(), event.getY(), event.getZ(), delta);
+            AbstractClientPlayer player = (AbstractClientPlayer) e;
+            RenderPlayerRower render = "slim".equals(player.getSkinType()) ? rowerSlimRender : rowerDefaultRender;
+            render.renderPilot(player, arms.get(ShipSide.STARBOARD), arms.get(ShipSide.PORT), bodyRotateAngleX, bodyRotateAngleY, event.getX(), event.getY(), event.getZ(), delta);
         }
     }
 

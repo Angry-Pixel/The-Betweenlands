@@ -1,32 +1,32 @@
-package thebetweenlands.client.render.render.entity.layer;
+package thebetweenlands.client.render.entity.layer;
 
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
-import thebetweenlands.client.render.model.entity.ModelPlayerRower;
+import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower;
 
-public class LayerRowerArmor extends LayerArmorBase<ModelPlayerRower> {
+public class LayerRowerArmor extends LayerArmorBase<ModelBipedRower> {
     public LayerRowerArmor(RenderLivingBase<?> renderer) {
         super(renderer);
     }
 
     @Override
     protected void initArmor() {
-        modelLeggings = new ModelPlayerRower(0.5F, false);
-        modelArmor = new ModelPlayerRower(1, false);
+        modelLeggings = new ModelBipedRower(0.5F);
+        modelArmor = new ModelBipedRower(1);
     }
 
-    public ModelPlayerRower getLeggings() {
+    public ModelBipedRower getLeggings() {
         return modelLeggings;
     }
 
-    public ModelPlayerRower getChest() {
+    public ModelBipedRower getChest() {
         return modelArmor;
     }
 
     @Override
-    protected void setModelSlotVisible(ModelPlayerRower rower, EntityEquipmentSlot slot) {
+    protected void setModelSlotVisible(ModelBipedRower rower, EntityEquipmentSlot slot) {
         rower.setInvisible(false);
         switch (slot) {
             case HEAD:
