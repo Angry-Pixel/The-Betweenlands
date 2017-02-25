@@ -26,26 +26,26 @@ public class LayerRowerArmor extends LayerArmorBase<ModelBipedRower> {
     }
 
     @Override
-    protected void setModelSlotVisible(ModelBipedRower rower, EntityEquipmentSlot slot) {
-        rower.setInvisible(false);
+    protected void setModelSlotVisible(ModelBipedRower armor, EntityEquipmentSlot slot) {
+        armor.setInvisible(false);
         switch (slot) {
             case HEAD:
-                rower.bipedHead.showModel = true;
-                rower.bipedHeadwear.showModel = true;
+                armor.bipedHead.showModel = true;
+                armor.bipedHeadwear.showModel = true;
                 break;
             case CHEST:
-                rower.bipedBody.showModel = true;
-                rower.bipedRightArm.showModel = true;
-                rower.bipedLeftArm.showModel = true;
+                armor.bipedBody.showModel = true;
+                armor.bipedRightArm.showModel = true;
+                armor.bipedLeftArm.showModel = true;
                 break;
             case LEGS:
-                rower.bipedBody.showModel = true;
-                rower.bipedRightLeg.showModel = true;
-                rower.bipedLeftLeg.showModel = true;
+                armor.bipedBody.showModel = true;
+                armor.bipedRightLeg.showModel = true;
+                armor.bipedLeftLeg.showModel = true;
                 break;
             case FEET:
-                rower.bipedRightLeg.showModel = true;
-                rower.bipedLeftLeg.showModel = true;
+                armor.bipedRightLeg.showModel = true;
+                armor.bipedLeftLeg.showModel = true;
             default:
         }
     }

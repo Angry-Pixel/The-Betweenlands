@@ -20,7 +20,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
@@ -58,6 +60,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private float bodyRotateAngleX;
 
     private float bodyRotateAngleY;
+
+    private boolean isRenderingWorld;
 
     public RenderWeedwoodRowboat(RenderManager mgr) {
         super(mgr);
@@ -198,6 +202,16 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     @SubscribeEvent
+    public void onFogDensity(EntityViewRenderEvent.FogColors event) {
+        isRenderingWorld = true;
+    }
+
+    @SubscribeEvent
+    public void onRenderWorldLast(RenderWorldLastEvent event) {
+        isRenderingWorld = false;
+    }
+
+    @SubscribeEvent
     public void onLivingRender(RenderLivingEvent.Pre<EntityPlayer> event) {
         Entity e = event.getEntity();
         if (!(e instanceof AbstractClientPlayer)) {
@@ -207,7 +221,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e && !(((Render<?>) event.getRenderer()) instanceof RenderPlayerRower)) {
             event.setCanceled(true);
             EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) riding;
-            float delta = Minecraft.getMinecraft().getRenderPartialTicks();
+            float delta = isRenderingWorld ? Minecraft.getMinecraft().getRenderPartialTicks() : 1;
             model.animateOar(rowboat, ShipSide.STARBOARD, delta);
             model.animateOar(rowboat, ShipSide.PORT, delta);
             calculateGrip(rowboat, ShipSide.STARBOARD, delta);

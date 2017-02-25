@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.model.entity.rowboat;
 
 import java.util.EnumMap;
+import java.util.Iterator;
 
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBox;
@@ -8,7 +9,6 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 
 import thebetweenlands.client.render.model.AdvancedModelRenderer;
-import thebetweenlands.client.render.model.entity.ModelBipedLimb;
 import thebetweenlands.client.render.model.entity.ModelBoxCustomizable;
 import thebetweenlands.common.entity.rowboat.ShipSide;
 import thebetweenlands.util.MathUtils;
@@ -19,52 +19,71 @@ public class ModelBipedRower extends ModelBiped {
     private ModelRenderer leftForearm, rightForearm;
 
     public ModelBipedRower(float expand) {
-        this(expand, 64, 32);
+        this(expand, false);
     }
 
-    public ModelBipedRower(float expand, int textureWidth, int textureHeight) {
+    public ModelBipedRower(float expand, boolean slimArms) {
+        this(expand, false, slimArms, 64, 32, new BipedTextureUVs(40, 16, 40, 16, 0, 16, 0, 16));
+    }
+
+    public ModelBipedRower(float expand, boolean expandJointed, boolean slimArms, int textureWidth, int textureHeight, BipedTextureUVs uvs) {
         super(expand, 0, textureWidth, textureHeight);
-        boxList.remove(bipedBody.cubeList.remove(0));
-        bipedBody = new AdvancedModelRenderer(this, 16, 16);
+        removeCuboids(bipedBody);
+        removeCuboids(bipedHead);
+        removeCuboids(bipedHeadwear);
+        removeCuboids(bipedLeftLeg);
+        removeCuboids(bipedRightLeg);
+        bipedBody = new AdvancedModelRenderer(this, uvs.bodyU, uvs.bodyV);
         bipedBody.setRotationPoint(0, 12, 0);
         bipedBody.addBox(-4, -12, -2, 8, 12, 4, expand);
         bipedHead.setRotationPoint(0, -12, 0);
-        boxList.remove(bipedHead.cubeList.remove(0));
         // additional expand to prevent head z-fighting with body
         bipedHead.addBox(-4, -8, -4, 8, 8, 8, expand + 0.025F);
         bipedBody.addChild(bipedHead);
         bipedHeadwear.setRotationPoint(0, 0, 0);
-        boxList.remove(bipedHeadwear.cubeList.remove(0));
-        bipedHeadwear.addBox(-4, -8, -4, 8, 8, 8, expand + 0.525F);
+        bipedHeadwear.addBox(-4, -8, -4, 8, 8, 8, expand + 0.5F);
         bipedHead.addChild(bipedHeadwear);
         bipedLeftArm.rotationPointY = -10;
         bipedRightArm.rotationPointY = bipedLeftArm.rotationPointY;
-        if (expand == 0) {
+        if (expand == 0 || expandJointed) {
             arms = ShipSide.newEnumMap(ModelBipedLimb.class);
-            ModelBipedLimb left = createReplacementLimb(bipedLeftArm, 40, 16);
+            ModelBipedLimb left = createReplacementArm(bipedLeftArm, uvs.armLeftU, uvs.armLeftV, slimArms, expand);
             bipedLeftArm = left;
             arms.put(ShipSide.STARBOARD, left);
-            ModelBipedLimb right = createReplacementLimb(bipedRightArm, 32, 48);
+            ModelBipedLimb right = createReplacementArm(bipedRightArm, uvs.armRightU, uvs.armRightV, slimArms, expand);
             bipedRightArm = right;
             arms.put(ShipSide.PORT, right);
         } else {
-            bipedLeftArm = createExpandReplacementLimb(bipedLeftArm, 40, 16, expand);
-            bipedRightArm = createExpandReplacementLimb(bipedRightArm, 40, 16, expand);
+            bipedLeftArm = createExpandReplacementArm(bipedLeftArm, uvs.armLeftU, uvs.armLeftV, slimArms, expand);
+            bipedRightArm = createExpandReplacementArm(bipedRightArm, uvs.armRightU, uvs.armRightV, slimArms, expand);
         }
-        bipedRightLeg.rotateAngleX = -MathUtils.TAU / 5;
-        bipedRightLeg.rotateAngleY = MathUtils.PI / 10;
-        bipedRightLeg.rotationPointZ = 0.1F;
-        bipedRightLeg.rotationPointY = 12;
-        bipedLeftLeg.rotateAngleX = -MathUtils.TAU / 5;
-        bipedLeftLeg.rotateAngleY = -MathUtils.PI / 10;
-        bipedLeftLeg.rotationPointZ = 0.1F;
-        bipedLeftLeg.rotationPointY = 12;
+        if (slimArms) {
+            bipedRightArm.rotationPointX++;
+        }
+        bipedLeftLeg = new ModelRenderer(this, uvs.legLeftU, uvs.legLeftV);
+        bipedLeftLeg.addBox(-2, 0, -2, 4, 12, 4, expand);
+        bipedLeftLeg.setRotationPoint(1.9F, 12, 0);
+        bipedLeftLeg.rotateAngleX = -1.25F;
+        bipedLeftLeg.rotateAngleY = -0.314F;
+        bipedRightLeg = new ModelRenderer(this, uvs.legRightU, uvs.legRightV);
+        bipedRightLeg.addBox(-2, 0, -2, 4, 12, 4, expand);
+        bipedRightLeg.setRotationPoint(-1.9F, 12, 0);
+        bipedRightLeg.rotateAngleX = -1.25F;
+        bipedRightLeg.rotateAngleY = 0.314F;
     }
 
-    private ModelBipedLimb createReplacementLimb(ModelRenderer oldLimb, int textureOffsetX, int textureOffsetY) {
-        ModelBipedLimb limb = new ModelBipedLimb(this, textureOffsetX, textureOffsetY);
+    private void removeCuboids(ModelRenderer renderer) {
+        Iterator<ModelBox> cuboids = renderer.cubeList.iterator();
+        while (cuboids.hasNext()) {
+            boxList.remove(cuboids.next());
+            cuboids.remove();
+        }
+    }
+
+    private ModelBipedLimb createReplacementArm(ModelRenderer oldLimb, int textureOffsetX, int textureOffsetY, boolean slimArms, float expand) {
+        ModelBipedLimb limb = new ModelBipedLimb(this, textureOffsetX, textureOffsetY, slimArms ? 3 : 4, 4, expand);
         limb.setRotationPoint(Math.signum(oldLimb.rotationPointX) * 6, oldLimb.rotationPointY, oldLimb.rotationPointZ);
-        boxList.remove(oldLimb.cubeList.remove(0));
+        removeCuboids(oldLimb);
         limb.offsetX = -2;
         limb.offsetY = -2;
         limb.offsetZ = -2;
@@ -72,13 +91,13 @@ public class ModelBipedRower extends ModelBiped {
         return limb;
     }
 
-    private ModelRenderer createExpandReplacementLimb(ModelRenderer oldLimb, int textureOffsetX, int textureOffsetY, float expand) {
+    private ModelRenderer createExpandReplacementArm(ModelRenderer oldLimb, int textureOffsetX, int textureOffsetY, boolean slimArms, float expand) {
         ModelRenderer limb = new ModelRenderer(this, textureOffsetX, textureOffsetY);
         bipedBody.addChild(limb);
         limb.mirror = oldLimb.mirror;
-        ModelBox box = (ModelBox) oldLimb.cubeList.remove(0);
-        boxList.remove(box);
-        ModelBoxCustomizable arm = new ModelBoxCustomizable(limb, textureOffsetX, textureOffsetY, -2, -2, -2, 4, 6, 4, expand);
+        ModelBox box = oldLimb.cubeList.get(0);
+        removeCuboids(oldLimb);
+        ModelBoxCustomizable arm = new ModelBoxCustomizable(limb, textureOffsetX, textureOffsetY, -2, -2, -2, slimArms ? 3 : 4, 6, 4, expand);
         arm.setVisibleSides(~ModelBoxCustomizable.SIDE_BOTTOM);
         limb.cubeList.add(arm);
         limb.setRotationPoint(Math.signum(oldLimb.rotationPointX) * 6, oldLimb.rotationPointY, oldLimb.rotationPointZ);
@@ -90,7 +109,7 @@ public class ModelBipedRower extends ModelBiped {
         }
         lowerLimb.mirror = oldLimb.mirror;
         lowerLimb.setRotationPoint(-2 + 2, box.posY1 + 6, box.posZ1 + 2);
-        ModelBoxCustomizable forearm = new ModelBoxCustomizable(lowerLimb, textureOffsetX, textureOffsetY + 6, -2, 0, -2, 4, 6, 4, expand * 0.75F, -6);
+        ModelBoxCustomizable forearm = new ModelBoxCustomizable(lowerLimb, textureOffsetX, textureOffsetY + 6, -2, 0, -2, slimArms ? 3 : 4, 6, 4, expand * 0.75F, -6);
         forearm.setVisibleSides(~ModelBoxCustomizable.SIDE_TOP);
         lowerLimb.cubeList.add(forearm);
         limb.addChild(lowerLimb);
@@ -118,13 +137,37 @@ public class ModelBipedRower extends ModelBiped {
     }
 
     @Override
-    public void render(Entity entity, float swing, float speed, float ticksExisted, float yaw, float pitch, float scale) {
-        setRotationAngles(speed, swing, ticksExisted, yaw, pitch, scale, entity);
+    public void render(Entity entity, float swing, float speed, float age, float yaw, float pitch, float scale) {
         bipedBody.render(scale);
         bipedRightLeg.render(scale);
         bipedLeftLeg.render(scale);
     }
 
     @Override
-    public void setRotationAngles(float speed, float swing, float ticksExisted, float yaw, float pitch, float scale, Entity entity) {}
+    public void setRotationAngles(float swing, float speed, float age, float yaw, float pitch, float scale, Entity entity) {}
+
+    public static class BipedTextureUVs {
+        int armLeftU, armLeftV;
+        int armRightU, armRightV;
+        int legLeftU, legLeftV;
+        int legRightU, legRightV;
+        int bodyU, bodyV;
+
+        public BipedTextureUVs(int armLeftU, int armLeftV, int armRightU, int armRightV, int legLeftU, int legLeftV, int legRightU, int legRightV) {
+            this(armLeftU, armLeftV, armRightU, armRightV, legLeftU, legLeftV, legRightU, legRightV, 16, 16);
+        }
+
+        public BipedTextureUVs(int armLeftU, int armLeftV, int armRightU, int armRightV, int legLeftU, int legLeftV, int legRightU, int legRightV, int bodyU, int bodyV) {
+            this.armLeftU = armLeftU;
+            this.armLeftV = armLeftV;
+            this.armRightU = armRightU;
+            this.armRightV = armRightV;
+            this.legLeftU = legLeftU;
+            this.legLeftV = legLeftV;
+            this.legRightU = legRightU;
+            this.legRightV = legRightV;
+            this.bodyU = bodyU;
+            this.bodyV = bodyV;
+        }
+    }
 }
