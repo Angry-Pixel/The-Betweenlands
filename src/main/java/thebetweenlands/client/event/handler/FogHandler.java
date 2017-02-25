@@ -141,7 +141,7 @@ public class FogHandler {
 			if(farPlaneDistance != 0.0F && player.dimension == ConfigHandler.dimensionId) {
 				state.update(world, player.getPositionVector().addVector(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
-			
+
 			Biome biome = world.getBiomeForCoordsBody(player.getPosition());
 			if(biome instanceof BiomeBetweenlands) {
 				((BiomeBetweenlands)biome).updateFog();
@@ -216,9 +216,9 @@ public class FogHandler {
 				fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
 			}
 			float lowViewDistanceFogReduction = state.getLowDistanceFogReduction(biomeFog.getEnd());
-			float[] range = fogGenerator.getFogRange(0.1F, 1.0F);
-			float denseFogStart = state.getFixedFogStart(biomeFog.getStart()) / Math.max(8.0f * lowViewDistanceFogReduction, 1) * range[0];
-			float denseFogEnd = state.getFixedFogStart(biomeFog.getEnd()) / Math.max(3.0f * lowViewDistanceFogReduction, 1) * range[1];
+			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);
+			float denseFogStart = 0.0F;//state.getFixedFogStart(biomeFog.getStart()) / Math.max(8.0f * lowViewDistanceFogReduction, 1) * range[0];
+			float denseFogEnd = state.getFixedFogEnd(biomeFog.getEnd()) / Math.max(3.0f * lowViewDistanceFogReduction, 1) * range[1];
 
 			fog.setStart(Math.min(fog.getStart(), denseFogStart));
 			fog.setEnd(Math.min(fog.getEnd(), denseFogEnd));
