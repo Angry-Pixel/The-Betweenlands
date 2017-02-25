@@ -11,7 +11,16 @@ public class TextureAnimation {
 	private Frame[] frames;
 	private int frameTicks = 0;
 	private int frameCounter = 0;
+	private int totalDuration = 0;
 	private Random rand;
+
+	/**
+	 * Returns the total duration of the whole animation
+	 * @return
+	 */
+	public int getTotalDuration() {
+		return this.totalDuration;
+	}
 
 	/**
 	 * If not null the animation will start at a random frame
@@ -82,6 +91,11 @@ public class TextureAnimation {
 			this.frameCounter = this.rand.nextInt(this.frames.length);
 		} else if(this.frameCounter >= this.frames.length) {
 			this.frameCounter = 0;
+		}
+
+		this.totalDuration = 0;
+		for(Frame frame : frames) {
+			this.totalDuration += frame.getDuration();
 		}
 
 		return this;

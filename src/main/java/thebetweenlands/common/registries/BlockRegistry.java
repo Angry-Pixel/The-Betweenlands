@@ -133,6 +133,7 @@ import thebetweenlands.common.block.terrain.BlockMud;
 import thebetweenlands.common.block.terrain.BlockPeat;
 import thebetweenlands.common.block.terrain.BlockRoot;
 import thebetweenlands.common.block.terrain.BlockRootUnderwater;
+import thebetweenlands.common.block.terrain.BlockRottenLog;
 import thebetweenlands.common.block.terrain.BlockRubber;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.block.terrain.BlockSilt;
@@ -240,6 +241,7 @@ public class BlockRegistry {
 
 	//TREES
 	public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
+	public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
 	public static final Block LOG_RUBBER = new BlockRubberLog();
 	public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
 	public static final Block LOG_SAP = new BlockLogSap();

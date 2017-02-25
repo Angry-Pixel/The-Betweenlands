@@ -28,10 +28,17 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 		this.setSize(0.9F, 0.6F);
 	}
 
+	/**
+	 * Sets whether the Termite is the small variant
+	 * @param small
+	 */
+	public void setSmall(boolean small) {
+		this.getEntityAttribute(SMALL).setBaseValue(small ? 1 : 0);
+	}
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAIAttackMelee(this, 1.0D, false));
-
 		this.targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true));
 	}
 
@@ -86,7 +93,7 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 
 		super.onUpdate();
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.TERMITE;

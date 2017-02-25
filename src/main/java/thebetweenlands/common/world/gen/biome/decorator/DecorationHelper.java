@@ -25,6 +25,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
+import thebetweenlands.common.world.gen.feature.WorldGenRottenLogs;
 import thebetweenlands.common.world.gen.feature.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallHollowLog;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallRuins;
@@ -39,6 +40,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeDead;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.CubicBezier;
@@ -100,6 +102,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_BULB_CAPPED_MUSHROOMS = new WorldGenPlantCluster(BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_SPAWNER = new WorldGenSpawner();
 	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
+	public static final WorldGenerator GEN_DEAD_TRUNK = new WorldGenGiantTreeDead();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -762,6 +765,23 @@ public class DecorationHelper {
 			if(GEN_WIGHT_FORTRESS.isBiomeValid(biome)) {
 				return GEN_WIGHT_FORTRESS.generate(decorator.getWorld(), decorator.getRand(), pos);
 			}
+		}
+		return false;
+	}
+
+	public static boolean generateRottenLogs(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
+			WorldGenRottenLogs gen = new WorldGenRottenLogs(decorator.getRand().nextInt(5) + 4, decorator.getRand().nextInt(3) + 2, (byte)decorator.getRand().nextInt(2));
+			gen.generate(decorator.getWorld(), decorator.getRand(), pos);
+		}
+		return false;
+	}
+
+	public static boolean generateDeadTrunk(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos();
+		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
+			GEN_DEAD_TRUNK.generate(decorator.getWorld(), decorator.getRand(), pos.down(8 + decorator.getRand().nextInt(5)));
 		}
 		return false;
 	}

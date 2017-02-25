@@ -216,7 +216,7 @@ public class FogHandler {
 				fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
 			}
 			float lowViewDistanceFogReduction = state.getLowDistanceFogReduction(biomeFog.getEnd());
-			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);
+			float[] range = fogGenerator.getFogRange(0.1F, 1.0F);
 			float denseFogStart = state.getFixedFogStart(biomeFog.getStart()) / Math.max(8.0f * lowViewDistanceFogReduction, 1) * range[0];
 			float denseFogEnd = state.getFixedFogStart(biomeFog.getEnd()) / Math.max(3.0f * lowViewDistanceFogReduction, 1) * range[1];
 

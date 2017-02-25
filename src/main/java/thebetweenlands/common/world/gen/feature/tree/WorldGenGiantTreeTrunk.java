@@ -37,25 +37,9 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 		initTrunkLayers();
 	}
 
-	public boolean canGenerateAt(World world, Random rand, BlockPos pos) {
-		int baseRadius = rand.nextInt(6) + 13;
-		int height = rand.nextInt(getRadiusHeightRatio() * 4 + 1) + baseRadius * getRadiusHeightRatio() + 6;
-		int blockX = pos.getX();
-		int blockY = pos.getY();
-		int blockZ = pos.getZ();
-		if (isSpaceOccupied(world, blockX, blockY, blockZ, baseRadius / 2, height)) {
-			return false;
-		}
-		return true;
-	}
-
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
-		long seed = rand.nextLong();
-		if(!this.canGenerateAt(world, new Random(seed), pos)) {
-			return false;
-		}
-		return this.generateTree(world, new Random(seed), pos);
+		return this.generateTree(world, rand, pos);
 	}
 
 	protected boolean generateTree(World world, Random rand, BlockPos pos) {
@@ -64,6 +48,11 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 		int blockX = pos.getX();
 		int blockY = pos.getY();
 		int blockZ = pos.getZ();
+
+		if (isSpaceOccupied(world, blockX, blockY, blockZ, baseRadius, height)) {
+			return false;
+		}
+
 		int mirrorX = rand.nextBoolean() ? -1 : 1;
 		int mirrorZ = rand.nextBoolean() ? -1 : 1;
 		initAttributes(rand);

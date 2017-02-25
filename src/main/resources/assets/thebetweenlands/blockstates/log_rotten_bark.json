@@ -1,0 +1,8 @@
+{
+	"variants": {
+			"axis=y":    { "model": "thebetweenlands:log_rotten_bark" },
+        	"axis=z":    { "model": "thebetweenlands:log_rotten_bark" },
+        	"axis=x":    { "model": "thebetweenlands:log_rotten_bark", "y": 90 },
+        	"axis=none": { "model": "thebetweenlands:log_rotten_bark" }
+	}
+}
