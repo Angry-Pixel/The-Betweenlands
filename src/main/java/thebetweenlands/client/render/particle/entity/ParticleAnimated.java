@@ -10,9 +10,13 @@ import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleS
 import thebetweenlands.client.render.sprite.TextureAnimation;
 
 public class ParticleAnimated extends Particle implements IParticleSpriteReceiver {
-	private TextureAnimation animation;
+	protected TextureAnimation animation;
 
 	public ParticleAnimated(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale) {
+		this(world, x, y, z, mx, my, mz, maxAge, scale, true);
+	}
+
+	public ParticleAnimated(World world, double x, double y, double z, double mx, double my, double mz, int maxAge, float scale, boolean randomStart) {
 		super(world, x, y, z);
 		this.posX = this.prevPosX = x;
 		this.posY = this.prevPosY = y;
@@ -22,7 +26,10 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 		this.motionZ = mz;
 		this.particleMaxAge = maxAge;
 		this.particleScale = scale;
-		this.animation = new TextureAnimation().setRandomStart(this.rand);
+		this.animation = new TextureAnimation();
+		if(randomStart) {
+			this.animation.setRandomStart(this.rand);
+		}
 	}
 
 	@Override

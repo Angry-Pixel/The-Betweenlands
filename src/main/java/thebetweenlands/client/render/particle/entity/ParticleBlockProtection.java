@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.particle.entity;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
@@ -12,25 +11,18 @@ import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 
-public class ParticleBlockProtection extends Particle implements IParticleSpriteReceiver {
+public class ParticleBlockProtection extends ParticleAnimated implements IParticleSpriteReceiver {
 	protected final EnumFacing face;
 
 	protected ParticleBlockProtection(World world, double x, double y, double z, double mx, double my, double mz, EnumFacing face, float scale, int maxAge) {
-		super(world, x, y, z, 0, 0, 0);
+		super(world, x, y, z, 0, 0, 0, maxAge, scale, false);
 		this.motionX = mx;
 		this.motionY = my;
 		this.motionZ = mz;
 		this.posX = this.prevPosX = x;
 		this.posY = this.prevPosY = y;
 		this.posZ = this.prevPosZ = z;
-		this.particleScale = scale;
-		this.particleMaxAge = maxAge;
 		this.face = face;
-	}
-
-	@Override
-	public int getFXLayer() {
-		return 1;
 	}
 
 	@Override
@@ -44,7 +36,7 @@ public class ParticleBlockProtection extends Particle implements IParticleSprite
 		float maxU = minU + 0.0624375F;
 		float minV = (float)this.particleTextureIndexY / 16.0F;
 		float maxV = minV + 0.0624375F;
-		float scale = 0.1F * this.particleScale;
+		float scale = 0.1F * this.particleScale * 2;
 
 		if (this.particleTexture != null) {
 			minU = this.particleTexture.getMinU();
@@ -74,7 +66,8 @@ public class ParticleBlockProtection extends Particle implements IParticleSprite
 		}
 		Vec3d perpendicular2 = perpendicular.crossProduct(normal);
 
-		Vec3d[] vertices = new Vec3d[] {perpendicular.scale(-1).add(perpendicular2.scale(-1)).scale(scale), perpendicular.scale(-1).add(perpendicular2).scale(scale), perpendicular.add(perpendicular2).scale(scale), perpendicular.add(perpendicular2.scale(-1)).scale(scale)};
+		double yOffset = 0.125D;
+		Vec3d[] vertices = new Vec3d[] {perpendicular.add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale)};
 
 		if (this.field_190014_F != 0.0F) {
 			float f8 = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
@@ -97,7 +90,7 @@ public class ParticleBlockProtection extends Particle implements IParticleSprite
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleBlockProtection> {
 		public Factory() {
-			super(ParticleBlockProtection.class, ParticleTextureStitcher.create(ParticleBlockProtection.class, new ResourceLocation("thebetweenlands:particle/block_protection")));
+			super(ParticleBlockProtection.class, ParticleTextureStitcher.create(ParticleBlockProtection.class, new ResourceLocation("thebetweenlands:particle/block_protection")).setSplitAnimations(true));
 		}
 
 		@Override
@@ -107,7 +100,7 @@ public class ParticleBlockProtection extends Particle implements IParticleSprite
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(EnumFacing.UP, 20);
+			args.withData(EnumFacing.UP, 5);
 		}
 	}
 }
