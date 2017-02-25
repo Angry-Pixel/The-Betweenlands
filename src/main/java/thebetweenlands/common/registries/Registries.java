@@ -2,6 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
+import thebetweenlands.common.entity.serializer.Serializers;
 
 public class Registries {
 	public static final Registries INSTANCE = new Registries();
@@ -15,7 +16,8 @@ public class Registries {
 		SoundRegistry.preInit();
 		CapabilityRegistry.preInit();
 		StorageRegistry.preInit();
-		
+		Serializers.register();
+
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ModelRegistry.preInit();
 			AmbienceRegistry.preInit();

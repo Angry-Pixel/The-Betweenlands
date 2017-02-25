@@ -1,7 +1,5 @@
 package thebetweenlands.common.entity.serializer;
 
-import java.io.IOException;
-
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
@@ -18,7 +16,7 @@ public class Serializers {
 		}
 
 		@Override
-		public Vec3d read(PacketBuffer buf) throws IOException {
+		public Vec3d read(PacketBuffer buf) {
 			return new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		}
 
@@ -28,7 +26,7 @@ public class Serializers {
 		}
 	};
 
-	static {
+	public static void register() {
 		DataSerializers.registerSerializer(VEC3D);
 	}
 }
