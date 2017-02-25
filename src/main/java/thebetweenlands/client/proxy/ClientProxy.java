@@ -13,6 +13,7 @@ import java.util.concurrent.FutureTask;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -648,16 +649,28 @@ public class ClientProxy extends CommonProxy {
         updatePilotView(pilot, 2);
 	}
 
-	@Override
-	public void onPilotExitWeedwoodRowboat(Entity pilot) {
-        updatePilotView(pilot, 0);
-	}
+    @Override
+    public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
+        if (updatePilotView(pilot, 0)) {
+            double dx = rowboat.posX - pilot.posX;
+            double dy = rowboat.posY + rowboat.height - (pilot.posY + pilot.getEyeHeight());
+            double dz = rowboat.posZ - pilot.posZ;
+            double h = MathHelper.sqrt_double(dx * dx + dz * dz);
+            pilot.rotationPitch = (float) -Math.toDegrees(MathHelper.atan2(dy, h));
+            float yaw = (float) Math.toDegrees(MathHelper.atan2(dz, dx)) - 90;
+            pilot.rotationYaw = yaw;
+            pilot.setRotationYawHead(yaw);
+            pilot.setRenderYawOffset(yaw);
+        }
+    }
 
-	private void updatePilotView(Entity pilot, int view) {
+	private boolean updatePilotView(Entity pilot, int view) {
         Minecraft mc = Minecraft.getMinecraft();
         if (mc.thePlayer == pilot) {
             mc.gameSettings.thirdPersonView = view;
+            return true;
         }
+        return false;
 	}
 
     private void onMacgyveredGameLoop() {

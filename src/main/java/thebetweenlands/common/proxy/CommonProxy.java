@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.inventory.container.ContainerBLDualFurnace;
@@ -179,7 +180,7 @@ public class CommonProxy implements IGuiHandler {
 
     }
 
-    public void onPilotExitWeedwoodRowboat(Entity pilot) {
+    public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
     }
 }

@@ -58,7 +58,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private static final CubicBezier SPEED_WAVE_POWER = new CubicBezier(0, 1, 0, 1);
 
-    private static final EnumMap<ShipSide, DataParameter<Float>> ROW_PROGRESS = ShipSide.<DataParameter<Float>>newEnumMap((Class<DataParameter<Float>>) (Class<?>) DataParameter.class, defineId(DataSerializers.FLOAT), defineId(DataSerializers.FLOAT));
+    private static final EnumMap<ShipSide, DataParameter<Float>> ROW_PROGRESS = ShipSide.newEnumMap((Class<DataParameter<Float>>) (Class<?>) DataParameter.class, defineId(DataSerializers.FLOAT), defineId(DataSerializers.FLOAT));
 
     private static final DataParameter<Boolean> IS_TARRED = defineId(DataSerializers.BOOLEAN);
 
@@ -308,7 +308,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @Override
     protected void removePassenger(Entity passenger) {
         if (worldObj.isRemote && getControllingPassenger() == passenger) {
-            TheBetweenlands.proxy.onPilotExitWeedwoodRowboat(passenger);
+            TheBetweenlands.proxy.onPilotExitWeedwoodRowboat(this, passenger);
         }
         super.removePassenger(passenger);
     }
