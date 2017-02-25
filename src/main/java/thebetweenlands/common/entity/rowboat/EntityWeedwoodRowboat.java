@@ -17,6 +17,8 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
@@ -31,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.network.serverbound.MessageRow;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -55,7 +58,9 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private static final CubicBezier SPEED_WAVE_POWER = new CubicBezier(0, 1, 0, 1);
 
-    private static final EnumMap<ShipSide, DataParameter<Float>> ROW_PROGRESS = ShipSide.newEnumMap(DataParameter.class, defineId(DataSerializers.FLOAT), defineId(DataSerializers.FLOAT));
+    private static final EnumMap<ShipSide, DataParameter<Float>> ROW_PROGRESS = ShipSide.<DataParameter<Float>>newEnumMap((Class<DataParameter<Float>>) (Class<?>) DataParameter.class, defineId(DataSerializers.FLOAT), defineId(DataSerializers.FLOAT));
+
+    private static final DataParameter<Boolean> IS_TARRED = defineId(DataSerializers.BOOLEAN);
 
     public static final float OAR_ROTATION_SCALE = -28;
 
@@ -151,6 +156,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         super.entityInit();
         dataManager.register(ROW_PROGRESS.get(ShipSide.STARBOARD), RESTING_ROW_PROGRESS);
         dataManager.register(ROW_PROGRESS.get(ShipSide.PORT), RESTING_ROW_PROGRESS);
+        dataManager.register(IS_TARRED, false);
     }
 
     @Override
@@ -165,7 +171,25 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     @Override
     public ItemStack getPickedResult(RayTraceResult target) {
-        return new ItemStack(getItemBoat());
+        return getItem();
+    }
+
+    public ItemStack getItem() {
+        ItemStack stack = new ItemStack(getItemBoat());
+        NBTTagCompound attrs = new NBTTagCompound();
+        writeEntityToNBT(attrs);
+        if (attrs.getSize() > 0) {
+            stack.setTagInfo("attributes", attrs);   
+        }
+        return stack;
+    }
+
+    public void setIsTarred(boolean isTarred) {
+        dataManager.set(IS_TARRED, isTarred);
+    }
+
+    public boolean isTarred() {
+        return dataManager.get(IS_TARRED);
     }
 
     @SideOnly(Side.CLIENT)
@@ -224,8 +248,38 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (isEntityInvulnerable(source)) {
+            return false;
+        }
+        if (!worldObj.isRemote && !isDead) {
+            if (source instanceof EntityDamageSourceIndirect && source.getEntity() != null && isPassenger(source.getEntity())) {
+                return false;
+            }
+            setForwardDirection(-getForwardDirection());
+            setTimeSinceHit(10);
+            setDamageTaken(getDamageTaken() + amount * 10);
+            setBeenAttacked();
+            boolean creative = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
+            if (creative || getDamageTaken() > 20) {
+                if (!creative && worldObj.getGameRules().getBoolean("doEntityDrops")) {
+                    entityDropItem(getItem(), 0);
+                }
+                setDead();
+            }
+        }
+        return true;
+    }
+
+    @Override
     public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-        if (!worldObj.isRemote && !player.isSneaking()) {
+        if (EnumItemMisc.TAR_DRIP.isItemOf(stack) && !isTarred()) {
+            if (!worldObj.isRemote) {
+                setIsTarred(true);
+                stack.stackSize--;
+                playSound(SoundRegistry.TAR_BEAST_STEP, 0.9F + rand.nextFloat() * 0.1F, 0.6F + rand.nextFloat() * 0.15F);
+            }
+        } else if (!worldObj.isRemote && !player.isSneaking()) {
             player.startRiding(this);
         }
         return true;
@@ -377,7 +431,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         waveHeight = point.subtract(normal.scale(point.subtract(s0).dotProduct(normal))).yCoord; 
         pullOarByWave(ShipSide.STARBOARD, normal);
         pullOarByWave(ShipSide.PORT, normal);
-        if (canPassengerSteer()) {
+        if (!isTarred() && canPassengerSteer()) {
             double wx = normal.xCoord;
             double wz = normal.zCoord;
             double mag = Math.sqrt(wx * wx + wz * wz);
@@ -386,7 +440,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 motionX += wx / strength;
                 motionZ += wz / strength;
                 double dir = Math.atan2(wz, wx) * MathUtils.RAD_TO_DEG;
-                rotationalVelocity += Math.signum(MathHelper.wrapDegrees(dir - 90) - rotationYaw) * Math.min((1 - normal.yCoord) * 60 * roughness, roughness);   
+                rotationalVelocity += Math.signum(MathUtils.modularDelta(rotationYaw, dir - 90, 360)) * Math.min((1 - normal.yCoord) * 60 * roughness, roughness);   
             }
         }
     }
@@ -897,10 +951,24 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
-    protected void writeEntityToNBT(NBTTagCompound compound) {}
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        if (isTarred()) {
+            compound.setBoolean("isTarred", isTarred());   
+        }
+    }
 
     @Override
-    protected void readEntityFromNBT(NBTTagCompound compound) {}
+    public void readEntityFromNBT(NBTTagCompound compound) {
+        setIsTarred(compound.getBoolean("isTarred"));
+    }
+
+    @Override
+    public void writeSpawnData(ByteBuf buf) {}
+
+    @Override
+    public void readSpawnData(ByteBuf buf) {
+        prevRotationYaw = rotationYaw;
+    }
 
     // Start the inheried methods not needed
 
@@ -931,19 +999,15 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     // End
 
+    public static boolean isTarred(ItemStack stack) {
+        return stack.hasTagCompound() && stack.getTagCompound().getCompoundTag("attributes").getBoolean("isTarred");
+    }
+
     private static <T> DataParameter<T> defineId(DataSerializer<T> serializer) {
         return EntityDataManager.createKey(EntityWeedwoodRowboat.class, serializer);
     }
 
     private static RuntimeException ohnoes() {
         return new UnsupportedOperationException("OH NOES!");
-    }
-
-    @Override
-    public void writeSpawnData(ByteBuf buf) {}
-
-    @Override
-    public void readSpawnData(ByteBuf buf) {
-        prevRotationYaw = rotationYaw;
     }
 }

@@ -7,10 +7,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
@@ -25,6 +27,16 @@ public class ItemWeedwoodRowboat extends Item {
     public ItemWeedwoodRowboat() {
         maxStackSize = 1;
         setCreativeTab(BLCreativeTabs.ITEMS);
+        addPropertyOverride(new ResourceLocation("tarred"), (stack, world, entity) -> EntityWeedwoodRowboat.isTarred(stack) ? 1 : 0);
+    }
+
+    @Override
+    public String getUnlocalizedNameInefficiently(ItemStack stack) {
+        String key = getUnlocalizedName(stack);
+        if (EntityWeedwoodRowboat.isTarred(stack)) {
+            return key + ".tarred";
+        }
+        return key;
     }
 
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
@@ -55,6 +67,10 @@ public class ItemWeedwoodRowboat extends Item {
             return new ActionResult(EnumActionResult.FAIL, stack);
         }
         if (!world.isRemote) {
+            NBTTagCompound attrs = stack.getSubCompound("attributes", false);
+            if (attrs != null) {
+                rowboat.readEntityFromNBT(attrs);
+            }
             world.spawnEntityInWorld(rowboat);
         }
         if (!player.capabilities.isCreativeMode) {

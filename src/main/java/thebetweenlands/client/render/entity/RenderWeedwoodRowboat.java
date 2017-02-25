@@ -35,7 +35,9 @@ import thebetweenlands.util.Matrix;
 import thebetweenlands.util.Quat;
 
 public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
-    private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID + ":textures/entity/weedwood_rowboat.png");
+    private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat.png");
+
+    private static final ResourceLocation TEXTURE_TARRED = new ResourceLocation(ModInfo.ID, "textures/entity/weedwood_rowboat_tarred.png");
 
     private static final CubicBezier PULL_CURVE = new CubicBezier(1, 0, 1, 0.25F);
 
@@ -202,7 +204,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     @SubscribeEvent
-    public void onFogDensity(EntityViewRenderEvent.FogColors event) {
+    public void onFogColors(EntityViewRenderEvent.FogColors event) {
         isRenderingWorld = true;
     }
 
@@ -370,8 +372,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntityWeedwoodRowboat entity) {
-        return TEXTURE;
+    protected ResourceLocation getEntityTexture(EntityWeedwoodRowboat rowboat) {
+        return rowboat.isTarred() ? TEXTURE_TARRED : TEXTURE;
     }
 
     public static class ArmArticulation {
