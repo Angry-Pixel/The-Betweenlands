@@ -112,21 +112,21 @@ public class ItemEquipmentHandler {
 				IEquippable equippable = (IEquippable) heldItem.getItem();
 
 				if(equippable.canEquipOnRightClick(heldItem, player, player)) {
-					ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
-
-					if(result == null || result.stackSize != heldItem.stackSize) {
-						if(!player.capabilities.isCreativeMode) {
-							player.setHeldItem(event.getHand(), result);
+					if(event instanceof PlayerInteractEvent.RightClickEmpty) {
+						//RightClickEmpty is client side only, must send packet
+						int slot = player.inventory.getSlotFor(heldItem);
+						if(slot >= 0) {
+							TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(player.inventory.currentItem, player));
 						}
+					} else {
+						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
 
-						player.swingArm(event.getHand());
-
-						if(event instanceof PlayerInteractEvent.RightClickEmpty) {
-							//RightClickEmpty is client side only, must send packet
-							int slot = player.inventory.getSlotFor(heldItem);
-							if(slot >= 0) {
-								TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(player.inventory.currentItem, player));
+						if(result == null || result.stackSize != heldItem.stackSize) {
+							if(!player.capabilities.isCreativeMode) {
+								player.setHeldItem(event.getHand(), result);
 							}
+
+							player.swingArm(event.getHand());
 						}
 					}
 				}

@@ -12,7 +12,7 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		super.decorate();
 
 		this.startProfilerSection("deadTrunk");
-		this.generate(1.25F, DecorationHelper::generateDeadTrunk);
+		this.generate(2.25F, DecorationHelper::generateDeadTrunk);
 		this.endProfilerSection();
 
 		this.startProfilerSection("rottenLogs");
