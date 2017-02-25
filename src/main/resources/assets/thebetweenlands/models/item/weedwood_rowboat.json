@@ -1,0 +1,12 @@
+{
+  "parent": "item/generated",
+  "textures": { 
+    "layer0": "thebetweenlands:items/weedwood_rowboat" 
+  },
+  "overrides": [{
+    "predicate": {
+	  "tarred": 1
+    },
+	"model": "thebetweenlands:item/weedwood_rowboat_tarred"
+  }]
+}

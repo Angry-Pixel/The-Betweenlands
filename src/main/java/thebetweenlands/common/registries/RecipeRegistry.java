@@ -9,6 +9,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -19,10 +20,12 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
 import net.minecraftforge.oredict.ShapedOreRecipe;
+import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
@@ -185,7 +188,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.ITEM_SHELF), "xxx", "   ", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANK_SLAB);
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
 		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
-		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.weedwoodRowboat), "x x", "xxx", "ttt", 'x', BlockRegistry.weedwoodPlanks, 't', ItemGeneric.createStack(EnumItemGeneric.TAR_DRIP));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_ROWBOAT), "x x", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 8), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_HOPPER), "s s", "scs", " s ", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'c', new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SIGN_ITEM, 3), "SSS", "SSS", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
@@ -600,5 +603,26 @@ public class RecipeRegistry {
 		//PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.FARMED_DIRT, 1, 0), new ItemStack(BlockRegistry.SWAMP_DIRT));
 		//TODO add vials
 		//PurifierRecipe.addRecipe(ItemRegistry.dentrothystVial.createStack(0), ItemRegistry.dentrothystVial.createStack(1));
+		PurifierRecipe.addRecipe(new IPurifierRecipe() {
+			@Override
+			public boolean matchesInput(ItemStack stack) {
+				return stack != null && stack.getItem() == ItemRegistry.WEEDWOOD_ROWBOAT && EntityWeedwoodRowboat.isTarred(stack);
+			}
+
+			@Override
+			public ItemStack getOutput(ItemStack input) {
+				ItemStack output = input.copy();
+				NBTTagCompound compound = output.getTagCompound();
+				NBTTagCompound attrs = compound.getCompoundTag("attributes");
+				attrs.removeTag("isTarred");
+				if (attrs.hasNoTags()) {
+					compound.removeTag("attributes");
+				}
+				if (compound.hasNoTags()) {
+					output.setTagCompound(null);	
+				}
+				return output;
+			}
+		});
 	}
 }

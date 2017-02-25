@@ -746,7 +746,6 @@
     ]
   },
   "astatos": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/astatos",
@@ -755,7 +754,6 @@
     ]
   },
   "between_you_and_me": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/between_you_and_me",
@@ -764,7 +762,6 @@
     ]
   },
   "christmas_on_the_marsh": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/christmas_on_the_marsh",
@@ -773,7 +770,6 @@
     ]
   },
   "hag_dance": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/hag_dance",
@@ -782,7 +778,6 @@
     ]
   },
   "the_explorer": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/the_explorer",
@@ -791,7 +786,6 @@
     ]
   },
   "beneath_a_green_sky": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/beneath_a_green_sky",
@@ -800,7 +794,6 @@
     ]
   },
   "dj_wights_mixtape": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/dj_wights_mixtape",
@@ -809,7 +802,6 @@
     ]
   },
   "lonely_fire": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/lonely_fire",
@@ -818,7 +810,6 @@
     ]
   },
   "onwards": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/onwards",
@@ -827,7 +818,6 @@
     ]
   },
   "stuck_in_the_mud": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/stuck_in_the_mud",
@@ -836,7 +826,6 @@
     ]
   },
   "wandering_wisps": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/wandering_wisps",
@@ -845,7 +834,6 @@
     ]
   },
   "waterlogged": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/waterlogged",
@@ -854,7 +842,6 @@
     ]
   },
   "ancient": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/ancient",
@@ -863,7 +850,6 @@
     ]
   },
   "16612": {
-    "catagory": "record",
     "sounds": [
       {
         "name": "thebetweenlands:records/16612",
@@ -871,29 +857,32 @@
       }
     ]
   },
-  "rowboat_row": {
-    "catagory": "neutral",
+  "rowboat_row_starboard": {
     "sounds": [
-      "thebetweenlands:boat_row_1",
-      "thebetweenlands:boat_row_2",
-      "thebetweenlands:boat_row_3"
+      "thebetweenlands:boat_row_1"
     ]
   },
-  "rowboat_row_start": {
-    "catagory": "neutral",
+  "rowboat_row_port": {
     "sounds": [
-      "thebetweenlands:boat_row_start_1",
+      "thebetweenlands:boat_row_2"
+	]
+  },
+  "rowboat_row_start_starboard": {
+    "sounds": [
+      "thebetweenlands:boat_row_start_1"
+    ]
+  },
+  "rowboat_row_start_port": {
+    "sounds": [
       "thebetweenlands:boat_row_start_2"
     ]
   },
   "possessed_scream": {
-    "catagory": "block",
     "sounds": [
       "thebetweenlands:possessed_scream"
     ]
   },
   "ignite": {
-    "catagory": "ambient",
     "sounds": [
       "thebetweenlands:ignite"
     ]

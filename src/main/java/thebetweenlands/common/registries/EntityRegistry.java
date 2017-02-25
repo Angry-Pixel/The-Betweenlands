@@ -45,6 +45,7 @@ import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 
 public class EntityRegistry {
 	private EntityRegistry() {
@@ -93,6 +94,7 @@ public class EntityRegistry {
 		registerEntity(EntityFortressBossProjectile.class, "fortress_boss_projectile", 64, 5, true);
 		registerEntity(EntityFortressBossTurret.class, "fortress_boss_turret", 64, 20, false);
 		registerEntity(EntityFortressBossTeleporter.class, "fortress_boss_teleporter", 64, 5, false);
+        registerEntity(EntityWeedwoodRowboat.class, "weedwood_rowboat");
 	}
 
 	private static int id = 0;

@@ -1,22 +1,30 @@
 package thebetweenlands.client.proxy;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayDeque;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.concurrent.FutureTask;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.color.IBlockColor;
 import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -26,6 +34,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
@@ -33,6 +42,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
+
 import thebetweenlands.client.event.handler.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.handler.BrightnessHandler;
 import thebetweenlands.client.event.handler.CameraPositionHandler;
@@ -102,6 +113,7 @@ import thebetweenlands.client.render.entity.RenderTarminion;
 import thebetweenlands.client.render.entity.RenderTermite;
 import thebetweenlands.client.render.entity.RenderThrownTarminion;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
+import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
@@ -174,6 +186,7 @@ import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.herblore.book.GuiManualHerblore;
 import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.inventory.InventoryItem;
@@ -220,6 +233,8 @@ public class ClientProxy extends CommonProxy {
 	private static final boolean createJSONFile = false;
 
 	public static Render<EntityDragonFly> dragonFlyRenderer;
+
+    private boolean isPlayerInRowboat;
 
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
@@ -474,7 +489,8 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossProjectile.class, RenderFortressBossProjectile::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTurret.class, RenderFortressBossTurret::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTeleporter.class, RenderFortressBossTeleporter::new);
-		
+        RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, RenderWeedwoodRowboat::new);
+
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
@@ -499,7 +515,9 @@ public class ClientProxy extends CommonProxy {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void postInit() {
-		dragonFlyRenderer = Minecraft.getMinecraft().getRenderManager().getEntityClassRenderObject(EntityDragonFly.class);
+	    RenderManager mgr = Minecraft.getMinecraft().getRenderManager();
+		dragonFlyRenderer = mgr.getEntityClassRenderObject(EntityDragonFly.class);
+        MinecraftForge.EVENT_BUS.register(mgr.getEntityClassRenderObject(EntityWeedwoodRowboat.class));
 
 		//Tile entities
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPurifier.class, new RenderPurifier());
@@ -582,6 +600,22 @@ public class ClientProxy extends CommonProxy {
 		}
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
 		HLEntryRegistry.init();
+
+		Field mods = ReflectionHelper.findField(Field.class, "modifiers");
+		Field scheduledTasks = ReflectionHelper.findField(Minecraft.class, "field_152351_aB", "scheduledTasks");
+		try {
+            mods.set(scheduledTasks, scheduledTasks.getModifiers() & ~Modifier.FINAL);
+            scheduledTasks.set(Minecraft.getMinecraft(), new ArrayDeque<FutureTask<?>>() {
+                @Override
+                public boolean isEmpty() {
+                    if (super.isEmpty()) {
+                        onMacgyveredGameLoop();
+                        return true;
+                    }
+                    return false;
+                }
+            });
+        } catch (Exception e) {}
 	}
 
 	@Override
@@ -627,4 +661,57 @@ public class ClientProxy extends CommonProxy {
 	public FontRenderer getCustomFontRenderer() {
 		return pixelLove;
 	}
+
+	@Override
+	public void onPilotEnterWeedwoodRowboat(Entity pilot) {
+        updatePilotView(pilot, 2);
+	}
+
+    @Override
+    public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
+        if (updatePilotView(pilot, 0)) {
+            double dx = rowboat.posX - pilot.posX;
+            double dy = rowboat.posY + rowboat.height - (pilot.posY + pilot.getEyeHeight());
+            double dz = rowboat.posZ - pilot.posZ;
+            double h = MathHelper.sqrt_double(dx * dx + dz * dz);
+            pilot.rotationPitch = (float) -Math.toDegrees(MathHelper.atan2(dy, h));
+            float yaw = (float) Math.toDegrees(MathHelper.atan2(dz, dx)) - 90;
+            pilot.rotationYaw = yaw;
+            pilot.setRotationYawHead(yaw);
+            pilot.setRenderYawOffset(yaw);
+        }
+    }
+
+	private boolean updatePilotView(Entity pilot, int view) {
+        Minecraft mc = Minecraft.getMinecraft();
+        if (mc.thePlayer == pilot) {
+            mc.gameSettings.thirdPersonView = view;
+            return true;
+        }
+        return false;
+	}
+
+    private void onMacgyveredGameLoop() {
+        Minecraft mc = Minecraft.getMinecraft();
+        EntityPlayerSP player = mc.thePlayer;
+        if (player == null) {
+            isPlayerInRowboat = false;
+            return;
+        }
+        Entity riding = player.getRidingEntity();
+        if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == player) {
+            if (!isPlayerInRowboat) {
+                player.prevRotationPitch = player.rotationPitch = -30;
+                player.prevRotationYawHead = player.rotationYawHead = player.prevRotationYaw = player.rotationYaw = MathHelper.wrapDegrees(riding.rotationYaw - 180);
+                riding.updatePassenger(player);
+                player.prevRenderYawOffset = player.renderYawOffset;
+                player.prevPosX = player.lastTickPosX = player.posX;
+                player.prevPosY = player.lastTickPosY = player.posY;
+                player.prevPosZ = player.lastTickPosZ = player.posZ;
+                isPlayerInRowboat = true;
+            }
+        } else {
+            isPlayerInRowboat = false;
+        }
+    }
 }
