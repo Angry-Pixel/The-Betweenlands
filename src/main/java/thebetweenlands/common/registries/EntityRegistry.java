@@ -89,7 +89,7 @@ public class EntityRegistry {
 		registerEntity(EntityAngryPebble.class, "angry_pebble");
 		registerEntity(EntityFortressBoss.class, "fortress_boss", 0x000000, 0x00FFFA, 64, 1, true);
 		registerEntity(EntityFortressBossSpawner.class, "fortress_boss_spawner", 64, 20, false);
-		registerEntity(EntityFortressBossBlockade.class, "fortress_boss_blockade", 0x000000, 0x00FFFA, 64, 20, false);
+		registerEntity(EntityFortressBossBlockade.class, "fortress_boss_blockade", 64, 20, false);
 		registerEntity(EntityFortressBossProjectile.class, "fortress_boss_projectile", 64, 5, true);
 		registerEntity(EntityFortressBossTurret.class, "fortress_boss_turret", 64, 20, false);
 		registerEntity(EntityFortressBossTeleporter.class, "fortress_boss_teleporter", 64, 5, false);
