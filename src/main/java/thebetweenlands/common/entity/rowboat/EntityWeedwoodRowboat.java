@@ -4,6 +4,7 @@ import java.util.EnumMap;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -28,6 +29,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -590,18 +592,18 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         BlockPos pos = new BlockPos(this);
         IBlockState blockAt = worldObj.getBlockState(pos);
         IBlockState blockAbove = worldObj.getBlockState(pos.up());
-        if (blockAt.getBlock() instanceof BlockLiquid && !(blockAbove.getBlock() instanceof BlockLiquid)) {
-            float y = (float) pos.getY() + getBlockLiquidHeight(blockAt, worldObj, pos) + height;
+        if (isWater(blockAt) && !isWater(blockAbove)) {
+            float y = (float) pos.getY() + getLiquidHeight(blockAt, worldObj, pos) + height;
             buoyancy = (y - (float) getEntityBoundingBox().minY - 0.55F) / height;
             drag = 0.9875F;
             submergeTicks = 0;
-        } else if (blockAt.getBlock() instanceof BlockLiquid && blockAbove.getBlock() instanceof BlockLiquid) {
+        } else if (isWater(blockAt) && isWater(blockAbove)) {
             buoyancy = 1.25F;
             drag = 0.975F;
             submergeTicks++;
         } else if (blockAt.getMaterial() == Material.AIR) {
             IBlockState blockBellow = worldObj.getBlockState(pos.down());
-            if (blockBellow.getBlock() instanceof BlockLiquid) {
+            if (isWater(blockBellow)) {
                 drag = 0.95F;
             } else if (blockBellow.getMaterial().blocksMovement()) {
                 drag = 0.35F;
@@ -970,35 +972,6 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         prevRotationYaw = rotationYaw;
     }
 
-    // Start the inheried methods not needed
-
-    @Override
-    public float getWaterLevelAbove() {
-        throw ohnoes();
-    }
-
-    @Override
-    public float getBoatGlide() {
-        throw ohnoes();
-    }
-
-    @Override
-    public void setBoatType(Type boatType) {
-        throw ohnoes();
-    }
-
-    @Override
-    public Type getBoatType() {
-        throw ohnoes();
-    }
-
-    @Override
-    public float getRowingTime(int oar, float limbSwing) {
-        throw ohnoes();
-    }
-
-    // End
-
     public static boolean isTarred(ItemStack stack) {
         return stack.hasTagCompound() && stack.getTagCompound().getCompoundTag("attributes").getBoolean("isTarred");
     }
@@ -1007,7 +980,39 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         return EntityDataManager.createKey(EntityWeedwoodRowboat.class, serializer);
     }
 
-    private static RuntimeException ohnoes() {
+    private static boolean isWater(IBlockState state) {
+        return state.getMaterial() == Material.WATER;
+    }
+
+    private static float getLiquidHeight(IBlockState state, World world, BlockPos pos) {
+        Block block = state.getBlock();
+        if (block instanceof IFluidBlock) {
+            return ((IFluidBlock) block).getFilledPercentage(world, pos);
+        }
+        if (block instanceof BlockLiquid) {
+            return getBlockLiquidHeight(state, world, pos);
+        }
+        return 1;
+    }
+
+    // Inheried methods not needed
+
+    @Override
+    public float getWaterLevelAbove() { throw ohnoes(); }
+
+    @Override
+    public float getBoatGlide() { throw ohnoes(); }
+
+    @Override
+    public void setBoatType(Type boatType) { throw ohnoes(); }
+
+    @Override
+    public Type getBoatType() { throw ohnoes(); }
+
+    @Override
+    public float getRowingTime(int oar, float limbSwing) { throw ohnoes(); }
+
+    private RuntimeException ohnoes() {
         return new UnsupportedOperationException("OH NOES!");
     }
 }
