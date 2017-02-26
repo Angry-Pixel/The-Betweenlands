@@ -196,7 +196,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.CAVE_MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(EnumItemMisc.PARCHMENT.create(3), "###", '#', EnumItemMisc.ROTTEN_BARK.create(1));
+		GameRegistry.addRecipe(EnumItemMisc.PARCHMENT.create(3), "###", '#', EnumItemMisc.DRY_BARK.create(1));
 		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN)); 
 		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGemType.NONE), "XXX", "X X", " # ", '#', EnumItemMisc.AMULET_SOCKET.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		//TODO: Volarkite
@@ -412,8 +412,9 @@ public class RecipeRegistry {
 	}
 
 	private static void registerCompostRecipes() {
-		CompostRecipe.addRecipe(30, 12000, EnumItemMisc.ROTTEN_BARK.create(1));
+		CompostRecipe.addRecipe(30, 12000, EnumItemMisc.DRY_BARK.create(1));
 		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BlockRegistry.HOLLOW_LOG));
+		CompostRecipe.addRecipe(25, 12000, Item.getItemFromBlock(BlockRegistry.LOG_ROTTEN_BARK));
 		CompostRecipe.addRecipe(10, 8000, Item.getItemFromBlock(BlockRegistry.SUNDEW));
 		CompostRecipe.addRecipe(6, 10000, Item.getItemFromBlock(BlockRegistry.SWAMP_DOUBLE_TALLGRASS));
 		CompostRecipe.addRecipe(5, 8000, Item.getItemFromBlock(BlockRegistry.PHRAGMITES));
@@ -489,11 +490,11 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(12, 10000, ItemRegistry.YELLOW_DOTTED_FUNGUS);
 
 		for (ItemCrushed.EnumItemCrushed type : ItemCrushed.EnumItemCrushed.values()) {
-			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_CRUSHED, type.getID()));
+			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_CRUSHED, 1, type.getID()));
 		}
 
 		for (ItemPlantDrop.EnumItemPlantDrop type : ItemPlantDrop.EnumItemPlantDrop.values()) {
-			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_PLANT_DROP, type.getID()));
+			CompostRecipe.addRecipe(3, 4000, new ItemStack(ItemRegistry.ITEMS_PLANT_DROP, 1, type.getID()));
 		}
 	}
 
@@ -545,7 +546,7 @@ public class RecipeRegistry {
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_SWAMP_GRASS_TALL.create(1)), (ItemPlantDrop.EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_TANGLED_ROOTS.create(1)), new ItemStack(ItemRegistry.TANGLED_ROOT));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), new ItemStack(BlockRegistry.LOG_WEEDWOOD));
-		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), EnumItemMisc.ROTTEN_BARK.create(1));
+		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1)), EnumItemMisc.DRY_BARK.create(1));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_HANGER.create(1)), (ItemPlantDrop.EnumItemPlantDrop.HANGER_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_WATER_WEEDS.create(1)), (ItemPlantDrop.EnumItemPlantDrop.WATER_WEEDS_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_VENUS_FLY_TRAP.create(1)), (ItemPlantDrop.EnumItemPlantDrop.VENUS_FLY_TRAP_ITEM.create(1)));

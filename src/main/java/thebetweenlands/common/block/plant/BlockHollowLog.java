@@ -102,6 +102,6 @@ public class BlockHollowLog extends BlockHorizontal {
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return EnumItemMisc.ROTTEN_BARK.getID();
+		return EnumItemMisc.DRY_BARK.getID();
 	}
 }

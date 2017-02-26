@@ -56,7 +56,7 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		SWAMP_REED_ROPE(7),
 		MUD_BRICK(10),
 		SYRMORITE_INGOT(11),
-		ROTTEN_BARK(13),
+		DRY_BARK(13),
 		SLIMY_BONE(14),
 		SNAPPER_ROOT(16),
 		STALKER_EYE(17),
