@@ -17,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockAlgae extends BlockPlant {
@@ -28,13 +29,10 @@ public class BlockAlgae extends BlockPlant {
 	
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		//if(entityIn instanceof EntityWeedwoodRowboat == false) {
-		entityIn.motionX *= 0.8D;
-		entityIn.motionZ *= 0.8D;
-		//} else {
-		//entityIn.motionX *= 0.995D;
-		//entityIn.motionZ *= 0.995D;
-		//}
+		if(entityIn instanceof EntityWeedwoodRowboat == false) {
+			entityIn.motionX *= 0.8D;
+			entityIn.motionZ *= 0.8D;
+		}
 	}
 
 	@Override
