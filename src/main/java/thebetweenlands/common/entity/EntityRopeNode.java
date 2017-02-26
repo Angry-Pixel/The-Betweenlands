@@ -319,7 +319,7 @@ public class EntityRopeNode extends Entity {
 				while(endNode.getNextNodeByUUID() instanceof EntityRopeNode && endNode.getNextNodeByUUID() != this) {
 					endNode = (EntityRopeNode) endNode.getNextNodeByUUID();
 				}
-				if(endNode.getNextNodeByUUID() == null) {
+				if(endNode.getNextNodeByUUID() == null && endNode.getPreviousNodeByUUID() instanceof EntityRopeNode) {
 					((EntityRopeNode) endNode.getPreviousNodeByUUID()).setNextNode(null);
 					endNode.setDead();
 
@@ -467,7 +467,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
-		for(Entity entity : (List<Entity>) this.worldObj.loadedEntityList) {
+		for(Entity entity : (List<Entity>) this.worldObj.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(24, 24, 24))) {
 			if (uuid.equals(entity.getUniqueID())) {
 				return entity;
 			}
