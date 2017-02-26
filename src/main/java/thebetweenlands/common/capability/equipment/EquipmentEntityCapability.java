@@ -47,8 +47,8 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	}
 
 	@Override
-	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
-		return this.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead) {
+		return !wasDead || this.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
 	}
 
 

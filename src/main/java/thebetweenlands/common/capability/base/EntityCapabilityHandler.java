@@ -106,11 +106,12 @@ public class EntityCapabilityHandler {
 		ID_CAPABILITY_MAP.put(capability.getID(), capability);
 	}
 
+	@SuppressWarnings("deprecation")
 	@SubscribeEvent
 	public static void onAttachCapabilities(AttachCapabilitiesEvent.Entity event) {
 		Entity entity = event.getEntity();
 		for(EntityCapability<?, ?, ?> entityCapability : REGISTERED_CAPABILITIES) {
-			if(entityCapability.isApplicable(event.getEntity())) {
+			if(entityCapability.isApplicable(entity)) {
 				final Capability<?> capabilityInstance = entityCapability.getCapability();
 
 				event.addCapability(entityCapability.getID(), new ICapabilitySerializable<NBTTagCompound>() {
@@ -118,7 +119,7 @@ public class EntityCapabilityHandler {
 
 					private EntityCapability<?, ?, ?> getNewInstance() {
 						EntityCapability<?, ?, ?> entityCapability = (EntityCapability<?, ?, ?>)capabilityInstance.getDefaultInstance();
-						entityCapability.setEntity(event.getEntity());
+						entityCapability.setEntity(entity);
 						entityCapability.init();
 						return entityCapability;
 					}
@@ -252,11 +253,11 @@ public class EntityCapabilityHandler {
 		List<EntityCapability<?, ?, EntityPlayer>> capabilities = getEntityCapabilities(oldPlayer);
 
 		for(EntityCapability<?, ?, EntityPlayer> capability : capabilities) {
-			if(capability.isPersistent(oldPlayer, newPlayer) && capability instanceof ISerializableCapability) {
+			if(capability.isPersistent(oldPlayer, newPlayer, event.isWasDeath()) && capability instanceof ISerializableCapability) {
 				EntityCapability<?, ?, EntityPlayer> newCapability = capability.getEntityCapability(newPlayer);
 
 				if(newCapability != null && newCapability instanceof ISerializableCapability) {
-					capability.clonePersistentData(oldPlayer, newPlayer, (ISerializableCapability) newCapability);
+					capability.clonePersistentData(oldPlayer, newPlayer, event.isWasDeath(), (ISerializableCapability) newCapability);
 				}
 			}
 		}

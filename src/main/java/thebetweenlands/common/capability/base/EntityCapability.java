@@ -126,10 +126,13 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	/**
 	 * Returns whether this capability is persistent for players. Capability
 	 * must implement {@link ISerializableCapability}
+	 * @param oldPlayer
+	 * @param newPlayer
+	 * @param wasDead
 	 * @return
 	 */
-	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
-		return false;
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead) {
+		return !wasDead;
 	}
 
 	/**
@@ -137,9 +140,10 @@ public abstract class EntityCapability<F extends EntityCapability<F, T, E>, T, E
 	 * true. Clones all data by default
 	 * @param oldPlayer
 	 * @param newPlayer
+	 * @param wasDead
 	 * @param newCapability
 	 */
-	public void clonePersistentData(EntityPlayer oldPlayer, EntityPlayer newPlayer, ISerializableCapability newCapability) {
+	public void clonePersistentData(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead, ISerializableCapability newCapability) {
 		if(this instanceof ISerializableCapability) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			((ISerializableCapability) this).writeToNBT(nbt);

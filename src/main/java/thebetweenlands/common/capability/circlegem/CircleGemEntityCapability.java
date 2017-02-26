@@ -47,8 +47,8 @@ public class CircleGemEntityCapability extends EntityCapability<CircleGemEntityC
 	}
 
 	@Override
-	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
-		return this.getEntity().getEntityWorld().getGameRules().getBoolean("keepInventory");
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead) {
+		return !wasDead || this.getEntity().getEntityWorld().getGameRules().getBoolean("keepInventory");
 	}
 
 

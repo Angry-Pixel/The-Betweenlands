@@ -46,7 +46,7 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 	}
 
 	@Override
-	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer) {
+	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead) {
 		return true;
 	}
 
