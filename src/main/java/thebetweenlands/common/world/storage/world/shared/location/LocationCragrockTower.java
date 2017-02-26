@@ -44,7 +44,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	private boolean wasEntered = false;
 	private int wispUpdateTicks = 0;
 
-	private final int[][] levelYBounds = { {-6, 9}, {10, 18}, {19, 27}, {28, 36}, {37, 45} };
+	private final int[][] levelYBounds = { {-5, 9}, {10, 18}, {19, 27}, {28, 36}, {37, 45} };
 
 	private boolean crumbling = false;
 	private int crumblingTicks = 0;
