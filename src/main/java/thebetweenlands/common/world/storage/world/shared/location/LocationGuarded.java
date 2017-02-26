@@ -41,6 +41,7 @@ public class LocationGuarded extends LocationStorage {
 
 	private Set<BlockPos> queuedChanges = new HashSet<>();
 	private boolean queuedClear;
+	private boolean readWriteGuardData = true;
 
 	public LocationGuarded(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
 		super(worldStorage, id, region);
@@ -58,24 +59,33 @@ public class LocationGuarded extends LocationStorage {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.readGuardNBT(nbt);
+		if(this.readWriteGuardData) {
+			this.readGuardNBT(nbt);
+		}
 	}
 
 	@Override
 	public void readFromPacketNBT(NBTTagCompound nbt) {
-		super.readFromNBT(nbt);
+		this.readWriteGuardData = false;
+		this.readFromNBT(nbt);
+		this.readWriteGuardData = true;
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		this.writeGuardNBT(nbt);
+		if(this.readWriteGuardData) {
+			this.writeGuardNBT(nbt);
+		}
 		return nbt;
 	}
 
 	@Override
 	public NBTTagCompound writeToPacketNBT(NBTTagCompound nbt) {
-		return super.writeToNBT(nbt);
+		this.readWriteGuardData = false;
+		nbt = this.writeToNBT(nbt);
+		this.readWriteGuardData = true;
+		return nbt;
 	}
 
 	@Override
