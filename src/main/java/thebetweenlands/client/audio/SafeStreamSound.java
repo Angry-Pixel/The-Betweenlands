@@ -35,7 +35,7 @@ public class SafeStreamSound extends MovingSound {
         if (donePlaying && !isDone) {
             if (pauseTicks == 0) {
                 SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-                SoundManager manager = ReflectionHelper.getPrivateValue(SoundHandler.class, handler, "field_147694_f", "sndSystem");
+                SoundManager manager = ReflectionHelper.getPrivateValue(SoundHandler.class, handler, "field_147694_f", "sndManager");
                 SoundSystem sys = ReflectionHelper.getPrivateValue(SoundManager.class, manager, "field_148620_e", "sndSystem");
                 Map<ISound, String> sounds = ReflectionHelper.getPrivateValue(SoundManager.class, manager, "field_148630_i", "invPlayingSounds");
                 sys.pause(sounds.get(this));
