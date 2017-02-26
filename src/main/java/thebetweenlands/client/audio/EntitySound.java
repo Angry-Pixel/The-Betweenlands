@@ -2,7 +2,6 @@ package thebetweenlands.client.audio;
 
 import java.util.function.Predicate;
 
-import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -10,7 +9,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
-public class EntitySound<T extends Entity> extends MovingSound {
+public class EntitySound<T extends Entity> extends SafeStreamSound {
 	public final T entity;
 	public final Predicate<T> isPlaying;
 
