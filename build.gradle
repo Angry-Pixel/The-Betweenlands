@@ -159,3 +159,13 @@ def addManifestAttributes(Manifest m) {
 	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
     m.attributes ('FMLCorePluginContainsFMLMod': 'true')
 }
+
+
+//JEI intergration
+repositories {
+    maven { url "http://dvs1.progwml6.com/files/maven" }
+}
+
+dependencies {
+    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.414:api"
+}

@@ -70,4 +70,9 @@ public class CompostRecipe implements ICompostBinRecipe {
 	public int getCompostingTime(ItemStack stack) {
 		return this.compostTime;
 	}
+
+
+	public ItemStack getInput(){
+		return input;
+	}
 }
