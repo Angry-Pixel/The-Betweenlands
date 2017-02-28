@@ -8,8 +8,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.gen.feature.WorldGenDeadWeedwoodTree;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenMudStructures;
 
 //MINE!!
 public class TestItem extends Item {
@@ -20,8 +19,8 @@ public class TestItem extends Item {
 	@Override
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {  
-			WorldGenDeadWeedwoodTree worldGenDruidCircle = new WorldGenDeadWeedwoodTree();
-			worldGenDruidCircle.generate(world, itemRand, pos.up());
+			WorldGenMudStructures gen = new WorldGenMudStructures();
+			gen.generate(world, itemRand, pos.up());
 		}
 		/*if (!world.isRemote) {  
 			WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();

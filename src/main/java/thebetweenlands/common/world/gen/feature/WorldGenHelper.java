@@ -16,7 +16,6 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
@@ -273,11 +272,15 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 */
 	@SafeVarargs
 	public final void rotatedCubeVolumeExtendedDown(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation, Consumer<BlockPos>... callbacks) {
-		while (y + offsetY > 0 && isReplaceable(world, x, y, z, offsetX, offsetY - 1, offsetZ, rotation)) {
-			offsetY--;
-			sizeHeight++;
+		for(int w = 0; w < sizeWidth; w++) {
+			for(int d = 0; d < sizeDepth; d++) {
+				while (y + offsetY > 0 && isReplaceable(world, x, y, z, offsetX + w, offsetY - 1, offsetZ + d, rotation)) {
+					offsetY--;
+					sizeHeight++;
+				}
+				rotatedCubeVolume(world, x, y, z, offsetX + w, offsetY, offsetZ + d, blockState, 1, sizeHeight, 1, rotation, callbacks);
+			}
 		}
-		rotatedCubeVolume(world, x, y, z, offsetX, offsetY, offsetZ, blockState, sizeWidth, sizeHeight, sizeDepth, rotation, callbacks);
 	}
 
 	/**
@@ -294,26 +297,20 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @return whether or not it is replaceable
 	 */
 	public boolean isReplaceable(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation) {
-		//return isReplaceable(world, new BlockPos(x, y, z), offsetX, offsetY, offsetZ, rotation);
 		x -= width / 2;
 		z -= depth / 2;
-		//pos = pos.add(-(width / 2), 0, -(depth / 2));
 		BlockPos pos;
 		switch (rotation) {
 		case 0:
-			//pos = pos.add(offsetX, offsetY, offsetZ);
 			pos = this.getCheckPos(x + offsetX, y + offsetY, z + offsetZ);
 			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
 		case 1:
-			//pos = pos.add(offsetZ, offsetY, depth - offsetX - 1);
 			pos = this.getCheckPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1);
 			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
 		case 2:
-			//pos = pos.add(width - offsetX - 1, offsetY, depth - offsetZ - 1);
 			pos = this.getCheckPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1);
 			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
 		case 3:
-			//pos = pos.add(width - offsetZ - 1, offsetY, offsetX);
 			pos = this.getCheckPos(x + width - offsetZ - 1, y + offsetY, z + offsetX);
 			return world.getBlockState(pos).getBlock().isReplaceable(world, pos) || (replaceable != null && arrayContainsBlock(replaceable, world.getBlockState(pos)));
 		}
@@ -388,23 +385,23 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param max     The maximum amount of items
 	 * @param chance  The chance of it actually generating
 	 */
-	public void rotatedLootPot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance) {
+	public void rotatedLootPot(World world, Random rand, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int rotation, int min, int max, int chance, ResourceLocation lootTable) {
 		x -= width / 2;
 		z -= depth / 2;
 		if (rand.nextInt(chance) == 0)
 			return;
 		switch (rotation) {
 		case 0:
-			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + offsetX, y + offsetY, z + offsetZ), min, max, lootTable);
 			break;
 		case 1:
-			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + offsetZ, y + offsetY, z + depth - offsetX - 1), min, max, lootTable);
 			break;
 		case 2:
-			generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + width - offsetX - 1, y + offsetY, z + depth - offsetZ - 1), min, max, lootTable);
 			break;
 		case 3:
-			generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, LootTableRegistry.DUNGEON_POT_LOOT);
+			generateLootPot(world, rand, new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX), min, max, lootTable);
 			break;
 		}
 	}

@@ -38,6 +38,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenSwampReedCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenMudStructures;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
@@ -105,6 +106,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_SPAWNER = new WorldGenSpawner();
 	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
 	public static final WorldGenerator GEN_DEAD_TRUNK = new WorldGenGiantTreeDead();
+	public static final WorldGenerator GEN_MUD_STRUCTURES = new WorldGenMudStructures();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -794,6 +796,14 @@ public class DecorationHelper {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			GEN_DEAD_TRUNK.generate(decorator.getWorld(), decorator.getRand(), pos.down(8 + decorator.getRand().nextInt(5)));
+		}
+		return false;
+	}
+	
+	public static boolean generateMudStructures(DecoratorPositionProvider decorator) {
+		BlockPos pos = decorator.getRandomPos(10);
+		if(decorator.getWorld().isAirBlock(pos) && decorator.getWorld().getBlockState(pos.down()).getBlock() == BlockRegistry.MUD) {
+			return GEN_MUD_STRUCTURES.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
 		return false;
 	}

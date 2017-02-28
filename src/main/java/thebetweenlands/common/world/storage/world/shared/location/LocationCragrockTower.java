@@ -50,7 +50,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	private int crumblingTicks = 0;
 
 	public LocationCragrockTower(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region) {
-		super(worldStorage, id, region, "translate:cragrockTower", EnumLocationType.DUNGEON);
+		super(worldStorage, id, region, "translate:cragrock_tower", EnumLocationType.DUNGEON);
 	}
 
 	/**

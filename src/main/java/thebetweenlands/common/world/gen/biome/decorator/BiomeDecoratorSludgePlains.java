@@ -11,8 +11,9 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBetweenlands {
 	public void decorate() {
 		super.decorate();
 
-		//TODO: Implement missing generators
-		//this.generate(5, DecorationHelper::generateMudStructures);
+		this.startProfilerSection("mudStructures");
+		this.generate(5, DecorationHelper::generateMudStructures);
+		this.endProfilerSection();
 
 		this.startProfilerSection("deadWeedwoodTree");
 		this.generate(4, DecorationHelper::generateDeadWeedwoodTree);
