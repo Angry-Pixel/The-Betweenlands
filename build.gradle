@@ -82,7 +82,6 @@ task serverJar(type: Jar, dependsOn: classes) {
 	from (zipTree(jar.archivePath)) {
 	
 		//A list of files or folders to be excluded from the server build
-		exclude("**/assets/" + modid + "/lang/**")
 		exclude("**/assets/" + modid + "/models/**")
 		exclude("**/assets/" + modid + "/shaders/**")
 		exclude("**/assets/" + modid + "/sounds/**")
