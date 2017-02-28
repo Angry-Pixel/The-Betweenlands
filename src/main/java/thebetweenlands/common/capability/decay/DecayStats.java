@@ -55,10 +55,29 @@ public class DecayStats {
 			}
 		}
 
+		float decaySpeed = 0.0F;
+
+		switch(difficulty) {
+		case PEACEFUL:
+			decaySpeed = 0.0F;
+			break;
+		case EASY:
+			decaySpeed = 0.0025F;
+			break;
+		case NORMAL:
+			decaySpeed = 0.0033F;
+			break;
+		case HARD:
+			decaySpeed = 0.005F;
+			break;
+		}
+
 		if(player.isInWater()) {
-			this.addDecayAcceleration(0.001F);
-		} else {
-			this.addDecayAcceleration(0.00075F);
+			decaySpeed *= 2.75F;
+		}
+
+		if(decaySpeed > 0.0F) {
+			this.addDecayAcceleration(decaySpeed);
 		}
 	}
 
