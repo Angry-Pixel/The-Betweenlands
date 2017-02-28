@@ -397,7 +397,7 @@ public class ClientProxy extends CommonProxy {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + item.getRegistryName().getResourcePath(), types.get(i)));
 			}
 		} else {
-			String itemName = item.getRegistryName().toString().replace("thebetweenlands:", "");
+			String itemName = item.getRegistryName().getResourcePath();
 			if (ConfigHandler.debug && createJSONFile)
 				JsonRenderGenerator.createJSONForItem(item, itemName);
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));

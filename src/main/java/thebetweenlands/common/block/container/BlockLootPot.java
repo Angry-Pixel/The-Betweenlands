@@ -40,12 +40,14 @@ import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.item.ItemBlockEnum.IGenericMetaSelector;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootInventory;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICustomItemBlock, ISubtypeBlock {
+public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICustomItemBlock, ISubtypeBlock, IStateMappedBlock {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	public static final PropertyEnum<EnumLootPot> VARIANT = PropertyEnum.create("type", EnumLootPot.class);
 
@@ -83,9 +85,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_1.getMetadata(EnumFacing.NORTH)));
-		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_2.getMetadata(EnumFacing.NORTH)));
-		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_3.getMetadata(EnumFacing.NORTH)));
+		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_1.getMetadata(EnumFacing.SOUTH)));
+		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_2.getMetadata(EnumFacing.SOUTH)));
+		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_3.getMetadata(EnumFacing.SOUTH)));
 	}
 
 	@Override
@@ -214,6 +216,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 			return facing.getHorizontalIndex() | (this.ordinal() << 2);
 		}
 
+		@Override
 		public String toString() {
 			return this.name;
 		}
@@ -226,6 +229,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 			return values()[metadata];
 		}
 
+		@Override
 		public String getName() {
 			return this.name;
 		}
@@ -238,7 +242,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public int getSubtypeNumber() {
-		return EnumLootPot.values().length;
+		return EnumLootPot.values().length * 4;
 	}
 
 	@Override
@@ -249,5 +253,10 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	@Override
 	public ItemBlock getItemBlock() {
 		return ItemBlockEnum.create(this, EnumLootPot.class);
+	}
+
+	@Override
+	public void setStateMapper(Builder builder) {
+		builder.ignore(VARIANT).withPropertySuffix(VARIANT, e -> e.getName());
 	}
 }
