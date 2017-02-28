@@ -62,6 +62,7 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		j = i % 65536;
 		k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 	}
 
 	@Override
