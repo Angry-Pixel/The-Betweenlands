@@ -32,8 +32,10 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 		double renderViewY = Minecraft.getMinecraft().getRenderManager().viewerPosY;
 		double renderViewZ = Minecraft.getMinecraft().getRenderManager().viewerPosZ;
 
+		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+
 		if(!BlockWisp.canSee(tileEntity.getWorld(), tileEntity.getPos())) {
-			double dist = Minecraft.getMinecraft().getRenderViewEntity().getDistance(x + renderViewX, y + renderViewY, z + renderViewZ);
+			double dist = renderView != null ? renderView.getDistance(x + renderViewX, y + renderViewY, z + renderViewZ) : 0.0D;
 			if(dist > 50 || dist < 10) {
 				return;
 			}
@@ -87,19 +89,21 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 
 		Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
 
-		Particle.interpPosX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * (double)partialTicks;
-		Particle.interpPosY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * (double)partialTicks;
-		Particle.interpPosZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * (double)partialTicks;
-		Particle.field_190016_K = viewer.getLook(partialTicks);
+		if(viewer != null) {
+			Particle.interpPosX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * (double)partialTicks;
+			Particle.interpPosY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * (double)partialTicks;
+			Particle.interpPosZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * (double)partialTicks;
+			Particle.field_190016_K = viewer.getLook(partialTicks);
 
-		for(Object particle : particleList){
-			ParticleWisp wisp = (ParticleWisp) particle;
-			wisp.renderParticle(vertexBuffer, viewer, partialTicks, 
-					ActiveRenderInfo.getRotationX(),
-					ActiveRenderInfo.getRotationXZ(),
-					ActiveRenderInfo.getRotationZ(),
-					ActiveRenderInfo.getRotationYZ(),
-					ActiveRenderInfo.getRotationXY());
+			for(Object particle : particleList){
+				ParticleWisp wisp = (ParticleWisp) particle;
+				wisp.renderParticle(vertexBuffer, viewer, partialTicks, 
+						ActiveRenderInfo.getRotationX(),
+						ActiveRenderInfo.getRotationXZ(),
+						ActiveRenderInfo.getRotationZ(),
+						ActiveRenderInfo.getRotationYZ(),
+						ActiveRenderInfo.getRotationXY());
+			}
 		}
 	}
 }

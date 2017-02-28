@@ -235,7 +235,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
 		this.uploadFloat(this.worldTimeUniformID, Minecraft.getMinecraft().theWorld.getWorldTime() + partialTicks);
 
-		Vec3d camPos = ActiveRenderInfo.projectViewFromEntity(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks);
+		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		Vec3d camPos = renderView != null ? ActiveRenderInfo.projectViewFromEntity(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks) : Vec3d.ZERO;
 		this.uploadFloat(this.camPosUniformID, (float)camPos.xCoord, (float)camPos.yCoord, (float)camPos.zCoord);
 	}
 

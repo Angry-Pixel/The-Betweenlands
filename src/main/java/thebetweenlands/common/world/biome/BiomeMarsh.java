@@ -81,7 +81,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		float fogStart = Math.min(10, super.getFogStart(farPlaneDistance, mode));
 
 		Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
-		if (viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
+		if (viewEntity == null || viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
 			return fogStart;
 
 		float fogEnd = super.getFogEnd(farPlaneDistance, mode);
@@ -95,7 +95,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		float fogEnd = super.getFogEnd(farPlaneDistance, mode);
 
 		Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
-		if (viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
+		if (viewEntity == null || viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
 			return fogEnd;
 
 		float fogStart = Math.min(10, super.getFogStart(farPlaneDistance, mode));
@@ -107,7 +107,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 	@SideOnly(Side.CLIENT)
 	public int[] getFogRGB() {
 		Entity viewEntity = Minecraft.getMinecraft().getRenderViewEntity();
-		if (viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
+
+		if (viewEntity == null || viewEntity.posY <= WorldProviderBetweenlands.CAVE_START)
 			return super.getFogRGB();
 
 		int[] targetFogColor = super.getFogRGB().clone();

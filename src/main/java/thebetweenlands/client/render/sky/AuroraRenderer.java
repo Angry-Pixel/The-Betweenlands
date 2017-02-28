@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.util.TextureAtlasHelper;
 
@@ -173,8 +174,10 @@ public class AuroraRenderer {
 					Vector4f bottomGradient = colorGradients.get(gi);
 					Vector4f topGradient = colorGradients.get(gi+1);
 
-					double camDist = Minecraft.getMinecraft().getRenderViewEntity().getDistance(segStopX, Minecraft.getMinecraft().getRenderViewEntity().posY, segStopZ);
-					double camDistNext = Minecraft.getMinecraft().getRenderViewEntity().getDistance(segStartX, Minecraft.getMinecraft().getRenderViewEntity().posY, segStartZ);
+					Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+					
+					double camDist = renderView != null ? renderView.getDistance(segStopX, renderView.posY, segStopZ) : 0.0D;
+					double camDistNext = renderView != null ? renderView.getDistance(segStartX, renderView.posY, segStartZ) : 0.0D;
 					float alphaGradMultiplier = (float) (salphaGradMultiplier);
 					float alphaGradMultiplierNext = (float) (salphaGradMultiplierNext);
 					float viewDist = Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16.0F - 10.0F;

@@ -29,10 +29,12 @@ public class CameraPositionHandler {
 		float screenShake = 0.0F;
 		World world = Minecraft.getMinecraft().theWorld;
 		Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
-		for(Entity entity : (List<Entity>) world.loadedEntityList) {
-			if(entity instanceof IEntityScreenShake) {
-				IEntityScreenShake shake = (IEntityScreenShake) entity;
-				screenShake += shake.getShakeIntensity(renderViewEntity, delta);
+		if(renderViewEntity != null) {
+			for(Entity entity : (List<Entity>) world.loadedEntityList) {
+				if(entity instanceof IEntityScreenShake) {
+					IEntityScreenShake shake = (IEntityScreenShake) entity;
+					screenShake += shake.getShakeIntensity(renderViewEntity, delta);
+				}
 			}
 		}
 		return MathHelper.clamp_float(screenShake, 0.0F, 0.15F);

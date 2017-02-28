@@ -65,10 +65,13 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 
 	public static float getDistanceToViewer(double x, double y, double z, float partialRenderTicks) {
 		Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
-		double dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
-		double dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
-		double dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
-		return MathHelper.sqrt_float((float) (dx * dx + dy * dy + dz * dz));
+		if(entity != null) {
+			double dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
+			double dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
+			double dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
+			return MathHelper.sqrt_float((float) (dx * dx + dy * dy + dz * dz));
+		}
+		return 0.0F;
 	}
 
 	@Override

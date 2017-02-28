@@ -77,7 +77,8 @@ public class ParticleThem extends Particle {
 
 		float fogEnd = FogHandler.getCurrentFogEnd();
 		float fogStart = FogHandler.getCurrentFogEnd();
-		float particleDist = (float)Minecraft.getMinecraft().getRenderViewEntity().getDistance(this.posX, this.posY, this.posZ);
+		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
+		float particleDist = renderView == null ? 0.0F : (float)renderView.getDistance(this.posX, this.posY, this.posZ);
 		float fadeStart = Math.max(fogStart + (fogEnd - fogStart) / 3.0F, 12.0F);
 		float fadeEnd = 8.0F;
 
