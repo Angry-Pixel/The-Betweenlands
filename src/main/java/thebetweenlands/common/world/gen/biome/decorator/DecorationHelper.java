@@ -20,6 +20,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveGrass;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
 import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
+import thebetweenlands.common.world.gen.feature.WorldGenDeadWeedwoodTree;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
 import thebetweenlands.common.world.gen.feature.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
@@ -52,6 +53,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_CAVE_MOSS = new WorldGenCaveMoss();
 	public static final WorldGenerator GEN_CAVE_GRASS = new WorldGenCaveGrass();
 	public static final WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedwoodTree();
+	public static final WorldGenerator GEN_DEAD_WEEDWOOD_TREE = new WorldGenDeadWeedwoodTree();
 	public static final WorldGenerator GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 	public static final WorldGenerator GEN_SWAMP_TALLGRASS = new WorldGenPlantCluster(BlockRegistry.SWAMP_TALLGRASS.getDefaultState());
 	public static final WorldGenerator GEN_NETTLES = new WorldGenPlantCluster(BlockRegistry.NETTLE.getDefaultState());
@@ -226,6 +228,16 @@ public class DecorationHelper {
 			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) ||
 					(SurfaceType.WATER.matches(world, pos) && world.getBlockState(pos.down()) == BlockRegistry.MUD))
 				return GEN_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
+		}
+		return false;
+	}
+
+	public static boolean generateDeadWeedwoodTree(DecoratorPositionProvider decorator) {
+		if (canShortThingsGenerateHere(decorator)) {
+			BlockPos pos = decorator.getRandomPos(14);
+			World world = decorator.getWorld();
+			if (world.isAirBlock(pos) && world.getBlockState(pos.down()).getBlock() == BlockRegistry.MUD)
+				return GEN_DEAD_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
 		}
 		return false;
 	}
