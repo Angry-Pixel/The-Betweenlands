@@ -753,6 +753,7 @@ entity.thebetweenlands.pyrad_flame.name=Pyrad Flame
 entity.thebetweenlands.shockwave_block.name=ShockWave Block
 entity.thebetweenlands.frog.name=Frog
 entity.thebetweenlands.gas_cloud.name=Gas Cloud
+entity.thebetweenlands.weedwood_rowboat.name=Weedwood Rowboat
 
 
 # Equipment

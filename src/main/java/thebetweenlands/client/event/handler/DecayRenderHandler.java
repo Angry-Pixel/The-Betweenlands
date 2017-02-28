@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
@@ -100,7 +101,7 @@ public class DecayRenderHandler {
 	private static ModelArmOverride modelArmOverrideLeft = null;
 	private static ModelArmOverride modelArmOverrideRight = null;
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOW)
 	public static void onRenderHand(RenderHandEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 		Minecraft mc = Minecraft.getMinecraft();

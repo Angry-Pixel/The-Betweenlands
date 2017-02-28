@@ -58,23 +58,26 @@ public class RenderPlayerRower extends RenderLivingBase<AbstractClientPlayer> {
 
     @Override
     public void doRender(AbstractClientPlayer player, double x, double y, double z, float yaw, float delta) {
-        if (!player.isUser() || renderManager.renderViewEntity == player) {
-            getMainModel().bipedHeadwear.showModel = player.isWearing(EnumPlayerModelParts.HAT);
-            wearModel.bipedBody.showModel = player.isWearing(EnumPlayerModelParts.JACKET);
-            wearModel.bipedLeftLeg.showModel = player.isWearing(EnumPlayerModelParts.LEFT_PANTS_LEG);
-            wearModel.bipedRightLeg.showModel = player.isWearing(EnumPlayerModelParts.RIGHT_PANTS_LEG);
-            wearModel.bipedLeftArm.showModel = player.isWearing(EnumPlayerModelParts.LEFT_SLEEVE);
-            wearModel.bipedRightArm.showModel = player.isWearing(EnumPlayerModelParts.RIGHT_SLEEVE);
-            GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
-            super.doRender(player, x, y, z, yaw, delta);
-            GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
-        }
+        getMainModel().bipedHeadwear.showModel = player.isWearing(EnumPlayerModelParts.HAT);
+        wearModel.bipedBody.showModel = player.isWearing(EnumPlayerModelParts.JACKET);
+        wearModel.bipedLeftLeg.showModel = player.isWearing(EnumPlayerModelParts.LEFT_PANTS_LEG);
+        wearModel.bipedRightLeg.showModel = player.isWearing(EnumPlayerModelParts.RIGHT_PANTS_LEG);
+        wearModel.bipedLeftArm.showModel = player.isWearing(EnumPlayerModelParts.LEFT_SLEEVE);
+        wearModel.bipedRightArm.showModel = player.isWearing(EnumPlayerModelParts.RIGHT_SLEEVE);
+        GlStateManager.enableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
+        super.doRender(player, x, y, z, yaw, delta);
+        GlStateManager.disableBlendProfile(GlStateManager.Profile.PLAYER_SKIN);
     }
 
     @Override
     protected void preRenderCallback(AbstractClientPlayer player, float delta) {
         float scale = 0.9375F;
         GlStateManager.scale(scale, scale, scale);
+    }
+
+    @Override
+    protected boolean canRenderName(AbstractClientPlayer entity) {
+        return !entity.isUser() && super.canRenderName(entity);
     }
 
     @Override

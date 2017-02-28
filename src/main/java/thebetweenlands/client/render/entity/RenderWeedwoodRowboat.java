@@ -21,7 +21,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -214,11 +214,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     }
 
     @SubscribeEvent
-    public void onLivingRender(RenderLivingEvent.Pre<EntityPlayer> event) {
-        Entity e = event.getEntity();
-        if (!(e instanceof AbstractClientPlayer)) {
-            return;
-        }
+    public void onLivingRender(RenderPlayerEvent.Pre event) {
+        EntityPlayer e = event.getEntityPlayer();
         Entity riding = e.getRidingEntity();
         if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e && !(((Render<?>) event.getRenderer()) instanceof RenderPlayerRower)) {
             event.setCanceled(true);
