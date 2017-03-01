@@ -26,7 +26,6 @@ public class ConfigHandler {
 	public static int dimensionBrightness;
 	public static int wispQuality;
 	public static boolean useShader;
-	public static boolean fireflyLighting;
 	public static boolean debug;
 	public static boolean debugMenuOnStart;
 	public static int skyResolution;
@@ -59,7 +58,6 @@ public class ConfigHandler {
 		dimensionBrightness = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
 
 		wispQuality = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 50).setMinValue(0).setMaxValue(100).getInt(100);
-		fireflyLighting = config.getBoolean("Firefly block lighting", CATEGORIES[1], true, "");
 		useShader = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", CATEGORIES[1], true, "");
 		skyResolution = config.get(CATEGORIES[1], "Sky texture resolution (only when shaders are enabled)", 1024).getInt(1024);
 

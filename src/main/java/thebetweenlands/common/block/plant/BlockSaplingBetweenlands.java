@@ -83,7 +83,7 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 		world.setBlockToAir(pos);
 
 		if (!worldGen.generate(world, rand, pos)) {
-			world.setBlockState(pos, (IBlockState) this);
+			world.setBlockState(pos, state);
 		}
 	}
 
