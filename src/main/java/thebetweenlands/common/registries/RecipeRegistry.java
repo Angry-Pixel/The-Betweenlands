@@ -176,6 +176,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(EnumItemMisc.SWAMP_REED_ROPE.create(4), "p", "p" , "p", 'p', new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
 		GameRegistry.addRecipe(EnumItemMisc.WEEDWOOD_BOWL.create(4), "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET), " X ", "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_BUCKET), " X ", "x x", " x ", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LADDER, 3), "X X", "xxx", "X X", 'x', EnumItemMisc.WEEDWOOD_STICK.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_BUTTON), new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BUTTON), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
