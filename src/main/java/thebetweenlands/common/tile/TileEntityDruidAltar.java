@@ -75,7 +75,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 					stopCraftingProcess();
 				}
 				if (this.craftingProgress >= CRAFTING_TIME && recipe != null) {
-					ItemStack stack = recipe.output;
+					ItemStack stack = recipe.getOutput();
 					stack.stackSize = 1;
 					setInventorySlotContents(1, null);
 					setInventorySlotContents(2, null);

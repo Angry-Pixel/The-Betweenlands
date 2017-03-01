@@ -9,11 +9,11 @@ import java.util.ArrayList;
 public class DruidAltarRecipe {
     public static ArrayList<DruidAltarRecipe> druidAltarRecipes = new ArrayList<DruidAltarRecipe>();
 
-    public ItemStack input1;
-    public ItemStack input2;
-    public ItemStack input3;
-    public ItemStack input4;
-    public ItemStack output;
+    private ItemStack input1;
+    private ItemStack input2;
+    private ItemStack input3;
+    private ItemStack input4;
+    private ItemStack output;
 
     public DruidAltarRecipe(ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4, ItemStack output) {
         this.input1 = input1;
@@ -107,5 +107,18 @@ public class DruidAltarRecipe {
 
     private static boolean matches(ItemStack itemStack1, ItemStack itemStack2) {
         return itemStack2.getItem() == itemStack1.getItem() && itemStack2.getItemDamage() == itemStack1.getItemDamage();
+    }
+
+    public ArrayList<ItemStack> getInputs(){
+        ArrayList<ItemStack> l = new ArrayList();
+        l.add(input1);
+        l.add(input2);
+        l.add(input3);
+        l.add(input4);
+        return l;
+    }
+
+    public ItemStack getOutput(){
+        return output;
     }
 }

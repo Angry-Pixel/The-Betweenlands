@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,11 +24,20 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	private String renderEntity = null;
 	private Entity renderEntityInstance = null;
 	private boolean closeOnFinish = false;
+	private ResourceLocation lootTable = null;
+
 
 	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife) {
 		this.input = input;
 		this.requiredFuel = requiredFuel;
 		this.requiredLife = requiredLife;
+	}
+
+	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife, ResourceLocation lootTable) {
+		this.input = input;
+		this.requiredFuel = requiredFuel;
+		this.requiredLife = requiredLife;
+		this.lootTable = lootTable;
 	}
 
 	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife, ItemStack result) {
@@ -175,5 +185,14 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	@Deprecated
 	public static IAnimatorRecipe getRecipeFromOutput(ItemStack output) {
 		return null;
+	}
+
+
+	public ItemStack getInput() {
+		return input;
+	}
+
+	public ResourceLocation getLootTable() {
+		return lootTable;
 	}
 }

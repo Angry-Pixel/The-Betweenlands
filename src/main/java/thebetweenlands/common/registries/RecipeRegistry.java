@@ -560,7 +560,7 @@ public class RecipeRegistry {
 	}
 
 	private static void registerAnimatorRecipes() {
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16) {
+		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.SCROLL.create(1), 16, 16, LootTableRegistry.ANIMATOR_SCROLL) {
 			@Override
 			public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
 				LootTable lootTable = world.getLootTableManager().getLootTableFromLocation(LootTableRegistry.ANIMATOR_SCROLL);
