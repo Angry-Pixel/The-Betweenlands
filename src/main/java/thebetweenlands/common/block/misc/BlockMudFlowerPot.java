@@ -28,7 +28,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ChunkCache;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -44,6 +43,7 @@ import thebetweenlands.common.block.property.PropertyBlockStateUnlisted;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
+import thebetweenlands.util.TileEntityHelper;
 
 public class BlockMudFlowerPot extends BlockContainer {
 	protected static final AxisAlignedBB FLOWER_POT_AABB = new AxisAlignedBB(0.3125D, 0.0D, 0.3125D, 0.6875D, 0.375D, 0.6875D);
@@ -97,18 +97,12 @@ public class BlockMudFlowerPot extends BlockContainer {
 	public IBlockState getExtendedState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		state = ((IExtendedBlockState)state).withProperty(FLOWER, Blocks.AIR.getDefaultState());
 
-		if(world instanceof ChunkCache) {
-			TileEntity te = world.getTileEntity(pos);
+		TileEntityMudFlowerPot te = TileEntityHelper.getTileEntityThreadSafe(world, pos, TileEntityMudFlowerPot.class);
 
-			if(te != null && te instanceof TileEntityMudFlowerPot) {
-				TileEntityMudFlowerPot flowerPot = (TileEntityMudFlowerPot) te;
-
-				if(flowerPot.getFlowerItemStack() != null) {
-					IBlockState blockState = this.getPlantBlockStateFromItem(flowerPot.getFlowerItemStack());
-					if(blockState != null) {
-						state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
-					}
-				}
+		if(te != null && te.getFlowerItemStack() != null) {
+			IBlockState blockState = this.getPlantBlockStateFromItem(te.getFlowerItemStack());
+			if(blockState != null) {
+				state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
 			}
 		}
 
