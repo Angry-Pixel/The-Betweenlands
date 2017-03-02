@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityRubberTap;
@@ -35,6 +36,7 @@ public class BlockWeedwoodRubberTap extends BlockRubberTap {
 			} else {
 				spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET));
 			}
+			spawnAsEntity(worldIn, pos, EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		}
 	}
 }
