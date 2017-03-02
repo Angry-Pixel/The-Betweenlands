@@ -13,4 +13,9 @@ public class ItemSapBall extends ItemBLFood implements IDecayFood {
 	public int getDecayHealAmount(ItemStack stack) {
 		return 2;
 	}
+
+	@Override
+	public boolean canGetSickOf(ItemStack stack) {
+		return false;
+	}
 }
