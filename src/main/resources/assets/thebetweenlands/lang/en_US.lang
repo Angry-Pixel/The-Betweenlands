@@ -793,3 +793,7 @@ sign.fortress.line1=Only The
 sign.fortress.line2=Sword Keeper
 sign.fortress.line3=May Pass
 sign.fortress.line4=This Point
+
+
+# JEI
+jei.thebetweenlands.animator.entity_spawn=This recipe will spawn %s

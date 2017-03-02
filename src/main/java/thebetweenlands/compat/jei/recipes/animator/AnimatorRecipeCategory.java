@@ -68,7 +68,7 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
         recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
         recipeLayout.getItemStacks().set(2, ingredients.getInputs(ItemStack.class).get(2));
         if (ingredients.getOutputs(ItemStack.class).size() > 0)
-            recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class).get(0));
+            recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class));
     }
 
     @Override

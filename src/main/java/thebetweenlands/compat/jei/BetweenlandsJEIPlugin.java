@@ -21,6 +21,7 @@ import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarRecipeMaker;
 @JEIPlugin
 public class BetweenlandsJEIPlugin extends BlankModPlugin{
     public static IJeiHelpers jeiHelper;
+    public static IJeiRuntime jeiRuntime;
 
     @Override
     public void register(IModRegistry registry) {
@@ -37,5 +38,11 @@ public class BetweenlandsJEIPlugin extends BlankModPlugin{
         registry.addRecipes(AnimatorRecipeMaker.getRecipes());
         registry.addRecipes(DruidAltarRecipeMaker.getRecipes());
         registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes());
+    }
+
+    @Override
+    public void onRuntimeAvailable(IJeiRuntime runtime) {
+        jeiRuntime = runtime;
+        System.out.println("runtime available, yay!");
     }
 }

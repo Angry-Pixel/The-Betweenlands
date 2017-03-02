@@ -24,11 +24,14 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
     private ItemStack result = null;
     private String entityName = null;
     private ResourceLocation lootTableName = null;
+    private World world = null;
 
     public AnimatorRecipeJEI(AnimatorRecipe animatorRecipe) {
         input = animatorRecipe.getInput();
         requiredFuel = animatorRecipe.getRequiredFuel(input);
         requiredLife = animatorRecipe.getRequiredLife(input);
+        result = animatorRecipe.getResult(input);
+        lootTableName = animatorRecipe.getLootTable();
         if (animatorRecipe.getSpawnEntityClass(input) != null) {
             Entity entity = null;
             try {
@@ -39,10 +42,11 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
             if (entity != null)
                 entityName = entity.getName();
         }
-        result = animatorRecipe.getResult(input);
-        lootTableName = animatorRecipe.getLootTable();
     }
-
+    public AnimatorRecipeJEI(AnimatorRecipe animatorRecipe, World world) {
+        this(animatorRecipe);
+        this.world = world;
+    }
     @Override
     public void getIngredients(IIngredients ingredients) {
         ArrayList<ItemStack> l = new ArrayList();
@@ -52,9 +56,8 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
         ingredients.setInputs(ItemStack.class, l);
         if (result != null)
             ingredients.setOutput(ItemStack.class, result);
-        if (lootTableName != null){
-            LootTable lootTable = Minecraft.getMinecraft().theWorld.getLootTableManager().getLootTableFromLocation(lootTableName);
-            //lootTable.
+        if (lootTableName != null && world != null){
+            ingredients.setOutputs(ItemStack.class, LootTableRegistry.getItemsFromTable(lootTableName, world));
         }
     }
 
@@ -70,7 +73,7 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
             processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.fuel"), requiredFuel));
         }
         if (entityName != null && mouseX >= 19 && mouseX <= 35 && mouseY >= 16 && mouseY <= 32) {
-            processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.entity_spawn"), requiredLife));
+            processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.entity_spawn"), entityName));
         }
         return processTooltip;
     }

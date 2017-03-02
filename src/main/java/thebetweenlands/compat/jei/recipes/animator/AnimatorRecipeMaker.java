@@ -1,5 +1,6 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
+import net.minecraft.world.World;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 
@@ -13,7 +14,19 @@ public class AnimatorRecipeMaker {
         ArrayList<AnimatorRecipeJEI> recipes = new ArrayList<AnimatorRecipeJEI>();
         for (IAnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
             if (recipe instanceof AnimatorRecipe)
-                recipes.add(new AnimatorRecipeJEI((AnimatorRecipe) recipe));
+                if (((AnimatorRecipe) recipe).getLootTable() == null)
+                    recipes.add(new AnimatorRecipeJEI((AnimatorRecipe) recipe));
+        }
+        return recipes;
+    }
+
+    @Nonnull
+    public static List<AnimatorRecipeJEI> getRecipesRuntime(World world) {
+        ArrayList<AnimatorRecipeJEI> recipes = new ArrayList<AnimatorRecipeJEI>();
+        for (IAnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
+            if (recipe instanceof AnimatorRecipe)
+                if (((AnimatorRecipe) recipe).getLootTable() != null)
+                    recipes.add(new AnimatorRecipeJEI((AnimatorRecipe) recipe, world));
         }
         return recipes;
     }
