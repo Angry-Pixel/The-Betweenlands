@@ -29,7 +29,7 @@ public class DruidAltarRecipeCategory implements IRecipeCategory {
 
     @Override
     public String getTitle() {
-        return TranslationHelper.translateToLocal("jei.betweenlands.recipe.druid_altar");
+        return TranslationHelper.translateToLocal("jei.thebetweenlands.recipe.druid_altar");
     }
 
     @Override

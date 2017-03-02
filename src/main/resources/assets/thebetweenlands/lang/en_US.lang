@@ -591,7 +591,7 @@ fluid.swampWater.name=Swamp Water
 fluid.tar.name=Tar
 fluid.stagnantWater.name=Stagnant Water
 fluid.rubber.name=Rubber
-
+fluid.swampWater=Swamp Water
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks
@@ -797,3 +797,14 @@ sign.fortress.line4=This Point
 
 # JEI
 jei.thebetweenlands.animator.entity_spawn=This recipe will spawn %s
+jei.thebetweenlands.recipe.animator=Animator
+jei.thebetweenlands.recipe.pestle_and_mortar=Pestle and Mortar
+jei.thebetweenlands.recipe.druid_altar=Druid Altar
+jei.thebetweenlands.recipe.purifier=Purifier
+jei.thebetweenlands.recipe.compost=Compost
+jei.thebetweenlands.compost.amount=Compost amount: %d
+jei.thebetweenlands.time=Process time: %d minutes and %d seconds
+jei.thebetweenlands.time.minutes=Process time: %d seconds
+jei.thebetweenlands.time.seconds=Process time: %d minutes
+jei.thebetweenlands.animator.life=Life amount: %d
+jei.thebetweenlands.animator.fuel=Fuel amount: %d

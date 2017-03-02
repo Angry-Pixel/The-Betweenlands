@@ -26,4 +26,8 @@ public class PurifierRecipeStandard extends PurifierRecipe {
 		}
 		return false;
 	}
+
+	public ItemStack getInput() {
+		return input;
+	}
 }

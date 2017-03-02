@@ -29,7 +29,7 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
 
     @Override
     public String getTitle() {
-        return TranslationHelper.translateToLocal("jei.betweenlands.recipe.animator");
+        return TranslationHelper.translateToLocal("jei.thebetweenlands.recipe.animator");
     }
 
     @Override

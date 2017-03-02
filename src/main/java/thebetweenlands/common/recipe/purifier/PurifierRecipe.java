@@ -48,11 +48,6 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 		return null;
 	}
 
-	@Deprecated //This needs to be removed or rewritten, is only used by HL book currently
-	public static ItemStack getRecipeInput(ItemStack output) {
-		return null;
-	}
-
 	public static List<IPurifierRecipe> getRecipeList() {
 		return Collections.unmodifiableList(RECIPES);
 	}

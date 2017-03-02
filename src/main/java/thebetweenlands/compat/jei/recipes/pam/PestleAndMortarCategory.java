@@ -29,7 +29,7 @@ public class PestleAndMortarCategory implements IRecipeCategory {
 
     @Override
     public String getTitle() {
-        return TranslationHelper.translateToLocal("jei.betweenlands.recipe.pestle_and_mortar");
+        return TranslationHelper.translateToLocal("jei.thebetweenlands.recipe.pestle_and_mortar");
     }
 
     @Override
