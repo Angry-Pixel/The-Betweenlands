@@ -98,6 +98,7 @@ import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
+import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
@@ -542,6 +543,7 @@ public class BlockRegistry {
 	public static final Block ROPE = new BlockRope();
 	public static final Block DAMP_TORCH = new BlockDampTorch();
 	public static final Block WALKWAY = new BlockWalkway();
+	public static final Block WOOD_CHIP_PATH = new BlockChipPath();
 	
 	public static final Set<Block> BLOCKS = new HashSet<Block>();
 

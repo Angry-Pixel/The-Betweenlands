@@ -1,0 +1,7 @@
+{ 
+  "parent": "thebetweenlands:block/chip_path",
+  "textures": {
+    "all": "thebetweenlands:blocks/wood_chip_path",
+    "particle": "thebetweenlands:blocks/wood_chip_path"
+  } 
+}

@@ -28,6 +28,7 @@ import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.herblore.ItemCrushed;
+import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -261,7 +262,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.RUBBER_BALL.create(1));
 		GameRegistry.addShapelessRecipe(EnumItemMisc.RUBBER_BALL.create(9), new ItemStack(BlockRegistry.RUBBER_BLOCK));
 		
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_CHIP_PATH, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK)); //TODO Walkway and chip path
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WOOD_CHIP_PATH, 4), "###", '#', EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WALKWAY, 2), "SSS", "x x", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.WEEDWOOD_PLANKS));
