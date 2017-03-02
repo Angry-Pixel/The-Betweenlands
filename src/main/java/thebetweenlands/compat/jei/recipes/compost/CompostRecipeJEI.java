@@ -42,8 +42,8 @@ public class CompostRecipeJEI extends BlankRecipeWrapper {
             int minutes = (compostTime / 20) / 60;
             int seconds = (compostTime / 20) % 60;
 
-            processTooltip.add(seconds > 0 && minutes > 0 ? String.format(TranslationHelper.translateToLocal(processTimeString), minutes, seconds) : minutes > 0? String.format(TranslationHelper.translateToLocal(processTimeMinutesString), minutes):String.format(TranslationHelper.translateToLocal(processTimeSecondsString), seconds));
-            processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.compost.amount"), compostAmount));
+            processTooltip.add(seconds > 0 && minutes > 0 ? TranslationHelper.translateToLocal(processTimeString, minutes, seconds) : minutes > 0? TranslationHelper.translateToLocal(processTimeMinutesString, minutes):TranslationHelper.translateToLocal(processTimeSecondsString, seconds));
+            processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.compost.amount", compostAmount));
         }
         return processTooltip;
     }

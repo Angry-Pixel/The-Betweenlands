@@ -67,13 +67,13 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         ArrayList<String> processTooltip = new ArrayList<>();
         if (mouseX >= 18 && mouseX <= 51 && mouseY >= 42 && mouseY <= 66) {
-            processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.life"), requiredLife));
+            processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.life", requiredLife));
         }
         if (mouseX >= 57 && mouseX <= 90 && mouseY >= 42 && mouseY <= 66) {
-            processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.fuel"), requiredFuel));
+            processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.fuel", requiredFuel));
         }
         if (entityName != null && mouseX >= 19 && mouseX <= 35 && mouseY >= 16 && mouseY <= 32) {
-            processTooltip.add(String.format(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.entity_spawn"), entityName));
+            processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.entity_spawn", entityName));
         }
         return processTooltip;
     }
