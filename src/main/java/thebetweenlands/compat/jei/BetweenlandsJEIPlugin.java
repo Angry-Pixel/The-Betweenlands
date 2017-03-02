@@ -1,13 +1,17 @@
 package thebetweenlands.compat.jei;
 
-import mezz.jei.api.*;
+import mezz.jei.api.BlankModPlugin;
+import mezz.jei.api.IJeiHelpers;
+import mezz.jei.api.IJeiRuntime;
+import mezz.jei.api.IModRegistry;
+import mezz.jei.api.JEIPlugin;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.compat.jei.recipes.animator.AnimatorRecipeCategory;
 import thebetweenlands.compat.jei.recipes.animator.AnimatorRecipeHandler;
@@ -32,6 +36,8 @@ public class BetweenlandsJEIPlugin extends BlankModPlugin{
 
     @Override
     public void register(IModRegistry registry) {
+    	MinecraftForge.EVENT_BUS.register(DynamicJEIRecipeHandler.class);
+    	
         jeiHelper = registry.getJeiHelpers();
         registry.addRecipeHandlers(new CompostRecipeHandler(), new AnimatorRecipeHandler(), new DruidAltarHandler(), new PestleAndMortarHandler(), new PurifierRecipeHandler());
         registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory());
