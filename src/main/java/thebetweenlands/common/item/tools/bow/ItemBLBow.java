@@ -1,8 +1,12 @@
 package thebetweenlands.common.item.tools.bow;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
@@ -173,5 +177,30 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 			playerIn.setActiveHand(hand);
 			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
 		}
+	}
+
+	@Override
+	public boolean shouldCauseBlockBreakReset(ItemStack oldStack, ItemStack newStack) {
+		return CorrosionHelper.shouldCauseBlockBreakReset(oldStack, newStack);
+	}
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return CorrosionHelper.shouldCauseReequipAnimation(oldStack, newStack, slotChanged);
+	}
+
+	@Override
+	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
+	}
+
+	@Override
+	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
+		CorrosionHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+	}
+
+	@Override
+	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
+		CorrosionHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
 	}
 }
