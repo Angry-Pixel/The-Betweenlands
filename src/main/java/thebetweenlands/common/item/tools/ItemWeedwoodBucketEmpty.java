@@ -30,18 +30,18 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
 		if(!world.isRemote) {
-			if(player.inventory.hasItemStack(EnumItemMisc.SWAMP_REED_ROPE.create(1))) {
-				RayTraceResult result = this.rayTrace(world, player, true);
+			RayTraceResult result = this.rayTrace(world, player, true);
 
-				if(result != null && result.typeOfHit == Type.BLOCK && result.sideHit.getAxis() != Axis.Y) {
-					BlockPos pos = result.getBlockPos();
+			if(result != null && result.typeOfHit == Type.BLOCK && result.sideHit.getAxis() != Axis.Y) {
+				BlockPos pos = result.getBlockPos();
 
-					if(player.canPlayerEdit(pos, result.sideHit, itemStack)) {
-						IBlockState blockState = world.getBlockState(pos);
+				if(player.canPlayerEdit(pos, result.sideHit, itemStack)) {
+					IBlockState blockState = world.getBlockState(pos);
 
-						if(blockState.getBlock() == BlockRegistry.LOG_RUBBER && blockState.getValue(BlockRubberLog.NATURAL)) {
-							if(world.getBlockState(pos.offset(result.sideHit)).getBlock().isReplaceable(world, pos.offset(result.sideHit))
-									&& BlockRegistry.WEEDWOOD_RUBBER_TAP.canPlaceBlockAt(world, pos.offset(result.sideHit))) {
+					if(blockState.getBlock() == BlockRegistry.LOG_RUBBER && blockState.getValue(BlockRubberLog.NATURAL)) {
+						if(world.getBlockState(pos.offset(result.sideHit)).getBlock().isReplaceable(world, pos.offset(result.sideHit))
+								&& BlockRegistry.WEEDWOOD_RUBBER_TAP.canPlaceBlockAt(world, pos.offset(result.sideHit))) {
+							if(player.inventory.hasItemStack(EnumItemMisc.SWAMP_REED_ROPE.create(1))) {
 								world.setBlockState(pos.offset(result.sideHit), BlockRegistry.WEEDWOOD_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
 								itemStack.stackSize--;
 
@@ -56,12 +56,12 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 								world.playSound(null, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1, 1);
 
 								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+							} else {
+								player.addChatMessage(new TextComponentTranslation("chat.tap.needsRope", new TextComponentTranslation(BlockRegistry.WEEDWOOD_RUBBER_TAP.getUnlocalizedName() + ".name")));
 							}
 						}
 					}
 				}
-			} else {
-				player.addChatMessage(new TextComponentTranslation("chat.tap.needsRope", new TextComponentTranslation(BlockRegistry.WEEDWOOD_RUBBER_TAP.getUnlocalizedName() + ".name")));
 			}
 		}
 
