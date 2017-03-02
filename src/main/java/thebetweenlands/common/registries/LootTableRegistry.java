@@ -85,7 +85,7 @@ public class LootTableRegistry {
 
         LootTable table = world.getLootTableManager().getLootTableFromLocation(lootTable);
         LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
-        Field f = ReflectionHelper.findField(LootTable.class, "pools");
+        Field f = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c", "c");
         List<LootPool> pools = null;
         try {
             pools = (List<LootPool>) f.get(table);
@@ -94,7 +94,7 @@ public class LootTableRegistry {
         }
         if (pools != null && pools.size() > 0) {
             for (LootPool pool : pools) {
-                Field f2 = ReflectionHelper.findField(LootPool.class, "lootEntries");
+                Field f2 = ReflectionHelper.findField(LootPool.class, "lootEntries", "field_186453_a", "a");
                 List<LootEntry> entries = null;
                 try {
                     entries = (List<LootEntry>) f2.get(pool);
