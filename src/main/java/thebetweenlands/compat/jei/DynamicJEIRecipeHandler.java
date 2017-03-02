@@ -32,10 +32,12 @@ public class DynamicJEIRecipeHandler {
 	public static void onWorldUnload(WorldEvent.Unload event) {
 		World world = event.getWorld();
 		List<IRecipeWrapper> dynamicRecipes = DYNAMIC_RECIPES.get(world.provider.getDimension());
-		for(IRecipeWrapper recipe : dynamicRecipes) {
-			BetweenlandsJEIPlugin.jeiRuntime.getRecipeRegistry().removeRecipe(recipe);
+		if(dynamicRecipes != null) {
+			for(IRecipeWrapper recipe : dynamicRecipes) {
+				BetweenlandsJEIPlugin.jeiRuntime.getRecipeRegistry().removeRecipe(recipe);
+			}
+			DYNAMIC_RECIPES.remove(world.provider.getDimension());
 		}
-		DYNAMIC_RECIPES.remove(world.provider.getDimension());
 	}
 
 	/**
