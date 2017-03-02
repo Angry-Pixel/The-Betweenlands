@@ -116,10 +116,10 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.SLIMY_BONE.create(1), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.LURKER_SKIN.create(1), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
 		
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW, 1), " #X", "# X", " #X", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
@@ -258,9 +258,11 @@ public class RecipeRegistry {
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_TILES, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_TILES));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.RUBBER_BALL.create(1));
+		GameRegistry.addShapelessRecipe(EnumItemMisc.RUBBER_BALL.create(9), new ItemStack(BlockRegistry.RUBBER_BLOCK));
+		
 		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_CHIP_PATH, 4), "###", '#', ItemGenericCrushed.createStack(EnumItemGenericCrushed.GROUND_WEEDWOOD_BARK)); //TODO Walkway and chip path
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.blockWalkWay, 3), "SSS", "x x", 'x',  ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'S', new ItemStack(BlockRegistry.weedwoodPlanks));
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WALKWAY, 2), "SSS", "x x", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.RUBBER_TREE_PLANKS));

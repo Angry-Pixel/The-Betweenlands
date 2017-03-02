@@ -17,7 +17,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -98,7 +97,8 @@ public class EntityBLArrow extends EntityArrow {
 					}
 					break;
 				case BASILISK:
-					hitEntity.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(100, 1));
+					//TODO Add when basilisk effect is implemented
+					//hitEntity.addPotionEffect(ElixirEffectRegistry.EFFECT_PETRIFY.createEffect(100, 1));
 					break;
 				default:
 				}

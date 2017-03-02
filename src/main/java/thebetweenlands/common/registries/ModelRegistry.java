@@ -20,6 +20,7 @@ import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
 import thebetweenlands.client.render.model.baked.modelbase.ModelBlackHatMushroom1;
@@ -138,7 +139,9 @@ public class ModelRegistry {
 	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"));
 	public static final IModel MUD_FLOWER_POT_BASE = new ModelFromModelBase(new ModelMudFlowerPot(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot"), 32, 32);
 	public static final IModel MOSS_BED = new ModelFromModelBase(new ModelMossBed(), new ResourceLocation("thebetweenlands:blocks/moss_bed"), 128, 128);
-
+	public static final IModel WALKWAY = new ModelWalkway(true);
+	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(false);
+	
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
 	private static final ICustomRegistrar DEFAULT_REGISTRAR = new DefaultRegistrar(CustomModelManager.INSTANCE);

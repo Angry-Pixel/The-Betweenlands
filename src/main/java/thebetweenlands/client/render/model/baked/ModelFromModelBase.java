@@ -137,7 +137,8 @@ public class ModelFromModelBase implements IModelCustomData {
 						Vec3UV vert = quad.getVertices()[i];
 						if(vertexProcessor != null)
 							vert = vertexProcessor.process(vert, quad, box);
-						builder.addVertex(vert.x + 0.5F, 1.5F - vert.y, vert.z + 0.5F, vert.getU(16.0F, width), vert.getV(16.0F, height));
+						if(vert != null)
+							builder.addVertex(vert.x + 0.5F, 1.5F - vert.y, vert.z + 0.5F, vert.getU(16.0F, width), vert.getV(16.0F, height));
 					}
 				}
 			}

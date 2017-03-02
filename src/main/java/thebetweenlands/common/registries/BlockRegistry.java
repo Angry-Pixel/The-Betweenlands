@@ -113,6 +113,7 @@ import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockStandingWeedwoodSign;
 import thebetweenlands.common.block.structure.BlockTemplePillar;
 import thebetweenlands.common.block.structure.BlockTreePortal;
+import thebetweenlands.common.block.structure.BlockWalkway;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
@@ -540,7 +541,8 @@ public class BlockRegistry {
 	public static final Block MOSS_BED = new BlockMossBed();
 	public static final Block ROPE = new BlockRope();
 	public static final Block DAMP_TORCH = new BlockDampTorch();
-
+	public static final Block WALKWAY = new BlockWalkway();
+	
 	public static final Set<Block> BLOCKS = new HashSet<Block>();
 
 	public static void preInit() {
