@@ -5,20 +5,20 @@ import java.util.Deque;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelPlayer;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.event.RenderHandEvent;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
@@ -37,11 +37,17 @@ public class DecayRenderHandler {
 		@Override
 		public void doRenderLayer(AbstractClientPlayer player, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
 			ModelPlayer model = this.renderer.getMainModel();
+			boolean bipedHeadwearShow = model.bipedHeadwear.showModel;
 			model.bipedHeadwear.showModel = false;
+			boolean bipedRightLegwearShow = model.bipedRightLegwear.showModel;
 			model.bipedRightLegwear.showModel = false;
+			boolean bipedLeftLegwearShow = model.bipedLeftLegwear.showModel;
 			model.bipedLeftLegwear.showModel = false;
+			boolean bipedBodyWearShow = model.bipedBodyWear.showModel;
 			model.bipedBodyWear.showModel = false;
+			boolean bipedRightArmwearShow = model.bipedRightArmwear.showModel;
 			model.bipedRightArmwear.showModel = false;
+			boolean bipedLeftArmwearShow = model.bipedLeftArmwear.showModel;
 			model.bipedLeftArmwear.showModel = false;
 
 			//Render decay overlay
@@ -55,12 +61,12 @@ public class DecayRenderHandler {
 			model.render(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 			GlStateManager.color(1, 1, 1, 1);
 
-			model.bipedHeadwear.showModel = true;
-			model.bipedRightLegwear.showModel = true;
-			model.bipedLeftLegwear.showModel = true;
-			model.bipedBodyWear.showModel = true;
-			model.bipedRightArmwear.showModel = true;
-			model.bipedLeftArmwear.showModel = true;
+			model.bipedHeadwear.showModel = bipedHeadwearShow;
+			model.bipedRightLegwear.showModel = bipedRightLegwearShow;
+			model.bipedLeftLegwear.showModel = bipedLeftLegwearShow;
+			model.bipedBodyWear.showModel = bipedBodyWearShow;
+			model.bipedRightArmwear.showModel = bipedRightArmwearShow;
+			model.bipedLeftArmwear.showModel = bipedLeftArmwearShow;
 		}
 
 		@Override
@@ -98,91 +104,104 @@ public class DecayRenderHandler {
 		}
 	}
 
-	private static ModelArmOverride modelArmOverrideLeft = null;
-	private static ModelArmOverride modelArmOverrideRight = null;
+	@SubscribeEvent
+	public static void onRenderHand(RenderSpecificHandEvent event) {
+		GlStateManager.pushMatrix();
 
-	@SubscribeEvent(priority = EventPriority.LOW)
-	public static void onRenderHand(RenderHandEvent event) {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-		Minecraft mc = Minecraft.getMinecraft();
 
 		if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
-				RenderPlayer playerRenderer = (RenderPlayer) Minecraft.getMinecraft().getRenderManager().getEntityRenderObject((AbstractClientPlayer) Minecraft.getMinecraft().thePlayer);
-
-				ModelPlayer model = playerRenderer.getMainModel();
-
-				//Should fix compatibility issues with mods that replace the player renderer or parts of it (e.g. More Player Models)
-				if(playerRenderer.getClass() == RenderPlayer.class && model.getClass() == ModelPlayer.class) {
-					boolean isSleeping = mc.getRenderViewEntity() instanceof EntityLivingBase && ((EntityLivingBase)mc.getRenderViewEntity()).isPlayerSleeping();
-					boolean shouldRenderHand = mc.gameSettings.thirdPersonView == 0 && !isSleeping && !mc.gameSettings.hideGUI && !mc.playerController.isSpectator();
-
-					if(shouldRenderHand) {
-						//Right arm
-						if ((modelArmOverrideRight == null || modelArmOverrideRight.model != model) && model != null) {
-							modelArmOverrideRight = new ModelArmOverride(model);
-						}
-						modelArmOverrideRight.parent = model.bipedRightArm;
-						modelArmOverrideRight.entity = player;
-						ModelRenderer previousModelRight = model.bipedRightArm;
-						model.bipedRightArm = modelArmOverrideRight;
-
-						//Left arm
-						if ((modelArmOverrideLeft == null || modelArmOverrideLeft.model != model) && model != null) {
-							modelArmOverrideLeft = new ModelArmOverride(model);
-						}
-						modelArmOverrideLeft.parent = model.bipedLeftArm;
-						modelArmOverrideLeft.entity = player;
-						ModelRenderer previousModelLeft = model.bipedLeftArm;
-						model.bipedLeftArm = modelArmOverrideLeft;
-
-						//Render hands and item
-						Minecraft.getMinecraft().entityRenderer.enableLightmap();
-						mc.getItemRenderer().renderItemInFirstPerson(event.getPartialTicks());
-						Minecraft.getMinecraft().entityRenderer.disableLightmap();
-
-						model.bipedRightArm = previousModelRight;
-						model.bipedLeftArm = previousModelLeft;
-
-						//We already rendered the hand, don't render it twice
-						event.setCanceled(true);
-					}
+				int decay = capability.getDecayStats().getDecayLevel();
+				boolean isMainHand = event.getHand() == EnumHand.MAIN_HAND;
+				if(isMainHand && !player.isInvisible() && event.getItemStack() == null) {
+					EnumHandSide enumhandside = isMainHand ? player.getPrimaryHand() : player.getPrimaryHand().opposite();
+					renderArmFirstPersonWithDecay(event.getEquipProgress(), event.getSwingProgress(), enumhandside, decay);
+					event.setCanceled(true);
 				}
 			}
 		}
+
+		GlStateManager.popMatrix();
 	}
 
-	private static class ModelArmOverride extends ModelRenderer {
-		private ModelRenderer parent;
-		private EntityPlayer entity;
-		public final ModelBase model;
+	/**
+	 * From ItemRenderer#renderArmFirstPerson
+	 * @param swingProgress
+	 * @param equipProgress
+	 * @param handSide
+	 * @param decay
+	 */
+	private static void renderArmFirstPersonWithDecay(float swingProgress, float equipProgress, EnumHandSide handSide, int decay) {
+		Minecraft mc = Minecraft.getMinecraft();
+		RenderManager renderManager = mc.getRenderManager();
+		boolean flag = handSide != EnumHandSide.LEFT;
+		float f = flag ? 1.0F : -1.0F;
+		float f1 = MathHelper.sqrt_float(equipProgress);
+		float f2 = -0.3F * MathHelper.sin(f1 * (float)Math.PI);
+		float f3 = 0.4F * MathHelper.sin(f1 * ((float)Math.PI * 2F));
+		float f4 = -0.4F * MathHelper.sin(equipProgress * (float)Math.PI);
+		GlStateManager.translate(f * (f2 + 0.64000005F), f3 + -0.6F + swingProgress * -0.6F, f4 + -0.71999997F);
+		GlStateManager.rotate(f * 45.0F, 0.0F, 1.0F, 0.0F);
+		float f5 = MathHelper.sin(equipProgress * equipProgress * (float)Math.PI);
+		float f6 = MathHelper.sin(f1 * (float)Math.PI);
+		GlStateManager.rotate(f * f6 * 70.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(f * f5 * -20.0F, 0.0F, 0.0F, 1.0F);
+		AbstractClientPlayer abstractclientplayer = mc.thePlayer;
+		mc.getTextureManager().bindTexture(abstractclientplayer.getLocationSkin());
+		GlStateManager.translate(f * -1.0F, 3.6F, 3.5F);
+		GlStateManager.rotate(f * 120.0F, 0.0F, 0.0F, 1.0F);
+		GlStateManager.rotate(200.0F, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(f * -135.0F, 0.0F, 1.0F, 0.0F);
+		GlStateManager.translate(f * 5.6F, 0.0F, 0.0F);
+		RenderPlayer renderplayer = (RenderPlayer)renderManager.getEntityRenderObject(abstractclientplayer);
+		GlStateManager.disableCull();
 
-		public ModelArmOverride(ModelBase modelBase) {
-			super(modelBase);
-			this.model = modelBase;
-		}
+		if (flag) {
+			renderplayer.renderRightArm(abstractclientplayer);
 
-		@Override
-		public void render(float partialTicks) {
-			//Render default hand
-			super.render(partialTicks);
-			this.parent.render(partialTicks);
-
-			//Render decay overlay
-			int decay = this.entity.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null).getDecayStats().getDecayLevel();
-			GlStateManager.pushMatrix();
-			Minecraft.getMinecraft().renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);
-			GlStateManager.enableTexture2D();
-			GlStateManager.enableBlend();
+			mc.renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			float glow = (float) ((Math.cos(this.entity.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
+			float glow = (float) ((Math.cos(abstractclientplayer.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
 			float transparency = 0.85F * decay / 20.0F - glow;
 			GlStateManager.color(1, 1, 1, transparency);
-			this.parent.render(partialTicks);
-			Minecraft.getMinecraft().renderEngine.bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());
-			GlStateManager.color(1, 1, 1, 1);
-			GlStateManager.popMatrix();
+
+			//From RenderPlayer#renderRightArm
+			ModelPlayer modelplayer = renderplayer.getMainModel();
+			GlStateManager.enableBlend();
+			modelplayer.swingProgress = 0.0F;
+			modelplayer.isSneak = false;
+			modelplayer.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, abstractclientplayer);
+			modelplayer.bipedRightArm.rotateAngleX = 0.0F;
+			modelplayer.bipedRightArm.render(0.0625F);
+			modelplayer.bipedRightArmwear.rotateAngleX = 0.0F;
+			modelplayer.bipedRightArmwear.render(0.0625F);
+			GlStateManager.disableBlend();
+		} else {
+			renderplayer.renderLeftArm(abstractclientplayer);
+
+			mc.renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			float glow = (float) ((Math.cos(abstractclientplayer.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
+			float transparency = 0.85F * decay / 20.0F - glow;
+			GlStateManager.color(1, 1, 1, transparency);
+
+			//From RenderPlayer#renderLeftArm
+			ModelPlayer modelplayer = renderplayer.getMainModel();
+			GlStateManager.enableBlend();
+			modelplayer.isSneak = false;
+			modelplayer.swingProgress = 0.0F;
+			modelplayer.setRotationAngles(0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, abstractclientplayer);
+			modelplayer.bipedLeftArm.rotateAngleX = 0.0F;
+			modelplayer.bipedLeftArm.render(0.0625F);
+			modelplayer.bipedLeftArmwear.rotateAngleX = 0.0F;
+			modelplayer.bipedLeftArmwear.render(0.0625F);
+			GlStateManager.disableBlend();
 		}
+
+		GlStateManager.color(1, 1, 1, 1);
+
+		GlStateManager.enableCull();
 	}
 }
