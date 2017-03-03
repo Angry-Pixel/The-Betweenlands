@@ -24,7 +24,7 @@ archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
 
 minecraft {
-    version = "1.10.2-12.18.2.2151"
+    version = "1.10.2-12.18.3.2239"
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '${mcversion}', project.minecraft.version
