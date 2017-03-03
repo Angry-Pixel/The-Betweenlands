@@ -256,7 +256,7 @@ public final class WeedwoodRowboatHandler {
                 float dx = ((zyx & 1) * 2 - 1) * 0.1F;
                 float dy = ((zyx >> 1 & 1) * 2 - 1) * 0.1F;
                 float dz = ((zyx >> 2 & 1) * 2 - 1) * 0.1F;
-                RayTraceResult vector = world.rayTraceBlocks(new Vec3d(x + dx, y + dy, z + dz), new Vec3d(x - extentX + dx, y - extentY + dy, z - extentZ + dz));
+                RayTraceResult vector = world.rayTraceBlocks(new Vec3d(x + dx, y + dy, z + dz), new Vec3d(x - extentX + dx, y - extentY + dy, z - extentZ + dz), false, true, false);
                 if (vector != null) {
                     double distance = vector.hitVec.distanceTo(new Vec3d(x, y, z));
                     if (distance < extent) {
