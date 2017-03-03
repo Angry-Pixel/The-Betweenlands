@@ -13,21 +13,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.json.JsonRenderGenerator;
-import thebetweenlands.common.item.ICustomJsonGenerationItem;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemPlantDrop extends Item implements ICustomJsonGenerationItem, ItemRegistry.ISubItemsItem {
+public class ItemPlantDrop extends Item implements ItemRegistry.ISubItemsItem {
 	public ItemPlantDrop() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
-	}
-
-	@Override
-	public String getJsonText(String itemName) {
-		return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/plantDrops/" + itemName);
 	}
 
 	@Override

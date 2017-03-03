@@ -33,6 +33,7 @@ import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtensionException;
 import thebetweenlands.client.render.model.loader.extension.ModelProcessorLoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.SimpleItemLoaderExtension;
+import thebetweenlands.common.TheBetweenlands;
 
 public final class CustomModelLoader implements ICustomModelLoader {
 	private static enum LoaderType {
@@ -106,8 +107,9 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	@Override
 	public void onResourceManagerReload(IResourceManager resourceManager) {
 		for(LoaderExtension extension : this.loaderExtensions) {
-			if(extension instanceof IResourceManagerReloadListener)
+			if(extension instanceof IResourceManagerReloadListener) {
 				((IResourceManagerReloadListener)extension).onResourceManagerReload(resourceManager);
+			}
 		}
 	}
 
@@ -117,6 +119,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		if(modelLocation.getResourcePath().contains("$")) {
 			LoaderResult result = this.getLoaderResult(modelLocation);
 			if(result.type != LoaderType.NORMAL) {
+				TheBetweenlands.logger.info(String.format("Accepting model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
 				return true;
 			}
 		}
@@ -129,6 +132,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 				//Only accept if path fully matches or is a variant
 				if(suffix.length() == 0 || suffix.startsWith("#")) {
+					TheBetweenlands.logger.info(String.format("Accepting model %s as %s through model registry", modelLocation, registeredModel));
 					return true;
 				}
 			}
@@ -139,11 +143,15 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 	@Override
 	public IModel loadModel(ResourceLocation modelLocation) throws Exception {
+		boolean accepted = false;
+
 		//Check for loader extensions
 		if(modelLocation.getResourcePath().contains("$")) {
 			LoaderResult result = this.getLoaderResult(modelLocation);
 
 			if(result.type == LoaderType.EXTENSION) {
+				accepted = true;
+
 				//Load actual model
 				IModel model = ModelLoaderRegistry.getModel(result.actualLocation);
 
@@ -151,7 +159,11 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				LoaderExtension loaderExtension = result.extension;
 				String loaderArgs = result.args;
 				try {
-					return loaderExtension.loadModel(model, result.actualLocation, loaderArgs);
+					TheBetweenlands.logger.info(String.format("Loading model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
+					IModel loadedModel = loaderExtension.loadModel(model, result.actualLocation, loaderArgs);
+					if(loadedModel != null) {
+						return loadedModel;
+					}
 				} catch(Exception ex) {
 					if(ex instanceof LoaderExtensionException == false) {
 						this.throwLoaderException(loaderExtension, ex);
@@ -162,18 +174,27 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			}
 		}
 
-		//Check for registered model providers
-		for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
-			ResourceLocation registeredModel = entry.getKey();
-			if(registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath())) {
-				String suffix = modelLocation.getResourcePath().substring(registeredModel.getResourcePath().length());
+		if(!accepted) {
+			//Check for registered model providers
+			for(Entry<ResourceLocation, Function<ResourceLocation, IModel>> entry : this.manager.getRegisteredModelProviders().entrySet()) {
+				ResourceLocation registeredModel = entry.getKey();
+				if(registeredModel.getResourceDomain().equals(modelLocation.getResourceDomain()) && modelLocation.getResourcePath().startsWith(registeredModel.getResourcePath())) {
+					String suffix = modelLocation.getResourcePath().substring(registeredModel.getResourcePath().length());
 
-				//Only accept if path fully matches or is a variant
-				if(suffix.length() == 0 || suffix.startsWith("#")) {
-					return entry.getValue().apply(modelLocation);
+					//Only accept if path fully matches or is a variant
+					if(suffix.length() == 0 || suffix.startsWith("#")) {
+						accepted = true;
+						TheBetweenlands.logger.info(String.format("Loading model %s as %s through model registry", modelLocation, registeredModel));
+						IModel model = entry.getValue().apply(modelLocation);
+						if(model != null) {
+							return model;
+						}
+					}
 				}
 			}
 		}
+
+		TheBetweenlands.logger.error("Unable to load model %s!", modelLocation);
 
 		return null;
 	}
@@ -204,8 +225,9 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			suffix = suffix.substring(loaderExtension.getName().length() + 2);
 			loaderArgs = suffix.substring(0, suffix.indexOf(")"));
 			suffix = suffix.substring(loaderArgs.length() + 1);
-			if(loaderArgs.length() == 0)
+			if(loaderArgs.length() == 0) {
 				loaderArgs = null;
+			}
 		}
 
 		ResourceLocation actualLocation = new ResourceLocation(modelLocation.getResourceDomain(), modelPath + suffix);
@@ -254,7 +276,12 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			}
 		}
 		for(Pair<ModelResourceLocation, IBakedModel> loadedModel : loadedModels) {
-			modelRegistry.putObject(loadedModel.getKey(), loadedModel.getValue());
+			if(loadedModel.getValue() != null) {
+				TheBetweenlands.logger.info(String.format("Registering additional baked model %s", loadedModel.getKey()));
+				modelRegistry.putObject(loadedModel.getKey(), loadedModel.getValue());
+			} else {
+				TheBetweenlands.logger.warn(String.format("Additional baked model %s is null!", loadedModel.getKey()));
+			}
 		}
 
 		//Replace loader extensions models
@@ -266,13 +293,15 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			for(ModelResourceLocation loc : keys) {
 				try {
 					IBakedModel replacement = extension.getModelReplacement(loc, modelRegistry.getObject(loc));
-					if(replacement != null)
+					if(replacement != null) {
 						replacementMap.put(loc, replacement);
+					}
 				} catch(Exception ex) {
-					if(ex instanceof LoaderExtensionException == false)
+					if(ex instanceof LoaderExtensionException == false) {
 						this.throwLoaderException(extension, ex);
-					else
+					} else {
 						throw ex;
+					}
 				}
 			}
 		}
@@ -301,8 +330,9 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		//Gather registered objects
 		for(K replacementKey : replacementKeys) {
 			T obj = registry.getObject(replacementKey);
-			if(obj != null)
+			if(obj != null) {
 				objectsToRemove.add(obj);
+			}
 		}
 
 		//Remove registered objects
@@ -310,13 +340,19 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		T obj = null;
 		while(it.hasNext()) {
 			obj = it.next();
-			if(objectsToRemove.contains(obj))
+			if(objectsToRemove.contains(obj)) {
 				it.remove();
+			}
 		}
 
 		//Add replacement objects
 		for(Entry<K, T> replacement : map.entrySet()) {
-			registry.putObject(replacement.getKey(), replacement.getValue());
+			if(replacement.getValue() != null) {
+				TheBetweenlands.logger.info(String.format("Replaced model %s", replacement.getKey()));
+				registry.putObject(replacement.getKey(), replacement.getValue());
+			} else {
+				TheBetweenlands.logger.info(String.format("Removed model %s", replacement.getKey()));
+			}
 		}
 	}
 }

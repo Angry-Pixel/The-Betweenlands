@@ -1,10 +1,8 @@
 package thebetweenlands.client.proxy;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -35,7 +33,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-
 import thebetweenlands.client.event.handler.AmbienceSoundPlayHandler;
 import thebetweenlands.client.event.handler.BrightnessHandler;
 import thebetweenlands.client.event.handler.CameraPositionHandler;
@@ -108,7 +105,6 @@ import thebetweenlands.client.render.entity.RenderThrownTarminion;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
-import thebetweenlands.client.render.json.JsonRenderGenerator;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
@@ -133,7 +129,6 @@ import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -218,13 +213,8 @@ import thebetweenlands.common.tile.spawner.TileEntityAlembic;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.GLUProjection;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ClientProxy extends CommonProxy {
-
-	//Please turn this off again after using
-	private static final boolean createJSONFile = false;
-
 	public static Render<EntityDragonFly> dragonFlyRenderer;
 
 	@Override
@@ -381,59 +371,20 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerDefaultItemRenderer(Item item) {
 		if (item instanceof ItemRegistry.ISubItemsItem) {
-			Set<Entry<Integer, ResourceLocation>> models = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet();
 			Iterator<Entry<Integer, ResourceLocation>> modelsIT = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet().iterator();
 			while (modelsIT.hasNext()) {
 				Entry<Integer, ResourceLocation> model = modelsIT.next();
-				if (ConfigHandler.debug && createJSONFile)
-					JsonRenderGenerator.createJSONForItem(item, model.getValue().getResourcePath());
 				ModelLoader.setCustomModelResourceLocation(item, model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
 			}
 		} else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
 			List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
 			for (int i = 0; i < types.size(); i++) {
-				//if (ConfigHandler.debug && createJSONFile)
-				//JsonRenderGenerator.createJSONForItem(item, types.get(i)); //TODO: Make this work. Tomorrow, (hopefully), so don't panic
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + item.getRegistryName().getResourcePath(), types.get(i)));
 			}
 		} else {
 			String itemName = item.getRegistryName().getResourcePath();
-			if (ConfigHandler.debug && createJSONFile)
-				JsonRenderGenerator.createJSONForItem(item, itemName);
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
 		}
-	}
-
-
-	//Probably will only be used while updating
-	@Override
-	public void changeFileNames() {
-		File textures = new File(TheBetweenlands.sourceFile, "assets/thebetweenlands/sounds");
-		if (textures.listFiles() != null)
-			for (File file : textures.listFiles()) {
-				if (file.getName().contains(".ogg")) {
-					CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-
-					String text = file.getName();
-					for (int i = 0; i < sequence.length(); i++) {
-						text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
-					}
-					File newFile = new File(file.getPath().replace(file.getName(), "") + text);
-					System.out.println(file.renameTo(newFile));
-				} else
-					for (File file2 : file.listFiles()) {
-						if (file2.getName().contains(".ogg")) {
-							CharSequence sequence = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789";
-
-							String text = file2.getName();
-							for (int i = 0; i < sequence.length(); i++) {
-								text = text.replace("" + sequence.charAt(i), "_" + ("" + sequence.charAt(i)).toLowerCase());
-							}
-							File newFile = new File(file2.getPath().replace(file2.getName(), "") + text);
-							System.out.println(file2.renameTo(newFile));
-						}
-					}
-			}
 	}
 
 	@Override

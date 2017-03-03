@@ -1,6 +1,6 @@
 package thebetweenlands.common;
 
-import java.io.File;
+import org.apache.logging.log4j.Logger;
 
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
@@ -54,23 +54,25 @@ import thebetweenlands.util.config.ConfigHandler;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI, acceptedMinecraftVersions = ModInfo.MC_VERSIONS)
 public class TheBetweenlands {
-	public static final Registries REGISTRIES = new Registries();
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands INSTANCE;
+	
+	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
+	public static CommonProxy proxy;
+	
+	public static final Registries REGISTRIES = new Registries();
+	
 	public static DimensionType dimensionType;
 	public static boolean isShadersModInstalled = false;
 	public static SimpleNetworkWrapper networkWrapper;
-	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
-	public static CommonProxy proxy;
-	public static File sourceFile;
-	private static File configDir;
-
+	public static Logger logger;
+	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
+		logger = event.getModLog();
+		
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
-		configDir = event.getModConfigurationDirectory();
-		sourceFile = event.getSourceFile();
 
 		BetweenlandsAPI.init();
 

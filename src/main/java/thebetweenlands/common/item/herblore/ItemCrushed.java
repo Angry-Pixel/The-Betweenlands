@@ -21,13 +21,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.json.JsonRenderGenerator;
-import thebetweenlands.common.item.ICustomJsonGenerationItem;
 import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemCrushed extends Item implements ICustomJsonGenerationItem, ItemRegistry.ISubItemsItem {
+public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 	public ItemCrushed() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
@@ -51,11 +49,6 @@ public class ItemCrushed extends Item implements ICustomJsonGenerationItem, Item
 			}
 		}
 		return EnumActionResult.FAIL;
-	}
-
-	@Override
-	public String getJsonText(String itemNAme) {
-		return String.format(JsonRenderGenerator.ITEM_DEFAULT_FORMAT, "strictlyHerblore/ground/" + itemNAme);
 	}
 
 	@Override
