@@ -370,7 +370,7 @@ public class BlockRegistry {
 	public static final Block CRACKED_BETWEENSTONE_BRICK_SLAB = new BlockSlabBetweenlands(CRACKED_BETWEENSTONE_BRICKS);
 	public static final Block WEEDWOOD_PLANK_SLAB = new BlockSlabBetweenlands(WEEDWOOD_PLANKS);
 	public static final Block RUBBER_TREE_PLANK_SLAB = new BlockSlabBetweenlands(RUBBER_TREE_PLANKS);
-	public static final Block THATCH_SLAB = new BlockSlabBetweenlands(THATCH);
+	public static final Block THATCH_SLAB = new BlockSlabBetweenlands(THATCH).setHardness(0.5F);
 
 	public static final Block TAR_SOLID_WALL = new BlockWallBetweenlands(TAR_SOLID.getDefaultState());
 	public static final Block TEMPLE_BRICK_WALL = new BlockWallBetweenlands(TEMPLE_BRICKS.getDefaultState());

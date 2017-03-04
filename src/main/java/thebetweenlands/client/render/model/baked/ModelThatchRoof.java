@@ -100,112 +100,105 @@ public class ModelThatchRoof implements IModel {
 			float cornerHeight3 = corner3 ? 1.0F : this.slopeEdge;
 			float cornerHeight4 = corner4 ? 1.0F : this.slopeEdge;
 
-			TextureAtlasSprite iconXP = this.texture;
-			TextureAtlasSprite iconXN = this.texture;
-			TextureAtlasSprite iconYP = this.texture;
-			TextureAtlasSprite iconYN = this.texture;
-			TextureAtlasSprite iconZP = this.texture;
-			TextureAtlasSprite iconZN = this.texture;
-
-			QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation);
+			QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation).setSprite(this.texture);
 
 			if(!upsidedown) {
 				//z- face
-				builder.addVertex(0, 0, 0.0001f, iconZN.getMinU(), iconZN.getMinV());
-				builder.addVertex(0, cornerHeight1, 0.0001f, iconZN.getMinU(), iconZN.getInterpolatedV(cornerHeight1*16.0F));
-				builder.addVertex(1, cornerHeight2, 0.0001f, iconZN.getMaxU(), iconZN.getInterpolatedV(cornerHeight2*16.0F));
-				builder.addVertex(1, 0, 0.0001f, iconZN.getMaxU(), iconZN.getMinV());
+				builder.addVertex(0, 0, 0.0001f, 0, 0);
+				builder.addVertex(0, cornerHeight1, 0.0001f, 0, cornerHeight1*16.0F);
+				builder.addVertex(1, cornerHeight2, 0.0001f, 16, cornerHeight2*16.0F);
+				builder.addVertex(1, 0, 0.0001f, 16, 0);
 				this.faceQuads.put(EnumFacing.NORTH, builder.build());
 
 				//z+ face
-				builder.addVertex(0, 0, 1, iconZP.getMinU(), iconZP.getMinV());
-				builder.addVertex(1, 0, 1, iconZP.getMaxU(), iconZP.getMinV());
-				builder.addVertex(1, cornerHeight3, 1, iconZP.getMaxU(), iconZP.getInterpolatedV(cornerHeight3*16.0F));
-				builder.addVertex(0, cornerHeight4, 1, iconZP.getMinU(), iconZP.getInterpolatedV(cornerHeight4*16.0F));
+				builder.addVertex(0, 0, 1, 0, 0);
+				builder.addVertex(1, 0, 1, 16, 0);
+				builder.addVertex(1, cornerHeight3, 1, 16, cornerHeight3*16.0F);
+				builder.addVertex(0, cornerHeight4, 1, 0, cornerHeight4*16.0F);
 				this.faceQuads.put(EnumFacing.SOUTH, builder.build());
 
 				//x+ face
-				builder.addVertex(1, 0, 0, iconXN.getMinU(), iconXN.getMinV());
-				builder.addVertex(1, cornerHeight2, 0, iconXN.getMinU(), iconXN.getInterpolatedV(cornerHeight2*16.0F));
-				builder.addVertex(1, cornerHeight3, 1, iconXN.getMaxU(), iconXN.getInterpolatedV(cornerHeight3*16.0F));
-				builder.addVertex(1, 0, 1, iconXN.getMaxU(), iconXN.getMinV());
+				builder.addVertex(1, 0, 0, 0, 0);
+				builder.addVertex(1, cornerHeight2, 0, 0, cornerHeight2*16.0F);
+				builder.addVertex(1, cornerHeight3, 1, 16, cornerHeight3*16.0F);
+				builder.addVertex(1, 0, 1, 16, 0);
 				this.faceQuads.put(EnumFacing.EAST, builder.build());
 
 				//x- face
-				builder.addVertex(0.0001f, 0, 0, iconXP.getMinU(), iconXP.getMinV());
-				builder.addVertex(0.0001f, 0, 1, iconXP.getMaxU(), iconXP.getMinV());
-				builder.addVertex(0.0001f, cornerHeight4, 1, iconXP.getMaxU(), iconXP.getInterpolatedV(cornerHeight4*16.0F));
-				builder.addVertex(0.0001f, cornerHeight1, 0, iconXP.getMinU(), iconXP.getInterpolatedV(cornerHeight1*16.0F));
+				builder.addVertex(0.0001f, 0, 0, 0, 0);
+				builder.addVertex(0.0001f, 0, 1, 16, 0);
+				builder.addVertex(0.0001f, cornerHeight4, 1, 16, cornerHeight4*16.0F);
+				builder.addVertex(0.0001f, cornerHeight1, 0, 0, cornerHeight1*16.0F);
 				this.faceQuads.put(EnumFacing.WEST, builder.build());
 
 				//top face
 				if((corner2 || corner4) && (!corner1 && !corner3) || (corner1 == corner3)) {
-					builder.addVertex(0, cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
-					builder.addVertex(1, cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
-					builder.addVertex(1, cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
-					builder.addVertex(0, cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
+					builder.addVertex(0, cornerHeight4, 1, 16, 0);
+					builder.addVertex(1, cornerHeight3, 1, 16, 16);
+					builder.addVertex(1, cornerHeight2, 0, 0, 16);
+					builder.addVertex(0, cornerHeight1, 0, 0, 0);
 				} else {
-					builder.addVertex(0, cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
-					builder.addVertex(0, cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
-					builder.addVertex(1, cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
-					builder.addVertex(1, cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
+					builder.addVertex(0, cornerHeight1, 0, 0, 0);
+					builder.addVertex(0, cornerHeight4, 1, 16, 0);
+					builder.addVertex(1, cornerHeight3, 1, 16, 16);
+					builder.addVertex(1, cornerHeight2, 0, 0, 16);
 				}
 				this.nonCulledQuads.addAll(builder.build());
 
 				//bottom face
-				builder.addVertex(0, 0, 0, iconYN.getMinU(), iconYN.getMinV());
-				builder.addVertex(1, 0, 0, iconYN.getMinU(), iconYN.getMaxV());
-				builder.addVertex(1, 0, 1, iconYN.getMaxU(), iconYN.getMaxV());
-				builder.addVertex(0, 0, 1, iconYN.getMaxU(), iconYN.getMinV());
+				builder.addVertex(0, 0, 0, 0, 0);
+				builder.addVertex(1, 0, 0, 0, 16);
+				builder.addVertex(1, 0, 1, 16, 16);
+				builder.addVertex(0, 0, 1, 16, 0);
 				this.faceQuads.put(EnumFacing.DOWN, builder.build());
 			} else {
 				//z- face
-				builder.addVertex(0, 1, 0.0001f, iconZN.getMinU(), iconZN.getMinV());
-				builder.addVertex(1, 1, 0.0001f, iconZN.getMaxU(), iconZN.getMinV());
-				builder.addVertex(1, 1-cornerHeight2, 0.0001f, iconZN.getMaxU(), iconZN.getInterpolatedV(cornerHeight2*16.0F));
-				builder.addVertex(0, 1-cornerHeight1, 0.0001f, iconZN.getMinU(), iconZN.getInterpolatedV(cornerHeight1*16.0F));
+				builder.addVertex(0, 1, 0.0001f, 0, 0);
+				builder.addVertex(1, 1, 0.0001f, 16, 0);
+				builder.addVertex(1, 1-cornerHeight2, 0.0001f, 16, cornerHeight2*16.0F);
+				builder.addVertex(0, 1-cornerHeight1, 0.0001f, 0, cornerHeight1*16.0F);
 				this.faceQuads.put(EnumFacing.NORTH, builder.build());
 
 				//z+ face
-				builder.addVertex(0, 1, 1, iconZP.getMinU(), iconZP.getMinV());
-				builder.addVertex(0, 1-cornerHeight4, 1, iconZP.getMinU(), iconZP.getInterpolatedV(cornerHeight4*16.0F));
-				builder.addVertex(1, 1-cornerHeight3, 1, iconZP.getMaxU(), iconZP.getInterpolatedV(cornerHeight3*16.0F));
-				builder.addVertex(1, 1, 1, iconZP.getMaxU(), iconZP.getMinV());
+				builder.addVertex(0, 1, 1, 0, 0);
+				builder.addVertex(0, 1-cornerHeight4, 1, 0, cornerHeight4*16.0F);
+				builder.addVertex(1, 1-cornerHeight3, 1, 16, cornerHeight3*16.0F);
+				builder.addVertex(1, 1, 1, 16, 0);
 				this.faceQuads.put(EnumFacing.SOUTH, builder.build());
 
 				//x+ face
-				builder.addVertex(1, 1, 0, iconXN.getMinU(), iconXN.getMinV());
-				builder.addVertex(1, 1, 1, iconXN.getMaxU(), iconXN.getMinV());
-				builder.addVertex(1, 1-cornerHeight3, 1, iconXN.getMaxU(), iconXN.getInterpolatedV(cornerHeight3*16.0F));
-				builder.addVertex(1, 1-cornerHeight2, 0, iconXN.getMinU(), iconXN.getInterpolatedV(cornerHeight2*16.0F));
+				builder.addVertex(1, 1, 0, 0, 0);
+				builder.addVertex(1, 1, 1, 16, 0);
+				builder.addVertex(1, 1-cornerHeight3, 1, 16, cornerHeight3*16.0F);
+				builder.addVertex(1, 1-cornerHeight2, 0, 0, cornerHeight2*16.0F);
 				this.faceQuads.put(EnumFacing.EAST, builder.build());
 
 				//x- face
-				builder.addVertex(0.0001f, 1, 0, iconXP.getMinU(), iconXP.getMinV());
-				builder.addVertex(0.0001f, 1-cornerHeight1, 0, iconXP.getMinU(), iconXP.getInterpolatedV(cornerHeight1*16.0F));
-				builder.addVertex(0.0001f, 1-cornerHeight4, 1, iconXP.getMaxU(), iconXP.getInterpolatedV(cornerHeight4*16.0F));
-				builder.addVertex(0.0001f, 1, 1, iconXP.getMaxU(), iconXP.getMinV());
+				builder.addVertex(0.0001f, 1, 0, 0, 0);
+				builder.addVertex(0.0001f, 1-cornerHeight1, 0, 0, cornerHeight1*16.0F);
+				builder.addVertex(0.0001f, 1-cornerHeight4, 1, 16, cornerHeight4*16.0F);
+				builder.addVertex(0.0001f, 1, 1, 16, 0);
 				this.faceQuads.put(EnumFacing.WEST, builder.build());
 
 				//bottom face
 				if((corner2 || corner4) && (!corner1 && !corner3) || (corner1 == corner3)) {
-					builder.addVertex(0, 1-cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
-					builder.addVertex(0, 1-cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
-					builder.addVertex(1, 1-cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
-					builder.addVertex(1, 1-cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
+					builder.addVertex(0, 1-cornerHeight4, 1, 16, 0);
+					builder.addVertex(0, 1-cornerHeight1, 0, 0, 0);
+					builder.addVertex(1, 1-cornerHeight2, 0, 0, 16);
+					builder.addVertex(1, 1-cornerHeight3, 1, 16, 16);
 				} else {
-					builder.addVertex(0, 1-cornerHeight1, 0, iconYP.getMinU(), iconYP.getMinV());
-					builder.addVertex(1, 1-cornerHeight2, 0, iconYP.getMinU(), iconYP.getMaxV());
-					builder.addVertex(1, 1-cornerHeight3, 1, iconYP.getMaxU(), iconYP.getMaxV());
-					builder.addVertex(0, 1-cornerHeight4, 1, iconYP.getMaxU(), iconYP.getMinV());
+					builder.addVertex(0, 1-cornerHeight1, 0, 0, 0);
+					builder.addVertex(1, 1-cornerHeight2, 0, 0, 16);
+					builder.addVertex(1, 1-cornerHeight3, 1, 16, 16);
+					builder.addVertex(0, 1-cornerHeight4, 1, 16, 0);
 				}
 				this.nonCulledQuads.addAll(builder.build());
 
 				//top face
-				builder.addVertex(0, 1, 0, iconYN.getMinU(), iconYN.getMinV());
-				builder.addVertex(0, 1, 1, iconYN.getMaxU(), iconYN.getMinV());
-				builder.addVertex(1, 1, 1, iconYN.getMaxU(), iconYN.getMaxV());
-				builder.addVertex(1, 1, 0, iconYN.getMinU(), iconYN.getMaxV());
+				builder.addVertex(0, 1, 0, 0, 0);
+				builder.addVertex(0, 1, 1, 16, 0);
+				builder.addVertex(1, 1, 1, 16, 16);
+				builder.addVertex(1, 1, 0, 0, 16);
 				this.faceQuads.put(EnumFacing.UP, builder.build());
 			}
 		}
