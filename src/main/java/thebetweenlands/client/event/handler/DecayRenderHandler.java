@@ -1,11 +1,17 @@
 package thebetweenlands.client.event.handler;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.function.Predicate;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelPlayer;
+import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -32,10 +38,25 @@ public class DecayRenderHandler {
 	private static Field fieldLayerRenderers = ReflectionHelper.findField(RenderLivingBase.class, "layerRenderers", "field_177097_h", "i");
 
 	public static class LayerDecay implements LayerRenderer<AbstractClientPlayer> {
-		private final RenderPlayer renderer;
+		private final RenderLivingBase<AbstractClientPlayer> renderer;
+		private final Predicate<ModelRenderer> modelExclusions;
 
-		public LayerDecay(RenderPlayer renderer) {
+		public LayerDecay(RenderLivingBase<AbstractClientPlayer> renderer, Predicate<ModelRenderer> modelExclusions) {
 			this.renderer = renderer;
+			this.modelExclusions = modelExclusions;
+		}
+
+		public LayerDecay(RenderLivingBase<AbstractClientPlayer> renderer) {
+			this(renderer, box -> {
+				if(renderer instanceof RenderPlayer) {
+					RenderPlayer renderPlayer = (RenderPlayer) renderer;
+					ModelPlayer playerModel = renderPlayer.getMainModel();
+					return box == playerModel.bipedHeadwear || box == playerModel.bipedRightLegwear ||
+							box == playerModel.bipedLeftLegwear || box == playerModel.bipedBodyWear ||
+							box == playerModel.bipedRightArmwear || box == playerModel.bipedLeftArmwear;
+				}
+				return false;
+			});
 		}
 
 		@Override
@@ -45,19 +66,14 @@ public class DecayRenderHandler {
 				if(cap.isDecayEnabled()) {
 					int decay = cap.getDecayStats().getDecayLevel();
 					if(decay > 0) {
-						ModelPlayer model = this.renderer.getMainModel();
-						boolean bipedHeadwearShow = model.bipedHeadwear.showModel;
-						model.bipedHeadwear.showModel = false;
-						boolean bipedRightLegwearShow = model.bipedRightLegwear.showModel;
-						model.bipedRightLegwear.showModel = false;
-						boolean bipedLeftLegwearShow = model.bipedLeftLegwear.showModel;
-						model.bipedLeftLegwear.showModel = false;
-						boolean bipedBodyWearShow = model.bipedBodyWear.showModel;
-						model.bipedBodyWear.showModel = false;
-						boolean bipedRightArmwearShow = model.bipedRightArmwear.showModel;
-						model.bipedRightArmwear.showModel = false;
-						boolean bipedLeftArmwearShow = model.bipedLeftArmwear.showModel;
-						model.bipedLeftArmwear.showModel = false;
+						ModelBase model = this.renderer.getMainModel();
+						Map<ModelRenderer, Boolean> visibilities = new HashMap<>();
+						for(ModelRenderer box : model.boxList) {
+							if(this.modelExclusions.test(box)) {
+								visibilities.put(box, box.showModel);
+								box.showModel = false;
+							}
+						}
 
 						//Render decay overlay
 						float glow = (float) ((Math.cos(player.ticksExisted / 10.0D) + 1.0D) / 2.0D) * 0.15F;
@@ -69,12 +85,9 @@ public class DecayRenderHandler {
 						model.render(player, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 						GlStateManager.color(1, 1, 1, 1);
 
-						model.bipedHeadwear.showModel = bipedHeadwearShow;
-						model.bipedRightLegwear.showModel = bipedRightLegwearShow;
-						model.bipedLeftLegwear.showModel = bipedLeftLegwearShow;
-						model.bipedBodyWear.showModel = bipedBodyWearShow;
-						model.bipedRightArmwear.showModel = bipedRightArmwearShow;
-						model.bipedLeftArmwear.showModel = bipedLeftArmwearShow;
+						for(Entry<ModelRenderer, Boolean> entry : visibilities.entrySet()) {
+							entry.getKey().showModel = entry.getValue();
+						}
 					}
 				}
 			}
