@@ -247,9 +247,6 @@ public class ModelThatchRoof implements IModel {
 
 			ModelBakedThatchRoof model = this.modelCache.getUnchecked(index);
 
-			//TODO: Remove
-			model = new ModelBakedThatchRoof(this.transformation != null ? Optional.of(this.transformation) : Optional.absent(), this.transforms, this.format, this.texture, index);
-			
 			return side == null ? model.nonCulledQuads : model.faceQuads.get(side);
 		}
 
