@@ -26,7 +26,23 @@ public class BlockStateContainerHelper {
 		unlistedProperties.addAll(Arrays.asList(newUnlistedProperties));
 		return new ExtendedBlockState(original.getBlock(), properties.toArray(new IProperty[0]), unlistedProperties.toArray(new IUnlistedProperty[0]));
 	}
-
+	
+	/**
+	 * Combines the new properties with the properties of the original block state
+	 * @param original
+	 * @param newProperties
+	 * @param newUnlistedProperties
+	 * @return
+	 */
+	public static ExtendedBlockState extendBlockstateContainer(BlockStateContainer original, IProperty<?>[] newProperties, IUnlistedProperty<?>[] newUnlistedProperties) {
+		Collection<IProperty<?>> properties = new ArrayList<IProperty<?>>();
+		properties.addAll(original.getProperties());
+		properties.addAll(Arrays.asList(newProperties));
+		Collection<IUnlistedProperty<?>> unlistedProperties = new ArrayList<IUnlistedProperty<?>>();
+		unlistedProperties.addAll(Arrays.asList(newUnlistedProperties));
+		return new ExtendedBlockState(original.getBlock(), properties.toArray(new IProperty[0]), unlistedProperties.toArray(new IUnlistedProperty[0]));
+	}
+	
 	/**
 	 * Combines the new properties with the properties of the original block state
 	 * @param original

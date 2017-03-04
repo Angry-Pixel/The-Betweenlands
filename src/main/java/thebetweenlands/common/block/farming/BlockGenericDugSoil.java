@@ -430,7 +430,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 	 * @return
 	 */
 	protected float getDecayChance(World world, BlockPos pos, IBlockState state, Random rand) {
-		return 0.15F;
+		return 0.25F;
 	}
 
 	public static TileEntityDugSoil getTile(World world, BlockPos pos) {

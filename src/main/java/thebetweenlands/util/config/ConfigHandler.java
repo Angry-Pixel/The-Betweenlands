@@ -27,7 +27,7 @@ public class ConfigHandler {
 	public static int wispQuality;
 	public static boolean useShader;
 	public static boolean debug;
-	public static boolean debugMenuOnStart;
+	public static boolean debugModelLoader;
 	public static int skyResolution;
 	public static boolean rowboatView;
 	public static int maxEntitiesPerLoadedArea;
@@ -63,7 +63,7 @@ public class ConfigHandler {
 
 		// Replaced with false by gradle for release version
 		debug = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
-		debugMenuOnStart = config.getBoolean("Debug menu on start", CATEGORIES[2], /*!*/true/*!*/, "");
+		debugModelLoader = config.getBoolean("Model loader debug", CATEGORIES[2], false, "");
 
 		blMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
 		

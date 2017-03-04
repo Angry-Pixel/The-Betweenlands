@@ -119,7 +119,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		if(modelLocation.getResourcePath().contains("$")) {
 			LoaderResult result = this.getLoaderResult(modelLocation);
 			if(result.type != LoaderType.NORMAL) {
-				if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Accepting model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Accepting model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
 				return true;
 			}
 		}
@@ -132,7 +132,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 				//Only accept if path fully matches or is a variant
 				if(suffix.length() == 0 || suffix.startsWith("#")) {
-					if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Accepting model %s as %s through model registry", modelLocation, registeredModel));
+					if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Accepting model %s as %s through model registry", modelLocation, registeredModel));
 					return true;
 				}
 			}
@@ -159,7 +159,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 				LoaderExtension loaderExtension = result.extension;
 				String loaderArgs = result.args;
 				try {
-					if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Loading model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
+					if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Loading model %s (full path: %s) through loader extension %s with args %s", result.actualLocation, modelLocation, result.extension.getName(), result.args));
 					IModel loadedModel = loaderExtension.loadModel(model, result.actualLocation, loaderArgs);
 					if(loadedModel != null) {
 						return loadedModel;
@@ -184,7 +184,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 					//Only accept if path fully matches or is a variant
 					if(suffix.length() == 0 || suffix.startsWith("#")) {
 						accepted = true;
-						if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Loading model %s as %s through model registry", modelLocation, registeredModel));
+						if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Loading model %s as %s through model registry", modelLocation, registeredModel));
 						IModel model = entry.getValue().apply(modelLocation);
 						if(model != null) {
 							return model;
@@ -194,7 +194,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 			}
 		}
 
-		if(ConfigHandler.debug) TheBetweenlands.logger.error("Unable to load model %s!", modelLocation);
+		if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.error("Unable to load model %s!", modelLocation);
 
 		return null;
 	}
@@ -277,10 +277,10 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		}
 		for(Pair<ModelResourceLocation, IBakedModel> loadedModel : loadedModels) {
 			if(loadedModel.getValue() != null) {
-				if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Registering additional baked model %s", loadedModel.getKey()));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Registering additional baked model %s", loadedModel.getKey()));
 				modelRegistry.putObject(loadedModel.getKey(), loadedModel.getValue());
 			} else {
-				if(ConfigHandler.debug) TheBetweenlands.logger.warn(String.format("Additional baked model %s is null!", loadedModel.getKey()));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.warn(String.format("Additional baked model %s is null!", loadedModel.getKey()));
 			}
 		}
 
@@ -325,7 +325,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 	 */
 	private <K, T> void replaceRegistryObjects(IRegistry<K, T> registry, Map<K, T> map) {
 		for(Entry<K, T> e : map.entrySet()) {
-			if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Replaced model %s", e.getKey()));
+			if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Replaced model %s", e.getKey()));
 			registry.putObject(e.getKey(), e.getValue());
 		}
 
@@ -336,10 +336,10 @@ public final class CustomModelLoader implements ICustomModelLoader {
 
 		//Gather registered objects
 		for(K replacementKey : replacementKeys) {
-			if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Searching model for %s", replacementKey));
+			if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Searching model for %s", replacementKey));
 			T obj = registry.getObject(replacementKey);
 			if(obj != null) {
-				if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Found model %s", obj));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Found model %s", obj));
 				objectsToRemove.put(obj, replacementKey);
 			}
 		}
@@ -350,7 +350,7 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		while(it.hasNext()) {
 			obj = it.next();
 			if(objectsToRemove.containsKey(obj)) {
-				if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Removed model %s, %s from registry", obj, objectsToRemove.get(obj)));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Removed model %s, %s from registry", obj, objectsToRemove.get(obj)));
 				it.remove();
 			}
 		}
@@ -358,10 +358,10 @@ public final class CustomModelLoader implements ICustomModelLoader {
 		//Add replacement objects
 		for(Entry<K, T> replacement : map.entrySet()) {
 			if(replacement.getValue() != null) {
-				if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Replaced model %s", replacement.getKey()));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Replaced model %s", replacement.getKey()));
 				registry.putObject(replacement.getKey(), replacement.getValue());
 			} else {
-				if(ConfigHandler.debug) TheBetweenlands.logger.info(String.format("Removed model %s", replacement.getKey()));
+				if(ConfigHandler.debugModelLoader) TheBetweenlands.logger.info(String.format("Removed model %s", replacement.getKey()));
 			}
 		}*/
 	}

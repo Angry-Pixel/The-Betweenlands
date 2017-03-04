@@ -20,6 +20,7 @@ import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
+import thebetweenlands.client.render.model.baked.ModelThatchRoof;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -141,6 +142,7 @@ public class ModelRegistry {
 	public static final IModel MOSS_BED = new ModelFromModelBase(new ModelMossBed(), new ResourceLocation("thebetweenlands:blocks/moss_bed"), 128, 128);
 	public static final IModel WALKWAY = new ModelWalkway(true);
 	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(false);
+	public static final IModel THATCH_ROOF = new ModelThatchRoof();
 	
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 

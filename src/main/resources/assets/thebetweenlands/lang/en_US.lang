@@ -86,7 +86,7 @@ tile.thebetweenlands.genericStone.corruptBetweenstone.name=Corrupt Betweenstone
 tile.thebetweenlands.glowingBetweenstoneTile.name=Glowing Betweenstone Tile
 tile.thebetweenlands.glowingSmoothCragrock.name=Glowing Smooth Cragrock
 tile.thebetweenlands.greenMiddleGemOre.name=Green Middle Gem Ore
-tile.thebetweenlands.leavesRubberTree.name=Rubber Leaves
+tile.thebetweenlands.leavesRubberTree.name=Rubber Tree Leaves
 tile.thebetweenlands.leavesSapTree.name=Sap Tree Leaves
 tile.thebetweenlands.leavesWeedwoodTree.name=Weedwood Leaves
 tile.thebetweenlands.lifeCrystalStalactite.default.name=Life Crystal Stalctite
@@ -217,6 +217,7 @@ tile.thebetweenlands.mossySmoothBetweenstoneSlab.name=Mossy Smooth Betweenstone 
 tile.thebetweenlands.crackedBetweenstoneBrickSlab.name=Cracked Betweenstone Brick Slab
 tile.thebetweenlands.weedwoodPlankSlab.name=Weedwood Plank Slab
 tile.thebetweenlands.rubberTreePlankSlab.name=Rubber Tree Plank Slab
+tile.thebetweenlands.thatchSlab.name=Thatch Slab
 tile.thebetweenlands.cragrockBrickWall.name=Cragrock Brick Wall
 tile.thebetweenlands.weedwoodPlankFence.name=Weedwood Plank Fence
 tile.thebetweenlands.weedwoodLogFence.name=Weedwood Log Fence
@@ -285,6 +286,8 @@ tile.thebetweenlands.itemShelf.name=Item Shelf
 tile.thebetweenlands.logRottenBark.name=Rotten Bark
 tile.thebetweenlands.walkway.name=Walkway
 tile.thebetweenlands.woodChipPath.name=Weedwood Chip Path
+tile.thebetweenlands.thatchRoof.name=Thatch Roof
+tile.thebetweenlands.thatch.name=Thatch
 
 # Items
 

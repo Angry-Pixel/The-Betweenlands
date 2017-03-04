@@ -1,12 +1,28 @@
 {
   "forge_marker": 1,
-  "variants": {
-    "facing=north": { "model": "thebetweenlands:internal/walkway", "y": 180 },
-    "facing=south": { "model": "thebetweenlands:internal/walkway" },
-    "facing=west":  { "model": "thebetweenlands:internal/walkway", "y": 90 },
-    "facing=east":  { "model": "thebetweenlands:internal/walkway", "y": 270 },
+  "defaults": {
+    "model": "thebetweenlands:internal/thatch_roof"
+  },
+  "variants": { 
+    "half": {
+      "top": { },
+      "bottom": { }
+    },
+    "shape": {
+      "straight": { },
+      "inner_left": { },
+      "inner_right": { },
+      "outer_left": { },
+      "outer_right": { }
+    },
+    "facing": {
+      "north": { },
+      "south": { },
+      "east": { },
+      "west": { }
+    },
     "inventory": { 
-      "model": "thebetweenlands:internal/walkway",
+      "model": "thebetweenlands:internal/thatch_roof",
       "transform": {
                 "gui": {
                     "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
@@ -45,5 +61,5 @@
                 }
             }
     }
-  }
+  } 
 }

@@ -238,7 +238,7 @@ public class RecipeRegistry {
 		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.OCTINE_INGOT, 9), new ItemStack(BlockRegistry.OCTINE_BLOCK));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.VALONITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.VALONITE_SHARD.create(1));
 		GameRegistry.addShapelessRecipe(EnumItemMisc.VALONITE_SHARD.create(9), new ItemStack(BlockRegistry.VALONITE_BLOCK));
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.thatch, 4), "xx", "xx", 'x', ItemGeneric.createStack(EnumItemGeneric.DRIED_SWAMP_REED)); //TODO: Thatch
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH, 4), "xx", "xx", 'x', EnumItemMisc.DRIED_SWAMP_REED.create(1));
 		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS, 4), new ItemStack(BlockRegistry.LOG_RUBBER, 1, OreDictionary.WILDCARD_VALUE));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MIRE_CORAL_BLOCK, 4), "xx", "xx", 'x', EnumItemPlantDrop.MIRE_CORAL_ITEM.create(1));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.DEEP_WATER_CORAL_BLOCK, 4), "xx", "xx", 'x', EnumItemPlantDrop.DEEP_WATER_CORAL_ITEM.create(1));
@@ -324,7 +324,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_SLAB, 6), "###", '#', BlockRegistry.TEMPLE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_SLAB, 6), "###", '#', BlockRegistry.WEEDWOOD_PLANKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_SLAB, 6), "###", '#', BlockRegistry.RUBBER_TREE_PLANKS);
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH_SLAB, 6), "###", '#', BlockRegistry.thatch); TODO Thatch
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH_SLAB, 6), "###", '#', BlockRegistry.THATCH);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
@@ -334,7 +334,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_CRAGROCK));
 
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH_SLOPE, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.thatch); TODO Thatch
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH_ROOF, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.THATCH);
 
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SILT_GLASS_PANE, 6), "xxx", "xxx", 'x', BlockRegistry.SILT_GLASS);
 
@@ -604,8 +604,7 @@ public class RecipeRegistry {
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM, 1), new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM, 1), new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM, 1), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
-		//TODO add swamp dirt
-		//PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.FARMED_DIRT, 1, 0), new ItemStack(BlockRegistry.SWAMP_DIRT));
+		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.PURIFIED_SWAMP_DIRT), new ItemStack(BlockRegistry.SWAMP_DIRT));
 		//TODO add vials
 		//PurifierRecipe.addRecipe(ItemRegistry.dentrothystVial.createStack(0), ItemRegistry.dentrothystVial.createStack(1));
 		PurifierRecipe.addRecipe(new IPurifierRecipe() {
