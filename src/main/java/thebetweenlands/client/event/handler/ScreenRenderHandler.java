@@ -219,7 +219,7 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 
-				if (player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				if (!player.isRiding() && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 					if(capability.isDecayEnabled()) {

@@ -5,12 +5,14 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.item.IDecayFood;
+import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class PlayerDecayHandler {
@@ -26,8 +28,10 @@ public class PlayerDecayHandler {
 					float currentMaxHealth = (float) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
 					float maxHealth = (int)(capability.getMaxPlayerHealth() / 2.0F) * 2;
 
+					DecayStats stats = capability.getDecayStats();
+					
 					//Only reset the health to default once, hopefully should improve mod compatilibity?
-					boolean requiresHealthReset = capability.getDecayStats().getDecayLevel() != capability.getDecayStats().getPrevDecayLevel() && currentMaxHealth < 20.0F && maxHealth >= 20.0F;
+					boolean requiresHealthReset = stats.getDecayLevel() != stats.getPrevDecayLevel() && currentMaxHealth < 20.0F && maxHealth >= 20.0F;
 
 					//Clamp health
 					if(maxHealth < 20.0F || requiresHealthReset) {
@@ -37,18 +41,47 @@ public class PlayerDecayHandler {
 						}
 					}
 
-					int decay = capability.getDecayStats().getDecayLevel();
+					int decay = stats.getDecayLevel();
 
 					if (decay >= 16) {
-						event.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 2, true, false));
-						event.player.jumpMovementFactor = 0.001F;
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 2, true, false));
+						player.jumpMovementFactor = 0.001F;
 					} else if (decay >= 13) {
-						event.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 1, true, false));
-						event.player.jumpMovementFactor = 0.002F;
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 1, true, false));
+						player.jumpMovementFactor = 0.002F;
 					} else if (decay >= 10) {
-						event.player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 0, true, false));
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 0, true, false));
 					}
 
+					if(!event.player.isRiding()) {
+						EnumDifficulty difficulty = player.worldObj.getDifficulty();
+						
+						float decaySpeed = 0.0F;
+
+						switch(difficulty) {
+						case PEACEFUL:
+							decaySpeed = 0.0F;
+							break;
+						case EASY:
+							decaySpeed = 0.0025F;
+							break;
+						case NORMAL:
+							decaySpeed = 0.0033F;
+							break;
+						case HARD:
+							decaySpeed = 0.005F;
+							break;
+						}
+
+						if(player.isInWater()) {
+							decaySpeed *= 2.75F;
+						}
+
+						if(decaySpeed > 0.0F) {
+							stats.addDecayAcceleration(decaySpeed);
+						}
+					}
+					
 					capability.getDecayStats().onUpdate(player);
 				}
 			}
