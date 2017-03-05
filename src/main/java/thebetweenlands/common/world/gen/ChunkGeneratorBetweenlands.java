@@ -1,14 +1,30 @@
 package thebetweenlands.common.world.gen;
 
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
+import javax.imageio.ImageIO;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -123,6 +139,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	@Override
 	public Chunk provideChunk(int chunkX, int chunkZ) {
 		this.rand.setSeed((long)chunkX * 341873128712L + (long)chunkZ * 132897987541L);
+		debugProvideHandle(chunkX, chunkZ);
 
 		ChunkPrimer chunkprimer = new ChunkPrimer();
 
@@ -329,10 +346,10 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 						//No amplified terrain
 						/*if (this.terrainType == WorldType.AMPLIFIED && f5 > 0.0F)
-                        {
-                            f5 = 1.0F + f5 * 2.0F;
-                            f6 = 1.0F + f6 * 4.0F;
-                        }*/
+						{
+							f5 = 1.0F + f5 * 2.0F;
+							f6 = 1.0F + f6 * 4.0F;
+						}*/
 
 						if(offsetX >= -2 && offsetX <= 2 && offsetZ >= -2 && offsetZ <=2) {
 							float weight = this.biomeWeights[offsetX + 2 + (offsetZ + 2) * 5];
@@ -521,5 +538,162 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 	public double evalSpeleothemDensityNoise(double x, double z) {
 		return this.speleothemDensityNoise.getValue(x, z);
+	}
+
+	public static boolean debugRecord = false;
+
+	private static class ChunkProvide {
+		int x, z;
+
+		boolean player;
+
+		int provides;
+
+		String cause;
+
+		int[] signature;
+
+		public ChunkProvide(int x, int z, boolean player, int provides, String cause, int[] signature) {
+			this.x = x;
+			this.z = z;
+			this.player = player;
+			this.provides = provides;
+			this.cause = cause;
+			this.signature = signature;
+		}
+
+		@Override
+		public int hashCode() {
+			return x * 31 + z;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			return obj instanceof ChunkProvide && ((ChunkProvide) obj).x == x && ((ChunkProvide) obj).z == z;
+		}
+	}
+
+	private Set<ChunkProvide> chunkProvides = Collections.synchronizedSet(new LinkedHashSet<>());
+
+	private int maxSigLen, maxProvides;
+
+	private void debugProvideHandle(int x, int z) {
+		if (!debugRecord) {
+			return;
+		}
+		StackTraceElement[] elems = Thread.currentThread().getStackTrace();
+		boolean inside = false;
+		int provides = 0;
+		boolean player = false;
+		StringBuilder cause = new StringBuilder();
+		int[] signature = new int[0];
+		int signatureIdx = -1;
+		boolean newSignature = false;
+		boolean lastOther = false;
+		for (int i = 0; i < elems.length; i++) {
+			StackTraceElement elem = elems[i];
+			String cls = elem.getClassName();
+			String method = elem.getMethodName();
+			boolean other = false;
+			if ("net.minecraft.world.gen.ChunkProviderServer".equals(cls) && "provideChunk".equals(method)) {
+				provides++;
+				cause.append("ChunkProviderServer#provideChunk");
+				inside = true;
+				signature = Arrays.copyOf(signature, signature.length + 1);
+				signatureIdx++;
+				newSignature = true;
+			} else if (inside) {
+				if ("net.minecraft.server.management.PlayerChunkMapEntry".equals(cls) && "providePlayerChunk".equals(method)) {
+					player = true;
+				} else if (cls.startsWith("thebetweenlands")) {
+					String name;
+					int dot = cls.lastIndexOf('.');
+					if (dot > -1) {
+						cause.append(cls);
+					} else {
+						cause.append(cls.substring(dot + 1));
+					}
+					cause.append('#').append(method).append(':').append(elem.getLineNumber()).append("\n");
+					signature[signatureIdx] = (((signature[signatureIdx] * 31) + cls.hashCode()) * 31 + method.hashCode()) * 31 + elem.getLineNumber();
+					newSignature = false;
+				} else if (!lastOther) {
+					cause.append("...\n");
+					other = true;
+				}
+			}
+			lastOther = other;
+		}
+		if (newSignature) {
+			signature = Arrays.copyOfRange(signature, 0, signature.length - 1);
+		}
+		if (signature.length > maxSigLen) {
+			maxSigLen = signature.length;
+		}
+		if (provides > maxProvides) {
+			maxProvides = provides;
+		}
+		chunkProvides.add(new ChunkProvide(x, z, player, provides, cause.toString(), signature));
+	}
+
+	public void debugGenerateChunkProvidesImage(boolean open) {
+		int minX = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
+		for (ChunkProvide p : chunkProvides) {
+			if (p.x < minX) {
+				minX = p.x;
+			}
+			if (p.z < minZ) {
+				minZ = p.z;
+			}
+			if (p.x > maxX) {
+				maxX = p.x;
+			}
+			if (p.z > maxZ) {
+				maxZ = p.z;
+			}
+		}
+		int half = (int) Math.ceil(Math.sqrt(maxSigLen / 2D));
+		int tile = 2 * half;
+		int pad = 1;
+		int unit = tile + pad;
+		BufferedImage img = new BufferedImage((maxX - minX + 1) * unit + pad, (maxZ - minZ + 1) * unit + pad, BufferedImage.TYPE_INT_RGB);
+		Graphics2D g = img.createGraphics();
+		Multimap<String, ChunkProvide> byCause = HashMultimap.create(); 
+		for (ChunkProvide p : chunkProvides) {
+			String cause = p.cause;
+			byCause.put(cause, p);
+			int px = (p.x - minX) * unit + pad, pz = (p.z - minZ) * unit + pad;
+			g.setColor(Color.LIGHT_GRAY);
+			g.fillRect(px, pz, tile, tile);
+			if (p.player) {
+				g.setColor(Color.WHITE);
+			} else {
+				g.setColor(Color.MAGENTA);
+			}
+			g.fillRect(px, pz, half, half);
+			g.setColor(new Color(Color.HSBtoRGB((1 - p.provides / (float) maxProvides) * 0.333F, 1, 1)));
+			g.fillRect(px, pz + half, half, half);
+			for (int i = 0; i < p.signature.length; i++) {
+				g.setColor(new Color(p.signature[i]));
+				g.fillRect(px + half + i % half, pz + i / half, 1, 1);
+			}
+		}
+		/*
+		for (String cause : byCause.keySet()) {
+			System.out.printf("%d caused by:%n%s%n", byCause.get(cause).size(), cause);
+		}*/
+		g.dispose();
+		File out = new File(Minecraft.getMinecraft().mcDataDir, "chunk_provides.png");
+		try {
+			ImageIO.write(img, "png", out);
+			Desktop.getDesktop().edit(out);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void debugProvideReset() {
+		chunkProvides.clear();
+		maxSigLen = 0;
+		maxProvides = 0;
 	}
 }

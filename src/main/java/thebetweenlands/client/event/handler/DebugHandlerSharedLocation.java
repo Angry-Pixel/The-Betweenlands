@@ -15,15 +15,20 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
 import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class DebugHandlerSharedLocation {
 	@SubscribeEvent
@@ -190,5 +195,19 @@ public class DebugHandlerSharedLocation {
 		GL11.glVertex3d(par1AxisAlignedBB.minX, par1AxisAlignedBB.minY, par1AxisAlignedBB.maxZ);
 		GL11.glVertex3d(par1AxisAlignedBB.minX, par1AxisAlignedBB.maxY, par1AxisAlignedBB.maxZ);
 		GL11.glEnd();
+	}
+
+	@SubscribeEvent
+	public static void onKey(InputEvent.KeyInputEvent event) {
+		if (Keyboard.getEventKey() == Keyboard.KEY_Y && Keyboard.getEventKeyState()) {
+			WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
+			if (world != null) {
+				ChunkGeneratorBetweenlands cgb = (ChunkGeneratorBetweenlands) world.getChunkProvider().chunkGenerator;
+				cgb.debugGenerateChunkProvidesImage(true);
+				if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
+					cgb.debugProvideReset();
+				}
+			}
+		}
 	}
 }
