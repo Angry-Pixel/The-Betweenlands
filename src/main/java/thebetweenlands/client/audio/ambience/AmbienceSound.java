@@ -6,10 +6,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.audio.SafeStreamSound;
 
 @SideOnly(Side.CLIENT)
-public class AmbienceSound extends SafeStreamSound {
+public class AmbienceSound extends MovingSound {
 	private boolean fadeOut = false;
 	private boolean isLowPriority = false;
 
@@ -30,7 +29,6 @@ public class AmbienceSound extends SafeStreamSound {
 
 	@Override
 	public void update() {
-	    super.update();
 		if(this.player == null || this.player.worldObj == null) {
 			this.stopImmediately();
 			return;
