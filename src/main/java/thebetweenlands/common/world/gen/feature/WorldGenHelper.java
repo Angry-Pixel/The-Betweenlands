@@ -338,7 +338,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
 						for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
-							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -346,7 +346,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int zz = z + sizeDepth - offsetX - 1; zz > z + sizeDepth - offsetX - sizeWidth - 1; zz--)
 						for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
-							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -354,7 +354,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int xx = x + sizeWidth - offsetX - 1; xx > x + sizeWidth - offsetX - sizeWidth - 1; xx--)
 						for (int zz = z + sizeDepth - offsetZ - 1; zz > z + sizeDepth - offsetZ - sizeDepth - 1; zz--) {
-							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -362,7 +362,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
 					for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
 						for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
-							if (!type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
 								return false;
 						}
 				break;
@@ -502,50 +502,41 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	public boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
 		x -= width / 2;
 		z -= depth / 2;
-		boolean replaceable = true;
 		switch (direction) {
 			case 0:
-				if (!world.isAreaLoaded(this.getCheckPos(x + offsetA - 4, y + offsetB, z + offsetC - 4), this.getCheckPos(x + offsetA + sizeWidth + 4, y + offsetB + sizeHeight, z + offsetC + sizeDepth + 4)))
-					return true;
 				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 					for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
 						for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
-							if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								replaceable = false;
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+								return true;
 						}
 				break;
 			case 1:
-				if (!world.isAreaLoaded(this.getCheckPos(x + offsetC - 4, y + offsetB, z + depth - offsetA - sizeWidth - 1 - 4), this.getCheckPos(x + offsetC + sizeDepth + 4, y + offsetB + sizeHeight, z + depth - offsetA - 1 + 4)))
-					return true;
 				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 					for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
 						for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
-							if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								replaceable = false;
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+								return true;
 						}
 				break;
 			case 2:
-				if (!world.isAreaLoaded(this.getCheckPos(x + width - offsetA - sizeWidth - 1 - 4, y + offsetB, z + depth - offsetC - sizeDepth - 1 - 4), this.getCheckPos(x + width - offsetA - 1 + 4, y + offsetB + sizeHeight, z + depth - offsetC - 1 + 4)))
-					return true;
 				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 					for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
 						for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
-							if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								replaceable = false;
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+								return true;
 						}
 				break;
 			case 3:
-				if (!world.isAreaLoaded(this.getCheckPos(x + width - offsetC - sizeDepth - 1 - 4, y + offsetB, z + offsetA - 4), this.getCheckPos(x + width - offsetC - 1 + 4, y + offsetB + sizeHeight, z + offsetA + sizeWidth + 4)))
-					return true;
 				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
 					for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
 						for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
-							if (!world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								replaceable = false;
+							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+								return true;
 						}
 				break;
 		}
-		return !replaceable;
+		return false;
 	}
 
 	/**

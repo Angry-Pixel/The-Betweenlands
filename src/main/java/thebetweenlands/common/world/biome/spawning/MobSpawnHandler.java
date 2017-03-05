@@ -294,28 +294,39 @@ public class MobSpawnHandler {
 	}
 
 	private void populateWorld(World world) {
-		if(world.provider instanceof WorldProviderBetweenlands == false) 
+		if(world.provider instanceof WorldProviderBetweenlands == false) {
 			return;
+		}
 
 		int totalWorldEntityCount = 0;
-		for(Entity entity : (List<Entity>)world.loadedEntityList)
-			if(entity instanceof EntityLivingBase)
+		for(Entity entity : (List<Entity>)world.loadedEntityList) {
+			if(entity instanceof EntityLivingBase) {
 				totalWorldEntityCount++;
-		if(totalWorldEntityCount >= HARD_ENTITY_LIMIT)
+			}
+		}
+
+		if(totalWorldEntityCount >= HARD_ENTITY_LIMIT) {
 			//Hard limit reached, don't spawn any more entities
 			return;
+		}
 
 		this.updateSpawnerChunks(world);
 
-		if(this.eligibleChunksForSpawning.size() == 0)
+		if(this.eligibleChunksForSpawning.isEmpty()) {
 			//No spawning chunks
 			return;
+		}
 
 		List<ChunkPos> spawnerChunks = new ArrayList<ChunkPos>(this.eligibleChunksForSpawning.keySet().size() / (SPAWN_CHUNK_DISTANCE*SPAWN_CHUNK_DISTANCE) * (SPAWN_CHUNK_DISTANCE-1) * 4);
 
 		//Add valid chunks
 		for(Entry<ChunkPos, Boolean> chunkEntry : this.eligibleChunksForSpawning.entrySet()) {
-			if(chunkEntry.getValue()) spawnerChunks.add(chunkEntry.getKey());
+			if(chunkEntry.getValue()) {
+				//Don't load chunks
+				if(world.isBlockLoaded(new BlockPos(chunkEntry.getKey().chunkXPos * 16, 64, chunkEntry.getKey().chunkZPos * 16))) {
+					spawnerChunks.add(chunkEntry.getKey());
+				}
+			}
 		}
 
 		this.updateEntityCounts(world);

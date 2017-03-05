@@ -14,6 +14,7 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -30,7 +31,7 @@ import thebetweenlands.common.world.storage.world.shared.location.LocationStorag
 import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class DebugHandlerSharedLocation {
+public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
 		if(StreamSupport.stream(Minecraft.getMinecraft().thePlayer.getHeldEquipment().spliterator(), false).anyMatch(stack -> stack != null && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
@@ -199,13 +200,26 @@ public class DebugHandlerSharedLocation {
 
 	@SubscribeEvent
 	public static void onKey(InputEvent.KeyInputEvent event) {
-		if (Keyboard.getEventKey() == Keyboard.KEY_Y && Keyboard.getEventKeyState()) {
-			WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
-			if (world != null) {
-				ChunkGeneratorBetweenlands cgb = (ChunkGeneratorBetweenlands) world.getChunkProvider().chunkGenerator;
-				cgb.debugGenerateChunkProvidesImage(true);
-				if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
-					cgb.debugProvideReset();
+		if (ConfigHandler.debug && Keyboard.getEventKeyState()) {
+			if(Keyboard.getEventKey() == Keyboard.KEY_Y) {
+				WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
+				if (world != null) {
+					ChunkGeneratorBetweenlands cgb = (ChunkGeneratorBetweenlands) world.getChunkProvider().chunkGenerator;
+					if(Keyboard.getEventKey() == Keyboard.KEY_Y) {
+						if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
+							cgb.debugProvideReset();
+							if(Minecraft.getMinecraft().thePlayer != null) {
+								Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format("Reset chunk provider debug")));
+							}
+						} else {
+							cgb.debugGenerateChunkProvidesImage(true);
+						}
+					}
+				}
+			} else if(Keyboard.getEventKey() == Keyboard.KEY_X) {
+				ChunkGeneratorBetweenlands.debugRecord = !ChunkGeneratorBetweenlands.debugRecord;
+				if(Minecraft.getMinecraft().thePlayer != null) {
+					Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format("Chunk provider debug is now %s", ChunkGeneratorBetweenlands.debugRecord ? "enabled" : "disabled")));
 				}
 			}
 		}

@@ -32,7 +32,7 @@ public class WorldGenSpawner extends WorldGenerator {
 			);
 	private final double size;
 	private int minY = 0;
-	private DecoratorPositionProvider positionProvider = new DecoratorPositionProvider().setOffsetXZ(-8, 8).setOffsetY(0, 8);
+	private DecoratorPositionProvider positionProvider = new DecoratorPositionProvider().setOffsetXZ(-4, 4).setOffsetY(0, 8);
 
 	public WorldGenSpawner() {
 		super(true);
@@ -152,10 +152,6 @@ public class WorldGenSpawner extends WorldGenerator {
 				logic.setSpawnInAir(false);
 			}
 
-			for(int i = 0; i < 16; i++) {
-				DecorationHelper.GEN_SWAMP_TALLGRASS.generate(world, rand, center.add(rand.nextInt(16) - 8, rand.nextInt(16) - 8, rand.nextInt(16) - 8));
-			}
-
 			boolean bigMushroom = false;
 			for(int i = 0; i < 40; i++) {
 				BlockPos pos = center.add(rand.nextInt(8) - 4, rand.nextInt(8) - 4, rand.nextInt(8) - 4);
@@ -176,8 +172,9 @@ public class WorldGenSpawner extends WorldGenerator {
 			this.positionProvider.init(world, world.getBiomeForCoordsBody(center), null, rand, center.getX(), center.getY(), center.getZ());
 
 			this.positionProvider.setOffsetY(-6, 3);
+			this.positionProvider.setOffsetXZ(-8, 8);
 
-			for(int i = 0; i < 160; i++) {
+			for(int i = 0; i < 80; i++) {
 				DecorationHelper.generateWeepingBlue(this.positionProvider);
 			}
 
@@ -185,7 +182,12 @@ public class WorldGenSpawner extends WorldGenerator {
 				DecorationHelper.generateSwampDoubleTallgrass(this.positionProvider);
 			}
 
+			for(int i = 0; i < 16; i++) {
+				DecorationHelper.GEN_SWAMP_TALLGRASS.generate(world, rand, center.add(rand.nextInt(8) - 4, rand.nextInt(8) - 4, rand.nextInt(8) - 4));
+			}
+
 			this.positionProvider.setOffsetY(0, 8);
+			this.positionProvider.setOffsetXZ(-3, 3);
 
 			for(int i = 0; i < 80; i++) {
 				DecorationHelper.generateSpeleothemCluster(this.positionProvider);

@@ -78,6 +78,8 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos)
 	{
+		if(world instanceof World && !((World)world).isBlockLoaded(pos)) return false;
+		
 		if (world.isAirBlock(pos))
 		{
 			return true;
@@ -272,6 +274,8 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	@Override
 	protected boolean canFlowInto(IBlockAccess world, BlockPos pos)
 	{
+		if(world instanceof World && !((World)world).isBlockLoaded(pos)) return false;
+		
 		if (world.isAirBlock(pos)) return true;
 
 		IBlockState state = world.getBlockState(pos);

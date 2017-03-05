@@ -49,77 +49,81 @@ public class BlockThatchRoof extends BlockStairs {
 		//0, 1
 		boolean corner4 = false;
 
+		EnumMap<EnumFacing, EnumHalf> halves = new EnumMap<EnumFacing, EnumHalf>(EnumFacing.class);
 		EnumMap<EnumFacing, EnumFacing> facings = new EnumMap<EnumFacing, EnumFacing>(EnumFacing.class);
-		for(EnumFacing side : EnumFacing.VALUES) {
+		for(EnumFacing side : EnumFacing.HORIZONTALS) {
 			IBlockState offsetState = worldIn.getBlockState(pos.offset(side));
 			if(offsetState.getBlock() instanceof BlockThatchRoof) {
 				facings.put(side, offsetState.getValue(FACING));
+				halves.put(side, offsetState.getValue(HALF));
 			}
 		}
+
+		EnumHalf half = state.getValue(HALF);
 
 		switch(state.getValue(FACING)) {
 		default:
 		case NORTH:
 			corner1 = true;
 			corner2 = true;
-			if(facings.get(EnumFacing.NORTH) == EnumFacing.WEST && facings.get(EnumFacing.EAST) != EnumFacing.NORTH) {
+			if(halves.get(EnumFacing.NORTH) == half && facings.get(EnumFacing.NORTH) == EnumFacing.WEST && facings.get(EnumFacing.EAST) != EnumFacing.NORTH) {
 				corner2 = false;
 			}
-			if(facings.get(EnumFacing.NORTH) == EnumFacing.EAST && facings.get(EnumFacing.WEST) != EnumFacing.NORTH) {
+			if(halves.get(EnumFacing.NORTH) == half && facings.get(EnumFacing.NORTH) == EnumFacing.EAST && facings.get(EnumFacing.WEST) != EnumFacing.NORTH) {
 				corner1 = false;
 			}
-			if(facings.get(EnumFacing.SOUTH) == EnumFacing.WEST && facings.get(EnumFacing.WEST) != EnumFacing.NORTH) {
+			if(halves.get(EnumFacing.SOUTH) == half && facings.get(EnumFacing.SOUTH) == EnumFacing.WEST && facings.get(EnumFacing.WEST) != EnumFacing.NORTH) {
 				corner4 = true;
 			}
-			if(facings.get(EnumFacing.SOUTH) == EnumFacing.EAST && facings.get(EnumFacing.EAST) != EnumFacing.NORTH) {
+			if(halves.get(EnumFacing.SOUTH) == half && facings.get(EnumFacing.SOUTH) == EnumFacing.EAST && facings.get(EnumFacing.EAST) != EnumFacing.NORTH) {
 				corner3 = true;
 			}
 			break;
 		case SOUTH:
 			corner3 = true;
 			corner4 = true;
-			if(facings.get(EnumFacing.SOUTH) == EnumFacing.WEST && facings.get(EnumFacing.EAST) != EnumFacing.SOUTH) {
+			if(halves.get(EnumFacing.SOUTH) == half && facings.get(EnumFacing.SOUTH) == EnumFacing.WEST && facings.get(EnumFacing.EAST) != EnumFacing.SOUTH) {
 				corner3 = false;
 			}
-			if(facings.get(EnumFacing.SOUTH) == EnumFacing.EAST && facings.get(EnumFacing.WEST) != EnumFacing.SOUTH) {
+			if(halves.get(EnumFacing.SOUTH) == half && facings.get(EnumFacing.SOUTH) == EnumFacing.EAST && facings.get(EnumFacing.WEST) != EnumFacing.SOUTH) {
 				corner4 = false;
 			}
-			if(facings.get(EnumFacing.NORTH) == EnumFacing.WEST && facings.get(EnumFacing.WEST) != EnumFacing.SOUTH) {
+			if(halves.get(EnumFacing.NORTH) == half && facings.get(EnumFacing.NORTH) == EnumFacing.WEST && facings.get(EnumFacing.WEST) != EnumFacing.SOUTH) {
 				corner1 = true;
 			}
-			if(facings.get(EnumFacing.NORTH) == EnumFacing.EAST && facings.get(EnumFacing.EAST) != EnumFacing.SOUTH) {
+			if(halves.get(EnumFacing.NORTH) == half && facings.get(EnumFacing.NORTH) == EnumFacing.EAST && facings.get(EnumFacing.EAST) != EnumFacing.SOUTH) {
 				corner2 = true;
 			}
 			break;
 		case EAST:
 			corner2 = true;
 			corner3 = true;
-			if(facings.get(EnumFacing.EAST) == EnumFacing.SOUTH && facings.get(EnumFacing.NORTH) != EnumFacing.EAST) {
+			if(halves.get(EnumFacing.EAST) == half && facings.get(EnumFacing.EAST) == EnumFacing.SOUTH && facings.get(EnumFacing.NORTH) != EnumFacing.EAST) {
 				corner2 = false;
 			}
-			if(facings.get(EnumFacing.EAST) == EnumFacing.NORTH && facings.get(EnumFacing.SOUTH) != EnumFacing.EAST) {
+			if(halves.get(EnumFacing.EAST) == half && facings.get(EnumFacing.EAST) == EnumFacing.NORTH && facings.get(EnumFacing.SOUTH) != EnumFacing.EAST) {
 				corner3 = false;
 			}
-			if(facings.get(EnumFacing.WEST) == EnumFacing.SOUTH && facings.get(EnumFacing.SOUTH) != EnumFacing.EAST) {
+			if(halves.get(EnumFacing.WEST) == half && facings.get(EnumFacing.WEST) == EnumFacing.SOUTH && facings.get(EnumFacing.SOUTH) != EnumFacing.EAST) {
 				corner4 = true;
 			}
-			if(facings.get(EnumFacing.WEST) == EnumFacing.NORTH && facings.get(EnumFacing.NORTH) != EnumFacing.EAST) {
+			if(halves.get(EnumFacing.WEST) == half && facings.get(EnumFacing.WEST) == EnumFacing.NORTH && facings.get(EnumFacing.NORTH) != EnumFacing.EAST) {
 				corner1 = true;
 			}
 			break;
 		case WEST:
 			corner4 = true;
 			corner1 = true;
-			if(facings.get(EnumFacing.WEST) == EnumFacing.SOUTH && facings.get(EnumFacing.NORTH) != EnumFacing.WEST) {
+			if(halves.get(EnumFacing.WEST) == half && facings.get(EnumFacing.WEST) == EnumFacing.SOUTH && facings.get(EnumFacing.NORTH) != EnumFacing.WEST) {
 				corner1 = false;
 			}
-			if(facings.get(EnumFacing.WEST) == EnumFacing.NORTH && facings.get(EnumFacing.SOUTH) != EnumFacing.WEST) {
+			if(halves.get(EnumFacing.WEST) == half && facings.get(EnumFacing.WEST) == EnumFacing.NORTH && facings.get(EnumFacing.SOUTH) != EnumFacing.WEST) {
 				corner4 = false;
 			}
-			if(facings.get(EnumFacing.EAST) == EnumFacing.SOUTH && facings.get(EnumFacing.SOUTH) != EnumFacing.WEST) {
+			if(halves.get(EnumFacing.EAST) == half && facings.get(EnumFacing.EAST) == EnumFacing.SOUTH && facings.get(EnumFacing.SOUTH) != EnumFacing.WEST) {
 				corner3 = true;
 			}
-			if(facings.get(EnumFacing.EAST) == EnumFacing.NORTH && facings.get(EnumFacing.NORTH) != EnumFacing.WEST) {
+			if(halves.get(EnumFacing.EAST) == half && facings.get(EnumFacing.EAST) == EnumFacing.NORTH && facings.get(EnumFacing.NORTH) != EnumFacing.WEST) {
 				corner2 = true;
 			}
 			break;

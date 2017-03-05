@@ -266,7 +266,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		for (int zz = z; zz < z + width; zz++)
 			for (int yy = y; yy < y + height; yy++)
 				for (int xx = x; xx > x - width; xx--)
-					if (!(world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == Blocks.AIR || (world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_WATER && yy < y + height - 2)))
+					if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !(world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == Blocks.AIR || (world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_WATER && yy < y + height - 2)))
 						return false;
 
 		if (!SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + width - 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))))
@@ -402,7 +402,6 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		width = 12;
 		depth = 12;
 		int direction = random.nextInt(4);
-		int originalY = y;
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND)) {
 			y--;
 			if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))

@@ -214,9 +214,9 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateSpawner(DecoratorPositionProvider decorator) {
-		int x = decorator.getRandomPosX();
+		int x = decorator.getRandomPosX(13);
 		int y = decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 20);
-		int z = decorator.getRandomPosZ();
+		int z = decorator.getRandomPosZ(13);
 		if(GEN_SPAWNER.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z))) {
 			return true;
 		}
@@ -371,7 +371,7 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateSwampReedCluster(DecoratorPositionProvider decorator) {
-		BlockPos pos = decorator.getRandomPosSeaGround();
+		BlockPos pos = decorator.getRandomPosSeaGround(10);
 		World world = decorator.getWorld();
 		if(SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
 			return GEN_SWAMP_REED.generate(decorator.getWorld(), decorator.getRand(), pos);
@@ -474,7 +474,7 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateBladderwortCluster(DecoratorPositionProvider decorator) {
-		BlockPos pos = decorator.getRandomPosSeaGround();
+		BlockPos pos = decorator.getRandomPosSeaGround(10);
 		if(SurfaceType.WATER.matches(decorator.getWorld(), pos) && SurfaceType.DIRT.matches(decorator.getWorld(), pos.down())) {
 			return GEN_BLADDERWORT.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
@@ -482,7 +482,7 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateWaterRootsCluster(DecoratorPositionProvider decorator) {
-		BlockPos pos = decorator.getRandomPosSeaGround();
+		BlockPos pos = decorator.getRandomPosSeaGround(10);
 		if(SurfaceType.WATER.matches(decorator.getWorld(), pos) && SurfaceType.DIRT.matches(decorator.getWorld(), pos.down())) {
 			return GEN_WATER_ROOTS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
@@ -506,7 +506,7 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateSwampKelpCluster(DecoratorPositionProvider decorator) {
-		BlockPos pos = decorator.getRandomPosSeaGround();
+		BlockPos pos = decorator.getRandomPosSeaGround(10);
 		if(SurfaceType.WATER.matches(decorator.getWorld(), pos) && SurfaceType.DIRT.matches(decorator.getWorld(), pos.down())) {
 			return GEN_SWAMP_KELP.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}
@@ -601,7 +601,7 @@ public class DecorationHelper {
 	}
 
 	public static boolean generateRootsCluster(DecoratorPositionProvider decorator) {
-		BlockPos pos = decorator.getRandomPos();
+		BlockPos pos = decorator.getRandomPos(10);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
 			return GEN_ROOTS.generate(decorator.getWorld(), decorator.getRand(), pos);
 		}

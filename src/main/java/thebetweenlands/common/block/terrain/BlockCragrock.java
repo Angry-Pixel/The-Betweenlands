@@ -41,16 +41,18 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random random){
 		if (!world.isRemote && state.getValue(VARIANT) != EnumCragrockType.DEFAULT) {
 			BlockPos newPos = pos.add(random.nextInt(3) - 1, random.nextInt(3) - 1, random.nextInt(3) - 1);
-			IBlockState blockState = world.getBlockState(newPos);
-			Block block = world.getBlockState(newPos).getBlock();
-			if (block == this && blockState.getValue(VARIANT) == EnumCragrockType.DEFAULT) {
-				if (world.getBlockState(newPos.up()).getBlock() == this 
-						&& world.getBlockState(newPos.up(2)).getBlock() == Blocks.AIR 
-						&& blockState.getValue(VARIANT) != EnumCragrockType.MOSSY_2) {
-					world.setBlockState(newPos, state.withProperty(VARIANT, EnumCragrockType.MOSSY_2));
-				} else if (world.getBlockState(newPos).getBlock() == this 
-						&& world.getBlockState(newPos.up()).getBlock() == Blocks.AIR) {
-					world.setBlockState(newPos, state.withProperty(VARIANT, EnumCragrockType.MOSSY_1), 2);
+			if(newPos.getY() >= 0 && newPos.getY() < 256 && world.isBlockLoaded(newPos)) {
+				IBlockState blockState = world.getBlockState(newPos);
+				Block block = world.getBlockState(newPos).getBlock();
+				if (block == this && blockState.getValue(VARIANT) == EnumCragrockType.DEFAULT) {
+					if (world.getBlockState(newPos.up()).getBlock() == this 
+							&& world.getBlockState(newPos.up(2)).getBlock() == Blocks.AIR 
+							&& blockState.getValue(VARIANT) != EnumCragrockType.MOSSY_2) {
+						world.setBlockState(newPos, state.withProperty(VARIANT, EnumCragrockType.MOSSY_2));
+					} else if (world.getBlockState(newPos).getBlock() == this 
+							&& world.getBlockState(newPos.up()).getBlock() == Blocks.AIR) {
+						world.setBlockState(newPos, state.withProperty(VARIANT, EnumCragrockType.MOSSY_1), 2);
+					}
 				}
 			}
 		}
