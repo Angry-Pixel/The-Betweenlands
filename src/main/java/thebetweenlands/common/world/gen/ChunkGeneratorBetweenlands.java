@@ -673,7 +673,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 			g.setColor(new Color(Color.HSBtoRGB((1 - p.provides / (float) maxProvides) * 0.333F, 1, 1)));
 			g.fillRect(px, pz + half, half, half);
 			for (int i = 0; i < p.signature.length; i++) {
-				g.setColor(new Color(p.signature[i]));
+				g.setColor(new Color(p.signature[p.signature.length - 1 - i]));
 				g.fillRect(px + half + i % half, pz + i / half, 1, 1);
 			}
 		}
