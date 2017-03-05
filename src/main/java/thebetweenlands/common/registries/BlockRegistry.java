@@ -381,6 +381,7 @@ public class BlockRegistry {
 	public static final Block CRAGROCK_BRICK_WALL = new BlockWallBetweenlands(CRAGROCK_BRICKS.getDefaultState());
 	public static final Block LIMESTONE_BRICK_WALL = new BlockWallBetweenlands(LIMESTONE_BRICKS.getDefaultState());
 	public static final Block LIMESTONE_WALL = new BlockWallBetweenlands(LIMESTONE.getDefaultState());
+	public static final Block POLISHED_LIMESTONE_WALL = new BlockWallBetweenlands(LIMESTONE.getDefaultState());
 	public static final Block PITSTONE_BRICK_WALL = new BlockWallBetweenlands(PITSTONE_BRICKS.getDefaultState());
 	public static final Block SMOOTH_BETWEENSTONE_WALL = new BlockWallBetweenlands(SMOOTH_BETWEENSTONE.getDefaultState());
 	public static final Block SMOOTH_CRAGROCK_WALL = new BlockWallBetweenlands(SMOOTH_CRAGROCK.getDefaultState());

@@ -289,13 +289,15 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
-
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
+		
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MUD_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE);
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.TAR_SOLID);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.TEMPLE_BRICKS);
@@ -305,9 +307,11 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
 
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.LOG_WEEDWOOD));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
 
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.LOG_WEEDWOOD));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
 
@@ -315,6 +319,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_SLAB, 6), "###", '#', BlockRegistry.MUD_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICK_SLAB, 6), "###", '#', BlockRegistry.CRAGROCK_BRICKS);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.LIMESTONE_BRICKS);
+		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_SLAB, 6), "###", '#', BlockRegistry.POLISHED_LIMESTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_SLAB, 6), "###", '#', BlockRegistry.LIMESTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_BETWEENSTONE);
 		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_CRAGROCK);
