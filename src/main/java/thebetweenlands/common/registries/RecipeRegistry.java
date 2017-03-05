@@ -112,7 +112,7 @@ public class RecipeRegistry {
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
 
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHIELD), "XXX", "XXX", " X ", 'X', ItemRegistry.OCTINE_INGOT);
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', EnumItemMisc.LURKER_SKIN.create(1));
+		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', BlockRegistry.PITSTONE);
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));

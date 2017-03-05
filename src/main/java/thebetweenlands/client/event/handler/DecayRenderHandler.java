@@ -1,8 +1,6 @@
 package thebetweenlands.client.event.handler;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Predicate;
@@ -27,15 +25,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.RenderHelper;
 
 public class DecayRenderHandler {
 	public static final ResourceLocation PLAYER_DECAY_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/player_decay.png");
-
-	private static Field fieldLayerRenderers = ReflectionHelper.findField(RenderLivingBase.class, "layerRenderers", "field_177097_h", "i");
 
 	public static class LayerDecay implements LayerRenderer<AbstractClientPlayer> {
 		private final RenderLivingBase<AbstractClientPlayer> renderer;
@@ -106,21 +102,8 @@ public class DecayRenderHandler {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
-				try {
-					@SuppressWarnings("unchecked")
-					List<LayerRenderer<?>> layers = (List<LayerRenderer<?>>) fieldLayerRenderers.get(event.getRenderer());
-					boolean hasLayer = false;
-					for(LayerRenderer<?> layer : layers) {
-						if(layer instanceof LayerDecay) {
-							hasLayer = true;
-							break;
-						}
-					}
-					if(!hasLayer) {
-						event.getRenderer().addLayer(new LayerDecay(event.getRenderer()));
-					}
-				} catch(Exception ex) {
-					throw new RuntimeException(ex);
+				if(!RenderHelper.doesRendererHaveLayer(event.getRenderer(), LayerDecay.class, false)) {
+					event.getRenderer().addLayer(new LayerDecay(event.getRenderer()));
 				}
 			}
 		}

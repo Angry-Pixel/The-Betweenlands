@@ -1,7 +1,5 @@
 package thebetweenlands.common.event.handler;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
@@ -24,7 +22,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.RenderLivingEvent;
@@ -41,7 +38,7 @@ import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.client.event.handler.WorldRenderHandler;
 import thebetweenlands.client.render.entity.RenderSwordEnergy;
-import thebetweenlands.client.render.entity.layer.LayerAnimatedOverlay;
+import thebetweenlands.client.render.entity.layer.LayerPuppetOverlay;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.ai.EntityAIFollowTarget;
@@ -50,10 +47,9 @@ import thebetweenlands.common.entity.ai.puppet.EntityAIPuppet;
 import thebetweenlands.common.entity.ai.puppet.EntityAIStay;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.RenderHelper;
 
 public class PuppetHandler {
-	public static final ResourceLocation OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/puppet_overlay.png");
-
 	private PuppetHandler() { }
 
 	@SubscribeEvent
@@ -300,8 +296,6 @@ public class PuppetHandler {
 		}
 	}
 
-	private static final Deque<LayerAnimatedOverlay<EntityLivingBase>> LAYER_STACK = new ArrayDeque<>();
-
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onRenderLivingPre(RenderLivingEvent.Pre<EntityLivingBase> event) {
@@ -310,9 +304,9 @@ public class PuppetHandler {
 		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
 			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
 			if(cap.hasPuppeteer()) {
-				LayerAnimatedOverlay<EntityLivingBase> layer = new LayerAnimatedOverlay<EntityLivingBase>(event.getRenderer(), OVERLAY_TEXTURE);
-				LAYER_STACK.push(layer);
-				event.getRenderer().addLayer(layer);
+				if(!RenderHelper.doesRendererHaveLayer(event.getRenderer(), LayerPuppetOverlay.class, false)) {
+					event.getRenderer().addLayer(new LayerPuppetOverlay(event.getRenderer()));
+				}
 			}
 		}
 	}
@@ -325,11 +319,9 @@ public class PuppetHandler {
 		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
 			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
 			if(cap.hasPuppeteer()) {
-				event.getRenderer().removeLayer(LAYER_STACK.pop());
-
 				Entity puppeteer = cap.getPuppeteer();
 				if(puppeteer != null) {
-					event.getRenderer().bindTexture(OVERLAY_TEXTURE);
+					event.getRenderer().bindTexture(LayerPuppetOverlay.OVERLAY_TEXTURE);
 
 					GlStateManager.matrixMode(GL11.GL_TEXTURE);
 					GlStateManager.loadIdentity();
