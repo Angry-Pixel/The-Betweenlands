@@ -8,11 +8,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import javax.imageio.ImageIO;
@@ -549,11 +548,11 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 		int provides;
 
-		String cause;
+		String[] cause;
 
 		int[] signature;
 
-		public ChunkProvide(int x, int z, boolean player, int provides, String cause, int[] signature) {
+		public ChunkProvide(int x, int z, boolean player, int provides, String[] cause, int[] signature) {
 			this.x = x;
 			this.z = z;
 			this.player = player;
@@ -585,8 +584,8 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		boolean inside = false;
 		int provides = 0;
 		boolean player = false;
-		StringBuilder cause = new StringBuilder();
 		int[] signature = new int[0];
+		StringBuilder[] signatureCauses = new StringBuilder[0];
 		int signatureIdx = -1;
 		boolean newSignature = false;
 		boolean lastOther = false;
@@ -597,11 +596,13 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 			boolean other = false;
 			if ("net.minecraft.world.gen.ChunkProviderServer".equals(cls) && "provideChunk".equals(method)) {
 				provides++;
-				cause.append("ChunkProviderServer#provideChunk");
 				inside = true;
 				signature = Arrays.copyOf(signature, signature.length + 1);
+                signatureCauses = Arrays.copyOf(signatureCauses, signature.length);
 				signatureIdx++;
+				signatureCauses[signatureIdx] = new StringBuilder();
 				newSignature = true;
+				signatureCauses[signatureIdx].append("ChunkProviderServer#provideChunk\n");
 			} else if (inside) {
 				if ("net.minecraft.server.management.PlayerChunkMapEntry".equals(cls) && "providePlayerChunk".equals(method)) {
 					player = true;
@@ -609,15 +610,17 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 					String name;
 					int dot = cls.lastIndexOf('.');
 					if (dot > -1) {
-						cause.append(cls);
+					    signatureCauses[signatureIdx].append(cls);
 					} else {
-						cause.append(cls.substring(dot + 1));
+					    signatureCauses[signatureIdx].append(cls.substring(dot + 1));
 					}
-					cause.append('#').append(method).append(':').append(elem.getLineNumber()).append("\n");
+					signatureCauses[signatureIdx].append('#').append(method).append(':').append(elem.getLineNumber()).append("\n");
 					signature[signatureIdx] = (((signature[signatureIdx] * 31) + cls.hashCode()) * 31 + method.hashCode()) * 31 + elem.getLineNumber();
 					newSignature = false;
-				} else if (!lastOther) {
-					cause.append("...\n");
+				} else {
+				    if (!lastOther) {
+				        signatureCauses[signatureIdx].append("...\n");   
+				    }
 					other = true;
 				}
 			}
@@ -632,55 +635,71 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		if (provides > maxProvides) {
 			maxProvides = provides;
 		}
-		chunkProvides.add(new ChunkProvide(x, z, player, provides, cause.toString(), signature));
+		String[] causes = new String[signatureCauses.length];
+		for (int i = 0; i < signatureCauses.length; i++) {
+		    causes[i] = signatureCauses[i].toString();
+		}
+		chunkProvides.add(new ChunkProvide(x, z, player, provides, causes, signature));
 	}
 
 	public void debugGenerateChunkProvidesImage(boolean open) {
 		int minX = Integer.MAX_VALUE, minZ = Integer.MAX_VALUE, maxX = Integer.MIN_VALUE, maxZ = Integer.MIN_VALUE;
-		for (ChunkProvide p : chunkProvides) {
-			if (p.x < minX) {
-				minX = p.x;
-			}
-			if (p.z < minZ) {
-				minZ = p.z;
-			}
-			if (p.x > maxX) {
-				maxX = p.x;
-			}
-			if (p.z > maxZ) {
-				maxZ = p.z;
-			}
-		}
+		synchronized (chunkProvides) {
+	        for (ChunkProvide p : chunkProvides) {
+	            if (p.x < minX) {
+	                minX = p.x;
+	            }
+	            if (p.z < minZ) {
+	                minZ = p.z;
+	            }
+	            if (p.x > maxX) {
+	                maxX = p.x;
+	            }
+	            if (p.z > maxZ) {
+	                maxZ = p.z;
+	            }
+	        }
+        }
 		int half = (int) Math.ceil(Math.sqrt(maxSigLen / 2D));
 		int tile = 2 * half;
 		int pad = 1;
 		int unit = tile + pad;
 		BufferedImage img = new BufferedImage((maxX - minX + 1) * unit + pad, (maxZ - minZ + 1) * unit + pad, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = img.createGraphics();
-		Multimap<String, ChunkProvide> byCause = HashMultimap.create(); 
-		for (ChunkProvide p : chunkProvides) {
-			String cause = p.cause;
-			byCause.put(cause, p);
-			int px = (p.x - minX) * unit + pad, pz = (p.z - minZ) * unit + pad;
-			g.setColor(Color.LIGHT_GRAY);
-			g.fillRect(px, pz, tile, tile);
-			if (p.player) {
-				g.setColor(Color.WHITE);
-			} else {
-				g.setColor(Color.MAGENTA);
-			}
-			g.fillRect(px, pz, half, half);
-			g.setColor(new Color(Color.HSBtoRGB((1 - p.provides / (float) maxProvides) * 0.333F, 1, 1)));
-			g.fillRect(px, pz + half, half, half);
-			for (int i = 0; i < p.signature.length; i++) {
-				g.setColor(new Color(p.signature[p.signature.length - 1 - i]));
-				g.fillRect(px + half + i % half, pz + i / half, 1, 1);
-			}
+		Multimap<String, ChunkProvide> byCause = HashMultimap.create();
+		Set<String> printed = new HashSet<>();
+        synchronized (chunkProvides) {
+    		for (ChunkProvide p : chunkProvides) {
+    		    byCause.put(p.cause[0], p);
+    			int px = (p.x - minX) * unit + pad, pz = (p.z - minZ) * unit + pad;
+    			g.setColor(Color.LIGHT_GRAY);
+    			g.fillRect(px, pz, tile, tile);
+    			if (p.player) {
+    				g.setColor(Color.WHITE);
+    			} else {
+    				g.setColor(Color.MAGENTA);
+    			}
+    			g.fillRect(px, pz, half, half);
+    			g.setColor(new Color(Color.HSBtoRGB((1 - (p.provides - 1) / (float) maxProvides) * 0.333F, 1, 1)));
+    			g.fillRect(px, pz + half, half, half);
+    			for (int i = 0, j = p.signature.length - 1; i < p.signature.length; i++, j--) {
+    			    int color = p.signature[j];
+    				g.setColor(new Color(color));
+    				g.fillRect(px + half + i % half, pz + i / half, 1, 1);
+    				if (printed.add(p.cause[i])) {
+    				    System.out.printf("#%s:%n%s%n", Integer.toHexString(color | 0xFF000000).substring(2), p.cause[i]);
+    				}
+    			}
+    		}
+        }
+		List<String> sortedCauses = new ArrayList<>(byCause.keySet());
+		sortedCauses.sort((s1, s2) -> byCause.get(s2).size() - byCause.get(s1).size());
+		for (String cause : sortedCauses) {
+		    int c = byCause.get(cause).size();
+		    if (c > 2) {
+	            System.out.printf("%d caused by:%n%s%n", c, cause);   
+		    }
 		}
-		/*
-		for (String cause : byCause.keySet()) {
-			System.out.printf("%d caused by:%n%s%n", byCause.get(cause).size(), cause);
-		}*/
 		g.dispose();
 		File out = new File(Minecraft.getMinecraft().mcDataDir, "chunk_provides.png");
 		try {
