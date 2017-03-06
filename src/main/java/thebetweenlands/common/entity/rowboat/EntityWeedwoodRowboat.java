@@ -217,11 +217,11 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         posY = y;
         posZ = MathHelper.clamp_double(z, -3E7, 3E7);
         // Keep prev for serverside onUpdate
-        if (worldObj.isRemote) {
-            prevPosX = posX;
-            prevPosY = posY;
-            prevPosZ = posZ;   
-        }
+        //if (worldObj.isRemote) {
+        prevPosX = posX;
+        prevPosY = posY;
+        prevPosZ = posZ;   
+        //}
         pitch = MathHelper.clamp_float(pitch, -90, 90);
         rotationYaw = yaw;
         rotationPitch = pitch;
