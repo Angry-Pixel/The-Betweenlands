@@ -215,7 +215,7 @@ public class BlockRegistry {
 		public void spawnParticle(World world, double x, double y, double z) {
 			BLParticles.SULFUR_ORE.spawn(world, x, y, z);
 		}
-	}.setXP(2, 5);
+	}.setXP(0, 2);
 	public static final Block SLIMY_BONE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
