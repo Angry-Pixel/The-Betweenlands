@@ -4,7 +4,6 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -16,13 +15,14 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelPurifier;
 import thebetweenlands.common.block.container.BlockPurifier;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.util.TileEntityHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier> {
@@ -44,16 +44,10 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 			return;
 		}
 
-		IBlockState blockState = tile.getWorld().getBlockState(tile.getPos());
-		
-		if(blockState.getBlock() != BlockRegistry.PURIFIER) {
-			return;
-		}
-		
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
-		int rotation = blockState.getValue(BlockPurifier.FACING).getHorizontalIndex() * 90;
+		int rotation = TileEntityHelper.getStatePropertySafely(tile, BlockPurifier.class, BlockPurifier.FACING, EnumFacing.NORTH).getHorizontalIndex() * 90;
 		GlStateManager.rotate(rotation - 180, 0, 1, 0);
 		MODEL.renderAll();
 		if (tile.isPurifying() && tile.lightOn)

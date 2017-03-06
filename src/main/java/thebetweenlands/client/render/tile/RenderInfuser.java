@@ -2,11 +2,11 @@ package thebetweenlands.client.render.tile;
 
 import java.util.Random;
 
-import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -24,6 +24,7 @@ import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
+import thebetweenlands.util.TileEntityHelper;
 import thebetweenlands.util.config.ConfigHandler;
 
 @SideOnly(Side.CLIENT)
@@ -45,7 +46,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		}
 
 		BlockPos pos = infuser.getPos();
-		EnumFacing facing = infuser.getWorld().getBlockState(pos).getValue(BlockInfuser.FACING);
+		EnumFacing facing = TileEntityHelper.getStatePropertySafely(infuser, BlockInfuser.class, BlockInfuser.FACING, EnumFacing.NORTH);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);

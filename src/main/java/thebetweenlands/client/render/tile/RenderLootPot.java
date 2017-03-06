@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.tile;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
@@ -11,6 +10,7 @@ import thebetweenlands.client.render.model.tile.ModelLootPot3;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.tile.TileEntityLootPot;
+import thebetweenlands.util.TileEntityHelper;
 
 public class RenderLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> {
 
@@ -24,14 +24,8 @@ public class RenderLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> 
 
 	@Override
 	public void renderTileEntityAt(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage) {
-		IBlockState state = te.getWorld().getBlockState(te.getPos());
-		
-		//Block is sometimes not loot pot it seems?!
-		if(state.getBlock() instanceof BlockLootPot == false)
-			return;
-		
-		EnumLootPot type = state.getValue(BlockLootPot.VARIANT);
-		EnumFacing rotation = state.getValue(BlockLootPot.FACING);
+		EnumLootPot type = TileEntityHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.VARIANT, EnumLootPot.POT_1);
+		EnumFacing rotation = TileEntityHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = te.getModelRotationOffset();
 
 		switch (type){

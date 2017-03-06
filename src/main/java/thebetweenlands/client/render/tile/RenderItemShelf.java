@@ -13,6 +13,7 @@ import net.minecraft.util.ResourceLocation;
 import thebetweenlands.client.render.model.tile.ModelItemShelf;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.tile.TileEntityItemShelf;
+import thebetweenlands.util.TileEntityHelper;
 
 public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShelf> {
 	public static final ModelItemShelf MODEL = new ModelItemShelf();
@@ -41,7 +42,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 
 		if(te != null && te.hasWorldObj()) {
 			isItem = false;
-			facing = te.getWorld().getBlockState(te.getPos()).getValue(BlockItemShelf.FACING);
+			facing = TileEntityHelper.getStatePropertySafely(te, BlockItemShelf.class, BlockItemShelf.FACING, EnumFacing.NORTH);
 		}
 
 		switch (facing) {

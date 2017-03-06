@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
@@ -17,8 +16,8 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.common.block.terrain.BlockWisp;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.util.TileEntityHelper;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
@@ -45,33 +44,29 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 			if(System.nanoTime() - ((TileEntityWisp)tileEntity).lastSpawn >= (500f - 500.0f * ConfigHandler.wispQuality / 150.0f) * 1000000L) {
 				((TileEntityWisp)tileEntity).lastSpawn = System.nanoTime();
 
-				IBlockState blockState = tileEntity.getWorld().getBlockState(tileEntity.getPos());
+				int colorIndex = TileEntityHelper.getStatePropertySafely(tileEntity, BlockWisp.class, BlockWisp.COLOR, 0);
 
-				if(blockState.getBlock() == BlockRegistry.WISP) {
-					int colorIndex = blockState.getValue(BlockWisp.COLOR);
+				int color = BlockWisp.COLORS[colorIndex * 2];
+				float r = (color >> 16 & 0xFF) / 255F;
+				float g = (color >> 8 & 0xFF) / 255F;
+				float b = (color & 0xFF) / 255F;
 
-					int color = BlockWisp.COLORS[colorIndex * 2];
-					float r = (color >> 16 & 0xFF) / 255F;
-					float g = (color >> 8 & 0xFF) / 255F;
-					float b = (color & 0xFF) / 255F;
+				particleList.add(BLParticles.WISP.create(tileEntity.getWorld(), 
+						x + 0.5 + renderViewX, 
+						y + 0.5 + renderViewY, 
+						z + 0.5 + renderViewZ, 
+						ParticleArgs.get().withColor(r, g, b, 1.0F).withScale(3.0F)));
 
-					particleList.add(BLParticles.WISP.create(tileEntity.getWorld(), 
-							x + 0.5 + renderViewX, 
-							y + 0.5 + renderViewY, 
-							z + 0.5 + renderViewZ, 
-							ParticleArgs.get().withColor(r, g, b, 1.0F).withScale(3.0F)));
+				color = BlockWisp.COLORS[colorIndex * 2 + 1];
+				r = (color >> 16 & 0xFF) / 255F;
+				g = (color >> 8 & 0xFF) / 255F;
+				b = (color & 0xFF) / 255F;
 
-					color = BlockWisp.COLORS[colorIndex * 2 + 1];
-					r = (color >> 16 & 0xFF) / 255F;
-					g = (color >> 8 & 0xFF) / 255F;
-					b = (color & 0xFF) / 255F;
-
-					particleList.add(BLParticles.WISP.create(tileEntity.getWorld(), 
-							x + 0.5 + renderViewX, 
-							y + 0.5 + renderViewY, 
-							z + 0.5 + renderViewZ, 
-							ParticleArgs.get().withColor(r, g, b, 1.0F).withScale(2.0F)));
-				}
+				particleList.add(BLParticles.WISP.create(tileEntity.getWorld(), 
+						x + 0.5 + renderViewX, 
+						y + 0.5 + renderViewY, 
+						z + 0.5 + renderViewZ, 
+						ParticleArgs.get().withColor(r, g, b, 1.0F).withScale(2.0F)));
 			}
 		}
 	}

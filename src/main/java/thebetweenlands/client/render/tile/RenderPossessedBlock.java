@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.tile;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
@@ -10,6 +9,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
+import thebetweenlands.util.TileEntityHelper;
 
 @SideOnly(Side.CLIENT)
 public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPossessedBlock> {
@@ -19,8 +19,7 @@ public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPo
 	@SuppressWarnings("incomplete-switch")
 	@Override
 	public final void renderTileEntityAt(TileEntityPossessedBlock tile, double x, double y, double z, float partialTicks, int destroyStage) {
-		IBlockState state = tile.getWorld().getBlockState(tile.getPos());
-		EnumFacing facing = state.getValue(BlockPossessedBlock.FACING);
+		EnumFacing facing = TileEntityHelper.getStatePropertySafely(tile, BlockPossessedBlock.class, BlockPossessedBlock.FACING, EnumFacing.NORTH);
 
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
