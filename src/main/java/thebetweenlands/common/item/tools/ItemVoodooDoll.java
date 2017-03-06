@@ -32,7 +32,7 @@ public class ItemVoodooDoll extends Item {
 		living.remove(player);
 		boolean attacked = false;
 		for (EntityLivingBase entity : living) {
-			if (entity.isEntityAlive() && !(entity instanceof IBLBoss)) {
+			if (entity.isEntityAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
 				if (!world.isRemote) {
 					attacked |= entity.attackEntityFrom(DamageSource.magic, 20);
 				} else if (!entity.isEntityInvulnerable(DamageSource.magic)) {
