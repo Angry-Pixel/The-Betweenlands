@@ -5,9 +5,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
@@ -29,12 +32,35 @@ public class BlockSilt extends BasicBlock {
 		return BOUNDING_BOX;
 	}
 
+	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		boolean canWalk = entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).inventory.armorInventory[0] != null 
 				&& ((EntityPlayer)entityIn).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
 		if(!(entityIn instanceof IEntityBL) && !canWalk) {
 			entityIn.motionX *= 0.4D;
 			entityIn.motionZ *= 0.4D;
+		}
+	}
+
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
+		if(super.canSustainPlant(state, world, pos, direction, plantable)) {
+			return true;
+		}
+
+		EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
+
+		switch(plantType) {
+		case Beach:
+			boolean hasWater = (world.getBlockState(pos.east()).getMaterial() == Material.WATER ||
+			world.getBlockState(pos.west()).getMaterial() == Material.WATER ||
+			world.getBlockState(pos.north()).getMaterial() == Material.WATER ||
+			world.getBlockState(pos.south()).getMaterial() == Material.WATER);
+			return hasWater;
+		case Plains:
+			return true;
+		default:
+			return false;
 		}
 	}
 }
