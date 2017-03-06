@@ -156,4 +156,10 @@ public class BlockWallBetweenlands extends Block {
 	{
 		return new BlockStateContainer(this, new IProperty[] {UP, NORTH, EAST, WEST, SOUTH});
 	}
+	
+	@Override
+	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos)
+    {
+		return true;
+    }
 }
