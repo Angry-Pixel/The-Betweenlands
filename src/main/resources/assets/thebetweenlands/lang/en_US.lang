@@ -727,6 +727,7 @@ chat.rope.disconnected=You were disconnected from the climbing rope
 chat.rope.tooFar=You're too far away from the last anchor point
 chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
 chat.tap.needsRope=You need a Reed Rope to create a %s
+chat.flintandsteel=It's too damp to set something on fire with %s
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid
