@@ -197,13 +197,13 @@ public class BlockRegistry {
 	public static final Block COARSE_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND).setItemDropped(() -> Item.getItemFromBlock(BlockRegistry.SWAMP_DIRT));
 	public static final Block SWAMP_GRASS = new BlockSwampGrass();
 	public static final Block WISP = new BlockWisp();
-	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.875F);
+	public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.875F);
 	public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return EnumItemMisc.VALONITE_SHARD.create(1 + rand.nextInt(fortune + 1));
 		}
-	}.setXP(5, 12);
+	}.setXP(5, 12).setHarvestLevel2("pickaxe", 2);
 	public static final Block SULFUR_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
@@ -215,23 +215,23 @@ public class BlockRegistry {
 		public void spawnParticle(World world, double x, double y, double z) {
 			BLParticles.SULFUR_ORE.spawn(world, x, y, z);
 		}
-	}.setXP(0, 2);
+	}.setXP(0, 2).setHarvestLevel2("pickaxe", 0);
 	public static final Block SLIMY_BONE_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return EnumItemMisc.SLIMY_BONE.create(1 + rand.nextInt(fortune + 1));
 		}
-	}.setXP(1, 4);
+	}.setXP(1, 4).setHarvestLevel2("pickaxe", 0);
 	public static final Block SCABYST_ORE = new BlockGenericOre(Material.ROCK) {
 		@Override
 		protected ItemStack getOreDrop(Random rand, int fortune) {
 			return EnumItemMisc.SCABYST.create(1 + rand.nextInt(fortune + 3));
 		}
-	}.setXP(4, 10);
-	public static final Block SYRMORITE_ORE = new BlockGenericOre(Material.ROCK);
-	public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
-	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
-	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setLightLevel(0.8F);
+	}.setXP(4, 10).setHarvestLevel2("pickaxe", 2);
+	public static final Block SYRMORITE_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1);
+	public static final Block AQUA_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.8F);
+	public static final Block CRIMSON_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.8F);
+	public static final Block GREEN_MIDDLE_GEM_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.8F);
 	public static final Block LIFE_CRYSTAL_STALACTITE = new BlockLifeCrystalStalactite(FluidRegistry.SWAMP_WATER, Material.WATER);
 	public static final Block STALACTITE = new BlockStalactite();
 	public static final Block SILT = new BlockSilt();

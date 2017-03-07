@@ -9,16 +9,15 @@ import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraftforge.common.util.EnumHelper;
 
 public class BLMaterialRegistry {
-	public static final ToolMaterial TOOL_WEEDWOOD = EnumHelper.addToolMaterial("weedwood", 0, 80, 2.0F, 0.0F, 15);
-	public static final ToolMaterial TOOL_BONE = EnumHelper.addToolMaterial("bone", 1, 320, 4.0F, 1.0F, 5);
-	public static final ToolMaterial TOOL_LURKER_SKIN = EnumHelper.addToolMaterial("bone", 1, 600, 5.0F, 1.0F, 5);
-	public static final ToolMaterial TOOL_DENTROTHYST = EnumHelper.addToolMaterial("dentrothyst", 1, 600, 7.0F, 1.0F, 5);
-	public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octine", 2, 900, 6.0F, 2.0F, 14);
-	public static final ToolMaterial TOOL_VALONITE = EnumHelper.addToolMaterial("valonite", 3, 2500, 8.0F, 3.0F, 10);
-	//TWEAK values
-	public static final ToolMaterial TOOL_SYRMORITE = EnumHelper.addToolMaterial("syrmorite", 3, 2500, 8.0F, 3.0F, 10);
-	public static final ToolMaterial TOOL_LOOT = EnumHelper.addToolMaterial("loot", 2, 7500, 2.0F, 0.5F, 5);
-	public static final ToolMaterial TOOL_LEGEND = EnumHelper.addToolMaterial("legend", 6, 10000, 16.0F, 6.0F, 20);
+	public static final ToolMaterial TOOL_WEEDWOOD = EnumHelper.addToolMaterial("weedwood", 0, 80, 2.0F, 0.0F, 0);
+	public static final ToolMaterial TOOL_BONE = EnumHelper.addToolMaterial("bone", 1, 320, 4.0F, 1.0F, 0);
+	public static final ToolMaterial TOOL_LURKER_SKIN = EnumHelper.addToolMaterial("bone", 1, 600, 5.0F, 1.0F, 0);
+	public static final ToolMaterial TOOL_DENTROTHYST = EnumHelper.addToolMaterial("dentrothyst", 1, 600, 7.0F, 1.0F, 0);
+	public static final ToolMaterial TOOL_OCTINE = EnumHelper.addToolMaterial("octine", 2, 900, 6.0F, 2.0F, 0);
+	public static final ToolMaterial TOOL_SYRMORITE = EnumHelper.addToolMaterial("syrmorite", 2, 900, 6.0F, 2.0F, 0);
+	public static final ToolMaterial TOOL_VALONITE = EnumHelper.addToolMaterial("valonite", 3, 2500, 8.0F, 3.0F, 0);
+	public static final ToolMaterial TOOL_LOOT = EnumHelper.addToolMaterial("loot", 3, 7500, 2.0F, 0.5F, 0);
+	public static final ToolMaterial TOOL_LEGEND = EnumHelper.addToolMaterial("legend", 6, 10000, 16.0F, 6.0F, 0);
 
 	//TODO add armor equip sounds maybe and fix the thoughness values
 	public static final ArmorMaterial ARMOR_BL_CLOTH = EnumHelper.addArmorMaterial("bl_cloth", "bl_cloth", 12, new int[]{1, 3, 2, 1}, 0, SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 1.0f);
