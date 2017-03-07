@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
-import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
@@ -61,8 +60,10 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean showAdvancedInfo) {
 		int slots = 9 + (stack.getItemDamage() * 9);
 		list.add(TextFormatting.GRAY + I18n.format("tooltip.lurkerSkinPouch.size", slots));
-		String info = I18n.format("tooltip.lurkerSkinPouch.info", KeyBindRegistry.OPEN_POUCH.getDisplayName());
-		list.addAll(ItemTooltipHandler.splitTooltip(info, 0));
+		list.add(I18n.format("tooltip.lurkerSkinPouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
+		if(stack.getItemDamage() < stack.getMaxDamage()) {
+			list.add(I18n.format("tooltip.lurkerSkinPouch.upgrade"));
+		}
 	}
 
 	@Override

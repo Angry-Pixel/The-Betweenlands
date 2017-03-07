@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
@@ -31,6 +34,12 @@ import thebetweenlands.common.registries.BlockRegistry;
 public class ItemOctineIngot extends Item {
 	public ItemOctineIngot() {
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean debug) {
+		info.add(I18n.format("tooltip.octine.fire"));
 	}
 
 	@Override

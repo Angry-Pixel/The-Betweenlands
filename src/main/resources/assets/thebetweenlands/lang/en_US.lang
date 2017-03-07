@@ -670,7 +670,9 @@ tooltip.circlegem.green=§aGreen Gem§r
 tooltip.circlegem.crimson=§cCrimson Gem§r
 tooltip.circlegem.aqua=§9Aqua Gem§r
 tooltip.lurkerSkinPouch.size=%d inventory slots
-tooltip.lurkerSkinPouch.info=Craft surrounded with Lurker Skin to upgrade\nPress '%s' to open the Pouch
+tooltip.lurkerSkinPouch.upgrade=Craft surrounded with Lurker Skin to upgrade
+tooltip.lurkerSkinPouch.usage=Press '%s' to open the Pouch
+tooltip.octine.fire=Hot enough to set moss on fire
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
