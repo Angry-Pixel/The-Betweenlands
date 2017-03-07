@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.container;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,6 +23,7 @@ import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 public class BlockWeedwoodWorkbench extends BlockContainer {
     public BlockWeedwoodWorkbench() {
         super(Material.WOOD);
+        setSoundType(SoundType.WOOD);
         setCreativeTab(BLCreativeTabs.BLOCKS);
         setUnlocalizedName("thebetweenlands.weedwoodCraftingTable");
         setHardness(2.5F);

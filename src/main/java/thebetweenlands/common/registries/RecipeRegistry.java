@@ -1,5 +1,6 @@
 package thebetweenlands.common.registries;
 
+import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPED;
 import static net.minecraftforge.oredict.RecipeSorter.Category.SHAPELESS;
 
 import java.util.List;
@@ -19,7 +20,6 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.RecipeSorter;
-import net.minecraftforge.oredict.ShapedOreRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
@@ -42,8 +42,11 @@ import thebetweenlands.common.recipe.misc.RecipesCircleGems;
 import thebetweenlands.common.recipe.misc.RecipesCoating;
 import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
+import thebetweenlands.common.recipe.misc.ShapedRecipesBetweenlands;
+import thebetweenlands.common.recipe.misc.ShapelessRecipesBetweenlands;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
+import thebetweenlands.util.RecipeHelper;
 
 public class RecipeRegistry {
 	private RecipeRegistry() { }
@@ -69,317 +72,392 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("oreGreenMiddleGem", new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 		OreDictionary.registerOre("oreCrimsonMiddleGem", new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
 		OreDictionary.registerOre("oreLifeCrystal", new ItemStack(BlockRegistry.LIFE_CRYSTAL_STALACTITE));
+		
+		OreDictionary.registerOre("blockSulfur", new ItemStack(BlockRegistry.SULFUR_BLOCK));
+		OreDictionary.registerOre("blockSyrmorite", new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
+		OreDictionary.registerOre("blockBone", new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK));
+		OreDictionary.registerOre("blockOctine", new ItemStack(BlockRegistry.OCTINE_BLOCK));
+		OreDictionary.registerOre("blockValonite", new ItemStack(BlockRegistry.VALONITE_BLOCK));
+		OreDictionary.registerOre("blockAquaMiddleGem", new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_BLOCK));
+		OreDictionary.registerOre("blockGreenMiddleGem", new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK));
+		OreDictionary.registerOre("blockCrimsonMiddleGem", new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK));
+		
+		OreDictionary.registerOre("blockGlass", new ItemStack(BlockRegistry.SILT_GLASS));
+		OreDictionary.registerOre("blockGlassColorless", new ItemStack(BlockRegistry.SILT_GLASS));
+		OreDictionary.registerOre("paneGlass", new ItemStack(BlockRegistry.SILT_GLASS_PANE));
+		OreDictionary.registerOre("paneGlassColorless", new ItemStack(BlockRegistry.SILT_GLASS_PANE));
+		
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER));
+		
+		OreDictionary.registerOre("dirt", new ItemStack(BlockRegistry.SWAMP_DIRT));
+		OreDictionary.registerOre("dirt", new ItemStack(BlockRegistry.COARSE_SWAMP_DIRT));
+		
+		OreDictionary.registerOre("grass", new ItemStack(BlockRegistry.SWAMP_GRASS));
+		
+		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_WEEDWOOD_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SAP_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_RUBBER_TREE));
+		
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_WEEDWOOD));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SAP));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_RUBBER));
-		//OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SPIRIT_TREE));
-		OreDictionary.registerOre("plankWeedwood", new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		
 		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM));
 		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM));
 		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM));
-
+		
 		OreDictionary.registerOre("ingotSyrmorite", EnumItemMisc.SYRMORITE_INGOT.create(1));
 		OreDictionary.registerOre("ingotOctine", new ItemStack(ItemRegistry.OCTINE_INGOT));
+		
+		OreDictionary.registerOre("gemValonite", EnumItemMisc.VALONITE_SHARD.create(1));
+		OreDictionary.registerOre("gemAquaMiddleGem", new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM));
+		OreDictionary.registerOre("gemCrimsonMiddleGem", new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM));
+		OreDictionary.registerOre("gemGreenMiddleGem", new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
+		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL));
+		
+		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_SLAB));
+		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_SLAB));
+		
+		OreDictionary.registerOre("torch", new ItemStack(BlockRegistry.SULFUR_TORCH));
+		
+		OreDictionary.registerOre("bone", EnumItemMisc.SLIMY_BONE.create(1));
+		
+		OreDictionary.registerOre("cobblestone", new ItemStack(BlockRegistry.BETWEENSTONE));
+		OreDictionary.registerOre("stone", new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
+		
+		OreDictionary.registerOre("sand", new ItemStack(BlockRegistry.SILT));
+		
+		OreDictionary.registerOre("workbench", new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH));
+		
+		OreDictionary.registerOre("chest", new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
+		OreDictionary.registerOre("chestWood", new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
+		
+		OreDictionary.registerOre("vine", new ItemStack(BlockRegistry.POISON_IVY));
+		OreDictionary.registerOre("vine", new ItemStack(BlockRegistry.THORNS));
+		
+		OreDictionary.registerOre("sugarcane", new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
+		
+		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
+		
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ASTATOS));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.BETWEEN_YOU_AND_ME));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.CHRISTMAS_ON_THE_MARSH));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.THE_EXPLORER));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.HAG_DANCE));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.LONELY_FIRE));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.MYSTERIOUS_RECORD));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ANCIENT));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.BENEATH_A_GREEN_SKY));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.DJ_WIGHTS_MIXTAPE));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ONWARDS));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.STUCK_IN_THE_MUD));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WANDERING_WISPS));
+		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WATERLOGGED));
 	}
 
 	private static void registerRecipes() {
+		RecipeSorter.register("thebetweenlands:shaped", ShapedRecipesBetweenlands.class, SHAPED, "before:minecraft:shaped");
+		RecipeSorter.register("thebetweenlands:shapeless", ShapelessRecipesBetweenlands.class, SHAPELESS, "after:thebetweenlands:shaped before:minecraft:shapeless");
+
+		
 		// Tools & Weapons
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHIELD), "XXX", "XXX", " X ", 'X', ItemRegistry.OCTINE_INGOT);
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', BlockRegistry.PITSTONE);
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.SLIMY_BONE.create(1), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.LURKER_SKIN.create(1), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHIELD), "XXX", "XXX", " X ", 'X', ItemRegistry.OCTINE_INGOT);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', BlockRegistry.PITSTONE);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.SLIMY_BONE.create(1), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.LURKER_SKIN.create(1), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
 		
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW, 1), " #X", "# X", " #X", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.ANGLER_TOOTH.create(1), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.OCTINE_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, 1), EnumItemMisc.POISON_GLAND.create(1), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW, 1), " #X", "# X", " #X", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.ANGLER_TOOTH.create(1), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, 1), EnumItemMisc.POISON_GLAND.create(1), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHEARS, 1), " #", "# ", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SICKLE, 1), " vv", "v s", "  r", 'v', EnumItemMisc.VALONITE_SHARD.create(1), 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHEARS, 1), " #", "# ", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SICKLE, 1), " vv", "v s", "  r", 'v', EnumItemMisc.VALONITE_SHARD.create(1), 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', new ItemStack(BlockRegistry.HANGER));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', new ItemStack(BlockRegistry.HANGER));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.NET, 1), "SRR", "SRR", "S  ", 'S', EnumItemMisc.WEEDWOOD_STICK.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.NET, 1), "SRR", "SRR", "S  ", 'S', EnumItemMisc.WEEDWOOD_STICK.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_POUCH), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_POUCH), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		GameRegistry.addRecipe(new RecipeLurkerSkinPouchUpgrades());
 
 		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.SWAMP_TALISMAN, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), EnumItemMisc.SLIMY_BONE.create(1), new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.SWAMP_TALISMAN, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), EnumItemMisc.SLIMY_BONE.create(1), new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1));
 
 		// Armour
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_HELMET, 1), "###", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.LURKER_SKIN.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_HELMET, 1), "###", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.LURKER_SKIN.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_HELMET, 1), "###", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.BONE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_HELMET, 1), "###", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_HELMET, 1), "###", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_HELMET, 1), "###", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_HELMET, 1), "###", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.VALONITE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_HELMET, 1), "###", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
 
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.RUBBER_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.RUBBER_BALL.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.RUBBER_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.RUBBER_BALL.create(1));
 
 		// Miscellaneous
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.SULFUR_TORCH, 4), EnumItemMisc.WEEDWOOD_STICK.create(1), EnumItemMisc.SULFUR.create(1));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addRecipe(EnumItemMisc.WEEDWOOD_STICK.create(4), "p", "p", 'p', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH), "xx", "xx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_CHEST), "xxx", "x x", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SULFUR_FURNACE), "xxx", "x x", "xxx", 'x', BlockRegistry.BETWEENSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL), "xxx", "xfx", "xxx", 'x', BlockRegistry.BETWEENSTONE, 'f', BlockRegistry.SULFUR_FURNACE);
-		GameRegistry.addRecipe(EnumItemMisc.SWAMP_REED_ROPE.create(4), "p", "p" , "p", 'p', new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
-		GameRegistry.addRecipe(EnumItemMisc.WEEDWOOD_BOWL.create(4), "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET), " X ", "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_BUCKET), " X ", "x x", " x ", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LADDER, 3), "X X", "xxx", "X X", 'x', EnumItemMisc.WEEDWOOD_STICK.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_BUTTON), new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BUTTON), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_PRESSURE_PLATE), "xx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_PRESSURE_PLATE), "xx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_PRESSURE_PLATE), "xx", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_FLOWER_POT), "x x", " x " , 'x', EnumItemMisc.MUD_BRICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LEVER), "X", "x", 'x', new ItemStack(BlockRegistry.LOG_WEEDWOOD), 'X', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.PESTLE), "X", "x", "x", 'x', new ItemStack(BlockRegistry.CRAGROCK), 'X', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.ITEM_SHELF), "xxx", "   ", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANK_SLAB);
-		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
-		//GameRegistry.addRecipe(ItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_ROWBOAT), "x x", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 8), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_HOPPER), "s s", "scs", " s ", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'c', new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SIGN_ITEM, 3), "SSS", "SSS", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.CAVE_MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(EnumItemMisc.PARCHMENT.create(3), "###", '#', EnumItemMisc.DRY_BARK.create(1));
-		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN)); 
-		GameRegistry.addRecipe(ItemAmulet.createStack(CircleGemType.NONE), "XXX", "X X", " # ", '#', EnumItemMisc.AMULET_SOCKET.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SULFUR_TORCH, 4), "#", "I", 'I', EnumItemMisc.WEEDWOOD_STICK.create(1), '#', EnumItemMisc.SULFUR.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), "#", '#', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANKS, 4), "#", '#', new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
+		RecipeHelper.addRecipe(EnumItemMisc.WEEDWOOD_STICK.create(4), "p", "p", 'p', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH), "xx", "xx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_CHEST), "xxx", "x x", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SULFUR_FURNACE), "xxx", "x x", "xxx", 'x', BlockRegistry.BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SULFUR_FURNACE_DUAL), "xxx", "xfx", "xxx", 'x', BlockRegistry.BETWEENSTONE, 'f', BlockRegistry.SULFUR_FURNACE);
+		RecipeHelper.addRecipe(EnumItemMisc.SWAMP_REED_ROPE.create(4), "p", "p" , "p", 'p', new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
+		RecipeHelper.addRecipe(EnumItemMisc.WEEDWOOD_BOWL.create(4), "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET), " X ", "x x", " x ", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_BUCKET), " X ", "x x", " x ", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LADDER, 3), "X X", "xxx", "X X", 'x', EnumItemMisc.WEEDWOOD_STICK.create(1),'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_BUTTON), "#", '#', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BUTTON), "#", '#', new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_PRESSURE_PLATE), "xx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_PRESSURE_PLATE), "xx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_PRESSURE_PLATE), "xx", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_FLOWER_POT), "x x", " x " , 'x', EnumItemMisc.MUD_BRICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LEVER), "X", "x", 'x', new ItemStack(BlockRegistry.LOG_WEEDWOOD), 'X', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.PESTLE), "X", "x", "x", 'x', new ItemStack(BlockRegistry.CRAGROCK), 'X', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.ITEM_SHELF), "xxx", "   ", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANK_SLAB);
+		//RecipeHelper.addRecipe(ItemRegistry.dentrothystVial.createStack(0, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 0), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
+		//RecipeHelper.addRecipe(ItemRegistry.dentrothystVial.createStack(2, 3), " r ", "x x", " x ", 'x', new ItemStack(BlockRegistry.dentrothyst, 1, 1), 'r', ItemGeneric.createStack(EnumItemGeneric.RUBBER_BALL));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_ROWBOAT), "x x", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.CAVING_ROPE, 8), "rrr", "ror", "rrr", 'r', new ItemStack(ItemRegistry.ROPE_ITEM), 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_HOPPER), "s s", "scs", " s ", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'c', new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SIGN_ITEM, 3), "SSS", "SSS", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.MOSS_BED_ITEM), "xxx", "PPP", 'x',  new ItemStack(BlockRegistry.CAVE_MOSS), 'P', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(EnumItemMisc.PARCHMENT.create(3), "###", '#', EnumItemMisc.DRY_BARK.create(1));
+		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN)); 
+		RecipeHelper.addRecipe(ItemAmulet.createStack(CircleGemType.NONE), "XXX", "X X", " # ", '#', EnumItemMisc.AMULET_SOCKET.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		//TODO: Volarkite
-		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
-		//GameRegistry.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
+		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
+		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
 
 		//Machine Blocks
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PURIFIER), "x x", "xxx", "ooo", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.COMPOST_BIN), "bxb", "x x", "x x", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'b', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.ANIMATOR), "xxx", "shs", "bbb", 'x', BlockRegistry.WEEDWOOD_PLANKS, 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'h', new ItemStack(ItemRegistry.WIGHT_HEART), 'b' ,new ItemStack(BlockRegistry.BETWEENSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MORTAR), "x x", "xxx", "s s", 'x', BlockRegistry.CRAGROCK, 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.ALEMBIC), " o ", " dv", "coc", 'o', new ItemStack(ItemRegistry.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Dentrothyst vials
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.INFUSER), "o o", "opo", "sos", 'o', new ItemStack(ItemRegistry.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'p', new ItemStack(ItemRegistry.PESTLE), 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.GECKO_CAGE), "sps", "rrr", "sps", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'p', new ItemStack(Item.getItemFromBlock(BlockRegistry.WEEDWOOD_PLANK_SLAB)), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-		//GameRegistry.addRecipe(new ItemStack(BlockRegistry.REPELLER), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Repeller
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_JUKEBOX), "xxx", "xVx", "xxx", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS), 'V', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PURIFIER), "x x", "xxx", "ooo", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'o', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.COMPOST_BIN), "bxb", "x x", "x x", 'x', BlockRegistry.WEEDWOOD_PLANKS, 'b', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.ANIMATOR), "xxx", "shs", "bbb", 'x', BlockRegistry.WEEDWOOD_PLANKS, 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'h', new ItemStack(ItemRegistry.WIGHT_HEART), 'b' ,new ItemStack(BlockRegistry.BETWEENSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MORTAR), "x x", "xxx", "s s", 'x', BlockRegistry.CRAGROCK, 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		//RecipeHelper.addRecipe(new ItemStack(BlockRegistry.ALEMBIC), " o ", " dv", "coc", 'o', new ItemStack(ItemRegistry.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Dentrothyst vials
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.INFUSER), "o o", "opo", "sos", 'o', new ItemStack(ItemRegistry.OCTINE_INGOT), 'd', new ItemStack(Item.getItemFromBlock(BlockRegistry.DENTROTHYST)), 'p', new ItemStack(ItemRegistry.PESTLE), 's', EnumItemMisc.WEEDWOOD_STICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.GECKO_CAGE), "sps", "rrr", "sps", 's', EnumItemMisc.SYRMORITE_INGOT.create(1), 'p', new ItemStack(Item.getItemFromBlock(BlockRegistry.WEEDWOOD_PLANK_SLAB)), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
+		//RecipeHelper.addRecipe(new ItemStack(BlockRegistry.REPELLER), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Repeller
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_JUKEBOX), "xxx", "xVx", "xxx", 'x', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS), 'V', EnumItemMisc.VALONITE_SHARD.create(1));
 
 		//Deco Blocks
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_BRICKS, 4), "xx", "xx", 'x', EnumItemMisc.MUD_BRICK.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.SMOOTH_PITSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.BETWEENSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.PITSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_SLAB));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.PITSTONE_BRICK_SLAB));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.SMOOTH_CRAGROCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.CRAGROCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.CRAGROCK_BRICK_SLAB));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.LIMESTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.LIMESTONE_BRICK_SLAB));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SULFUR_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SULFUR.create(1));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.SULFUR.create(9), new ItemStack(BlockRegistry.SULFUR_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.OCTINE_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.OCTINE_INGOT));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.SYRMORITE_INGOT.create(9), new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.OCTINE_INGOT, 9), new ItemStack(BlockRegistry.OCTINE_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.VALONITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.VALONITE_SHARD.create(1));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.VALONITE_SHARD.create(9), new ItemStack(BlockRegistry.VALONITE_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH, 4), "xx", "xx", 'x', EnumItemMisc.DRIED_SWAMP_REED.create(1));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS, 4), new ItemStack(BlockRegistry.LOG_RUBBER, 1, OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MIRE_CORAL_BLOCK, 4), "xx", "xx", 'x', EnumItemPlantDrop.MIRE_CORAL_ITEM.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.DEEP_WATER_CORAL_BLOCK, 4), "xx", "xx", 'x', EnumItemPlantDrop.DEEP_WATER_CORAL_ITEM.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BULB_CAPPED_MUSHROOM_CAP, 4), "xx", "xx", 'x',  ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SLIMY_BONE.create(1));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.SLIMY_BONE.create(9), new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM, 9), new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM, 9), new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM, 9), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.COMPOST_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.COMPOST.create(1));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.COMPOST.create(9), new ItemStack(BlockRegistry.COMPOST_BLOCK));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICKS, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICKS, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_TILES, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_TILES));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_TILES, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_TILES));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-		GameRegistry.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.RUBBER_BALL.create(1));
-		GameRegistry.addShapelessRecipe(EnumItemMisc.RUBBER_BALL.create(9), new ItemStack(BlockRegistry.RUBBER_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_BRICKS, 4), "xx", "xx", 'x', EnumItemMisc.MUD_BRICK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.SMOOTH_PITSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.BETWEENSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.PITSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_SLAB));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.PITSTONE_BRICK_SLAB));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.SMOOTH_CRAGROCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.CRAGROCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.CRAGROCK_BRICK_SLAB));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_TILES, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICKS, 4), "xx", "xx", 'x', new ItemStack(BlockRegistry.LIMESTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_CHISELED, 4), "x", "x", 'x', new ItemStack(BlockRegistry.LIMESTONE_BRICK_SLAB));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SULFUR_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SULFUR.create(1));
+		RecipeHelper.addRecipe(EnumItemMisc.SULFUR.create(9), "#", '#', new ItemStack(BlockRegistry.SULFUR_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.OCTINE_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.OCTINE_INGOT));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(EnumItemMisc.SYRMORITE_INGOT.create(9), "#", '#', new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_INGOT, 9), "#", '#', new ItemStack(BlockRegistry.OCTINE_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.VALONITE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.VALONITE_SHARD.create(1));
+		RecipeHelper.addRecipe(EnumItemMisc.VALONITE_SHARD.create(9), "#", '#', new ItemStack(BlockRegistry.VALONITE_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.THATCH, 4), "xx", "xx", 'x', EnumItemMisc.DRIED_SWAMP_REED.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS, 4), "#", '#', new ItemStack(BlockRegistry.LOG_RUBBER, 1, OreDictionary.WILDCARD_VALUE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MIRE_CORAL_BLOCK, 4), "xx", "xx", 'x', EnumItemPlantDrop.MIRE_CORAL_ITEM.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.DEEP_WATER_CORAL_BLOCK, 4), "xx", "xx", 'x', EnumItemPlantDrop.DEEP_WATER_CORAL_ITEM.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BULB_CAPPED_MUSHROOM_CAP, 4), "xx", "xx", 'x',  ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.SLIMY_BONE.create(1));
+		RecipeHelper.addRecipe(EnumItemMisc.SLIMY_BONE.create(9), "#", '#', new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM, 9), "#", '#', new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM, 9), "#", '#', new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK), "xxx", "xxx", "xxx", 'x', new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM, 9), "#", '#', new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.COMPOST_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.COMPOST.create(1));
+		RecipeHelper.addRecipe(EnumItemMisc.COMPOST.create(9), "#", '#', new ItemStack(BlockRegistry.COMPOST_BLOCK));
+		RecipeHelper.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICKS, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS));
+		RecipeHelper.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICKS, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS));
+		RecipeHelper.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_TILES, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_TILES));
+		RecipeHelper.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_TILES, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.BETWEENSTONE_TILES));
+		RecipeHelper.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
+		RecipeHelper.addShapelessRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE, 1), EnumItemPlantDrop.CAVE_MOSS_ITEM.create(1), new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_BLOCK), "xxx", "xxx", "xxx", 'x', EnumItemMisc.RUBBER_BALL.create(1));
+		RecipeHelper.addRecipe(EnumItemMisc.RUBBER_BALL.create(9), "#", '#', new ItemStack(BlockRegistry.RUBBER_BLOCK));
 		
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WOOD_CHIP_PATH, 4), "###", '#', EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WALKWAY, 2), "SSS", "x x", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WOOD_CHIP_PATH, 4), "###", '#', EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WALKWAY, 2), "SSS", "x x", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.RUBBER_TREE_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_DOOR_ITEM, 1), "##", "##", "##", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockRegistry.WEEDWOOD_TRAPDOOR, 2), "###", "###", '#', BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_TRAPDOOR, 2), "###", "###", '#', BlockRegistry.RUBBER_TREE_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_TRAPDOOR, 2), "###", "###", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.RUBBER_TREE_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_DOOR_ITEM, 1), "##", "##", "##", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_TRAPDOOR, 2), "###", "###", '#', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_TRAPDOOR, 2), "###", "###", '#', BlockRegistry.RUBBER_TREE_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_TRAPDOOR, 2), "###", "###", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
 
 		// Stairs, slabs, walls, fences, pillars
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MUD_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.LIMESTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.LIMESTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.SMOOTH_CRAGROCK);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_PITSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.SMOOTH_PITSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.TAR_SOLID);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.TEMPLE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.RUBBER_TREE_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MUD_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.LIMESTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.LIMESTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.SMOOTH_CRAGROCK);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_PITSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.SMOOTH_PITSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.TAR_SOLID);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.TEMPLE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.RUBBER_TREE_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
 		
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MUD_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.TAR_SOLID);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.TEMPLE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_PITSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_PITSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_CRAGROCK);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MUD_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.TAR_SOLID);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.TEMPLE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_PITSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_PITSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.SMOOTH_CRAGROCK);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.LOG_WEEDWOOD));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.LOG_WEEDWOOD));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE, 3), "SxS", "SxS", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.LOG_WEEDWOOD));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.LOG_WEEDWOOD));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_SLAB, 6), "###", '#', BlockRegistry.MUD_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICK_SLAB, 6), "###", '#', BlockRegistry.CRAGROCK_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.LIMESTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_SLAB, 6), "###", '#', BlockRegistry.POLISHED_LIMESTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_SLAB, 6), "###", '#', BlockRegistry.LIMESTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_BETWEENSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_CRAGROCK);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SMOOTH_PITSTONE_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_PITSTONE);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.PITSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_SLAB, 6), "###", '#', BlockRegistry.TAR_SOLID);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_SLAB, 6), "###", '#', BlockRegistry.TEMPLE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_SLAB, 6), "###", '#', BlockRegistry.WEEDWOOD_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_SLAB, 6), "###", '#', BlockRegistry.RUBBER_TREE_PLANKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH_SLAB, 6), "###", '#', BlockRegistry.THATCH);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_SLAB, 6), "###", '#', BlockRegistry.MUD_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICK_SLAB, 6), "###", '#', BlockRegistry.CRAGROCK_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.LIMESTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_SLAB, 6), "###", '#', BlockRegistry.POLISHED_LIMESTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_SLAB, 6), "###", '#', BlockRegistry.LIMESTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_BETWEENSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_CRAGROCK_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_CRAGROCK);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SMOOTH_PITSTONE_SLAB, 6), "###", '#', BlockRegistry.SMOOTH_PITSTONE);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.PITSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.TAR_SOLID_SLAB, 6), "###", '#', BlockRegistry.TAR_SOLID);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.TEMPLE_BRICK_SLAB, 6), "###", '#', BlockRegistry.TEMPLE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_SLAB, 6), "###", '#', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_SLAB, 6), "###", '#', BlockRegistry.RUBBER_TREE_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.THATCH_SLAB, 6), "###", '#', BlockRegistry.THATCH);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.MOSSY_BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.MOSSY_SMOOTH_BETWEENSTONE);
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.PITSTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_PITSTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_CRAGROCK));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_PITSTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_PILLAR, 2), "x", "x", 'x', new ItemStack(BlockRegistry.SMOOTH_CRAGROCK));
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.THATCH_ROOF, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.THATCH);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.THATCH_ROOF, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.THATCH);
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.SILT_GLASS_PANE, 6), "xxx", "xxx", 'x', BlockRegistry.SILT_GLASS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SILT_GLASS_PANE, 6), "xxx", "xxx", 'x', BlockRegistry.SILT_GLASS);
 
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_DENTROTHYST_PANE, 6, EnumDentrothyst.GREEN.getMeta()), "xxx", "xxx", 'x', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()));
-		GameRegistry.addRecipe(new ItemStack(BlockRegistry.POLISHED_DENTROTHYST_PANE, 6, EnumDentrothyst.ORANGE.getMeta()), "xxx", "xxx", 'x', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_DENTROTHYST_PANE, 6, EnumDentrothyst.GREEN.getMeta()), "xxx", "xxx", 'x', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()));
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_DENTROTHYST_PANE, 6, EnumDentrothyst.ORANGE.getMeta()), "xxx", "xxx", 'x', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()));
 
 		//Food
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.REED_DONUT, 1), " # ", "# #", " # ", '#', EnumItemMisc.DRIED_SWAMP_REED.create(1));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.JAM_DONUT, 1), new ItemStack(ItemRegistry.REED_DONUT), new ItemStack(ItemRegistry.MIDDLE_FRUIT));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.GERTS_DONUT, 1), new ItemStack(ItemRegistry.REED_DONUT), new ItemStack(ItemRegistry.WIGHT_HEART), new ItemStack(Items.SLIME_BALL));
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.CRAB_STICK, 3), "  #", " # ", "#  ", '#', new ItemStack(ItemRegistry.SILT_CRAB_CLAW));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.SAP_JELLO, 1), new ItemStack(ItemRegistry.SLUDGE_JELLO), new ItemStack(ItemRegistry.SAP_BALL));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.MIDDLE_FRUIT_JELLO, 1), new ItemStack(ItemRegistry.SLUDGE_JELLO), new ItemStack(ItemRegistry.MIDDLE_FRUIT));
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.NETTLE_SOUP, 1), EnumItemMisc.WEEDWOOD_BOWL.create(1), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, BlockRegistry.NETTLE);
-		GameRegistry.addShapelessRecipe(new ItemStack(ItemRegistry.NETTLE_SOUP, 1), EnumItemMisc.WEEDWOOD_BOWL.create(1), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, BlockRegistry.NETTLE_FLOWERED);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.REED_DONUT, 1), " # ", "# #", " # ", '#', EnumItemMisc.DRIED_SWAMP_REED.create(1));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.JAM_DONUT, 1), new ItemStack(ItemRegistry.REED_DONUT), new ItemStack(ItemRegistry.MIDDLE_FRUIT));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.GERTS_DONUT, 1), new ItemStack(ItemRegistry.REED_DONUT), new ItemStack(ItemRegistry.WIGHT_HEART), new ItemStack(Items.SLIME_BALL));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.CRAB_STICK, 3), "  #", " # ", "#  ", '#', new ItemStack(ItemRegistry.SILT_CRAB_CLAW));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.SAP_JELLO, 1), new ItemStack(ItemRegistry.SLUDGE_JELLO), new ItemStack(ItemRegistry.SAP_BALL));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.MIDDLE_FRUIT_JELLO, 1), new ItemStack(ItemRegistry.SLUDGE_JELLO), new ItemStack(ItemRegistry.MIDDLE_FRUIT));
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.NETTLE_SOUP, 1), EnumItemMisc.WEEDWOOD_BOWL.create(1), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, BlockRegistry.NETTLE);
+		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.NETTLE_SOUP, 1), EnumItemMisc.WEEDWOOD_BOWL.create(1), ItemRegistry.BLACK_HAT_MUSHROOM_ITEM, ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM, BlockRegistry.NETTLE_FLOWERED);
 
 		// Special Items
-		GameRegistry.addRecipe(new ItemStack(ItemRegistry.TARMINION, 1), "ttt", "tht", "ttt", 't', EnumItemMisc.TAR_DRIP.create(1), 'h', EnumItemMisc.TAR_BEAST_HEART_ANIMATED.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.TARMINION, 1), "ttt", "tht", "ttt", 't', EnumItemMisc.TAR_DRIP.create(1), 'h', EnumItemMisc.TAR_BEAST_HEART_ANIMATED.create(1));
 
 		//TODO Recipes
 		/*RecipeSorter.register("thebetweenlands:bookCloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new BookCloneRecipe());
+		RecipeHelper.addRecipe(new BookCloneRecipe());
 
 		RecipeSorter.register("thebetweenlands:bookMerging", BookMergeRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new BookMergeRecipe());*/
+		RecipeHelper.addRecipe(new BookMergeRecipe());*/
 
 		RecipeSorter.register("thebetweenlands:recipesCircleGems", RecipesCircleGems.class, SHAPELESS, "after:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesCircleGems());
 
 		/*RecipeSorter.register("thebetweenlands:recipesAspectVials", RecipesAspectVials.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipesAspectVials());
+		RecipeHelper.addRecipe(new RecipesAspectVials());
 
 		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipesAspectrusSeeds());
+		RecipeHelper.addRecipe(new RecipesAspectrusSeeds());
 
 		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipeImprovedRubberBoots());
+		RecipeHelper.addRecipe(new RecipeImprovedRubberBoots());
 
 		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
-		GameRegistry.addRecipe(new RecipeSummonMummy());*/
+		RecipeHelper.addRecipe(new RecipeSummonMummy());*/
 
 		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, SHAPELESS, "before:minecraft:shapeless");
 		GameRegistry.addRecipe(new RecipesCoating());
