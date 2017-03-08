@@ -19,7 +19,7 @@ public class PurifierRecipeStandard extends PurifierRecipe {
 	@Override
 	public boolean matchesInput(ItemStack stack) {
 		if (stack != null) {
-			if (areStacksTheSame(input, stack)) {
+			if (doesInputMatch(input, stack)) {
 				stack = null;
 				return true;
 			}

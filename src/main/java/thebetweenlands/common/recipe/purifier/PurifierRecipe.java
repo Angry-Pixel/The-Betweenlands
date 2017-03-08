@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 
 public abstract class PurifierRecipe implements IPurifierRecipe {
@@ -52,22 +53,22 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 		return Collections.unmodifiableList(RECIPES);
 	}
 
-	public static boolean areStacksTheSame(ItemStack a, ItemStack b) {
-		return areStacksTheSame(a, b, false);
+	public static boolean doesInputMatch(ItemStack input, ItemStack toCheck) {
+		return doesInputMatch(input, toCheck, false);
 	}
 
-	public static boolean areStacksTheSame(ItemStack a, ItemStack b, boolean matchStackSize) {
-		if (a == null || b == null) {
+	public static boolean doesInputMatch(ItemStack input, ItemStack toCheck, boolean matchStackSize) {
+		if (input == null || toCheck == null) {
 			return false;
 		}
 
-		if (a.getItem() == b.getItem()) {
-			if (a.getItemDamage() == b.getItemDamage()) {
-				if (!matchStackSize || a.stackSize == b.stackSize) {
-					if (a.hasTagCompound() && b.hasTagCompound()) {
-						return a.getTagCompound().equals(b.getTagCompound());
+		if (input.getItem() == toCheck.getItem()) {
+			if (input.getItemDamage() == OreDictionary.WILDCARD_VALUE || input.getItemDamage() == toCheck.getItemDamage()) {
+				if (!matchStackSize || input.stackSize == toCheck.stackSize) {
+					if (input.hasTagCompound() && toCheck.hasTagCompound()) {
+						return input.getTagCompound().equals(toCheck.getTagCompound());
 					}
-					return a.hasTagCompound() == b.hasTagCompound();
+					return input.hasTagCompound() == toCheck.hasTagCompound();
 				}
 			}
 		}

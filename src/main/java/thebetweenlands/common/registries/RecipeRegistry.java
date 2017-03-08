@@ -60,6 +60,8 @@ public class RecipeRegistry {
 		registerCompostRecipes();
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
+		
+		CustomRecipeRegistry.loadCustomRecipes();
 	}
 
 	private static void registerOreDictionary() {

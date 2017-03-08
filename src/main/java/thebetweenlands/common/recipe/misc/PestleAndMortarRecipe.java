@@ -1,10 +1,11 @@
 package thebetweenlands.common.recipe.misc;
 
-import net.minecraft.item.ItemStack;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 public class PestleAndMortarRecipe {
     private static final List<PestleAndMortarRecipe> recipes = new ArrayList<PestleAndMortarRecipe>();
@@ -21,9 +22,11 @@ public class PestleAndMortarRecipe {
     }
 
     public static ItemStack getOutput(ItemStack input) {
-        for (PestleAndMortarRecipe recipe : recipes)
-            if (recipe.matches(input))
+        for (PestleAndMortarRecipe recipe : recipes) {
+            if (recipe.matches(input)) {
                 return recipe.getOutput();
+            }
+        }
 
         return null;
     }
@@ -80,21 +83,20 @@ public class PestleAndMortarRecipe {
         return false;
     }
 
-    @SuppressWarnings("unchecked")
     private boolean areStacksTheSame(ItemStack stack, ItemStack target) {
-        return areStacksTheSame(stack, target, false);
+        return doesInputMatch(stack, target, false);
     }
 
-    public static boolean areStacksTheSame(ItemStack stack1, ItemStack stack2, boolean matchSize) {
-        if (stack1 == null || stack2 == null)
+    public static boolean doesInputMatch(ItemStack input, ItemStack toCheck, boolean matchSize) {
+        if (input == null || toCheck == null)
             return false;
 
-        if (stack1.getItem() == stack2.getItem())
-            if (stack1.getItemDamage() == stack2.getItemDamage())
-                if (!matchSize || stack1.stackSize == stack2.stackSize) {
-                    if (stack1.hasTagCompound() && stack2.hasTagCompound())
-                        return stack1.getTagCompound().equals(stack2.getTagCompound());
-                    return stack1.hasTagCompound() == stack2.hasTagCompound();
+        if (input.getItem() == toCheck.getItem())
+            if (input.getItemDamage() == OreDictionary.WILDCARD_VALUE || input.getItemDamage() == toCheck.getItemDamage())
+                if (!matchSize || input.stackSize == toCheck.stackSize) {
+                    if (input.hasTagCompound() && toCheck.hasTagCompound())
+                        return input.getTagCompound().equals(toCheck.getTagCompound());
+                    return input.hasTagCompound() == toCheck.hasTagCompound();
                 }
         return false;
     }

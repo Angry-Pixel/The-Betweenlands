@@ -3,6 +3,7 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.ArrayList;
 
@@ -51,7 +52,7 @@ public class DruidAltarRecipe {
             if (input1 == null || input2 == null || input3 == null || input4 == null)
                 break;
             for (ItemStack itemStack : recipeStacks) {
-                if (matches(input1, itemStack)) {
+                if (matches(itemStack, input1)) {
                     next = true;
                     recipeStacks.remove(itemStack);
                 }
@@ -61,7 +62,7 @@ public class DruidAltarRecipe {
             if (next) {
                 next = false;
                 for (ItemStack itemStack : recipeStacks) {
-                    if (matches(input2, itemStack)) {
+                    if (matches(itemStack, input2)) {
                         next = true;
                         recipeStacks.remove(itemStack);
                     }
@@ -72,7 +73,7 @@ public class DruidAltarRecipe {
             if (next) {
                 next = false;
                 for (ItemStack itemStack : recipeStacks) {
-                    if (matches(input3, itemStack)) {
+                    if (matches(itemStack, input3)) {
                         next = true;
                         recipeStacks.remove(itemStack);
                     }
@@ -83,7 +84,7 @@ public class DruidAltarRecipe {
             if (next) {
                 next = false;
                 for (ItemStack itemStack : recipeStacks) {
-                    if (matches(input4, itemStack)) {
+                    if (matches(itemStack, input4)) {
                         next = true;
                         recipeStacks.remove(itemStack);
                     }
@@ -99,14 +100,16 @@ public class DruidAltarRecipe {
     }
 
     public static boolean isValidItem(ItemStack stack) {
-        for (DruidAltarRecipe recipe : druidAltarRecipes)
-            if (matches(recipe.input1, stack) || matches(recipe.input2, stack) || matches(recipe.input3, stack) || matches(recipe.input4, stack))
+        for (DruidAltarRecipe recipe : druidAltarRecipes) {
+            if (matches(recipe.input1, stack) || matches(recipe.input2, stack) || matches(recipe.input3, stack) || matches(recipe.input4, stack)) {
                 return true;
+            }
+        }
         return false;
     }
 
-    private static boolean matches(ItemStack itemStack1, ItemStack itemStack2) {
-        return itemStack2.getItem() == itemStack1.getItem() && itemStack2.getItemDamage() == itemStack1.getItemDamage();
+    private static boolean matches(ItemStack input, ItemStack toCheck) {
+        return toCheck.getItem() == input.getItem() && (input.getItemDamage() == OreDictionary.WILDCARD_VALUE || toCheck.getItemDamage() == input.getItemDamage());
     }
 
     public ArrayList<ItemStack> getInputs(){

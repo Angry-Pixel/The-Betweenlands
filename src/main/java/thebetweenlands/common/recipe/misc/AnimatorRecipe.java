@@ -50,6 +50,13 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 		this.spawnEntity = result;
 		this.closeOnFinish = true;
 	}
+	
+	public AnimatorRecipe(ItemStack input, int requiredFuel, int requiredLife, ItemStack result, Class<? extends Entity> resultEntity) {
+		this(input, requiredFuel, requiredLife);
+		this.spawnEntity = resultEntity;
+		this.result = result;
+		this.closeOnFinish = true;
+	}
 
 	public AnimatorRecipe setRenderEntity(String entity) {
 		this.renderEntity = entity;

@@ -59,7 +59,7 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 			if (animationTicks == 0)
 				worldObj.playSound(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
 			if (animationTicks <= 20)
-				animationTicks++;
+				animationTicks += 4;
 			if (animationTicks == 20 && !this.worldObj.isRemote)
 				setActive(false);
 		}
