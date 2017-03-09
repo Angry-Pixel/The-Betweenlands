@@ -32,6 +32,7 @@ import thebetweenlands.util.config.ConfigHandler;
 
 public final class CorrosionHelper {
 	public static final int MAX_CORROSION = 255;
+	public static final int MAX_COATING = 600;
 	public static final String TOOLTIP_PART = "/" + MAX_CORROSION + ")";
 	public static final int CORROSION_STAGE_COUNT = 6;
 	public static final String ITEM_CORROSION_NBT_TAG = "Corrosion";
@@ -208,7 +209,7 @@ public final class CorrosionHelper {
 			if (advancedItemTooltips) {
 				coatingInfo.append(" (");
 				coatingInfo.append(coating);
-				coatingInfo.append("/600)");
+				coatingInfo.append("/" + MAX_COATING + ")");
 			}
 			lines.add(coatingInfo.toString());
 		}

@@ -19,6 +19,8 @@ public class RecipesLifeCrystal implements IRecipe {
 				if(stack.getItem() == ItemRegistry.LIFE_CRYSTAL) {
 					if(crystal != null)
 						return false;
+					if(stack.getItemDamage() == 0)
+						return false;
 					crystal = stack;
 				} else if(stack.getItem() == ItemRegistry.WIGHT_HEART) {
 					hearts++;
@@ -80,11 +82,13 @@ public class RecipesLifeCrystal implements IRecipe {
 				if(requiredHearts > 0) {
 					requiredHearts--;
 				} else {
-					remaining[i] = stack;
+					remaining[i] = stack.copy();
+					remaining[i].stackSize = 1;
 					continue;
 				}
+			} else {
+				remaining[i] = ForgeHooks.getContainerItem(stack);
 			}
-			remaining[i] = ForgeHooks.getContainerItem(stack);
 		}
 
 		return remaining;

@@ -24,6 +24,9 @@ public class RecipesCoating implements IRecipe {
 					if(tool != null) {
 						return false;
 					}
+					if(CorrosionHelper.getCoating(stack) >= CorrosionHelper.MAX_COATING) {
+						return false;
+					}
 					tool = stack;
 				} else {
 					return false;
@@ -48,7 +51,7 @@ public class RecipesCoating implements IRecipe {
 			}
 		}
 		tool = tool.copy();
-		CorrosionHelper.setCoating(tool, Math.min(600, CorrosionHelper.getCoating(tool) + coating * 75));
+		CorrosionHelper.setCoating(tool, Math.min(CorrosionHelper.MAX_COATING, CorrosionHelper.getCoating(tool) + coating * 75));
 		return tool;
 	}
 
@@ -72,7 +75,7 @@ public class RecipesCoating implements IRecipe {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(stack != null) {
 				if(stack.getItem() instanceof ICorrodible) {
-					requiredCoating += MathHelper.ceiling_float_int((600 - CorrosionHelper.getCoating(stack)) / 75);
+					requiredCoating += MathHelper.ceiling_float_int(((float)CorrosionHelper.MAX_COATING - (float)CorrosionHelper.getCoating(stack)) / 75.0F);
 				}
 			}
 		}
@@ -83,11 +86,13 @@ public class RecipesCoating implements IRecipe {
 				if(requiredCoating > 0) {
 					requiredCoating--;
 				} else {
-					remaining[i] = stack;
+					remaining[i] = stack.copy();
+					remaining[i].stackSize = 1;
 					continue;
 				}
+			} else {
+				remaining[i] = ForgeHooks.getContainerItem(stack);
 			}
-			remaining[i] = ForgeHooks.getContainerItem(stack);
 		}
 
 		return remaining;
