@@ -163,12 +163,13 @@ public class BlockRegistry {
 	public static final Block TAR = new BlockTar();
 	public static final Block RUBBER = new BlockRubber();
 
-	public static final Block DRUID_STONE_1 = new BlockDruidStone(Material.ROCK, "druid_stone_1");
-	public static final Block DRUID_STONE_2 = new BlockDruidStone(Material.ROCK, "druid_stone_2");
-	public static final Block DRUID_STONE_3 = new BlockDruidStone(Material.ROCK, "druid_stone_3");
-	public static final Block DRUID_STONE_4 = new BlockDruidStone(Material.ROCK, "druid_stone_4");
-	public static final Block DRUID_STONE_5 = new BlockDruidStone(Material.ROCK, "druid_stone_5");
-
+	public static final Block DRUID_STONE_1 = new BlockDruidStone(Material.ROCK);
+	public static final Block DRUID_STONE_2 = new BlockDruidStone(Material.ROCK);
+	public static final Block DRUID_STONE_3 = new BlockDruidStone(Material.ROCK);
+	public static final Block DRUID_STONE_4 = new BlockDruidStone(Material.ROCK);
+	public static final Block DRUID_STONE_5 = new BlockDruidStone(Material.ROCK);
+	public static final Block DRUID_STONE_6 = new BlockDruidStone(Material.ROCK);
+	
 	//TERRAIN BLOCKS
 	public static final Block BETWEENLANDS_BEDROCK = new BlockBetweenlandsBedrock();
 	public static final Block BETWEENSTONE = new BasicBlock(Material.ROCK)

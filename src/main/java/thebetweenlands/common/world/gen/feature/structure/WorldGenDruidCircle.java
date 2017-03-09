@@ -31,7 +31,7 @@ import thebetweenlands.common.world.storage.world.shared.location.guard.ILocatio
 import thebetweenlands.util.config.ConfigHandler;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
-	private static final IBlockState[] DRUID_STONES = {
+	private static final IBlockState[] RUNE_STONES = {
 			BlockRegistry.DRUID_STONE_1.getDefaultState(),
 			BlockRegistry.DRUID_STONE_2.getDefaultState(),
 			BlockRegistry.DRUID_STONE_3.getDefaultState(),
@@ -178,9 +178,9 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 			this.guard.setGuarded(world, pos, true);
 			EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
 			if (rand.nextBoolean()) {
-				world.setBlockState(pos.toImmutable(), getRandomBlock(rand).withProperty(BlockDruidStone.FACING, facing), 3);
+				world.setBlockState(pos.toImmutable(), getRandomRuneBlock(rand).withProperty(BlockDruidStone.FACING, facing), 3);
 			} else {
-				world.setBlockState(pos.toImmutable(), Blocks.STONE.getDefaultState());
+				world.setBlockState(pos.toImmutable(), BlockRegistry.DRUID_STONE_6.getDefaultState().withProperty(BlockDruidStone.FACING, facing));
 				for (int vineCount = 0; vineCount < 4; vineCount++) {
 					setRandomFoliage(world, pos, rand);
 				}
@@ -196,7 +196,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		}
 	}
 
-	private IBlockState getRandomBlock(Random rand) {
-		return DRUID_STONES[rand.nextInt(DRUID_STONES.length)];
+	private IBlockState getRandomRuneBlock(Random rand) {
+		return RUNE_STONES[rand.nextInt(RUNE_STONES.length)];
 	}
 }
