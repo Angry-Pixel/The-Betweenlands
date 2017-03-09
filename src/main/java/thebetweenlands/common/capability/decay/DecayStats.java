@@ -40,19 +40,23 @@ public class DecayStats {
 
 		this.prevDecayLevel = this.decayLevel;
 
-		if (this.decayAccelerationLevel > 4.0F) {
-			this.decayAccelerationLevel -= 4.0F;
-
-			if (this.decaySaturationLevel > 0.0F) {
-				this.decaySaturationLevel = Math.max(this.decaySaturationLevel - 1.0F, 0.0F);
-			} else if (difficulty != EnumDifficulty.PEACEFUL) {
-				this.decaySaturationLevel = 0.0F;
-				this.decayLevel = Math.min(this.decayLevel + 1, 20);
-
-				if(this.capability != null) {
-					this.capability.markDirty();
+		if (difficulty != EnumDifficulty.PEACEFUL) {
+			if (this.decayAccelerationLevel > 4.0F) {
+				this.decayAccelerationLevel -= 4.0F;
+	
+				if (this.decaySaturationLevel > 0.0F) {
+					this.decaySaturationLevel = Math.max(this.decaySaturationLevel - 1.0F, 0.0F);
+				} else {
+					this.decaySaturationLevel = 0.0F;
+					this.decayLevel = Math.min(this.decayLevel + 1, 20);
+	
+					if(this.capability != null) {
+						this.capability.markDirty();
+					}
 				}
 			}
+		} else if(this.getDecayLevel() < 20){
+			this.addStats(-1, 0);
 		}
 	}
 

@@ -101,7 +101,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 	@Override
 	protected boolean canDespawn() {
-		return !isTamed();
+		return false;
 	}
 
 	public boolean isTamed() {

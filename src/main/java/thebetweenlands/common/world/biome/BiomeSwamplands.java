@@ -20,6 +20,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.TarSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
 import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorSwamplands;
@@ -65,12 +66,12 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLeech.class, (short) 35).setHostile(true));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 40).setCanSpawnInWater(true).setHostile(true));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 80).setHostile(true));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntitySwampHag.class, (short) 140).setHostile(true).setSpawnCheckRadius(6.0D).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 18).setHostile(true).setSpawnCheckRadius(64.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 90).setHostile(true));
+		this.blSpawnEntries.add(new SwampHagCaveSpawnEntry((short) 120).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 24).setHostile(true).setSpawnCheckRadius(64.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 28).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityBloodSnail.class, (short) 25).setHostile(true));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 12).setHostile(true).setSpawnCheckRadius(30.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(30.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 	}
 }

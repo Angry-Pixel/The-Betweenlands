@@ -14,6 +14,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+
 import javax.imageio.ImageIO;
 
 import com.google.common.collect.HashMultimap;
@@ -29,6 +30,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldEntitySpawner;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.Biome.SpawnListEntry;
 import net.minecraft.world.chunk.Chunk;
@@ -495,7 +497,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 			if(decorator != null) {
 				decorator.decorate(this.worldObj, this, this.rand, bx, bz);
 			}
-			MobSpawnHandler.INSTANCE.populateChunk(this.worldObj, x, z);
+			if(this.worldObj instanceof WorldServer) {
+				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z);
+			}
 		} else {
 			biome.decorate(this.worldObj, this.rand, new BlockPos(bx, 0, bz));
 			if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.worldObj, this.rand, x, z, false, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS)) {

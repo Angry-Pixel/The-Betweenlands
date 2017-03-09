@@ -3,11 +3,10 @@ package thebetweenlands.common.world.biome.spawning;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +15,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -41,12 +41,10 @@ public class MobSpawnHandler {
 	public static final MobSpawnHandler INSTANCE = new MobSpawnHandler();
 
 	//How many times a chunk should be populated with mobs when it generates
-	private static final int CHUNK_GEN_SPAWN_RUNS = 64;
+	private static final int CHUNK_GEN_SPAWN_RUNS = 128;
 
-	//Distance from the player where mobs spawn (middle of the spawner chunk rim)
-	private static final byte SPAWN_CHUNK_DISTANCE = 4;
-	//Size of the chunk rim where mobs can spawn (SPAWN_CHUNK_DISTANCE +- SPAWN_CHUNK_RIM)
-	private static final byte SPAWN_CHUNK_RIM = 2;
+	//Distance from the player where mobs spawn
+	private static final byte SPAWN_CHUNK_RANGE = 8;
 
 	//How many attempts per spawning run
 	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 8;
@@ -55,15 +53,17 @@ public class MobSpawnHandler {
 
 	//Maximum spawns per spawning run
 	private static final int MAX_SPAWNS_PER_CHUNK = 6;
-	//Maximum entities per loaded area around a player
-	private static final int MAX_ENTITIES_PER_LOADED_AREA = ConfigHandler.maxEntitiesPerLoadedArea;
-	//Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
-	private static final float MAX_ENTITIES_PER_CHUNK_MULTIPLIER = (float)MAX_ENTITIES_PER_LOADED_AREA / (float)((SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM)*(SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM) - SPAWN_CHUNK_RIM*SPAWN_CHUNK_RIM);
 
 	//World entity limit
 	private static final int HARD_ENTITY_LIMIT = ConfigHandler.hardEntityLimit;
 
-
+	/**
+	 * Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
+	 * @return
+	 */
+	public static final float getMaxEntitiesPerChunkMultiplier() {
+		return (float)ConfigHandler.maxEntitiesPerLoadedArea / (SPAWN_CHUNK_RANGE * 2 * SPAWN_CHUNK_RANGE * 2 - 25);
+	}
 
 	/**
 	 * Default spawning weight is 100
@@ -277,7 +277,7 @@ public class MobSpawnHandler {
 		}
 	}
 
-	public void populateChunk(World world, int chunkX, int chunkZ) {
+	public void populateChunk(WorldServer world, int chunkX, int chunkZ) {
 		if(world == null || world.provider.getDimension() != ConfigHandler.dimensionId)
 			return;
 
@@ -293,7 +293,7 @@ public class MobSpawnHandler {
 		}
 	}
 
-	private void populateWorld(World world) {
+	private void populateWorld(WorldServer world) {
 		if(world.provider instanceof WorldProviderBetweenlands == false) {
 			return;
 		}
@@ -317,15 +317,13 @@ public class MobSpawnHandler {
 			return;
 		}
 
-		List<ChunkPos> spawnerChunks = new ArrayList<ChunkPos>(this.eligibleChunksForSpawning.keySet().size() / (SPAWN_CHUNK_DISTANCE*SPAWN_CHUNK_DISTANCE) * (SPAWN_CHUNK_DISTANCE-1) * 4);
+		List<ChunkPos> spawnerChunks = new ArrayList<ChunkPos>(this.eligibleChunksForSpawning.size());
 
 		//Add valid chunks
-		for(Entry<ChunkPos, Boolean> chunkEntry : this.eligibleChunksForSpawning.entrySet()) {
-			if(chunkEntry.getValue()) {
-				//Don't load chunks
-				if(world.isBlockLoaded(new BlockPos(chunkEntry.getKey().chunkXPos * 16, 64, chunkEntry.getKey().chunkZPos * 16))) {
-					spawnerChunks.add(chunkEntry.getKey());
-				}
+		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
+			//Don't load chunks
+			if(world.isBlockLoaded(new BlockPos(chunkPos.chunkXPos * 16, 64, chunkPos.chunkZPos * 16))) {
+				spawnerChunks.add(chunkPos);
 			}
 		}
 
@@ -335,27 +333,29 @@ public class MobSpawnHandler {
 			totalEligibleEntityCount += count;
 		}
 
-		int maxEntitiesForLoadedArea = Math.min(HARD_ENTITY_LIMIT, (int) (spawnerChunks.size() * MAX_ENTITIES_PER_CHUNK_MULTIPLIER));
+		int maxEntitiesForLoadedArea = Math.min(HARD_ENTITY_LIMIT, (int) (spawnerChunks.size() * getMaxEntitiesPerChunkMultiplier()));
 
-		if(totalEligibleEntityCount >= maxEntitiesForLoadedArea)
+		if(totalEligibleEntityCount >= maxEntitiesForLoadedArea) {
 			//Too many entities, don't spawn any more entities
 			return;
+		}
 
 		Collections.shuffle(spawnerChunks);
 
 		boolean spawnHostiles = ((WorldProviderBetweenlands)world.provider).getCanSpawnHostiles();
 		boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
-		float areaMultiplier = (float)spawnerChunks.size() / (float)((SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM)*(SPAWN_CHUNK_DISTANCE+SPAWN_CHUNK_RIM) - SPAWN_CHUNK_RIM*SPAWN_CHUNK_RIM);
+		//The approximate number of loaded areas (one area is the area loaded by one player)
+		float loadedAreas = (float)spawnerChunks.size() / (float)(SPAWN_CHUNK_RANGE * 2 * SPAWN_CHUNK_RANGE * 2 - 25);
 
 		for(ChunkPos chunkPos : spawnerChunks) {
 			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, false, 
-					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, maxEntitiesForLoadedArea, areaMultiplier);
+					SPAWNING_ATTEMPTS_PER_CHUNK, MAX_SPAWNS_PER_CHUNK, SPAWNING_ATTEMPTS_PER_GROUP, maxEntitiesForLoadedArea, loadedAreas);
 		}
 	}
 
 	private int populateChunk(World world, ChunkPos chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreTimers,
-			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float areaMultiplier) {
+			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float loadedAreas) {
 		int attempts = 0, chunkSpawnedEntities = 0;
 		spawnLoop:
 			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
@@ -393,17 +393,19 @@ public class MobSpawnHandler {
 				weightedPossibleSpawns.recalculateWeight();
 
 				BLSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(world.rand);
-				if(spawnEntry == null)
+				if(spawnEntry == null) {
 					continue;
+				}
 
 				int dynamicLimitBase = (int)((double)entityLimit / (double)totalBaseWeight * spawnEntry.getBaseWeight());
 				int dynamicLimit = (int)((double)entityLimit / (double)totalWeight * spawnEntry.getWeight());
 
 				int spawnEntityCount = this.entityCounts.get(spawnEntry.entityType);
 
-				if(spawnEntityCount >= Math.max(dynamicLimit, dynamicLimitBase) || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit()))
+				if(spawnEntityCount >= Math.max(dynamicLimit, dynamicLimitBase) || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit())) {
 					//Entity reached world spawning limit
 					continue;
+				}
 
 				int desiredGroupSize = spawnEntry.getMinGroupSize() + world.rand.nextInt(spawnEntry.getMaxGroupSize() - spawnEntry.getMinGroupSize() + 1);
 				double groupCheckRadius = spawnEntry.spawnCheckRadius;
@@ -447,10 +449,11 @@ public class MobSpawnHandler {
 							continue;
 						}
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
-						int adjustedInterval = (int)(spawnEntry.spawningInterval / areaMultiplier);
-						if(world.getTotalWorldTime() - spawnEntry.lastSpawn < adjustedInterval)
+						int adjustedInterval = (int)(spawnEntry.spawningInterval / loadedAreas);
+						if(world.getTotalWorldTime() - spawnEntry.lastSpawn < adjustedInterval) {
 							//Too early, don't spawn yet
 							continue;
+						}
 					}
 
 					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
@@ -548,15 +551,14 @@ public class MobSpawnHandler {
 				centerPos.getZ() + world.rand.nextInt(radius*2) - radius);
 	}
 
-	private Map<ChunkPos, Boolean> eligibleChunksForSpawning = new HashMap<ChunkPos, Boolean>();
+	private Set<ChunkPos> eligibleChunksForSpawning = new HashSet<>();
 
 	/**
 	 * Clears eligibleChunksForSpawning, finds chunks entities can spawn in and adds them to eligibleChunksForSpawning
 	 * @param world
 	 */
-	private void updateSpawnerChunks(World world) {
-		this.eligibleChunksForSpawning.clear();
-		for(EntityPlayer player : (List<EntityPlayer>) world.playerEntities) {
+	private void updateSpawnerChunks(WorldServer world) {
+		/*for(EntityPlayer player : (List<EntityPlayer>) world.playerEntities) {
 			int pcx = player.chunkCoordX;
 			int pcz = player.chunkCoordZ;
 			for(int cox = -SPAWN_CHUNK_DISTANCE; cox <= SPAWN_CHUNK_DISTANCE; cox++) {
@@ -573,6 +575,31 @@ public class MobSpawnHandler {
 					}
 				}
 			}
+		}*/
+		this.eligibleChunksForSpawning.clear();
+
+		for (EntityPlayer entityplayer : world.playerEntities) {
+			if (!entityplayer.isSpectator()) {
+				int cx = MathHelper.floor_double(entityplayer.posX / 16.0D);
+				int cz = MathHelper.floor_double(entityplayer.posZ / 16.0D);
+
+				for (int xo = -SPAWN_CHUNK_RANGE; xo <= SPAWN_CHUNK_RANGE; ++xo) {
+					for (int zo = -SPAWN_CHUNK_RANGE; zo <= SPAWN_CHUNK_RANGE; ++zo) {
+						boolean isBorder = xo == -SPAWN_CHUNK_RANGE || xo == SPAWN_CHUNK_RANGE || zo == -SPAWN_CHUNK_RANGE || zo == SPAWN_CHUNK_RANGE;
+						ChunkPos chunkpos = new ChunkPos(xo + cx, zo + cz);
+
+						if (!this.eligibleChunksForSpawning.contains(chunkpos)) {
+							if (!isBorder && world.getWorldBorder().contains(chunkpos)) {
+								PlayerChunkMapEntry playerchunkmapentry = world.getPlayerChunkMap().getEntry(chunkpos.chunkXPos, chunkpos.chunkZPos);
+
+								if (playerchunkmapentry != null && playerchunkmapentry.isSentToPlayers()) {
+									this.eligibleChunksForSpawning.add(chunkpos);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 
@@ -580,15 +607,15 @@ public class MobSpawnHandler {
 
 	private void updateEntityCounts(World world) {
 		this.entityCounts.clear();
-		for(Entry<ChunkPos, Boolean> eligibleChunk : this.eligibleChunksForSpawning.entrySet()) {
-			ChunkPos chunkPos = eligibleChunk.getKey();
+		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
 			if(world.getChunkProvider().getLoadedChunk(chunkPos.chunkXPos, chunkPos.chunkZPos) != null) {
 				Chunk chunk = world.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
 				ClassInheritanceMultiMap<Entity>[] entityLists = chunk.getEntityLists();
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {
-						if(entity instanceof EntityLivingBase)
+						if(entity instanceof EntityLivingBase) {
 							this.entityCounts.adjustOrPutValue(entity.getClass(), 1, 1);
+						}
 					}
 				}
 			}

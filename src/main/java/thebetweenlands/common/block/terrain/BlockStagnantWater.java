@@ -9,7 +9,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
@@ -26,6 +28,10 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 		//		if (entity instanceof EntityPlayer && !world.isRemote && !((EntityPlayer)entity).isPotionActive(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect())) {
 		//			((EntityPlayer)entity).addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(60, 3));
 		//		}
+		if(!worldIn.isRemote && entityIn.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+			IDecayCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+			cap.getDecayStats().addDecayAcceleration(0.1F);
+		}
 	}
 
 	@Override

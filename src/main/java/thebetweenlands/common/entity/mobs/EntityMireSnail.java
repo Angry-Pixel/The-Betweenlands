@@ -79,7 +79,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	protected boolean canDespawn() {
-		return !hasMated();
+		return false;
 	}
 
 	@Override

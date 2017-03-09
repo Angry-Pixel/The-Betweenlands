@@ -172,7 +172,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 
 	@Override
 	protected boolean canDespawn() {
-		return !isInLurkersMouth();
+		return false;
 	}
 
 	@Override

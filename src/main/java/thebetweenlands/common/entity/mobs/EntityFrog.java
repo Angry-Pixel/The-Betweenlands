@@ -229,4 +229,9 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	public boolean isPushedByWater() {
 		return false;
 	}
+	
+	@Override
+	public boolean canDespawn() {
+		return false;
+	}
 }
