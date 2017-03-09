@@ -9,9 +9,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -23,6 +21,7 @@ import thebetweenlands.common.inventory.container.ContainerPurifier;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.registries.FluidRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class TileEntityPurifier extends TileEntityBasicInventory implements IFluidHandler, ITickable {
 	private static final int MAX_TIME = 432;
@@ -106,12 +105,8 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	protected NBTTagCompound writePacketNbt(NBTTagCompound nbt) {
 		nbt.setBoolean("state", lightOn);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
-		NBTTagCompound itemStackCompound = new NBTTagCompound();
-		if (inventory[2] != null) {
-			inventory[2].writeToNBT(itemStackCompound);
-		}
-		nbt.setTag("outputItem", itemStackCompound);
 		nbt.setBoolean("isPurifying", this.isPurifying());
+		this.writeInventoryNBT(nbt);
 		return nbt;
 	}
 
@@ -119,12 +114,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		NBTTagCompound compound = nbt;
 		lightOn = compound.getBoolean("state");
 		waterTank.readFromNBT(compound.getCompoundTag("waterTank"));
-		NBTTagCompound itemStackCompound = compound.getCompoundTag("outputItem");
-		if (itemStackCompound.getShort("id") != 0) {
-			inventory[2] = ItemStack.loadItemStackFromNBT(itemStackCompound);
-		} else {
-			inventory[2] = null;
-		}
+		this.readInventoryNBT(nbt);
 		isPurifyingClient = compound.getBoolean("isPurifying");
 	}
 
@@ -189,7 +179,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
 				time++;
 				if (time % 108 == 0)
-					worldObj.playSound(pos.getX(), pos.getY(), pos.getZ(), new SoundEvent(new ResourceLocation("thebetweenlands:purifier")), SoundCategory.BLOCKS, 1.0F, 1.0F, false);
+					worldObj.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				if (!lightOn)
 					setIlluminated(true);
 				if (time >= MAX_TIME) {

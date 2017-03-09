@@ -37,7 +37,7 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 	}
 	
 	public static void removeRecipe(IPurifierRecipe recipe) {
-		RECIPES.add(recipe);
+		RECIPES.remove(recipe);
 	}
 	
 	public static ItemStack getRecipeOutput(ItemStack input) {

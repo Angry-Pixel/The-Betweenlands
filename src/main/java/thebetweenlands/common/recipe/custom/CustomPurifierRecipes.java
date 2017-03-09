@@ -17,7 +17,7 @@ public class CustomPurifierRecipes extends CustomRecipes<IPurifierRecipe> {
 		ItemStack input = this.get("input", RecipeArg.ITEM_INPUT).get().create();
 		ItemStack output = this.get("output", RecipeArg.ITEM_OUTPUT).get().create();
 
-		return new PurifierRecipeStandard(input, output);
+		return new PurifierRecipeStandard(output, input);
 	}
 
 	@Override
