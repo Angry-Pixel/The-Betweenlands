@@ -3,15 +3,16 @@ package thebetweenlands.common.recipe.custom;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 
-public class CustomPestleAndMortarRecipes extends CustomRecipes<PestleAndMortarRecipe> {
+public class CustomPestleAndMortarRecipes extends CustomRecipes<IPestleAndMortarRecipe> {
 	public CustomPestleAndMortarRecipes() {
 		super("pestle_and_mortar", ImmutableMap.of("input", RecipeArg.ITEM_INPUT, "output", RecipeArg.ITEM_OUTPUT), ImmutableMap.of());
 	}
 
 	@Override
-	public PestleAndMortarRecipe load() {
+	public IPestleAndMortarRecipe load() {
 		ItemStack input = this.get("input", RecipeArg.ITEM_INPUT).get().create();
 		ItemStack output = this.get("output", RecipeArg.ITEM_OUTPUT).get().create();
 
@@ -19,16 +20,16 @@ public class CustomPestleAndMortarRecipes extends CustomRecipes<PestleAndMortarR
 	}
 
 	@Override
-	public IRecipeRegistrar<PestleAndMortarRecipe> createRegistrar() {
-		return new IRecipeRegistrar<PestleAndMortarRecipe>() {
+	public IRecipeRegistrar<IPestleAndMortarRecipe> createRegistrar() {
+		return new IRecipeRegistrar<IPestleAndMortarRecipe>() {
 			@Override
-			public boolean register(PestleAndMortarRecipe recipe) {
+			public boolean register(IPestleAndMortarRecipe recipe) {
 				PestleAndMortarRecipe.addRecipe(recipe);
 				return true;
 			}
 
 			@Override
-			public boolean unregister(PestleAndMortarRecipe recipe) {
+			public boolean unregister(IPestleAndMortarRecipe recipe) {
 				PestleAndMortarRecipe.removeRecipe(recipe);
 				return true;
 			}

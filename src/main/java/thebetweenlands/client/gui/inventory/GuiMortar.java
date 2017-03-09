@@ -2,10 +2,14 @@ package thebetweenlands.client.gui.inventory;
 
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
+
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMortar;
@@ -41,12 +45,17 @@ public class GuiMortar extends GuiContainer {
     }
 
     private void renderSlot(ItemStack stack, int x, int y) {
-        GlStateManager.pushMatrix();
-        GlStateManager.enableBlend();
-        //TODO fix alpha because minecraft just changes it to 1 in it's item render code
-        GlStateManager.color(1f, 1f, 1f, 0.2f);
-        this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
-        GlStateManager.disableBlend();
-        GlStateManager.popMatrix();
+    	GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GL14.glBlendColor(0, 0, 0, 0.35f);
+		GL11.glBlendFunc(GL11.GL_CONSTANT_ALPHA, GL11.GL_ONE_MINUS_CONSTANT_ALPHA); //ugly hack
+		GlStateManager.pushMatrix();
+		this.itemRender.renderItemAndEffectIntoGUI(stack, x, y);
+		GlStateManager.popMatrix();
+		GL14.glBlendColor(1, 1, 1, 1);
+		GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA); //ugly
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
     }
 }

@@ -1,19 +1,21 @@
 package thebetweenlands.compat.jei.recipes.pam;
 
-import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
-import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeJEI;
-
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.annotation.Nonnull;
+
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
+import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 
 public class PestleAndMortarRecipeMaker {
     @Nonnull
     public static List<PestleAndMortarRecipeJEI> getRecipes() {
         ArrayList<PestleAndMortarRecipeJEI> recipes = new ArrayList<PestleAndMortarRecipeJEI>();
-        for (PestleAndMortarRecipe recipe : PestleAndMortarRecipe.getRecipeList()) {
-            recipes.add(new PestleAndMortarRecipeJEI(recipe));
+        for (IPestleAndMortarRecipe recipe : PestleAndMortarRecipe.getRecipes()) {
+        	if(recipe instanceof PestleAndMortarRecipe) {
+        		recipes.add(new PestleAndMortarRecipeJEI((PestleAndMortarRecipe) recipe));
+        	}
         }
         return recipes;
     }

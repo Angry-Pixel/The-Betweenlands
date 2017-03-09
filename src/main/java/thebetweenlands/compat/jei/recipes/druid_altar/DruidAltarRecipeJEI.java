@@ -12,7 +12,7 @@ public class DruidAltarRecipeJEI extends BlankRecipeWrapper {
     private ItemStack output;
     public DruidAltarRecipeJEI(DruidAltarRecipe recipe){
         inputs = recipe.getInputs();
-        output = recipe.getOutput();
+        output = recipe.getDefaultOutput();
     }
 
     @Override

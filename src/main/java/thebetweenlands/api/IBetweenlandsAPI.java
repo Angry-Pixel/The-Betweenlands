@@ -8,20 +8,20 @@ import net.minecraft.item.ItemStack;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
+import thebetweenlands.api.recipes.IDruidAltarRecipe;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.herblore.aspect.IItemStackMatcher;
 
 public interface IBetweenlandsAPI {
 	/**
 	 * Registers a purifier recipe
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param recipe
 	 */
 	public void registerPurifierRecipe(IPurifierRecipe recipe);
 
 	/**
 	 * Unregisters a purified recipe
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param recipe
 	 */
 	public void unregisterPurifierRecipe(IPurifierRecipe recipe);
@@ -34,14 +34,12 @@ public interface IBetweenlandsAPI {
 
 	/**
 	 * Registers an animator recipe
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param recipe
 	 */
 	public void registerAnimatorRecipe(IAnimatorRecipe recipe);
 
 	/**
 	 * Unregisters an animator recipe
-	 * <p>Must be called during INITIALIZATION</p>
 	 */
 	public void unregisterAnimatorRecipe(IAnimatorRecipe recipe);
 
@@ -53,14 +51,12 @@ public interface IBetweenlandsAPI {
 
 	/**
 	 * Registers a compost bin recipe
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param recipe
 	 */
 	public void registerCompostBinRecipe(ICompostBinRecipe recipe);
 
 	/**
 	 * Unregisters a compost bin recipe
-	 * <p>Must be called during INITIALIZATION</p>
 	 */
 	public void unregisterCompostBinRecipe(ICompostBinRecipe recipe);
 
@@ -71,29 +67,59 @@ public interface IBetweenlandsAPI {
 	public List<ICompostBinRecipe> getCompostBinRecipes();
 
 	/**
+	 * Registers a druid altar recipe
+	 * @param recipe
+	 */
+	public void registerDruidAltarRecipe(IDruidAltarRecipe recipe);
+
+	/**
+	 * Unregisters a druid altar recipe
+	 */
+	public void unregisterDruidAltarRecipe(IDruidAltarRecipe recipe);
+
+	/**
+	 * Returns a list of all druid altar recipes
+	 * @return
+	 */
+	public List<IDruidAltarRecipe> getDruidAltarRecipes();
+
+	/**
+	 * Registers a pestle and mortar recipe
+	 * @param recipe
+	 */
+	public void registerPestleAndMortarRecipe(IPestleAndMortarRecipe recipe);
+
+	/**
+	 * Unregisters a pestle and mortar recipe
+	 */
+	public void unregisterPestleAndMortarRecipe(IPestleAndMortarRecipe recipe);
+
+	/**
+	 * Returns a list of all pestle and mortar recipes
+	 * @return
+	 */
+	public List<IPestleAndMortarRecipe> getPestleAndMortarRecipes();
+
+	/**
 	 * Registers an entity to be equippable with amulets
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param entity
 	 */
 	public void registerAmuletSupportingEntity(Class<? extends EntityLivingBase> entity);
 
 	/**
 	 * Unregisters an entity from being equippable with amulets
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param entity
 	 */
 	public void unregisterAmuletSupportingEntity(Class<? extends EntityLivingBase> entity);
 
 	/**
 	 * Adds an item to the overworld item whitelist
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param item
 	 */
 	public void registerWhitelistedOverworldItem(Item item);
 
 	/**
 	 * Removes an item from the overworld item whitelist
-	 * <p>Must be called during INITIALIZATION</p>
 	 * @param item
 	 */
 	public void unregisterWhitelistedOverworldItem(Item item);

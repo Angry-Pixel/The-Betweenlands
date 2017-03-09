@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockDruidAltar;
 import thebetweenlands.common.block.structure.BlockDruidStone;
@@ -65,7 +66,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 			this.renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * (FINAL_HEIGHT - 0.2D) + 1.2D);
 		} else {
 			if (this.craftingProgress != 0) {
-				DruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);
+				IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);
 				// Sync clients every second
 				if (this.craftingProgress % 20 == 0 || this.craftingProgress == 1) {
 					sendCraftingProgressPacket();
@@ -75,7 +76,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 					stopCraftingProcess();
 				}
 				if (this.craftingProgress >= CRAFTING_TIME && recipe != null) {
-					ItemStack stack = recipe.getOutput();
+					ItemStack stack = recipe.getOutput(new ItemStack[]{this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]});
 					stack.stackSize = 1;
 					setInventorySlotContents(1, null);
 					setInventorySlotContents(2, null);
@@ -106,7 +107,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
 			stack.stackSize = getInventoryStackLimit();
 		}
-		DruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);
+		IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);
 		if (!this.worldObj.isRemote && recipe != null && stack != null && this.inventory[0] == null && this.craftingProgress == 0) {
 			startCraftingProcess();
 		}

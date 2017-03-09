@@ -6,9 +6,10 @@ import java.util.List;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 
-public class PestleAndMortarRecipe {
-    private static final List<PestleAndMortarRecipe> recipes = new ArrayList<PestleAndMortarRecipe>();
+public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
+    private static final List<IPestleAndMortarRecipe> recipes = new ArrayList<IPestleAndMortarRecipe>();
 
     /**
      *
@@ -21,33 +22,31 @@ public class PestleAndMortarRecipe {
         recipes.add(new PestleAndMortarRecipe(output, input));
     }
     
-    public static void addRecipe(PestleAndMortarRecipe recipe) {
+    public static void addRecipe(IPestleAndMortarRecipe recipe) {
         recipes.add(recipe);
     }
 
-    public static void removeRecipe(PestleAndMortarRecipe recipe) {
+    public static void removeRecipe(IPestleAndMortarRecipe recipe) {
     	recipes.remove(recipe);
     }
     
-    public static ItemStack getOutput(ItemStack input) {
-        for (PestleAndMortarRecipe recipe : recipes) {
-            if (recipe.matches(input)) {
-                return recipe.getOutput();
+    public static ItemStack getResult(ItemStack input) {
+        for (IPestleAndMortarRecipe recipe : recipes) {
+            if (recipe.matchesInput(input)) {
+                return recipe.getOutput(input);
             }
         }
-
         return null;
     }
 
-    public static ItemStack getInput(ItemStack output) {
-        for (PestleAndMortarRecipe recipe : recipes)
-            if (recipe.matchesOutput(output))
-                return recipe.getInputs();
+    /*public static ItemStack getInput(ItemStack output) {
+        for (IPestleAndMortarRecipe recipe : recipes) {
 
+        }
         return null;
-    }
+    }*/
 
-    public static List<PestleAndMortarRecipe> getRecipeList() {
+    public static List<IPestleAndMortarRecipe> getRecipes() {
         return Collections.unmodifiableList(recipes);
     }
 
@@ -108,4 +107,14 @@ public class PestleAndMortarRecipe {
                 }
         return false;
     }
+
+	@Override
+	public ItemStack getOutput(ItemStack input) {
+		return this.output;
+	}
+
+	@Override
+	public boolean matchesInput(ItemStack stack) {
+		return doesInputMatch(this.input, stack, false);
+	}
 }

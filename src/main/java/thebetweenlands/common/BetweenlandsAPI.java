@@ -14,6 +14,8 @@ import thebetweenlands.api.IBetweenlandsAPI;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
+import thebetweenlands.api.recipes.IDruidAltarRecipe;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.event.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -21,6 +23,8 @@ import thebetweenlands.common.herblore.aspect.IItemStackMatcher;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
+import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 
 public class BetweenlandsAPI implements IBetweenlandsAPI {
@@ -40,13 +44,11 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 
 	@Override
 	public void registerPurifierRecipe(IPurifierRecipe recipe) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		PurifierRecipe.addRecipe(recipe);
 	}
 
 	@Override
 	public void unregisterPurifierRecipe(IPurifierRecipe recipe) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		PurifierRecipe.removeRecipe(recipe);
 	}
 
@@ -57,13 +59,11 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 
 	@Override
 	public void registerAnimatorRecipe(IAnimatorRecipe recipe) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		AnimatorRecipe.addRecipe(recipe);
 	}
 
 	@Override
 	public void unregisterAnimatorRecipe(IAnimatorRecipe recipe) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		AnimatorRecipe.removeRecipe(recipe);
 	}
 
@@ -74,13 +74,11 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 
 	@Override
 	public void registerCompostBinRecipe(ICompostBinRecipe recipe) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		CompostRecipe.addRecipe(recipe);
 	}
 
 	@Override
 	public void unregisterCompostBinRecipe(ICompostBinRecipe recipe) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		CompostRecipe.removeRecipe(recipe);
 	}
 
@@ -90,26 +88,52 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 	}
 
 	@Override
+	public void registerDruidAltarRecipe(IDruidAltarRecipe recipe) {
+		DruidAltarRecipe.addRecipe(recipe);		
+	}
+
+	@Override
+	public void unregisterDruidAltarRecipe(IDruidAltarRecipe recipe) {
+		DruidAltarRecipe.removeRecipe(recipe);		
+	}
+
+	@Override
+	public List<IDruidAltarRecipe> getDruidAltarRecipes() {
+		return DruidAltarRecipe.getRecipes();
+	}
+
+	@Override
+	public void registerPestleAndMortarRecipe(IPestleAndMortarRecipe recipe) {
+		PestleAndMortarRecipe.addRecipe(recipe);		
+	}
+
+	@Override
+	public void unregisterPestleAndMortarRecipe(IPestleAndMortarRecipe recipe) {
+		PestleAndMortarRecipe.removeRecipe(recipe);	
+	}
+
+	@Override
+	public List<IPestleAndMortarRecipe> getPestleAndMortarRecipes() {
+		return PestleAndMortarRecipe.getRecipes();
+	}
+
+	@Override
 	public void registerAmuletSupportingEntity(Class<? extends EntityLivingBase> entity) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		ItemAmulet.SUPPORTED_ENTITIES.add(entity);
 	}
 
 	@Override
 	public void unregisterAmuletSupportingEntity(Class<? extends EntityLivingBase> entity) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		ItemAmulet.SUPPORTED_ENTITIES.remove(entity);
 	}
 
 	@Override
 	public void registerWhitelistedOverworldItem(Item item) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		OverworldItemHandler.WHITELIST.add(item);
 	}
 
 	@Override
 	public void unregisterWhitelistedOverworldItem(Item item) {
-		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		OverworldItemHandler.WHITELIST.remove(item);
 	}
 

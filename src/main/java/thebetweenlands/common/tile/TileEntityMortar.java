@@ -1,11 +1,12 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -14,8 +15,6 @@ import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import javax.annotation.Nullable;
 
 public class TileEntityMortar extends TileEntityBasicInventory implements ITickable {
 
@@ -58,17 +57,17 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             }
             return;
         }
-        ItemStack output = PestleAndMortarRecipe.getOutput(inventory[0]);
+        ItemStack output = PestleAndMortarRecipe.getResult(inventory[0]);
         if (pestleInstalled() && !outputIsFull()) {
 
             if (isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
                 if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
                     progress++;
                     if (progress == 1)
-                        worldObj.playSound(getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F, true);
+                        worldObj.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
                     if (progress == 64 || progress == 84) {
-                        worldObj.playSound(getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.5F, 1F, true);
-                        worldObj.playSound(getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 1F, 1F, true);
+                        worldObj.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+                        worldObj.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
                     }
                     if (inventory[1] != null && !getStackInSlot(1).getTagCompound().getBoolean("active"))
                         getStackInSlot(1).getTagCompound().setBoolean("active", true);
@@ -177,11 +176,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         nbt.setBoolean("hasPestle", hasPestle);
         nbt.setBoolean("hasCrystal", hasCrystal);
         nbt.setBoolean("manualGrinding", manualGrinding);
-        NBTTagCompound itemStackCompound = new NBTTagCompound();
-        if (inventory[3] != null) {
-            inventory[3].writeToNBT(itemStackCompound);
-        }
-        nbt.setTag("outputItem", itemStackCompound);
+        this.writeInventoryNBT(nbt);
         return new SPacketUpdateTileEntity(getPos(), 0, nbt);
     }
 
@@ -191,12 +186,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         hasPestle = packet.getNbtCompound().getBoolean("hasPestle");
         hasCrystal = packet.getNbtCompound().getBoolean("hasCrystal");
         manualGrinding = packet.getNbtCompound().getBoolean("manualGrinding");
-        NBTTagCompound itemStackCompound = packet.getNbtCompound().getCompoundTag("outputItem");
-        if (itemStackCompound.getShort("id") != 0) {
-            inventory[3] = ItemStack.loadItemStackFromNBT(itemStackCompound);
-        } else {
-            inventory[3] = null;
-        }
+        this.readInventoryNBT(packet.getNbtCompound());
     }
 
     @Override

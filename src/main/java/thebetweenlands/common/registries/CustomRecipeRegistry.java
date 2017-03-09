@@ -13,6 +13,8 @@ import com.google.gson.stream.JsonReader;
 
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
+import thebetweenlands.api.recipes.IDruidAltarRecipe;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
 import thebetweenlands.common.recipe.custom.CustomCompostBinRecipes;
@@ -21,8 +23,6 @@ import thebetweenlands.common.recipe.custom.CustomPestleAndMortarRecipes;
 import thebetweenlands.common.recipe.custom.CustomPurifierRecipes;
 import thebetweenlands.common.recipe.custom.CustomRecipes;
 import thebetweenlands.common.recipe.custom.CustomRecipes.InvalidRecipeException;
-import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class CustomRecipeRegistry {
@@ -33,8 +33,8 @@ public class CustomRecipeRegistry {
 	public static CustomRecipes<IAnimatorRecipe> animatorRecipes;
 	public static CustomRecipes<IPurifierRecipe> purifiedRecipes;
 	public static CustomRecipes<ICompostBinRecipe> compostBinRecipes;
-	public static CustomRecipes<DruidAltarRecipe> druidAltarRecipes;
-	public static CustomRecipes<PestleAndMortarRecipe> pestleAndMortarRecipes;
+	public static CustomRecipes<IDruidAltarRecipe> druidAltarRecipes;
+	public static CustomRecipes<IPestleAndMortarRecipe> pestleAndMortarRecipes;
 
 	public static void preInit() {
 		RECIPE_TYPES.add(animatorRecipes = new CustomAnimatorRecipes());
