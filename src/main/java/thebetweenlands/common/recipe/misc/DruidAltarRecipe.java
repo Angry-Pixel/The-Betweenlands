@@ -24,6 +24,10 @@ public class DruidAltarRecipe {
         this.output = output;
     }
 
+    public static void addRecipe(DruidAltarRecipe recipe) {
+        druidAltarRecipes.add(recipe);
+    }
+    
     public static void addRecipe(ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4, ItemStack output) {
         druidAltarRecipes.add(new DruidAltarRecipe(input1, input2, input3, input4, output));
     }

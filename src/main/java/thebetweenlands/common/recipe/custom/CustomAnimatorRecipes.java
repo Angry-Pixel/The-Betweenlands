@@ -9,16 +9,17 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 
-public class CustomAnimatorRecipe extends CustomRecipe {
-	public CustomAnimatorRecipe() {
+public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
+	public CustomAnimatorRecipes() {
 		super("animator", ImmutableMap.of("input/item", RecipeArg.ITEM_INPUT, "input/fuel", RecipeArg.INT, "input/life", RecipeArg.INT), ImmutableMap.of("output", RecipeArg.ITEM_OUTPUT, "output_entity", RecipeArg.ENTITY, "rendered_entity", RecipeArg.STRING));
 	}
 
 	@Override
-	public void register() {
+	public IAnimatorRecipe load() {
 		ItemStack input = this.get("input/item", RecipeArg.ITEM_INPUT).get().create();
 		Optional<IRecipeEntry<ItemStack>> outputItem = this.get("output", RecipeArg.ITEM_OUTPUT);
 		Optional<IRecipeEntry<Entity>> outputEntity = this.get("output_entity", RecipeArg.ENTITY);
@@ -51,7 +52,7 @@ public class CustomAnimatorRecipe extends CustomRecipe {
 					}
 					return true;
 				}
-			};
+			}.setCloseOnFinish(true);
 			if(renderedEntity.isPresent()) {
 				recipe.setRenderEntity(renderedEntity.get().create());
 			}
@@ -59,6 +60,23 @@ public class CustomAnimatorRecipe extends CustomRecipe {
 			recipe = new AnimatorRecipe(input, fuel, life, output);
 		}
 
-		AnimatorRecipe.addRecipe(recipe);
+		return recipe;
+	}
+
+	@Override
+	public IRecipeRegistrar<IAnimatorRecipe> createRegistrar() {
+		return new IRecipeRegistrar<IAnimatorRecipe>() {
+			@Override
+			public boolean register(IAnimatorRecipe recipe) {
+				AnimatorRecipe.addRecipe(recipe);
+				return true;
+			}
+
+			@Override
+			public boolean unregister(IAnimatorRecipe recipe) {
+				AnimatorRecipe.removeRecipe(recipe);
+				return true;
+			}
+		};
 	}
 }

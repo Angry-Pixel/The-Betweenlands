@@ -20,7 +20,15 @@ public class PestleAndMortarRecipe {
     public static void addRecipe(ItemStack output, ItemStack input) {
         recipes.add(new PestleAndMortarRecipe(output, input));
     }
+    
+    public static void addRecipe(PestleAndMortarRecipe recipe) {
+        recipes.add(recipe);
+    }
 
+    public static void removeRecipe(PestleAndMortarRecipe recipe) {
+    	recipes.remove(recipe);
+    }
+    
     public static ItemStack getOutput(ItemStack input) {
         for (PestleAndMortarRecipe recipe : recipes) {
             if (recipe.matches(input)) {
@@ -46,7 +54,7 @@ public class PestleAndMortarRecipe {
     private final ItemStack output;
     private final ItemStack input;
 
-    private PestleAndMortarRecipe(ItemStack output, ItemStack input) {
+    public PestleAndMortarRecipe(ItemStack output, ItemStack input) {
         this.output = ItemStack.copyItemStack(output);
         this.input = ItemStack.copyItemStack(input);
 

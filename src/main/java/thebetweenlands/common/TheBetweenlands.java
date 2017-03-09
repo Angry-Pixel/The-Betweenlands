@@ -21,6 +21,7 @@ import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
+import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.event.handler.AnvilEventHandler;
 import thebetweenlands.common.event.handler.ArmorHandler;
@@ -136,6 +137,7 @@ public class TheBetweenlands {
 			event.registerServerCommand(new CommandTickSpeed());
 		}
 		BLGamerules.INSTANCE.onServerStarting(event);*/
+		event.registerServerCommand(new CommandReloadRecipes());
 	}
 
 	/**

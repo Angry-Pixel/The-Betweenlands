@@ -1,6 +1,9 @@
 package thebetweenlands.common.recipe.custom;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -8,6 +11,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -23,15 +27,33 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraftforge.oredict.OreDictionary;
 
-public abstract class CustomRecipe {
+public abstract class CustomRecipes<C> {
 	private final String name;
+	private final List<C> loadedRecipes = new ArrayList<>();
+	private IRecipeRegistrar<C> recipeRegistrar;
 
-	protected static class InvalidRecipeException extends RuntimeException {
+	public static class InvalidRecipeException extends RuntimeException {
 		private static final long serialVersionUID = -6724435505685374630L;
 
 		public InvalidRecipeException(String msg) {
 			super(msg);
 		}
+	}
+
+	public static interface IRecipeRegistrar<C> {
+		/**
+		 * Registers the recipe
+		 * @param recipe
+		 * @return Return true if successful
+		 */
+		public boolean register(C recipe);
+
+		/**
+		 * Unregisters the recipe
+		 * @param recipe
+		 * @return Return true if successful
+		 */
+		public boolean unregister(C recipe);
 	}
 
 	@FunctionalInterface
@@ -82,11 +104,7 @@ public abstract class CustomRecipe {
 			int meta = obj.has("meta") ? obj.get("meta").getAsInt() : (input ? OreDictionary.WILDCARD_VALUE : 0);
 			NBTTagCompound nbt = null;
 			if(obj.has("nbt")) {
-				try {
-					nbt = JsonToNBT.getTagFromJson(obj.get("nbt").getAsString());
-				} catch (NBTException e) {
-					throw new RuntimeException(e);
-				}
+				nbt = NBT.parse(obj.get("nbt")).create();
 			}
 			int size = obj.has("size") ? obj.get("size").getAsInt() : 1;
 			ItemStack stack = new ItemStack(Item.getByNameOrId(id), size, meta);
@@ -101,17 +119,25 @@ public abstract class CustomRecipe {
 				String id = obj.get("id").getAsString();
 				NBTTagCompound nbt = null;
 				if(obj.has("nbt")) {
-					try {
-						nbt = JsonToNBT.getTagFromJson(obj.get("nbt").getAsString());
-					} catch (NBTException e) {
-						throw new RuntimeException(e);
-					}
+					nbt = NBT.parse(obj.get("nbt")).create();
 				} else {
 					nbt = new NBTTagCompound();
 				}
 				nbt.setString("id", id);
 				final NBTTagCompound finalNbt = nbt;
 				return (world, pos, crafter) -> AnvilChunkLoader.readWorldEntityPos(finalNbt, world, pos.xCoord, pos.yCoord, pos.zCoord, true);
+			}
+		};
+
+		public static final RecipeArg<NBTTagCompound> NBT = new RecipeArg<NBTTagCompound>() {
+			@Override
+			public IRecipeEntry<NBTTagCompound> parse(JsonElement element) {
+				try {
+					NBTTagCompound nbt = JsonToNBT.getTagFromJson(element.getAsString());
+					return (world, pos, crafter) -> nbt;
+				} catch (NBTException e) {
+					throw new RuntimeException(e);
+				}
 			}
 		};
 
@@ -152,17 +178,26 @@ public abstract class CustomRecipe {
 	private final ImmutableMap<String, RecipeArg<?>> args;
 	private final ImmutableMap<String, RecipeArg<?>> optionalArgs;
 
-	public CustomRecipe(String name, ImmutableMap<String, RecipeArg<?>> args, ImmutableMap<String, RecipeArg<?>> optionalArgs) {
+	public CustomRecipes(String name, ImmutableMap<String, RecipeArg<?>> args, ImmutableMap<String, RecipeArg<?>> optionalArgs) {
 		this.name = name;
 		this.args = args;
 		this.optionalArgs = optionalArgs;
 	}
 
 	/**
-	 * Loads the entries
-	 * @param element
+	 * Parses and loads the recipes
+	 * @param array
 	 */
-	public void loadEntries(JsonElement element) {
+	public final void parse(JsonArray array) {
+		this.clear();
+		array.forEach(element -> {
+			this.parseRecipe(element);
+			this.loadedRecipes.add(this.load());
+		});
+		this.recipeRegistrar = this.createRegistrar();
+	}
+
+	private final void parseRecipe(JsonElement element) {
 		this.loadedEntries.clear();
 
 		for(Entry<String, RecipeArg<?>> entry : this.args.entrySet()) {
@@ -181,7 +216,7 @@ public abstract class CustomRecipe {
 		}
 	}
 
-	private JsonElement getElement(String entry, JsonElement parent) {
+	private final JsonElement getElement(String entry, JsonElement parent) {
 		String[] path = entry.split("/");
 		JsonElement element = parent;
 		for(String str : path) {
@@ -200,15 +235,62 @@ public abstract class CustomRecipe {
 	}
 
 	/**
-	 * Registers the recipe
+	 * Loads the recipe
 	 */
-	public abstract void register();
+	protected abstract C load();
+
+	/**
+	 * Creates the recipe registrar
+	 * @return
+	 */
+	protected abstract IRecipeRegistrar<C> createRegistrar();
+
+	/**
+	 * Returns the recipe registrar
+	 * @return
+	 */
+	protected final IRecipeRegistrar<C> getRegistrar() {
+		return this.recipeRegistrar;
+	}
+
+	/**
+	 * Registers all loaded recipes
+	 */
+	public final void registerRecipes() {
+		for(C recipe : this.loadedRecipes) {
+			this.getRegistrar().register(recipe);
+		}
+	}
+
+	/**
+	 * Unregisters all loaded recipes
+	 */
+	public final void unregisterRecipes() {
+		for(C recipe : this.loadedRecipes) {
+			this.getRegistrar().unregister(recipe);
+		}
+	}
+
+	/**
+	 * Returns a list of all loaded recipes
+	 * @return
+	 */
+	public final List<C> getRecipes() {
+		return Collections.unmodifiableList(this.loadedRecipes);
+	}
+
+	/**
+	 * Clears the loaded recipes
+	 */
+	public final void clear() {
+		this.loadedRecipes.clear();
+	}
 
 	/**
 	 * Throws an invalid recipe exception
 	 * @param msg
 	 */
-	protected void throwException(String msg) {
+	protected final void throwException(String msg) {
 		throw new InvalidRecipeException(msg);
 	}
 
@@ -219,7 +301,7 @@ public abstract class CustomRecipe {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public <T, F extends RecipeArg<T>> Optional<IRecipeEntry<T>> get(String id, RecipeArg<T> arg) {
+	public final <T, F extends RecipeArg<T>> Optional<IRecipeEntry<T>> get(String id, RecipeArg<T> arg) {
 		Optional<IRecipeEntry<?>> entry = this.loadedEntries.get(id);
 		if(entry != null && entry.isPresent()) {
 			return Optional.of((IRecipeEntry<T>)(IRecipeEntry<?>)entry.get());
@@ -231,7 +313,7 @@ public abstract class CustomRecipe {
 	 * Returns the name of this recipe type
 	 * @return
 	 */
-	public String getName() {
+	public final String getName() {
 		return this.name;
 	}
 }

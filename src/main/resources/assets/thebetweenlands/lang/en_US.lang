@@ -821,3 +821,36 @@ jei.thebetweenlands.time.minutes=Process time: %d seconds
 jei.thebetweenlands.time.seconds=Process time: %d minutes
 jei.thebetweenlands.animator.life=Life amount: %d
 jei.thebetweenlands.animator.fuel=Fuel amount: %d
+
+# Commands
+command.generic.noplayer=You must be a player
+
+command.blevent.success.on=The event '%s' is now taking place
+command.blevent.success.off=The event '%s' is no longer taking place
+command.blevent.success.alloff=All events are no longer taking place
+command.blevent.success.enable=Events are enabled
+command.blevent.success.disable=Events are disabled
+
+command.blevent.usage=/blevent <toggle|on|off|list|enable|disable>
+command.blevent.usage.toggle=/blevent toggle <event name>
+command.blevent.usage.on=/blevent on <event name>
+command.blevent.usage.off=/blevent off [event name]
+
+command.blevent.failure.unknown=Unknown event '%s'
+command.blevent.failure.wrongdimension=You must be in a Betweenlands world to toggle events
+command.blevent.failure.alreadyon=The event '%s' is already on
+command.blevent.failure.alreadyoff=The event '%s' is already off
+command.blevent.failure.alreadyenabled=Events are already enabled
+command.blevent.failure.alreadydisabled=Events are already disabled
+
+command.aspectdiscovery.book.none=There's no Herblore Book to write to
+command.aspectdiscovery.held.null=Held item must not be null
+command.aspectdiscovery.discover.held=Result: %s Aspect: %d
+command.aspectdiscovery.discover.all=Discovered all aspects of all items
+command.aspectdiscovery.reset.held=Removed discovered aspects
+command.aspectdiscovery.reset.all=Removed discovered aspects from all items
+
+command.aspect.reset.confirm=Confirm with '/resetAspects confirm'
+command.aspect.reset.success=The aspects have been reset
+
+command.blreloadrecipes.success=Reloaded custom recipes
