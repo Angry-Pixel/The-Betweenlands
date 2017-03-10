@@ -1,4 +1,4 @@
-package thebetweenlands.common.tile.spawner;
+package thebetweenlands.common.tile;
 
 import java.util.ArrayList;
 import java.util.Iterator;

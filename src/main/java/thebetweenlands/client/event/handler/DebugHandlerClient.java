@@ -8,12 +8,17 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -75,6 +80,23 @@ public class DebugHandlerClient {
 					GlStateManager.color(red, green, blue, 1.0F);
 					drawBoundingBoxOutline(location.getEnclosingBounds().offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 
+					AxisAlignedBB aabb = location.getEnclosingBounds();
+					Vec3d center = new Vec3d((aabb.maxX + aabb.minX) / 2.0D, (aabb.maxY + aabb.minY) / 2.0D, (aabb.maxZ + aabb.minZ) / 2.0D).addVector(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ);
+
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(center.xCoord, center.yCoord, center.zCoord);
+
+					float scale = Math.max(2.0F, (float)center.lengthVector() / 10.0F);
+
+					GlStateManager.scale(scale, scale, scale);
+
+					renderTag(Minecraft.getMinecraft().fontRendererObj, location.getLocalizedName(), 0, 0, 0, 0, Minecraft.getMinecraft().getRenderManager().playerViewY, Minecraft.getMinecraft().getRenderManager().playerViewX, Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);
+
+					GlStateManager.popMatrix();
+
+					GlStateManager.disableTexture2D();
+					GlStateManager.color(1, 1, 1, 1);
+
 					GlStateManager.enableDepth();
 					GlStateManager.glLineWidth(2F);
 
@@ -116,6 +138,34 @@ public class DebugHandlerClient {
 				}
 			}
 		}
+	}
+
+	public static void renderTag(FontRenderer fontRenderer, String str, float x, float y, float z, int yOffset, float playerViewY, float playerViewX, boolean thirdPerson) {
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate(-playerViewY, 0.0F, 1.0F, 0.0F);
+		GlStateManager.rotate((float)(thirdPerson ? -1 : 1) * playerViewX, 1.0F, 0.0F, 0.0F);
+		GlStateManager.scale(-0.025F, -0.025F, 0.025F);
+
+		GlStateManager.enableBlend();
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		int i = fontRenderer.getStringWidth(str) / 2;
+		GlStateManager.disableTexture2D();
+		Tessellator tessellator = Tessellator.getInstance();
+		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+		vertexbuffer.pos((double)(-i - 1), (double)(-1 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double)(-i - 1), (double)(8 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double)(i + 1), (double)(8 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double)(i + 1), (double)(-1 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		tessellator.draw();
+		GlStateManager.enableTexture2D();
+
+		fontRenderer.drawString(str, -fontRenderer.getStringWidth(str) / 2, yOffset,  0xFFFFFFFF);
+		GlStateManager.disableBlend();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.popMatrix();
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -52,12 +52,16 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	public static final PropertyEnum<EnumLootPot> VARIANT = PropertyEnum.create("type", EnumLootPot.class);
 
 	public BlockLootPot() {
-		super(Material.GLASS);
+		this(Material.GLASS);
+	}
+
+	public BlockLootPot(Material material) {
+		super(material);
 		setHardness(1.0f);
 		setSoundType(SoundType.GLASS);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(VARIANT, EnumLootPot.POT_1));
 	}
-
+	
 	@Nullable
 	public static TileEntityLootPot getTileEntity(IBlockAccess world, BlockPos pos) {
 		TileEntity tile = world.getTileEntity(pos);

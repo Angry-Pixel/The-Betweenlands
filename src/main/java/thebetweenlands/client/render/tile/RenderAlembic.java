@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelAlembic;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
-import thebetweenlands.common.tile.spawner.TileEntityAlembic;
+import thebetweenlands.common.tile.TileEntityAlembic;
 
 @SideOnly(Side.CLIENT)
 public class RenderAlembic extends TileEntitySpecialRenderer<TileEntityAlembic> {

@@ -39,6 +39,7 @@ import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
 import thebetweenlands.common.block.farming.BlockDugDirt;
@@ -112,6 +113,7 @@ import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.block.structure.BlockStandingWeedwoodSign;
+import thebetweenlands.common.block.structure.BlockTarBeastSpawner;
 import thebetweenlands.common.block.structure.BlockTemplePillar;
 import thebetweenlands.common.block.structure.BlockThatchRoof;
 import thebetweenlands.common.block.structure.BlockTreePortal;
@@ -316,6 +318,8 @@ public class BlockRegistry {
 	public static final Block PITSTONE_PILLAR = new BlockTemplePillar();
 	public static final Block LIMESTONE_PILLAR = new BlockTemplePillar();
 	public static final Block CRAGROCK_PILLAR = new BlockTemplePillar();
+	public static final Block TAR_BEAST_SPAWNER = new BlockTarBeastSpawner();
+	public static final Block TAR_LOOT_POT = new BlockTarLootPot();
 	
 	public static final Block CRAGROCK_STAIRS = new BlockStairsBetweenlands(CRAGROCK.getDefaultState());
 	public static final Block PITSTONE_STAIRS = new BlockStairsBetweenlands(PITSTONE.getDefaultState());

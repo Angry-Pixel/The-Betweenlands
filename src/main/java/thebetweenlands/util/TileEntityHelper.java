@@ -1,5 +1,7 @@
 package thebetweenlands.util;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +21,7 @@ public class TileEntityHelper {
 	 * @param defaultVal
 	 * @return
 	 */
-	public static <P extends IUnlistedProperty<T>, T> T getStatePropertySafely(TileEntity te, Class<? extends Block> block, P property, T defaultVal) {
+	public static <P extends IUnlistedProperty<T>, T> T getStatePropertySafely(@Nullable TileEntity te, Class<? extends Block> block, P property, T defaultVal) {
 		return getStatePropertySafely(te, block, property, defaultVal, false, false);
 	}
 
@@ -32,7 +34,10 @@ public class TileEntityHelper {
 	 * @param extended
 	 * @return
 	 */
-	public static <P extends IUnlistedProperty<T>, T> T getStatePropertySafely(TileEntity te, Class<? extends Block> block, P property, T defaultVal, boolean actual, boolean extended) {
+	public static <P extends IUnlistedProperty<T>, T> T getStatePropertySafely(@Nullable TileEntity te, Class<? extends Block> block, P property, T defaultVal, boolean actual, boolean extended) {
+		if(te == null || te.getWorld() == null) {
+			return defaultVal;
+		}
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
 		if(block.isInstance(state.getBlock())) {
 			if(actual) {
@@ -55,7 +60,7 @@ public class TileEntityHelper {
 	 * @param defaultVal
 	 * @return
 	 */
-	public static <P extends IProperty<T>, T extends Comparable<T>> T getStatePropertySafely(TileEntity te, Class<? extends Block> block, P property, T defaultVal) {
+	public static <P extends IProperty<T>, T extends Comparable<T>> T getStatePropertySafely(@Nullable TileEntity te, Class<? extends Block> block, P property, T defaultVal) {
 		return getStatePropertySafely(te, block, property, defaultVal, false, false);
 	}
 
@@ -68,7 +73,10 @@ public class TileEntityHelper {
 	 * @param extended
 	 * @return
 	 */
-	public static <P extends IProperty<T>, T extends Comparable<T>> T getStatePropertySafely(TileEntity te, Class<? extends Block> block, P property, T defaultVal, boolean actual, boolean extended) {
+	public static <P extends IProperty<T>, T extends Comparable<T>> T getStatePropertySafely(@Nullable TileEntity te, Class<? extends Block> block, P property, T defaultVal, boolean actual, boolean extended) {
+		if(te == null || te.getWorld() == null) {
+			return defaultVal;
+		}
 		IBlockState state = te.getWorld().getBlockState(te.getPos());
 		if(block.isInstance(state.getBlock())) {
 			if(actual) {

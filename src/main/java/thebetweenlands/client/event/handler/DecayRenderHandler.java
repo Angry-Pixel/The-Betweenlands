@@ -24,6 +24,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderSpecificHandEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
@@ -95,7 +96,7 @@ public class DecayRenderHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onPreRenderPlayer(RenderPlayerEvent.Pre event) {
 		EntityPlayer player = event.getEntityPlayer();
 
@@ -109,7 +110,7 @@ public class DecayRenderHandler {
 		}
 	}
 
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderHand(RenderSpecificHandEvent event) {
 		GlStateManager.pushMatrix();
 

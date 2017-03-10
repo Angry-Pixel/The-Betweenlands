@@ -29,6 +29,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -297,7 +298,7 @@ public class PuppetHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderLivingPre(RenderLivingEvent.Pre<EntityLivingBase> event) {
 		EntityLivingBase living = event.getEntity();
 
@@ -312,7 +313,7 @@ public class PuppetHandler {
 	}
 
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent(receiveCanceled = true)
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderLivingPost(RenderLivingEvent.Post<EntityLivingBase> event) {
 		EntityLivingBase living = event.getEntity();
 

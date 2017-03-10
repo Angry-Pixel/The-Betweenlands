@@ -22,23 +22,24 @@ import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
 import thebetweenlands.common.world.gen.feature.WorldGenDeadWeedwoodTree;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
-import thebetweenlands.common.world.gen.feature.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRottenLogs;
 import thebetweenlands.common.world.gen.feature.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallHollowLog;
-import thebetweenlands.common.world.gen.feature.WorldGenSmallRuins;
-import thebetweenlands.common.world.gen.feature.WorldGenSpawner;
-import thebetweenlands.common.world.gen.feature.WorldGenSpawnerStructure;
 import thebetweenlands.common.world.gen.feature.WorldGenSpeleothem;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampKelpCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampReedCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWaterRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenWeedwoodBush;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenIdolHeads;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenMudStructures;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawner;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSpawnerStructure;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenTarPoolDungeon;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRuins;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
@@ -107,6 +108,7 @@ public class DecorationHelper {
 	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
 	public static final WorldGenerator GEN_DEAD_TRUNK = new WorldGenGiantTreeDead();
 	public static final WorldGenerator GEN_MUD_STRUCTURES = new WorldGenMudStructures();
+	public static final WorldGenerator GEN_TAR_POOL_DUNGEON = new WorldGenTarPoolDungeon();
 
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
@@ -218,6 +220,16 @@ public class DecorationHelper {
 		int y = decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 20);
 		int z = decorator.getRandomPosZ(13);
 		if(GEN_SPAWNER.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z))) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean generateTarPoolDungeon(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX(10);
+		int y = decorator.getRand().nextInt(WorldProviderBetweenlands.CAVE_START - 20);
+		int z = decorator.getRandomPosZ(10);
+		if(GEN_TAR_POOL_DUNGEON.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z))) {
 			return true;
 		}
 		return false;

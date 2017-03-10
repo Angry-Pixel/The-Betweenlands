@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 import java.util.UUID;

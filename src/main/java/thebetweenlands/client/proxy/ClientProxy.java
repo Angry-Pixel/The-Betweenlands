@@ -43,6 +43,7 @@ import thebetweenlands.client.event.handler.FogHandler;
 import thebetweenlands.client.event.handler.InputHandler;
 import thebetweenlands.client.event.handler.ItemTooltipHandler;
 import thebetweenlands.client.event.handler.MusicHandler;
+import thebetweenlands.client.event.handler.OverlayHandler;
 import thebetweenlands.client.event.handler.ScreenRenderHandler;
 import thebetweenlands.client.event.handler.ShaderHandler;
 import thebetweenlands.client.event.handler.TextureStitchHandler;
@@ -126,6 +127,9 @@ import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
+import thebetweenlands.client.render.tile.RenderTarLootPot1;
+import thebetweenlands.client.render.tile.RenderTarLootPot2;
+import thebetweenlands.client.render.tile.RenderTarLootPot3;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
@@ -190,6 +194,7 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
+import thebetweenlands.common.tile.TileEntityAlembic;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.common.tile.TileEntityBLDualFurnace;
 import thebetweenlands.common.tile.TileEntityBLFurnace;
@@ -206,10 +211,12 @@ import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
+import thebetweenlands.common.tile.TileEntityTarLootPot1;
+import thebetweenlands.common.tile.TileEntityTarLootPot2;
+import thebetweenlands.common.tile.TileEntityTarLootPot3;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
-import thebetweenlands.common.tile.spawner.TileEntityAlembic;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.GLUProjection;
@@ -481,6 +488,9 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAlembic.class, new RenderAlembic());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCompostBin.class, new RenderCompostBin());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityItemShelf.class, new RenderItemShelf());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot1.class, new RenderTarLootPot1());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot2.class, new RenderTarLootPot2());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new RenderTarLootPot3());
 		
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -502,7 +512,12 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ANIMATOR), 0, TileEntityAnimator.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ALEMBIC), 0, TileEntityAlembic.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_SHELF), 0, TileEntityItemShelf.class);
-
+		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);
+			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_3.getMetadata(facing), TileEntityTarLootPot3.class);
+		}
+		
 		//Block colors
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {
@@ -569,6 +584,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
 		MinecraftForge.EVENT_BUS.register(GuiBLMainMenu.class);
         MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(OverlayHandler.class);
 	}
 
 	@Override

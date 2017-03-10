@@ -82,6 +82,10 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 		this.startProfilerSection("undergroundSpawners");
 		this.generate(1.0F, DecorationHelper::generateSpawner);
 		this.endProfilerSection();
+		
+		this.startProfilerSection("tarPoolDungeons");
+		this.generate(1.0F, DecorationHelper::generateTarPoolDungeon);
+		this.endProfilerSection();
 	}
 
 	/**

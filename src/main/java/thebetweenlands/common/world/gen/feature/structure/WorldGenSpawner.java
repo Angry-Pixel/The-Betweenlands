@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.List;
 import java.util.Random;
@@ -194,7 +194,7 @@ public class WorldGenSpawner extends WorldGenerator {
 			}
 
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-			LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "undergroundDungeon", EnumLocationType.DUNGEON);
+			LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "underground_dungeon", EnumLocationType.DUNGEON);
 			location.addBounds(new AxisAlignedBB(center).expand(6, 4, 6));
 			location.linkChunks();
 			location.setLayer(0);

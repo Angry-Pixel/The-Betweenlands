@@ -21,6 +21,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -159,7 +160,7 @@ public class ItemAmulet extends Item implements IEquippable {
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) { }
 
 	@SideOnly(Side.CLIENT)
-	@SubscribeEvent
+	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public static void onRenderLiving(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		if(event.getEntity() != null) {
 			renderAmulet(event.getEntity(), event.getX(), event.getY(), event.getZ(), WorldRenderHandler.getPartialTicks());

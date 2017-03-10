@@ -193,7 +193,7 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 
 	protected void generateWorldLocation(World world, Random rand, BlockPos pos) {
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage treeLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "giantTree", EnumLocationType.GIANT_TREE);
+		LocationStorage treeLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "giant_tree", EnumLocationType.GIANT_TREE);
 		treeLocation.addBounds(new AxisAlignedBB(pos.getX() - 32, pos.getY() - 10, pos.getZ() - 32, pos.getX() + 32, pos.getY() + 80, pos.getZ() + 32));
 		treeLocation.linkChunks();
 		treeLocation.setDirty(true);

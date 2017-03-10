@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +19,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.gen.feature.WorldGenHelper;
+import thebetweenlands.common.world.gen.feature.WorldGenHelper.EnumRotationSequence;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.SharedRegion;
 import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;

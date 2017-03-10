@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.terrain;
 
+import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -48,5 +49,22 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(BlockStagnantWater.LEVEL);
+	}
+
+	@Override
+	public Boolean isEntityInsideMaterial(IBlockAccess world, BlockPos blockpos, IBlockState state, Entity entity, double yToTest, Material materialIn, boolean testingHead) {
+		if(materialIn == Material.WATER) {
+			double liquidHeight = (double)((float)(blockpos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
+			if(testingHead) {
+				double liquidHeightBelow = 0;
+				if(world.getBlockState(blockpos.up()).getBlock() == state.getBlock()) {
+					liquidHeightBelow = (double)((float)(blockpos.getY() + 2) - BlockLiquid.getLiquidHeightPercent(((Integer)world.getBlockState(blockpos.up()).getValue(BlockLiquid.LEVEL)).intValue()));
+				}
+				return entity.posY + entity.getEyeHeight() < 0.1D + liquidHeight || entity.posY + entity.getEyeHeight() < 0.1D + liquidHeightBelow;
+			} else {
+				return entity.getEntityBoundingBox().maxY >= liquidHeight && entity.getEntityBoundingBox().minY < liquidHeight;
+			}
+		}
+		return null;
 	}
 }

@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
 
@@ -19,6 +19,8 @@ import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockCragrock.EnumCragrockType;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.gen.feature.WorldGenBlockReplacementCluster;
+import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 
 
 public class WorldGenIdolHeads extends WorldGenerator {

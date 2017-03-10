@@ -20,7 +20,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.common.tile.spawner.TileEntityAlembic;
+import thebetweenlands.common.tile.TileEntityAlembic;
 
 import javax.annotation.Nullable;
 import java.util.Random;
