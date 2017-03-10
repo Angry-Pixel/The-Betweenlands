@@ -43,14 +43,17 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTorchPlacement(PlaceEvent event) {
-		ItemStack itemstack = event.getPlayer().inventory.getCurrentItem();
-		if (itemstack != null && Block.getBlockFromItem(itemstack.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(itemstack.getItem())) && !WHITELIST.contains(itemstack.getItem())) {
+		ItemStack mainHand = event.getPlayer().getHeldItemMainhand();
+		ItemStack offHand = event.getPlayer().getHeldItemMainhand();
+		boolean isHoldingTorchMainhand = mainHand != null && Block.getBlockFromItem(mainHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(mainHand.getItem())) && !WHITELIST.contains(mainHand.getItem());
+		boolean isHoldingTorchOffhand = offHand != null && Block.getBlockFromItem(offHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(offHand.getItem())) && !WHITELIST.contains(offHand.getItem());
+		if (isHoldingTorchMainhand || isHoldingTorchOffhand) {
 			if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
 				for(int x = -2; x <= 2; x++) {
 					for(int y = -2; y <= 2; y++) {
 						for(int z = -2; z <= 2; z++) {
 							IBlockState block = event.getWorld().getBlockState(event.getPos().add(x, y, z));
-							if(block.getBlock() == Blocks.TORCH) {
+							if(block.getBlock() == Blocks.TORCH && !BlockRegistry.BLOCKS.contains(block.getBlock()) && !WHITELIST.contains(Item.getItemFromBlock(block.getBlock()))) {
 								EnumFacing facing = block.getValue(BlockTorch.FACING);
 								IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
 								event.getWorld().setBlockState(event.getPos().add(x, y, z), dampTorch);

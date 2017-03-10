@@ -342,14 +342,16 @@ public class RecipeRegistry {
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WOOD_CHIP_PATH, 4), "###", '#', EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1));
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WALKWAY, 2), "SSS", "x x", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 
-		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.WEEDWOOD_PLANKS);
-		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM, 1), "##", "##", "##", '#', BlockRegistry.RUBBER_TREE_PLANKS);
-		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_DOOR_ITEM, 1), "##", "##", "##", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM, 3), "##", "##", "##", '#', BlockRegistry.WEEDWOOD_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM, 3), "##", "##", "##", '#', BlockRegistry.RUBBER_TREE_PLANKS);
+		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_DOOR_ITEM, 3), "##", "##", "##", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_TRAPDOOR, 2), "###", "###", '#', BlockRegistry.WEEDWOOD_PLANKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_TRAPDOOR, 2), "###", "###", '#', BlockRegistry.RUBBER_TREE_PLANKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SYRMORITE_TRAPDOOR, 2), "###", "###", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
 
 		// Stairs, slabs, walls, fences, pillars
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRAGROCK);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.PITSTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.BETWEENSTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
@@ -369,11 +371,13 @@ public class RecipeRegistry {
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.CRACKED_BETWEENSTONE_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_STAIRS, 4), "x  ", "xx ", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
 		
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.PITSTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.BETWEENSTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.BETWEENSTONE_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.PITSTONE_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.MUD_BRICKS);
-		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRAGROCK);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.CRAGROCK_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_BRICK_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.LIMESTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.POLISHED_LIMESTONE_WALL, 6), "xxx", "xxx", 'x', BlockRegistry.POLISHED_LIMESTONE);
@@ -394,6 +398,8 @@ public class RecipeRegistry {
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE, 1), "xSx", "xSx", 'x',  EnumItemMisc.WEEDWOOD_STICK.create(1), 'S', new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
 
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.CRAGROCK_SLAB, 6), "###", '#', BlockRegistry.CRAGROCK);
+		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.PITSTONE_SLAB, 6), "###", '#', BlockRegistry.PITSTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_SLAB, 6), "###", '#', BlockRegistry.BETWEENSTONE);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.BETWEENSTONE_BRICK_SLAB, 6), "###", '#', BlockRegistry.BETWEENSTONE_BRICKS);
 		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.MUD_BRICK_SLAB, 6), "###", '#', BlockRegistry.MUD_BRICKS);
@@ -589,7 +595,6 @@ public class RecipeRegistry {
 
 	private static void registerPestleAndMortarRecipes() {
 		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(1)), new ItemStack(BlockRegistry.LIMESTONE));
-		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(1)), new ItemStack(BlockRegistry.LIMESTONE_CHISELED));
 		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(1)), new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_ALGAE.create(1)), (ItemPlantDrop.EnumItemPlantDrop.ALGAE_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1)), (EnumItemMisc.ANGLER_TOOTH.create(1)));

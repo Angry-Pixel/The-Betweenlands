@@ -317,6 +317,8 @@ public class BlockRegistry {
 	public static final Block LIMESTONE_PILLAR = new BlockTemplePillar();
 	public static final Block CRAGROCK_PILLAR = new BlockTemplePillar();
 	
+	public static final Block CRAGROCK_STAIRS = new BlockStairsBetweenlands(CRAGROCK.getDefaultState());
+	public static final Block PITSTONE_STAIRS = new BlockStairsBetweenlands(PITSTONE.getDefaultState());
 	public static final Block BETWEENSTONE_STAIRS = new BlockStairsBetweenlands(BETWEENSTONE.getDefaultState());
 	public static final Block BETWEENSTONE_BRICK_STAIRS = new BlockStairsBetweenlands(BETWEENSTONE_BRICKS.getDefaultState());
 	public static final Block MUD_BRICK_STAIRS = new BlockStairsBetweenlands(MUD_BRICKS.getDefaultState());
@@ -357,6 +359,8 @@ public class BlockRegistry {
 	public static final Block THATCH = new BasicBlock(Material.PLANTS).setSoundType2(SoundType.PLANT).setDefaultCreativeTab().setHardness(0.5F);
 	
 
+	public static final Block CRAGROCK_SLAB = new BlockSlabBetweenlands(CRAGROCK);
+	public static final Block PITSTONE_SLAB = new BlockSlabBetweenlands(PITSTONE);
 	public static final Block BETWEENSTONE_SLAB = new BlockSlabBetweenlands(BETWEENSTONE);
 	public static final Block SMOOTH_PITSTONE_SLAB = new BlockSlabBetweenlands(SMOOTH_PITSTONE);
 	public static final Block TAR_SOLID_SLAB = new BlockSlabBetweenlands(TAR_SOLID);
@@ -377,6 +381,7 @@ public class BlockRegistry {
 	public static final Block RUBBER_TREE_PLANK_SLAB = new BlockSlabBetweenlands(RUBBER_TREE_PLANKS);
 	public static final Block THATCH_SLAB = new BlockSlabBetweenlands(THATCH).setHardness(0.5F);
 
+	public static final Block PITSTONE_WALL = new BlockWallBetweenlands(PITSTONE.getDefaultState());
 	public static final Block BETWEENSTONE_WALL = new BlockWallBetweenlands(BETWEENSTONE.getDefaultState());
 	public static final Block TAR_SOLID_WALL = new BlockWallBetweenlands(TAR_SOLID.getDefaultState());
 	public static final Block TEMPLE_BRICK_WALL = new BlockWallBetweenlands(TEMPLE_BRICKS.getDefaultState());
