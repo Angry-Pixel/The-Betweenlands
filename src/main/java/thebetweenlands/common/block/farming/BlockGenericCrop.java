@@ -22,6 +22,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockStackablePlant;
@@ -88,6 +89,11 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 			pos = pos.down();
 		}
 		return false;
+	}
+
+	@Override
+	public EnumPlantType getPlantType(net.minecraft.world.IBlockAccess world, BlockPos pos) {
+		return EnumPlantType.Crop;
 	}
 
 	@Override

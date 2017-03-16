@@ -12,9 +12,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
@@ -32,8 +32,8 @@ public class ItemPlantTonic extends Item {
 	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState state = world.getBlockState(pos);
 
-		if(state.getBlock() instanceof BlockGenericCrop || state.getBlock() instanceof IFarmablePlant) {
-			while(world.getBlockState(pos).getBlock() instanceof BlockGenericCrop || world.getBlockState(pos).getBlock() instanceof IFarmablePlant) {
+		if(state.getBlock() instanceof IPlantable || state.getBlock() instanceof IFarmablePlant) {
+			while(world.getBlockState(pos).getBlock() instanceof IPlantable || world.getBlockState(pos).getBlock() instanceof IFarmablePlant) {
 				pos = pos.down();
 			}
 		}

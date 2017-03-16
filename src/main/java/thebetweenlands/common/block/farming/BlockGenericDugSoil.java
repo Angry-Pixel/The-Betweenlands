@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.farming;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -21,6 +22,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
@@ -31,9 +33,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
+import net.minecraftforge.event.world.BlockEvent.CropGrowEvent;
+import net.minecraftforge.event.world.BlockEvent.HarvestDropsEvent;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.IFarmablePlant;
@@ -495,6 +504,86 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 							BLParticles.DIRT_DECAY.spawn(worldIn, offsetPos.getX() + rand.nextFloat(), offsetPos.getY(), offsetPos.getZ() + rand.nextFloat());
 						}
 					}
+				}
+			}
+		}
+	}
+
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
+		if(super.canSustainPlant(state, world, pos, direction, plantable)) {
+			return true;
+		}
+
+		EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
+
+		boolean isSoilSuitable = direction == EnumFacing.UP && (state.getValue(DECAYED) || state.getValue(COMPOSTED));
+
+		if(!isSoilSuitable) {
+			return false;
+		}
+
+		switch(plantType) {
+		case Crop:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public boolean isFertile(World world, BlockPos pos) {
+		return true;
+	}
+
+	@SubscribeEvent
+	public static void onBlockBreak(BreakEvent event) {
+		//Consume compost if non-BL crop is broken
+		if(!event.getWorld().isRemote) {
+			IBlockState stateDown = event.getWorld().getBlockState(event.getPos().down());
+			if(stateDown.getBlock() instanceof BlockGenericDugSoil) {
+				if(event.getState().getBlock() instanceof BlockGenericCrop == false && event.getState().getBlock() instanceof IPlantable) {
+					TileEntityDugSoil te = getTile(event.getWorld(), event.getPos().down());
+					if(te != null) {
+						te.setCompost(Math.max(te.getCompost() - 10, 0));
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onHarvestBlock(HarvestDropsEvent event) {
+		//Don't drop items except one seed if soil is decayed
+		if(!event.getWorld().isRemote) {
+			IBlockState stateDown = event.getWorld().getBlockState(event.getPos().down());
+			if(stateDown.getBlock() instanceof BlockGenericDugSoil) {
+				if(event.getState().getBlock() instanceof BlockGenericCrop == false && event.getState().getBlock() instanceof IPlantable && stateDown.getValue(DECAYED)) {
+					Iterator<ItemStack> it = event.getDrops().iterator();
+					boolean removeSeeds = false;
+					while(it.hasNext()) {
+						ItemStack stack = it.next();
+						if(stack != null) {
+							if(!removeSeeds && stack.getItem() instanceof ItemSeeds) {
+								removeSeeds = true;
+								continue;
+							}
+							it.remove();
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onCropGrow(CropGrowEvent.Pre event) {
+		//Don't let crops grow further on decayed soil
+		if(!event.getWorld().isRemote) {
+			IBlockState stateDown = event.getWorld().getBlockState(event.getPos().down());
+			if(stateDown.getBlock() instanceof BlockGenericDugSoil) {
+				if(event.getState().getBlock() instanceof BlockGenericCrop == false && event.getState().getBlock() instanceof IPlantable && stateDown.getValue(DECAYED)) {
+					event.setResult(Result.DENY);
 				}
 			}
 		}
