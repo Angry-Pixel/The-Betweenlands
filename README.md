@@ -16,6 +16,27 @@
   <img src="http://i.imgur.com/5AgEXax.png">
 </p>
 
+<b><i>Reporting Issues</i></b>
+
+When reporting problems you must...
+<ul>
+  <li>use a descriptive and concise title</li>
+  <li>include the version of Forge and the Betweenlands you are using</li>
+  <li>provide a detailed and comprehensible description, if possible also include instructions on how to reproduce it</li>
+  <li>upload <b>the full</b> crash log if available and include a link to said crash log</li>
+  <li>not post multiple problems in one issue. Create multiple issues instead</li>
+</ul>
+<p>
+Feel free to include images of the problem you are having, if that helps.
+You may also create issues for suggestions. If you have multiple suggestions please post them in one single issue.
+<p>
+If you do not follow these rules your issues will be closed and ignored.
+<br>
+
+<p align="center">
+  <img src="http://i.imgur.com/5AgEXax.png">
+</p>
+
 <b><i>Features include</i></b>
 <ul>
   <li>A complete independent survival experience with hours of gameplay</li>
