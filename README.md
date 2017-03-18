@@ -16,8 +16,7 @@
   <img src="http://i.imgur.com/5AgEXax.png">
 </p>
 
-<b><i>Reporting Issues</i></b>
-
+<p align="center"><b>Creating Issues</b></p>
 When reporting problems you must...
 <ul>
   <li>use a descriptive and concise title</li>
@@ -27,7 +26,7 @@ When reporting problems you must...
   <li>not post multiple problems in one issue. Create multiple issues instead</li>
 </ul>
 <p>
-Feel free to include images of the problem you are having, if that helps.
+Feel free to include pictures of the problem you are having, if that helps.
 You may also create issues for suggestions. If you have multiple suggestions please post them in one single issue.
 <p>
 If you do not follow these rules your issues will be closed and ignored.
@@ -37,7 +36,7 @@ If you do not follow these rules your issues will be closed and ignored.
   <img src="http://i.imgur.com/5AgEXax.png">
 </p>
 
-<b><i>Features include</i></b>
+<p align="center"><b>Features include</b></p>
 <ul>
   <li>A complete independent survival experience with hours of gameplay</li>
   <li>A whole new dimension to survive in</li>
