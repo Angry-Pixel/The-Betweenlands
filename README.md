@@ -30,6 +30,7 @@ Feel free to include pictures of the problem you are having, if that helps.
 You may also create issues for suggestions. If you have multiple suggestions please post them in one single issue.
 <p>
 If you do not follow these rules your issues will be closed and ignored.
+</p>
 <br>
 
 <p align="center">
@@ -60,6 +61,7 @@ If you do not follow these rules your issues will be closed and ignored.
 </p>
 
 <p align="center"><b>TERMS AND CONDITIONS</b></p>
+
 > 0. USED TERMS
 > MOD - modification, plugin, a piece of software that interfaces with the Minecraft client to extend, add, change or remove original capabilities.
 > MOJANG - Mojang AB
