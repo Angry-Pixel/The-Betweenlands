@@ -5,6 +5,7 @@ import org.apache.logging.log4j.Logger;
 import net.minecraft.world.DimensionType;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -58,21 +59,22 @@ import thebetweenlands.util.config.ConfigHandler;
 public class TheBetweenlands {
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands INSTANCE;
-	
+
 	@SidedProxy(modId = ModInfo.ID, clientSide = ModInfo.CLIENTPROXY_LOCATION, serverSide = ModInfo.COMMONPROXY_LOCATION)
 	public static CommonProxy proxy;
-	
+
 	public static final Registries REGISTRIES = new Registries();
-	
+
 	public static DimensionType dimensionType;
-	public static boolean isShadersModInstalled = false;
 	public static SimpleNetworkWrapper networkWrapper;
 	public static Logger logger;
-	
+
+	public static boolean isToughAsNailsModInstalled = false;
+
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();
-		
+
 		//Configuration File
 		ConfigHandler.INSTANCE.loadConfig(event);
 
@@ -117,6 +119,8 @@ public class TheBetweenlands {
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		proxy.postInit();
+
+		isToughAsNailsModInstalled = Loader.isModLoaded("toughasnails") || Loader.isModLoaded("ToughAsNails");
 
 		/*if (ConfigHandler.DEBUG) {
 			System.out.println("==================================================");

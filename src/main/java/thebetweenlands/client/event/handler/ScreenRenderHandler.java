@@ -233,6 +233,11 @@ public class ScreenRenderHandler extends Gui {
 								startY -= 12;
 							}
 						}
+						
+						//TaN compatibility
+						if(TheBetweenlands.isToughAsNailsModInstalled) {
+							startY -= 10;
+						}
 
 						//Ridden entity hearts offset
 						Entity ridingEntity = player.getRidingEntity();
