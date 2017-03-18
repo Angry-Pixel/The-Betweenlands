@@ -19,7 +19,7 @@ public class ItemBlackHatMushroom extends ItemPlantableFood {
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		super.onFoodEaten(stack, world, player);
 		if (player != null) {
-			player.addPotionEffect(new PotionEffect(MobEffects.POISON, 500, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 500, 1));
 		}
 	}
 
