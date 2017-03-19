@@ -55,6 +55,11 @@ public class TextureStitchHandler {
 	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
+		if(e.getMap() != Minecraft.getMinecraft().getTextureMapBlocks()) {
+			//Only stitch to the main texture map
+			return;
+		}
+		
 		//Corrosion
 		this.stitchedCorrosionSprites.clear();
 		Map<String, TextureAtlasSprite> mapRegisteredSprites;
@@ -180,6 +185,11 @@ public class TextureStitchHandler {
 
 	@SubscribeEvent
 	public void onTextureStitchPost(TextureStitchEvent.Post e) {
+		if(e.getMap() != Minecraft.getMinecraft().getTextureMapBlocks()) {
+			//Only stitch to the main texture map
+			return;
+		}
+		
 		//Corrosion
 		TextureMap map = e.getMap();
 		for(TextureCorrosion corrosionSprite : this.stitchedCorrosionSprites) {
