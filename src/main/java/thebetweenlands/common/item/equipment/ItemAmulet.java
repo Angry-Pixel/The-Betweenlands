@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.ICircleGemCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
-import thebetweenlands.client.event.handler.WorldRenderHandler;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.circlegem.CircleGem;
 import thebetweenlands.common.capability.circlegem.CircleGem.CombatType;

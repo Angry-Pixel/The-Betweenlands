@@ -38,7 +38,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.event.AttachWorldCapabilitiesEvent;
+import thebetweenlands.api.event.AttachWorldCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
 import thebetweenlands.common.world.storage.world.shared.SharedRegionCache;

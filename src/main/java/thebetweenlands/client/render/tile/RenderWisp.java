@@ -11,7 +11,7 @@ import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
-import thebetweenlands.client.event.handler.WorldRenderHandler;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;

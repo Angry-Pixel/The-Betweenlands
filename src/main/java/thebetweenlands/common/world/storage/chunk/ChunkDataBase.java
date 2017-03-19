@@ -32,7 +32,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
-import thebetweenlands.common.event.AttachChunkCapabilitiesEvent;
+import thebetweenlands.api.event.AttachChunkCapabilitiesEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;

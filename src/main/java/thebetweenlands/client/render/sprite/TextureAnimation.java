@@ -5,7 +5,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
+import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 
 public class TextureAnimation {
 	private Frame[] frames;

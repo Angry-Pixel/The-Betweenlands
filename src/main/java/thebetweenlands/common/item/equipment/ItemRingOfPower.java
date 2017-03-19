@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.event.handler.ItemTooltipHandler;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 

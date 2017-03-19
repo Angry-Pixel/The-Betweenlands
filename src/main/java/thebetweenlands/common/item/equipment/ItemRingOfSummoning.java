@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
-import thebetweenlands.client.event.handler.ItemTooltipHandler;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.entity.mobs.EntityMummyArm;
 import thebetweenlands.common.registries.CapabilityRegistry;

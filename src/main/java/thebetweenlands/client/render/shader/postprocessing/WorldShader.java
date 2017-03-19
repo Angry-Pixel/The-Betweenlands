@@ -20,7 +20,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.client.event.handler.FogHandler;
+import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.shader.DepthBuffer;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;

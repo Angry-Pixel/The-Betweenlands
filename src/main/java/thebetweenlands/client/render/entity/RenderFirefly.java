@@ -17,7 +17,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.event.handler.WorldRenderHandler;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.entity.layer.LayerGlow;
 import thebetweenlands.client.render.model.entity.ModelFirefly;
 import thebetweenlands.client.render.shader.LightSource;

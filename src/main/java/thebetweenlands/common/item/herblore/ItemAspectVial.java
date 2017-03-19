@@ -10,7 +10,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.client.event.handler.ScreenRenderHandler;
+import thebetweenlands.client.handler.ScreenRenderHandler;
 import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.registries.AspectRegistry;

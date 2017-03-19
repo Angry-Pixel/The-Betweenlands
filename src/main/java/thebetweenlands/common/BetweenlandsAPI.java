@@ -17,7 +17,7 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
-import thebetweenlands.common.event.handler.OverworldItemHandler;
+import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.aspect.IItemStackMatcher;
 import thebetweenlands.common.item.equipment.ItemAmulet;

@@ -23,7 +23,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.common.event.AttachSharedStorageCapabilitiesEvent;
+import thebetweenlands.api.event.AttachSharedStorageCapabilitiesEvent;
 import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
 import thebetweenlands.common.world.storage.chunk.shared.SharedStorageReference;
 import thebetweenlands.common.world.storage.world.global.WorldDataBase;

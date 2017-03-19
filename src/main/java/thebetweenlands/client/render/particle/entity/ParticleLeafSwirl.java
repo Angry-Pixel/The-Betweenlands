@@ -3,7 +3,7 @@ package thebetweenlands.client.render.particle.entity;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
+import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;

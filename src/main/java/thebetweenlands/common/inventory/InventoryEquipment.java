@@ -10,6 +10,8 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.api.event.EquipmentChangedEvent;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 
@@ -81,6 +83,7 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Override
 	public void markDirty() {
 		this.capability.markDirty();
+		MinecraftForge.EVENT_BUS.post(new EquipmentChangedEvent(this.capability.getEntity(), this.capability));
 	}
 
 	@Override

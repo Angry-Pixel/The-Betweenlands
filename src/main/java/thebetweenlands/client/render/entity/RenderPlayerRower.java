@@ -9,7 +9,7 @@ import net.minecraft.scoreboard.Score;
 import net.minecraft.scoreboard.ScoreObjective;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.event.handler.DecayRenderHandler;
+import thebetweenlands.client.handler.DecayRenderHandler;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat.ArmArticulation;
 import thebetweenlands.client.render.entity.layer.LayerRowerArmor;
 import thebetweenlands.client.render.entity.layer.LayerRowerWear;

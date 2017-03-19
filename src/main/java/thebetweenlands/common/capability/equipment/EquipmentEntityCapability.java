@@ -8,13 +8,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
-import thebetweenlands.common.event.EquipmentChangedEvent;
 import thebetweenlands.common.inventory.InventoryEquipment;
 import thebetweenlands.common.inventory.InventoryEquipmentAmulets;
 import thebetweenlands.common.lib.ModInfo;
@@ -142,12 +140,6 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	@Override
 	public int getTrackingTime() {
 		return 0;
-	}
-
-	@Override
-	public void markDirty() {
-		super.markDirty();
-		MinecraftForge.EVENT_BUS.post(new EquipmentChangedEvent(this.getEntity(), this));
 	}
 
 	@Override

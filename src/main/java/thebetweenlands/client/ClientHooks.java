@@ -1,7 +1,7 @@
 package thebetweenlands.client;
 
 import net.minecraftforge.common.MinecraftForge;
-import thebetweenlands.client.event.PreRenderShadersEvent;
+import thebetweenlands.api.event.PreRenderShadersEvent;
 
 public final class ClientHooks {
 	private ClientHooks() { }

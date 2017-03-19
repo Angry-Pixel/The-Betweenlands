@@ -2,7 +2,7 @@ package thebetweenlands.client.render.particle;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.util.ResourceLocation;
-import thebetweenlands.client.event.handler.TextureStitchHandler.Frame;
+import thebetweenlands.client.handler.TextureStitchHandler.Frame;
 
 public final class ParticleTextureStitcher<T> {
 	/**
