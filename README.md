@@ -17,10 +17,12 @@
 </p>
 
 <p align="center"><b>Creating Issues</b></p>
+
 When reporting problems you must...
 <ul>
   <li>use a descriptive and concise title</li>
   <li>include the version of Forge and the Betweenlands you are using</li>
+  <li>specify whether it happens in singleplayer or multiplayer (and if so, what server is used, e.g. Vanilla, Thermos, Sponge etc.)</li>
   <li>provide a detailed and comprehensible description, if possible also include instructions on how to reproduce it</li>
   <li>upload <b>the full</b> crash log if available and include a link to said crash log</li>
   <li>not post multiple problems in one issue. Create multiple issues instead</li>
