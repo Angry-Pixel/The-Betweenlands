@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.mobs.EntityScout;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 
 //MINE!!
@@ -22,10 +24,10 @@ public class TestItem extends Item {
 			WorldGenTarPoolDungeon gen = new WorldGenTarPoolDungeon();
 			gen.generate(world, itemRand, pos.up());
 		}*/
-		if (!world.isRemote) {  
+		/*if (!world.isRemote) {
 			WorldGenDruidCircle worldGenDruidCircle = new WorldGenDruidCircle();
 			worldGenDruidCircle.generateStructure(world, itemRand, pos.up());
-		}
+		}*/
 		/*if (!world.isRemote) {
             WorldGenIdolHeads head = new WorldGenIdolHeads();
             head.generate(world, itemRand, pos.up());
@@ -76,6 +78,11 @@ public class TestItem extends Item {
 		//			}
 		//		}
 
+		EntityScout entity = new EntityScout(world);
+		entity.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0, 0);
+		if (!world.isRemote)
+			entity.setOwnerId(playerIn.getUniqueID());
+		world.spawnEntityInWorld(entity);
 		return EnumActionResult.SUCCESS;
 	}
 }

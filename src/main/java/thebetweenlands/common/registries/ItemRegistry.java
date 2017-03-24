@@ -187,6 +187,7 @@ public class ItemRegistry {
 	public static final Item RUBBER_BOOTS = new ItemRubberBoots();
 	public static final Item SKULL_MASK = new ItemSkullMask();
 	public static final Item EXPLORERS_HAT = new ItemExplorersHat();
+	public static final Item SCOUT = new ItemScout();
 
 	//TOOLS
 	public static final Item WEEDWOOD_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_WEEDWOOD).setCreativeTab(BLCreativeTabs.GEARS);
