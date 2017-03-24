@@ -100,25 +100,7 @@ import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
-import thebetweenlands.common.item.tools.ItemBLAxe;
-import thebetweenlands.common.item.tools.ItemBLBucketFilled;
-import thebetweenlands.common.item.tools.ItemBLPickaxe;
-import thebetweenlands.common.item.tools.ItemBLShield;
-import thebetweenlands.common.item.tools.ItemBLShovel;
-import thebetweenlands.common.item.tools.ItemBLSword;
-import thebetweenlands.common.item.tools.ItemLootSword;
-import thebetweenlands.common.item.tools.ItemNet;
-import thebetweenlands.common.item.tools.ItemPestle;
-import thebetweenlands.common.item.tools.ItemShockwaveSword;
-import thebetweenlands.common.item.tools.ItemSickle;
-import thebetweenlands.common.item.tools.ItemSpecificBucket;
-import thebetweenlands.common.item.tools.ItemSwiftPick;
-import thebetweenlands.common.item.tools.ItemSyrmoriteBucketEmpty;
-import thebetweenlands.common.item.tools.ItemSyrmoriteBucketSolidRubber;
-import thebetweenlands.common.item.tools.ItemSyrmoriteShears;
-import thebetweenlands.common.item.tools.ItemVoodooDoll;
-import thebetweenlands.common.item.tools.ItemWeedwoodBucketEmpty;
-import thebetweenlands.common.item.tools.ItemWeedwoodBucketInfusion;
+import thebetweenlands.common.item.tools.*;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.item.tools.bow.ItemBLArrow;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
@@ -283,6 +265,7 @@ public class ItemRegistry {
 	public static final Item HAG_HACKER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntitySwampHag.class).setMaxDamage(32);
 	public static final Item VOODOO_DOLL = new ItemVoodooDoll();
 	public static final Item SWIFT_PICK = new ItemSwiftPick();
+	public static final Item SHADOW_STAFF = new ItemShadowStaff().setCreativeTab(BLCreativeTabs.SPECIALS);
 	
 	//BUCKETS
 	public static final Item WEEDWOOD_BUCKET = new ItemWeedwoodBucketEmpty();
