@@ -26,10 +26,10 @@ public class ItemShadowStaff extends Item {
     private static String DISTANCE_NBT = "distance";
     private static String TARGET_ID_NBT = "target_id";
     private static String TIME_IN_AIR_NBT = "time_in_air";
-    private static String COOLDOWN_NBT = "cooldown";
 
     public ItemShadowStaff() {
         this.setMaxStackSize(1);
+        this.setMaxDamage(COOLDOWN);
     }
 
     @Override
@@ -46,18 +46,18 @@ public class ItemShadowStaff extends Item {
                     tagCompound.removeTag(DISTANCE_NBT);
                     tagCompound.removeTag(TARGET_ID_NBT);
                     tagCompound.removeTag(TIME_IN_AIR_NBT);
-                    tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
+                    //tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
+                    stack.setItemDamage(COOLDOWN);
                     stack.setTagCompound(tagCompound);
                 }
             }
-            if (tagCompound.hasKey(COOLDOWN_NBT)) {
-                int cooldown = tagCompound.getInteger(COOLDOWN_NBT);
-                if (cooldown > 0) {
-                    cooldown--;
-                    tagCompound.setInteger(COOLDOWN_NBT, cooldown);
-                    stack.setTagCompound(tagCompound);
-                }
+
+            int cooldown = stack.getItemDamage();
+            if (cooldown > 0) {
+                cooldown--;
+                stack.setItemDamage(cooldown);
             }
+
 
             if (tagCompound.hasKey(TIME_IN_AIR_NBT)) {
                 int timeInAir = tagCompound.getInteger(TIME_IN_AIR_NBT);
@@ -65,8 +65,8 @@ public class ItemShadowStaff extends Item {
                     tagCompound.removeTag(DISTANCE_NBT);
                     tagCompound.removeTag(TARGET_ID_NBT);
                     tagCompound.removeTag(TIME_IN_AIR_NBT);
-                    tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
                     stack.setTagCompound(tagCompound);
+                    stack.setItemDamage(COOLDOWN);
                 } else {
                     timeInAir++;
                     tagCompound.setInteger(TIME_IN_AIR_NBT, timeInAir);
@@ -80,14 +80,14 @@ public class ItemShadowStaff extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         NBTTagCompound tagCompound = itemStackIn.getTagCompound();
-        if (tagCompound != null && tagCompound.hasKey(COOLDOWN_NBT) && tagCompound.getInteger(COOLDOWN_NBT) > 0) {
+        if (tagCompound != null && itemStackIn.getMetadata() > 0) {
             return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
         } else if (tagCompound != null && tagCompound.hasKey(DISTANCE_NBT) && tagCompound.hasKey(TARGET_ID_NBT)) {
             tagCompound.removeTag(DISTANCE_NBT);
             tagCompound.removeTag(TARGET_ID_NBT);
             tagCompound.removeTag(TIME_IN_AIR_NBT);
-            tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
             itemStackIn.setTagCompound(tagCompound);
+            itemStackIn.setItemDamage(COOLDOWN);
             return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
         } else {
             int d = 1;
@@ -125,8 +125,8 @@ public class ItemShadowStaff extends Item {
             tagCompound.removeTag(DISTANCE_NBT);
             tagCompound.removeTag(TARGET_ID_NBT);
             tagCompound.removeTag(TIME_IN_AIR_NBT);
-            tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
             stack.setTagCompound(tagCompound);
+            stack.setItemDamage(COOLDOWN);
             return true;
         }
         return super.onEntitySwing(entityLiving, stack);
@@ -146,6 +146,8 @@ public class ItemShadowStaff extends Item {
 
     @Override
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-        return oldStack.getItem() != newStack.getItem() || oldStack.getMetadata() != newStack.getMetadata();
+        return oldStack.getItem() != newStack.getItem();
     }
+
+
 }

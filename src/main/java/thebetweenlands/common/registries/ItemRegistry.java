@@ -268,6 +268,7 @@ public class ItemRegistry {
 	public static final Item VOODOO_DOLL = new ItemVoodooDoll();
 	public static final Item SWIFT_PICK = new ItemSwiftPick();
 	public static final Item SHADOW_STAFF = new ItemShadowStaff().setCreativeTab(BLCreativeTabs.SPECIALS);
+	public static final Item ELDER_STAFF = new ItemElderStaff().setCreativeTab(BLCreativeTabs.SPECIALS);
 	
 	//BUCKETS
 	public static final Item WEEDWOOD_BUCKET = new ItemWeedwoodBucketEmpty();
