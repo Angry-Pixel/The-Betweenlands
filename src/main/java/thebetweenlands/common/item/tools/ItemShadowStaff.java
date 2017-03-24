@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.tools;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,12 +14,20 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
-import thebetweenlands.util.NBTHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ItemShadowStaff extends Item {
+    private static float THROW_SPEED = 5f;
+    private static int RANGE = 10;
+    private static int COOLDOWN = 200;
+    private static int MAX_TIME_IN_AIR = 1000;
+    private static String DISTANCE_NBT = "distance";
+    private static String TARGET_ID_NBT = "target_id";
+    private static String TIME_IN_AIR_NBT = "time_in_air";
+    private static String COOLDOWN_NBT = "cooldown";
+
     public ItemShadowStaff() {
         this.setMaxStackSize(1);
     }
@@ -27,40 +36,40 @@ public class ItemShadowStaff extends Item {
     public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound != null) {
-            if (tagCompound.hasKey("distance") && tagCompound.hasKey("target_id")) {
-                Entity target = worldIn.getEntityByID(tagCompound.getInteger("target_id"));
+            if (tagCompound.hasKey(DISTANCE_NBT) && tagCompound.hasKey(TARGET_ID_NBT)) {
+                Entity target = worldIn.getEntityByID(tagCompound.getInteger(TARGET_ID_NBT));
                 if (target != null) {
-                    Vec3d location = entityIn.getPositionVector().add(new Vec3d(0, 1, 0)).add(entityIn.getLookVec().scale(tagCompound.getInteger("distance"))).add(new Vec3d(0, .5f, 0));
+                    Vec3d location = entityIn.getPositionVector().add(new Vec3d(0, 1, 0)).add(entityIn.getLookVec().scale(tagCompound.getInteger(DISTANCE_NBT))).add(new Vec3d(0, .5f, 0));
                     BLParticles.FLAME.spawn(worldIn, location.xCoord, location.yCoord, location.zCoord, ParticleFactory.ParticleArgs.get().withMotion(0, 0.1, 0));
                     setEntityMotionFromVector(target, location, .25f);
                 } else {
-                    tagCompound.removeTag("distance");
-                    tagCompound.removeTag("target_id");
-                    tagCompound.removeTag("time_in_air");
-                    tagCompound.setInteger("cooldown", 200);
+                    tagCompound.removeTag(DISTANCE_NBT);
+                    tagCompound.removeTag(TARGET_ID_NBT);
+                    tagCompound.removeTag(TIME_IN_AIR_NBT);
+                    tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
                     stack.setTagCompound(tagCompound);
                 }
             }
-            if (tagCompound.hasKey("cooldown")) {
-                int cooldown = tagCompound.getInteger("cooldown");
+            if (tagCompound.hasKey(COOLDOWN_NBT)) {
+                int cooldown = tagCompound.getInteger(COOLDOWN_NBT);
                 if (cooldown > 0) {
                     cooldown--;
-                    tagCompound.setInteger("cooldown", cooldown);
+                    tagCompound.setInteger(COOLDOWN_NBT, cooldown);
                     stack.setTagCompound(tagCompound);
                 }
             }
 
-            if (tagCompound.hasKey("time_in_air")) {
-                int timeInAir = tagCompound.getInteger("time_in_air");
-                if (timeInAir > 1000) {
-                    tagCompound.removeTag("distance");
-                    tagCompound.removeTag("target_id");
-                    tagCompound.removeTag("time_in_air");
-                    tagCompound.setInteger("cooldown", 200);
+            if (tagCompound.hasKey(TIME_IN_AIR_NBT)) {
+                int timeInAir = tagCompound.getInteger(TIME_IN_AIR_NBT);
+                if (timeInAir > MAX_TIME_IN_AIR) {
+                    tagCompound.removeTag(DISTANCE_NBT);
+                    tagCompound.removeTag(TARGET_ID_NBT);
+                    tagCompound.removeTag(TIME_IN_AIR_NBT);
+                    tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
                     stack.setTagCompound(tagCompound);
                 } else {
                     timeInAir++;
-                    tagCompound.setInteger("time_in_air", timeInAir);
+                    tagCompound.setInteger(TIME_IN_AIR_NBT, timeInAir);
                     stack.setTagCompound(tagCompound);
                 }
             }
@@ -71,13 +80,13 @@ public class ItemShadowStaff extends Item {
     @Override
     public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
         NBTTagCompound tagCompound = itemStackIn.getTagCompound();
-        if (tagCompound != null && tagCompound.hasKey("cooldown") && tagCompound.getInteger("cooldown") > 0) {
+        if (tagCompound != null && tagCompound.hasKey(COOLDOWN_NBT) && tagCompound.getInteger(COOLDOWN_NBT) > 0) {
             return new ActionResult<>(EnumActionResult.FAIL, itemStackIn);
-        } else if (tagCompound != null && tagCompound.hasKey("distance") && tagCompound.hasKey("target_id")) {
-            tagCompound.removeTag("distance");
-            tagCompound.removeTag("target_id");
-            tagCompound.removeTag("time_in_air");
-            tagCompound.setInteger("cooldown", 200);
+        } else if (tagCompound != null && tagCompound.hasKey(DISTANCE_NBT) && tagCompound.hasKey(TARGET_ID_NBT)) {
+            tagCompound.removeTag(DISTANCE_NBT);
+            tagCompound.removeTag(TARGET_ID_NBT);
+            tagCompound.removeTag(TIME_IN_AIR_NBT);
+            tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
             itemStackIn.setTagCompound(tagCompound);
             return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
         } else {
@@ -86,7 +95,7 @@ public class ItemShadowStaff extends Item {
             Vec3d location = null;
             AxisAlignedBB bounds;
             List<Entity> entities = new ArrayList<>();
-            while (d <= 10 && entities.size() == 0) {
+            while (d <= RANGE && entities.size() == 0) {
                 location = initialLocation.add(playerIn.getLookVec().scale(d)).add(new Vec3d(0, .5f, 0));
                 bounds = new AxisAlignedBB(location.add(new Vec3d(-1, -1, -1)), location.add(new Vec3d(1, 1, 1)));
                 entities = worldIn.getEntitiesWithinAABBExcludingEntity(playerIn, bounds);
@@ -96,14 +105,31 @@ public class ItemShadowStaff extends Item {
                 Entity locked = entities.get(0);
                 if (tagCompound == null)
                     tagCompound = new NBTTagCompound();
-                tagCompound.setInteger("distance", d);
-                tagCompound.setInteger("target_id", locked.getEntityId());
-                tagCompound.setInteger("time_in_air", 0);
+                tagCompound.setInteger(DISTANCE_NBT, d);
+                tagCompound.setInteger(TARGET_ID_NBT, locked.getEntityId());
+                tagCompound.setInteger(TIME_IN_AIR_NBT, 0);
                 itemStackIn.setTagCompound(tagCompound);
                 return new ActionResult<>(EnumActionResult.PASS, itemStackIn);
             }
         }
         return super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+    }
+
+    @Override
+    public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+        NBTTagCompound tagCompound = stack.getTagCompound();
+        if (tagCompound != null && tagCompound.hasKey(DISTANCE_NBT) && tagCompound.hasKey(TARGET_ID_NBT)) {
+            Entity target = entityLiving.worldObj.getEntityByID(tagCompound.getInteger(TARGET_ID_NBT));
+            Vec3d location = entityLiving.getPositionVector().add(new Vec3d(0, 1, 0)).add(entityLiving.getLookVec()).add(new Vec3d(0, .5f, 0));
+            setEntityMotionFromVector(target, location, THROW_SPEED);
+            tagCompound.removeTag(DISTANCE_NBT);
+            tagCompound.removeTag(TARGET_ID_NBT);
+            tagCompound.removeTag(TIME_IN_AIR_NBT);
+            tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
+            stack.setTagCompound(tagCompound);
+            return true;
+        }
+        return super.onEntitySwing(entityLiving, stack);
     }
 
     public static void setEntityMotionFromVector(Entity entity, Vec3d originalPosVector, float modifier) {

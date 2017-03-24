@@ -1,0 +1,6 @@
+{
+  "parent": "item/bow",
+  "textures": {
+    "layer0": "thebetweenlands:items/phantom_bow_1"
+  }
+}

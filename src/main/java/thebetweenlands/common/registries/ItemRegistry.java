@@ -104,6 +104,7 @@ import thebetweenlands.common.item.tools.*;
 import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.item.tools.bow.ItemBLArrow;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
+import thebetweenlands.common.item.tools.bow.ItemPhantomBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -259,6 +260,7 @@ public class ItemRegistry {
 	public static final Item OCTINE_ARROW = new ItemBLArrow(EnumArrowType.OCTINE).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item BASILISK_ARROW = new ItemBLArrow(EnumArrowType.BASILISK).setCreativeTab(BLCreativeTabs.GEARS);
 	public static final Item WEEDWOOD_BOW = new ItemBLBow().setCreativeTab(BLCreativeTabs.GEARS);
+	public static final Item PHANTOM_BOW = new ItemPhantomBow().setCreativeTab(BLCreativeTabs.SPECIALS);
 	public static final Item WIGHTS_BANE = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityWight.class).setMaxDamage(32);
 	public static final Item SLUDGE_SLICER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntitySludge.class).setMaxDamage(32);
 	public static final Item CRITTER_CRUNCHER = new ItemLootSword(BLMaterialRegistry.TOOL_WEEDWOOD).addInstantKills(EntityBloodSnail.class, EntityDragonFly.class, EntityFirefly.class, EntityLeech.class, EntityMireSnail.class, EntitySporeling.class, EntityTermite.class).setMaxDamage(32);
