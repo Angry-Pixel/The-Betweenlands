@@ -50,9 +50,9 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 		case NORTH:
 			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
 			rotation = 180F;
-			offSetX = unitPixel * 12;
+			offSetX = unitPixel * 3.75;
 			offSetZ = unitPixel * 3.75;
-			offSetXX = unitPixel * 3.75;
+			offSetXX = unitPixel * 12;
 			offSetZZ = unitPixel * 3.75;
 			break;
 		case SOUTH:
