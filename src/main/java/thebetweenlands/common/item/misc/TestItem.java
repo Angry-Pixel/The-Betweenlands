@@ -79,7 +79,7 @@ public class TestItem extends Item {
 		//		}
 
 		EntityScout entity = new EntityScout(world);
-		entity.setLocationAndAngles(pos.getX(), pos.getY(), pos.getZ(), 0, 0);
+		entity.setLocationAndAngles(playerIn.posX, playerIn.posY, playerIn.posZ, 0, 0);
 		if (!world.isRemote)
 			entity.setOwnerId(playerIn.getUniqueID());
 		world.spawnEntityInWorld(entity);

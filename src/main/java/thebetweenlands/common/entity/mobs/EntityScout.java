@@ -1,11 +1,14 @@
 package thebetweenlands.common.entity.mobs;
 
 import com.google.common.base.Optional;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.passive.EntityTameable;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -13,9 +16,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -24,6 +29,7 @@ import java.util.UUID;
 
 public class EntityScout extends EntityFlying {
     protected static final DataParameter<Optional<UUID>> OWNER_UNIQUE_ID = EntityDataManager.<Optional<UUID>>createKey(EntityTameable.class, DataSerializers.OPTIONAL_UNIQUE_ID);
+    protected static final DataParameter<BlockPos> LOCATION = EntityDataManager.<BlockPos>createKey(EntityTameable.class, DataSerializers.BLOCK_POS);
 
     public EntityScout(World worldIn) {
         super(worldIn);
@@ -35,40 +41,7 @@ public class EntityScout extends EntityFlying {
     protected void entityInit() {
         super.entityInit();
         this.dataManager.register(OWNER_UNIQUE_ID, Optional.<UUID>absent());
-    }
-
-    @Override
-    protected void initEntityAI() {
-        this.tasks.addTask(5, new EntityAIFlyRandomly<EntityScout>(this) {
-            @Override
-            protected double getTargetY(Random rand, double distanceMultiplier) {
-                if (EntityScout.this.getOwner() != null) {
-                    return EntityScout.this.getOwner().posY + 4;
-                }
-                return EntityScout.this.posY;
-            }
-
-            @Override
-            protected double getTargetX(Random rand, double distanceMultiplier) {
-                if (EntityScout.this.getOwner() != null) {
-                    return EntityScout.this.getOwner().posX + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * 15d;
-                }
-                return EntityScout.this.posX;
-            }
-
-            @Override
-            protected double getTargetZ(Random rand, double distanceMultiplier) {
-                if (EntityScout.this.getOwner() != null) {
-                    return EntityScout.this.getOwner().posZ + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * 15d;
-                }
-                return EntityScout.this.posZ;
-            }
-
-            @Override
-            protected double getFlightSpeed() {
-                return 0.1D;
-            }
-        });
+        this.dataManager.register(LOCATION, new BlockPos(0, -10, 0));
     }
 
 
@@ -109,6 +82,27 @@ public class EntityScout extends EntityFlying {
 
     public void setOwnerId(@Nullable UUID playerID) {
         this.dataManager.set(OWNER_UNIQUE_ID, Optional.fromNullable(playerID));
+        EntityLivingBase player = getOwner();
+        if (player instanceof EntityPlayer)
+            for (ItemStack itemStack : player.getArmorInventoryList())
+                if (itemStack != null && itemStack.getItem() == ItemRegistry.SCOUT) {
+                    NBTTagCompound tagCompound = itemStack.getTagCompound();
+                    if (tagCompound == null)
+                        tagCompound = new NBTTagCompound();
+                    tagCompound.setInteger("entity_id", this.getEntityId());
+                    itemStack.setTagCompound(tagCompound);
+                    break;
+                }
+    }
+
+    public void setLocation(BlockPos pos) {
+        if (pos == null)
+            pos = new BlockPos(0, -10, 0);
+        this.dataManager.set(LOCATION, pos);
+    }
+
+    public BlockPos getLocation() {
+        return this.dataManager.get(LOCATION);
     }
 
     @Nullable
@@ -125,6 +119,26 @@ public class EntityScout extends EntityFlying {
     public void onEntityUpdate() {
         super.onEntityUpdate();
         if (getOwner() != null) {
+            boolean hasOwner = false;
+            for (ItemStack itemStack : getOwner().getArmorInventoryList())
+                if (itemStack != null && itemStack.getItem() == ItemRegistry.SCOUT) {
+                    if ((itemStack.hasTagCompound() && itemStack.getTagCompound().hasKey("entity_id") && itemStack.getTagCompound().getInteger("entity_id") == this.getEntityId())) {
+                        hasOwner = true;
+                    }
+                }
+            if (!hasOwner)
+                this.setDead();
+
+            if (!EntityScout.this.getLocation().equals(new BlockPos(0, -10, 0))) {
+                moveHelper.setMoveTo(getLocation().getX(), getLocation().getY(), getLocation().getZ(), 0.25f);
+            } else if (EntityScout.this.getOwner() != null) {
+                EntityLivingBase player = getOwner();
+                moveHelper.setMoveTo(player.posX, player.posY, player.posZ, 0.25f);
+            }
+            if(moveHelper instanceof FlightMoveHelper) {
+                FlightMoveHelper flightMoveHelper = (FlightMoveHelper) moveHelper;
+            }
+
             AxisAlignedBB bound = new AxisAlignedBB(this.posX - 10, this.posY - 10, this.posZ - 10, this.posX + 10, this.posY + 10, this.posZ + 10);
             List<EntityLiving> entities = worldObj.getEntitiesWithinAABB(EntityLiving.class, bound);
             for (EntityLiving e : entities)
@@ -133,5 +147,9 @@ public class EntityScout extends EntityFlying {
         } else {
             this.setDead();
         }
+    }
+
+    @Override
+    protected void collideWithEntity(Entity entityIn) {
     }
 }

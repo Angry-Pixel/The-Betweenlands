@@ -20,6 +20,7 @@ import java.util.List;
 
 public class ItemShadowStaff extends Item {
     private static float THROW_SPEED = 5f;
+    private static float THROW_DISTANCE = 10f;
     private static int RANGE = 10;
     private static int COOLDOWN = 200;
     private static int MAX_TIME_IN_AIR = 1000;
@@ -46,7 +47,6 @@ public class ItemShadowStaff extends Item {
                     tagCompound.removeTag(DISTANCE_NBT);
                     tagCompound.removeTag(TARGET_ID_NBT);
                     tagCompound.removeTag(TIME_IN_AIR_NBT);
-                    //tagCompound.setInteger(COOLDOWN_NBT, COOLDOWN);
                     stack.setItemDamage(COOLDOWN);
                     stack.setTagCompound(tagCompound);
                 }
@@ -120,7 +120,8 @@ public class ItemShadowStaff extends Item {
         NBTTagCompound tagCompound = stack.getTagCompound();
         if (tagCompound != null && tagCompound.hasKey(DISTANCE_NBT) && tagCompound.hasKey(TARGET_ID_NBT)) {
             Entity target = entityLiving.worldObj.getEntityByID(tagCompound.getInteger(TARGET_ID_NBT));
-            Vec3d location = entityLiving.getPositionVector().add(new Vec3d(0, 1, 0)).add(entityLiving.getLookVec()).add(new Vec3d(0, .5f, 0));
+            Vec3d location = entityLiving.getPositionVector().add(new Vec3d(0, 1, 0)).add(entityLiving.getLookVec().scale(THROW_DISTANCE)).add(new Vec3d(0, .5f, 0));
+            System.out.println(location);
             setEntityMotionFromVector(target, location, THROW_SPEED);
             tagCompound.removeTag(DISTANCE_NBT);
             tagCompound.removeTag(TARGET_ID_NBT);

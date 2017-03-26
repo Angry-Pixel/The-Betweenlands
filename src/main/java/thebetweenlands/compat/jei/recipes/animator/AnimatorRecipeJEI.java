@@ -56,9 +56,9 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
         ingredients.setInputs(ItemStack.class, l);
         if (result != null)
             ingredients.setOutput(ItemStack.class, result);
-        if (lootTableName != null && world != null){
+        /*if (lootTableName != null && world != null){
             ingredients.setOutputs(ItemStack.class, LootTableRegistry.getItemsFromTable(lootTableName, world));
-        }
+        }*/
     }
 
 
