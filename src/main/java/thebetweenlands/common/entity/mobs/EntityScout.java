@@ -17,14 +17,14 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
+import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 public class EntityScout extends EntityFlying {
@@ -44,6 +44,25 @@ public class EntityScout extends EntityFlying {
         this.dataManager.register(LOCATION, new BlockPos(0, -10, 0));
     }
 
+
+    @Override
+    protected void initEntityAI() {
+        super.initEntityAI();
+        this.tasks.addTask(2, new EntityAIMoveToDirect<EntityScout>(this, 0.25D) {
+
+            @Nullable
+            @Override
+            protected Vec3d getTarget() {
+                if (!EntityScout.this.getLocation().equals(new BlockPos(0, -10, 0))) {
+                    return new Vec3d(getLocation().getX(), getLocation().getY(), getLocation().getZ());
+                } else if (EntityScout.this.getOwner() != null) {
+                    EntityLivingBase player = EntityScout.this.getOwner();
+                    return new Vec3d(player.posX, player.posY, player.posZ);
+                }
+                return null;
+            }
+        });
+    }
 
     @Override
     public void writeEntityToNBT(NBTTagCompound nbt) {
@@ -128,16 +147,6 @@ public class EntityScout extends EntityFlying {
                 }
             if (!hasOwner)
                 this.setDead();
-
-            if (!EntityScout.this.getLocation().equals(new BlockPos(0, -10, 0))) {
-                moveHelper.setMoveTo(getLocation().getX(), getLocation().getY(), getLocation().getZ(), 0.25f);
-            } else if (EntityScout.this.getOwner() != null) {
-                EntityLivingBase player = getOwner();
-                moveHelper.setMoveTo(player.posX, player.posY, player.posZ, 0.25f);
-            }
-            if(moveHelper instanceof FlightMoveHelper) {
-                FlightMoveHelper flightMoveHelper = (FlightMoveHelper) moveHelper;
-            }
 
             AxisAlignedBB bound = new AxisAlignedBB(this.posX - 10, this.posY - 10, this.posZ - 10, this.posX + 10, this.posY + 10, this.posZ + 10);
             List<EntityLiving> entities = worldObj.getEntitiesWithinAABB(EntityLiving.class, bound);

@@ -18,6 +18,15 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class ItemPhantomBow extends ItemBLBow {
     private static float ROTATION_SPAN = 60f;
 
+    public ItemPhantomBow(){
+        this.setMaxDamage(400);
+    }
+
+    @Override
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return 800000;
+    }
+
     @Override
     public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
         if (entityLiving instanceof EntityPlayer) {
@@ -27,12 +36,11 @@ public class ItemPhantomBow extends ItemBLBow {
 
             int usedTicks = this.getMaxItemUseDuration(stack) - timeLeft;
             usedTicks = ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) entityLiving, usedTicks, arrow != null || infiniteArrows);
-
             if (usedTicks < 0) {
                 return;
             }
 
-            if (arrow != null || infiniteArrows) {
+            if ((arrow != null && arrow.stackSize > 4) || infiniteArrows) {
                 if (arrow == null) {
                     arrow = new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
                 }
@@ -46,7 +54,7 @@ public class ItemPhantomBow extends ItemBLBow {
                         for (int i = 0; i < 5; i++) {
                             ItemArrow itemArrow = (ItemArrow) arrow.getItem();
                             EntityArrow entityArrow = itemArrow.createArrow(world, arrow, player);
-                            entityArrow.setAim(player, player.rotationPitch, player.rotationYaw + (ROTATION_SPAN/5)*(i-2), 0.0F, strength * 3.0F, 1.0F);
+                            entityArrow.setAim(player, player.rotationPitch, player.rotationYaw + (ROTATION_SPAN / 5) * (i - 2), 0.0F, strength * 1.5F, 1.0F);
 
                             if (strength == 1.0F) {
                                 entityArrow.setIsCritical(true);
@@ -81,7 +89,7 @@ public class ItemPhantomBow extends ItemBLBow {
                     world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
 
                     if (!infiniteArrows) {
-                        arrow.stackSize -=5;
+                        arrow.stackSize -= 5;
 
                         if (arrow.stackSize == 0) {
                             player.inventory.deleteStack(arrow);
