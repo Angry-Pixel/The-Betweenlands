@@ -27,6 +27,7 @@ public class RenderWight extends RenderLiving<EntityWight> {
 	@Override
 	protected void preRenderCallback(EntityWight entity, float partialTickTime) {
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY, entity.posZ, 10.0f, -1, -1, -1));
 		}
 

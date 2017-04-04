@@ -39,6 +39,7 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 
 	public void renderShockwaveBlock(EntityShockwaveBlock entity, double x, double y, double z, float yaw, float tick) {
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(entity.posX, entity.posY + 0.5D, entity.posZ, 
 					(entity.ticksExisted + tick) / 12.0F + 1F,
 					10.0f / 255.0f * 4.0F, 

@@ -42,6 +42,7 @@ public class RenderPyrad extends RenderLiving<EntityPyrad> {
 		double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 
 		if(!entity.isActive() && entity.getHitTicks(partialTicks) > 8 && ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
 			float hitTicks = entity.getHitTicks(partialTicks);
 			float brightness = 1.0F - (float)(Math.cos((hitTicks - 8) / 12.0F * 2.0F * Math.PI) + 1.0F) / 2.0F;
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry + 0.5D, rz,
@@ -52,6 +53,7 @@ public class RenderPyrad extends RenderLiving<EntityPyrad> {
 		}
 
 		if(entity.getGlowTicks(partialTicks) > 0 && ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
 			float glow = entity.getGlowTicks(partialTicks) / 10.0F;
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry + entity.getEyeHeight(), rz,
 					4.75F * glow + 1.0F,

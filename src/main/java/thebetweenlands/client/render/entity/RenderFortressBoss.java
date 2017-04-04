@@ -52,9 +52,11 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 					}
 				}
 				if(lightIntensity > 0.0F) {
+					ShaderHelper.INSTANCE.require();
 					shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
 				}
 			} else {
+				ShaderHelper.INSTANCE.require();
 				shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 1.5F / boss.maxHurtResistantTime * (boss.hurtResistantTime + partialTicks), 0, 0));
 			}
 		}

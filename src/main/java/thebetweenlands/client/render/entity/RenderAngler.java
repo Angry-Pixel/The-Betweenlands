@@ -41,6 +41,7 @@ public class RenderAngler extends RenderLiving<EntityAngler> {
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 
         if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+        	ShaderHelper.INSTANCE.require();
         	double rx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 			double ry = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
 			double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;

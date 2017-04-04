@@ -24,6 +24,7 @@ public class RenderBLArrow extends RenderArrow<EntityBLArrow> {
 	@Override
 	public void doRender(EntityBLArrow entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		if(entity.getArrowType() == EnumArrowType.OCTINE && ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
 			double rx = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * partialTicks;
 			double ry = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * partialTicks;
 			double rz = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;

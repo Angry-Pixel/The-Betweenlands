@@ -19,6 +19,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ShaderHelper implements IResourceManagerReloadListener {
@@ -37,7 +38,8 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	private ResizableFramebuffer blitBuffer = null;
 
 	private boolean shadersUpdated = false;
-	
+	private boolean required = false;
+
 	/**
 	 * The minumum amount of required texture units for the shaders to work properly
 	 */
@@ -134,7 +136,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 * Updates and initializes the main shader if necessary
 	 */
 	public void updateShaders(float partialTicks) {
-		if(this.isRequired() && this.canUseShaders()) {
+		if(this.canUseShaders()) {
 			try {
 				if(this.worldShader == null) {
 					this.worldShader = new WorldShader().init();
@@ -146,11 +148,13 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 					this.toneMappingShader = new Tonemapper().init();
 				}
 
-				this.worldShader.updateDepthBuffer();
-				this.worldShader.updateMatrices();
-				this.worldShader.updateTextures(partialTicks);
-				
-				this.shadersUpdated = true;
+				if(this.isRequired()) {
+					this.worldShader.updateDepthBuffer();
+					this.worldShader.updateMatrices();
+					this.worldShader.updateTextures(partialTicks);
+
+					this.shadersUpdated = true;
+				}
 			} catch(Exception ex) {
 				this.shaderError = ex;
 				ex.printStackTrace();
@@ -252,8 +256,9 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			}
 
 			GlStateManager.enableAlpha();
-			
+
 			this.shadersUpdated = false;
+			this.required = false;
 		}
 	}
 
@@ -262,7 +267,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 */
 	public void deleteShaders() {
 		this.shaderError = null;
-		
+
 		if(this.worldShader != null)
 			this.worldShader.delete();
 		this.worldShader = null;
@@ -276,16 +281,21 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		this.toneMappingShader = null;
 	}
 
+	/**
+	 * Enables the shaders to be used in the next/current render tick.
+	 * The shaders are always rendered in the BL dimension, but if something in another
+	 * dimension requires the shaders this must be called every render tick
+	 */
+	public void require() {
+		this.required = true;
+	}
+
 	private boolean isRequired() {
-		//		Minecraft mc = Minecraft.getMinecraft();
-		//		boolean inPortal = false;
-		//		if(mc.thePlayer != null){
-		//			EntityPropertiesPortal props = BLEntityPropertiesRegistry.HANDLER.getProperties(mc.thePlayer, EntityPropertiesPortal.class);
-		//			inPortal = props.inPortal;
-		//		}
-		//		return inPortal || (mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands && mc.thePlayer.dimension == ConfigHandler.DIMENSION_ID);
-		//TODO: Requires dimension and portal
-		return true;
+		Minecraft mc = Minecraft.getMinecraft();
+		if(mc.thePlayer != null && mc.thePlayer.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.thePlayer.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
+			return true;
+		}
+		return this.required || (mc.theWorld != null && mc.theWorld.provider.getDimension() == ConfigHandler.dimensionId);
 	}
 
 	@Override

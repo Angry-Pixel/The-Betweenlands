@@ -35,6 +35,8 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			ShaderHelper.INSTANCE.require();
+			
 			//Use animated shader texture
 			GlStateManager.bindTexture(ShaderHelper.INSTANCE.getWorldShader().getGasTexture());
 		} else {

@@ -108,6 +108,7 @@ public class WorldRenderHandler {
 					float g = (color >> 8 & 0xFF) / 255F;
 					float b = (color & 0xFF) / 255F;
 					if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
+						ShaderHelper.INSTANCE.require();
 						ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz,
 								i == 0 ? size : size * 0.5F,
 										r * (i == 0 ? 3.5F : 1.0F),
