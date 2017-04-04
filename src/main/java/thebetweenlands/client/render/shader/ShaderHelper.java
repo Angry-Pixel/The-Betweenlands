@@ -36,6 +36,8 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	private Tonemapper toneMappingShader = null;
 	private ResizableFramebuffer blitBuffer = null;
 
+	private boolean shadersUpdated = false;
+	
 	/**
 	 * The minumum amount of required texture units for the shaders to work properly
 	 */
@@ -147,6 +149,8 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 				this.worldShader.updateDepthBuffer();
 				this.worldShader.updateMatrices();
 				this.worldShader.updateTextures(partialTicks);
+				
+				this.shadersUpdated = true;
 			} catch(Exception ex) {
 				this.shaderError = ex;
 				ex.printStackTrace();
@@ -158,7 +162,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 * Renders the main shader to the screen
 	 */
 	public void renderShaders(float partialTicks) {
-		if(this.worldShader != null && this.isRequired() && this.canUseShaders()) {
+		if(this.shadersUpdated && this.worldShader != null && this.isRequired() && this.canUseShaders()) {
 			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
 			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);;
 			Framebuffer targetFramebuffer1 = mainFramebuffer;
@@ -248,6 +252,8 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			}
 
 			GlStateManager.enableAlpha();
+			
+			this.shadersUpdated = false;
 		}
 	}
 
