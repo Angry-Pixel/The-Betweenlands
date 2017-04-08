@@ -1,20 +1,13 @@
 package thebetweenlands.common.world.teleporter;
 
-import org.omg.CORBA.TypeCodePackage.BadKind;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityList;
-import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.world.WorldEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.TheBetweenlands;
+
 import thebetweenlands.util.config.ConfigHandler;
 
 public final class TeleporterHandler {
@@ -63,7 +56,8 @@ public final class TeleporterHandler {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
 				player.mcServer.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(toWorld));
 				player.timeUntilPortal = 0;
-			} else { // if (!(entity instanceof EntityMinecartContainer))
+			} else {
+				entity.setDropItemsWhenDead(false);
 				world.removeEntityDangerously(entity);
 				entity.dimension = dimensionId;
 				entity.isDead = false;
