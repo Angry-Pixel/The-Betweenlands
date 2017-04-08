@@ -107,8 +107,6 @@ public class TheBetweenlands {
 	public void init(FMLInitializationEvent event) {
 		REGISTRIES.init();
 
-		TeleporterHandler.init();
-
 		proxy.init();
 
 		this.registerEventHandlers();

@@ -3,9 +3,9 @@ package thebetweenlands.common.world.teleporter;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.FakePlayer;
 
 import thebetweenlands.util.config.ConfigHandler;
@@ -15,37 +15,13 @@ public final class TeleporterHandler {
 
 	private TeleporterHandler() {}
 
-	public static void init() {
-		MinecraftForge.EVENT_BUS.register(INSTANCE);
-	}
-
 	public static void transferToOverworld(Entity entity) {
-		INSTANCE.transferEntity(entity, 0);
+		INSTANCE.transferEntity(entity, DimensionType.OVERWORLD.getId());
 	}
 
 	public static void transferToBL(Entity entity) {
 		INSTANCE.transferEntity(entity, ConfigHandler.dimensionId);
 	}
-
-	private TeleporterBetweenlands teleportToOverworld;
-	private TeleporterBetweenlands teleportToBetweenlands;
-
-	/*
-	@SubscribeEvent
-	public void onWorldLoad(WorldEvent.Load e) {
-		if (!(e.getWorld() instanceof WorldServer))
-			return;
-
-		WorldServer world = (WorldServer) e.getWorld();
-
-		//TODO This is broken, teleporter is set AFTER the entity is transferred and if the dimension was unloaded the reference points to an invalid world and the portal doesn't gen
-
-		if (world.provider.getDimensionType() == DimensionType.OVERWORLD) {
-			world.customTeleporters.add(this.teleportToOverworld = new TeleporterBetweenlands(world));
-		} else if (world.provider.getDimensionType() == TheBetweenlands.dimensionType) {
-			world.customTeleporters.add(this.teleportToBetweenlands = new TeleporterBetweenlands(world));
-		}
-	}*/
 
 	private void transferEntity(Entity entity, int dimensionId) {
 		World world = entity.worldObj;
