@@ -19,6 +19,9 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -149,6 +152,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(COLOR);
 	}

@@ -12,6 +12,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.AdvancedStateMap;
@@ -40,6 +43,7 @@ public class BlockBogBeanStalk extends BlockStackablePlantUnderwater {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(IS_TOP, IS_BOTTOM);

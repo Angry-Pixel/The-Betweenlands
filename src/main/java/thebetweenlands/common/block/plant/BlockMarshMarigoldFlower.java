@@ -48,6 +48,7 @@ public class BlockMarshMarigoldFlower extends BlockStackablePlant {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(IS_TOP, IS_BOTTOM);

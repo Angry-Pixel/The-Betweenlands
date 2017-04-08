@@ -106,6 +106,7 @@ public class BlockWalkway extends Block implements IStateMappedBlock {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.withPropertySuffixFalse(STANDS, "no_stands").ignore(STANDS);
 	}

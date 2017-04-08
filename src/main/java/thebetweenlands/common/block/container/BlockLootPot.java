@@ -260,6 +260,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(VARIANT).withPropertySuffix(VARIANT, e -> e.getName());
 	}

@@ -64,6 +64,7 @@ public class BlockPolishedDentrothyst extends BlockGlassBetweenlands implements 
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(TYPE).withPropertySuffix(TYPE, type -> type == EnumDentrothyst.GREEN ? "green" : "orange");
 	}

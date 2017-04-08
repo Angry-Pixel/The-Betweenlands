@@ -1,5 +1,7 @@
 package thebetweenlands.common.world.teleporter;
 
+import org.omg.CORBA.TypeCodePackage.BadKind;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecartContainer;
@@ -16,7 +18,9 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
 public final class TeleporterHandler {
-	private static TeleporterHandler INSTANCE = new TeleporterHandler();
+	private static final TeleporterHandler INSTANCE = new TeleporterHandler();
+
+	private TeleporterHandler() {}
 
 	public static void init() {
 		MinecraftForge.EVENT_BUS.register(INSTANCE);
@@ -33,9 +37,7 @@ public final class TeleporterHandler {
 	private TeleporterBetweenlands teleportToOverworld;
 	private TeleporterBetweenlands teleportToBetweenlands;
 
-	private TeleporterHandler() { }
-
-
+	/*
 	@SubscribeEvent
 	public void onWorldLoad(WorldEvent.Load e) {
 		if (!(e.getWorld() instanceof WorldServer))
@@ -50,48 +52,23 @@ public final class TeleporterHandler {
 		} else if (world.provider.getDimensionType() == TheBetweenlands.dimensionType) {
 			world.customTeleporters.add(this.teleportToBetweenlands = new TeleporterBetweenlands(world));
 		}
-	}
+	}*/
 
 	private void transferEntity(Entity entity, int dimensionId) {
 		World world = entity.worldObj;
-
-		if (!world.isRemote && !entity.isDead) {
+		if (!world.isRemote && !entity.isDead && !(entity instanceof FakePlayer)) {
+			MinecraftServer server = world.getMinecraftServer();
+			WorldServer toWorld = server.worldServerForDimension(dimensionId);
 			if (entity instanceof EntityPlayerMP) {
-				if (entity instanceof FakePlayer) {
-					return;
-				}
-
 				EntityPlayerMP player = (EntityPlayerMP) entity;
-				player.mcServer.getPlayerList().transferPlayerToDimension(player, dimensionId, dimensionId == 0 ? teleportToOverworld : teleportToBetweenlands);
+				player.mcServer.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(toWorld));
 				player.timeUntilPortal = 0;
-			} else if (!(entity instanceof EntityMinecartContainer)) { // TODO we cannot handle this, would result in container breaking in both worlds and duplicate items;
-				// find some sneaky solution around this issue fixme copy paste
-				world.theProfiler.startSection("changeDimension");
-
-				MinecraftServer mcServer = world.getMinecraftServer();
-				WorldServer worldCurrent = mcServer.worldServerForDimension(entity.dimension);
-				WorldServer worldTarget = mcServer.worldServerForDimension(dimensionId);
+			} else { // if (!(entity instanceof EntityMinecartContainer))
+				world.removeEntityDangerously(entity);
 				entity.dimension = dimensionId;
-
-				world.removeEntity(entity);
 				entity.isDead = false;
-				world.theProfiler.startSection("reposition");
-				mcServer.getPlayerList().transferEntityToWorld(entity, dimensionId, worldCurrent, worldTarget, dimensionId == 0 ? teleportToOverworld : teleportToBetweenlands);
-				world.theProfiler.endStartSection("reloading");
-				Entity newEntity = EntityList.createEntityByName(EntityList.getEntityString(entity), worldTarget);
-
-				if (newEntity != null) {
-					//newEntity.copyDataFromOld(entity);
-					worldTarget.spawnEntityInWorld(newEntity);
-				}
-
-				entity.isDead = true;
-				world.theProfiler.endSection();
-				worldCurrent.resetUpdateEntityTick();
-				worldTarget.resetUpdateEntityTick();
-				world.theProfiler.endSection();
-
-				newEntity.timeUntilPortal = entity.getPortalCooldown();
+				WorldServer oldWorld = server.worldServerForDimension(entity.dimension);
+				server.getPlayerList().transferEntityToWorld(entity, dimensionId, oldWorld, toWorld, new TeleporterBetweenlands(toWorld));
 			}
 		}
 	}

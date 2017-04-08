@@ -65,6 +65,7 @@ public class BlockDentrothystPane extends BlockPaneBetweenlands implements Block
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(TYPE).withPropertySuffix(TYPE, type -> type == EnumDentrothyst.GREEN ? "green" : "orange");
 	}

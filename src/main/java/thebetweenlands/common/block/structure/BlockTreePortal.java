@@ -220,23 +220,20 @@ public class BlockTreePortal extends BasicBlock {
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0) {
 			AxisAlignedBB aabb = state.getBoundingBox(worldIn, pos);
-			if(aabb != null && aabb.offset(pos).intersectsWith(entityIn.getEntityBoundingBox())) {
-				if(entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
+			if (aabb != null && aabb.offset(pos).intersectsWith(entityIn.getEntityBoundingBox())) {
+				if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
 					IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
 
 					if(worldIn.provider.getDimensionType() == DimensionType.OVERWORLD || entityIn.dimension == ConfigHandler.dimensionId) {
 						cap.setInPortal(true);
 					}
-				} else if(!worldIn.isRemote) {
+				} else if (!worldIn.isRemote) {
 					if (worldIn.provider.getDimensionType() == DimensionType.OVERWORLD) {
 						TeleporterHandler.transferToBL(entityIn);
-					} else if(entityIn.dimension == ConfigHandler.dimensionId) {
+					} else if (entityIn.dimension == ConfigHandler.dimensionId) {
 						TeleporterHandler.transferToOverworld(entityIn);
 					}
-
-					if (entityIn != null) {
-						entityIn.timeUntilPortal = entityIn.getPortalCooldown();
-					}
+					entityIn.timeUntilPortal = entityIn.getPortalCooldown();
 				}
 			}
 		}

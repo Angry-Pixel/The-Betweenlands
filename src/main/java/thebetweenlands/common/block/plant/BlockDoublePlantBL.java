@@ -200,6 +200,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(FACING);
 	}

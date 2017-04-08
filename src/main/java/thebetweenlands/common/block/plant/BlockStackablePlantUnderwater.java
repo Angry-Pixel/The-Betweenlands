@@ -18,6 +18,9 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -220,6 +223,7 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		super.setStateMapper(builder);
 		builder.ignore(AGE);

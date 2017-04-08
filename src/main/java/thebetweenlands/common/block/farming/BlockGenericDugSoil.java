@@ -313,6 +313,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(COMPOSTED).ignore(DECAYED).withPropertySuffix(COMPOSTED, null, "composted")
 		.withPropertySuffixExclusions((map) -> {

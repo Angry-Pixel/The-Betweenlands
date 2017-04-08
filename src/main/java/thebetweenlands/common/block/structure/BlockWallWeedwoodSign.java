@@ -53,6 +53,7 @@ public class BlockWallWeedwoodSign extends BlockWallSign implements ICustomItemB
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(FACING);
 	}

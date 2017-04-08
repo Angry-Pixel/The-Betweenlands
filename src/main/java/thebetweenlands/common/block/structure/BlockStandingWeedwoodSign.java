@@ -53,6 +53,7 @@ public class BlockStandingWeedwoodSign extends BlockStandingSign implements ICus
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(ROTATION);
 	}

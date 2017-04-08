@@ -19,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.DimensionManager;
+
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
@@ -28,9 +28,8 @@ import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 import thebetweenlands.common.world.storage.world.shared.location.LocationPortal;
 import thebetweenlands.util.config.ConfigHandler;
 
-
 public final class TeleporterBetweenlands extends Teleporter {
-	private World targetWorld;
+	private final World targetWorld;
 
 	public TeleporterBetweenlands(WorldServer worldServer) {
 		super(worldServer);
@@ -39,9 +38,6 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
-		//The TeleporterHandler doesn't set the world properly if the world was unloaded before, this "fixes" the problem
-		this.targetWorld = DimensionManager.getWorld(entity.dimension);
-
 		if (!this.placeInExistingPortal(entity, rotationYaw)) {
 			if(!this.makePortal(entity)) {
 				//Portal failed to generate... fallback?

@@ -35,6 +35,7 @@ public abstract class BlockDoorBetweenlands extends BlockDoor implements ICustom
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(POWERED);
 	}

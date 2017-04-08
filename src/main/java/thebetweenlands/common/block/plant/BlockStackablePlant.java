@@ -217,6 +217,7 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(AdvancedStateMap.Builder builder) {
 		builder.ignore(AGE);
 		if(this.maxHeight == 1) {

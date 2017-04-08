@@ -44,6 +44,7 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
 		builder.ignore(OCCUPIED);
 	}
