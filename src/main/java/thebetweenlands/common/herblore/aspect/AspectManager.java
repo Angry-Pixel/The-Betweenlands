@@ -19,6 +19,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.AspectItem;
+import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
 
@@ -90,61 +93,6 @@ public class AspectManager {
 		 */
 		public boolean matchEntry(AspectEntry aspectEntry) {
 			return aspectEntry.tier == this.tier && aspectEntry.group == this.group;
-		}
-	}
-
-	public static final class AspectItem {
-		private final ItemStack original;
-		private final IItemStackMatcher matcher;
-
-		/**
-		 * Creates a new aspect item
-		 * @param stack
-		 * @param matcher
-		 */
-		private AspectItem(ItemStack stack, IItemStackMatcher matcher) {
-			this.original = stack;
-			this.matcher = matcher;
-		}
-
-		/**
-		 * Returns the original item stack
-		 * <p><b>DO NOT MODIFY</b>
-		 * @return
-		 */
-		public ItemStack getOriginal() {
-			return this.original;
-		}
-
-		/**
-		 * Returns the item stack matcher
-		 * @return
-		 */
-		public IItemStackMatcher getMatcher() {
-			return this.matcher;
-		}
-
-		/**
-		 * Writes this aspect item to the specified NBT
-		 * @param nbt
-		 * @return
-		 */
-		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-			nbt.setTag("item", this.original.writeToNBT(new NBTTagCompound()));
-			return nbt;
-		}
-
-		/**
-		 * Reads an aspect item from the specified NBT
-		 * @param nbt
-		 * @return
-		 */
-		@Nullable
-		public static AspectItem readFromNBT(NBTTagCompound nbt) {
-			ItemStack item = nbt.hasKey("item") ? ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item")) : null;
-			if(item == null)
-				return null;
-			return AspectManager.getAspectItem(item);
 		}
 	}
 
@@ -263,9 +211,9 @@ public class AspectManager {
 		}
 
 		//Register aspect item and matcher
-		List<AspectItem> aspectItems = ITEM_TO_ASPECT_ITEMS.get(entry.item.original.getItem());
+		List<AspectItem> aspectItems = ITEM_TO_ASPECT_ITEMS.get(entry.item.getOriginal().getItem());
 		if(aspectItems == null)
-			ITEM_TO_ASPECT_ITEMS.put(entry.item.original.getItem(), aspectItems = new ArrayList<AspectItem>());
+			ITEM_TO_ASPECT_ITEMS.put(entry.item.getOriginal().getItem(), aspectItems = new ArrayList<AspectItem>());
 		aspectItems.add(entry.item);
 	}
 
@@ -329,7 +277,7 @@ public class AspectManager {
 			for(int i = 0; i < entryList.tagCount(); i++) {
 				NBTTagCompound entryCompound = entryList.getCompoundTagAt(i);
 				//System.out.println("Getting aspect item: " + entryCompound);
-				AspectItem itemEntry = AspectItem.readFromNBT(entryCompound);
+				AspectItem itemEntry = readAspectItemFromNBT(entryCompound);
 				if(itemEntry == null) {
 					//System.out.println("Failed getting aspect item");
 					continue;
@@ -360,7 +308,7 @@ public class AspectManager {
 			AspectItem itemEntry = entry.getKey();
 			List<Aspect> itemAspects = entry.getValue();
 			NBTTagCompound entryCompound = new NBTTagCompound();
-			itemEntry.writeToNBT(entryCompound);
+			writeAspectItemToNbt(itemEntry, entryCompound);
 			NBTTagList aspectList = new NBTTagList();
 			for(Aspect aspect : itemAspects) {
 				aspectList.appendTag(aspect.writeToNBT(new NBTTagCompound()));
@@ -372,6 +320,29 @@ public class AspectManager {
 		nbt.setTag("entries", entryList);
 	}
 
+	/**
+	 * Writes an aspect item to the specified NBT
+	 * @param nbt
+	 * @return
+	 */
+	public static NBTTagCompound writeAspectItemToNbt(AspectItem aspectItem, NBTTagCompound nbt) {
+		nbt.setTag("item", aspectItem.getOriginal().writeToNBT(new NBTTagCompound()));
+		return nbt;
+	}
+
+	/**
+	 * Reads an aspect item from the specified NBT
+	 * @param nbt
+	 * @return
+	 */
+	@Nullable
+	public static AspectItem readAspectItemFromNBT(NBTTagCompound nbt) {
+		ItemStack item = nbt.hasKey("item") ? ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item")) : null;
+		if(item == null)
+			return null;
+		return AspectManager.getAspectItem(item);
+	}
+	
 	/**
 	 * Resets all static aspects and generates a new distribution with the specified seed
 	 * @param aspectSeed
@@ -511,7 +482,7 @@ public class AspectManager {
 		List<AspectItem> potentialMatches = ITEM_TO_ASPECT_ITEMS.get(stack.getItem());
 		if(potentialMatches != null) {
 			for(AspectItem aspectItem : potentialMatches) {
-				if(aspectItem.matcher.matches(aspectItem.original, stack))
+				if(aspectItem.matches(stack))
 					return aspectItem;
 			}
 		}

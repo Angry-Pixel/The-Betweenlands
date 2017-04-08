@@ -25,9 +25,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
@@ -52,7 +52,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isHeldItem) {
-		CorrosionHelper.onUpdate(stack, world, entity, slot, isHeldItem);
+		CorrosionHelper.updateCorrosion(stack, world, entity, slot, isHeldItem);
 		
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());

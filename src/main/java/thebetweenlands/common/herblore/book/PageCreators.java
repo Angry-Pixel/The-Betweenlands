@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.AspectItemSlideShowWidget;
@@ -152,7 +153,7 @@ public class PageCreators {
      * @param manualType the type of manual they are in
      * @return an array for the entry
      */
-    public static ArrayList<Page> AspectItemPages(AspectManager.AspectItem item, Item manualType) {
+    public static ArrayList<Page> AspectItemPages(AspectItem item, Item manualType) {
         ArrayList<Page> newPages = new ArrayList<>();
         int height = 0;
         ItemStack itemStack = item.getOriginal();

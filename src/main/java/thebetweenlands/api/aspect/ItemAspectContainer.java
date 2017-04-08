@@ -1,4 +1,4 @@
-package thebetweenlands.common.herblore.aspect;
+package thebetweenlands.api.aspect;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +11,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.common.herblore.aspect.AspectManager;
 
 public final class ItemAspectContainer extends AspectContainer {
 	public static final String ASPECTS_NBT_TAG = "blHerbloreAspects";

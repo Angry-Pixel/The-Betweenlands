@@ -3,9 +3,9 @@ package thebetweenlands.common.item.tools;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
 
 public class ItemSwiftPick extends ItemBLPickaxe {
 	public ItemSwiftPick() {

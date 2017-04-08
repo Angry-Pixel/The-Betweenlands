@@ -1,4 +1,4 @@
-package thebetweenlands.common.herblore.aspect;
+package thebetweenlands.api.aspect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,10 +13,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.api.item.IDiscoveryProvider;
-import thebetweenlands.common.herblore.aspect.AspectManager.AspectItem;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
+import thebetweenlands.common.herblore.aspect.AspectManager;
 
 public class DiscoveryContainer<T> {
 	private final Map<AspectItem, List<IAspectType>> discoveredStaticAspects = new HashMap<AspectItem, List<IAspectType>>();
@@ -164,7 +163,7 @@ public class DiscoveryContainer<T> {
 				continue;
 			}
 			NBTTagCompound discoveryEntry = new NBTTagCompound();
-			e.getKey().writeToNBT(discoveryEntry);
+			AspectManager.writeAspectItemToNbt(e.getKey(), discoveryEntry);
 			NBTTagList aspectListCompound = new NBTTagList();
 			for(IAspectType type : e.getValue()) {
 				aspectListCompound.appendTag(type.writeToNBT(new NBTTagCompound()));
@@ -187,7 +186,7 @@ public class DiscoveryContainer<T> {
 		int discoveryEntries = discoveryList.tagCount();
 		for (int i = 0; i < discoveryEntries; i++) {
 			NBTTagCompound discoveryEntry = discoveryList.getCompoundTagAt(i);
-			AspectItem item = AspectItem.readFromNBT(discoveryEntry);
+			AspectItem item = AspectManager.readAspectItemFromNBT(discoveryEntry);
 			List<IAspectType> aspectTypeList = new ArrayList<IAspectType>();
 			NBTTagList aspectListCompound = discoveryEntry.getTagList("aspects", Constants.NBT.TAG_COMPOUND);
 			for (int c = 0; c < aspectListCompound.tagCount(); c++) {
@@ -259,7 +258,7 @@ public class DiscoveryContainer<T> {
 			this.successful = successful;
 		}
 
-		public enum EnumDiscoveryResult {
+		public static enum EnumDiscoveryResult {
 			NONE, NEW, LAST, END
 		}
 	}

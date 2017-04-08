@@ -12,7 +12,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemPhantomBow extends ItemBLBow {

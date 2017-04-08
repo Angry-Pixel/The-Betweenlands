@@ -1,5 +1,9 @@
 package thebetweenlands.common.herblore.book;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -8,16 +12,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentTranslation;
+import thebetweenlands.api.aspect.AspectItem;
+import thebetweenlands.api.aspect.DiscoveryContainer;
+import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.item.IDiscoveryProvider;
-import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class ManualManager {
 
@@ -120,8 +120,8 @@ public class ManualManager {
             IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
             DiscoveryContainer container = provider.getContainer(stack);
             ItemStack ingredient = null;
-            Map<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
-            for (Map.Entry<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
+            Map<AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
+            for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
                 if (e.getKey() != null) {
                     if ((new ItemStack(e.getKey().getOriginal().getItem(), 1, e.getKey().getOriginal().getItemDamage()).getDisplayName().toLowerCase().replace(" ", "").equals(page))) {
                         ingredient = new ItemStack(e.getKey().getOriginal().getItem(), 1, e.getKey().getOriginal().getItemDamage());

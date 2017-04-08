@@ -7,7 +7,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import thebetweenlands.api.item.ICorrodible;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
 public class RecipesCoating implements IRecipe {
@@ -24,7 +23,8 @@ public class RecipesCoating implements IRecipe {
 					if(tool != null) {
 						return false;
 					}
-					if(CorrosionHelper.getCoating(stack) >= CorrosionHelper.MAX_COATING) {
+					ICorrodible corrodible = (ICorrodible) stack.getItem();
+					if(corrodible.getCoating(stack) >= corrodible.getMaxCoating(stack)) {
 						return false;
 					}
 					tool = stack;
@@ -51,7 +51,8 @@ public class RecipesCoating implements IRecipe {
 			}
 		}
 		tool = tool.copy();
-		CorrosionHelper.setCoating(tool, Math.min(CorrosionHelper.MAX_COATING, CorrosionHelper.getCoating(tool) + coating * 75));
+		ICorrodible corrodible = (ICorrodible) tool.getItem();
+		corrodible.setCoating(tool, Math.min(corrodible.getMaxCoating(tool), corrodible.getCoating(tool) + coating * 75));
 		return tool;
 	}
 
@@ -73,10 +74,9 @@ public class RecipesCoating implements IRecipe {
 
 		for (int i = 0; i < remaining.length; ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null) {
-				if(stack.getItem() instanceof ICorrodible) {
-					requiredCoating += MathHelper.ceiling_float_int(((float)CorrosionHelper.MAX_COATING - (float)CorrosionHelper.getCoating(stack)) / 75.0F);
-				}
+			if(stack != null && stack.getItem() instanceof ICorrodible) {
+				ICorrodible corrodible = (ICorrodible) stack.getItem();
+				requiredCoating += MathHelper.ceiling_float_int(((float)corrodible.getMaxCoating(stack) - (float)corrodible.getCoating(stack)) / 75.0F);
 			}
 		}
 

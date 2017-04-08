@@ -16,9 +16,9 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.block.ISickleHarvestable;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
 
 public class ItemSickle extends Item implements ICorrodible {
 	public ItemSickle() {
@@ -78,11 +78,11 @@ public class ItemSickle extends Item implements ICorrodible {
 	
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		CorrosionHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+		CorrosionHelper.updateCorrosion(itemStack, world, holder, slot, isHeldItem);
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
-		CorrosionHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+		CorrosionHelper.addCorrosionTooltips(itemStack, player, lines, advancedItemTooltips);
 	}
 }

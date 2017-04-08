@@ -1,7 +1,6 @@
-package thebetweenlands.common.herblore.aspect;
+package thebetweenlands.api.aspect;
 
 import net.minecraft.nbt.NBTTagCompound;
-import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public final class Aspect implements Comparable<Aspect> {

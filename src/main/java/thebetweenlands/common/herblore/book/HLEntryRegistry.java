@@ -1,20 +1,19 @@
 package thebetweenlands.common.herblore.book;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.item.Item;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.ButtonWidget;
 import thebetweenlands.common.herblore.book.widgets.PictureWidget;
-import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
-import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 public class HLEntryRegistry {
     public static ArrayList<ManualCategory> CATEGORIES = new ArrayList<>();
@@ -61,8 +60,8 @@ public class HLEntryRegistry {
         entryPages.addAll(PageCreators.pageCreatorButtons(temp, manualType));
         indexPages += PageCreators.pageCreatorButtons(temp, manualType).size();
 
-        Map<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
-        for (Map.Entry<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
+        Map<AspectItem, List<AspectManager.AspectItemEntry>> matchedAspects = AspectManager.getRegisteredItems();
+        for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> e : matchedAspects.entrySet()) {
             if (e.getKey() != null)
                 itemPages.addAll(PageCreators.AspectItemPages(e.getKey(), manualType));
         }

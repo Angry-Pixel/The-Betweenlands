@@ -22,13 +22,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.AspectItem;
+import thebetweenlands.api.aspect.DiscoveryContainer;
+import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery;
+import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.aspect.AspectManager.AspectItem;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer.AspectDiscovery;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 
@@ -99,7 +99,7 @@ public class BlockGeckoCage extends BlockContainer {
 						if(DiscoveryContainer.hasDiscoveryProvider(player)) {
 							if(!world.isRemote) {
 								AspectManager manager = AspectManager.get(world);
-								AspectItem aspectItem = manager.getAspectItem(heldItemStack);
+								AspectItem aspectItem = AspectManager.getAspectItem(heldItemStack);
 								List<Aspect> aspects = manager.getStaticAspects(aspectItem);
 								if(aspects.size() > 0) {
 									DiscoveryContainer mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);

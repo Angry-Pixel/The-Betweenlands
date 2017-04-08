@@ -26,7 +26,7 @@ import net.minecraft.client.resources.data.AnimationFrame;
 import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.lib.ModInfo;
 
 /**

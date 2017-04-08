@@ -13,8 +13,8 @@ import net.minecraft.item.ItemPickaxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
 
 public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 	public ItemBLPickaxe(ToolMaterial material) {
@@ -40,7 +40,7 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		CorrosionHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+		CorrosionHelper.updateCorrosion(itemStack, world, holder, slot, isHeldItem);
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class ItemBLPickaxe extends ItemPickaxe implements ICorrodible {
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
-		CorrosionHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+		CorrosionHelper.addCorrosionTooltips(itemStack, player, lines, advancedItemTooltips);
 	}
 }

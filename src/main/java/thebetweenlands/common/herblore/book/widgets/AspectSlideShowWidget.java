@@ -9,11 +9,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.common.herblore.aspect.Aspect;
+import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-import thebetweenlands.common.herblore.aspect.ItemAspectContainer;
 import thebetweenlands.util.AspectIconRenderer;
 
 @SideOnly(Side.CLIENT)

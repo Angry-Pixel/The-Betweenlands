@@ -1,17 +1,18 @@
 package thebetweenlands.common.herblore.book.widgets;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.aspect.Aspect;
+import thebetweenlands.api.aspect.AspectItem;
+import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.common.herblore.aspect.Aspect;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.aspect.DiscoveryContainer;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class AspectItemSlideShowWidget extends ManualWidgetBase {
@@ -76,7 +77,7 @@ public class AspectItemSlideShowWidget extends ManualWidgetBase {
     public void getItems() {
         items.clear();
         AspectManager manager = AspectManager.get(Minecraft.getMinecraft().theWorld);
-        for (Map.Entry<AspectManager.AspectItem, List<AspectManager.AspectItemEntry>> entry : AspectManager.getRegisteredItems().entrySet()) {
+        for (Map.Entry<AspectItem, List<AspectManager.AspectItemEntry>> entry : AspectManager.getRegisteredItems().entrySet()) {
             List<Aspect> discoveredAspects = manager.getDiscoveredAspects(entry.getKey(), DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer));
             for (Aspect aspect : discoveredAspects) {
                 if (aspect.type.equals(this.aspectType))

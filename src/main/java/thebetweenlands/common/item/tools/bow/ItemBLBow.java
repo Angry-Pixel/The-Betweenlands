@@ -27,9 +27,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.item.corrosion.CorrosionHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemBLBow extends ItemBow implements ICorrodible {
@@ -196,11 +196,11 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 
 	@Override
 	public void onUpdate(ItemStack itemStack, World world, Entity holder, int slot, boolean isHeldItem) {
-		CorrosionHelper.onUpdate(itemStack, world, holder, slot, isHeldItem);
+		CorrosionHelper.updateCorrosion(itemStack, world, holder, slot, isHeldItem);
 	}
 
 	@Override
 	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
-		CorrosionHelper.addInformation(itemStack, player, lines, advancedItemTooltips);
+		CorrosionHelper.addCorrosionTooltips(itemStack, player, lines, advancedItemTooltips);
 	}
 }

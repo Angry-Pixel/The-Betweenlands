@@ -24,20 +24,24 @@ public class PlayerDecayHandler {
 			if(!player.worldObj.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
-				if(capability.isDecayEnabled()) {
-					float currentMaxHealth = (float) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
-					float maxHealth = (int)(capability.getMaxPlayerHealth() / 2.0F) * 2;
+				float currentMaxHealth = (float) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
+				float decayMaxHealth = (int)(capability.getMaxPlayerHealth() / 2.0F) * 2;
 
-					DecayStats stats = capability.getDecayStats();
-					
-					//Only reset the health to default once, hopefully should improve mod compatilibity?
-					boolean requiresHealthReset = stats.getDecayLevel() != stats.getPrevDecayLevel() && currentMaxHealth < 20.0F && maxHealth >= 20.0F;
+				DecayStats stats = capability.getDecayStats();
 
+				//Only reset the health to default once, hopefully should improve mod compatilibity?
+				boolean requiresHealthReset = capability.isDecayEnabled() ? (stats.getDecayLevel() != stats.getPrevDecayLevel() && currentMaxHealth < 20.0F && decayMaxHealth >= 20.0F) : (currentMaxHealth < 20.0F);
+
+				if(!capability.isDecayEnabled()) {
+					if(requiresHealthReset) {
+						player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0F);
+					}
+				} else {
 					//Clamp health
-					if(maxHealth < 20.0F || requiresHealthReset) {
-						player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(maxHealth);
-						if(player.getHealth() > maxHealth) {
-							player.setHealth(maxHealth);
+					if(decayMaxHealth < 20.0F || requiresHealthReset) {
+						player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(decayMaxHealth);
+						if(player.getHealth() > decayMaxHealth) {
+							player.setHealth(decayMaxHealth);
 						}
 					}
 
@@ -55,7 +59,7 @@ public class PlayerDecayHandler {
 
 					if(!event.player.isRiding()) {
 						EnumDifficulty difficulty = player.worldObj.getDifficulty();
-						
+
 						float decaySpeed = 0.0F;
 
 						switch(difficulty) {
@@ -81,7 +85,7 @@ public class PlayerDecayHandler {
 							stats.addDecayAcceleration(decaySpeed);
 						}
 					}
-					
+
 					capability.getDecayStats().onUpdate(player);
 				}
 			}
