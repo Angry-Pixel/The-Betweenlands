@@ -62,7 +62,6 @@ public class EntityRegistry {
 		registerEntity(EntityFortressBossTurret.class, "fortress_boss_turret", 64, 20, false);
 		registerEntity(EntityFortressBossTeleporter.class, "fortress_boss_teleporter", 64, 5, false);
         registerEntity(EntityWeedwoodRowboat.class, "weedwood_rowboat");
-		registerEntity(EntityScout.class, "scout");
 	}
 
 	private static int id = 0;
