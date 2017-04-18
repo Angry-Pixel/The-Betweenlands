@@ -18,6 +18,7 @@ import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
+import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveSharedStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkData;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
@@ -26,7 +27,15 @@ import thebetweenlands.common.network.clientbound.MessageSyncSharedStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
-import thebetweenlands.common.network.serverbound.*;
+import thebetweenlands.common.network.serverbound.MessageEquipItem;
+import thebetweenlands.common.network.serverbound.MessageFlightState;
+import thebetweenlands.common.network.serverbound.MessageOpenPouch;
+import thebetweenlands.common.network.serverbound.MessagePouchNaming;
+import thebetweenlands.common.network.serverbound.MessageReturnScout;
+import thebetweenlands.common.network.serverbound.MessageRow;
+import thebetweenlands.common.network.serverbound.MessageSendScout;
+import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
+import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
 
 public class MessageRegistry {
 	private MessageRegistry() { }
@@ -50,6 +59,7 @@ public class MessageRegistry {
 		registerMessage(MessageBlockGuardData.class, Side.CLIENT);
 		registerMessage(MessageClearBlockGuard.class, Side.CLIENT);
 		registerMessage(MessagePlayEntityIdle.class, Side.CLIENT);
+		registerMessage(MessagePowerRingParticles.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
