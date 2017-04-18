@@ -2,11 +2,18 @@ package thebetweenlands.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent.KeyInputEvent;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.common.network.serverbound.MessageOpenPouch;
+import thebetweenlands.common.network.serverbound.MessageReturnScout;
+import thebetweenlands.common.network.serverbound.MessageSendScout;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
 import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class InputHandler {
@@ -20,6 +27,24 @@ public class InputHandler {
 		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
 
 		if(player != null) {
+			if(event instanceof KeyInputEvent) {
+				if(KeyBindRegistry.OPEN_POUCH.isPressed()) {
+					if(ItemLurkerSkinPouch.getFirstPouch(player) != null) {
+						TheBetweenlands.networkWrapper.sendToServer(new MessageOpenPouch());
+					}
+				}
+				if(KeyBindRegistry.SEND_SCOUT.isPressed()) {
+					for (ItemStack itemStack:player.getArmorInventoryList())
+						if (itemStack != null && itemStack.getItem() == ItemRegistry.SCOUT)
+							TheBetweenlands.networkWrapper.sendToServer(new MessageSendScout());
+				}
+				if(KeyBindRegistry.RETURN_SCOUT.isPressed()) {
+					for (ItemStack itemStack:player.getArmorInventoryList())
+						if (itemStack != null && itemStack.getItem() == ItemRegistry.SCOUT)
+							TheBetweenlands.networkWrapper.sendToServer(new MessageReturnScout());
+				}
+			}
+
 			updateUseButtonState();
 			updateRingUseButtonState();
 		}

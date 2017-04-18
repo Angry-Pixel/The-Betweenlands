@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,6 +9,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.entity.mobs.EntityScout;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 
 //MINE!!
 public class TestItem extends Item {
@@ -75,6 +78,11 @@ public class TestItem extends Item {
 		//			}
 		//		}
 
+		EntityScout entity = new EntityScout(world);
+		entity.setLocationAndAngles(playerIn.posX, playerIn.posY, playerIn.posZ, 0, 0);
+		if (!world.isRemote)
+			entity.setOwnerId(playerIn.getUniqueID());
+		world.spawnEntityInWorld(entity);
 		return EnumActionResult.SUCCESS;
 	}
 }
