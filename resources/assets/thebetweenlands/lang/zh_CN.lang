@@ -1,0 +1,1344 @@
+# Blocks
+tile.thebetweenlands.betweenstone.name=交错石
+tile.thebetweenlands.pitstone.name=麻纹石
+tile.thebetweenlands.genericStone_0.name=腐化交错石
+tile.thebetweenlands.genericStone_1.name=峭壁岩
+tile.thebetweenlands.genericStone_2.name=峭壁苔岩顶
+tile.thebetweenlands.genericStone_3.name=峭壁苔岩底
+tile.thebetweenlands.bedrock.name=基岩
+tile.thebetweenlands.swampDirt.name=沼泽土
+tile.thebetweenlands.swampGrass.name=沼泽草
+tile.thebetweenlands.druidStone1.name=符石
+tile.thebetweenlands.druidStone2.name=符石
+tile.thebetweenlands.druidStone3.name=符石
+tile.thebetweenlands.druidStone4.name=符石
+tile.thebetweenlands.druidStone5.name=符石
+tile.thebetweenlands.druidSpawner.name=黑暗德鲁伊刷怪笼
+tile.thebetweenlands.druidAltar.name=黑暗德鲁伊祭坛
+tile.thebetweenlands.silt.name=淤泥
+tile.thebetweenlands.mud.name=泥淖
+tile.thebetweenlands.swampWater.name=沼泽水
+tile.thebetweenlands.stagnantWater.name=污水
+tile.thebetweenlands.sulfurTorch.name=硫火把
+tile.thebetweenlands.aquaMiddleGemOre.name=海蓝中型宝石矿
+tile.thebetweenlands.crimsonMiddleGemOre.name=深红中型宝石矿
+tile.thebetweenlands.greenMiddleGemOre.name=翠绿中型宝石矿
+tile.thebetweenlands.syrmoriteOre.name=赛摩铜矿
+tile.thebetweenlands.octineOre.name=辛炔铁矿
+tile.thebetweenlands.sulfurOre.name=硫矿
+tile.thebetweenlands.valoniteOre.name=万罗钠矿
+tile.thebetweenlands.boneOre.name=黏滑骨矿
+tile.thebetweenlands.scabystOre.name=痂壳晶矿
+tile.thebetweenlands.lifeCrystalOre.name=生命结晶矿
+tile.thebetweenlands.peat.name=泥炭
+tile.thebetweenlands.wisp.name=鬼火
+tile.thebetweenlands.dampTorch.name=潮湿火把
+tile.thebetweenlands.algae.name=水藻
+tile.thebetweenlands.sludge.name=烂泥
+tile.thebetweenlands.stalactite.name=钟乳石
+tile.thebetweenlands.root.name=根茎
+tile.thebetweenlands.rootUW.name=水下根茎
+tile.thebetweenlands.deadGrass.name=枯草
+tile.thebetweenlands.fallenLeaves.name=落叶
+tile.thebetweenlands.purpleFallenLeaves.name=紫色落叶
+tile.thebetweenlands.wallPlants_0.name=苔藓
+tile.thebetweenlands.wallPlants_1.name=地衣
+tile.thebetweenlands.wallPlants_2.name=苔藓
+tile.thebetweenlands.wallPlants_3.name=苔藓
+tile.thebetweenlands.wallPlants_4.name=苔藓
+tile.thebetweenlands.wallPlants_5.name=苔藓
+tile.thebetweenlands.wallPlants_6.name=苔藓
+tile.thebetweenlands.wallPlants_7.name=苔藓
+tile.thebetweenlands.wallPlants_8.name=地衣
+tile.thebetweenlands.wallPlants_9.name=地衣
+tile.thebetweenlands.wallPlants_10.name=地衣
+tile.thebetweenlands.wallPlants_11.name=地衣
+tile.thebetweenlands.wallPlants_12.name=地衣
+tile.thebetweenlands.wallPlants_13.name=地衣
+tile.thebetweenlands.portalBark.name=传送树树皮
+tile.thebetweenlands.rottenLog.name=腐烂原木
+tile.thebetweenlands.rottenWeedwoodBark.name=腐烂的杂草树树皮
+tile.thebetweenlands.tarFluid.name=液态焦油
+tile.thebetweenlands.puddle.name=水坑
+tile.thebetweenlands.smoothCragrock.name=平滑峭壁岩
+tile.thebetweenlands.totem.name=图腾方块
+tile.thebetweenlands.siltGlass.name=砂玻璃
+tile.thebetweenlands.siltGlassPane.name=砂玻璃板
+tile.thebetweenlands.weedwoodPlanksFenceGate.name=杂草木栅栏门
+tile.thebetweenlands.rubberTreePlanksFenceGate.name=橡胶木栅栏门
+tile.thebetweenlands.purpleRainPlanksFenceGate.name=紫雨红唇栅栏门
+tile.thebetweenlands.weedwoodJukebox.name=杂草木唱片机
+tile.thebetweenlands.weedwoodLadder.name=杂草木梯子
+tile.thebetweenlands.doorsyrmorite.name=赛摩铜门
+tile.thebetweenlands.doorrubber.name=橡胶木门
+tile.thebetweenlands.weedwoodTrapDoor.name=杂草木活板门
+tile.thebetweenlands.syrmoriteTrapDoor.name=赛摩铜活板门
+tile.thebetweenlands.weedwoodPlanksButton.name=杂草木按钮
+tile.thebetweenlands.smoothBetweenstoneButton.name=交错石按钮
+tile.thebetweenlands.weedwoodPlanksPressurePlate.name=杂草木压力板
+tile.thebetweenlands.betweenstonePressurePlate.name=交错石压力板
+tile.thebetweenlands.syrmoriteBlockPressurePlate.name=赛摩铜压力板
+tile.thebetweenlands.weedwoodLever.name=杂草木拉杆
+tile.thebetweenlands.mudFlowerPot.name=泥砖花盆
+tile.thebetweenlands.weedwoodPlanksPressurePlate.name=杂草木压力板
+tile.thebetweenlands.compostBin.name=堆肥箱
+tile.thebetweenlands.pestleAndMortar.name=研磨器
+tile.thebetweenlands.alembic.name=蒸馏器
+tile.thebetweenlands.infuser.name=注入器
+tile.thebetweenlands.aspectVialBlock.name=要素瓶
+tile.thebetweenlands.hollowLog.name=空心原木
+tile.thebetweenlands.itemShelf.name=物品架
+tile.thebetweenlands.geckoCage.name=壁虎笼
+tile.thebetweenlands.blSpawner.name=刷怪笼
+tile.thebetweenlands.lifeCrystalBlock.name=生命结晶块
+tile.thebetweenlands.repeller.name=驱魔灯
+tile.thebetweenlands.itemCage.name=物品笼
+tile.thebetweenlands.spikeTrap.name=尖刺陷阱
+tile.thebetweenlands.possessedBlock.name=入魔方块
+
+tile.thebetweenlands.farmedDirt_0.name=洁净沼泽土
+tile.thebetweenlands.farmedDirt_1.name=带洞沼泽土
+tile.thebetweenlands.farmedDirt_2.name=带洞沼泽草
+tile.thebetweenlands.farmedDirt_3.name=带洞洁净沼泽土
+tile.thebetweenlands.farmedDirt_4.name=堆肥沼泽土
+tile.thebetweenlands.farmedDirt_5.name=堆肥沼泽草
+tile.thebetweenlands.farmedDirt_6.name=堆肥洁净沼泽土
+tile.thebetweenlands.farmedDirt_7.name=腐烂的堆肥沼泽土
+tile.thebetweenlands.farmedDirt_8.name=腐烂的堆肥沼泽草
+
+tile.thebetweenlands.middleFruitBush.name=紫梨灌木丛
+tile.thebetweenlands.fungusCrop.name=黄斑菌
+tile.thebetweenlands.aspectrusCrop.name=要素植物
+
+tile.thebetweenlands.slimyGrass.name=黏滑的草
+tile.thebetweenlands.slimyDirt.name=黏滑的土
+
+tile.thebetweenlands.saplingWeedwood.name=杂草树树苗
+tile.thebetweenlands.saplingSapTree.name=凝胶树树苗
+tile.thebetweenlands.saplingSpiritTree.name=灵魂树树苗
+tile.thebetweenlands.saplingRubberTree.name=橡胶树树苗
+tile.thebetweenlands.saplingPurpleRain.name=紫雨红唇树苗
+tile.thebetweenlands.purpleRainPlanks.name=紫雨红唇木板
+tile.thebetweenlands.purpleRainPlankStairs.name=紫雨红唇楼梯
+tile.thebetweenlands.purpleRainPlanksSlab.name=紫雨红唇台阶
+tile.thebetweenlands.purpleRainPlankFence.name=紫雨红唇栅栏
+
+tile.thebetweenlands.weedwoodLog.name=杂草树原木
+tile.thebetweenlands.weedwood.name=杂草树树芯
+tile.thebetweenlands.weedwoodBark.name=杂草树树皮
+tile.thebetweenlands.sapTreeLog.name=凝胶树原木
+tile.thebetweenlands.rubberTreeLog.name=橡胶树原木
+tile.thebetweenlands.purpleRainLog.name=紫雨红唇原木
+
+tile.thebetweenlands.weedwoodLeaves.name=杂草树树叶
+tile.thebetweenlands.sapTreeLeaves.name=凝胶树树叶
+tile.thebetweenlands.rubberTreeLeaves.name=橡胶树树叶
+tile.thebetweenlands.purpleRainLeavesLight.name=紫雨红唇亮树叶
+tile.thebetweenlands.purpleRainLeavesDark.name=紫雨红唇暗树叶
+
+tile.thebetweenlands.weedwoodPlanks.name=杂草木板
+tile.thebetweenlands.weedwoodCraftingTable.name=杂草木工作台
+tile.thebetweenlands.weedwoodChest.name=杂草木箱子
+tile.thebetweenlands.weedwoodBush.name=杂草木灌木
+tile.thebetweenlands.doorweedwood.name=杂草木门
+
+tile.thebetweenlands.weedwoodPlanksSlab.name=杂草木台阶
+tile.thebetweenlands.rubberTreePlanksSlab.name=橡胶木台阶
+
+tile.thebetweenlands.treeFungus.name=层孔菌
+tile.thebetweenlands.hanger.name=藤蔓
+tile.thebetweenlands.purpleHanger.name=紫色藤蔓
+tile.thebetweenlands.purpleHangerFlowered.name=开花的紫色藤蔓
+
+tile.thebetweenlands.mudBrick.name=泥砖
+tile.thebetweenlands.angryBetweenstone.name=愤怒的交错石
+tile.thebetweenlands.betweenstoneTiles.name=交错石地砖
+tile.thebetweenlands.carvedCrag.name=凿制峭壁岩
+tile.thebetweenlands.carvedTempleBrick.name=凿制神庙石砖
+tile.thebetweenlands.cragrockBrick.name=峭壁岩砖
+tile.thebetweenlands.cragTiles.name=峭壁岩地砖
+tile.thebetweenlands.dungeonTile.name=地牢地砖
+tile.thebetweenlands.bronzeCircleBrick.name=錾制青铜砖
+tile.thebetweenlands.silverCircleBrick.name=錾制银砖
+tile.thebetweenlands.goldCircleBrick.name=錾制金砖
+tile.thebetweenlands.smoothBetweenstone.name=平滑交错石
+tile.thebetweenlands.smoothTempleBrick.name=平滑神庙石砖
+tile.thebetweenlands.solidTar.name=固态焦油
+tile.thebetweenlands.sulphurBlock.name=硫块
+tile.thebetweenlands.syrmoriteBlock.name=赛摩铜块
+tile.thebetweenlands.octineBlock.name=辛炔铁块
+tile.thebetweenlands.valoniteBlock.name=万罗钠块
+tile.thebetweenlands.templeBrick.name=神庙石砖
+tile.thebetweenlands.mossyTempleBrick.name=神庙苔石砖
+tile.thebetweenlands.crackedTempleBrick.name=神庙裂石砖
+tile.thebetweenlands.bloodyTempleBrick.name=血腥神庙石砖
+tile.thebetweenlands.templePillar.name=神庙柱
+tile.thebetweenlands.thatch.name=茅草顶
+tile.thebetweenlands.rubberTreePlanks.name=橡胶树木板
+tile.thebetweenlands.blockOfCompost.name=堆肥块
+tile.thebetweenlands.dungeonWall.name=地牢墙
+tile.thebetweenlands.chiseledBetweenstone.name=凿制交错石
+tile.thebetweenlands.betweenstoneBricks.name=交错石砖
+tile.thebetweenlands.betweenstoneBricksMirage.name=幻想交错石砖
+tile.thebetweenlands.mireCoralBlock.name=沼泽珊瑚块
+tile.thebetweenlands.deepWaterCoralBlock.name=深水珊瑚块
+tile.thebetweenlands.limestone.name=石灰石
+tile.thebetweenlands.limestoneBricks.name=石灰石砖
+tile.thebetweenlands.limestoneTiles.name=石灰石地砖
+tile.thebetweenlands.chiseledLimestone.name=凿制石灰石
+tile.thebetweenlands.polishedLimestone.name=抛光石灰石
+tile.thebetweenlands.dentrothyst_0.name=绿色模树石块
+tile.thebetweenlands.dentrothyst_1.name=橙色模树石块
+tile.thebetweenlands.limestoneStairs.name=石灰石楼梯
+tile.thebetweenlands.limestoneSlab.name=石灰石台阶
+tile.thebetweenlands.limestoneWall.name=石灰石墙
+tile.thebetweenlands.smoothCragrockStairs.name=平滑峭壁岩楼梯
+tile.thebetweenlands.smoothCragrockSlab.name=平滑峭壁岩台阶
+tile.thebetweenlands.smoothCragrockWall.name=平滑峭壁岩墙
+tile.thebetweenlands.smoothPitstoneStairs.name=平滑麻纹石楼梯
+tile.thebetweenlands.smoothPitstoneSlab.name=平滑麻纹石台阶
+tile.thebetweenlands.smoothPitstoneWall.name=平滑麻纹石墙
+tile.thebetweenlands.pitstoneBrickStairs.name=麻纹石砖楼梯
+tile.thebetweenlands.pitstoneBricksSlab.name=麻纹石砖台阶
+tile.thebetweenlands.pitstoneBrickWall.name=麻纹石砖墙
+tile.thebetweenlands.smoothPitstone.name=平滑麻纹石
+tile.thebetweenlands.chiseledPitstone.name=凿制麻纹石
+tile.thebetweenlands.pitstoneBricks.name=麻纹石砖
+tile.thebetweenlands.pitstoneTiles.name=麻纹石地砖
+tile.thebetweenlands.aquaMiddleGemBlock.name=海蓝中型宝石块
+tile.thebetweenlands.crimsonMiddleGemBlock.name=深红中型宝石块
+tile.thebetweenlands.greenMiddleGemBlock.name=翠绿中型宝石块
+tile.thebetweenlands.slimyBoneBlock.name=黏滑骨块
+tile.thebetweenlands.mossyLimestoneBricks.name=苔石灰石砖
+tile.thebetweenlands.crackedLimestoneBricks.name=裂石灰石砖
+tile.thebetweenlands.betweenstonePillar.name=交错石柱
+tile.thebetweenlands.pitstonePillar.name=麻纹石柱
+tile.thebetweenlands.limestonePillar.name=石灰石柱
+tile.thebetweenlands.cragrockPillar.name=峭壁岩柱
+tile.thebetweenlands.polishedDentrothyst1.name=抛光绿色模树石
+tile.thebetweenlands.polishedDentrothyst2.name=抛光橙色模树石
+tile.thebetweenlands.polishedDentrothyst1Pane.name=抛光绿色模树石板
+tile.thebetweenlands.polishedDentrothyst2Pane.name=抛光橙色模树石板
+
+tile.thebetweenlands.weedwoodChipPath.name=木片小径
+tile.thebetweenlands.walkway.name=杂草木走道
+
+tile.thebetweenlands.lootPot1.name=机运之壶
+tile.thebetweenlands.lootPot2.name=机运之壶
+tile.thebetweenlands.lootPot3.name=机运之壶
+
+tile.thebetweenlands.choca.name=电视机屏幕
+
+tile.thebetweenlands.energyBarrier.name=能量屏障
+
+# Stairs, Slabs, Walls, Fences
+tile.thebetweenlands.mudBrickStairs.name=泥砖楼梯
+tile.thebetweenlands.cragrockBrickStairs.name=峭壁岩砖楼梯
+tile.thebetweenlands.smoothBetweenstoneStairs.name=平滑交错石楼梯
+tile.thebetweenlands.solidTarStairs.name=固态焦油楼梯
+tile.thebetweenlands.templeBrickStairs.name=神庙石砖楼梯
+tile.thebetweenlands.weedwoodPlankStairs.name=杂草木楼梯
+tile.thebetweenlands.rubberTreePlankStairs.name=橡胶木楼梯
+tile.thebetweenlands.mudBrickWall.name=泥砖墙
+tile.thebetweenlands.cragrockWall.name=峭壁岩砖墙
+tile.thebetweenlands.smoothBetweenstoneWall.name=平滑交错石墙
+tile.thebetweenlands.solidTarWall.name=固态焦油墙
+tile.thebetweenlands.templeBrickWall.name=神庙石砖墙
+tile.thebetweenlands.weedwoodPlankFence.name=杂草木栅栏
+tile.thebetweenlands.rubberTreePlankFence.name=橡胶木栅栏
+tile.thebetweenlands.betweenstoneBricksSlab.name=交错石砖台阶
+tile.thebetweenlands.mudBrickSlab.name=泥砖台阶
+tile.thebetweenlands.cragrockBrickSlab.name=峭壁岩砖台阶
+tile.thebetweenlands.limestoneBricksSlab.name=石灰岩砖台阶
+tile.thebetweenlands.smoothBetweenstoneSlab.name=平滑交错石台阶
+tile.thebetweenlands.solidTarSlab.name=固态焦油台阶
+tile.thebetweenlands.templeBrickSlab.name=神庙石砖台阶
+tile.thebetweenlands.thatchSlab.name=茅草台阶
+tile.thebetweenlands.limestoneBrickWall.name=石灰岩砖墙
+tile.thebetweenlands.limestoneBrickStairs.name=石灰岩砖楼梯
+tile.thebetweenlands.betweenstoneBrickStairs.name=交错石砖楼梯
+tile.thebetweenlands.betweenstoneBrickWall.name=交错石砖墙
+tile.thebetweenlands.sludgyDirt.name=泥泞泥土
+tile.thebetweenlands.tarLootPot1.name=机运之壶
+tile.thebetweenlands.tarLootPot2.name=机运之壶
+tile.thebetweenlands.tarLootPot3.name=机运之壶
+tile.thebetweenlands.tarBeastSpawner.name=焦油魔兽刷怪笼
+tile.thebetweenlands.thatchSlope.name=茅草屋顶
+tile.thebetweenlands.rubberTap.name=橡胶取汁器
+tile.thebetweenlands.betweenstoneTilesCollapsing.name=碎裂交错石地砖
+tile.thebetweenlands.betweenstoneTilesMossyCollapsing.name=碎裂苔交错石地砖
+tile.thebetweenlands.betweenstoneSmoothMossy.name=平滑苔交错石
+tile.thebetweenlands.betweenstoneSmoothStairsMossy.name=平滑苔交错石楼梯
+tile.thebetweenlands.betweenstoneBrickWallMossy.name=苔交错石砖墙
+tile.thebetweenlands.betweenstoneTilesCracked.name=裂交错石地砖
+tile.thebetweenlands.betweenstoneBrickStairsMossy.name=苔交错石砖楼梯
+tile.thebetweenlands.betweenstoneBricksMossy.name=苔交错石砖
+tile.thebetweenlands.betweenstoneTilesMossy.name=苔交错石地砖
+tile.thebetweenlands.betweenstoneBricksCracked.name=裂交错石砖
+tile.thebetweenlands.betweenstoneBrickStairsCracked.name=裂交错石砖楼梯
+tile.thebetweenlands.betweenstoneBrickWallCracked.name=裂交错石砖墙
+tile.thebetweenlands.smoothBetweenstoneWallMossy.name=平滑苔交错石墙
+tile.thebetweenlands.betweenstoneSmoothMossySlab.name=平滑苔交错石台阶
+tile.thebetweenlands.betweenstoneBricksMossySlab.name=苔交错石砖台阶
+tile.thebetweenlands.betweenstoneBricksCrackedSlab.name=裂交错石砖台阶
+tile.thebetweenlands.betweenstoneTilesFortress.name=闪耀交错石瓷砖
+tile.thebetweenlands.spookyBetweenstoneBrick1.name=坍塌交错石砖
+tile.thebetweenlands.spookyBetweenstoneBrick2.name=坍塌交错石砖
+tile.thebetweenlands.spookyBetweenstoneBrick3.name=坍塌交错石砖
+tile.thebetweenlands.rubberTreePlankTrapDoor.name=橡胶木活板门
+tile.thebetweenlands.glowingSmoothCragrock.name=闪耀平滑峭壁岩
+tile.thebetweenlands.polishedLimestoneCollapsing.name=碎裂抛光石灰石
+
+# Plants
+tile.thebetweenlands.blackHatMushroom.name=黑帽菇
+tile.thebetweenlands.flatHeadMushroom.name=平顶菇
+tile.thebetweenlands.bulbCappedMushroom.name=球盖菇
+
+tile.thebetweenlands.sundew.name=茅膏菜
+tile.thebetweenlands.weepingBlue.name=哭泣蓝花
+tile.thebetweenlands.swampReed.name=沼泽芦苇
+tile.thebetweenlands.cattail.name=香蒲
+tile.thebetweenlands.swampPlant.name=沼泽植物
+tile.thebetweenlands.nettleFlowered.name=开花的荨麻
+tile.thebetweenlands.nettle.name=荨麻
+tile.thebetweenlands.swampReedBlock.name=沼泽芦苇
+tile.thebetweenlands.swampReedBlockUW.name=水下沼泽芦苇
+tile.thebetweenlands.mireCoral.name=沼泽珊瑚
+tile.thebetweenlands.deepWaterCoral.name=深水珊瑚
+tile.thebetweenlands.waterFlowerStalk.name=狸藻茎
+tile.thebetweenlands.waterFlower.name=狸藻
+tile.thebetweenlands.thorns.name=荆棘
+tile.thebetweenlands.poisonIvy.name=毒叶藤
+tile.thebetweenlands.swampTallgrass.name=沼泽高草
+tile.thebetweenlands.doubleSwampTallgrass.name=沼泽高草
+tile.thebetweenlands.pitcherPlant.name=猪笼草
+tile.thebetweenlands.venusFlyTrap.name=捕蝇草
+tile.thebetweenlands.volarpad.name=大型旱莲
+
+tile.thebetweenlands.arrowArum.name=茯苓
+tile.thebetweenlands.buttonBush.name=风箱树
+tile.thebetweenlands.marshHibiscus.name=沼泽木槿
+tile.thebetweenlands.marshMallow.name=沼泽锦葵
+tile.thebetweenlands.pickerelWeed.name=梭鱼草
+tile.thebetweenlands.milkweed.name=乳草
+tile.thebetweenlands.shoots.name=嫩芽
+tile.thebetweenlands.phragmites.name=芦苇
+tile.thebetweenlands.softRush.name=灯心草
+tile.thebetweenlands.tallCattail.name=高香蒲
+tile.thebetweenlands.cardinalFlower.name=红花半边莲
+tile.thebetweenlands.blueIris.name=蓝色鸢尾花
+tile.thebetweenlands.copperIris.name=铜色鸢尾花
+tile.thebetweenlands.bogBean.name=沼泽豆
+tile.thebetweenlands.goldenClub.name=奥昂蒂
+tile.thebetweenlands.marshMarigold.name=沼泽金盏花
+tile.thebetweenlands.broomSedge.name=扫帚草
+tile.thebetweenlands.blueEyedGrass.name=蓝眼草
+tile.thebetweenlands.boneset.name=兰草
+tile.thebetweenlands.bottleBrushGrass.name=瓶刷草
+tile.thebetweenlands.waterWeeds.name=沼泽海藻
+tile.thebetweenlands.waterWeedsSmall.name=水草
+tile.thebetweenlands.sludgecreep.name=泥藤
+tile.thebetweenlands.deadWeedwoodBush.name=枯死的杂草木灌木
+tile.thebetweelands.syrmoriteHopper.name=赛摩铜漏斗
+tile.thebetweenlands.hugeMushroomTop.name=球盖菇顶
+tile.thebetweenlands.hugeMushroomStalk.name=球盖菇茎
+
+tile.thebetweenlands.portalBarkFrame_0.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_1.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_2.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_3.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_4.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_5.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_6.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_7.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_8.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_9.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_10.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_11.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_12.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_13.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_14.name=传送门框架
+tile.thebetweenlands.portalBarkFrame_15.name=传送门框架
+
+tile.thebetweenlands.furnaceBL.name=硫熔炉
+tile.thebetweenlands.dualFurnaceBL.name=二重硫熔炉
+
+tile.thebetweenlands.caveMoss.name=洞穴苔藓
+tile.thebetweenlands.caveGrass.name=洞穴草
+
+#Mostly unused I think
+tile.thebetweenlands.treePortalBlock.name=树的传送门
+tile.thebetweenlands.genericStone.name=通用的石头
+tile.thebetweenlands.farmedDirt.name=耕地
+tile.thebetweenlands.dentrothyst.name=模树石
+tile.thebetweenlands.portalBarkFrame.name=树的呓语
+tile.thebetweenlands.wallPlants.name=迷之苔藓
+tile.thebetweenlands.furnaceBLLit.name=点亮的硫磺熔炉
+tile.thebetweenlands.dualFurnaceBLLit.name=点亮的双层硫磺熔炉
+tile.thebetweenlands.weedwoodSignStanding.name=站立的杂草木告示牌
+tile.thebetweenlands.weedwoodSignWall.name=贴墙上的杂草木告示牌
+tile.thebetweenlands.mossBed.name=苔藓床
+tile.thebetweenlands.rope.name=绳子
+item.thebetweenlands.swampTalisman.name=交换护符
+
+# Items
+item.thebetweenlands.testItem.name=测试用具
+item.thebetweenlands.testItem2.name=测试用具第二个
+item.thebetweenlands.monsterPlacer.name=生成 %s
+item.thebetweenlands.unknownGeneric.name=没用的东西
+item.thebetweenlands.amulet.name=没用的护身符
+item.thebetweenlands.lore.name=没用的戒指
+
+item.thebetweenlands.angryPebble.name=愤怒的卵石
+item.thebetweenlands.itemScroll.name=物品卷轴
+item.thebetweenlands.pestle.name=杵
+
+item.thebetweenlands.swampTalisman.0.name=沼泽护身符
+item.thebetweenlands.swampTalisman.1.name=沼泽护身符碎片
+item.thebetweenlands.swampTalisman.2.name=沼泽护身符碎片
+item.thebetweenlands.swampTalisman.3.name=沼泽护身符碎片
+item.thebetweenlands.swampTalisman.4.name=沼泽护身符碎片
+
+item.thebetweenlands.weedwoodSword.name=杂草木剑
+item.thebetweenlands.weedwoodPickaxe.name=杂草木镐
+item.thebetweenlands.weedwoodAxe.name=杂草木斧
+item.thebetweenlands.weedwoodShovel.name=杂草木铲
+
+item.thebetweenlands.betweenstoneSword.name=骨制剑
+item.thebetweenlands.betweenstonePickaxe.name=骨制镐
+item.thebetweenlands.betweenstoneAxe.name=骨制斧
+item.thebetweenlands.betweenstoneShovel.name=骨制铲
+
+item.thebetweenlands.octineSword.name=辛炔铁剑
+item.thebetweenlands.octinePickaxe.name=辛炔铁镐
+item.thebetweenlands.octineAxe.name=辛炔铁斧
+item.thebetweenlands.octineShovel.name=辛炔铁铲
+
+item.thebetweenlands.valoniteSword.name=万罗钠剑
+item.thebetweenlands.valonitePickaxe.name=万罗钠镐
+item.thebetweenlands.valoniteAxe.name=万罗钠斧
+item.thebetweenlands.valoniteShovel.name=万罗钠铲
+
+item.thebetweenlands.lurkerSkinHelmet.name=潜尾鳄皮制头盔
+item.thebetweenlands.lurkerSkinChestplate.name=潜尾鳄皮制胸甲
+item.thebetweenlands.lurkerSkinLeggings.name=潜尾鳄皮制护腿
+item.thebetweenlands.lurkerSkinBoots.name=潜尾鳄皮制靴子
+
+item.thebetweenlands.boneHelmet.name=骨制头盔
+item.thebetweenlands.boneChestplate.name=骨制胸甲
+item.thebetweenlands.boneLeggings.name=骨制护腿
+item.thebetweenlands.boneBoots.name=骨制靴子
+
+item.thebetweenlands.syrmoriteHelmet.name=赛摩铜头盔
+item.thebetweenlands.syrmoriteChestplate.name=赛摩铜胸甲
+item.thebetweenlands.syrmoriteLeggings.name=赛摩铜护腿
+item.thebetweenlands.syrmoriteBoots.name=赛摩铜靴子
+
+item.thebetweenlands.valoniteHelmet.name=万罗钠头盔
+item.thebetweenlands.valoniteChestplate.name=万罗钠胸甲
+item.thebetweenlands.valoniteLeggings.name=万罗钠护腿
+item.thebetweenlands.valoniteBoots.name=万罗钠靴子
+
+item.thebetweenlands.legendaryHelmet.name=传说的头盔
+item.thebetweenlands.legendaryChestplate.name=传说的胸甲
+item.thebetweenlands.legendaryLeggings.name=传说的护腿
+item.thebetweenlands.legendaryBoots.name=传说的靴子
+
+item.thebetweenlands.rubberBoots.name=橡胶靴子
+item.thebetweenlands.rubberBootsImproved.name=沼地行者靴
+
+item.thebetweenlands.amulet.none.name=空白护身符
+item.thebetweenlands.amulet.crimson.name=深红中型宝石护身符
+item.thebetweenlands.amulet.aqua.name=海蓝中型宝石护身符
+item.thebetweenlands.amulet.green.name=翠绿中型宝石护身符
+item.thebetweenlands.amuletSlot.name=护身符槽
+
+item.thebetweenlands.shockwaveSword.name=冲击剑
+
+item.thebetweenlands.weedwoodBow.name=杂草木弓
+
+item.thebetweenlands.lurkerSkinPouch.name=潜尾鳄皮制袋子
+
+item.thebetweenlands.sapBall.name=球状树汁
+item.thebetweenlands.rottenFood.name=腐烂食物
+item.thebetweenlands.taintedPotion.name=腐化药水
+item.thebetweenlands.tangledRoot.name=缠结根须
+item.thebetweenlands.chiromawWing.name=颈椎喙翅膀
+
+item.thebetweenlands.anglerMeatRaw.name=生鮟鱇肉
+item.thebetweenlands.anglerMeatCooked.name=鮟鱇肉排
+item.thebetweenlands.frogLegsRaw.name=生蛙腿
+item.thebetweenlands.frogLegsCooked.name=油炸蛙腿
+item.thebetweenlands.snailFleshRaw.name=生蜗牛肉
+item.thebetweenlands.snailFleshCooked.name=烤蜗牛
+item.thebetweenlands.reedDonut.name=芦苇甜甜圈
+item.thebetweenlands.jamDonut.name=果酱甜甜圈
+item.thebetweenlands.gertsDonut.name=Gert的甜甜圈
+item.thebetweenlands.krakenTentacle.name=海妖触须
+item.thebetweenlands.krakenCalamari.name=海妖肉
+item.thebetweenlands.middleFruit.name=紫梨
+item.thebetweenlands.mincePie.name=肉馅饼
+item.thebetweenlands.weepingBluePetal.name=哭泣的蓝花瓣
+item.thebetweenlands.wightHeart.name=鬼魂的心脏
+item.thebetweenlands.yellowDottedFungus.name=黄斑菌
+item.thebetweenlands.siltCrabClaw.name=泥蟹钳
+item.thebetweenlands.crabstick.name=蟹柳
+item.thebetweenlands.nettleSoup.name=荨麻汤
+item.thebetweenlands.sapJello.name=树汁果冻
+item.thebetweenlands.sludgeJello.name=污泥果冻
+item.thebetweenlands.middleFruitJello.name=紫梨果冻
+item.thebetweenlands.marshmallow.name=绿色棉花糖
+item.thebetweenlands.marshmallowPink.name=粉色棉花糖
+item.thebetweenlands.friedSwampKelp.name=油炸沼泽海带
+item.thebetweenlands.blackHatMushroomItem.name=黑帽菇
+item.thebetweenlands.flatheadMushroomItem.name=平顶菇
+item.thebetweenlands.bulbCappedMushroomItem.name=球盖菇
+
+item.thebetweenlands.aquaMiddleGem.name=海蓝中型宝石
+item.thebetweenlands.crimsonMiddleGem.name=深红中型宝石
+item.thebetweenlands.greenMiddleGem.name=翠绿中型宝石
+item.thebetweenlands.bloodSnailShell.name=猩红蜗牛壳
+item.thebetweenlands.mireSnailShell.name=黄褐蜗牛壳
+item.thebetweenlands.compost.name=堆肥
+item.thebetweenlands.dragonflyWing.name=蜻蜓翅膀
+item.thebetweenlands.lurkerSkin.name=潜尾鳄的皮
+item.thebetweenlands.swampReed.name=沼泽芦苇
+item.thebetweenlands.driedSwampReed.name=风干沼泽芦苇
+item.thebetweenlands.swampReedRope.name=芦苇绳
+item.thebetweenlands.lifeCrystal.name=生命结晶
+item.thebetweenlands.middleFruitSeeds.name=紫梨灌木丛种子
+item.thebetweenlands.aspectrusSeeds.name=要素植物种子
+item.thebetweenlands.mireCoral.name=沼泽珊瑚
+item.thebetweenlands.deepWaterCoral.name=深水珊瑚
+item.thebetweenlands.moss.name=苔藓
+item.thebetweenlands.mudBrick.name=泥砖
+item.thebetweenlands.syrmoriteIngot.name=赛摩铜锭
+item.thebetweenlands.octineIngot.name=辛炔铁锭
+item.thebetweenlands.scabyst.name=痂壳晶
+item.thebetweenlands.rottenBark.name=风干树皮
+item.thebetweenlands.slimyBone.name=黏滑骨头
+item.thebetweenlands.sludgeBall.name=泥球
+item.thebetweenlands.snapperRoot.name=暴躁红藤根
+item.thebetweenlands.spores.name=孢子
+item.thebetweenlands.stalkerEye.name=潜行者的眼
+item.thebetweenlands.sulfur.name=硫磺
+item.thebetweenlands.valoniteShard.name=万罗钠碎片
+item.thebetweenlands.weedWoodStick.name=杂草木棍
+item.thebetweenlands.anglerTooth.name=鮟鱇牙
+item.thebetweenlands.weedwoodBowl.name=杂草木碗
+item.thebetweenlands.weedwoodBucket.name=杂草木桶
+item.thebetweenlands.weedwoodBucketWater.name=杂草木水桶
+item.thebetweenlands.weedwoodBucketTar.name=杂草木焦油桶
+item.thebetweenlands.weedwoodBucketStagnantWater.name=杂草木污水桶
+item.thebetweenlands.volarkite.name=伞莲风筝
+item.thebetweenlands.anglerToothArrow.name=鮟鱇牙箭
+item.thebetweenlands.poisonedAnglerToothArrow.name=剧毒鮟鱇牙箭
+item.thebetweenlands.octineArrow.name=辛炔铁箭
+item.thebetweenlands.basiliskArrow.name=蜥毒箭
+item.thebetweenlands.swampKelp.name=沼泽海带
+item.thebetweenlands.plantTonic.name=植物滋补液
+item.thebetweenlands.rubber.name=固态橡胶
+item.thebetweenlands.bucketOfRubber.name=液态橡胶桶
+item.thebetweenlands.driedSwampReedDust.name=风干沼泽芦苇粉
+item.thebetweenlands.mandrakeSeeds.name=曼德拉草种子
+item.thebetweenlands.mudFlowerPotItem.name=泥砖花盆
+item.thebetweenlands.weedwoodItemFrame.name=杂草木物品展示栏
+item.thebetweenlands.weedwoodBucketInfusion.name=杂草木注魔桶
+item.thebetweenlands.forbiddenFig.name=禁果
+item.thebetweenlands.tarBeastHeart.name=焦油魔兽的心脏
+item.thebetweenlands.tarBeastHeartAnimated.name=剧烈跳动的焦油魔兽的心脏
+item.thebetweenlands.tarDrip.name=焦油滴
+item.thebetweenlands.candyBlue.name=蓝色糖果
+item.thebetweenlands.candyRed.name=红色糖果
+item.thebetweenlands.candyYellow.name=黄色糖果
+item.thebetweenlands.limestoneFlux.name=石灰石渣
+item.thebetweenlands.itemRope.name=难用的登山绳
+item.thebetweenlands.syrmoriteShears.name=赛摩铜剪刀
+item.thebetweenlands.manual.name=引导手册 (WIP)
+item.thebetweenlands.manualHL.name=药学手册
+item.thebetweenlands.tribalPants.name=部落裤子
+item.thebetweenlands.sickle.name=镰刀
+item.thebetweenlands.gecko.name=壁虎
+item.thebetweenlands.fireFly.name=萤火虫
+item.thebetweenlands.net.name=网
+item.thebetweenlands.inanimateTarminion.name=衰老的焦油仆从
+item.thebetweenlands.cavingRope.name=崩坏的绳索
+item.thebetweenlands.poisonGland.name=毒腺
+item.thebetweenlands.aspectrusFruit.name=要素果实
+item.thebetweenlands.weedwoodSign.name=杂草木告示牌
+item.thebetweenlands.parchment.name=一打纸
+item.thebetweenlands.shockwaveSword1.name=冲击剑碎片
+item.thebetweenlands.shockwaveSword2.name=冲击剑碎片
+item.thebetweenlands.shockwaveSword3.name=冲击剑碎片
+item.thebetweenlands.shockwaveSword4.name=冲击剑碎片
+item.thebetweenlands.pyradFlame.name=炎木妖烈焰
+item.thebetweenlands.amuletSocket.name=护身符插槽
+
+item.thebetweenlands.explorerHat.name=探险者帽子
+item.thebetweenlands.voodooDoll.name=巫毒娃娃
+item.thebetweenlands.ringOfPower.name=力量之戒
+item.thebetweenlands.ringOfRecruitment.name=招募之戒
+item.thebetweenlands.ringOfSummoning.name=召唤之戒
+item.thebetweenlands.ringOfFlight.name=升腾之戒
+item.thebetweenlands.swiftPickaxe.name=迅捷之镐
+item.thebetweenlands.wightsBane.name=鬼魂杀手
+item.thebetweenlands.skullMask.name=骷髅面具
+item.thebetweenlands.legendarySword.name=传说之剑
+item.thebetweenlands.critterCruncher.name=爬虫杀手
+item.thebetweenlands.sludgeSlicer.name=污泥长枪
+item.thebetweenlands.hagHacker.name=沼泽怪杀手
+
+item.thebetweenlands.recordHagDance.name=音乐唱片
+item.thebetweenlands.recordLonelyFire.name=音乐唱片
+item.thebetweenlands.recordOnwards.name=音乐唱片
+item.thebetweenlands.recordBeneathAGreenSky.name=音乐唱片
+item.thebetweenlands.recordStuckInTheMud.name=音乐唱片
+item.thebetweenlands.recordWaterlogged.name=音乐唱片
+item.thebetweenlands.recordWanderingWisps.name=音乐唱片
+item.thebetweenlands.recorLonelyFire.name=音乐唱片
+item.thebetweenlands.recordAstatos.name=传奇唱片
+item.thebetweenlands.recordChristmasOnTheMarsh.name=寒霜唱片
+item.thebetweenlands.recordTheExplorer.name=探险家唱片
+item.thebetweenlands.recordBetweenYouAndMe.name=部落唱片
+item.thebetweenlands.record16612.name=神秘唱片
+item.thebetweenlands.recordAncient.name=神庙唱片
+item.thebetweenlands.recordDJWightsMixtape.name=鬼魂最火爆的混音带
+
+item.thebetweenlands.recordAstatos.desc=Voog2 - Astatos
+item.thebetweenlands.recordBetweenYouAndMe.desc=Voog2 - Between You And Me
+item.thebetweenlands.recordChristmasOnTheMarsh.desc=Voog2 - Christmas On The Marsh
+item.thebetweenlands.recordTheExplorer.desc=Voog2 - The Explorer
+item.thebetweenlands.recordHagDance.desc=Voog2 - Hag Dance
+item.thebetweenlands.recordLonelyFire.desc=Voog2 - Lonely Fire
+item.thebetweenlands.record16612.desc=...
+item.thebetweenlands.recordBeneathAGreenSky.desc=Voog2 - Beneath A Green Sky
+item.thebetweenlands.recordOnwards.desc=Voog2 - Onwards
+item.thebetweenlands.recordDJWightsMixtape.desc=Voog2 - Rave In A Cave
+item.thebetweenlands.recordStuckInTheMud.desc=Voog2 - Stuck In The Mud
+item.thebetweenlands.recordWaterlogged.desc=Voog2 - Waterlogged
+item.thebetweenlands.recordWanderingWisps.desc=Voog2 - Wandering Wisps
+item.thebetweenlands.recordLonelyFire.desc=Voog2 - Lonely Fire
+item.thebetweenlands.recordAncient.desc=Voog2 - Ancient
+
+item.thebetweenlands.tarminion.name=焦油仆从
+
+item.thebetweenlands.shimmerStone.name=微光石子
+
+item.thebetweenlands.caveMossItem.name=洞穴苔藓
+
+item.thebetweenlands.weedwoodRowboat.name=杂草木船
+
+item.thebetweenlands.mummyBait.name=木乃伊饵料
+
+# Ground items
+item.thebetweenlands.groundWeedwoodBark.name=磨碎的杂树皮
+item.thebetweenlands.groundCatTail.name=磨碎的香蒲
+item.thebetweenlands.groundSwampTallgrass.name=磨碎的沼泽高草
+item.thebetweenlands.groundShoots.name=磨碎的嫩芽
+item.thebetweenlands.groundArrowArum.name=磨碎的茯苓
+item.thebetweenlands.groundButtonBush.name=磨碎的风箱树
+item.thebetweenlands.groundMarshHibiscus.name=磨碎的沼泽木槿
+item.thebetweenlands.groundPickerelWeed.name=磨碎的梭鱼草
+item.thebetweenlands.groundSoftRush.name=磨碎的灯心草
+item.thebetweenlands.groundMarshMallow.name=磨碎的沼泽锦葵
+item.thebetweenlands.groundMilkweed.name=磨碎的乳草
+item.thebetweenlands.groundBlueIris.name=磨碎的蓝色鸢尾花
+item.thebetweenlands.groundCopperIris.name=磨碎的铜色鸢尾花
+item.thebetweenlands.groundBlueEyedGrass.name=磨碎的蓝眼草
+item.thebetweenlands.groundBoneset.name=磨碎的兰草
+item.thebetweenlands.groundBottleBrushGrass.name=磨碎的瓶刷草
+item.thebetweenlands.groundDriedSwampReed.name=磨碎的风干沼泽芦苇
+item.thebetweenlands.groundWeedwoodBark.name=磨碎的杂树皮
+item.thebetweenlands.groundAlgae.name=磨碎的水藻
+item.thebetweenlands.groundAnglerTooth.name=磨碎的鮟鱇牙
+item.thebetweenlands.groundBlackHatMushroom.name=磨碎的黑帽菇
+item.thebetweenlands.groundBloodSnailShell.name=磨碎的猩红蜗牛壳
+item.thebetweenlands.groundMireSnailShell.name=磨碎的沼泽蜗牛壳
+item.thebetweenlands.groundBogBean.name=磨碎的沼泽豆
+item.thebetweenlands.groundBroomSedge.name=磨碎的扫帚草
+item.thebetweenlands.groundBulbCappedMushroom.name=磨碎的球盖菇
+item.thebetweenlands.groundCardinalFlower.name=磨碎的红花半边莲
+item.thebetweenlands.groundCaveGrass.name=磨碎的洞穴草
+item.thebetweenlands.groundCaveMoss.name=磨碎的洞穴苔藓
+item.thebetweenlands.groundCrimsonMiddleGem.name=磨碎的深红中型宝石
+item.thebetweenlands.groundDeepWaterCoral.name=磨碎的深水珊瑚
+item.thebetweenlands.groundFlatheadMushroom.name=磨碎的平顶菇
+item.thebetweenlands.groundGoldenClub.name=磨碎的奥昂蒂
+item.thebetweenlands.groundGreenMiddleGem.name=磨碎的翠绿中型宝石
+item.thebetweenlands.groundAquaMiddleGem.name=磨碎的海蓝中型宝石
+item.thebetweenlands.groundHanger.name=磨碎的藤蔓
+item.thebetweenlands.groundLichen.name=磨碎的地衣
+item.thebetweenlands.groundMarshMarigold.name=磨碎的沼泽金盏花
+item.thebetweenlands.groundMireCoral.name=磨碎的泥潭珊瑚
+item.thebetweenlands.groundMoss.name=磨碎的苔藓
+item.thebetweenlands.groundNettle.name=磨碎的荨麻
+item.thebetweenlands.groundPhragmites.name=磨碎的芦苇
+item.thebetweenlands.groundSludgecreep.name=磨碎的泥藤
+item.thebetweenlands.groundSundew.name=磨碎的茅膏菜
+item.thebetweenlands.groundSwampKelp.name=磨碎的沼泽海带
+item.thebetweenlands.groundTangledRoot.name=磨碎的缠结根须
+item.thebetweenlands.groundPitcherPlant.name=磨碎的猪笼草
+item.thebetweenlands.groundWaterWeeds.name=磨碎的水草
+item.thebetweenlands.groundVenusFlyTrap.name=磨碎的捕蝇草
+item.thebetweenlands.groundVolarpad.name=磨碎的伞莲
+item.thebetweenlands.groundThorns.name=磨碎的荆棘
+item.thebetweenlands.groundPoisonIvy.name=磨碎的毒叶藤
+item.thebetweenlands.groundGenericLeaf.name=磨碎的叶
+item.thebetweenlands.groundWaterFlower.name=磨碎的狸藻花
+item.thebetweenlands.groundWaterFlowerStalk.name=磨碎的狸藻茎
+
+#Plant drops
+item.thebetweenlands.genericLeaf.name=叶
+item.thebetweenlands.algae.name=藻丛
+item.thebetweenlands.arrowArumLeaf.name=茯苓叶
+item.thebetweenlands.blueEyedGrassFlowers.name=蓝眼草花
+item.thebetweenlands.blueIrisPetals.name=蓝色鸢尾花瓣
+item.thebetweenlands.bogBeanFlower.name=沼泽豆花
+item.thebetweenlands.bonesetFlowers.name=兰草花
+item.thebetweenlands.bottleBrushGrassBlades.name=瓶刷草叶片
+item.thebetweenlands.broomSedgeLeaves.name=扫帚芦苇叶
+item.thebetweenlands.buttonBushFlowers.name=悬铃木花
+item.thebetweenlands.cardinalFlowerPetals.name=红花半边莲花瓣
+item.thebetweenlands.cattailHead.name=蒲黄
+item.thebetweenlands.caveGrassBlades.name=洞穴草叶片
+item.thebetweenlands.copperIrisPetals.name=铜色鸢尾花瓣
+item.thebetweenlands.goldenClubFlowers.name=奥昂蒂花
+item.thebetweenlands.lichen.name=地衣丛
+item.thebetweenlands.marshHibiscusFlower.name=沼泽木槿花
+item.thebetweenlands.marshMallowFlower.name=沼泽锦葵花
+item.thebetweenlands.marshMarigoldFlower.name=沼泽金盏花
+item.thebetweenlands.nettleLeaf.name=荨麻叶
+item.thebetweenlands.phragmiteStems.name=芦苇茎
+item.thebetweenlands.pickerelWeedFlower.name=梭鱼草花
+item.thebetweenlands.shootLeaves.name=嫩芽
+item.thebetweenlands.sludgecreepLeaves.name=泥藤叶子
+item.thebetweenlands.softRushLeaves.name=灯心草叶子
+item.thebetweenlands.sundewHead.name=茅膏菜顶
+item.thebetweenlands.swampTallGrassBlades.name=沼泽高草叶片
+item.thebetweenlands.caveMoss.name=洞穴苔藓丛
+item.thebetweenlands.milkWeed.name=乳草花
+item.thebetweenlands.hanger.name=藤蔓
+item.thebetweenlands.pitcherPlantTrap.name=猪笼草陷阱
+item.thebetweenlands.waterWeeds.name=水草
+item.thebetweenlands.venusFlyTrap.name=捕蝇草陷阱
+item.thebetweenlands.volarpad.name=伞莲叶
+item.thebetweenlands.thorns.name=荆棘
+item.thebetweenlands.poisonIvy.name=毒叶藤叶子
+item.thebetweenlands.waterFlower.name=狸藻花
+item.thebetweenlands.waterFlowerStalk.name=狸藻茎
+
+# Herblore
+item.thebetweenlands.elixir.dentrothystVial.green.name=绿色模树石药瓶
+item.thebetweenlands.elixir.dentrothystVial.orange.name=橙色模树石药瓶
+item.thebetweenlands.elixir.dentrothystVial.dirty.name=脏的模树石药瓶
+item.thebetweenlands.aspectVial.green.name=绿色模树石要素瓶
+item.thebetweenlands.aspectVial.orange.name=橙色模树石要素瓶
+
+#Mostly unused I think
+item.null.name=空的
+item.thebetweenlands.groundStuff.name=磨碎的物品
+item.thebetweenlands.plantDrop.name=植物掉落物
+item.thebetweenlands.door_weedwood.name=杂草木门
+item.thebetweenlands.door_rubber.name=橡胶木门
+item.thebetweenlands.door_syrmorite.name=赛摩铜门
+item.thebetweenlands.mossBedItem.name=苔藓床
+item.item.thebetweenlands.elixir.name=药剂
+item.item.thebetweenlands.dentrothystVial.name=模树石药瓶
+item.item.thebetweenlands.aspectVial.name=要素瓶
+
+#Lore
+item.thebetweenlands.lore.them.name=潜伏者之影
+item.thebetweenlands.lore.mutants.name=恐怖的变异
+item.thebetweenlands.lore.shadows.name=落影的笔记
+item.thebetweenlands.lore.ruins.name=探险者条目:沼泽地牢
+item.thebetweenlands.lore.heads.name=探险者条目:崇拜者之头
+item.thebetweenlands.lore.tar.name=探险者条目:焦油池
+item.thebetweenlands.lore.dungeon.name=探险者条目:圣陵地牢
+item.thebetweenlands.lore.pitstone.name=探险者条目:地下遗迹
+item.thebetweenlands.lore.tower.name=探险者条目:高塔
+item.thebetweenlands.lore.fort.name=探险者条目:要塞
+
+# Elixirs
+bl.elixir.petrify=石化
+bl.elixir.strength=力量药剂
+bl.elixir.nimblefeet=脚底抹油药剂
+bl.elixir.healing=治疗药剂
+bl.elixir.ripening=风华药剂
+bl.elixir.toughskin=厚皮药剂
+bl.elixir.feasting=饱食药剂
+bl.elixir.huntersSense=猎人的感知药剂
+bl.elixir.masking=隐身药剂
+bl.elixir.swiftarm=快手药剂
+bl.elixir.catsEyes=猫眼药剂
+bl.elixir.sagittarius=射手座药剂
+bl.elixir.spiderbreed=蜘蛛药剂
+bl.elixir.lightweight=减肥药剂
+bl.elixir.unclouded=明目药剂
+bl.elixir.gillsgrowth=水肺药剂
+bl.elixir.wings=翅膀变形药剂
+bl.elixir.huntersSenseMaster=富含猎人酿造知识的药剂
+bl.elixir.weakness=虚弱药剂
+bl.elixir.lumbering=伐木累药剂
+bl.elixir.draining=利尿剂
+bl.elixir.decay=残烛药剂
+bl.elixir.poisonsting=毒针药剂
+bl.elixir.starvation=饥饿药剂
+bl.elixir.drunkard=酒鬼药剂
+bl.elixir.stenching=恶臭药剂
+bl.elixir.slugarm=仆从药剂
+bl.elixir.blindman=盲人药剂
+bl.elixir.weakbow=无力药剂
+bl.elixir.basilisk=蜥蜴药剂
+bl.elixir.heavyweight=增肥药剂
+bl.elixir.foggedMind=懵逼药剂
+bl.elixir.deformed=变形者异变药剂
+bl.elixir.limbless=变形者截肢药剂
+bl.elixir.isolatedSenses=孤独的炼药人
+
+# Entities
+entity.thebetweenlands.darkDruid.name=黑暗德鲁伊
+entity.thebetweenlands.angler.name=鮟鱇鱼
+entity.thebetweenlands.sludge.name=烂泥怪
+entity.thebetweenlands.swampHag.name=沼泽魔物
+entity.thebetweenlands.tarBeast.name=焦油魔兽
+entity.thebetweenlands.wight.name=鬼魂
+entity.thebetweenlands.firefly.name=萤火虫
+entity.thebetweenlands.sporeling.name=孢子
+entity.thebetweenlands.leech.name=水蛭
+entity.thebetweenlands.dragonfly.name=蜻蜓
+entity.thebetweenlands.bloodSnail.name=猩红蜗牛
+entity.thebetweenlands.mireSnail.name=沼泽蜗牛
+entity.thebetweenlands.mireSnailEgg.name=沼泽蜗牛蛋
+entity.thebetweenlands.angryPebble.name=愤怒卵石
+entity.thebetweenlands.siltCrab.name=泥蟹
+entity.thebetweenlands.lurker.name=潜尾鳄
+entity.thebetweenlands.gecko.name=壁虎
+entity.thebetweenlands.termite.name=白蚁
+entity.thebetweenlands.toad.name=蟾蜍
+entity.thebetweenlands.meleeGuardian.name=神庙守护者
+entity.thebetweenlands.berserkerGuardian.name=神庙守护者
+entity.thebetweenlands.blindCaveFish.name=洞穴盲鱼
+entity.thebetweenlands.tarminion.name=焦油仆从
+entity.thebetweenlands.peatMummy.name=泥炭木乃伊
+entity.thebetweenlands.dreadfulMummy.name=可怕的泥炭木乃伊
+entity.thebetweenlands.swordEnergy.name=冲击剑能量球
+entity.thebetweenlands.fortressBoss.name=原始之恶
+entity.thebetweenlands.fortressBossTurret.name=原始之恶炮塔
+entity.thebetweenlands.fortressBossProjectile.name=原始之恶弹射物
+entity.thebetweenlands.chiromaw.name=颈椎喙
+entity.thebetweenlands.pyrad.name=炎木妖
+entity.thebetweenlands.pyradFlame.name=炎木妖烈焰
+entity.thebetweenlands.shockwaveBlock.name=冲击波方块
+entity.thebetweenlands.frog.name=青蛙
+entity.thebetweenlands.gasCloud.name=瓦斯云
+
+# Creative Tabs
+itemGroup.thebetweenlands.block=交错维度方块
+itemGroup.thebetweenlands.item=交错维度物品
+itemGroup.thebetweenlands.gear=交错维度工具
+itemGroup.thebetweenlands.special=交错维度特殊物品
+itemGroup.thebetweenlands.plants=交错维度植物
+itemGroup.thebetweenlands.herbLore=交错维度药学
+
+# Containers
+container.weedwoodChest=杂草木箱子
+container.weedwoodChestDouble=大杂草木箱子
+container.furnaceBL=硫熔炉
+container.dualFurnaceBL=二重硫熔炉
+tile.thebetweenlands.animator.name=活化器
+tile.thebetweenlands.purifier.name=净化器
+container.lurkerSkinPouch=潜尾鳄皮制袋子
+
+# Tooltips
+corrosion.0=完好无损！
+corrosion.1=轻微磨损
+corrosion.2=稍稍磨损
+corrosion.3=过度磨损
+corrosion.4=严重磨损
+corrosion.5=完全磨损
+tooltip.coated=具有涂层
+arrow.caution=慎用！
+arrow.stunning=可引发瘫痪
+compost.compostable=可堆肥
+circlegem.green=翠绿宝石
+circlegem.crimson=深红宝石
+circlegem.aqua=海蓝宝石
+octine.fire=其灼热足以点燃苔藓
+ring.power.bonus=获得全属性提升
+ring.recruitment.bonus=获得招募敌人的能力
+ring.flight.bonus=获得浮空的能力
+ring.summoning.bonus=获得召唤来自深渊的盟军的能力
+item.thebetweenlands.ringOfSummoning.tooltip=请使用径向菜单来装备[默认“F”键]， \按“R”咆哮[默认]
+item.thebetweenlands.ringOfFlight.tooltip=请使用径向菜单来装备[默认“F”键]， \n二段跳来激活
+item.thebetweenlands.ringOfPower.tooltip=请使用径向菜单来装备[默认“F”键]
+item.thebetweenlands.ringOfRecruitment.tooltip=请使用径向菜单来装备[默认“F”键]， \n右键怪物来激活
+aspectvial.byariis.fuel=可用作驱魔灯的燃料
+food_sickness.state.fine=尝起来还不错
+food_sickness.state.half=尝起来一般般
+food_sickness.state.sick=已经不能再食用
+item.equippable=可装备
+item.thebetweenlands.press.shift=按住“Shift”获取更多信息
+fig.tooltip=十分具有诱惑力…
+chiromawWing.taste=吃掉这个后任何食物都将显得更加美味…
+chiromawWing.dontEat=我大概再也不会吃这种东西了…
+lurkerSkinPouch.size=槽位
+lurkerSkinPouch.info=用潜尾鳄的皮环绕一周合成来升级
+shockwaveSword.usage=按住Shift，右键地面来制造冲击波
+tarminion.usage=可以投掷
+lifeCrystal.remaining=%s 剩余
+
+# Commands
+command.generic.noplayer=你必须是个玩家
+
+command.tickspeed.success=设置每秒为%s ticks
+command.tickspeed.usage=/tickspeed <刻每秒>
+
+command.blevent.success.on='%s'事件开始了
+command.blevent.success.off='%s'事件结束了
+command.blevent.success.alloff=所有事件已结束
+command.blevent.success.enable=启用事件
+command.blevent.success.disable=关闭事件
+
+command.blevent.usage=/blevent <toggle|on|off|list|enable|disable>
+command.blevent.usage.toggle=/blevent toggle <事件名称>
+command.blevent.usage.on=/blevent on <事件名称>
+command.blevent.usage.off=/blevent off [事件名称]
+
+command.blevent.failure.unknown=未知事件'%s'
+command.blevent.failure.wrongdimension=你必须在交错维度世界中才能切换事件
+command.blevent.failure.alreadyon='%s'事件已经开始了
+command.blevent.failure.alreadyoff='%s'事件已经结束了
+command.blevent.failure.alreadyenabled=已经启用事件
+command.blevent.failure.alreadydisabled=已经关闭事件
+
+command.decay.noplayer=你必须是个玩家
+command.decay.noint=参数不是整数
+
+command.aspectdiscovery.book.none=没有药学手册可以写入
+command.aspectdiscovery.held.null=空手不可以哦~
+command.aspectdiscovery.discover.held=结果： %s 要素： %d
+command.aspectdiscovery.discover.all=已经发现了所有物品的所有要素
+command.aspectdiscovery.reset.held=移除所有已发现的要素
+command.aspectdiscovery.reset.all=移除所有物品的所有要素
+
+command.aspect.reset.confirm=输入'/resetAspects confirm'确认
+command.aspect.reset.success=要素已被重置
+
+# Events
+event.denseFog.name=迷雾
+event.heavyRain.name=大雨
+event.auroras.name=极光
+event.bloodSky.name=血迹天空
+
+# Manual
+manual.text.test=This might be a <tooltip:hehe haha hoho> <color:0x800000> long </color> </tooltip> text but it also might not be I will just use this for testing the text widget so hopefully this will work out quite well boasjdsKJHDFAH HJAKSHFAKL hfalsdhaljhhkakl booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga booooga booooga booooga booooga booooga booooga boooogabooooga booooga booooga
+manual.text.test2=   <tooltip:test>Tooltip <color:0xFF0000>Color </color></tooltip><scale:2.5>Scale <tooltip:test2>T<color:0x0000FF>oo</color>l<scale:0.8>ti</scale>p </tooltip></scale>Not scaled <bold>Bold <italic>Bold/Italic </bold>Italic </italic>Normal
+
+manual.widget.process.time=加工时间： .minutes. 分钟 .seconds. 秒
+manual.widget.process.time.seconds=加工时间： .seconds. 秒
+manual.widget.process.time.minutes=加工时间： .minutes. 分钟
+manual.widget.burn.time=燃烧时间： .time. 秒
+
+manual.widget.compost.recipe=堆肥配方
+manual.widget.compost.amount=堆肥量： .amount.%
+manual.widget.compost.amount.per=每个堆肥数量：25%
+
+manual.widget.crafting.shaped.recipe=有序合成
+manual.widget.crafting.shapeless.recipe=无序合成
+
+manual.widget.pam.optional=可选
+manual.widget.pam.recipe=杵和臼配方
+
+manual.widget.purifier.recipe=净化配方
+manual.widget.purifier.process.time=加工时间： .seconds. 秒
+
+manual.widget.smelting.recipe=熔炼配方
+
+manual.widget.animator.output=输出
+manual.widget.animator.input=输入
+manual.widget.animator.recipe=活化器配方
+
+#manual items
+manual.angryPebble.title=愤怒的卵石
+manual.angryPebble.description=需要本地化
+manual.arrows.title=箭
+manual.arrows.description=交错维度增加了一些魔法箭。它们能够作<nl>为战利品获得或者可以简单地被合成出来。
+manual.axes.title=斧
+manual.axes.description=需要本地化
+manual.boneArmor.title=骨制装甲
+manual.boneArmor.description=需要本地化
+manual.buckets.title=桶
+manual.buckets.description=需要本地化
+manual.doors.title=门
+manual.doors.description=需要本地化
+manual.explorerHat.title=探险者帽子
+manual.explorerHat.description=需要本地化
+manual.food.title=食物
+manual.food.description=需要本地化
+manual.genericItems.title=通用物品
+manual.genericItems.description=需要本地化
+manual.genericItemsCrushed.title=碾碎的物品
+manual.genericItemsCrushed.description=需要本地化
+manual.legendaryArmor.title=传说装甲
+manual.legendaryArmor.description=需要本地化
+manual.lifeCrystal.title=生命结晶
+manual.lifeCrystal.description=需要本地化
+manual.lurkerArmor.title=潜尾鳄装甲
+manual.lurkerArmor.description=需要本地化
+manual.pickaxes.title=镐
+manual.pickaxes.description=需要本地化
+manual.records.title=唱片
+manual.records.description=需要本地化
+manual.ringOfPower.title=力量之戒
+manual.ringOfPower.description=需要本地化
+manual.rope.title=绳子
+manual.rope.description=需要本地化
+manual.rubberBoots.title=橡胶靴子
+manual.rubberBoots.description=需要本地化
+manual.shimmerStone.title=微光石子
+manual.shimmerStone.description=需要本地化
+manual.shovels.title=铲
+manual.shovels.description=需要本地化
+manual.skullMask.title=骷髅面具
+manual.skullMask.description=需要本地化
+manual.swampTalisman.title=沼泽护身符
+manual.swampTalisman.description=需要本地化
+manual.swords.title=剑
+manual.swords.description=需要本地化
+manual.syrmoriteArmor.title=赛摩铜
+manual.syrmoriteArmor.description=需要本地化
+manual.tarMinion.title=焦油仆从
+manual.tarMinion.description=需要本地化
+manual.valoniteArmor.title=万罗钠装甲
+manual.valoniteArmor.description=需要本地化
+manual.volarKite.title=Volarkite
+manual.volarKite.description=需要本地化
+manual.voodooDoll.title=巫毒娃娃
+manual.voodooDoll.description=需要本地化
+manual.weedwoodBow.title=杂草木弓
+manual.weedwoodBow.description=需要本地化
+manual.weedwoodJukebox.title=杂草木唱片机
+manual.weedwoodJukebox.description=需要本地化
+manual.weedwoodRowboat.title=杂草木船
+manual.weedwoodRowboat.description=需要本地化
+#manual machines
+manual.pestleAndMortar.title=杵和臼
+manual.pestleAndMortar.description=<bold>1 - 原料格</bold> <nl> 你可以在这个地方放置你想要加工的物品。<nl> <nl> <bold>2 - 生命水晶格</bold> <nl> 你可以放置一个<tooltip:Open guide book entry><pagelink:manual.lifeCrystal.title><rb>生命水晶</rb></pagelink></tooltip>在这里来自动化。<nl> <nl> <bold>3 - 产物格</bold> <nl> 这里是产品输出的地方。 <nl> <nl> <bold>4 - 杵格</bold> <nl> 你可以在这里放置杵来研磨
+manual.purifier.title=净化器
+manual.purifier.description=<bold>1 - 原料格</bold> <nl> 你可以在这个地方放置你想要净化的物品。<nl> <nl> <bold>2 - 硫磺格</bold> <nl> 你可以在这里放置硫磺来给净化器加燃料。<nl> <nl> <bold>3 - 产物格</bold> <nl> 这里是产品输出的地方。
+manual.sulfurFurnace.title=硫熔炉
+manual.sulfurFurnace.description=<bold>1 - 原料格</bold> <nl> 你可以在这个地方放置你想要熔炼的物品。<nl> <nl> <bold>2 - 硫磺格</bold> <nl> 你可以在这里放置硫磺来给硫熔炉加燃料。<nl> <nl> <bold>3 - 产物格</bold> <nl> 这里是产品输出的地方。
+manual.druidAltar.title=黑暗德鲁伊祭坛
+manual.druidAltar.description=<bold>1 to 4 - 原料格</bold> <nl> 你可以在这个地方放置沼泽护身符碎片。<nl> <nl> <bold>5 - 产物格</bold> <nl> 这里是沼泽护身符输出的地方。
+manual.compostBin.title=堆肥箱
+manual.compostBin.description=<bold>步骤1</bold> <nl> 打开堆肥箱。<nl> <nl> <bold>步骤2</bold> <nl> 用可堆肥的物品右键堆肥箱。<nl> <nl> <bold>步骤3</bold> <nl> 关闭堆肥箱。<nl> <nl> <bold>步骤4</bold> 等待一段时间然后打开堆肥箱。<nl> <nl> <bold>步骤5</bold> 收集得到堆肥。
+manual.rubberTab.title=橡胶取汁器
+manual.rubberTab.description=<bold>步骤1</bold> <nl> 用一个杂草木桶和一些芦苇绳右键一个橡胶树。<nl> <nl> <bold>步骤2</bold> <nl> 等待一段时间 <nl> <nl> <bold>步骤3</bold> <nl> 收集得到液态橡胶桶。
+manual.animator.title=活化器
+manual.animator.description=<bold>1 - 生命水晶格</bold> <nl> 你可以在这个地方放置生命水晶作为燃料。<nl> <nl> <bold>2 - 原料/产物格</bold> <nl> 这里是你放置想要活化的物品的地方，这里也是结果呈现的地方。<nl> <nl> <bold>3 - 硫磺格</bold> <nl> 这里是你放置作为燃料的硫磺的地方。
+#manual entities
+manual.angler.title=鮟鱇
+manual.angler.description=Vicious flesh-eating fish that swim around in the waters
+manual.berserkerGuardian.title=狂战士守护者
+manual.berserkerGuardian.description=One of the three types of guardian
+manual.blindCaveFish.title=洞穴盲鱼
+manual.blindCaveFish.description=Small fish that swim in the waters of the caverns
+manual.bloodSnail.title=猩红蜗牛
+manual.bloodSnail.description=Aggressive snails that could squirt poisonous blood at their enemies
+manual.darkDruid.title=黑暗德鲁伊
+manual.darkDruid.description=Insane Druids who chant around altars in Overworld swamps
+manual.dragonFly.title=蜻蜓
+manual.dragonFly.description=Graceful insects that fly across the dark skies
+manual.firefly.title=萤火虫
+manual.firefly.description=Glowing insects that fly around and give off light
+manual.gecko.title=壁虎
+manual.gecko.description=Small lizards that hide in bushes
+manual.giantToad.title=巨型蟾蜍
+manual.giantToad.description=Big slimy amphibians that can be tamed and ridden
+manual.leech.title=水蛭
+manual.leech.description=Second-rating worms that suck the blood of any living mob
+manual.lurker.title=潜尾鳄
+manual.lurker.description=Large, strong reptilian creatures that attack when provoked
+manual.meleeGuardian.title=混乱守护者
+manual.meleeGuardian.description=One of the three types of guardian
+manual.mireSnail.title=沼泽蜗牛
+manual.mireSnail.description=Peaceful snails that could be farmed much easier than their ornery cousins
+manual.mireSnailEgg.title=沼泽蜗牛蛋
+manual.mireSnailEgg.description=The egg of Mire Snails
+manual.peatMummy.title=泥炭木乃伊
+manual.peatMummy.description=Undead skeletons that rise up from the muddy marshes to attack the player
+manual.siltCrab.title=泥蟹
+manual.siltCrab.description=Watch your toes!
+manual.sludge.title=烂泥怪
+manual.sludge.description=Slime-like mobs that lie in wait for their prey in the marshes
+manual.sporeling.title=孢苗
+manual.sporeling.description=Skittish mushroom creatures that prefer to walk on shelf fungus
+manual.swampHag.title=沼泽魔物
+manual.swampHag.description=Undead monsters that stalk the swamps
+manual.tarBeast.title=焦油魔兽
+manual.tarBeast.description=Monsters made out of tar that live in tar pools
+manual.tarminion.title=焦油仆从
+manual.tarminion.description=Craftable little tar-based creatures that will attack hostile mobs
+manual.termite.title=白蚁
+manual.termite.description=Pesky insects that occasionally come out of Rotten Weedwood Logs
+manual.wight.title=鬼魂
+manual.wight.description=vil spirits who look sad on the outside, but then lash out if taken too lightly
+
+manual.aspect.found.in=该要素可发现于：
+manual.aspect.used.in=该要素可用于：
+manual.has.aspects=该物品有以下要素：
+manual.aspectInfo.title=要素信息
+manual.ingredientInfo.title=原料信息
+
+
+manual.azuwynn.description=这个要素影响肌体的方面。<nl> 一阶要素。
+manual.armaniis.description=这个要素影响对一个人或一<nl>件事的欲望。<nl> 二阶要素。
+manual.byariis.description=这个要素将自然的任何事物<nl>变为其反面。<nl> 一阶特殊要素。
+manual.byrginaz.description=这个要素与水元素相关。<nl> 二阶要素。
+manual.celawynn.description=这个要素影响消化器官和免<nl>疫系统。<nl> 一阶要素。
+manual.dayuniis.description=这个要素影响精神方面和真<nl>实与虚幻的边界。<nl> 二阶要素。
+manual.fergalaz.description=这个要素与地元素相关。<nl> 二阶要素。
+manual.firnalaz.description=这个要素与火元素相关。<nl> 二阶要素。
+manual.freiwynn.description=这个要素影响光的感知方面。<nl> 二阶要素。
+manual.geoliirgaz.description=这个要素与无定形的虚空或<nl>以太元素相关。<nl> 三阶要素。
+manual.ordaniis.description=这个要素以任何形式活跃其<nl>它要素或者提高药效。<nl> 一阶要素。
+manual.yeowynn.description=这个要素影响身体健康和康<nl>复。<nl> 一阶要素。
+manual.yunugaz.description=这个要素与风元素相关。<nl> 二阶要素。
+manual.yihinren.description=这个要素影响身体和心理的<nl>形成。<nl> 三阶要素。
+
+#ground items
+manual.item.thebetweenlands.groundAlgae.description=大片的藻类可以经常在任何生物群系的水面上发现。
+manual.item.thebetweenlands.groundArrowArum.description=茯苓是一种生长在交错维度的潮湿沼泽地里的绿叶植物。
+manual.item.thebetweenlands.groundBlackHatMushroom.description=黑帽菇可以零散的被发现在任何湿地生物群系。
+manual.item.thebetweenlands.groundBogBean.description=在片状岛屿生物群系被发现，沼泽豆生长在浅水中的泥土上。
+manual.item.thebetweenlands.groundBoneset.description=兰草是一种生长在片状岛屿生物群系的花。
+manual.item.thebetweenlands.groundBottleBrushGrass.description=瓶刷草是一种生长在沼泽生物群系小植物。
+manual.item.thebetweenlands.groundBroomSedge.description=扫帚莎草是一种可以在沼泽生物群系的发现高大的植物。
+manual.item.thebetweenlands.groundButtonBush.description=风箱树是一种生长在沼泽生物群系灌木的小植物。
+manual.item.thebetweenlands.groundCatTail.description=香蒲是生长在除了深水域和污泥平原的所有生物群系的很常见的植物。
+manual.item.thebetweenlands.groundCaveGrass.description=洞穴草生长在麻纹石层的远离光的地下深处。
+manual.item.thebetweenlands.groundCaveMoss.description=洞穴苔藓可以在洞穴地下被发现。
+manual.item.thebetweenlands.groundCopperIris.description=铜色鸢尾花是被发现生长在刺状岛屿生物群系的两种鸢尾属植物的其中的一种。
+manual.item.thebetweenlands.groundDriedSwampReed.description=沼泽芦苇生长在片状和刺状岛屿的水中还有沼泽生物群系的地上。
+manual.item.thebetweenlands.groundFlatheadMushroom.description=平顶菇常见生长在沼泽生物群系。
+manual.item.thebetweenlands.groundHanger.description=藤蔓是挂在巨大杂草树上生长的藤状植物。
+manual.item.thebetweenlands.groundLichen.description=地衣是一种生长在深海生物群系的峭壁顶上的植物，有时也会在地下或石头为基础的结构上发现。
+manual.item.thebetweenlands.groundMarshHibiscus.description=沼泽木槿是一种漂亮的花，生长在沼泽生物群系。
+manual.item.thebetweenlands.groundMarshMallow.description=沼泽锦葵是一种可以在沼泽生物群系被发现的粉红色和白色的花朵。和他们的名字完全相反，他们味道并不特别好。
+manual.item.thebetweenlands.groundMilkweed.description=乳草是一种生长在片状岛屿生物群系的亮粉色花朵。
+manual.item.thebetweenlands.groundMoss.description=苔藓是一种几乎所有地方都能生长、分布的植物。
+manual.item.thebetweenlands.groundNettle.description=荨麻可以在刺状岛屿、沼泽和湿地生物群系发现。他们会刺你如果你碰他们，所以要小心。
+manual.item.thebetweenlands.groundPhragmites.description=芦苇是沼泽生物群系中到处都生长着的高大植物。
+manual.item.thebetweenlands.groundPickerelWeed.description=梭鱼草是一种可以在沼泽生物群系发现的花。
+manual.item.thebetweenlands.groundShoots.description=嫩芽是一种可以在片状岛屿生物群系发现的小植物。
+manual.item.thebetweenlands.groundSludgecreep.description=泥藤是一种污泥平原上发现的以史莱姆为食的植物。
+manual.item.thebetweenlands.groundSoftRush.description=灯心草是一种生长在沼泽生物群系的小植物。
+manual.item.thebetweenlands.groundSwampKelp.description=沼泽海带是一种水生植物，一般生长在深海和刺状岛屿生物群系。
+manual.item.thebetweenlands.groundSwampTallgrass.description=沼泽高草是片状岛屿、刺状岛屿和沼泽生物群系中发现的一种常见的植物。
+manual.item.thebetweenlands.groundTangledRoot.description=缠结根须生长在刺状岛屿生物群系的水里和污泥平原的地上。
+manual.item.thebetweenlands.groundWeedwoodBark.description=杂草树树皮长在杂草树树芯的周围。
+manual.item.thebetweenlands.groundWaterWeeds.description=水草可被发现生长在深海生物群系水底的泥土里。
+manual.item.thebetweenlands.groundVolarpad.description=volarpad是一种非常大的植物通常生长在刺状岛屿生物群系、有时也在湿地生物群系。
+manual.item.thebetweenlands.groundThorns.description=荆棘是在洞穴的地下深处生长的危险的悬挂植物。
+manual.item.thebetweenlands.groundPoisonIvy.description=毒叶藤是一种一般悬挂生长在杂草树上的有毒植物。
+manual.item.thebetweenlands.groundGenericLeaf.description=叶是由生长在沼泽生物群系里的小叶子的沼泽植物掉落的。
+manual.item.thebetweenlands.groundBloodSnailShell.description=猩红蜗牛壳是由出现在沼泽和片状岛屿生物群系的猩红蜗牛掉落的。
+manual.item.thebetweenlands.groundBlueIris.description=蓝色鸢尾花是被发现生长在刺状岛屿生物群系的两种鸢尾属植物的其中的一种。
+manual.item.thebetweenlands.groundBlueEyedGrass.description=蓝眼草是一种可以在片状岛屿生物群系的发现的有小小的蓝色的花的植物。
+manual.item.thebetweenlands.groundCardinalFlower.description=红花半边莲是生长在片状岛屿生物群系的高的明亮的红色植物。
+manual.item.thebetweenlands.groundMireCoral.description=沼泽珊瑚是生长在深海生物群系和刺状岛屿生物群系的泥淖上的一个橙色光芒的水生植物。
+manual.item.thebetweenlands.groundMarshMarigold.description=沼泽金盏花是生长在片状岛屿生物群系的水里的黄色花朵。
+manual.item.thebetweenlands.groundGoldenClub.description=奥昂蒂花是生长在片状岛屿生物群系的水里的奇特的橙色花朵。
+manual.item.thebetweenlands.groundDeepWaterCoral.description=深水珊瑚是生长在深海生物群系的泥淖上的一个蓝色光芒的水生植物。
+manual.item.thebetweenlands.groundMireSnailShell.description=沼泽蜗牛壳是由被发现在沼泽和片状岛屿生物群系的沼泽蜗牛掉落的。
+manual.item.thebetweenlands.groundBulbCappedMushroom.description=球盖菇是有着明亮光芒的蓝色蘑菇，并且可以被发现在片状岛屿生物群系生长着巨大的球盖菇。它们也已知会引发轻微的幻觉。
+manual.item.thebetweenlands.groundAnglerTooth.description=鮟鱇牙是由被发现潜伏在交错维度里浑浊的水中的鮟鱇掉落的。
+manual.item.thebetweenlands.groundSundew.description=茅膏菜是生长在沼泽生物群系的大型植物。
+manual.item.thebetweenlands.groundPitcherPlant.description=猪笼草是生长在沼泽生物群系的大型植物。
+manual.item.thebetweenlands.groundVenusFlyTrap.description=捕蝇草是生长在沼泽生物群系的大型植物。
+manual.item.thebetweenlands.groundGreenMiddleGem.description=翠绿中型宝石是可以被发现陷在泥淖里的三种中型宝石中的一种。
+manual.item.thebetweenlands.groundCrimsonMiddleGem.description=深红中型宝石是可以被发现陷在泥淖里的三种中型宝石中的一种。
+manual.item.thebetweenlands.groundAquaMiddleGem.description=海蓝中型宝石是可以被发现陷在泥淖里的三种中型宝石中的一种。
+manual.item.thebetweenlands.groundWaterFlower.description=狸藻是生长在深海生物群系的高的水下植物。
+manual.item.thebetweenlands.groundWaterFlowerStalk.description=狸藻的茎生长在深海生物群系。
+
+#manual.item.thebetweenlands.bl.elixir.foggedMind.description=<scale:0.75>这个药剂可以使人内心充满想法和担忧，<nl>从而创造浓雾的错觉。要达到这样的效<nl>果，你将需要Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, Yunugaz和Byariis<nl>这些要素的共同参与。为了得到更模糊<nl>的思维你将需要通过增加更多的Geoliirgaz<nl>要素来提高效果的强度。为了得到一个<nl>较长的持续时间它需要更多的Dayuniis<nl>要素。如果你遗漏了这个配方的Byariis<nl>要素，你最后会得到看似能清除你道路<nl>上一切雾气的明目药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.heavyweight.description=<scale:0.75>这个药剂影响人身体的细胞，产生增加<nl>体重的结果。为了制作这个药剂你将需<nl>要使用Azuwynn, Byrginaz, Yunugaz, Yihinren, Geoliirgaz和Byariis这些要素。<nl>为了提高效果的强度，需要增加更多的<nl>Yunugaz要素。为了增加持续时间<nl>Geoliirgaz要素是必需的。</scale>
+#manual.item.thebetweenlands.bl.elixir.basilisk.description=<scale:0.75>作为灵敏的蜘蛛药剂的对应药剂，这个<nl>药剂使人麻痹一定时间。为了得到这个<nl>效果你将需要混合Azuwynn, Fergalaz, Dayuniis, Yunugaz, Byariis和将会调整一个人存在的非常<nl>稀有的Yihinren这些要素。为了提高这<nl>个效果的强度你将需要为了肌体混合更<nl>多的Azuwynn要素。为了保持一个较长<nl>的状态时间，你需要增加更多的稀有的<nl>Yihinren要素。遗漏Byariis要素将会<nl>最终产生上述的允许一个人像一个蜘蛛<nl>一样攀爬的蜘蛛药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.weakbow.description=<scale:0.75>这个怪异的药剂强烈地降低你的拉弓的效率。你将不能射到比三米更远的地方。为了完成这个神秘的效果你需要Freiwynn, Dayuniis, Armaniis和Ordaniis这些要素。为了提高这个药水的准度，你需要加入更多Freiwynn要素，for it improves the vision.为了增加这个状态的持续时间，它需要Dayuniis元素。如果Byariis被加入这个配方中，它将最终形成允许弓有更好的精度的射手座药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.blindman.description=<scale:0.75>这个mc药剂立刻致盲将其摄入系统的任何人。为了完成这个，你将需要Freiwynn, Dayuniis, Ordaniis, Geoliirgaz和Byariis这些要素共同参与。Freiwynn要素用得更多，药水效果的强度越大。Dayuniis要素增加这个状态的持续时间。如果Byariis要素被遗漏的话，它最终会变成允许你事实上在黑暗的区域内看得更清楚的猫眼药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.slugarm.description=<scale:0.75>仆从药剂让人的手臂感到麻木，降低挥动武器的速度，挖矿速度，甚至还有拉弓速度。为了达到这个效果，你将需要使用Azuwynn, Dayuniis, Yunugaz, Ordaniis和腐化肌体的Byariis要素。因为这个状态作用于肌体，Azuwynn要素能增加它的强度。在这期间，Ordaniis要素将会增加这个状态的持续时间。遗漏Byariis要素将最终得到允许你手臂的肌肉以大功率工作的快手药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.stenching.description=<scale:0.75>这个药剂产生古怪的、许多野兽所需的恶臭，使它们更容易地发现你。为了酿造这个药剂你将需要与野兽的欲望和思维共舞。因此需Dayuniis, Armaniis和required要素。Armaniis将增加被气味掩盖的强度，而Dayuniis要素增加持续时间。当Byariis要素被加入到这个药剂时，它将结果变成掩盖你的气息让你很难被发现的隐身药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.drunkard.description=<scale:0.75>这个药剂可以喝醉任何人，让他们感受到些许严重的反胃。为了达到这个效果，你将需要Freiwynn, Dayuniis, Ordaniis, Firnalaz和腐化视野和思维的Byariis要素。因为对思维和视野的影响非常重要，Freiwynn要素增加药剂的强度并且Dayuniis要素增加它的持续时间。通过遗漏这个配方的Byariis要素，你将最后得到允许你闻到任何生物的气味痕迹的猎人的感知药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.starvation.description=<scale:0.75>这个药剂引起一个人的胃液更快地消化食物并减少食物利用效率。这样的结果会造成饥饿感。为了让这个药剂成为可能，你需要混合Yeowynn, Ordaniis, Celawynn和Byariis要素，来腐化胃部。为了增加饥饿药剂的药力，你将向它增加更多的Celawynn要素。为了延长它的效果的持续时间，它需要更多的Ordaniis要素。没有使用配方里的Byariis要素，你将最后得到可以快速解决你的饥饿的饱食药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.poisonsting.description=<scale:0.75>这个药剂非常类似于我们在主世界发现的一种药水。它引起某人中毒。为了制作这个药剂，你需要Azuwynn, Yeowynn, Celawynn和Byariis要素。为了提高这个效果的强度你将需要增加更多的Yeowynn要素。为了增加持续时间你将需要更多Celawynn要素。<nl>当Byariis要素被遗漏时，你将得到保护人抵抗该区域的伤害性植物的厚皮药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.decay.description=<scale:0.75>这个药剂让人的身体和心灵更易受该区域衰变的伤害。为了达到这个效果，你需要混合Yeowynn, Ordaniis, Dayuniis和Byariis要素。因为理智是衰变最主要的影响因素，Dayuniis要素增加这个药剂的强度。Ordaniis要素增加持续时间。通过遗漏Byariis要素，取而代之你将最终得到增强你身体和心灵来抵抗衰变的催熟药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.draining.description=<scale:0.75>The Elixir of Draining looks like one of the potions we find in the Overworld. It drains one's health over time. <nl>The Elixir of Draining is made by simply using the two aspects Yeowynn and Ordaniis, as the combination of these two enhances the health of a being. Then One needs to add Byariis to corrupt this healing effect, causing it to drain. The potion can be made stronger by using more Yeowynn, and the duration can be increased by using Ordaniis. <nl>When Byariis is not added, it will simply result in the Elixir of Healing, which heals you over time.</scale>
+#manual.item.thebetweenlands.bl.elixir.lumbering.description=<scale:0.75>This elixir looks a lot like one we find in the Overworld. It makes one's movement very slow. <nl>The Lumbering Elixir is brewed by using the aspects Azuwynn, Ordaniis, Yunugaz and Byariis. Yunugaz makes it so it does not simply enhance your muscles, but specifically their swiftness. This results in Yunugaz increasing the strength of the potion. While Ordaniis increases duration. <nl>Leaving out Byariis of the recipe will result in the Nimblefeet Elixir, which increases one's movement speed.</scale>
+#manual.item.thebetweenlands.bl.elixir.weakness.description=<scale:0.75>Very much like one of the potions we find in the Overworld, this elixir weakens one's muscles, reducing any damage dealt by the affected. The Elixir of Weakness is made by using the aspects Azuwynn and Ordaniis, as it enhances the muscle, and Byariis, for the corruption of the effect. Besides, by adding more Azuwynn one can increase the strength of the elixir, and by using more Ordaniis one can increase the duration of its effect. <nl>By leaving out Byariis, one would end up with the Elixir of Strength, which increases the damage you deal to any entity.</scale>
+#manual.item.thebetweenlands.bl.elixir.unclouded.description=<scale:0.75>This strange draught seems to clear up a foggy mind. You will be able to see through a dense fog, as if it evaporates right in front of you. To achieve such an effect, one will need to work with the aspects Dayuniis, Freiwynn, Geoliirgaz, Ordaniis and Yunugaz. To get a clearer view one will need to improve the strength of the effect by adding more Geoliirgaz. To achieve a longer duration it requires more Dayuniis. <nl>By adding Byariis to its recipe, this draught ends up being the Draught of the Fogged Mind, which causes one to hallucinate an extremely dense fog.</scale>
+#manual.item.thebetweenlands.bl.elixir.lightweight.description=<scale:0.75>This draught is the improved, and tastier version of your improved rubber靴子. Being as light as a feather, you will be able to walk on water and jump higher than ever before. To make this draught one would need to use the aspects Azuwynn, Byrginaz, Yunugaz, Yihinren for a lighter form and Geoliirgaz to reach the state of an empty and pure mind. To improve the strength of the effect, more Yunugaz needs to be added. To increase the duration, one will need to keep an empty and pure mind for longer, therefore Geoliirgaz is required. <nl>When corrupting this draught with the aspect Byariis, this draught becomes the Heavyweight Draught, which makes the affected so heavy, he or she will be unable to swim and sink into mud, even when wearing rubber靴子.</scale>
+#manual.item.thebetweenlands.bl.elixir.spiderbreed.description=<scale:0.75>这个药剂改变皮肤和肌肉的工作方法。<nl>它允许你就像爬梯子那样爬上任何障碍。<nl>要得到这个效果你将需要混合Azuwynn, Fergalaz, Dayuniis, Yunugaz<nl>和将会调整一个人存在的非常稀有的Yihinren<nl>这些要素。为了提高这个效果的强度你<nl>将需要为了肌体混合更多的Azuwynn要<nl>素。为了保持一个较长的状态时间，你<nl>需要增加更多的稀有的Yihinren要素。<nl>当Byariis要素被加入到这个药剂中时，<nl>它将变得腐化并且转变成将会麻痹与之<nl>接触的任何人或任何物的蜥蜴药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.sagittarius.description=<scale:0.75>This draught blesses you with the power of Sagittarius. Therefore you will be able to see exactly what path your arrow will take and where it will land. To achieve this wonderful effect one needs to work with the aspects Freiwynn, Dayuniis, Armaniis, and strangely enough Byariis and Ordaniis. Apparently ones mind needs to be corrupted for this to work. To enhance the accuracy of this potion, one needs to add more Freiwynn, for it improves the vision. To increase the duration of the effect, it requires Dayuniis. <nl>When leaving out Byariis completely one ends up with the Weakbow Draught, which heavily reduces one's shooting range.</scale>
+#manual.item.thebetweenlands.bl.elixir.catsEyes.description=<scale:0.75>Similar to a potion of the overworld, this brew will make your eyes extremely sensitive to light. It allows you to see in the dark. To achieve this, one will need to work with the aspects Freiwynn, Dayuniis, Ordaniis and Geoliirgaz.  <nl>The more Freiwynn one uses, the stronger the effect of the potion. Dayuniis increases the duration of the effect. <nl>When corrupted by adding the aspect Byariis, this brew turns into the Blindman's Brew, which blinds anyone or anything it is used on.</scale>
+#manual.item.thebetweenlands.bl.elixir.swiftarm.description=<scale:0.75>This brew enables your arm muscles to work to the fullest. It will increase the speed of your arm, be it during mining, pulling your bow, or smacking your foes. To achieve this effect, one will need to work with the aspects Azuwynn, Dayuniis, Yunugaz and, to enhance the bunch, Ordaniis. Since the effect works on the muscles, Azuwynn increases its strength. In the meantime, Ordaniis will increase the duration of the effect. <nl>When this brew is corrupted by using the aspect Byariis, it will turn into the Slugarm Brew, which heavily decrease ones arm speed.</scale>
+#manual.item.thebetweenlands.bl.elixir.masking.description=<scale:0.75>This brew will mask your natural odour like a perfume. Therefore you will be harder to detect by predators of any kind. To make this brew one will need to play with the desire and mind of the beasts and corrupt them. Therefore the aspects Dayuniis, Armaniis and Byariis are required. Armaniis will increase the masking strength, while Dayuniis increases the duration. <nl>One can corrupt this brew by using the aspect Byariis, this will result in the Stenching Brew, which leaves a strong smell on the person which it is used on. This will make that person easier to detect for predators.</scale>
+#manual.item.thebetweenlands.bl.elixir.huntersSense.description=<scale:0.75>This wonderful brew strongly enhances your senses. You will be able to see and smell the trails of any creature. To achieve this effect, one would need to work with the aspects of vision and the mind, Freiwynn and Dayuniis, and the aspects Ordaniis and Firnalaz. Since the influence on the mind and vision are most important, Freiwynn increases the strength of the brew and Dayuniis increases its duration. <nl>When corrupted by using the aspect Byariis, this brew turns into the Drunkard's Brew, which causes some heavy nausea to anyone who gets it into their system.</scale>
+#manual.item.thebetweenlands.bl.elixir.feasting.description=<scale:0.75>这个药剂给予胃一些营养。它可以快速解决你的饥饿。为了让这个药剂成为可能，你需要混合Yeowynn, Ordaniis和Celawynn要素，通过它们将强力地增加胃。为了增强这个滋养药剂的药力，你将需要向它增加更多的Celawynn要素。为了延长它的效果的持续时间，它需要更多Ordaniis要素。通过使用Byariis要素腐化这个药剂将最后得到引起胃液更快地消化食物并减少食物利用效率，引起一些严重的饥饿的饥饿药剂。</scale>
+#manual.item.thebetweenlands.bl.elixir.toughskin.description=<scale:0.75>In a realm full of harmfull plants, this elixir makes your skin tough and protects it against the flora. To make this elixir, one needs the aspects of Azuwynn, Yeowynn, and, very important, the aspect of the stomach, Celawynn. 为了提高这个效果的强度 one will need to add more Yeowynn. 为了增加持续时间 one would need more Celawynn. <nl>When corrupted by using the aspect Byariis, this potion will turn into the Poisonsting Elixir, which instantly poisons a creature.</scale>
+#manual.item.thebetweenlands.bl.elixir.ripening.description=<scale:0.75>This elixir restores your physical and psychological health from the decay of the Betweenlands. To achieve this effect, one needs to brew with the aspects Yeowynn, Ordaniis and Dayuniis. As sanity is most affected by the realm's decay, Dayuniis increases the strength of this elixir. Ordaniis increases the duration. <nl>When this elixir is corrupted by using the aspect Byariis one will end up with an Elixir of Decay, which speeds up the process of decay in someone.</scale>
+#manual.item.thebetweenlands.bl.elixir.healing.description=<scale:0.75>这个药剂以一种我们在主世界发现的药水为基础。It heals one's wounds with incredible speed, unmatched by normal medicine or bandages. The Elixir of Healing is made by simply using the two aspects Yeowynn and Ordaniis. The combination of these two enhances the health of a being. The potion can be made stronger by using more Yeowynn, and the duration can be increased by using Ordaniis. <nl>By using the aspect Byariis, one corrupts the elixir. It will then turn into the Elixir of Draining, which drains ones health.</scale>
+#manual.item.thebetweenlands.bl.elixir.nimblefeet.description=<scale:0.75>这个药剂非常类似于我们在主世界发现的一种药水。它让你的双脚灵敏并因此增加你的速度。The Nimblefeet Elixir is brewed by using the aspects Azuwynn, Ordaniis and, for the nimble and swift effect, Yunugaz. Yunugaz makes it so it does not simply enhance your muscles, but specifically their swiftness. This results in Yunugaz increasing the strength of the potion. While Ordaniis increases duration. <nl>When one corrupts the effect of this elixir with the aspect Byariis, it will turn into the Lumbering Elixir, which will slow down your target.</scale>
+#manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.75>这个药剂以一种我们在主世界发现的药剂为基础。It lets you deal more damage to any entity you hit. <nl>The Elixir of Strength is made by using the aspects Azuwynn and Ordaniis, as it enhances the muscle. Besides, by adding more Azuwynn one can increase the strength of the elixir, and by using more Ordaniis one can increase the duration of its effect. <nl>When one corrupts this elixir by using the aspect Byariis, it will turn into the Elixir of Weakness, which reduces the damage dealth to any entity the affected creature hits.</scale>
+
+manual.wip.page=这几页看起来像是被魔法胶水粘在一起了, 交错维度蓬勃发展时胶水会慢慢地失去粘性。
+
+talisman.noplace=该空间不够大。
+
+# Chat Messages
+chat.flintandsteel=这里实在是太潮湿了,没法用%s来生火.
+
+chat.food_sickness.fine.0=啊,这真是令人精神焕发.
+chat.food_sickness.fine.1=终于！不一样的食物
+chat.food_sickness.fine.2=终于！新东西
+chat.food_sickness.fine.3=终于！那不只是棕色粘液
+chat.food_sickness.fine.4=那实际上尝起来还好
+chat.food_sickness.fine.5=好吧至少那尝起来不像翔
+chat.food_sickness.fine.6=粘糊糊的，至少令人满意
+chat.food_sickness.fine.7=嗯…没差
+chat.food_sickness.fine.8=我能习惯吃这个
+chat.food_sickness.fine.9=我认为这个比吃青苔好
+chat.food_sickness.fine.10=有不同的东西改变，真是太棒了
+chat.food_sickness.fine.11=最后，我因为其他的东西生病
+chat.food_sickness.fine.12=好吧挺好吃的
+chat.food_sickness.fine.13=这不如金苹果，但是它也又有用
+chat.food_sickness.fine.14=好吃！！
+chat.food_sickness.fine.15=还好，希望不会怀孕
+
+chat.food_sickness.half.0=我因为吃这个有点生病了
+chat.food_sickness.half.1=周围没吃的了?
+chat.food_sickness.half.2=我觉得能吃
+chat.food_sickness.half.3=我不觉得我能吃下去很多
+chat.food_sickness.half.4=这玩意太难吃了
+chat.food_sickness.half.5=希望周围有更多食物
+chat.food_sickness.half.6=我应该尝试找点更多的东西来吃
+chat.food_sickness.half.7=我觉得我应该吃的丰富点
+chat.food_sickness.half.8=劲有点大，我应该找个别的试试
+chat.food_sickness.half.9=齁，和我吃过的另一种效果一模一样
+chat.food_sickness.half.10=我希望我能有更多的食物选择
+chat.food_sickness.half.11=我应该找点以后吃的
+chat.food_sickness.half.12=这个东西让我开始生病了
+chat.food_sickness.half.13=我感觉不是很好，有什么可以吃的么
+chat.food_sickness.half.14=这种食物淡出鸟了，我需要更多的品种
+chat.food_sickness.half.15=每次吃一样的东西对我可不好
+
+chat.food_sickness.sick.0=我不能吃再多了
+chat.food_sickness.sick.1=不行！不能吃这个了
+chat.food_sickness.sick.2=齁，我不吃那个
+chat.food_sickness.sick.3=我不会再吃了
+chat.food_sickness.sick.4=我吃这个生病了，我要找点别的
+chat.food_sickness.sick.5=我不会把它靠近我的嘴的
+chat.food_sickness.sick.6=我觉得我在吃就生病了，我要找点别的
+chat.food_sickness.sick.7=我觉得这个要找不到了，我要找点别的
+chat.food_sickness.sick.8=没门，我不吃这个！
+chat.food_sickness.sick.9=这个东西对我不好，我要点别的
+chat.food_sickness.sick.10=我要点丰富的，我不要这个了
+chat.food_sickness.sick.11=我觉得我吃更多之前要喘口气
+chat.food_sickness.sick.12=不用了，我有别的改变
+chat.food_sickness.sick.13=它闻起来比看起来更糟，我要找点别的吃
+chat.food_sickness.sick.15=我不能让自己再吃这个了，周围肯定有别的东西吃
+
+chat.rope.already_connected=已经连接到另一根爬绳
+chat.rope.disconnected=你从爬绳上掉下来了
+chat.rope.too_far=你距离上一个固定点太远了
+
+chat.compost.close=关上堆肥箱来让这些物品转化为堆肥。
+chat.compost.add=向堆肥箱里添加可堆肥的物品。
+chat.compost.composting=耐心等待物品转化为堆肥。
+chat.compost.full=堆肥箱已经满了。
+chat.compost.not.compostable=该物品无法用来堆肥。
+chat.compost.open.add=打开堆肥箱来添加可堆肥的物品。
+chat.compost.open.get=打开堆肥箱来取出堆肥。
+
+chat.aspect.discovery.book.none=你连记录下新发现的书都没有。
+chat.aspect.discovery.gecko.none=你需要一只壁虎来进行这个实验。
+chat.aspect.discovery.gecko.recovering=该壁虎因上次实验仍在恢复中。
+chat.aspect.discovery.none=这个物品看起来不含任何要素。
+chat.aspect.discovery.more=这个物品看起来还具有着尚未发现的要素。
+chat.aspect.discovery.end=你已经发现了这个物品所含有的全部要素。
+chat.aspect.discovery.last=这应该就是这个物品上最后一个尚未发现的要素了。
+chat.aspect.discovery.Ordaniis=壁虎的鳞片好像泛着微光。
+chat.aspect.discovery.Celawynn=你可以听到它腹部的隆隆声，似乎要打饱嗝个不停。
+chat.aspect.discovery.Yeowynn=你从未见过比这更健康的壁虎了，它生龙活虎。
+chat.aspect.discovery.Azuwynn=你可以看见它的肌肉在不由自主地抽搐。
+chat.aspect.discovery.Freiwynn=它的眼睛正在跳动。
+chat.aspect.discovery.Dayuniis=壁虎像个酒鬼似的到处走动，像个精神分裂者一样到处观望。
+chat.aspect.discovery.Fergalaz=壁虎的鳞片好像变得石头般坚硬，几乎不能动。
+chat.aspect.discovery.Yunugaz=壁虎看起来变得十分轻盈，它的呼吸听来像是山谷中的风。
+chat.aspect.discovery.Firnalaz=它的鳞片闪耀着红光，它还呼出灼热的气息。
+chat.aspect.discovery.Byrginaz=它的笼子周围到处都是汗水，口水和尿液。
+chat.aspect.discovery.Armaniis=它看上去十分平静，并含情脉脉地盯着你。
+chat.aspect.discovery.Geoliirgaz=壁虎的眼睛空洞无神，它似乎不对任何事情有反应。
+chat.aspect.discovery.Yihinren=它的鳞片变得肿胀…它看起来有些不同。
+chat.aspect.discovery.Byariis=壁虎愤怒地啃着自己的尾巴，像是着了魔般的到处观望。
+
+chat.event.spook=你感受到空气的寒意…令人难以忘怀的季节！
+
+chat.item.forbiddenfig=那些吃了禁果的人将受到诅咒！
+
+chat.manual.discover.page=你已发现新的一页： %s
+
+chat.repeller.shimmerstone.missing=驱魔灯需要一个闪耀石子来运作
+
+chat.bedSpawnSet=你的出生点已重设
+
+chat.amulet.slot.added=添加了一个新的护身符槽
+chat.amulet.slot.full=已不能再添加更多护身符槽
+
+chat.guard.warning1=你的行为已经产生了影响…
+chat.guard.warning2=你已经激怒了守护者…
+
+chat.guard.drop=这个地方看起来不再被守护着
+
+chat.voodoo.no.mobs=没有伤害的目标
+
+chat.bucket.needsrope=你需要一根芦苇绳来把桶系在树上
+
+# Radial menu
+equipment.menu.equip=装备
+equipment.menu.unequip=卸下
+equipment.menu.page=第%d页
+
+# Key Binding
+key.categories.weedwoodRowboat=杂草木船
+key.categories.betweenlands=交错维度操控
+key.radialmenu=装备界面
+key.useRing=使用戒指
+key.openPouch=打开袋子
+
+# Locations
+location.wilderness.name=80:<scale:1.75>荒野</scale>
+location.caverns.name=80:<scale:1.75>洞穴</scale>
+location.ruins.name=80:<scale:1.75>遗迹</scale>
+location.smallDungeon.name=80:<scale:1.75>圣陵地牢</scale>
+location.tarPoolDungeon.name=80:<scale:1.75>焦油池地牢</scale>
+location.cragrockTower.name=80:峭壁岩高塔
+location.wightTower.name=80:鬼魂要塞
+location.wightTowerPuzzle.name=80:军械库
+location.wightTowerTeleporter.name=200:<scale:1>注意，与怪物战斗时，自己不要变成怪物…<nl>因为当你凝视深渊时，深渊同样凝视着你。</scale>
+location.wightTowerBoss.name=80:原始之恶
+
+# Biomes
+biome.swamplands.name=沼泽
+biome.coarseIslands.name=刺状岛屿
+biome.deepWaters.name=深水
+biome.patchyIslands.name=片状岛屿
+biome.marsh1.name=沼泽
+biome.marsh2.name=沼泽
+biome.sludgePlains.name=污泥平原
+
+# Wight Fortress Sign
+fortress.line1=只有
+fortress.line2=耍剑的人
+fortress.line3=才能通过
+fortress.line4=这个地方
