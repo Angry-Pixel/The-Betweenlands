@@ -5,6 +5,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
 import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
 import thebetweenlands.common.registries.KeyBindRegistry;
@@ -14,6 +15,7 @@ public class InputHandler {
 
 	private static boolean wasUseButtonPressed = false;
 	private static boolean wasRingUseButtonPressed = false;
+	private static boolean wasPouchButtonPressed = false;
 
 	@SubscribeEvent
 	public static void onInput(InputEvent event) {
@@ -22,6 +24,16 @@ public class InputHandler {
 		if(player != null) {
 			updateUseButtonState();
 			updateRingUseButtonState();
+			updatePouchButtonState();
+		}
+	}
+
+	private static void updatePouchButtonState() {
+		if(!wasPouchButtonPressed && KeyBindRegistry.OPEN_POUCH.isKeyDown()) {
+			wasPouchButtonPressed = true;
+			TheBetweenlands.networkWrapper.sendToServer(new MessageOpenPouch());
+		} else if(wasPouchButtonPressed && !KeyBindRegistry.OPEN_POUCH.isKeyDown()) {
+			wasPouchButtonPressed = false;
 		}
 	}
 

@@ -69,8 +69,10 @@ public class AttackDamageHandler {
 					}
 				}
 
-				TheBetweenlands.networkWrapper.sendToAllAround(new MessagePowerRingParticles(attackedEntity), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
-
+				if(rings > 0) {
+					TheBetweenlands.networkWrapper.sendToAllAround(new MessagePowerRingParticles(attackedEntity), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
+				}
+				
 				damage *= 1.0F + 0.5F * rings;
 			}
 		}

@@ -48,8 +48,9 @@ public class DynamicJEIRecipeHandler {
 	private static List<IRecipeWrapper> getDynamicRecipes(World world) {
 		List<IRecipeWrapper> dynamicRecipes = new ArrayList<>();
 
+		//TODO Animator recipes need to be synced to clients
 		//Add animator recipes
-		dynamicRecipes.addAll(AnimatorRecipeMaker.getRecipesRuntime(world));
+		//dynamicRecipes.addAll(AnimatorRecipeMaker.getRecipesRuntime(world));
 
 		return dynamicRecipes;
 	}

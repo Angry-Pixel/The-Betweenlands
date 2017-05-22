@@ -864,3 +864,11 @@ command.aspect.reset.confirm=Confirm with '/resetAspects confirm'
 command.aspect.reset.success=The aspects have been reset
 
 command.blreloadrecipes.success=Reloaded custom recipes
+
+# Keybinds
+key.categories.betweenlands=The Betweenlands
+key.openPouch=Open Lurker Skin Pouch
+key.radialmenu=Open Equipment Menu
+key.return_scout=Return Scout (NYI)
+key.send_scout=Send Scout (NYI)
+key.useRing=Use Ring
