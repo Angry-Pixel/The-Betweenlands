@@ -606,11 +606,10 @@ item.thebetweenlands.lurkerSkinShield.name=Lurker Skin Shield
 
 
 # Fluids
-fluid.swampWater.name=Swamp Water
-fluid.tar.name=Tar
-fluid.stagnantWater.name=Stagnant Water
-fluid.rubber.name=Rubber
 fluid.swampWater=Swamp Water
+fluid.tar=Tar
+fluid.stagnantWater=Stagnant Water
+fluid.rubber=Rubber
 
 # Creative Tabs
 itemGroup.thebetweenlands.block=The Betweenlands Blocks

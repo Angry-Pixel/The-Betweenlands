@@ -81,18 +81,18 @@ public class ItemBLBucketFilled extends UniversalBucket {
 		String key = this.getEmpty().getUnlocalizedName() + "." + (fluidStack == null ? "unknown" : fluidStack.getFluid().getUnlocalizedName(fluidStack));
 		return key;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		FluidStack fluidStack = this.getFluid(stack);
-		String fluidStr = (fluidStack == null ? "unknown" : fluidStack.getFluid().getUnlocalizedName(fluidStack));
-		String key = this.getEmpty().getUnlocalizedName() + "." + fluidStr;
+		String fluidLocalizedStr = (fluidStack == null ? "unknown" : fluidStack.getLocalizedName()); //Localized fluid name
+		String fullUnlocalizedFluidBucketKey = this.getEmpty().getUnlocalizedName() + "." + (fluidStack == null ? "unknown" : fluidStack.getUnlocalizedName()); //Unlocalized full bucket name
 		//Try to find localization for this specific fluid bucket, if not found use a generic name with the fluid passed in as %s
-		return net.minecraft.util.text.translation.I18n.canTranslate(key) ? 
-				net.minecraft.util.text.translation.I18n.translateToLocal(key + ".name").trim() : 
-					net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getEmpty().getUnlocalizedName() + ".full.name", net.minecraft.util.text.translation.I18n.translateToLocal(fluidStr + ".name"));
-    }
+		return net.minecraft.util.text.translation.I18n.canTranslate(fullUnlocalizedFluidBucketKey + ".name") ? 
+				net.minecraft.util.text.translation.I18n.translateToLocal(fullUnlocalizedFluidBucketKey + ".name").trim() : 
+					net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getEmpty().getUnlocalizedName() + ".full.name", fluidLocalizedStr);
+	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
