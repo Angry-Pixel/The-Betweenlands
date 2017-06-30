@@ -12,6 +12,6 @@ public class ModInfo {
 	public static final String API_NAME = "BetweenlandsAPI";
 
 	public static final String MC_VERSIONS = "1.10.2";
-	public static final String VERSION = "2.0.3-alpha";
+	public static final String VERSION = "2.0.4-alpha";
 	public static final String API_VERSION = "1.3.0";
 }
