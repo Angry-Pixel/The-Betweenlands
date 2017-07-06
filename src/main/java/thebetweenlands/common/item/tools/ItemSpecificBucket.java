@@ -8,6 +8,7 @@ import java.util.Map;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
@@ -58,7 +59,7 @@ public class ItemSpecificBucket extends ItemBLBucketFilled {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		subItems.add(new ItemStack(this));
 	}
 
@@ -84,7 +85,7 @@ public class ItemSpecificBucket extends ItemBLBucketFilled {
 		BlockPos pos = target.getBlockPos();
 
 		ItemStack singleBucket = emptyBucket.copy();
-		singleBucket.stackSize = 1;
+		singleBucket.setCount(1);
 
 		IFluidHandler targetFluidHandler = FluidUtil.getFluidHandler(world, pos, target.sideHit);
 		if (targetFluidHandler != null) {

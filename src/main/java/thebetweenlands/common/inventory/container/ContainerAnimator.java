@@ -52,17 +52,17 @@ public class ContainerAnimator extends Container {
                 if (stack1.getItem() == ItemRegistry.LIFE_CRYSTAL)
                     if (!mergeItemStack(stack1, 1, 2, true))
                         return null;
-                if (stack1.stackSize == 1 && stack1 != new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()) && stack1.getItem() != ItemRegistry.LIFE_CRYSTAL)
+                if (stack1.getCount() == 1 && stack1 != new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()) && stack1.getItem() != ItemRegistry.LIFE_CRYSTAL)
                     if (!mergeItemStack(stack1, 0, 1, true))
                         return null;
             } else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
                 return null;
-            if (stack1.stackSize == 0)
+            if (stack1.getCount() == 0)
                 slot.putStack(null);
             else
                 slot.onSlotChanged();
-            if (stack1.stackSize != stack.stackSize)
-                slot.onPickupFromSlot(player, stack1);
+            if (stack1.getCount() != stack.getCount())
+                slot.onTake(player, stack1);
             else
                 return null;
         }

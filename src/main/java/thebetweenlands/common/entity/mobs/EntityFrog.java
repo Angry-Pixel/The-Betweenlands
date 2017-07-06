@@ -90,7 +90,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		}
 		if (this.strokeTicks > 0)
 			this.strokeTicks--;
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (this.strokeTicks > 0) {
 				this.strokeTicks--;
 				this.dataManager.set(DW_SWIM_STROKE, (byte) 1);
@@ -105,7 +105,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 				this.strokeTicks = 0;
 			}
 		}
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			this.setAir(20);
 
 			Path path = getNavigator().getPath();
@@ -133,7 +133,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 								this.motionZ += 0.45 * MathHelper.sin(angle) * speedMultiplier;
 								this.velocityChanged = true;
 								this.strokeTicks = 40;
-								this.worldObj.setEntityState(this, (byte) 8);
+								this.world.setEntityState(this, (byte) 8);
 							} else if (this.isCollidedHorizontally) {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
@@ -145,21 +145,21 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 				}
 			}
 
-			if (!this.worldObj.isRemote) {
-				if (this.motionY < 0.0F && this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.4D), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid()) {
+			if (!this.world.isRemote) {
+				if (this.motionY < 0.0F && this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY + 0.4D), MathHelper.floor(this.posZ))).getMaterial().isLiquid()) {
 					this.motionY *= 0.1F;
 					this.velocityChanged = true;
 				}
 
-				if ((path == null || path.isFinished()) && this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.5D), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid()) {
+				if ((path == null || path.isFinished()) && this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY + 0.5D), MathHelper.floor(this.posZ))).getMaterial().isLiquid()) {
 					this.motionY += 0.04F;
 					this.velocityChanged = true;
 				}
 			}
 		}
 
-		if (worldObj.isRemote && getSkin() == 4 && worldObj.getWorldTime() % 10 == 0) {
-			BLParticles.DIRT_DECAY.spawn(worldObj, posX, posY + 0.5D, posZ);
+		if (world.isRemote && getSkin() == 4 && world.getWorldTime() % 10 == 0) {
+			BLParticles.DIRT_DECAY.spawn(world, posX, posY + 0.5D, posZ);
 		}
 	}
 
@@ -173,10 +173,10 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		super.onCollideWithPlayer(player);
 		byte duration = 0;
 		if (getSkin() == 4) {
-			if (!worldObj.isRemote && !player.capabilities.isCreativeMode && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
-				if (worldObj.getDifficulty() == EnumDifficulty.NORMAL)
+			if (!world.isRemote && !player.capabilities.isCreativeMode && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
+				if (world.getDifficulty() == EnumDifficulty.NORMAL)
 					duration = 5;
-				else if (worldObj.getDifficulty() == EnumDifficulty.HARD)
+				else if (world.getDifficulty() == EnumDifficulty.HARD)
 					duration = 10;
 				if (duration > 0)
 					player.addPotionEffect(new PotionEffect(MobEffects.POISON, duration * 20, 0));
@@ -186,7 +186,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean isNotColliding() {
-		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
 	}
 
 	public int getSkin() {

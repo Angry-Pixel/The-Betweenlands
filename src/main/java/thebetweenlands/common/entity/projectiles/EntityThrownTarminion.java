@@ -47,8 +47,8 @@ public class EntityThrownTarminion extends EntityThrowable {
 	public void onUpdate() {
 		super.onUpdate();
 		if(!this.onGround) {
-			if (this.worldObj.isRemote) {
-				BLParticles.TAR_BEAST_DRIP.spawn(this.worldObj, this.posX, this.posY, this.posZ);
+			if (this.world.isRemote) {
+				BLParticles.TAR_BEAST_DRIP.spawn(this.world, this.posX, this.posY, this.posZ);
 			}
 		}
 	}
@@ -57,7 +57,7 @@ public class EntityThrownTarminion extends EntityThrowable {
 	protected void onImpact(RayTraceResult result) {
 		if (result.entityHit != null && result.entityHit instanceof EntityLivingBase) {
 			if(!(result.entityHit instanceof EntityTarminion)) {
-				if(!this.worldObj.isRemote) {
+				if(!this.world.isRemote) {
 					result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 2);
 
 					if (this.isBurning() && !(result.entityHit instanceof EntityEnderman)) {
@@ -65,30 +65,30 @@ public class EntityThrownTarminion extends EntityThrowable {
 					}
 				}
 
-				if(this.worldObj.isRemote) {
+				if(this.world.isRemote) {
 					for (int i = 0; i < 8; i++) {
-						BLParticles.SPLASH_TAR.spawn(this.worldObj, this.posX, this.posY, this.posZ);
+						BLParticles.SPLASH_TAR.spawn(this.world, this.posX, this.posY, this.posZ);
 					}
 				}
 			}
 
-			if (!this.worldObj.isRemote) {
+			if (!this.world.isRemote) {
 				EntityTarminion tarminion = spawnTarminion();
 				if(result.entityHit instanceof EntityMob) {
 					tarminion.setAttackTarget((EntityLivingBase) result.entityHit);
 				}
 			}
 		} else if (result.typeOfHit == RayTraceResult.Type.BLOCK) {
-			if (!this.worldObj.isRemote) {
+			if (!this.world.isRemote) {
 				spawnTarminion();
 			}
 		}
 	}
 
 	private EntityTarminion spawnTarminion() {
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			this.setDead();
-			EntityTarminion tarminion = new EntityTarminion(this.worldObj);
+			EntityTarminion tarminion = new EntityTarminion(this.world);
 			if(this.ownerUUID != null) {
 				tarminion.setOwnerId(this.ownerUUID);
 			}
@@ -99,7 +99,7 @@ public class EntityThrownTarminion extends EntityThrowable {
 			tarminion.motionY = motionVec.yCoord * speed;
 			tarminion.motionZ = motionVec.zCoord * speed;
 			tarminion.setLocationAndAngles(this.posX, this.posY, this.posZ, 0.0F, 0.0F);
-			this.worldObj.spawnEntityInWorld(tarminion);
+			this.world.spawnEntity(tarminion);
 			return tarminion;
 		}
 		return null;

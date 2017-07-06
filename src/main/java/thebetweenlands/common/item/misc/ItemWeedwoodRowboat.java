@@ -13,6 +13,7 @@ import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -43,7 +44,7 @@ public class ItemWeedwoodRowboat extends Item {
     
     @Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
     	list.add(new ItemStack(item));
     	
     	ItemStack tarred = new ItemStack(item);
@@ -53,7 +54,8 @@ public class ItemWeedwoodRowboat extends Item {
     	list.add(tarred);
 	}
 
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    	ItemStack stack = player.getHeldItem(hand);
         Vec3d pos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
         Vec3d look = player.getLookVec();
         Vec3d lookExtent = pos.addVector(look.xCoord * REACH, look.yCoord * REACH, look.zCoord * REACH);
@@ -81,14 +83,14 @@ public class ItemWeedwoodRowboat extends Item {
             return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
         }
         if (!world.isRemote) {
-            NBTTagCompound attrs = stack.getSubCompound("attributes", false);
+            NBTTagCompound attrs = stack.getSubCompound("attributes");
             if (attrs != null) {
                 rowboat.readEntityFromNBT(attrs);
             }
-            world.spawnEntityInWorld(rowboat);
+            world.spawnEntity(rowboat);
         }
         if (!player.capabilities.isCreativeMode) {
-            stack.stackSize--;
+            stack.shrink(1);
         }
         player.addStat(StatList.getObjectUseStats(this));
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);

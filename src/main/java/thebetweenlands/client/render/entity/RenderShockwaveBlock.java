@@ -68,10 +68,10 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
 			blockRenderer.setLighting((IBlockState blockState, @Nullable EnumFacing facing) -> {
-				return state.getPackedLightmapCoords(entity.worldObj, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
+				return state.getPackedLightmapCoords(entity.world, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
 			}).setTint((IBlockState blockState, int tintIndex) -> {
 				if(blockState.getBlock() == entity.block)
-					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, entity.worldObj, entity.origin, tintIndex);
+					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, entity.world, entity.origin, tintIndex);
 				else
 					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, tintIndex);
 			});

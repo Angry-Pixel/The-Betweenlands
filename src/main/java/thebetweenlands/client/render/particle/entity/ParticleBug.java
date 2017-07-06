@@ -61,29 +61,29 @@ public class ParticleBug  extends Particle implements IParticleSpriteReceiver {
 
 		super.onUpdate();
 
-		this.moveEntity(this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter, this.worldObj.rand.nextFloat()*this.jitter*2-this.jitter);
+		this.move(this.world.rand.nextFloat()*this.jitter*2-this.jitter, this.world.rand.nextFloat()*this.jitter*2-this.jitter, this.world.rand.nextFloat()*this.jitter*2-this.jitter);
 		double distToTarget = Math.sqrt((this.tx-this.posX)*(this.tx-this.posX)+(this.ty-this.posY)*(this.ty-this.posY)+(this.tz-this.posZ)*(this.tz-this.posZ));
-		Block currBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getBlock();
+		Block currBlock = this.world.getBlockState(new BlockPos((int)Math.floor(this.posX), (int)Math.floor(this.posY), (int)Math.floor(this.posZ))).getBlock();
 		if(this.underwater == (currBlock instanceof BlockSwampWater == false)) {
 			this.motionY += 0.08D;
-			if(this.isCollided)
+			if(this.onGround)
 				this.motionY += 0.25D;
 			this.tx = this.posX;
 			this.ty = this.posY;
 			this.tz = this.posZ;
 		} else {
 			if(distToTarget <= this.speed + this.jitter) {
-				this.tx = this.posX + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-				this.ty = this.posY + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-				this.tz = this.posZ + this.worldObj.rand.nextFloat()*2.0F-1.0F;
-				Block targetBlock = this.worldObj.getBlockState(new BlockPos((int)Math.floor(this.tx), (int)Math.floor(this.ty + 0.5D), (int)Math.floor(this.tz))).getBlock();
+				this.tx = this.posX + this.world.rand.nextFloat()*2.0F-1.0F;
+				this.ty = this.posY + this.world.rand.nextFloat()*2.0F-1.0F;
+				this.tz = this.posZ + this.world.rand.nextFloat()*2.0F-1.0F;
+				Block targetBlock = this.world.getBlockState(new BlockPos((int)Math.floor(this.tx), (int)Math.floor(this.ty + 0.5D), (int)Math.floor(this.tz))).getBlock();
 				if(this.underwater == (targetBlock instanceof BlockSwampWater == false)) {
 					this.tx = this.posX;
 					this.ty = this.posY;
 					this.tz = this.posZ;
 				}
 			} else {
-				this.moveEntity(-(this.posX-this.tx)/distToTarget*this.speed, -(this.posY-this.ty)/distToTarget*this.speed, -(this.posZ-this.tz)/distToTarget*this.speed);
+				this.move(-(this.posX-this.tx)/distToTarget*this.speed, -(this.posY-this.ty)/distToTarget*this.speed, -(this.posZ-this.tz)/distToTarget*this.speed);
 			}
 		}
 	}

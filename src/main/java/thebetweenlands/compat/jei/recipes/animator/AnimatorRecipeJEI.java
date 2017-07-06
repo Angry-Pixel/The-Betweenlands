@@ -35,7 +35,7 @@ public class AnimatorRecipeJEI extends BlankRecipeWrapper {
         if (animatorRecipe.getSpawnEntityClass(input) != null) {
             Entity entity = null;
             try {
-                entity = (Entity) animatorRecipe.getSpawnEntityClass(input).getConstructor(new Class[]{World.class}).newInstance(Minecraft.getMinecraft().theWorld);
+                entity = (Entity) animatorRecipe.getSpawnEntityClass(input).getConstructor(new Class[]{World.class}).newInstance(Minecraft.getMinecraft().world);
             } catch (Exception exception) {
                 exception.printStackTrace();
             }

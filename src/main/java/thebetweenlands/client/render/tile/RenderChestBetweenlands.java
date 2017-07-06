@@ -59,7 +59,7 @@ public class RenderChestBetweenlands extends TileEntitySpecialRenderer<TileEntit
 			return;
 		}
 
-		if (te.hasWorldObj()) {
+		if (te.hasWorld()) {
 			Block block = te.getBlockType();
 			i = te.getBlockMetadata();
 

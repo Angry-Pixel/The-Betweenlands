@@ -9,6 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
@@ -96,16 +97,63 @@ public class ItemBLBucketFilled extends UniversalBucket {
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 			if (fluid != FluidRegistry.WATER && fluid != FluidRegistry.LAVA && !fluid.getName().equals("milk") && !ItemSpecificBucket.hasSpecificBucket(this.getEmpty().getItem(), fluid)) {
 				// add all fluids that the bucket can be filled  with
 				FluidStack fs = new FluidStack(fluid, getCapacity());
 				ItemStack stack = new ItemStack(this);
-				if (fill(stack, fs, true) == fs.amount) {
+				UniversalBucket.getFilledBucket(this, fluid);
+				if (this.getFluid(stack) != null && this.getFluid(stack).amount == fs.amount) { // probably broke something
 					subItems.add(stack);
 				}
 			}
 		}
+	}
+	
+	 public int fill(ItemStack container, FluidStack resource, boolean doFill) {
+	        // has to be exactly 1, must be handled from the caller
+	        if (container.getCount() != 1) {
+	            return 0;
+	        }
+
+	        // can only fill exact capacity
+	        if (resource == null || resource.amount < getCapacity()) {
+	            return 0;
+	        }
+
+	        // already contains fluid?
+	        if (getFluid(container) != null) {
+	            return 0;
+	        }
+
+	        // registered in the registry?
+	        if (FluidRegistry.getBucketFluids().contains(resource.getFluid())) {
+	            // fill the container
+	            if (doFill) {
+	                NBTTagCompound tag = container.getTagCompound();
+	                if (tag == null)
+	                {
+	                    tag = new NBTTagCompound();
+	                }
+	                resource.writeToNBT(tag);
+	                container.setTagCompound(tag);
+	            }
+	            return getCapacity();
+	        }
+	        else if (resource.getFluid() == FluidRegistry.WATER) {
+	            if (doFill) {
+	                container.deserializeNBT(new ItemStack(Items.WATER_BUCKET).serializeNBT());
+	            }
+	            return getCapacity();
+	        }
+	        else if (resource.getFluid() == FluidRegistry.LAVA) {
+	            if (doFill) {
+	                container.deserializeNBT(new ItemStack(Items.LAVA_BUCKET).serializeNBT());
+	            }
+	            return getCapacity();
+	        }
+
+	        return 0;
 	}
 }

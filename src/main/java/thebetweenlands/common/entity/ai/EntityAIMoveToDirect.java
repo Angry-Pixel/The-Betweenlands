@@ -25,7 +25,7 @@ public abstract class EntityAIMoveToDirect<T extends EntityLiving> extends Entit
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return this.getTarget() != null;
 	}
 

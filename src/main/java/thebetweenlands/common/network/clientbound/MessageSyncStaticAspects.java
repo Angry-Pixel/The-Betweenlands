@@ -25,7 +25,7 @@ public class MessageSyncStaticAspects extends MessageBase {
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		try {
-			this.nbt = buf.readNBTTagCompoundFromBuffer();
+			this.nbt = buf.readCompoundTag();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -33,7 +33,7 @@ public class MessageSyncStaticAspects extends MessageBase {
 
 	@Override
 	public void serialize(PacketBuffer buf) {
-		buf.writeNBTTagCompoundToBuffer(this.nbt);
+		buf.writeCompoundTag(this.nbt);
 	}
 
 	@Override

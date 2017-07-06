@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraftforge.oredict.OreDictionary;
@@ -59,7 +60,7 @@ public class LootPropertyHasItem implements EntityProperty {
 				ItemStack stack = it.next();
 				if(this.doesItemMatch(stack)) {
 					if(!this.combineStacks) {
-						if(this.doesSizeMatch(stack.stackSize)) {
+						if(this.doesSizeMatch(stack.getCount())) {
 							return this.hasItem;
 						}
 					} else {
@@ -74,7 +75,7 @@ public class LootPropertyHasItem implements EntityProperty {
 				ItemStack stack = it.next();
 				if(this.doesItemMatch(stack)) {
 					if(!this.combineStacks) {
-						if(this.doesSizeMatch(stack.stackSize)) {
+						if(this.doesSizeMatch(stack.getCount())) {
 							return this.hasItem;
 						}
 					} else {
@@ -84,12 +85,12 @@ public class LootPropertyHasItem implements EntityProperty {
 			}
 		}
 		if(this.main && entity instanceof EntityPlayer) {
-			ItemStack[] inv = ((EntityPlayer) entity).inventory.mainInventory;
-			for(int i = 0; i < inv.length; i++) {
-				ItemStack stack = inv[i];
+			NonNullList<ItemStack> inv = ((EntityPlayer) entity).inventory.mainInventory;
+			for(int i = 0; i < inv.size(); i++) {
+				ItemStack stack = inv.get(i);
 				if(this.doesItemMatch(stack)) {
 					if(!this.combineStacks) {
-						if(this.doesSizeMatch(stack.stackSize)) {
+						if(this.doesSizeMatch(stack.getCount())) {
 							return this.hasItem;
 						}
 					} else {
@@ -99,7 +100,7 @@ public class LootPropertyHasItem implements EntityProperty {
 			}
 		}
 		if(this.combineStacks && amount != -1) {
-			if(this.sizeMatcher.matcher.apply(this.item.stackSize, amount + 1)) {
+			if(this.sizeMatcher.matcher.apply(this.item.getCount(), amount + 1)) {
 				return this.hasItem;
 			}
 		}
@@ -117,7 +118,7 @@ public class LootPropertyHasItem implements EntityProperty {
 	}
 
 	private boolean doesSizeMatch(int size) {
-		return this.sizeMatcher == null || this.sizeMatcher.matcher.apply(this.item.stackSize, size);
+		return this.sizeMatcher == null || this.sizeMatcher.matcher.apply(this.item.getCount(), size);
 	}
 
 	public static class Serializer extends EntityProperty.Serializer<LootPropertyHasItem> {
@@ -135,8 +136,8 @@ public class LootPropertyHasItem implements EntityProperty {
 			if(property.item.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
 				itemJson.add("meta", new JsonPrimitive(property.item.getItemDamage()));
 			}
-			if(property.item.stackSize != 1) {
-				itemJson.add("size", new JsonPrimitive(property.item.stackSize));
+			if(property.item.getCount() != 1) {
+				itemJson.add("size", new JsonPrimitive(property.item.getCount()));
 			}
 			obj.add("item", itemJson);
 			JsonArray inventories = new JsonArray();

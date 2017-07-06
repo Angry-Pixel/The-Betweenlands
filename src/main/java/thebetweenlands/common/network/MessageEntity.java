@@ -105,7 +105,7 @@ public abstract class MessageEntity extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void processClient() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		for(EntityIdentifier id : this.entityIdentifiers) {
 			if(id.dimensionId == world.provider.getDimension()) {
 				id.entity = world.getEntityByID(id.entityID);

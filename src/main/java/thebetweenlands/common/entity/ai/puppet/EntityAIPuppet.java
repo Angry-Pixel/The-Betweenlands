@@ -30,7 +30,7 @@ public class EntityAIPuppet extends EntityAIBase {
 		this.taskOwner = taskOwner;
 		this.puppeteer = puppeteer;
 		if(tasks != null && !tasks.isEmpty()) {
-			this.tasks = new EntityAITasks(taskOwner.worldObj.theProfiler);
+			this.tasks = new EntityAITasks(taskOwner.world.profiler);
 			for(int i = 0; i < tasks.size(); i++) {
 				this.tasks.addTask(i, tasks.get(i));
 			}

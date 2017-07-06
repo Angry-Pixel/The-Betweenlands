@@ -59,11 +59,11 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		double radius = 6.0D;
 		double lookRadius = 8.0D;
 
-		if(!this.worldObj.isRemote) {
-			if(this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL) {
+		if(!this.world.isRemote) {
+			if(this.world.getDifficulty() != EnumDifficulty.PEACEFUL) {
 				if(this.target == null) {
 					AxisAlignedBB checkAABB = new AxisAlignedBB(this.posX-radius, this.posY-radius, this.posZ-radius, this.posX+radius, this.posY+radius, this.posZ+radius);
-					List<EntityPlayer> players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
+					List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
 					EntityPlayer closestPlayer = null;
 					for(EntityPlayer player : players) {
 						if((closestPlayer == null || player.getDistanceToEntity(this) < closestPlayer.getDistanceToEntity(this)) && player.getDistanceToEntity(this) < radius && player.canEntityBeSeen(this)) {
@@ -102,18 +102,18 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			}
 		} else {
 			Entity prevTarget = this.target;
-			Entity target = this.worldObj.getEntityByID(this.getDataManager().get(TARGET_ID));
+			Entity target = this.world.getEntityByID(this.getDataManager().get(TARGET_ID));
 			if(target instanceof EntityPlayer) {
 				if(this.target == null) {
 					for(int i = 0; i < 60; i++) {
-						this.spawnSmokeParticle(this.posX, this.posY + this.height / 2.0D, this.posZ, (this.worldObj.rand.nextFloat() - 0.5F) / 2.5F, (this.worldObj.rand.nextFloat() - 0.5F) / 2.5F, (this.worldObj.rand.nextFloat() - 0.5F) / 2.5F);
+						this.spawnSmokeParticle(this.posX, this.posY + this.height / 2.0D, this.posZ, (this.world.rand.nextFloat() - 0.5F) / 2.5F, (this.world.rand.nextFloat() - 0.5F) / 2.5F, (this.world.rand.nextFloat() - 0.5F) / 2.5F);
 					}
 				}
 				this.target = (EntityPlayer) target;
 			} else {
 				this.target = null;
 			}
-			if(this.target != null && prevTarget != this.target && this.worldObj.isRemote) {
+			if(this.target != null && prevTarget != this.target && this.world.isRemote) {
 				this.playTeleportSound();
 			}
 		}
@@ -123,7 +123,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 
 			this.teleportTicks++;
 
-			if(!this.worldObj.isRemote && this.teleportTicks > this.maxTeleportTicks) {
+			if(!this.world.isRemote && this.teleportTicks > this.maxTeleportTicks) {
 				//Teleport
 				if(this.target instanceof EntityPlayerMP) {
 					EntityPlayerMP player = (EntityPlayerMP) this.target;
@@ -139,10 +139,10 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 				}
 				this.target = null;
 				this.teleportTicks = 0;
-			} else if(this.worldObj.isRemote && this.worldObj.rand.nextInt(2) == 0) {
-				double rx = (double)(this.worldObj.rand.nextFloat());
-				double ry = (double)(this.worldObj.rand.nextFloat());
-				double rz = (double)(this.worldObj.rand.nextFloat());
+			} else if(this.world.isRemote && this.world.rand.nextInt(2) == 0) {
+				double rx = (double)(this.world.rand.nextFloat());
+				double ry = (double)(this.world.rand.nextFloat());
+				double rz = (double)(this.world.rand.nextFloat());
 				double len = Math.sqrt(rx*rx+ry*ry+rz*rz);
 				this.spawnSmokeParticle((float)this.posX - this.width / 2.0F + rx, (float)this.posY + ry, (float)this.posZ - this.width / 2.0F + rz, 
 						(rx-0.5D)/len*0.2D, (ry-0.5D)/len*0.2D, (rz-0.5D)/len*0.2D);
@@ -150,7 +150,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		} else {
 			this.teleportTicks = 0;
 			AxisAlignedBB checkAABB = new AxisAlignedBB(this.posX-lookRadius, this.posY-lookRadius, this.posZ-lookRadius, this.posX+lookRadius, this.posY+lookRadius, this.posZ+lookRadius);
-			List<EntityPlayer> players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
+			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
 			EntityPlayer closestPlayer = null;
 			for(EntityPlayer player : players) {
 				if((closestPlayer == null || player.getDistanceToEntity(this) < closestPlayer.getDistanceToEntity(this)) && player.getDistanceToEntity(this) < lookRadius && player.canEntityBeSeen(this)) {
@@ -159,10 +159,10 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			}
 			if(closestPlayer != null) {
 				this.faceEntity(closestPlayer);
-				if(this.worldObj.isRemote) {
+				if(this.world.isRemote) {
 					if(!this.isLookingAtPlayer) {
 						for(int i = 0; i < 10; i++) {
-							this.spawnSmokeParticle(this.posX, this.posY + this.height / 2.0D, this.posZ, (this.worldObj.rand.nextFloat() - 0.5F) / 2.5F, (this.worldObj.rand.nextFloat() - 0.5F) / 2.5F, (this.worldObj.rand.nextFloat() - 0.5F) / 2.5F);
+							this.spawnSmokeParticle(this.posX, this.posY + this.height / 2.0D, this.posZ, (this.world.rand.nextFloat() - 0.5F) / 2.5F, (this.world.rand.nextFloat() - 0.5F) / 2.5F, (this.world.rand.nextFloat() - 0.5F) / 2.5F);
 						}
 					}
 				}
@@ -189,7 +189,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 		} else {
 			dy = (target.getEntityBoundingBox().minY + target.getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double)this.getEyeHeight());
 		}
-		double dist = (double)MathHelper.sqrt_double(dx * dx + dz * dz);
+		double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
 		float yaw = (float)(Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
 		float pitch = (float)(-(Math.atan2(dy, dist) * 180.0D / Math.PI));
 		this.rotationPitch = this.prevRotationPitch = pitch;
@@ -249,10 +249,10 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	}
 
 	protected void spawnBoss() {
-		EntityFortressBoss boss = new EntityFortressBoss(this.worldObj);
+		EntityFortressBoss boss = new EntityFortressBoss(this.world);
 		boss.setPosition(this.bossSpawnPosition.xCoord, this.bossSpawnPosition.yCoord, this.bossSpawnPosition.zCoord);
 		boss.setAnchor(this.bossSpawnPosition, 6.0D);
-		this.worldObj.spawnEntityInWorld(boss);
+		this.world.spawnEntity(boss);
 	}
 
 	@Override
@@ -264,7 +264,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 
 	@SideOnly(Side.CLIENT)
 	protected void spawnSmokeParticle(double x, double y, double z, double mx, double my, double mz) {
-		BLParticles.PORTAL.spawn(this.worldObj, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
+		BLParticles.PORTAL.spawn(this.world, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
 	}
 }
 

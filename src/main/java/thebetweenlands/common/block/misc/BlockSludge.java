@@ -109,7 +109,7 @@ public class BlockSludge extends Block {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
 		if (!this.canPlaceBlockAt(world, pos)) {
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
 		}

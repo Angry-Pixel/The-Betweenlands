@@ -172,30 +172,32 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 
 	@Override
 	public void update() {
-		if (worldObj.isRemote)
+		if (world.isRemote)
 			return;
-		ItemStack output = PurifierRecipe.getRecipeOutput(inventory[1]);
+		ItemStack output = PurifierRecipe.getRecipeOutput(inventory.get(1));
 		if (hasFuel() && !outputIsFull()) {
-			if (output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output)) {
+			if (output != null && getWaterAmount() > 0 && inventory.get(2) == null || output != null && getWaterAmount() > 0 && inventory.get(2) != null && inventory.get(2).isItemEqual(output)) {
 				time++;
 				if (time % 108 == 0)
-					worldObj.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				if (!lightOn)
 					setIlluminated(true);
 				if (time >= MAX_TIME) {
 					for (int i = 0; i < 2; i++)
-						if (inventory[i] != null)
-							if (--inventory[i].stackSize <= 0)
-								inventory[i] = null;
+						if (inventory.get(i) != null) {
+							inventory.get(i).shrink(1);
+							if (inventory.get(i).getCount() <= 0)
+								inventory.set(i,  null);
+						}
 					extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
-					if (inventory[2] == null) {
-						inventory[2] = output.copy();
-					} else if (inventory[2].isItemEqual(output)) {
-						inventory[2].stackSize += output.stackSize;
+					if (inventory.get(2) == null) {
+						inventory.set(2, output.copy());
+					} else if (inventory.get(2).isItemEqual(output)) {
+						inventory.get(2).grow(output.getCount());
 					}
 					time = 0;
 					markDirty();
-					boolean canRun = output != null && getWaterAmount() > 0 && inventory[2] == null || output != null && getWaterAmount() > 0 && inventory[2] != null && inventory[2].isItemEqual(output);
+					boolean canRun = output != null && getWaterAmount() > 0 && inventory.get(2) == null || output != null && getWaterAmount() > 0 && inventory.get(2) != null && inventory.get(2).isItemEqual(output);
 					if (!canRun) setIlluminated(false);
 				}
 			}
@@ -208,14 +210,14 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 			markDirty();
 			setIlluminated(false);
 		}
-		if (this.prevStackSize != (inventory[2] != null ? inventory[2].stackSize : 0)) {
+		if (this.prevStackSize != (inventory.get(2) != null ? inventory.get(2).getCount() : 0)) {
 			markDirty();
 		}
-		if (this.prevItem != (inventory[2] != null ? inventory[2].getItem() : null)) {
+		if (this.prevItem != (inventory.get(2) != null ? inventory.get(2).getItem() : null)) {
 			markDirty();
 		}
-		this.prevItem = inventory[2] != null ? inventory[2].getItem() : null;
-		this.prevStackSize = inventory[2] != null ? inventory[2].stackSize : 0;
+		this.prevItem = inventory.get(2) != null ? inventory.get(2).getItem() : null;
+		this.prevStackSize = inventory.get(2) != null ? inventory.get(2).getCount() : 0;
 	}
 
 	private void extractFluids(FluidStack fluid) {
@@ -225,16 +227,16 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	}
 
 	public boolean hasFuel() {
-		return getStackInSlot(0) != null && EnumItemMisc.SULFUR.isItemOf(getStackInSlot(0)) && getStackInSlot(0).stackSize >= 1;
+		return getStackInSlot(0) != null && EnumItemMisc.SULFUR.isItemOf(getStackInSlot(0)) && getStackInSlot(0).getCount() >= 1;
 	}
 
 	private boolean outputIsFull() {
-		return getStackInSlot(2) != null && getStackInSlot(2).stackSize >= getInventoryStackLimit();
+		return getStackInSlot(2) != null && getStackInSlot(2).getCount() >= getInventoryStackLimit();
 	}
 
 	public void setIlluminated(boolean state) {
 		lightOn = state;
-		worldObj.addBlockEvent(pos, getBlockType(), 0, lightOn ? 1 : 0);
+		world.addBlockEvent(pos, getBlockType(), 0, lightOn ? 1 : 0);
 	}
 
 	@Override
@@ -242,7 +244,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 		switch (eventId) {
 		case 0:
 			lightOn = eventData == 1;
-			worldObj.checkLight(pos);
+			world.checkLight(pos);
 			return true;
 		default:
 			return false;
@@ -290,8 +292,8 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public int fill(FluidStack resource, boolean doFill) {
 		if(doFill) {
 			this.markDirty();
-			IBlockState stat = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 		}
 		return this.waterTank.fill(resource, doFill);
 	}
@@ -300,8 +302,8 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		if(doDrain) {
 			this.markDirty();
-			IBlockState stat = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 		}
 		return this.waterTank.drain(resource, doDrain);
 	}
@@ -310,8 +312,8 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		if(doDrain) {
 			this.markDirty();
-			IBlockState stat = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 		}
 		return this.waterTank.drain(maxDrain, doDrain);
 	}

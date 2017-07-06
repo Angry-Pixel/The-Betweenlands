@@ -1,7 +1,9 @@
 package thebetweenlands.common.world.biome;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -16,6 +18,7 @@ import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
@@ -45,8 +48,8 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new SiltBeachFeature(0.98F))
 		.setDecorator(new BiomeDecoratorSwamplands(this));
 		this.setFoliageColors(0x2AFF00, 0x2AFF00);
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
+		GameRegistry.register(this.setRegistryName(new ResourceLocation(ModInfo.ID, this.getBiomeName())));
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
 	}
 
 	@Override

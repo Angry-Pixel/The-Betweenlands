@@ -88,7 +88,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 			Particle.interpPosX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * (double)partialTicks;
 			Particle.interpPosY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * (double)partialTicks;
 			Particle.interpPosZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * (double)partialTicks;
-			Particle.field_190016_K = viewer.getLook(partialTicks);
+			Particle.cameraViewDir = viewer.getLook(partialTicks);
 
 			for(Object particle : particleList){
 				ParticleWisp wisp = (ParticleWisp) particle;

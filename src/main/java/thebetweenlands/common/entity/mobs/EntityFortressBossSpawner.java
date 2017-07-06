@@ -111,7 +111,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if(!this.worldObj.isRemote && (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
+		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
 			this.setDead();
 			return;
 		}
@@ -122,7 +122,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 
 		super.onUpdate();
 
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			Entity owner = this.getOwner();
 			if(owner != null) {
 				for(int i = 0; i < 3; i++) {
@@ -132,7 +132,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 					double ex = owner.posX + (this.rand.nextDouble() - 0.5D) * (double)owner.width;
 					double ey = owner.posY + this.rand.nextDouble() * (double)owner.height - 0.25D;
 					double ez = owner.posZ + (this.rand.nextDouble() - 0.5D) * (double)owner.width;
-					this.worldObj.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
+					this.world.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
 				}
 			}
 		}
@@ -140,8 +140,8 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		if(this.spawnDelay > 0) {
 			this.spawnDelay--;
 		} else {
-			if(!this.worldObj.isRemote) {
-				EntityWight wight = new EntityWight(this.worldObj);
+			if(!this.world.isRemote) {
+				EntityWight wight = new EntityWight(this.world);
 				wight.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 				wight.setCanTurnVolatile(false);
 				wight.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
@@ -149,7 +149,7 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 				if(this.getOwner() instanceof EntityLiving) {
 					wight.setAttackTarget(((EntityLiving)this.getOwner()).getAttackTarget());
 				}
-				this.worldObj.spawnEntityInWorld(wight);
+				this.world.spawnEntity(wight);
 				this.setDead();
 			} else {
 				for(int i = 0; i < 6; i++) {
@@ -167,14 +167,14 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		final double cy = this.posY + 0.35D;
 		final double cz = this.posZ;
 		for(int i = 0; i < 8; i++) {
-			double px = this.worldObj.rand.nextFloat() * 0.7F;
-			double py = this.worldObj.rand.nextFloat() * 0.7F;
-			double pz = this.worldObj.rand.nextFloat() * 0.7F;
+			double px = this.world.rand.nextFloat() * 0.7F;
+			double py = this.world.rand.nextFloat() * 0.7F;
+			double pz = this.world.rand.nextFloat() * 0.7F;
 			Vec3d vec = new Vec3d(px, py, pz).subtract(new Vec3d(0.35F, 0.35F, 0.35F)).normalize();
 			px = cx + vec.xCoord * radius;
 			py = cy + vec.yCoord * radius;
 			pz = cz + vec.zCoord * radius;
-			BLParticles.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz);
+			BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
 		}
 	}
 

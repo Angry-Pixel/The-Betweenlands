@@ -23,7 +23,7 @@ public class MessageRemoveSharedStorage extends MessageBase {
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		PacketBuffer packetBuffer = new PacketBuffer(buf);
-		this.id = packetBuffer.readStringFromBuffer(128);
+		this.id = packetBuffer.readString(128);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class MessageRemoveSharedStorage extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		SharedStorage loadedStorage = worldStorage.getSharedStorage(this.id);
 		if(loadedStorage != null) {

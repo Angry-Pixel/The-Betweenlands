@@ -322,7 +322,7 @@ public class MobSpawnHandler {
 		//Add valid chunks
 		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
 			//Don't load chunks
-			if(world.isBlockLoaded(new BlockPos(chunkPos.chunkXPos * 16, 64, chunkPos.chunkZPos * 16))) {
+			if(world.isBlockLoaded(new BlockPos(chunkPos.x * 16, 64, chunkPos.z * 16))) {
 				spawnerChunks.add(chunkPos);
 			}
 		}
@@ -360,7 +360,7 @@ public class MobSpawnHandler {
 		spawnLoop:
 			while(attempts++ < attemptsPerChunk && chunkSpawnedEntities < maxSpawnsPerChunk) {
 				BlockPos spawnPos = this.getRandomSpawnPosition(world, chunkPos);
-				Biome biome = world.getBiomeGenForCoords(spawnPos);
+				Biome biome = world.getBiome(spawnPos);
 
 				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof BiomeBetweenlands == false) 
 					continue;
@@ -410,10 +410,10 @@ public class MobSpawnHandler {
 				int desiredGroupSize = spawnEntry.getMinGroupSize() + world.rand.nextInt(spawnEntry.getMaxGroupSize() - spawnEntry.getMinGroupSize() + 1);
 				double groupCheckRadius = spawnEntry.spawnCheckRadius;
 				//Check whether chunks are loaded in the check radius, prevents entities from spawning somewhere even though the group limit was already reached in an unloaded chunk
-				int csx = MathHelper.floor_double((spawnPos.getX() - groupCheckRadius) / 16.0D);
-				int cex = MathHelper.floor_double((spawnPos.getX() + groupCheckRadius) / 16.0D);
-				int csz = MathHelper.floor_double((spawnPos.getZ() - groupCheckRadius) / 16.0D);
-				int cez = MathHelper.floor_double((spawnPos.getZ() + groupCheckRadius) / 16.0D);
+				int csx = MathHelper.floor((spawnPos.getX() - groupCheckRadius) / 16.0D);
+				int cex = MathHelper.floor((spawnPos.getX() + groupCheckRadius) / 16.0D);
+				int csz = MathHelper.floor((spawnPos.getZ() - groupCheckRadius) / 16.0D);
+				int cez = MathHelper.floor((spawnPos.getZ() + groupCheckRadius) / 16.0D);
 				for (int cx = csx; cx <= cex; ++cx) {
 					for (int cz = csz; cz <= cez; ++cz) {
 						if(world.getChunkProvider().getLoadedChunk(cx, cz) == null) {
@@ -457,9 +457,9 @@ public class MobSpawnHandler {
 					}
 
 					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
-						BlockPos entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor_double(groupSpawnRadius));
+						BlockPos entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor(groupSpawnRadius));
 
-						boolean inChunk = (entitySpawnPos.getX() >> 4) == chunkPos.chunkXPos && (entitySpawnPos.getZ() >> 4) == chunkPos.chunkZPos;
+						boolean inChunk = (entitySpawnPos.getX() >> 4) == chunkPos.x && (entitySpawnPos.getZ() >> 4) == chunkPos.z;
 
 						if(!loadChunks && !inChunk)
 							continue;
@@ -495,7 +495,7 @@ public class MobSpawnHandler {
 							//Entity reached chunk limit
 							continue;
 
-						IBlockState surfaceBlockState = spawnChunk.getBlockState(entitySpawnPos.getX() - spawnChunk.xPosition * 16, entitySpawnPos.getY() - 1, entitySpawnPos.getZ() - spawnChunk.zPosition * 16);
+						IBlockState surfaceBlockState = spawnChunk.getBlockState(entitySpawnPos.getX() - spawnChunk.x * 16, entitySpawnPos.getY() - 1, entitySpawnPos.getZ() - spawnChunk.z * 16);
 
 						if(spawnEntry.canSpawn(world, spawnChunk, entitySpawnPos, spawnBlockState, surfaceBlockState)) {
 							double sx = entitySpawnPos.getX() + 0.5D;
@@ -515,7 +515,7 @@ public class MobSpawnHandler {
 									NBTTagCompound entityNBT = newEntity.getEntityData();
 									entityNBT.setBoolean("naturallySpawned", true);
 
-									world.spawnEntityInWorld(newEntity);
+									world.spawnEntity(newEntity);
 
 									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz)) {
 										newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), null);
@@ -537,9 +537,9 @@ public class MobSpawnHandler {
 	}
 
 	private BlockPos getRandomSpawnPosition(World world, ChunkPos chunkPos) {
-		Chunk chunk = world.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
-		int x = chunkPos.chunkXPos * 16 + world.rand.nextInt(16);
-		int z = chunkPos.chunkZPos * 16 + world.rand.nextInt(16);
+		Chunk chunk = world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z);
+		int x = chunkPos.x * 16 + world.rand.nextInt(16);
+		int z = chunkPos.z * 16 + world.rand.nextInt(16);
 		int y = Math.min(world.rand.nextInt(chunk == null ? world.getActualHeight() : chunk.getTopFilledSegment() + 16 - 1), 256);
 		return new BlockPos(x, y, z);
 	}
@@ -547,7 +547,7 @@ public class MobSpawnHandler {
 	private BlockPos getRandomSpawnPosition(World world, BlockPos centerPos, int radius) {
 		return new BlockPos(
 				centerPos.getX() + world.rand.nextInt(radius*2) - radius,
-				MathHelper.clamp_int(centerPos.getY() + world.rand.nextInt(4) - 2, 1, world.getHeight()),
+				MathHelper.clamp(centerPos.getY() + world.rand.nextInt(4) - 2, 1, world.getHeight()),
 				centerPos.getZ() + world.rand.nextInt(radius*2) - radius);
 	}
 
@@ -580,8 +580,8 @@ public class MobSpawnHandler {
 
 		for (EntityPlayer entityplayer : world.playerEntities) {
 			if (!entityplayer.isSpectator()) {
-				int cx = MathHelper.floor_double(entityplayer.posX / 16.0D);
-				int cz = MathHelper.floor_double(entityplayer.posZ / 16.0D);
+				int cx = MathHelper.floor(entityplayer.posX / 16.0D);
+				int cz = MathHelper.floor(entityplayer.posZ / 16.0D);
 
 				for (int xo = -SPAWN_CHUNK_RANGE; xo <= SPAWN_CHUNK_RANGE; ++xo) {
 					for (int zo = -SPAWN_CHUNK_RANGE; zo <= SPAWN_CHUNK_RANGE; ++zo) {
@@ -590,7 +590,7 @@ public class MobSpawnHandler {
 
 						if (!this.eligibleChunksForSpawning.contains(chunkpos)) {
 							if (!isBorder && world.getWorldBorder().contains(chunkpos)) {
-								PlayerChunkMapEntry playerchunkmapentry = world.getPlayerChunkMap().getEntry(chunkpos.chunkXPos, chunkpos.chunkZPos);
+								PlayerChunkMapEntry playerchunkmapentry = world.getPlayerChunkMap().getEntry(chunkpos.x, chunkpos.z);
 
 								if (playerchunkmapentry != null && playerchunkmapentry.isSentToPlayers()) {
 									this.eligibleChunksForSpawning.add(chunkpos);
@@ -608,8 +608,8 @@ public class MobSpawnHandler {
 	private void updateEntityCounts(World world) {
 		this.entityCounts.clear();
 		for(ChunkPos chunkPos : this.eligibleChunksForSpawning) {
-			if(world.getChunkProvider().getLoadedChunk(chunkPos.chunkXPos, chunkPos.chunkZPos) != null) {
-				Chunk chunk = world.getChunkFromChunkCoords(chunkPos.chunkXPos, chunkPos.chunkZPos);
+			if(world.getChunkProvider().getLoadedChunk(chunkPos.x, chunkPos.z) != null) {
+				Chunk chunk = world.getChunkFromChunkCoords(chunkPos.x, chunkPos.z);
 				ClassInheritanceMultiMap<Entity>[] entityLists = chunk.getEntityLists();
 				for(ClassInheritanceMultiMap<Entity> entityList : entityLists) {
 					for(Entity entity : entityList) {

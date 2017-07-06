@@ -60,13 +60,13 @@ public class ContainerMortar  extends Container {
                         return null;
             } else if (!mergeItemStack(stack1, 4, inventorySlots.size(), false))
                 return null;
-            if (stack1.stackSize == 0)
+            if (stack1.getCount() == 0)
                 slot.putStack(null);
             else
 
                 slot.onSlotChanged();
-            if (stack1.stackSize != stack.stackSize)
-                slot.onPickupFromSlot(player, stack1);
+            if (stack1.getCount() != stack.getCount())
+                slot.onTake(player, stack1);
             else
                 return null;
         }

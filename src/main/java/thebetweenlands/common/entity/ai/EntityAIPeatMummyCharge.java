@@ -20,7 +20,7 @@ public class EntityAIPeatMummyCharge extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return this.mummy.getAttackTarget() != null;
 	}
 
@@ -49,6 +49,6 @@ public class EntityAIPeatMummyCharge extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		this.chargingTime = 0;
-		this.chargingCooldown = this.mummy.getMaxChargingCooldown() + this.mummy.worldObj.rand.nextInt(this.mummy.getMaxChargingCooldown() / 2 + 1);
+		this.chargingCooldown = this.mummy.getMaxChargingCooldown() + this.mummy.world.rand.nextInt(this.mummy.getMaxChargingCooldown() / 2 + 1);
 	}
 }

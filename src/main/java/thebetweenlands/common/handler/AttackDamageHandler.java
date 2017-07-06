@@ -82,13 +82,13 @@ public class AttackDamageHandler {
 
 	@SideOnly(Side.CLIENT)
 	public static void spawnPowerRingParticles(Entity entityHit) {
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX + entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(0.08D, 0.05D, 0));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ + entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, 0.05D, 0.08D));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX - entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(-0.08D, 0.05D, 0));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ - entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, 0.05D, -0.08D));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX + entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(0.08D, -0.05D, 0));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ + entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, -0.05D, 0.08D));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX - entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(-0.08D, -0.05D, 0));
-		BLParticles.GREEN_FLAME.spawn(entityHit.worldObj, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ - entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, -0.05D, -0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX + entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(0.08D, 0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ + entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, 0.05D, 0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX - entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(-0.08D, 0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ - entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, 0.05D, -0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX + entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(0.08D, -0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ + entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, -0.05D, 0.08D));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX - entityHit.width / 2.0D, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ, ParticleArgs.get().withMotion(-0.08D, -0.05D, 0));
+		BLParticles.GREEN_FLAME.spawn(entityHit.world, entityHit.posX, entityHit.posY + entityHit.height / 2.0D + 0.5D, entityHit.posZ - entityHit.width / 2.0D, ParticleArgs.get().withMotion(0, -0.05D, -0.08D));
 	}
 }

@@ -38,7 +38,8 @@ public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    	ItemStack itemStack = player.getHeldItem(hand);
         player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_HL, world, (int) player.posX, (int) player.posY, (int) player.posZ);
         return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
     }

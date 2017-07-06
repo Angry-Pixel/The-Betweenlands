@@ -194,14 +194,14 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		if (world.getBlockState(pos.up()).getBlock() instanceof BlockSwampWater)
 		{
 			boolean flag =
-					isBlockSolid(world, pos.add( 0,  0, -1), EnumFacing.NORTH) ||
-					isBlockSolid(world, pos.add( 0,  0,  1), EnumFacing.SOUTH) ||
-					isBlockSolid(world, pos.add(-1,  0,  0), EnumFacing.WEST) ||
-					isBlockSolid(world, pos.add( 1,  0,  0), EnumFacing.EAST) ||
-					isBlockSolid(world, pos.add( 0,  1, -1), EnumFacing.NORTH) ||
-					isBlockSolid(world, pos.add( 0,  1,  1), EnumFacing.SOUTH) ||
-					isBlockSolid(world, pos.add(-1,  1,  0), EnumFacing.WEST) ||
-					isBlockSolid(world, pos.add( 1,  1,  0), EnumFacing.EAST);
+					causesDownwardCurrent(world, pos.add( 0,  0, -1), EnumFacing.NORTH) ||
+					causesDownwardCurrent(world, pos.add( 0,  0,  1), EnumFacing.SOUTH) ||
+					causesDownwardCurrent(world, pos.add(-1,  0,  0), EnumFacing.WEST) ||
+					causesDownwardCurrent(world, pos.add( 1,  0,  0), EnumFacing.EAST) ||
+					causesDownwardCurrent(world, pos.add( 0,  1, -1), EnumFacing.NORTH) ||
+					causesDownwardCurrent(world, pos.add( 0,  1,  1), EnumFacing.SOUTH) ||
+					causesDownwardCurrent(world, pos.add(-1,  1,  0), EnumFacing.WEST) ||
+					causesDownwardCurrent(world, pos.add( 1,  1,  0), EnumFacing.EAST);
 
 			if (flag)
 			{
@@ -379,7 +379,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 					{
 						world.setBlockState(pos, state.withProperty(LEVEL, quantaPerBlock - expQuanta), 2);
 						world.scheduleUpdate(pos, this, tickRate);
-						world.notifyNeighborsOfStateChange(pos, this);
+						world.notifyNeighborsOfStateChange(pos, this, false);
 					}
 				}
 			}
@@ -428,7 +428,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		if(blockState.getBlock() instanceof BlockSwampWater && ((BlockSwampWater)blockState.getBlock()).isUnderwaterBlock)
 			return blockState.getBoundingBox(worldIn, pos);
 		return null;
@@ -475,7 +475,7 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		int b = 0;
 		for (int dx = -1; dx <= 1; dx++) {
 			for (int dz = -1; dz <= 1; dz++) {
-				int colorMultiplier = worldIn.getBiomeGenForCoords(pos.add(dx, 0, dz)).getWaterColorMultiplier();
+				int colorMultiplier = worldIn.getBiome(pos.add(dx, 0, dz)).getWaterColorMultiplier();
 				r += (colorMultiplier & 0xFF0000) >> 16; g += (colorMultiplier & 0x00FF00) >> 8; b += colorMultiplier & 0x0000FF;
 			}
 		}

@@ -1,7 +1,9 @@
 package thebetweenlands.common.world.biome;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
@@ -9,6 +11,7 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -28,8 +31,8 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		.addFeature(new DeepWatersFeature())
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WATER);
+		GameRegistry.register(this.setRegistryName(new ResourceLocation(ModInfo.ID, this.getBiomeName())));
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WATER);
 	}
 
 	@Override

@@ -49,15 +49,6 @@ public class CompostRecipeCategory implements IRecipeCategory {
     }
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {
-
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-    }
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 0, 1);
         recipeLayout.getItemStacks().init(1, false, 42, 1);

@@ -24,7 +24,7 @@ archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
 
 minecraft {
-    version = "1.10.2-12.18.3.2239"
+    version = "1.11.2-13.20.0.2309"
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '${mcversion}', project.minecraft.version
@@ -35,7 +35,7 @@ minecraft {
     // stable_#            stables are built at the discretion of the MCP team.
     // Use non-default mappings at your own risk. they may not allways work.
     // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20160518"
+    mappings = "snapshot_20170527"
     makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
@@ -166,5 +166,5 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.10.2:3.14.7.414:api"
+    deobfCompile "mezz.jei:jei_1.11.2:4.3.6.282:api"
 }

@@ -25,7 +25,7 @@ public class ItemMob extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (world.isRemote) return EnumActionResult.FAIL;
 		EntityLiving entity = null;
 		switch (name) {
@@ -37,11 +37,12 @@ public class ItemMob extends Item {
 				break;
 		}
 		if (entity != null) {
+			ItemStack stack = player.getHeldItem(hand);
 			BlockPos offset = pos.offset(facing);
 			entity.setLocationAndAngles(offset.getX() + 0.5F, offset.getY(), offset.getZ() + 0.5F, 0.0F, 0.0F);
 			if (!(stack.getDisplayName().equals(TranslationHelper.translateToLocal(stack.getUnlocalizedName()))) && stack.hasDisplayName())
 				entity.setCustomNameTag(stack.getDisplayName());
-			world.spawnEntityInWorld(entity);
+			world.spawnEntity(entity);
 			entity.playLivingSound();
 			player.setHeldItem(hand, null);
 			return EnumActionResult.SUCCESS;

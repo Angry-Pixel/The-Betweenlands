@@ -17,7 +17,8 @@ public class ItemRope extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = playerIn.getHeldItem(hand);
 		if(worldIn.getBlockState(pos).getBlock() == BlockRegistry.ROPE || worldIn.getBlockState(pos.down()).getBlock() == BlockRegistry.ROPE) {
 			BlockPos offsetPos = pos.down();
 
@@ -34,7 +35,7 @@ public class ItemRope extends Item {
 					worldIn.setBlockState(offsetPos, BlockRegistry.ROPE.getDefaultState());
 
 					if(!playerIn.isCreative()) {
-						stack.stackSize--;
+						stack.shrink(1);
 					}
 				}
 
@@ -45,7 +46,7 @@ public class ItemRope extends Item {
 				worldIn.setBlockState(pos.down(), BlockRegistry.ROPE.getDefaultState());
 
 				if(!playerIn.isCreative()) {
-					stack.stackSize--;
+					stack.shrink(1);
 				}
 			}
 

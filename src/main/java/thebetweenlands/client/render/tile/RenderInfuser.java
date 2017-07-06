@@ -36,7 +36,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 	public void renderTileEntityAt(TileEntityInfuser infuser, double x, double y, double z, float partialTickTime, int destroyStage) {
 		bindTexture(TEXTURE);
 
-		if(infuser == null || !infuser.hasWorldObj()) {
+		if(infuser == null || !infuser.hasWorld()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate((float) 0.5F, (float) 1.5F, (float) 0.5F);
 			GlStateManager.scale(1F, -1F, -1F);
@@ -173,7 +173,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		VertexBuffer vb = tessellator.getBuffer();
 
 		vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
 		int width = fontrenderer.getStringWidth(count) / 2;
 		vb.pos(-width - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 		vb.pos(-width - 1, 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();

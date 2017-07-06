@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.MCVersion;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin.TransformerExclusions;
 
 @TransformerExclusions({ "thebetweenlands.core." })
-@MCVersion("1.10.2")
+@MCVersion("1.11.2")
 public class TheBetweenlandsLoadingPlugin implements IFMLLoadingPlugin {
 	@Override
 	public String[] getASMTransformerClass() {

@@ -44,8 +44,8 @@ public class SharedStorageReference {
 	 */
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setString("id", this.id);
-		nbt.setInteger("x", this.chunkPos.chunkXPos);
-		nbt.setInteger("z", this.chunkPos.chunkZPos);
+		nbt.setInteger("x", this.chunkPos.x);
+		nbt.setInteger("z", this.chunkPos.z);
 		if(this.region != null) {
 			nbt.setTag("region", this.region.writeToNBT(new NBTTagCompound()));
 		}

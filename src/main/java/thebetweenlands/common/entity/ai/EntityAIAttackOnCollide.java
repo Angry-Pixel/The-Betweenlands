@@ -17,7 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityAIAttackOnCollide extends EntityAIBase {
-	protected World worldObj;
+	protected World world;
 	protected EntityLiving attacker;
 
 	/** An amount of decrementing ticks that allows the entity to attack once the tick reaches 0. */
@@ -31,7 +31,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 
 	public EntityAIAttackOnCollide(EntityLiving entity, boolean useStandardAttack) {
 		this.attacker = entity;
-		this.worldObj = entity.worldObj;
+		this.world = entity.world;
 		this.useStandardAttack = useStandardAttack;
 	}
 
@@ -41,7 +41,7 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return this.attacker.getAttackTarget() != null && this.attacker.getAttackTarget().isEntityAlive();
 	}
 
@@ -116,9 +116,9 @@ public class EntityAIAttackOnCollide extends EntityAIBase {
 				if (attackerItem != null && defenderItem != null && attackerItem.getItem() instanceof ItemAxe && defenderItem.getItem() == Items.SHIELD) {
 					float efficiencyModifier = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
 
-					if (attacker.worldObj.rand.nextFloat() < efficiencyModifier) {
+					if (attacker.world.rand.nextFloat() < efficiencyModifier) {
 						entityplayer.getCooldownTracker().setCooldown(Items.SHIELD, 100);
-						attacker.worldObj.setEntityState(entityplayer, (byte)30);
+						attacker.world.setEntityState(entityplayer, (byte)30);
 					}
 				}
 			}

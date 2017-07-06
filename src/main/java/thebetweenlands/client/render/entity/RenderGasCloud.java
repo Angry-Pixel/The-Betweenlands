@@ -84,7 +84,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 				particle.setRBGColorF(gasColor[0] / 255.0F * fade, gasColor[1] / 255.0F * fade, gasColor[2] / 255.0F * fade);
 			}
 
-			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,
+			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().player, partialTicks,
 					ActiveRenderInfo.getRotationX(),
 					ActiveRenderInfo.getRotationXZ(),
 					ActiveRenderInfo.getRotationZ(),

@@ -18,7 +18,7 @@ public class EntityAIHurtByTargetDruid extends EntityAIHurtByTarget {
 	}
 
 	@Override
-	public boolean continueExecuting() {
-		return super.continueExecuting() && (druid.getAttackCounter() != 0 || druid.getAttackTarget().onGround);
+	public boolean shouldContinueExecuting() {
+		return super.shouldContinueExecuting() && (druid.getAttackCounter() != 0 || druid.getAttackTarget().onGround);
 	}
 }

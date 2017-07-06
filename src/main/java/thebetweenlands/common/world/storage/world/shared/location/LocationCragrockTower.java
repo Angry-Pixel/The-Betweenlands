@@ -490,7 +490,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 						fallingBlock.fallTime = -60;
 						fallingBlock.shouldDropItem = false;
 						fallingBlock.setHurtEntities(true);
-						world.spawnEntityInWorld(fallingBlock);
+						world.spawnEntity(fallingBlock);
 
 						world.playSound(null, pos, SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.2F, 0.5F + world.rand.nextFloat() * 0.4F);
 					}
@@ -506,12 +506,12 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	protected BlockPos getRandomPosInTower() {
 		AxisAlignedBB innerBB = this.getInnerBoundingBox().expand(-1, -1, -1);
 
-		int x = MathHelper.ceiling_double_int(innerBB.minX);
-		int y = MathHelper.ceiling_double_int(innerBB.minY);
-		int z = MathHelper.ceiling_double_int(innerBB.minZ);
-		int width = MathHelper.floor_double(innerBB.maxX) - x;
-		int height = MathHelper.floor_double(innerBB.maxY) - y;
-		int depth = MathHelper.floor_double(innerBB.maxZ) - z;
+		int x = MathHelper.ceil(innerBB.minX);
+		int y = MathHelper.ceil(innerBB.minY);
+		int z = MathHelper.ceil(innerBB.minZ);
+		int width = MathHelper.floor(innerBB.maxX) - x;
+		int height = MathHelper.floor(innerBB.maxY) - y;
+		int depth = MathHelper.floor(innerBB.maxZ) - z;
 
 		World world = this.getWorldStorage().getWorld();
 

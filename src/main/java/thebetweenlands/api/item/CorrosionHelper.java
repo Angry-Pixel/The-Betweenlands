@@ -127,7 +127,7 @@ public class CorrosionHelper {
 	 */
 	public static Multimap<String, AttributeModifier> getAttributeModifiers(Multimap<String, AttributeModifier> map, EntityEquipmentSlot slot, ItemStack stack, UUID uuid, float damageVsEntity) {
 		if(slot == EntityEquipmentSlot.MAINHAND) {
-			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
+			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
 		}
 		return map;
 	}

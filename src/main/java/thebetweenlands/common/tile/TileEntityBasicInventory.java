@@ -1,5 +1,7 @@
 package thebetweenlands.common.tile;
 
+import java.util.ArrayList;
+
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -7,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -14,14 +17,14 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
 	private final String name;
-	protected ItemStack[] inventory;
+	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
 	public TileEntityBasicInventory(int invtSize, String name) {
-		this.inventoryHandler = new ItemStackHandler(this.inventory = new ItemStack[invtSize]) {
+		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
-				this.stacks = TileEntityBasicInventory.this.inventory = new ItemStack[size];
+				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(size, ItemStack.EMPTY);
 			}
 
 			@Override
@@ -102,7 +105,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
+	public final boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
@@ -185,7 +188,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		this.accessSlot(index);
-		return this.inventoryHandler.extractItem(index, this.inventoryHandler.getStackInSlot(index) != null ? this.inventoryHandler.getStackInSlot(index).stackSize : 0, false);
+		return this.inventoryHandler.extractItem(index, this.inventoryHandler.getStackInSlot(index) != null ? this.inventoryHandler.getStackInSlot(index).getCount() : 0, false);
 	}
 
 	@Override
@@ -225,5 +228,17 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 			return (T) this.inventoryHandler;
 		}
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemstack : this.inventory) {
+			if (!itemstack.isEmpty())
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

@@ -9,6 +9,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -62,8 +63,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 	}
 
 	private Entity getEntityByUUID(UUID id) {
-		for (int i = 0; i < worldObj.loadedEntityList.size(); ++i) {
-			Entity entity = (Entity)worldObj.loadedEntityList.get(i);
+		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+			Entity entity = (Entity)world.loadedEntityList.get(i);
 			if (id.equals(entity.getUniqueID())) {
 				return entity;
 			}
@@ -73,7 +74,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 
 	@Override
 	public void onUpdate() {
-		this.worldObj.theProfiler.startSection("entityBaseTick");
+		this.world.profiler.startSection("entityBaseTick");
 
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
@@ -90,8 +91,8 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			} else {
 				this.motionY -= 0.05D;
 
-				if(!this.worldObj.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
-					this.kill();
+				if(!this.world.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
+					this.outOfWorld();
 				}
 			}
 		} else {
@@ -99,25 +100,25 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		}
 
 		if(this.posY < -64.0D) {
-			this.kill();
+			this.outOfWorld();
 		}
 
 		if(this.posY + this.motionY <= this.origin.getY()) {
 			this.motionY = 0.0D;
 			this.setLocationAndAngles(this.posX, this.origin.getY(), this.posZ, 0, 0);
 		} else {
-			this.moveEntity(0, this.motionY, 0);
+			this.move(MoverType.SELF, 0, this.motionY, 0);
 		}
 
-		if(this.motionY > 0.1D && !this.worldObj.isRemote) {
+		if(this.motionY > 0.1D && !this.world.isRemote) {
 			DamageSource damageSource;
 			Entity owner = getOwner();
 			if(owner != null) {
 				damageSource = new EntityDamageSourceIndirect("player", this, owner);
 			} else {
-				damageSource = DamageSource.generic;
+				damageSource = DamageSource.GENERIC;
 			}
-			List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D));
+			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D));
 			for(EntityLivingBase entity : entities) {
 				if (entity != null) {
 					if (entity instanceof EntityLivingBase) {
@@ -135,7 +136,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		}
 
 		this.firstUpdate = false;
-		this.worldObj.theProfiler.endSection();
+		this.world.profiler.endSection();
 	}
 
 	@Override

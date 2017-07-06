@@ -33,7 +33,7 @@ public class MessageUpdateSummoningState extends MessageBase {
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
+			EntityPlayer player = ctx.getServerHandler().player;
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
 				ISummoningCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
 
@@ -43,7 +43,7 @@ public class MessageUpdateSummoningState extends MessageBase {
 				} else if(this.active && !cap.isActive() && cap.getCooldownTicks() <= 0 && ItemRingOfSummoning.isRingActive(player)) {
 					cap.setActive(true);
 					cap.setActiveTicks(0);
-					player.worldObj.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.PEAT_MUMMY_CHARGE, SoundCategory.PLAYERS, 0.4F, (player.worldObj.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
+					player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.PEAT_MUMMY_CHARGE, SoundCategory.PLAYERS, 0.4F, (player.world.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 				}
 			}
 		}

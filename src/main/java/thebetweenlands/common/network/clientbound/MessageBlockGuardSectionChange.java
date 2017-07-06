@@ -34,7 +34,7 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
-		this.id = buf.readStringFromBuffer(256);
+		this.id = buf.readString(256);
 		this.pos = BlockPos.fromLong(buf.readLong());
 		if(!buf.readBoolean()) {
 			this.data = buf.readByteArray(512);
@@ -66,7 +66,7 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		SharedStorage storage = worldStorage.getSharedStorage(this.id);
 		if(storage != null && storage instanceof LocationGuarded) {

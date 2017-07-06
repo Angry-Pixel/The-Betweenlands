@@ -201,7 +201,7 @@ public class BlockRubberLog extends BlockLog implements IStateMappedBlock {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		state = state.getActualState(worldIn, pos);
 
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOXES[0]);

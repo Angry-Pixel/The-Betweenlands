@@ -337,7 +337,7 @@ public class AspectManager {
 	 */
 	@Nullable
 	public static AspectItem readAspectItemFromNBT(NBTTagCompound nbt) {
-		ItemStack item = nbt.hasKey("item") ? ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item")) : null;
+		ItemStack item = nbt.hasKey("item") ? new ItemStack(nbt.getCompoundTag("item")) : null;
 		if(item == null)
 			return null;
 		return AspectManager.getAspectItem(item);

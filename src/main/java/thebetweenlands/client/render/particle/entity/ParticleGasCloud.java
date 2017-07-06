@@ -26,8 +26,8 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 		posZ = prevPosZ = z;
 		particleMaxAge = 60;
 		particleScale = scale;
-		field_190017_n = false; //Collision
-		field_190015_G = field_190014_F = startRotation; //Rotation
+		canCollide = false; //Collision
+		prevParticleAngle = particleAngle = startRotation; //Rotation
 		if(startRotation < 0.0F) {
 			rotateReversed = true;
 		}
@@ -52,12 +52,12 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 		int lightmapY = brightness & 65535;
 		Vec3d[] scaledRotations = new Vec3d[] {new Vec3d((double)(-rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double)(-rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(rotationYZ * scale - rotationXZ * scale))};
 
-		if (this.field_190014_F != 0.0F) {
-			float interpRoll = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+		if (this.particleAngle != 0.0F) {
+			float interpRoll = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float f9 = MathHelper.cos(interpRoll * 0.5F);
-			float f10 = MathHelper.sin(interpRoll * 0.5F) * (float)field_190016_K.xCoord;
-			float f11 = MathHelper.sin(interpRoll * 0.5F) * (float)field_190016_K.yCoord;
-			float f12 = MathHelper.sin(interpRoll * 0.5F) * (float)field_190016_K.zCoord;
+			float f10 = MathHelper.sin(interpRoll * 0.5F) * (float)cameraViewDir.xCoord;
+			float f11 = MathHelper.sin(interpRoll * 0.5F) * (float)cameraViewDir.yCoord;
+			float f12 = MathHelper.sin(interpRoll * 0.5F) * (float)cameraViewDir.zCoord;
 			Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
 
 			for (int l = 0; l < 4; ++l) {
@@ -86,8 +86,8 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.field_190015_G = this.field_190014_F;
-		this.field_190014_F += this.rotateReversed ? -0.015F : 0.015F;
+		this.prevParticleAngle = this.particleAngle;
+		this.particleAngle += this.rotateReversed ? -0.015F : 0.015F;
 	}
 
 	@Override

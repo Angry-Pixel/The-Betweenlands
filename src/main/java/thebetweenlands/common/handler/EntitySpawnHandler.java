@@ -38,7 +38,7 @@ public class EntitySpawnHandler {
 	public static void onEntitySpawn(EntityJoinWorldEvent event) {
 		Entity entity = event.getEntity();
 
-		if (!entity.worldObj.isRemote) {
+		if (!entity.world.isRemote) {
 			//Add gem modifier to arrows
 			if (entity instanceof EntityArrow) {
 				EntityArrow entityArrow = (EntityArrow) entity;
@@ -57,8 +57,8 @@ public class EntitySpawnHandler {
 			}
 
 			//Random chance for spawned mobs to have an amulet
-			if (AMULET_SPAWNS.contains(entity.getClass()) && entity.getEntityData() != null && entity.worldObj.rand.nextInt(AMULET_SPAWN_CHANCE) == 0) {
-				CircleGemType gem = CircleGemType.TYPES[entity.worldObj.rand.nextInt(CircleGemType.TYPES.length - 1)];
+			if (AMULET_SPAWNS.contains(entity.getClass()) && entity.getEntityData() != null && entity.world.rand.nextInt(AMULET_SPAWN_CHANCE) == 0) {
+				CircleGemType gem = CircleGemType.TYPES[entity.world.rand.nextInt(CircleGemType.TYPES.length - 1)];
 				ItemAmulet.addAmulet(gem, entity, false, false);
 			}
 		}

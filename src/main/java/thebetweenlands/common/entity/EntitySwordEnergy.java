@@ -58,9 +58,9 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 		super.onUpdate();
 		pulseFloat = pulse.swing(0.3F, 0.75F, false);
 		motionY = 0;
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if(ticksExisted%140 == 0)
-				worldObj.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_ORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_ORB, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 			if (getSwordPart1Pos() > 0 && getSwordPart1Pos() < 3.5F)
 				setSwordPart1Pos(getSwordPart1Pos() - 0.05F);
@@ -75,12 +75,12 @@ public class EntitySwordEnergy extends Entity implements IEntityAdditionalSpawnD
 				setSwordPart4Pos(getSwordPart4Pos() - 0.05F);
 
 			if (getSwordPart1Pos() <= 0 && getSwordPart2Pos() <= 0 && getSwordPart3Pos() <= 0 && getSwordPart4Pos() <= 0) {
-				worldObj.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_SWORD, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				EntityItem entityItem = new EntityShockwaveSwordItem(worldObj, posX, posY, posZ, new ItemStack(ItemRegistry.SHOCKWAVE_SWORD));
+				world.playSound(null, posX, posY, posZ, SoundRegistry.FORTRESS_PUZZLE_SWORD, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				EntityItem entityItem = new EntityShockwaveSwordItem(world, posX, posY, posZ, new ItemStack(ItemRegistry.SHOCKWAVE_SWORD));
 				entityItem.motionX = 0;
 				entityItem.motionY = 0;
 				entityItem.motionZ = 0;
-				worldObj.spawnEntityInWorld(entityItem);
+				world.spawnEntity(entityItem);
 				setDead();
 			}
 		} else {

@@ -28,7 +28,7 @@ public class EventAmbienceType extends AmbienceType {
 
 	@Override
 	public boolean isActive() {
-		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(this.getPlayer().worldObj);
+		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(this.getPlayer().world);
 		if(worldData != null) {
 			EnvironmentEventRegistry eventRegistry = worldData.getEnvironmentEventRegistry();
 			for(EnvironmentEvent event : eventRegistry.getActiveEvents())

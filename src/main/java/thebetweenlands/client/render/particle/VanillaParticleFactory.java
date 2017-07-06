@@ -30,9 +30,9 @@ public final class VanillaParticleFactory<T extends Particle> extends ParticleFa
 		Object[] data = args.data.getAll();
 		if(data.length > 1) {
 			int[] additionalArgs = ArrayUtils.toPrimitive(Arrays.copyOfRange(data, 1, data.length - 1, Integer[].class));
-			return (T) this.factory.getEntityFX((int)data[0], args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, additionalArgs);
+			return (T) this.factory.createParticle((int)data[0], args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, additionalArgs);
 		} else {
-			return (T) this.factory.getEntityFX((int)data[0], args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ);
+			return (T) this.factory.createParticle((int)data[0], args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ);
 		}
 	}
 

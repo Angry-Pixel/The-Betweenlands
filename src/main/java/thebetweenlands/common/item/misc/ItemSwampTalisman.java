@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -37,7 +38,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		for (EnumTalisman type : EnumTalisman.values())
 			list.add(type.create(1));
 	}
@@ -52,7 +53,8 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = playerIn.getHeldItem(hand);
 		if (!worldIn.isRemote) {
 			if (!playerIn.canPlayerEdit(pos, facing, stack)) {
 				return EnumActionResult.FAIL;
@@ -64,7 +66,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 							worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 							playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
 						} else {
-							playerIn.addChatMessage(new TextComponentTranslation("talisman.noplace"));
+							playerIn.sendMessage(new TextComponentTranslation("talisman.noplace"));
 						}
 					}
 					stack.damageItem(1, playerIn);

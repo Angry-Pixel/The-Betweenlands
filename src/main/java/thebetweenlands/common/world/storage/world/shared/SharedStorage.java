@@ -165,7 +165,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * @return True if the chunk was linked successfully
 	 */
 	public final boolean linkChunk(Chunk chunk) {
-		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
+		ChunkPos chunkPos = new ChunkPos(chunk.x, chunk.z);
 		if(!this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
 			if(chunkData != null && chunkData.linkSharedStorage(this)) {
@@ -184,7 +184,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 	 * @return True if the chunk was unlinked successfully
 	 */
 	public final boolean unlinkChunk(Chunk chunk) {
-		ChunkPos chunkPos = new ChunkPos(chunk.xPosition, chunk.zPosition);
+		ChunkPos chunkPos = new ChunkPos(chunk.x, chunk.z);
 		if(this.linkedChunks.contains(chunkPos)) {
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
 			if(chunkData != null) {
@@ -211,7 +211,7 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		ChunkPos pos = null;
 		while(it.hasNext()) {
 			pos = it.next();
-			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.chunkXPos, pos.chunkZPos);
+			Chunk chunk = this.worldStorage.getWorld().getChunkFromChunkCoords(pos.x, pos.z);
 			ChunkDataBase chunkData = ChunkDataBase.forChunk(this.worldStorage, chunk);
 			if(chunkData == null || !chunkData.unlinkSharedStorage(this)) {
 				allUnlinked = false;
@@ -297,8 +297,8 @@ public abstract class SharedStorage implements ICapabilityProvider {
 		NBTTagList referenceChunkList = new NBTTagList();
 		for(ChunkPos referenceChunk : this.linkedChunks) {
 			NBTTagCompound referenceChunkNbt = new NBTTagCompound();
-			referenceChunkNbt.setInteger("x", referenceChunk.chunkXPos);
-			referenceChunkNbt.setInteger("z", referenceChunk.chunkZPos);
+			referenceChunkNbt.setInteger("x", referenceChunk.x);
+			referenceChunkNbt.setInteger("z", referenceChunk.z);
 			referenceChunkList.appendTag(referenceChunkNbt);
 		}
 		nbt.setTag("ReferenceChunks", referenceChunkList);

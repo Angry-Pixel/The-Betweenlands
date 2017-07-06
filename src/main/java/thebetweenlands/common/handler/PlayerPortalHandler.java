@@ -37,11 +37,11 @@ public class PlayerPortalHandler {
 
 				if(cap.isInPortal()){
 					BlockPos pos = new BlockPos(player.posX, player.posY + 0.5D, player.posZ);
-					IBlockState state = player.worldObj.getBlockState(pos);
+					IBlockState state = player.world.getBlockState(pos);
 
 					boolean inPortalBlock = false;
 					if(state.getBlock() instanceof BlockTreePortal) {
-						AxisAlignedBB aabb = state.getBoundingBox(player.worldObj, pos);
+						AxisAlignedBB aabb = state.getBoundingBox(player.world, pos);
 						if(aabb != null && aabb.offset(pos).intersectsWith(player.getEntityBoundingBox())) {
 							inPortalBlock = true;
 						}
@@ -79,14 +79,14 @@ public class PlayerPortalHandler {
 			}
 		}
 
-		if(entity.worldObj.isRemote && entity == TheBetweenlands.proxy.getClientPlayer()) {
+		if(entity.world.isRemote && entity == TheBetweenlands.proxy.getClientPlayer()) {
 			updateClientPortal();
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	private static void updateClientPortal() {
-		EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayerSP player = Minecraft.getMinecraft().player;
 
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
 			IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);

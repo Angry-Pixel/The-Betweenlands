@@ -19,10 +19,10 @@ public class SlotPestle extends Slot {
     }
 
     @Override
-    public void onPickupFromSlot(EntityPlayer player, ItemStack stack) {
+    public ItemStack onTake(EntityPlayer player, ItemStack stack) {
         if (stack != null && slotNumber == 1)
             if(stack.getTagCompound().getBoolean("active"))
                 stack.getTagCompound().setBoolean("active", false);
-        super.onPickupFromSlot(player, stack);
+        return super.onTake(player, stack);
     }
 }

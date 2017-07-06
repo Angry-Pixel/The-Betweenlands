@@ -74,7 +74,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	private NoiseGeneratorPerlin surfaceNoise;
 	public NoiseGeneratorOctaves scaleNoise;
 	public NoiseGeneratorOctaves depthNoise;
-	private final World worldObj;
+	private final World world;
 	/**
 	 * Technically this isn't a heightmap, it's a 3D density map
 	 */
@@ -103,14 +103,14 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		this.layerBlock = layerBlock;
 		this.layerBlockState = layerBlock.getDefaultState();
 		this.layerHeight = layerHeight;
-		this.worldObj = world;
+		this.world = world;
 		this.seed = seed;
 		this.rand = new Random(seed);
 		this.heightMap = new double[825];
 		this.biomeWeights = new float[25];
 		for (int i = -2; i <= 2; ++i) {
 			for (int j = -2; j <= 2; ++j) {
-				float f = 10.0F / MathHelper.sqrt_float((float)(i * i + j * j) + 0.2F);
+				float f = 10.0F / MathHelper.sqrt((float)(i * i + j * j) + 0.2F);
 				this.biomeWeights[i + 2 + (j + 2) * 5] = f;
 			}
 		}
@@ -170,16 +170,16 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 		BiomeWeights biomeWeights = new BiomeWeights(this.interpolatedTerrainBiomeWeights);
 
-		this.biomesForGeneration = this.worldObj.getBiomeProvider().loadBlockGeneratorData(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
+		this.biomesForGeneration = this.world.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX * 16, chunkZ * 16, 16, 16);
 
 		this.replaceBiomeBlocks(chunkX, chunkZ, chunkprimer, this.biomesForGeneration, biomeWeights);
 
 		//Gen caves
 		this.caveGenerator.setBiomeTerrainWeights(biomeWeights);
-		this.caveGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
+		this.caveGenerator.generate(this.world, chunkX, chunkZ, chunkprimer);
 
 		//Gen ravines
-		this.ravineGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
+		this.ravineGenerator.generate(this.world, chunkX, chunkZ, chunkprimer);
 		
 		//Add biome features (post cave)
 		for(int z = 0; z < 16; z++) {
@@ -193,7 +193,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 			}
 		}
 
-		Chunk chunk = new Chunk(this.worldObj, chunkprimer, chunkX, chunkZ);
+		Chunk chunk = new Chunk(this.world, chunkprimer, chunkX, chunkZ);
 		byte[] biomeArray = chunk.getBiomeArray();
 
 		for (int i = 0; i < biomeArray.length; ++i) {
@@ -211,7 +211,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 * @param primer
 	 */
 	public void setBlocksInChunk(int chunkX, int chunkZ, ChunkPrimer primer) {
-		this.biomesForGeneration = this.worldObj.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4 - 5, chunkZ * 4 - 5, 15, 15);
+		this.biomesForGeneration = this.world.getBiomeProvider().getBiomesForGeneration(this.biomesForGeneration, chunkX * 4 - 5, chunkZ * 4 - 5, 15, 15);
 
 		this.generateHeightmap(chunkX * 4, 0, chunkZ * 4);
 
@@ -372,7 +372,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				}
 
 				//The 0 point is offset by some blocks so that the lerp doesn't cause problems later on
-				this.terrainBiomeWeights[heightMapIndex] = MathHelper.clamp_float(Math.max((nearestOtherBiomeSq - 2) / 46.0F, 0.0F), 0.0F, 1.0F);
+				this.terrainBiomeWeights[heightMapIndex] = MathHelper.clamp(Math.max((nearestOtherBiomeSq - 2) / 46.0F, 0.0F), 0.0F, 1.0F);
 
 				biomeVariation = biomeVariation / totalBiomeWeight;
 				biomeDepth = biomeDepth / totalBiomeWeight;
@@ -431,7 +431,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 					double maxDensity = (this.maxLimitRegion[noiseIndex] / maxGenDensity16) * biomeVariation / 256.0D;
 					double mainDensity = (this.mainNoiseRegion[noiseIndex] / maxGenDensity8);
 
-					this.heightMap[noiseIndex] = MathHelper.denormalizeClamp(minDensity, maxDensity, mainDensity) - densityOffset;
+					this.heightMap[noiseIndex] = MathHelper.clampedLerp(minDensity, maxDensity, mainDensity) - densityOffset;
 
 					++noiseIndex;
 				}
@@ -447,7 +447,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 	 * @param biomesIn
 	 */
 	public void replaceBiomeBlocks(int chunkX, int chunkZ, ChunkPrimer primer, Biome[] biomesIn, BiomeWeights biomeWeights) {
-		if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, chunkX, chunkZ, primer, this.worldObj))
+		if (!net.minecraftforge.event.ForgeEventFactory.onReplaceBiomeBlocks(this, chunkX, chunkZ, primer, this.world))
 			return;
 
 		this.surfaceNoiseBuffer = this.surfaceNoise.getRegion(this.surfaceNoiseBuffer, (double)(chunkX * 16), (double)(chunkZ * 16), 16, 16, 0.0625D, 0.0625D, 1.0D);
@@ -468,7 +468,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 					generator.replaceBiomeBlocks(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, this.rand, this.seed, primer, this, biomesIn, biomeWeights);
 					generator.runBiomeFeatures(chunkZ * 16 + z, chunkX * 16 + x, z, x, baseBlockNoise, primer, this, biomesIn, biomeWeights, EnumGeneratorPass.POST_REPLACE_BIOME_BLOCKS);
 				} else {
-					biome.genTerrainBlocks(this.worldObj, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
+					biome.genTerrainBlocks(this.world, this.rand, primer, chunkX * 16 + x, chunkZ * 16 + z, baseBlockNoise);
 				}
 			}
 		}
@@ -484,30 +484,30 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		int bx = x * 16;
 		int bz = z * 16;
 		BlockPos blockPos = new BlockPos(bx, 0, bz);
-		Biome biome = this.worldObj.getBiomeGenForCoords(blockPos.add(16, 0, 16));
-		this.rand.setSeed(this.worldObj.getSeed());
+		Biome biome = this.world.getBiome(blockPos.add(16, 0, 16));
+		this.rand.setSeed(this.world.getSeed());
 		long seedX = this.rand.nextLong() / 2L * 2L + 1L;
 		long seedZ = this.rand.nextLong() / 2L * 2L + 1L;
-		this.rand.setSeed((long)x * seedX + (long)z * seedZ ^ this.worldObj.getSeed());
+		this.rand.setSeed((long)x * seedX + (long)z * seedZ ^ this.world.getSeed());
 
-		ForgeEventFactory.onChunkPopulate(true, this, this.worldObj, this.rand, x, z, false);
+		ForgeEventFactory.onChunkPopulate(true, this, this.world, this.rand, x, z, false);
 
 		if(biome instanceof BiomeBetweenlands) {
 			BiomeDecoratorBetweenlands decorator = ((BiomeBetweenlands)biome).getBiomeGenerator().getDecorator();
 			if(decorator != null) {
-				decorator.decorate(this.worldObj, this, this.rand, bx, bz);
+				decorator.decorate(this.world, this, this.rand, bx, bz);
 			}
-			if(this.worldObj instanceof WorldServer) {
-				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z);
+			if(this.world instanceof WorldServer) {
+				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.world, x, z);
 			}
 		} else {
-			biome.decorate(this.worldObj, this.rand, new BlockPos(bx, 0, bz));
-			if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.worldObj, this.rand, x, z, false, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS)) {
-				WorldEntitySpawner.performWorldGenSpawning(this.worldObj, biome, bx + 8, bz + 8, 16, 16, this.rand);
+			biome.decorate(this.world, this.rand, new BlockPos(bx, 0, bz));
+			if(net.minecraftforge.event.terraingen.TerrainGen.populate(this, this.world, this.rand, x, z, false, net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType.ANIMALS)) {
+				WorldEntitySpawner.performWorldGenSpawning(this.world, biome, bx + 8, bz + 8, 16, 16, this.rand);
 			}
 		}
 
-		ForgeEventFactory.onChunkPopulate(false, this, this.worldObj, this.rand, x, z, false);
+		ForgeEventFactory.onChunkPopulate(false, this, this.world, this.rand, x, z, false);
 
 		BlockFalling.fallInstantly = false;
 	}
@@ -525,7 +525,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 
 	@Override
-	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position) {
+	public BlockPos getStrongholdGen(World worldIn, String structureName, BlockPos position,  boolean p_180513_4_) {
 		return null; //No strongholds
 	}
 

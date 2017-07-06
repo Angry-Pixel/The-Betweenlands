@@ -45,11 +45,11 @@ public class ParticleWeedwoodLeaf extends Particle implements IParticleSpriteRec
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
 		this.motionY -= 0.04D * (double)this.particleGravity;
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.9800000190734863D;
 		this.motionY *= 0.9800000190734863D;
 		this.motionZ *= 0.9800000190734863D;
-		this.isCollided = this.prevPosY == this.posY;
+		this.onGround = this.prevPosY == this.posY;
 
 		if (this.particleMaxAge-- <= 40) {
 			this.setAlphaF((float)this.particleMaxAge / 40.0F);
@@ -59,7 +59,7 @@ public class ParticleWeedwoodLeaf extends Particle implements IParticleSpriteRec
 			}
 		}
 
-		if (this.isCollided) {
+		if (this.onGround) {
 			this.motionX *= 0.699999988079071D;
 			this.motionZ *= 0.699999988079071D;
 
@@ -68,14 +68,14 @@ public class ParticleWeedwoodLeaf extends Particle implements IParticleSpriteRec
 			}
 		}
 
-		if (!this.isCollided) {
+		if (!this.onGround) {
 			this.animation.update();
 			this.setParticleTexture(this.animation.getCurrentSprite());
 		}
 	}
 
 	@Override
-	public boolean isTransparent() {
+	public boolean shouldDisableDepth() {
 		return this.particleAlpha < 1.0F;
 	}
 

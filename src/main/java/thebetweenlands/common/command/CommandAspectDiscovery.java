@@ -18,11 +18,11 @@ import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
 public class CommandAspectDiscovery extends CommandBase {
-	public String getCommandName() {
+	public String getName() {
 		return "aspectDiscovery";
 	}
 
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "/aspectDiscovery <reset|discover> <held|all>";
 	}
 
@@ -32,7 +32,7 @@ public class CommandAspectDiscovery extends CommandBase {
 	}
 
 	@Override
-	public List getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		List<String> completions = new ArrayList<String>();
 		if(args.length == 1) {
 			completions.add("reset");
@@ -68,14 +68,14 @@ public class CommandAspectDiscovery extends CommandBase {
 				AspectDiscovery discovery = mergedKnowledge.discover(manager, manager.getAspectItem(player.getHeldItemMainhand()));
 				if(discovery.discovered != null) {
 					DiscoveryContainer.addDiscoveryToContainers(player, manager.getAspectItem(player.getHeldItemMainhand()), discovery.discovered.type);
-					sender.addChatMessage(new TextComponentTranslation("command.aspectdiscovery.discover.held", new TextComponentString(discovery.result.toString()), new TextComponentString(discovery.discovered == null ? "null" : discovery.discovered.type.getName())));
+					sender.sendMessage(new TextComponentTranslation("command.aspectdiscovery.discover.held", new TextComponentString(discovery.result.toString()), new TextComponentString(discovery.discovered == null ? "null" : discovery.discovered.type.getName())));
 				}
 				break;
 			case "all":
 				List<DiscoveryContainer<?>> discoveryContainers = DiscoveryContainer.getWritableDiscoveryContainers(player);
 				for(DiscoveryContainer<?> container : discoveryContainers)
 					container.discoverAll(manager);
-				sender.addChatMessage(new TextComponentTranslation("command.aspectdiscovery.discover.all"));
+				sender.sendMessage(new TextComponentTranslation("command.aspectdiscovery.discover.all"));
 				break;
 			default:
 				throw new CommandException("commands.generic.syntax");
@@ -90,12 +90,12 @@ public class CommandAspectDiscovery extends CommandBase {
 				}
 				for(DiscoveryContainer<?> container : discoveryContainers)
 					container.resetDiscovery(manager.getAspectItem(player.getHeldItemMainhand()));
-				sender.addChatMessage(new TextComponentTranslation("command.aspectdiscovery.reset.held"));
+				sender.sendMessage(new TextComponentTranslation("command.aspectdiscovery.reset.held"));
 				break;
 			case "all":
 				for(DiscoveryContainer<?> container : discoveryContainers)
 					container.resetAllDiscovery();
-				sender.addChatMessage(new TextComponentTranslation("command.aspectdiscovery.reset.all"));
+				sender.sendMessage(new TextComponentTranslation("command.aspectdiscovery.reset.all"));
 				break;
 			default:
 				throw new CommandException("commands.generic.syntax");

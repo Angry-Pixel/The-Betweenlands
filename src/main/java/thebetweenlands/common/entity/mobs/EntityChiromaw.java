@@ -92,7 +92,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (!worldObj.isRemote && worldObj.getDifficulty() == EnumDifficulty.PEACEFUL)
+		if (!world.isRemote && world.getDifficulty() == EnumDifficulty.PEACEFUL)
 			setDead();
 
 		EntityLivingBase attackTarget = this.getAttackTarget();
@@ -110,7 +110,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 
 		if (this.getIsHanging()) {
 			this.motionX = this.motionY = this.motionZ = 0.0D;
-			this.posY = (double) MathHelper.floor_double(this.posY) + 1.0D - (double) this.height;
+			this.posY = (double) MathHelper.floor(this.posY) + 1.0D - (double) this.height;
 		} else {
 			this.motionY *= 0.6D;
 		}
@@ -122,15 +122,15 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 		super.updateAITasks();
 
 		if (getIsHanging()) {
-			if(!this.worldObj.isRemote) {
+			if(!this.world.isRemote) {
 				this.moveHelper.setMoveTo(this.posX, this.posY + 0.5D, this.posZ, 0);
 
-				if (this.rand.nextInt(250) == 0 || !this.worldObj.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
+				if (this.rand.nextInt(250) == 0 || !this.world.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
 					setIsHanging(false);
-					this.worldObj.playEvent(null, 1025, this.getPosition(), 0);
+					this.world.playEvent(null, 1025, this.getPosition(), 0);
 				} else if(this.getAttackTarget() != null) {
 					setIsHanging(false);
-					this.worldObj.playEvent(null, 1025, this.getPosition(), 0);
+					this.world.playEvent(null, 1025, this.getPosition(), 0);
 				}
 			}
 		} else {
@@ -141,7 +141,7 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
 			} else {
 				this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
 
-				if(!this.worldObj.isRemote && this.rand.nextInt(20) == 0 && worldObj.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
+				if(!this.world.isRemote && this.rand.nextInt(20) == 0 && world.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
 					setIsHanging(true);
 				}
 			}

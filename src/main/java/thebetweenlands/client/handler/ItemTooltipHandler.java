@@ -52,7 +52,7 @@ public class ItemTooltipHandler {
 			}
 		}
 
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(stack.getItem() instanceof IEquippable && player != null && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
 			toolTip.add(I18n.format("tooltip.item.equippable"));
 		}

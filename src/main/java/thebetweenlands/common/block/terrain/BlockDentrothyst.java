@@ -12,6 +12,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BasicBlock;
@@ -97,7 +98,7 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this, 1, EnumDentrothyst.GREEN.getMeta()));
 		list.add(new ItemStack(this, 1, EnumDentrothyst.ORANGE.getMeta()));
 	}

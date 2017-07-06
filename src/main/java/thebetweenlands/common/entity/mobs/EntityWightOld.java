@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -181,7 +182,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.checkNoEntityCollision(getEntityBoundingBox()) && worldObj.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(getEntityBoundingBox());
+		return world.checkNoEntityCollision(getEntityBoundingBox()) && world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox());
 	}
 
 	@Override
@@ -211,7 +212,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (this.isLocationGuard() && (this.getViolator() == null || !this.getViolator().isEntityAlive())) {
 				this.setDead();
 			} else if (this.isLocationGuard() && this.getViolator() != null) {
@@ -226,7 +227,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 		if (!this.isRepairGuard()) {
 			EntityPlayer target = this.getAttackTarget() instanceof EntityPlayer ? (EntityPlayer) this.getAttackTarget() : null;
 			if (target == null || target.isDead || target.getDistanceToEntity(this) > this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue()) {
-				target = this.worldObj.getClosestPlayer(posX, posY, posZ, 16.0D, false);
+				target = this.world.getClosestPlayer(posX, posY, posZ, 16.0D, false);
 			}
 
 			if (target != null && !target.isSneaking()) {
@@ -247,7 +248,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
             if(this.getRidingEntity() instanceof EntityFortressBoss)
                 this.dismountEntity(this.getRidingEntity());*/
 
-			if(!this.worldObj.isRemote) {
+			if(!this.world.isRemote) {
 			if (this.getAttackTarget() != null) {
 				if (getAnimation() > 0)
 					setAnimation(getAnimation() - 0.1F);
@@ -265,7 +266,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 				this.canTurnVolatileOnTarget = false;
 			}
 
-			if (!this.worldObj.isRemote && getAttackTarget() != null) {
+			if (!this.world.isRemote && getAttackTarget() != null) {
 				this.dataManager.set(ATTACK_STATE_DW, (byte) 1);
 
 				if (!this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatile && this.canTurnVolatileOnTarget) {
@@ -273,7 +274,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 						this.volatileCooldown--;
 					if (this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldown <= 0) {
 						this.setVolatile(true);
-						this.volatileCooldown = this.getVolatileCooldown() + this.worldObj.rand.nextInt(this.getVolatileCooldown()) + 20;
+						this.volatileCooldown = this.getVolatileCooldown() + this.world.rand.nextInt(this.getVolatileCooldown()) + 20;
 						this.volatileProgress = 0;
 					}
 				} else if (this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
@@ -293,21 +294,21 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 						} else {
 							dy = (this.getAttackTarget().getEntityBoundingBox().minY + this.getAttackTarget().getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
 						}
-						double dist = (double) MathHelper.sqrt_double(dx * dx + dz * dz);
+						double dist = (double) MathHelper.sqrt(dx * dx + dz * dz);
 						float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
 						float pitch = (float) (-(Math.atan2(dy, dist) * 180.0D / Math.PI));
 						this.setRotation(yaw, pitch);
-						if (this.worldObj.isRemote) {
+						if (this.world.isRemote) {
 							this.setRotationYawHead(yaw);
 						}
 					} else {
 						this.setRotation(this.getRidingEntity().rotationYaw, 0);
-						if (this.worldObj.isRemote) {
+						if (this.world.isRemote) {
 							this.setRotationYawHead(this.getRidingEntity().rotationYaw);
 						}
 					}
 				}
-				if (!this.worldObj.isRemote) {
+				if (!this.world.isRemote) {
 					if (this.getRidingEntity() != null && this.getRidingEntity().isDead) {
 						this.dismountEntity(this.getRidingEntity());
 					}
@@ -335,17 +336,17 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 					if (this.getRidingEntity() != null) {
 						if (this.ticksExisted % 30 == 0) {
 							/* TODO add EntityVolatileSoul
-                            List<EntityVolatileSoul> existingSouls = this.worldObj.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
+                            List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
                             if (existingSouls.size() < 16) {
-                                EntityVolatileSoul soul = new EntityVolatileSoul(this.worldObj);
-                                float mx = this.worldObj.rand.nextFloat() - 0.5F;
-                                float my = this.worldObj.rand.nextFloat() / 2.0F;
-                                float mz = this.worldObj.rand.nextFloat() - 0.5F;
+                                EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
+                                float mx = this.world.rand.nextFloat() - 0.5F;
+                                float my = this.world.rand.nextFloat() / 2.0F;
+                                float mz = this.world.rand.nextFloat() - 0.5F;
                                 Vec3d dir = new Vec3d(mx, my, mz).normalize();
                                 soul.setOwner(this.getUniqueID().toString());
                                 soul.setLocationAndAngles(this.posX + dir.xCoord * 0.5D, this.posY + dir.yCoord * 1.5D, this.posZ + dir.zCoord * 0.5D, 0, 0);
                                 soul.setThrowableHeading(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
-                                this.worldObj.spawnEntityInWorld(soul);
+                                this.world.spawnEntity(soul);
                             }*/
 						}
 					}
@@ -359,21 +360,21 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 				this.setSize(0.7F, 2.2F);
 			}
 
-			if (!this.worldObj.isRemote && getAttackTarget() == null) {
+			if (!this.world.isRemote && getAttackTarget() == null) {
 				this.dataManager.set(ATTACK_STATE_DW, (byte) 0);
 			}
 
 			if (this.prevVolatile != this.isVolatile()) {
-				if (this.worldObj.isRemote) {
+				if (this.world.isRemote) {
 					for (int i = 0; i < 80; i++) {
-						double px = this.posX + this.worldObj.rand.nextFloat() * 0.7F;
-						double py = this.posY + this.worldObj.rand.nextFloat() * 2.2F;
-						double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.7F;
+						double px = this.posX + this.world.rand.nextFloat() * 0.7F;
+						double py = this.posY + this.world.rand.nextFloat() * 2.2F;
+						double pz = this.posZ + this.world.rand.nextFloat() * 0.7F;
 						Vec3d vec = new Vec3d(px, py, pz).subtract(new Vec3d(this.posX + 0.35F, this.posY + 1.1F, this.posZ + 0.35F)).normalize();
-						BLParticles.SWAMP_SMOKE.spawn(this.worldObj, px, py, pz, ParticleFactory.ParticleArgs.get().withMotion(vec.xCoord * 0.25F, vec.yCoord * 0.25F, vec.zCoord * 0.25F));
+						BLParticles.SWAMP_SMOKE.spawn(this.world, px, py, pz, ParticleFactory.ParticleArgs.get().withMotion(vec.xCoord * 0.25F, vec.yCoord * 0.25F, vec.zCoord * 0.25F));
 					}
 				}
-				this.worldObj.playSound(this.posX, this.posY, this.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F, false);
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F, false);
 			}
 			this.prevVolatile = this.isVolatile();
 		} else {
@@ -385,15 +386,15 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 
 			if (this.getDistance(this.repairX + 0.5D, this.repairY + 0.5D, this.repairZ + 0.5D) <= this.getEntityAttribute(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue() + 0.1D) {
 				if (this.breakBlock) {
-					this.worldObj.setBlockToAir(new BlockPos(this.repairX, this.repairY, this.repairZ));
+					this.world.setBlockToAir(new BlockPos(this.repairX, this.repairY, this.repairZ));
 				} else {
 					if (this.repairBlock != null)
-						this.worldObj.setBlockState(new BlockPos(this.repairX, this.repairY, this.repairZ), repairBlock.getStateFromMeta(this.repairMeta), 2);
+						this.world.setBlockState(new BlockPos(this.repairX, this.repairY, this.repairZ), repairBlock.getStateFromMeta(this.repairMeta), 2);
 				}
 				this.setDead();
 			}
 
-			if (!this.worldObj.isRemote) {
+			if (!this.world.isRemote) {
 				this.dataManager.set(REPAIR_X_DW, this.repairX);
 				this.dataManager.set(REPAIR_Y_DW, this.repairY);
 				this.dataManager.set(REPAIR_Z_DW, this.repairZ);
@@ -403,26 +404,26 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 				this.repairY = this.getDataManager().get(REPAIR_Y_DW);
 				this.repairZ = this.getDataManager().get(REPAIR_Z_DW);
 				for (int i = 0; i <= 2; i++) {
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY, this.repairZ);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY, this.repairZ + 1);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY + 1, this.repairZ);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 0.5D * i, this.repairY + 1, this.repairZ + 1);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 0.5D * i, this.repairY, this.repairZ);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 0.5D * i, this.repairY, this.repairZ + 1);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 0.5D * i, this.repairY + 1, this.repairZ);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 0.5D * i, this.repairY + 1, this.repairZ + 1);
 				}
 				for (int i = 0; i <= 2; i++) {
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY + 0.5D * i, this.repairZ);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY + 0.5D * i, this.repairZ + 1);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY + 0.5D * i, this.repairZ);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY + 0.5D * i, this.repairZ + 1);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX, this.repairY + 0.5D * i, this.repairZ);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX, this.repairY + 0.5D * i, this.repairZ + 1);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 1, this.repairY + 0.5D * i, this.repairZ);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 1, this.repairY + 0.5D * i, this.repairZ + 1);
 				}
 				for (int i = 0; i <= 2; i++) {
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY, this.repairZ + 0.5D * i);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX, this.repairY + 1, this.repairZ + 0.5D * i);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY, this.repairZ + 0.5D * i);
-					BLParticles.STEAM_PURIFIER.spawn(this.worldObj, this.repairX + 1, this.repairY + 1, this.repairZ + 0.5D * i);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX, this.repairY, this.repairZ + 0.5D * i);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX, this.repairY + 1, this.repairZ + 0.5D * i);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 1, this.repairY, this.repairZ + 0.5D * i);
+					BLParticles.STEAM_PURIFIER.spawn(this.world, this.repairX + 1, this.repairY + 1, this.repairZ + 0.5D * i);
 				}
 			}
 			AxisAlignedBB repairBB = new AxisAlignedBB(this.repairX, this.repairY, this.repairZ, this.repairX + 1, this.repairY + 1, this.repairZ + 1);
-			List<EntityLivingBase> entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, repairBB);
+			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, repairBB);
 			for (EntityLivingBase entity : entities) {
 				if (entity != this && entity instanceof EntityWight == false) {
 					if (entity.posX < this.repairX + 0.5D) {
@@ -440,7 +441,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 					} else if (entity.posZ > this.repairZ + 0.5D) {
 						entity.motionZ = 0.5D;
 					}
-					entity.attackEntityFrom(DamageSource.magic, 4.0F);
+					entity.attackEntityFrom(DamageSource.MAGIC, 4.0F);
 					entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 160, 2));
 					entity.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 160, 2));
 				}
@@ -451,7 +452,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 	}
 
 	public void onCollideWithEntity(EntityLivingBase entity) {
-		if (!this.worldObj.isRemote && this.isVolatile() && entity == this.getAttackTarget()) {
+		if (!this.world.isRemote && this.isVolatile() && entity == this.getAttackTarget()) {
 			startRiding(entity, true);
 			this.volatileProgress = 20;
 		}
@@ -467,7 +468,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 	public EntityPlayer getViolator() {
 		if (this.locationViolatorUUID != null) {
 			try {
-				return this.worldObj.getPlayerEntityByUUID(UUID.fromString(this.locationViolatorUUID));
+				return this.world.getPlayerEntityByUUID(UUID.fromString(this.locationViolatorUUID));
 			} catch (Exception ex) {
 				this.locationViolatorUUID = null;
 			}
@@ -508,14 +509,14 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 		final double cy = this.posY + 0.35D;
 		final double cz = this.posZ;
 		for (int i = 0; i < 8; i++) {
-			double px = this.worldObj.rand.nextFloat() * 0.7F;
-			double py = this.worldObj.rand.nextFloat() * 0.7F;
-			double pz = this.worldObj.rand.nextFloat() * 0.7F;
+			double px = this.world.rand.nextFloat() * 0.7F;
+			double py = this.world.rand.nextFloat() * 0.7F;
+			double pz = this.world.rand.nextFloat() * 0.7F;
 			Vec3d vec = new Vec3d(px, py, pz).subtract( new Vec3d(0.35F, 0.35F, 0.35F)).normalize();
 			px = cx + vec.xCoord * radius;
 			py = cy + vec.yCoord * radius;
 			pz = cz + vec.zCoord * radius;
-			BLParticles.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz);
+			BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
 		}
 	}
 
@@ -539,13 +540,13 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 		if (this.isVolatile()) {
 			if (this.isInWater()) {
 				this.moveRelative(strafe, forward, 0.02F);
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 				this.motionX *= 0.800000011920929D;
 				this.motionY *= 0.800000011920929D;
 				this.motionZ *= 0.800000011920929D;
 			} else if (this.handleWaterMovement()) {
 				this.moveRelative(strafe, forward, 0.02F);
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 				this.motionX *= 0.5D;
 				this.motionY *= 0.5D;
 				this.motionZ *= 0.5D;
@@ -553,7 +554,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 				float friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 				}
 
 				float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -561,10 +562,10 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 				friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 				}
 
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 				this.motionX *= (double) friction;
 				this.motionY *= (double) friction;
 				this.motionZ *= (double) friction;
@@ -573,7 +574,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 			this.prevLimbSwingAmount = this.limbSwingAmount;
 			double dx = this.posX - this.prevPosX;
 			double dz = this.posZ - this.prevPosZ;
-			float distanceMoved = MathHelper.sqrt_double(dx * dx + dz * dz) * 4.0F;
+			float distanceMoved = MathHelper.sqrt(dx * dx + dz * dz) * 4.0F;
 
 			if (distanceMoved > 1.0F) {
 				distanceMoved = 1.0F;
@@ -593,7 +594,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 		if (this.isVolatile()) {
 			this.noClip = true;
 
-			if (this.worldObj.isRemote) {
+			if (this.world.isRemote) {
 				return;
 			}
 
@@ -606,7 +607,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 				double dx = this.waypointX - this.posX;
 				double dy = this.waypointY - this.posY;
 				double dz = this.waypointZ - this.posZ;
-				double dist = MathHelper.sqrt_double(dx * dx + dy * dy + dz * dz);
+				double dist = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
 				double speed = this.getEntityAttribute(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue();
 				if (dist <= speed) {
 					this.waypointX = this.posX;
@@ -666,7 +667,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (this.isVolatile() && source == DamageSource.inWall) {
+		if (this.isVolatile() && source == DamageSource.IN_WALL) {
 			return false;
 		}
 		float prevHealth = this.getHealth();
@@ -703,7 +704,7 @@ public class EntityWightOld extends EntityMob implements IEntityBL {
 
 	@Override
 	public double getYOffset() {
-		if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer && this.worldObj.isRemote) {
+		if (this.getRidingEntity() != null && this.getRidingEntity() instanceof EntityPlayer && this.world.isRemote) {
 			if (this.getRidingEntity() == TheBetweenlands.proxy.getClientPlayer()) {
 				return -1.6D;
 			} else {

@@ -13,7 +13,7 @@ public class WaterAmbienceType extends AmbienceType {
 	@Override
 	public boolean isActive() {
 		//Get the view block
-		IBlockState viewBlockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.getPlayer().worldObj, this.getPlayer(), 1);
+		IBlockState viewBlockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(this.getPlayer().world, this.getPlayer(), 1);
 		if (viewBlockState.getMaterial().isLiquid()) {
 			return true;
 		}

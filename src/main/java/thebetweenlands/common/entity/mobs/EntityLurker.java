@@ -7,6 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -93,7 +94,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			this.moveHelper = this.moveHelperLand;
 		}
 
-		this.pathNavigateWater = this.getNewNavigator(world);
+		this.pathNavigateWater = this.createNavigator(world);
 		this.pathNavigateLand = new PathNavigateGround(this, world);
 
 		if(this.isInWater()) {
@@ -136,34 +137,34 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean isNotColliding() {
-		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
 	}
 
 	@Override
 	public boolean isInWater() {
-		return worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
+		return world.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this);
 	}
 
 	@Override
-	protected PathNavigate getNewNavigator(World world){
+	protected PathNavigate createNavigator(World world){
 		return new PathNavigateSwimmer(this, world);
 	}
 
 	private Block getRelativeBlock(int offsetY) {
-		return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(getEntityBoundingBox().minY) + offsetY, MathHelper.floor_double(posZ))).getBlock();
+		return world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(getEntityBoundingBox().minY) + offsetY, MathHelper.floor(posZ))).getBlock();
 	}
 
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 		if (isInWater()) {
-			if (!worldObj.isRemote) {
+			if (!world.isRemote) {
 				if (motionY < 0 && isLeaping()) {
 					setIsLeaping(false);
 				}
 			}
 		} else {
-			if (worldObj.isRemote) {
+			if (world.isRemote) {
 				if (prevInWater && isLeaping()) {
 					breachWater();
 				}
@@ -179,7 +180,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		}
 		if (isLeaping()) {
 			leapRiseTime++;
-			if (!worldObj.isRemote) {
+			if (!world.isRemote) {
 				rotationYaw += 10F;
 			}
 		} else {
@@ -190,12 +191,12 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				leapFallTime++;
 			}
 		}
-		float magnitude = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ) * (onGround ? 0 : 1);
-		float motionPitch = MathHelper.clamp_float((float) Math.atan2(magnitude, motionY) / (float) Math.PI * 180 - 90, -10.0F, 10.0F);
+		float magnitude = MathHelper.sqrt(motionX * motionX + motionZ * motionZ) * (onGround ? 0 : 1);
+		float motionPitch = MathHelper.clamp((float) Math.atan2(magnitude, motionY) / (float) Math.PI * 180 - 90, -10.0F, 10.0F);
 		if (magnitude > 1) {
 			magnitude = 1;
 		}
-		float newRotationPitch = isLeaping() ? 90 : leapFallTime > 0 ? -45 :  MathHelper.clamp_float((rotationPitchBody - motionPitch) * magnitude * 4 * (inWater ? 1 : 0), -30.0F, 30.0F);
+		float newRotationPitch = isLeaping() ? 90 : leapFallTime > 0 ? -45 :  MathHelper.clamp((rotationPitchBody - motionPitch) * magnitude * 4 * (inWater ? 1 : 0), -30.0F, 30.0F);
 		tailPitch += (rotationPitchBody - newRotationPitch) * 0.75F;
 		rotationPitchBody += (newRotationPitch - rotationPitchBody) * 0.3F;
 		if (Math.abs(rotationPitchBody) < 0.05F) {
@@ -218,17 +219,17 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				double motionX = dx * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
 				double motionY = ring * 0.3F + rand.nextDouble() * 0.1;
 				double motionZ = dz * MathUtils.linearTransformf(rand.nextFloat(), 0, 1, 0.03F, 0.2F);
-				BLParticles.SPLASH.spawn(this.worldObj, x, y, z, ParticleArgs.get().withMotion(motionX, motionY, motionZ).withColor(waterColorMultiplier));
+				BLParticles.SPLASH.spawn(this.world, x, y, z, ParticleArgs.get().withMotion(motionX, motionY, motionZ).withColor(waterColorMultiplier));
 			}
 		}
 	}
 
 	private int getWaterColor() {
-		int blockX = MathHelper.floor_double(posX), blockZ = MathHelper.floor_double(posZ);
+		int blockX = MathHelper.floor(posX), blockZ = MathHelper.floor(posZ);
 		int y = 0;
 		while (getRelativeBlock(y--) == Blocks.AIR && posY - y > 0) ;
-		int blockY = MathHelper.floor_double(getEntityBoundingBox().minY + y);
-		IBlockState blockState = worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ));
+		int blockY = MathHelper.floor(getEntityBoundingBox().minY + y);
+		IBlockState blockState = world.getBlockState(new BlockPos(blockX, blockY, blockZ));
 		if (blockState.getMaterial().isLiquid()) {
 			int r = 255, g = 255, b = 255;
 			// TODO: automatically build a map of all liquid blocks to the average color of there texture to get color from
@@ -265,7 +266,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			this.navigator = this.pathNavigateLand;
 		}
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			Entity target = this.getAttackTarget();
 			if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistanceToEntity(this) < 3.2D && target.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && target.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
 				setShouldMouthBeOpen(true);
@@ -337,7 +338,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				}
 			}
 		}
-		float movementSpeed = MathHelper.sqrt_double((prevPosX - posX) * (prevPosX - posX) + (prevPosY - posY) * (prevPosY - posY) + (prevPosZ - posZ) * (prevPosZ - posZ));
+		float movementSpeed = MathHelper.sqrt((prevPosX - posX) * (prevPosX - posX) + (prevPosY - posY) * (prevPosY - posY) + (prevPosZ - posZ) * (prevPosZ - posZ));
 		if (movementSpeed > 1) {
 			movementSpeed = 1;
 		} else if (movementSpeed < 0.08) {
@@ -358,7 +359,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		if (isServerWorld()) {
 			if (isInWater()) {
 				moveRelative(strafe, forward, 0.1F);
-				moveEntity(motionX, motionY, motionZ);
+				move(MoverType.SELF, motionX, motionY, motionZ);
 				motionX *= 0.8999999761581421D;
 				motionY *= 0.8999999761581421D;
 				motionZ *= 0.8999999761581421D;
@@ -399,7 +400,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 		if(this.getAttackTarget() != null) {
 			return this.getAttackTarget();
 		}
-		List<Entity> nearEntities = worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(8, 10, 8));
+		List<Entity> nearEntities = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(8, 10, 8));
 		for (int i = 0; i < nearEntities.size(); i++) {
 			Entity entity = nearEntities.get(i);
 			for (int n = 0; n < prey.length; n++) {
@@ -427,7 +428,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 			setIsLeaping(true);
 			double distanceX = entityIn.posX - posX;
 			double distanceZ = entityIn.posZ - posZ;
-			float magnitude = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
+			float magnitude = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 			motionX += distanceX / magnitude * 0.8;
 			motionY += 0.9;
 			motionZ += distanceZ / magnitude * 0.8;
@@ -445,12 +446,12 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (isEntityInvulnerable(source) || source.equals(DamageSource.inWall) || source.equals(DamageSource.drown)) {
+		if (isEntityInvulnerable(source) || source.equals(DamageSource.IN_WALL) || source.equals(DamageSource.DROWN)) {
 			return false;
 		}
 		Entity attacker = source.getEntity();
 		if (attacker instanceof EntityPlayer) {
-			List<EntityLurker> nearLurkers = worldObj.getEntitiesWithinAABB(EntityLurker.class, getEntityBoundingBox().expand(16, 16, 16));
+			List<EntityLurker> nearLurkers = world.getEntitiesWithinAABB(EntityLurker.class, getEntityBoundingBox().expand(16, 16, 16));
 			for (EntityLurker fellowLurker : nearLurkers) {
 				// Thou shouldst joineth me! F'r thither is a great foe comest!
 				// RE: lol
@@ -562,7 +563,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 				double d1 = posY - lurker.posY;
 				double d2 = posZ - lurker.posZ;
 				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-				d3 = (double) MathHelper.sqrt_double(d3);
+				d3 = (double) MathHelper.sqrt(d3);
 				d1 = d1 / d3;
 				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
 				lurker.rotationYaw = limitAngle(lurker.rotationYaw, f, 90.0F);

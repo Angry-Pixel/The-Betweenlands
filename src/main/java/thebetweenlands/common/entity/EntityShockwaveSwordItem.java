@@ -23,8 +23,8 @@ public class EntityShockwaveSwordItem extends EntityItem {
 		this.setSize(0.25F, 1.0F);
 	}
 
-	public EntityShockwaveSwordItem(World worldObj, double posX, double posY, double posZ, ItemStack itemStack) {
-		super(worldObj, posX, posY, posZ, itemStack);
+	public EntityShockwaveSwordItem(World world, double posX, double posY, double posZ, ItemStack itemStack) {
+		super(world, posX, posY, posZ, itemStack);
 		this.setPickupDelay(80);
 		this.setNoDespawn();
 	}

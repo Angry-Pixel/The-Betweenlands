@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import java.util.List;
 
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
@@ -43,8 +44,8 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 
 	private int timeHiding;
 
-	public EntityGecko(World worldObj) {
-		super(worldObj);
+	public EntityGecko(World world) {
+		super(world);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(0.75F, 0.35F);
 	}
@@ -100,7 +101,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 		float x = rand.nextFloat() * 2 - 1;
 		float y = rand.nextFloat() * 0.5F;
 		float z = rand.nextFloat() * 2 - 1;
-		float len = MathHelper.sqrt_float(x * x + y * y + z * z);
+		float len = MathHelper.sqrt(x * x + y * y + z * z);
 		float mag = 0.6F;
 		motionX += x / len * mag;
 		motionY += y / len * mag;
@@ -108,7 +109,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 
 	private boolean hasValidHiding() {
-		return worldObj.getBlockState(this.hidingBush).getBlock() == BlockRegistry.WEEDWOOD_BUSH;
+		return world.getBlockState(this.hidingBush).getBlock() == BlockRegistry.WEEDWOOD_BUSH;
 	}
 
 	private void sendRustleEffect(float strength) {
@@ -125,16 +126,16 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	}
 
 	@Override
-	public void moveEntity(double motionX, double motionY, double motionZ) {
+	public void move(MoverType type, double motionX, double motionY, double motionZ) {
 		if (!isHiding()) {
-			super.moveEntity(motionX, motionY, motionZ);
+			super.move(type, motionX, motionY, motionZ);
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (isHiding()) {
 				if (hasValidHiding()) {
 					timeHiding++;
@@ -143,7 +144,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 						if (rand.nextFloat() < 0.3F) sendRustleEffect((rand.nextFloat() + 0.2F) * 0.06F);
 					}
 					if (timeHiding > MIN_HIDE_TIME) {
-						List<EntityPlayer> players = worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));
+						List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));
 						if (players.size() < 1 && rand.nextFloat() < UNHIDE_CHANCE) {
 							stopHiding();
 						}

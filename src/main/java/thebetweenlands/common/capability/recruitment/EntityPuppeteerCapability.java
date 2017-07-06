@@ -70,7 +70,7 @@ public class EntityPuppeteerCapability extends EntityCapability<EntityPuppeteerC
 		if(this.activatingEntityId < 0) {
 			this.activatingEntity = null;
 		} else if(this.activatingEntity == null || !this.activatingEntity.isEntityAlive() || this.activatingEntity.getEntityId() != this.activatingEntityId) {
-			this.activatingEntity = this.getEntity().worldObj.getEntityByID(this.activatingEntityId);
+			this.activatingEntity = this.getEntity().world.getEntityByID(this.activatingEntityId);
 		}
 		return this.activatingEntity;
 	}

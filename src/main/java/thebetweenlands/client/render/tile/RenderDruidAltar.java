@@ -317,7 +317,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 	@Override
 	public void renderTileEntityAt(TileEntityDruidAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(te == null || !te.hasWorldObj()) {
+		if(te == null || !te.hasWorld()) {
 			renderTileAsItem(x, y, z);
 			return;
 		}

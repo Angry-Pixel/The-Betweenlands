@@ -220,7 +220,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		this.prevSpawningOffset = this.getSpawningOffset();
 		this.prevSpawningProgress = this.getSpawningProgress();
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(this.shouldUpdateSpawningAnimation()) {
 				if(this.getSpawningTicks() == 0) {
 					this.playSound(SoundRegistry.PEAT_MUMMY_EMERGE, 1.2F, 1.0F);
@@ -239,7 +239,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				int breakPoint = getSpawningLength() / BREAK_COUNT;
 				if ((getSpawningTicks() - breakPoint / 2 - 1) % breakPoint == 0) {
 					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
-					IBlockState blockState = this.worldObj.getBlockState(pos);
+					IBlockState blockState = this.world.getBlockState(pos);
 					this.playSound(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
 				}
 
@@ -258,7 +258,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				int breakPoint = getSpawningLength() / BREAK_COUNT;
 				if ((getSpawningTicks() - breakPoint / 2 - 1) % breakPoint == 0) {
 					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
-					IBlockState blockState = this.worldObj.getBlockState(pos);
+					IBlockState blockState = this.world.getBlockState(pos);
 					double px = this.posX + this.rand.nextDouble() - 0.5F;
 					double py = this.posY + this.rand.nextDouble() * 0.2 + 0.075;
 					double pz = this.posZ + this.rand.nextDouble() - 0.5F;
@@ -268,7 +268,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 						double motionX = this.rand.nextDouble() * 0.2 - 0.1;
 						double motionY = this.rand.nextDouble() * 0.25 + 0.1;
 						double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
-						this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(blockState));
+						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(blockState));
 					}
 				}
 			}
@@ -292,7 +292,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 				this.screamTimer = 0;
 			}
 
-			if(!this.worldObj.isRemote) {
+			if(!this.world.isRemote) {
 				if(this.isPreparing()){
 					this.chargingPreparation++;
 					if(this.getPreparationProgress() == 1.0F) {
@@ -325,19 +325,19 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public boolean isInValidSpawn() {
-		int ebx = MathHelper.floor_double(this.posX);
-		int eby = MathHelper.floor_double(this.posY);
-		int ebz = MathHelper.floor_double(this.posZ);
+		int ebx = MathHelper.floor(this.posX);
+		int eby = MathHelper.floor(this.posY);
+		int ebz = MathHelper.floor(this.posZ);
 		return inMud(ebx, eby, ebz);
 	}
 
 	@SuppressWarnings("deprecation")
 	private boolean inMud(int ebx, int eby, int ebz) {
 		MutableBlockPos pos = new MutableBlockPos();
-		for(int y = -MathHelper.ceiling_double_int(this.getMaxSpawnOffset()); y < 0; y++) {
+		for(int y = -MathHelper.ceil(this.getMaxSpawnOffset()); y < 0; y++) {
 			for(int x = -1; x <= 1; x++) {
 				for(int z = -1; z <= 1; z++) {
-					IBlockState blockState = this.worldObj.getBlockState(pos.setPos(ebx + x, eby + y, ebz + z));
+					IBlockState blockState = this.world.getBlockState(pos.setPos(ebx + x, eby + y, ebz + z));
 					Block cb = blockState.getBlock();
 					if(!(y == -1 ? (SPAWN_BLOCKS.contains(cb)) : (cb.isOpaqueCube(blockState) || SPAWN_BLOCKS.contains(cb)))) {
 						return false;
@@ -368,7 +368,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if(source.equals(DamageSource.inWall)) 
+		if(source.equals(DamageSource.IN_WALL)) 
 			return false;
 		return super.attackEntityFrom(source, damage);
 	}
@@ -444,7 +444,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public void setSpawningTicks(int ticks) {
 		this.getDataManager().set(SPAWNING_TICKS, ticks);
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(this.isSpawningFinished()) {
 				for(EntityAIBase task : this.inactiveTargetTasks) {
 					this.targetTasks.removeTask(task);
@@ -649,7 +649,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode || this.getSpawningTicks() > 0 ? this.getEntityBoundingBox() : ZERO_AABB;
+		return Minecraft.getMinecraft().player.capabilities.isCreativeMode || this.getSpawningTicks() > 0 ? this.getEntityBoundingBox() : ZERO_AABB;
 	}
 
 	@Override

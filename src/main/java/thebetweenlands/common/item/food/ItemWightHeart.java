@@ -13,12 +13,13 @@ public class ItemWightHeart extends ItemBLFood {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack stack = playerIn.getHeldItem(hand);
 		if (playerIn.getHealth() < playerIn.getMaxHealth()) {
 			playerIn.setActiveHand(hand);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		} else {
-			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+			return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
 		}
 	}
 

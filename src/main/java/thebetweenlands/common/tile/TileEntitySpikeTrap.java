@@ -24,24 +24,24 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
-			if (!worldObj.isAirBlock(pos.up())) {
+		if (!world.isRemote) {
+			if (!world.isAirBlock(pos.up())) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = worldObj.getBlockState(pos.up()).getBlock();
-				worldObj.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(worldObj.getBlockState(pos.up()).getBlock()));
-				block.dropBlockAsItem(worldObj, pos.up(), worldObj.getBlockState(pos.up()), 0);
-				worldObj.setBlockToAir(pos.up());
+				Block block = world.getBlockState(pos.up()).getBlock();
+				world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(world.getBlockState(pos.up()).getBlock()));
+				block.dropBlockAsItem(world, pos.up(), world.getBlockState(pos.up()), 0);
+				world.setBlockToAir(pos.up());
 			}
-			if (!worldObj.isAirBlock(pos.up(2))) {
+			if (!world.isAirBlock(pos.up(2))) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = worldObj.getBlockState(pos.up(2)).getBlock();
-				worldObj.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(worldObj.getBlockState(pos.up(2)).getBlock()));
-				block.dropBlockAsItem(worldObj, pos.up(2), worldObj.getBlockState(pos.up(2)), 0);
-				worldObj.setBlockToAir(pos.up(2));
+				Block block = world.getBlockState(pos.up(2)).getBlock();
+				world.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(world.getBlockState(pos.up(2)).getBlock()));
+				block.dropBlockAsItem(world, pos.up(2), world.getBlockState(pos.up(2)), 0);
+				world.setBlockToAir(pos.up(2));
 			}
-			if (worldObj.rand.nextInt(500) == 0) {
+			if (world.rand.nextInt(500) == 0) {
 				if (type != 0 && !active && animationTicks == 0)
 					setType((byte) 0);
 				else if (isBlockOccupied() == null)
@@ -57,10 +57,10 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 		if (active) {
 			activateBlock();
 			if (animationTicks == 0)
-				worldObj.playSound(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
+				world.playSound(null, (double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.SPIKE, SoundCategory.BLOCKS, 1.25F, 1.0F);
 			if (animationTicks <= 20)
 				animationTicks += 4;
-			if (animationTicks == 20 && !this.worldObj.isRemote)
+			if (animationTicks == 20 && !this.world.isRemote)
 				setActive(false);
 		}
 		if (!active)
@@ -70,29 +70,29 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
-		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 	}
 
 	protected Entity activateBlock() {
 		float y = 1F / 16 * animationTicks;
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1D, pos.getY() + 1D + y, pos.getZ() + 1D));
+		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1D, pos.getY() + 1D + y, pos.getZ() + 1D));
 		if (animationTicks >= 1)
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
 					//if (entity instanceof EntityPlayer)
-						((EntityLivingBase) entity).attackEntityFrom(DamageSource.generic, 2);
+						((EntityLivingBase) entity).attackEntityFrom(DamageSource.GENERIC, 2);
 			}
 		return null;
 	}
 
 	protected Entity isBlockOccupied() {
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY(), pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY() + 2D, pos.getZ() + 0.75D));
+		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY(), pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY() + 2D, pos.getZ() + 0.75D));
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)

@@ -56,7 +56,8 @@ public class BlockRope extends Block {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
 		if(heldItem == null && player.isSneaking()) {
 			BlockPos offsetPos = pos.down();
 			while(world.getBlockState(offsetPos).getBlock() == this) {
@@ -68,7 +69,7 @@ public class BlockRope extends Block {
 					world.setBlockToAir(offsetPos);
 
 					if(!player.capabilities.isCreativeMode && !player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.ROPE_ITEM))) {
-						world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemRegistry.ROPE_ITEM)));
+						world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemRegistry.ROPE_ITEM)));
 					}
 				}
 
@@ -101,8 +102,8 @@ public class BlockRope extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		super.neighborChanged(state, worldIn, pos, blockIn);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 		if (!(worldIn.getBlockState(pos.up()).isSideSolid(worldIn, pos, EnumFacing.DOWN) || worldIn.getBlockState(pos.up()).getBlock() == this)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockToAir(pos);

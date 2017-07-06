@@ -35,7 +35,7 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 		int count = items.tagCount();
 		for (int i = 0; i < count; i++) {
 			NBTTagCompound nbtItem = items.getCompoundTagAt(i);
-			this.craftingSlots[nbtItem.getByte("Slot")] = ItemStack.loadItemStackFromNBT(nbtItem);
+			this.craftingSlots[nbtItem.getByte("Slot")] = new ItemStack(nbtItem);
 		}
 
 		this.rotation = nbt.getByte("Rotation");

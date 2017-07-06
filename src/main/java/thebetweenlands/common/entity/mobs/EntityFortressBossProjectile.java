@@ -10,6 +10,7 @@ import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
@@ -128,34 +129,34 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 					ray = ray.normalize().scale(64.0D);
 					int shieldHit = boss.rayTraceShield(new Vec3d(this.posX, this.posY, this.posZ), ray, false);
 					if(shieldHit >= 0) {
-						if(!this.worldObj.isRemote) {
+						if(!this.world.isRemote) {
 							boss.setShieldActive(shieldHit, false);
 
-							this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
+							this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SHIELD_DOWN, SoundCategory.HOSTILE, 1.0F, 1.0F);
 
 							double angle = Math.PI * 2.0D / 18;
 							for(int i = 0; i < 18; i++) {
 								Vec3d dir = new Vec3d(Math.sin(angle * i), 0, Math.cos(angle * i));
 								dir = dir.normalize();
 								float speed = 0.8F;
-								EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this.getOwner());
+								EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this.getOwner());
 								bullet.setLocationAndAngles(boss.posX, boss.posY, boss.posZ, 0, 0);
 								bullet.setThrowableHeading(dir.xCoord, dir.yCoord, dir.zCoord, speed, 0.0F);
-								this.worldObj.spawnEntityInWorld(bullet);
+								this.world.spawnEntity(bullet);
 							}
 						}
 					} else {
-						boss.attackEntityFrom(DamageSource.generic, 10);
+						boss.attackEntityFrom(DamageSource.GENERIC, 10);
 					}
 
-					if(!this.worldObj.isRemote) {
+					if(!this.world.isRemote) {
 						boss.setFloating(false);
 					}
 				} else {
 					target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 2);
 				}
 
-				if(!this.worldObj.isRemote) {
+				if(!this.world.isRemote) {
 					this.setDead();
 				}
 			} else if(target.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -179,7 +180,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				if (source.getEntity() instanceof EntityPlayer) {
 					ItemStack heldItem = ((EntityPlayer)source.getEntity()).getHeldItem(EnumHand.MAIN_HAND);
 					if(heldItem != null && heldItem.getItem() instanceof ItemSword) {
-						if(!this.worldObj.isRemote && source.getEntity().getPassengers().isEmpty()) {
+						if(!this.world.isRemote && source.getEntity().getPassengers().isEmpty()) {
 							this.startRiding(source.getEntity(), true);
 							this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(source.getEntity()));
 							return true;
@@ -187,7 +188,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 					}
 				}
 			} else {
-				if(!this.worldObj.isRemote) {
+				if(!this.world.isRemote) {
 					this.setDead();
 				}
 			}
@@ -197,7 +198,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 
 	@Override
 	public void onUpdate() {
-		if(!this.worldObj.isRemote && (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
+		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
 			this.setDead();
 			return;
 		}
@@ -212,7 +213,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 
 				Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
 				Vec3d nextPos = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-				RayTraceResult hitObject = this.worldObj.rayTraceBlocks(currentPos, nextPos);
+				RayTraceResult hitObject = this.world.rayTraceBlocks(currentPos, nextPos);
 				currentPos = new Vec3d(this.posX, this.posY, this.posZ);
 				nextPos = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 
@@ -221,7 +222,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				}
 
 				Entity hitEntity = null;
-				List<Entity> hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(0.1D, 0.1D, 0.1D));
+				List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(0.1D, 0.1D, 0.1D));
 				double minDist = 0.0D;
 
 				for (int i = 0; i < hitEntities.size(); ++i) {
@@ -247,13 +248,13 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 				if (hitObject != null && hitObject.entityHit != this.getThrower()) {
 					this.onImpact(hitObject);
 				}
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			} else {
 				if(this.getRidingEntity() instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) this.getRidingEntity();
 					ItemStack heldItem = player.getHeldItem(EnumHand.MAIN_HAND);
 					if(!this.isDeflectable() || heldItem == null || heldItem.getItem() instanceof ItemSword == false) {
-						if(!this.worldObj.isRemote) {
+						if(!this.world.isRemote) {
 							this.setDead();
 						}
 					} else {
@@ -280,7 +281,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 
 	@Override
 	public void setThrowableHeading(double x, double y, double z, float speed, float randMotion) {
-		float f2 = MathHelper.sqrt_double(x * x + y * y + z * z);
+		float f2 = MathHelper.sqrt(x * x + y * y + z * z);
 		x /= (double)f2;
 		y /= (double)f2;
 		z /= (double)f2;
@@ -293,7 +294,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 		this.motionX = x;
 		this.motionY = y;
 		this.motionZ = z;
-		float f3 = MathHelper.sqrt_double(x * x + z * z);
+		float f3 = MathHelper.sqrt(x * x + z * z);
 		this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(x, z) * 180.0D / Math.PI);
 		this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(y, (double)f3) * 180.0D / Math.PI);
 		this.velocityChanged = true;

@@ -38,7 +38,7 @@ public class CaveAmbienceType extends AmbienceType {
 	@Override
 	public float getVolume() {
 		if(this.getPlayer().posY <= WorldProviderBetweenlands.CAVE_START) {
-			return MathHelper.clamp_float((float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
+			return MathHelper.clamp((float)(WorldProviderBetweenlands.CAVE_START - this.getPlayer().posY) / 15.0F, 0.0F, 1.0F);
 		} else {
 			return 1.0F;
 		}

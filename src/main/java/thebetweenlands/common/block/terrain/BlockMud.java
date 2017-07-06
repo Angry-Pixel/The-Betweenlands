@@ -31,7 +31,7 @@ public class BlockMud extends Block {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabblist, @Nullable Entity entity) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabblist, @Nullable Entity entity, boolean p_185477_7_) {
 		AxisAlignedBB blockAABB = this.getCollisionBoundingBox(state, world, pos).offset(pos);
 		if (blockAABB != null && aabb.intersectsWith(blockAABB) && (entity == null || ItemRubberBoots.canEntityWalkOnMud(entity))) {
 			aabblist.add(blockAABB);
@@ -51,7 +51,7 @@ public class BlockMud extends Block {
 			}
 			entity.onGround = true;
 			if(entity instanceof EntityLivingBase && entity.isInsideOfMaterial(BLMaterialRegistry.MUD)) {
-				entity.attackEntityFrom(DamageSource.inWall, 2.0F);
+				entity.attackEntityFrom(DamageSource.IN_WALL, 2.0F);
 			}
 		}
 	}
@@ -67,7 +67,7 @@ public class BlockMud extends Block {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+	public boolean causesDownwardCurrent(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 

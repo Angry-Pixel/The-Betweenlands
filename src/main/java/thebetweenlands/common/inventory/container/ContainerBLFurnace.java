@@ -83,7 +83,7 @@ public class ContainerBLFurnace extends Container {
 
 	@Override
     public boolean canInteractWith(EntityPlayer player) {
-        return tileFurnace.isUseableByPlayer(player);
+        return tileFurnace.isUsableByPlayer(player);
     }
 
 	@Override
@@ -122,14 +122,14 @@ public class ContainerBLFurnace extends Container {
             }
             else if (!mergeItemStack(itemstack1, 4, 39, false))
                 return null;
-            if (itemstack1.stackSize == 0)
+            if (itemstack1.getCount() == 0)
                 slot.putStack((ItemStack)null);
             else
                 slot.onSlotChanged();
-            if (itemstack1.stackSize == itemstack.stackSize)
+            if (itemstack1.getCount() == itemstack.getCount())
                 return null;
 
-            slot.onPickupFromSlot(player, itemstack1);
+            slot.onTake(player, itemstack1);
         }
         return itemstack;
     }

@@ -12,11 +12,6 @@ public class PestleAndMortarHandler implements IRecipeHandler<PestleAndMortarRec
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return null;
-    }
-
-    @Override
     public String getRecipeCategoryUid(PestleAndMortarRecipeJEI recipe) {
         return ModInfo.ID + ":pestle_and_mortar";
     }

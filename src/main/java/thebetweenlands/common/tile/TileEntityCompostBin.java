@@ -62,7 +62,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 	public void update() {
 		this.lidAngle = this.open ? Math.min(this.lidAngle + OPEN_SPEED, MAX_OPEN) : Math.max(this.lidAngle - CLOSE_SPEED, MIN_OPEN);
 
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (!this.open) {
 				for (int i = 0; i < this.inventory.length; i++) {
 					if (this.inventory[i] != null) {
@@ -73,7 +73,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 							this.compostTimes[i] = 0;
 							this.compostAmounts[i] = 0;
 
-							this.worldObj.notifyBlockUpdate(this.pos, this.worldObj.getBlockState(this.pos), this.worldObj.getBlockState(this.pos), 2);
+							this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 2);
 							this.markDirty();
 						} else {
 							this.processes[i]++;
@@ -112,7 +112,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 				this.compostedAmount = 0;
 				this.totalCompostAmount = 0;
 			}
-			this.worldObj.notifyBlockUpdate(this.pos, this.worldObj.getBlockState(this.pos), this.worldObj.getBlockState(this.pos), 2);
+			this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 2);
 			this.markDirty();
 			return true;
 		}
@@ -134,13 +134,13 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 				if (this.inventory[i] == null) {
 					if (!doSimulate) {
 						this.inventory[i] = stack.copy();
-						this.inventory[i].stackSize = 1;
+						this.inventory[i].setCount(1);
 						this.compostAmounts[i] = clampedAmount;
 						this.compostTimes[i] = compostTime;
 						this.processes[i] = 0;
 						this.totalCompostAmount += clampedAmount;
 
-						this.worldObj.notifyBlockUpdate(this.pos, this.worldObj.getBlockState(this.pos), this.worldObj.getBlockState(this.pos), 2);
+						this.world.notifyBlockUpdate(this.pos, this.world.getBlockState(this.pos), this.world.getBlockState(this.pos), 2);
 						this.markDirty();
 					}
 					return 1;
@@ -163,7 +163,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 		for (int i = 0; i < inventoryTags.tagCount(); i++) {
 			NBTTagCompound data = inventoryTags.getCompoundTagAt(i);
 			int j = data.getByte("Slot") & 255;
-			this.inventory[j] = ItemStack.loadItemStackFromNBT(data);
+			this.inventory[j] = new ItemStack(data);
 		}
 		this.processes = readIntArrayFixedSize("Processes", inventory.length, nbt);
 		this.compostAmounts = readIntArrayFixedSize("CompostAmounts", inventory.length, nbt);
@@ -304,7 +304,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 	public ItemStack decrStackSize(int index, int count) {
 		if (index < inventory.length && this.inventory[index] != null) {
 			ItemStack itemstack;
-			if (this.inventory[index].stackSize <= count) {
+			if (this.inventory[index].getCount() <= count) {
 				itemstack = this.inventory[index];
 				this.inventory[index] = null;
 				this.processes[index] = 0;
@@ -315,7 +315,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 				return itemstack;
 			} else {
 				itemstack = this.inventory[index].splitStack(count);
-				if (this.inventory[index].stackSize == 0) {
+				if (this.inventory[index].getCount() == 0) {
 					this.inventory[index] = null;
 				}
 				this.markDirty();
@@ -360,7 +360,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return false;
 	}
 
@@ -422,5 +422,17 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 	@Override
 	public ITextComponent getDisplayName() {
 		return null;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemstack : this.inventory) {
+			if (!itemstack.isEmpty())
+			{
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

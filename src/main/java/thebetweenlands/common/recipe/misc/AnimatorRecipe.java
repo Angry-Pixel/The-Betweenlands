@@ -68,7 +68,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	public Entity getRenderEntity(ItemStack stack) {
 		if(this.renderEntity != null && this.renderEntity.length() > 0) {
 			if(this.renderEntityInstance == null) {
-				Entity entity = EntityList.createEntityByName(this.renderEntity, (World)null);
+				Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(this.renderEntity), (World)null);
 				this.renderEntityInstance = entity;
 			}
 			return this.renderEntityInstance;
@@ -121,7 +121,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 					return true;
 				}
 				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
-				world.spawnEntityInWorld(entity);
+				world.spawnEntity(entity);
 				animator.setInventorySlotContents(0, null);
 				return false;
 			}

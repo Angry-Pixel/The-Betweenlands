@@ -110,7 +110,8 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = playerIn.getHeldItem(hand);
 		if (heldItem != null) {
 			TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
@@ -120,13 +121,13 @@ public class BlockMudFlowerPot extends BlockContainer {
 				return false;
 			} else {
 				if (this.getPlantBlockStateFromItem(heldItem) != null) {
-					te.setFlowerPotData(heldItem.getItem(), heldItem.getMetadata());
+					te.setItemStack(heldItem);
 					te.markDirty();
 					worldIn.notifyBlockUpdate(pos, state, state, 3);
 					playerIn.addStat(StatList.FLOWER_POTTED);
 
 					if (!playerIn.capabilities.isCreativeMode) {
-						--heldItem.stackSize;
+						heldItem.shrink(1);
 					}
 
 					return true;
@@ -200,7 +201,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (!worldIn.getBlockState(pos.down()).isSideSolid(worldIn, pos.down(), EnumFacing.UP)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockToAir(pos);
@@ -215,7 +216,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 			TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
 			if (te != null) {
-				te.setFlowerPotData((Item)null, 0);
+				te.setItemStack(new ItemStack(Blocks.AIR)); // probably broke something
 			}
 		}
 	}

@@ -43,11 +43,11 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 		this.tasks.addTask(5, new EntityAIFlyRandomly<EntityFirefly>(this) {
 			@Override
 			protected double getTargetY(Random rand, double distanceMultiplier) {
-				int worldHeight = MathHelper.floor_double(EntityFirefly.this.aboveLayer);
+				int worldHeight = MathHelper.floor(EntityFirefly.this.aboveLayer);
 
 				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
 
-				for(int yo = 0; yo < MathHelper.ceiling_double_int(EntityFirefly.this.aboveLayer); yo++) {
+				for(int yo = 0; yo < MathHelper.ceil(EntityFirefly.this.aboveLayer); yo++) {
 					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
 
 					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
@@ -119,7 +119,7 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 		this.prevGlowTicks = this.glowTicks;
 
 		if(this.isEntityAlive()) {
-			if(!this.worldObj.isRemote) {
+			if(!this.world.isRemote) {
 				if(!this.isGlowActive() && this.rand.nextDouble() < this.getEntityAttribute(GLOW_START_CHANCE).getAttributeValue()) {
 					this.setGlowStrength(this.getEntityAttribute(GLOW_STRENGTH_ATTRIB).getAttributeValue());
 				} else if(this.isGlowActive() && this.rand.nextDouble() < this.getEntityAttribute(GLOW_STOP_CHANCE).getAttributeValue()) {
@@ -168,7 +168,7 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 	 * @return
 	 */
 	public double getGlowStrength() {
-		return this.getDataManager().get(GLOW_STRENGTH);
+		return (double) this.getDataManager().get(GLOW_STRENGTH);
 	}
 
 	/**

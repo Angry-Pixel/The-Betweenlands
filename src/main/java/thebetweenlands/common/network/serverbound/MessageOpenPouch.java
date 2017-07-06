@@ -20,11 +20,11 @@ public class MessageOpenPouch extends MessageBase {
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
+			EntityPlayer player = ctx.getServerHandler().player;
 			ItemStack stack = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(stack != null) {
 				int meta = stack.getItemDamage();
-				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_KEYBIND, player.worldObj, meta, 0, 0);
+				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_KEYBIND, player.world, meta, 0, 0);
 			}
 		}
 		return null;

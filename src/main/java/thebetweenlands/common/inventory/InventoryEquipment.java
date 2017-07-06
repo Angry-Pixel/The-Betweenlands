@@ -1,5 +1,8 @@
 package thebetweenlands.common.inventory;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,17 +19,17 @@ import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 
 public class InventoryEquipment implements IInventory, ITickable {
-	protected final ItemStack[] inventory;
-	protected final ItemStack[] prevTickStacks;
+	protected final List<ItemStack> inventory;
+	protected final List<ItemStack> prevTickStacks;
 	protected final EquipmentEntityCapability capability;
 
-	public InventoryEquipment(EquipmentEntityCapability capability, ItemStack[] inventory) {
+	public InventoryEquipment(EquipmentEntityCapability capability, List<ItemStack> inventory) {
 		this.capability = capability;
 		this.inventory = inventory;
-		this.prevTickStacks = new ItemStack[inventory.length];
-		for (int i = 0; i < this.inventory.length; ++i) {
-			ItemStack stack = this.inventory[i];
-			this.prevTickStacks[i] = stack == null ? null : stack.copy();
+		this.prevTickStacks = new ArrayList<ItemStack>(inventory.size());
+		for (int i = 0; i < this.inventory.size(); ++i) {
+			ItemStack stack = this.inventory.get(i);
+			this.prevTickStacks.add(i, stack == null ? null : stack.copy());
 		}
 	}
 
@@ -70,7 +73,7 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Override
 	public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
 		if(index < this.getSizeInventory()) {
-			this.inventory[index] = stack;
+			this.inventory.set(index, stack);
 			this.markDirty();
 		}
 	}
@@ -87,7 +90,7 @@ public class InventoryEquipment implements IInventory, ITickable {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
@@ -127,27 +130,27 @@ public class InventoryEquipment implements IInventory, ITickable {
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.inventory.length; ++i) {
-			this.inventory[i] = null;
+		for (int i = 0; i < this.inventory.size(); ++i) {
+			this.inventory.set(i, null);
 		}
 		this.markDirty();
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return this.inventory.length;
+		return this.inventory.size();
 	}
 
 	@Override
 	@Nullable
 	public ItemStack getStackInSlot(int index) {
-		return index >= this.getSizeInventory() ? null : this.inventory[index];
+		return index >= this.getSizeInventory() ? null : this.inventory.get(index);
 	}
 
 	@Override
 	public void update() {
-		for(int i = 0; i < this.inventory.length; i++) {
-			ItemStack stack = this.inventory[i];
+		for(int i = 0; i < this.inventory.size(); i++) {
+			ItemStack stack = this.inventory.get(i);
 
 			if(stack != null && stack.getItem() instanceof IEquippable) {
 				((IEquippable) stack.getItem()).onEquipmentTick(stack, this.capability.getEntity(), this);
@@ -158,14 +161,27 @@ public class InventoryEquipment implements IInventory, ITickable {
 	}
 
 	protected void detectChangesAndMarkDirty() {
-		for (int i = 0; i < this.inventory.length; ++i) {
-			ItemStack stack = this.inventory[i];
-			ItemStack prevStack = this.prevTickStacks[i];
+		for (int i = 0; i < this.inventory.size(); ++i) {
+			ItemStack stack = this.inventory.get(i);
+			ItemStack prevStack = this.prevTickStacks.get(i);
 
 			if (!ItemStack.areItemStacksEqual(prevStack, stack)) {
-				prevStack = this.prevTickStacks[i] = stack == null ? null : stack.copy();
+				prevStack = this.prevTickStacks.set(i, stack == null ? null : stack.copy());
 				this.markDirty();
 			}
 		}
 	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemstack : this.inventory) {
+			if (!itemstack.isEmpty())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 }

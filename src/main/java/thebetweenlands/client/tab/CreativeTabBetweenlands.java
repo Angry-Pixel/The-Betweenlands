@@ -3,6 +3,7 @@ package thebetweenlands.client.tab;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 public abstract class CreativeTabBetweenlands extends CreativeTabs {
 	public CreativeTabBetweenlands(String label) {
@@ -26,9 +27,9 @@ public abstract class CreativeTabBetweenlands extends CreativeTabs {
 	}
 
 	@Override  
-	public Item getTabIconItem() {  
+	public ItemStack getTabIconItem() {  
 		if(this.getIconItemStack() != null)  
-			return this.getIconItemStack().getItem();  
+			return this.getIconItemStack();  
 		return null;  
 	}  
 }

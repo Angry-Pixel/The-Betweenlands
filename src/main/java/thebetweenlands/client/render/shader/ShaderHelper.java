@@ -172,7 +172,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			Framebuffer targetFramebuffer1 = mainFramebuffer;
 			Framebuffer targetFramebuffer2 = blitFramebuffer;
 
-			int renderPasses = MathHelper.floor_double(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
+			int renderPasses = MathHelper.floor(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
 			renderPasses = 1; //Multiple render passes are currently not recommended
 
 			Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
@@ -292,10 +292,10 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 	private boolean isRequired() {
 		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.thePlayer != null && mc.thePlayer.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.thePlayer.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
+		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}
-		return this.required || (mc.theWorld != null && mc.theWorld.provider.getDimension() == ConfigHandler.dimensionId);
+		return this.required || (mc.world != null && mc.world.provider.getDimension() == ConfigHandler.dimensionId);
 	}
 
 	@Override

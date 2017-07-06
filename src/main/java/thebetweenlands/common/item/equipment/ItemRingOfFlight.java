@@ -59,13 +59,13 @@ public class ItemRingOfFlight extends ItemRing {
 				cap.setFlightRing(true);
 				if(!player.capabilities.isCreativeMode && this.canFly(player, stack)) {
 					double flightHeight = 4.1D;
-					if(player.worldObj.isRemote || cap.isFlying())
+					if(player.world.isRemote || cap.isFlying())
 						player.capabilities.allowFlying = true;
 					boolean isFlying = cap.isFlying();
 					NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 					if(!entity.onGround) {
 						if(isFlying) {
-							if(!entity.worldObj.isRemote && entity.ticksExisted % 20 == 0) {
+							if(!entity.world.isRemote && entity.ticksExisted % 20 == 0) {
 								this.removeXp((EntityPlayer)entity, 2);
 							}
 
@@ -85,7 +85,7 @@ public class ItemRingOfFlight extends ItemRing {
 
 								double my = 0.0D;
 								boolean moveUp = false;
-								if(player.worldObj.isRemote) {
+								if(player.world.isRemote) {
 									if(player instanceof EntityPlayerSP) {
 										moveUp = ((EntityPlayerSP)player).movementInput.jump;
 									}
@@ -105,12 +105,12 @@ public class ItemRingOfFlight extends ItemRing {
 
 							entity.fallDistance = 0.0F;
 
-							if(!entity.onGround && entity.worldObj.isRemote) {
+							if(!entity.onGround && entity.world.isRemote) {
 								if(cap.getFlightTime() > 40) {
-									BLParticles.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
+									BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
 								} else {
 									for(int i = 0; i < 5; i++) {
-										BLParticles.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
+										BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
 									}
 								}
 							}
@@ -121,12 +121,12 @@ public class ItemRingOfFlight extends ItemRing {
 						cap.setFlying(false);
 						nbt.setBoolean("ringActive", false);
 					}
-				} else if(cap.isFlying() && !player.onGround && player.worldObj.isRemote) {
+				} else if(cap.isFlying() && !player.onGround && player.world.isRemote) {
 					if(cap.getFlightTime() > 40) {
-						BLParticles.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
+						BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
 					} else {
 						for(int i = 0; i < 5; i++) {
-							BLParticles.LEAF_SWIRL.spawn(entity.worldObj, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
+							BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
 						}
 					}
 				}
@@ -135,7 +135,7 @@ public class ItemRingOfFlight extends ItemRing {
 	}
 
 	private double getGroundHeight(EntityPlayer player) {
-		RayTraceResult result = player.worldObj.rayTraceBlocks(new Vec3d(player.posX, player.posY, player.posZ), new Vec3d(player.posX, player.posY - 64, player.posZ), true);
+		RayTraceResult result = player.world.rayTraceBlocks(new Vec3d(player.posX, player.posY, player.posZ), new Vec3d(player.posX, player.posY - 64, player.posZ), true);
 		if(result != null && result.typeOfHit == Type.BLOCK) {
 			return result.hitVec.yCoord;
 		}
@@ -172,7 +172,7 @@ public class ItemRingOfFlight extends ItemRing {
 						}
 					}
 
-					if(canPlayerFly && player.worldObj.isRemote) {
+					if(canPlayerFly && player.world.isRemote) {
 						if(event.phase == Phase.START) {
 							player.capabilities.isFlying = false;
 						} else {
@@ -193,7 +193,7 @@ public class ItemRingOfFlight extends ItemRing {
 								if(!player.capabilities.isCreativeMode) {
 									player.capabilities.isFlying = false;
 									player.capabilities.allowFlying = false;
-									if(player.worldObj.isRemote) {
+									if(player.world.isRemote) {
 										player.capabilities.setFlySpeed(0.05F);
 									}
 								}

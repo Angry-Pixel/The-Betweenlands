@@ -49,7 +49,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
 	}
 
@@ -59,7 +59,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (world.isRemote) {
 			return true;
 		}
@@ -69,7 +69,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 			if (player.isSneaking()) {
 				return false;
 			}
-
+			ItemStack heldItem = player.getHeldItem(hand);
 			if (heldItem != null) {
 				if(heldItem.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 					Fluid fluid = FluidRegistry.SWAMP_WATER;

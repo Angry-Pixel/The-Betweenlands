@@ -10,6 +10,7 @@ import com.google.common.base.CaseFormat;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -26,7 +27,7 @@ public class ItemPlantDrop extends Item implements ItemRegistry.ISubItemsItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList list) {
 		for (EnumItemPlantDrop type : EnumItemPlantDrop.values())
 			list.add(type.create(1));
 	}

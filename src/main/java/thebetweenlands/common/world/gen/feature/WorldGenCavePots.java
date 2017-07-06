@@ -40,7 +40,7 @@ public class WorldGenCavePots extends WorldGenerator {
 			for (int zz = -2; zz <= 2; zz++) {
 				for(int yy = -1; yy <= 1; yy++) {
 					double dst = Math.sqrt(xx*xx+yy*yy+zz*zz);
-					if (random.nextInt(MathHelper.ceiling_double_int(dst / 1.4D) + 1) == 0) {
+					if (random.nextInt(MathHelper.ceil(dst / 1.4D) + 1) == 0) {
 						BlockPos offsetPos = pos.add(xx, yy, zz);
 						if(world.isAirBlock(offsetPos)) {
 							IBlockState surfaceBlock = world.getBlockState(offsetPos.down());

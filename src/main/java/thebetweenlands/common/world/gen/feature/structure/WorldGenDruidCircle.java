@@ -62,8 +62,8 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 						int x = startX + xo;
 						int z = startZ + zo;
 						pos.setPos(x, 0, z);
-						Biome biome = world.getBiomeGenForCoords(pos);
-						if (BiomeDictionary.isBiomeOfType(biome, BiomeDictionary.Type.SWAMP)) {
+						Biome biome = world.getBiome(pos);
+						if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)) {
 							int newY = world.getHeight(pos).getY() - 1;
 							pos.setY(newY);
 							IBlockState block = world.getBlockState(pos);
@@ -107,8 +107,8 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 
 		// circle
 		MutableBlockPos pos = new MutableBlockPos();
-		IBlockState ground = world.getBiomeGenForCoords(altar).topBlock;
-		IBlockState filler = world.getBiomeGenForCoords(altar).fillerBlock;
+		IBlockState ground = world.getBiome(altar).topBlock;
+		IBlockState filler = world.getBiome(altar).fillerBlock;
 		int altarX = altar.getX(), altarY = altar.getY(), altarZ = altar.getZ();
 		for (int x = -this.baseRadius; x <= this.baseRadius; x++) {
 			for (int z = -this.baseRadius; z <= this.baseRadius; z++) {
@@ -163,7 +163,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	}
 
 	private void placeAir(World world, MutableBlockPos pos) {
-		Biome biome = world.getBiomeGenForCoords(pos);
+		Biome biome = world.getBiome(pos);
 		for (int k = 0, y = pos.getY(); k <= this.height; k++, pos.setY(y + k)) {
 			IBlockState blockState = world.getBlockState(pos);
 			if(blockState == biome.fillerBlock || blockState == biome.topBlock || blockState.getMaterial() == Material.ROCK || blockState.getMaterial() == Material.GROUND) {

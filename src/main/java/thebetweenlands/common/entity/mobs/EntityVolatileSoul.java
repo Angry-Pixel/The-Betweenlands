@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -62,8 +63,8 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	private Entity getEntityByUUID(UUID p_152378_1_) {
-		for (int i = 0; i < this.worldObj.loadedEntityList.size(); ++i) {
-			Entity entity = (Entity)this.worldObj.loadedEntityList.get(i);
+		for (int i = 0; i < this.world.loadedEntityList.size(); ++i) {
+			Entity entity = (Entity)this.world.loadedEntityList.get(i);
 			if (p_152378_1_.equals(entity.getUniqueID())) {
 				return entity;
 			}
@@ -73,7 +74,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	protected void onImpact(RayTraceResult target) {
 		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase && target.entityHit instanceof EntityWight == false) {
-			if(!this.worldObj.isRemote) {
+			if(!this.world.isRemote) {
 				if(target.entityHit instanceof EntityPlayer && ((EntityPlayer)target.entityHit).isActiveItemStackBlocking() && ((EntityPlayer)target.entityHit).getItemInUseCount() <= 15) {
 					this.motionX *= -6;
 					this.motionY *= -6;
@@ -84,10 +85,10 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				target.entityHit.attackEntityFrom(DamageSource.causeIndirectMagicDamage(this, this.getOwner()), 3);
 				if(!this.isDead && target.entityHit instanceof EntityPlayer && (target.entityHit.isDead || ((EntityLivingBase)target.entityHit).getHealth() <= 0.0F)) {
 					target.entityHit.setDead();
-					/*EntityWight wight = new EntityWight(this.worldObj);
+					/*EntityWight wight = new EntityWight(this.world);
 					wight.setLocationAndAngles(target.entityHit.posX, target.entityHit.posY + 0.05D, target.entityHit.posZ, target.entityHit.rotationYaw, target.entityHit.rotationPitch);
-					if(this.worldObj.getCollidingBoundingBoxes(wight, wight.boundingBox).isEmpty()) {
-						this.worldObj.spawnEntityInWorld(wight);
+					if(this.world.getCollidingBoundingBoxes(wight, wight.boundingBox).isEmpty()) {
+						this.world.spawnEntity(wight);
 					}*/
 				}
 				this.setDead();
@@ -115,7 +116,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 			}
 			this.setBeenAttacked();
 			if (source.getEntity() != null) {
-				if(!this.worldObj.isRemote) {
+				if(!this.world.isRemote) {
 					Vec3d vec3 = source.getEntity().getLookVec();
 					if (vec3 != null) {
 						this.motionX = vec3.xCoord * 1.5F;
@@ -132,29 +133,29 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	public void onUpdate() {
-		if(!this.worldObj.isRemote && (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL || this.getOwner() == null || this.getOwner().isDead)) {
+		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || this.getOwner() == null || this.getOwner().isDead)) {
 			this.setDead();
 			return;
 		}
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if((this.getOwner() == null || !this.getOwner().isEntityAlive() || this.getOwner() instanceof EntityWight == false || !((EntityWight)this.getOwner()).isVolatile()) /*|| this.target instanceof EntityFortressBoss*/)
 				this.setDead();
 		}
 
 		if(!this.isDead) {
 			this.ticksInAir++;
-			if(this.worldObj.isRemote) {
-				double px = this.posX + this.worldObj.rand.nextFloat() * 0.25F;
-				double py = this.posY + this.worldObj.rand.nextFloat() * 0.25F;
-				double pz = this.posZ + this.worldObj.rand.nextFloat() * 0.25F;
+			if(this.world.isRemote) {
+				double px = this.posX + this.world.rand.nextFloat() * 0.25F;
+				double py = this.posY + this.world.rand.nextFloat() * 0.25F;
+				double pz = this.posZ + this.world.rand.nextFloat() * 0.25F;
 				Vec3d vec = new Vec3d(px, py, pz).subtract(new Vec3d(this.posX + 0.125F, this.posY + 0.125F, this.posZ + 0.125F)).normalize();
-				BLParticles.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz, ParticleArgs.get().withMotion(vec.xCoord * 0.05F, vec.yCoord * 0.05F, vec.zCoord * 0.05F));
+				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz, ParticleArgs.get().withMotion(vec.xCoord * 0.05F, vec.yCoord * 0.05F, vec.zCoord * 0.05F));
 			}
 			if(this.target == null || this.target.isDead) {
-				List<Entity> targetList = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
+				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
 				List<Entity> eligibleTargets = new ArrayList<Entity>();
-				if(this.worldObj.rand.nextInt(4) > 0) {
+				if(this.world.rand.nextInt(4) > 0) {
 					for(Entity e : targetList) {
 						if(e instanceof EntityPlayer) {
 							eligibleTargets.add((EntityPlayer)e);
@@ -169,14 +170,14 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 					}
 				}
 				if(!eligibleTargets.isEmpty()) {
-					this.target = eligibleTargets.get(this.worldObj.rand.nextInt(eligibleTargets.size()));
+					this.target = eligibleTargets.get(this.world.rand.nextInt(eligibleTargets.size()));
 				}
 			} 
 			if(this.target != null && this.ticksInAir >= 10) {
 				double dx = this.target.getEntityBoundingBox().minX + (this.target.getEntityBoundingBox().maxX - this.target.getEntityBoundingBox().minX) / 2.0D - this.posX;
 				double dy = this.target.getEntityBoundingBox().minY + (this.target.getEntityBoundingBox().maxY - this.target.getEntityBoundingBox().minY) / 2.0D - this.posY;
 				double dz = this.target.getEntityBoundingBox().minZ + (this.target.getEntityBoundingBox().maxZ - this.target.getEntityBoundingBox().minZ) / 2.0D - this.posZ;
-				double dist = MathHelper.sqrt_double(dx * dx + dy * dy + dz * dz);
+				double dist = MathHelper.sqrt(dx * dx + dy * dy + dz * dz);
 				double speed = 0.075D;
 				double maxSpeed = 0.8D;
 				this.motionX += dx / dist * speed;
@@ -192,14 +193,14 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 			}
 			Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
 			Vec3d nextPos = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
-			RayTraceResult hitObject = this.worldObj.rayTraceBlocks(currentPos, nextPos);
+			RayTraceResult hitObject = this.world.rayTraceBlocks(currentPos, nextPos);
 			currentPos = new Vec3d(this.posX, this.posY, this.posZ);
 			nextPos = new Vec3d(this.posX + this.motionX, this.posY + this.motionY, this.posZ + this.motionZ);
 			if (hitObject != null) {
 				nextPos = new Vec3d(hitObject.hitVec.xCoord, hitObject.hitVec.yCoord, hitObject.hitVec.zCoord);
 			}
 			Entity hitEntity = null;
-			List<Entity> hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(2.0D, 2.0D, 2.0D));
+			List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().addCoord(this.motionX, this.motionY, this.motionZ).expand(2.0D, 2.0D, 2.0D));
 			double minDist = 0.0D;
 			for (int i = 0; i < hitEntities.size(); ++i) {
 				Entity entity1 = (Entity)hitEntities.get(i);
@@ -222,7 +223,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 			if (hitObject != null) {
 				this.onImpact(hitObject);
 			}
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		}
 
 		super.onUpdate();
@@ -230,7 +231,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	@Override
 	public void setThrowableHeading(double x, double y, double z, float speed, float randMotion) {
-		float f2 = MathHelper.sqrt_double(x * x + y * y + z * z);
+		float f2 = MathHelper.sqrt(x * x + y * y + z * z);
 		x /= (double)f2;
 		y /= (double)f2;
 		z /= (double)f2;
@@ -243,7 +244,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 		this.motionX = x;
 		this.motionY = y;
 		this.motionZ = z;
-		float f3 = MathHelper.sqrt_double(x * x + z * z);
+		float f3 = MathHelper.sqrt(x * x + z * z);
 		this.prevRotationYaw = this.rotationYaw = (float)(Math.atan2(x, z) * 180.0D / Math.PI);
 		this.prevRotationPitch = this.rotationPitch = (float)(Math.atan2(y, (double)f3) * 180.0D / Math.PI);
 	}

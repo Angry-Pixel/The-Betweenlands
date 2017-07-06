@@ -11,11 +11,6 @@ public class DruidAltarHandler implements IRecipeHandler<DruidAltarRecipeJEI> {
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return null;
-    }
-
-    @Override
     public String getRecipeCategoryUid(DruidAltarRecipeJEI recipe) {
         return ModInfo.ID + ":druid_altar";
     }

@@ -114,26 +114,26 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		boolean isDifficultyValid = this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL;
+		boolean isDifficultyValid = this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 		if(isDifficultyValid) {
-			int bx = MathHelper.floor_double(posX);
-			int by = MathHelper.floor_double(posY);
-			int bz = MathHelper.floor_double(posZ);
+			int bx = MathHelper.floor(posX);
+			int by = MathHelper.floor(posY);
+			int bz = MathHelper.floor(posZ);
 			MutableBlockPos pos = new MutableBlockPos();
 			boolean isInTar = 
-					this.worldObj.getBlockState(pos.setPos(bx, by, bz)).getBlock() == BlockRegistry.TAR &&
-					this.worldObj.getBlockState(pos.setPos(bx-1, by, bz)).getBlock() == BlockRegistry.TAR &&
-					this.worldObj.getBlockState(pos.setPos(bx+1, by, bz)).getBlock() == BlockRegistry.TAR &&
-					this.worldObj.getBlockState(pos.setPos(bx, by, bz-1)).getBlock() == BlockRegistry.TAR &&
-					this.worldObj.getBlockState(pos.setPos(bx, by, bz+1)).getBlock() == BlockRegistry.TAR;
-			return this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox()) && this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && isInTar;
+					this.world.getBlockState(pos.setPos(bx, by, bz)).getBlock() == BlockRegistry.TAR &&
+					this.world.getBlockState(pos.setPos(bx-1, by, bz)).getBlock() == BlockRegistry.TAR &&
+					this.world.getBlockState(pos.setPos(bx+1, by, bz)).getBlock() == BlockRegistry.TAR &&
+					this.world.getBlockState(pos.setPos(bx, by, bz-1)).getBlock() == BlockRegistry.TAR &&
+					this.world.getBlockState(pos.setPos(bx, by, bz+1)).getBlock() == BlockRegistry.TAR;
+			return this.world.checkNoEntityCollision(this.getEntityBoundingBox()) && this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && isInTar;
 		}
 		return false;
 	}
 
 	@Override
 	public boolean isNotColliding() {
-		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
 	}
 
 	@Override
@@ -211,21 +211,21 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			if(ticksExisted % 10 == 0) {
-				renderParticles(worldObj, posX, posY, posZ, rand);
+				renderParticles(world, posX, posY, posZ, rand);
 			}
 			if(this.sheddingProgress > this.getSheddingSpeed()) {
 				this.sheddingProgress = 0;
 
 				for(int i = 0; i < 200; i++) {
-					Random rnd = worldObj.rand;
+					Random rnd = world.rand;
 					float rx = rnd.nextFloat() * 4.0F - 2.0F;
 					float ry = rnd.nextFloat() * 4.0F - 2.0F;
 					float rz = rnd.nextFloat() * 4.0F - 2.0F;
 					Vec3d vec = new Vec3d(rx, ry, rz);
 					vec = vec.normalize();
-					BLParticles.SPLASH_TAR.spawn(this.worldObj, this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, ParticleArgs.get().withMotion(vec.xCoord * 0.5F, vec.yCoord * 0.5F, vec.zCoord * 0.5F));
+					BLParticles.SPLASH_TAR.spawn(this.world, this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, ParticleArgs.get().withMotion(vec.xCoord * 0.5F, vec.yCoord * 0.5F, vec.zCoord * 0.5F));
 				}
 			} else if(this.isShedding() || this.sheddingProgress > 0) {
 				this.sheddingProgress++;
@@ -235,18 +235,18 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 			if(this.isSucking()) {
 				for(int i = 0; i < 5; i++) {
-					Random rnd = worldObj.rand;
+					Random rnd = world.rand;
 					float rx = rnd.nextFloat() * 8.0F - 4.0F;
 					float ry = rnd.nextFloat() * 8.0F - 4.0F;
 					float rz = rnd.nextFloat() * 8.0F - 4.0F;
 					Vec3d vec = new Vec3d(rx, ry, rz);
 					vec = vec.normalize();
-					this.worldObj.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, -vec.xCoord * 0.5F, -vec.yCoord * 0.5F, -vec.zCoord * 0.5F);
+					this.world.spawnParticle(EnumParticleTypes.SMOKE_LARGE, this.posX + rx + 0.25F, this.posY + ry, this.posZ + rz + 0.25F, -vec.xCoord * 0.5F, -vec.yCoord * 0.5F, -vec.zCoord * 0.5F);
 				}
 			}
 		}
 
-		if(!worldObj.isRemote) {
+		if(!world.isRemote) {
 			if(this.isInsideOfMaterial(BLMaterialRegistry.TAR)) {
 				this.stepHeight = 2.0F;
 			} else {
@@ -260,7 +260,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			if(!this.isSucking() && !this.isPreparing()) {
 				if(this.shedCooldown == 0 && this.getAttackTarget() != null && this.getAttackTarget().getDistanceToEntity(this) < 6.0D && this.canEntityBeSeen(this.getAttackTarget())) {
 					this.setShedding(true);
-					this.shedCooldown = this.getSheddingCooldown() + this.worldObj.rand.nextInt(this.getSheddingCooldown() / 2);
+					this.shedCooldown = this.getSheddingCooldown() + this.world.rand.nextInt(this.getSheddingCooldown() / 2);
 				}
 
 				if(this.sheddingProgress > this.getSheddingSpeed()) {
@@ -271,7 +271,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					this.sheddingProgress = 0;
 					this.setShedding(false);
 					if(this.getAttackTarget() != null) {
-						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(6.0F, 6.0F, 6.0F));
+						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(6.0F, 6.0F, 6.0F));
 						for(EntityLivingBase e : affectedEntities) {
 							if(e == this || e.getDistanceToEntity(this) > 6.0F || !e.canEntityBeSeen(this) || e instanceof EntityTarBeast) continue;
 							if(e instanceof EntityPlayer) {
@@ -308,7 +308,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 						this.suckingPreparation = 0;
 
 						this.setSucking(true);
-						this.suckingCooldown = this.getSuckingCooldown() + this.worldObj.rand.nextInt(this.getSuckingCooldown() / 2);
+						this.suckingCooldown = this.getSuckingCooldown() + this.world.rand.nextInt(this.getSuckingCooldown() / 2);
 						this.playSound(SoundRegistry.TAR_BEAST_SUCK, 1F, 1F);
 					}
 				}
@@ -321,7 +321,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.isSucking()) {
 					this.suckingProgress++;
 
-					List<Entity> affectedEntities = (List<Entity>)this.worldObj.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(10.0F, 10.0F, 10.0F));
+					List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(10.0F, 10.0F, 10.0F));
 					for(Entity e : affectedEntities) {
 						if(e == this || e.getDistanceToEntity(this) > 10.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
 						Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
@@ -341,7 +341,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 								((EntityPlayer)e).jumpMovementFactor = 0.0F;
 							}
 							if(this.ticksExisted % 12 == 0) {
-								e.attackEntityFrom(DamageSource.drown, 1);
+								e.attackEntityFrom(DamageSource.DROWN, 1);
 							}
 						}
 						e.motionX += vec.xCoord * 0.18F * mod;

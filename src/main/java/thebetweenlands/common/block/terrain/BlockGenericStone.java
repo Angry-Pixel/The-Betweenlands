@@ -15,6 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -37,7 +38,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 	@Override
 	@SideOnly(Side.CLIENT)
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void getSubBlocks(Item id, CreativeTabs tab, List list) {
+	public void getSubBlocks(Item id, CreativeTabs tab, NonNullList list) {
 		for (EnumStoneType type : EnumStoneType.values())
 			list.add(new ItemStack(id, 1, type.getMetadata()));
 	}

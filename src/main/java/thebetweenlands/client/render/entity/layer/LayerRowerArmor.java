@@ -27,7 +27,7 @@ public class LayerRowerArmor extends LayerArmorBase<ModelBipedRower> {
 
     @Override
     protected void setModelSlotVisible(ModelBipedRower armor, EntityEquipmentSlot slot) {
-        armor.setInvisible(false);
+        armor.setVisible(false);
         switch (slot) {
             case HEAD:
                 armor.bipedHead.showModel = true;

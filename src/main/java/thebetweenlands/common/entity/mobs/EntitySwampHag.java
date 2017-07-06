@@ -126,7 +126,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	public void onLivingUpdate() {
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			updateLivingSoundTime();
 		}
 

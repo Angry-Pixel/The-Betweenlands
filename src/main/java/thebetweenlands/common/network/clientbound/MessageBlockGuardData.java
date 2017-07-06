@@ -29,9 +29,9 @@ public class MessageBlockGuardData extends MessageBase {
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
-		this.id = buf.readStringFromBuffer(256);
+		this.id = buf.readString(256);
 		try {
-			this.data = buf.readNBTTagCompoundFromBuffer();
+			this.data = buf.readCompoundTag();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -40,7 +40,7 @@ public class MessageBlockGuardData extends MessageBase {
 	@Override
 	public void serialize(PacketBuffer buf) {
 		buf.writeString(this.id);
-		buf.writeNBTTagCompoundToBuffer(this.data);
+		buf.writeCompoundTag(this.data);
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public class MessageBlockGuardData extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		SharedStorage storage = worldStorage.getSharedStorage(this.id);
 		if(storage != null && storage instanceof LocationGuarded) {

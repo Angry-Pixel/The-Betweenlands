@@ -35,7 +35,7 @@ public class MessageFlightState extends MessageBase {
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
+			EntityPlayer player = ctx.getServerHandler().player;
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
 				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
 

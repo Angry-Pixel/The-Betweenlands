@@ -25,7 +25,7 @@ public class BlockLocationGuard implements ILocationGuard {
 	public GuardChunk getChunk(BlockPos pos) {
 		int x = pos.getX();
 		int z = pos.getZ();
-		long id = ChunkPos.chunkXZ2Int(x / 16, z / 16);
+		long id = ChunkPos.asLong(x / 16, z / 16);
 		return this.chunkMap.get(id);
 	}
 
@@ -48,7 +48,7 @@ public class BlockLocationGuard implements ILocationGuard {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
-		long id = ChunkPos.chunkXZ2Int(x / 16, z / 16);
+		long id = ChunkPos.asLong(x / 16, z / 16);
 		GuardChunk chunk = this.chunkMap.get(id);
 		if(guarded) {
 			if(chunk == null) {
@@ -66,7 +66,7 @@ public class BlockLocationGuard implements ILocationGuard {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
-			long id = ChunkPos.chunkXZ2Int(x / 16, z / 16);
+			long id = ChunkPos.asLong(x / 16, z / 16);
 			GuardChunk chunk = this.chunkMap.get(id);
 			if(chunk != null && chunk.isGuarded(x & 15, y, z & 15)) {
 				return true;
@@ -117,7 +117,7 @@ public class BlockLocationGuard implements ILocationGuard {
 				int z = chunkNbt.getInteger("Z");
 				GuardChunk chunk = new GuardChunk(x, z);
 				chunk.readFromNBT(chunkNbt);
-				this.chunkMap.put(ChunkPos.chunkXZ2Int(x, z), chunk);
+				this.chunkMap.put(ChunkPos.asLong(x, z), chunk);
 			}
 		}
 	}

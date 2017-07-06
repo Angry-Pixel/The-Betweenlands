@@ -20,6 +20,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -76,7 +77,7 @@ public class ItemAmulet extends Item implements IEquippable {
 
 		ItemStack result = EquipmentHelper.equipItem(null, entity, amulet, false);
 
-		if(result == null || result.stackSize != amulet.stackSize) {
+		if(result == null || result.getCount() != amulet.getCount()) {
 			return true;
 		}
 
@@ -96,7 +97,7 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(createStack(CircleGemType.NONE));
 		list.add(createStack(CircleGemType.AQUA));
 		list.add(createStack(CircleGemType.CRIMSON));

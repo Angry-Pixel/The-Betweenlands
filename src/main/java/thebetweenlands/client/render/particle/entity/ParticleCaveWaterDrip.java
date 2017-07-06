@@ -29,24 +29,24 @@ public class ParticleCaveWaterDrip extends Particle {
 		prevPosY = posY;
 		prevPosZ = posZ;
 		motionY -= particleGravity;
-		moveEntity(motionX, motionY, motionZ);
+		move(motionX, motionY, motionZ);
 		motionX *= 0.98;
 		motionY *= 0.98;
 		motionZ *= 0.98;
 		if (particleMaxAge-- <= 0) {
 			this.setExpired();
 		}
-		if (this.isCollided) {
+		if (this.onGround) {
 			this.setExpired();
-			this.worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
+			this.world.spawnParticle(EnumParticleTypes.WATER_SPLASH, this.posX, this.posY, this.posZ, 0.0D, 0.0D, 0.0D, new int[0]);
 			motionX *= 0.7;
 			motionZ *= 0.7;
 		}
 		BlockPos pos = new BlockPos(posX, posY, posZ);
-		IBlockState block = worldObj.getBlockState(pos);
+		IBlockState block = world.getBlockState(pos);
 		Material material = block.getMaterial();
 		if (material.isLiquid() || material.isSolid() && !(block instanceof BlockStalactite)) {
-			double y = pos.getY() + 1 - BlockLiquid.getLiquidHeightPercent(worldObj.getBlockState(pos).getBlock().getMetaFromState(worldObj.getBlockState(pos)));
+			double y = pos.getY() + 1 - BlockLiquid.getLiquidHeightPercent(world.getBlockState(pos).getBlock().getMetaFromState(world.getBlockState(pos)));
 			if (posY < y) {
 				this.setExpired();
 			}

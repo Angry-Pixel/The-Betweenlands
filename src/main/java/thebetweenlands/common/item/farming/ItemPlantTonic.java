@@ -29,7 +29,7 @@ public class ItemPlantTonic extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState state = world.getBlockState(pos);
 
 		if(state.getBlock() instanceof IPlantable || state.getBlock() instanceof IFarmablePlant) {
@@ -62,6 +62,7 @@ public class ItemPlantTonic extends Item {
 
 			if(cured) {
 				if(!world.isRemote && !player.isCreative()) {
+					ItemStack stack = player.getHeldItem(hand);
 					stack.setItemDamage(stack.getItemDamage() + 1);
 					if(stack.getItemDamage() >= stack.getMaxDamage()) {
 						player.setHeldItem(hand, this.empty != null ? this.empty.copy() : null);

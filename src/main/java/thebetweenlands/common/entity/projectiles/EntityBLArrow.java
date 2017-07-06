@@ -69,7 +69,7 @@ public class EntityBLArrow extends EntityArrow {
 			try {
 				UUID uuid = UUID.fromString(this.dataManager.get(DW_UUID));
 				if(uuid != null) {
-					this.shootingEntity = this.worldObj.getPlayerEntityByUUID(uuid);
+					this.shootingEntity = this.world.getPlayerEntityByUUID(uuid);
 				}
 			} catch(Exception ignored) { } finally {
 				this.checkedShooter = true;
@@ -80,7 +80,7 @@ public class EntityBLArrow extends EntityArrow {
 			this.inGroundTicks++;
 		}
 
-		if(!this.worldObj.isRemote && !this.inGround) {
+		if(!this.world.isRemote && !this.inGround) {
 			RayTraceResult collision = getCollision(this);
 			if(collision != null && collision.typeOfHit == RayTraceResult.Type.ENTITY && collision.entityHit instanceof EntityLivingBase) {
 				EntityLivingBase hitEntity = (EntityLivingBase) collision.entityHit;
@@ -112,7 +112,7 @@ public class EntityBLArrow extends EntityArrow {
 	private static RayTraceResult getCollision(EntityArrow ea) {
 		Vec3d start = new Vec3d(ea.posX, ea.posY, ea.posZ);
 		Vec3d dest = new Vec3d(ea.posX + ea.motionX, ea.posY + ea.motionY, ea.posZ + ea.motionZ);
-		RayTraceResult hit = ea.worldObj.rayTraceBlocks(start, dest, false, true, false);
+		RayTraceResult hit = ea.world.rayTraceBlocks(start, dest, false, true, false);
 		start = new Vec3d(ea.posX, ea.posY, ea.posZ);
 		dest = new Vec3d(ea.posX + ea.motionX, ea.posY + ea.motionY, ea.posZ + ea.motionZ);
 		if (hit != null) {
@@ -120,7 +120,7 @@ public class EntityBLArrow extends EntityArrow {
 		}
 
 		Entity collidedEntity = null;
-		List<Entity> entityList = ea.worldObj.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().addCoord(ea.motionX, ea.motionY, ea.motionZ).expand(1.05D, 1.05D, 1.05D));
+		List<Entity> entityList = ea.world.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().addCoord(ea.motionX, ea.motionY, ea.motionZ).expand(1.05D, 1.05D, 1.05D));
 		double lastDistance = 0.0D;
 		for (Object anEntityList : entityList) {
 			Entity currentEntity = (Entity) anEntityList;

@@ -73,7 +73,7 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
 
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.worldObj);
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.world);
 		return worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity), entity.posX, entity.posZ);
 	}
 
@@ -86,7 +86,7 @@ public class ScreenRenderHandler extends Gui {
 				this.titleTicks--;
 			}
 
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer player = Minecraft.getMinecraft().player;
 			if(player != null && player.dimension == ConfigHandler.dimensionId) {
 				String prevLocation = this.currentLocation;
 
@@ -165,7 +165,7 @@ public class ScreenRenderHandler extends Gui {
 			int height = event.getResolution().getScaledHeight();
 
 			Minecraft mc = Minecraft.getMinecraft();
-			EntityPlayer player = mc.thePlayer;
+			EntityPlayer player = mc.player;
 
 			if(player != null) {
 				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
@@ -195,7 +195,7 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.scale(scale, scale, scale);
 
 								mc.getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
-								mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRendererObj, stack, 0, 0, null);
+								mc.getRenderItem().renderItemOverlayIntoGUI(mc.fontRenderer, stack, 0, 0, null);
 
 								GlStateManager.disableAlpha();
 								GlStateManager.disableRescaleNormal();
@@ -341,21 +341,21 @@ public class ScreenRenderHandler extends Gui {
 	@SubscribeEvent
 	public void onRenderScreen(DrawScreenEvent.Post event) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mc.currentScreen instanceof GuiContainer && mc.thePlayer != null) {
+		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mc.currentScreen instanceof GuiContainer && mc.player != null) {
 			GuiContainer container = (GuiContainer) mc.currentScreen;
 
 			//Render aspects tooltip
 			Slot selectedSlot = container.getSlotUnderMouse();
 			if(selectedSlot != null && selectedSlot.getHasStack()) {
 				ScaledResolution resolution = new ScaledResolution(mc);
-				FontRenderer fontRenderer = mc.fontRendererObj;
+				FontRenderer fontRenderer = mc.fontRenderer;
 				double mouseX = (Mouse.getX() * resolution.getScaledWidth_double()) / mc.displayWidth;
 				double mouseY = resolution.getScaledHeight_double() - (Mouse.getY() * resolution.getScaledHeight_double()) / mc.displayHeight - 1;
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(mouseX + 8, mouseY - 38, 500);
 				int yOffset = 0;
 				int width = 0;
-				List<Aspect> aspects = ItemAspectContainer.fromItem(selectedSlot.getStack(), AspectManager.get(mc.theWorld)).getAspects(mc.thePlayer);
+				List<Aspect> aspects = ItemAspectContainer.fromItem(selectedSlot.getStack(), AspectManager.get(mc.world)).getAspects(mc.player);
 				GlStateManager.enableTexture2D();
 				GlStateManager.enableBlend();
 				RenderHelper.disableStandardItemLighting();

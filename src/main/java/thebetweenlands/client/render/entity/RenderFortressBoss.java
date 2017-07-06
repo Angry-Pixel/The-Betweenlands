@@ -53,7 +53,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 				}
 				if(lightIntensity > 0.0F) {
 					ShaderHelper.INSTANCE.require();
-					shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
+					shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp(lightIntensity, 0.0F, 4.0F)));
 				}
 			} else {
 				ShaderHelper.INSTANCE.require();
@@ -299,8 +299,8 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 		if(this.getRenderManager().isDebugBoundingBox()) {
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.disableCull();
-			Vec3d pos = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks);
-			Vec3d ray = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
+			Vec3d pos = Minecraft.getMinecraft().player.getPositionEyes(partialTicks);
+			Vec3d ray = Minecraft.getMinecraft().player.getLook(partialTicks);
 			ray = ray.scale(64.0D);
 			int hitShield = boss.rayTraceShield(pos, ray, false);
 			if(hitShield >= 0) {

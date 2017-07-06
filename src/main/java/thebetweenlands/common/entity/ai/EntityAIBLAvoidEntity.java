@@ -52,12 +52,12 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
             if (entity instanceof EntityTameable && ((EntityTameable) entity).isTamed()) {
                 return false;
             }
-            closestLivingEntity = entity.worldObj.getClosestPlayerToEntity(entity, targetDistanceFromEntity);
+            closestLivingEntity = entity.world.getClosestPlayerToEntity(entity, targetDistanceFromEntity);
             if (closestLivingEntity == null) {
                 return false;
             }
         } else {
-            List list = entity.worldObj.getEntitiesWithinAABB(targetEntityClass, entity.getEntityBoundingBox().expand(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
+            List list = entity.world.getEntitiesWithinAABB(targetEntityClass, entity.getEntityBoundingBox().expand(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
             if (list.isEmpty()) {
                 return false;
             }
@@ -75,7 +75,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         return !entityPathNavigate.noPath();
     }
 

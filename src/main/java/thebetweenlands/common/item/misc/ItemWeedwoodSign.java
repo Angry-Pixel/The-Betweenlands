@@ -25,13 +25,13 @@ public class ItemWeedwoodSign extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
 		boolean flag = iblockstate.getBlock().isReplaceable(worldIn, pos);
 
 		if (facing != EnumFacing.DOWN && (iblockstate.getMaterial().isSolid() || flag) && (!flag || facing == EnumFacing.UP)) {
 			pos = pos.offset(facing);
-
+			ItemStack stack = playerIn.getHeldItem(hand);
 			if (playerIn.canPlayerEdit(pos, facing, stack) && BlockRegistry.STANDING_WEEDWOOD_SIGN.canPlaceBlockAt(worldIn, pos)) {
 				if (worldIn.isRemote) {
 					return EnumActionResult.SUCCESS;
@@ -39,13 +39,13 @@ public class ItemWeedwoodSign extends Item {
 					pos = flag ? pos.down() : pos;
 
 					if (facing == EnumFacing.UP) {
-						int i = MathHelper.floor_double((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
+						int i = MathHelper.floor((double)((playerIn.rotationYaw + 180.0F) * 16.0F / 360.0F) + 0.5D) & 15;
 						worldIn.setBlockState(pos, BlockRegistry.STANDING_WEEDWOOD_SIGN.getDefaultState().withProperty(BlockStandingSign.ROTATION, Integer.valueOf(i)), 11);
 					} else {
 						worldIn.setBlockState(pos, BlockRegistry.WALL_WEEDWOOD_SIGN.getDefaultState().withProperty(BlockWallSign.FACING, facing), 11);
 					}
 
-					--stack.stackSize;
+					stack.shrink(1);
 					TileEntity tileentity = worldIn.getTileEntity(pos);
 
 					if (tileentity instanceof TileEntitySign && !ItemBlock.setTileEntityNBT(worldIn, playerIn, pos, stack)) {

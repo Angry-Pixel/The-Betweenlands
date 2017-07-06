@@ -11,11 +11,6 @@ public class AnimatorRecipeHandler implements IRecipeHandler<AnimatorRecipeJEI> 
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return null;
-    }
-
-    @Override
     public String getRecipeCategoryUid(AnimatorRecipeJEI recipe) {
         return ModInfo.ID + ":animator";
     }
