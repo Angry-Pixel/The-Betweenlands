@@ -39,7 +39,7 @@ public class BlockMortar extends BlockContainer {
     }
 
     @Override
-    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
     }
 
@@ -49,7 +49,7 @@ public class BlockMortar extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (worldIn.isRemote)
             return true;
         if (worldIn.getTileEntity(pos) instanceof TileEntityMortar) {
@@ -99,7 +99,7 @@ public class BlockMortar extends BlockContainer {
                         double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
                         EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
                         entityitem.setPickupDelay(10);
-                        world.spawnEntityInWorld(entityitem);
+                        world.spawnEntity(entityitem);
                     }
                 }
             }

@@ -20,12 +20,12 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 	private final MobSpawnerLogicBetweenlands spawnerLogic = new MobSpawnerLogicBetweenlands() {
 		@Override
 		public void broadcastEvent(int eventID) {
-			TileEntityMobSpawnerBetweenlands.this.worldObj.addBlockEvent(TileEntityMobSpawnerBetweenlands.this.getPos(), BlockRegistry.MOB_SPAWNER, eventID, 0);
+			TileEntityMobSpawnerBetweenlands.this.world.addBlockEvent(TileEntityMobSpawnerBetweenlands.this.getPos(), BlockRegistry.MOB_SPAWNER, eventID, 0);
 		}
 
 		@Override
 		public World getSpawnerWorld() {
-			return TileEntityMobSpawnerBetweenlands.this.worldObj;
+			return TileEntityMobSpawnerBetweenlands.this.world;
 		}
 
 		@Override
@@ -58,7 +58,7 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 						(float) this.getSpawnerX() + rx, (float) this.getSpawnerY() + ry, (float) this.getSpawnerZ() + rz,
 						ParticleFactory.ParticleArgs.get()
 						.withMotion((rx - 0.5D) / len * 0.05D, (ry - 0.5D) / len * 0.05D, (rz - 0.5D) / len * 0.05D)
-						.withColor(1.0F, MathHelper.clamp_float(4 + (float) Math.sin(counter) * 3, 0, 1), MathHelper.clamp_float((float) Math.sin(counter) * 2, 0, 1), 0.65F));
+						.withColor(1.0F, MathHelper.clamp(4 + (float) Math.sin(counter) * 3, 0, 1), MathHelper.clamp((float) Math.sin(counter) * 2, 0, 1), 0.65F));
 			}
 		}
 	};

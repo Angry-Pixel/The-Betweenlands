@@ -31,7 +31,7 @@ public class MessageUpdatePuppeteerState extends MessageBase {
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
 			if(!this.active) {
-				EntityPlayer player = ctx.getServerHandler().playerEntity;
+				EntityPlayer player = ctx.getServerHandler().player;
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
 					IPuppeteerCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 					cap.setActivatingEntity(null);

@@ -34,7 +34,7 @@ public class BiomeRegistry {
 				Object obj = f.get(null);
 				if (obj instanceof BiomeBetweenlands) {
 					BiomeBetweenlands biome = (BiomeBetweenlands) obj;
-					GameRegistry.register(biome.setRegistryName(new ResourceLocation(ModInfo.ID, biome.getBiomeName())));
+					//GameRegistry.register(biome.setRegistryName(new ResourceLocation(ModInfo.ID, biome.getBiomeName())));
 					REGISTERED_BIOMES.add(biome);
 				}
 			}

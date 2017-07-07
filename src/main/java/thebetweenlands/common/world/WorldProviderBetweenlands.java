@@ -77,7 +77,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new ChunkGeneratorBetweenlands(this.worldObj, this.worldObj.getSeed(), BlockRegistry.BETWEENSTONE, /*Blocks.WATER*/BlockRegistry.SWAMP_WATER, LAYER_HEIGHT);
+		return new ChunkGeneratorBetweenlands(this.world, this.world.getSeed(), BlockRegistry.BETWEENSTONE, /*Blocks.WATER*/BlockRegistry.SWAMP_WATER, LAYER_HEIGHT);
 	}
 
 	@Override
@@ -91,9 +91,9 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	}
 
 	@Override
-	public void createBiomeProvider() {
+	public void init() {
 		this.setDimension(ConfigHandler.dimensionId);
-		this.biomeProvider = new BiomeProviderBetweenlands(this.worldObj.getWorldInfo());
+		this.biomeProvider = new BiomeProviderBetweenlands(this.world.getWorldInfo());
 	}
 
 	@Override
@@ -117,7 +117,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	public boolean getCanSpawnHostiles() {
 		//TODO: See setAllowedSpawnTypes
-		return /*this.allowHostiles*/this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL;
+		return /*this.allowHostiles*/this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	public boolean getCanSpawnAnimals() {
@@ -127,15 +127,15 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public BlockPos getRandomizedSpawnPoint() {
-		BlockPos spawnPos = worldObj.getSpawnPoint();
+		BlockPos spawnPos = world.getSpawnPoint();
 
-		boolean isAdventure = worldObj.getWorldInfo().getGameType() == GameType.ADVENTURE;
+		boolean isAdventure = world.getWorldInfo().getGameType() == GameType.ADVENTURE;
 		int spawnFuzz = 100;
 		int spawnFuzzHalf = spawnFuzz / 2;
 
 		if(!isAdventure) {
-			spawnPos = spawnPos.add(worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, worldObj.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
-			spawnPos = worldObj.getTopSolidOrLiquidBlock(spawnPos);
+			spawnPos = spawnPos.add(world.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, world.rand.nextInt(spawnFuzz) - spawnFuzzHalf);
+			spawnPos = world.getTopSolidOrLiquidBlock(spawnPos);
 		}
 
 		return spawnPos;
@@ -143,7 +143,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	public BetweenlandsWorldData getWorldData() {
 		if(this.worldData == null) {
-			this.worldData = BetweenlandsWorldData.forWorld(this.worldObj);
+			this.worldData = BetweenlandsWorldData.forWorld(this.world);
 		}
 		return this.worldData;
 	}
@@ -156,11 +156,11 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public void updateWeather() {
 		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
-		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
-		this.worldObj.getWorldInfo().setThundering(false);
-		this.worldObj.prevRainingStrength = this.worldObj.rainingStrength;
-		if(!this.worldObj.isRemote) {
-			float rainingStrength = this.worldObj.rainingStrength;
+		this.world.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
+		this.world.getWorldInfo().setThundering(false);
+		this.world.prevRainingStrength = this.world.rainingStrength;
+		if(!this.world.isRemote) {
+			float rainingStrength = this.world.rainingStrength;
 			if(eeRegistry.HEAVY_RAIN.isActive()) {
 				if (rainingStrength < 0.5F) {
 					rainingStrength += 0.0125F;
@@ -176,7 +176,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 					rainingStrength = 0;
 				}
 			}
-			this.worldObj.rainingStrength = rainingStrength;
+			this.world.rainingStrength = rainingStrength;
 		}
 	}
 
@@ -212,8 +212,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public void calculateInitialWeather() {
 		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
-		this.worldObj.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
-		this.worldObj.getWorldInfo().setThundering(false);
+		this.world.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
+		this.world.getWorldInfo().setThundering(false);
 		super.calculateInitialWeather();
 	}
 

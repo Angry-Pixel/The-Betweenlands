@@ -21,7 +21,7 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (isBlockOccupied() != null)
 				if (!canBreak)
 					setCanBeBroken(true);
@@ -34,17 +34,17 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 
 	public void setCanBeBroken(boolean isBreakable) {
 		canBreak = isBreakable;
-		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 	}
 
 	public void setType(byte blockType) {
 		type = blockType;
-		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected Entity isBlockOccupied() {
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY() - 3D, pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY(), pos.getZ() + 0.75D));
+		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.25D, pos.getY() - 3D, pos.getZ() + 0.25D, pos.getX() + 0.75D, pos.getY(), pos.getZ() + 0.75D));
 		for (int i = 0; i < list.size(); i++) {
 			Entity entity = list.get(i);
 			if (entity != null)
@@ -56,7 +56,7 @@ public class TileEntityItemCage extends TileEntity implements ITickable {
 
 	@SuppressWarnings("unchecked")
 	public Entity isSwordEnergyBelow() {
-		List<EntitySwordEnergy> list = worldObj.getEntitiesWithinAABB(EntitySwordEnergy.class, new AxisAlignedBB(pos.getX() - 9D, pos.getY() - 2D, pos.getZ() - 9D, pos.getX() + 10D, pos.getY() + 3D, pos.getZ() + 10D));
+		List<EntitySwordEnergy> list = world.getEntitiesWithinAABB(EntitySwordEnergy.class, new AxisAlignedBB(pos.getX() - 9D, pos.getY() - 2D, pos.getZ() - 9D, pos.getX() + 10D, pos.getY() + 3D, pos.getZ() + 10D));
 		for (int i = 0; i < list.size(); i++) {
 			EntitySwordEnergy entity = list.get(i);
 			if (entity != null)

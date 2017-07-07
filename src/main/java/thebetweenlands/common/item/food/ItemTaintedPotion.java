@@ -45,8 +45,9 @@ public class ItemTaintedPotion extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		playerIn.setActiveHand(hand);
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 	}
 
@@ -56,7 +57,7 @@ public class ItemTaintedPotion extends Item {
 		EntityPlayer player = entity instanceof EntityPlayer ? (EntityPlayer) entity : null;
 
 		if (player == null || !player.capabilities.isCreativeMode) {
-			--stack.stackSize;
+			stack.shrink(1);
 		}
 
 		if (!world.isRemote) {
@@ -68,7 +69,7 @@ public class ItemTaintedPotion extends Item {
 		}
 
 		if (player == null || !player.capabilities.isCreativeMode) {
-			if (stack.stackSize <= 0) {
+			if (stack.getCount() <= 0) {
 				return new ItemStack(Items.GLASS_BOTTLE);
 			}
 
@@ -85,6 +86,6 @@ public class ItemTaintedPotion extends Item {
 	}
 
 	public ItemStack getOriginalStack(ItemStack stack) {
-		return stack.getTagCompound() != null ? ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("originalStack")) : null;
+		return stack.getTagCompound() != null ? new ItemStack(stack.getTagCompound().getCompoundTag("originalStack")) : null;
 	}
 }

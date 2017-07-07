@@ -51,7 +51,7 @@ public class ItemWidget extends ManualWidgetBase {
         GlStateManager.enableDepth();
         GlStateManager.scale(scale, scale, scale);
         render.renderItemAndEffectIntoGUI(stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale));
-        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale), null);
+        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stacks.get(currentDisplayItem), (int) (xStart / scale), (int) (yStart / scale), null);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.scale(1f, 1f, 1f);
         GlStateManager.disableLighting();
@@ -59,7 +59,7 @@ public class ItemWidget extends ManualWidgetBase {
 
         if (mouseX >= xStart && mouseX <= xStart + 16 * scale && mouseY >= yStart && mouseY <= yStart + 16 * scale) {
             if (stacks.get(currentDisplayItem) != null) {
-                List<String> tooltipData = stacks.get(currentDisplayItem).getTooltip(Minecraft.getMinecraft().thePlayer, false);
+                List<String> tooltipData = stacks.get(currentDisplayItem).getTooltip(Minecraft.getMinecraft().player, false);
                 List<String> parsedTooltip = new ArrayList();
                 boolean first = true;
 

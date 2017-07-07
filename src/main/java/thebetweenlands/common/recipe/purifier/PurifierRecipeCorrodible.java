@@ -11,8 +11,8 @@ class PurifierRecipeCorrodible extends PurifierRecipe {
 
 	@Override
 	public ItemStack getOutput(ItemStack input) {
-		ItemStack output = ItemStack.copyItemStack(input);
-		output.stackSize = 1;
+		ItemStack output = input.copy();
+		output.setCount(1);
 		((ICorrodible)output.getItem()).setCorrosion(output, 0);
 		return output;
 	}

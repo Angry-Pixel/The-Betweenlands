@@ -75,7 +75,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (this.aggroCooldown == 200 && !this.canAttack) {
 				this.tasks.removeTask(this.aiRunAway);
 				this.tasks.addTask(0, this.aiAttack);
@@ -97,14 +97,14 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		if (source.equals(DamageSource.drown))
+		if (source.equals(DamageSource.DROWN))
 			return false;
 		return super.attackEntityFrom(source, damage);
 	}
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!this.worldObj.isRemote && getDistanceToEntity(player) <= 1.5F && this.canAttack) {
+		if (!this.world.isRemote && getDistanceToEntity(player) <= 1.5F && this.canAttack) {
 			this.aggroCooldown = 0;
 		}
 	}

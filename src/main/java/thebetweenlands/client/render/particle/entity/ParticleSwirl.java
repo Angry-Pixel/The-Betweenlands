@@ -63,9 +63,9 @@ public class ParticleSwirl extends Particle {
 			double my = tmy * VELOCITY_OFFSET_MULTIPLIER;
 			double tmz = this.targetMotionZ;
 
-			this.dragX = MathHelper.clamp_double(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
-			this.dragY = MathHelper.clamp_double(my, -0.3D, 1);
-			this.dragZ = MathHelper.clamp_double(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
+			this.dragX = MathHelper.clamp(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
+			this.dragY = MathHelper.clamp(my, -0.3D, 1);
+			this.dragZ = MathHelper.clamp(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
 		}
 	}
 
@@ -131,9 +131,9 @@ public class ParticleSwirl extends Particle {
 			this.dragZ = tmz * VELOCITY_OFFSET_MULTIPLIER;
 		}
 
-		this.dragX = MathHelper.clamp_double(this.dragX, -1, 1);
-		this.dragY = MathHelper.clamp_double(this.dragY, -0.3D, 1);
-		this.dragZ = MathHelper.clamp_double(this.dragZ, -1, 1);
+		this.dragX = MathHelper.clamp(this.dragX, -1, 1);
+		this.dragY = MathHelper.clamp(this.dragY, -0.3D, 1);
+		this.dragZ = MathHelper.clamp(this.dragZ, -1, 1);
 	}
 
 	protected void updatePosition() {

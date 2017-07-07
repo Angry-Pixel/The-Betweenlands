@@ -86,8 +86,8 @@ public class FogHandler {
 	 * @return
 	 */
 	public static boolean hasDenseFog() {
-		World world = Minecraft.getMinecraft().theWorld;
-		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().thePlayer.posY > WorldProviderBetweenlands.CAVE_START) {
+		World world = Minecraft.getMinecraft().world;
+		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			if(eeRegistry.DENSE_FOG.isActive()) {
@@ -155,12 +155,12 @@ public class FogHandler {
 	public static void onFogColor(FogColors event) {
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderView != null) {
-			IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.worldObj, renderView, (float) event.getRenderPartialTicks());
+			IBlockState blockState = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.world, renderView, (float) event.getRenderPartialTicks());
 			Fog fog = state.getFog((float)event.getRenderPartialTicks());
 			float fogColorMultiplier = fog.getColorMultiplier();
 			if(blockState.getBlock() instanceof BlockSwampWater) {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
-				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.worldObj, pos, 0);
+				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.world, pos, 0);
 				if(renderView.dimension == ConfigHandler.dimensionId) {
 					double waterFogColorMultiplier = fogColorMultiplier / 2.0F;
 					event.setRed((float)(colorMultiplier >> 16 & 255) / 255.0F * (float)waterFogColorMultiplier);
@@ -186,7 +186,7 @@ public class FogHandler {
 	public static void onFogDensity(FogDensity event) {
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderView != null) {
-			Block block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.worldObj, renderView, (float) event.getRenderPartialTicks()).getBlock();
+			Block block = ActiveRenderInfo.getBlockStateAtEntityViewpoint(renderView.world, renderView, (float) event.getRenderPartialTicks()).getBlock();
 			if(block instanceof BlockSwampWater) {
 				fogMode = GL11.GL_EXP;
 				GlStateManager.setFog(FogMode.EXP);
@@ -212,8 +212,8 @@ public class FogHandler {
 		float fogBrightness = 0;
 
 		if(hasDenseFog()) {
-			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
-				fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
+			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
+				fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
 			}
 			float lowViewDistanceFogReduction = state.getLowDistanceFogReduction(biomeFog.getEnd());
 			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);

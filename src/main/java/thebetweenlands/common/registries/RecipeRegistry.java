@@ -678,7 +678,7 @@ public class RecipeRegistry {
 					entityitem.motionX = 0;
 					entityitem.motionZ = 0;
 					entityitem.motionY = 0.11000000298023224D;
-					world.spawnEntityInWorld(entityitem);
+					world.spawnEntity(entityitem);
 					animator.setInventorySlotContents(0, null);
 					return false;
 				}

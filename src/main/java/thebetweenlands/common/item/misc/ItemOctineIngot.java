@@ -43,7 +43,8 @@ public class ItemOctineIngot extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		RayTraceResult result = this.rayTrace(worldIn, playerIn, true);
 		if(result != null && result.typeOfHit == Type.BLOCK) {
 			BlockPos offsetPos = result.getBlockPos().offset(result.sideHit);
@@ -70,7 +71,7 @@ public class ItemOctineIngot extends Item {
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase playerIn, int count) {
 		if(playerIn instanceof EntityPlayer) {
-			World worldIn = playerIn.worldObj;
+			World worldIn = playerIn.world;
 			RayTraceResult result = this.rayTrace(worldIn, (EntityPlayer) playerIn, true);
 			if(result != null && result.typeOfHit == Type.BLOCK) {
 				BlockPos pos = result.getBlockPos();

@@ -10,6 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -28,7 +29,7 @@ public class ItemLurkerSkinArmor extends ItemBLArmor {
 
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack itemStack) {
-		ItemStack[] armor = player.inventory.armorInventory;
+		NonNullList<ItemStack> armor = player.inventory.armorInventory;
 		int armorPieces = 0;
 
 		for (ItemStack anArmor : armor) {
@@ -38,7 +39,7 @@ public class ItemLurkerSkinArmor extends ItemBLArmor {
 		}
 
 		if (itemStack.getItem() == ItemRegistry.LURKER_SKIN_BOOTS && player.isInWater()) {
-			IBlockState blockState = player.worldObj.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
+			IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
 			boolean fullyInWater = blockState.getMaterial().isLiquid();
 
 			if(fullyInWater) {
@@ -75,10 +76,10 @@ public class ItemLurkerSkinArmor extends ItemBLArmor {
 						float ry = rand.nextFloat() - rand.nextFloat();
 						float rz = rand.nextFloat() - rand.nextFloat();
 
-						player.worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX + (double)rx, player.posY + (double)ry, player.posZ + (double)rz, player.motionX, player.motionY, player.motionZ);
+						player.world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, player.posX + (double)rx, player.posY + (double)ry, player.posZ + (double)rz, player.motionX, player.motionY, player.motionZ);
 					}
 
-					player.attackEntityFrom(DamageSource.drown, 2.0F);
+					player.attackEntityFrom(DamageSource.DROWN, 2.0F);
 				}
 			}
 		}

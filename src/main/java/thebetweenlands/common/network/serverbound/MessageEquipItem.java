@@ -86,7 +86,7 @@ public class MessageEquipItem extends MessageEntity {
 		super.process(ctx);
 
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer sender = ctx.getServerHandler().playerEntity;
+			EntityPlayer sender = ctx.getServerHandler().player;
 			Entity target = this.getEntity(0);
 
 			if(target != null && target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {

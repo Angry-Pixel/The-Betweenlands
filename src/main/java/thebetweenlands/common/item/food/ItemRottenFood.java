@@ -38,7 +38,7 @@ public class ItemRottenFood extends ItemBLFood {
 	}
 
 	public ItemStack getOriginalStack(ItemStack stack) {
-		return stack.getTagCompound() != null ? ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("originalStack")) : null;
+		return stack.getTagCompound() != null ? new ItemStack(stack.getTagCompound().getCompoundTag("originalStack")) : null;
 	}
 
 	@Override

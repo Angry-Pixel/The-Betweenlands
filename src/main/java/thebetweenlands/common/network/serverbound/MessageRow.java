@@ -46,7 +46,7 @@ public class MessageRow extends MessageBase {
 
     @Override
     public IMessage process(MessageContext ctx) {
-        EntityPlayer player = ctx.getServerHandler().playerEntity;
+        EntityPlayer player = ctx.getServerHandler().player;
         Entity e = player.getRidingEntity();
         if (e instanceof EntityWeedwoodRowboat) {
             ((EntityWeedwoodRowboat) e).setOarStates(starboard, port, progressStarboard, progressPort);

@@ -53,8 +53,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	private ControlledAnimation swimmingAnim = new ControlledAnimation(8);
 	private ControlledAnimation waterStanceAnim = new ControlledAnimation(4);
 
-	public EntityGiantToad(World worldObj) {
-		super(worldObj);
+	public EntityGiantToad(World world) {
+		super(world);
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(1.6F, 1.5F);
 		this.stepHeight = 1.0F;
@@ -133,7 +133,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		} else {
 			this.ticksOnGround = 0;
 		}
-		if (!this.worldObj.isRemote) {
+		if (!this.world.isRemote) {
 			if (this.strokeTicks > 0) {
 				this.strokeTicks--;
 				this.dataManager.set(DW_SWIM_STROKE, (byte) 1);
@@ -141,7 +141,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				this.dataManager.set(DW_SWIM_STROKE, (byte) 0);
 			}
 		}
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (this.rand.nextInt(900) == 0 && this.deathTime == 0) {
 				this.heal(1.0F);
 			}
@@ -161,7 +161,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								double speedMultiplier = (Math.min(distance, 4.0F) / 4.0F * 0.8F + 0.2F);
 								motionX += speedMultiplier * 0.8F * MathHelper.cos(angle);
 								motionZ += speedMultiplier * 0.8F * MathHelper.sin(angle);
-								this.worldObj.setEntityState(this, (byte) 8);
+								this.world.setEntityState(this, (byte) 8);
 								this.strokeTicks = 40;
 							} else if (this.isCollidedHorizontally) {
 								motionX += 0.01 * MathHelper.cos(angle);
@@ -182,7 +182,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 						if (distance > 1) {
 							if (this.ticksOnGround > 20) {
 								double speedMultiplier = (Math.min(distance, 2.0F) / 2.0F * 0.8F + 0.2F);
-								motionY += speedMultiplier * 0.6 + MathHelper.clamp_double((nextHopSpot.yCoord - this.posY) / 6.0D, 0.0D, 0.3D);
+								motionY += speedMultiplier * 0.6 + MathHelper.clamp((nextHopSpot.yCoord - this.posY) / 6.0D, 0.0D, 0.3D);
 								motionX += speedMultiplier * 0.5 * MathHelper.cos(angle);
 								motionZ += speedMultiplier * 0.5 * MathHelper.sin(angle);
 								ForgeHooks.onLivingJump(this);
@@ -197,12 +197,12 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 			}
 			if (this.isBeingRidden()) {
-				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(0.6D, 0.6D, 0.6D));
+				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(0.6D, 0.6D, 0.6D));
 				EntityLivingBase closestTarget = null;
 				float lastAngDiff = 0.0F;
 				Entity controllingPassenger = this.getControllingPassenger();
 				for (EntityLivingBase target : targets) {
-					if (target.getAITarget() == controllingPassenger || (controllingPassenger instanceof EntityLivingBase && ((EntityLivingBase) controllingPassenger).getAITarget() == target)) {
+					if (target.getRevengeTarget() == controllingPassenger || (controllingPassenger instanceof EntityLivingBase && ((EntityLivingBase) controllingPassenger).getRevengeTarget() == target)) {
 						float x = (float) (target.posX - posX);
 						float z = (float) (target.posZ - posZ);
 						float angle = (float) (Math.atan2(z, x));
@@ -235,7 +235,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 							motionZ += 0.5 * MathHelper.sin(angle);
 							if (this.inWater) {
 								this.strokeTicks = 20;
-								this.worldObj.setEntityState(this, (byte) 8);
+								this.world.setEntityState(this, (byte) 8);
 							} else
 								ForgeHooks.onLivingJump(this);
 							this.onGround = false;
@@ -246,7 +246,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			waterStanceAnim.updateTimer();
 			if (this.inWater) {
 				waterStanceAnim.increaseTimer();
@@ -305,8 +305,8 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected boolean processInteract(EntityPlayer player, EnumHand Hand, ItemStack stack) {
-		if (!this.worldObj.isRemote) {
+	protected boolean processInteract(EntityPlayer player, EnumHand Hand) {
+		if (!this.world.isRemote) {
 			//TODO: handle equipment
 			//			boolean holdsEquipment = player.getHeldItem(Hand) != null /*&& (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == Registries.INSTANCE.itemRegistry.amuletSlot)*/;
 			//			if (holdsEquipment)
@@ -318,23 +318,23 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				if (!this.isTamed()) {
 					this.temper += this.rand.nextInt(4) + 1;
 					if (this.temper >= 30) {
-						this.worldObj.setEntityState(this, (byte) 7);
+						this.world.setEntityState(this, (byte) 7);
 						this.setTamed(true);
 						this.temper = 0;
 					} else {
-						this.worldObj.setEntityState(this, (byte) 6);
+						this.world.setEntityState(this, (byte) 6);
 					}
 					if (!player.capabilities.isCreativeMode) {
-						player.getHeldItem(Hand).stackSize--;
-						if (player.getHeldItem(Hand).stackSize <= 0)
+						player.getHeldItem(Hand).shrink(1);
+						if (player.getHeldItem(Hand).getCount() <= 0)
 							player.setHeldItem(Hand, null);
 					}
 				}
 				if (this.getHealth() < this.getMaxHealth()) {
-					this.worldObj.setEntityState(this, (byte) 6);
+					this.world.setEntityState(this, (byte) 6);
 					this.heal(4.0F);
-					player.getHeldItem(Hand).stackSize--;
-					if (player.getHeldItem(Hand).stackSize <= 0)
+					player.getHeldItem(Hand).shrink(1);
+					if (player.getHeldItem(Hand).getCount() <= 0)
 						player.setHeldItem(Hand, null);
 				}
 			}
@@ -373,11 +373,11 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				forward *= 0.25F;
 			}
 
-			boolean onWaterSurface = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid();
+			boolean onWaterSurface = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY + 1), MathHelper.floor(this.posZ))).getMaterial().isLiquid();
 
 			if (!this.inWater || !onWaterSurface) {
 				if (this.onGround && forward != 0.0F) {
-					if (!this.worldObj.isRemote) {
+					if (!this.world.isRemote) {
 						if (this.ticksOnGround > 4) {
 							motionY += 0.5;
 							motionX += forward / 1.5F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
@@ -390,33 +390,33 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 			} else {
 				if (this.motionY < 0.0F) {
-					if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 0.9D), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid()) {
+					if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY + 0.9D), MathHelper.floor(this.posZ))).getMaterial().isLiquid()) {
 						this.motionY *= 0.05F;
 					}
 				}
-				if (this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.posY + 1.1D), MathHelper.floor_double(this.posZ))).getMaterial().isLiquid()) {
+				if (this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.posY + 1.1D), MathHelper.floor(this.posZ))).getMaterial().isLiquid()) {
 					this.motionY += 0.02F;
 				}
 
-				if (!this.worldObj.isRemote) {
+				if (!this.world.isRemote) {
 					if (this.isCollidedHorizontally) {
 						this.motionY += 0.2D;
 						this.strokeTicks = 0;
 					}
 				}
 
-				if (!this.worldObj.isRemote && forward > 0.0F) {
+				if (!this.world.isRemote && forward > 0.0F) {
 					if (forward != 0.0F && this.strokeTicks == 0) {
 						motionX += forward / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
 						motionZ += forward / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
 						motionX += strafing / 1.25F * MathHelper.cos((float) Math.toRadians(this.rotationYaw));
 						motionZ += strafing / 1.25F * MathHelper.sin((float) Math.toRadians(this.rotationYaw));
-						this.worldObj.setEntityState(this, (byte) 8);
+						this.world.setEntityState(this, (byte) 8);
 						this.strokeTicks = 20;
 					}
 				}
 			}
-			if (!this.worldObj.isRemote && forward > 0.0F) {
+			if (!this.world.isRemote && forward > 0.0F) {
 				motionX += 0.05D * MathHelper.cos((float) Math.toRadians(this.rotationYaw + 90));
 				motionZ += 0.05D * MathHelper.sin((float) Math.toRadians(this.rotationYaw + 90));
 			}
@@ -435,7 +435,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 			double d0 = this.rand.nextGaussian() * 0.02D;
 			double d1 = this.rand.nextGaussian() * 0.02D;
 			double d2 = this.rand.nextGaussian() * 0.02D;
-			this.worldObj.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
+			this.world.spawnParticle(enumparticletypes, this.posX + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, this.posY + 0.5D + (double)(this.rand.nextFloat() * this.height), this.posZ + (double)(this.rand.nextFloat() * this.width * 2.0F) - (double)this.width, d0, d1, d2, new int[0]);
 		}
 	}
 

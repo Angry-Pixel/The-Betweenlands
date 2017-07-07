@@ -40,7 +40,7 @@ public class BlockGenericCollapsing extends BlockFalling {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BlockGenericCollapsing extends BlockFalling {
                     world.playSound((double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
                     EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F), world.getBlockState(pos));
                     this.onStartFalling(entityfallingblock);
-                    world.spawnEntityInWorld(entityfallingblock);
+                    world.spawnEntity(entityfallingblock);
                 }
             } else {
                 world.setBlockToAir(pos);

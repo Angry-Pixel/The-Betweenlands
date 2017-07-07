@@ -26,7 +26,7 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 	}
 
 	@Override
-	public boolean isTransparent() {
+	public boolean shouldDisableDepth() {
 		return true;
 	}
 
@@ -69,8 +69,8 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 		double yOffset = 0.125D;
 		Vec3d[] vertices = new Vec3d[] {perpendicular.add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale)};
 
-		if (this.field_190014_F != 0.0F) {
-			float f8 = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+		if (this.particleAngle != 0.0F) {
+			float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float f9 = MathHelper.cos(f8 * 0.5F);
 			float f10 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetX();
 			float f11 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetY();

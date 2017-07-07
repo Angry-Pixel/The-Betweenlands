@@ -18,11 +18,11 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 public class CommandResetAspects extends CommandBase {
 	private boolean confirm = false;
 
-	public String getCommandName() {
+	public String getName() {
 		return "resetAspects";
 	}
 
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "/resetAspects";
 	}
 
@@ -32,7 +32,7 @@ public class CommandResetAspects extends CommandBase {
 	}
 
 	@Override
-	public List getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		List<String> completions = null;
 		if (this.confirm && args.length == 1) {
 			completions = new ArrayList<String>();
@@ -48,7 +48,7 @@ public class CommandResetAspects extends CommandBase {
 		}
 		if (args.length < 1) {
 			this.confirm = true;
-			sender.addChatMessage(new TextComponentTranslation("command.aspect.reset.confirm"));
+			sender.sendMessage(new TextComponentTranslation("command.aspect.reset.confirm"));
 			return;
 		}
 		if(!this.confirm) {
@@ -62,7 +62,7 @@ public class CommandResetAspects extends CommandBase {
 		if(arg1.equals("confirm")) {
 			World world = sender.getEntityWorld();
 			AspectManager.get(world).resetStaticAspects(AspectManager.getAspectsSeed(world.getSeed()));
-			sender.addChatMessage(new TextComponentTranslation("command.aspect.reset.success"));
+			sender.sendMessage(new TextComponentTranslation("command.aspect.reset.success"));
 		}
 	}
 }

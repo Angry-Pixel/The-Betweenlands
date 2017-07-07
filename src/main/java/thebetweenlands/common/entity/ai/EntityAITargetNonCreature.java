@@ -55,7 +55,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 	/**
 	 * Returns whether an in-progress EntityAIBase should continue executing
 	 */
-	public boolean continueExecuting()
+	public boolean shouldContinueExecuting()
 	{
 		EntityLivingBase entitylivingbase = this.taskOwner.getAttackTarget();
 
@@ -250,8 +250,8 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 			}
 			else
 			{
-				int i = pathpoint.xCoord - MathHelper.floor_double(target.posX);
-				int j = pathpoint.zCoord - MathHelper.floor_double(target.posZ);
+				int i = pathpoint.xCoord - MathHelper.floor(target.posX);
+				int j = pathpoint.zCoord - MathHelper.floor(target.posZ);
 				return (double)(i * i + j * j) <= 2.25D;
 			}
 		}

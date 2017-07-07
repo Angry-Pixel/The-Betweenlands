@@ -61,9 +61,9 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 				double interpZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 				ShaderHelper.INSTANCE.require();
 				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ,
-						entity.worldObj.rand.nextFloat() * 0.1f + radius,
-						16.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.4f,
-						12.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.1f,
+						entity.world.rand.nextFloat() * 0.1f + radius,
+						16.0f / 255.0f * 60.0F + entity.world.rand.nextFloat() * 0.4f,
+						12.0f / 255.0f * 60.0F + entity.world.rand.nextFloat() * 0.1f,
 						8.0f / 255.0f * 60.0F));
 			}
 		}

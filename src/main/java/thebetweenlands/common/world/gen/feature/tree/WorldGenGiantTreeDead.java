@@ -52,7 +52,7 @@ public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 	}
 
 	private float calculateDistanceToTop(int height, int dx, int dy, int dz) {
-		return MathHelper.sqrt_float(dx * dx + dz * dz + (height - dy) * (height - dy));
+		return MathHelper.sqrt(dx * dx + dz * dz + (height - dy) * (height - dy));
 	}
 
 	private int calculateTilt(int dx, int dz) {

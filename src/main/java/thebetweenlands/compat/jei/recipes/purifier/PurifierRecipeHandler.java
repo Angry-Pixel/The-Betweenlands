@@ -12,11 +12,6 @@ public class PurifierRecipeHandler implements IRecipeHandler<PurifierRecipeJEI> 
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return null;
-    }
-
-    @Override
     public String getRecipeCategoryUid(PurifierRecipeJEI recipe) {
         return ModInfo.ID + ":purifier";
     }

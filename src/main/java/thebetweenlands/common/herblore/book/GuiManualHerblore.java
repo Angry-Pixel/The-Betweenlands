@@ -119,10 +119,10 @@ public class GuiManualHerblore extends GuiScreen {
      */
     protected void renderPageNumbers(int mouseX, int mouseY, float partialTicks) {
         if (this.currentCategory != null) {
-            int leftPageStrWidth = this.fontRendererObj.getStringWidth(String.valueOf(this.currentCategory.getCurrentPage()));
+            int leftPageStrWidth = this.fontRenderer.getStringWidth(String.valueOf(this.currentCategory.getCurrentPage()));
             GlStateManager.enableBlend();
-            this.fontRendererObj.drawString(String.valueOf(this.currentCategory.getCurrentPage()), this.xStart + this.WIDTH / 2 - 11 - leftPageStrWidth, this.yStart + this.HEIGHT - 17, 0x804f4314);
-            this.fontRendererObj.drawString(String.valueOf(this.currentCategory.getCurrentPage() + 1), this.xStart + this.WIDTH / 2 + 11, this.yStart + this.HEIGHT - 17, 0x804f4314);
+            this.fontRenderer.drawString(String.valueOf(this.currentCategory.getCurrentPage()), this.xStart + this.WIDTH / 2 - 11 - leftPageStrWidth, this.yStart + this.HEIGHT - 17, 0x804f4314);
+            this.fontRenderer.drawString(String.valueOf(this.currentCategory.getCurrentPage() + 1), this.xStart + this.WIDTH / 2 + 11, this.yStart + this.HEIGHT - 17, 0x804f4314);
         }
     }
 

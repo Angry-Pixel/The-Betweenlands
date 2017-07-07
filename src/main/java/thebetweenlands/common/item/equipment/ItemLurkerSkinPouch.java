@@ -67,7 +67,8 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote) {
 			if (!player.isSneaking()) {
 				int meta = stack.getItemDamage();

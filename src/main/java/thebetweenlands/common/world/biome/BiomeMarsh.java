@@ -2,8 +2,10 @@ package thebetweenlands.common.world.biome;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -14,6 +16,7 @@ import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
@@ -40,8 +43,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
 		.setDecorator(new BiomeDecoratorMarsh(this));
 		this.setFoliageColors(0x627017, 0x627017);
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
+		GameRegistry.register(this.setRegistryName(new ResourceLocation(ModInfo.ID, this.getBiomeName())));
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
 	@Override
@@ -67,8 +70,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 	@Override
 	public void updateFog() {
-		if(this.fogGenerator == null || this.fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
-			this.fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
+		if(this.fogGenerator == null || this.fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
+			this.fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
 		}
 		float[] range = this.fogGenerator.getFogRange(0.0F, 1.0F);
 		this.fogRangeInterpolateStart = range[0];

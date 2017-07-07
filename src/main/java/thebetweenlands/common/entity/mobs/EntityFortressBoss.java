@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
@@ -317,13 +318,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				if(this.hasShield() && (entity instanceof EntityPlayer == false || !((EntityPlayer)entity).capabilities.isCreativeMode) || entity.isSneaking()) {
 					int shieldHit = this.rayTraceShield(pos, ray, false);
 					if(shieldHit >= 0) {
-						if(!this.worldObj.isRemote && entity.isSneaking() && ((EntityPlayer)entity).capabilities.isCreativeMode) {
+						if(!this.world.isRemote && entity.isSneaking() && ((EntityPlayer)entity).capabilities.isCreativeMode) {
 							this.setShieldActive(shieldHit, false);
 						}
-						if(this.worldObj.isRemote) {
+						if(this.world.isRemote) {
 							this.shieldAnimationTicks[shieldHit] = 20;
 						}
-						this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
+						this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_NOPE, SoundCategory.HOSTILE, 1, 1);
 						double dx = entity.posX - this.posX;
 						double dy = entity.posY - this.posY;
 						double dz = entity.posZ - this.posZ;
@@ -331,7 +332,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 						entity.motionX = dx / len * 0.8F;
 						entity.motionY = dy / len * 0.8F;
 						entity.motionZ = dz / len * 0.8F;
-						entity.attackEntityFrom(DamageSource.magic, 2);
+						entity.attackEntityFrom(DamageSource.MAGIC, 2);
 						return false;
 					}
 				}
@@ -414,7 +415,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 	public void onUpdate() {
 		super.onUpdate();
 
-		EntityPlayer closestPlayer = this.worldObj.getNearestAttackablePlayer(this, 32.0D, 16.0D);
+		EntityPlayer closestPlayer = this.world.getNearestAttackablePlayer(this, 32.0D, 16.0D);
 		if(closestPlayer != null) {
 			this.faceEntity(closestPlayer, 360.0F, 360.0F);
 			this.setAttackTarget(closestPlayer);
@@ -432,10 +433,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		}
 
 		float shieldRotation = 0.0F;
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			shieldRotation = this.getDataManager().get(SHIELD_ROTATION);
 			this.anchor = this.getDataManager().get(ANCHOR);
-			this.anchorRadius = this.getDataManager().get(ANCHOR_RADIUS);
+			this.anchorRadius = (double) this.getDataManager().get(ANCHOR_RADIUS);
 			this.unpackShieldData(this.getDataManager().get(SHIELD_STATE));
 		} else {
 			if(this.isEntityAlive()) {
@@ -461,7 +462,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		}
 
 		if(this.isEntityAlive()) {
-			if(!this.worldObj.isRemote) {
+			if(!this.world.isRemote) {
 				if(this.isFloating() && this.posY < this.anchor.yCoord) {
 					this.motionY = 0.1F;
 				} else if(!this.isFloating()) {
@@ -474,12 +475,12 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				}
 
 				if(this.isFloating() && (this.getDistance(this.anchor.xCoord, this.posY, this.anchor.zCoord) > this.anchorRadius || Math.abs(this.posY - this.anchor.yCoord) > this.anchorRadius)) {
-					this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+					this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 					this.setPosition(this.anchor.xCoord, this.anchor.yCoord, this.anchor.zCoord);
 				}
 
 				//Teleport entities back
-				List<EntityLivingBase> currentlyTrackedEntities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(this.anchorRadius*2, 512, this.anchorRadius*2));
+				List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
 				while(it.hasNext()) {
 					EntityLivingBase living = it.next();
@@ -487,7 +488,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 						it.remove();
 				}
 				if(!this.trackedEntities.isEmpty()) {
-					int tpy = this.worldObj.getHeight(new BlockPos(this.anchor.xCoord, 64, this.anchor.zCoord)).getY();
+					int tpy = this.world.getHeight(new BlockPos(this.anchor.xCoord, 64, this.anchor.zCoord)).getY();
 					if(Math.abs(this.anchor.yCoord - tpy) < this.anchorRadius) {
 						for(EntityLivingBase living : this.trackedEntities) {
 							if(living != null && living.isEntityAlive() && !currentlyTrackedEntities.contains(living) && (living instanceof EntityPlayer == false || !((EntityPlayer)living).capabilities.isCreativeMode)) {
@@ -511,74 +512,74 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 			}
 
 			AxisAlignedBB checkArea = this.getEntityBoundingBox().expand(32, 16, 32);
-			List<EntityPlayer> players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
+			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
 			if(!players.isEmpty()) {
-				if(!this.worldObj.isRemote) {
+				if(!this.world.isRemote) {
 					this.getDataManager().set(SHIELD_STATE, this.packShieldData());
 
 					if(this.isFloating() && this.posY >= this.anchor.yCoord) {
 						AxisAlignedBB checkAABB = this.getEntityBoundingBox().expand(16, 16, 16);
-						List<EntityWight> wights = this.worldObj.getEntitiesWithinAABB(EntityWight.class, checkAABB);
-						List<EntityFortressBossSpawner> spawners = this.worldObj.getEntitiesWithinAABB(EntityFortressBossSpawner.class, checkAABB);
+						List<EntityWight> wights = this.world.getEntitiesWithinAABB(EntityWight.class, checkAABB);
+						List<EntityFortressBossSpawner> spawners = this.world.getEntitiesWithinAABB(EntityFortressBossSpawner.class, checkAABB);
 						if(wights.isEmpty() && spawners.isEmpty()) {
 							this.wightSpawnTicks--;
 							if(this.wightSpawnTicks <= 0) {
 								if(this.wightSpawnTicks == 0) {
-									int spawnY = this.worldObj.getHeight(this.getPosition()).getY();
+									int spawnY = this.world.getHeight(this.getPosition()).getY();
 									if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
-										EntityFortressBossSpawner spawner = new EntityFortressBossSpawner(this.worldObj, this);
-										spawner.setLocationAndAngles(MathHelper.floor_double(this.posX), spawnY, MathHelper.floor_double(this.posZ), 0, 0);
+										EntityFortressBossSpawner spawner = new EntityFortressBossSpawner(this.world, this);
+										spawner.setLocationAndAngles(MathHelper.floor(this.posX), spawnY, MathHelper.floor(this.posZ), 0, 0);
 										spawner.setOwner(this);
-										this.worldObj.spawnEntityInWorld(spawner);
+										this.world.spawnEntity(spawner);
 									}
 								}
-								this.wightSpawnTicks = 160 + this.worldObj.rand.nextInt(200);
+								this.wightSpawnTicks = 160 + this.world.rand.nextInt(200);
 							}
 						}
 
 
-						List<EntityFortressBossBlockade> blockades = this.worldObj.getEntitiesWithinAABB(EntityFortressBossBlockade.class, checkAABB);
+						List<EntityFortressBossBlockade> blockades = this.world.getEntitiesWithinAABB(EntityFortressBossBlockade.class, checkAABB);
 						if(blockades.isEmpty()) {
 							this.blockadeSpawnTicks--;
 							if(this.blockadeSpawnTicks <= 0) {
 								if(this.blockadeSpawnTicks == 0) {
-									int spawnY = this.worldObj.getHeight(this.getPosition()).getY();
+									int spawnY = this.world.getHeight(this.getPosition()).getY();
 									if(Math.abs(spawnY - this.posY) < this.anchorRadius) {
-										EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(this.worldObj, this);
+										EntityFortressBossBlockade blockade = new EntityFortressBossBlockade(this.world, this);
 										blockade.setLocationAndAngles(this.posX, spawnY, this.posZ, 0, 0);
-										blockade.setTriangleSize(1.2F + this.worldObj.rand.nextFloat() * 1.6F);
+										blockade.setTriangleSize(1.2F + this.world.rand.nextFloat() * 1.6F);
 										blockade.setOwner(this);
 										blockade.setMaxDespawnTicks(400);
-										this.worldObj.spawnEntityInWorld(blockade);
+										this.world.spawnEntity(blockade);
 									}
 								}
-								this.blockadeSpawnTicks = 190 + this.worldObj.rand.nextInt(160);
+								this.blockadeSpawnTicks = 190 + this.world.rand.nextInt(160);
 							}
 						}
 
 						this.teleportTicks--;
 						if(this.teleportTicks <= 0) {
 							if(this.teleportTicks == 0) {
-								this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
-								this.setLocationAndAngles(this.anchor.xCoord + (this.worldObj.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), this.anchor.yCoord, this.anchor.zCoord + (this.worldObj.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), 0, 0);
+								this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+								this.setLocationAndAngles(this.anchor.xCoord + (this.world.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), this.anchor.yCoord, this.anchor.zCoord + (this.world.rand.nextFloat()-0.5F)*2.0F*(this.anchorRadius-1), 0, 0);
 							}
-							this.teleportTicks = 140 + this.worldObj.rand.nextInt(200);
+							this.teleportTicks = 140 + this.world.rand.nextInt(200);
 						}
 
 						if(this.turretStreak <= 0 && this.getHealth() < this.getMaxHealth() / 2.0F){
 							if(this.turretStreak == 0) {
 								this.turretStreakTicks++;
-								int turretFrequency = MathHelper.floor_double(15.0D - 14.0D / 300.0D * this.turretStreakTicks);
+								int turretFrequency = MathHelper.floor(15.0D - 14.0D / 300.0D * this.turretStreakTicks);
 								if(this.turretStreakTicks % turretFrequency == 0) {
 									double angle = Math.PI * 2.0D / 150.0D * this.turretStreakTicks;
 									for(int d = 0; d < 2; d++) {
 										Vec3d dir = new Vec3d(Math.sin(angle) * (d == 0 ? 1 : -1), 0, Math.cos(angle) * (d == 0 ? 1 : -1));
 										dir = dir.normalize().scale(this.anchorRadius);
-										EntityFortressBossTurret turret = new EntityFortressBossTurret(this.worldObj, this);
+										EntityFortressBossTurret turret = new EntityFortressBossTurret(this.world, this);
 										turret.setLocationAndAngles(this.anchor.xCoord + dir.xCoord, this.anchor.yCoord + dir.yCoord, this.anchor.zCoord + dir.zCoord, 0, 0);
 										turret.setAttackDelay(turretFrequency);
-										this.worldObj.spawnEntityInWorld(turret);
-										this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 0.25F, 0.3F + 0.7F / 300.0F * this.turretStreakTicks);
+										this.world.spawnEntity(turret);
+										this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 0.25F, 0.3F + 0.7F / 300.0F * this.turretStreakTicks);
 									}
 								}
 								if(this.turretStreakTicks >= 300) {
@@ -586,18 +587,18 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 									for(int i = 0; i < 32; i++) {
 										Vec3d dir = new Vec3d(Math.sin(angle * i), 0, Math.cos(angle * i));
 										dir = dir.normalize().scale(this.anchorRadius);
-										EntityFortressBossTurret turret = new EntityFortressBossTurret(this.worldObj, this);
+										EntityFortressBossTurret turret = new EntityFortressBossTurret(this.world, this);
 										turret.setLocationAndAngles(this.anchor.xCoord + dir.xCoord, this.anchor.yCoord + dir.yCoord, this.anchor.zCoord + dir.zCoord, 0, 0);
 										turret.setAttackDelay(5 + i / 3);
-										this.worldObj.spawnEntityInWorld(turret);
+										this.world.spawnEntity(turret);
 									}
-									this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
+									this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
 									this.turretStreakTicks = 0;
 									this.turretStreak = -1;
 								}
 							}
 							if(this.turretStreak < 0) {
-								this.turretStreak = 250 + this.worldObj.rand.nextInt(200);
+								this.turretStreak = 250 + this.world.rand.nextInt(200);
 								this.turretStreakTicks = 0;
 							}
 						} else {
@@ -605,18 +606,18 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 								if(this.turretTicks == 0) {
 									double angle = Math.PI * 2.0D / 9;
 									for(int i = 0; i < 9; i++) {
-										if(this.worldObj.rand.nextInt(3) == 0) {
+										if(this.world.rand.nextInt(3) == 0) {
 											Vec3d dir = new Vec3d(Math.sin(angle * i), 0, Math.cos(angle * i));
 											dir = dir.normalize().scale(8.0D);
-											EntityFortressBossTurret turret = new EntityFortressBossTurret(this.worldObj, this);
+											EntityFortressBossTurret turret = new EntityFortressBossTurret(this.world, this);
 											turret.setLocationAndAngles(this.anchor.xCoord + dir.xCoord, this.anchor.yCoord + dir.yCoord, this.anchor.zCoord + dir.zCoord, 0, 0);
-											turret.setDeflectable(this.worldObj.rand.nextInt(2) != 0);
-											this.worldObj.spawnEntityInWorld(turret);
+											turret.setDeflectable(this.world.rand.nextInt(2) != 0);
+											this.world.spawnEntity(turret);
 										}
 									}
-									this.worldObj.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
+									this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.FORTRESS_BOSS_SUMMON_PROJECTILES, SoundCategory.HOSTILE, 1.0F, 1.0F);
 								}
-								this.turretTicks = 100 + this.worldObj.rand.nextInt(200);
+								this.turretTicks = 100 + this.world.rand.nextInt(200);
 							} else {
 								this.turretTicks--;
 								if(this.turretStreak > 0)
@@ -633,13 +634,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 									Vec3d dir = new Vec3d(Math.sin(angle * i), 0, Math.cos(angle * i));
 									dir = dir.normalize();
 									float speed = 0.8F;
-									EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this);
+									EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this);
 									bullet.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ, 0, 0);
 									bullet.setThrowableHeading(dir.xCoord, dir.yCoord, dir.zCoord, speed, 0.0F);
-									this.worldObj.spawnEntityInWorld(bullet);
+									this.world.spawnEntity(bullet);
 								}
 							}
-							this.groundAttackTicks = 40 + this.worldObj.rand.nextInt(80);
+							this.groundAttackTicks = 40 + this.world.rand.nextInt(80);
 							this.getDataManager().set(GROUND_ATTACK_STATE, false);
 							this.turretStreak = -1;
 							this.turretTicks = -1;
@@ -654,7 +655,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 					}
 				} else {
 					for(int i = 0; i <= 19; i++) {
-						if(this.shieldAnimationTicks[i] == 0 && this.worldObj.rand.nextInt(50) == 0)
+						if(this.shieldAnimationTicks[i] == 0 && this.world.rand.nextInt(50) == 0)
 							this.shieldAnimationTicks[i] = 40;
 						if(this.shieldAnimationTicks[i] > 0) {
 							this.shieldAnimationTicks[i]--;
@@ -680,7 +681,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		if(this.isFloating()) {
 			if (this.isInWater()) {
 				this.moveRelative(strafe, forward, 0.02F);
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 				this.motionX *= 0.800000011920929D;
 				this.motionY *= 0.800000011920929D;
 				this.motionZ *= 0.800000011920929D;
@@ -688,7 +689,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				float friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 				}
 
 				float groundFriction = 0.16277136F / (friction * friction * friction);
@@ -696,10 +697,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				friction = 0.91F;
 
 				if (this.onGround) {
-					friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+					friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 				}
 
-				this.moveEntity(this.motionX, this.motionY, this.motionZ);
+				this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 				this.motionX *= (double)friction;
 				this.motionY *= (double)friction;
 				this.motionZ *= (double)friction;
@@ -708,7 +709,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 			this.prevLimbSwingAmount = this.limbSwingAmount;
 			double dx = this.posX - this.prevPosX;
 			double dz = this.posZ - this.prevPosZ;
-			float distanceMoved = MathHelper.sqrt_double(dx * dx + dz * dz) * 4.0F;
+			float distanceMoved = MathHelper.sqrt(dx * dx + dz * dz) * 4.0F;
 
 			if (distanceMoved > 1.0F) {
 				distanceMoved = 1.0F;
@@ -725,10 +726,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 	@Override
 	protected void onDeathUpdate() {
 		if(this.deathTicks == 0) {
-			if(!this.worldObj.isRemote) {
-				this.worldObj.playSound(null, this.anchor.xCoord, this.anchor.yCoord, this.anchor.zCoord, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
+			if(!this.world.isRemote) {
+				this.world.playSound(null, this.anchor.xCoord, this.anchor.yCoord, this.anchor.zCoord, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 				this.setPosition(this.anchor.xCoord, this.anchor.yCoord, this.anchor.zCoord);
-				List<Entity> trackedEntities = this.worldObj.getEntitiesWithinAABB(EntityWight.class, this.getEntityBoundingBox().expand(this.anchorRadius*2, 512, this.anchorRadius*2));
+				List<Entity> trackedEntities = this.world.getEntitiesWithinAABB(EntityWight.class, this.getEntityBoundingBox().expand(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<Entity> it = trackedEntities.iterator();
 				while(it.hasNext()) {
 					Entity entity = it.next();
@@ -751,13 +752,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 			this.activeShields[i] = i * (130.0F / 19.0F) > this.deathTicks;
 		}
 		this.getDataManager().set(SHIELD_STATE, this.packShieldData());
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if (this.deathTicks > 100 && this.deathTicks % 5 == 0) {
 				int xp = 800;
 				while (xp > 0) {
 					int dropXP = EntityXPOrb.getXPSplit(xp);
 					xp -= dropXP;
-					this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
 				}
 			}
 
@@ -766,7 +767,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				while (xp > 0) {
 					int dropXP = EntityXPOrb.getXPSplit(xp);
 					xp -= dropXP;
-					this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY + this.height / 2.0D, this.posZ, dropXP));
 				}
 
 				for(int c = 0; c < 4; c++) {
@@ -775,10 +776,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 						Vec3d dir = new Vec3d(Math.sin(yawAngle * i), (c-2)/4.0D*2.0D, Math.cos(yawAngle * i));
 						dir = dir.normalize();
 						float speed = 0.8F;
-						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this);
+						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this);
 						bullet.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ, 0, 0);
 						bullet.setThrowableHeading(dir.xCoord, dir.yCoord, dir.zCoord, speed, 0.0F);
-						this.worldObj.spawnEntityInWorld(bullet);
+						this.world.spawnEntity(bullet);
 					}
 				}
 
@@ -786,11 +787,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				this.dropItem(ItemRegistry.RING_OF_RECRUITMENT, 1);
 				this.dropItem(ItemRegistry.AMULET_SLOT, 1);
 
-				List<LocationStorage> locations = LocationStorage.getLocations(this.worldObj, this.getPositionVector());
+				List<LocationStorage> locations = LocationStorage.getLocations(this.world, this.getPositionVector());
 				for(LocationStorage location : locations) {
 					if(location.getType() == EnumLocationType.WIGHT_TOWER) {
 						if(location.getGuard() != null) {
-							location.getGuard().clear(this.worldObj);
+							location.getGuard().clear(this.world);
 						}
 					}
 				}
@@ -823,7 +824,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 
 	@Override
 	public void playLivingSound() {
-		if(!this.worldObj.isRemote && !this.isSilent()) {
+		if(!this.world.isRemote && !this.isSilent()) {
 			TheBetweenlands.networkWrapper.sendToAllAround(new MessagePlayEntityIdle(this, SoundRegistry.FORTRESS_BOSS_LIVING, SoundCategory.HOSTILE, 1, 1), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 16.0D));
 		}
 	}

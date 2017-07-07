@@ -55,7 +55,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		List<EntityItem> list = this.entity.worldObj.getEntitiesWithinAABB(EntityItem.class, this.entity.getEntityBoundingBox().expand(this.targetDistance, 3, this.targetDistance), this.entitySelector);
+		List<EntityItem> list = this.entity.world.getEntitiesWithinAABB(EntityItem.class, this.entity.getEntityBoundingBox().expand(this.targetDistance, 3, this.targetDistance), this.entitySelector);
 		if (list == null || list.isEmpty()) {
 			return false;
 		}
@@ -71,7 +71,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		boolean cont = (this.entityPathEntity != null && this.targetEntity != null && this.targetEntity.isEntityAlive()) || !this.entityPathNavigate.noPath();
 		return cont;
 	}

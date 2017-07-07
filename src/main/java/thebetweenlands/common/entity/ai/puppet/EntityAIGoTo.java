@@ -42,7 +42,7 @@ public class EntityAIGoTo extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return this.pos != null;
 	}
 

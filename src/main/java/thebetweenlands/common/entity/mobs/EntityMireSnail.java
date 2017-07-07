@@ -69,7 +69,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(getEntityBoundingBox());
+		return world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox());
 	}
 
 	@Override
@@ -103,14 +103,15 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (stack != null && isBreedingItem(stack) && !shagging()) {
 			player.swingArm(hand);
 			setHasMated(true);
-			return super.processInteract(player, hand, stack);
+			return super.processInteract(player, hand);
 		}
 
-		return super.processInteract(player, hand, stack);
+		return super.processInteract(player, hand);
 	}
 
 	public boolean shagging() {
@@ -124,7 +125,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public EntityAgeable createChild(EntityAgeable entityageable) {
-		return new EntityMireSnailEgg(worldObj);
+		return new EntityMireSnailEgg(world);
 	}
 
 	public void setHasMated(boolean hasMated) {

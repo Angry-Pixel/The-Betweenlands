@@ -728,7 +728,7 @@ public class DecorationHelper {
 			for(int zo = 0; zo < 32; zo++) {
 				int px = decorator.getX() + xo;
 				int pz = decorator.getZ() + zo;
-				int py = world.func_189649_b(px, pz) - 1;
+				int py = world.getHeight(px, pz) - 1;
 				Block surfaceBlock = world.getBlockState(checkPos.setPos(px, py, pz)).getBlock();
 				if(surfaceBlock instanceof BlockLeaves) {
 					int yo = 0;
@@ -787,7 +787,7 @@ public class DecorationHelper {
 	public static boolean generateWightFortress(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos(1);
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.MIXED_GROUND.matches(decorator.getWorld(), pos.down())) {
-			Biome biome = decorator.getWorld().getBiomeGenForCoords(pos);
+			Biome biome = decorator.getWorld().getBiome(pos);
 			if(GEN_WIGHT_FORTRESS.isBiomeValid(biome)) {
 				return GEN_WIGHT_FORTRESS.generate(decorator.getWorld(), decorator.getRand(), pos);
 			}

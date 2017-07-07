@@ -26,7 +26,7 @@ public class MessageSyncSharedStorage extends MessageBase {
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		try {
-			this.nbt = buf.readNBTTagCompoundFromBuffer();
+			this.nbt = buf.readCompoundTag();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -34,7 +34,7 @@ public class MessageSyncSharedStorage extends MessageBase {
 
 	@Override
 	public void serialize(PacketBuffer buf) {
-		buf.writeNBTTagCompoundToBuffer(this.nbt);
+		buf.writeCompoundTag(this.nbt);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class MessageSyncSharedStorage extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		SharedStorage sharedStorage = SharedStorage.load(worldStorage, this.nbt, null, true);
 		SharedStorage loadedStorage = worldStorage.getSharedStorage(sharedStorage.getID());

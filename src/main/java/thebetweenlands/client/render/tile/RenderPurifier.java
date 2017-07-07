@@ -35,7 +35,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 	public void renderTileEntityAt(TileEntityPurifier tile, double x, double y, double z, float partialTickTime, int destroyStage) {
 		this.bindTexture(TEXTURE);
 
-		if (tile == null || !tile.hasWorldObj()) {
+		if (tile == null || !tile.hasWorld()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5F, y + 1.5F, z + 0.5F);
 			GlStateManager.rotate(180F, 0.0F, 0.0F, 1.0F);
@@ -62,7 +62,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, y + 0.27D, z + 0.5D);
 			GlStateManager.rotate(180, 1, 0, 0);
-			int items = tile.getStackInSlot(2).stackSize;
+			int items = tile.getStackInSlot(2).getCount();
 			Random rand = new Random(tile.getPos().toLong());
 			for (int i = 0; i < items; i++) {
 				GlStateManager.pushMatrix();

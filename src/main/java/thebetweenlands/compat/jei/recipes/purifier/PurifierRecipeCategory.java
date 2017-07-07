@@ -54,16 +54,6 @@ public class PurifierRecipeCategory implements IRecipeCategory {
     }
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {
-
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-
-    }
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 24, 1);
         recipeLayout.getItemStacks().init(1, true, 24, 41);

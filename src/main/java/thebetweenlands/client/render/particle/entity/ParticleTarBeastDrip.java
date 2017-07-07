@@ -47,7 +47,7 @@ public class ParticleTarBeastDrip extends Particle {
 		} else
 			setParticleTextureIndex(112);
 
-		moveEntity(motionX, motionY, motionZ);
+		move(motionX, motionY, motionZ);
 		motionX *= 0.9800000190734863D;
 		motionY *= 0.9800000190734863D;
 		motionZ *= 0.9800000190734863D;
@@ -57,17 +57,17 @@ public class ParticleTarBeastDrip extends Particle {
 		}
 
 
-		if (this.isCollided) {
+		if (this.onGround) {
 			setParticleTextureIndex(114);
 			motionX *= 0.699999988079071D;
 			motionZ *= 0.699999988079071D;
 		}
 
-		IBlockState blockState = worldObj.getBlockState(new BlockPos(this.posX, this.posY, this.posZ));
+		IBlockState blockState = world.getBlockState(new BlockPos(this.posX, this.posY, this.posZ));
 		Material material = blockState.getMaterial();
 
 		if (material.isLiquid() || material.isSolid()) {
-			double d0 = (double) ((float) (MathHelper.floor_double(posY) + 1) - BlockLiquid.getLiquidHeightPercent(blockState.getBlock().getMetaFromState(blockState)));
+			double d0 = (double) ((float) (MathHelper.floor(posY) + 1) - BlockLiquid.getLiquidHeightPercent(blockState.getBlock().getMetaFromState(blockState)));
 
 			if (posY < d0) {
 				this.setExpired();

@@ -9,6 +9,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityBoat;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -213,16 +214,16 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     @Override
     public void setPositionAndRotation(double x, double y, double z, float yaw, float pitch) {
-        posX = MathHelper.clamp_double(x, -3E7, 3E7);
+        posX = MathHelper.clamp(x, -3E7, 3E7);
         posY = y;
-        posZ = MathHelper.clamp_double(z, -3E7, 3E7);
+        posZ = MathHelper.clamp(z, -3E7, 3E7);
         // Keep prev for serverside onUpdate
-        //if (worldObj.isRemote) {
+        //if (world.isRemote) {
         prevPosX = posX;
         prevPosY = posY;
         prevPosZ = posZ;   
         //}
-        pitch = MathHelper.clamp_float(pitch, -90, 90);
+        pitch = MathHelper.clamp(pitch, -90, 90);
         rotationYaw = yaw;
         rotationPitch = pitch;
         prevRotationYaw = rotationYaw;
@@ -254,7 +255,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         if (isEntityInvulnerable(source)) {
             return false;
         }
-        if (!worldObj.isRemote && !isDead) {
+        if (!world.isRemote && !isDead) {
             if (source instanceof EntityDamageSourceIndirect && source.getEntity() != null && isPassenger(source.getEntity())) {
                 return false;
             }
@@ -264,7 +265,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             setBeenAttacked();
             boolean creative = source.getEntity() instanceof EntityPlayer && ((EntityPlayer) source.getEntity()).capabilities.isCreativeMode;
             if (creative || getDamageTaken() > 20) {
-                if (!creative && worldObj.getGameRules().getBoolean("doEntityDrops")) {
+                if (!creative && world.getGameRules().getBoolean("doEntityDrops")) {
                     entityDropItem(getItem(), 0);
                 }
                 setDead();
@@ -274,14 +275,15 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     }
 
     @Override
-    public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+    	ItemStack stack = player.getHeldItem(hand);
         if (EnumItemMisc.TAR_DRIP.isItemOf(stack) && !isTarred()) {
-            if (!worldObj.isRemote) {
+            if (!world.isRemote) {
                 setIsTarred(true);
-                stack.stackSize--;
+                stack.shrink(1);
                 playSound(SoundRegistry.TAR_BEAST_STEP, 0.9F + rand.nextFloat() * 0.1F, 0.6F + rand.nextFloat() * 0.15F);
             }
-        } else if (!worldObj.isRemote && !player.isSneaking()) {
+        } else if (!world.isRemote && !player.isSneaking()) {
             player.startRiding(this);
         }
         return true;
@@ -291,7 +293,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     protected void updateFallState(double y, boolean onGround, IBlockState state, BlockPos pos) {
         if (onGround) {
             if (fallDistance > 0) {
-                state.getBlock().onFallenUpon(worldObj, pos, this, fallDistance);
+                state.getBlock().onFallenUpon(world, pos, this, fallDistance);
             }
             fallDistance = 0;
         } else if (y < 0) {
@@ -302,14 +304,14 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @Override
     protected void addPassenger(Entity passenger) {
         super.addPassenger(passenger);
-        if (worldObj.isRemote && getControllingPassenger() == passenger) {
+        if (world.isRemote && getControllingPassenger() == passenger) {
             TheBetweenlands.proxy.onPilotEnterWeedwoodRowboat(passenger);
         }
     }
 
     @Override
     protected void removePassenger(Entity passenger) {
-        if (worldObj.isRemote && getControllingPassenger() == passenger) {
+        if (world.isRemote && getControllingPassenger() == passenger) {
             TheBetweenlands.proxy.onPilotExitWeedwoodRowboat(this, passenger);
         }
         super.removePassenger(passenger);
@@ -317,8 +319,8 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     @Override
     public void onUpdate() {
-        double pow = 1 - SPEED_WAVE_POWER.eval(MathHelper.sqrt_double((posX - prevPosX) * (posX - prevPosX) + (posZ - prevPosZ) * (posZ - prevPosZ)));
-        if (!worldObj.isRemote) {
+        double pow = 1 - SPEED_WAVE_POWER.eval(MathHelper.sqrt((posX - prevPosX) * (posX - prevPosX) + (posZ - prevPosZ) * (posZ - prevPosZ)));
+        if (!world.isRemote) {
             setFlag(6, isGlowing());
         }
         onEntityUpdate();
@@ -329,7 +331,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             setDamageTaken(getDamageTaken() - 1);
         }
         tickLerp();
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             updateClientOarProgress(ShipSide.STARBOARD);
             updateClientOarProgress(ShipSide.PORT);
         }
@@ -365,11 +367,11 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         }
         if (canPassengerSteer()) {
             Vec3d motion = null;
-            if (worldObj.isRemote) {
+            if (world.isRemote) {
                 motion = applyRowForce();
             }
             rotationYaw += rotationalVelocity;
-            if (worldObj.isRemote) {
+            if (world.isRemote) {
                 if (motion != null) {
                     updateMotion(motion);
                 }
@@ -380,21 +382,21 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             returnOarToResting(ShipSide.STARBOARD, rotationLeft);
             returnOarToResting(ShipSide.PORT, rotationRight);
             synchronizeOars();
-            moveEntity(motionX, motionY, motionZ);
+            move(MoverType.SELF, motionX, motionY, motionZ);
         } else {
             motionX = motionY = motionZ = 0;
         }
         doBlockCollisions();
         if (inWater) {
-            if (worldObj.isRemote) {
+            if (world.isRemote) {
                 animateHullWaterInteraction();
                 animateOars();   
             } else {
                 createSoundFX();
             }
         }
-        if (!worldObj.isRemote) {
-            worldObj.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
+        if (!world.isRemote) {
+            world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
         }
         rotationYaw = MathHelper.wrapDegrees(rotationYaw);
         prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);
@@ -402,7 +404,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private void hitWaves(double pow) {
         // TODO: custom smooth sync total world time
-        double t = worldObj.getTotalWorldTime() * 0.03;
+        double t = world.getTotalWorldTime() * 0.03;
         double roughness = 0.15 * pow * (inWaterTicks < 20 ? inWaterTicks / 20D : 1), scale = 0.5;
         double x = posX, z = posZ;
         Matrix mat = new Matrix();
@@ -475,7 +477,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         float yaw = (float) Math.atan2(-normal.zCoord, -normal.xCoord) - (rotationYaw - 90) * MathUtils.DEG_TO_RAD;
         float pitch = (float) Math.acos(Math.max(Math.min(normal.dotProduct(of), 1), -1));
         float x = oarXWavePull.get(side);
-        oarXWavePull.put(side, x + (MathHelper.clamp_float(yaw * align * (float) nf.lengthVector() * 2, -0.3F, 0.3F) - x) * 0.7F * (float) nf.lengthVector());
+        oarXWavePull.put(side, x + (MathHelper.clamp(yaw * align * (float) nf.lengthVector() * 2, -0.3F, 0.3F) - x) * 0.7F * (float) nf.lengthVector());
         float z = oarZWavePull.get(side);
         oarZWavePull.put(side, z + ((pitch - MathUtils.PI / 2) * (1 - align) * (getOarElevation(side) + 1) / 2 - z) * 0.4F);
     }
@@ -555,7 +557,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     protected void applyYawToEntity(Entity entity) {
         entity.setRenderYawOffset(MathHelper.wrapDegrees(rotationYaw - 180));
         float delta = MathHelper.wrapDegrees(entity.rotationYaw - rotationYaw - 180);
-        float clamped = MathHelper.clamp_float(delta, -135, 135);
+        float clamped = MathHelper.clamp(delta, -135, 135);
         entity.prevRotationYaw += clamped - delta;
         entity.rotationYaw = entity.rotationYaw + clamped - delta;
         entity.setRotationYawHead(entity.rotationYaw);
@@ -590,10 +592,10 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         float bobBase = 0.1F;
         float buoyancy = 0;
         BlockPos pos = new BlockPos(this);
-        IBlockState blockAt = worldObj.getBlockState(pos);
-        IBlockState blockAbove = worldObj.getBlockState(pos.up());
+        IBlockState blockAt = world.getBlockState(pos);
+        IBlockState blockAbove = world.getBlockState(pos.up());
         if (isWater(blockAt) && !isWater(blockAbove)) {
-            float y = (float) pos.getY() + getLiquidHeight(blockAt, worldObj, pos) + height;
+            float y = (float) pos.getY() + getLiquidHeight(blockAt, world, pos) + height;
             buoyancy = (y - (float) getEntityBoundingBox().minY - 0.55F) / height;
             drag = 0.9875F;
             submergeTicks = 0;
@@ -602,7 +604,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             drag = 0.975F;
             submergeTicks++;
         } else if (blockAt.getMaterial() == Material.AIR) {
-            IBlockState blockBellow = worldObj.getBlockState(pos.down());
+            IBlockState blockBellow = world.getBlockState(pos.down());
             if (isWater(blockBellow)) {
                 drag = 0.95F;
             } else if (blockBellow.getMaterial().blocksMovement()) {
@@ -678,7 +680,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
 
     private float getOarWaterResistance(ShipSide side) {
         float weight = MathUtils.linearTransformf(getOarElevation(side), -1, 1, 1, 0.25F);
-        float velocity = MathHelper.sqrt_double(motionX * motionX + motionZ * motionZ);
+        float velocity = MathHelper.sqrt(motionX * motionX + motionZ * motionZ);
         final float max = 0.5F;
         if (velocity > max) {
             velocity = max;
@@ -743,7 +745,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                     splashX = posX + vecX + vecZ * near * 0.7;
                     splashZ = posZ + vecZ - vecX * near * 0.7;
                 }
-                worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, splashX, Math.ceil(posY) - 0.125, splashZ, motionX, 0.01, motionZ);
+                world.spawnParticle(EnumParticleTypes.WATER_SPLASH, splashX, Math.ceil(posY) - 0.125, splashZ, motionX, 0.01, motionZ);
             }
         }
     }
@@ -760,7 +762,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         Vec3d oarlock = getOarlockPosition(side);
         Vec3d oarVector = getOarVector(side);
         Vec3d blade = oarlock.addVector(oarVector.xCoord * OAR_LENGTH, oarVector.yCoord * OAR_LENGTH, oarVector.zCoord * OAR_LENGTH);
-        RayTraceResult raytrace = worldObj.rayTraceBlocks(new Vec3d(oarlock.xCoord, oarlock.yCoord, oarlock.zCoord), blade, true);
+        RayTraceResult raytrace = world.rayTraceBlocks(new Vec3d(oarlock.xCoord, oarlock.yCoord, oarlock.zCoord), blade, true);
         boolean bladeInAir = true;
         float amountOfBladeInAir = BLADE_LENGTH;
         if (raytrace != null && raytrace.typeOfHit == RayTraceResult.Type.BLOCK) {
@@ -769,7 +771,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                     float x = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
                     float y = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
                     float z = MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.2F, 0.2F);
-                    worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, raytrace.hitVec.xCoord + x, raytrace.hitVec.yCoord + y, raytrace.hitVec.zCoord + z, motionX, 0.01, motionZ);
+                    world.spawnParticle(EnumParticleTypes.WATER_SPLASH, raytrace.hitVec.xCoord + x, raytrace.hitVec.yCoord + y, raytrace.hitVec.zCoord + z, motionX, 0.01, motionZ);
                 }
             }
             float amountInAir = (float) oarlock.distanceTo(raytrace.hitVec);
@@ -785,7 +787,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 float x = (float) (oarVector.xCoord * point + MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.1F, 0.1F));
                 float y = (float) (oarVector.yCoord * point + MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.4F, -0.2F));
                 float z = (float) (oarVector.zCoord * point + MathUtils.linearTransformf(rand.nextFloat(), 0, 1, -0.1F, 0.1F));
-                worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, oarlock.xCoord + x, oarlock.yCoord + y, oarlock.zCoord + z, 0, 1e-8, 0);
+                world.spawnParticle(EnumParticleTypes.WATER_SPLASH, oarlock.xCoord + x, oarlock.yCoord + y, oarlock.zCoord + z, 0, 1e-8, 0);
             }
         }
     }
@@ -823,7 +825,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
         Vec3d oarlock = getOarlockPosition(side);
         Vec3d oarVector = getOarVector(side);
         Vec3d blade = oarlock.addVector(oarVector.xCoord * OAR_LENGTH, oarVector.yCoord * OAR_LENGTH, oarVector.zCoord * OAR_LENGTH);
-        RayTraceResult raytrace = worldObj.rayTraceBlocks(new Vec3d(oarlock.xCoord, oarlock.yCoord, oarlock.zCoord), blade, true);
+        RayTraceResult raytrace = world.rayTraceBlocks(new Vec3d(oarlock.xCoord, oarlock.yCoord, oarlock.zCoord), blade, true);
         boolean bladeInAir = true;
         if (raytrace != null && raytrace.typeOfHit == RayTraceResult.Type.BLOCK) {
             float amountInAir = (float) oarlock.distanceTo(raytrace.hitVec);
@@ -834,7 +836,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
                 if (oarInAir.get(side) || start) {
                     float volume = force * 0.8F + 0.2F;
                     SoundEvent sound = (start ? SOUND_ROW_START : SOUND_ROW).get(side);
-                    worldObj.playSound(null, raytrace.hitVec.xCoord, raytrace.hitVec.yCoord, raytrace.hitVec.zCoord, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
+                    world.playSound(null, raytrace.hitVec.xCoord, raytrace.hitVec.yCoord, raytrace.hitVec.zCoord, sound, SoundCategory.NEUTRAL, volume, 0.8F + rand.nextFloat() * 0.3F);
                 }
             }
         }
@@ -849,30 +851,30 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
     @Override
     public boolean handleWaterMovement() {
         double mX = motionX, mZ = motionZ;
-        if (worldObj.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this)) {
+        if (world.handleMaterialAcceleration(getEntityBoundingBox(), Material.WATER, this)) {
             if (mX != motionX && mZ != motionZ && canPassengerSteer()) {
                 double aX = motionX - mX, aZ = motionZ - mZ;
                 double dir = Math.atan2(aZ, aX) * MathUtils.RAD_TO_DEG;
                 double speed = Math.sqrt(motionX * motionX + motionZ * motionZ);
-                rotationalVelocity += (MathHelper.clamp_double(MathUtils.modularDelta(rotationYaw, dir - 90, 360) * Math.min(speed * 1.1, 0.3), -12, 12) - rotationalVelocity) * 0.75;   
+                rotationalVelocity += (MathHelper.clamp(MathUtils.modularDelta(rotationYaw, dir - 90, 360) * Math.min(speed * 1.1, 0.3), -12, 12) - rotationalVelocity) * 0.75;   
             }
             if (!inWater) {
-                float volume = MathHelper.sqrt_double(motionX * motionX * 0.2 + motionY * motionY + motionZ * motionZ * 0.2) * 0.2F;
+                float volume = MathHelper.sqrt(motionX * motionX * 0.2 + motionY * motionY + motionZ * motionZ * 0.2) * 0.2F;
                 if (volume > 0.15) {
                     if (volume > 1) {
                         volume = 1;
                     }
                     playSound(getSplashSound(), volume, 1 + (rand.nextFloat() - rand.nextFloat()) * 0.4F);
-                    float min = MathHelper.floor_double(getEntityBoundingBox().minY);
+                    float min = MathHelper.floor(getEntityBoundingBox().minY);
                     for (int i = 0; i < 1 + width * 20; i++) {
                         float x = (rand.nextFloat() * 2 - 1) * width;
                         float z = (rand.nextFloat() * 2 - 1) * width;
-                        worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + x, min + 1, posZ + z, motionX, motionY - rand.nextFloat() * 0.2F, motionZ);
+                        world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + x, min + 1, posZ + z, motionX, motionY - rand.nextFloat() * 0.2F, motionZ);
                     }
                     for (int i = 0; i < 1 + width * 20; i++) {
                         float x = (rand.nextFloat() * 2 - 1) * width;
                         float z = (rand.nextFloat() * 2 - 1) * width;
-                        worldObj.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + x, min + 1, posZ + z, motionX, motionY, motionZ);
+                        world.spawnParticle(EnumParticleTypes.WATER_SPLASH, posX + x, min + 1, posZ + z, motionX, motionY, motionZ);
                     }
                 }
             }
@@ -990,7 +992,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             return ((IFluidBlock) block).getFilledPercentage(world, pos);
         }
         if (block instanceof BlockLiquid) {
-            return getBlockLiquidHeight(state, world, pos);
+            return BlockLiquid.getBlockLiquidHeight(state, world, pos);
         }
         return 1;
     }

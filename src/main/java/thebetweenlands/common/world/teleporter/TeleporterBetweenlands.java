@@ -97,7 +97,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 */
 	@Nullable
 	protected LocationPortal getPortalLocation(Entity entity) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.worldObj);
+		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.world);
 		AxisAlignedBB aabb = entity.getEntityBoundingBox();
 		List<LocationPortal> portals = worldStorage.getSharedStorageAt(LocationPortal.class, loc -> loc.intersects(aabb), aabb);
 		this.validatePortals(portals);
@@ -150,9 +150,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 		World world = portal.getWorldStorage().getWorld();
 		AxisAlignedBB aabb = portal.getBounds().get(0);
 		MutableBlockPos pos = new MutableBlockPos();
-		for(int x = MathHelper.floor_double(aabb.minX); x <= MathHelper.floor_double(aabb.maxX); x++) {
-			for(int y = MathHelper.floor_double(aabb.minY); y <= MathHelper.floor_double(aabb.maxY); y++) {
-				for(int z = MathHelper.floor_double(aabb.minZ); z <= MathHelper.floor_double(aabb.maxZ); z++) {
+		for(int x = MathHelper.floor(aabb.minX); x <= MathHelper.floor(aabb.maxX); x++) {
+			for(int y = MathHelper.floor(aabb.minY); y <= MathHelper.floor(aabb.maxY); y++) {
+				for(int z = MathHelper.floor(aabb.minZ); z <= MathHelper.floor(aabb.maxZ); z++) {
 					pos.setPos(x, y, z);
 					IBlockState blockState = world.getBlockState(pos);
 					if(blockState.getBlock() instanceof BlockTreePortal) {

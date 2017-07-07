@@ -39,8 +39,8 @@ import thebetweenlands.util.config.ConfigHandler;
 public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
-		if(StreamSupport.stream(Minecraft.getMinecraft().thePlayer.getHeldEquipment().spliterator(), false).anyMatch(stack -> stack != null && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
-			World world = Minecraft.getMinecraft().theWorld;
+		if(StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false).anyMatch(stack -> stack != null && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
+			World world = Minecraft.getMinecraft().world;
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 
 			for(SharedStorage sharedStorage : worldStorage.getSharedStorage()) {
@@ -90,7 +90,7 @@ public class DebugHandlerClient {
 
 					GlStateManager.scale(scale, scale, scale);
 
-					renderTag(Minecraft.getMinecraft().fontRendererObj, location.getLocalizedName(), 0, 0, 0, 0, Minecraft.getMinecraft().getRenderManager().playerViewY, Minecraft.getMinecraft().getRenderManager().playerViewX, Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);
+					renderTag(Minecraft.getMinecraft().fontRenderer, location.getLocalizedName(), 0, 0, 0, 0, Minecraft.getMinecraft().getRenderManager().playerViewY, Minecraft.getMinecraft().getRenderManager().playerViewX, Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);
 
 					GlStateManager.enableBlend();
 					
@@ -109,10 +109,10 @@ public class DebugHandlerClient {
 						for(int xo = -8; xo <= 8; xo++) {
 							for(int yo = -8; yo <= 8; yo++) {
 								for(int zo = -8; zo <= 8; zo++) {
-									BlockPos pos = Minecraft.getMinecraft().thePlayer.getPosition().add(xo, yo, zo);
+									BlockPos pos = Minecraft.getMinecraft().player.getPosition().add(xo, yo, zo);
 									if(pos.getY() >= 0) {
 										IBlockState state = world.getBlockState(pos);
-										boolean guarded = guard.isGuarded(world, Minecraft.getMinecraft().thePlayer, pos);
+										boolean guarded = guard.isGuarded(world, Minecraft.getMinecraft().player, pos);
 										if(guarded) {
 											if(state.getBlock() != Blocks.AIR) {
 												GlStateManager.color(1, 0, 0, 0.25F);
@@ -260,8 +260,8 @@ public class DebugHandlerClient {
 					if(Keyboard.getEventKey() == Keyboard.KEY_Y) {
 						if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
 							cgb.debugProvideReset();
-							if(Minecraft.getMinecraft().thePlayer != null) {
-								Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format("Reset chunk provider debug")));
+							if(Minecraft.getMinecraft().player != null) {
+								Minecraft.getMinecraft().player.sendMessage(new TextComponentString(String.format("Reset chunk provider debug")));
 							}
 						} else {
 							cgb.debugGenerateChunkProvidesImage(true);
@@ -270,8 +270,8 @@ public class DebugHandlerClient {
 				}
 			} else if(Keyboard.getEventKey() == Keyboard.KEY_X) {
 				ChunkGeneratorBetweenlands.debugRecord = !ChunkGeneratorBetweenlands.debugRecord;
-				if(Minecraft.getMinecraft().thePlayer != null) {
-					Minecraft.getMinecraft().thePlayer.addChatMessage(new TextComponentString(String.format("Chunk provider debug is now %s", ChunkGeneratorBetweenlands.debugRecord ? "enabled" : "disabled")));
+				if(Minecraft.getMinecraft().player != null) {
+					Minecraft.getMinecraft().player.sendMessage(new TextComponentString(String.format("Chunk provider debug is now %s", ChunkGeneratorBetweenlands.debugRecord ? "enabled" : "disabled")));
 				}
 			}
 		}

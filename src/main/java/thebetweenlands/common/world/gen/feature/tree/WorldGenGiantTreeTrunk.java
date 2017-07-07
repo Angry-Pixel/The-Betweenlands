@@ -77,7 +77,7 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 					case 2:
 						placeBark(world, rand, radius, height, blockX, blockY, blockZ, dx, dy, dz);
 						if (canFungusGenerateAtY(dy, height) && rand.nextInt(8) == 0) {
-							float distance = MathHelper.sqrt_float(dx * dx + dz * dz);
+							float distance = MathHelper.sqrt(dx * dx + dz * dz);
 							int fungusX = (int) (-dx / distance * 2);
 							int fungusZ = (int) (-dz / distance * 2);
 							int fungusRadius = rand.nextInt(3) + radius / 4 + 3;
@@ -238,7 +238,7 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 			for (int x = -radius; x <= radius; x++) {
 				for (int z = -radius; z <= radius; z++) {
 					float angle = (float) Math.atan2(z, x);
-					float dist = MathHelper.sqrt_float(x * x + z * z) + (i < 3 ? 0 : 0);
+					float dist = MathHelper.sqrt(x * x + z * z) + (i < 3 ? 0 : 0);
 					float fold = (MathHelper.sin(angle * 2 * (float) Math.PI * 2) + 1) * (slope * (radius - MIN_TRUNK_RADIUS));
 					if (dist <= radius - fold) {
 						TRUNK_LAYERS[i][x + radius + (z + radius) * size] = 1;

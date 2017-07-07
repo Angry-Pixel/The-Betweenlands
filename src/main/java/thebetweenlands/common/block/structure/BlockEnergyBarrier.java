@@ -80,7 +80,7 @@ public class BlockEnergyBarrier extends Block {
 
 	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return BOUNDS;
 	}
 
@@ -125,7 +125,7 @@ public class BlockEnergyBarrier extends Block {
 					}
 				}
 			} else {
-				entity.attackEntityFrom(DamageSource.magic, 1);
+				entity.attackEntityFrom(DamageSource.MAGIC, 1);
 				double dx = (entity.posX - (pos.getX()))*2-1;
 				double dz = (entity.posZ - (pos.getZ()))*2-1;
 				if(Math.abs(dx) > Math.abs(dz))

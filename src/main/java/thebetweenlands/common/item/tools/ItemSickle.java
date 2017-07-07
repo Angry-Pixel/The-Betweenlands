@@ -31,14 +31,14 @@ public class ItemSickle extends Item implements ICorrodible {
 
 	@Override
 	public boolean onBlockStartBreak(ItemStack itemstack, BlockPos pos, EntityPlayer player) {
-		boolean shouldDrop = player.worldObj.rand.nextFloat() <= 1.0F * CorrosionHelper.getModifier(itemstack);
-		if (player.worldObj.isRemote || player.capabilities.isCreativeMode || !shouldDrop)
+		boolean shouldDrop = player.world.rand.nextFloat() <= 1.0F * CorrosionHelper.getModifier(itemstack);
+		if (player.world.isRemote || player.capabilities.isCreativeMode || !shouldDrop)
 			return false;
-		Block block = player.worldObj.getBlockState(pos).getBlock();
+		Block block = player.world.getBlockState(pos).getBlock();
 		if (block instanceof ISickleHarvestable) {
 			ISickleHarvestable target = (ISickleHarvestable)block;
-			if (target.isHarvestable(itemstack, player.worldObj, pos)) {
-				List<ItemStack> drops = target.getHarvestableDrops(itemstack, player.worldObj, pos, EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("fortune"), itemstack));
+			if (target.isHarvestable(itemstack, player.world, pos)) {
+				List<ItemStack> drops = target.getHarvestableDrops(itemstack, player.world, pos, EnchantmentHelper.getEnchantmentLevel(Enchantment.getEnchantmentByLocation("fortune"), itemstack));
 				if(drops == null || drops.isEmpty())
 					return false;
 				Random rand = new Random();
@@ -47,13 +47,13 @@ public class ItemSickle extends Item implements ICorrodible {
 					double rx  = (double)(rand.nextFloat() * offset) + (double)(1.0F - offset) * 0.5D;
 					double ry = (double)(rand.nextFloat() * offset) + (double)(1.0F - offset) * 0.5D;
 					double rz = (double)(rand.nextFloat() * offset) + (double)(1.0F - offset) * 0.5D;
-					EntityItem entityitem = new EntityItem(player.worldObj, (double)pos.getX() + rx, (double)pos.getY() + ry, (double)pos.getZ() + rz, stack);
+					EntityItem entityitem = new EntityItem(player.world, (double)pos.getX() + rx, (double)pos.getY() + ry, (double)pos.getZ() + rz, stack);
 					entityitem.setDefaultPickupDelay();
-					player.worldObj.spawnEntityInWorld(entityitem);
+					player.world.spawnEntity(entityitem);
 				}
 				itemstack.damageItem(1, player);
-				block.onBlockHarvested(player.worldObj, pos, player.worldObj.getBlockState(pos), player);
-				player.worldObj.setBlockToAir(pos);
+				block.onBlockHarvested(player.world, pos, player.world.getBlockState(pos), player);
+				player.world.setBlockToAir(pos);
 				player.addStat(StatList.getBlockStats(block), 1);
 				return true;
 			}

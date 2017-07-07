@@ -218,7 +218,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 3 : 4) == 0) {
+			if (attacker.world.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 3 : 4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -228,7 +228,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(4) == 0) {
+			if (attacker.world.rand.nextInt(4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -238,7 +238,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(4) == 0) {
+			if (attacker.world.rand.nextInt(4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -248,7 +248,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(4) == 0) {
+			if (attacker.world.rand.nextInt(4) == 0) {
 				target.setFire(10);
 			}
 			return false;

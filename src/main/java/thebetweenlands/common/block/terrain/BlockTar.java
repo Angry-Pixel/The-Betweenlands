@@ -49,7 +49,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast) && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)) {
 			double liquidHeight = (double)((float)(pos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
 			if (entity.posY + entity.getEyeHeight() < liquidHeight) {
-				((EntityLivingBase) entity).attackEntityFrom(DamageSource.drown, 2.0F);
+				((EntityLivingBase) entity).attackEntityFrom(DamageSource.DROWN, 2.0F);
 			}
 		}
 	}
@@ -61,9 +61,9 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos neighborPos) {
 		this.solidifyTar(world, pos);
-		super.neighborChanged(state, world, pos, block);
+		super.neighborChanged(state, world, pos, block, neighborPos);
 	}
 
 	private void solidifyTar(World world, BlockPos pos) {

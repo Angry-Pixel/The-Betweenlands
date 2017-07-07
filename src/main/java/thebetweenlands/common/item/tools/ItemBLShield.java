@@ -78,9 +78,10 @@ public class ItemBLShield extends ItemShield {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+        ItemStack itemStack = playerIn.getHeldItem(hand);
 		playerIn.setActiveHand(hand);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 	}
 
 	@Override
@@ -106,7 +107,7 @@ public class ItemBLShield extends ItemShield {
 	 * @param source
 	 */
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(!attacked.worldObj.isRemote && source.getEntity() instanceof EntityLivingBase) {
+		if(!attacked.world.isRemote && source.getEntity() instanceof EntityLivingBase) {
 			EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
 			ItemStack activeItem = attacker.getActiveItemStack();
 			if(activeItem != null && activeItem.getItem() instanceof ItemAxe) {
@@ -115,13 +116,13 @@ public class ItemBLShield extends ItemShield {
 				if(attacker.isSprinting() && attackStrength > 0.9F) {
 					criticalChance += 0.75F;
 				}
-				if (attacked.worldObj.rand.nextFloat() < criticalChance) {
+				if (attacked.world.rand.nextFloat() < criticalChance) {
 					if(attacked instanceof EntityPlayer) {
 						((EntityPlayer)attacked).getCooldownTracker().setCooldown(this, 100);
 						attacked.stopActiveHand();
 					}
 					//Shield break sound effect
-					attacked.worldObj.setEntityState(attacked, (byte)30);
+					attacked.world.setEntityState(attacked, (byte)30);
 				}
 			}
 		}
@@ -173,14 +174,14 @@ public class ItemBLShield extends ItemShield {
 					this.canBlockDamageSource(attacked, event.getSource())) {
 
 				//Cancel event
-				if(!attacked.worldObj.isRemote)
+				if(!attacked.world.isRemote)
 					event.setCanceled(true);
 
 				EnumHand activeHand = attacked.getActiveHand();
 				ItemStack stack = attacked.getActiveItemStack();
 				ItemBLShield shield = (ItemBLShield) stack.getItem();
 
-				if(!attacked.worldObj.isRemote) {
+				if(!attacked.world.isRemote) {
 					//Stop blocking
 					attacked.stopActiveHand();
 					//Apply damage with multiplier
@@ -201,13 +202,13 @@ public class ItemBLShield extends ItemShield {
 					attacked.motionY = prevMotionY;
 					attacked.velocityChanged = true;
 					//Shield block sound effect
-					attacked.worldObj.setEntityState(attacked, (byte)29);
+					attacked.world.setEntityState(attacked, (byte)29);
 					//Set shield active again
 					attacked.setActiveHand(activeHand);
 				}
 
 				//Knock back attacker
-				if(!attacked.worldObj.isRemote)
+				if(!attacked.world.isRemote)
 					if (event.getSource().getSourceOfDamage() instanceof EntityLivingBase) {
 						float attackerKbMultiplier = shield.getAttackerKnockbackMultiplier(stack, attacked, event.getAmount(), event.getSource());
 						if(attackerKbMultiplier > 0.0F)
@@ -224,12 +225,12 @@ public class ItemBLShield extends ItemShield {
 
 				shield.onAttackBlocked(stack, attacked, event.getAmount(), event.getSource());
 
-				if(!attacked.worldObj.isRemote) {
+				if(!attacked.world.isRemote) {
 					//Damage item
-					int itemDamage = 1 + MathHelper.floor_float(event.getAmount());
+					int itemDamage = 1 + MathHelper.floor(event.getAmount());
 					stack.damageItem(itemDamage, attacked);
 					//Shield broke
-					if (stack.stackSize <= 0) {
+					if (stack.getCount() <= 0) {
 						EnumHand enumhand = attacked.getActiveHand();
 						if(attacked instanceof EntityPlayer)
 							net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
@@ -238,7 +239,7 @@ public class ItemBLShield extends ItemShield {
 						else
 							attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
 						//Shield break sound effect
-						attacked.worldObj.setEntityState(attacked, (byte)30);
+						attacked.world.setEntityState(attacked, (byte)30);
 					}
 				}
 			}

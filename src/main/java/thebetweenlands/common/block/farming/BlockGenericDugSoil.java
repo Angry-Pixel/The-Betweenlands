@@ -28,6 +28,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -305,7 +306,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(this, 1, 0));
 		list.add(new ItemStack(this, 1, 1));
 		if(!this.purified)
@@ -452,14 +453,15 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		TileEntityDugSoil te = getTile(world, pos);
+		ItemStack heldItem = player.getHeldItem(hand);
 		if(te != null && te.getCompost() == 0 && heldItem != null && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
 			if(!world.isRemote) {
 				world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
 				te.setCompost(30);
 				if(!player.isCreative()) {
-					heldItem.stackSize--;
+					heldItem.shrink(1);
 				}
 			}
 			return true;

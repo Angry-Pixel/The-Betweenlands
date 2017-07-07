@@ -226,7 +226,7 @@ public class ModelLurker extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float ticksExisted, float rotationYaw, float rotationPitch, float scale) {
-		rotationYaw = MathHelper.clamp_float(rotationYaw, -60, 60);
+		rotationYaw = MathHelper.clamp(rotationYaw, -60, 60);
 		head.rotateAngleY = rotationYaw * MathUtils.DEG_TO_RAD;
 		head.rotateAngleX += rotationPitch * MathUtils.DEG_TO_RAD;
 		trunk.render(scale);

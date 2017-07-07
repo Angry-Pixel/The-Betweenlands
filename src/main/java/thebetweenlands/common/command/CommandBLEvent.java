@@ -21,7 +21,7 @@ public class CommandBLEvent extends CommandBase {
 	private List<String> childCommands = Arrays.asList("toggle", "on", "off", "list", "enable", "disable");
 
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "blevent";
 	}
 
@@ -31,7 +31,7 @@ public class CommandBLEvent extends CommandBase {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "command.blevent.usage";
 	}
 
@@ -90,7 +90,7 @@ public class CommandBLEvent extends CommandBase {
 
 	private void processList(ICommandSender sender) throws CommandException {
 		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
-		sender.addChatMessage(new TextComponentString(environmentEventRegistry.getGrammaticalActiveEventNameList()));
+		sender.sendMessage(new TextComponentString(environmentEventRegistry.getGrammaticalActiveEventNameList()));
 	}
 
 	private void processEventState(ICommandSender sender, String eventName, boolean isActive) throws CommandException {
@@ -104,7 +104,7 @@ public class CommandBLEvent extends CommandBase {
 	}
 
 	@Override
-	public List getTabCompletionOptions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
+	public List getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos pos) {
 		if (!(sender.getEntityWorld().provider instanceof WorldProviderBetweenlands)) {
 			return null;
 		}

@@ -44,7 +44,7 @@ public class ButtonWidget extends ManualWidgetBase {
         } else if (page.resourceLocation != null) {
             this.resourceLocation = new ResourceLocation(page.resourceLocation);
         }
-        this.textContainer = new TextContainer(84, 22, page.pageName, Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(84, 22, page.pageName, Minecraft.getMinecraft().fontRenderer);
 
         this.isHidden = page.isHidden;
         this.init();
@@ -71,7 +71,7 @@ public class ButtonWidget extends ManualWidgetBase {
     public void setPageToRight() {
         super.setPageToRight();
         if (renderSomething) {
-            this.textContainer = new TextContainer(84, 22, page.pageName, Minecraft.getMinecraft().fontRendererObj);
+            this.textContainer = new TextContainer(84, 22, page.pageName, Minecraft.getMinecraft().fontRenderer);
             this.init();
         }
     }
@@ -159,7 +159,7 @@ public class ButtonWidget extends ManualWidgetBase {
     public void resize() {
         super.resize();
         if (renderSomething) {
-            this.textContainer = new TextContainer(84, 22, page.pageName, Minecraft.getMinecraft().fontRendererObj);
+            this.textContainer = new TextContainer(84, 22, page.pageName, Minecraft.getMinecraft().fontRenderer);
             this.init();
         }
     }

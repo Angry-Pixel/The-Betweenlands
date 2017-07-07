@@ -59,14 +59,14 @@ public class EventSpoopy extends EnvironmentEvent {
 		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			player.addChatMessage(new TextComponentTranslation("chat.event.spook"));
+			player.sendMessage(new TextComponentTranslation("chat.event.spook"));
 		}
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			int px = MathHelper.floor_double(player.posX) - 256;
-			int py = MathHelper.floor_double(player.posY) - 256;
-			int pz = MathHelper.floor_double(player.posZ) - 256;
+			int px = MathHelper.floor(player.posX) - 256;
+			int py = MathHelper.floor(player.posY) - 256;
+			int pz = MathHelper.floor(player.posZ) - 256;
 			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
 		super.setActive(active, markDirty);

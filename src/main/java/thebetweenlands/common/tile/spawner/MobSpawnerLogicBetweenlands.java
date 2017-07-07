@@ -11,6 +11,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -376,7 +377,7 @@ public abstract class MobSpawnerLogicBetweenlands {
 	 */
 	public Entity spawnEntity(Entity entity) {
 		((EntityLiving) entity).onInitialSpawn(this.getSpawnerWorld().getDifficultyForLocation(new BlockPos(entity)), (IEntityLivingData) null);
-		this.getSpawnerWorld().spawnEntityInWorld(entity);
+		this.getSpawnerWorld().spawnEntity(entity);
 		return entity;
 	}
 
@@ -482,7 +483,7 @@ public abstract class MobSpawnerLogicBetweenlands {
 			}
 		}
 		if (this.cachedEntity == null) {
-			Entity entity = EntityList.createEntityByName(this.getEntityNameToSpawn(), (World) this.getSpawnerWorld());
+			Entity entity = EntityList.createEntityByIDFromName(new ResourceLocation(this.getEntityNameToSpawn()), (World) this.getSpawnerWorld());
 			this.cachedEntity = entity;
 		}
 		return this.cachedEntity;

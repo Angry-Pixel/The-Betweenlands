@@ -76,8 +76,8 @@ public class ModelBipedLimb extends ModelRenderer {
         float y1i = slope * x1i + (y1p - x1p * slope);
         float x2o = x2;
         float y2o = -y1i;
-        float len1 = MathHelper.sqrt_float((x1i - x3p) * (x1i - x3p) + (y1i - y3p) * (y1i - y3p));
-        float len2 = MathHelper.sqrt_float((x2o - x4p) * (x2o - x4p) + (y2o - y4p) * (y2o - y4p));
+        float len1 = MathHelper.sqrt((x1i - x3p) * (x1i - x3p) + (y1i - y3p) * (y1i - y3p));
+        float len2 = MathHelper.sqrt((x2o - x4p) * (x2o - x4p) + (y2o - y4p) * (y2o - y4p));
         GL11.glPushAttrib(GL11.GL_CULL_FACE);
         GlStateManager.disableCull();
         GlStateManager.pushMatrix();

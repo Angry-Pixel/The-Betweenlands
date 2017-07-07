@@ -24,7 +24,7 @@ public final class TeleporterHandler {
 	}
 
 	private void transferEntity(Entity entity, int dimensionId) {
-		World world = entity.worldObj;
+		World world = entity.world;
 		if (!world.isRemote && !entity.isDead && !(entity instanceof FakePlayer)) {
 			MinecraftServer server = world.getMinecraftServer();
 			WorldServer toWorld = server.worldServerForDimension(dimensionId);

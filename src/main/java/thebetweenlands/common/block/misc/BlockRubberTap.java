@@ -52,7 +52,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		if (this.canPlaceAt(worldIn, pos, facing)) {
 			return this.getDefaultState().withProperty(FACING, facing);
 		} else {
@@ -80,7 +80,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (this.checkForDrop(worldIn, pos, state)) {
 			EnumFacing facing = (EnumFacing)state.getValue(FACING);
 			EnumFacing.Axis axis = facing.getAxis();
@@ -193,7 +193,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 
 	@Override
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return this.getBoundingBox(blockState, worldIn, pos);
 	}
 }

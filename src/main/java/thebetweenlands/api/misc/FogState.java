@@ -97,7 +97,7 @@ public class FogState {
 		MutableFog defaultBiomeFog = new MutableFog().setType(FogType.LINEAR).setDensity(0.0F).setColorIncrement(0.001F).setDistanceIncrementMultiplier(1.0F)
 				.setRed(0.5F).setGreen(0.5F).setBlue(0.5F).setStart(farPlaneDistance).setEnd(farPlaneDistance).setColorMultiplier(1);
 
-		Biome biome = world.getBiomeGenForCoords(new BlockPos(position));
+		Biome biome = world.getBiome(new BlockPos(position));
 
 		if(biome instanceof BiomeBetweenlands) {
 			BiomeBetweenlands biomeBl = (BiomeBetweenlands) biome;
@@ -164,7 +164,7 @@ public class FogState {
 					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - position.yCoord)), 0.85F);
 				}
 			}
-			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0.1F, 1);
+			fogColorMultiplier = MathHelper.clamp(fogColorMultiplier, 0.1F, 1);
 			fogColorMultiplier = Math.min(fogColorMultiplier, 1.0F);
 			fogColorMultiplier = fogColorMultiplier + (1.0F - fogColorMultiplier) * (float)Math.pow(lowViewDistanceFogReduction, 2.25D);
 			defaultAmbientFog.setStart(fixedFogStart * fogColorMultiplier);

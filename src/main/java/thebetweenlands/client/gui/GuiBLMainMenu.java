@@ -277,7 +277,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 			button.drawButton(this.mc, mouseX, mouseY);
 		}
 
-		net.minecraftforge.client.ForgeHooksClient.renderMainMenu(this, this.fontRendererObj, this.width, this.height, "");
+		net.minecraftforge.client.ForgeHooksClient.renderMainMenu(this, this.fontRenderer, this.width, this.height, "");
 
 		java.util.List<String> brandings = com.google.common.collect.Lists.reverse(net.minecraftforge.fml.common.FMLCommonHandler.instance().getBrandings(true));
 		for (int brdline = 0; brdline < brandings.size(); brdline++)
@@ -285,13 +285,13 @@ public class GuiBLMainMenu extends GuiMainMenu {
 			String brd = brandings.get(brdline);
 			if (!com.google.common.base.Strings.isNullOrEmpty(brd))
 			{
-				this.drawString(this.fontRendererObj, brd, 2, this.height - ( 10 + brdline * (this.fontRendererObj.FONT_HEIGHT + 1)), 16777215);
+				this.drawString(this.fontRenderer, brd, 2, this.height - ( 10 + brdline * (this.fontRenderer.FONT_HEIGHT + 1)), 16777215);
 			}
 		}
 
 		this.modUpdateNotification.drawScreen(mouseX, mouseY, partialTicks);
 
-		this.drawString(this.fontRendererObj, "Copyright Mojang AB. Do not distribute!", this.width - this.fontRendererObj.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
+		this.drawString(this.fontRenderer, "Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
 	}
 
 	protected void drawStarfield(float partialTicks) {

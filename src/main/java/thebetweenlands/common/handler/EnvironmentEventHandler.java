@@ -71,7 +71,7 @@ public class EnvironmentEventHandler {
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event) {
 		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
-			World world = Minecraft.getMinecraft().theWorld;
+			World world = Minecraft.getMinecraft().world;
 			if(world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 				EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();

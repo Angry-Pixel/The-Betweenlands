@@ -27,7 +27,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 			if(this.courseChangeCooldown-- <= 0) {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
-				dist = (double)MathHelper.sqrt_double(dist);
+				dist = (double)MathHelper.sqrt(dist);
 
 				if(this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
 					double speed = this.getFlightSpeed();
@@ -93,7 +93,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	 * @return
 	 */
 	protected boolean isBlocked(AxisAlignedBB aabb) {
-		return !this.entity.worldObj.getCollisionBoxes(this.entity, aabb).isEmpty();
+		return !this.entity.world.getCollisionBoxes(this.entity, aabb).isEmpty();
 	}
 
 	/**

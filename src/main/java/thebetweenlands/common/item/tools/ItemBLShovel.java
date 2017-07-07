@@ -63,7 +63,7 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(facing == EnumFacing.UP) {
 			boolean dug = false;
 			IBlockState blockState = world.getBlockState(pos);
@@ -99,8 +99,7 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible {
 				for(int i = 0; i < 3; i++) {
 					world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, sound.getBreakSound(), SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
 				}
-
-				stack.damageItem(1, player);
+				player.getHeldItem(hand).damageItem(1, player);
 
 				return EnumActionResult.SUCCESS;
 			}

@@ -64,7 +64,7 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 
 		if (input.getItem() == toCheck.getItem()) {
 			if (input.getItemDamage() == OreDictionary.WILDCARD_VALUE || input.getItemDamage() == toCheck.getItemDamage()) {
-				if (!matchStackSize || input.stackSize == toCheck.stackSize) {
+				if (!matchStackSize || input.getCount() == toCheck.getCount()) {
 					if (input.hasTagCompound() && toCheck.hasTagCompound()) {
 						return input.getTagCompound().equals(toCheck.getTagCompound());
 					}

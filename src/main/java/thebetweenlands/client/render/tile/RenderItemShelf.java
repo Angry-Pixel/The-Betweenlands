@@ -40,7 +40,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 
 		boolean isItem = true;
 
-		if(te != null && te.hasWorldObj()) {
+		if(te != null && te.hasWorld()) {
 			isItem = false;
 			facing = TileEntityHelper.getStatePropertySafely(te, BlockItemShelf.class, BlockItemShelf.FACING, EnumFacing.NORTH);
 		}

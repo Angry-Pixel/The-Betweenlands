@@ -29,12 +29,12 @@ public class EntityPyradFlame extends EntitySmallFireball {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (!this.worldObj.isRemote)
+		if (!this.world.isRemote)
 			if (this.ticksExisted >= 1200)
 				this.setDead();
 
-		if (this.worldObj.isRemote)
-			this.trailParticles(this.worldObj, this.prevPosX, this.prevPosY, this.prevPosZ, this.rand);
+		if (this.world.isRemote)
+			this.trailParticles(this.world, this.prevPosX, this.prevPosY, this.prevPosZ, this.rand);
 
 		if (this.isBurning())
 			this.extinguish();
@@ -51,8 +51,8 @@ public class EntityPyradFlame extends EntitySmallFireball {
 		velZ = rand.nextFloat() * 0.1F * motionZ;
 		velX = rand.nextFloat() * 0.1F * motionX;
 		if(rand.nextInt(4) == 0) {
-			BLParticles.FLAME.spawn(worldObj, x, y, z, ParticleArgs.get().withMotion(velX, velY, velZ));
+			BLParticles.FLAME.spawn(world, x, y, z, ParticleArgs.get().withMotion(velX, velY, velZ));
 		}
-		BLParticles.WEEDWOOD_LEAF.spawn(worldObj, x, y + this.height / 2.0F, z, ParticleArgs.get().withMotion(velX, velY, velZ).withColor(1F, 0.25F, 0.0F, 1.0F).withData(40));
+		BLParticles.WEEDWOOD_LEAF.spawn(world, x, y + this.height / 2.0F, z, ParticleArgs.get().withMotion(velX, velY, velZ).withColor(1F, 0.25F, 0.0F, 1.0F).withData(40));
 	}
 }

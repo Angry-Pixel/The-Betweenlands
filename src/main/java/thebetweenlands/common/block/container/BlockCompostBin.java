@@ -49,7 +49,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().rotateYCCW());
 	}
 
@@ -80,12 +80,13 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
 				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
 
 				boolean open = tile.isOpen();
+				ItemStack heldItem = player.getHeldItem(hand);
 
 				if((heldItem == null && (!open || player.isSneaking() || tile.getCompostedAmount() == 0)) || (heldItem != null && !open)) {
 					tile.setOpen(!open);
@@ -105,15 +106,15 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 							break;
 						case -1:
 						default:
-							player.addChatMessage(new TextComponentTranslation("chat.compost.full"));
+							player.sendMessage(new TextComponentTranslation("chat.compost.full"));
 							break;
 						}
 					} else {
-						player.addChatMessage(new TextComponentTranslation("chat.compost.not.compostable"));
+						player.sendMessage(new TextComponentTranslation("chat.compost.not.compostable"));
 					}
 				} else if(tile.getCompostedAmount() > 0 && open) {
 					if (tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {
-						world.spawnEntityInWorld(new EntityItem(world, player.posX, player.posY, player.posZ, EnumItemMisc.COMPOST.create(1)));
+						world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, EnumItemMisc.COMPOST.create(1)));
 					}
 				}
 			}

@@ -155,7 +155,7 @@ public class MapGenCavesBetweenlands extends MapGenBase {
 
 							int bz = z * 2 + zo;
 
-							Biome biome = world.getBiomeGenForCoords(pos.setPos(cx + bx, 0, cz + bz));
+							Biome biome = world.getBiome(pos.setPos(cx + bx, 0, cz + bz));
 
 							// Only break in correct biomes and don't generate in biome transitions
 							double shouldntBreak = noBreakBiomes.contains(biome) ? SHOULDNT_BREAK : (1 - this.biomeWeights.get(bx, bz)) * SHOULDNT_BREAK;

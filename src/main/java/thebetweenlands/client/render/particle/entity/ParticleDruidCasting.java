@@ -47,7 +47,7 @@ public class ParticleDruidCasting extends Particle {
 			this.setExpired();
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		this.motionX *= 0.8599999785423279D;
 		this.motionY *= 0.2599999785423279D;
 		this.motionZ *= 0.8599999785423279D;

@@ -18,7 +18,7 @@ public class BlockRottenLog extends BlockLogBetweenlands {
 				if(!entity.isNotColliding()) {
 					entity.setSmall(true);
 				}
-				world.spawnEntityInWorld(entity);
+				world.spawnEntity(entity);
 			}
 		}
 	}

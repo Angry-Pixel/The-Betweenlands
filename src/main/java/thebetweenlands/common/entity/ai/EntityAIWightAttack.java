@@ -18,7 +18,7 @@ public class EntityAIWightAttack extends EntityAIAttackMelee {
 	}
 
 	@Override
-	public boolean continueExecuting() {
-		return super.continueExecuting() && !this.wight.isHiding() && !this.wight.isVolatile();
+	public boolean shouldContinueExecuting() {
+		return super.shouldContinueExecuting() && !this.wight.isHiding() && !this.wight.isVolatile();
 	}
 }

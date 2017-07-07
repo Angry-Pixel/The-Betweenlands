@@ -118,7 +118,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	public void onCollideWithEntity(EntityLivingBase entity) {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (!entity.isBeingRidden() && getBloodConsumed() <= 0) {
 				startRiding(entity);
 				this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(entity));
@@ -130,7 +130,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (fleeingTick == 0 && getAttackTarget() != null && getDistanceToEntity(getAttackTarget()) < 2) {
 				onCollideWithEntity(getAttackTarget());
 			}
@@ -172,10 +172,10 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 			moveProgress = 1 + mathSucking.swing(1, 0.15F, false);
 			if (rand.nextInt(10) == 0) {
 				for (int i = 0; i < 8; i++) {
-					worldObj.spawnParticle(EnumParticleTypes.REDSTONE, posX + (rand.nextFloat() - rand.nextFloat()), posY + rand.nextFloat(), posZ + (rand.nextFloat() - rand.nextFloat()), 0, 0, 0);
+					world.spawnParticle(EnumParticleTypes.REDSTONE, posX + (rand.nextFloat() - rand.nextFloat()), posY + rand.nextFloat(), posZ + (rand.nextFloat() - rand.nextFloat()), 0, 0, 0);
 				}
 			}
-		} else if (!worldObj.isRemote) {
+		} else if (!world.isRemote) {
 			moveProgress = 0F + mathSucking.swing(1, 0.15F, false);
 		}
 
@@ -192,7 +192,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	private void flee() {
 		fleeingTick = TIME_TO_FLEE;
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			aiAvoidHarmer.setTargetEntityClass(getRidingEntity().getClass());
 			tasks.addTask(0, aiAvoidHarmer);
 			targetTasks.removeTask(aiAttackTarget);
@@ -201,7 +201,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	}
 
 	private void stopFleeing() {
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			tasks.removeTask(aiAvoidHarmer);
 			targetTasks.addTask(0, aiAttackTarget);
 			tasks.addTask(0, aiAttackOnCollide);
@@ -229,7 +229,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	public void setBloodConsumed(int amount) {
 		hungerCoolDown = 500;
 		dataManager.set(BLOOD_CONSUMED, Byte.valueOf((byte) amount));
-		if (amount == 0 && getRidingEntity() == null && !this.worldObj.isRemote) {
+		if (amount == 0 && getRidingEntity() == null && !this.world.isRemote) {
 			targetTasks.addTask(0, aiAttackTarget);
 			tasks.addTask(0, aiAttackOnCollide);
 		}

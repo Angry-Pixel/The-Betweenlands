@@ -1,7 +1,0 @@
-{
-	"parent": "block/column_side",
-	"textures": {
-		"side": "thebetweenlands:blocks/log_portal",
-        	"end": "thebetweenlands:blocks/log_weedwood_top"
-	}
-}

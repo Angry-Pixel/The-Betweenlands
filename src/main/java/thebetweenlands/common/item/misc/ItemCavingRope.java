@@ -23,8 +23,9 @@ public class ItemCavingRope extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if(!world.isRemote) {
+			ItemStack stack = player.getHeldItem(hand);
 			EntityRopeNode connectedRopeNode = null;
 			for(Entity e : (List<Entity>) world.loadedEntityList) {
 				if(e instanceof EntityRopeNode) {
@@ -39,18 +40,18 @@ public class ItemCavingRope extends Item {
 				EntityRopeNode ropeNode = new EntityRopeNode(world);
 				ropeNode.setLocationAndAngles(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, 0, 0);
 				ropeNode.setNextNode(player);
-				world.spawnEntityInWorld(ropeNode);
+				world.spawnEntity(ropeNode);
 				world.playSound((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
-				--stack.stackSize;
+				stack.shrink(1);
 			} else {
 				if(connectedRopeNode.getDistance(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ) > EntityRopeNode.ROPE_LENGTH) {
-					player.addChatMessage(new TextComponentTranslation("chat.rope.tooFar"));
+					player.sendMessage(new TextComponentTranslation("chat.rope.tooFar"));
 					
 					return EnumActionResult.FAIL;
 				} else {
 					EntityRopeNode ropeNode = connectedRopeNode.extendRope(player, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ);
 					world.playSound((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
-					--stack.stackSize;
+					stack.shrink(1);
 				}
 			}
 		}

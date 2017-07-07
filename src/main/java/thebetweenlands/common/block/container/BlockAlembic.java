@@ -38,7 +38,7 @@ public class BlockAlembic extends BlockContainer {
 
 
     @Override
-    public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
     }
 
@@ -48,7 +48,7 @@ public class BlockAlembic extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             if (world.getTileEntity(pos) instanceof TileEntityAlembic) {
                 TileEntityAlembic tile = (TileEntityAlembic) world.getTileEntity(pos);
@@ -69,7 +69,7 @@ public class BlockAlembic extends BlockContainer {
                             ItemStack result = tile.getElixir(heldStack.getItemDamage() == 0 ? 0 : 1);
                             EntityItem itemEntity = player.dropItem(result, false);
                             if (itemEntity != null) itemEntity.setPickupDelay(0);
-                            if (!player.capabilities.isCreativeMode) heldStack.stackSize--;
+                            if (!player.capabilities.isCreativeMode) heldStack.shrink(1);
                         }
                     }
                 }

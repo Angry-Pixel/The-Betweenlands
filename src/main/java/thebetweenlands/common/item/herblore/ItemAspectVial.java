@@ -6,6 +6,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -100,7 +101,7 @@ public class ItemAspectVial extends Item {
 */
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
+    public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> list) {
         list.add(new ItemStack(item, 1, 0)); //green
         list.add(new ItemStack(item, 1, 1)); //orange
 
@@ -198,7 +199,7 @@ public class ItemAspectVial extends Item {
             if(world.isAirBlock(pos.up())) {
                 if(!world.isRemote) {
                     ItemAspectVial.placeAspectVial(world, pos.up(), stack.getItemDamage(), itemAspects.get(0));
-                    stack.stackSize--;
+                    stack.shrink(1);
                 }
                 return EnumActionResult.SUCCESS;
             }

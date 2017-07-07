@@ -22,7 +22,8 @@ public class ItemAmuletSlot extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if(!world.isRemote) {
 			if(player.isSneaking() && player.capabilities.isCreativeMode) {
 				removeAmuletSlot(player);
@@ -35,7 +36,7 @@ public class ItemAmuletSlot extends Item {
 
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer player, EntityLivingBase target, EnumHand hand) {
-		if(!player.worldObj.isRemote) {
+		if(!player.world.isRemote) {
 			if(ItemAmulet.SUPPORTED_ENTITIES.contains(target.getClass()) || player.capabilities.isCreativeMode) {
 				if(player.isSneaking() && player.capabilities.isCreativeMode) {
 					removeAmuletSlot(target);
@@ -64,11 +65,11 @@ public class ItemAmuletSlot extends Item {
 					}
 				}
 
-				player.addChatMessage(new TextComponentTranslation("chat.amulet.slot.added"));
+				player.sendMessage(new TextComponentTranslation("chat.amulet.slot.added"));
 
 				return true;
 			} else {
-				player.addChatMessage(new TextComponentTranslation("chat.amulet.slot.full"));
+				player.sendMessage(new TextComponentTranslation("chat.amulet.slot.full"));
 			}
 		}
 		return false;

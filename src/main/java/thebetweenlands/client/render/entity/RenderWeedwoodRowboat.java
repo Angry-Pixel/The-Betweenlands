@@ -101,9 +101,9 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         double bpx = rowboat.prevPosX + (rowboat.posX - rowboat.prevPosX) * delta;
         double bpy = rowboat.prevPosY + (rowboat.posY - rowboat.prevPosY) * delta;
         double bpz = rowboat.prevPosZ + (rowboat.posZ - rowboat.prevPosZ) * delta;
-        int bx = MathHelper.floor_double(bpx);
-        int by = MathHelper.floor_double(bpy);
-        int bz = MathHelper.floor_double(bpz);
+        int bx = MathHelper.floor(bpx);
+        int by = MathHelper.floor(bpy);
+        int bz = MathHelper.floor(bpz);
         OpenSimplexNoise waveRng = new OpenSimplexNoise(6354);
         TextureMap texturemap = Minecraft.getMinecraft().getTextureMapBlocks();
         TextureAtlasSprite sprite = texturemap.getAtlasSprite("minecraft:blocks/water_still");
@@ -117,7 +117,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.glBegin(GL11.GL_TRIANGLES);
         float roughness = 0.15F, scale = 0.5F;
-        double t = (rowboat.worldObj.getTotalWorldTime() + delta) * 0.03;
+        double t = (rowboat.world.getTotalWorldTime() + delta) * 0.03;
         int range = 4;
         // scale up waves to normal level from number of ticks the rowboat has existed
         for (int dx = -range; dx <= range; dx++) {
@@ -177,12 +177,12 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private static float scale(int x, int z, float originX, float originZ, int range) {
         float dx = x - originX;
         float dz = z - originZ;
-        float dist = MathHelper.sqrt_float(dx * dx + dz * dz);
+        float dist = MathHelper.sqrt(dx * dx + dz * dz);
         if (dist > range) {
             return 0;
         }
         dist /= range;
-        return MathHelper.sqrt_double(1 - dist * dist);
+        return MathHelper.sqrt(1 - dist * dist);
     }
 
     private void roll(EntityWeedwoodRowboat rowboat, float yaw, float delta) {
@@ -273,7 +273,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             float z = (leftZ + rightZ) / 2;
             float y = (float) (grips.get(ShipSide.STARBOARD).yCoord + grips.get(ShipSide.PORT).yCoord) / 2;
             float forward = -z * MathUtils.linearTransformf(Math.abs(leftZ + rightZ), 0, 0.05F, 1.1F, 1);
-            float downward = MathHelper.clamp_float((-y - 0.3F) / 0.35F, 0, 1);
+            float downward = MathHelper.clamp((-y - 0.3F) / 0.35F, 0, 1);
             float upward;
             if (downward < 0.6F) {
                 upward = MathUtils.linearTransformf(downward, 0, 0.6F, 1, 0);
@@ -286,8 +286,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         }
         bodyRotateAngleX = generalX + (powerX - generalX) * pow;
         bodyRotateAngleY = generalY * (1 - pow);
-        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp_float((leftZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
-        shoulderZ.put(ShipSide.PORT,MathHelper.clamp_float((rightZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
+        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp((leftZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
+        shoulderZ.put(ShipSide.PORT,MathHelper.clamp((rightZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
     }
 
     private void articulateArm(ShipSide side, float yaw) {
@@ -303,8 +303,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         float targetY = (float) (grip.yCoord - arm.yCoord);
         float targetZ = (float) (grip.zCoord - arm.zCoord);
         float horizontalDistSq = targetX * targetX + targetZ * targetZ;
-        float targetPitch = (float) Math.atan2(targetY, MathHelper.sqrt_float(horizontalDistSq));
-        float targetLen = MathHelper.sqrt_float(horizontalDistSq + targetY * targetY);
+        float targetPitch = (float) Math.atan2(targetY, MathHelper.sqrt(horizontalDistSq));
+        float targetLen = MathHelper.sqrt(horizontalDistSq + targetY * targetY);
         float upperArmLen = 4 / 16F, lowerArmLen = 4.25F / 16;
         float shoulderAngle = (float) Math.acos((upperArmLen * upperArmLen + targetLen * targetLen - lowerArmLen * lowerArmLen) / (2 * upperArmLen * targetLen));
         float flexionAngle = (float) Math.acos((upperArmLen * upperArmLen + lowerArmLen * lowerArmLen - targetLen * targetLen) / (2 * upperArmLen * lowerArmLen));

@@ -60,8 +60,8 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onLivingUpdate() {
-		if(this.worldObj.isRemote) {
-			BLParticles.REDSTONE_DUST.spawn(this.worldObj, posX + (rand.nextDouble() - 0.5D) * width, posY + rand.nextDouble() * height - 0.25D, posZ + (rand.nextDouble() - 0.5D) * width, 
+		if(this.world.isRemote) {
+			BLParticles.REDSTONE_DUST.spawn(this.world, posX + (rand.nextDouble() - 0.5D) * width, posY + rand.nextDouble() * height - 0.25D, posZ + (rand.nextDouble() - 0.5D) * width, 
 					ParticleArgs.get().withColor(0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 0.5F + this.rand.nextFloat() * 0.5F, 1.0F));
 		}
 		super.onLivingUpdate();
@@ -70,7 +70,7 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		if (!this.isInWater()) {
-			if (!onGround && motionY < 0D && worldObj.getBlockState(getPosition().down()).getBlock() == Blocks.AIR) {
+			if (!onGround && motionY < 0D && world.getBlockState(getPosition().down()).getBlock() == Blocks.AIR) {
 				motionY *= 0.7D;
 				renderYawOffset += 10;
 				setIsFalling(true);

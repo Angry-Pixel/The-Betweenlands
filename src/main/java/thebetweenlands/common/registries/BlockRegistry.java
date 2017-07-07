@@ -15,6 +15,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -614,7 +615,11 @@ public class BlockRegistry {
 		 */
 		@Nonnull
 		default ItemBlock getItemBlock() {
-			return (ItemBlock) Item.getItemFromBlock((Block)this);
+			Item item = Item.getItemFromBlock((Block)this);
+			if (item != Items.AIR) // getItemFromBlock returns this now instead of null
+				return (ItemBlock) item;
+			else
+				return (ItemBlock) null;
 		}
 
 		/**

@@ -48,7 +48,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     public void addInfusion(ItemStack bucket) {
         this.infusionBucket = bucket;
         this.loadFromInfusion();
-        worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }
 
 
@@ -61,9 +61,9 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
 
         if (this.isFull() && !this.hasFinished()) {
             this.progress++;
-            if (!this.worldObj.isRemote) {
+            if (!this.world.isRemote) {
                 if (!this.running || this.progress % 20 == 0) {
-                    worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+                    world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
                 }
                 this.running = true;
                 if (this.hasFinished()) {
@@ -71,9 +71,9 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
                 }
             }
         } else {
-            if (!this.worldObj.isRemote) {
+            if (!this.world.isRemote) {
                 if (this.running) {
-                    worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+                    world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
                 }
                 this.running = false;
             }
@@ -102,7 +102,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         if (nbt.hasKey("infusionBucket"))
-            this.infusionBucket = ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("infusionBucket"));
+            this.infusionBucket = new ItemStack(nbt.getCompoundTag("infusionBucket"));
         this.loadInfusionData = true;
         this.progress = nbt.getInteger("progress");
         this.producedAmount = nbt.getFloat("producedAmount");
@@ -137,7 +137,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         NBTTagCompound itemStackCompound = packet.getNbtCompound().getCompoundTag("infusionBucket");
         ItemStack oldStack = this.infusionBucket;
         if (itemStackCompound != null && itemStackCompound.getShort("id") != 0)
-            this.infusionBucket = ItemStack.loadItemStackFromNBT(itemStackCompound);
+            this.infusionBucket = new ItemStack(itemStackCompound);
         else
             this.infusionBucket = null;
         if (this.infusionBucket != null && !ItemStack.areItemStacksEqual(this.infusionBucket, oldStack)) {
@@ -170,7 +170,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         NBTTagList nbtList = (NBTTagList) this.infusionBucket.getTagCompound().getTag("ingredients");
         List<ItemStack> infusionIngredients = new ArrayList<ItemStack>();
         for (int i = 0; i < nbtList.tagCount(); i++) {
-            infusionIngredients.add(ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i)));
+            infusionIngredients.add(new ItemStack(nbtList.getCompoundTagAt(i)));
         }
         List<IAspectType> infusionAspects = this.getInfusionAspects(infusionIngredients);
         ElixirRecipe recipe = ElixirRecipes.getFromAspects(infusionAspects);
@@ -210,11 +210,11 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
         float relStrengthAmount = strengthAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
         float relDurationAmount = durationAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
-        this.producableStrength = MathHelper.floor_float(relStrengthAmount * 4.0F);
+        this.producableStrength = MathHelper.floor(relStrengthAmount * 4.0F);
         if (isPositive) {
-            this.producableDuration = recipe.baseDuration + MathHelper.floor_float(recipe.durationModifier * relDurationAmount * 2.0F);
+            this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount * 2.0F);
         } else {
-            this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor_float(recipe.negativeDurationModifier * relDurationAmount * 2.0F);
+            this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount * 2.0F);
         }
     }
 
@@ -229,7 +229,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             NBTTagList nbtList = (NBTTagList) this.infusionBucket.getTagCompound().getTag("ingredients");
             List<ItemStack> infusionIngredients = new ArrayList<ItemStack>();
             for (int i = 0; i < nbtList.tagCount(); i++) {
-                infusionIngredients.add(ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i)));
+                infusionIngredients.add(new ItemStack(nbtList.getCompoundTagAt(i)));
             }
             List<Aspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
             for (Aspect aspect : infusionAspects) {
@@ -241,7 +241,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     public List<IAspectType> getInfusionAspects(List<ItemStack> ingredients) {
         List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
         for (ItemStack ingredient : ingredients) {
-            infusingAspects.addAll(AspectManager.get(this.worldObj).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
+            infusingAspects.addAll(AspectManager.get(this.world).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
         }
         return infusingAspects;
     }
@@ -249,7 +249,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     private List<Aspect> getInfusionItemAspects(List<ItemStack> ingredients) {
         List<Aspect> infusingItemAspects = new ArrayList<Aspect>();
         for (ItemStack ingredient : ingredients) {
-            infusingItemAspects.addAll(AspectManager.get(this.worldObj).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
+            infusingItemAspects.addAll(AspectManager.get(this.world).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
         }
         return infusingItemAspects;
     }
@@ -326,7 +326,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         this.producableStrength = 0;
         this.producedAmount = 0.0F;
         this.progress = 0;
-        worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }
     /*TODO add elixir
     private ItemStack createElixir(ElixirEffect elixir, int strength, int duration, int vialType) {

@@ -20,25 +20,25 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	public void update() {
 		this.prevTicks = this.ticks;
 		++this.ticks;
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(this.recoverTicks > 0) {
 				--this.recoverTicks;
 				if(this.recoverTicks == 0) {
-					IBlockState state = this.worldObj.getBlockState(this.pos);
-					this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+					IBlockState state = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, state, state, 3);
 				}
 			} else {
 				if(this.aspectType != null && this.geckoUsages > 0) {
 					--this.geckoUsages;
 					if(this.geckoUsages == 0) {
-						IBlockState state = this.worldObj.getBlockState(this.pos);
-						this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+						IBlockState state = this.world.getBlockState(this.pos);
+						this.world.notifyBlockUpdate(this.pos, state, state, 3);
 					}
 				}
 				if(this.aspectType != null) {
 					this.aspectType = null;
-					IBlockState state = this.worldObj.getBlockState(this.pos);
-					this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+					IBlockState state = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, state, state, 3);
 				}
 			}
 		}
@@ -59,8 +59,8 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	public void setAspectType(IAspectType type, int recoverTime) {
 		this.aspectType = type;
 		this.recoverTicks = recoverTime;
-		IBlockState state = this.worldObj.getBlockState(this.pos);
-		this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+		IBlockState state = this.world.getBlockState(this.pos);
+		this.world.notifyBlockUpdate(this.pos, state, state, 3);
 	}
 
 	public boolean hasGecko() {
@@ -70,8 +70,8 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	public void addGecko(int usages) {
 		this.geckoUsages = usages;
 		this.ticks = 0;
-		IBlockState state = this.worldObj.getBlockState(this.pos);
-		this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+		IBlockState state = this.world.getBlockState(this.pos);
+		this.world.notifyBlockUpdate(this.pos, state, state, 3);
 	}
 
 	@Override

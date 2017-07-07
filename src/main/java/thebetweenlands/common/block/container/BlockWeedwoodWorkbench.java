@@ -30,7 +30,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, ItemStack heldItem, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         if (!world.isRemote) {
             player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_WEEDWOOD_CRAFT, world, pos.getX(), pos.getY(), pos.getZ());
         }
@@ -39,7 +39,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        ((TileEntityWeedwoodWorkbench) world.getTileEntity(pos)).rotation = (byte) (((MathHelper.floor_double((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) + 1) % 4);
+        ((TileEntityWeedwoodWorkbench) world.getTileEntity(pos)).rotation = (byte) (((MathHelper.floor((double) (placer.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3) + 1) % 4);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
                     double offsetZ = world.rand.nextFloat() * offset + (1.0F - offset) * 0.5D;
                     EntityItem item = new EntityItem(world, pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ, stack);
                     item.setDefaultPickupDelay();
-                    world.spawnEntityInWorld(item);
+                    world.spawnEntity(item);
                 }
             }
         }

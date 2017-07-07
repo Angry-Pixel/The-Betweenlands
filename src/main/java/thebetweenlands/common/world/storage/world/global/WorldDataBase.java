@@ -221,7 +221,7 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 
 			//Add already loaded references and watchers
 			for(ChunkPos referenceChunk : storage.getLinkedChunks()) {
-				Chunk chunk = this.world.getChunkProvider().getLoadedChunk(referenceChunk.chunkXPos, referenceChunk.chunkZPos);
+				Chunk chunk = this.world.getChunkProvider().getLoadedChunk(referenceChunk.x, referenceChunk.z);
 				if(chunk != null) {
 					ChunkDataBase chunkData = ChunkDataBase.forChunk(this, chunk);
 					if(chunkData != null) {
@@ -441,8 +441,8 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	@SuppressWarnings("unchecked")
 	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, @Nullable Predicate<F> selector, double x, double z) {
 		List<F> storages = new ArrayList<>();
-		int cx = MathHelper.floor_double(x) / 16;
-		int cz = MathHelper.floor_double(z) / 16;
+		int cx = MathHelper.floor(x) / 16;
+		int cz = MathHelper.floor(z) / 16;
 		Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);
 		ChunkDataBase chunkStorage = ChunkDataBase.forChunk(this, chunk);
 		if(chunkStorage != null) {
@@ -466,10 +466,10 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 	@SuppressWarnings("unchecked")
 	public <F extends SharedStorage> List<F> getSharedStorageAt(Class<F> storageClass, @Nullable Predicate<F> selector, AxisAlignedBB aabb) {
 		List<F> storages = new ArrayList<>();
-		int sx = MathHelper.floor_double(aabb.minX) / 16;
-		int sz = MathHelper.floor_double(aabb.minZ) / 16;
-		int ex = MathHelper.floor_double(aabb.maxX) / 16;
-		int ez = MathHelper.floor_double(aabb.maxZ) / 16;
+		int sx = MathHelper.floor(aabb.minX) / 16;
+		int sz = MathHelper.floor(aabb.minZ) / 16;
+		int ex = MathHelper.floor(aabb.maxX) / 16;
+		int ez = MathHelper.floor(aabb.maxZ) / 16;
 		for(int cx = sx; cx <= ex; cx++) {
 			for(int cz = sz; cz <= ez; cz++) {
 				Chunk chunk = this.world.getChunkFromChunkCoords(cx, cz);
@@ -574,7 +574,7 @@ public abstract class WorldDataBase<T extends ChunkDataBase> extends WorldSavedD
 		@SubscribeEvent
 		public void onClientTick(ClientTickEvent event) {
 			if(event.phase == Phase.END) {
-				World world = Minecraft.getMinecraft().theWorld;
+				World world = Minecraft.getMinecraft().world;
 				if(world != null && !Minecraft.getMinecraft().isGamePaused()) {
 					this.tickWorld(world);
 				}

@@ -44,7 +44,7 @@ public class CaveSpawnEntry extends BLSpawnEntry {
 		short spawnWeight = (short) (this.getBaseWeight() / 3);
 		if(pos.getY() < surfaceHeight) {
 			double percentage = 1.0D - ((double)(surfaceHeight - pos.getY()) / (double)surfaceHeight);
-			spawnWeight = (short) MathHelper.ceiling_double_int(this.getBaseWeight() / (2.0D * percentage + 1.0D));
+			spawnWeight = (short) MathHelper.ceil(this.getBaseWeight() / (2.0D * percentage + 1.0D));
 		} else {
 			spawnWeight = 0;
 		}

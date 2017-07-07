@@ -20,7 +20,8 @@ public class ItemTarminion extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
 		if (!world.isRemote) {
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_EGG_THROW, SoundCategory.NEUTRAL, 1, 1);
 
@@ -28,10 +29,10 @@ public class ItemTarminion extends Item {
 			Vec3d lookVec = player.getLookVec();
 			tarminion.setPosition(player.posX, player.posY + player.getEyeHeight(), player.posZ);
 			tarminion.setThrowableHeading(lookVec.xCoord, lookVec.yCoord, lookVec.zCoord, 0.8F, 0.1F);
-			world.spawnEntityInWorld(tarminion);
+			world.spawnEntity(tarminion);
 
 			if (!player.capabilities.isCreativeMode) {
-				itemStack.stackSize--;
+				itemStack.shrink(1);
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);

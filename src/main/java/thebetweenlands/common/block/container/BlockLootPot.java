@@ -28,6 +28,7 @@ import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -88,7 +89,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
+	public void getSubBlocks(Item itemIn, CreativeTabs tab, NonNullList<ItemStack> list) {
 		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_1.getMetadata(EnumFacing.SOUTH)));
 		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_2.getMetadata(EnumFacing.SOUTH)));
 		list.add(new ItemStack(itemIn, 1, EnumLootPot.POT_3.getMetadata(EnumFacing.SOUTH)));
@@ -121,7 +122,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int rotation = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		state = state.withProperty(FACING, EnumFacing.getHorizontal(rotation));
 		state = state.withProperty(VARIANT, EnumLootPot.byMetadata(stack.getItemDamage()));
 		worldIn.setBlockState(pos, state, 3);
@@ -134,7 +135,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	}
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		if(!worldIn.isRemote) {
 			if (worldIn.getTileEntity(pos) instanceof TileEntityLootPot) {
 				TileEntityLootPot tile = (TileEntityLootPot) worldIn.getTileEntity(pos);
@@ -145,7 +146,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 					for(int i = 0; i < wrapper.getSlots() && stack != null; i++) {
 						stack = wrapper.insertItem(i, stack, false);
 					}
-					if(stack == null || stack.stackSize != prevStack.stackSize) {
+					if(stack == null || stack.getCount() != prevStack.getCount()) {
 						if(!playerIn.isCreative()) {
 							playerIn.setHeldItem(hand, stack);
 						}
@@ -157,7 +158,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 						if(extracted != null) {
 							EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
 							item.motionX = item.motionY = item.motionZ = 0D;
-							worldIn.spawnEntityInWorld(item);
+							worldIn.spawnEntity(item);
 							return true;
 						}
 					}
@@ -194,7 +195,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 				EntityTermite entity = new EntityTermite(worldIn);
 				entity.getEntityAttribute(EntityTermite.SMALL).setBaseValue(1);
 				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, 0.0F, 0.0F);
-				worldIn.spawnEntityInWorld(entity);
+				worldIn.spawnEntity(entity);
 			}
 		}
 		super.onBlockDestroyedByPlayer(worldIn, pos, state);

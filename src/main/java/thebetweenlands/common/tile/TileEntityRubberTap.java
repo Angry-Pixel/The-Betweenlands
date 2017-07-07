@@ -63,7 +63,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 
 	@Override
 	public void update() {
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			FluidStack drained = this.tank.drain(Fluid.BUCKET_VOLUME, false);
 			final int ticksPerStep = ((BlockRubberTap)this.getBlockType()).ticksPerStep;
 			if(drained == null || drained.amount < Fluid.BUCKET_VOLUME) {
@@ -73,8 +73,8 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 					this.tank.fill(new FluidStack(FluidRegistry.RUBBER, 67), true);
 					this.fillProgress = 0;
 
-					IBlockState stat = this.worldObj.getBlockState(this.pos);
-					this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+					IBlockState stat = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 					this.markDirty();
 				}
 			}
@@ -106,7 +106,7 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.tank.readFromNBT(pkt.getNbtCompound());
-		this.worldObj.markBlockRangeForRenderUpdate(this.pos, this.pos);
+		this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 	}
 
 	@Override
@@ -118,8 +118,8 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	public int fill(FluidStack resource, boolean doFill) {
 		if(doFill) {
 			this.markDirty();
-			IBlockState stat = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 		}
 		return this.tank.fill(resource, doFill);
 	}
@@ -128,8 +128,8 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		if(doDrain) {
 			this.markDirty();
-			IBlockState stat = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 		}
 		return this.tank.drain(resource, doDrain);
 	}
@@ -138,8 +138,8 @@ public class TileEntityRubberTap extends TileEntity implements IFluidHandler, IT
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		if(doDrain) {
 			this.markDirty();
-			IBlockState stat = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, stat, stat, 3);
+			IBlockState stat = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, stat, stat, 3);
 		}
 		return this.tank.drain(maxDrain, doDrain);
 	}

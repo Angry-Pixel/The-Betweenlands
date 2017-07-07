@@ -11,7 +11,7 @@ public class ElixirPetrify extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase livingBase, int strength) {
-		livingBase.setLocationAndAngles(MathHelper.floor_double(livingBase.posX) + 0.5, livingBase.onGround ? MathHelper.floor_double(livingBase.getEntityBoundingBox().minY) : livingBase.getEntityBoundingBox().minY, MathHelper.floor_double(livingBase.posZ) + 0.5, 0, 0);
+		livingBase.setLocationAndAngles(MathHelper.floor(livingBase.posX) + 0.5, livingBase.onGround ? MathHelper.floor(livingBase.getEntityBoundingBox().minY) : livingBase.getEntityBoundingBox().minY, MathHelper.floor(livingBase.posZ) + 0.5, 0, 0);
 		livingBase.motionX = livingBase.motionZ = 0.0;
 		livingBase.motionY = -1F;
 		livingBase.isSwingInProgress = false;

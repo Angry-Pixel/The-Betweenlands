@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -83,7 +84,7 @@ public class ItemLoreScrap extends Item implements ItemRegistry.ISubItemsItem {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(Item item, CreativeTabs tab, NonNullList<ItemStack> subItems) {
 		for(int i = 0; i < PAGE_NAMES.length; i++) {
 			ItemStack stack = new ItemStack(item);
 			setPage(stack, i);
@@ -101,7 +102,8 @@ public class ItemLoreScrap extends Item implements ItemRegistry.ISubItemsItem {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		if (getPage(itemStackIn) != -1) {
 			playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LORE, worldIn, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);

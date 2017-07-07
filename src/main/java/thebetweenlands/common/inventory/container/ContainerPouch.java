@@ -70,7 +70,7 @@ public class ContainerPouch extends Container {
 				return null;
 			}
 
-			if (slotStack.stackSize == 0) {
+			if (slotStack.getCount() == 0) {
 				slot.putStack(null);
 			} else {
 				slot.onSlotChanged();

@@ -42,8 +42,8 @@ public class LocationHandler {
 		if(event.phase == Phase.END) {
 			EntityPlayer player = event.player;
 
-			if(player != null && !player.isCreative() && !player.worldObj.isRemote) {
-				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(player.worldObj);
+			if(player != null && !player.isCreative() && !player.world.isRemote) {
+				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(player.world);
 				List<LocationCragrockTower> locations = worldStorage.getSharedStorageAt(LocationCragrockTower.class, location -> location.isInside(player), player.posX, player.posZ);
 
 				for(LocationCragrockTower location : locations) {
@@ -69,7 +69,7 @@ public class LocationHandler {
 						}
 						player.fallDistance = 0.0F;
 						player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 2));
-						player.worldObj.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.AMBIENT, 1, 1);
+						player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.AMBIENT, 1, 1);
 					} else if(location.isTopReached() && player.posY - structurePos.getY() <= 42 && !location.isCrumbling() && location.getCrumblingTicks() == 0) {
 						location.setCrumbling(true);
 						location.restoreBlockade(4);
@@ -115,9 +115,9 @@ public class LocationHandler {
 				positions.add(event.getPos());
 			}
 			for(BlockPos pos : positions) {
-				List<LocationStorage> locations = LocationStorage.getLocations(player.worldObj, new Vec3d(pos));
+				List<LocationStorage> locations = LocationStorage.getLocations(player.world, new Vec3d(pos));
 				for(LocationStorage location : locations) {
-					if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.worldObj, player, pos)) {
+					if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.world, player, pos)) {
 						event.setCanceled(true);
 						return;
 					}
@@ -131,13 +131,13 @@ public class LocationHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		if(!player.isCreative() && event.getItemStack() != null && Block.getBlockFromItem(event.getItemStack().getItem()) != null) {
 			BlockPos resultingPos = event.getPos();
-			IBlockState blockState = player.worldObj.getBlockState(resultingPos);
-			if(!blockState.getBlock().isReplaceable(player.worldObj, resultingPos)) {
+			IBlockState blockState = player.world.getBlockState(resultingPos);
+			if(!blockState.getBlock().isReplaceable(player.world, resultingPos)) {
 				resultingPos = resultingPos.offset(event.getFace());
 			}
-			List<LocationStorage> locations = LocationStorage.getLocations(player.worldObj, new Vec3d(resultingPos));
+			List<LocationStorage> locations = LocationStorage.getLocations(player.world, new Vec3d(resultingPos));
 			for(LocationStorage location : locations) {
-				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.worldObj, player, resultingPos)) {
+				if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.world, player, resultingPos)) {
 					event.setUseItem(Result.DENY);
 					if(event.getWorld().isRemote) {
 						Vec3d hitVec = event.getHitVec();
@@ -152,9 +152,9 @@ public class LocationHandler {
 	@SubscribeEvent
 	public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		EntityPlayer player = event.getEntityPlayer();
-		List<LocationStorage> locations = LocationStorage.getLocations(player.worldObj, new Vec3d(event.getPos()));
+		List<LocationStorage> locations = LocationStorage.getLocations(player.world, new Vec3d(event.getPos()));
 		for(LocationStorage location : locations) {
-			if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.worldObj, player, event.getPos())) {
+			if(location != null && location.getGuard() != null && location.getGuard().isGuarded(player.world, player, event.getPos())) {
 				event.setNewSpeed(0.0F);
 				event.setCanceled(true);
 				return;
@@ -172,7 +172,7 @@ public class LocationHandler {
 		List<LocationStorage> affectedLocations = new ArrayList<LocationStorage>();
 
 		for(BlockPos pos : explosion.getAffectedBlockPositions()) {
-			long chunkId = ChunkPos.chunkXZ2Int(pos.getX() / 16, pos.getZ() / 16);
+			long chunkId = ChunkPos.asLong(pos.getX() / 16, pos.getZ() / 16);
 			List<LocationStorage> locations = locationCache.get(chunkId);
 
 			if(locations == null) {

@@ -1,5 +1,9 @@
 package thebetweenlands.common.capability.equipment;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -46,28 +50,31 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead) {
-		return !wasDead || this.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
+		return !wasDead || this.getEntity().world.getGameRules().getBoolean("keepInventory");
 	}
 
 
 
-	private ItemStack[][] inventories;
+	//private List<ItemStack>[] inventories;
+	private List<List<ItemStack>> inventories;
 	private int amuletSlots = 1;
 
 	public EquipmentEntityCapability() {
-		this.inventories = new ItemStack[EnumEquipmentInventory.values().length][];
+		//this.inventories = (ArrayList<ItemStack>[])new ArrayList[EnumEquipmentInventory.values().length]; // this is fug.  arraylist of arraylist probably better
+		this.inventories = new ArrayList<List<ItemStack>>(EnumEquipmentInventory.values().length); 
+		//this.inventories = new ItemStack[EnumEquipmentInventory.values().length][];
 		for(EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
-			this.inventories[inventory.id] = new ItemStack[inventory.maxSize];
+			this.inventories.add(inventory.id, new ArrayList<ItemStack>(Collections.nCopies(inventory.maxSize, ItemStack.EMPTY)));
 		}
 	}
-
+	
 	@Override
 	public IInventory getInventory(EnumEquipmentInventory inventory) {
 		switch(inventory) {
 		case AMULET:
-			return new InventoryEquipmentAmulets(this, this.inventories[inventory.id]);
+			return new InventoryEquipmentAmulets(this, this.inventories.get(inventory.id));
 		default:
-			return new InventoryEquipment(this, this.inventories[inventory.id]);
+			return new InventoryEquipment(this, this.inventories.get(inventory.id));
 		}
 	}
 
@@ -75,11 +82,11 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	public void writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("amuletSlots", this.amuletSlots);
 		NBTTagList inventoryList = new NBTTagList();
-		for(int i = 0; i < this.inventories.length; i++) {
+		for(int i = 0; i < this.inventories.size(); i++) {
 			NBTTagCompound inventoryNbt = new NBTTagCompound();
 			NBTTagList slotList = new NBTTagList();
-			for(int c = 0; c < this.inventories[i].length; c++) {
-				ItemStack stack = this.inventories[i][c];
+			for(int c = 0; c < this.inventories.get(i).size(); c++) {
+				ItemStack stack = this.inventories.get(i).get(c);
 				if(stack != null) {
 					NBTTagCompound slotNbt = new NBTTagCompound();
 					slotNbt.setInteger("slot", c);
@@ -100,7 +107,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		for(EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
-			this.inventories[inventory.id] = new ItemStack[inventory.maxSize];
+			this.inventories.set(inventory.id, new ArrayList<ItemStack>(Collections.nCopies(inventory.maxSize, ItemStack.EMPTY)));
 		}
 		if(nbt.hasKey("amuletSlots")) {
 			this.amuletSlots = nbt.getInteger("amuletSlots");
@@ -111,14 +118,14 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 				NBTTagCompound inventoryNbt = inventoryList.getCompoundTagAt(i);
 				if(inventoryNbt.hasKey("items")) {
 					int id = inventoryNbt.getInteger("id");
-					if(id < this.inventories.length) {
-						ItemStack[] inventoryStacks = this.inventories[id];
+					if(id < this.inventories.size()) {
+						List<ItemStack> inventoryStacks = this.inventories.get(id);
 						NBTTagList slotList = inventoryNbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
 						for(int c = 0; c < slotList.tagCount(); c++) {
 							NBTTagCompound slotNbt = slotList.getCompoundTagAt(c);
 							int slot = slotNbt.getInteger("slot");
-							if(slot < inventoryStacks.length) {
-								inventoryStacks[slot] = ItemStack.loadItemStackFromNBT(slotNbt.getCompoundTag("stack"));
+							if(slot < inventoryStacks.size()) {
+								inventoryStacks.set(slot, new ItemStack(slotNbt.getCompoundTag("stack")));
 							}
 						}
 					}

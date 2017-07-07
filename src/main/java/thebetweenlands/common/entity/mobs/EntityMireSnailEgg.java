@@ -37,7 +37,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 		super.onUpdate();
 		if (getGrowingAge() < 0 || getGrowingAge() > 0) // stupid hack to stop entity scaling
 		setGrowingAge(0);
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (getHatchTime() < 24000)
 				setHatchTime(getHatchTime() + 1);
 			if (getHatchTime() >= 24000) //this should be 24000 = 1 day (20 mins)
@@ -48,13 +48,13 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	}
 
 	private void hatch() {
-		EntityMireSnail snail = new EntityMireSnail(worldObj);
+		EntityMireSnail snail = new EntityMireSnail(world);
 		snail.setPosition(posX, posY, posZ);
 		if (snail.getCanSpawnHere()) {
 			setDead();
 			hatchParticlePacketTarget();
 			snail.setHasMated(true);
-			worldObj.spawnEntityInWorld(snail);
+			world.spawnEntity(snail);
 		}
 	}
 

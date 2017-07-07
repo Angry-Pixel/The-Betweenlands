@@ -97,7 +97,7 @@ public class WorldRenderHandler {
 
 				float size = 3.0F;
 				if (!BlockWisp.canSee(te.getWorld(), te.getPos())) {
-					size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp_float(ParticleWisp.getDistanceToViewer(rx, ry, rz, event.getPartialTicks()), 10, 20))) * 1.2F;
+					size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp(ParticleWisp.getDistanceToViewer(rx, ry, rz, event.getPartialTicks()), 10, 20))) * 1.2F;
 				}
 
 				int colorIndex = blockState.getValue(BlockWisp.COLOR);

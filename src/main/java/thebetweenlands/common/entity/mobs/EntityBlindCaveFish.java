@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
@@ -55,7 +56,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	protected PathNavigate getNewNavigator(World world){
+	protected PathNavigate createNavigator(World world){
 		return new PathNavigateSwimmer(this, world);
 	}
 
@@ -82,17 +83,17 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
 	@Override
 	public float getBlockPathWeight(BlockPos pos) {
-		return worldObj.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + worldObj.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+		return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
 	}
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+		return this.posY <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
 	}
 
 	@Override
 	public boolean isInWater() {
-		return worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+		return world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
 	}
 
 	@Override
@@ -100,7 +101,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 		if (isServerWorld()) {
 			if (isInWater()) {
 				moveRelative(strafe, forward, 0.1F);
-				moveEntity(motionX, motionY, motionZ);
+				move(MoverType.SELF, motionX, motionY, motionZ);
 				motionX *= 0.8999999761581421D;
 				motionY *= 0.8999999761581421D;
 				motionZ *= 0.8999999761581421D;
@@ -125,7 +126,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
 
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			if(isInWater()) {
 				moveProgress = animation.swing(1.2F, 0.4F, false);
 			} else {
@@ -141,9 +142,9 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 				rotationYaw = rand.nextFloat() * 360.0F;
 				onGround = false;
 				isAirBorne = true;
-				if(worldObj.getWorldTime()%5==0)
-					worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
-				this.damageEntity(DamageSource.drown, 0.5F);
+				if(world.getWorldTime()%5==0)
+					world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				this.damageEntity(DamageSource.DROWN, 0.5F);
 			}
 		}
 	}
@@ -159,7 +160,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
 			if (getAir() == -20) {
 				setAir(0);
-				attackEntityFrom(DamageSource.drown, 2.0F);
+				attackEntityFrom(DamageSource.DROWN, 2.0F);
 			}
 		} else
 			setAir(80);
@@ -167,7 +168,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
 	@Override
 	public boolean isNotColliding() {
-		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
 	}
 	
 	@Override
@@ -189,7 +190,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 				double d1 = posY - fish.posY;
 				double d2 = posZ - fish.posZ;
 				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-				d3 = (double) MathHelper.sqrt_double(d3);
+				d3 = (double) MathHelper.sqrt(d3);
 				d1 = d1 / d3;
 				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
 				fish.rotationYaw = limitAngle(fish.rotationYaw, f, 90.0F);

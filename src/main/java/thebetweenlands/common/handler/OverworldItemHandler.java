@@ -74,7 +74,7 @@ public class OverworldItemHandler {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
 				if(event.getWorld().isRemote) {
-					event.getEntityPlayer().addChatMessage(new TextComponentTranslation("chat.flintandsteel", new TextComponentTranslation(item.getUnlocalizedName() + ".name")));
+					event.getEntityPlayer().sendMessage(new TextComponentTranslation("chat.flintandsteel", new TextComponentTranslation(item.getUnlocalizedName() + ".name")));
 				}
 			}
 		}
@@ -106,7 +106,7 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
-		if(!event.player.worldObj.isRemote && event.player.ticksExisted % 5 == 0 && !event.player.capabilities.isCreativeMode) {
+		if(!event.player.world.isRemote && event.player.ticksExisted % 5 == 0 && !event.player.capabilities.isCreativeMode) {
 			updatePlayerInventory(event.player);
 		}
 	}
@@ -119,13 +119,13 @@ public class OverworldItemHandler {
 				ItemStack stack = player.inventory.getStackInSlot(i);
 				if(stack != null) {
 					if(isRotting(stack)) {
-						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.stackSize);
-						stack.stackSize = 1;
+						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.getCount());
+						stack.setCount(1);
 						ItemRegistry.ROTTEN_FOOD.setOriginalStack(rottenFoodStack, stack);
 						player.inventory.setInventorySlotContents(i, rottenFoodStack);
 					} else if(isTainting(stack)) {
-						ItemStack taintedPotionStack = new ItemStack(ItemRegistry.TAINTED_POTION, stack.stackSize);
-						stack.stackSize = 1;
+						ItemStack taintedPotionStack = new ItemStack(ItemRegistry.TAINTED_POTION, stack.getCount());
+						stack.setCount(1);
 						ItemRegistry.TAINTED_POTION.setOriginalStack(taintedPotionStack, stack);
 						player.inventory.setInventorySlotContents(i, taintedPotionStack);
 					}
@@ -139,7 +139,7 @@ public class OverworldItemHandler {
 					if(stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
 						ItemStack originalStack = ItemRegistry.ROTTEN_FOOD.getOriginalStack(stack);
 						if(originalStack != null) {
-							originalStack.stackSize = stack.stackSize;
+							originalStack.setCount(stack.getCount());
 							player.inventory.setInventorySlotContents(i, originalStack);
 						} else {
 							player.inventory.setInventorySlotContents(i, null);
@@ -147,7 +147,7 @@ public class OverworldItemHandler {
 					} else if(stack.getItem() == ItemRegistry.TAINTED_POTION) {
 						ItemStack originalStack = ItemRegistry.TAINTED_POTION.getOriginalStack(stack);
 						if(originalStack != null) {
-							originalStack.stackSize = stack.stackSize;
+							originalStack.setCount(stack.getCount());
 							player.inventory.setInventorySlotContents(i, originalStack);
 						} else {
 							player.inventory.setInventorySlotContents(i, null);
@@ -161,16 +161,16 @@ public class OverworldItemHandler {
 	@SubscribeEvent
 	public static void onItemPickup(EntityItemPickupEvent event) {
 		EntityPlayer player = event.getEntityPlayer();
-		if(player != null && !player.worldObj.isRemote && !player.capabilities.isCreativeMode) {
+		if(player != null && !player.world.isRemote && !player.capabilities.isCreativeMode) {
 			ItemStack stack = event.getItem().getEntityItem();
 			if(stack != null) {
 				if(player.dimension == ConfigHandler.dimensionId) {
 					if(isRotting(stack)) {
-						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.stackSize);
+						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.getCount());
 						ItemRegistry.ROTTEN_FOOD.setOriginalStack(rottenFoodStack, stack);
 						event.getItem().setEntityItemStack(rottenFoodStack);
 					} else if(isTainting(stack)) {
-						ItemStack taintedPotionStack = new ItemStack(ItemRegistry.TAINTED_POTION, stack.stackSize);
+						ItemStack taintedPotionStack = new ItemStack(ItemRegistry.TAINTED_POTION, stack.getCount());
 						ItemRegistry.TAINTED_POTION.setOriginalStack(taintedPotionStack, stack);
 						event.getItem().setEntityItemStack(taintedPotionStack);
 					}

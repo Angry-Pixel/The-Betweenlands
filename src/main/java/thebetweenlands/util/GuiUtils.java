@@ -212,8 +212,8 @@ public class GuiUtils {
 		double segmentWidth = (radius - innerRadius);
 		double requiredSegments = segmentWidth / wrapRadius;
 		double diffV = maxV - minV;
-		double vPerSegment = MathHelper.clamp_double(diffV * requiredSegments, 0.0D, diffV);
-		for(int i = 0; i < MathHelper.ceiling_double_int(requiredSegments); i++) {
+		double vPerSegment = MathHelper.clamp(diffV * requiredSegments, 0.0D, diffV);
+		for(int i = 0; i < MathHelper.ceil(requiredSegments); i++) {
 			double renderInnerRadius = segmentWidth / requiredSegments * i;
 			double renderOuterRadius = segmentWidth / requiredSegments * (i+1);
 			double segmentLength = renderOuterRadius - renderInnerRadius;
@@ -281,8 +281,8 @@ public class GuiUtils {
 			double borderLength = (radius - innerRadius);
 			double requiredSegments = borderLength / wrapRadius;
 			double diffV = b1maxV - b1minV;
-			double vPerSegment = MathHelper.clamp_double(diffV * requiredSegments, 0.0D, diffV);
-			for(int i = 0; i < MathHelper.ceiling_double_int(requiredSegments); i++) {
+			double vPerSegment = MathHelper.clamp(diffV * requiredSegments, 0.0D, diffV);
+			for(int i = 0; i < MathHelper.ceil(requiredSegments); i++) {
 				double renderInnerRadius = borderLength / requiredSegments * i;
 				double renderOuterRadius = borderLength / requiredSegments * (i+1);
 				double segmentLength = renderOuterRadius - renderInnerRadius;
@@ -327,8 +327,8 @@ public class GuiUtils {
 			double borderLength = (radius - innerRadius);
 			double requiredSegments = borderLength / wrapRadius;
 			double diffV = b3maxV - b3minV;
-			double vPerSegment = MathHelper.clamp_double(diffV * requiredSegments, 0.0D, diffV);
-			for(int i = 0; i < MathHelper.ceiling_double_int(requiredSegments); i++) {
+			double vPerSegment = MathHelper.clamp(diffV * requiredSegments, 0.0D, diffV);
+			for(int i = 0; i < MathHelper.ceil(requiredSegments); i++) {
 				double renderInnerRadius = borderLength / requiredSegments * i;
 				double renderOuterRadius = borderLength / requiredSegments * (i+1);
 				double segmentLength = renderOuterRadius - renderInnerRadius;

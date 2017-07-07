@@ -37,7 +37,7 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
 
         if (player != null) {
             if (world.isRemote) {
-                player.addChatMessage(new TextComponentTranslation("chat.item.forbiddenfig"));
+                player.sendMessage(new TextComponentTranslation("chat.item.forbiddenfig"));
                 //world.playSoundAtEntity(player, "thebetweenlands:fig", 0.7F, 0.8F);
             } else {
                 player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200, 1));

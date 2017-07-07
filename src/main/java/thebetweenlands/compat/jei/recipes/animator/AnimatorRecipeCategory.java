@@ -48,15 +48,6 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
     }
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {
-
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-    }
-
-    @Override
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {
         recipeLayout.getItemStacks().init(0, true, 0, 15);
         recipeLayout.getItemStacks().init(1, true, 0, 49);
@@ -68,7 +59,7 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
         recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
         recipeLayout.getItemStacks().set(2, ingredients.getInputs(ItemStack.class).get(2));
         if (ingredients.getOutputs(ItemStack.class).size() > 0)
-            recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class));
+            recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class).get(0)); // probably broke something
     }
 
     @Override

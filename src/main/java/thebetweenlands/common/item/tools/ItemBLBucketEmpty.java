@@ -34,7 +34,8 @@ public abstract class ItemBLBucketEmpty extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    	ItemStack itemStackIn = playerIn.getHeldItem(hand);
         RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
         ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, itemStackIn, raytraceresult);
         if (ret != null) {
@@ -75,11 +76,11 @@ public abstract class ItemBLBucketEmpty extends Item {
                             nbtCompound.setTag("ingredients", nbtList);
                             nbtCompound.setInteger("infusionTime", tile.getInfusionTime());
                             tile.extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
-                            if (itemStackIn.stackSize == 1)
+                            if (itemStackIn.getCount() == 1)
                                 return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, infusionBucket);
                             else {
                                 playerIn.dropItem(infusionBucket.copy(), false);
-                                itemStackIn.stackSize--;
+                                itemStackIn.shrink(1);
                                 return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
                             }
                         }
@@ -114,13 +115,16 @@ public abstract class ItemBLBucketEmpty extends Item {
         ItemStack fullBucket = UniversalBucket.getFilledBucket(this.getFilledBucket(), fluid);
         if (player.capabilities.isCreativeMode) {
             return emptyBuckets;
-        } else if (--emptyBuckets.stackSize <= 0) {
-            return fullBucket.copy();
         } else {
-            if (!player.inventory.addItemStackToInventory(fullBucket.copy())) {
-                player.dropItem(fullBucket.copy(), false);
-            }
-            return emptyBuckets;
+        	emptyBuckets.shrink(1);
+        	if (emptyBuckets.getCount() <= 0) {
+        		return fullBucket.copy();
+        	} else {
+        		if (!player.inventory.addItemStackToInventory(fullBucket.copy())) {
+        			player.dropItem(fullBucket.copy(), false);
+        		}
+        	}
+        	return emptyBuckets;
         }
     }
 

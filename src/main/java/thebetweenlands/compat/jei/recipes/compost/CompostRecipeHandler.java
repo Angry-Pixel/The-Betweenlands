@@ -12,11 +12,6 @@ public class CompostRecipeHandler implements IRecipeHandler<CompostRecipeJEI> {
     }
 
     @Override
-    public String getRecipeCategoryUid() {
-        return null;
-    }
-
-    @Override
     public String getRecipeCategoryUid(CompostRecipeJEI recipe) {
         return ModInfo.ID + ":compost";
     }

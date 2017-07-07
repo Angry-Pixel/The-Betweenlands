@@ -1,7 +1,0 @@
-{
-  "parent": "block/column_side",
-  "textures": {
-    "side": "thebetweenlands:blocks/bulb_capped_shroom_stalk_bottomy",
-    "end": "thebetweenlands:blocks/bulb_capped_shroom_stalk_top"
-  }
-}

@@ -34,7 +34,7 @@ public class ParticleThem extends Particle {
 		this.posZ = this.prevPosZ = z;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 		this.particleMaxAge = (int)1200;
-		this.field_190017_n = false;
+		this.canCollide = false;
 		this.particleScale = scale;
 		this.startY = this.posY;
 		this.textureStart = texture / (float) TEXTURE_COUNT;
@@ -58,12 +58,12 @@ public class ParticleThem extends Particle {
 		int lightmapY = brightness & 65535;
 		Vec3d[] rotation = new Vec3d[] {new Vec3d((double)(-rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double)(-rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(rotationYZ * scale - rotationXZ * scale))};
 
-		if (this.field_190014_F != 0.0F) {
-			float interpolatedRoll = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+		if (this.particleAngle != 0.0F) {
+			float interpolatedRoll = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float cos = MathHelper.cos(interpolatedRoll * 0.5F);
-			float lookX = MathHelper.sin(interpolatedRoll * 0.5F) * (float)field_190016_K.xCoord;
-			float lookY = MathHelper.sin(interpolatedRoll * 0.5F) * (float)field_190016_K.yCoord;
-			float lookZ = MathHelper.sin(interpolatedRoll * 0.5F) * (float)field_190016_K.zCoord;
+			float lookX = MathHelper.sin(interpolatedRoll * 0.5F) * (float)cameraViewDir.xCoord;
+			float lookY = MathHelper.sin(interpolatedRoll * 0.5F) * (float)cameraViewDir.yCoord;
+			float lookZ = MathHelper.sin(interpolatedRoll * 0.5F) * (float)cameraViewDir.zCoord;
 			Vec3d look = new Vec3d((double)lookX, (double)lookY, (double)lookZ);
 
 			for (int l = 0; l < 4; ++l) {
@@ -71,7 +71,7 @@ public class ParticleThem extends Particle {
 			}
 		}
 
-		Vec3d look = new Vec3d(field_190016_K.xCoord, field_190016_K.yCoord, field_190016_K.zCoord).normalize();
+		Vec3d look = new Vec3d(cameraViewDir.xCoord, cameraViewDir.yCoord, cameraViewDir.zCoord).normalize();
 		Vec3d diff = new Vec3d(this.posX - interpPosX, this.posY - interpPosY, this.posZ - interpPosZ).normalize();
 		float angle = (float) Math.toDegrees(Math.acos(look.dotProduct(diff)));
 
@@ -137,16 +137,16 @@ public class ParticleThem extends Particle {
 		}
 
 		BlockPos checkPos = new BlockPos(this.posX, this.posY - 2, this.posZ);
-		IBlockState blockStateBelow = this.worldObj.getBlockState(checkPos);
+		IBlockState blockStateBelow = this.world.getBlockState(checkPos);
 		if(blockStateBelow.getBlock() == Blocks.AIR) {
 			this.motionY = -0.01D;
 		} else {
-			if(this.worldObj.getBlockState(checkPos.up()).getBlock() != Blocks.AIR) {
+			if(this.world.getBlockState(checkPos.up()).getBlock() != Blocks.AIR) {
 				this.motionY = 0.01D;
 			}
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		this.startY += this.motionY;
 
 		this.motionX *= 0.96D;
@@ -163,7 +163,7 @@ public class ParticleThem extends Particle {
 	}
 
 	@Override
-	public boolean isTransparent() {
+	public boolean shouldDisableDepth() {
 		return true;
 	}
 

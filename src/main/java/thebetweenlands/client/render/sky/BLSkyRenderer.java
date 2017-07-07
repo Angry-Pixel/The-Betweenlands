@@ -326,16 +326,16 @@ public class BLSkyRenderer extends IRenderHandler {
 	}
 
 	private void renderAuroras(Minecraft mc, float partialTicks) {
-		Random rand = mc.theWorld.rand;
-		double newAuroraPosX = mc.thePlayer.posX + rand.nextInt(160) - 80;
-		double newAuroraPosZ = mc.thePlayer.posZ + rand.nextInt(160) - 80;
+		Random rand = mc.world.rand;
+		double newAuroraPosX = mc.player.posX + rand.nextInt(160) - 80;
+		double newAuroraPosZ = mc.player.posZ + rand.nextInt(160) - 80;
 		double newAuroraPosY = 260;
 		double minDist = 0.0D;
 
 		Iterator<AuroraRenderer> auroraIT = this.auroras.iterator();
 		while(auroraIT.hasNext()) {
 			AuroraRenderer aurora = auroraIT.next();
-			if(aurora.getDistance(mc.thePlayer.posX, aurora.getY(), mc.thePlayer.posZ) > 180) {
+			if(aurora.getDistance(mc.player.posX, aurora.getY(), mc.player.posZ) > 180) {
 				auroraIT.remove();
 				this.auroras.remove(aurora);
 			}
@@ -351,8 +351,8 @@ public class BLSkyRenderer extends IRenderHandler {
 		List<Vector4f> gradients = new ArrayList<Vector4f>();
 
 		EventAuroras event = null;
-		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
-			event = ((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS;
+		if(mc.world != null && mc.world.provider instanceof WorldProviderBetweenlands) {
+			event = ((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry().AURORAS;
 		}
 		if(event != null) {
 			switch(event.getAuroraType()) {
@@ -495,7 +495,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		float starBrightness = (world.getStarBrightness(partialTicks) + 0.5F) * invRainStrength * invRainStrength * invRainStrength;
 		float fade = 1.0F;
-		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(mc.theWorld);
+		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(mc.world);
 		if(provider != null) {
 			fade = provider.getEnvironmentEventRegistry().DENSE_FOG.getFade(partialTicks) * 0.95F + 0.05F;
 		}
@@ -519,7 +519,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glColor4f(0.0F, 0.0F, 0.0F, 1.0F);
 
-		double horizon = mc.thePlayer.getPositionEyes(partialTicks).yCoord - world.getHorizon();
+		double horizon = mc.player.getPositionEyes(partialTicks).yCoord - world.getHorizon();
 		float relHorizon = -((float)(horizon + 65.0D));
 		if (horizon < 0.0D) {
 			GL11.glPushMatrix();
@@ -666,7 +666,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 
 			//TODO: Don't use world time because of lag
-			float ticks = Minecraft.getMinecraft().theWorld.getTotalWorldTime() + partialTicks;
+			float ticks = Minecraft.getMinecraft().world.getTotalWorldTime() + partialTicks;
 
 			float domeRotation = (float)(Math.sin(ticks / 1600.0F) * 120.0F - ticks / 20.0F + Math.cos(ticks / 800.0F) * 30.0F * Math.sin(ticks / 1400.0F));
 
@@ -705,7 +705,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		GL11.glEnable(GL11.GL_ALPHA_TEST);
 
-		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().theWorld)) {
+		if(EventSpoopy.isSpoopy(Minecraft.getMinecraft().world)) {
 			GL11.glColor4f(1, 1, 1, 1);
 			GL11.glEnable(GL11.GL_FOG);
 			mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE_RES);
@@ -728,8 +728,8 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL11.glPopMatrix();
 		}
 
-		if(mc.theWorld != null && mc.theWorld.provider instanceof WorldProviderBetweenlands) {
-			if(((WorldProviderBetweenlands)mc.theWorld.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
+		if(mc.world != null && mc.world.provider instanceof WorldProviderBetweenlands) {
+			if(((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
 				GL11.glDisable(GL11.GL_FOG);
 				this.renderAuroras(mc, partialTicks);
 				GL11.glEnable(GL11.GL_FOG);

@@ -149,7 +149,7 @@ public class RadialMenuHandler {
 								if(equippable.canEquip(stack, player, player)) {
 									ItemStack res = EquipmentHelper.equipItem(player, player, stack, true);
 
-									if(res == null || res.stackSize != stack.stackSize) {
+									if(res == null || res.getCount() != stack.getCount()) {
 										categories.add(new Categories.EquipCategory(I18n.format("equipment.menu.equip", stack.getDisplayName()), 0x6010AA10, 0xDD10AA10, stack, type, i));
 									}
 								}
@@ -429,7 +429,7 @@ public class RadialMenuHandler {
 				double textureHeight = 64.0D;
 
 				//									      segments,    maxAngle, wrapAngle, wrapRadius, radius, innerRadius, borderWidth
-				GuiUtils.renderMappedCircleSegmentWrapped(subSegments, maxAngle, wrapAngle, wrapRadius, radius, MathHelper.clamp_double(innerRadius-segments*2.5D, 10, innerRadius), 8, 
+				GuiUtils.renderMappedCircleSegmentWrapped(subSegments, maxAngle, wrapAngle, wrapRadius, radius, MathHelper.clamp(innerRadius-segments*2.5D, 10, innerRadius), 8, 
 						//Central piece
 						0 / textureWidth, 100 / textureWidth, 10 / textureHeight, 47 / textureHeight,
 						//Border 1
@@ -488,7 +488,7 @@ public class RadialMenuHandler {
 			for(int i = 0; i < Math.min(this.currentCategory.getCategories().size(), this.displayedCategories); i++) {
 				Category category = this.currentCategory.getCategories().get(i);
 				float midAngle = i * circleAngle + circleAngle / 2.0F;
-				int width = mc.fontRendererObj.getStringWidth(category.getName());
+				int width = mc.fontRenderer.getStringWidth(category.getName());
 
 				GlStateManager.enableTexture2D();
 
@@ -542,13 +542,13 @@ public class RadialMenuHandler {
 				int textColor = 0xFFFFFFFF;
 				if(endX < this.guiX - 1) {
 					Gui.drawRect((int)this.guiX - 100 - width - 1, (int)endY - 8, (int)this.guiX - 100, (int)endY + 1, color);
-					mc.fontRendererObj.drawString(category.getName(), (int)this.guiX-100-width, (int)endY - 7, textColor);
+					mc.fontRenderer.drawString(category.getName(), (int)this.guiX-100-width, (int)endY - 7, textColor);
 				} else if(endX > this.guiX + 1) {
 					Gui.drawRect((int)this.guiX + 100 - 1, (int)endY - 8, (int)this.guiX + 100 + width, (int)endY + 1, color);
-					mc.fontRendererObj.drawString(category.getName(), (int)this.guiX+100, (int)endY - 7, textColor);
+					mc.fontRenderer.drawString(category.getName(), (int)this.guiX+100, (int)endY - 7, textColor);
 				} else {
 					Gui.drawRect((int)this.guiX - width / 2 - 1, (int)endY - 1, (int)this.guiX - width / 2 + width, (int)endY + 8, color);
-					mc.fontRendererObj.drawString(category.getName(), (int)this.guiX - width / 2, (int)endY, textColor);
+					mc.fontRenderer.drawString(category.getName(), (int)this.guiX - width / 2, (int)endY, textColor);
 				}
 
 				GlStateManager.popMatrix();
@@ -564,8 +564,8 @@ public class RadialMenuHandler {
 					categoryName = categoryName + category.getName() + " > ";
 				}
 				categoryName = categoryName + this.currentCategory.getName();
-				int width = mc.fontRendererObj.getStringWidth(categoryName);
-				mc.fontRendererObj.drawString(categoryName, (int)this.guiX - width / 2, (int)this.guiY - this.radius - 60, 0xFFFFFFFF);
+				int width = mc.fontRenderer.getStringWidth(categoryName);
+				mc.fontRenderer.drawString(categoryName, (int)this.guiX - width / 2, (int)this.guiY - this.radius - 60, 0xFFFFFFFF);
 			}
 
 			GL11.glDisable(GL11.GL_LINE_SMOOTH);
@@ -613,7 +613,7 @@ public class RadialMenuHandler {
 		double length = Math.sqrt(diffX * diffX + diffY * diffY);
 		double angle = (360 - (Math.toDegrees(Math.atan2(diffX, diffY)) + 180) + 180) % 360;
 		int segments = Math.min(this.currentCategory.getCategories().size(), this.displayedCategories);
-		if(angle >= (int)(category * circleAngle) && angle < (int)((category + 1) * circleAngle) && length <= this.radius + segments*2D && length >= MathHelper.clamp_double(this.innerRadius-segments*2.8D, 10, this.innerRadius) + segments*2D - 4) {
+		if(angle >= (int)(category * circleAngle) && angle < (int)((category + 1) * circleAngle) && length <= this.radius + segments*2D && length >= MathHelper.clamp(this.innerRadius-segments*2.8D, 10, this.innerRadius) + segments*2D - 4) {
 			return true;
 		}
 		return false;

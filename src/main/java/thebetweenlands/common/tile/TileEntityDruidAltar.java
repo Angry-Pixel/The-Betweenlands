@@ -48,11 +48,11 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 
 	@Override
 	public void update() {
-		if (!this.worldObj.isRemote && this.circleShouldRevert) {
-			checkDruidCircleBlocks(this.worldObj);
+		if (!this.world.isRemote && this.circleShouldRevert) {
+			checkDruidCircleBlocks(this.world);
 			this.circleShouldRevert = false;
 		}
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			this.prevRotation = this.rotation;
 			this.rotation += ROTATION_SPEED;
 			if (this.rotation >= 360.0F) {
@@ -66,18 +66,18 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 			this.renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * (FINAL_HEIGHT - 0.2D) + 1.2D);
 		} else {
 			if (this.craftingProgress != 0) {
-				IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);
+				IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
 				// Sync clients every second
 				if (this.craftingProgress % 20 == 0 || this.craftingProgress == 1) {
 					sendCraftingProgressPacket();
 				}
 				this.craftingProgress++;
-				if (recipe == null || this.inventory[0] != null) {
+				if (recipe == null || this.inventory.get(0) != null) {
 					stopCraftingProcess();
 				}
 				if (this.craftingProgress >= CRAFTING_TIME && recipe != null) {
-					ItemStack stack = recipe.getOutput(new ItemStack[]{this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]});
-					stack.stackSize = 1;
+					ItemStack stack = recipe.getOutput(new ItemStack[]{this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)});
+					stack.setCount(1);
 					setInventorySlotContents(1, null);
 					setInventorySlotContents(2, null);
 					setInventorySlotContents(3, null);
@@ -96,27 +96,27 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	}
 
 	private void removeSpawner() {
-		if (this.worldObj.getBlockState(this.pos.down()).getBlock() == BlockRegistry.MOB_SPAWNER) {
-			this.worldObj.setBlockState(this.pos.down(), this.worldObj.getBiomeGenForCoords(this.pos).topBlock);
+		if (this.world.getBlockState(this.pos.down()).getBlock() == BlockRegistry.MOB_SPAWNER) {
+			this.world.setBlockState(this.pos.down(), this.world.getBiome(this.pos).topBlock);
 		}
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		this.inventory[slot] = stack;
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-			stack.stackSize = getInventoryStackLimit();
+		this.inventory.set(slot, stack);
+		if (stack != null && stack.getCount() > getInventoryStackLimit()) {
+			stack.setCount(getInventoryStackLimit());
 		}
-		IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory[1], this.inventory[2], this.inventory[3], this.inventory[4]);
-		if (!this.worldObj.isRemote && recipe != null && stack != null && this.inventory[0] == null && this.craftingProgress == 0) {
+		IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
+		if (!this.world.isRemote && recipe != null && stack != null && this.inventory.get(0) == null && this.craftingProgress == 0) {
 			startCraftingProcess();
 		}
 	}
 
 	private void startCraftingProcess() {
-		World world = this.worldObj;
+		World world = this.world;
 		int dim = world.provider.getDimension();
-		this.worldObj.setBlockState(this.pos, this.worldObj.getBlockState(this.pos).withProperty(BlockDruidAltar.ACTIVE, true), 3);
+		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).withProperty(BlockDruidAltar.ACTIVE, true), 3);
 		this.craftingProgress = 1;
 		// Packet to start sound
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, -1), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
@@ -126,12 +126,12 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		checkDruidCircleBlocks(world);
 
 		AxisAlignedBB aabb = new AxisAlignedBB(this.pos).expand(8, 6, 8);
-		List<EntityDarkDruid> druids = this.worldObj.getEntitiesWithinAABB(EntityDarkDruid.class, aabb);
+		List<EntityDarkDruid> druids = this.world.getEntitiesWithinAABB(EntityDarkDruid.class, aabb);
 		for(EntityDarkDruid druid : druids) {
-			druid.attackEntityFrom(DamageSource.generic, druid.getHealth());
+			druid.attackEntityFrom(DamageSource.GENERIC, druid.getHealth());
 		}
 
-		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(this.worldObj, this.pos.down());
+		MobSpawnerLogicBetweenlands logic = BlockMobSpawnerBetweenlands.getLogic(this.world, this.pos.down());
 		if(logic != null) {
 			//Don't spawn druids while crafting
 			logic.setDelay(CRAFTING_TIME + 20);
@@ -139,9 +139,9 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	}
 
 	private void stopCraftingProcess() {
-		World world = this.worldObj;
+		World world = this.world;
 		int dim = world.provider.getDimension();
-		this.worldObj.setBlockState(this.pos, this.worldObj.getBlockState(this.pos).withProperty(BlockDruidAltar.ACTIVE, false), 3);
+		this.world.setBlockState(this.pos, this.world.getBlockState(this.pos).withProperty(BlockDruidAltar.ACTIVE, false), 3);
 		this.craftingProgress = 0;
 		// Packet to cancel sound
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this, -2), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
@@ -162,7 +162,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	}
 
 	public void sendCraftingProgressPacket() {
-		World world = this.worldObj;
+		World world = this.world;
 		int dim = world.provider.getDimension();
 		TheBetweenlands.networkWrapper.sendToAllAround(new MessageDruidAltarProgress(this), new NetworkRegistry.TargetPoint(dim, this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D, 64D));
 	}

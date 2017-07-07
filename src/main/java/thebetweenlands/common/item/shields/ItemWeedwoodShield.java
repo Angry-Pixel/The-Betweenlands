@@ -48,16 +48,16 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	@Override
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
 		super.onAttackBlocked(stack, attacked, damage, source);
-		if(!attacked.worldObj.isRemote && source.getEntity() != null) {
+		if(!attacked.world.isRemote && source.getEntity() != null) {
 			Entity attacker;
 			if(source instanceof EntityDamageSourceIndirect) {
 				attacker = ((EntityDamageSourceIndirect)source).getSourceOfDamage();
 			} else {
 				attacker = source.getEntity();
 			}
-			if((attacker.isBurning() || attacker instanceof EntitySmallFireball) && attacked.worldObj.rand.nextFloat() < 0.5F) {
+			if((attacker.isBurning() || attacker instanceof EntitySmallFireball) && attacked.world.rand.nextFloat() < 0.5F) {
 				stack.setTagInfo("burningTicks", new NBTTagInt(80));
-			} else if(attacker instanceof EntityLivingBase && attacked.worldObj.rand.nextFloat() < 0.25F) {
+			} else if(attacker instanceof EntityLivingBase && attacked.world.rand.nextFloat() < 0.25F) {
 				ItemStack activeItem = ((EntityLivingBase)attacker).getActiveItemStack();
 				if(activeItem != null) {
 					Item item = activeItem.getItem();
@@ -79,10 +79,10 @@ public class ItemWeedwoodShield extends ItemBLShield {
 				if(burningTicks % 5 == 0)
 					worldIn.playSound((EntityPlayer)null, (double)((float)entityIn.posX), (double)((float)entityIn.posY + entityIn.getEyeHeight()), (double)((float)entityIn.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + worldIn.rand.nextFloat(), worldIn.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 10 == 0 && worldIn.rand.nextFloat() < 0.3F)
-					entityIn.worldObj.setEntityState(entityIn, (byte)30);
+					entityIn.world.setEntityState(entityIn, (byte)30);
 				if(burningTicks % 3 == 0 && entityIn instanceof EntityLivingBase)
 					stack.damageItem(1, (EntityLivingBase)entityIn);
-				if(stack.stackSize <= 0 && entityIn instanceof EntityLivingBase) {
+				if(stack.getCount() <= 0 && entityIn instanceof EntityLivingBase) {
 					if(entityIn instanceof EntityPlayer) {
 						((EntityPlayer)entityIn).inventory.setInventorySlotContents(itemSlot, null);
 						EntityLivingBase entityLiving = (EntityLivingBase) entityIn;
@@ -98,18 +98,18 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
 		ItemStack stack = entityItem.getEntityItem();
 		NBTTagCompound nbt = stack.getTagCompound();
-		if(!entityItem.worldObj.isRemote && nbt != null && nbt.hasKey("burningTicks")) {
+		if(!entityItem.world.isRemote && nbt != null && nbt.hasKey("burningTicks")) {
 			int burningTicks = nbt.getInteger("burningTicks");
 			if(burningTicks > 0) {
 				nbt.setInteger("burningTicks", burningTicks - 1);
 				if(burningTicks % 5 == 0)
-					entityItem.worldObj.playSound((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.worldObj.rand.nextFloat(), entityItem.worldObj.rand.nextFloat() * 0.7F + 0.3F);
+					entityItem.world.playSound((EntityPlayer)null, (double)((float)entityItem.posX), (double)((float)entityItem.posY + entityItem.height / 2.0F), (double)((float)entityItem.posZ), SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + entityItem.world.rand.nextFloat(), entityItem.world.rand.nextFloat() * 0.7F + 0.3F);
 				if(burningTicks % 3 == 0) {
-					if (stack.attemptDamageItem(1, entityItem.worldObj.rand)) {
-						this.renderBrokenItemStack(entityItem.worldObj, entityItem.posX, entityItem.posY + entityItem.height / 2.0F, entityItem.posZ, stack);
-						--stack.stackSize;
-						if (stack.stackSize < 0) {
-							stack.stackSize = 0;
+					if (stack.attemptDamageItem(1, entityItem.world.rand)) {
+						this.renderBrokenItemStack(entityItem.world, entityItem.posX, entityItem.posY + entityItem.height / 2.0F, entityItem.posZ, stack);
+						stack.shrink(1);
+						if (stack.getCount() < 0) {
+							stack.setCount(0);
 						}
 						entityItem.setDead();
 					}
@@ -137,8 +137,9 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		boolean isBurning = itemStackIn.getTagCompound() != null && itemStackIn.getTagCompound().getInteger("burningTicks") > 0;
-		return isBurning ? new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn) : super.onItemRightClick(itemStackIn, worldIn, playerIn, hand);
+		return isBurning ? new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn) : super.onItemRightClick(worldIn, playerIn, hand);
 	}
 }

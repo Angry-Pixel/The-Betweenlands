@@ -37,7 +37,7 @@ public class BlockTemplePillar extends BlockRotatedPillar {
 	}
 
 	@Override
-	public boolean isBlockSolid(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
+	public boolean causesDownwardCurrent(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 

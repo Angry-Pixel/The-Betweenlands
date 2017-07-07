@@ -43,7 +43,7 @@ public class GuiPouchNaming extends GuiContainer {
 	@Override
 	public void initGui() {
 		super.initGui();
-		this.textFieldName = new GuiTextField(0, this.fontRendererObj, 22, 17, 136, 20);
+		this.textFieldName = new GuiTextField(0, this.fontRenderer, 22, 17, 136, 20);
 		this.textFieldName.setMaxStringLength(20);
 		this.textFieldName.setFocused(false);
 		this.textFieldName.setTextColor(5635925);

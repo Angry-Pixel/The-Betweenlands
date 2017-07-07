@@ -31,7 +31,7 @@ public class MessagePlayEntityIdle extends MessageEntity {
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		super.deserialize(buf);
-		this.sound = (SoundEvent)SoundEvent.REGISTRY.getObjectById(buf.readVarIntFromBuffer());
+		this.sound = (SoundEvent)SoundEvent.REGISTRY.getObjectById(buf.readVarInt());
 		this.category = (SoundCategory)buf.readEnumValue(SoundCategory.class);
 		this.soundVolume = buf.readFloat();
 		this.soundPitch = buf.readFloat();
@@ -40,7 +40,7 @@ public class MessagePlayEntityIdle extends MessageEntity {
 	@Override
 	public void serialize(PacketBuffer buf) {
 		super.serialize(buf);
-		buf.writeVarIntToBuffer(SoundEvent.REGISTRY.getIDForObject(this.sound));
+		buf.writeVarInt(SoundEvent.REGISTRY.getIDForObject(this.sound));
 		buf.writeEnumValue(this.category);
 		buf.writeFloat(this.soundVolume);
 		buf.writeFloat(this.soundPitch);

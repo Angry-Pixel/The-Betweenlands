@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -114,15 +115,15 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.getDifficulty() != EnumDifficulty.PEACEFUL && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY), MathHelper.floor_double(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
+		return world.getDifficulty() != EnumDifficulty.PEACEFUL && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY), MathHelper.floor(posZ))).getBlock() == BlockRegistry.SWAMP_WATER;
 	}
 
 	public boolean isGrounded() {
-		return !isInWater() && worldObj.isAirBlock(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 1), MathHelper.floor_double(posZ))) && worldObj.getBlockState(new BlockPos(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ))).getBlock().isCollidable();
+		return !isInWater() && world.isAirBlock(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 1), MathHelper.floor(posZ))) && world.getBlockState(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ))).getBlock().isCollidable();
 	}
 
 	@Override
-	protected PathNavigate getNewNavigator(World world){
+	protected PathNavigate createNavigator(World world){
 		return new PathNavigateSwimmer(this, world);
 	}
 
@@ -133,16 +134,16 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
 	@Override
 	public float getBlockPathWeight(BlockPos pos) {
-		return worldObj.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + worldObj.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
+		return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
 	}
 
 	@Override
 	public void onLivingUpdate() {
-		if (worldObj.isRemote) {
+		if (world.isRemote) {
 			if (isInWater()) {
 				Vec3d vec3d = this.getVectorForRotation(this.rotationPitch, this.renderYawOffset);
 				for (int i = 0; i < 2; ++i)
-					worldObj.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.xCoord * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.yCoord * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.zCoord * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+					world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.xCoord * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.yCoord * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.zCoord * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
 			}
 		}
 
@@ -157,27 +158,27 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				setIsLeaping(false);
 			onGround = false;
 			isAirBorne = true;
-			if(worldObj.getWorldTime()%5==0)
-				worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
-			this.damageEntity(DamageSource.drown, 0.5F);
+			if(world.getWorldTime()%5==0)
+				world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+			this.damageEntity(DamageSource.DROWN, 0.5F);
 		}
 		super.onLivingUpdate();
 	}
 
 	@Override
 	public void onUpdate() {
-		if(!worldObj.isRemote) {
-			if(getAttackTarget() != null && !worldObj.containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
+		if(!world.isRemote) {
+			if(getAttackTarget() != null && !world.containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
 				Double distance = this.getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
 				if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
-					if (isInWater() && worldObj.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
+					if (isInWater() && world.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
 						if(!isLeaping()) {
 							setIsLeaping(true);
-							worldObj.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
+							world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
 						}
 						double distanceX = getAttackTarget().posX - posX;
 						double distanceZ = getAttackTarget().posZ - posZ;
-						float distanceSqrRoot = MathHelper.sqrt_double(distanceX * distanceX + distanceZ * distanceZ);
+						float distanceSqrRoot = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ);
 						motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
 						motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
 						motionY = 0.4D;
@@ -192,7 +193,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 		if (isServerWorld()) {
 			if (isInWater()) {
 				moveRelative(strafe, forward, 0.1F);
-				moveEntity(motionX, motionY, motionZ);
+				move(MoverType.SELF, motionX, motionY, motionZ);
 				motionX *= 0.8999999761581421D;
 				motionY *= 0.8999999761581421D;
 				motionZ *= 0.8999999761581421D;
@@ -219,7 +220,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 
 	@Override
 	public boolean isNotColliding() {
-		return this.worldObj.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.worldObj.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
 	}
 	
 	@Override
@@ -243,7 +244,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				double d1 = posY - angler.posY;
 				double d2 = posZ - angler.posZ;
 				double d3 = d0 * d0 + d1 * d1 + d2 * d2;
-				d3 = (double) MathHelper.sqrt_double(d3);
+				d3 = (double) MathHelper.sqrt(d3);
 				d1 = d1 / d3;
 				float f = (float) (MathHelper.atan2(d2, d0) * (180D / Math.PI)) - 90.0F;
 				angler.rotationYaw = limitAngle(angler.rotationYaw, f, 90.0F);

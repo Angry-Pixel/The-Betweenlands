@@ -21,24 +21,24 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
      */
     public boolean shouldExecute() {
         int i = this.taskOwner.getRevengeTimer();
-        return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAITarget(), false);
+        return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getRevengeTarget(), false);
     }
 
     /**
      * Execute a one shot task or start executing a continuous task
      */
     public void startExecuting() {
-        this.taskOwner.setAttackTarget(this.taskOwner.getAITarget());
+        this.taskOwner.setAttackTarget(this.taskOwner.getRevengeTarget());
         this.revengeTimer = this.taskOwner.getRevengeTimer();
 
         if (this.entityCallsForHelp) {
             double dist = this.getTargetDistance();
-            List list = this.taskOwner.worldObj.getEntitiesWithinAABB(this.taskOwner.getClass(), new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(dist, 10.0D, dist));
+            List list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).expand(dist, 10.0D, dist));
             for (Object aList : list) {
                 EntityCreature creature = (EntityCreature) aList;
 
-                if (this.taskOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.taskOwner.getAITarget()) && creature != this.taskOwner.getAITarget()) {
-                    creature.setAttackTarget(this.taskOwner.getAITarget());
+                if (this.taskOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.taskOwner.getRevengeTarget()) && creature != this.taskOwner.getRevengeTarget()) {
+                    creature.setAttackTarget(this.taskOwner.getRevengeTarget());
                 }
             }
         }

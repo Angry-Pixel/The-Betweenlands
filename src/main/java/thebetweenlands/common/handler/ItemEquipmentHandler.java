@@ -80,7 +80,7 @@ public class ItemEquipmentHandler {
 					if(equippable.canEquipOnRightClick(heldItem, player, target)) {
 						ItemStack result = EquipmentHelper.equipItem(player, target, heldItem, false);
 
-						if(result == null || result.stackSize != heldItem.stackSize) {
+						if(result == null || result.getCount() != heldItem.getCount()) {
 							if(!player.capabilities.isCreativeMode) {
 								player.setHeldItem(event.getHand(), result);
 							}
@@ -121,7 +121,7 @@ public class ItemEquipmentHandler {
 					} else {
 						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
 
-						if(result == null || result.stackSize != heldItem.stackSize) {
+						if(result == null || result.getCount() != heldItem.getCount()) {
 							if(!player.capabilities.isCreativeMode) {
 								player.setHeldItem(event.getHand(), result);
 							}
@@ -138,7 +138,7 @@ public class ItemEquipmentHandler {
 	public static void onDeathDrops(LivingDropsEvent event) {
 		EntityLivingBase entity = event.getEntityLiving();
 
-		if(entity != null && !entity.worldObj.isRemote && !entity.worldObj.getGameRules().getBoolean("keepInventory")) {
+		if(entity != null && !entity.world.isRemote && !entity.world.getGameRules().getBoolean("keepInventory")) {
 			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
@@ -157,7 +157,7 @@ public class ItemEquipmentHandler {
 								}
 							}
 
-							EntityItem equipmentDrop = new EntityItem(entity.worldObj, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ, stack.copy());
+							EntityItem equipmentDrop = new EntityItem(entity.world, entity.posX, entity.posY + entity.getEyeHeight(), entity.posZ, stack.copy());
 							equipmentDrop.setDefaultPickupDelay();
 							event.getDrops().add(equipmentDrop);
 						}

@@ -24,7 +24,7 @@ public class MessageClearBlockGuard extends MessageBase {
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
-		this.id = buf.readStringFromBuffer(256);
+		this.id = buf.readString(256);
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class MessageClearBlockGuard extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handle() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		SharedStorage storage = worldStorage.getSharedStorage(this.id);
 		if(storage != null && storage instanceof LocationGuarded) {
