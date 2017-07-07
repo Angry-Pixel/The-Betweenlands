@@ -1,12 +1,12 @@
 {
   "parent": "block/cube",
   "textures": {
-    "particle": "thebetweenlands:blocks/mossyCragrockSide1",
-    "up": "thebetweenlands:blocks/mossyCragrockTop",
-    "down": "thebetweenlands:blocks/mossyCragrockSide2",
-    "north": "thebetweenlands:blocks/mossyCragrockSide1",
-    "east": "thebetweenlands:blocks/mossyCragrockSide1",
-    "south": "thebetweenlands:blocks/mossyCragrockSide1",
-    "west": "thebetweenlands:blocks/mossyCragrockSide1"
+    "particle": "thebetweenlands:blocks/mossy_cragrock_side1",
+    "up": "thebetweenlands:blocks/mossy_cragrock_top",
+    "down": "thebetweenlands:blocks/mossy_cragrock_side2",
+    "north": "thebetweenlands:blocks/mossy_cragrock_side1",
+    "east": "thebetweenlands:blocks/mossy_cragrock_side1",
+    "south": "thebetweenlands:blocks/mossy_cragrock_side1",
+    "west": "thebetweenlands:blocks/mossy_cragrock_side1"
   }
 }
