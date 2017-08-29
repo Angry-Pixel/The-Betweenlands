@@ -40,7 +40,7 @@ public class BlockGenericCollapsing extends BlockFalling {
     }
 
     @Override
-    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+    public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BlockGenericCollapsing extends BlockFalling {
                     world.playSound((double) pos.getX(), (double)pos.getY(), (double)pos.getZ(), SoundRegistry.CRUMBLE, SoundCategory.BLOCKS, 0.5F, 1.0F, false);
                     EntityFallingBlock entityfallingblock = new EntityFallingBlock(world, (double) ((float) pos.getX() + 0.5F), (double) ((float) pos.getY() + 0.5F), (double) ((float) pos.getZ() + 0.5F), world.getBlockState(pos));
                     this.onStartFalling(entityfallingblock);
-                    world.spawnEntityInWorld(entityfallingblock);
+                    world.spawnEntity(entityfallingblock);
                 }
             } else {
                 world.setBlockToAir(pos);
@@ -80,7 +80,7 @@ public class BlockGenericCollapsing extends BlockFalling {
     }
 
     @Override
-    public void onEndFalling(World world, BlockPos pos) {
+    public void onEndFalling(World world, BlockPos pos, IBlockState p_176502_3_, IBlockState p_176502_4_) {
         if (!world.isRemote) {
             world.playSound((double)((float)pos.getX() + 0.5F), (double)((float)pos.getY() + 0.5F), (double)((float)pos.getZ() + 0.5F), blockSoundType.getStepSound(), SoundCategory.BLOCKS, (blockSoundType.getVolume() + 1.0F) / 2.0F, blockSoundType.getPitch() * 0.8F, false);
             world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(world.getBlockState(pos).getBlock()));
