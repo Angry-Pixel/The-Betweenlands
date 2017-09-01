@@ -89,7 +89,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state) {
 		if(!world.isRemote && canSee(world, pos)) {
 			EntityItem wispItem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(Item.getItemFromBlock(this), 1));
-			world.spawnEntityInWorld(wispItem);
+			world.spawnEntity(wispItem);
 		}
 	}
 
@@ -114,7 +114,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return null;
 	}
 

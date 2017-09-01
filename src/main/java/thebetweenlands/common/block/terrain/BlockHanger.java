@@ -64,8 +64,8 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		super.neighborChanged(state, worldIn, pos, blockIn);
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
 		Material material = worldIn.getBlockState(pos.up()).getMaterial();
 		if (!(worldIn.getBlockState(pos.up()).getBlock() instanceof BlockLog || material == Material.LEAVES || worldIn.getBlockState(pos.up()).getBlock() == this)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);

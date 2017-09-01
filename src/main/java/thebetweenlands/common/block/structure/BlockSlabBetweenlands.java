@@ -47,10 +47,6 @@ public class BlockSlabBetweenlands extends BasicBlock {
 		return state.getValue(HALF).equals(EnumBlockHalfBL.FULL);
 	}
 
-	@Override
-	public boolean isFullyOpaque(IBlockState state) {
-		return !state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM);
-	}
 
 	@Override
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
@@ -58,7 +54,7 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		IBlockState state = getStateFromMeta(meta);
 		return state.getValue(HALF).equals(EnumBlockHalfBL.FULL) ? state : (facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double) hitY <= 0.5D) ? state.withProperty(HALF, EnumBlockHalfBL.BOTTOM) : state.withProperty(HALF, EnumBlockHalfBL.TOP));
 	}
@@ -88,18 +84,19 @@ public class BlockSlabBetweenlands extends BasicBlock {
 
 
 	@Override
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
-		if (heldItem != null && playerIn != null && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && side.equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && side.equals(EnumFacing.UP)))){
+    public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	    ItemStack heldItem = playerIn.getHeldItem(hand);
+		if (heldItem != null && playerIn != null && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && facing.getOpposite().equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && facing.getOpposite().equals(EnumFacing.UP)))){
 			if (heldItem.getItem() == Item.getItemFromBlock(this)) {
 				worldIn.setBlockState(pos, state.withProperty(HALF, EnumBlockHalfBL.FULL));
 				if(!playerIn.capabilities.isCreativeMode)
-					heldItem.stackSize--;
+					heldItem.setCount(heldItem.getCount() - 1);
 				SoundType soundtype = this.getSoundType();
 				worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 				return true;
 			}
 		}
-		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, heldItem, side, hitX, hitY, hitZ);
+		return super.onBlockActivated(worldIn, pos, state, playerIn, hand, facing, hitX, hitY, hitZ);
 	}
 
 	@Override

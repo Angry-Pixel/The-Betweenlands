@@ -26,14 +26,13 @@ public class BlockPeat extends Block {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World world, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return PEAT_AABB;
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer)entity).inventory.armorInventory[0] != null &&
-				((EntityPlayer)entity).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
+		boolean canWalk = entity instanceof EntityPlayer && ((EntityPlayer) entity).inventory.armorInventory.get(0).getItem() instanceof ItemRubberBoots;
 		if(!canWalk) {
 			entity.motionX *= 0.85D;
 			entity.motionY *= 0.85D;

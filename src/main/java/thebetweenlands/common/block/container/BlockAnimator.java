@@ -52,7 +52,7 @@ public class BlockAnimator extends BlockContainer {
 
 
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand){
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
 	}
 
@@ -62,18 +62,18 @@ public class BlockAnimator extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
 		if (world.isRemote) {
 			return true;
 		}
 		if (world.getTileEntity(pos) instanceof TileEntityAnimator) {
 			TileEntityAnimator animator = (TileEntityAnimator) world.getTileEntity(pos);
 			if (animator.fuelConsumed < animator.requiredFuelCount) {
-				playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 			} else {
 				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(animator.itemToAnimate);
 				if (recipe == null || recipe.onRetrieved(world, pos, animator.itemToAnimate)) {
-					playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
+					player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 				}
 				animator.fuelConsumed = 0;
 			}

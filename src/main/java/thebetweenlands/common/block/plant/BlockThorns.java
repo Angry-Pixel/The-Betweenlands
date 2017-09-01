@@ -20,7 +20,7 @@ public class BlockThorns extends BlockVineBL {
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		//TODO add && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entity) when elxirs are added
 		if (!worldIn.isRemote && !(entityIn instanceof IEntityBL) && entityIn instanceof EntityLivingBase) {
-			entityIn.attackEntityFrom(DamageSource.cactus, 1.0F);
+			entityIn.attackEntityFrom(DamageSource.CACTUS, 1.0F);
 		}
 	}
 

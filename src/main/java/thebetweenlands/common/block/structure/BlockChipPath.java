@@ -46,7 +46,7 @@ public class BlockChipPath extends Block {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos posFrom) {
 		if(!this.canPlaceBlockAt(worldIn, pos)) {
 			worldIn.setBlockToAir(pos);
 		}
