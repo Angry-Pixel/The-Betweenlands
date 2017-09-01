@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -153,7 +153,7 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		Vec3d localUp = localSide.crossProduct(dir).normalize();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
 
 		double maxVStart = diff.lengthVector() / 8.0D;
 		double maxVEnd = diff.lengthVector() / 8.0D;
@@ -162,38 +162,38 @@ public class RenderSwordEnergy extends Render<EntitySwordEnergy> {
 		double maxU = diff.lengthVector() / 2.0D;
 
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
-		vertexbuffer.pos(start.xCoord + (localSide.xCoord + localUp.xCoord) * startWidth, start.yCoord + (localSide.yCoord + localUp.yCoord) * startWidth, start.zCoord + (localSide.zCoord + localUp.zCoord) * startWidth).tex(0, minVStart).endVertex();
-		vertexbuffer.pos(start.xCoord + (localSide.xCoord - localUp.xCoord) * startWidth, start.yCoord + (localSide.yCoord - localUp.yCoord) * startWidth, start.zCoord + (localSide.zCoord - localUp.zCoord) * startWidth).tex(0, maxVStart).endVertex();
-		vertexbuffer.pos(end.xCoord + (localSide.xCoord - localUp.xCoord) * endWidth, end.yCoord + (localSide.yCoord - localUp.yCoord) * endWidth, end.zCoord + (localSide.zCoord - localUp.zCoord) * endWidth).tex(maxU, maxVEnd).endVertex();
-		vertexbuffer.pos(end.xCoord + (localSide.xCoord + localUp.xCoord) * endWidth, end.yCoord + (localSide.yCoord + localUp.yCoord) * endWidth, end.zCoord + (localSide.zCoord + localUp.zCoord) * endWidth).tex(maxU, minVEnd).endVertex();
+		vertexbuffer.pos(start.x + (localSide.x + localUp.x) * startWidth, start.y + (localSide.y + localUp.y) * startWidth, start.z + (localSide.z + localUp.z) * startWidth).tex(0, minVStart).endVertex();
+		vertexbuffer.pos(start.x + (localSide.x - localUp.x) * startWidth, start.y + (localSide.y - localUp.y) * startWidth, start.z + (localSide.z - localUp.z) * startWidth).tex(0, maxVStart).endVertex();
+		vertexbuffer.pos(end.x + (localSide.x - localUp.x) * endWidth, end.y + (localSide.y - localUp.y) * endWidth, end.z + (localSide.z - localUp.z) * endWidth).tex(maxU, maxVEnd).endVertex();
+		vertexbuffer.pos(end.x + (localSide.x + localUp.x) * endWidth, end.y + (localSide.y + localUp.y) * endWidth, end.z + (localSide.z + localUp.z) * endWidth).tex(maxU, minVEnd).endVertex();
 
-		vertexbuffer.pos(end.xCoord + (-localSide.xCoord + localUp.xCoord) * endWidth, end.yCoord + (-localSide.yCoord + localUp.yCoord) * endWidth, end.zCoord + (-localSide.zCoord + localUp.zCoord) * endWidth).tex(maxU, minVEnd).endVertex();
-		vertexbuffer.pos(end.xCoord + (-localSide.xCoord - localUp.xCoord) * endWidth, end.yCoord + (-localSide.yCoord - localUp.yCoord) * endWidth, end.zCoord + (-localSide.zCoord - localUp.zCoord) * endWidth).tex(maxU, maxVEnd).endVertex();
-		vertexbuffer.pos(start.xCoord + (-localSide.xCoord - localUp.xCoord) * startWidth, start.yCoord + (-localSide.yCoord - localUp.yCoord) * startWidth, start.zCoord + (-localSide.zCoord - localUp.zCoord) * startWidth).tex(0, maxVStart).endVertex();
-		vertexbuffer.pos(start.xCoord + (-localSide.xCoord + localUp.xCoord) * startWidth, start.yCoord + (-localSide.yCoord + localUp.yCoord) * startWidth, start.zCoord + (-localSide.zCoord + localUp.zCoord) * startWidth).tex(0, minVStart).endVertex();
+		vertexbuffer.pos(end.x + (-localSide.x + localUp.x) * endWidth, end.y + (-localSide.y + localUp.y) * endWidth, end.z + (-localSide.z + localUp.z) * endWidth).tex(maxU, minVEnd).endVertex();
+		vertexbuffer.pos(end.x + (-localSide.x - localUp.x) * endWidth, end.y + (-localSide.y - localUp.y) * endWidth, end.z + (-localSide.z - localUp.z) * endWidth).tex(maxU, maxVEnd).endVertex();
+		vertexbuffer.pos(start.x + (-localSide.x - localUp.x) * startWidth, start.y + (-localSide.y - localUp.y) * startWidth, start.z + (-localSide.z - localUp.z) * startWidth).tex(0, maxVStart).endVertex();
+		vertexbuffer.pos(start.x + (-localSide.x + localUp.x) * startWidth, start.y + (-localSide.y + localUp.y) * startWidth, start.z + (-localSide.z + localUp.z) * startWidth).tex(0, minVStart).endVertex();
 
-		vertexbuffer.pos(end.xCoord + (localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord + localSide.zCoord) * endWidth).tex(maxU, minVEnd).endVertex();
-		vertexbuffer.pos(end.xCoord + (localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord - localSide.zCoord) * endWidth).tex(maxU, maxVEnd).endVertex();
-		vertexbuffer.pos(start.xCoord + (localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord - localSide.zCoord) * startWidth).tex(0, maxVStart).endVertex();
-		vertexbuffer.pos(start.xCoord + (localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord + localSide.zCoord) * startWidth).tex(0, minVStart).endVertex();
+		vertexbuffer.pos(end.x + (localUp.x + localSide.x) * endWidth, end.y + (localUp.y + localSide.y) * endWidth, end.z + (localUp.z + localSide.z) * endWidth).tex(maxU, minVEnd).endVertex();
+		vertexbuffer.pos(end.x + (localUp.x - localSide.x) * endWidth, end.y + (localUp.y - localSide.y) * endWidth, end.z + (localUp.z - localSide.z) * endWidth).tex(maxU, maxVEnd).endVertex();
+		vertexbuffer.pos(start.x + (localUp.x - localSide.x) * startWidth, start.y + (localUp.y - localSide.y) * startWidth, start.z + (localUp.z - localSide.z) * startWidth).tex(0, maxVStart).endVertex();
+		vertexbuffer.pos(start.x + (localUp.x + localSide.x) * startWidth, start.y + (localUp.y + localSide.y) * startWidth, start.z + (localUp.z + localSide.z) * startWidth).tex(0, minVStart).endVertex();
 
-		vertexbuffer.pos(start.xCoord + (-localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord + localSide.zCoord) * startWidth).tex(0, minVStart).endVertex();
-		vertexbuffer.pos(start.xCoord + (-localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord - localSide.zCoord) * startWidth).tex(0, maxVStart).endVertex();
-		vertexbuffer.pos(end.xCoord + (-localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord - localSide.zCoord) * endWidth).tex(maxU, maxVEnd).endVertex();
-		vertexbuffer.pos(end.xCoord + (-localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord + localSide.zCoord) * endWidth).tex(maxU, minVEnd).endVertex();
+		vertexbuffer.pos(start.x + (-localUp.x + localSide.x) * startWidth, start.y + (-localUp.y + localSide.y) * startWidth, start.z + (-localUp.z + localSide.z) * startWidth).tex(0, minVStart).endVertex();
+		vertexbuffer.pos(start.x + (-localUp.x - localSide.x) * startWidth, start.y + (-localUp.y - localSide.y) * startWidth, start.z + (-localUp.z - localSide.z) * startWidth).tex(0, maxVStart).endVertex();
+		vertexbuffer.pos(end.x + (-localUp.x - localSide.x) * endWidth, end.y + (-localUp.y - localSide.y) * endWidth, end.z + (-localUp.z - localSide.z) * endWidth).tex(maxU, maxVEnd).endVertex();
+		vertexbuffer.pos(end.x + (-localUp.x + localSide.x) * endWidth, end.y + (-localUp.y + localSide.y) * endWidth, end.z + (-localUp.z + localSide.z) * endWidth).tex(maxU, minVEnd).endVertex();
 
 		if(renderStartCap) {
-			vertexbuffer.pos(start.xCoord + (localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord - localSide.zCoord) * startWidth).tex(0, 1).endVertex();
-			vertexbuffer.pos(start.xCoord + (-localUp.xCoord - localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord - localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord - localSide.zCoord) * startWidth).tex(1, 1).endVertex();
-			vertexbuffer.pos(start.xCoord + (-localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (-localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (-localUp.zCoord + localSide.zCoord) * startWidth).tex(1, 0).endVertex();
-			vertexbuffer.pos(start.xCoord + (localUp.xCoord + localSide.xCoord) * startWidth, start.yCoord + (localUp.yCoord + localSide.yCoord) * startWidth, start.zCoord + (localUp.zCoord + localSide.zCoord) * startWidth).tex(0, 0).endVertex();
+			vertexbuffer.pos(start.x + (localUp.x - localSide.x) * startWidth, start.y + (localUp.y - localSide.y) * startWidth, start.z + (localUp.z - localSide.z) * startWidth).tex(0, 1).endVertex();
+			vertexbuffer.pos(start.x + (-localUp.x - localSide.x) * startWidth, start.y + (-localUp.y - localSide.y) * startWidth, start.z + (-localUp.z - localSide.z) * startWidth).tex(1, 1).endVertex();
+			vertexbuffer.pos(start.x + (-localUp.x + localSide.x) * startWidth, start.y + (-localUp.y + localSide.y) * startWidth, start.z + (-localUp.z + localSide.z) * startWidth).tex(1, 0).endVertex();
+			vertexbuffer.pos(start.x + (localUp.x + localSide.x) * startWidth, start.y + (localUp.y + localSide.y) * startWidth, start.z + (localUp.z + localSide.z) * startWidth).tex(0, 0).endVertex();
 		}
 
 		if(renderEndCap) {
-			vertexbuffer.pos(end.xCoord + (localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord + localSide.zCoord) * endWidth).tex(0, 0).endVertex();
-			vertexbuffer.pos(end.xCoord + (-localUp.xCoord + localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord + localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord + localSide.zCoord) * endWidth).tex(1, 0).endVertex();
-			vertexbuffer.pos(end.xCoord + (-localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (-localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (-localUp.zCoord - localSide.zCoord) * endWidth).tex(1, 1).endVertex();
-			vertexbuffer.pos(end.xCoord + (localUp.xCoord - localSide.xCoord) * endWidth, end.yCoord + (localUp.yCoord - localSide.yCoord) * endWidth, end.zCoord + (localUp.zCoord - localSide.zCoord) * endWidth).tex(0, 1).endVertex();
+			vertexbuffer.pos(end.x + (localUp.x + localSide.x) * endWidth, end.y + (localUp.y + localSide.y) * endWidth, end.z + (localUp.z + localSide.z) * endWidth).tex(0, 0).endVertex();
+			vertexbuffer.pos(end.x + (-localUp.x + localSide.x) * endWidth, end.y + (-localUp.y + localSide.y) * endWidth, end.z + (-localUp.z + localSide.z) * endWidth).tex(1, 0).endVertex();
+			vertexbuffer.pos(end.x + (-localUp.x - localSide.x) * endWidth, end.y + (-localUp.y - localSide.y) * endWidth, end.z + (-localUp.z - localSide.z) * endWidth).tex(1, 1).endVertex();
+			vertexbuffer.pos(end.x + (localUp.x - localSide.x) * endWidth, end.y + (localUp.y - localSide.y) * endWidth, end.z + (localUp.z - localSide.z) * endWidth).tex(0, 1).endVertex();
 		}
 		tessellator.draw();
 	}

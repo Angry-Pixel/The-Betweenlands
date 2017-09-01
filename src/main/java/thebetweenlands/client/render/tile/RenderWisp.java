@@ -2,12 +2,12 @@ package thebetweenlands.client.render.tile;
 
 import java.util.List;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
@@ -22,7 +22,8 @@ import thebetweenlands.util.config.ConfigHandler;
 
 public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 	@Override
-	public void renderTileEntityAt(TileEntityWisp tileEntity, double x, double y, double z, float partialTicks, int destroyProgress) {
+	public void render(TileEntityWisp tileEntity, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+
 		WorldRenderHandler.WISP_TILE_LIST.add(Pair.of(Pair.of(this, tileEntity), new Vec3d(x, y, z)));
 
 		List<Object> particleList = tileEntity.particleList;
@@ -79,7 +80,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 	 * @param z
 	 * @param partialTicks
 	 */
-	public void renderWispParticles(VertexBuffer vertexBuffer, TileEntityWisp tileEntity, double x, double y, double z, float partialTicks) {
+	public void renderWispParticles(BufferBuilder vertexBuffer, TileEntityWisp tileEntity, double x, double y, double z, float partialTicks) {
 		List<Object> particleList = tileEntity.particleList;
 
 		Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
@@ -88,7 +89,7 @@ public class RenderWisp extends TileEntitySpecialRenderer<TileEntityWisp> {
 			Particle.interpPosX = viewer.lastTickPosX + (viewer.posX - viewer.lastTickPosX) * (double)partialTicks;
 			Particle.interpPosY = viewer.lastTickPosY + (viewer.posY - viewer.lastTickPosY) * (double)partialTicks;
 			Particle.interpPosZ = viewer.lastTickPosZ + (viewer.posZ - viewer.lastTickPosZ) * (double)partialTicks;
-			Particle.field_190016_K = viewer.getLook(partialTicks);
+			Particle.cameraViewDir = viewer.getLook(partialTicks);
 
 			for(Object particle : particleList){
 				ParticleWisp wisp = (ParticleWisp) particle;

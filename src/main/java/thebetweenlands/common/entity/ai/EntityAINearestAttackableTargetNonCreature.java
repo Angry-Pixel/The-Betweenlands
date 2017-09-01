@@ -16,7 +16,6 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.entity.monster.SkeletonType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
@@ -76,7 +75,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 		}
 		else if (this.targetClass != EntityPlayer.class && this.targetClass != EntityPlayerMP.class)
 		{
-			List<T> list = this.taskOwner.worldObj.<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
+			List<T> list = this.taskOwner.getEntityWorld().<T>getEntitiesWithinAABB(this.targetClass, this.getTargetableArea(this.getTargetDistance()), this.targetEntitySelector);
 
 			if (list.isEmpty())
 			{
@@ -91,7 +90,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 		}
 		else
 		{
-			this.targetEntity = (T)this.taskOwner.worldObj.getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>()
+			this.targetEntity = (T)this.taskOwner.getEntityWorld().getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>()
 			{
 				@Nullable
 				public Double apply(@Nullable EntityPlayer p_apply_1_)
@@ -101,7 +100,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 					if (itemstack != null && itemstack.getItem() == Items.SKULL)
 					{
 						int i = itemstack.getItemDamage();
-						boolean flag = EntityAINearestAttackableTargetNonCreature.this.taskOwner instanceof EntitySkeleton && ((EntitySkeleton)EntityAINearestAttackableTargetNonCreature.this.taskOwner).func_189771_df() == SkeletonType.NORMAL && i == 0;
+						boolean flag = EntityAINearestAttackableTargetNonCreature.this.taskOwner instanceof EntitySkeleton && i == 0;
 						boolean flag1 = EntityAINearestAttackableTargetNonCreature.this.taskOwner instanceof EntityZombie && i == 2;
 						boolean flag2 = EntityAINearestAttackableTargetNonCreature.this.taskOwner instanceof EntityCreeper && i == 4;
 

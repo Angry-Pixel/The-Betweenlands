@@ -108,8 +108,8 @@ public class EntityCapabilityHandler {
 
 	@SuppressWarnings("deprecation")
 	@SubscribeEvent
-	public static void onAttachCapabilities(AttachCapabilitiesEvent.Entity event) {
-		Entity entity = event.getEntity();
+	public static void onAttachCapabilities(AttachCapabilitiesEvent<Entity> event) {
+		Entity entity = event.getObject();
 		for(EntityCapability<?, ?, ?> entityCapability : REGISTERED_CAPABILITIES) {
 			if(entityCapability.isApplicable(entity)) {
 				final Capability<?> capabilityInstance = entityCapability.getCapability();
@@ -196,7 +196,7 @@ public class EntityCapabilityHandler {
 
 	@SubscribeEvent
 	public static void onEntityUpdate(PlayerTickEvent event) {
-		if(!event.player.worldObj.isRemote && event.side == Side.SERVER)  {
+		if(!event.player.getEntityWorld().isRemote && event.side == Side.SERVER)  {
 			EntityPlayerMP player = (EntityPlayerMP) event.player;
 			List<EntityCapabilityTracker> trackers = TRACKER_MAP.get(player);
 			if(trackers != null) {
@@ -234,7 +234,7 @@ public class EntityCapabilityHandler {
 
 					//System.out.println(entry.getValue().size() + " " + player.getServerWorld().loadedEntityList.size());
 
-					if(!player.getServerWorld().getMinecraftServer().getPlayerList().getPlayerList().contains(player)) {
+					if(player.getServerWorld().getMinecraftServer() != null && !player.getServerWorld().getMinecraftServer().getPlayerList().getPlayers().contains(player)) {
 						it.remove();
 						for(EntityCapabilityTracker tracker : entry.getValue()) {
 							tracker.remove();

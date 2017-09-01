@@ -8,7 +8,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -33,10 +33,10 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/infuser.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntityInfuser infuser, double x, double y, double z, float partialTickTime, int destroyStage) {
+	public void render(TileEntityInfuser infuser, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		bindTexture(TEXTURE);
 
-		if(infuser == null || !infuser.hasWorldObj()) {
+		if(infuser == null || !infuser.hasWorld()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate((float) 0.5F, (float) 1.5F, (float) 0.5F);
 			GlStateManager.scale(1F, -1F, -1F);
@@ -106,7 +106,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 
 		if (amount >= 100) {
 			Tessellator tess = Tessellator.getInstance();
-			VertexBuffer vb = tess.getBuffer();
+			BufferBuilder vb = tess.getBuffer();
 			TextureAtlasSprite waterSprite = Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(FluidRegistry.SWAMP_WATER.getStill().toString());
 			GlStateManager.pushMatrix();
 			GlStateManager.enableBlend();
@@ -170,10 +170,10 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 		GlStateManager.disableTexture2D();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vb = tessellator.getBuffer();
+		BufferBuilder vb = tessellator.getBuffer();
 
 		vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRendererObj;
+		FontRenderer fontrenderer = Minecraft.getMinecraft().fontRenderer;
 		int width = fontrenderer.getStringWidth(count) / 2;
 		vb.pos(-width - 1, -1, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 		vb.pos(-width - 1, 8, 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();

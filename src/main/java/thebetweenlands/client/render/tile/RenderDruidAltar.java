@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.Vector3d;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -236,7 +236,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 			f2 = (f1 - 0.8F) / 0.2F;
 		}
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 		for (int i = 0; (float) i < iterations; ++i) {
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
@@ -279,7 +279,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 		for (float i = 0; i < 360.0f; i += step) {
 			Tessellator tessellator = Tessellator.getInstance();
-			VertexBuffer buffer = tessellator.getBuffer();
+			BufferBuilder buffer = tessellator.getBuffer();
 			double lr = 0.1D;
 			double ur = 0.3D;
 			double height = 0.2D;
@@ -316,8 +316,8 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 
 	@Override
-	public void renderTileEntityAt(TileEntityDruidAltar te, double x, double y, double z, float partialTicks, int destroyStage) {
-		if(te == null || !te.hasWorldObj()) {
+	public void render(TileEntityDruidAltar te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+		if(te == null || !te.hasWorld()) {
 			renderTileAsItem(x, y, z);
 			return;
 		}

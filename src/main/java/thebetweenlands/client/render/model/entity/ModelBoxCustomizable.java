@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 
 public class ModelBoxCustomizable extends ModelBox {
     public static final int SIDE_LEFT = 1;
@@ -102,7 +102,7 @@ public class ModelBoxCustomizable extends ModelBox {
     }
 
     @Override
-    public void render(VertexBuffer vb, float scale) {
+    public void render(BufferBuilder vb, float scale) {
         for (int i = 0; i < quadList.length; i++) {
             if ((visibleSides & (1 << i)) != 0) {
                 quadList[i].draw(vb, scale);

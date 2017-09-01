@@ -2,12 +2,12 @@ package thebetweenlands.client.render.entity;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -63,15 +63,15 @@ public class RenderShockwaveBlock extends Render<EntityShockwaveBlock> {
 		IBakedModel model = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state);
 		if(model != null) {
 			Tessellator tessellator = Tessellator.getInstance();
-			VertexBuffer buffer = tessellator.getBuffer();
+			BufferBuilder buffer = tessellator.getBuffer();
 
 			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.BLOCK);
 
 			blockRenderer.setLighting((IBlockState blockState, @Nullable EnumFacing facing) -> {
-				return state.getPackedLightmapCoords(entity.worldObj, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
+				return state.getPackedLightmapCoords(entity.world, facing != null ? entity.origin.up().offset(facing) : entity.origin.up());
 			}).setTint((IBlockState blockState, int tintIndex) -> {
 				if(blockState.getBlock() == entity.block)
-					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, entity.worldObj, entity.origin, tintIndex);
+					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, entity.world, entity.origin, tintIndex);
 				else
 					return Minecraft.getMinecraft().getBlockColors().colorMultiplier(state, null, null, tintIndex);
 			});

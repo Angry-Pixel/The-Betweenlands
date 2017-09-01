@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureUtil;
@@ -130,7 +130,7 @@ public class IsolatedBlockModelRenderer {
 	 * @param buffer Vertex buffer
 	 * @return
 	 */
-	public boolean renderModel(BlockPos pos, IBakedModel model, IBlockState state, long rand, VertexBuffer buffer) {
+	public boolean renderModel(BlockPos pos, IBakedModel model, IBlockState state, long rand, BufferBuilder buffer) {
 		@SuppressWarnings("deprecation")
 		boolean useAO = Minecraft.isAmbientOcclusionEnabled() && state.getLightValue() == 0 && model.isAmbientOcclusion() && this.ao != null;
 
@@ -145,7 +145,7 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	private boolean renderModelSmooth(BlockPos pos, IBakedModel model, IBlockState state, VertexBuffer buffer, long rand) {
+	private boolean renderModelSmooth(BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
 		boolean flag = false;
 		float[] blockBounds = new float[EnumFacing.values().length * 2];
 		BitSet bitset = new BitSet(3);
@@ -169,7 +169,7 @@ public class IsolatedBlockModelRenderer {
 		return flag;
 	}
 
-	private boolean renderModelFlat(BlockPos pos, IBakedModel model, IBlockState state, VertexBuffer buffer, long rand) {
+	private boolean renderModelFlat(BlockPos pos, IBakedModel model, IBlockState state, BufferBuilder buffer, long rand) {
 		boolean flag = false;
 		BitSet bitset = new BitSet(3);
 
@@ -193,7 +193,7 @@ public class IsolatedBlockModelRenderer {
 		return flag;
 	}
 
-	private void renderQuadsSmooth(BlockPos pos, IBlockState state, VertexBuffer vertexBuffer, List<BakedQuad> quads, float[] blockBounds, BitSet blockBoundsState) {
+	private void renderQuadsSmooth(BlockPos pos, IBlockState state, BufferBuilder vertexBuffer, List<BakedQuad> quads, float[] blockBounds, BitSet blockBoundsState) {
 		double blockX = 0.0D;
 		double blockY = 0.0D;
 		double blockZ = 0.0D;
@@ -254,7 +254,7 @@ public class IsolatedBlockModelRenderer {
 		}
 	}
 
-	private void renderQuadsFlat(IBlockState state, BlockPos pos, int brightness, boolean updateBrightness, VertexBuffer vertexBuffer, List<BakedQuad> quads, BitSet blockBoundsState, @Nullable LightingProvider lighting) {
+	private void renderQuadsFlat(IBlockState state, BlockPos pos, int brightness, boolean updateBrightness, BufferBuilder vertexBuffer, List<BakedQuad> quads, BitSet blockBoundsState, @Nullable LightingProvider lighting) {
 		double blockX = 0.0D;
 		double blockY = 0.0D;
 		double blockZ = 0.0D;

@@ -11,7 +11,7 @@ import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -177,12 +177,12 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     private static float scale(int x, int z, float originX, float originZ, int range) {
         float dx = x - originX;
         float dz = z - originZ;
-        float dist = MathHelper.sqrt_float(dx * dx + dz * dz);
+        float dist = MathHelper.sqrt(dx * dx + dz * dz);
         if (dist > range) {
             return 0;
         }
         dist /= range;
-        return MathHelper.sqrt_double(1 - dist * dist);
+        return MathHelper.sqrt(1 - dist * dist);
     }
 
     private void roll(EntityWeedwoodRowboat rowboat, float yaw, float delta) {
@@ -260,8 +260,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
 
     private void articulateBody(EntityWeedwoodRowboat rowboat, float delta) {
         float pow = rowboat.getPilotPower(delta);
-        float leftZ = (float) grips.get(ShipSide.STARBOARD).zCoord;
-        float rightZ = (float) grips.get(ShipSide.PORT).zCoord;
+        float leftZ = (float) grips.get(ShipSide.STARBOARD).z;
+        float rightZ = (float) grips.get(ShipSide.PORT).z;
         float generalX = 0, generalY = 0, powerX = 0;
         if (pow != 0) {
             float port = rowboat.getRowProgress(ShipSide.PORT, delta);
@@ -271,9 +271,9 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             float tilt = (float) Math.atan2(leftZ, rightZ) + 3 * MathUtils.PI / 4;
             generalY = tilt * 0.75F;
             float z = (leftZ + rightZ) / 2;
-            float y = (float) (grips.get(ShipSide.STARBOARD).yCoord + grips.get(ShipSide.PORT).yCoord) / 2;
+            float y = (float) (grips.get(ShipSide.STARBOARD).y + grips.get(ShipSide.PORT).y) / 2;
             float forward = -z * MathUtils.linearTransformf(Math.abs(leftZ + rightZ), 0, 0.05F, 1.1F, 1);
-            float downward = MathHelper.clamp_float((-y - 0.3F) / 0.35F, 0, 1);
+            float downward = MathHelper.clamp((-y - 0.3F) / 0.35F, 0, 1);
             float upward;
             if (downward < 0.6F) {
                 upward = MathUtils.linearTransformf(downward, 0, 0.6F, 1, 0);
@@ -286,8 +286,8 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         }
         bodyRotateAngleX = generalX + (powerX - generalX) * pow;
         bodyRotateAngleY = generalY * (1 - pow);
-        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp_float((leftZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
-        shoulderZ.put(ShipSide.PORT,MathHelper.clamp_float((rightZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
+        shoulderZ.put(ShipSide.STARBOARD, MathHelper.clamp((leftZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
+        shoulderZ.put(ShipSide.PORT,MathHelper.clamp((rightZ + 0.44F) * 0.45F - 0.02F, -0.1F, 0.1F));
     }
 
     private void articulateArm(ShipSide side, float yaw) {
@@ -299,12 +299,12 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         matrix.translate(-6 / 16F * dir, -10 / 16F, shoulderZ.get(side));
         arm = matrix.transform(Vec3d.ZERO);
         Vec3d grip = grips.get(side);
-        float targetX = (float) (grip.xCoord - arm.xCoord);
-        float targetY = (float) (grip.yCoord - arm.yCoord);
-        float targetZ = (float) (grip.zCoord - arm.zCoord);
+        float targetX = (float) (grip.x - arm.x);
+        float targetY = (float) (grip.y - arm.y);
+        float targetZ = (float) (grip.z - arm.z);
         float horizontalDistSq = targetX * targetX + targetZ * targetZ;
-        float targetPitch = (float) Math.atan2(targetY, MathHelper.sqrt_float(horizontalDistSq));
-        float targetLen = MathHelper.sqrt_float(horizontalDistSq + targetY * targetY);
+        float targetPitch = (float) Math.atan2(targetY, MathHelper.sqrt(horizontalDistSq));
+        float targetLen = MathHelper.sqrt(horizontalDistSq + targetY * targetY);
         float upperArmLen = 4 / 16F, lowerArmLen = 4.25F / 16;
         float shoulderAngle = (float) Math.acos((upperArmLen * upperArmLen + targetLen * targetLen - lowerArmLen * lowerArmLen) / (2 * upperArmLen * targetLen));
         float flexionAngle = (float) Math.acos((upperArmLen * upperArmLen + lowerArmLen * lowerArmLen - targetLen * targetLen) / (2 * upperArmLen * lowerArmLen));
@@ -336,7 +336,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
         if (maskId == -1) {
             maskId = GLAllocation.generateDisplayLists(1);
             Tessellator tessellator = Tessellator.getInstance();
-            VertexBuffer vb = tessellator.getBuffer();
+            BufferBuilder vb = tessellator.getBuffer();
             vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
             double y = -0.687;
             double midWidth = 0.55;

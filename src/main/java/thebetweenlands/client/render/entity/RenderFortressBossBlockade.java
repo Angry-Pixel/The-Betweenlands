@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -38,7 +38,7 @@ public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockad
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		LightingUtil.INSTANCE.setLighting(255);
 
@@ -74,9 +74,9 @@ public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockad
 			tv2 = cv + tv2 * cos;
 			tu3 = cu + tu3 * sin;
 			tv3 = cv + tv3 * cos;
-			buffer.pos(vertices[0].xCoord, vertices[0].yCoord, vertices[0].zCoord).tex(tu1, tv1).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
-			buffer.pos(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord).tex(tu2, tv2).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
-			buffer.pos(vertices[2].xCoord, vertices[2].yCoord, vertices[2].zCoord).tex(tu3, tv3).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
+			buffer.pos(vertices[0].x, vertices[0].y, vertices[0].z).tex(tu1, tv1).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
+			buffer.pos(vertices[1].x, vertices[1].y, vertices[1].z).tex(tu2, tv2).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
+			buffer.pos(vertices[2].x, vertices[2].y, vertices[2].z).tex(tu3, tv3).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
 		}
 		tessellator.draw();
 		GlStateManager.depthMask(true);
@@ -88,9 +88,9 @@ public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockad
 		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
 		buffer.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(vertices[0].xCoord, vertices[0].yCoord, vertices[0].zCoord).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
-		buffer.pos(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
-		buffer.pos(vertices[2].xCoord, vertices[2].yCoord, vertices[2].zCoord).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
+		buffer.pos(vertices[0].x, vertices[0].y, vertices[0].z).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
+		buffer.pos(vertices[1].x, vertices[1].y, vertices[1].z).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
+		buffer.pos(vertices[2].x, vertices[2].y, vertices[2].z).color(0.5F, 0.6F, 1F, 0.5F).endVertex();
 		tessellator.draw();
 
 		GlStateManager.cullFace(CullFace.BACK);
@@ -100,12 +100,12 @@ public class RenderFortressBossBlockade extends Render<EntityFortressBossBlockad
 		GlStateManager.glLineWidth(1.0F);
 
 		buffer.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-		buffer.pos(vertices[0].xCoord, vertices[0].yCoord, vertices[0].zCoord).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
-		buffer.pos(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
-		buffer.pos(vertices[1].xCoord, vertices[1].yCoord, vertices[1].zCoord).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
-		buffer.pos(vertices[2].xCoord, vertices[2].yCoord, vertices[2].zCoord).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
-		buffer.pos(vertices[2].xCoord, vertices[2].yCoord, vertices[2].zCoord).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
-		buffer.pos(vertices[0].xCoord, vertices[0].yCoord, vertices[0].zCoord).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
+		buffer.pos(vertices[0].x, vertices[0].y, vertices[0].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
+		buffer.pos(vertices[1].x, vertices[1].y, vertices[1].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
+		buffer.pos(vertices[1].x, vertices[1].y, vertices[1].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
+		buffer.pos(vertices[2].x, vertices[2].y, vertices[2].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
+		buffer.pos(vertices[2].x, vertices[2].y, vertices[2].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
+		buffer.pos(vertices[0].x, vertices[0].y, vertices[0].z).color(0.5F, 0.75F, 1F, 1.0F).endVertex();
 		tessellator.draw();
 
 		GlStateManager.popMatrix();

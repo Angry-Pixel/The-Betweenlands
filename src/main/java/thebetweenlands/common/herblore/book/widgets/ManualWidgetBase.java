@@ -3,15 +3,12 @@ package thebetweenlands.common.herblore.book.widgets;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.util.ITooltipFlag;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -71,7 +68,7 @@ public class ManualWidgetBase {
             int var5 = 0;
             int var6;
             int var7;
-            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
+            FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
             for (var6 = 0; var6 < tooltipData.size(); ++var6) {
                 var7 = fontRenderer.getStringWidth(tooltipData.get(var6));
                 if (var7 > var5)
@@ -140,7 +137,7 @@ public class ManualWidgetBase {
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vertexBuffer = tessellator.getBuffer();
+        BufferBuilder vertexBuffer = tessellator.getBuffer();
         vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
         vertexBuffer.color(var8, var9, var10, var7);
         vertexBuffer.pos(par3, y, z);
@@ -254,7 +251,7 @@ public class ManualWidgetBase {
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableDepth();
         render.renderItemAndEffectIntoGUI(stack, xPos, yPos);
-        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRendererObj, stack, xPos, yPos, null);
+        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stack, xPos, yPos, null);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
         boolean shouldShowTooltip = false;
@@ -267,7 +264,7 @@ public class ManualWidgetBase {
         }
         if (!hasSpecialTooltip && mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {
-                List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().thePlayer, false);
+                List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
                 List<String> parsedTooltip = new ArrayList();
                 boolean first = true;
                 if (addPageLink && shouldShowTooltip)
@@ -298,7 +295,7 @@ public class ManualWidgetBase {
     public void addSpecialItemTooltip(int xPos, int yPos, ItemStack stack, ArrayList<String> toolTips) {
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {
-                List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().thePlayer, false);
+                List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
                 List<String> parsedTooltip = new ArrayList();
                 boolean first = true;
 

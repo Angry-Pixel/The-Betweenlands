@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.shader;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.ARBMultitexture;
 import org.lwjgl.opengl.ContextCapabilities;
 import org.lwjgl.opengl.GL11;
@@ -11,7 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
@@ -172,7 +173,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 			Framebuffer targetFramebuffer1 = mainFramebuffer;
 			Framebuffer targetFramebuffer2 = blitFramebuffer;
 
-			int renderPasses = MathHelper.floor_double(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
+			int renderPasses = MathHelper.floor(this.worldShader.getLightSourcesAmount() / WorldShader.MAX_LIGHT_SOURCES_PER_PASS) + 1;
 			renderPasses = 1; //Multiple render passes are currently not recommended
 
 			Minecraft.getMinecraft().entityRenderer.setupOverlayRendering();
@@ -222,7 +223,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 				GlStateManager.depthMask(false);
 				GlStateManager.colorMask(true, true, true, true);
 				Tessellator tessellator = Tessellator.getInstance();
-				VertexBuffer vb = tessellator.getBuffer();
+				BufferBuilder vb = tessellator.getBuffer();
 				vb.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 				vb.pos(0.0D, (double)targetFramebuffer1.framebufferTextureHeight, 500.0D).tex(0, 0).endVertex();
 				vb.pos((double)targetFramebuffer1.framebufferTextureWidth, (double)targetFramebuffer1.framebufferTextureHeight, 500.0D).tex(1, 0).endVertex();
@@ -292,10 +293,10 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 	private boolean isRequired() {
 		Minecraft mc = Minecraft.getMinecraft();
-		if(mc.thePlayer != null && mc.thePlayer.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.thePlayer.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
+		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}
-		return this.required || (mc.theWorld != null && mc.theWorld.provider.getDimension() == ConfigHandler.dimensionId);
+		return this.required || (mc.world != null && mc.world.provider.getDimension() == ConfigHandler.dimensionId);
 	}
 
 	@Override

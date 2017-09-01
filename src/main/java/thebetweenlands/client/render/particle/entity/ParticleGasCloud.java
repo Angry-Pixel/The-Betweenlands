@@ -1,7 +1,7 @@
 package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
@@ -26,8 +26,8 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 		posZ = prevPosZ = z;
 		particleMaxAge = 60;
 		particleScale = scale;
-		field_190017_n = false; //Collision
-		field_190015_G = field_190014_F = startRotation; //Rotation
+		canCollide = false; //Collision
+		prevParticleAngle = particleAngle = startRotation; //Rotation
 		if(startRotation < 0.0F) {
 			rotateReversed = true;
 		}
@@ -36,7 +36,7 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 	/**
 	 * Renders this particle with the UVs [0, 0] to [1, 1]
 	 */
-	public void renderParticleFullTexture(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
+	public void renderParticleFullTexture(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ)
 	{
 		float minU = 0.0F;
 		float maxU = 1.0F;
@@ -52,12 +52,12 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 		int lightmapY = brightness & 65535;
 		Vec3d[] scaledRotations = new Vec3d[] {new Vec3d((double)(-rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double)(-rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(rotationYZ * scale - rotationXZ * scale))};
 
-		if (this.field_190014_F != 0.0F) {
-			float interpRoll = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+		if (this.particleAngle != 0.0F) {
+			float interpRoll = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float f9 = MathHelper.cos(interpRoll * 0.5F);
-			float f10 = MathHelper.sin(interpRoll * 0.5F) * (float)field_190016_K.xCoord;
-			float f11 = MathHelper.sin(interpRoll * 0.5F) * (float)field_190016_K.yCoord;
-			float f12 = MathHelper.sin(interpRoll * 0.5F) * (float)field_190016_K.zCoord;
+			float f10 = MathHelper.sin(interpRoll * 0.5F) * (float)cameraViewDir.x;
+			float f11 = MathHelper.sin(interpRoll * 0.5F) * (float)cameraViewDir.y;
+			float f12 = MathHelper.sin(interpRoll * 0.5F) * (float)cameraViewDir.z;
 			Vec3d vec3d = new Vec3d((double)f10, (double)f11, (double)f12);
 
 			for (int l = 0; l < 4; ++l) {
@@ -77,17 +77,17 @@ public class ParticleGasCloud extends Particle implements ParticleTextureStitche
 			alpha = this.particleAlpha * (1.0F - Math.min((float)(this.particleAge - fadeOutStart) / (float)fadeOutDuration, 1.0F));
 		}
 		
-		worldRendererIn.pos((double)interpX + scaledRotations[0].xCoord, (double)interpY + scaledRotations[0].yCoord, (double)interpZ + scaledRotations[0].zCoord).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		worldRendererIn.pos((double)interpX + scaledRotations[1].xCoord, (double)interpY + scaledRotations[1].yCoord, (double)interpZ + scaledRotations[1].zCoord).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		worldRendererIn.pos((double)interpX + scaledRotations[2].xCoord, (double)interpY + scaledRotations[2].yCoord, (double)interpZ + scaledRotations[2].zCoord).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		worldRendererIn.pos((double)interpX + scaledRotations[3].xCoord, (double)interpY + scaledRotations[3].yCoord, (double)interpZ + scaledRotations[3].zCoord).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[0].x, (double)interpY + scaledRotations[0].y, (double)interpZ + scaledRotations[0].z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[1].x, (double)interpY + scaledRotations[1].y, (double)interpZ + scaledRotations[1].z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[2].x, (double)interpY + scaledRotations[2].y, (double)interpZ + scaledRotations[2].z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		worldRendererIn.pos((double)interpX + scaledRotations[3].x, (double)interpY + scaledRotations[3].y, (double)interpZ + scaledRotations[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		this.field_190015_G = this.field_190014_F;
-		this.field_190014_F += this.rotateReversed ? -0.015F : 0.015F;
+		this.prevParticleAngle = this.particleAngle;
+		this.particleAngle += this.rotateReversed ? -0.015F : 0.015F;
 	}
 
 	@Override

@@ -2,7 +2,8 @@ package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -42,14 +43,14 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer buff, Entity entityIn, float partialTicks, float rx, float rz, float ryz, float rxy, float rxz) {
+	public void renderParticle(BufferBuilder buff, Entity entityIn, float partialTicks, float rx, float rz, float ryz, float rxy, float rxz) {
 		float currentX = (float) (prevPosX + (posX - prevPosX) * partialTicks);
 		float currentY = (float) (prevPosY + (posY - prevPosY) * partialTicks);
 		float currentZ = (float) (prevPosZ + (posZ - prevPosZ) * partialTicks);
 		this.particleScale = (this.prevFlameScale + (this.flameScale - this.prevFlameScale) * partialTicks);
 		float distance = 0.0F;
-		if(!BlockWisp.canSee(this.worldObj, new BlockPos(this.posX, this.posY, this.posZ))) {
-			distance = MathHelper.clamp_float(getDistanceToViewer(currentX, currentY, currentZ, partialTicks), 10, 20);
+		if(!BlockWisp.canSee(this.world, new BlockPos(this.posX, this.posY, this.posZ))) {
+			distance = MathHelper.clamp(getDistanceToViewer(currentX, currentY, currentZ, partialTicks), 10, 20);
 		}
 		this.setAlphaF(1.0F - MathHelper.sin(MathUtils.PI / 20 * distance));
 		super.renderParticle(buff, entityIn, partialTicks, rx, rz, ryz, rxy, rxz);
@@ -69,7 +70,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 			double dx = (float) (entity.prevPosX + (entity.posX - entity.prevPosX) * partialRenderTicks) - x;
 			double dy = (float) (entity.prevPosY + (entity.posY - entity.prevPosY) * partialRenderTicks) - y;
 			double dz = (float) (entity.prevPosZ + (entity.posZ - entity.prevPosZ) * partialRenderTicks) - z;
-			return MathHelper.sqrt_float((float) (dx * dx + dy * dy + dz * dz));
+			return MathHelper.sqrt((float) (dx * dx + dy * dy + dz * dz));
 		}
 		return 0.0F;
 	}
@@ -81,7 +82,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 		this.prevPosZ = this.posZ;
 		this.prevFlameScale = this.flameScale;
 
-		moveEntity(this.motionX, this.motionY, this.motionZ);
+		move(this.motionX, this.motionY, this.motionZ);
 
 		this.motionX *= 0.96;
 		this.motionZ *= 0.96;
@@ -96,7 +97,7 @@ public class ParticleWisp extends Particle implements IParticleSpriteReceiver {
 			this.motionY += 0.00008;
 		}
 
-		moveEntity(this.motionX, this.motionY, this.motionZ);
+		move(this.motionX, this.motionY, this.motionZ);
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleWisp> {

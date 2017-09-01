@@ -24,7 +24,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 
 public class BakedModelItemWrapper implements IPerspectiveAwareModel {
 	private final IBakedModel transformsModel, quadModel;

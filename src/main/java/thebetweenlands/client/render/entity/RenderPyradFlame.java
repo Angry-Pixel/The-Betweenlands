@@ -2,7 +2,7 @@ package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -30,7 +30,7 @@ public class RenderPyradFlame extends Render<EntityPyradFlame> {
 		GlStateManager.enableRescaleNormal();
 		GlStateManager.scale(this.scale, this.scale, this.scale);
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexbuffer = tessellator.getBuffer();
+		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		float minU = 0;
 		float maxU = 1;
 		float minV = 0;

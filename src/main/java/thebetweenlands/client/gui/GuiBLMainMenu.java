@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.world.WorldServerDemo;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -21,14 +23,12 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.realms.RealmsBridge;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.demo.DemoWorldServer;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -178,7 +178,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 
 		if (button.id == 11)
 		{
-			this.mc.launchIntegratedServer("Demo_World", "Demo_World", DemoWorldServer.DEMO_WORLD_SETTINGS);
+			this.mc.launchIntegratedServer("Demo_World", "Demo_World", WorldServerDemo.DEMO_WORLD_SETTINGS);
 		}
 
 		if (button.id == 12)
@@ -233,7 +233,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 		this.drawStarfield(partialTicks);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		for(int i = 0; i < this.layerTextures.length; i++) {
 			if(i >= 1) {
@@ -274,10 +274,10 @@ public class GuiBLMainMenu extends GuiMainMenu {
 		this.drawTexturedModalRect(0, 0, 239, 0, 17, 16);
 
 		for (GuiButton button : (List<GuiButton>) this.buttonList) {
-			button.drawButton(this.mc, mouseX, mouseY);
+			button.drawButton(this.mc, mouseX, mouseY, partialTicks);
 		}
 
-		net.minecraftforge.client.ForgeHooksClient.renderMainMenu(this, this.fontRendererObj, this.width, this.height, "");
+		net.minecraftforge.client.ForgeHooksClient.renderMainMenu(this, this.fontRenderer, this.width, this.height, "");
 
 		java.util.List<String> brandings = com.google.common.collect.Lists.reverse(net.minecraftforge.fml.common.FMLCommonHandler.instance().getBrandings(true));
 		for (int brdline = 0; brdline < brandings.size(); brdline++)
@@ -285,13 +285,13 @@ public class GuiBLMainMenu extends GuiMainMenu {
 			String brd = brandings.get(brdline);
 			if (!com.google.common.base.Strings.isNullOrEmpty(brd))
 			{
-				this.drawString(this.fontRendererObj, brd, 2, this.height - ( 10 + brdline * (this.fontRendererObj.FONT_HEIGHT + 1)), 16777215);
+				this.drawString(this.fontRenderer, brd, 2, this.height - ( 10 + brdline * (this.fontRenderer.FONT_HEIGHT + 1)), 16777215);
 			}
 		}
 
 		this.modUpdateNotification.drawScreen(mouseX, mouseY, partialTicks);
 
-		this.drawString(this.fontRendererObj, "Copyright Mojang AB. Do not distribute!", this.width - this.fontRendererObj.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
+		this.drawString(this.fontRenderer, "Copyright Mojang AB. Do not distribute!", this.width - this.fontRenderer.getStringWidth("Copyright Mojang AB. Do not distribute!") - 2, this.height - 10, -1);
 	}
 
 	protected void drawStarfield(float partialTicks) {
@@ -327,7 +327,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 		double vscale = 1.0F / textureHeight;
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(x + 0, y + height, this.zLevel).tex(u * uscale, (v + height) * vscale).endVertex();

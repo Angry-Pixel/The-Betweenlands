@@ -1,6 +1,6 @@
 package thebetweenlands.client.render.particle.entity;
 
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -26,12 +26,12 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 	}
 
 	@Override
-	public boolean isTransparent() {
+	public boolean shouldDisableDepth() {
 		return true;
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer buff, Entity entityIn, float partialTicks, float rx, float rz, float ryz, float rxy, float rxz) {
+	public void renderParticle(BufferBuilder buff, Entity entityIn, float partialTicks, float rx, float rz, float ryz, float rxy, float rxz) {
 		float minU = (float)this.particleTextureIndexX / 16.0F;
 		float maxU = minU + 0.0624375F;
 		float minV = (float)this.particleTextureIndexY / 16.0F;
@@ -69,8 +69,8 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 		double yOffset = 0.125D;
 		Vec3d[] vertices = new Vec3d[] {perpendicular.add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2.scale(-1)).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.scale(-1).add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale), perpendicular.add(perpendicular2).add(perpendicular.scale(yOffset)).scale(scale)};
 
-		if (this.field_190014_F != 0.0F) {
-			float f8 = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+		if (this.particleAngle != 0.0F) {
+			float f8 = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float f9 = MathHelper.cos(f8 * 0.5F);
 			float f10 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetX();
 			float f11 = MathHelper.sin(f8 * 0.5F) * this.face.getFrontOffsetY();
@@ -82,10 +82,10 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 			}
 		}
 
-		buff.pos((double)rpx + vertices[0].xCoord, (double)rpy + vertices[0].yCoord, (double)rpz + vertices[0].zCoord).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + vertices[1].xCoord, (double)rpy + vertices[1].yCoord, (double)rpz + vertices[1].zCoord).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + vertices[2].xCoord, (double)rpy + vertices[2].yCoord, (double)rpz + vertices[2].zCoord).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
-		buff.pos((double)rpx + vertices[3].xCoord, (double)rpy + vertices[3].yCoord, (double)rpz + vertices[3].zCoord).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + vertices[0].x, (double)rpy + vertices[0].y, (double)rpz + vertices[0].z).tex((double)maxU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + vertices[1].x, (double)rpy + vertices[1].y, (double)rpz + vertices[1].z).tex((double)maxU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + vertices[2].x, (double)rpy + vertices[2].y, (double)rpz + vertices[2].z).tex((double)minU, (double)minV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
+		buff.pos((double)rpx + vertices[3].x, (double)rpy + vertices[3].y, (double)rpz + vertices[3].z).tex((double)minU, (double)maxV).color(this.particleRed, this.particleGreen, this.particleBlue, this.particleAlpha).lightmap(lightmapX, lightmapY).endVertex();
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleBlockProtection> {

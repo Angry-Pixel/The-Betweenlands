@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -29,7 +29,7 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		float rxy = ActiveRenderInfo.getRotationXY();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		float scale = 0.25F;
 
@@ -58,7 +58,7 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		buffer.pos((double)(x + rx * scale - ryz * scale), (double)(y - rxz * scale), (double)(z + rz * scale - rxy * scale)).tex((double)minU, (double)maxV).color(255, 255, 255, 255).endVertex();
 		tessellator.draw();
 
-		i = entity.getBrightnessForRender(partialTicks);
+		i = entity.getBrightnessForRender();
 		j = i % 65536;
 		k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);

@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -26,7 +26,7 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 	@Override
 	public void doRender(EntityRopeNode ropeNode, double x, double y, double z, float yaw, float partialTicks) {
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		GlStateManager.pushMatrix();
 
@@ -103,7 +103,7 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 		return prev + (now - prev) * partialTicks;
 	}
 
-	protected void renderConnection(Entity node1, Entity node2, Tessellator tessellator, VertexBuffer buffer, double x, double y, double z, float partialTicks) {
+	protected void renderConnection(Entity node1, Entity node2, Tessellator tessellator, BufferBuilder buffer, double x, double y, double z, float partialTicks) {
 		if(node2 != null) {
 			double camPosX = this.interpolate(node1.prevPosX - x, node1.posX - x, partialTicks);
 			double camPosY = this.interpolate(node1.prevPosY - y, node1.posY - y, partialTicks);

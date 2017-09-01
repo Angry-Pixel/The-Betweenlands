@@ -1,12 +1,13 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -45,7 +46,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		}
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		this.renderGasParticles(buffer, entity, partialTicks);
@@ -73,7 +74,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		GlStateManager.enableLighting();
 	}
 
-	private void renderGasParticles(VertexBuffer buffer, EntityGasCloud entity, float partialTicks) {
+	private void renderGasParticles(BufferBuilder buffer, EntityGasCloud entity, float partialTicks) {
 		for (Object obj: entity.gasParticles) {
 			ParticleGasCloud particle = (ParticleGasCloud) obj;
 
@@ -84,7 +85,7 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 				particle.setRBGColorF(gasColor[0] / 255.0F * fade, gasColor[1] / 255.0F * fade, gasColor[2] / 255.0F * fade);
 			}
 
-			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().thePlayer, partialTicks,
+			particle.renderParticleFullTexture(buffer, Minecraft.getMinecraft().player, partialTicks,
 					ActiveRenderInfo.getRotationX(),
 					ActiveRenderInfo.getRotationXZ(),
 					ActiveRenderInfo.getRotationZ(),

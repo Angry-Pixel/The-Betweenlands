@@ -6,6 +6,7 @@ import java.util.Map;
 
 import javax.vecmath.Vector3d;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
@@ -15,7 +16,6 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
@@ -77,7 +77,7 @@ public class WorldRenderHandler {
 		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexBuffer = tessellator.getBuffer();
+		BufferBuilder vertexBuffer = tessellator.getBuffer();
 
 		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 
@@ -89,15 +89,15 @@ public class WorldRenderHandler {
 			IBlockState blockState = te.getWorld().getBlockState(te.getPos());
 
 			if (blockState.getBlock() == BlockRegistry.WISP) {
-				renderer.renderWispParticles(vertexBuffer, te, pos.xCoord, pos.yCoord, pos.zCoord, event.getPartialTicks());
+				renderer.renderWispParticles(vertexBuffer, te, pos.x, pos.y, pos.z, event.getPartialTicks());
 
-				double rx = pos.xCoord + renderViewX + 0.5D;
-				double ry = pos.yCoord + renderViewY + 0.5D;
-				double rz = pos.zCoord + renderViewZ + 0.5D;
+				double rx = pos.x + renderViewX + 0.5D;
+				double ry = pos.y + renderViewY + 0.5D;
+				double rz = pos.z + renderViewZ + 0.5D;
 
 				float size = 3.0F;
 				if (!BlockWisp.canSee(te.getWorld(), te.getPos())) {
-					size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp_float(ParticleWisp.getDistanceToViewer(rx, ry, rz, event.getPartialTicks()), 10, 20))) * 1.2F;
+					size = (1.0F - MathHelper.sin(MathUtils.PI / 16 * MathHelper.clamp(ParticleWisp.getDistanceToViewer(rx, ry, rz, event.getPartialTicks()), 10, 20))) * 1.2F;
 				}
 
 				int colorIndex = blockState.getValue(BlockWisp.COLOR);

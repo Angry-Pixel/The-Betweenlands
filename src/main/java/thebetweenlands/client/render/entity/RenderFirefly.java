@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -61,9 +61,9 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 				double interpZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * partialTicks;
 				ShaderHelper.INSTANCE.require();
 				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(interpX, interpY, interpZ,
-						entity.worldObj.rand.nextFloat() * 0.1f + radius,
-						16.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.4f,
-						12.0f / 255.0f * 60.0F + entity.worldObj.rand.nextFloat() * 0.1f,
+						entity.world.rand.nextFloat() * 0.1f + radius,
+						16.0f / 255.0f * 60.0F + entity.world.rand.nextFloat() * 0.4f,
+						12.0f / 255.0f * 60.0F + entity.world.rand.nextFloat() * 0.1f,
 						8.0f / 255.0f * 60.0F));
 			}
 		}
@@ -79,7 +79,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 	 */
 	public void renderFireflyGlow(EntityFirefly entity, double x, double y, double z, float partialTicks) {
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		GlStateManager.pushMatrix();
 		GlStateManager.depthMask(false);

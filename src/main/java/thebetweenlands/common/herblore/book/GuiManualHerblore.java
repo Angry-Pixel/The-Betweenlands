@@ -2,9 +2,9 @@ package thebetweenlands.common.herblore.book;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +18,7 @@ import org.lwjgl.input.Mouse;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.io.IOException;
+import java.nio.Buffer;
 
 public class GuiManualHerblore extends GuiScreen {
     private static ResourceLocation book = new ResourceLocation("thebetweenlands:textures/gui/manual/manual_hl.png");
@@ -119,10 +120,10 @@ public class GuiManualHerblore extends GuiScreen {
      */
     protected void renderPageNumbers(int mouseX, int mouseY, float partialTicks) {
         if (this.currentCategory != null) {
-            int leftPageStrWidth = this.fontRendererObj.getStringWidth(String.valueOf(this.currentCategory.getCurrentPage()));
+            int leftPageStrWidth = this.fontRenderer.getStringWidth(String.valueOf(this.currentCategory.getCurrentPage()));
             GlStateManager.enableBlend();
-            this.fontRendererObj.drawString(String.valueOf(this.currentCategory.getCurrentPage()), this.xStart + this.WIDTH / 2 - 11 - leftPageStrWidth, this.yStart + this.HEIGHT - 17, 0x804f4314);
-            this.fontRendererObj.drawString(String.valueOf(this.currentCategory.getCurrentPage() + 1), this.xStart + this.WIDTH / 2 + 11, this.yStart + this.HEIGHT - 17, 0x804f4314);
+            this.fontRenderer.drawString(String.valueOf(this.currentCategory.getCurrentPage()), this.xStart + this.WIDTH / 2 - 11 - leftPageStrWidth, this.yStart + this.HEIGHT - 17, 0x804f4314);
+            this.fontRenderer.drawString(String.valueOf(this.currentCategory.getCurrentPage() + 1), this.xStart + this.WIDTH / 2 + 11, this.yStart + this.HEIGHT - 17, 0x804f4314);
         }
     }
 
@@ -147,12 +148,15 @@ public class GuiManualHerblore extends GuiScreen {
         double vmin = 1.0D / textureHeight * textureYStart;
         double vmax = 1.0D / textureHeight * textureYEnd;
         Tessellator tessellator = Tessellator.getInstance();
-        VertexBuffer vetrexBuffer = tessellator.getBuffer();
+        BufferBuilder vetrexBuffer = tessellator.getBuffer();
         vetrexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vetrexBuffer.pos(xStart, yStart, this.zLevel).tex(umin, vmin).endVertex();
-        vetrexBuffer.pos(xStart, yStart + height, this.zLevel).tex(umin, vmax).endVertex();;
-        vetrexBuffer.pos(xStart + width, yStart + height, this.zLevel).tex(umax, vmax).endVertex();;
-        vetrexBuffer.pos(xStart + width, yStart, this.zLevel).tex(umax, vmin).endVertex();;
+        vetrexBuffer.pos(xStart, yStart + height, this.zLevel).tex(umin, vmax).endVertex();
+        ;
+        vetrexBuffer.pos(xStart + width, yStart + height, this.zLevel).tex(umax, vmax).endVertex();
+        ;
+        vetrexBuffer.pos(xStart + width, yStart, this.zLevel).tex(umax, vmin).endVertex();
+        ;
         tessellator.draw();
     }
 

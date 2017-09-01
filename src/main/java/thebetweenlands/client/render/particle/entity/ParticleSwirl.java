@@ -1,7 +1,8 @@
 package thebetweenlands.client.render.particle.entity;
 
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -63,14 +64,14 @@ public class ParticleSwirl extends Particle {
 			double my = tmy * VELOCITY_OFFSET_MULTIPLIER;
 			double tmz = this.targetMotionZ;
 
-			this.dragX = MathHelper.clamp_double(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
-			this.dragY = MathHelper.clamp_double(my, -0.3D, 1);
-			this.dragZ = MathHelper.clamp_double(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
+			this.dragX = MathHelper.clamp(tmx * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
+			this.dragY = MathHelper.clamp(my, -0.3D, 1);
+			this.dragZ = MathHelper.clamp(tmz * VELOCITY_OFFSET_MULTIPLIER, -1, 1);
 		}
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.particleAge > 2) {
 			super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 		}
@@ -131,9 +132,9 @@ public class ParticleSwirl extends Particle {
 			this.dragZ = tmz * VELOCITY_OFFSET_MULTIPLIER;
 		}
 
-		this.dragX = MathHelper.clamp_double(this.dragX, -1, 1);
-		this.dragY = MathHelper.clamp_double(this.dragY, -0.3D, 1);
-		this.dragZ = MathHelper.clamp_double(this.dragZ, -1, 1);
+		this.dragX = MathHelper.clamp(this.dragX, -1, 1);
+		this.dragY = MathHelper.clamp(this.dragY, -0.3D, 1);
+		this.dragZ = MathHelper.clamp(this.dragZ, -1, 1);
 	}
 
 	protected void updatePosition() {

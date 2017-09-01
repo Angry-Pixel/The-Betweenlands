@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -28,9 +28,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 	@Override
-	public void renderTileEntityAt(TileEntityCompostBin tile, double x, double y, double z, float partialTickTime, int destroyStage) {
-		TileEntityCompostBin te = (TileEntityCompostBin) tile;
-
+	public void render(TileEntityCompostBin te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = te != null ? te.getBlockMetadata() : 0;
 
 		float compostHeight = te != null ? Math.min(te.getCompostedAmount() / (float) TileEntityCompostBin.MAX_COMPOST_AMOUNT, 0.82f) : 0;
@@ -50,7 +48,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 			GlStateManager.translate(-(float)blockPos.getX() - 0.5D, -(float)blockPos.getY(), -(float)blockPos.getZ() - 0.5D);
 
 			Tessellator tessellator = Tessellator.getInstance();
-			VertexBuffer vertexbuffer = tessellator.getBuffer();
+			BufferBuilder vertexbuffer = tessellator.getBuffer();
 			vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
 
 			BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
@@ -73,7 +71,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 		GlStateManager.disableCull();
 
 		this.bindTexture(TEXTURE);
-		MODEL.render(te != null ? te.getLidAngle(partialTickTime) : 0);
+		MODEL.render(te != null ? te.getLidAngle(partialTicks) : 0);
 
 		GlStateManager.enableCull();
 		GlStateManager.popMatrix();

@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 import com.google.common.base.Preconditions;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -71,9 +72,9 @@ public class ItemCapabilityHandler {
 	}
 
 	@SubscribeEvent
-	public static void onAttachCapabilities(AttachCapabilitiesEvent.Item event) {
+	public static void onAttachCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
 		@SuppressWarnings("deprecation")
-		Item item = event.getItem(); //I don't know what to use... getItemStack returns a stack with a null item...
+		Item item = event.getObject().getItem(); //I don't know what to use... getItemStack returns a stack with a null item...
 
 		for(ItemCapability<?, ?> itemCapability : REGISTERED_CAPABILITIES) {
 			if(itemCapability.isApplicable(item)) {
@@ -84,7 +85,7 @@ public class ItemCapabilityHandler {
 
 					private ItemCapability<?, ?> getNewInstance() {
 						ItemCapability<?, ?> itemCapability = (ItemCapability<?, ?>)capabilityInstance.getDefaultInstance();
-						itemCapability.setStack(event.getItemStack());
+						itemCapability.setStack(event.getObject());
 						itemCapability.init();
 						return itemCapability;
 					}

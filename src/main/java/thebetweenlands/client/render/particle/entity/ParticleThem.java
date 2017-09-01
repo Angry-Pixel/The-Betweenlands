@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -34,14 +34,14 @@ public class ParticleThem extends Particle {
 		this.posZ = this.prevPosZ = z;
 		this.motionX = this.motionY = this.motionZ = 0.0D;
 		this.particleMaxAge = (int)1200;
-		this.field_190017_n = false;
+		this.canCollide = false;
 		this.particleScale = scale;
 		this.startY = this.posY;
 		this.textureStart = texture / (float) TEXTURE_COUNT;
 	}
 
 	@Override
-	public void renderParticle(VertexBuffer vertexBuffer, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
+	public void renderParticle(BufferBuilder vertexBuffer, Entity entity, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TEXTURE);
 
 		float umin = 0;
@@ -58,12 +58,12 @@ public class ParticleThem extends Particle {
 		int lightmapY = brightness & 65535;
 		Vec3d[] rotation = new Vec3d[] {new Vec3d((double)(-rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(-rotationYZ * scale - rotationXZ * scale)), new Vec3d((double)(-rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(-rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale + rotationXY * scale), (double)(rotationZ * scale), (double)(rotationYZ * scale + rotationXZ * scale)), new Vec3d((double)(rotationX * scale - rotationXY * scale), (double)(-rotationZ * scale), (double)(rotationYZ * scale - rotationXZ * scale))};
 
-		if (this.field_190014_F != 0.0F) {
-			float interpolatedRoll = this.field_190014_F + (this.field_190014_F - this.field_190015_G) * partialTicks;
+		if (this.particleAngle != 0.0F) {
+			float interpolatedRoll = this.particleAngle + (this.particleAngle - this.prevParticleAngle) * partialTicks;
 			float cos = MathHelper.cos(interpolatedRoll * 0.5F);
-			float lookX = MathHelper.sin(interpolatedRoll * 0.5F) * (float)field_190016_K.xCoord;
-			float lookY = MathHelper.sin(interpolatedRoll * 0.5F) * (float)field_190016_K.yCoord;
-			float lookZ = MathHelper.sin(interpolatedRoll * 0.5F) * (float)field_190016_K.zCoord;
+			float lookX = MathHelper.sin(interpolatedRoll * 0.5F) * (float)cameraViewDir.x;
+			float lookY = MathHelper.sin(interpolatedRoll * 0.5F) * (float)cameraViewDir.y;
+			float lookZ = MathHelper.sin(interpolatedRoll * 0.5F) * (float)cameraViewDir.z;
 			Vec3d look = new Vec3d((double)lookX, (double)lookY, (double)lookZ);
 
 			for (int l = 0; l < 4; ++l) {
@@ -71,7 +71,7 @@ public class ParticleThem extends Particle {
 			}
 		}
 
-		Vec3d look = new Vec3d(field_190016_K.xCoord, field_190016_K.yCoord, field_190016_K.zCoord).normalize();
+		Vec3d look = new Vec3d(cameraViewDir.x, cameraViewDir.y, cameraViewDir.z).normalize();
 		Vec3d diff = new Vec3d(this.posX - interpPosX, this.posY - interpPosY, this.posZ - interpPosZ).normalize();
 		float angle = (float) Math.toDegrees(Math.acos(look.dotProduct(diff)));
 
@@ -107,10 +107,10 @@ public class ParticleThem extends Particle {
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		vertexBuffer.pos((double)ipx + rotation[0].xCoord, (double)ipy + rotation[0].yCoord * 1.8F, (double)ipz + rotation[0].zCoord).tex((double)umax, (double)vmax).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		vertexBuffer.pos((double)ipx + rotation[1].xCoord, (double)ipy + rotation[1].yCoord * 1.8F, (double)ipz + rotation[1].zCoord).tex((double)umax, (double)vmin).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		vertexBuffer.pos((double)ipx + rotation[2].xCoord, (double)ipy + rotation[2].yCoord * 1.8F, (double)ipz + rotation[2].zCoord).tex((double)umin, (double)vmin).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
-		vertexBuffer.pos((double)ipx + rotation[3].xCoord, (double)ipy + rotation[3].yCoord * 1.8F, (double)ipz + rotation[3].zCoord).tex((double)umin, (double)vmax).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		vertexBuffer.pos((double)ipx + rotation[0].x, (double)ipy + rotation[0].y * 1.8F, (double)ipz + rotation[0].z).tex((double)umax, (double)vmax).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		vertexBuffer.pos((double)ipx + rotation[1].x, (double)ipy + rotation[1].y * 1.8F, (double)ipz + rotation[1].z).tex((double)umax, (double)vmin).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		vertexBuffer.pos((double)ipx + rotation[2].x, (double)ipy + rotation[2].y * 1.8F, (double)ipz + rotation[2].z).tex((double)umin, (double)vmin).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
+		vertexBuffer.pos((double)ipx + rotation[3].x, (double)ipy + rotation[3].y * 1.8F, (double)ipz + rotation[3].z).tex((double)umin, (double)vmax).color(this.particleRed, this.particleGreen, this.particleBlue, alpha).lightmap(lightmapX, lightmapY).endVertex();
 		Tessellator.getInstance().draw();
 
 		GlStateManager.disableBlend();
@@ -132,21 +132,21 @@ public class ParticleThem extends Particle {
 				this.setExpired();
 			}
 			Vec3d dir = diff.normalize();
-			this.motionX = dir.xCoord * 0.05D;
-			this.motionZ = dir.zCoord * 0.05D;
+			this.motionX = dir.x * 0.05D;
+			this.motionZ = dir.z * 0.05D;
 		}
 
 		BlockPos checkPos = new BlockPos(this.posX, this.posY - 2, this.posZ);
-		IBlockState blockStateBelow = this.worldObj.getBlockState(checkPos);
+		IBlockState blockStateBelow = this.world.getBlockState(checkPos);
 		if(blockStateBelow.getBlock() == Blocks.AIR) {
 			this.motionY = -0.01D;
 		} else {
-			if(this.worldObj.getBlockState(checkPos.up()).getBlock() != Blocks.AIR) {
+			if(this.world.getBlockState(checkPos.up()).getBlock() != Blocks.AIR) {
 				this.motionY = 0.01D;
 			}
 		}
 
-		this.moveEntity(this.motionX, this.motionY, this.motionZ);
+		this.move(this.motionX, this.motionY, this.motionZ);
 		this.startY += this.motionY;
 
 		this.motionX *= 0.96D;
@@ -163,9 +163,10 @@ public class ParticleThem extends Particle {
 	}
 
 	@Override
-	public boolean isTransparent() {
+	public boolean shouldDisableDepth() {
 		return true;
 	}
+
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleThem> {
 		public Factory() {
