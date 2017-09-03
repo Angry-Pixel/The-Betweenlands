@@ -1,5 +1,6 @@
 package thebetweenlands.common.inventory;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,17 +18,17 @@ import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
 
 public class InventoryEquipment implements IInventory, ITickable {
-	protected final ItemStack[] inventory;
-	protected final ItemStack[] prevTickStacks;
+	protected final NonNullList<ItemStack> inventory;
+	protected final NonNullList<ItemStack> prevTickStacks;
 	protected final EquipmentEntityCapability capability;
 
-	public InventoryEquipment(EquipmentEntityCapability capability, ItemStack[] inventory) {
+	public InventoryEquipment(EquipmentEntityCapability capability, NonNullList<ItemStack> inventory) {
 		this.capability = capability;
 		this.inventory = inventory;
-		this.prevTickStacks = new ItemStack[inventory.length];
-		for (int i = 0; i < this.inventory.length; ++i) {
-			ItemStack stack = this.inventory[i];
-			this.prevTickStacks[i] = stack == null ? null : stack.copy();
+		this.prevTickStacks = NonNullList.withSize(inventory.size(), ItemStack.EMPTY);
+		for (int i = 0; i < this.inventory.size(); ++i) {
+			ItemStack stack = this.inventory.get(i);
+			this.prevTickStacks.set(i, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
 		}
 	}
 
@@ -50,9 +51,8 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Nullable
 	public ItemStack removeStackFromSlot(int index) {
 		ItemStack stack = null;
-		NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, inventory);
 		if(index < this.getSizeInventory()) {
-			stack = ItemStackHelper.getAndRemove(list, index);
+			stack = ItemStackHelper.getAndRemove(inventory, index);
 			this.markDirty();
 		}
 		return stack;
@@ -62,18 +62,17 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Nullable
 	public ItemStack decrStackSize(int index, int count) {
 		ItemStack stack = null;
-		NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, inventory);
 		if(index < this.getSizeInventory()) {
-			stack = ItemStackHelper.getAndSplit(list, index, count);
+			stack = ItemStackHelper.getAndSplit(inventory, index, count);
 			this.markDirty();
 		}
 		return stack;
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, @Nullable ItemStack stack) {
+	public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
 		if(index < this.getSizeInventory()) {
-			this.inventory[index] = stack;
+			this.inventory.set(index, stack);
 			this.markDirty();
 		}
 	}
@@ -131,34 +130,34 @@ public class InventoryEquipment implements IInventory, ITickable {
 
 	@Override
 	public void clear() {
-		for (int i = 0; i < this.inventory.length; ++i) {
-			this.inventory[i] = null;
+		for (int i = 0; i < this.inventory.size(); ++i) {
+			this.inventory.set(i, ItemStack.EMPTY);
 		}
 		this.markDirty();
 	}
 
 	@Override
 	public int getSizeInventory() {
-		return this.inventory.length;
+		return this.inventory.size();
 	}
 
 	@Override
 	public boolean isEmpty() {
-		return inventory.length <= 0;
+		return inventory.size() <= 0;
 	}
 
 	@Override
 	@Nullable
 	public ItemStack getStackInSlot(int index) {
-		return index >= this.getSizeInventory() ? null : this.inventory[index];
+		return index >= this.getSizeInventory() ? null : this.inventory.get(index);
 	}
 
 	@Override
 	public void update() {
-		for(int i = 0; i < this.inventory.length; i++) {
-			ItemStack stack = this.inventory[i];
+		for(int i = 0; i < this.inventory.size(); i++) {
+			ItemStack stack = this.inventory.get(i);
 
-			if(stack != null && stack.getItem() instanceof IEquippable) {
+			if(!stack.isEmpty() && stack.getItem() instanceof IEquippable) {
 				((IEquippable) stack.getItem()).onEquipmentTick(stack, this.capability.getEntity(), this);
 			}
 		}
@@ -167,12 +166,12 @@ public class InventoryEquipment implements IInventory, ITickable {
 	}
 
 	protected void detectChangesAndMarkDirty() {
-		for (int i = 0; i < this.inventory.length; ++i) {
-			ItemStack stack = this.inventory[i];
-			ItemStack prevStack = this.prevTickStacks[i];
+		for (int i = 0; i < this.inventory.size(); ++i) {
+			ItemStack stack = this.inventory.get(i);
+			ItemStack prevStack = this.prevTickStacks.get(i);
 
-			if (!ItemStack.areItemStacksEqual(prevStack, stack)) {
-				prevStack = this.prevTickStacks[i] = stack == null ? null : stack.copy();
+			if ( !ItemStack.areItemStacksEqual(prevStack, stack)) {
+				this.prevTickStacks.set(i,  stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
 				this.markDirty();
 			}
 		}

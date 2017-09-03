@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
@@ -67,7 +68,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 		case AMULET:
 			return new InventoryEquipmentAmulets(this, this.inventories[inventory.id]);
 		default:
-			return new InventoryEquipment(this, this.inventories[inventory.id]);
+			return new InventoryEquipment(this, NonNullList.from(ItemStack.EMPTY, this.inventories[inventory.id]));
 		}
 	}
 
