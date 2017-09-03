@@ -66,7 +66,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 	public IInventory getInventory(EnumEquipmentInventory inventory) {
 		switch(inventory) {
 		case AMULET:
-			return new InventoryEquipmentAmulets(this, this.inventories[inventory.id]);
+			return new InventoryEquipmentAmulets(this, NonNullList.from(ItemStack.EMPTY,this.inventories[inventory.id]));
 		default:
 			return new InventoryEquipment(this, NonNullList.from(ItemStack.EMPTY, this.inventories[inventory.id]));
 		}

@@ -11,14 +11,22 @@ import java.util.Set;
 import com.google.common.base.CaseFormat;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
@@ -125,6 +133,7 @@ import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.config.ConfigHandler;
 
+@Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class ItemRegistry {
 	public final static Set<Item> ITEMS = new HashSet<Item>();
 
@@ -444,5 +453,26 @@ public class ItemRegistry {
 	public static boolean isIngot(ItemStack stack) {
 		if (stack == null) return false;
 		return containsItem(INGOTS, stack);
+	}
+
+	@SubscribeEvent
+	public static void registerItems(final RegistryEvent.Register<Item> event) {
+		final IForgeRegistry<Item> registry = event.getRegistry();
+		for (Item item : ITEMS) {
+			registry.register(item);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void registerModels(ModelRegistryEvent event) {
+		for (Item item : ITEMS)
+			if (item instanceof ISubItemsItem) {
+				Map<Integer, ResourceLocation> models = ((ISubItemsItem) item).getModels();
+				for (int i = 0; i < models.size(); i++)
+					ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ID + ":" + models.get(i), "inventory"));
+			} else {
+				ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
+			}
 	}
 }
