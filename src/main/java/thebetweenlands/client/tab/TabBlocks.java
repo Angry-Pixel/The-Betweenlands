@@ -14,7 +14,7 @@ public class TabBlocks extends CreativeTabBetweenlands {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return Item.getItemFromBlock(BlockRegistry.SWAMP_GRASS);
+	public ItemStack getTabIconItem() {
+		return new ItemStack(BlockRegistry.SWAMP_GRASS);
 	}
 }

@@ -34,9 +34,9 @@ public class MessageMireSnailEggHatching extends MessageEntity {
 		EntityMireSnailEgg entity = (EntityMireSnailEgg) this.getEntity(0);
 		if (entity != null) {
 			for (int count = 0; count <= 50; ++count) {
-				entity.worldObj.spawnParticle(EnumParticleTypes.SLIME, entity.posX + (entity.worldObj.rand.nextDouble() - 0.5D) * 0.35F, entity.posY + entity.worldObj.rand.nextDouble() * 0.175F, entity.posZ + (entity.worldObj.rand.nextDouble() - 0.5D) * 0.35F, 0, 0, 0);
+				entity.world.spawnParticle(EnumParticleTypes.SLIME, entity.posX + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, entity.posY + entity.world.rand.nextDouble() * 0.175F, entity.posZ + (entity.world.rand.nextDouble() - 0.5D) * 0.35F, 0, 0, 0);
 			}
-			entity.worldObj.playSound(Minecraft.getMinecraft().thePlayer, entity.posX, entity.posY, entity.posZ, SoundRegistry.SQUISH, SoundCategory.NEUTRAL, 1, 0.8F);
+			entity.world.playSound(Minecraft.getMinecraft().player, entity.posX, entity.posY, entity.posZ, SoundRegistry.SQUISH, SoundCategory.NEUTRAL, 1, 0.8F);
 		}
 	}
 }

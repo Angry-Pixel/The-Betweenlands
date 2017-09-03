@@ -46,13 +46,13 @@ public class RotationMatrix {
 	 * @return
 	 */
 	public Vec3d transformVec(Vec3d point, Vec3d centerPoint) {
-		double px = point.xCoord - centerPoint.xCoord;
-		double py = point.yCoord - centerPoint.yCoord;
-		double pz = point.zCoord - centerPoint.zCoord;
+		double px = point.x - centerPoint.x;
+		double py = point.y - centerPoint.y;
+		double pz = point.z - centerPoint.z;
 		return new Vec3d(
-				this.matrix[0] * px + this.matrix[1] * py + this.matrix[2] * pz + centerPoint.xCoord, 
-				this.matrix[3] * px + this.matrix[4] * py + this.matrix[5] * pz + centerPoint.yCoord, 
-				this.matrix[6] * px + this.matrix[7] * py + this.matrix[8] * pz + centerPoint.zCoord);
+				this.matrix[0] * px + this.matrix[1] * py + this.matrix[2] * pz + centerPoint.x, 
+				this.matrix[3] * px + this.matrix[4] * py + this.matrix[5] * pz + centerPoint.y, 
+				this.matrix[6] * px + this.matrix[7] * py + this.matrix[8] * pz + centerPoint.z);
 	}
 
 	/**

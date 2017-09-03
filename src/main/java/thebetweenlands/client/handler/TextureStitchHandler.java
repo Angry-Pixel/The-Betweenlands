@@ -133,7 +133,7 @@ public class TextureStitchHandler {
 							//Load sprite
 							IResource resource = null;
 							if (sprite.hasCustomLoader(resourceManager, resourceLocation)) {
-								sprite.load(resourceManager, resourceLocation);
+								sprite.load(resourceManager, resourceLocation, l -> mapRegisteredSprites.get(l.toString()));
 							} else {
 								PngSizeInfo pngSizeInfo = PngSizeInfo.makeFromResource(resourceManager.getResource(resourceLocation));
 								resource = resourceManager.getResource(resourceLocation);
@@ -180,7 +180,7 @@ public class TextureStitchHandler {
 
 	private ResourceLocation getResourceLocation(String basePath, TextureAtlasSprite sprite) {
 		ResourceLocation resourcelocation = new ResourceLocation(sprite.getIconName());
-		return new ResourceLocation(resourcelocation.getResourceDomain(), String.format("%s/%s%s", new Object[] {basePath, resourcelocation.getResourcePath(), ".png"}));
+		return new ResourceLocation(resourcelocation.getResourceDomain(), String.format("%s/%s%s", basePath, resourcelocation.getResourcePath(), ".png"));
 	}
 
 	@SubscribeEvent

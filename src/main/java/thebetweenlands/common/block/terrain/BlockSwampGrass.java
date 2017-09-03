@@ -145,7 +145,7 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
 		DecoratorPositionProvider provider = new DecoratorPositionProvider();
-		provider.init(worldIn, worldIn.getBiomeGenForCoords(pos), null, rand, pos.getX(), pos.getY() + 1, pos.getZ());
+		provider.init(worldIn, worldIn.getBiome(pos), null, rand, pos.getX(), pos.getY() + 1, pos.getZ());
 		provider.setOffsetXZ(-4, 4);
 		provider.setOffsetY(-2, 2);
 

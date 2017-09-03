@@ -34,6 +34,11 @@ public class CompostRecipeCategory implements IRecipeCategory {
     }
 
     @Override
+    public String getModName() {
+        return ModInfo.NAME;
+    }
+
+    @Override
     public IDrawable getBackground() {
         return background;
     }
@@ -48,14 +53,6 @@ public class CompostRecipeCategory implements IRecipeCategory {
     public void drawExtras(Minecraft minecraft) {
     }
 
-    @Override
-    public void drawAnimations(Minecraft minecraft) {
-
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-    }
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {

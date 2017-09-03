@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableList;
@@ -25,7 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
-public class BakedModelItemWrapper implements IPerspectiveAwareModel {
+public class BakedModelItemWrapper implements IBakedModel {
 	private final IBakedModel transformsModel, quadModel;
 	private boolean shouldInheritOverrides = true;
 	private boolean shouldCacheOverrideModels = true;
@@ -107,10 +108,10 @@ public class BakedModelItemWrapper implements IPerspectiveAwareModel {
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		Pair<? extends IBakedModel, Matrix4f> result;
-		if(this.transformsModel instanceof IPerspectiveAwareModel) {
-			result = ((IPerspectiveAwareModel)this.transformsModel).handlePerspective(cameraTransformType);
+		if(this.transformsModel instanceof PerspectiveMapWrapper) {
+			result = ((PerspectiveMapWrapper)this.transformsModel).handlePerspective(cameraTransformType);
 		} else 
-			result = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
+			result = PerspectiveMapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
 		return Pair.of(this, result.getValue());
 	}
 

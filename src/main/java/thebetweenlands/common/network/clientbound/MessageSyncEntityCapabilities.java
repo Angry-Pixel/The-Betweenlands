@@ -31,15 +31,15 @@ public class MessageSyncEntityCapabilities extends MessageEntity {
 	public void serialize(PacketBuffer buf) {
 		super.serialize(buf);
 		buf.writeString(this.capability.toString());
-		buf.writeNBTTagCompoundToBuffer(this.nbt);
+		buf.writeCompoundTag(this.nbt);
 	}
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
 		super.deserialize(buf);
-		this.capability = new ResourceLocation(buf.readStringFromBuffer(128));
+		this.capability = new ResourceLocation(buf.readString(128));
 		try {
-			this.nbt = buf.readNBTTagCompoundFromBuffer();
+			this.nbt = buf.readCompoundTag();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

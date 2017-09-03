@@ -38,15 +38,16 @@ public class ItemRing extends Item implements IEquippable {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if(!player.isSneaking()) {
 			if(stack.getItemDamage() > 0 && player.experienceTotal > 0) {
 				if(!world.isRemote) {
 					int repairPerClick = 40;
 					float conversion = this.getXPConversionRate(stack, player);
 					float requiredRepair = Math.min(repairPerClick, stack.getItemDamage() / conversion);
-					stack.setItemDamage(Math.max(0, stack.getItemDamage() - MathHelper.ceiling_float_int(Math.min(repairPerClick, player.experienceTotal) * conversion)));
-					this.removeXp(player, MathHelper.ceiling_float_int(Math.min(requiredRepair, player.experienceTotal)));
+					stack.setItemDamage(Math.max(0, stack.getItemDamage() - MathHelper.ceil(Math.min(repairPerClick, player.experienceTotal) * conversion)));
+					this.removeXp(player, MathHelper.ceil(Math.min(requiredRepair, player.experienceTotal)));
 				}
 
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);

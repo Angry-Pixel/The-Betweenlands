@@ -26,14 +26,14 @@ public class ItemTangledRoot extends Item {
 	public int getMaxItemUseDuration(ItemStack stack) {
 		return 32;
 	}
-	
+
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand hand) {
 		if (player.canEat(true)) {
 			player.setActiveHand(hand);
-			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 		} else {
-			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack);
+			return new ActionResult<ItemStack>(EnumActionResult.FAIL, player.getHeldItem(hand));
 		}
 	}
 
@@ -44,7 +44,7 @@ public class ItemTangledRoot extends Item {
 
 	@Nullable
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		--stack.stackSize;
+		stack.shrink(1);
 
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityplayer = (EntityPlayer)entityLiving;

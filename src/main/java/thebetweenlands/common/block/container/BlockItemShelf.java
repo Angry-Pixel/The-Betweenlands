@@ -69,7 +69,7 @@ public class BlockItemShelf extends BlockContainer {
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing());
 	}
 
@@ -79,7 +79,8 @@ public class BlockItemShelf extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
 		if(hand == EnumHand.MAIN_HAND) {
 			TileEntity te = world.getTileEntity(pos);
 
@@ -113,7 +114,7 @@ public class BlockItemShelf extends BlockContainer {
 				if(!player.isSneaking()) {
 					if(heldItem != null) {
 						ItemStack result = wrapper.insertItem(slot, heldItem, true);
-						if(result == null || result.stackSize != heldItem.stackSize) {
+						if(result == null || result.getCount() != heldItem.getCount()) {
 							if(!world.isRemote) {
 								result = wrapper.insertItem(slot, heldItem.copy(), false);
 								world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
@@ -127,7 +128,7 @@ public class BlockItemShelf extends BlockContainer {
 					}
 				} else {
 					ItemStack result = wrapper.extractItem(slot, 1, true);
-					if(result != null && result.stackSize > 0) {
+					if(result != null && result.getCount() > 0) {
 						if(!world.isRemote) {
 							result = wrapper.extractItem(slot, 1, false);
 							world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);

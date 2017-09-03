@@ -34,7 +34,7 @@ public class ParticleAnimator extends PathParticle {
 
 			Vec3d pos = this.getPosition(t);
 
-			this.setPosition(pos.xCoord, pos.yCoord, pos.zCoord);
+			this.setPosition(pos.x, pos.y, pos.z);
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;

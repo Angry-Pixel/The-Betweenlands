@@ -9,6 +9,7 @@ import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -79,7 +80,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expandXyz(64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -91,7 +92,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 
 	public void setTriangleSize(float size) {
 		this.getDataManager().set(SIZE, size);
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			double prevX = this.posX;
 			double prevZ = this.posZ;
 			this.setSize(size*2, this.height);
@@ -153,7 +154,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if(!this.worldObj.isRemote && (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
+		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
 			this.setDead();
 			return;
 		}
@@ -166,7 +167,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 
 		super.onUpdate();
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			this.despawnTicks++;
 			if(this.despawnTicks >= this.getMaxDespawnTicks()) {
 				this.setDead();
@@ -175,12 +176,12 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.rotation += 1.0F;
 			this.getDataManager().set(ROTATION, this.rotation);
 
-			List<EntityPlayer> targets = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
+			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
 			for(EntityPlayer target : targets) {
 				Vec3d[] vertices = this.getTriangleVertices(1);
 				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, this.posY + 1, target.posZ - this.posZ), new Vec3d(0, -16, 0), vertices[0], vertices[1], vertices[2])) {
 					float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
-					if(target.attackEntityFrom(DamageSource.magic, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase) {
+					if(target.attackEntityFrom(DamageSource.MAGIC, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase) {
 						EntityLivingBase owner = (EntityLivingBase) this.getOwner();
 						if(owner.getHealth() < owner.getMaxHealth() - damage) {
 							owner.heal(damage * 3.0F);
@@ -193,8 +194,8 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.rotation = this.getDataManager().get(ROTATION);
 
 			for(int c = 0; c < 4; c++) {
-				float r1 = this.worldObj.rand.nextFloat();
-				float r2 = this.worldObj.rand.nextFloat();
+				float r1 = this.world.rand.nextFloat();
+				float r2 = this.world.rand.nextFloat();
 				this.rotation += 15;
 				Vec3d[] vertices = this.getTriangleVertices(1);
 				this.rotation -= 15;
@@ -204,27 +205,27 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 					switch(i) {
 					default:
 					case 0:
-						xc += vertex.xCoord * (1 - Math.sqrt(r1));
-						zc += vertex.zCoord * (1 - Math.sqrt(r1));
+						xc += vertex.x * (1 - Math.sqrt(r1));
+						zc += vertex.z * (1 - Math.sqrt(r1));
 						break;
 					case 1:
-						xc += (Math.sqrt(r1) * (1 - r2)) * vertex.xCoord;
-						zc += (Math.sqrt(r1) * (1 - r2)) * vertex.zCoord;
+						xc += (Math.sqrt(r1) * (1 - r2)) * vertex.x;
+						zc += (Math.sqrt(r1) * (1 - r2)) * vertex.z;
 						break;
 					case 2:
-						xc += (Math.sqrt(r1) * r2) * vertex.xCoord;
-						zc += (Math.sqrt(r1) * r2) * vertex.zCoord;
+						xc += (Math.sqrt(r1) * r2) * vertex.x;
+						zc += (Math.sqrt(r1) * r2) * vertex.z;
 						break;
 					}
 				}
-				Vec3d rp = new Vec3d(xc, vertices[0].yCoord, zc);
+				Vec3d rp = new Vec3d(xc, vertices[0].y, zc);
 
-				double sx = this.posX + rp.xCoord;
-				double sy = this.posY + rp.yCoord + 4;
-				double sz = this.posZ + rp.zCoord;
-				double ex = this.posX + rp.xCoord;
-				double ey = this.posY + rp.yCoord;
-				double ez = this.posZ + rp.zCoord;
+				double sx = this.posX + rp.x;
+				double sy = this.posY + rp.y + 4;
+				double sz = this.posZ + rp.z;
+				double ex = this.posX + rp.x;
+				double ey = this.posY + rp.y;
+				double ez = this.posZ + rp.z;
 
 				if(this.getOwner() != null) {
 					sx = this.getOwner().posX;
@@ -232,16 +233,16 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 					sz = this.getOwner().posZ;
 				}
 
-				this.worldObj.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
+				this.world.spawnParticle(EnumParticleTypes.PORTAL, sx, sy, sz, ex - sx, ey - sy, ez - sz);
 			}
 		}
 	}
 
 	@Override
-	public void moveEntityWithHeading(float strafe, float forward) {
+	public void travel(float strafe, float up, float forward) {
 		if (this.isInWater()) {
-			this.moveRelative(strafe, forward, 0.02F);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.moveRelative(strafe, up, forward, 0.02F);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.800000011920929D;
 			this.motionY *= 0.800000011920929D;
 			this.motionZ *= 0.800000011920929D;
@@ -249,18 +250,18 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			float friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			float groundFriction = 0.16277136F / (friction * friction * friction);
-			this.moveRelative(strafe, forward, this.onGround ? 0.1F * groundFriction : 0.02F);
+			this.moveRelative(strafe, up, forward, this.onGround ? 0.1F * groundFriction : 0.02F);
 			friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= (double)friction;
 			this.motionY *= (double)friction;
 			this.motionZ *= (double)friction;
@@ -269,7 +270,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 		this.prevLimbSwingAmount = this.limbSwingAmount;
 		double dx = this.posX - this.prevPosX;
 		double dz = this.posZ - this.prevPosZ;
-		float distanceMoved = MathHelper.sqrt_double(dx * dx + dz * dz) * 4.0F;
+		float distanceMoved = MathHelper.sqrt(dx * dx + dz * dz) * 4.0F;
 
 		if (distanceMoved > 1.0F) {
 			distanceMoved = 1.0F;

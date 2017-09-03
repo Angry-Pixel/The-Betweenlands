@@ -61,15 +61,15 @@ public class TileEntityDugSoil extends TileEntity {
 		boolean wasComposted = this.isComposted();
 		this.compost = compost;
 		if(wasComposted != this.isComposted()) {
-			IBlockState blockState = this.worldObj.getBlockState(this.pos);
+			IBlockState blockState = this.world.getBlockState(this.pos);
 			if(!this.isFullyDecayed()) {
-				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted()), 3);
+				this.world.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted()), 3);
 			} else {
-				this.worldObj.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false), 3);
+				this.world.setBlockState(this.pos, blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false), 3);
 			}
 		} else {
-			IBlockState state = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+			IBlockState state = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, state, state, 3);
 		}
 	}
 
@@ -88,24 +88,24 @@ public class TileEntityDugSoil extends TileEntity {
 		boolean wasDecayed = this.isFullyDecayed();
 		this.decay = decay;
 		if(wasDecayed != this.isFullyDecayed()) {
-			IBlockState blockState = this.worldObj.getBlockState(this.pos);
+			IBlockState blockState = this.world.getBlockState(this.pos);
 			if(this.isFullyDecayed()) {
 				blockState = blockState.withProperty(BlockGenericDugSoil.DECAYED, this.isFullyDecayed()).withProperty(BlockGenericDugSoil.COMPOSTED, false);
 			} else {
 				blockState = blockState.withProperty(BlockGenericDugSoil.DECAYED, false).withProperty(BlockGenericDugSoil.COMPOSTED, this.isComposted());
 			}
-			this.worldObj.setBlockState(this.pos, blockState, 3);
+			this.world.setBlockState(this.pos, blockState, 3);
 
-			IBlockState blockUp = this.worldObj.getBlockState(this.pos.up());
+			IBlockState blockUp = this.world.getBlockState(this.pos.up());
 			if(blockUp.getBlock() instanceof BlockGenericCrop) {
 				BlockPos pos = this.pos.up();
 				for(int i = 0; i < ((BlockGenericCrop)blockUp.getBlock()).getMaxHeight(); i++) {
-					IBlockState cropBlockState = this.worldObj.getBlockState(pos);
+					IBlockState cropBlockState = this.world.getBlockState(pos);
 					if(cropBlockState.getBlock() instanceof BlockGenericCrop) {
 						if(this.isFullyDecayed()) {
-							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, true), 3);
+							this.world.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, true), 3);
 						} else {
-							this.worldObj.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false), 3);
+							this.world.setBlockState(pos, cropBlockState.withProperty(BlockGenericCrop.DECAYED, false), 3);
 						}
 					} else {
 						break;
@@ -114,8 +114,8 @@ public class TileEntityDugSoil extends TileEntity {
 				}
 			}
 		} else {
-			IBlockState state = this.worldObj.getBlockState(this.pos);
-			this.worldObj.notifyBlockUpdate(this.pos, state, state, 3);
+			IBlockState state = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, state, state, 3);
 		}
 	}
 

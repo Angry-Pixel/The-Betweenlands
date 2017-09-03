@@ -21,7 +21,7 @@ public class RenderItemCage extends TileEntitySpecialRenderer<TileEntityItemCage
 	private final ModelItemCage model = new ModelItemCage();
 
 	@Override
-	public void renderTileEntityAt(TileEntityItemCage tile, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityItemCage tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		float ticks = (float) (720.0 * (System.currentTimeMillis() & 0x3FFFL) / 0x3FFFL);
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && tile != null) {

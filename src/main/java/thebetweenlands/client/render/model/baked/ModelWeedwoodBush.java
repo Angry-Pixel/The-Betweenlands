@@ -9,10 +9,11 @@ import java.util.Random;
 
 import javax.vecmath.Matrix4f;
 
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.state.IBlockState;
@@ -27,7 +28,6 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -51,9 +51,9 @@ public class ModelWeedwoodBush implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		return new ModelBakedWeedwoodBush(format, state.apply(Optional.<IModelPart>absent()), map, bakedTextureGetter.apply(TEXTURE_LEAVES), bakedTextureGetter.apply(TEXTURE_STICKS));
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
+		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, bakedTextureGetter.apply(TEXTURE_LEAVES), bakedTextureGetter.apply(TEXTURE_STICKS));
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class ModelWeedwoodBush implements IModel {
 		return TRSRTransformation.identity();
 	}
 
-	public static class ModelBakedWeedwoodBush implements IBakedModel, IPerspectiveAwareModel {
+	public static class ModelBakedWeedwoodBush implements IBakedModel {
 		protected final TRSRTransformation transformation;
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 		private final VertexFormat format;
@@ -361,7 +361,7 @@ public class ModelWeedwoodBush implements IModel {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
+			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
 		}
 	}
 }

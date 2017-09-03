@@ -42,7 +42,7 @@ public class EntityAIGoTo extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return this.pos != null;
 	}
 
@@ -78,7 +78,7 @@ public class EntityAIGoTo extends EntityAIBase {
 
 				if (this.taskOwner.getNavigator().getPath() != null) {
 					PathPoint finalPathPoint = this.taskOwner.getNavigator().getPath().getFinalPathPoint();
-					if (finalPathPoint != null && this.pos.getDistance(finalPathPoint.xCoord, finalPathPoint.yCoord, finalPathPoint.zCoord) < 1) {
+					if (finalPathPoint != null && this.pos.getDistance(finalPathPoint.x, finalPathPoint.y, finalPathPoint.z) < 1) {
 						this.failedPathFindingPenalty = 0;
 					} else {
 						this.failedPathFindingPenalty += 6;

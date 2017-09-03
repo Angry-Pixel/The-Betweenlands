@@ -28,14 +28,14 @@ public class MessagePouchNaming extends MessageBase {
 
 	@Override
 	public void deserialize(PacketBuffer buf) {
-		this.name = buf.readStringFromBuffer(128);
+		this.name = buf.readString(128);
 		this.hand = buf.readByte() == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 	}
 
 	@Override
 	public IMessage process(MessageContext ctx) {
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer player = ctx.getServerHandler().playerEntity;
+			EntityPlayer player = ctx.getServerHandler().player;
 			ItemStack heldItem = player.getHeldItem(this.hand);
 			if(heldItem != null && heldItem.getItem() == ItemRegistry.LURKER_SKIN_POUCH && this.name != null) {
 				if(this.name.length() == 0) {

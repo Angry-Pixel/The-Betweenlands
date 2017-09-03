@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -60,11 +61,12 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
+	//TODO probably does not work
 	@SafeVarargs
 	public static MobSpawnerLogicBetweenlands setMob(World world, BlockPos pos, String mobName, Consumer<MobSpawnerLogicBetweenlands>... consumers) {
 		MobSpawnerLogicBetweenlands spawnerLogic = getLogic(world, pos);
 		if(spawnerLogic != null) {
-			String prevMob = spawnerLogic.getEntityNameToSpawn();
+			String prevMob = spawnerLogic.getEntityId().toString();
 			spawnerLogic.setNextEntityName(mobName);
 			//resets the rendered entity
 			if (world.isRemote && !Objects.equals(prevMob, mobName)) {

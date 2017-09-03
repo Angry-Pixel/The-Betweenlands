@@ -25,7 +25,7 @@ public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEnt
 	public abstract EnumLootPot getType();
 
 	@Override
-	public void renderTileEntityAt(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumLootPot type = this.getType();
 		EnumFacing rotation = TileEntityHelper.getStatePropertySafely(te, BlockTarLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = 0;

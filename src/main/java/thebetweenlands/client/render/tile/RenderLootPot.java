@@ -23,7 +23,7 @@ public class RenderLootPot extends TileEntitySpecialRenderer<TileEntityLootPot> 
 	private static final ResourceLocation TEXTURE_3 = new ResourceLocation("thebetweenlands:textures/tiles/loot_pot_3.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityLootPot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumLootPot type = TileEntityHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.VARIANT, EnumLootPot.POT_1);
 		EnumFacing rotation = TileEntityHelper.getStatePropertySafely(te, BlockLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = te.getModelRotationOffset();

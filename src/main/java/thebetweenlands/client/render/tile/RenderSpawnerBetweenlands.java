@@ -31,7 +31,7 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
     }
 
     @Override
-    public void renderTileEntityAt(TileEntityMobSpawnerBetweenlands te, double x, double y, double z, float partialTicks, int destroyStage) {
+    public void render(TileEntityMobSpawnerBetweenlands te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         float interpolatedCounter = 0;
         if (te != null) {
             interpolatedCounter = -(te.lastCounter + (te.counter - te.lastCounter) * partialTicks);

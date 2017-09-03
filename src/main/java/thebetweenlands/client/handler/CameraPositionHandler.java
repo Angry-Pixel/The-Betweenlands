@@ -27,7 +27,7 @@ public class CameraPositionHandler {
 
 	private float getShakeStrength(float delta) {
 		float screenShake = 0.0F;
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		Entity renderViewEntity = Minecraft.getMinecraft().getRenderViewEntity();
 		if(renderViewEntity != null) {
 			for(Entity entity : (List<Entity>) world.loadedEntityList) {
@@ -37,7 +37,7 @@ public class CameraPositionHandler {
 				}
 			}
 		}
-		return MathHelper.clamp_float(screenShake, 0.0F, 0.15F);
+		return MathHelper.clamp(screenShake, 0.0F, 0.15F);
 	}
 
 	private double prevPosX;
@@ -54,16 +54,16 @@ public class CameraPositionHandler {
 
 			float shakeStrength = this.getShakeStrength(event.renderTickTime);
 			List<IEntityCameraOffset> offsetEntities = new ArrayList<IEntityCameraOffset>();
-			for(Entity entity : (List<Entity>) renderViewEntity.worldObj.loadedEntityList) {
+			for(Entity entity : (List<Entity>) renderViewEntity.world.loadedEntityList) {
 				if(entity instanceof IEntityCameraOffset)
 					offsetEntities.add((IEntityCameraOffset)entity);
 			}
 
-			World world = renderViewEntity.worldObj;
+			World world = renderViewEntity.world;
 			BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
 
 			//Crumbling cragrock tower
-			List<LocationCragrockTower> towers = worldData.getSharedStorageAt(LocationCragrockTower.class, location -> location.getInnerBoundingBox().expand(4, 4, 4).isVecInside(renderViewEntity.getPositionVector()), renderViewEntity.posX, renderViewEntity.posZ);
+			List<LocationCragrockTower> towers = worldData.getSharedStorageAt(LocationCragrockTower.class, location -> location.getInnerBoundingBox().expand(4, 4, 4).contains(renderViewEntity.getPositionVector()), renderViewEntity.posX, renderViewEntity.posZ);
 			for(LocationCragrockTower tower : towers) {
 				if(tower.isCrumbling()) {
 					shakeStrength += Math.min(Math.pow((tower.getCrumblingTicks() + event.renderTickTime) / 400.0f, 4) * 0.08f, 0.08f);
@@ -72,7 +72,7 @@ public class CameraPositionHandler {
 
 
 			//Ring of Summoning
-			List<EntityPlayer> nearbyPlayers = renderViewEntity.worldObj.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getEntityBoundingBox().expand(32, 32, 32), entity -> entity.getDistanceToEntity(renderViewEntity) <= 32.0D);
+			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getEntityBoundingBox().expand(32, 32, 32), entity -> entity.getDistanceToEntity(renderViewEntity) <= 32.0D);
 
 			for(EntityPlayer player : nearbyPlayers) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
@@ -93,7 +93,7 @@ public class CameraPositionHandler {
 					this.prevPosX = renderViewEntity.posX;
 					this.prevPosY = renderViewEntity.posY;
 					this.prevPosZ = renderViewEntity.posZ;
-					Random rnd = renderViewEntity.worldObj.rand;
+					Random rnd = renderViewEntity.world.rand;
 					renderViewEntity.posX += rnd.nextFloat() * shakeStrength;
 					renderViewEntity.posY += rnd.nextFloat() * shakeStrength;
 					renderViewEntity.posZ += rnd.nextFloat() * shakeStrength;

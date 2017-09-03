@@ -27,12 +27,12 @@ public class EntityAngryPebble extends EntityThrowable {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		if(result.typeOfHit != null) {
-			if(this.worldObj.isRemote) {
-				double particleX = MathHelper.floor_double(this.posX) + this.rand.nextFloat();
-				double particleY = MathHelper.floor_double(this.posY) + this.rand.nextFloat();
-				double particleZ = MathHelper.floor_double(this.posZ) + this.rand.nextFloat();
+			if(this.world.isRemote) {
+				double particleX = MathHelper.floor(this.posX) + this.rand.nextFloat();
+				double particleY = MathHelper.floor(this.posY) + this.rand.nextFloat();
+				double particleZ = MathHelper.floor(this.posZ) + this.rand.nextFloat();
 				for (int count = 0; count < 10; count++) {
-					BLParticles.FLAME.spawn(this.worldObj, particleX, particleY, particleZ);
+					BLParticles.FLAME.spawn(this.world, particleX, particleY, particleZ);
 				}
 			} else {
 				this.explode();
@@ -45,7 +45,7 @@ public class EntityAngryPebble extends EntityThrowable {
 	 * Creates the explosion
 	 */
 	protected void explode() {
-		boolean blockDamage = this.worldObj.getGameRules().getBoolean("mobGriefing");
-		this.worldObj.createExplosion(this, this.posX, this.posY, this.posZ, 4.5F, blockDamage);
+		boolean blockDamage = this.world.getGameRules().getBoolean("mobGriefing");
+		this.world.createExplosion(this, this.posX, this.posY, this.posZ, 4.5F, blockDamage);
 	}
 }

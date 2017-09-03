@@ -11,7 +11,7 @@ public class ElixirFeasting extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
+		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			player.getFoodStats().addStats(1, 5.0F);
 		}

@@ -11,12 +11,14 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -69,7 +71,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return worldObj.getCollisionBoxes(getEntityBoundingBox()).isEmpty() && !worldObj.containsAnyLiquid(getEntityBoundingBox());
+		return world.getCollisionBoxes(this, getEntityBoundingBox()).isEmpty() && !world.containsAnyLiquid(getEntityBoundingBox());
 	}
 
 	@Override
@@ -88,7 +90,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.SNAIL_HURT;
 	}
 
@@ -103,14 +105,15 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 	}
 
 	@Override
-	public boolean processInteract(EntityPlayer player, EnumHand hand, ItemStack stack) {
-		if (stack != null && isBreedingItem(stack) && !shagging()) {
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
+		if (!stack.isEmpty() && isBreedingItem(stack) && !shagging()) {
 			player.swingArm(hand);
 			setHasMated(true);
-			return super.processInteract(player, hand, stack);
+			return super.processInteract(player, hand);
 		}
 
-		return super.processInteract(player, hand, stack);
+		return super.processInteract(player, hand);
 	}
 
 	public boolean shagging() {
@@ -124,7 +127,7 @@ public class EntityMireSnail extends EntityAnimal implements IEntityBL {
 
 	@Override
 	public EntityAgeable createChild(EntityAgeable entityageable) {
-		return new EntityMireSnailEgg(worldObj);
+		return new EntityMireSnailEgg(world);
 	}
 
 	public void setHasMated(boolean hasMated) {

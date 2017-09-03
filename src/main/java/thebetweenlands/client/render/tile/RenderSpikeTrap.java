@@ -15,7 +15,7 @@ public class RenderSpikeTrap extends TileEntitySpecialRenderer<TileEntitySpikeTr
 	private static final ModelSpikeBlock MODEL = new ModelSpikeBlock();
 
 	@Override
-	public final void renderTileEntityAt(TileEntitySpikeTrap tile, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntitySpikeTrap tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if (tile.type == 1)
 			bindTexture(ACTIVE_TEXTURE);
 		else

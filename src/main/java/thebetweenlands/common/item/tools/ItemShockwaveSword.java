@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,6 +32,8 @@ import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
 
+import javax.annotation.Nullable;
+
 
 public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	public ItemShockwaveSword(ToolMaterial material) {
@@ -44,10 +47,9 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedItemTooltips) {
-		super.addInformation(stack, player, list, advancedItemTooltips);
-		list.add(I18n.format("tooltip.shockwaveSword.usage"));
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		super.addInformation(stack, worldIn, tooltip, flagIn);
+		tooltip.add(I18n.format("tooltip.shockwaveSword.usage"));
 	}
 
 	@Override
@@ -72,7 +74,8 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {	
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 			return EnumActionResult.PASS;
@@ -87,9 +90,9 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 				for (int distance = -1; distance <= 16; distance++) {
 					for(int distance2 = -distance; distance2 <= distance; distance2++) {
 						for(int yo = -1; yo <= 1; yo++) {
-							int originX = MathHelper.floor_double(pos.getX() + 0.5D - Math.sin(direction) * distance - diag.xCoord * distance2 * 0.25D);
+							int originX = MathHelper.floor(pos.getX() + 0.5D - Math.sin(direction) * distance - diag.x * distance2 * 0.25D);
 							int originY = pos.getY() + yo;
-							int originZ = MathHelper.floor_double(pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.zCoord * distance2 * 0.25D);
+							int originZ = MathHelper.floor(pos.getZ() + 0.5D + Math.cos(direction) * distance + diag.z * distance2 * 0.25D);
 							BlockPos origin = new BlockPos(originX, originY, originZ);
 
 							if(spawnedPos.contains(origin))
@@ -106,10 +109,10 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 								stack.getTagCompound().setInteger("blockMeta", world.getBlockState(origin).getBlock().getMetaFromState(world.getBlockState(origin)));
 
 								EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-								shockwaveBlock.setOrigin(origin, MathHelper.floor_double(Math.sqrt(distance*distance+distance2*distance2)), pos.getX() + 0.5D, pos.getZ() + 0.5D, player);
+								shockwaveBlock.setOrigin(origin, MathHelper.floor(Math.sqrt(distance*distance+distance2*distance2)), pos.getX() + 0.5D, pos.getZ() + 0.5D, player);
 								shockwaveBlock.setLocationAndAngles(originX + 0.5D, originY, originZ + 0.5D, 0.0F, 0.0F);
 								shockwaveBlock.setBlock(Block.getBlockById(stack.getTagCompound().getInteger("blockID")), stack.getTagCompound().getInteger("blockMeta"));
-								world.spawnEntityInWorld(shockwaveBlock);
+								world.spawnEntity(shockwaveBlock);
 								break;
 							}
 						}

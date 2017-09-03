@@ -20,7 +20,8 @@ public abstract class ItemPlantableFood extends ItemBLFood {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse( EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = playerIn.getHeldItem(hand);
 		Block block = worldIn.getBlockState(pos).getBlock();
 		boolean isReplacing = block.isReplaceable(worldIn, pos);
 		BlockPos facingOffset = pos.offset(facing);
@@ -32,7 +33,7 @@ public abstract class ItemPlantableFood extends ItemBLFood {
 				if (!worldIn.isRemote) {
 					worldIn.setBlockState(newPos, this.getBlockState(placeBlock, stack, playerIn, worldIn, newPos));
 					worldIn.playSound((EntityPlayer)null, (float)pos.getX() + 0.5F, (float)pos.getY() + 0.5F, (float)pos.getZ() + 0.5F, placeBlock.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (placeBlock.getSoundType().getVolume() + 1.0F) / 2.0F, placeBlock.getSoundType().getPitch() * 0.8F);
-					--stack.stackSize;
+					stack.shrink(1);
 				}
 				return EnumActionResult.SUCCESS;
 			}

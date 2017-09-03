@@ -65,7 +65,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.getDataManager().register(IS_ACTIVE, this.worldObj.rand.nextInt(5) == 0);
+		this.getDataManager().register(IS_ACTIVE, this.world.rand.nextInt(5) == 0);
 	}
 
 	@Override
@@ -93,15 +93,15 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if (!this.worldObj.isRemote && this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			this.isDead = true;
 		}
 
 		this.squishFactor += (this.squishAmount - this.squishFactor) * 0.5F;
 		this.prevSquishFactor = this.squishFactor;
 
-		if (!this.worldObj.isRemote) {
-			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.worldObj.rand.nextInt(2200) == 0) {
+		if (!this.world.isRemote) {
+			if (getIsPlayerNearby(7, 3, 7, 7) || getAttackTarget() != null || this.world.rand.nextInt(2200) == 0) {
 				if (!this.isActive()) {
 					this.setActive(true);
 					this.motionY += 0.6;
@@ -110,11 +110,11 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 
 			if(this.isActive()) {
 				BlockPos position = new BlockPos(this.posX, this.posY, this.posZ);;
-				if (this.worldObj.isAirBlock(position) && BlockRegistry.SLUDGE.canPlaceBlockAt(this.worldObj, position)) {
-					BlockRegistry.SLUDGE.generateBlockTemporary(this.worldObj, position);
+				if (this.world.isAirBlock(position) && BlockRegistry.SLUDGE.canPlaceBlockAt(this.world, position)) {
+					BlockRegistry.SLUDGE.generateBlockTemporary(this.world, position);
 				}
 
-				if (this.getAttackTarget() == null && this.onGround && this.worldObj.rand.nextInt(350) == 0 && !this.isInWater()) {
+				if (this.getAttackTarget() == null && this.onGround && this.world.rand.nextInt(350) == 0 && !this.isInWater()) {
 					this.setActive(false);
 				}
 			} else if(this.isInWater() || !this.onGround) {
@@ -145,7 +145,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		this.alterSquishAmount();
 
 		//Update animation
-		if (this.worldObj.isRemote) {
+		if (this.world.isRemote) {
 			this.scale.updateTimer();
 			if (this.isActive()) {
 				this.scale.increaseTimer();
@@ -222,7 +222,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	protected boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
-		List<Entity> entities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(distanceX, distanceY, distanceZ));
+		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(distanceX, distanceY, distanceZ));
 		for (Entity entityNeighbor : entities) {
 			if (entityNeighbor instanceof EntityPlayer && this.getDistanceToEntity(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.disableDamage && this.getEntitySenses().canSee(entityNeighbor)))
 				return true;
@@ -238,7 +238,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getRenderBoundingBox() {
-		return Minecraft.getMinecraft().thePlayer.capabilities.isCreativeMode || this.isActive() ? this.getEntityBoundingBox() : ZERO_AABB;
+		return Minecraft.getMinecraft().player.capabilities.isCreativeMode || this.isActive() ? this.getEntityBoundingBox() : ZERO_AABB;
 	}
 
 	@Override
@@ -251,7 +251,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(!this.isActive() && !source.isCreativePlayer()) {
-			if (!this.worldObj.isRemote) {
+			if (!this.world.isRemote) {
 				this.setActive(true);
 			}
 			return false;
@@ -281,7 +281,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 
 		@Override
-		public boolean continueExecuting() {
+		public boolean shouldContinueExecuting() {
 			EntityLivingBase entitylivingbase = this.sludge.getAttackTarget();
 			return entitylivingbase == null ? false : (!entitylivingbase.isEntityAlive() ? false : (entitylivingbase instanceof EntityPlayer && ((EntityPlayer)entitylivingbase).capabilities.disableDamage ? false : --this.growTieredTimer > 0));
 		}

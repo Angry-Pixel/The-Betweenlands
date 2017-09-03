@@ -24,7 +24,8 @@ public class ItemMossBed extends Item {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse( EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (world.isRemote) {
 			return EnumActionResult.SUCCESS;
 		} else if (facing != EnumFacing.UP) {
@@ -38,7 +39,7 @@ public class ItemMossBed extends Item {
 				pos = pos.up();
 			}
 
-			int rotation = MathHelper.floor_double((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			int rotation = MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 			EnumFacing playerFacing = EnumFacing.getHorizontal(rotation);
 			BlockPos offsetPos = pos.offset(playerFacing);
 
@@ -47,7 +48,7 @@ public class ItemMossBed extends Item {
 				boolean canPlaceHead = isBlockReplaceable || world.isAirBlock(pos);
 				boolean canPlaceFoot = isFootBlockReplaceable || world.isAirBlock(offsetPos);
 				
-				if (canPlaceHead && canPlaceFoot && world.getBlockState(pos.down()).isFullyOpaque() && world.getBlockState(offsetPos.down()).isFullyOpaque()) {
+				if (canPlaceHead && canPlaceFoot && world.getBlockState(pos.down()).isBlockNormalCube() && world.getBlockState(offsetPos.down()).isBlockNormalCube()) {
 					IBlockState placedFootBlockState = BlockRegistry.MOSS_BED.getDefaultState().withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockBed.FACING, playerFacing).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
 
 					if (world.setBlockState(pos, placedFootBlockState, 11)) {
@@ -57,7 +58,7 @@ public class ItemMossBed extends Item {
 
 					SoundType sound = placedFootBlockState.getBlock().getSoundType(placedFootBlockState, world, pos, player);
 					world.playSound((EntityPlayer)null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-					--stack.stackSize;
+					stack.shrink(1);
 
 					return EnumActionResult.SUCCESS;
 				} else {

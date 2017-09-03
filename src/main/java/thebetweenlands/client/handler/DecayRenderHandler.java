@@ -114,7 +114,7 @@ public class DecayRenderHandler {
 	public static void onRenderHand(RenderSpecificHandEvent event) {
 		GlStateManager.pushMatrix();
 
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 
 		if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
@@ -144,7 +144,7 @@ public class DecayRenderHandler {
 		RenderManager renderManager = mc.getRenderManager();
 		boolean flag = handSide != EnumHandSide.LEFT;
 		float f = flag ? 1.0F : -1.0F;
-		float f1 = MathHelper.sqrt_float(equipProgress);
+		float f1 = MathHelper.sqrt(equipProgress);
 		float f2 = -0.3F * MathHelper.sin(f1 * (float)Math.PI);
 		float f3 = 0.4F * MathHelper.sin(f1 * ((float)Math.PI * 2F));
 		float f4 = -0.4F * MathHelper.sin(equipProgress * (float)Math.PI);
@@ -154,17 +154,17 @@ public class DecayRenderHandler {
 		float f6 = MathHelper.sin(f1 * (float)Math.PI);
 		GlStateManager.rotate(f * f6 * 70.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(f * f5 * -20.0F, 0.0F, 0.0F, 1.0F);
-		AbstractClientPlayer abstractclientplayer = mc.thePlayer;
+		AbstractClientPlayer abstractclientplayer = mc.player;
 		mc.getTextureManager().bindTexture(abstractclientplayer.getLocationSkin());
 		GlStateManager.translate(f * -1.0F, 3.6F, 3.5F);
 		GlStateManager.rotate(f * 120.0F, 0.0F, 0.0F, 1.0F);
 		GlStateManager.rotate(200.0F, 1.0F, 0.0F, 0.0F);
 		GlStateManager.rotate(f * -135.0F, 0.0F, 1.0F, 0.0F);
 		GlStateManager.translate(f * 5.6F, 0.0F, 0.0F);
-		RenderPlayer renderplayer = (RenderPlayer)renderManager.getEntityRenderObject(abstractclientplayer);
+		RenderPlayer renderplayer = (RenderPlayer)renderManager.<AbstractClientPlayer>getEntityRenderObject(abstractclientplayer);
 		GlStateManager.disableCull();
 
-		if (flag) {
+		if (flag && renderplayer != null) {
 			renderplayer.renderRightArm(abstractclientplayer);
 
 			mc.renderEngine.bindTexture(PLAYER_DECAY_TEXTURE);

@@ -54,7 +54,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 		if (this.stackList[slot] != null) {
 			ItemStack stack;
 
-			if (this.stackList[slot].stackSize <= amount) {
+			if (this.stackList[slot].getCount() <= amount) {
 				stack = this.stackList[slot];
 				this.stackList[slot] = null;
 				this.container.onCraftMatrixChanged(this);
@@ -62,7 +62,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 			} else {
 				stack = this.stackList[slot].splitStack(amount);
 
-				if (this.stackList[slot].stackSize == 0) {
+				if (this.stackList[slot].getCount() == 0) {
 					this.stackList[slot] = null;
 				}
 

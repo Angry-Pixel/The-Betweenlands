@@ -103,7 +103,7 @@ public class TileEntityHelper {
 		TileEntity te;
 
 		if(world instanceof ChunkCache) {
-			te = ((ChunkCache)world).func_190300_a(pos, EnumCreateEntityType.CHECK);
+			te = ((ChunkCache)world).getTileEntity(pos, EnumCreateEntityType.CHECK);
 		} else {
 			te = world.getTileEntity(pos);
 		}

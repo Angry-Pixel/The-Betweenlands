@@ -21,8 +21,7 @@ public class MessageEquipItem extends MessageEntity {
 	 * Creates a message to equip an item
 	 * @param sourceSlot
 	 * @param target
-	 * @param inventory
-	 * @param destSlot
+
 	 */
 	public MessageEquipItem(int sourceSlot, Entity target) {
 		this.addEntity(target);
@@ -33,8 +32,7 @@ public class MessageEquipItem extends MessageEntity {
 	/**
 	 * Creates a message to unequip an item
 	 * @param target
-	 * @param destInv
-	 * @param destSlot
+
 	 */
 	public MessageEquipItem(Entity target, EnumEquipmentInventory inventory, int slot) {
 		this.addEntity(target);
@@ -86,7 +84,7 @@ public class MessageEquipItem extends MessageEntity {
 		super.process(ctx);
 
 		if(ctx.getServerHandler() != null) {
-			EntityPlayer sender = ctx.getServerHandler().playerEntity;
+			EntityPlayer sender = ctx.getServerHandler().player;
 			Entity target = this.getEntity(0);
 
 			if(target != null && target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {

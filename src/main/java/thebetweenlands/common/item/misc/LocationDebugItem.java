@@ -27,7 +27,7 @@ public class LocationDebugItem extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse( EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 			if(playerIn.isSneaking()) {
@@ -40,14 +40,14 @@ public class LocationDebugItem extends Item {
 					location.linkChunks();
 					location.setDirty(true);
 					worldStorage.addSharedStorage(location);
-					playerIn.addChatMessage(new TextComponentString(String.format("Added new location: %s", location.getName())));
+					playerIn.sendMessage(new TextComponentString(String.format("Added new location: %s", location.getName())));
 				} else {
 					for(LocationStorage location : locations) {
 						worldStorage.removeSharedStorage(location);
 					}
-					playerIn.addChatMessage(new TextComponentString(String.format("Removed %s locations:",  locations.size())));
+					playerIn.sendMessage(new TextComponentString(String.format("Removed %s locations:",  locations.size())));
 					for(LocationStorage location : locations) {
-						playerIn.addChatMessage(new TextComponentString("  " + location.getName()));
+						playerIn.sendMessage(new TextComponentString("  " + location.getName()));
 					}
 				}
 			} else {
@@ -58,7 +58,7 @@ public class LocationDebugItem extends Item {
 					if(hand == EnumHand.OFF_HAND && location.getGuard() != null) {
 						boolean guarded = location.getGuard().isGuarded(world, playerIn, pos);
 						location.getGuard().setGuarded(world, pos, !guarded);
-						playerIn.addChatMessage(new TextComponentString(String.format("Set block guard to %s at %s for location %s", !guarded, "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), location.getName())));
+						playerIn.sendMessage(new TextComponentString(String.format("Set block guard to %s at %s for location %s", !guarded, "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), location.getName())));
 						location.setDirty(true, true);
 						guard = true;
 					}
@@ -74,14 +74,14 @@ public class LocationDebugItem extends Item {
 							}
 						}
 					}
-					playerIn.addChatMessage(new TextComponentString(String.format("Marked %s locations as dirty and queued update packets to %s watchers:", locations.size(), watchers.size())));
-					playerIn.addChatMessage(new TextComponentString("  Locations:"));
+					playerIn.sendMessage(new TextComponentString(String.format("Marked %s locations as dirty and queued update packets to %s watchers:", locations.size(), watchers.size())));
+					playerIn.sendMessage(new TextComponentString("  Locations:"));
 					for(LocationStorage location : locations) {
-						playerIn.addChatMessage(new TextComponentString("    " + location.getName()));
-						playerIn.addChatMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getUnlocalizedName() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
-						playerIn.addChatMessage(new TextComponentString("      Watchers:"));
+						playerIn.sendMessage(new TextComponentString("    " + location.getName()));
+						playerIn.sendMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getUnlocalizedName() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
+						playerIn.sendMessage(new TextComponentString("      Watchers:"));
 						for(EntityPlayerMP watcher : location.getWatchers()) {
-							playerIn.addChatMessage(new TextComponentString("        " + watcher.getName()));
+							playerIn.sendMessage(new TextComponentString("        " + watcher.getName()));
 						}
 					}
 				}

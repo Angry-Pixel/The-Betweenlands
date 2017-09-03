@@ -13,7 +13,7 @@ public class ElixirRipening extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
+		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);

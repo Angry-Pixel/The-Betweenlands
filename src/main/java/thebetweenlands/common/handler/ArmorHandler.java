@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
@@ -20,7 +21,7 @@ public class ArmorHandler {
 		DamageSource source = event.getSource();
 		EntityLivingBase entityLiving = event.getEntityLiving();
 
-		if (source == DamageSource.inFire || source == DamageSource.onFire || source == DamageSource.lava) {
+		if (source == DamageSource.IN_FIRE || source == DamageSource.ON_FIRE || source == DamageSource.LAVA) {
 			float damageMultiplier = 1;
 			Iterable<ItemStack> armorStacks = entityLiving.getArmorInventoryList();
 			float reductionAmount = 0.25F;
@@ -43,14 +44,14 @@ public class ArmorHandler {
 		EntityPlayer player = event.getEntityPlayer();
 
 		if(player.isInWater()) {
-			IBlockState blockState = player.worldObj.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
+			IBlockState blockState = player.world.getBlockState(new BlockPos(player.posX, player.getEntityBoundingBox().maxY + 0.1D, player.posZ));
 			boolean fullyInWater = blockState.getMaterial().isLiquid();
 
 			if(fullyInWater) {
-				ItemStack[] armor = player.inventory.armorInventory;
+				NonNullList<ItemStack> armor = player.inventory.armorInventory;
 				int pieces = 0;
-				for (int i = 0; i < armor.length; i++) {
-					if (armor[i] != null && armor[i].getItem() instanceof ItemLurkerSkinArmor) {
+				for (int i = 0; i < armor.size(); i++) {
+					if (!armor.get(i).isEmpty() && armor.get(i).getItem() instanceof ItemLurkerSkinArmor) {
 						pieces++;
 					}
 				}

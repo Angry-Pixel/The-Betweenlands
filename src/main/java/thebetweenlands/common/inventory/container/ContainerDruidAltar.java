@@ -36,7 +36,7 @@ public class ContainerDruidAltar extends Container {
         Slot slot = inventorySlots.get(slotIndex);
         if (slot != null && slot.getHasStack()) {
             ItemStack stack1 = slot.getStack();
-            assert stack1 != null;
+            assert !stack1.isEmpty();
             stack = stack1.copy();
             if (slotIndex >= 5) {
                 //Prevents wrong items from being shift-clicked into the slots
@@ -55,12 +55,12 @@ public class ContainerDruidAltar extends Container {
                 }
             } else if (!mergeItemStack(stack1, 5, inventorySlots.size(), false))
                 return null;
-            if (stack1.stackSize == 0)
+            if (stack1.getCount() == 0)
                 slot.putStack(null);
             else
                 slot.onSlotChanged();
-            if (stack1.stackSize != stack.stackSize)
-                slot.onPickupFromSlot(player, stack1);
+            if (stack1.getCount() != stack.getCount())
+                slot.onTake(player, stack1);
             else
                 return null;
         }

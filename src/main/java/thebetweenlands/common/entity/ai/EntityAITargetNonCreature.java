@@ -17,7 +17,6 @@ import net.minecraft.util.math.MathHelper;
 
 /**
  * Copy of {@link EntityAITarget} for non creature entities
- * @param <T>
  */
 public abstract class EntityAITargetNonCreature extends EntityAIBase
 {
@@ -250,8 +249,8 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 			}
 			else
 			{
-				int i = pathpoint.xCoord - MathHelper.floor_double(target.posX);
-				int j = pathpoint.zCoord - MathHelper.floor_double(target.posZ);
+				int i = pathpoint.x - MathHelper.floor(target.posX);
+				int j = pathpoint.z - MathHelper.floor(target.posZ);
 				return (double)(i * i + j * j) <= 2.25D;
 			}
 		}

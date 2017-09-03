@@ -10,9 +10,9 @@ public class Serializers {
 	public static final DataSerializer<Vec3d> VEC3D = new DataSerializer<Vec3d>() {
 		@Override
 		public void write(PacketBuffer buf, Vec3d value) {
-			buf.writeDouble(value.xCoord);
-			buf.writeDouble(value.yCoord);
-			buf.writeDouble(value.zCoord);
+			buf.writeDouble(value.x);
+			buf.writeDouble(value.y);
+			buf.writeDouble(value.z);
 		}
 
 		@Override
@@ -23,6 +23,11 @@ public class Serializers {
 		@Override
 		public DataParameter<Vec3d> createKey(int id) {
 			return new DataParameter<Vec3d>(id, this);
+		}
+
+		@Override
+		public Vec3d copyValue(Vec3d value) {
+			return null;
 		}
 	};
 

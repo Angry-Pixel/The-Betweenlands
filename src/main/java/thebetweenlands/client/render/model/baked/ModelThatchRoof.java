@@ -9,10 +9,11 @@ import java.util.List;
 
 import javax.vecmath.Matrix4f;
 
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
+import java.util.Optional;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -32,7 +33,6 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -55,9 +55,9 @@ public class ModelThatchRoof implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		return new ModelBakedThatchRoof(state.apply(Optional.<IModelPart>absent()), map, format, bakedTextureGetter.apply(TEXTURE));
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
+		return new ModelBakedThatchRoof(state.apply(Optional.empty()), map, format, bakedTextureGetter.apply(TEXTURE));
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class ModelThatchRoof implements IModel {
 		return TRSRTransformation.identity();
 	}
 
-	public static class ModelBakedThatchRoof implements IPerspectiveAwareModel {
+	public static class ModelBakedThatchRoof implements IBakedModel {
 		private final VertexFormat format;
 		private final TextureAtlasSprite texture;
 		private float slopeEdge = 1.0F / 16.0F * 3.0F;
@@ -206,7 +206,7 @@ public class ModelThatchRoof implements IModel {
 		private final LoadingCache<Integer, ModelBakedThatchRoof> modelCache = CacheBuilder.newBuilder().maximumSize(64).build(new CacheLoader<Integer, ModelBakedThatchRoof>() {
 			@Override
 			public ModelBakedThatchRoof load(Integer key) throws Exception {
-				return new ModelBakedThatchRoof(ModelBakedThatchRoof.this.transformation != null ? Optional.of(ModelBakedThatchRoof.this.transformation) : Optional.absent(), ModelBakedThatchRoof.this.transforms, ModelBakedThatchRoof.this.format, ModelBakedThatchRoof.this.texture, key);
+				return new ModelBakedThatchRoof(ModelBakedThatchRoof.this.transformation != null ? Optional.of(ModelBakedThatchRoof.this.transformation) : Optional.empty(), ModelBakedThatchRoof.this.transforms, ModelBakedThatchRoof.this.format, ModelBakedThatchRoof.this.texture, key);
 			}
 		});
 
@@ -275,7 +275,7 @@ public class ModelThatchRoof implements IModel {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
+			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
 		}
 	}
 }

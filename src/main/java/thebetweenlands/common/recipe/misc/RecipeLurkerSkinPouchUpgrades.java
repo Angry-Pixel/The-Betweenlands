@@ -3,12 +3,14 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class RecipeLurkerSkinPouchUpgrades implements IRecipe {
+public class RecipeLurkerSkinPouchUpgrades  extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
 	@Override
 	public boolean matches(InventoryCrafting craftMatrix, World world) {
@@ -57,8 +59,8 @@ public class RecipeLurkerSkinPouchUpgrades implements IRecipe {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
+	public boolean canFit(int width, int height) {
+		return true;//TODO what does this do?
 	}
 
 	@Override
@@ -67,12 +69,12 @@ public class RecipeLurkerSkinPouchUpgrades implements IRecipe {
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] remaining = new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack>  remaining = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
-		for (int i = 0; i < remaining.length; ++i) {
+		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack itemstack = inv.getStackInSlot(i);
-			remaining[i] = ForgeHooks.getContainerItem(itemstack);
+			remaining.set(i, ForgeHooks.getContainerItem(itemstack));
 		}
 
 		return remaining;

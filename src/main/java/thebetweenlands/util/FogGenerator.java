@@ -34,16 +34,13 @@ public class FogGenerator {
 
 	/**
 	 * Returns the fog range based on the player position.
-	 * @param start
-	 * @param end
-	 * @param rng
 	 * @return
 	 */
 	public float[] getFogRange(float min, float max) {
-		if(Minecraft.getMinecraft().thePlayer == null)
+		if(Minecraft.getMinecraft().player == null)
 			return new float[]{min, max};
-		double x = Minecraft.getMinecraft().thePlayer.posX;
-		double z = Minecraft.getMinecraft().thePlayer.posZ;
+		double x = Minecraft.getMinecraft().player.posX;
+		double z = Minecraft.getMinecraft().player.posZ;
 		int cx = (int)((x - ((int)(Math.floor(x)) & 15)) / 16) - 1;
 		int cz = (int)((z - ((int)(Math.floor(z)) & 15)) / 16);
 		if(this.fogChunkNoise == null || this.lastCX != cx || this.lastCZ != cz) {

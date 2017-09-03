@@ -34,7 +34,7 @@ public class RenderChestBetweenlands extends TileEntitySpecialRenderer<TileEntit
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntityChestBetweenlands te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityChestBetweenlands te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GlStateManager.enableDepth();
 		GlStateManager.depthFunc(515);
 		GlStateManager.depthMask(true);
@@ -59,7 +59,7 @@ public class RenderChestBetweenlands extends TileEntitySpecialRenderer<TileEntit
 			return;
 		}
 
-		if (te.hasWorldObj()) {
+		if (te.hasWorld()) {
 			Block block = te.getBlockType();
 			i = te.getBlockMetadata();
 

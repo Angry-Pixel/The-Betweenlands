@@ -55,7 +55,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 	}
 
 	@Override
-	public void renderTileEntityAt(TileEntityAnimator te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityAnimator te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = 0;
 
 		if(te != null) {
@@ -81,7 +81,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 0.27D, z + 0.5D);
 				GlStateManager.rotate(180, 1, 0, 0);
-				int items = te.getStackInSlot(2).stackSize;
+				int items = te.getStackInSlot(2).getCount();
 				for (int i = 0; i < items; i++) {
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(rand.nextDouble() / 3.0D - 1.0D / 6.0D, 0.0D, rand.nextDouble() / 3.0D - 1.0D / 6.0D);

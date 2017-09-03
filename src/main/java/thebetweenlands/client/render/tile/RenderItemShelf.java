@@ -22,7 +22,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 	protected final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 	@Override
-	public void renderTileEntityAt(TileEntityItemShelf te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityItemShelf te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		double unitPixel = 0.0625D;
 		double offSetX = 0;
 		double offSetZ = 0;
@@ -40,7 +40,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 
 		boolean isItem = true;
 
-		if(te != null && te.hasWorldObj()) {
+		if(te != null && te.hasWorld()) {
 			isItem = false;
 			facing = TileEntityHelper.getStatePropertySafely(te, BlockItemShelf.class, BlockItemShelf.FACING, EnumFacing.NORTH);
 		}

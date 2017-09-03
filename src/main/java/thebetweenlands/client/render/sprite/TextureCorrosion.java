@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Function;
 
 import javax.imageio.ImageIO;
 
@@ -54,6 +55,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 	private ResourceLocation loadedResourceLocation = null;
 	private IResourceManager loaderResourceManager = null;
 	private TextureAtlasSprite parentSprite;
+	private Function<ResourceLocation, TextureAtlasSprite> textureGetter;
 
 	public TextureCorrosion(String spriteName, ResourceLocation parentTexture, int corrosionAmount, long seed) {
 		super(spriteName);
@@ -135,7 +137,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 	}
 
 	@Override
-	public boolean load(IResourceManager manager, ResourceLocation location) {
+	public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> textureGetter) {
 		if (corrosionPixels == null) {
 			this.loadCorrosionPixels(manager);
 		}
@@ -143,6 +145,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		try {
 			this.loadedResourceLocation = location;
 			this.loaderResourceManager = manager;
+			this.textureGetter = textureGetter;
 			resource = manager.getResource(this.parentTexture);
 			this.loadSpriteFrames(resource, this.currentMipmapLevels + 1);
 		} catch (RuntimeException runtimeexception) {
@@ -162,7 +165,7 @@ public class TextureCorrosion extends TextureAtlasSprite {
 			if(this.loaderResourceManager != null && this.loadedResourceLocation != null) {
 				this.currentMipmapLevels = mipmapLevels;
 				try {
-					this.load(this.loaderResourceManager, this.loadedResourceLocation);
+					this.load(this.loaderResourceManager, this.loadedResourceLocation, textureGetter);
 				} catch(Exception ex) {
 					//Failed loading resources, ignore and generate no mipmaps
 					generatedMipmaps = false;

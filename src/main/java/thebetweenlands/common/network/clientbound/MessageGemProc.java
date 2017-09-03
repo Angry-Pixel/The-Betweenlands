@@ -35,7 +35,7 @@ public class MessageGemProc extends MessageEntity {
 	public void deserialize(PacketBuffer buf) {
 		super.deserialize(buf);
 		try {
-			this.gem = CircleGem.readFromNBT(buf.readNBTTagCompoundFromBuffer());
+			this.gem = CircleGem.readFromNBT(buf.readCompoundTag());
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -44,7 +44,7 @@ public class MessageGemProc extends MessageEntity {
 	@Override
 	public void serialize(PacketBuffer buf) {
 		super.serialize(buf);
-		buf.writeNBTTagCompoundToBuffer(this.gem.writeToNBT(new NBTTagCompound()));
+		buf.writeCompoundTag(this.gem.writeToNBT(new NBTTagCompound()));
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class MessageGemProc extends MessageEntity {
 		CircleGem gem = this.getGem();
 		Entity entityHit = this.getEntity(0);
 		if(entityHit != null) {
-			Random rnd = entityHit.worldObj.rand;
+			Random rnd = entityHit.world.rand;
 			for(int i = 0; i < 40; i++) {
 				double x = entityHit.posX + rnd.nextFloat() * entityHit.width * 2.0F - entityHit.width;
 				double y = entityHit.getEntityBoundingBox().minY + rnd.nextFloat() * entityHit.height;
@@ -97,7 +97,7 @@ public class MessageGemProc extends MessageEntity {
 					break;
 				}
 
-				BLParticles.GEM_PROC.spawn(entityHit.worldObj, x, y, z, args);
+				BLParticles.GEM_PROC.spawn(entityHit.world, x, y, z, args);
 			}
 		}
 	}

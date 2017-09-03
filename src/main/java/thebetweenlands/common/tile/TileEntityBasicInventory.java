@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -14,14 +15,14 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
 	private final String name;
-	protected ItemStack[] inventory;
+	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
 	public TileEntityBasicInventory(int invtSize, String name) {
-		this.inventoryHandler = new ItemStackHandler(this.inventory = new ItemStack[invtSize]) {
+		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
-				this.stacks = TileEntityBasicInventory.this.inventory = new ItemStack[size];
+				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY);
 			}
 
 			@Override
@@ -96,19 +97,25 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return inventory.isEmpty();
+	}
+
+	@Override
 	public ItemStack getStackInSlot(int slot) {
 		this.accessSlot(slot);
 		return this.inventoryHandler.getStackInSlot(slot);
 	}
 
-	@Override
-	public final boolean isUseableByPlayer(EntityPlayer player) {
-		return true;
-	}
 
 	@Override
 	public int getInventoryStackLimit() {
 		return 64;
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return false;
 	}
 
 	@Override
@@ -185,7 +192,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		this.accessSlot(index);
-		return this.inventoryHandler.extractItem(index, this.inventoryHandler.getStackInSlot(index) != null ? this.inventoryHandler.getStackInSlot(index).stackSize : 0, false);
+		return this.inventoryHandler.extractItem(index, this.inventoryHandler.getStackInSlot(index) != null ? this.inventoryHandler.getStackInSlot(index).getCount() : 0, false);
 	}
 
 	@Override
@@ -204,7 +211,6 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	/**
 	 * Called before a slot is accessed
 	 * @param slot
-	 * @param player
 	 */
 	protected void accessSlot(int slot) {
 

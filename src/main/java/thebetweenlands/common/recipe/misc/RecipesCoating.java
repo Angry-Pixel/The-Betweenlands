@@ -3,13 +3,15 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 
-public class RecipesCoating implements IRecipe {
+public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
 		ItemStack tool = null;
@@ -57,9 +59,10 @@ public class RecipesCoating implements IRecipe {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
+	public boolean canFit(int width, int height) {
+		return true; //TODO what is this?
 	}
+
 
 	@Override
 	public ItemStack getRecipeOutput() {
@@ -67,31 +70,31 @@ public class RecipesCoating implements IRecipe {
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] remaining = new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack>  remaining = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
 		int requiredCoating = 0;
 
-		for (int i = 0; i < remaining.length; ++i) {
+		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(stack != null && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();
-				requiredCoating += MathHelper.ceiling_float_int(((float)corrodible.getMaxCoating(stack) - (float)corrodible.getCoating(stack)) / 75.0F);
+				requiredCoating += MathHelper.ceil(((float)corrodible.getMaxCoating(stack) - (float)corrodible.getCoating(stack)) / 75.0F);
 			}
 		}
 
-		for (int i = 0; i < remaining.length; ++i) {
+		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(stack != null && EnumItemMisc.SCABYST.isItemOf(stack)) {
 				if(requiredCoating > 0) {
 					requiredCoating--;
 				} else {
-					remaining[i] = stack.copy();
-					remaining[i].stackSize = 1;
+					remaining.set(i,stack.copy());
+					remaining.get(i).shrink(1);
 					continue;
 				}
 			} else {
-				remaining[i] = ForgeHooks.getContainerItem(stack);
+				remaining.set(i, ForgeHooks.getContainerItem(stack));
 			}
 		}
 

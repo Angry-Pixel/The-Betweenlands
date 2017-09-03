@@ -63,18 +63,19 @@ public class BlockInfuser extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int rotation = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		state = state.withProperty(FACING, EnumFacing.getHorizontal(rotation));
 		worldIn.setBlockState(pos, state, 3);
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItem = player.getHeldItem(hand);
 		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityInfuser) {
 			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
 
 			final IFluidHandler fluidHandler = getFluidHandler(world, pos);
-			if (fluidHandler != null && FluidUtil.interactWithFluidHandler(heldItem, fluidHandler, player)) {
+			if (fluidHandler != null && FluidUtil.interactWithFluidHandler(player, hand, fluidHandler)) {
 				return true;
 			}
 
@@ -90,11 +91,11 @@ public class BlockInfuser extends BlockContainer {
 						for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
 							if(tile.getStackInSlot(i) == null) {
 								ItemStack singleIngredient = ingredient.copy();
-								singleIngredient.stackSize = 1;
+								singleIngredient.setCount(1);
 								tile.setInventorySlotContents(i, singleIngredient);
 								tile.updateInfusingRecipe();
 								if (!player.capabilities.isCreativeMode) 
-									heldItem.stackSize--;
+									heldItem.shrink(1);
 								world.notifyBlockUpdate(pos, state, state, 2);
 								return true;
 							}
@@ -161,7 +162,7 @@ public class BlockInfuser extends BlockContainer {
 							double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 							EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
 							entityitem.setDefaultPickupDelay();
-							world.spawnEntityInWorld(entityitem);
+							world.spawnEntity(entityitem);
 						}
 					}
 				}
@@ -175,7 +176,7 @@ public class BlockInfuser extends BlockContainer {
 						double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
 						entityitem.setDefaultPickupDelay();
-						world.spawnEntityInWorld(entityitem);
+						world.spawnEntity(entityitem);
 					}
 				}
 			}

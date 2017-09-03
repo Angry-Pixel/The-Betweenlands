@@ -46,7 +46,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
 	@Override
 	public boolean isPersistent(EntityPlayer oldPlayer, EntityPlayer newPlayer, boolean wasDead) {
-		return !wasDead || this.getEntity().worldObj.getGameRules().getBoolean("keepInventory");
+		return !wasDead || this.getEntity().world.getGameRules().getBoolean("keepInventory");
 	}
 
 
@@ -118,7 +118,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 							NBTTagCompound slotNbt = slotList.getCompoundTagAt(c);
 							int slot = slotNbt.getInteger("slot");
 							if(slot < inventoryStacks.length) {
-								inventoryStacks[slot] = ItemStack.loadItemStackFromNBT(slotNbt.getCompoundTag("stack"));
+								inventoryStacks[slot] = new ItemStack(slotNbt.getCompoundTag("stack"));
 							}
 						}
 					}

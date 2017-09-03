@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
-import net.minecraft.world.chunk.IChunkGenerator;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -170,7 +170,7 @@ public class BiomeGenerator {
 
 	/**
 	 * Initializes additional noise generators if necessary
-	 * @param rng Seeded Random
+	 * @param seed Seeded Random
 	 */
 	public void initializeGenerators(long seed) {
 		if(!this.noiseGeneratorsInitialized) {

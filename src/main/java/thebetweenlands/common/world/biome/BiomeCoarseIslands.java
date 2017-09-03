@@ -31,7 +31,11 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 		.addFeature(new CoarseIslandsFeature())
 		.addFeature(new AlgaeFeature());
 
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
+	}
+
+	@Override
+	public void addTypes() {
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
 	@Override

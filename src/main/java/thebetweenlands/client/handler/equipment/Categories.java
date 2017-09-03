@@ -57,12 +57,12 @@ public class Categories {
 
 		@Override
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
-			EntityPlayer sender = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer sender = Minecraft.getMinecraft().player;
 
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				ItemStack res = EquipmentHelper.equipItem(sender, sender, item, false);
 
-				if(res == null || res.stackSize != item.stackSize) {
+				if(res == null || res.getCount() != item.getCount()) {
 					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(this.slot, sender));
 
 					if(!sender.capabilities.isCreativeMode) {
@@ -92,7 +92,7 @@ public class Categories {
 
 		@Override
 		public boolean onClicked(int mouseX, int mouseY, int mouseButton) {
-			EntityPlayer sender = Minecraft.getMinecraft().thePlayer;
+			EntityPlayer sender = Minecraft.getMinecraft().player;
 
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);

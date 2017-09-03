@@ -37,7 +37,11 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		.addFeature(new AlgaeFeature());
 		this.setFoliageColors(0x1FC66D, 0x1FC66D);
 
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
+	}
+
+	@Override
+	public void addTypes() {
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
 	@Override

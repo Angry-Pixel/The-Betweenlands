@@ -2,6 +2,8 @@ package thebetweenlands.common.item.equipment;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -21,14 +23,15 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
+import javax.annotation.Nullable;
+
 public class ItemRingOfRecruitment extends ItemRing {
 	public ItemRingOfRecruitment() {
 		this.setMaxDamage(450);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedTooltips) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add(I18n.format("tooltip.ring.recruitment.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = I18n.format("tooltip.ring.recruitment", KeyBindRegistry.RADIAL_MENU.getDisplayName());
@@ -40,7 +43,7 @@ public class ItemRingOfRecruitment extends ItemRing {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer) {
+		if(!entity.world.isRemote && entity instanceof EntityPlayer) {
 			int tickRate = 80;
 
 			if(entity.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {

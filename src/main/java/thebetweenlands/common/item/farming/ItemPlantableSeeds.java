@@ -36,7 +36,8 @@ public class ItemPlantableSeeds extends ItemSeeds {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse( EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = playerIn.getHeldItem(hand);
 		IBlockState state = worldIn.getBlockState(pos);
 		BlockBush bush = this.crops.get().getBlock() instanceof BlockBush ? (BlockBush) this.crops.get().getBlock() : null;
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack) && 
@@ -44,7 +45,7 @@ public class ItemPlantableSeeds extends ItemSeeds {
 				&& worldIn.isAirBlock(pos.up())
 				&& (this.soilMatcher == null || this.soilMatcher.test(state))) {
 			worldIn.setBlockState(pos.up(), this.crops.get());
-			--stack.stackSize;
+			stack.shrink(1);
 			return EnumActionResult.SUCCESS;
 		} else {
 			return EnumActionResult.FAIL;

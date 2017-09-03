@@ -196,7 +196,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 	 * @return
 	 */
 	public Profiler getProfiler() {
-		return this.getWorld().theProfiler;
+		return this.getWorld().profiler;
 	}
 
 	/**

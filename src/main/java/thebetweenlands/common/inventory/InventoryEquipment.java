@@ -7,6 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -49,8 +50,9 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Nullable
 	public ItemStack removeStackFromSlot(int index) {
 		ItemStack stack = null;
+		NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, inventory);
 		if(index < this.getSizeInventory()) {
-			stack = ItemStackHelper.getAndRemove(this.inventory, index);
+			stack = ItemStackHelper.getAndRemove(list, index);
 			this.markDirty();
 		}
 		return stack;
@@ -60,8 +62,9 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Nullable
 	public ItemStack decrStackSize(int index, int count) {
 		ItemStack stack = null;
+		NonNullList<ItemStack> list = NonNullList.from(ItemStack.EMPTY, inventory);
 		if(index < this.getSizeInventory()) {
-			stack = ItemStackHelper.getAndSplit(this.inventory, index, count);
+			stack = ItemStackHelper.getAndSplit(list, index, count);
 			this.markDirty();
 		}
 		return stack;
@@ -87,9 +90,10 @@ public class InventoryEquipment implements IInventory, ITickable {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
-		return true;
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return false;
 	}
+
 
 	@Override
 	public void openInventory(EntityPlayer player) {
@@ -136,6 +140,11 @@ public class InventoryEquipment implements IInventory, ITickable {
 	@Override
 	public int getSizeInventory() {
 		return this.inventory.length;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		return inventory.length <= 0;
 	}
 
 	@Override

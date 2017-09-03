@@ -45,8 +45,11 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new SiltBeachFeature(0.98F))
 		.setDecorator(new BiomeDecoratorSwamplands(this));
 		this.setFoliageColors(0x2AFF00, 0x2AFF00);
+	}
 
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
+	@Override
+	public void addTypes() {
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.DENSE, Type.FOREST, Type.WET, Type.WATER);
 	}
 
 	@Override

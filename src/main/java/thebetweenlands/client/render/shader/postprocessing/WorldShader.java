@@ -233,11 +233,11 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		this.uploadInt(this.lightSourceAmountUniformID, renderedLightSources);
 		this.uploadFloat(this.msTimeUniformID, System.nanoTime() / 1000000.0F);
-		this.uploadFloat(this.worldTimeUniformID, Minecraft.getMinecraft().theWorld.getWorldTime() + partialTicks);
+		this.uploadFloat(this.worldTimeUniformID, Minecraft.getMinecraft().world.getWorldTime() + partialTicks);
 
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 		Vec3d camPos = renderView != null ? ActiveRenderInfo.projectViewFromEntity(Minecraft.getMinecraft().getRenderViewEntity(), partialTicks) : Vec3d.ZERO;
-		this.uploadFloat(this.camPosUniformID, (float)camPos.xCoord, (float)camPos.yCoord, (float)camPos.zCoord);
+		this.uploadFloat(this.camPosUniformID, (float)camPos.x, (float)camPos.y, (float)camPos.z);
 	}
 
 	/**
@@ -403,7 +403,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 * @param partialTicks
 	 */
 	public void updateTextures(float partialTicks) {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		if (world != null && !Minecraft.getMinecraft().isGamePaused()) {
 			//Update repeller shield
 			this.updateRepellerShieldTexture(partialTicks);
@@ -441,7 +441,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		boolean hasBeat = false;
 
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		if (world != null) {
 			if (world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
@@ -466,8 +466,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		Vec3d lightPos = new Vec3d(45, 40, 30);
 
 		//Get screen space coordinates of light source
-		Projection projection = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.ORTHOGONAL, false);
-		Projection projectionUnclamped = GLUProjection.getInstance().project(lightPos.xCoord, lightPos.yCoord, lightPos.zCoord, ClampMode.NONE, false);
+		Projection projection = GLUProjection.getInstance().project(lightPos.x, lightPos.y, lightPos.z, ClampMode.ORTHOGONAL, false);
+		Projection projectionUnclamped = GLUProjection.getInstance().project(lightPos.x, lightPos.y, lightPos.z, ClampMode.NONE, false);
 
 		//Get light source positions in texture coords
 		float rayX = (float) (projection.getX() / renderWidth);
@@ -476,10 +476,10 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		float rayYUnclamped = (float) (projectionUnclamped.getY() / renderWidth);
 
 		//Calculate angle differences
-		Vec3d lookVec = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
-		lookVec = new Vec3d(lookVec.xCoord + 0.0001D, 0, lookVec.zCoord + 0.0001D);
+		Vec3d lookVec = Minecraft.getMinecraft().player.getLook(partialTicks);
+		lookVec = new Vec3d(lookVec.x + 0.0001D, 0, lookVec.z + 0.0001D);
 		lookVec = lookVec.normalize();
-		Vec3d sLightPos = new Vec3d(lightPos.xCoord + 0.0001D, 0, lightPos.zCoord + 0.0001D).normalize();
+		Vec3d sLightPos = new Vec3d(lightPos.x + 0.0001D, 0, lightPos.z + 0.0001D).normalize();
 		float lightXZAngle = (float) Math.toDegrees(Math.acos(sLightPos.dotProduct(lookVec)));
 		float fovX = GLUProjection.getInstance().getFovX() / 2.0F;
 		float angDiff = Math.abs(lightXZAngle);
@@ -490,7 +490,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		//Lower effect strength if outside of view
 		if (rayYUnclamped <= 0.0F) {
-			float mult = 1 + MathHelper.clamp_float(rayYUnclamped / 5.0F * (1.0F - angDiff / fovX), -1, 0.0F);
+			float mult = 1 + MathHelper.clamp(rayYUnclamped / 5.0F * (1.0F - angDiff / fovX), -1, 0.0F);
 			decay *= mult;
 			illuminationDecay *= mult;
 			weight *= mult;
@@ -610,7 +610,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	private void updateGasParticlesTexture(World world, float partialTicks) {
 		boolean hasCloud = false;
-		for (Entity entity : Minecraft.getMinecraft().theWorld.loadedEntityList) {
+		for (Entity entity : Minecraft.getMinecraft().world.loadedEntityList) {
 			if (entity instanceof EntityGasCloud) {
 				hasCloud = true;
 				break;

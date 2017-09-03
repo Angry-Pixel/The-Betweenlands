@@ -2,11 +2,14 @@ package thebetweenlands.common.item.herblore;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
@@ -16,6 +19,8 @@ import thebetweenlands.client.handler.ScreenRenderHandler;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedRecipeHelper;
+
+import javax.annotation.Nullable;
 
 public class ItemAspectVial extends Item {
     public ItemAspectVial() {
@@ -30,7 +35,7 @@ public class ItemAspectVial extends Item {
     }
 
     @Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.RED + "Not yet implemented!");
 	}
     
@@ -98,19 +103,19 @@ public class ItemAspectVial extends Item {
         return super.getIcon(stack, pass);
     }
 */
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-        list.add(new ItemStack(item, 1, 0)); //green
-        list.add(new ItemStack(item, 1, 1)); //orange
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        list.add(new ItemStack(this, 1, 0)); //green
+        list.add(new ItemStack(this, 1, 1)); //orange
 
         //Add all aspects
         for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
-            ItemStack stackGreen = new ItemStack(item, 1, 0);
+            ItemStack stackGreen = new ItemStack(this, 1, 0);
             ItemAspectContainer greenAspectContainer = ItemAspectContainer.fromItem(stackGreen);
             greenAspectContainer.add(aspect, 400);
             list.add(stackGreen);
-            ItemStack stackOrange = new ItemStack(item, 1, 1);
+            ItemStack stackOrange = new ItemStack(this, 1, 1);
             ItemAspectContainer orangeAspectContainer = ItemAspectContainer.fromItem(stackOrange);
             orangeAspectContainer.add(aspect, 400);
             list.add(stackOrange);

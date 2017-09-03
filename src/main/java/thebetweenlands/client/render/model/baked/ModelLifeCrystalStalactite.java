@@ -43,7 +43,7 @@ public class ModelLifeCrystalStalactite implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		return new ModelBakedLifeCrystalOre(format, bakedTextureGetter.apply(TEXTURE_DEFAULT), bakedTextureGetter.apply(TEXTURE_ORE_BACKGROUND), bakedTextureGetter.apply(TEXTURE_ORE));
 	}
 

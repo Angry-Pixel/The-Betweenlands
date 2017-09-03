@@ -125,7 +125,7 @@ public abstract class CustomRecipes<C> {
 				}
 				nbt.setString("id", id);
 				final NBTTagCompound finalNbt = nbt;
-				return (world, pos, crafter) -> AnvilChunkLoader.readWorldEntityPos(finalNbt, world, pos.xCoord, pos.yCoord, pos.zCoord, true);
+				return (world, pos, crafter) -> AnvilChunkLoader.readWorldEntityPos(finalNbt, world, pos.x, pos.y, pos.z, true);
 			}
 		};
 

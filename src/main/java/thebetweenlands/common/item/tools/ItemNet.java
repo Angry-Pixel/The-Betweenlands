@@ -27,11 +27,11 @@ public class ItemNet extends Item {
 			} else {
 				receivedItem = new ItemStack(ItemRegistry.GECKO);
 			}
-			if (player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() == this && !player.worldObj.isRemote) {
+			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
 				if (target.getCustomNameTag() != null) {
 					receivedItem.setStackDisplayName(target.getCustomNameTag());
 				}
-				player.worldObj.spawnEntityInWorld(new EntityItem(player.worldObj, player.posX, player.posY, player.posZ, receivedItem));
+				player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, receivedItem));
 				target.setDead();
 				stack.damageItem(1, player);
 			}

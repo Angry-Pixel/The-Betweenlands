@@ -11,8 +11,8 @@ public class ElixirDraining extends ElixirEffect {
 
 	@Override
 	protected void performEffect(EntityLivingBase entity, int strength) {
-		if(!entity.worldObj.isRemote) {
-			entity.attackEntityFrom(DamageSource.magic, 1);
+		if(!entity.world.isRemote) {
+			entity.attackEntityFrom(DamageSource.MAGIC, 1);
 		}
 	}
 

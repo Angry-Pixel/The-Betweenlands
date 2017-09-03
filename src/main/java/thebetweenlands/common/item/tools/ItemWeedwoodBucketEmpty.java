@@ -28,7 +28,8 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStack = player.getHeldItem(hand);
 		if(!world.isRemote) {
 			RayTraceResult result = this.rayTrace(world, player, true);
 
@@ -43,7 +44,7 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 								&& BlockRegistry.WEEDWOOD_RUBBER_TAP.canPlaceBlockAt(world, pos.offset(result.sideHit))) {
 							if(player.inventory.hasItemStack(EnumItemMisc.SWAMP_REED_ROPE.create(1))) {
 								world.setBlockState(pos.offset(result.sideHit), BlockRegistry.WEEDWOOD_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
-								itemStack.stackSize--;
+								itemStack.shrink(1);
 
 								for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 									ItemStack invStack = player.inventory.getStackInSlot(i);
@@ -57,7 +58,7 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 
 								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 							} else {
-								player.addChatMessage(new TextComponentTranslation("chat.tap.needsRope", new TextComponentTranslation(BlockRegistry.WEEDWOOD_RUBBER_TAP.getUnlocalizedName() + ".name")));
+								player.sendMessage(new TextComponentTranslation("chat.tap.needsRope", new TextComponentTranslation(BlockRegistry.WEEDWOOD_RUBBER_TAP.getUnlocalizedName() + ".name")));
 							}
 						}
 					}
@@ -65,6 +66,6 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 			}
 		}
 
-		return super.onItemRightClick(itemStack, world, player, hand);
+		return super.onItemRightClick(world, player, hand);
 	}
 }

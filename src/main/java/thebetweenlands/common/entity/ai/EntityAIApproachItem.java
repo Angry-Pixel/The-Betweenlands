@@ -20,7 +20,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 		public boolean apply(Entity entity) {
 			return entity.isEntityAlive() && entity.getDistanceToEntity(EntityAIApproachItem.this.entity) <= EntityAIApproachItem.this.targetDistance 
 					&& entity instanceof EntityItem && 
-					(EntityAIApproachItem.this.ignoreDamage ? ((EntityItem)entity).getEntityItem().getItem() == EntityAIApproachItem.this.targetItem.getItem() : ((EntityItem)entity).getEntityItem().isItemEqual(EntityAIApproachItem.this.targetItem));
+					(EntityAIApproachItem.this.ignoreDamage ? ((EntityItem)entity).getItem().getItem() == EntityAIApproachItem.this.targetItem.getItem() : ((EntityItem)entity).getItem().isItemEqual(EntityAIApproachItem.this.targetItem));
 		}
 	};
 
@@ -55,7 +55,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		List<EntityItem> list = this.entity.worldObj.getEntitiesWithinAABB(EntityItem.class, this.entity.getEntityBoundingBox().expand(this.targetDistance, 3, this.targetDistance), this.entitySelector);
+		List<EntityItem> list = this.entity.world.getEntitiesWithinAABB(EntityItem.class, this.entity.getEntityBoundingBox().expand(this.targetDistance, 3, this.targetDistance), this.entitySelector);
 		if (list == null || list.isEmpty()) {
 			return false;
 		}
@@ -71,7 +71,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		boolean cont = (this.entityPathEntity != null && this.targetEntity != null && this.targetEntity.isEntityAlive()) || !this.entityPathNavigate.noPath();
 		return cont;
 	}
@@ -90,7 +90,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		if(this.targetEntity.getDistance(this.targetPos.xCoord, this.targetPos.yCoord, this.targetPos.zCoord) > 0.5) {
+		if(this.targetEntity.getDistance(this.targetPos.x, this.targetPos.y, this.targetPos.z) > 0.5) {
 			this.entityPathEntity = this.entityPathNavigate.getPathToXYZ(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);
 			this.entityPathNavigate.setPath(this.entityPathEntity, this.farSpeed);
 			this.targetPos = new Vec3d(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);;

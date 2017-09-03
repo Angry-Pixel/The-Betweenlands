@@ -27,7 +27,7 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 	private static final ResourceLocation GECKO_TEXTURE_TAN = new ResourceLocation("thebetweenlands:textures/entity/gecko_tan.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntityGeckoCage cage, double x, double y, double z, float partialTickTime, int destroyProgress) {
+	public void render(TileEntityGeckoCage cage, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = cage != null ? cage.getBlockMetadata() : 0;
 
 		GL11.glPushMatrix();
@@ -76,22 +76,22 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 			IAspectType aspect = cage.getAspectType();
 			if(aspect == AspectRegistry.FERGALAZ) {
 				bindTexture(GECKO_TEXTURE_TAN);
-				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTickTime, swing, speed);
+				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTicks, swing, speed);
 			} else if(aspect == AspectRegistry.FIRNALAZ) {
 				bindTexture(GECKO_TEXTURE_RED);
-				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTickTime, swing, speed);
+				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTicks, swing, speed);
 			} else if(aspect == AspectRegistry.GEOLIIRGAZ) {
 				bindTexture(GECKO_TEXTURE_PALE);
-				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTickTime, swing, speed);
+				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTicks, swing, speed);
 			} else if(aspect == AspectRegistry.YIHINREN) {
 				bindTexture(GECKO_TEXTURE_GREEN);
-				MODEL_GECKO_GREEN.render(cage.getTicks(), partialTickTime, swing, speed);
+				MODEL_GECKO_GREEN.render(cage.getTicks(), partialTicks, swing, speed);
 			} else if(aspect == AspectRegistry.BYARIIS) {
 				bindTexture(GECKO_TEXTURE_CORRUPTED);
-				MODEL_GECKO_CORRUPTED.render(cage.getTicks(), partialTickTime);
+				MODEL_GECKO_CORRUPTED.render(cage.getTicks(), partialTicks);
 			} else {
 				bindTexture(GECKO_TEXTURE_NORMAL);
-				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTickTime, swing, speed);
+				MODEL_GECKO_NORMAL.render(cage.getTicks(), partialTicks, swing, speed);
 			}
 		}
 

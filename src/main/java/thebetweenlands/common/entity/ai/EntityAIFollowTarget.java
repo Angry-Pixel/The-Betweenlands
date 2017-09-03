@@ -28,7 +28,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 
 	public EntityAIFollowTarget(EntityLiving taskOwner, Supplier<EntityLivingBase> target, double speed, float minDist, float maxDist) {
 		this.taskOwner = taskOwner;
-		this.theWorld = taskOwner.worldObj;
+		this.theWorld = taskOwner.world;
 		this.target = target;
 		this.speed = speed;
 		this.navigator = taskOwner.getNavigator();
@@ -56,7 +56,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		EntityLivingBase target = this.target.get();
 		return target != null && !this.navigator.noPath() && this.taskOwner.getDistanceSqToEntity(target) > (double)(this.maxDist * this.maxDist);
 	}
@@ -93,13 +93,13 @@ public class EntityAIFollowTarget extends EntityAIBase {
 				if (!this.navigator.tryMoveToEntityLiving(target, this.speed)) {
 					if (!this.taskOwner.getLeashed()) {
 						if (this.taskOwner.getDistanceSqToEntity(target) >= 144.0D) {
-							int i = MathHelper.floor_double(target.posX) - 2;
-							int j = MathHelper.floor_double(target.posZ) - 2;
-							int k = MathHelper.floor_double(target.getEntityBoundingBox().minY);
+							int i = MathHelper.floor(target.posX) - 2;
+							int j = MathHelper.floor(target.posZ) - 2;
+							int k = MathHelper.floor(target.getEntityBoundingBox().minY);
 
 							for (int l = 0; l <= 4; ++l) {
 								for (int i1 = 0; i1 <= 4; ++i1) {
-									if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.theWorld.getBlockState(new BlockPos(i + l, k - 1, j + i1)).isFullyOpaque() && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
+									if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.theWorld.getBlockState(new BlockPos(i + l, k - 1, j + i1)).isBlockNormalCube() && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
 										this.taskOwner.setLocationAndAngles((double)((float)(i + l) + 0.5F), (double)k, (double)((float)(j + i1) + 0.5F), this.taskOwner.rotationYaw, this.taskOwner.rotationPitch);
 										this.navigator.clearPathEntity();
 										return;

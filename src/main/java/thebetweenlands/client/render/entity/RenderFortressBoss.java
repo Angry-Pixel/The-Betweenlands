@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.entity;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -8,7 +9,6 @@ import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -53,7 +53,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 				}
 				if(lightIntensity > 0.0F) {
 					ShaderHelper.INSTANCE.require();
-					shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp_float(lightIntensity, 0.0F, 4.0F)));
+					shader.addLight(new LightSource(boss.posX, boss.posY, boss.posZ, 16.0F, 3.4F / 4.0F * MathHelper.clamp(lightIntensity, 0.0F, 4.0F), 0.0F / 4.0F * MathHelper.clamp(lightIntensity, 0.0F, 4.0F), 3.6F / 4.0F * MathHelper.clamp(lightIntensity, 0.0F, 4.0F)));
 				}
 			} else {
 				ShaderHelper.INSTANCE.require();
@@ -110,7 +110,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 		GlStateManager.enableBlend();
 
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer buffer = tessellator.getBuffer();
+		BufferBuilder buffer = tessellator.getBuffer();
 
 		LightingUtil.INSTANCE.setLighting(255);
 
@@ -236,9 +236,9 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 				Vec3d v1Normalized = new Vec3d(v1[0], v1[1], v1[2]).normalize();
 				Vec3d v2Normalized = new Vec3d(v2[0], v2[1], v2[2]).normalize();
 				Vec3d v3Normalized = new Vec3d(v3[0], v3[1], v3[2]).normalize();
-				buffer.pos(v1[0]+v1Normalized.xCoord*vertexExplode, v1[1]+v1Normalized.yCoord*vertexExplode, v1[2]+v1Normalized.zCoord*vertexExplode).color(0.05F, 0.05F, 0.05F, 0.45F).endVertex();
-				buffer.pos(v2[0]+v2Normalized.xCoord*vertexExplode, v2[1]+v2Normalized.yCoord*vertexExplode, v2[2]+v2Normalized.zCoord*vertexExplode).color(0.05F, 0.05F, 0.05F, 0.45F).endVertex();
-				buffer.pos(v3[0]+v3Normalized.xCoord*vertexExplode, v3[1]+v3Normalized.yCoord*vertexExplode, v3[2]+v3Normalized.zCoord*vertexExplode).color(0.05F, 0.05F, 0.05F, 0.45F).endVertex();
+				buffer.pos(v1[0]+v1Normalized.x*vertexExplode, v1[1]+v1Normalized.y*vertexExplode, v1[2]+v1Normalized.z*vertexExplode).color(0.05F, 0.05F, 0.05F, 0.45F).endVertex();
+				buffer.pos(v2[0]+v2Normalized.x*vertexExplode, v2[1]+v2Normalized.y*vertexExplode, v2[2]+v2Normalized.z*vertexExplode).color(0.05F, 0.05F, 0.05F, 0.45F).endVertex();
+				buffer.pos(v3[0]+v3Normalized.x*vertexExplode, v3[1]+v3Normalized.y*vertexExplode, v3[2]+v3Normalized.z*vertexExplode).color(0.05F, 0.05F, 0.05F, 0.45F).endVertex();
 			}
 			tessellator.draw();
 		}
@@ -266,7 +266,7 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 				Vec3d vec3 = new Vec3d(v3[0]+centerX/len*explode, v3[1]+centerY/len*explode, v3[2]+centerZ/len*explode);
 				Vec3d normal = vec2.subtract(vec1).crossProduct(vec3.subtract(vec1));
 				buffer.pos(centerX+centerX/len*explode, centerY+centerY/len*explode, centerZ+centerZ/len*explode).color(0.8F, 0.0F, 1F, 0.5F).endVertex();
-				buffer.pos(normal.xCoord+centerX+centerX/len*explode, normal.yCoord+centerY+centerY/len*explode, normal.zCoord+centerZ+centerZ/len*explode).color(0.8F, 0.0F, 1F, 0.5F).endVertex();
+				buffer.pos(normal.x+centerX+centerX/len*explode, normal.y+centerY+centerY/len*explode, normal.z+centerZ+centerZ/len*explode).color(0.8F, 0.0F, 1F, 0.5F).endVertex();
 			}
 			tessellator.draw();
 		}
@@ -299,8 +299,8 @@ public class RenderFortressBoss extends Render<EntityFortressBoss> {
 		if(this.getRenderManager().isDebugBoundingBox()) {
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.disableCull();
-			Vec3d pos = Minecraft.getMinecraft().thePlayer.getPositionEyes(partialTicks);
-			Vec3d ray = Minecraft.getMinecraft().thePlayer.getLook(partialTicks);
+			Vec3d pos = Minecraft.getMinecraft().player.getPositionEyes(partialTicks);
+			Vec3d ray = Minecraft.getMinecraft().player.getLook(partialTicks);
 			ray = ray.scale(64.0D);
 			int hitShield = boss.rayTraceShield(pos, ray, false);
 			if(hitShield >= 0) {

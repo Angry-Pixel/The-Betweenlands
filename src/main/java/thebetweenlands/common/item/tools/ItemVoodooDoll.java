@@ -27,15 +27,16 @@ public class ItemVoodooDoll extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(player.posX, player.posY, player.posZ, player.posX, player.posY, player.posZ).expand(5, 5, 5));
 		living.remove(player);
 		boolean attacked = false;
 		for (EntityLivingBase entity : living) {
 			if (entity.isEntityAlive() && !(entity instanceof IBLBoss) && entity instanceof EntityPlayer == false) {
 				if (!world.isRemote) {
-					attacked |= entity.attackEntityFrom(DamageSource.magic, 20);
-				} else if (!entity.isEntityInvulnerable(DamageSource.magic)) {
+					attacked |= entity.attackEntityFrom(DamageSource.MAGIC, 20);
+				} else if (!entity.isEntityInvulnerable(DamageSource.MAGIC)) {
 					attacked = true;
 					for (int i = 0; i < 20; i++)
 						BLParticles.SWAMP_SMOKE.spawn(world, entity.posX, entity.posY + entity.height / 2.0D, entity.posZ, ParticleFactory.ParticleArgs.get().withMotion((world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F, (world.rand.nextFloat() - 0.5F) * 0.5F).withColor(1, 1, 1, 1));

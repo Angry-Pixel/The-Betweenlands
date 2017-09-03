@@ -3,16 +3,18 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class RecipesPlantTonic implements IRecipe {
+public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
 		int sap = 0;
@@ -64,9 +66,10 @@ public class RecipesPlantTonic implements IRecipe {
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
+	public boolean canFit(int width, int height) {
+		return true; //TODO what is this
 	}
+
 
 	@Override
 	public ItemStack getRecipeOutput() {
@@ -74,15 +77,15 @@ public class RecipesPlantTonic implements IRecipe {
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] remaining = new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
-		for (int i = 0; i < remaining.length; ++i) {
+		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(stack != null && (stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED)) {
-				remaining[i] = null;
+				remaining.set(i, null);
 			} else {
-				remaining[i] = ForgeHooks.getContainerItem(stack);
+				remaining.set(i, ForgeHooks.getContainerItem(stack));
 			}
 		}
 

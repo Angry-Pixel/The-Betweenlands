@@ -11,6 +11,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.BlockStateContainerHelper;
@@ -58,10 +59,9 @@ public class BlockDentrothystPane extends BlockPaneBetweenlands implements Block
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubBlocks(Item itemIn, CreativeTabs tab, List<ItemStack> list) {
-		list.add(new ItemStack(this, 1, EnumDentrothyst.GREEN.getMeta()));
-		list.add(new ItemStack(this, 1, EnumDentrothyst.ORANGE.getMeta()));
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items) {
+		items.add(new ItemStack(this, 1, EnumDentrothyst.GREEN.getMeta()));
+		items.add(new ItemStack(this, 1, EnumDentrothyst.ORANGE.getMeta()));
 	}
 
 	@Override

@@ -52,11 +52,11 @@ public class MusicHandler {
 				//Wait for sound track to finish
 				if(!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
 					this.currentSound = null;
-					this.timeUntilMusic = Math.min(MathHelper.getRandomIntegerInRange(this.RNG, MIN_WAIT, MAX_WAIT), this.timeUntilMusic);
+					this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, MIN_WAIT, MAX_WAIT), this.timeUntilMusic);
 				}
 			} else if(this.timeUntilMusic-- <= 0) {
 				//Start new sound track
-				this.timeUntilMusic = MathHelper.getRandomIntegerInRange(this.RNG, MIN_WAIT, MAX_WAIT);
+				this.timeUntilMusic = MathHelper.getInt(this.RNG, MIN_WAIT, MAX_WAIT);
 				this.playRandomSoundTrack();
 			}
 		}
@@ -144,7 +144,7 @@ public class MusicHandler {
 	}
 
 	private EntityPlayer getPlayer() {
-		return this.mc.thePlayer;
+		return this.mc.player;
 	}
 
 	public static class SoundWrapper implements ISound {

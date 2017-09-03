@@ -31,7 +31,7 @@ public class TextWidget extends ManualWidgetBase {
         super(xStart, yStart);
         width = 130 - xStart;
         height = 144;
-        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRenderer);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
@@ -44,7 +44,7 @@ public class TextWidget extends ManualWidgetBase {
         super(xStart, yStart);
         width = 130 - xStart;
         height = 144;
-        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRenderer);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
@@ -57,7 +57,7 @@ public class TextWidget extends ManualWidgetBase {
         super(xStart, yStart);
         this.width = width;
         this.height = height;
-        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRenderer);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
@@ -71,7 +71,7 @@ public class TextWidget extends ManualWidgetBase {
         super(xStart, yStart);
         width = 130 - xStart;
         height = 144;
-        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, I18n.format(unlocalizedText), Minecraft.getMinecraft().fontRenderer);
         this.text = I18n.format(unlocalizedText);
         if (!I18n.hasKey(unlocalizedText) || text.equals("")) {
         	TranslationHelper.addUnlocalizedString(unlocalizedText);
@@ -86,7 +86,7 @@ public class TextWidget extends ManualWidgetBase {
         this.text = isLocalized ? text : I18n.format(text);
         width = 130 - xStart;
         height = 144;
-        this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRenderer);
         if (!isLocalized && (!I18n.hasKey(text) || text.equals(""))) {
         	TranslationHelper.addUnlocalizedString(text);
         }
@@ -97,7 +97,7 @@ public class TextWidget extends ManualWidgetBase {
     @SideOnly(Side.CLIENT)
     public void setPageToRight() {
         super.setPageToRight();
-        this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRenderer);
         this.init();
     }
 
@@ -138,7 +138,7 @@ public class TextWidget extends ManualWidgetBase {
     @SideOnly(Side.CLIENT)
     public void resize() {
         super.resize();
-        this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRendererObj);
+        this.textContainer = new TextContainer(width, height, text, Minecraft.getMinecraft().fontRenderer);
         this.init();
     }
 

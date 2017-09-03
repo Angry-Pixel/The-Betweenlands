@@ -42,6 +42,11 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 		return furnaceItemStacks.length;
 	}
 
+	@Override
+	public boolean isEmpty() {
+		return furnaceItemStacks.length <= 0;
+	}
+
 	public ItemStack getStackInSlot(int slot) {
 		return furnaceItemStacks[slot];
 	}
@@ -51,14 +56,14 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 		if (furnaceItemStacks[slot] != null) {
 			ItemStack itemstack;
 
-			if (furnaceItemStacks[slot].stackSize <= amount) {
+			if (furnaceItemStacks[slot].getCount() <= amount) {
 				itemstack = furnaceItemStacks[slot];
 				furnaceItemStacks[slot] = null;
 				return itemstack;
 			}
 			else {
 				itemstack = furnaceItemStacks[slot].splitStack(amount);
-				if (furnaceItemStacks[slot].stackSize == 0)
+				if (furnaceItemStacks[slot].getCount() == 0)
 					furnaceItemStacks[slot] = null;
 				return itemstack;
 			}
@@ -82,8 +87,8 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack itemstack) {
 		furnaceItemStacks[slot] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
-			itemstack.stackSize = getInventoryStackLimit();
+		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit())
+			itemstack.setCount(getInventoryStackLimit());
 	}
 
 	@Override
@@ -110,7 +115,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			byte slot = nbttagcompound1.getByte("Slot");
 			if (slot >= 0 && slot < furnaceItemStacks.length)
-				furnaceItemStacks[slot] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				furnaceItemStacks[slot] = new ItemStack(nbttagcompound1);
 		}
 		furnaceBurnTime = nbt.getShort("BurnTime");
 		furnaceCookTime = nbt.getShort("CookTime");
@@ -144,6 +149,11 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 		return 64;
 	}
 
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return this.world.getTileEntity(this.pos) == this && player.getDistanceSq((double) this.pos.getX() + 0.5D, (double) this.pos.getY() + 0.5D, (double) this.pos.getZ() + 0.5D) <= 64.0D;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public int getCookProgressScaled(int count) {
 		return furnaceCookTime * count / 200;
@@ -172,7 +182,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 			--furnaceBurnTime;
 		}
 
-		if (!worldObj.isRemote)
+		if (!world.isRemote)
 		{
 			if (furnaceBurnTime != 0 || furnaceItemStacks[1] != null && furnaceItemStacks[0] != null)
 			{
@@ -186,9 +196,9 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 
 						if (furnaceItemStacks[1] != null)
 						{
-							--furnaceItemStacks[1].stackSize;
+							furnaceItemStacks[1].shrink(1);
 
-							if (furnaceItemStacks[1].stackSize == 0)
+							if (furnaceItemStacks[1].getCount() == 0)
 							{
 								furnaceItemStacks[1] = furnaceItemStacks[1].getItem().getContainerItem(furnaceItemStacks[1]);
 							}
@@ -216,7 +226,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 			if (isBurning != furnaceBurnTime > 0)
 			{
 				isDirty = true;
-				BlockBLFurnace.setState(furnaceBurnTime > 0, worldObj, pos);
+				BlockBLFurnace.setState(furnaceBurnTime > 0, world, pos);
 			}
 		}
 
@@ -234,7 +244,7 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 			if (itemstack == null) return false;
 			if (furnaceItemStacks[2] == null) return true;
 			if (!furnaceItemStacks[2].isItemEqual(itemstack)) return false;
-			int result = furnaceItemStacks[2].stackSize + itemstack.stackSize;
+			int result = furnaceItemStacks[2].getCount() + itemstack.getCount();
 			return result <= getInventoryStackLimit() && result <= furnaceItemStacks[2].getMaxStackSize(); //Forge BugFix: Make it respect stack sizes properly.
 		}
 	}
@@ -247,22 +257,22 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 				furnaceItemStacks[2] = itemstack.copy();
 
 			else if (furnaceItemStacks[2].getItem() == itemstack.getItem())
-				furnaceItemStacks[2].stackSize += itemstack.stackSize; // Forge BugFix: Results may have multiple items
+				furnaceItemStacks[2].grow(itemstack.getCount()); // Forge BugFix: Results may have multiple items
 
 			if(ItemRegistry.isIngotFromOre(furnaceItemStacks[0], furnaceItemStacks[2])) {
 				if(furnaceItemStacks[3] != null) {
-					boolean useFlux = this.worldObj.rand.nextInt(3) == 0;
-					if(useFlux && furnaceItemStacks[2].stackSize + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].stackSize + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
-						furnaceItemStacks[2].stackSize++;
+					boolean useFlux = this.world.rand.nextInt(3) == 0;
+					if(useFlux && furnaceItemStacks[2].getCount() + 1 <= getInventoryStackLimit() && furnaceItemStacks[2].getCount() + 1 <= furnaceItemStacks[2].getMaxStackSize()) {
+						furnaceItemStacks[2].grow(1);
 					}
-					--furnaceItemStacks[3].stackSize;
-					if (furnaceItemStacks[3].stackSize <= 0)
+					furnaceItemStacks[3].shrink(1);
+					if (furnaceItemStacks[3].getCount() <= 0)
 						furnaceItemStacks[3] = null;
 				}
 			}
 
-			--furnaceItemStacks[0].stackSize;
-			if (furnaceItemStacks[0].stackSize <= 0)
+			furnaceItemStacks[0].shrink(1);
+			if (furnaceItemStacks[0].getCount() <= 0)
 				furnaceItemStacks[0] = null;
 		}
 	}
@@ -316,10 +326,6 @@ public class TileEntityBLFurnace extends TileEntity implements ISidedInventory, 
 		return itemstack.getItem() == ItemRegistry.ITEMS_MISC && itemstack.getItemDamage() == EnumItemMisc.LIMESTONE_FLUX.getID();
 	}
 
-	@Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
-        return this.worldObj.getTileEntity(this.pos) != this ? false : player.getDistanceSq((double)this.pos.getX() + 0.5D, (double)this.pos.getY() + 0.5D, (double)this.pos.getZ() + 0.5D) <= 64.0D;
-    }
 
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {

@@ -3,7 +3,9 @@ package thebetweenlands.common.tile;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -45,7 +47,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 				this.requiredLifeCount = recipe.getRequiredLife(this.itemToAnimate);
 			}
 		}
-		if(!worldObj.isRemote) {
+		if(!world.isRemote) {
 			if (isCrystalInslot())
 				lifeCrystalLife = 128 - getCrystalPower();
 			if (!isSlotInUse(0) || !isSlotInUse(1) || !isSlotInUse(2)) {
@@ -53,7 +55,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 				fuelConsumed = 0;
 			}
 			if (isSlotInUse(0) && isCrystalInslot() && isSulfurInslot() && fuelConsumed < requiredFuelCount && isValidFocalItem()) {
-				this.itemToAnimate = this.inventory[0];
+				this.itemToAnimate = this.inventory.get(1);
 				if (lifeCrystalLife >= this.requiredLifeCount) {
 					fuelBurnProgress++;
 					if (fuelBurnProgress >= 42) {
@@ -72,22 +74,22 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 			}
 
 			if (fuelConsumed >= requiredFuelCount && isSlotInUse(0) && isSlotInUse(1) && !this.itemAnimated) {
-				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(inventory[0]);
-				ItemStack result = recipe.onAnimated(this.worldObj, getPos(), inventory[0]);
-				if(result == null) result = recipe.getResult(inventory[0]);
+				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(inventory.get(1));
+				ItemStack result = recipe.onAnimated(this.world, getPos(), inventory.get(1));
+				if(result == null) result = recipe.getResult(inventory.get(1));
 				if(result != null) {
 					setInventorySlotContents(0, result.copy());
-					worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+					world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
 				}
-				inventory[1].setItemDamage(inventory[1].getItemDamage() + recipe.getRequiredLife(inventory[0]));
+				inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + recipe.getRequiredLife(inventory.get(1)));
 				this.itemAnimated = true;
 			}
-			if (prevStackSize != (isSlotInUse(0) ? inventory[0].stackSize : 0))
-				worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
-			if (prevItem != (isSlotInUse(0) ? inventory[0] : null))
-				worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
-			prevItem = isSlotInUse(0) ? inventory[0] : null;
-			prevStackSize = isSlotInUse(0) ? inventory[0].stackSize : 0;
+			if (prevStackSize != (isSlotInUse(0) ? inventory.get(1).getCount() : 0))
+				world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+			if (prevItem != (isSlotInUse(0) ? inventory.get(1) : null))
+				world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+			prevItem = isSlotInUse(0) ? inventory.get(1) : null;
+			prevStackSize = isSlotInUse(0) ? inventory.get(1).getCount() : 0;
 			updateContainingBlockInfo();
 		} else {
 			if(this.isRunning() && !this.soundPlaying) {
@@ -105,37 +107,47 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return inventory.size() <=0;
+	}
+
+	@Override
 	public int getInventoryStackLimit() {
 		return 64;
 	}
 
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return false;
+	}
+
 	public boolean isCrystalInslot() {
-		return isSlotInUse(1) && inventory[1].getItem() == ItemRegistry.LIFE_CRYSTAL && inventory[1].getItemDamage() < inventory[1].getMaxDamage();
+		return isSlotInUse(1) && inventory.get(1).getItem() == ItemRegistry.LIFE_CRYSTAL && inventory.get(1).getItemDamage() < inventory.get(1).getMaxDamage();
 	}
 
 	public int getCrystalPower() {
 		if(isCrystalInslot())
-			return inventory[1].getItemDamage();
+			return inventory.get(1).getItemDamage();
 		return 0;
 	}
 
 	public boolean isSulfurInslot() {
-		return isSlotInUse(2) && inventory[2].getItem() == ItemRegistry.ITEMS_MISC && inventory[2].getItemDamage() == ItemMisc.EnumItemMisc.SULFUR.getID();
+		return isSlotInUse(2) && inventory.get(2).getItem() == ItemRegistry.ITEMS_MISC && inventory.get(2).getItemDamage() == ItemMisc.EnumItemMisc.SULFUR.getID();
 	}
 
 	public boolean isSlotInUse(int slot) {
-		return inventory[slot] != null;
+		return !inventory.get(slot).isEmpty();
 	}
 
 	public boolean isValidFocalItem() {
-		return inventory[0] != null && AnimatorRecipe.getRecipe(inventory[0]) != null;
+		return !inventory.get(1).isEmpty() && AnimatorRecipe.getRecipe(inventory.get(1)) != null;
 	}
 
 	public void sendGUIData(ContainerAnimator animator, IContainerListener listener) {
-		listener.sendProgressBarUpdate(animator, 0, fuelBurnProgress);
-		listener.sendProgressBarUpdate(animator, 1, lifeCrystalLife);
-		listener.sendProgressBarUpdate(animator, 2, itemAnimated ? 1 : 0);
-		listener.sendProgressBarUpdate(animator, 3, fuelConsumed);
+		listener.sendWindowProperty(animator, 0, fuelBurnProgress);
+		listener.sendWindowProperty(animator, 1, lifeCrystalLife);
+		listener.sendWindowProperty(animator, 2, itemAnimated ? 1 : 0);
+		listener.sendWindowProperty(animator, 3, fuelConsumed);
 	}
 
 	public void getGUIData(int id, int value) {
@@ -190,7 +202,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 		itemAnimated = nbt.getBoolean("lifeDepleted");
 		NBTTagCompound toAnimateStackCompound = nbt.getCompoundTag("toAnimate");
 		if(toAnimateStackCompound.hasKey("id", Constants.NBT.TAG_STRING))
-			this.itemToAnimate = ItemStack.loadItemStackFromNBT(toAnimateStackCompound);
+			this.itemToAnimate = new ItemStack(toAnimateStackCompound);
 		else
 			this.itemToAnimate = null;
 	}

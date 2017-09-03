@@ -42,7 +42,7 @@ public class ModelStalactite implements IModel {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		return new ModelBakedStalactite(format, bakedTextureGetter.apply(TEXTURE_TOP), bakedTextureGetter.apply(TEXTURE_MIDDLE), bakedTextureGetter.apply(TEXTURE_BOTTOM));
 	}
 

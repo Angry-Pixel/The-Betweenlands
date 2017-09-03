@@ -74,12 +74,12 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 			return false;
 		}
 		if (avoidingEntityClass == EntityPlayer.class) {
-			closestLivingEntity = gecko.worldObj.getNearestPlayerNotCreative(gecko, distance);
+			closestLivingEntity = gecko.world.getNearestPlayerNotCreative(gecko, distance);
 			if (closestLivingEntity == null) {
 				return false;
 			}
 		} else {
-			List<Entity> list = gecko.worldObj.getEntitiesWithinAABB(avoidingEntityClass, gecko.getEntityBoundingBox().expand(distance, 3.0D, distance), viableSelector);
+			List<Entity> list = gecko.world.getEntitiesWithinAABB(avoidingEntityClass, gecko.getEntityBoundingBox().expand(distance, 3.0D, distance), viableSelector);
 			if (list.isEmpty()) {
 				return false;
 			}
@@ -107,7 +107,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 			}
 			if (path != null) {
 				PathPoint finalPathPoint = path.getFinalPathPoint();
-				return finalPathPoint.xCoord == target.getX() && finalPathPoint.yCoord == target.getY() && finalPathPoint.zCoord == target.getZ() || bushBound && doesPathDestinationNeighborBush(target, path);
+				return finalPathPoint.x == target.getX() && finalPathPoint.y == target.getY() && finalPathPoint.z == target.getZ() || bushBound && doesPathDestinationNeighborBush(target, path);
 			}
 			return false;
 		}
@@ -127,7 +127,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 		for (EnumFacing facing : EnumFacing.values()) {
 			BlockPos nearTarget = new BlockPos(target.offset(facing));
 			PathPoint finalPathPoint = path.getFinalPathPoint();
-			if (finalPathPoint.xCoord == nearTarget.getX() && finalPathPoint.yCoord == nearTarget.getY() && finalPathPoint.zCoord == nearTarget.getZ()) {
+			if (finalPathPoint.x == nearTarget.getX() && finalPathPoint.y == nearTarget.getY() && finalPathPoint.z == nearTarget.getZ()) {
 				return true;
 			}
 		}
@@ -144,8 +144,8 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 			for (int dy = -radius / 2; dy <= radius; dy++) {
 				for (int dz = -radius; dz <= radius; dz++) {
 					pos.setPos(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
-					IBlockState state = gecko.worldObj.getBlockState(pos);
-					if (state.getBlock() == BlockRegistry.WEEDWOOD_BUSH && gecko.worldObj.isBlockNormalCube(pos.down(), false)) {
+					IBlockState state = gecko.world.getBlockState(pos);
+					if (state.getBlock() == BlockRegistry.WEEDWOOD_BUSH && gecko.world.isBlockNormalCube(pos.down(), false)) {
 						bushes.add(pos.subtract(center));
 					}
 				}
@@ -167,7 +167,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
+	public boolean shouldContinueExecuting() {
 		return !navigator.noPath();
 	}
 

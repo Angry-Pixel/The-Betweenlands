@@ -32,6 +32,11 @@ public class InventoryItem implements IInventory {
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return inventory.length <= 0;
+	}
+
+	@Override
 	public ItemStack getStackInSlot(int slot) {
 		return this.inventory[slot];
 	}
@@ -40,7 +45,7 @@ public class InventoryItem implements IInventory {
 	public ItemStack decrStackSize(int slot, int amount) {
 		ItemStack stack = getStackInSlot(slot);
 		if(stack != null) {
-			if(stack.stackSize > amount) {
+			if(stack.getCount() > amount) {
 				stack = stack.splitStack(amount);
 				this.markDirty();
 			} else {
@@ -53,8 +58,8 @@ public class InventoryItem implements IInventory {
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		inventory[slot] = stack;
-		if (stack != null && stack.stackSize > this.getInventoryStackLimit()) {
-			stack.stackSize = this.getInventoryStackLimit();
+		if (stack != null && stack.getCount() > this.getInventoryStackLimit()) {
+			stack.setCount(this.getInventoryStackLimit());
 		}
 		markDirty();
 	}
@@ -67,7 +72,7 @@ public class InventoryItem implements IInventory {
 	@Override
 	public void markDirty() {
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
-			if (this.getStackInSlot(i) != null && this.getStackInSlot(i).stackSize == 0) {
+			if (this.getStackInSlot(i) != null && this.getStackInSlot(i).getCount() == 0) {
 				this.inventory[i] = null;		
 			}
 		}
@@ -75,7 +80,7 @@ public class InventoryItem implements IInventory {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 		return true;
 	}
 
@@ -90,7 +95,7 @@ public class InventoryItem implements IInventory {
 			NBTTagCompound item = items.getCompoundTagAt(i);
 			int slot = item.getInteger("Slot");
 			if (slot >= 0 && slot < this.getSizeInventory()) {
-				this.inventory[slot] = ItemStack.loadItemStackFromNBT(item);
+				this.inventory[slot] = new ItemStack(item);
 			}
 		}
 	}

@@ -103,7 +103,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
 
-				for(int yo = 0; yo < MathHelper.ceiling_double_int(EntityGasCloud.this.aboveLayer); yo++) {
+				for(int yo = 0; yo < MathHelper.ceil(EntityGasCloud.this.aboveLayer); yo++) {
 					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
 
 					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
@@ -178,7 +178,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.worldObj.getDifficulty() != EnumDifficulty.PEACEFUL;
+		return super.getCanSpawnHere() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	@Override
@@ -190,20 +190,20 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (!this.worldObj.isRemote && this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL) {
+		if (!this.world.isRemote && this.world.getDifficulty() == EnumDifficulty.PEACEFUL) {
 			this.setDead();
 		}
 
-		if (this.worldObj.isRemote) {
-			double x = this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
-			double y = this.posY + this.height / 2.0D + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
-			double z = this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
-			double mx = this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F;
-			double my = this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F;
-			double mz = this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 16.0F;
+		if (this.world.isRemote) {
+			double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+			double mx = this.motionX + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
+			double my = this.motionY + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
+			double mz = this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 16.0F;
 			int[] color = this.getGasColor();
 			ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-					.create(this.worldObj, x, y, z, ParticleFactory.ParticleArgs.get()
+					.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
 							.withMotion(mx, my, mz)
 							.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
 			this.gasParticles.add(particle);
@@ -225,8 +225,8 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			}
 		}
 
-		if (!this.worldObj.isRemote && this.isEntityAlive()) {
-			List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(0.5D, 0.5D, 0.5D));
+		if (!this.world.isRemote && this.isEntityAlive()) {
+			List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(0.5D, 0.5D, 0.5D));
 			for (EntityLivingBase target : targets) {
 				if (!(target instanceof EntityGasCloud) && !(target instanceof IEntityBL)) {
 					target.addPotionEffect(new PotionEffect(MobEffects.POISON, 60, 0));
@@ -244,7 +244,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float damage) {
-		return source != DamageSource.inWall && super.attackEntityFrom(source, damage);
+		return source != DamageSource.IN_WALL && super.attackEntityFrom(source, damage);
 	}
 
 	@Override
@@ -253,7 +253,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.GAS_CLOUD_HURT;
 	}
 
@@ -266,14 +266,14 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	protected void onDeathUpdate() {
 		++this.deathTime;
 
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			for(int i = 0; i < 6; i++) {
-				double x = this.posX + this.motionX + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
-				double y = this.posY + this.height / 2.0D + this.motionY + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
-				double z = this.posZ + this.motionZ + (this.worldObj.rand.nextFloat() - 0.5F) / 2.0F;
+				double x = this.posX + this.motionX + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+				double y = this.posY + this.height / 2.0D + this.motionY + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
+				double z = this.posZ + this.motionZ + (this.world.rand.nextFloat() - 0.5F) / 2.0F;
 				int[] color = this.getGasColor();
 				ParticleGasCloud particle = (ParticleGasCloud) BLParticles.GAS_CLOUD
-						.create(this.worldObj, x, y, z, ParticleFactory.ParticleArgs.get()
+						.create(this.world, x, y, z, ParticleFactory.ParticleArgs.get()
 								.withMotion((this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F, (this.rand.nextFloat() - 0.5F) * this.rand.nextFloat() * 0.25F)
 								.withColor(color[0] / 255.0F, color[1] / 255.0F, color[2] / 255.0F, color[3] / 255.0F));
 				this.gasParticles.add(particle);
@@ -281,13 +281,13 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 		}
 
 		if (this.deathTime >= 80) {
-			if (!this.worldObj.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.worldObj.getGameRules().getBoolean("doMobLoot"))) {
+			if (!this.world.isRemote && (this.isPlayer() || this.recentlyHit > 0 && this.canDropLoot() && this.world.getGameRules().getBoolean("doMobLoot"))) {
 				int i = this.getExperiencePoints(this.attackingPlayer);
 				i = net.minecraftforge.event.ForgeEventFactory.getExperienceDrop(this, this.attackingPlayer, i);
 				while (i > 0) {
 					int j = EntityXPOrb.getXPSplit(i);
 					i -= j;
-					this.worldObj.spawnEntityInWorld(new EntityXPOrb(this.worldObj, this.posX, this.posY, this.posZ, j));
+					this.world.spawnEntity(new EntityXPOrb(this.world, this.posX, this.posY, this.posZ, j));
 				}
 			}
 

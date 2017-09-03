@@ -54,22 +54,22 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     private final ItemStack input;
 
     public PestleAndMortarRecipe(ItemStack output, ItemStack input) {
-        this.output = ItemStack.copyItemStack(output);
-        this.input = ItemStack.copyItemStack(input);
+        this.output = output.copy();
+        this.input = input.copy();
 
         if (input instanceof ItemStack)
-            input = ItemStack.copyItemStack((ItemStack) input);
+            input = input.copy();
 
         else
             throw new IllegalArgumentException("Input must be an ItemStack");
     }
 
     public ItemStack getInputs() {
-        return ItemStack.copyItemStack(input);
+        return input.copy();
     }
 
     public ItemStack getOutput() {
-        return ItemStack.copyItemStack(output);
+        return output.copy();
     }
 
     public boolean matches(ItemStack stacks) {
@@ -100,7 +100,7 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
 
         if (input.getItem() == toCheck.getItem())
             if (input.getItemDamage() == OreDictionary.WILDCARD_VALUE || input.getItemDamage() == toCheck.getItemDamage())
-                if (!matchSize || input.stackSize == toCheck.stackSize) {
+                if (!matchSize || input.getCount() == toCheck.getCount()) {
                     if (input.hasTagCompound() && toCheck.hasTagCompound())
                         return input.getTagCompound().equals(toCheck.getTagCompound());
                     return input.hasTagCompound() == toCheck.hasTagCompound();

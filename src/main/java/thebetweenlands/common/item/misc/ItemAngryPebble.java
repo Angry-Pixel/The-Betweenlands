@@ -18,16 +18,17 @@ public class ItemAngryPebble extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick( World world, EntityPlayer player, EnumHand hand) {
+		ItemStack itemStackIn= player.getHeldItem(hand);
 		if (!player.capabilities.isCreativeMode) {
-			--itemStackIn.stackSize;
+			itemStackIn.shrink(1);
 		}
 
 		if (!world.isRemote) {
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
 			EntityAngryPebble pebble = new EntityAngryPebble(world, player);
 			pebble.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, -10, 1.2F, 3.5F);
-			world.spawnEntityInWorld(pebble);
+			world.spawnEntity(pebble);
 		}
 
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);

@@ -52,13 +52,13 @@ public class ContainerBLDualFurnace extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		listener.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
-		listener.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
-		listener.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
+		listener.sendWindowProperty(this, 0, tileFurnace.furnaceCookTime);
+		listener.sendWindowProperty(this, 1, tileFurnace.furnaceBurnTime);
+		listener.sendWindowProperty(this, 2, tileFurnace.currentItemBurnTime);
 
-		listener.sendProgressBarUpdate(this, 3, tileFurnace.furnaceCookTime2);
-		listener.sendProgressBarUpdate(this, 4, tileFurnace.furnaceBurnTime2);
-		listener.sendProgressBarUpdate(this, 5, tileFurnace.currentItemBurnTime2);
+		listener.sendWindowProperty(this, 3, tileFurnace.furnaceCookTime2);
+		listener.sendWindowProperty(this, 4, tileFurnace.furnaceBurnTime2);
+		listener.sendWindowProperty(this, 5, tileFurnace.currentItemBurnTime2);
 	}
 
 
@@ -69,22 +69,22 @@ public class ContainerBLDualFurnace extends Container {
         for (IContainerListener listener : listeners) {
 
 			if (lastCookTime != tileFurnace.furnaceCookTime)
-            	listener.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
+            	listener.sendWindowProperty(this, 0, tileFurnace.furnaceCookTime);
 
 			if (lastBurnTime != tileFurnace.furnaceBurnTime)
-            	listener.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
+            	listener.sendWindowProperty(this, 1, tileFurnace.furnaceBurnTime);
 
 			if (lastItemBurnTime != tileFurnace.currentItemBurnTime)
-            	listener.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
+            	listener.sendWindowProperty(this, 2, tileFurnace.currentItemBurnTime);
 
 			if (lastCookTime2 != tileFurnace.furnaceCookTime2)
-            	listener.sendProgressBarUpdate(this, 3, tileFurnace.furnaceCookTime2);
+            	listener.sendWindowProperty(this, 3, tileFurnace.furnaceCookTime2);
 
 			if (lastBurnTime2 != tileFurnace.furnaceBurnTime2)
-            	listener.sendProgressBarUpdate(this, 4, tileFurnace.furnaceBurnTime2);
+            	listener.sendWindowProperty(this, 4, tileFurnace.furnaceBurnTime2);
 
 			if (lastItemBurnTime2 != tileFurnace.currentItemBurnTime2)
-            	listener.sendProgressBarUpdate(this, 5, tileFurnace.currentItemBurnTime2);
+            	listener.sendWindowProperty(this, 5, tileFurnace.currentItemBurnTime2);
 		}
 
 		lastCookTime = tileFurnace.furnaceCookTime;
@@ -120,7 +120,7 @@ public class ContainerBLDualFurnace extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return tileFurnace.isUseableByPlayer(player);
+		return tileFurnace.isUsableByPlayer(player);
 	}
 
 	@Override
@@ -159,14 +159,14 @@ public class ContainerBLDualFurnace extends Container {
 			}
 			else if (!mergeItemStack(itemstack1, 8, 44, false))
 				return null;
-			if (itemstack1.stackSize == 0)
+			if (itemstack1.getCount() == 0)
 				slot.putStack((ItemStack)null);
 			else
 				slot.onSlotChanged();
-			if (itemstack1.stackSize == itemstack.stackSize)
+			if (itemstack1.getCount() == itemstack.getCount())
 				return null;
 
-			slot.onPickupFromSlot(player, itemstack1);
+			slot.onTake(player, itemstack1);
 		}
 		return itemstack;
 	}

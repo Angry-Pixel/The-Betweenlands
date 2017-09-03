@@ -52,12 +52,12 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
             if (entity instanceof EntityTameable && ((EntityTameable) entity).isTamed()) {
                 return false;
             }
-            closestLivingEntity = entity.worldObj.getClosestPlayerToEntity(entity, targetDistanceFromEntity);
+            closestLivingEntity = entity.world.getClosestPlayerToEntity(entity, targetDistanceFromEntity);
             if (closestLivingEntity == null) {
                 return false;
             }
         } else {
-            List list = entity.worldObj.getEntitiesWithinAABB(targetEntityClass, entity.getEntityBoundingBox().expand(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
+            List list = entity.world.getEntitiesWithinAABB(targetEntityClass, entity.getEntityBoundingBox().expand(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
             if (list.isEmpty()) {
                 return false;
             }
@@ -66,16 +66,16 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
         Vec3d pos = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, new Vec3d(closestLivingEntity.posX, closestLivingEntity.posY, closestLivingEntity.posZ));
         if (pos == null) {
             return false;
-        } else if (closestLivingEntity.getDistanceSq(pos.xCoord, pos.yCoord, pos.zCoord) < closestLivingEntity.getDistanceSqToEntity(entity)) {
+        } else if (closestLivingEntity.getDistanceSq(pos.x, pos.y, pos.z) < closestLivingEntity.getDistanceSqToEntity(entity)) {
             return false;
         } else {
-            entityPathEntity = entityPathNavigate.getPathToXYZ(pos.xCoord, pos.yCoord, pos.zCoord);
+            entityPathEntity = entityPathNavigate.getPathToXYZ(pos.x, pos.y, pos.z);
             return entityPathEntity != null && entityPathEntity.isSamePath(entityPathEntity);
         }
     }
 
     @Override
-    public boolean continueExecuting() {
+    public boolean shouldContinueExecuting() {
         return !entityPathNavigate.noPath();
     }
 

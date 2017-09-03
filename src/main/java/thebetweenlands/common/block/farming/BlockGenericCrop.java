@@ -112,7 +112,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 			ItemStack stack = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().copy() : null;
 			if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0) {
 				java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
-				ItemStack itemstack = this.createStackedBlock(state);
+				ItemStack itemstack = this.getItem(worldIn, pos, state);
 
 				if (itemstack != null) {
 					items.add(itemstack);
@@ -242,7 +242,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		state = super.getActualState(state, worldIn, pos);
-		return state.withProperty(DECAYED, this.isDecayed(worldIn, pos)).withProperty(this.stageProperty, MathHelper.floor_float(state.getValue(AGE) / 15.0f * Collections.max(this.stageProperty.getAllowedValues())));
+		return state.withProperty(DECAYED, this.isDecayed(worldIn, pos)).withProperty(this.stageProperty, MathHelper.floor(state.getValue(AGE) / 15.0f * Collections.max(this.stageProperty.getAllowedValues())));
 	}
 
 	@Override
@@ -294,7 +294,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		int age = state.getValue(AGE) + MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
+		int age = state.getValue(AGE) + MathHelper.getInt(worldIn.rand, 2, 5);
 		if(age > 15) {
 			age = 15;
 			int height;

@@ -2,6 +2,7 @@ package thebetweenlands.client.render.sprite;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.function.Function;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -49,7 +50,7 @@ public class TextureFromData extends TextureAtlasSprite {
 	}
 
 	@Override
-	public boolean load(IResourceManager manager, ResourceLocation location) {
+	public boolean load(IResourceManager manager, ResourceLocation location, Function<ResourceLocation, TextureAtlasSprite> textureGetter) {
 		try {
 			this.loadSpriteFrames(null, this.currentMipmapLevels + 1);
 		} catch (IOException ex) {
@@ -63,7 +64,7 @@ public class TextureFromData extends TextureAtlasSprite {
 		boolean generatedMipmaps = true;
 		if(mipmapLevels > this.currentMipmapLevels) {
 			this.currentMipmapLevels = mipmapLevels;
-			this.load(null, null);
+			this.load(null, null, null);
 		}
 		super.generateMipmaps(generatedMipmaps ? mipmapLevels : 0);
 	}

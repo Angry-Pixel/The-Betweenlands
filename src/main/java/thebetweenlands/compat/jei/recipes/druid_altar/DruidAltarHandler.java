@@ -10,10 +10,6 @@ public class DruidAltarHandler implements IRecipeHandler<DruidAltarRecipeJEI> {
         return DruidAltarRecipeJEI.class;
     }
 
-    @Override
-    public String getRecipeCategoryUid() {
-        return null;
-    }
 
     @Override
     public String getRecipeCategoryUid(DruidAltarRecipeJEI recipe) {

@@ -40,8 +40,6 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
 		.setDecorator(new BiomeDecoratorMarsh(this));
 		this.setFoliageColors(0x627017, 0x627017);
-
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 
 	@Override
@@ -67,8 +65,8 @@ public class BiomeMarsh extends BiomeBetweenlands {
 
 	@Override
 	public void updateFog() {
-		if(this.fogGenerator == null || this.fogGenerator.getSeed() != Minecraft.getMinecraft().theWorld.getSeed()) {
-			this.fogGenerator = new FogGenerator(Minecraft.getMinecraft().theWorld.getSeed());
+		if(this.fogGenerator == null || this.fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
+			this.fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
 		}
 		float[] range = this.fogGenerator.getFogRange(0.0F, 1.0F);
 		this.fogRangeInterpolateStart = range[0];
@@ -125,5 +123,10 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		}
 
 		return targetFogColor;
+	}
+
+	@Override
+	public void addTypes() {
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WET, Type.WATER);
 	}
 }

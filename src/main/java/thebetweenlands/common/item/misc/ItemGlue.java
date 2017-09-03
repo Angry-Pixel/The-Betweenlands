@@ -31,9 +31,10 @@ public class ItemGlue extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
-		if (player.canEat(true)) {
-			player.setActiveHand(hand);
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+		ItemStack itemStack = playerIn.getHeldItem(handIn);
+		if (playerIn.canEat(true)) {
+			playerIn.setActiveHand(handIn);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 		} else {
 			return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStack);
@@ -47,7 +48,7 @@ public class ItemGlue extends Item {
 
 	@Nullable
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
-		--stack.stackSize;
+		stack.shrink(1);
 
 		if (entityLiving instanceof EntityPlayer) {
 			EntityPlayer entityPlayer = (EntityPlayer)entityLiving;

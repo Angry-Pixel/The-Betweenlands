@@ -34,8 +34,8 @@ public class EntityAIFlyRandomly<T extends EntityLiving> extends EntityAIBase {
 	}
 
 	@Override
-	public boolean continueExecuting() {
-		return false;
+	public boolean shouldContinueExecuting() {
+		return true;
 	}
 
 	@Override

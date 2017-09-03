@@ -1,6 +1,7 @@
 package thebetweenlands.client.tab;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class TabPlants extends CreativeTabBetweenlands {
@@ -9,7 +10,7 @@ public class TabPlants extends CreativeTabBetweenlands {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return Item.getItemFromBlock(BlockRegistry.MIRE_CORAL);
+	public ItemStack getTabIconItem() {
+		return new ItemStack(Item.getItemFromBlock(BlockRegistry.MIRE_CORAL));
 	}
 }

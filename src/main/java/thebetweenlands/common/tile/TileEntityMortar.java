@@ -34,7 +34,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 
     @Override
     public void update() {
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             if (hasCrystal) {
                 crystalVelocity -= Math.signum(this.crystalVelocity) * 0.05F;
                 crystalRotation += this.crystalVelocity;
@@ -43,7 +43,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                 else if (this.crystalRotation <= 360.0F)
                     this.crystalRotation += 360.0F;
                 if (Math.abs(crystalVelocity) <= 1.0F && this.getWorld().rand.nextInt(15) == 0)
-                    crystalVelocity = this.worldObj.rand.nextFloat() * 18.0F - 9.0F;
+                    crystalVelocity = this.world.rand.nextFloat() * 18.0F - 9.0F;
                 if (countUp && itemBob <= 20) {
                     itemBob++;
                     if (itemBob == 20)
@@ -57,38 +57,38 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             }
             return;
         }
-        ItemStack output = PestleAndMortarRecipe.getResult(inventory[0]);
+        ItemStack output = PestleAndMortarRecipe.getResult(inventory.get(0));
         if (pestleInstalled() && !outputIsFull()) {
 
             if (isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
-                if (output != null && inventory[2] == null || output != null && inventory[2] != null && inventory[2].isItemEqual(output)) {
+                if (output != null && inventory.get(2).isEmpty() || output != null && inventory.get(2).isEmpty() && inventory.get(2).isItemEqual(output)) {
                     progress++;
                     if (progress == 1)
-                        worldObj.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
+                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
                     if (progress == 64 || progress == 84) {
-                        worldObj.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
-                        worldObj.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_GRASS_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
+                        world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundEvents.BLOCK_STONE_BREAK, SoundCategory.BLOCKS, 0.3F, 1F);
                     }
-                    if (inventory[1] != null && !getStackInSlot(1).getTagCompound().getBoolean("active"))
+                    if (!inventory.get(1).isEmpty() && !getStackInSlot(1).getTagCompound().getBoolean("active"))
                         getStackInSlot(1).getTagCompound().setBoolean("active", true);
                     if (progress > 84) {
-                        if (inventory[0] != null)
-                            if (--inventory[0].stackSize <= 0)
-                                inventory[0] = null;
-                        if (inventory[2] == null)
-                            inventory[2] = output.copy();
-                        else if (inventory[2].isItemEqual(output))
-                            inventory[2].stackSize += output.stackSize;
-                        inventory[1].setItemDamage(inventory[1].getItemDamage() + 1);
+                        if (!inventory.get(0).isEmpty())
+                            if (inventory.get(0).getCount() - 1 <= 0)
+                                inventory.set(0, ItemStack.EMPTY);
+                        if (inventory.get(2).isEmpty())
+                            inventory.set(2,output.copy());
+                        else if (inventory.get(2).isItemEqual(output))
+                            inventory.get(2).grow(output.getCount());
+                        inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + 1);
                         if (!manualGrinding)
-                            inventory[3].setItemDamage(inventory[3].getItemDamage() + 1);
+                            inventory.get(3).setItemDamage(inventory.get(3).getItemDamage() + 1);
                         progress = 0;
                         manualGrinding = false;
-                        if (inventory[1].getItemDamage() >= inventory[1].getMaxDamage()) {
-                            inventory[1] = null;
+                        if (inventory.get(1).getItemDamage() >= inventory.get(1).getMaxDamage()) {
+                            inventory.set(1, ItemStack.EMPTY);
                             hasPestle = false;
                         }
-                        if (inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+                        if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
                             getStackInSlot(1).getTagCompound().setBoolean("active", false);
                         markDirty();
                     }
@@ -99,29 +99,29 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             markDirty();
         if (pestleInstalled()) {
             hasPestle = true;
-            worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         } else {
             hasPestle = false;
-            worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         }
         if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
-            if (inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+            if (inventory.get(1) != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
                 getStackInSlot(1).getTagCompound().setBoolean("active", false);
             progress = 0;
             markDirty();
         }
         if (getStackInSlot(3) == null && progress > 0 && !manualGrinding) {
-            if (inventory[1] != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+            if (inventory.get(1) != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
                 getStackInSlot(1).getTagCompound().setBoolean("active", false);
             progress = 0;
             markDirty();
         }
         if (isCrystalInstalled()) {
             hasCrystal = true;
-            worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         } else {
             hasCrystal = false;
-            worldObj.notifyBlockUpdate(getPos(), worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         }
     }
 
@@ -134,11 +134,11 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     }
 
     private boolean outputIsFull() {
-        return getStackInSlot(2) != null && getStackInSlot(2).stackSize >= getInventoryStackLimit();
+        return getStackInSlot(2) != null && getStackInSlot(2).getCount() >= getInventoryStackLimit();
     }
 
     public void sendGUIData(ContainerMortar mortar, IContainerListener containerListener) {
-        containerListener.sendProgressBarUpdate(mortar, 0, progress);
+        containerListener.sendWindowProperty(mortar, 0, progress);
     }
 
     public void getGUIData(int id, int value) {

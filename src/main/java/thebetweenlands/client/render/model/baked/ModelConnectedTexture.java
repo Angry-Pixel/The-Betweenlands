@@ -1,17 +1,5 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.vecmath.Matrix4f;
-
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -19,7 +7,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -33,16 +20,20 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.IModelPart;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import org.apache.commons.lang3.tuple.Pair;
 import thebetweenlands.util.QuadBuilder;
 
-public class ModelConnectedTexture implements IModelCustomData {
+import javax.vecmath.Matrix4f;
+import java.util.*;
+import java.util.Map.Entry;
+import java.util.function.Function;
+
+public class ModelConnectedTexture implements IModel {
 	protected static class ConnectedTextureQuad {
 		protected final ResourceLocation[] textures;
 		protected final String index0, index1, index2, index3;
@@ -74,8 +65,8 @@ public class ModelConnectedTexture implements IModelCustomData {
 		}
 
 		public void bake(Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
-				Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, 
-				VertexFormat format) {
+						 Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms,
+						 VertexFormat format) {
 			Vec3d p12 = this.p1.add(this.p2).scale(0.5D);
 			Vec3d p23 = this.p2.add(this.p3).scale(0.5D);
 			Vec3d p34 = this.p3.add(this.p4).scale(0.5D);
@@ -160,8 +151,8 @@ public class ModelConnectedTexture implements IModelCustomData {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		Optional<TRSRTransformation> transformation = state.apply(Optional.<IModelPart>absent());
+		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
+		Optional<TRSRTransformation> transformation = state.apply(Optional.empty());
 		for(ConnectedTextureQuad connectedTexture : this.connectedTextures) {
 			connectedTexture.bake(bakedTextureGetter, transformation, map, format);
 		}
@@ -174,7 +165,7 @@ public class ModelConnectedTexture implements IModelCustomData {
 		return TRSRTransformation.identity();
 	}
 
-	public static class ModelBakedConnectedFace implements IPerspectiveAwareModel {
+	public static class ModelBakedConnectedFace implements IBakedModel {
 		protected final ConnectedTextureQuad[][] connectedTextures;
 		protected final TextureAtlasSprite particleTexture;
 		protected final boolean ambientOcclusion;
@@ -269,7 +260,7 @@ public class ModelConnectedTexture implements IModelCustomData {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
+			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
 		}
 
 		@Override

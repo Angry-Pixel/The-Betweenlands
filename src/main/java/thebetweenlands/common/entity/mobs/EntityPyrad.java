@@ -9,6 +9,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -94,17 +95,17 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 				EntityLivingBase target = this.entity.getAttackTarget();
 				if(target != null) {
 					BlockPos pos = new BlockPos(this.entity);
-					int groundHeight = FlightMoveHelper.getGroundHeight(this.entity.worldObj, pos, 16, pos).getY();
+					int groundHeight = FlightMoveHelper.getGroundHeight(this.entity.world, pos, 16, pos).getY();
 					Vec3d dir = new Vec3d(target.posX - this.entity.posX, target.posY + 1 - this.entity.rand.nextFloat() * 0.3 - this.entity.posY - 1, target.posZ - this.entity.posZ);
 					double dst = dir.lengthVector();
 					if(dst > 10) {
 						dir = dir.normalize();
 						this.setSpeed(0.08D);
-						return new Vec3d(this.entity.posX + dir.xCoord * (dst - 10), Math.min(this.entity.posY + dir.yCoord * (dst - 10), Math.max(groundHeight + 2, target.posY + 2)), this.entity.posZ + dir.zCoord * (dst - 10));
+						return new Vec3d(this.entity.posX + dir.x * (dst - 10), Math.min(this.entity.posY + dir.y * (dst - 10), Math.max(groundHeight + 2, target.posY + 2)), this.entity.posZ + dir.z * (dst - 10));
 					} else if(dst < 5) {
 						dir = dir.normalize();
 						this.setSpeed(0.1D);
-						return new Vec3d(this.entity.posX - dir.xCoord * 2, Math.min(this.entity.posY - dir.yCoord * 2, Math.max(groundHeight + (this.entity.isCharging() ? 6 : 2), target.posY + 2)), this.entity.posZ - dir.zCoord * 2);
+						return new Vec3d(this.entity.posX - dir.x * 2, Math.min(this.entity.posY - dir.y * 2, Math.max(groundHeight + (this.entity.isCharging() ? 6 : 2), target.posY + 2)), this.entity.posZ - dir.z * 2);
 					}
 				}
 				return null;
@@ -160,7 +161,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.PYRAD_HURT;
 	}
 
@@ -191,7 +192,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			this.motionY *= 0.6D;
 		}
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(this.isEntityAlive() && (this.getEntityAttribute(AGRESSIVE).getAttributeValue() == 1 || this.isInWater()) && !this.isActive()) {
 				this.setActive(true);
 			}
@@ -231,7 +232,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			this.setSize(0.7F, 2F);
 		}
 
-		if (this.worldObj.isRemote && this.isActive()) {
+		if (this.world.isRemote && this.isActive()) {
 			if(this.rand.nextInt(4) == 0) {
 				ParticleArgs<?> args = ParticleArgs.get().withDataBuilder().setData(2, this).buildData();
 				if(this.isCharging()) {
@@ -239,7 +240,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 				} else {
 					args.withColor(1F, 0.65F, 0.25F, 1);
 				}
-				BLParticles.LEAF_SWIRL.spawn(this.worldObj, this.posX, this.posY, this.posZ, args);
+				BLParticles.LEAF_SWIRL.spawn(this.world, this.posX, this.posY, this.posZ, args);
 			}
 			if(this.isCharging() || this.rand.nextInt(10) == 0) {
 				ParticleArgs<?> args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 4.0F, (this.rand.nextFloat() - 0.5F) / 4.0F, (this.rand.nextFloat() - 0.5F) / 4.0F);
@@ -249,7 +250,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 				} else {
 					args.withColor(1F, 0.65F, 0.25F, 1);
 				}
-				BLParticles.WEEDWOOD_LEAF.spawn(this.worldObj, this.posX, this.posY + this.getEyeHeight(), this.posZ, args);
+				BLParticles.WEEDWOOD_LEAF.spawn(this.world, this.posX, this.posY + this.getEyeHeight(), this.posZ, args);
 			}
 		}
 
@@ -298,7 +299,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void moveEntityWithHeading(float strafe, float forward) {
+	public void travel(float strafe, float up, float forward) {
 		if(!this.isActive()) {
 			this.motionX = 0;
 			this.motionZ = 0;
@@ -306,14 +307,14 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		}
 
 		if (this.isInWater()) {
-			this.moveRelative(strafe, forward, 0.02F);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.moveRelative(strafe, up ,forward, 0.02F);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.800000011920929D;
 			this.motionY *= 0.800000011920929D;
 			this.motionZ *= 0.800000011920929D;
 		} else if (this.isInLava()) {
-			this.moveRelative(strafe, forward, 0.02F);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.moveRelative(strafe, up, forward, 0.02F);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.5D;
 			this.motionY *= 0.5D;
 			this.motionZ *= 0.5D;
@@ -321,18 +322,18 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			float friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			float f1 = 0.16277136F / (friction * friction * friction);
-			this.moveRelative(strafe, forward, this.onGround ? 0.1F * f1 : 0.02F);
+			this.moveRelative(strafe, up, forward, this.onGround ? 0.1F * f1 : 0.02F);
 			friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= (double)friction;
 			this.motionY *= (double)friction;
 			this.motionZ *= (double)friction;
@@ -341,7 +342,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		this.prevLimbSwingAmount = this.limbSwingAmount;
 		double d1 = this.posX - this.prevPosX;
 		double d0 = this.posZ - this.prevPosZ;
-		float f2 = MathHelper.sqrt_double(d1 * d1 + d0 * d0) * 4.0F;
+		float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
 
 		if (f2 > 1.0F) {
 			f2 = 1.0F;
@@ -360,14 +361,14 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(!this.isActive() && this.isEntityAlive()) {
 			if(this.hitTicks <= 0) {
-				if(!this.worldObj.isRemote && (this.rand.nextInt(12) == 0 || amount > 3.0F)) {
+				if(!this.world.isRemote && (this.rand.nextInt(12) == 0 || amount > 3.0F)) {
 					this.setActive(true);
 					return super.attackEntityFrom(source, amount);
 				}
 				for(int i = 0; i < 10; i++) {
-					if(this.worldObj.isRemote) {
+					if(this.world.isRemote) {
 						ParticleArgs<?> args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F).withColor(1F, 0.65F, 0.25F, 1);
-						BLParticles.WEEDWOOD_LEAF.spawn(this.worldObj, this.posX, this.posY + 0.8D, this.posZ, args);
+						BLParticles.WEEDWOOD_LEAF.spawn(this.world, this.posX, this.posY + 0.8D, this.posZ, args);
 					}
 					this.playSound(SoundRegistry.PYRAD_HURT, 0.1F, 0.3F + this.rand.nextFloat() * 0.3F);
 				}
@@ -398,16 +399,16 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		} else if(this.onGround && this.activeTicks < 20) {
 			this.deathTicks++;
 			if(this.deathTicks > 10) {
-				if(this.worldObj.isRemote) {
+				if(this.world.isRemote) {
 					for(int i = 0; i < 10; i++) {
 						ParticleArgs<?> args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F).withScale(2.0F);
 						args.withColor(1F, 0.25F + this.rand.nextFloat() * 0.5F, 0.05F + this.rand.nextFloat() * 0.25F, 1);
-						BLParticles.WEEDWOOD_LEAF.spawn(this.worldObj, this.posX, this.posY + 0.8D, this.posZ, args);
+						BLParticles.WEEDWOOD_LEAF.spawn(this.world, this.posX, this.posY + 0.8D, this.posZ, args);
 						args = ParticleArgs.get().withMotion((this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F, (this.rand.nextFloat() - 0.5F) / 2.0F);
-						BLParticles.SWAMP_SMOKE.spawn(this.worldObj, this.posX, this.posY + 0.8D, this.posZ, args);
+						BLParticles.SWAMP_SMOKE.spawn(this.world, this.posX, this.posY + 0.8D, this.posZ, args);
 					}
 				}
-				if(this.deathTicks > 30 && !this.worldObj.isRemote) {
+				if(this.deathTicks > 30 && !this.world.isRemote) {
 					for(int i = 0; i < 10; i++) {
 						this.playSound(SoundRegistry.PYRAD_HURT, 0.18F, 0.1F + this.rand.nextFloat() * 0.2F);
 						this.playSound(SoundRegistry.PYRAD_DEATH, 0.08F, 0.1F + this.rand.nextFloat() * 0.2F);
@@ -438,7 +439,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 	public void setActive(boolean active) {
 		this.getDataManager().set(ACTIVE, active);
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(active) {
 				for(int i = 0; i < this.activeTasks.size(); i++) {
 					this.tasks.addTask(i, this.activeTasks.get(i));
@@ -515,15 +516,15 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 					}
 
 					if (this.attackStep > 1) {
-						float f = MathHelper.sqrt_float(MathHelper.sqrt_double(distSq)) * 0.8F;
-						this.pyrad.worldObj.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
+						float f = MathHelper.sqrt(MathHelper.sqrt(distSq)) * 0.8F;
+						this.pyrad.world.playEvent((EntityPlayer)null, 1018, new BlockPos((int)this.pyrad.posX, (int)this.pyrad.posY, (int)this.pyrad.posZ), 0);
 
 						int numberFlames = (int)this.pyrad.getEntityAttribute(FLAMES_PER_ATTACK).getAttributeValue();
 
 						for (int i = 0; i < (numberFlames > 1 ? this.pyrad.rand.nextInt(numberFlames) : 0) + 1; ++i) {
-							EntityPyradFlame flame = new EntityPyradFlame(this.pyrad.worldObj, this.pyrad, dx + this.pyrad.getRNG().nextGaussian() * (double)f, dy, dz + this.pyrad.getRNG().nextGaussian() * (double)f);
+							EntityPyradFlame flame = new EntityPyradFlame(this.pyrad.world, this.pyrad, dx + this.pyrad.getRNG().nextGaussian() * (double)f, dy, dz + this.pyrad.getRNG().nextGaussian() * (double)f);
 							flame.posY = this.pyrad.posY + (double)(this.pyrad.height / 2.0F) + 0.5D;
-							this.pyrad.worldObj.spawnEntityInWorld(flame);
+							this.pyrad.world.spawnEntity(flame);
 						}
 					}
 				}

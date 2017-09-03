@@ -49,13 +49,8 @@ public class PestleAndMortarCategory implements IRecipeCategory {
     }
 
     @Override
-    public void drawAnimations(Minecraft minecraft) {
-
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-
+    public String getModName() {
+        return ModInfo.NAME;
     }
 
     @Override

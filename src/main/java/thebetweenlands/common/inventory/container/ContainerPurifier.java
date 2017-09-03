@@ -46,12 +46,12 @@ public class ContainerPurifier extends Container {
 				}
 			} else if (!mergeItemStack(slotStack, 3, inventorySlots.size(), false))
 				return null;
-			if (slotStack.stackSize == 0)
+			if (slotStack.getCount() == 0)
 				slot.putStack(null);
 			else
 				slot.onSlotChanged();
-			if (slotStack.stackSize != newStack.stackSize)
-				slot.onPickupFromSlot(player, slotStack);
+			if (slotStack.getCount() != newStack.getCount())
+				slot.onTake(player, slotStack);
 			else
 				return null;
 		}

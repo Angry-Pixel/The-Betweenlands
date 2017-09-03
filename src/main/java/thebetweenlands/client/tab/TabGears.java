@@ -1,6 +1,7 @@
 package thebetweenlands.client.tab;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TabGears extends CreativeTabBetweenlands {
@@ -9,7 +10,7 @@ public class TabGears extends CreativeTabBetweenlands {
 	}
 
 	@Override
-	public Item getTabIconItem() {
-		return ItemRegistry.VALONITE_PICKAXE;
+	public ItemStack getTabIconItem() {
+		return new ItemStack(ItemRegistry.VALONITE_PICKAXE);
 	}
 }

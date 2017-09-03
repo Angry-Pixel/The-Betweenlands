@@ -75,8 +75,7 @@ public class CorrosionHelper {
 	 * Returns the dig speed of an item at the amount of corrosion of the specified item
 	 * @param normalStrength
 	 * @param itemStack
-	 * @param block
-	 * @param meta
+	 * @param blockState
 	 * @return
 	 */
 	public static float getStrVsBlock(float normalStrength, ItemStack itemStack, IBlockState blockState) {
@@ -127,7 +126,7 @@ public class CorrosionHelper {
 	 */
 	public static Multimap<String, AttributeModifier> getAttributeModifiers(Multimap<String, AttributeModifier> map, EntityEquipmentSlot slot, ItemStack stack, UUID uuid, float damageVsEntity) {
 		if(slot == EntityEquipmentSlot.MAINHAND) {
-			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getAttributeUnlocalizedName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
+			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(uuid, "Tool modifier", damageVsEntity * getModifier(stack), 0));
 		}
 		return map;
 	}
@@ -175,11 +174,10 @@ public class CorrosionHelper {
 	/**
 	 * Adds the corrosion tooltips
 	 * @param stack
-	 * @param player
 	 * @param lines
 	 * @param advancedItemTooltips
 	 */
-	public static void addCorrosionTooltips(ItemStack stack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
+	public static void addCorrosionTooltips(ItemStack stack, List<String> lines, boolean advancedItemTooltips) {
 		if(stack != null && stack.getItem() instanceof ICorrodible) {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
 			int corrosion = corrodible.getCorrosion(stack);
@@ -210,7 +208,7 @@ public class CorrosionHelper {
 
 	/**
 	 * Returns the corrosion stage of the specified item. Ranges from [0, 5]
-	 * @param itemStack
+	 * @param stack
 	 * @return
 	 */
 	public static int getCorrosionStage(ItemStack stack) {

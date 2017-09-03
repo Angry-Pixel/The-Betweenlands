@@ -100,7 +100,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 		if (motionY < 0.0D) {
 			motionY *= 0.6D;
 		}
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			if (rand.nextInt(200) == 0) {
 				if (!entityFlying) {
 					setEntityFlying(true);
@@ -117,10 +117,10 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 				if (isInWater()) {
 					motionY += 0.2F;
 				}
-				if (worldObj.containsAnyLiquid(getEntityBoundingBox().expand(0D, 1D, 0D))) {
+				if (world.containsAnyLiquid(getEntityBoundingBox().expand(0D, 1D, 0D))) {
 					flyAbout();
 				}
-				if (worldObj.getClosestPlayerToEntity(this, 4.0D) != null) {
+				if (world.getClosestPlayerToEntity(this, 4.0D) != null) {
 					flyAbout();
 				}
 			}
@@ -130,7 +130,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 
 	public void flyAbout() {
 		if (currentFlightTarget != null) {
-			if (!worldObj.isAirBlock(currentFlightTarget) || currentFlightTarget.getY() < 1 || worldObj.getBlockState(currentFlightTarget.up()).getBlock() == Blocks.WATER) {
+			if (!world.isAirBlock(currentFlightTarget) || currentFlightTarget.getY() < 1 || world.getBlockState(currentFlightTarget.up()).getBlock() == Blocks.WATER) {
 				currentFlightTarget = null;
 			}
 		}
@@ -188,12 +188,12 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	protected void onDeathUpdate() {
 		deathTime++;
 		if (deathTime == 20) {
-			if (!worldObj.isRemote && (recentlyHit > 0 || isPlayer()) && !this.isChild() && worldObj.getGameRules().getBoolean("doMobLoot")) {
+			if (!world.isRemote && (recentlyHit > 0 || isPlayer()) && !this.isChild() && world.getGameRules().getBoolean("doMobLoot")) {
 				int experiencePoints = getExperiencePoints(attackingPlayer);
 				while (experiencePoints > 0) {
 					int amount = EntityXPOrb.getXPSplit(experiencePoints);
 					experiencePoints -= amount;
-					worldObj.spawnEntityInWorld(new EntityXPOrb(worldObj, posX, posY, posZ, amount));
+					world.spawnEntity(new EntityXPOrb(world, posX, posY, posZ, amount));
 				}
 			}
 			setDead();
@@ -202,7 +202,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 					double motionX = rand.nextGaussian() * 0.02D;
 					double motionY = rand.nextGaussian() * 0.02D;
 					double motionZ = rand.nextGaussian() * 0.02D;
-					worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX + rand.nextFloat() * width * 2.0F - width, posY + rand.nextFloat() * height, posZ + rand.nextFloat() * width * 2.0F - width, motionX, motionY, motionZ);
+					world.spawnParticle(EnumParticleTypes.EXPLOSION_NORMAL, posX + rand.nextFloat() * width * 2.0F - width, posY + rand.nextFloat() * height, posZ + rand.nextFloat() * width * 2.0F - width, motionX, motionY, motionZ);
 				}
 			}
 		}

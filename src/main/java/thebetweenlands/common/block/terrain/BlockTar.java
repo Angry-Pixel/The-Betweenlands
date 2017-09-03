@@ -25,6 +25,8 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
+import javax.annotation.Nonnull;
+
 public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 	public BlockTar() {
 		super(FluidRegistry.TAR, BLMaterialRegistry.TAR);
@@ -49,7 +51,7 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 		if (entity instanceof EntityLivingBase && !(entity instanceof EntityTarBeast) && !(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)) {
 			double liquidHeight = (double)((float)(pos.getY() + 1) - BlockLiquid.getLiquidHeightPercent(((Integer)state.getValue(BlockLiquid.LEVEL)).intValue()));
 			if (entity.posY + entity.getEyeHeight() < liquidHeight) {
-				((EntityLivingBase) entity).attackEntityFrom(DamageSource.drown, 2.0F);
+				((EntityLivingBase) entity).attackEntityFrom(DamageSource.DROWN, 2.0F);
 			}
 		}
 	}
@@ -61,9 +63,10 @@ public class BlockTar extends BlockFluidClassic implements IStateMappedBlock {
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block) {
+	public void neighborChanged(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block neighborBlock, @Nonnull BlockPos neighbourPos) {
+
 		this.solidifyTar(world, pos);
-		super.neighborChanged(state, world, pos, block);
+		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
 	}
 
 	private void solidifyTar(World world, BlockPos pos) {

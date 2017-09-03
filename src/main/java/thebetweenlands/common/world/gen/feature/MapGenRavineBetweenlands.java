@@ -40,7 +40,7 @@ public class MapGenRavineBetweenlands extends MapGenRavine {
 
 	@Override
 	protected void digBlock(ChunkPrimer data, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop) {
-		Biome biome = worldObj.getBiomeGenForCoords(new BlockPos(x + chunkX * 16, 0, z + chunkZ * 16));
+		Biome biome = world.getBiome(new BlockPos(x + chunkX * 16, 0, z + chunkZ * 16));
 		IBlockState state = data.getBlockState(x, y, z);
 		IBlockState top = biome.topBlock;
 		IBlockState filler = biome.fillerBlock;

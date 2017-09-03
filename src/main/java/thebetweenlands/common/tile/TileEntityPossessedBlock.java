@@ -30,12 +30,12 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			findEnemyToAttack();
 			if (active) {
 				activateBlock();
 				if (animationTicks == 0)
-					worldObj.playSound(null, getPos(), SoundRegistry.POSSESSED_SCREAM, SoundCategory.BLOCKS, 0.25F, 1.25F - this.worldObj.rand.nextFloat() * 0.5F);
+					world.playSound(null, getPos(), SoundRegistry.POSSESSED_SCREAM, SoundCategory.BLOCKS, 0.25F, 1.25F - this.world.rand.nextFloat() * 0.5F);
 				if (animationTicks <= 24)
 					animationTicks++;
 				if (animationTicks == 24) {
@@ -49,10 +49,10 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 				if(coolDown >= 0)
 					coolDown--;
 			}
-			worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+			world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		}
 		moveProgress = 1 + headShake.swing(4, 1F, false);
-		if (worldObj.isRemote)
+		if (world.isRemote)
 			if(!active && animationTicks %8 > 0)
 				spawnParticles();
 	}
@@ -73,16 +73,16 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 		float xx = (float) getPos().getX() + 0.5F + x;
 		float yy = (float) getPos().getY() + 0.5F;
 		float zz = (float) getPos().getZ() + 0.5F + z;
-		float randomOffset = worldObj.rand.nextFloat() * 0.6F - 0.3F;
-		BLParticles.SMOKE.spawn(worldObj, (double) (xx - randomOffset), (double) (yy + randomOffset), (double) (zz + randomOffset));
-		BLParticles.SMOKE.spawn(worldObj, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset));
-		BLParticles.SMOKE.spawn(worldObj, (double) (xx + randomOffset), (double) (yy + randomOffset), (double) (zz - randomOffset));
-		BLParticles.SMOKE.spawn(worldObj, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset));
+		float randomOffset = world.rand.nextFloat() * 0.6F - 0.3F;
+		BLParticles.SMOKE.spawn(world, (double) (xx - randomOffset), (double) (yy + randomOffset), (double) (zz + randomOffset));
+		BLParticles.SMOKE.spawn(world, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset));
+		BLParticles.SMOKE.spawn(world, (double) (xx + randomOffset), (double) (yy + randomOffset), (double) (zz - randomOffset));
+		BLParticles.SMOKE.spawn(world, (double) (xx + randomOffset), (double) (yy - randomOffset), (double) (zz + randomOffset));
 	}
 
 	public void setActive(boolean isActive) {
 		active = isActive;
-		worldObj.notifyBlockUpdate(pos, worldObj.getBlockState(pos), worldObj.getBlockState(pos), 3);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -98,7 +98,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 			z = -1.25F;
 		if(facing == EnumFacing.SOUTH)
 			z = 1.25F;
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + x, pos.getY(), pos.getZ() + z, pos.getX() + 1D + x, pos.getY() + 1D, pos.getZ() + 1D + z));
+		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + x, pos.getY(), pos.getZ() + z, pos.getX() + 1D + x, pos.getY() + 1D, pos.getZ() + 1D + z));
 		for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
 				if (entity != null)
@@ -122,7 +122,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 			z = -1.25F;
 		if(facing == EnumFacing.SOUTH)
 			z = 1.25F;
-		List<EntityLivingBase> list = worldObj.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + x, pos.getY(), pos.getZ() + z, pos.getX() + 1D + x, pos.getY() + 1D, pos.getZ() + 1D + z));
+		List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + x, pos.getY(), pos.getZ() + z, pos.getX() + 1D + x, pos.getY() + 1D, pos.getZ() + 1D + z));
 		if (animationTicks == 1)
 			for (int i = 0; i < list.size(); i++) {
 				Entity entity = list.get(i);
@@ -130,7 +130,7 @@ public class TileEntityPossessedBlock extends TileEntity implements ITickable {
 					if (entity instanceof EntityPlayer) {
 						int Knockback = 4;
 						entity.addVelocity(MathHelper.sin(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.2F, 0.3D, -MathHelper.cos(entity.rotationYaw * 3.141593F / 180.0F) * Knockback * 0.2F);
-						((EntityLivingBase) entity).attackEntityFrom(DamageSource.generic, 2);
+						((EntityLivingBase) entity).attackEntityFrom(DamageSource.GENERIC, 2);
 					}
 			}
 		return null;

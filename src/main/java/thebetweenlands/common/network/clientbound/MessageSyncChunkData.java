@@ -21,8 +21,8 @@ public class MessageSyncChunkData extends MessageBase {
 	public MessageSyncChunkData() {}
 
 	public MessageSyncChunkData(Chunk chunk, NBTTagCompound nbt) {
-		this.chunkX = chunk.xPosition;
-		this.chunkZ = chunk.zPosition;
+		this.chunkX = chunk.x;
+		this.chunkZ = chunk.z;
 		this.nbt = nbt;
 	}
 
@@ -32,7 +32,7 @@ public class MessageSyncChunkData extends MessageBase {
 		this.chunkZ = buf.readInt();
 		PacketBuffer packetBuffer = new PacketBuffer(buf);
 		try {
-			this.nbt = packetBuffer.readNBTTagCompoundFromBuffer();
+			this.nbt = packetBuffer.readCompoundTag();
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}
@@ -43,7 +43,7 @@ public class MessageSyncChunkData extends MessageBase {
 		buf.writeInt(this.chunkX);
 		buf.writeInt(this.chunkZ);
 		PacketBuffer packetBuffer = new PacketBuffer(buf);
-		packetBuffer.writeNBTTagCompoundToBuffer(this.nbt);
+		packetBuffer.writeCompoundTag(this.nbt);
 	}
 
 	@Override
@@ -56,9 +56,9 @@ public class MessageSyncChunkData extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void updateChunks(int chunkX, int chunkZ, NBTTagCompound nbt) {
-		Chunk chunk = Minecraft.getMinecraft().theWorld.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
+		Chunk chunk = Minecraft.getMinecraft().world.getChunkProvider().getLoadedChunk(chunkX, chunkZ);
 		if(chunk != null) {
-			ChunkDataBase.updateHandlerData(BetweenlandsWorldData.forWorld(Minecraft.getMinecraft().theWorld), chunk, nbt);
+			ChunkDataBase.updateHandlerData(BetweenlandsWorldData.forWorld(Minecraft.getMinecraft().world), chunk, nbt);
 		}
 	}
 }

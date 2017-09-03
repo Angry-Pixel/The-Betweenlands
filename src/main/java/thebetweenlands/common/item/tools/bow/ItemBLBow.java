@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -128,15 +129,15 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 							entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 						}
 
-						world.spawnEntityInWorld(entityArrow);
+						world.spawnEntity(entityArrow);
 					}
 
 					world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.NEUTRAL, 1.0F, 1.0F / (itemRand.nextFloat() * 0.4F + 1.2F) + strength * 0.5F);
 
 					if (!infiniteArrows) {
-						--arrow.stackSize;
+						arrow.shrink(1);
 
-						if (arrow.stackSize == 0) {
+						if (arrow.getCount() == 0) {
 							player.inventory.deleteStack(arrow);
 						}
 					}
@@ -167,7 +168,8 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		boolean flag = this.findArrows(playerIn) != null;
 		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
 		if (ret != null) return ret;
@@ -200,7 +202,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 	}
 
 	@Override
-	public void addInformation(ItemStack itemStack, EntityPlayer player, List<String> lines, boolean advancedItemTooltips) {
-		CorrosionHelper.addCorrosionTooltips(itemStack, player, lines, advancedItemTooltips);
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
 	}
 }

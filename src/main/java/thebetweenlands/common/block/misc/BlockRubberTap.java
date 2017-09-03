@@ -11,10 +11,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -52,12 +49,12 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	}
 
 	@Override
-	public IBlockState onBlockPlaced(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		if (this.canPlaceAt(worldIn, pos, facing)) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		if (this.canPlaceAt(world, pos, facing)) {
 			return this.getDefaultState().withProperty(FACING, facing);
 		} else {
 			for (EnumFacing enumfacing : FACING.getAllowedValues()) {
-				if(this.canPlaceAt(worldIn, pos, enumfacing))
+				if(this.canPlaceAt(world, pos, enumfacing))
 					return this.getDefaultState().withProperty(FACING, enumfacing);
 			}
 			return this.getDefaultState();
@@ -80,14 +77,14 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		if (this.checkForDrop(worldIn, pos, state)) {
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		if (this.checkForDrop(world, pos, world.getBlockState(fromPos))) {
 			EnumFacing facing = (EnumFacing)state.getValue(FACING);
 			EnumFacing.Axis axis = facing.getAxis();
 			EnumFacing oppositeFacing = facing.getOpposite();
-			if (axis.isVertical() || !this.canPlaceOn(worldIn, pos.offset(oppositeFacing))) {
-				this.dropBlockAsItem(worldIn, pos, state, 0);
-				worldIn.setBlockToAir(pos);
+			if (axis.isVertical() || !this.canPlaceOn(world, pos.offset(oppositeFacing))) {
+				this.dropBlockAsItem(world, pos, state, 0);
+				world.setBlockToAir(pos);
 			}
 		}
 	}
@@ -191,9 +188,9 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 		}
 	}
 
-	@Override
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return this.getBoundingBox(blockState, worldIn, pos);
 	}
 }

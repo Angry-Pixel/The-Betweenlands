@@ -29,7 +29,11 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());
 
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WATER);
+	}
+
+	@Override
+	public void addTypes() {
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WATER);
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package thebetweenlands.common.item.food;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.util.TranslationHelper;
+
+import javax.annotation.Nullable;
 
 
 public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
@@ -24,11 +27,9 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
         return 20;
     }
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
-        list.add(TranslationHelper.translateToLocal("fig.tooltip"));
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        tooltip.add(TranslationHelper.translateToLocal("fig.tooltip"));
     }
 
     @Override
@@ -37,7 +38,7 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
 
         if (player != null) {
             if (world.isRemote) {
-                player.addChatMessage(new TextComponentTranslation("chat.item.forbiddenfig"));
+                player.sendMessage(new TextComponentTranslation("chat.item.forbiddenfig"));
                 //world.playSoundAtEntity(player, "thebetweenlands:fig", 0.7F, 0.8F);
             } else {
                 player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200, 1));

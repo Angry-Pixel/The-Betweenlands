@@ -19,11 +19,12 @@ public class ItemSyrmoriteBucketSolidRubber extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+
 		player.addStat(StatList.getObjectUseStats(this));
 		player.setHeldItem(hand, null);
 		ItemHandlerHelper.giveItemToPlayer(player, new ItemStack(ItemRegistry.SYRMORITE_BUCKET), player.inventory.currentItem);
 		ItemHandlerHelper.giveItemToPlayer(player, EnumItemMisc.RUBBER_BALL.create(1), player.inventory.currentItem + 1);
-		return ActionResult.newResult(EnumActionResult.SUCCESS, itemStack);
+		return ActionResult.newResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 	}
 }

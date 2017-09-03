@@ -62,7 +62,7 @@ public class PuppetHandler {
 			EntityCreature creature = (EntityCreature) entity;
 
 			if(cap.hasPuppeteer()) {
-				if(!entity.worldObj.isRemote) {
+				if(!entity.world.isRemote) {
 					cap.setRemainingTicks(cap.getRemainingTicks() - 1);
 
 					if(cap.getRemainingTicks() <= 0 || (cap.getPuppeteer() != null && !ItemRingOfRecruitment.isRingActive(cap.getPuppeteer()))) {
@@ -113,12 +113,12 @@ public class PuppetHandler {
 						}
 					}
 				} else {
-					if(entity.worldObj.rand.nextInt(5) == 0) {
-						BLParticles.SPAWNER.spawn(creature.worldObj, creature.posX + creature.motionX * 2, creature.posY + creature.height / 2.0D, creature.posZ + creature.motionZ * 2,
+					if(entity.world.rand.nextInt(5) == 0) {
+						BLParticles.SPAWNER.spawn(creature.world, creature.posX + creature.motionX * 2, creature.posY + creature.height / 2.0D, creature.posZ + creature.motionZ * 2,
 								ParticleArgs.get().withMotion(
-										creature.motionX + (creature.worldObj.rand.nextFloat() - 0.5F) / 8.0F * entity.width, 
-										(creature.worldObj.rand.nextFloat() - 0.5F) / 8.0F * entity.height, 
-										creature.motionZ + (creature.worldObj.rand.nextFloat() - 0.5F) / 8.0F * entity.width
+										creature.motionX + (creature.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width, 
+										(creature.world.rand.nextFloat() - 0.5F) / 8.0F * entity.height, 
+										creature.motionZ + (creature.world.rand.nextFloat() - 0.5F) / 8.0F * entity.width
 										).withData(40).withColor(0.2F, 0.8F, 0.4F, 1));
 					}
 				}
@@ -129,11 +129,11 @@ public class PuppetHandler {
 	@SubscribeEvent
 	public static void onEntityAttacked(LivingHurtEvent event) {
 		EntityLivingBase attackedEntity = event.getEntityLiving();
-		if(!attackedEntity.worldObj.isRemote) {
+		if(!attackedEntity.world.isRemote) {
 			DamageSource source = event.getSource();
 
-			if(source.getEntity() instanceof EntityPlayer && source.getEntity().hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
-				IPuppeteerCapability cap = source.getEntity().getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
+			if(source.getTrueSource() instanceof EntityPlayer && source.getTrueSource().hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
+				IPuppeteerCapability cap = source.getTrueSource().getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 				List<Entity> puppets = cap.getPuppets();
 
 				if(!puppets.contains(attackedEntity)) {
@@ -171,12 +171,12 @@ public class PuppetHandler {
 
 				if(player == puppeteer) {
 					if(player.isSneaking()) {
-						if(!player.worldObj.isRemote) {
+						if(!player.world.isRemote) {
 							cap.setRemainingTicks(0);
 						}
 						player.swingArm(EnumHand.MAIN_HAND);
 					} else {
-						if(!player.worldObj.isRemote){
+						if(!player.world.isRemote){
 							EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(creature.targetTasks);
 							if(puppetAI != null) {
 								EntityAIStay aiStay = getAI(EntityAIStay.class, puppetAI.getSubTasks());
@@ -189,7 +189,7 @@ public class PuppetHandler {
 						player.swingArm(EnumHand.MAIN_HAND);
 					}
 				}
-			} else if(!player.worldObj.isRemote) {
+			} else if(!player.world.isRemote) {
 				if(ItemRingOfRecruitment.isRingActive(player) && player.hasCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null)) {
 					IPuppeteerCapability capPlayer = player.getCapability(CapabilityRegistry.CAPABILITY_PUPPETEER, null);
 					if(capPlayer.getActivatingEntity() == null) {
@@ -210,7 +210,7 @@ public class PuppetHandler {
 			if(activatingEntity instanceof EntityCreature) {
 				EntityCreature creature = (EntityCreature) activatingEntity;
 
-				if(!event.player.worldObj.isRemote) {
+				if(!event.player.world.isRemote) {
 					if(creature.getDistanceToEntity(event.player) > 5.0D) {
 						cap.setActivatingEntity(null);
 						cap.setActivatingTicks(0);
@@ -234,14 +234,14 @@ public class PuppetHandler {
 				} else {
 					Vec3d vec = new Vec3d(creature.posX - event.player.posX, (creature.posY + creature.getEyeHeight() * 0.8F) - (event.player.posY + event.player.getEyeHeight() * 0.8F), creature.posZ - event.player.posZ);
 					vec = vec.normalize();
-					vec = vec.addVector((event.player.worldObj.rand.nextFloat() - 0.5F) / 3.0F, 
-							(event.player.worldObj.rand.nextFloat() - 0.5F) / 3.0F, 
-							(event.player.worldObj.rand.nextFloat() - 0.5F) / 3.0F);
+					vec = vec.addVector((event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
+							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
+							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F);
 					vec = vec.normalize();
 					double dist = event.player.getDistanceToEntity(creature);
 					vec = vec.scale(dist / 15.0F);
-					BLParticles.SPAWNER.spawn(event.player.worldObj, event.player.posX, event.player.posY + event.player.getEyeHeight() * 0.8F, event.player.posZ, 
-							ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.xCoord, vec.yCoord, vec.zCoord));
+					BLParticles.SPAWNER.spawn(event.player.world, event.player.posX, event.player.posY + event.player.getEyeHeight() * 0.8F, event.player.posZ, 
+							ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.x, vec.y, vec.z));
 				}
 
 				event.player.motionX *= 0.05D;
@@ -265,7 +265,7 @@ public class PuppetHandler {
 				for(Entity puppet : puppets) {
 					if(puppet instanceof EntityLiving) {
 						EntityLiving living = (EntityLiving) puppet;
-						if(!player.worldObj.isRemote) {
+						if(!player.world.isRemote) {
 							EntityAIPuppet puppetAI = EntityAIPuppet.getPuppetAI(living.targetTasks);
 							if(puppetAI != null) {
 								EntityAIGoTo aiGoTo = getAI(EntityAIGoTo.class, puppetAI.getSubTasks());
@@ -282,13 +282,13 @@ public class PuppetHandler {
 				if(ordered) {
 					player.swingArm(EnumHand.MAIN_HAND);
 
-					if(player.worldObj.isRemote) {
+					if(player.world.isRemote) {
 						for(int i = 0; i < 4; i++) {
-							BLParticles.SPAWNER.spawn(player.worldObj, target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D,
+							BLParticles.SPAWNER.spawn(player.world, target.getX() + 0.5D, target.getY() + 0.5D, target.getZ() + 0.5D,
 									ParticleArgs.get().withMotion(
-											(player.worldObj.rand.nextFloat() - 0.5F) / 16.0F, 
-											(player.worldObj.rand.nextFloat() - 0.5F) / 16.0F, 
-											(player.worldObj.rand.nextFloat() - 0.5F) / 16.0F
+											(player.world.rand.nextFloat() - 0.5F) / 16.0F, 
+											(player.world.rand.nextFloat() - 0.5F) / 16.0F, 
+											(player.world.rand.nextFloat() - 0.5F) / 16.0F
 											).withData(30).withColor(0.2F, 0.8F, 0.25F, 1));
 						}
 					}

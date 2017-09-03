@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -92,20 +93,20 @@ public class EntityRopeNode extends Entity {
 
 		if(!attached) {
 			this.handleWaterMovement();
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 		}
 
 		boolean prevAttached = attached;
 		attached = this.isAttached();
 
 		if(attached && !prevAttached) {
-			this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+			this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 		}
 
 		Entity nextNode;
 		Entity prevNode;
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			nextNode = this.getNextNodeByUUID();
 			prevNode = this.getPreviousNodeByUUID();
 
@@ -129,20 +130,20 @@ public class EntityRopeNode extends Entity {
 			prevNode = this.getPreviousNode();
 		}
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(nextNode instanceof EntityPlayer) {
 				if(nextNode.getDistanceToEntity(this) > 1.5D) {
 					this.pickUp = true;
 				}
-				if(this.pickUp && nextNode.getEntityBoundingBox().expand(0.4D, 0.4D, 0.4D).intersectsWith(this.getEntityBoundingBox())) {
+				if(this.pickUp && nextNode.getEntityBoundingBox().expand(0.4D, 0.4D, 0.4D).intersects(this.getEntityBoundingBox())) {
 					this.removeNode(nextNode);
 					EntityPlayer player = (EntityPlayer) nextNode;
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
-						this.worldObj.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+						this.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 					} else {
-						EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
+						EntityItem itemEntity = new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
 						itemEntity.setPickupDelay(0);
-						this.worldObj.spawnEntityInWorld(itemEntity);
+						this.world.spawnEntity(itemEntity);
 					}
 				}
 				if(nextNode.getDistanceToEntity(this) < ROPE_LENGTH - 1) {
@@ -154,18 +155,18 @@ public class EntityRopeNode extends Entity {
 					for(int i = 0; i < invSize; ++i) {
 						ItemStack stack = inventory.getStackInSlot(i);
 						if(stack != null && stack.getItem() == ItemRegistry.CAVING_ROPE) {
-							--stack.stackSize;
-							inventory.setInventorySlotContents(i, stack.stackSize > 0 ? stack : null);
+							stack.shrink(1);
+							inventory.setInventorySlotContents(i, stack.getCount() > 0 ? stack : null);
 							Vec3d connection = this.getConnectionToNext();
 							if(connection != null) {
 								Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).addVector(0, 0.1D, 0);
-								RayTraceResult result = this.worldObj.rayTraceBlocks(nextNode.getPositionVector(), newPos, false);
+								RayTraceResult result = this.world.rayTraceBlocks(nextNode.getPositionVector(), newPos, false);
 								if(result != null && result.typeOfHit == Type.BLOCK && result.hitVec.squareDistanceTo(nextNode.getPositionVector()) < newPos.squareDistanceTo(nextNode.getPositionVector())) {
 									newPos = result.hitVec.add(result.hitVec.subtract(this.getPositionVector()).normalize().scale(0.1D));
 								}
-								EntityRopeNode rope = this.extendRope(nextNode, newPos.xCoord, newPos.yCoord, newPos.zCoord);
+								EntityRopeNode rope = this.extendRope(nextNode, newPos.x, newPos.y, newPos.z);
 								if(rope.isAttached()) {
-									this.worldObj.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
+									this.world.playSound((EntityPlayer)null, this.posX, this.posY, this.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 								}
 								break;
 							}
@@ -174,7 +175,7 @@ public class EntityRopeNode extends Entity {
 				}
 				if(nextNode.getDistanceToEntity(this) > ROPE_LENGTH_MAX) {
 					if(nextNode instanceof ICommandSender) {
-						((ICommandSender) nextNode).addChatMessage(new TextComponentTranslation("chat.rope.disconnected"));
+						((ICommandSender) nextNode).sendMessage(new TextComponentTranslation("chat.rope.disconnected"));
 					}
 					this.setNextNode(null);
 				}
@@ -191,9 +192,9 @@ public class EntityRopeNode extends Entity {
 			if(nextNode != null && this.getDistanceToEntity(nextNode) >= ROPE_LENGTH) {
 				Vec3d connection = this.getConnectionToNext();
 				if(connection != null) {
-					double mx = connection.xCoord * 0.02D;
-					double my = connection.yCoord * 0.02D;
-					double mz = connection.zCoord * 0.02D;
+					double mx = connection.x * 0.02D;
+					double my = connection.y * 0.02D;
+					double mz = connection.z * 0.02D;
 					double len = Math.sqrt(mx*mx + my*my + mz*mz);
 					if(len > 0.5D) {
 						mx /= len * 0.5D;
@@ -222,13 +223,13 @@ public class EntityRopeNode extends Entity {
 				if(tetherPoint.distanceTo(nextPoint) >= ROPE_LENGTH) {
 					Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
 					constrainedPoint = new Vec3d(
-							constrainedPoint.xCoord * ROPE_LENGTH, 
-							constrainedPoint.yCoord * ROPE_LENGTH, 
-							constrainedPoint.zCoord * ROPE_LENGTH).addVector(tetherPoint.xCoord, tetherPoint.yCoord, tetherPoint.zCoord);
+							constrainedPoint.x * ROPE_LENGTH, 
+							constrainedPoint.y * ROPE_LENGTH, 
+							constrainedPoint.z * ROPE_LENGTH).addVector(tetherPoint.x, tetherPoint.y, tetherPoint.z);
 					Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint);
-					this.motionX = -diff.xCoord;
-					this.motionY = -diff.yCoord;
-					this.motionZ = -diff.zCoord;
+					this.motionX = -diff.x;
+					this.motionY = -diff.y;
+					this.motionZ = -diff.z;
 				}
 			}
 
@@ -241,13 +242,13 @@ public class EntityRopeNode extends Entity {
 				if(tetherPoint.distanceTo(nextPoint) >= ROPE_LENGTH) {
 					Vec3d constrainedPoint = nextPoint.subtract(tetherPoint).normalize();
 					constrainedPoint = new Vec3d(
-							constrainedPoint.xCoord * ROPE_LENGTH, 
-							constrainedPoint.yCoord * ROPE_LENGTH, 
-							constrainedPoint.zCoord * ROPE_LENGTH).addVector(tetherPoint.xCoord, tetherPoint.yCoord, tetherPoint.zCoord);
+							constrainedPoint.x * ROPE_LENGTH, 
+							constrainedPoint.y * ROPE_LENGTH, 
+							constrainedPoint.z * ROPE_LENGTH).addVector(tetherPoint.x, tetherPoint.y, tetherPoint.z);
 					Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ).subtract(constrainedPoint).scale(0.8D);
-					this.motionX = -diff.xCoord;
-					this.motionY = -diff.yCoord;
-					this.motionZ = -diff.zCoord;
+					this.motionX = -diff.x;
+					this.motionY = -diff.y;
+					this.motionZ = -diff.z;
 				}
 			}
 
@@ -261,10 +262,10 @@ public class EntityRopeNode extends Entity {
 			this.motionZ = 0.0D;
 		}
 
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(nextNode == null) {
 				if(prevNode == null) {
-					this.kill();
+					this.onKillCommand();
 				} else {
 					this.despawnTimer++;
 					if(this.despawnTimer >= 12000) {
@@ -273,7 +274,7 @@ public class EntityRopeNode extends Entity {
 							prevRopeNode.setNextNode(null);
 							prevRopeNode.despawn(); 
 						}
-						this.kill();
+						this.onKillCommand();
 					}
 				}
 			} else {
@@ -282,16 +283,17 @@ public class EntityRopeNode extends Entity {
 		}
 	}
 
+
 	@Override
-	public boolean processInitialInteract(EntityPlayer player, @Nullable ItemStack stack, EnumHand hand) {
-		if(!this.worldObj.isRemote) {
+	public boolean processInitialInteract(EntityPlayer player,  EnumHand hand) {
+		if(!this.world.isRemote) {
 			Entity prevNode = this.getPreviousNodeByUUID();
 			Entity nextNode = this.getNextNodeByUUID();
 
 			if(prevNode != null) {
 				if(nextNode == null) {
 					EntityRopeNode connectedRopeNode = null;
-					for(Entity e : (List<Entity>) player.worldObj.loadedEntityList) {
+					for(Entity e : (List<Entity>) player.world.loadedEntityList) {
 						if(e instanceof EntityRopeNode) {
 							EntityRopeNode ropeNode = (EntityRopeNode) e;
 							if(ropeNode.getNextNodeByUUID() == player) {
@@ -301,7 +303,7 @@ public class EntityRopeNode extends Entity {
 						}
 					}
 					if(connectedRopeNode != null) {
-						player.addChatMessage(new TextComponentTranslation("chat.rope.alreadyConnected"));
+						player.sendMessage(new TextComponentTranslation("chat.rope.alreadyConnected"));
 						return false;
 					}
 
@@ -324,11 +326,11 @@ public class EntityRopeNode extends Entity {
 					endNode.setDead();
 
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
-						this.worldObj.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
+						this.world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.PLAYERS, 0.2F, ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.7F + 1.0F) * 2.0F);
 					} else {
-						EntityItem itemEntity = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
+						EntityItem itemEntity = new EntityItem(this.world, this.posX, this.posY, this.posZ, new ItemStack(ItemRegistry.CAVING_ROPE, 1));
 						itemEntity.setPickupDelay(0);
-						this.worldObj.spawnEntityInWorld(itemEntity);
+						this.world.spawnEntity(itemEntity);
 					}
 
 					return true;
@@ -358,7 +360,7 @@ public class EntityRopeNode extends Entity {
 			((EntityRopeNode)prevNode).setNextNode(nextConnectionNode);
 			((EntityRopeNode)prevNode).canExtend = false;
 		}
-		this.kill();
+		this.onKillCommand();
 	}
 
 	public void despawn() {
@@ -366,22 +368,22 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public boolean isAttached() {
-		return !this.worldObj.getCollisionBoxes(this.getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D)).isEmpty();
+		return !this.world.getCollisionBoxes(this, this.getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D)).isEmpty();
 	}
 
 	public EntityRopeNode extendRope(Entity entity, double x, double y, double z) {
-		EntityRopeNode ropeNode = new EntityRopeNode(this.worldObj);
+		EntityRopeNode ropeNode = new EntityRopeNode(this.world);
 		ropeNode.setLocationAndAngles(x, y, z, 0, 0);
 		ropeNode.setPreviousNode(this);
 		ropeNode.setNextNode(entity);
 		this.setNextNode(ropeNode);
-		this.worldObj.spawnEntityInWorld(ropeNode);
+		this.world.spawnEntity(ropeNode);
 		return ropeNode;
 	}
 
 	public Vec3d getConnectionToNext() {
 		Entity nextNode;
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			nextNode = this.getNextNode();
 		} else {
 			nextNode = this.getNextNodeByUUID();
@@ -449,7 +451,7 @@ public class EntityRopeNode extends Entity {
 	@SideOnly(Side.CLIENT)
 	public Entity getNextNode() {
 		if(this.cachedNextNodeEntity == null || !this.cachedNextNodeEntity.isEntityAlive() || this.cachedNextNodeEntity.getEntityId() != this.getDataManager().get(DW_NEXT_NODE)) {
-			Entity entity = this.worldObj.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
+			Entity entity = this.world.getEntityByID(this.getDataManager().get(DW_NEXT_NODE));
 			this.cachedNextNodeEntity = entity;
 			return entity;
 		}
@@ -459,7 +461,7 @@ public class EntityRopeNode extends Entity {
 	@SideOnly(Side.CLIENT)
 	public Entity getPreviousNode() {
 		if(this.cachedPrevNodeEntity == null || !this.cachedPrevNodeEntity.isEntityAlive() || this.cachedPrevNodeEntity.getEntityId() != this.getDataManager().get(DW_PREV_NODE)) {
-			Entity entity = this.worldObj.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
+			Entity entity = this.world.getEntityByID(this.getDataManager().get(DW_PREV_NODE));
 			this.cachedPrevNodeEntity = entity;
 			return entity;
 		}
@@ -467,7 +469,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
-		for(Entity entity : (List<Entity>) this.worldObj.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(24, 24, 24))) {
+		for(Entity entity : (List<Entity>) this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(24, 24, 24))) {
 			if (uuid.equals(entity.getUniqueID())) {
 				return entity;
 			}

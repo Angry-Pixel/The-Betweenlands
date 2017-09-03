@@ -2,6 +2,8 @@ package thebetweenlands.common.item.equipment;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -27,6 +29,8 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
+import javax.annotation.Nullable;
+
 public class ItemRingOfSummoning extends ItemRing {
 	public static final int MAX_USE_TIME = 100;
 	public static final int USE_COOLDOWN = 120;
@@ -36,9 +40,8 @@ public class ItemRingOfSummoning extends ItemRing {
 		this.setMaxDamage(256);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedTooltips) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add(I18n.format("tooltip.ring.summoning.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = I18n.format("tooltip.ring.summoning", KeyBindRegistry.RADIAL_MENU.getDisplayName(), KeyBindRegistry.USE_RING.getDisplayName());
@@ -50,7 +53,7 @@ public class ItemRingOfSummoning extends ItemRing {
 
 	@Override
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
-		if(!entity.worldObj.isRemote && entity instanceof EntityPlayer && entity.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
+		if(!entity.world.isRemote && entity instanceof EntityPlayer && entity.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {
 			ISummoningCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_SUMMON, null);
 
 			NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
@@ -68,41 +71,41 @@ public class ItemRingOfSummoning extends ItemRing {
 						cap.setActive(false);
 						cap.setCooldownTicks(USE_COOLDOWN);
 					} else {
-						int arms = entity.worldObj.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().expand(18, 18, 18), e -> e.getDistanceToEntity(entity) <= 18.0D).size();
+						int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().expand(18, 18, 18), e -> e.getDistanceToEntity(entity) <= 18.0D).size();
 
 						if(arms < MAX_ARMS) {
-							List<EntityLivingBase> targets = entity.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expand(16, 16, 16),
+							List<EntityLivingBase> targets = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().expand(16, 16, 16),
 									e -> e instanceof EntityLiving && e.getDistanceToEntity(entity) <= 16.0D && e != entity);
 
 							BlockPos targetPos = null;
 
 							if(!targets.isEmpty()) {
-								EntityLivingBase target = targets.get(entity.worldObj.rand.nextInt(targets.size()));
-								boolean isAttacked = !entity.worldObj.getEntitiesWithinAABB(EntityMummyArm.class, target.getEntityBoundingBox()).isEmpty();
+								EntityLivingBase target = targets.get(entity.world.rand.nextInt(targets.size()));
+								boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, target.getEntityBoundingBox()).isEmpty();
 								if(!isAttacked) {
 									targetPos = target.getPosition();
 								}
 							}
 
-							if(targetPos == null && entity.worldObj.rand.nextInt(3) == 0) {
+							if(targetPos == null && entity.world.rand.nextInt(3) == 0) {
 								targetPos = entity.getPosition().add(
-										entity.worldObj.rand.nextInt(16) - 8, 
-										entity.worldObj.rand.nextInt(6) - 3, 
-										entity.worldObj.rand.nextInt(16) - 8);
-								boolean isAttacked = !entity.worldObj.getEntitiesWithinAABB(EntityMummyArm.class, new AxisAlignedBB(targetPos)).isEmpty();
+										entity.world.rand.nextInt(16) - 8, 
+										entity.world.rand.nextInt(6) - 3, 
+										entity.world.rand.nextInt(16) - 8);
+								boolean isAttacked = !entity.world.getEntitiesWithinAABB(EntityMummyArm.class, new AxisAlignedBB(targetPos)).isEmpty();
 								if(isAttacked) {
 									targetPos = null;
 								}
 							}
 
-							if(targetPos != null && entity.worldObj.getBlockState(targetPos.down()).isSideSolid(entity.worldObj, targetPos.down(), EnumFacing.UP)) {
-								EntityMummyArm arm = new EntityMummyArm(entity.worldObj);
+							if(targetPos != null && entity.world.getBlockState(targetPos.down()).isSideSolid(entity.world, targetPos.down(), EnumFacing.UP)) {
+								EntityMummyArm arm = new EntityMummyArm(entity.world);
 								arm.setLocationAndAngles(targetPos.getX() + 0.5D, targetPos.getY(), targetPos.getZ() + 0.5D, 0, 0);
 
-								if(arm.worldObj.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
+								if(arm.world.getCollisionBoxes(arm, arm.getEntityBoundingBox()).isEmpty()) {
 									this.drainPower(stack, entity);
 									arm.setOwner(entity);
-									entity.worldObj.spawnEntityInWorld(arm);
+									entity.world.spawnEntity(arm);
 								}
 							}
 						}

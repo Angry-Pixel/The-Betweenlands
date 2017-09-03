@@ -37,7 +37,7 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 	@Override
 	public void deserialize(PacketBuffer buffer) {
 		this.receivedBuffer = buffer;
-		this.eventName = buffer.readStringFromBuffer(128);
+		this.eventName = buffer.readString(128);
 		this.active = buffer.readBoolean();
 	}
 
@@ -51,7 +51,7 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handleMessage() {
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();

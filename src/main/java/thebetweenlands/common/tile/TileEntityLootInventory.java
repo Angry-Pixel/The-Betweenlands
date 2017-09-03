@@ -29,7 +29,7 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 
 	public void fillWithLoot(@Nullable EntityPlayer player) {
 		if (this.lootTable != null) {
-			LootTable lootTable = this.worldObj.getLootTableManager().getLootTableFromLocation(this.lootTable);
+			LootTable lootTable = this.world.getLootTableManager().getLootTableFromLocation(this.lootTable);
 			this.lootTable = null;
 			Random random;
 
@@ -39,7 +39,7 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 				random = new Random(this.lootTableSeed);
 			}
 
-			LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) this.worldObj);
+			LootContext.Builder lootBuilder = new LootContext.Builder((WorldServer) this.world);
 
 			if (player != null) {
 				lootBuilder.withLuck(player.getLuck());
@@ -64,9 +64,9 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 			while (iterator.hasNext()) {
 				ItemStack itemstack = (ItemStack)iterator.next();
 
-				if (itemstack.stackSize <= 0) {
+				if (itemstack.getCount() <= 0) {
 					iterator.remove();
-				} else if (itemstack.stackSize > 1) {
+				} else if (itemstack.getCount() > 1) {
 					splittableStacks.add(itemstack);
 					iterator.remove();
 				}
@@ -76,21 +76,21 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 			emptySlotCount = emptySlotCount - loot.size() - splittableStacks.size();
 
 			while (emptySlotCount > 0 && ((List<ItemStack>)splittableStacks).size() > 0) {
-				ItemStack itemstack2 = (ItemStack)splittableStacks.remove(MathHelper.getRandomIntegerInRange(random, 0, splittableStacks.size() - 1));
-				int i = MathHelper.getRandomIntegerInRange(random, 1, itemstack2.stackSize / 2);
-				itemstack2.stackSize -= i;
+				ItemStack itemstack2 = (ItemStack)splittableStacks.remove(MathHelper.getInt(random, 0, splittableStacks.size() - 1));
+				int i = MathHelper.getInt(random, 1, itemstack2.getCount() / 2);
+				itemstack2.shrink( i);
 				ItemStack itemstack1 = itemstack2.copy();
-				itemstack1.stackSize = i;
+				itemstack1.setCount(i);
 
 				emptySlotCount--;
 				
-				if (emptySlotCount > 0 && itemstack2.stackSize > 1 && random.nextBoolean()) {
+				if (emptySlotCount > 0 && itemstack2.getCount() > 1 && random.nextBoolean()) {
 					splittableStacks.add(itemstack2);
 				} else {
 					loot.add(itemstack2);
 				}
 
-				if (emptySlotCount > 0 && itemstack1.stackSize > 1 && random.nextBoolean()) {
+				if (emptySlotCount > 0 && itemstack1.getCount() > 1 && random.nextBoolean()) {
 					splittableStacks.add(itemstack1);
 				} else {
 					loot.add(itemstack1);

@@ -21,7 +21,7 @@ public class PlayerDecayHandler {
 		if(event.phase == Phase.START) {
 			EntityPlayer player = event.player;
 
-			if(!player.worldObj.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+			if(!player.world.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 				float currentMaxHealth = (float) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
@@ -58,7 +58,7 @@ public class PlayerDecayHandler {
 					}
 
 					if(!event.player.isRiding()) {
-						EnumDifficulty difficulty = player.worldObj.getDifficulty();
+						EnumDifficulty difficulty = player.world.getDifficulty();
 
 						float decaySpeed = 0.0F;
 

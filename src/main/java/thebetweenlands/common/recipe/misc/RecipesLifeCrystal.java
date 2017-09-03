@@ -3,12 +3,17 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class RecipesLifeCrystal implements IRecipe {
+import javax.annotation.Nullable;
+
+public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
 		int hearts = 0;
@@ -47,13 +52,13 @@ public class RecipesLifeCrystal implements IRecipe {
 			}
 		}
 		crystal = crystal.copy();
-		crystal.setItemDamage(Math.max(0, crystal.getItemDamage() - MathHelper.ceiling_double_int(hearts * crystal.getMaxDamage() / 8.0F)));
+		crystal.setItemDamage(Math.max(0, crystal.getItemDamage() - MathHelper.ceil(hearts * crystal.getMaxDamage() / 8.0F)));
 		return crystal;
 	}
 
 	@Override
-	public int getRecipeSize() {
-		return 9;
+	public boolean canFit(int width, int height) {
+		return false;
 	}
 
 	@Override
@@ -62,35 +67,36 @@ public class RecipesLifeCrystal implements IRecipe {
 	}
 
 	@Override
-	public ItemStack[] getRemainingItems(InventoryCrafting inv) {
-		ItemStack[] remaining = new ItemStack[inv.getSizeInventory()];
+	public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
 
 		int requiredHearts = 0;
 
-		for (int i = 0; i < remaining.length; ++i) {
+		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(stack != null) {
 				if(stack.getItem() == ItemRegistry.LIFE_CRYSTAL) {
-					requiredHearts += MathHelper.ceiling_float_int(stack.getItemDamage() / (stack.getMaxDamage() / 8.0F));
+					requiredHearts += MathHelper.ceil(stack.getItemDamage() / (stack.getMaxDamage() / 8.0F));
 				}
 			}
 		}
 
-		for (int i = 0; i < remaining.length; ++i) {
+		for (int i = 0; i < remaining.size() ;++i) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(stack != null && stack.getItem() == ItemRegistry.WIGHT_HEART) {
 				if(requiredHearts > 0) {
 					requiredHearts--;
 				} else {
-					remaining[i] = stack.copy();
-					remaining[i].stackSize = 1;
+					remaining.set(i,stack.copy());
+					remaining.get(i).setCount(1);
 					continue;
 				}
 			} else {
-				remaining[i] = ForgeHooks.getContainerItem(stack);
+				remaining.set(i, ForgeHooks.getContainerItem(stack));
 			}
 		}
 
 		return remaining;
 	}
+
 }

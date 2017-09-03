@@ -23,7 +23,8 @@ public class RenderWeedwoodSign extends TileEntitySpecialRenderer<TileEntityWeed
 	private final ModelSign model = new ModelSign();
 
 	@Override
-	public void renderTileEntityAt(TileEntityWeedwoodSign te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityWeedwoodSign te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+
 		Block block = te.getBlockType();
 		GlStateManager.pushMatrix();
 

@@ -1,13 +1,6 @@
 package thebetweenlands.common.item.tools;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.lwjgl.input.Keyboard;
-
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -15,8 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
@@ -25,16 +17,21 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 
+import javax.annotation.Nullable;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ItemWeedwoodBucketInfusion extends Item {
 
     public ItemWeedwoodBucketInfusion() {
         this.setMaxStackSize(1);
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         if (hasTag(stack)) {
             if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
                 int infusionTime = stack.getTagCompound().getInteger("infusionTime");
@@ -42,36 +39,37 @@ public class ItemWeedwoodBucketInfusion extends Item {
                 list.add(TextFormatting.GREEN + "Infusion time: " + TextFormatting.RESET + infusionTimeSeconds);
                 list.add(TextFormatting.GREEN + "Ingredients:");
                 // The properties will be retrieved in the Alembic's TE logic
-                NBTTagList nbtList = (NBTTagList)stack.getTagCompound().getTag("ingredients");
+                NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
                 Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
-                for(int i = 0; i < nbtList.tagCount(); i++) {
-                    ItemStack ingredient = ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i));
+                for (int i = 0; i < nbtList.tagCount(); i++) {
+                    ItemStack ingredient = new ItemStack(nbtList.getCompoundTagAt(i));
                     boolean contained = false;
-                    for(Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
-                        if(ItemStack.areItemStacksEqual(stackCount.getKey(), ingredient)) {
+                    for (Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
+                        if (ItemStack.areItemStacksEqual(stackCount.getKey(), ingredient)) {
                             stackMap.put(stackCount.getKey(), stackCount.getValue() + 1);
                             contained = true;
                         }
                     }
-                    if(!contained) {
+                    if (!contained) {
                         stackMap.put(ingredient, 1);
                     }
                 }
-                for(Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
-                    ItemStack ingredient = stackCount.getKey();
-                    int count = stackCount.getValue();
-                    if(ingredient != null) {
-                        list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
-                        List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(player));
-                        if(ingredientAspects.size() >= 1) {
-                            if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)){
-                                for(Aspect aspect : ingredientAspects) {
-                                    list.add("  - " + aspect.type.getName() + " (" + aspect.getDisplayAmount() * count + ")");
-                                }
-                            }
-                        }
-                    }
-                }
+                //TODO find a way to use the player
+//                for (Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
+//                    ItemStack ingredient = stackCount.getKey();
+//                    int count = stackCount.getValue();
+//                    if (ingredient != null) {
+//                        list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
+//                        List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(player));
+//                        if (ingredientAspects.size() >= 1) {
+//                            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+//                                for (Aspect aspect : ingredientAspects) {
+//                                    list.add("  - " + aspect.type.getName() + " (" + aspect.getDisplayAmount() * count + ")");
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
             } else {
                 list.add("This Infusion Contains Nothing");
             }
@@ -119,10 +117,10 @@ public class ItemWeedwoodBucketInfusion extends Item {
         List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
         if (hasTag(stack)) {
             if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
-                NBTTagList nbtList = (NBTTagList)stack.getTagCompound().getTag("ingredients");
+                NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
                 Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
-                for(int i = 0; i < nbtList.tagCount(); i++) {
-                    ItemStack ingredient = ItemStack.loadItemStackFromNBT(nbtList.getCompoundTagAt(i));
+                for (int i = 0; i < nbtList.tagCount(); i++) {
+                    ItemStack ingredient = new ItemStack(nbtList.getCompoundTagAt(i));
                     infusingAspects.addAll(AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
                 }
             }
@@ -178,6 +176,6 @@ public class ItemWeedwoodBucketInfusion extends Item {
     }*/
 
     private int getColorFromRGBA(float r, float g, float b, float a) {
-        return ((int)(a * 255.0F) << 24) | ((int)(r * 255.0F) << 16) | ((int)(g * 255.0F) << 8) | ((int)(b * 255.0F));
+        return ((int) (a * 255.0F) << 24) | ((int) (r * 255.0F) << 16) | ((int) (g * 255.0F) << 8) | ((int) (b * 255.0F));
     }
 }

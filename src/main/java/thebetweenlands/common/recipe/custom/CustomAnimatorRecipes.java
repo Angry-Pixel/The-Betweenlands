@@ -6,6 +6,7 @@ import com.google.common.collect.ImmutableMap;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -45,7 +46,7 @@ public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
 						Entity entity = outputEntity.get().create(world, new Vec3d(pos), null);
 						if(entity != null) {
 							entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
-							world.spawnEntityInWorld(entity);
+							world.spawnEntity(entity);
 							return false;
 						}
 						return true;
@@ -54,7 +55,7 @@ public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
 				}
 			}.setCloseOnFinish(true);
 			if(renderedEntity.isPresent()) {
-				recipe.setRenderEntity(renderedEntity.get().create());
+				recipe.setRenderEntity(new ResourceLocation(renderedEntity.get().create()));
 			}
 		} else {
 			recipe = new AnimatorRecipe(input, fuel, life, output);

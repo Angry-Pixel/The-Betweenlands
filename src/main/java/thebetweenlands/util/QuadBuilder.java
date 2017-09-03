@@ -138,7 +138,6 @@ public class QuadBuilder {
 
 	/**
 	 * Sets whether the UV coordinates should be switched (U -> V, V -> U)
-	 * @param flip
 	 * @return
 	 */
 	public QuadBuilder setSwitchUV(boolean switchUV) {
@@ -288,9 +287,9 @@ public class QuadBuilder {
 			case NORMAL:
 				float[] normalData;
 				if(vertexNormal != null) {
-					normalData = new float[]{ (float) vertexNormal.xCoord, (float) vertexNormal.yCoord, (float) vertexNormal.zCoord, 0f };
+					normalData = new float[]{ (float) vertexNormal.x, (float) vertexNormal.y, (float) vertexNormal.z, 0f };
 				} else {
-					normalData = new float[]{ (float) -quadNormal.xCoord, (float) -quadNormal.yCoord, (float) -quadNormal.zCoord, 0f };
+					normalData = new float[]{ (float) -quadNormal.x, (float) -quadNormal.y, (float) -quadNormal.z, 0f };
 				}
 				if(transformation != null && transformation != TRSRTransformation.identity()) {
 					Vector4f vec = new Vector4f(normalData);
@@ -334,13 +333,13 @@ public class QuadBuilder {
 			quadNormal = vert1.pos.subtract(vert2.pos).crossProduct(vert3.pos.subtract(vert2.pos));
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
 		builder.setTexture(vert1.sprite);
-		putVertex(vert1.transformation, format, builder, quadNormal, vert1.pos.xCoord, vert1.pos.yCoord, vert1.pos.zCoord, vert1.u, vert1.v, vert1.sprite, vert1.switchUV, vert1.color, vert1.normal);
+		putVertex(vert1.transformation, format, builder, quadNormal, vert1.pos.x, vert1.pos.y, vert1.pos.z, vert1.u, vert1.v, vert1.sprite, vert1.switchUV, vert1.color, vert1.normal);
 		builder.setTexture(vert2.sprite);
-		putVertex(vert2.transformation, format, builder, quadNormal, vert2.pos.xCoord, vert2.pos.yCoord, vert2.pos.zCoord, vert2.u, vert2.v, vert2.sprite, vert2.switchUV, vert2.color, vert2.normal);
+		putVertex(vert2.transformation, format, builder, quadNormal, vert2.pos.x, vert2.pos.y, vert2.pos.z, vert2.u, vert2.v, vert2.sprite, vert2.switchUV, vert2.color, vert2.normal);
 		builder.setTexture(vert3.sprite);
-		putVertex(vert3.transformation, format, builder, quadNormal, vert3.pos.xCoord, vert3.pos.yCoord, vert3.pos.zCoord, vert3.u, vert3.v, vert3.sprite, vert3.switchUV, vert3.color, vert3.normal);
+		putVertex(vert3.transformation, format, builder, quadNormal, vert3.pos.x, vert3.pos.y, vert3.pos.z, vert3.u, vert3.v, vert3.sprite, vert3.switchUV, vert3.color, vert3.normal);
 		builder.setTexture(vert4.sprite);
-		putVertex(vert4.transformation, format, builder, quadNormal, vert4.pos.xCoord, vert4.pos.yCoord, vert4.pos.zCoord, vert4.u, vert4.v, vert4.sprite, vert4.switchUV, vert4.color, vert4.normal);
+		putVertex(vert4.transformation, format, builder, quadNormal, vert4.pos.x, vert4.pos.y, vert4.pos.z, vert4.u, vert4.v, vert4.sprite, vert4.switchUV, vert4.color, vert4.normal);
 		if(quadConsumer != null)
 			quadConsumer.accept(builder);
 		return builder.build();

@@ -25,8 +25,8 @@ public class DecayStats {
 	 * @param saturationModifier Saturation
 	 */
 	public void addStats(int decay, float saturationModifier) {
-		this.decayLevel = MathHelper.clamp_int(this.decayLevel + decay, 0, 20);
-		this.decaySaturationLevel = MathHelper.clamp_float(this.decaySaturationLevel + (float)-decay * saturationModifier * 2.0F, 0.0F, (float)(20 - this.decayLevel) / 4.0F);
+		this.decayLevel = MathHelper.clamp(this.decayLevel + decay, 0, 20);
+		this.decaySaturationLevel = MathHelper.clamp(this.decaySaturationLevel + (float)-decay * saturationModifier * 2.0F, 0.0F, (float)(20 - this.decayLevel) / 4.0F);
 		if(this.capability != null)
 			this.capability.markDirty();
 	}
@@ -36,7 +36,7 @@ public class DecayStats {
 	 * @param player
 	 */
 	public void onUpdate(EntityPlayer player) {
-		EnumDifficulty difficulty = player.worldObj.getDifficulty();
+		EnumDifficulty difficulty = player.world.getDifficulty();
 
 		this.prevDecayLevel = this.decayLevel;
 

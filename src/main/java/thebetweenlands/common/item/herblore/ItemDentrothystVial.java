@@ -7,6 +7,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -27,11 +28,10 @@ public class ItemDentrothystVial extends Item {
 
 
     @Override
-    @SideOnly(Side.CLIENT)
-    public void getSubItems(Item item, CreativeTabs tab, List list) {
-        list.add(new ItemStack(item, 1, 0)); //green
-        list.add(new ItemStack(item, 1, 1)); //green dirty
-        list.add(new ItemStack(item, 1, 2)); //orange
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        list.add(new ItemStack(this, 1, 0)); //green
+        list.add(new ItemStack(this, 1, 1)); //green dirty
+        list.add(new ItemStack(this, 1, 2)); //orange
     }
 
     @Override

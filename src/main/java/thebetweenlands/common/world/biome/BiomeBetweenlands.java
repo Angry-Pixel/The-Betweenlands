@@ -196,4 +196,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	public void updateFog() {
 
 	}
+
+	public void addTypes(){
+
+	}
 }

@@ -2,6 +2,8 @@ package thebetweenlands.common.item.equipment;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.resources.I18n;
@@ -16,14 +18,15 @@ import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.util.NBTHelper;
 
+import javax.annotation.Nullable;
+
 public class ItemRingOfPower extends ItemRing {
 	public ItemRingOfPower() {
 		this.setMaxDamage(1800);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> list, boolean advancedTooltips) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add(I18n.format("tooltip.ring.power.bonus"));
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
 			String toolTip = I18n.format("tooltip.ring.power", KeyBindRegistry.RADIAL_MENU.getDisplayName());

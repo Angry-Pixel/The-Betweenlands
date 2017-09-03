@@ -25,8 +25,8 @@ public class RenderLurker extends RenderLiving<EntityLurker> {
 	}
 
 	@Override
-	protected void rotateCorpse(EntityLurker lurker, float headPitch, float yaw, float partialTicks) {
-		super.rotateCorpse(lurker, headPitch, yaw, partialTicks);
+	protected void applyRotations(EntityLurker lurker, float headPitch, float yaw, float partialTicks) {
+		super.applyRotations(lurker, headPitch, yaw, partialTicks);
 		GlStateManager.rotate((lurker).getRotationPitch(partialTicks), 1, 0, 0);
 	}
 
@@ -37,7 +37,7 @@ public class RenderLurker extends RenderLiving<EntityLurker> {
 			GlStateManager.rotate(180, 1, 0, 0);
 			GlStateManager.translate(0, -1.25F, 0);
 			GlStateManager.translate(0, 0, 0.7F);
-			GlStateManager.rotate(-MathHelper.clamp_float(netHeadYaw, -50, 50), 0, 1, 0);
+			GlStateManager.rotate(-MathHelper.clamp(netHeadYaw, -50, 50), 0, 1, 0);
 			GlStateManager.rotate(headPitch, 1, 0, 0);
 			GlStateManager.translate(0, 0, 0.8F);
 			GlStateManager.color(1, 1, 1, 1);

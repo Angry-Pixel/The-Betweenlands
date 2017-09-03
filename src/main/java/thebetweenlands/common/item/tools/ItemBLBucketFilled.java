@@ -2,6 +2,7 @@ package thebetweenlands.common.item.tools;
 
 import java.util.List;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.creativetab.CreativeTabs;
@@ -9,16 +10,15 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.ForgeModContainer;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.UniversalBucket;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.wrappers.FluidBucketWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemBLBucketFilled extends UniversalBucket {
 	private static final class FluidBucketWrapperFixed extends FluidBucketWrapper {
@@ -94,18 +94,38 @@ public class ItemBLBucketFilled extends UniversalBucket {
 					net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getEmpty().getUnlocalizedName() + ".full.name", fluidLocalizedStr);
 	}
 
-	@SideOnly(Side.CLIENT)
 	@Override
-	public void getSubItems(Item itemIn, CreativeTabs tab, List<ItemStack> subItems) {
+	public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
 		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
 			if (fluid != FluidRegistry.WATER && fluid != FluidRegistry.LAVA && !fluid.getName().equals("milk") && !ItemSpecificBucket.hasSpecificBucket(this.getEmpty().getItem(), fluid)) {
 				// add all fluids that the bucket can be filled  with
 				FluidStack fs = new FluidStack(fluid, getCapacity());
 				ItemStack stack = new ItemStack(this);
-				if (fill(stack, fs, true) == fs.amount) {
-					subItems.add(stack);
+				if (!getFilledBucket(fs).isEmpty()) {
+					subItems.add(getFilledBucket(fs));
 				}
 			}
 		}
+	}
+
+
+	@Nonnull
+	public ItemStack getFilledBucket(@Nonnull FluidStack fluidStack)
+	{
+		Fluid fluid = fluidStack.getFluid();
+
+		if ( FluidRegistry.getBucketFluids().contains(fluid))
+		{
+			ItemStack filledBucket = new ItemStack(this);
+			FluidStack fluidContents = new FluidStack(fluidStack, this.getCapacity());
+
+			NBTTagCompound tag = new NBTTagCompound();
+			fluidContents.writeToNBT(tag);
+			filledBucket.setTagCompound(tag);
+
+			return filledBucket;
+		}
+
+		return ItemStack.EMPTY;
 	}
 }

@@ -18,6 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.MathHelper;
@@ -83,7 +84,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		return SoundRegistry.SNAIL_HURT;
 	}
 
@@ -97,9 +98,9 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 		if (super.attackEntityAsMob(entity)) {
 			if (entity instanceof EntityLiving) {
 				byte duration = 0;
-				if (worldObj.getDifficulty() == EnumDifficulty.NORMAL)
+				if (world.getDifficulty() == EnumDifficulty.NORMAL)
 					duration = 7;
-				else if (worldObj.getDifficulty() == EnumDifficulty.HARD)
+				else if (world.getDifficulty() == EnumDifficulty.HARD)
 					duration = 15;
 
 				if (duration > 0) {
@@ -134,15 +135,15 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 	public void shootMissile(EntityLivingBase entity, float distance) {
 		setRangeAttackTimer(0);
 		if (canEntityBeSeen(entity)) {
-			EntityThrowable missile = new EntitySnailPoisonJet(worldObj, this);
+			EntityThrowable missile = new EntitySnailPoisonJet(world, this);
 			missile.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 			missile.rotationPitch -= -20.0F;
 			double targetX = entity.posX + entity.motionX - this.posX;
 			double targetY = entity.posY + entity.getEyeHeight() / 2.0D - this.posY;
 			double targetZ = entity.posZ + entity.motionZ - this.posZ;
-			float target = MathHelper.sqrt_double(targetX * targetX + targetZ * targetZ);
+			float target = MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
 			missile.setThrowableHeading(targetX, targetY + target * 0.1F, targetZ, 0.75F, 8.0F);
-			worldObj.spawnEntityInWorld(missile);
+			world.spawnEntity(missile);
 		}
 	}
 

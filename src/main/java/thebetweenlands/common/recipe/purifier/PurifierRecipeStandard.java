@@ -7,13 +7,13 @@ public class PurifierRecipeStandard extends PurifierRecipe {
 	private final ItemStack input;
 
 	public PurifierRecipeStandard(ItemStack output, ItemStack input) {
-		this.output = ItemStack.copyItemStack(output);
-		this.input = ItemStack.copyItemStack(input);
+		this.output = output.copy();
+		this.input =input.copy();
 	}
 
 	@Override
 	public ItemStack getOutput(ItemStack input) {
-		return ItemStack.copyItemStack(output);
+		return output.copy();
 	}
 
 	@Override

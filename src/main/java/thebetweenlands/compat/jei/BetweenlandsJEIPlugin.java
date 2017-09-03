@@ -34,6 +34,8 @@ public class BetweenlandsJEIPlugin extends BlankModPlugin{
     public static IJeiHelpers jeiHelper;
     public static IJeiRuntime jeiRuntime;
 
+
+    //TODO update all this shizzel
     @Override
     public void register(IModRegistry registry) {
     	MinecraftForge.EVENT_BUS.register(DynamicJEIRecipeHandler.class);

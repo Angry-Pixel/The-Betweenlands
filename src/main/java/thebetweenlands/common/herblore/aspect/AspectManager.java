@@ -337,7 +337,7 @@ public class AspectManager {
 	 */
 	@Nullable
 	public static AspectItem readAspectItemFromNBT(NBTTagCompound nbt) {
-		ItemStack item = nbt.hasKey("item") ? ItemStack.loadItemStackFromNBT(nbt.getCompoundTag("item")) : null;
+		ItemStack item = nbt.hasKey("item") ? new ItemStack(nbt.getCompoundTag("item")) : null;
 		if(item == null)
 			return null;
 		return AspectManager.getAspectItem(item);
@@ -448,7 +448,6 @@ public class AspectManager {
 
 	/**
 	 * Returns a list of all static aspects on an item
-	 * @param item
 	 * @return
 	 */
 	@Nonnull
@@ -494,7 +493,6 @@ public class AspectManager {
 	 * this will only return the aspects that the player has discovered.
 	 * If the player is null this will return all aspects on an item.
 	 * @param item
-	 * @param player
 	 * @return
 	 */
 	public List<Aspect> getDiscoveredAspects(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
@@ -512,7 +510,6 @@ public class AspectManager {
 	 * this will only return the aspect types that the player has discovered.
 	 * If the player is null this will return all aspect types on an item.
 	 * @param item
-	 * @param player
 	 * @return
 	 */
 	public List<IAspectType> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {

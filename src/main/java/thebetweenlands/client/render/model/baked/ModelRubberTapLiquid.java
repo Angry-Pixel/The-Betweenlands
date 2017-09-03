@@ -5,10 +5,11 @@ import java.util.List;
 
 import javax.vecmath.Matrix4f;
 
+import java.util.Optional;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -25,14 +26,12 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.util.QuadBuilder;
 
-public class ModelRubberTapLiquid implements IModel, IModelCustomData {
+public class ModelRubberTapLiquid implements IModel {
 	private final int height;
 	private final ResourceLocation fluidTexture;
 
@@ -54,9 +53,9 @@ public class ModelRubberTapLiquid implements IModel, IModelCustomData {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		return new BakedModelRubberTapLiquid(format, state.apply(Optional.<IModelPart>absent()), map, this.fluidTexture != null ? bakedTextureGetter.apply(this.fluidTexture) : null, this.height);
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
+		return new BakedModelRubberTapLiquid(format, state.apply(Optional.empty()), map, this.fluidTexture != null ? bakedTextureGetter.apply(this.fluidTexture) : null, this.height);
 	}
 
 	@Override
@@ -84,7 +83,7 @@ public class ModelRubberTapLiquid implements IModel, IModelCustomData {
 		return new ModelRubberTapLiquid(new ResourceLocation(fluid), height);
 	}
 
-	private static final class BakedModelRubberTapLiquid implements IBakedModel, IPerspectiveAwareModel {
+	private static final class BakedModelRubberTapLiquid implements IBakedModel {
 		protected final TRSRTransformation transformation;
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 		private final TextureAtlasSprite fluidSprite;
@@ -92,7 +91,7 @@ public class ModelRubberTapLiquid implements IModel, IModelCustomData {
 
 		private BakedModelRubberTapLiquid(VertexFormat format, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, TextureAtlasSprite fluidSprite, int height) {
 			this.fluidSprite = fluidSprite;
-			this.transformation = transformation.isPresent() ? transformation.get() : null;
+			this.transformation = transformation.orElse(null);
 			this.transforms = transforms;
 
 			if(height > 0) {
@@ -148,7 +147,7 @@ public class ModelRubberTapLiquid implements IModel, IModelCustomData {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
+			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
 		}
 	}
 }

@@ -31,7 +31,7 @@ public class ItemTooltipHandler {
 		ICompostBinRecipe recipe = CompostRecipe.getCompostRecipe(stack);
 		if(recipe != null) {
 			String debug = "";
-			if(event.isShowAdvancedItemTooltips()) {
+			if(event.getFlags().isAdvanced()) {
 				debug = " (T: " + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(recipe.getCompostingTime(stack) / 20.0F) + "s A: " + recipe.getCompostAmount(stack) + ")";
 			}
 			toolTip.add(I18n.format("tooltip.compost.compostable") + debug);
@@ -48,11 +48,11 @@ public class ItemTooltipHandler {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
 				int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
-				((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.isShowAdvancedItemTooltips(), toolTip);
+				((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.getFlags().isAdvanced(), toolTip);
 			}
 		}
 
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 		if(stack.getItem() instanceof IEquippable && player != null && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
 			toolTip.add(I18n.format("tooltip.item.equippable"));
 		}

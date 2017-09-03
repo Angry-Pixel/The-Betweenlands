@@ -133,7 +133,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int rot = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rot = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		worldIn.setBlockState(pos.up(), this.getDefaultState().withProperty(HALF, BlockDoublePlantBL.EnumBlockHalf.UPPER).withProperty(FACING, EnumFacing.getHorizontal(rot)), 2);
 	}
 

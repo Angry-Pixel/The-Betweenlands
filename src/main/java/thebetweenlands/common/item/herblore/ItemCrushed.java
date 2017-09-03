@@ -13,10 +13,7 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,7 +29,8 @@ public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (stack.getItemDamage() == EnumItemCrushed.GROUND_DRIED_SWAMP_REED.ordinal()) {
 			Block block = worldIn.getBlockState(pos).getBlock();
 			if (block instanceof IGrowable) {
@@ -42,7 +40,7 @@ public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 						if (growable.canUseBonemeal(worldIn, worldIn.rand, pos, worldIn.getBlockState(pos))) {
 							growable.grow(worldIn, worldIn.rand, pos, worldIn.getBlockState(pos));
 						}
-						--stack.stackSize;
+						stack.shrink(1);
 					}
 					return EnumActionResult.SUCCESS;
 				}
@@ -52,11 +50,10 @@ public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void getSubItems(Item item, CreativeTabs tab, List list) {
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		super.getSubItems(tab, items);
 		for (EnumItemCrushed type : EnumItemCrushed.values())
-			list.add(type.create(1));
+			items.add(type.create(1));
 	}
 
 	@Override

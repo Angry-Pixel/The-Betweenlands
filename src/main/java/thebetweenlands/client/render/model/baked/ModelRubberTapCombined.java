@@ -11,11 +11,10 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
 import net.minecraftforge.common.model.IModelState;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTap;
 
-public class ModelRubberTapCombined implements IModelCustomData {
+public class ModelRubberTapCombined implements IModel {
 	private final IModel tapModel;
 	private final int height;
 	private final ResourceLocation tapTexture;
@@ -43,7 +42,7 @@ public class ModelRubberTapCombined implements IModelCustomData {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		return this.tapModel.bake(state, format, bakedTextureGetter);
 	}
 

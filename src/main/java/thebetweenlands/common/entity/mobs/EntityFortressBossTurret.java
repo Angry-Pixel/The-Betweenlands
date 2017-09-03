@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.google.common.base.Optional;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -85,7 +86,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expandXyz(64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -112,7 +113,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.cachedTarget = null;
 		} else if(this.cachedTarget == null || !this.cachedTarget.isEntityAlive() || !this.cachedTarget.getUniqueID().equals(uuid)) {
 			this.cachedTarget = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expandXyz(64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedTarget = entity;
 					break;
@@ -178,7 +179,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if(!this.worldObj.isRemote && (this.worldObj.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
+		if(!this.world.isRemote && (this.world.getDifficulty() == EnumDifficulty.PEACEFUL || (this.getOwner() != null && !this.getOwner().isEntityAlive()))) {
 			this.setDead();
 			return;
 		}
@@ -187,21 +188,21 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		this.motionZ = 0;
 		super.onUpdate();
 
-		if(this.worldObj.isRemote) {
+		if(this.world.isRemote) {
 			if(!this.particlesSpawned) {
 				this.particlesSpawned = true;
 				for(int i = 0; i < 6; i++) {
 					this.spawnVolatileParticles();
 				}
 			}
-			if(this.worldObj.rand.nextInt(6) == 0) {
+			if(this.world.rand.nextInt(6) == 0) {
 				this.spawnFlameParticles();
 			}
 		}
 
 		if(this.getTarget() == null) {
 			AxisAlignedBB searchBB = this.getEntityBoundingBox().expand(16, 16, 16);
-			List<EntityPlayer> eligiblePlayers = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, searchBB);
+			List<EntityPlayer> eligiblePlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, searchBB);
 			EntityPlayer closest = null;
 			for(EntityPlayer player : eligiblePlayers) {
 				if(closest == null || closest.getDistanceToEntity(this) > player.getDistanceToEntity(this))
@@ -216,18 +217,18 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.attackTicks++;
 
 			if(this.attackTicks > this.attackDelay) {
-				if(!this.worldObj.isRemote) {
+				if(!this.world.isRemote) {
 					if(!this.isObstructedByBoss()) {
 						Vec3d diff = new Vec3d(this.posX, this.posY, this.posZ)
 								.subtract(new Vec3d(this.getTarget().getEntityBoundingBox().minX + (this.getTarget().getEntityBoundingBox().maxX - this.getTarget().getEntityBoundingBox().minX) / 2.0D,
 										this.getTarget().getEntityBoundingBox().minY + (this.getTarget().getEntityBoundingBox().maxY - this.getTarget().getEntityBoundingBox().minY) / 2.0D,
 										this.getTarget().getEntityBoundingBox().minZ + (this.getTarget().getEntityBoundingBox().maxZ - this.getTarget().getEntityBoundingBox().minZ) / 2.0D)).normalize();
-						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.worldObj, this.getOwner());
+						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this.getOwner());
 						bullet.setDeflectable(this.isDeflectable());
 						bullet.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						float speed = 0.5F;
-						bullet.setThrowableHeading(-diff.xCoord, -diff.yCoord, -diff.zCoord, speed, 0.0F);
-						this.worldObj.spawnEntityInWorld(bullet);
+						bullet.setThrowableHeading(-diff.x, -diff.y, -diff.z, speed, 0.0F);
+						this.world.spawnEntity(bullet);
 					}
 				} else {
 					for(int i = 0; i < 6; i++)
@@ -243,9 +244,9 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 	public boolean isObstructedByBoss() {
 		Vec3d ray = this.getLookVec().normalize();
 		Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
-		Vec3d nextPos = currentPos.addVector(ray.xCoord * 64.0D, ray.yCoord * 64.0D, ray.zCoord * 64.0D);
+		Vec3d nextPos = currentPos.addVector(ray.x * 64.0D, ray.y * 64.0D, ray.z * 64.0D);
 		Entity hitEntity = null;
-		List<Entity> hitEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(64, 64, 64));
+		List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(64, 64, 64));
 		double minDist = 0.0D;
 		for (int i = 0; i < hitEntities.size(); ++i) {
 			Entity entity = (Entity)hitEntities.get(i);
@@ -270,7 +271,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 
 	@SideOnly(Side.CLIENT)
 	private void spawnFlameParticles() {
-		BLParticles.GREEN_FLAME.spawn(this.worldObj, this.posX, this.posY + 0.2F, this.posZ, ParticleArgs.get().withMotion((this.worldObj.rand.nextFloat() - 0.5F) / 5.0F, (this.worldObj.rand.nextFloat() - 0.5F) / 5.0F, (this.worldObj.rand.nextFloat() - 0.5F) / 5.0F));
+		BLParticles.GREEN_FLAME.spawn(this.world, this.posX, this.posY + 0.2F, this.posZ, ParticleArgs.get().withMotion((this.world.rand.nextFloat() - 0.5F) / 5.0F, (this.world.rand.nextFloat() - 0.5F) / 5.0F, (this.world.rand.nextFloat() - 0.5F) / 5.0F));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -280,22 +281,22 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		final double cy = this.posY + 0.35D;
 		final double cz = this.posZ;
 		for(int i = 0; i < 8; i++) {
-			double px = this.worldObj.rand.nextFloat() * 0.7F;
-			double py = this.worldObj.rand.nextFloat() * 0.7F;
-			double pz = this.worldObj.rand.nextFloat() * 0.7F;
+			double px = this.world.rand.nextFloat() * 0.7F;
+			double py = this.world.rand.nextFloat() * 0.7F;
+			double pz = this.world.rand.nextFloat() * 0.7F;
 			Vec3d vec = new Vec3d(px, py, pz).subtract(new Vec3d(0.35F, 0.35F, 0.35F)).normalize();
-			px = cx + vec.xCoord * radius;
-			py = cy + vec.yCoord * radius;
-			pz = cz + vec.zCoord * radius;
-			BLParticles.STEAM_PURIFIER.spawn(this.worldObj, px, py, pz);
+			px = cx + vec.x * radius;
+			py = cy + vec.y * radius;
+			pz = cz + vec.z * radius;
+			BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz);
 		}
 	}
 
 	@Override
-	public void moveEntityWithHeading(float strafe, float forward) {
+	public void travel(float strafe, float up, float forward) {
 		if (this.isInWater()) {
-			this.moveRelative(strafe, forward, 0.02F);
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.moveRelative(strafe, up, forward, 0.02F);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= 0.800000011920929D;
 			this.motionY *= 0.800000011920929D;
 			this.motionZ *= 0.800000011920929D;
@@ -303,18 +304,18 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			float friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
 			float groundFriction = 0.16277136F / (friction * friction * friction);
-			this.moveRelative(strafe, forward, this.onGround ? 0.1F * groundFriction : 0.02F);
+			this.moveRelative(strafe, up,  forward, this.onGround ? 0.1F * groundFriction : 0.02F);
 			friction = 0.91F;
 
 			if (this.onGround) {
-				friction = this.worldObj.getBlockState(new BlockPos(MathHelper.floor_double(this.posX), MathHelper.floor_double(this.getEntityBoundingBox().minY) - 1, MathHelper.floor_double(this.posZ))).getBlock().slipperiness * 0.91F;
+				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
 			}
 
-			this.moveEntity(this.motionX, this.motionY, this.motionZ);
+			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
 			this.motionX *= (double)friction;
 			this.motionY *= (double)friction;
 			this.motionZ *= (double)friction;
@@ -323,7 +324,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		this.prevLimbSwingAmount = this.limbSwingAmount;
 		double dx = this.posX - this.prevPosX;
 		double dz = this.posZ - this.prevPosZ;
-		float distanceMoved = MathHelper.sqrt_double(dx * dx + dz * dz) * 4.0F;
+		float distanceMoved = MathHelper.sqrt(dx * dx + dz * dz) * 4.0F;
 
 		if (distanceMoved > 1.0F) {
 			distanceMoved = 1.0F;

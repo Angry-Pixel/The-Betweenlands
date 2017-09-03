@@ -97,7 +97,7 @@ public class FogState {
 		MutableFog defaultBiomeFog = new MutableFog().setType(FogType.LINEAR).setDensity(0.0F).setColorIncrement(0.001F).setDistanceIncrementMultiplier(1.0F)
 				.setRed(0.5F).setGreen(0.5F).setBlue(0.5F).setStart(farPlaneDistance).setEnd(farPlaneDistance).setColorMultiplier(1);
 
-		Biome biome = world.getBiomeGenForCoords(new BlockPos(position));
+		Biome biome = world.getBiome(new BlockPos(position));
 
 		if(biome instanceof BiomeBetweenlands) {
 			BiomeBetweenlands biomeBl = (BiomeBetweenlands) biome;
@@ -153,18 +153,18 @@ public class FogState {
 		float fixedFogStart = this.getFixedFogStart(defaultAmbientFog.getStart());
 		float fixedFogEnd = this.getFixedFogEnd(defaultAmbientFog.getEnd());
 
-		if(position.yCoord < WorldProviderBetweenlands.CAVE_START) {
-			float fogColorMultiplier = ((float)(WorldProviderBetweenlands.CAVE_START - position.yCoord) / WorldProviderBetweenlands.CAVE_START);
+		if(position.y < WorldProviderBetweenlands.CAVE_START) {
+			float fogColorMultiplier = ((float)(WorldProviderBetweenlands.CAVE_START - position.y) / WorldProviderBetweenlands.CAVE_START);
 			fogColorMultiplier = 1.0F - fogColorMultiplier;
 			fogColorMultiplier *= Math.pow(fogColorMultiplier, 8.5);
 			fogColorMultiplier = fogColorMultiplier * 0.95F + 0.05F;
-			if(position.yCoord <= WorldProviderBetweenlands.PITSTONE_HEIGHT) {
+			if(position.y <= WorldProviderBetweenlands.PITSTONE_HEIGHT) {
 				float targettedMultiplier = 0.3F;
 				if(fogColorMultiplier < targettedMultiplier) {
-					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - position.yCoord)), 0.85F);
+					fogColorMultiplier += Math.pow(((targettedMultiplier - fogColorMultiplier) / WorldProviderBetweenlands.PITSTONE_HEIGHT * (WorldProviderBetweenlands.PITSTONE_HEIGHT - position.y)), 0.85F);
 				}
 			}
-			fogColorMultiplier = MathHelper.clamp_float(fogColorMultiplier, 0.1F, 1);
+			fogColorMultiplier = MathHelper.clamp(fogColorMultiplier, 0.1F, 1);
 			fogColorMultiplier = Math.min(fogColorMultiplier, 1.0F);
 			fogColorMultiplier = fogColorMultiplier + (1.0F - fogColorMultiplier) * (float)Math.pow(lowViewDistanceFogReduction, 2.25D);
 			defaultAmbientFog.setStart(fixedFogStart * fogColorMultiplier);

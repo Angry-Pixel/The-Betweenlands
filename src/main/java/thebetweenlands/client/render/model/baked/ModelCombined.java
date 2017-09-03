@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import javax.vecmath.Matrix4f;
 
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
@@ -27,12 +28,10 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.common.model.IModelState;
 
-public class ModelCombined implements IModelCustomData {
+public class ModelCombined implements IModel {
 	private IModel baseModel;
 	private IModel additionalModel;
 
@@ -64,7 +63,7 @@ public class ModelCombined implements IModelCustomData {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
 		IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
 		return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
@@ -75,7 +74,7 @@ public class ModelCombined implements IModelCustomData {
 		return this.baseModel.getDefaultState();
 	}
 
-	public static class BakedCombinedModel implements IPerspectiveAwareModel {
+	public static class BakedCombinedModel implements IBakedModel {
 		private final IBakedModel baseBakedModel;
 		private final IBakedModel additionalBakedModel;
 
@@ -127,10 +126,10 @@ public class ModelCombined implements IModelCustomData {
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 			Pair<? extends IBakedModel, Matrix4f> result;
-			if(this.baseBakedModel instanceof IPerspectiveAwareModel) {
-				result = ((IPerspectiveAwareModel)this.baseBakedModel).handlePerspective(cameraTransformType);
+			if(this.baseBakedModel instanceof PerspectiveMapWrapper) {
+				result = ((PerspectiveMapWrapper)this.baseBakedModel).handlePerspective(cameraTransformType);
 			} else 
-				result = IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
+				result = PerspectiveMapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
 			return Pair.of(this, result.getValue());
 		}
 	}
@@ -146,16 +145,16 @@ public class ModelCombined implements IModelCustomData {
 		ResourceLocation additionalModelLocation = new ResourceLocation(parser.parse(additionalJsonStr).getAsString());
 
 		IModel baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
-		if(baseModel instanceof IModelCustomData) {
+		if(baseModel instanceof IModel) {
 			if(!customData.containsKey("model_base_data"))
 				return this;
-			baseModel = ((IModelCustomData)baseModel).process(getCustomDataFor(parser, customData.get("model_base_data")));
+			baseModel = ((IModel)baseModel).process(getCustomDataFor(parser, customData.get("model_base_data")));
 		}
 		IModel additionalModel = ModelLoaderRegistry.getModelOrLogError(additionalModelLocation, "Could not find additional model for combined model");
-		if(additionalModel instanceof IModelCustomData) {
+		if(additionalModel instanceof IModel) {
 			if(!customData.containsKey("model_additional_data"))
 				return this;
-			additionalModel = ((IModelCustomData)additionalModel).process(getCustomDataFor(parser, customData.get("model_additional_data")));
+			additionalModel = ((IModel)additionalModel).process(getCustomDataFor(parser, customData.get("model_additional_data")));
 		}
 
 		return new ModelCombined(baseModel, additionalModel);

@@ -38,6 +38,11 @@ public class PurifierRecipeCategory implements IRecipeCategory {
     }
 
     @Override
+    public String getModName() {
+        return ModInfo.NAME;
+    }
+
+    @Override
     public IDrawable getBackground() {
         return background;
     }
@@ -53,15 +58,6 @@ public class PurifierRecipeCategory implements IRecipeCategory {
 
     }
 
-    @Override
-    public void drawAnimations(Minecraft minecraft) {
-
-    }
-
-    @Override
-    public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper) {
-
-    }
 
     @Override
     public void setRecipe(IRecipeLayout recipeLayout, IRecipeWrapper recipeWrapper, IIngredients ingredients) {

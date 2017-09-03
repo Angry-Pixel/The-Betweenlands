@@ -19,7 +19,7 @@ public class InputHandler {
 
 	@SubscribeEvent
 	public static void onInput(InputEvent event) {
-		EntityPlayer player = Minecraft.getMinecraft().thePlayer;
+		EntityPlayer player = Minecraft.getMinecraft().player;
 
 		if(player != null) {
 			updateUseButtonState();

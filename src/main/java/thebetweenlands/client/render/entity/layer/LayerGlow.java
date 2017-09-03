@@ -69,7 +69,7 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	 * @param partialTicks
 	 */
 	protected void setLightmap(T entityLivingIn, float partialTicks) {
-		int i = entityLivingIn.getBrightnessForRender(partialTicks);
+		int i = entityLivingIn.getBrightnessForRender();
 		int j = i % 65536;
 		int k = i / 65536;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float)j, (float)k);

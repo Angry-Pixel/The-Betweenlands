@@ -3,14 +3,15 @@ package thebetweenlands.client.render.model.baked;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 import com.google.gson.JsonParser;
@@ -26,9 +27,6 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.IModelCustomData;
-import net.minecraftforge.client.model.IPerspectiveAwareModel;
-import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.util.ModelConverter;
@@ -38,7 +36,7 @@ import thebetweenlands.util.ModelConverter.Quad;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.Vec3UV;
 
-public class ModelFromModelBase implements IModelCustomData {
+public class ModelFromModelBase implements IModel {
 	public static interface IVertexProcessor {
 		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box);
 	}
@@ -103,9 +101,9 @@ public class ModelFromModelBase implements IModelCustomData {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		ImmutableMap<TransformType, TRSRTransformation> map = IPerspectiveAwareModel.MapWrapper.getTransforms(state);
-		return new ModelBakedModelBase(this.vertexProcessor, state.apply(Optional.<IModelPart>absent()), map, format, this.model, bakedTextureGetter.apply(this.texture), bakedTextureGetter.apply(this.particleTexture), this.width, this.height, this.ambientOcclusion);
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
+		return new ModelBakedModelBase(this.vertexProcessor, state.apply(Optional.empty()), map, format, this.model, bakedTextureGetter.apply(this.texture), bakedTextureGetter.apply(this.particleTexture), this.width, this.height, this.ambientOcclusion);
 	}
 
 	@Override
@@ -113,7 +111,7 @@ public class ModelFromModelBase implements IModelCustomData {
 		return TRSRTransformation.identity();
 	}
 
-	public static class ModelBakedModelBase implements IPerspectiveAwareModel {
+	public static class ModelBakedModelBase implements IBakedModel {
 		protected final TRSRTransformation transformation;
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 		protected final VertexFormat format;
@@ -123,7 +121,7 @@ public class ModelFromModelBase implements IModelCustomData {
 		protected final boolean ambientOcclusion;
 
 		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, TextureAtlasSprite particleTexture, int width, int height, boolean ambientOcclusion) {
-			this.transformation = transformation.isPresent() ? transformation.get() : null;
+			this.transformation = transformation.orElse(null);
 			this.transforms = transforms;
 			this.format = format;
 			this.texture = texture;
@@ -185,7 +183,7 @@ public class ModelFromModelBase implements IModelCustomData {
 
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
-			return IPerspectiveAwareModel.MapWrapper.handlePerspective(this, this.transforms, type);
+			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
 		}
 	}
 

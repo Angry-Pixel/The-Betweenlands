@@ -218,7 +218,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 3 : 4) == 0) {
+			if (attacker.world.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 3 : 4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -228,7 +228,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(4) == 0) {
+			if (attacker.world.rand.nextInt(4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -238,7 +238,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(4) == 0) {
+			if (attacker.world.rand.nextInt(4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -248,7 +248,7 @@ public class ItemRegistry {
 		@Override
 		public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
 			super.hitEntity(stack, target, attacker);
-			if (attacker.worldObj.rand.nextInt(4) == 0) {
+			if (attacker.world.rand.nextInt(4) == 0) {
 				target.setFire(10);
 			}
 			return false;
@@ -396,9 +396,9 @@ public class ItemRegistry {
 	}
 
 	private static void registerItem(Item item, String fieldName) {
-		String itemName = fieldName.toLowerCase(Locale.ENGLISH);
-		GameRegistry.register(item.setRegistryName(ModInfo.ID, itemName).setUnlocalizedName(ModInfo.NAME_PREFIX + CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, itemName)));
 		ITEMS.add(item);
+		String name = fieldName.toLowerCase(Locale.ENGLISH);
+		item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
 	}
 
 	public interface ISubItemsItem {

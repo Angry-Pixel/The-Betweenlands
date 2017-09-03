@@ -24,10 +24,10 @@ public final class TeleporterHandler {
 	}
 
 	private void transferEntity(Entity entity, int dimensionId) {
-		World world = entity.worldObj;
+		World world = entity.world;
 		if (!world.isRemote && !entity.isDead && !(entity instanceof FakePlayer)) {
 			MinecraftServer server = world.getMinecraftServer();
-			WorldServer toWorld = server.worldServerForDimension(dimensionId);
+			WorldServer toWorld = server.getWorld(dimensionId);
 			if (entity instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
 				player.mcServer.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(toWorld));
@@ -37,7 +37,7 @@ public final class TeleporterHandler {
 				world.removeEntityDangerously(entity);
 				entity.dimension = dimensionId;
 				entity.isDead = false;
-				WorldServer oldWorld = server.worldServerForDimension(entity.dimension);
+				WorldServer oldWorld = server.getWorld(entity.dimension);
 				server.getPlayerList().transferEntityToWorld(entity, dimensionId, oldWorld, toWorld, new TeleporterBetweenlands(toWorld));
 			}
 		}

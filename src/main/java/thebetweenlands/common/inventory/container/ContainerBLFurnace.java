@@ -42,9 +42,9 @@ public class ContainerBLFurnace extends Container {
 	@Override
 	public void addListener(IContainerListener listener) {
 		super.addListener(listener);
-		listener.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
-		listener.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
-		listener.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
+		listener.sendWindowProperty(this, 0, tileFurnace.furnaceCookTime);
+		listener.sendWindowProperty(this, 1, tileFurnace.furnaceBurnTime);
+		listener.sendWindowProperty(this, 2, tileFurnace.currentItemBurnTime);
 	}
 
 	@Override
@@ -54,13 +54,13 @@ public class ContainerBLFurnace extends Container {
         for (IContainerListener listener : listeners) {
 
             if (lastCookTime != tileFurnace.furnaceCookTime)
-            	listener.sendProgressBarUpdate(this, 0, tileFurnace.furnaceCookTime);
+            	listener.sendWindowProperty(this, 0, tileFurnace.furnaceCookTime);
 
             if (lastBurnTime != tileFurnace.furnaceBurnTime)
-            	listener.sendProgressBarUpdate(this, 1, tileFurnace.furnaceBurnTime);
+            	listener.sendWindowProperty(this, 1, tileFurnace.furnaceBurnTime);
 
             if (lastItemBurnTime != tileFurnace.currentItemBurnTime)
-            	listener.sendProgressBarUpdate(this, 2, tileFurnace.currentItemBurnTime);
+            	listener.sendWindowProperty(this, 2, tileFurnace.currentItemBurnTime);
         }
 
         lastCookTime = tileFurnace.furnaceCookTime;
@@ -83,7 +83,7 @@ public class ContainerBLFurnace extends Container {
 
 	@Override
     public boolean canInteractWith(EntityPlayer player) {
-        return tileFurnace.isUseableByPlayer(player);
+        return tileFurnace.isUsableByPlayer(player);
     }
 
 	@Override
@@ -101,7 +101,7 @@ public class ContainerBLFurnace extends Container {
                 slot.onSlotChange(itemstack1, itemstack);
             }
             else if (slotIndex != 1 && slotIndex != 0 && slotIndex != 3) {
-                if (FurnaceRecipes.instance().getSmeltingResult(itemstack1) != null) {
+                if (!FurnaceRecipes.instance().getSmeltingResult(itemstack1).isEmpty()) {
                     if (!mergeItemStack(itemstack1, 0, 1, false))
                         return null;
                 }
@@ -122,14 +122,14 @@ public class ContainerBLFurnace extends Container {
             }
             else if (!mergeItemStack(itemstack1, 4, 39, false))
                 return null;
-            if (itemstack1.stackSize == 0)
+            if (itemstack1.getCount() == 0)
                 slot.putStack((ItemStack)null);
             else
                 slot.onSlotChanged();
-            if (itemstack1.stackSize == itemstack.stackSize)
+            if (itemstack1.getCount() == itemstack.getCount())
                 return null;
 
-            slot.onPickupFromSlot(player, itemstack1);
+            slot.onTake(player, itemstack1);
         }
         return itemstack;
     }

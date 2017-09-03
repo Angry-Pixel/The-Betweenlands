@@ -84,8 +84,7 @@ public class CircleGemHelper {
 	/**
 	 * Adds a gem to the specified entity
 	 * @param entity
-	 * @param gem
-	 * @param type
+
 	 */
 	public static void addGem(Entity entity, CircleGemType gemType, CircleGem.CombatType combatType) {
 		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
@@ -156,10 +155,10 @@ public class CircleGemHelper {
 			Entity attacker = null;
 			Entity source = null;
 			if(damageSource instanceof EntityDamageSourceIndirect) {
-				attacker = ((EntityDamageSourceIndirect)damageSource).getSourceOfDamage();
-				source = ((EntityDamageSource)damageSource).getEntity();
+				attacker = ((EntityDamageSourceIndirect)damageSource).getTrueSource();
+				source = ((EntityDamageSource)damageSource).getImmediateSource();
 			} else {
-				attacker = ((EntityDamageSource)damageSource).getEntity();
+				attacker = ((EntityDamageSource)damageSource).getImmediateSource();
 				source = attacker;
 			}
 			if(attacker != null && source != null) {
@@ -234,8 +233,8 @@ public class CircleGemHelper {
 					damage = Math.max(damage + gemDamageVariation, 1.0F);
 				}
 
-				boolean attackerProc = attacker.worldObj.rand.nextFloat() <= (source == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
-				boolean defenderProc = attacker.worldObj.rand.nextFloat() <= GEM_PROC_CHANCE;
+				boolean attackerProc = attacker.world.rand.nextFloat() <= (source == attacker && !attacker.onGround && attacker.motionY < 0 ? GEM_PROC_CHANCE * 1.33F : GEM_PROC_CHANCE);
+				boolean defenderProc = attacker.world.rand.nextFloat() <= GEM_PROC_CHANCE;
 
 				boolean attackerProcd = false;
 				boolean defenderProcd = false;
@@ -289,7 +288,7 @@ public class CircleGemHelper {
 				}
 
 				if(attackerProcd || defenderProcd) {
-					World world = attackedEntity.worldObj;
+					World world = attackedEntity.world;
 					int dim = 0;
 					if (world instanceof WorldServer) {
 						dim = ((WorldServer)world).provider.getDimension();
@@ -304,8 +303,8 @@ public class CircleGemHelper {
 							TheBetweenlands.networkWrapper.sendToAllAround(new MessageGemProc(attackedEntity, false, gem), new TargetPoint(dim, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 64.0D));
 						}
 					}
-					source.worldObj.playSound(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
-					source.worldObj.playSound(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.world.playSound(null, source.posX, source.posY, source.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
+					source.world.playSound(null, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, SoundEvents.ENTITY_ARROW_HIT_PLAYER, SoundCategory.PLAYERS, 1, 1);
 				}
 			}
 		}

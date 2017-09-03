@@ -15,7 +15,7 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 	private final RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
 	@Override
-	public void renderTileEntityAt(TileEntityWeedwoodWorkbench table, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityWeedwoodWorkbench table, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5D, y + 0.875D, z + 0.5D);
 		GlStateManager.scale(0.25F, 0.25F, 0.25F);

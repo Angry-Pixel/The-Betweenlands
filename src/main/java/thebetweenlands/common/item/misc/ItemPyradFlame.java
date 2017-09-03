@@ -19,7 +19,8 @@ public class ItemPyradFlame extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick( World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if(!world.isRemote) {
 			world.playSound((EntityPlayer)null, player.posX, player.posY, player.posZ, SoundEvents.ITEM_FIRECHARGE_USE, SoundCategory.BLOCKS, 1.0F, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2F + 1.0F);
 
@@ -28,13 +29,13 @@ public class ItemPyradFlame extends Item {
 			float f = 0.05F;
 
 			for (int i = 0; i < player.getRNG().nextInt(6) + 1; ++i) {
-				EntityPyradFlame flame = new EntityPyradFlame(world, player, look.xCoord + player.getRNG().nextGaussian() * (double)f, look.yCoord, look.zCoord + player.getRNG().nextGaussian() * (double)f);
+				EntityPyradFlame flame = new EntityPyradFlame(world, player, look.x + player.getRNG().nextGaussian() * (double)f, look.y, look.z + player.getRNG().nextGaussian() * (double)f);
 				flame.posY = player.posY + (double)(player.height / 2.0F) + 0.5D;
-				world.spawnEntityInWorld(flame);
+				world.spawnEntity(flame);
 			}
 
 			if (!player.capabilities.isCreativeMode) {
-				--stack.stackSize;
+				stack.shrink(1);
 			}
 		}
 		return new ActionResult<>(EnumActionResult.SUCCESS, stack);

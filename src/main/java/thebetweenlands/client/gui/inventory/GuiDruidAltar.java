@@ -103,7 +103,7 @@ public class GuiDruidAltar extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        if (this.mc.theWorld.getWorldTime() % 40 == 0) {
+        if (this.mc.world.getWorldTime() % 40 == 0) {
             this.stack = new ItemStack(ghostIcon, 1, this.iconCountTool);
             this.iconCountTool++;
             if (this.iconCountTool > 4) {
@@ -112,7 +112,7 @@ public class GuiDruidAltar extends GuiContainer {
         }
         TileEntity tile2 = tile.getWorld().getTileEntity(tile.getPos());
         if (tile2.getBlockMetadata() == 1) {
-            this.mc.thePlayer.closeScreen();
+            this.mc.player.closeScreen();
         }
     }
 }

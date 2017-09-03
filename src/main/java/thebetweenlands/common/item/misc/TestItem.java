@@ -16,7 +16,7 @@ public class TestItem extends Item {
 	}
 
 	@Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		/*if (!world.isRemote) {  
 			WorldGenTarPoolDungeon gen = new WorldGenTarPoolDungeon();
 			gen.generate(world, itemRand, pos.up());

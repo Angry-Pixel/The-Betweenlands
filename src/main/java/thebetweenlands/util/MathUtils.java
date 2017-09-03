@@ -123,7 +123,7 @@ public final class MathUtils {
     }
 
     public static int degToByte(float angle) {
-        return MathHelper.floor_float(angle * (256F / 360));
+        return MathHelper.floor(angle * (256F / 360));
     }
 
     public static int hash(int x) {

@@ -150,6 +150,6 @@ public class Mat4d {
     }
 
     public Vec3d transform(Vec3d point) {
-        return new Vec3d(m00 * point.xCoord + m01 * point.yCoord + m02 * point.zCoord + m03, m10 * point.xCoord + m11 * point.yCoord + m12 * point.zCoord + m13, m20 * point.xCoord + m21 * point.yCoord + m22 * point.zCoord + m23);
+        return new Vec3d(m00 * point.x + m01 * point.y + m02 * point.z + m03, m10 * point.x + m11 * point.y + m12 * point.z + m13, m20 * point.x + m21 * point.y + m22 * point.z + m23);
     }
 }

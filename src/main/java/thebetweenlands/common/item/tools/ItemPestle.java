@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.tools;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
+import javax.annotation.Nullable;
 import java.util.List;
 
 public class ItemPestle extends Item {
@@ -26,10 +28,8 @@ public class ItemPestle extends Item {
         });
     }
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean flag) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         list.add("Place Pestle in Mortar");
         list.add(Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "% Remaining: " + (getMaxDamage() - getDamage(stack)) +" more uses." );
     }

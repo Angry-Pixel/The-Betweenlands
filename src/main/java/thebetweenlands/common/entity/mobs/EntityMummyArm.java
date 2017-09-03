@@ -57,7 +57,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance diff, IEntityLivingData data) {
-		this.rotationYaw = this.worldObj.rand.nextFloat() * 360.0F;
+		this.rotationYaw = this.world.rand.nextFloat() * 360.0F;
 		return data;
 	}
 
@@ -77,7 +77,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	}
 
 	public Entity getOwner() {
-		if(!this.worldObj.isRemote) {
+		if(!this.world.isRemote) {
 			if(this.owner != null && this.owner.getUniqueID().equals(this.ownerUUID)) {
 				return this.owner;
 			} else {
@@ -89,15 +89,15 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 				return this.owner;
 			} else {
 				int id = this.getDataManager().get(OWNER_ID);
-				this.owner = id < 0 ? null : this.worldObj.getEntityByID(id);
+				this.owner = id < 0 ? null : this.world.getEntityByID(id);
 				return this.owner;
 			}
 		}
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
-		for (int i = 0; i < this.worldObj.loadedEntityList.size(); ++i) {
-			Entity entity = (Entity)this.worldObj.loadedEntityList.get(i);
+		for (int i = 0; i < this.world.loadedEntityList.size(); ++i) {
+			Entity entity = (Entity)this.world.loadedEntityList.get(i);
 			if (uuid.equals(entity.getUniqueID())) {
 				return entity;
 			}
@@ -110,10 +110,10 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 		super.onUpdate();
 
 		BlockPos pos = this.getPosition().down(1);
-		IBlockState blockState = this.worldObj.getBlockState(pos);
+		IBlockState blockState = this.world.getBlockState(pos);
 
-		if(!this.worldObj.isRemote) {
-			if(blockState.getBlock() == Blocks.AIR || !blockState.isSideSolid(this.worldObj, pos, EnumFacing.UP)) {
+		if(!this.world.isRemote) {
+			if(blockState.getBlock() == Blocks.AIR || !blockState.isSideSolid(this.world, pos, EnumFacing.UP)) {
 				this.setDead();
 			}
 
@@ -147,7 +147,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 
 		if(this.isEntityAlive()) {
 			if(this.spawnTicks >= 4) {
-				List<EntityLivingBase> targets = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox());
+				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox());
 				for(EntityLivingBase target : targets) {
 					if(target != this && target != this.getOwner() && target instanceof EntityMob || target instanceof IMob) {
 						target.setInWeb();
@@ -183,7 +183,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if(this.worldObj.isRemote && this.rand.nextInt(this.yOffset < 0.0F ? 2 : 8) == 0) {
+		if(this.world.isRemote && this.rand.nextInt(this.yOffset < 0.0F ? 2 : 8) == 0) {
 			if(blockState.getBlock() != Blocks.AIR) {
 				double px = this.posX;
 				double py = this.posY;
@@ -194,14 +194,14 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 					double motionX = this.rand.nextDouble() * 0.2 - 0.1;
 					double motionY = this.rand.nextDouble() * 0.1 + 0.1;
 					double motionZ = this.rand.nextDouble() * 0.2 - 0.1;
-					this.worldObj.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(blockState));
+					this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(blockState));
 				}
 			}
 		}
 	}
 
 	@Override
-	public void moveEntityWithHeading(float strafe, float forward) { }
+	public void travel(float strafe, float up,  float forward) { }
 
 	@Override
 	public void applyEntityCollision(Entity entity) { }
@@ -228,7 +228,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 	protected void onDeathUpdate() {
 		this.deathTicks++;
 
-		if(!this.worldObj.isRemote && this.deathTicks >= 40) {
+		if(!this.world.isRemote && this.deathTicks >= 40) {
 			this.setDead();
 		}
 	}

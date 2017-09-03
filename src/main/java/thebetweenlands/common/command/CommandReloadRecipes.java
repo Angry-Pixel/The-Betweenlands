@@ -8,7 +8,7 @@ import thebetweenlands.common.registries.CustomRecipeRegistry;
 
 public class CommandReloadRecipes extends CommandBase {
 	@Override
-	public String getCommandName() {
+	public String getName() {
 		return "blReloadRecipes";
 	}
 
@@ -18,7 +18,7 @@ public class CommandReloadRecipes extends CommandBase {
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender) {
+	public String getUsage(ICommandSender sender) {
 		return "/blReloadRecipes";
 	}
 

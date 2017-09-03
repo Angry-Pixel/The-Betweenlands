@@ -91,7 +91,7 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 			for (int x = -sizeRange; x <= sizeRange; x++) {
 				for (int z = -sizeRange; z <= sizeRange; z++) {
 					for (int y = -sizeRange; y <= sizeRange; y++) {
-						float dist = MathHelper.sqrt_float(x * x + y * y + z * z);
+						float dist = MathHelper.sqrt(x * x + y * y + z * z);
 						if (dist <= size) {
 							IBlockState block = world.getBlockState(new BlockPos((int) posX + x, (int) posY + y, (int) posZ + z));
 							IBlockState above = world.getBlockState(new BlockPos((int) posX + x, (int) posY + y + 1, (int) posZ + z));
@@ -140,7 +140,7 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 					for (int x = -size; x <= size; x++) {
 						for (int z = -size; z <= size; z++) {
 							for (int y = -size; y <= size; y++) {
-								if (MathHelper.sqrt_float(x * x + y * y + z * z) <= size) {
+								if (MathHelper.sqrt(x * x + y * y + z * z) <= size) {
 									this.setBlockAndNotifyAdequately(world, new BlockPos((int) posX + x, (int) posY + y, (int) posZ + z), BARK);
 								}
 							}

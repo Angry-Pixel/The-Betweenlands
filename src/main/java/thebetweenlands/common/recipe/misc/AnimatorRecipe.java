@@ -21,7 +21,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	private int requiredFuel, requiredLife;
 	private ItemStack result = null;
 	private Class<? extends Entity> spawnEntity = null;
-	private String renderEntity = null;
+	private ResourceLocation renderEntity = null;
 	private Entity renderEntityInstance = null;
 	private boolean closeOnFinish = false;
 	private ResourceLocation lootTable = null;
@@ -58,7 +58,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 		this.closeOnFinish = true;
 	}
 
-	public AnimatorRecipe setRenderEntity(String entity) {
+	public AnimatorRecipe setRenderEntity(ResourceLocation entity) {
 		this.renderEntity = entity;
 		return this;
 	}
@@ -66,9 +66,9 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Entity getRenderEntity(ItemStack stack) {
-		if(this.renderEntity != null && this.renderEntity.length() > 0) {
+		if(this.renderEntity != null && this.renderEntity.toString().length() > 0) {
 			if(this.renderEntityInstance == null) {
-				Entity entity = EntityList.createEntityByName(this.renderEntity, (World)null);
+				Entity entity = EntityList.createEntityByIDFromName(this.renderEntity, (World)null);
 				this.renderEntityInstance = entity;
 			}
 			return this.renderEntityInstance;
@@ -86,9 +86,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 		return this.spawnEntity;
 	}
 
-	/**
-	 * Called when the item is animated. Can return the resulting ItemStack (overrides {@link AnimatorRecipe#getResult()}).
-	 * Also used to spawn entities from animator once animated
+	/*** Also used to spawn entities from animator once animated
 	 * @param world
 	 * @param pos
 	 * @return
@@ -102,9 +100,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	 * Called when the animator has finished animating and is right clicked.
 	 * Return true if GUI should be opened on first click
 	 * @param world
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param pos
 	 */
 	@Override
 	public boolean onRetrieved(World world, BlockPos pos, ItemStack stack) {
@@ -121,7 +117,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 					return true;
 				}
 				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
-				world.spawnEntityInWorld(entity);
+				world.spawnEntity(entity);
 				animator.setInventorySlotContents(0, null);
 				return false;
 			}

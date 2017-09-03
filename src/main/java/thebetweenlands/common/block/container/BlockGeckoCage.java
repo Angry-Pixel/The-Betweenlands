@@ -69,13 +69,14 @@ public class BlockGeckoCage extends BlockContainer {
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int rotation = MathHelper.floor_double(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int rotation = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
 		state = state.withProperty(FACING, EnumFacing.getHorizontal(rotation));
 		worldIn.setBlockState(pos, state, 3);
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, @Nullable ItemStack heldItemStack, EnumFacing side, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
+		ItemStack heldItemStack = player.getHeldItem(hand);
 		if (world.getTileEntity(pos) instanceof TileEntityGeckoCage) {
 			TileEntityGeckoCage tile = (TileEntityGeckoCage) world.getTileEntity(pos);
 
@@ -89,7 +90,7 @@ public class BlockGeckoCage extends BlockContainer {
 					if(!tile.hasGecko()) {
 						tile.addGecko(12);
 						if(!player.capabilities.isCreativeMode)
-							--heldItemStack.stackSize;
+							heldItemStack.shrink(1);
 						return true;
 					}
 					return false;
@@ -110,23 +111,23 @@ public class BlockGeckoCage extends BlockContainer {
 										DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 										if(!world.isRemote) {
 											tile.setAspectType(discovery.discovered.type, 600);
-											player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
+											player.sendMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
 											if(discovery.result == EnumDiscoveryResult.LAST) {
-												player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.last"));
+												player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.last"));
 											} else {
-												player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.more"));
+												player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.more"));
 											}
 											if(!player.capabilities.isCreativeMode) 
-												--heldItemStack.stackSize;
+												heldItemStack.shrink(1);
 										}
 										return true;
 									case END:
 										//already all discovered
-										player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.end"));
+										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.end"));
 										return false;
 									default:
 										//no aspects
-										player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
+										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
 										return false;
 									}
 								} else {
@@ -135,25 +136,25 @@ public class BlockGeckoCage extends BlockContainer {
 							} else {
 								//no aspects
 								if(!world.isRemote) 
-									player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
+									player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
 								return false;
 							}
 						} else {
 							//no herblore book
 							if(!world.isRemote) 
-								player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.book.none"));
+								player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.book.none"));
 							return false;
 						}
 					} else {
 						//no gecko
 						if(!world.isRemote) 
-							player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.none"));
+							player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.none"));
 						return false;
 					}
 				} else {
 					//recovering
 					if(!world.isRemote) 
-						player.addChatMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.recovering"));
+						player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.recovering"));
 					return false;
 				}
 			}

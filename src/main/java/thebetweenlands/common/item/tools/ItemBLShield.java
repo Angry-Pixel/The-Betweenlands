@@ -46,11 +46,7 @@ public class ItemBLShield extends ItemShield {
 		return ("" + I18n.translateToLocal(this.getUnlocalizedNameInefficiently(stack) + ".name")).trim();
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
-		//no op
-	}
+
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -78,9 +74,9 @@ public class ItemBLShield extends ItemShield {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		playerIn.setActiveHand(hand);
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
 	}
 
 	@Override
@@ -106,8 +102,8 @@ public class ItemBLShield extends ItemShield {
 	 * @param source
 	 */
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(!attacked.worldObj.isRemote && source.getEntity() instanceof EntityLivingBase) {
-			EntityLivingBase attacker = (EntityLivingBase) source.getEntity();
+		if(!attacked.world.isRemote && source.getTrueSource() instanceof EntityLivingBase) {
+			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
 			ItemStack activeItem = attacker.getActiveItemStack();
 			if(activeItem != null && activeItem.getItem() instanceof ItemAxe) {
 				float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
@@ -115,13 +111,13 @@ public class ItemBLShield extends ItemShield {
 				if(attacker.isSprinting() && attackStrength > 0.9F) {
 					criticalChance += 0.75F;
 				}
-				if (attacked.worldObj.rand.nextFloat() < criticalChance) {
+				if (attacked.world.rand.nextFloat() < criticalChance) {
 					if(attacked instanceof EntityPlayer) {
 						((EntityPlayer)attacked).getCooldownTracker().setCooldown(this, 100);
 						attacked.stopActiveHand();
 					}
 					//Shield break sound effect
-					attacked.worldObj.setEntityState(attacked, (byte)30);
+					attacked.world.setEntityState(attacked, (byte)30);
 				}
 			}
 		}
@@ -173,14 +169,14 @@ public class ItemBLShield extends ItemShield {
 					this.canBlockDamageSource(attacked, event.getSource())) {
 
 				//Cancel event
-				if(!attacked.worldObj.isRemote)
+				if(!attacked.world.isRemote)
 					event.setCanceled(true);
 
 				EnumHand activeHand = attacked.getActiveHand();
 				ItemStack stack = attacked.getActiveItemStack();
 				ItemBLShield shield = (ItemBLShield) stack.getItem();
 
-				if(!attacked.worldObj.isRemote) {
+				if(!attacked.world.isRemote) {
 					//Stop blocking
 					attacked.stopActiveHand();
 					//Apply damage with multiplier
@@ -197,21 +193,21 @@ public class ItemBLShield extends ItemShield {
 					}
 					//Knock back defender
 					double prevMotionY = attacked.motionY;
-					attacked.knockBack(event.getSource().getEntity(), defenderKbMultiplier, event.getSource().getSourceOfDamage().posX - attacked.posX, event.getSource().getSourceOfDamage().posZ - attacked.posZ);
+					attacked.knockBack(event.getSource().getTrueSource(), defenderKbMultiplier, event.getSource().getTrueSource().posX - attacked.posX, event.getSource().getTrueSource().posZ - attacked.posZ);
 					attacked.motionY = prevMotionY;
 					attacked.velocityChanged = true;
 					//Shield block sound effect
-					attacked.worldObj.setEntityState(attacked, (byte)29);
+					attacked.world.setEntityState(attacked, (byte)29);
 					//Set shield active again
 					attacked.setActiveHand(activeHand);
 				}
 
 				//Knock back attacker
-				if(!attacked.worldObj.isRemote)
-					if (event.getSource().getSourceOfDamage() instanceof EntityLivingBase) {
+				if(!attacked.world.isRemote)
+					if (event.getSource().getTrueSource() instanceof EntityLivingBase) {
 						float attackerKbMultiplier = shield.getAttackerKnockbackMultiplier(stack, attacked, event.getAmount(), event.getSource());
 						if(attackerKbMultiplier > 0.0F)
-							((EntityLivingBase)event.getSource().getSourceOfDamage()).knockBack(attacked, attackerKbMultiplier, attacked.posX - event.getSource().getSourceOfDamage().posX, attacked.posZ - event.getSource().getSourceOfDamage().posZ);
+							((EntityLivingBase)event.getSource().getTrueSource()).knockBack(attacked, attackerKbMultiplier, attacked.posX - event.getSource().getTrueSource().posX, attacked.posZ - event.getSource().getTrueSource().posZ);
 					}
 
 				if(attacked instanceof EntityPlayer) {
@@ -224,12 +220,12 @@ public class ItemBLShield extends ItemShield {
 
 				shield.onAttackBlocked(stack, attacked, event.getAmount(), event.getSource());
 
-				if(!attacked.worldObj.isRemote) {
+				if(!attacked.world.isRemote) {
 					//Damage item
-					int itemDamage = 1 + MathHelper.floor_float(event.getAmount());
+					int itemDamage = 1 + MathHelper.floor(event.getAmount());
 					stack.damageItem(itemDamage, attacked);
 					//Shield broke
-					if (stack.stackSize <= 0) {
+					if (stack.getCount() <= 0) {
 						EnumHand enumhand = attacked.getActiveHand();
 						if(attacked instanceof EntityPlayer)
 							net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
@@ -238,7 +234,7 @@ public class ItemBLShield extends ItemShield {
 						else
 							attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
 						//Shield break sound effect
-						attacked.worldObj.setEntityState(attacked, (byte)30);
+						attacked.world.setEntityState(attacked, (byte)30);
 					}
 				}
 			}
@@ -256,7 +252,7 @@ public class ItemBLShield extends ItemShield {
 				if (vec3d != null) {
 					Vec3d vec3d1 = attacked.getLook(1.0F);
 					Vec3d vec3d2 = vec3d.subtractReverse(new Vec3d(attacked.posX, attacked.posY, attacked.posZ)).normalize();
-					vec3d2 = new Vec3d(vec3d2.xCoord, 0.0D, vec3d2.zCoord);
+					vec3d2 = new Vec3d(vec3d2.x, 0.0D, vec3d2.z);
 					if (vec3d2.dotProduct(vec3d1) < 0.0D) {
 						return true;
 					}

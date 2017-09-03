@@ -1,8 +1,7 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.List;
-
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,8 +16,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -29,88 +26,91 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 public class ItemLurkerSkinPouch extends Item implements IEquippable {
-	public ItemLurkerSkinPouch() {
-		this.setMaxStackSize(1);
-		this.setCreativeTab(BLCreativeTabs.ITEMS);
-		this.setMaxDamage(3);
+    public ItemLurkerSkinPouch() {
+        this.setMaxStackSize(1);
+        this.setCreativeTab(BLCreativeTabs.ITEMS);
+        this.setMaxDamage(3);
 
-		this.addPropertyOverride(new ResourceLocation("pouch_size"), new IItemPropertyGetter() {
-			@Override
-			public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
-				return stack.getItemDamage();
-			}
-		});
-		IEquippable.addEquippedPropertyOverrides(this);
-	}
+        this.addPropertyOverride(new ResourceLocation("pouch_size"), new IItemPropertyGetter() {
+            @Override
+            public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn) {
+                return stack.getItemDamage();
+            }
+        });
+        IEquippable.addEquippedPropertyOverrides(this);
+    }
 
-	@Override
-	public int getMaxItemUseDuration(ItemStack stack) {
-		return 1;
-	}
+    /**
+     * Returns the first accessible pouch of the players equipment (first priority) or hotbar
+     *
+     * @param player
+     * @return
+     */
+    public static ItemStack getFirstPouch(EntityPlayer player) {
+        if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+            IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+            IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
 
-	@Override
-	public boolean showDurabilityBar(ItemStack stack) {
-		return false;
-	}
+            for (int i = 0; i < inv.getSizeInventory(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+                    return stack;
+                }
+            }
+        }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean showAdvancedInfo) {
-		int slots = 9 + (stack.getItemDamage() * 9);
-		list.add(TextFormatting.GRAY + I18n.format("tooltip.lurkerSkinPouch.size", slots));
-		list.add(I18n.format("tooltip.lurkerSkinPouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
-		if(stack.getItemDamage() < stack.getMaxDamage()) {
-			list.add(I18n.format("tooltip.lurkerSkinPouch.upgrade"));
-		}
-	}
+        InventoryPlayer playerInventory = player.inventory;
+        for (int i = 0; i < InventoryPlayer.getHotbarSize(); i++) {
+            ItemStack stack = playerInventory.getStackInSlot(i);
+            if (stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+                return stack;
+            }
+        }
 
-	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote) {
-			if (!player.isSneaking()) {
-				int meta = stack.getItemDamage();
-				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH, world, meta, 0, 0);
-			} else {
-				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
-			}
-		}
+        return null;
+    }
 
-		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
-	}
+    @Override
+    public int getMaxItemUseDuration(ItemStack stack) {
+        return 1;
+    }
 
-	/**
-	 * Returns the first accessible pouch of the players equipment (first priority) or hotbar
-	 * @param player
-	 * @return
-	 */
-	public static ItemStack getFirstPouch(EntityPlayer player) {
-		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+    @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return false;
+    }
 
-			for(int i = 0; i < inv.getSizeInventory(); i++) {
-				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
-					return stack;
-				}
-			}
-		}
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
+        int slots = 9 + (stack.getItemDamage() * 9);
+        list.add(TextFormatting.GRAY + I18n.format("tooltip.lurkerSkinPouch.size", slots));
+        list.add(I18n.format("tooltip.lurkerSkinPouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
+        if (stack.getItemDamage() < stack.getMaxDamage()) {
+            list.add(I18n.format("tooltip.lurkerSkinPouch.upgrade"));
+        }
+    }
 
-		InventoryPlayer playerInventory = player.inventory;
-		for(int i = 0; i < InventoryPlayer.getHotbarSize(); i++) {
-			ItemStack stack = playerInventory.getStackInSlot(i);
-			if(stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
-				return stack;
-			}
-		}
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
+        if (!world.isRemote) {
+            if (!player.isSneaking()) {
+                int meta = stack.getItemDamage();
+                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH, world, meta, 0, 0);
+            } else {
+                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+            }
+        }
 
-		return null;
-	}
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+    }
 
 	/*@SideOnly(Side.CLIENT)
-	@SubscribeEvent
+    @SubscribeEvent
 	public static void onRenderPlayer(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		if(event.getEntity() instanceof EntityPlayer) {
 			renderPouch(event.getEntity(), event.getX(), event.getY(), event.getZ(), 0.0F);
@@ -173,37 +173,40 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 		}
 	}*/
 
-	@Override
-	public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
-		return EnumEquipmentInventory.POUCH;
-	}
+    @Override
+    public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
+        return EnumEquipmentInventory.POUCH;
+    }
 
-	@Override
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
-		return false;
-	}
+    @Override
+    public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
+        return false;
+    }
 
-	@Override
-	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		return target == player;
-	}
+    @Override
+    public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
+        return target == player;
+    }
 
-	@Override
-	public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
-		return true;
-	}
+    @Override
+    public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+        return true;
+    }
 
-	@Override
-	public boolean canDrop(ItemStack stack, Entity entity, IInventory inventory) {
-		return true;
-	}
+    @Override
+    public boolean canDrop(ItemStack stack, Entity entity, IInventory inventory) {
+        return true;
+    }
 
-	@Override
-	public void onEquip(ItemStack stack, Entity entity, IInventory inventory) { }
+    @Override
+    public void onEquip(ItemStack stack, Entity entity, IInventory inventory) {
+    }
 
-	@Override
-	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) { }
+    @Override
+    public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) {
+    }
 
-	@Override
-	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) { }
+    @Override
+    public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
+    }
 }

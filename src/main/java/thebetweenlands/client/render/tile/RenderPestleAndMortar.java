@@ -17,7 +17,7 @@ public class RenderPestleAndMortar extends TileEntitySpecialRenderer<TileEntityM
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/pestle_and_mortar.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntityMortar te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityMortar te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = 0;
 		if(te != null) {
 			meta = te.getBlockMetadata();

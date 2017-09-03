@@ -41,7 +41,7 @@ import thebetweenlands.common.world.storage.world.shared.SharedStorage;
 /**
  * Chunk specific storage.
  * <p>Capabilities can be attached using the {@link AttachChunkCapabilitiesEvent} event.
- * <p><b>{@link ChunkDataBase#CHUNK_EVENT_HANDLER} must be registered to {@link MinecraftForge.EVENT_BUS}.</b>
+ * <p><b>{@link ChunkDataBase#CHUNK_EVENT_HANDLER} must be registered to {@link MinecraftForge}.</b>
  */
 public abstract class ChunkDataBase implements ICapabilityProvider {
 	public static final ChunkEventHandler CHUNK_EVENT_HANDLER = new ChunkEventHandler();
@@ -112,7 +112,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 
 	@Nullable
 	public static <T extends ChunkDataBase> T forChunk(WorldDataBase<T> worldStorage, Chunk chunk) {
-		ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(worldStorage.getWorld(), chunk.getChunkCoordIntPair()));
+		ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(worldStorage.getWorld(), chunk.getPos()));
 
 		if(container != null) {
 			//Get cached handler instance
@@ -148,7 +148,6 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 * Returns a new handler instance of the specified handler type
 	 * @param worldStorage
 	 * @param chunk
-	 * @param handlerClass
 	 * @return
 	 */
 	private static <T extends ChunkDataBase> T getHandlerInstance(WorldDataBase<T> worldStorage, Chunk chunk, Function<String, NBTTagCompound> nbtProvider) {
@@ -176,7 +175,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 		}
 
 		//Update watchers
-		List<EntityPlayerMP> watchers = CHUNK_WATCHERS.get(new ChunkIdentifier(worldStorage.getWorld(), chunk.getChunkCoordIntPair()));
+		List<EntityPlayerMP> watchers = CHUNK_WATCHERS.get(new ChunkIdentifier(worldStorage.getWorld(), chunk.getPos()));
 		if(watchers != null)
 			for(EntityPlayerMP watcher : watchers)
 				newInstance.onWatched(watcher);
@@ -193,19 +192,18 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 */
 	public static void updateContainerData(World world, Chunk chunk, NBTTagCompound nbt) {
 		if(chunk.isLoaded()) {
-			CHUNK_CONTAINER_CACHE.put(new ChunkIdentifier(world, chunk.getChunkCoordIntPair()), new ChunkDataContainer(nbt));
+			CHUNK_CONTAINER_CACHE.put(new ChunkIdentifier(world, chunk.getPos()), new ChunkDataContainer(nbt));
 		}
 	}
 
 	/**
 	 * Adds or overrides the data of a chunk data handler
 	 * @param chunk
-	 * @param handlerClass
 	 * @param nbt
 	 */
 	public static <T extends ChunkDataBase> void updateHandlerData(WorldDataBase<T> world, Chunk chunk, NBTTagCompound nbt) {
 		if(chunk.isLoaded()) {
-			ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(world.getWorld(), chunk.getChunkCoordIntPair()));
+			ChunkDataContainer container = CHUNK_CONTAINER_CACHE.get(new ChunkIdentifier(world.getWorld(), chunk.getPos()));
 			if(container != null) {
 				Class<T> handlerClass = world.getChunkStorage();
 				ChunkDataBase handler = container.getCachedHandler(handlerClass);
@@ -230,7 +228,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 			if(id.equals(ref.getID()))
 				return false;
 		}
-		SharedStorageReference ref = new SharedStorageReference(this.chunk.getChunkCoordIntPair(), id, storage.getRegion());
+		SharedStorageReference ref = new SharedStorageReference(this.chunk.getPos(), id, storage.getRegion());
 		if(this.sharedStorageReferences.add(ref)) {
 			this.markDirty();
 			return true;
@@ -351,7 +349,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 			}
 
 			//Load reference if properly linked
-			if(sharedStorage != null && sharedStorage.getLinkedChunks().contains(this.chunk.getChunkCoordIntPair())) {
+			if(sharedStorage != null && sharedStorage.getLinkedChunks().contains(this.chunk.getPos())) {
 				sharedStorage.loadReference(ref);
 			} else if(!this.worldStorage.getWorld().isRemote) {
 				//Shared storage doesn't exist or chunk shouldn't be linked to shared storage, remove link
@@ -449,7 +447,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 	 * Marks the chunk as dirty
 	 */
 	public void markDirty() {
-		this.chunk.setChunkModified();
+		this.chunk.setModified(true);
 	}
 
 	public static final class ChunkEventHandler {
@@ -457,7 +455,7 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 
 		@SubscribeEvent
 		public void onChunkDataEvent(ChunkDataEvent event) {
-			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getChunkCoordIntPair());
+			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getPos());
 			NBTTagCompound chunkNBT = event.getData();
 
 			if(event instanceof ChunkDataEvent.Save) {
@@ -481,14 +479,14 @@ public abstract class ChunkDataBase implements ICapabilityProvider {
 
 		@SubscribeEvent(priority = EventPriority.HIGHEST)
 		public void onChunkLoad(ChunkEvent.Load event) {
-			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getChunkCoordIntPair());
+			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getPos());
 			if(!CHUNK_CONTAINER_CACHE.containsKey(id))
 				CHUNK_CONTAINER_CACHE.put(id, new ChunkDataContainer(new NBTTagCompound()));
 		}
 
 		@SubscribeEvent
 		public void onChunkUnload(ChunkEvent.Unload event) {
-			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getChunkCoordIntPair());
+			ChunkIdentifier id = new ChunkIdentifier(event.getWorld(), event.getChunk().getPos());
 
 			CHUNK_WATCHERS.remove(id);
 

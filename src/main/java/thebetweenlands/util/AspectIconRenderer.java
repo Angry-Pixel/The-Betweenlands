@@ -1,9 +1,9 @@
 package thebetweenlands.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 
@@ -14,7 +14,7 @@ public class AspectIconRenderer {
 		GlStateManager.translate(x, y, 0);
 		GlStateManager.disableBlend();
 		Tessellator tessellator = Tessellator.getInstance();
-		VertexBuffer vertexBuffer = tessellator.getBuffer();
+		BufferBuilder vertexBuffer = tessellator.getBuffer();
 		vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
 		vertexBuffer.pos(0, 0, 0).tex(0, 0).endVertex();
 		vertexBuffer.pos(0, height, 0).tex(0, 1).endVertex();

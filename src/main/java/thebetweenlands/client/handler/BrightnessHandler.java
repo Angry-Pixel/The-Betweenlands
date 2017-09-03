@@ -14,11 +14,11 @@ public class BrightnessHandler {
 	@SubscribeEvent
 	public static void onTick(TickEvent.ClientTickEvent event) {
 		if(event.phase == Phase.END) {
-			EntityPlayer player = Minecraft.getMinecraft().thePlayer;
-			World world = Minecraft.getMinecraft().theWorld;
+			EntityPlayer player = Minecraft.getMinecraft().player;
+			World world = Minecraft.getMinecraft().world;
 			if(player != null && world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-				provider.updateLightTable(Minecraft.getMinecraft().thePlayer);
+				provider.updateLightTable(Minecraft.getMinecraft().player);
 			}
 		}
 	}

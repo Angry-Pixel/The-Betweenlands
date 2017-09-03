@@ -154,13 +154,12 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 		return Blocks.LEAVES.getBlockLayer();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabblist, @Nullable Entity entity) {
-		if (entity instanceof WeedWoodBushUncollidableEntity) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
+		if (entityIn instanceof WeedWoodBushUncollidableEntity) {
 			return;
 		}
-		super.addCollisionBoxToList(state, world, pos, aabb, aabblist, entity);
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
 	}
 	
 	@Override

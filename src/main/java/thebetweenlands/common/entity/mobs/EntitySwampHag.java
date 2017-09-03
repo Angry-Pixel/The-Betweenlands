@@ -16,6 +16,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -109,7 +110,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	protected SoundEvent getHurtSound() {
+	protected SoundEvent getHurtSound(DamageSource damageSource) {
 		setTalkSound(4);
 		setShouldJawMove(true);
 		return SoundRegistry.SWAMP_HAG_HURT;
@@ -126,7 +127,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	public void onLivingUpdate() {
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
 
-		if (!worldObj.isRemote) {
+		if (!world.isRemote) {
 			updateLivingSoundTime();
 		}
 

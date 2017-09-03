@@ -42,8 +42,8 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (this.worldObj.isRemote) {
-			this.trailParticles(this.worldObj, this.posX, this.posY + this.height / 2.0D, this.posZ, this.rand);
+		if (this.world.isRemote) {
+			this.trailParticles(this.world, this.posX, this.posY + this.height / 2.0D, this.posZ, this.rand);
 		}
 
 		if (this.ticksExisted > 140) {
@@ -55,7 +55,7 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 	protected void onImpact(RayTraceResult result) {
 		if (result.entityHit != null) {
 			if (result.entityHit instanceof EntityLivingBase && !(result.entityHit instanceof EntityBloodSnail)) {
-				if (!worldObj.isRemote) {
+				if (!world.isRemote) {
 					((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
 					result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);
 				}
@@ -63,9 +63,9 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 			}
 		} else {
 			if(result.typeOfHit == Type.BLOCK) {
-				IBlockState blockState = this.worldObj.getBlockState(result.getBlockPos());
-				AxisAlignedBB collisionBox = blockState.getCollisionBoundingBox(this.worldObj, result.getBlockPos());
-				if(collisionBox != null && collisionBox.offset(result.getBlockPos()).intersectsWith(this.getEntityBoundingBox())) {
+				IBlockState blockState = this.world.getBlockState(result.getBlockPos());
+				AxisAlignedBB collisionBox = blockState.getCollisionBoundingBox(this.world, result.getBlockPos());
+				if(collisionBox != null && collisionBox.offset(result.getBlockPos()).intersects(this.getEntityBoundingBox())) {
 					this.setDead();
 				}
 			} else {
@@ -91,7 +91,7 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 	@SideOnly(Side.CLIENT)
 	public void trailParticles(World world, double x, double y, double z, Random rand) {
 		for (int count = 0; count < 5; ++count) {
-			BLParticles.SNAIL_POISON.spawn(worldObj, x, y, z);
+			BLParticles.SNAIL_POISON.spawn(world, x, y, z);
 		}
 	}
 }

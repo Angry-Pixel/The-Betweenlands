@@ -16,7 +16,7 @@ public class RenderAlembic extends TileEntitySpecialRenderer<TileEntityAlembic> 
 	public static ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/alembic.png");
 
 	@Override
-	public void renderTileEntityAt(TileEntityAlembic te, double x, double y, double z, float partialTicks, int destroyStage) {
+	public void render(TileEntityAlembic te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = te != null ? te.getBlockMetadata() : 0;
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();

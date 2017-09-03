@@ -34,25 +34,26 @@ public abstract class ItemBLBucketEmpty extends Item {
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
+        ItemStack stack = playerIn.getHeldItem(handIn);
         RayTraceResult raytraceresult = this.rayTrace(worldIn, playerIn, true);
-        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, itemStackIn, raytraceresult);
+        ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onBucketUse(playerIn, worldIn, stack, raytraceresult);
         if (ret != null) {
         	return ret;
         }
 
         if (raytraceresult == null) {
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         } else if (raytraceresult.typeOfHit != RayTraceResult.Type.BLOCK) {
-            return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
+            return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
         } else {
             BlockPos blockpos = raytraceresult.getBlockPos();
 
             if (!worldIn.isBlockModifiable(playerIn, blockpos)) {
-                return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+                return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
             } else {
-                if (!playerIn.canPlayerEdit(blockpos.offset(raytraceresult.sideHit), raytraceresult.sideHit, itemStackIn)) {
-                    return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+                if (!playerIn.canPlayerEdit(blockpos.offset(raytraceresult.sideHit), raytraceresult.sideHit, stack)) {
+                    return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
                 } else {
                     IBlockState iblockstate = worldIn.getBlockState(blockpos);
                     Block block = iblockstate.getBlock();
@@ -75,12 +76,12 @@ public abstract class ItemBLBucketEmpty extends Item {
                             nbtCompound.setTag("ingredients", nbtList);
                             nbtCompound.setInteger("infusionTime", tile.getInfusionTime());
                             tile.extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
-                            if (itemStackIn.stackSize == 1)
+                            if (stack.getCount() == 1)
                                 return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, infusionBucket);
                             else {
                                 playerIn.dropItem(infusionBucket.copy(), false);
-                                itemStackIn.stackSize--;
-                                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+                                stack.shrink(1);
+                                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
                             }
                         }
                     }
@@ -90,7 +91,7 @@ public abstract class ItemBLBucketEmpty extends Item {
                         worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 11);
                         playerIn.addStat(StatList.getObjectUseStats(this));
                         playerIn.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(itemStackIn, playerIn, fluid));
+                        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(stack, playerIn, fluid));
                     } else {
                         TileEntity te = worldIn.getTileEntity(blockpos);
                         if (te != null && te instanceof IFluidHandler) {
@@ -100,10 +101,10 @@ public abstract class ItemBLBucketEmpty extends Item {
                                 drained = handler.drain(Fluid.BUCKET_VOLUME, true);
                                 playerIn.addStat(StatList.getObjectUseStats(this));
                                 playerIn.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(itemStackIn, playerIn, drained.getFluid()));
+                                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(stack, playerIn, drained.getFluid()));
                             }
                         }
-                        return new ActionResult<ItemStack>(EnumActionResult.FAIL, itemStackIn);
+                        return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
                     }
                 }
             }
@@ -114,7 +115,7 @@ public abstract class ItemBLBucketEmpty extends Item {
         ItemStack fullBucket = UniversalBucket.getFilledBucket(this.getFilledBucket(), fluid);
         if (player.capabilities.isCreativeMode) {
             return emptyBuckets;
-        } else if (--emptyBuckets.stackSize <= 0) {
+        } else if (emptyBuckets.getCount() - 1<= 0) {
             return fullBucket.copy();
         } else {
             if (!player.inventory.addItemStackToInventory(fullBucket.copy())) {

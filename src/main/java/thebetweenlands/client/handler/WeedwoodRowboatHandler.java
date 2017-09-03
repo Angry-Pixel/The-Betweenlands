@@ -67,17 +67,17 @@ public final class WeedwoodRowboatHandler {
     }
 
     public void onPilotEnterWeedwoodRowboat(Entity pilot) {
-        if (pilot == MC.thePlayer) {
+        if (pilot == MC.player) {
             enterRowboatPerspective();
         }
     }
 
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
-        if (pilot == MC.thePlayer) {
+        if (pilot == MC.player) {
             double dx = rowboat.posX - pilot.posX;
             double dy = rowboat.posY + rowboat.height - (pilot.posY + pilot.getEyeHeight());
             double dz = rowboat.posZ - pilot.posZ;
-            double h = MathHelper.sqrt_double(dx * dx + dz * dz);
+            double h = MathHelper.sqrt(dx * dx + dz * dz);
             pilot.rotationPitch = (float) -Math.toDegrees(MathHelper.atan2(dy, h));
             float yaw = (float) Math.toDegrees(MathHelper.atan2(dz, dx)) - 90;
             pilot.rotationYaw = yaw;
@@ -92,7 +92,7 @@ public final class WeedwoodRowboatHandler {
         if (event.phase == TickEvent.Phase.START) {
             Entity entity = MC.getRenderViewEntity();
             if (entity instanceof RowboatCam && isPlayerInRowboat && (!MC.inGameHasFocus || !Display.isActive())) {
-                ((RowboatCam) entity).update(MC.thePlayer.getRidingEntity(), event.renderTickTime);
+                ((RowboatCam) entity).update(MC.player.getRidingEntity(), event.renderTickTime);
             }
         }
     }
@@ -102,7 +102,7 @@ public final class WeedwoodRowboatHandler {
         Entity entity = MC.getRenderViewEntity();
         if (entity instanceof RowboatCam) {
             RowboatCam cam = (RowboatCam) entity;
-            cam.dolly = MathHelper.clamp_double(cam.dolly - Math.signum(event.getDwheel()) * (cam.dolly - 1) * 0.1, 1, 10);
+            cam.dolly = MathHelper.clamp(cam.dolly - Math.signum(event.getDwheel()) * (cam.dolly - 1) * 0.1, 1, 10);
             event.setCanceled(true);
             int key = event.getButton() - 100;
             KeyBinding.setKeyBindState(key, Mouse.getEventButtonState());
@@ -134,8 +134,8 @@ public final class WeedwoodRowboatHandler {
     }
 
     private void enterRowboatPerspective() {
-        Entity entity = MC.thePlayer.getRidingEntity();
-        MC.setRenderViewEntity(new RowboatCam(MC.theWorld, entity == null ? 0 : entity.rotationYaw, 30));
+        Entity entity = MC.player.getRidingEntity();
+        MC.setRenderViewEntity(new RowboatCam(MC.world, entity == null ? 0 : entity.rotationYaw, 30));
         lastMouseHelper = MC.mouseHelper;
         MC.mouseHelper = new RowboatCamUpdater();
         view = View.ROWBOAT;
@@ -159,7 +159,7 @@ public final class WeedwoodRowboatHandler {
 
     // Do this so that when the player enters the rowboat they are rotated correctly after a SetPassengers packet is recieved
     private void onMacgyveredGameLoop() {
-        EntityPlayerSP player = MC.thePlayer;
+        EntityPlayerSP player = MC.player;
         if (player == null) {
             isPlayerInRowboat = false;
             return;
@@ -193,13 +193,13 @@ public final class WeedwoodRowboatHandler {
             Entity entity = MC.getRenderViewEntity();
             if (entity instanceof RowboatCam) {
                 RowboatCam cam = (RowboatCam) entity;
-                EntityPlayer player = MC.thePlayer;
+                EntityPlayer player = MC.player;
                 Entity riding = player.getRidingEntity();
                 if (riding instanceof EntityWeedwoodRowboat) {
                     int deltaX = Mouse.getDX();
                     int deltaY = Mouse.getDY();
                     cam.prevRotationYaw = cam.rotationYaw = MathHelper.wrapDegrees(cam.rotationYaw + deltaX * 0.15F);
-                    cam.prevRotationPitch = cam.rotationPitch = MathHelper.clamp_float(cam.rotationPitch - deltaY * 0.15F, 0, 90);
+                    cam.prevRotationPitch = cam.rotationPitch = MathHelper.clamp(cam.rotationPitch - deltaY * 0.15F, 0, 90);
                     cam.update(riding, MC.getRenderPartialTicks());
                     GuiIngameForge.renderCrosshairs = false;
                     reset = false;
@@ -239,11 +239,11 @@ public final class WeedwoodRowboatHandler {
             mat.translate(x, y + offsetY, z);
             mat.rotate(-rotationYaw * MathUtils.DEG_TO_RAD, 0, 1, 0);
             mat.rotate(rotationPitch * MathUtils.DEG_TO_RAD, 1, 0, 0);
-            mat.translate(0, 0, -getDistance(worldObj, x, y + offsetY, z, rotationYaw, rotationPitch));
+            mat.translate(0, 0, -getDistance(world, x, y + offsetY, z, rotationYaw, rotationPitch));
             Vec3d point = mat.transform(Vec3d.ZERO);
-            lastTickPosX = prevPosX = posX = point.xCoord;
-            lastTickPosY = prevPosY = posY = point.yCoord;
-            lastTickPosZ = prevPosZ = posZ = point.zCoord;
+            lastTickPosX = prevPosX = posX = point.x;
+            lastTickPosY = prevPosY = posY = point.y;
+            lastTickPosZ = prevPosZ = posZ = point.z;
         }
 
         private double getDistance(World world, double x, double y, double z, float yaw, float pitch) {

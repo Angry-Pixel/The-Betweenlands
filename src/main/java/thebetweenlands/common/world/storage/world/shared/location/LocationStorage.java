@@ -119,10 +119,10 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public LocationStorage linkChunks() {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			int sx = MathHelper.floor_double(boundingBox.minX) / 16;
-			int sz = MathHelper.floor_double(boundingBox.minZ) / 16;
-			int ex = MathHelper.floor_double(boundingBox.maxX) / 16;
-			int ez = MathHelper.floor_double(boundingBox.maxZ) / 16;
+			int sx = MathHelper.floor(boundingBox.minX) / 16;
+			int sz = MathHelper.floor(boundingBox.minZ) / 16;
+			int ex = MathHelper.floor(boundingBox.maxX) / 16;
+			int ez = MathHelper.floor(boundingBox.maxZ) / 16;
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
 					Chunk chunk = this.getWorldStorage().getWorld().getChunkFromChunkCoords(cx, cz);
@@ -353,7 +353,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public boolean intersects(AxisAlignedBB aabb) {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			if(boundingBox.intersectsWith(aabb)) {
+			if(boundingBox.intersects(aabb)) {
 				return true;
 			}
 		}
@@ -367,7 +367,7 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	protected final boolean isVecInsideOrEdge(AxisAlignedBB aabb, Vec3d vec) {
-		return vec.xCoord >= aabb.minX && vec.xCoord <= aabb.maxX ? (vec.yCoord >= aabb.minY && vec.yCoord <= aabb.maxY ? vec.zCoord >= aabb.minZ && vec.zCoord <= aabb.maxZ : false) : false;
+		return vec.x >= aabb.minX && vec.x <= aabb.maxX ? (vec.y >= aabb.minY && vec.y <= aabb.maxY ? vec.z >= aabb.minZ && vec.z <= aabb.maxZ : false) : false;
 	}
 
 	/**
@@ -408,20 +408,19 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(Entity entity) {
-		return getLocations(entity.worldObj, entity.getEntityBoundingBox());
+		return getLocations(entity.world, entity.getEntityBoundingBox());
 	}
 
 	/**
 	 * Returns a list of all locations at the specified position
 	 * @param world
-	 * @param entity
 	 * @return
 	 */
 	public static List<LocationStorage> getLocations(World world, Vec3d position) {
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		return worldStorage.getSharedStorageAt(LocationStorage.class, (location) -> {
 			return location.isInside(position);
-		}, position.xCoord, position.zCoord);
+		}, position.x, position.z);
 	}
 
 	/**
@@ -440,7 +439,6 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	/**
 	 * Returns the highest priority ambience at the specified position
 	 * @param world
-	 * @param entity
 	 * @return
 	 */
 	public static LocationAmbience getAmbience(World world, Vec3d position) {

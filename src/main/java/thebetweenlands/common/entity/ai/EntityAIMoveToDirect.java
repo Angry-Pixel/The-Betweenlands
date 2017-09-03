@@ -25,15 +25,15 @@ public abstract class EntityAIMoveToDirect<T extends EntityLiving> extends Entit
 	}
 
 	@Override
-	public boolean continueExecuting() {
-		return this.getTarget() != null;
+	public boolean shouldContinueExecuting() {
+		return false;
 	}
 
 	@Override
 	public void updateTask() {
 		Vec3d target = this.getTarget();
 		if(target != null) {
-			this.entity.getMoveHelper().setMoveTo(target.xCoord, target.yCoord, target.zCoord, this.speed);
+			this.entity.getMoveHelper().setMoveTo(target.x, target.y, target.z, this.speed);
 		}
 	}
 

@@ -16,6 +16,8 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 
+import javax.annotation.Nullable;
+
 public class BlockSilt extends BasicBlock {
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1 - 0.125F, 1);
 
@@ -27,15 +29,16 @@ public class BlockSilt extends BasicBlock {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
+	@Nullable
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
 		return BOUNDING_BOX;
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		boolean canWalk = entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).inventory.armorInventory[0] != null 
-				&& ((EntityPlayer)entityIn).inventory.armorInventory[0].getItem() instanceof ItemRubberBoots;
+		boolean canWalk = entityIn instanceof EntityPlayer && ((EntityPlayer)entityIn).inventory.armorInventory.get(0) != null
+				&& ((EntityPlayer)entityIn).inventory.armorInventory.get(0).getItem() instanceof ItemRubberBoots;
 		if(!(entityIn instanceof IEntityBL) && !canWalk) {
 			entityIn.motionX *= 0.4D;
 			entityIn.motionZ *= 0.4D;

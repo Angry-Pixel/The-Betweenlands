@@ -12,13 +12,12 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
 import net.minecraftforge.client.model.ModelDynBucket;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
-public class ModelDynBucketBL implements IModel, IModelCustomData {
+public class ModelDynBucketBL implements IModel {
 	private final IModel model;
 	private final ResourceLocation baseLocation, liquidLocation, coverLocation;
 
@@ -47,7 +46,7 @@ public class ModelDynBucketBL implements IModel, IModelCustomData {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		return this.model.bake(state, format, bakedTextureGetter);
 	}
 
@@ -69,10 +68,16 @@ public class ModelDynBucketBL implements IModel, IModelCustomData {
 		boolean flip = false;
 		if (customData.containsKey("flipGas")) {
 			String flipStr = parser.parse(customData.get("flipGas")).getAsString();
-			if (flipStr.equals("true")) flip = true;
-			else if (flipStr.equals("false")) flip = false;
-			else
-				throw new IllegalArgumentException(String.format("DynBucket custom data \"flipGas\" must have value \'true\' or \'false\' (was \'%s\')", flipStr));
+			switch (flipStr) {
+				case "true":
+					flip = true;
+					break;
+				case "false":
+					flip = false;
+					break;
+				default:
+					throw new IllegalArgumentException(String.format("DynBucket custom data \"flipGas\" must have value \'true\' or \'false\' (was \'%s\')", flipStr));
+			}
 		}
 
 		ResourceLocation baseLocation = null;

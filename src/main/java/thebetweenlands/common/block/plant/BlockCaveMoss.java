@@ -88,7 +88,7 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if(!isValidBlock(worldIn.getBlockState(pos.up()))) {
 			worldIn.setBlockToAir(pos);
 		}

@@ -2,6 +2,7 @@ package thebetweenlands.common.item.herblore;
 
 import java.util.List;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +17,8 @@ import thebetweenlands.api.item.IDiscoveryProvider;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 
+import javax.annotation.Nullable;
+
 public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     public ItemManualHL() {
         setMaxStackSize(1);
@@ -23,7 +26,7 @@ public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     }
 
     @Override
-	public void addInformation(ItemStack stack, EntityPlayer playerIn, List<String> tooltip, boolean advanced) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(TextFormatting.RED + "Not yet implemented!");
 	}
     
@@ -38,9 +41,9 @@ public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     }
 
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStack, World world, EntityPlayer player, EnumHand hand) {
+    public ActionResult<ItemStack> onItemRightClick( World world, EntityPlayer player, EnumHand hand) {
         player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_HL, world, (int) player.posX, (int) player.posY, (int) player.posZ);
-        return new ActionResult<>(EnumActionResult.SUCCESS, itemStack);
+        return new ActionResult<>(EnumActionResult.SUCCESS, player.getHeldItem(hand));
     }
 
     @Override

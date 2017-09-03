@@ -1,8 +1,5 @@
 package thebetweenlands.common.item.equipment;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -20,6 +17,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -43,216 +41,219 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.LightingUtil;
 import thebetweenlands.util.NBTHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemAmulet extends Item implements IEquippable {
-	public static final List<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new ArrayList<Class<? extends EntityLivingBase>>();
+    public static final List<Class<? extends EntityLivingBase>> SUPPORTED_ENTITIES = new ArrayList<Class<? extends EntityLivingBase>>();
 
-	static {
-		SUPPORTED_ENTITIES.add(EntityTarminion.class);
-		SUPPORTED_ENTITIES.add(EntityGiantToad.class);
-	}
+    static {
+        SUPPORTED_ENTITIES.add(EntityTarminion.class);
+        SUPPORTED_ENTITIES.add(EntityGiantToad.class);
+    }
 
-	public ItemAmulet() {
-		this.setCreativeTab(BLCreativeTabs.SPECIALS);
-		this.setMaxStackSize(1);
+    public ItemAmulet() {
+        this.setCreativeTab(BLCreativeTabs.SPECIALS);
+        this.setMaxStackSize(1);
 
-		CircleGemHelper.addGemPropertyOverrides(this);
-		IEquippable.addEquippedPropertyOverrides(this);
-	}
+        CircleGemHelper.addGemPropertyOverrides(this);
+        IEquippable.addEquippedPropertyOverrides(this);
+    }
 
-	/**
-	 * Adds an amulet to the specified entity
-	 * @param gem
-	 * @param entity
-	 * @param canUnequip
-	 * @param canDrop
-	 * @return True if successful
-	 */
-	public static boolean addAmulet(CircleGemType gem, Entity entity, boolean canUnequip, boolean canDrop) {
-		ItemStack amulet = createStack(gem);
+    /**
+     * Adds an amulet to the specified entity
+     *
+     * @param gem
+     * @param entity
+     * @param canUnequip
+     * @param canDrop
+     * @return True if successful
+     */
+    public static boolean addAmulet(CircleGemType gem, Entity entity, boolean canUnequip, boolean canDrop) {
+        ItemStack amulet = createStack(gem);
 
-		NBTTagCompound nbt = NBTHelper.getStackNBTSafe(amulet);
-		nbt.setBoolean("canUnequip", canUnequip);
-		nbt.setBoolean("canDrop", canDrop);
+        NBTTagCompound nbt = NBTHelper.getStackNBTSafe(amulet);
+        nbt.setBoolean("canUnequip", canUnequip);
+        nbt.setBoolean("canDrop", canDrop);
 
-		ItemStack result = EquipmentHelper.equipItem(null, entity, amulet, false);
+        ItemStack result = EquipmentHelper.equipItem(null, entity, amulet, false);
 
-		if(result == null || result.stackSize != amulet.stackSize) {
-			return true;
-		}
+        return result == null || result.getCount() != amulet.getCount();
 
-		return false;
-	}
+    }
 
-	/**
-	 * Creates an amulet with the specified gem
-	 * @param gem
-	 * @return
-	 */
-	public static ItemStack createStack(CircleGemType gem) {
-		ItemStack stack = new ItemStack(ItemRegistry.AMULET);
-		CircleGemHelper.setGem(stack, gem);
-		return stack;
-	}
+    /**
+     * Creates an amulet with the specified gem
+     *
+     * @param gem
+     * @return
+     */
+    public static ItemStack createStack(CircleGemType gem) {
+        ItemStack stack = new ItemStack(ItemRegistry.AMULET);
+        CircleGemHelper.setGem(stack, gem);
+        return stack;
+    }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void getSubItems(Item item, CreativeTabs tab, List<ItemStack> list) {
-		list.add(createStack(CircleGemType.NONE));
-		list.add(createStack(CircleGemType.AQUA));
-		list.add(createStack(CircleGemType.CRIMSON));
-		list.add(createStack(CircleGemType.GREEN));
-	}
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority = EventPriority.LOWEST)
+    public static void onRenderLiving(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
+        if (event.getEntity() != null) {
+            renderAmulet(event.getEntity(), event.getX(), event.getY(), event.getZ(), WorldRenderHandler.getPartialTicks());
+        }
+    }
 
-	@Override
-	public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
-		return EnumEquipmentInventory.AMULET;
-	}
+    @SideOnly(Side.CLIENT)
+    private static void renderAmulet(EntityLivingBase entity, double x, double y, double z, float partialTicks) {
+        if (entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+            IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+            IInventory inv = cap.getInventory(EnumEquipmentInventory.AMULET);
+            List<ItemStack> items = new ArrayList<ItemStack>(inv.getSizeInventory());
 
-	@Override
-	public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
-		return true;
-	}
+            for (int i = 0; i < inv.getSizeInventory(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (stack != null && CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
+                    items.add(stack);
+                }
+            }
 
-	@Override
-	public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
-		if(CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
-			return false;
-		}
+            int amulets = items.size();
+            float degOffset = 360.0F / amulets;
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(x, y, z);
 
-		return true;
-	}
+            TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+            RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-	@Override
-	public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
-		return target == player || stack.getTagCompound() == null || !stack.getTagCompound().hasKey("canUnequip") || stack.getTagCompound().getBoolean("canUnequip");
-	}
+            textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+            texture.setBlurMipmap(false, false);
 
-	@Override
-	public boolean canDrop(ItemStack stack, Entity entity, IInventory inventory) {
-		return stack.getTagCompound() == null || !stack.getTagCompound().hasKey("canDrop") || stack.getTagCompound().getBoolean("canDrop");
-	}
+            int i = 0;
+            for (ItemStack stack : items) {
+                GlStateManager.rotate(degOffset, 0, 1, 0);
 
-	@Override
-	public void onEquip(ItemStack stack, Entity entity, IInventory inventory) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
-			cap.addGem(new CircleGem(CircleGemHelper.getGem(stack), CombatType.BOTH));
-		}
-	}
+                CircleGemType gem = CircleGemHelper.getGem(stack);
+                ItemStack gemItem = null;
 
-	@Override
-	public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
-			ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
-			List<CircleGem> gems = cap.getGems();
-			CircleGemType type = CircleGemHelper.getGem(stack);
+                switch (gem) {
+                    case CRIMSON:
+                        gemItem = new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM);
+                        break;
+                    case AQUA:
+                        gemItem = new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM);
+                        break;
+                    case GREEN:
+                        gemItem = new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM);
+                        break;
+                    default:
+                }
 
-			for(CircleGem gem : gems) {
-				if(gem.getCombatType() == CombatType.BOTH && gem.getGemType() == type) {
-					cap.removeGem(gem);
-					break;
-				}
-			}
-		}
-	}
+                if (gemItem != null) {
+                    IBakedModel model = renderItem.getItemModelMesher().getItemModel(gemItem);
 
-	@Override
-	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) { }
+                    GlStateManager.pushMatrix();
+                    GlStateManager.rotate((entity.ticksExisted + partialTicks) * 1.5F, 0, 1, 0);
+                    double eyeHeight = entity.getEyeHeight();
+                    GlStateManager.translate(0, eyeHeight / 1.5D + Math.sin((entity.ticksExisted + partialTicks) / 60.0D + (double) i / amulets * Math.PI * 2.0D) / 2.0D * entity.height / 4.0D, entity.width / 1.25D);
+                    GlStateManager.scale(0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D);
+                    GlStateManager.enableBlend();
+                    GlStateManager.color(1, 1, 1, 0.8F);
+                    GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-	@SideOnly(Side.CLIENT)
-	@SubscribeEvent(priority = EventPriority.LOWEST)
-	public static void onRenderLiving(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
-		if(event.getEntity() != null) {
-			renderAmulet(event.getEntity(), event.getX(), event.getY(), event.getZ(), WorldRenderHandler.getPartialTicks());
-		}
-	}
+                    LightingUtil.INSTANCE.setLighting(255);
 
-	@SideOnly(Side.CLIENT)
-	private static void renderAmulet(EntityLivingBase entity, double x, double y, double z, float partialTicks) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
-			IInventory inv = cap.getInventory(EnumEquipmentInventory.AMULET);
-			List<ItemStack> items = new ArrayList<ItemStack>(inv.getSizeInventory());
+                    renderItem.renderItem(stack, model);
 
-			for(int i = 0; i < inv.getSizeInventory(); i++) {
-				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
-					items.add(stack);
-				}
-			}
+                    LightingUtil.INSTANCE.revert();
 
-			int amulets = items.size();
-			float degOffset = 360.0F / amulets;
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(x, y, z);
+                    GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
+                    float scale = ((float) Math.cos(entity.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
+                    GlStateManager.scale(scale, scale, scale);
+                    GlStateManager.colorMask(false, false, false, false);
 
-			TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
-			RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+                    renderItem.renderItem(stack, model);
 
-			textureManager.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			ITextureObject texture = textureManager.getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			texture.setBlurMipmap(false, false);
+                    GlStateManager.colorMask(true, true, true, true);
 
-			int i = 0;
-			for(ItemStack stack : items) {
-				GlStateManager.rotate(degOffset, 0, 1, 0);
+                    renderItem.renderItem(stack, model);
 
-				CircleGemType gem = CircleGemHelper.getGem(stack);
-				ItemStack gemItem = null;
+                    GlStateManager.popMatrix();
 
-				switch(gem) {
-				case CRIMSON:
-					gemItem = new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM);
-					break;
-				case AQUA:
-					gemItem = new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM);
-					break;
-				case GREEN:
-					gemItem = new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM);
-					break;
-				default:
-				}
+                    i++;
+                }
+            }
 
-				if(gemItem != null) {
-					IBakedModel model = renderItem.getItemModelMesher().getItemModel(gemItem);
+            GlStateManager.popMatrix();
+            GlStateManager.color(1, 1, 1, 1);
+            GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 
-					GlStateManager.pushMatrix();
-					GlStateManager.rotate((entity.ticksExisted + partialTicks) * 1.5F, 0, 1, 0);
-					double eyeHeight = entity.getEyeHeight();
-					GlStateManager.translate(0, eyeHeight / 1.5D + Math.sin((entity.ticksExisted + partialTicks) / 60.0D + (double)i / amulets * Math.PI * 2.0D) / 2.0D * entity.height / 4.0D, entity.width / 1.25D);
-					GlStateManager.scale(0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D, 0.25F * entity.height / 2.0D);
-					GlStateManager.enableBlend();
-					GlStateManager.color(1, 1, 1, 0.8F);
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+            texture.restoreLastBlurMipmap();
+        }
+    }
 
-					LightingUtil.INSTANCE.setLighting(255);
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
+        list.add(createStack(CircleGemType.NONE));
+        list.add(createStack(CircleGemType.AQUA));
+        list.add(createStack(CircleGemType.CRIMSON));
+        list.add(createStack(CircleGemType.GREEN));
+    }
 
-					renderItem.renderItem(stack, model);
+    @Override
+    public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {
+        return EnumEquipmentInventory.AMULET;
+    }
 
-					LightingUtil.INSTANCE.revert();
+    @Override
+    public boolean canEquipOnRightClick(ItemStack stack, EntityPlayer player, Entity target) {
+        return true;
+    }
 
-					GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
-					float scale = ((float) Math.cos(entity.ticksExisted / 5.0F) + 1.0F) / 15.0F + 1.05F;
-					GlStateManager.scale(scale, scale, scale);
-					GlStateManager.colorMask(false, false, false, false);
+    @Override
+    public boolean canEquip(ItemStack stack, EntityPlayer player, Entity target) {
+        if (CircleGemHelper.getGem(stack) == CircleGemType.NONE || (target instanceof EntityPlayer == false && !SUPPORTED_ENTITIES.contains(target.getClass()) && player != null)) {
+            return false;
+        }
 
-					renderItem.renderItem(stack, model);
+        return true;
+    }
 
-					GlStateManager.colorMask(true, true, true, true);
+    @Override
+    public boolean canUnequip(ItemStack stack, EntityPlayer player, Entity target, IInventory inventory) {
+        return target == player || stack.getTagCompound() == null || !stack.getTagCompound().hasKey("canUnequip") || stack.getTagCompound().getBoolean("canUnequip");
+    }
 
-					renderItem.renderItem(stack, model);
+    @Override
+    public boolean canDrop(ItemStack stack, Entity entity, IInventory inventory) {
+        return stack.getTagCompound() == null || !stack.getTagCompound().hasKey("canDrop") || stack.getTagCompound().getBoolean("canDrop");
+    }
 
-					GlStateManager.popMatrix();
+    @Override
+    public void onEquip(ItemStack stack, Entity entity, IInventory inventory) {
+        if (entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
+            ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+            cap.addGem(new CircleGem(CircleGemHelper.getGem(stack), CombatType.BOTH));
+        }
+    }
 
-					i++;
-				}
-			}
+    @Override
+    public void onUnequip(ItemStack stack, Entity entity, IInventory inventory) {
+        if (entity.hasCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null)) {
+            ICircleGemCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_ENTITY_CIRCLE_GEM, null);
+            List<CircleGem> gems = cap.getGems();
+            CircleGemType type = CircleGemHelper.getGem(stack);
 
-			GlStateManager.popMatrix();
-			GlStateManager.color(1, 1, 1, 1);
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+            for (CircleGem gem : gems) {
+                if (gem.getCombatType() == CombatType.BOTH && gem.getGemType() == type) {
+                    cap.removeGem(gem);
+                    break;
+                }
+            }
+        }
+    }
 
-			texture.restoreLastBlurMipmap();
-		}
-	}
+    @Override
+    public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
+    }
 }

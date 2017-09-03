@@ -3,6 +3,7 @@ package thebetweenlands.common.block.plant;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
@@ -114,9 +115,10 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, World worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(@Nonnull IBlockState blockState, @Nonnull IBlockAccess worldIn, @Nonnull BlockPos pos) {
 		return NULL_AABB;
 	}
+
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -126,9 +128,9 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	}
 
 	@Override
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn) {
-		super.neighborChanged(state, worldIn, pos, blockIn);
-		this.checkAndDropBlock(worldIn, pos, state);
+	public void neighborChanged(@Nonnull IBlockState state, @Nonnull World world, @Nonnull BlockPos pos, @Nonnull Block neighborBlock, @Nonnull BlockPos neighbourPos) {
+		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
+		this.checkAndDropBlock(world, pos, state);
 	}
 
 	@Override

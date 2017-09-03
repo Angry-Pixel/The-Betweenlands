@@ -93,8 +93,8 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
 
     public void getAspects() {
         aspects.clear();
-        ItemAspectContainer container = ItemAspectContainer.fromItem(this.itemStack, AspectManager.get(Minecraft.getMinecraft().theWorld));
-        List<Aspect> visibleAspects = container.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getMinecraft().thePlayer));
+        ItemAspectContainer container = ItemAspectContainer.fromItem(this.itemStack, AspectManager.get(Minecraft.getMinecraft().world));
+        List<Aspect> visibleAspects = container.getAspects(DiscoveryContainer.getMergedDiscoveryContainer(Minecraft.getMinecraft().player));
         for (Aspect aspect : visibleAspects) {
             aspects.add(aspect.type);
         }

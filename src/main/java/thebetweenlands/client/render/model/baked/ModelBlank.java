@@ -20,11 +20,10 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.IModelCustomData;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 
-public class ModelBlank implements IModelCustomData {
+public class ModelBlank implements IModel {
 	private final ResourceLocation particleTexture;
 	private final List<ResourceLocation> texturesToLoad = new ArrayList<ResourceLocation>();
 
@@ -59,7 +58,7 @@ public class ModelBlank implements IModelCustomData {
 	}
 
 	@Override
-	public IBakedModel bake(IModelState state, VertexFormat format, Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
+	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		return new ModelBakedBlank(bakedTextureGetter.apply(this.particleTexture));
 	}
 

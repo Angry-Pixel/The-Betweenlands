@@ -129,7 +129,7 @@ public class ManualManager {
                     }
                 }
             }
-            ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getMinecraft().theWorld));
+            ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(ingredient, AspectManager.get(Minecraft.getMinecraft().world));
             return ingredient != null && aspectContainer.getAspects(container).size() > 0;
         }
 
@@ -145,9 +145,9 @@ public class ManualManager {
      * @param itemManual either manualGuideBook or manualHL
      */
     public static void playerDiscoverPage(EntityPlayer player, String name, Item itemManual) {
-        if (!ManualManager.hasFoundPage(player, name, itemManual) && player != null && player.inventory.hasItemStack(new ItemStack(itemManual)) && !player.worldObj.isRemote) {
+        if (!ManualManager.hasFoundPage(player, name, itemManual) && player != null && player.inventory.hasItemStack(new ItemStack(itemManual)) && !player.world.isRemote) {
             if (ManualManager.findPage(player, name, itemManual))
-                player.addChatMessage(new TextComponentTranslation("chat.manual.discover_page", new TextComponentTranslation("manual." + name + ".title")));
+                player.sendMessage(new TextComponentTranslation("chat.manual.discover_page", new TextComponentTranslation("manual." + name + ".title")));
         }
     }
 
@@ -178,7 +178,7 @@ public class ManualManager {
      * @return
      */
     public static int getCurrentPageNumber(Item itemManual, EntityPlayer player) {
-        player = player.worldObj.getClosestPlayerToEntity(player, 20);
+        player = player.world.getClosestPlayerToEntity(player, 20);
         if (player != null && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual)
             if (player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound() != null && player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().hasKey("pageNumber"))
                 return player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().getInteger("page_number");
@@ -193,7 +193,7 @@ public class ManualManager {
      * @return returns a category
      */
     public static ManualCategory getCurrentCategory(Item itemManual, EntityPlayer player) {
-        player = player.worldObj.getClosestPlayerToEntity(player, 20);
+        player = player.world.getClosestPlayerToEntity(player, 20);
         if (player != null &&player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual) {
             NBTTagCompound nbt = player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound();
             if (nbt != null && nbt.hasKey("category") && getCategoryFromString(nbt.getString("category"), itemManual) != null)

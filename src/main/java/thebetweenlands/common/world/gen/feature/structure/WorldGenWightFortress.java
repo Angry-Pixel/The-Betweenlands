@@ -137,19 +137,19 @@ public class WorldGenWightFortress extends WorldGenerator {
 	protected boolean canGenerateAt(World world, Random rand, BlockPos pos) {
 		MutableBlockPos checkPos = new MutableBlockPos();
 
-		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos))) {
+		if(!this.isBiomeValid(world.getBiome(pos))) {
 			return false;
 		}
 		
-		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(32, 0, 0)))) {
+		if(!this.isBiomeValid(world.getBiome(pos.add(32, 0, 0)))) {
 			return false;
 		}
 
-		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(32, 0, 32)))) {
+		if(!this.isBiomeValid(world.getBiome(pos.add(32, 0, 32)))) {
 			return false;
 		}
 
-		if(!this.isBiomeValid(world.getBiomeGenForCoords(pos.add(0, 0, 32)))) {
+		if(!this.isBiomeValid(world.getBiome(pos.add(0, 0, 32)))) {
 			return false;
 		}
 
@@ -1090,7 +1090,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		EntitySwordEnergy swordEnergy = new EntitySwordEnergy(world);
 		swordEnergy.setPosition(pos.getX() + 16D, pos.getY() + 21.5, pos.getZ() + 16D);
-		world.spawnEntityInWorld(swordEnergy);
+		world.spawnEntity(swordEnergy);
 
 		//floor 1
 		rotatedCubeVolume(world, rand, pos, 12, 23, 12, limestonePolishedCollapsing, 0, 8, 1, 8, 0);
@@ -1104,7 +1104,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 		tp.setLocationAndAngles(pos.getX() + 16, pos.getY() + 30, pos.getZ() + 16, 0, 0);
 		tp.setTeleportDestination(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19.2D, pos.getZ() + 16));
 		tp.setBossSpawnPosition(new Vec3d(pos.getX() + 16, pos.getY() + 17 + 19 + 5.2D, pos.getZ() + 16));
-		world.spawnEntityInWorld(tp);
+		world.spawnEntity(tp);
 		 
 		//floor3 (Boss fight Floor)
 		rotatedCubeVolume(world, rand, pos, 13, 35, 13, betweenstoneTiles, 0, 6, 1, 6, 0);

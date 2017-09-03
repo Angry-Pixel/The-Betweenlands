@@ -46,7 +46,7 @@ public class ItemShimmerStone extends Item {
 
 	@Override
 	public boolean onEntityItemUpdate(EntityItem entityItem) {
-		this.updateShimmer(entityItem.getEntityItem(), entityItem.worldObj.rand);
+		this.updateShimmer(entityItem.getItem(), entityItem.world.rand);
 		return super.onEntityItemUpdate(entityItem);
 	}
 
@@ -75,7 +75,8 @@ public class ItemShimmerStone extends Item {
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		if (!world.isRemote) {
 			double px = player.posX;
 			double py = player.posY + player.getEyeHeight();
@@ -92,10 +93,10 @@ public class ItemShimmerStone extends Item {
 			itemEntity.motionY = my;
 			itemEntity.motionZ = mz;
 			itemEntity.setPickupDelay(20);
-			world.spawnEntityInWorld(itemEntity);
+			world.spawnEntity(itemEntity);
 
 			if (!player.capabilities.isCreativeMode) {
-				--stack.stackSize;
+				stack.shrink(1);
 			}
 		}
 

@@ -35,7 +35,12 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		.addFeature(new MiddleGemFeature());
 		this.setFoliageColors(0x5B3522, 0x5B3522);
 
-		BiomeDictionary.registerBiomeType(this, Type.SWAMP, Type.WET, Type.WASTELAND, Type.DEAD);
+	}
+
+	@Override
+	public void addTypes() {
+		BiomeDictionary.addTypes(this, Type.SWAMP, Type.WET, Type.WASTELAND, Type.DEAD);
+
 	}
 
 	@Override

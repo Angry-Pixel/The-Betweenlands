@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,19 +32,21 @@ import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.registries.BlockRegistry;
 
+import javax.annotation.Nullable;
+
 public class ItemOctineIngot extends Item {
 	public ItemOctineIngot() {
 		this.setCreativeTab(BLCreativeTabs.ITEMS);
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List<String> info, boolean debug) {
-		info.add(I18n.format("tooltip.octine.fire"));
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(I18n.format("tooltip.octine.fire"));
 	}
 
 	@Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand) {
+	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
+		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		RayTraceResult result = this.rayTrace(worldIn, playerIn, true);
 		if(result != null && result.typeOfHit == Type.BLOCK) {
 			BlockPos offsetPos = result.getBlockPos().offset(result.sideHit);
@@ -54,7 +57,7 @@ public class ItemOctineIngot extends Item {
 				hasTinder = true;
 				isBlockTinder = true;
 			} else {
-				List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> entity.getEntityItem() != null && this.isTinder(null, entity.getEntityItem()));
+				List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> entity.getItem() != null && this.isTinder(null, entity.getItem()));
 				if(!tinder.isEmpty()) {
 					hasTinder = true;
 				}
@@ -70,7 +73,7 @@ public class ItemOctineIngot extends Item {
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase playerIn, int count) {
 		if(playerIn instanceof EntityPlayer) {
-			World worldIn = playerIn.worldObj;
+			World worldIn = playerIn.world;
 			RayTraceResult result = this.rayTrace(worldIn, (EntityPlayer) playerIn, true);
 			if(result != null && result.typeOfHit == Type.BLOCK) {
 				BlockPos pos = result.getBlockPos();
@@ -82,7 +85,7 @@ public class ItemOctineIngot extends Item {
 					hasTinder = true;
 					isBlockTinder = true;
 				} else {
-					List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> entity.getEntityItem() != null && this.isTinder(null, entity.getEntityItem()));
+					List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> entity.getItem() != null && this.isTinder(null, entity.getItem()));
 					if(!tinder.isEmpty()) {
 						hasTinder = true;
 					}
@@ -90,13 +93,13 @@ public class ItemOctineIngot extends Item {
 				if(hasTinder) {
 					if(worldIn.rand.nextInt(count / 10 + 1) == 0) {
 						worldIn.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, 
-								result.hitVec.xCoord + worldIn.rand.nextFloat()*0.2-0.1, 
-								result.hitVec.yCoord + worldIn.rand.nextFloat()*0.2-0.1, 
-								result.hitVec.zCoord + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
+								result.hitVec.x + worldIn.rand.nextFloat()*0.2-0.1, 
+								result.hitVec.y + worldIn.rand.nextFloat()*0.2-0.1, 
+								result.hitVec.z + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
 						worldIn.spawnParticle(EnumParticleTypes.FLAME, 
-								result.hitVec.xCoord + worldIn.rand.nextFloat()*0.2-0.1, 
-								result.hitVec.yCoord + worldIn.rand.nextFloat()*0.2-0.1, 
-								result.hitVec.zCoord + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
+								result.hitVec.x + worldIn.rand.nextFloat()*0.2-0.1, 
+								result.hitVec.y + worldIn.rand.nextFloat()*0.2-0.1, 
+								result.hitVec.z + worldIn.rand.nextFloat()*0.2-0.1, 0, 0.1, 0);
 					}
 					if(!worldIn.isRemote) {
 						if(count <= 1) {
