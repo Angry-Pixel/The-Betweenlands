@@ -46,7 +46,6 @@ import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
-import javax.annotation.Nullable;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -97,11 +96,11 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
      *
      * @param connectionArray <p>Connection states, index 4 is the center:
      *                        <pre>
-     *                         -------
-     *                        | 0 1 2 |
-     *                        | 3 4 5 |
-     *                        | 6 7 8 |
-     *                         ------- </pre>
+     *                                                -------
+     *                                               | 0 1 2 |
+     *                                               | 3 4 5 |
+     *                                               | 6 7 8 |
+     *                                                ------- </pre>
      * @return <p>Returned index positions:
      * <pre>
      *  -------> +x
@@ -185,7 +184,6 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
      * @param blockAccess Block access
      * @param pos
      * @param dir         Face
-
      * @return Connection array
      */
     public static boolean[] getConnectionArray(IBlockAccess blockAccess, BlockPos pos, EnumFacing dir, Predicate<IBlockState> matcher) {
@@ -370,7 +368,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
         builder.ignore(COMPOSTED).ignore(DECAYED).withPropertySuffix(COMPOSTED, null, "composted")
                 .withPropertySuffixExclusions((map) -> {
                     //Exclude COMPOSTED && DECAYED because that will never be used
-                    if (map.getValue(COMPOSTED) && map.getValue(DECAYED))
+                    if (map != null && map.getValue(COMPOSTED) != null && map.getValue(DECAYED) != null && map.getValue(COMPOSTED) && map.getValue(DECAYED))
                         return ImmutableList.of(COMPOSTED, DECAYED);
                     return ImmutableList.of();
                 });
