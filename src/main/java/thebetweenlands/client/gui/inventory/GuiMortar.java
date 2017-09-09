@@ -44,6 +44,12 @@ public class GuiMortar extends GuiContainer {
     protected void drawGuiContainerForegroundLayer(int x, int y) {
     }
 
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
+
     private void renderSlot(ItemStack stack, int x, int y) {
     	GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();

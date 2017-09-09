@@ -82,17 +82,17 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
+
 		if (!world.isRemote) {
 			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
 				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
-
 				boolean open = tile.isOpen();
 
-				if((heldItem == null && (!open || player.isSneaking() || tile.getCompostedAmount() == 0)) || (heldItem != null && !open)) {
+				if(heldItem.isEmpty() && player.isSneaking()) {
 					tile.setOpen(!open);
 					world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
 					tile.markDirty();
-				} else if(open && heldItem != null) {
+				} else if(open && !heldItem.isEmpty()) {
 					ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(heldItem);
 					if (compostRecipe != null) {
 						int amount = compostRecipe.getCompostAmount(heldItem);
@@ -101,7 +101,7 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 						case 1:
 							tile.addItemToBin(heldItem, amount, time, false);
 							if (!player.capabilities.isCreativeMode) {
-								player.inventory.decrStackSize(player.inventory.currentItem, 1);
+								player.getHeldItem(hand).shrink(1);
 							}
 							break;
 						case -1:

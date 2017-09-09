@@ -40,4 +40,9 @@ public class GuiPurifier extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int x, int y) {
     }
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
 }

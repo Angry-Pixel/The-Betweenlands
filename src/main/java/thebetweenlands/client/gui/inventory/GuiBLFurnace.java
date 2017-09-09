@@ -15,7 +15,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 
 @SideOnly(Side.CLIENT)
 public class GuiBLFurnace extends GuiContainer {
-	private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("thebetweenlands:textures/gui/sulfurFurnace.png");
+	private static final ResourceLocation furnaceGuiTextures = new ResourceLocation("thebetweenlands:textures/gui/sulfur_furnace.png");
 	private TileEntityBLFurnace tileFurnace;
 
 	public GuiBLFurnace(InventoryPlayer inventory, TileEntityBLFurnace tile) {
@@ -45,5 +45,10 @@ public class GuiBLFurnace extends GuiContainer {
 			this.drawTexturedModalRect(k + 79, l + 34, 176, 14, i1 + 1, 16);
 		}
 
+	}
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

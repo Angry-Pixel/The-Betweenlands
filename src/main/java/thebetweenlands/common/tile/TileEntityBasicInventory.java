@@ -13,16 +13,18 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import javax.annotation.Nonnull;
+
 public class TileEntityBasicInventory extends TileEntity implements ISidedInventory {
 	private final String name;
 	protected NonNullList<ItemStack> inventory;
 	protected final ItemStackHandler inventoryHandler;
 
 	public TileEntityBasicInventory(int invtSize, String name) {
-		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY)) {
+		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.<ItemStack>withSize(invtSize, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
-				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY);
+				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.<ItemStack>withSize(invtSize, ItemStack.EMPTY);
 			}
 
 			@Override
@@ -31,7 +33,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 			}
 
 			@Override
-			public void setStackInSlot(int slot, ItemStack stack) {
+			public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
 				TileEntityBasicInventory.this.accessSlot(slot);
 				super.setStackInSlot(slot, stack);
 			}
@@ -75,7 +77,6 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
-	@MethodsReturnNonnullByDefault
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		this.writeInventoryNBT(nbt);
@@ -102,6 +103,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
+	@MethodsReturnNonnullByDefault
 	public ItemStack getStackInSlot(int slot) {
 		this.accessSlot(slot);
 		return this.inventoryHandler.getStackInSlot(slot);
@@ -196,7 +198,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	}
 
 	@Override
-	public void setInventorySlotContents(int index, ItemStack stack) {
+	public void setInventorySlotContents(int index, @Nonnull ItemStack stack) {
 		this.accessSlot(index);
 		this.inventoryHandler.setStackInSlot(index, stack);
 	}
@@ -204,7 +206,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	@Override
 	public void clear() {
 		for(int i = 0; i < this.inventoryHandler.getSlots(); i++) {
-			this.inventoryHandler.setStackInSlot(i, null);
+			this.inventoryHandler.setStackInSlot(i, ItemStack.EMPTY);
 		}
 	}
 

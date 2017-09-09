@@ -48,7 +48,7 @@ public interface IGenericItem {
 	 * @return
 	 */
 	default boolean isItemOf(ItemStack stack) {
-		return stack != null && stack.getItem() == this.getItem() && stack.getItemDamage() == this.getID();
+		return !stack.isEmpty()&& stack.getItem() == this.getItem() && stack.getItemDamage() == this.getID();
 	}
 
 	/**

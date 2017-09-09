@@ -19,7 +19,7 @@ import thebetweenlands.common.tile.TileEntityAnimator;
 public class AnimatorRecipe implements IAnimatorRecipe {
 	private final ItemStack input;
 	private int requiredFuel, requiredLife;
-	private ItemStack result = null;
+	private ItemStack result = ItemStack.EMPTY;
 	private Class<? extends Entity> spawnEntity = null;
 	private ResourceLocation renderEntity = null;
 	private Entity renderEntityInstance = null;
@@ -93,7 +93,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	 */
 	@Override
 	public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack) {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 				}
 				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
 				world.spawnEntity(entity);
-				animator.setInventorySlotContents(0, null);
+				animator.setInventorySlotContents(0, ItemStack.EMPTY);
 				return false;
 			}
 			return true;
@@ -133,6 +133,11 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	@Override
 	public boolean getCloseOnFinish(ItemStack stack) {
 		return this.closeOnFinish;
+	}
+
+	@Override
+	public ItemStack input() {
+		return input;
 	}
 
 	/**
@@ -175,7 +180,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	}
 
 	public static IAnimatorRecipe getRecipe(ItemStack input) {
-		if(input != null) {
+		if(!input.isEmpty()) {
 			for(IAnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
 				if(recipe.matchesInput(input)) {
 					return recipe;

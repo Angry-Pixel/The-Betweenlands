@@ -55,7 +55,7 @@ public class DruidAltarRecipe implements IDruidAltarRecipe {
 		return null;
 	}*/
 
-	public static IDruidAltarRecipe getOutput(ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
+	public static IDruidAltarRecipe getDruidAltarRecipe(ItemStack input1, ItemStack input2, ItemStack input3, ItemStack input4) {
 		ItemStack[] input = new ItemStack[]{input1, input2, input3, input4};
 		for (IDruidAltarRecipe druidAltarRecipe : druidAltarRecipes) {
 			if(druidAltarRecipe.matchesInput(input)) {
@@ -138,10 +138,7 @@ public class DruidAltarRecipe implements IDruidAltarRecipe {
 					break;
 			}
 		}
-		if (next && recipeStacks.size() == 0) {
-			return true;
-		}
-		return false;
+		return next && recipeStacks.size() == 0;
 	}
 
 	public ItemStack getDefaultOutput() {

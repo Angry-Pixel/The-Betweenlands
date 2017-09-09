@@ -31,8 +31,8 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 
 		for (int row = 0; row < 3; row++) {
 			for (int column = 0; column < 3; column++) {
-				ItemStack stack = table.craftingSlots[column * 3 + row];
-				if (stack != null) {
+				ItemStack stack = table.craftingSlots.get(column * 3 + row);
+				if (!stack.isEmpty()) {
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(row * 0.75F, 0.0D, column * 0.75F);
 					GlStateManager.translate(0.75F, 0.52F, 0.25F);

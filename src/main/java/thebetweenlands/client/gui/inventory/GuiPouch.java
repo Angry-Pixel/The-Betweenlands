@@ -35,4 +35,10 @@ public class GuiPouch extends GuiContainer {
 		this.drawTexturedModalRect(xStart, yStart, 0, 0, this.xSize, this.inventoryRows * 18 + 17);
 		this.drawTexturedModalRect(xStart, yStart + this.inventoryRows * 18 + 17, 0, 126, this.xSize, 96);
 	}
+
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
+	}
 }

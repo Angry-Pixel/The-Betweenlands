@@ -2,31 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import thebetweenlands.common.tile.TileEntityAlembic;
-import thebetweenlands.common.tile.TileEntityAnimator;
-import thebetweenlands.common.tile.TileEntityBLDualFurnace;
-import thebetweenlands.common.tile.TileEntityBLFurnace;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
-import thebetweenlands.common.tile.TileEntityCompostBin;
-import thebetweenlands.common.tile.TileEntityDruidAltar;
-import thebetweenlands.common.tile.TileEntityDugSoil;
-import thebetweenlands.common.tile.TileEntityGeckoCage;
-import thebetweenlands.common.tile.TileEntityInfuser;
-import thebetweenlands.common.tile.TileEntityItemCage;
-import thebetweenlands.common.tile.TileEntityItemShelf;
-import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.common.tile.TileEntityMortar;
-import thebetweenlands.common.tile.TileEntityMudFlowerPot;
-import thebetweenlands.common.tile.TileEntityPossessedBlock;
-import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntityRubberTap;
-import thebetweenlands.common.tile.TileEntitySpikeTrap;
-import thebetweenlands.common.tile.TileEntityTarLootPot1;
-import thebetweenlands.common.tile.TileEntityTarLootPot2;
-import thebetweenlands.common.tile.TileEntityTarLootPot3;
-import thebetweenlands.common.tile.TileEntityWeedwoodSign;
-import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.common.tile.*;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityTarBeastSpawner;
 
@@ -61,6 +37,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityTarLootPot1.class, "tar_loot_pot_1");
 		registerTileEntity(TileEntityTarLootPot2.class, "tar_loot_pot_2");
 		registerTileEntity(TileEntityTarLootPot3.class, "tar_loot_pot_3");
+		registerTileEntity(TileEntityHopperBetweenlands.class, "syrmorite_hopper");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

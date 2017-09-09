@@ -52,5 +52,9 @@ public class GuiBLDualFurnace extends GuiContainer {
             drawTexturedModalRect(k + 79, l + 109, 176, 14, i1 + 1, 16);
         }
 	}
-
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
 }

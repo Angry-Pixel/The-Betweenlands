@@ -40,7 +40,7 @@ public class ContainerAnimator extends Container {
 
     @Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-        ItemStack stack = null;
+        ItemStack stack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(slotIndex);
         if (slot != null && slot.getHasStack()) {
             ItemStack stack1 = slot.getStack();
@@ -48,23 +48,23 @@ public class ContainerAnimator extends Container {
             if (slotIndex > 2) {
                 if (stack1.getItem() == ItemRegistry.ITEMS_MISC && stack1.getItemDamage() == ItemMisc.EnumItemMisc.SULFUR.getID())
                     if (!mergeItemStack(stack1, 2, 3, true))
-                        return null;
+                        return ItemStack.EMPTY;
                 if (stack1.getItem() == ItemRegistry.LIFE_CRYSTAL)
                     if (!mergeItemStack(stack1, 1, 2, true))
-                        return null;
+                        return ItemStack.EMPTY;
                 if (stack1.getCount() == 1 && stack1 != new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()) && stack1.getItem() != ItemRegistry.LIFE_CRYSTAL)
                     if (!mergeItemStack(stack1, 0, 1, true))
-                        return null;
+                        return ItemStack.EMPTY;
             } else if (!mergeItemStack(stack1, 3, inventorySlots.size(), false))
-                return null;
+                return ItemStack.EMPTY;
             if (stack1.getCount() == 0)
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             else
                 slot.onSlotChanged();
             if (stack1.getCount() != stack.getCount())
                 slot.onTake(player, stack1);
             else
-                return null;
+                return ItemStack.EMPTY;
         }
         return stack;
     }
@@ -93,4 +93,5 @@ public class ContainerAnimator extends Container {
     public boolean canInteractWith(EntityPlayer p_75145_1_) {
         return true;
     }
+
 }

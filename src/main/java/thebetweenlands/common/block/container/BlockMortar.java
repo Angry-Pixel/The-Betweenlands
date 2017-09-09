@@ -55,25 +55,25 @@ public class BlockMortar extends BlockContainer {
         if (worldIn.getTileEntity(pos) instanceof TileEntityMortar) {
             TileEntityMortar tile = (TileEntityMortar) worldIn.getTileEntity(pos);
 
-            if (playerIn.getHeldItem(hand) == null && !playerIn.isSneaking()) {
+            if (playerIn.getHeldItem(hand).isEmpty() && !playerIn.isSneaking()) {
                 tile.manualGrinding = true;
                 worldIn.notifyBlockUpdate(pos, state, state, 3);
                 return true;
             }
 
-            if (playerIn.getHeldItem(hand) != null) {
+            if (!playerIn.getHeldItem(hand).isEmpty()) {
                 if (playerIn.getHeldItem(hand).getItem() == ItemRegistry.PESTLE) {
-                    if (tile.getStackInSlot(1) == null) {
+                    if (tile.getStackInSlot(1).isEmpty()) {
                         tile.setInventorySlotContents(1, playerIn.getHeldItem(hand));
                         tile.hasPestle = true;
-                        playerIn.setHeldItem(hand, null);
+                        playerIn.setHeldItem(hand, ItemStack.EMPTY);
                     }
                     return true;
                 }
                 if (playerIn.getHeldItem(hand).getItem() == ItemRegistry.LIFE_CRYSTAL) {
-                    if (tile.getStackInSlot(3) == null) {
+                    if (tile.getStackInSlot(3).isEmpty()) {
                         tile.setInventorySlotContents(3, playerIn.getHeldItem(hand));
-                        playerIn.setHeldItem(hand, null);
+                        playerIn.setHeldItem(hand, ItemStack.EMPTY);
                     }
                     return true;
                 }
@@ -91,7 +91,7 @@ public class BlockMortar extends BlockContainer {
         if (tile != null)
             for (int i = 0; i < tile.getSizeInventory(); i++) {
                 ItemStack stack = tile.getStackInSlot(i);
-                if (stack != null) {
+                if (!stack.isEmpty()) {
                     if (!world.isRemote && world.getGameRules().getBoolean("doTileDrops")) {
                         float f = 0.7F;
                         double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;

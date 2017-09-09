@@ -1,5 +1,6 @@
 package thebetweenlands.common.inventory.container;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -36,6 +37,7 @@ public class ContainerMortar  extends Container {
     }
 
     @Override
+    @MethodsReturnNonnullByDefault
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
         ItemStack stack = null;
         Slot slot = (Slot) inventorySlots.get(slotIndex);
@@ -51,24 +53,24 @@ public class ContainerMortar  extends Container {
             if (slotIndex > 3) {
                 if (stack1.getItem() == ItemRegistry.PESTLE)
                     if (!mergeItemStack(stack1, 1, 2, true))
-                        return null;
+                        return ItemStack.EMPTY;
                 if (stack1.getItem() != ItemRegistry.PESTLE && stack1.getItem() != ItemRegistry.LIFE_CRYSTAL)
                     if (!mergeItemStack(stack1, 0, 1, true))
-                        return null;
+                        return ItemStack.EMPTY;
                 if (stack1.getItem() == ItemRegistry.LIFE_CRYSTAL)
                     if (!mergeItemStack(stack1, 3, 4, true))
-                        return null;
+                        return ItemStack.EMPTY;
             } else if (!mergeItemStack(stack1, 4, inventorySlots.size(), false))
                 return null;
             if (stack1.getCount() == 0)
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             else
 
                 slot.onSlotChanged();
             if (stack1.getCount() != stack.getCount())
                 slot.onTake(player, stack1);
             else
-                return null;
+                return ItemStack.EMPTY;
         }
         return stack;
     }

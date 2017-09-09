@@ -32,4 +32,10 @@ public class GuiWeedwoodWorkbench extends GuiContainer {
         int centerY = (height - ySize) / 2;
         drawTexturedModalRect(centerX, centerY, 0, 0, xSize, ySize);
     }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
+        this.renderHoveredToolTip(mouseX, mouseY);
+    }
 }

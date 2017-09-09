@@ -31,7 +31,7 @@ public class ContainerPurifier extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		ItemStack newStack = null;
+		ItemStack newStack = ItemStack.EMPTY;
 		Slot slot = inventorySlots.get(slotIndex);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack slotStack = slot.getStack();
@@ -47,13 +47,13 @@ public class ContainerPurifier extends Container {
 			} else if (!mergeItemStack(slotStack, 3, inventorySlots.size(), false))
 				return null;
 			if (slotStack.getCount() == 0)
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			else
 				slot.onSlotChanged();
 			if (slotStack.getCount() != newStack.getCount())
 				slot.onTake(player, slotStack);
 			else
-				return null;
+				return ItemStack.EMPTY;
 		}
 		return newStack;
 	}

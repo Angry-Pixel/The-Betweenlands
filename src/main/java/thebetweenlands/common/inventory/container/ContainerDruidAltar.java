@@ -47,16 +47,16 @@ public class ContainerDruidAltar extends Container {
                     //Moves items from hotbar to inventory and vice versa
                     if (slotIndex < 32) {
                         if (!mergeItemStack(stack1, 32, 41, false))
-                            return null;
+                            return ItemStack.EMPTY;
                     } else {
                         if (!mergeItemStack(stack1, 5, 31, false))
-                            return null;
+                            return ItemStack.EMPTY;
                     }
                 }
             } else if (!mergeItemStack(stack1, 5, inventorySlots.size(), false))
                 return null;
             if (stack1.getCount() == 0)
-                slot.putStack(null);
+                slot.putStack(ItemStack.EMPTY);
             else
                 slot.onSlotChanged();
             if (stack1.getCount() != stack.getCount())

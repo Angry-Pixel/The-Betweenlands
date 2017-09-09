@@ -67,7 +67,7 @@ public class GuiAnimator extends GuiContainer {
 			}
 		}
 
-		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInslot() && tile.fuelConsumed < tile.requiredFuelCount && tile.lifeCrystalLife >= tile.requiredLifeCount && tile.isValidFocalItem()) {
+		if (tile.isSlotInUse(0) && tile.isCrystalInslot() && tile.isSulfurInSlot() && tile.fuelConsumed < tile.requiredFuelCount && tile.lifeCrystalLife >= tile.requiredLifeCount && tile.isValidFocalItem()) {
 			//Fuel bar
 			int fuelBurnProgress = tile.fuelBurnProgress;
 			drawTexturedModalRect(k + 129, l + 8 + fuelBurnProgress, 175, 2 + fuelBurnProgress, 6, 42);
@@ -118,5 +118,10 @@ public class GuiAnimator extends GuiContainer {
 		if (tile.itemAnimated && shouldClose)
 			playerSent.closeScreen();
 		this.updateTicks++;
+	}
+	@Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
+		this.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

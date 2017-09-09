@@ -16,7 +16,7 @@ public class ContainerPouch extends Container {
 	public ContainerPouch(EntityPlayer player, InventoryPlayer playerInventory, InventoryItem itemInventory) {
 		this.inventory = itemInventory;
 
-		if(this.inventory == null) {
+		if(this.inventory == null || this.inventory.isEmpty()) {
 			return;
 		}
 
@@ -59,19 +59,19 @@ public class ContainerPouch extends Container {
 			stack = slotStack.copy();
 
 			if (slotStack.getItem() instanceof ItemLurkerSkinPouch) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			if (slotIndex < this.numRows * 9) {
 				if (!mergeItemStack(slotStack, this.numRows * 9, this.inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			} else if (!mergeItemStack(slotStack, 0, this.numRows * 9, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			if (slotStack.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}

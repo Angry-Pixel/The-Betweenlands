@@ -112,7 +112,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = playerIn.getHeldItem(hand);
-		if (heldItem != null) {
+		if (!heldItem.isEmpty()) {
 			TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
 			if (te == null) {
@@ -154,12 +154,12 @@ public class BlockMudFlowerPot extends BlockContainer {
 			if(item instanceof ItemBlock) {
 				Block blockIn = Block.getBlockFromItem((ItemBlock) item);
 
-				if(blockIn == Blocks.YELLOW_FLOWER || blockIn == Blocks.RED_FLOWER || 
-						blockIn == Blocks.CACTUS || blockIn == Blocks.BROWN_MUSHROOM || 
-						blockIn == Blocks.RED_MUSHROOM || blockIn == Blocks.SAPLING || 
+				if(blockIn == Blocks.YELLOW_FLOWER || blockIn == Blocks.RED_FLOWER ||
+						blockIn == Blocks.CACTUS || blockIn == Blocks.BROWN_MUSHROOM ||
+						blockIn == Blocks.RED_MUSHROOM || blockIn == Blocks.SAPLING ||
 						blockIn == Blocks.DEADBUSH ||
 						(blockIn == Blocks.TALLGRASS && itemStack.getMetadata() == BlockTallGrass.EnumType.FERN.getMeta())
-						|| (blockIn instanceof BlockPlant && blockIn instanceof BlockPlantUnderwater == false && blockIn instanceof BlockStackablePlant == false)) {
+						|| (blockIn instanceof BlockPlant && !(blockIn instanceof BlockStackablePlant))) {
 
 					return blockIn.getDefaultState();
 				}

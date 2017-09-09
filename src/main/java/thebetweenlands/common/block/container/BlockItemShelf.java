@@ -112,9 +112,9 @@ public class BlockItemShelf extends BlockContainer {
 				InvWrapper wrapper = new InvWrapper(shelf);
 
 				if(!player.isSneaking()) {
-					if(heldItem != null) {
+					if(!heldItem.isEmpty()) {
 						ItemStack result = wrapper.insertItem(slot, heldItem, true);
-						if(result == null || result.getCount() != heldItem.getCount()) {
+						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
 							if(!world.isRemote) {
 								result = wrapper.insertItem(slot, heldItem.copy(), false);
 								world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
@@ -128,7 +128,7 @@ public class BlockItemShelf extends BlockContainer {
 					}
 				} else {
 					ItemStack result = wrapper.extractItem(slot, 1, true);
-					if(result != null && result.getCount() > 0) {
+					if(!result.isEmpty() && result.getCount() > 0) {
 						if(!world.isRemote) {
 							result = wrapper.extractItem(slot, 1, false);
 							world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);

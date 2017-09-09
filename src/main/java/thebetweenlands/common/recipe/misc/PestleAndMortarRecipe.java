@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
+
+import javax.annotation.Nonnull;
 
 public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     private static final List<IPestleAndMortarRecipe> recipes = new ArrayList<IPestleAndMortarRecipe>();
@@ -29,14 +32,15 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
     public static void removeRecipe(IPestleAndMortarRecipe recipe) {
     	recipes.remove(recipe);
     }
-    
+
+    @MethodsReturnNonnullByDefault
     public static ItemStack getResult(ItemStack input) {
         for (IPestleAndMortarRecipe recipe : recipes) {
             if (recipe.matchesInput(input)) {
                 return recipe.getOutput(input);
             }
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     /*public static ItemStack getInput(ItemStack output) {

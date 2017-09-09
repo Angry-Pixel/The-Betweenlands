@@ -4,10 +4,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class InventoryWeedwoodWorkbench extends InventoryCrafting {
-	private ItemStack[] stackList;
+	private NonNullList<ItemStack> stackList;
 	private Container container;
 	private static final int INV_WIDTH = 3;
 	private final TileEntityWeedwoodWorkbench tile;
@@ -21,12 +22,12 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public int getSizeInventory() {
-		return this.stackList.length;
+		return this.stackList.size();
 	}
 
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return slot >= this.getSizeInventory() ? null : this.stackList[slot];
+		return slot >= this.getSizeInventory() ? ItemStack.EMPTY : this.stackList.get(slot);
 	}
 
 	@Override
@@ -51,19 +52,19 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (this.stackList[slot] != null) {
+		if (this.stackList.get(slot) != null) {
 			ItemStack stack;
 
-			if (this.stackList[slot].getCount() <= amount) {
-				stack = this.stackList[slot];
-				this.stackList[slot] = null;
+			if (this.stackList.get(slot).getCount() <= amount) {
+				stack = this.stackList.get(slot);
+				this.stackList.set(slot, ItemStack.EMPTY);
 				this.container.onCraftMatrixChanged(this);
 				return stack;
 			} else {
-				stack = this.stackList[slot].splitStack(amount);
+				stack = this.stackList.get(slot).splitStack(amount);
 
-				if (this.stackList[slot].getCount() == 0) {
-					this.stackList[slot] = null;
+				if (this.stackList.get(slot).getCount() == 0) {
+					this.stackList.set(slot, ItemStack.EMPTY);
 				}
 
 				this.container.onCraftMatrixChanged(this);
@@ -76,7 +77,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
-		this.stackList[slot] = stack;
+		this.stackList.set(slot, stack);
 		this.container.onCraftMatrixChanged(this);
 	}
 

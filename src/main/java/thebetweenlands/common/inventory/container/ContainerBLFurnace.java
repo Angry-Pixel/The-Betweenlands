@@ -88,7 +88,7 @@ public class ContainerBLFurnace extends Container {
 
 	@Override
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-        ItemStack itemstack = null;
+        ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = (Slot)inventorySlots.get(slotIndex);
 
         if (slot != null && slot.getHasStack()) {
@@ -97,37 +97,37 @@ public class ContainerBLFurnace extends Container {
 
             if (slotIndex == 2) {
                 if (!mergeItemStack(itemstack1, 3, 39, true))
-                    return null;
+                    return ItemStack.EMPTY;
                 slot.onSlotChange(itemstack1, itemstack);
             }
             else if (slotIndex != 1 && slotIndex != 0 && slotIndex != 3) {
                 if (!FurnaceRecipes.instance().getSmeltingResult(itemstack1).isEmpty()) {
                     if (!mergeItemStack(itemstack1, 0, 1, false))
-                        return null;
+                        return ItemStack.EMPTY;
                 }
                 else if (TileEntityFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemMisc && itemstack.getItemDamage() == EnumItemMisc.SULFUR.getID()) {
                     if (!mergeItemStack(itemstack1, 1, 2, false))
-                        return null;
+                        return ItemStack.EMPTY;
                 }
                 else if (itemstack1.getItem() instanceof ItemMisc && itemstack.getItemDamage() == EnumItemMisc.LIMESTONE_FLUX.getID()) {
                     if (!mergeItemStack(itemstack1, 3, 4, false))
-                        return null;
+                        return ItemStack.EMPTY;
                 }
                 else if (slotIndex >= 3 && slotIndex <= 30) {
                     if (!mergeItemStack(itemstack1, 31, 40, false))
-                        return null;
+                        return ItemStack.EMPTY;
                 }
                 else if (slotIndex >= 31 && slotIndex < 40 && !mergeItemStack(itemstack1, 4, 30, false))
-                    return null;
+                    return ItemStack.EMPTY;
             }
             else if (!mergeItemStack(itemstack1, 4, 39, false))
-                return null;
+                return ItemStack.EMPTY;
             if (itemstack1.getCount() == 0)
-                slot.putStack((ItemStack)null);
+                slot.putStack(ItemStack.EMPTY);
             else
                 slot.onSlotChanged();
             if (itemstack1.getCount() == itemstack.getCount())
-                return null;
+                return ItemStack.EMPTY;
 
             slot.onTake(player, itemstack1);
         }

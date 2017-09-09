@@ -6,10 +6,11 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
 
 public class TileEntityWeedwoodWorkbench extends TileEntity {
-	public ItemStack[] craftingSlots = new ItemStack[9];
+	public NonNullList<ItemStack> craftingSlots = NonNullList.withSize(9, ItemStack.EMPTY);
 	public ItemStack craftResult;
 	public byte rotation = 0;
 
@@ -35,7 +36,7 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 		int count = items.tagCount();
 		for (int i = 0; i < count; i++) {
 			NBTTagCompound nbtItem = items.getCompoundTagAt(i);
-			this.craftingSlots[nbtItem.getByte("Slot")] = new ItemStack(nbtItem);
+			this.craftingSlots.set(nbtItem.getByte("Slot"), new ItemStack(nbtItem));
 		}
 
 		this.rotation = nbt.getByte("Rotation");
@@ -52,11 +53,11 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 	private NBTTagCompound writeNbt(NBTTagCompound nbt) {
 		NBTTagList items = new NBTTagList();
 
-		for (int i = 0; i < craftingSlots.length; i++) {
-			if (this.craftingSlots[i] != null) {
+		for (int i = 0; i < craftingSlots.size(); i++) {
+			if (!this.craftingSlots.get(i).isEmpty()) {
 				NBTTagCompound nbtItem = new NBTTagCompound();
 				nbtItem.setByte("Slot", (byte) i);
-				this.craftingSlots[i].writeToNBT(nbtItem);
+				this.craftingSlots.get(i).writeToNBT(nbtItem);
 				items.appendTag(nbtItem);
 			}
 		}

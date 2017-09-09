@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.recipes.IPurifierRecipe;
@@ -39,14 +40,15 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 	public static void removeRecipe(IPurifierRecipe recipe) {
 		RECIPES.remove(recipe);
 	}
-	
+
+	@MethodsReturnNonnullByDefault
 	public static ItemStack getRecipeOutput(ItemStack input) {
 		for (IPurifierRecipe recipe : RECIPES) {
 			if (recipe.matchesInput(input)) {
 				return recipe.getOutput(input);
 			}
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	public static List<IPurifierRecipe> getRecipeList() {

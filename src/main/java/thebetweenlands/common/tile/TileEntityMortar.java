@@ -61,7 +61,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         if (pestleInstalled() && !outputIsFull()) {
 
             if (isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
-                if (output != null && inventory.get(2).isEmpty() || output != null && inventory.get(2).isEmpty() && inventory.get(2).isItemEqual(output)) {
+                if (!output.isEmpty() && inventory.get(2).isEmpty() || !output.isEmpty() && inventory.get(2).isItemEqual(output)) {
                     progress++;
                     if (progress == 1)
                         world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
@@ -104,14 +104,14 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             hasPestle = false;
             world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
         }
-        if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
-            if (inventory.get(1) != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+        if (getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputIsFull()) {
+            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
                 getStackInSlot(1).getTagCompound().setBoolean("active", false);
             progress = 0;
             markDirty();
         }
-        if (getStackInSlot(3) == null && progress > 0 && !manualGrinding) {
-            if (inventory.get(1) != null && getStackInSlot(1).getTagCompound().getBoolean("active"))
+        if (getStackInSlot(3).isEmpty() && progress > 0 && !manualGrinding) {
+            if (!inventory.get(1).isEmpty() && getStackInSlot(1).getTagCompound().getBoolean("active"))
                 getStackInSlot(1).getTagCompound().setBoolean("active", false);
             progress = 0;
             markDirty();
@@ -126,15 +126,15 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
     }
 
     public boolean pestleInstalled() {
-        return getStackInSlot(1) != null && getStackInSlot(1).getItem() == ItemRegistry.PESTLE;
+        return !getStackInSlot(1).isEmpty() && getStackInSlot(1).getItem() == ItemRegistry.PESTLE;
     }
 
     public boolean isCrystalInstalled() {
-        return getStackInSlot(3) != null && getStackInSlot(3).getItem() == ItemRegistry.LIFE_CRYSTAL && getStackInSlot(3).getItemDamage() <= getStackInSlot(3).getMaxDamage();
+        return !getStackInSlot(3).isEmpty() && getStackInSlot(3).getItem() == ItemRegistry.LIFE_CRYSTAL && getStackInSlot(3).getItemDamage() <= getStackInSlot(3).getMaxDamage();
     }
 
     private boolean outputIsFull() {
-        return getStackInSlot(2) != null && getStackInSlot(2).getCount() >= getInventoryStackLimit();
+        return !getStackInSlot(2).isEmpty() && getStackInSlot(2).getCount() >= getInventoryStackLimit();
     }
 
     public void sendGUIData(ContainerMortar mortar, IContainerListener containerListener) {

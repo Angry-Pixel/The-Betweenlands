@@ -66,22 +66,22 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 			this.renderYOffset = (float) ((double) this.craftingProgress / (double) TileEntityDruidAltar.CRAFTING_TIME * (FINAL_HEIGHT - 0.2D) + 1.2D);
 		} else {
 			if (this.craftingProgress != 0) {
-				IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
+				IDruidAltarRecipe recipe = DruidAltarRecipe.getDruidAltarRecipe(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
 				// Sync clients every second
 				if (this.craftingProgress % 20 == 0 || this.craftingProgress == 1) {
 					sendCraftingProgressPacket();
 				}
 				this.craftingProgress++;
-				if (recipe == null || this.inventory.get(0) != null) {
+				if (recipe == null || !this.inventory.get(0).isEmpty()) {
 					stopCraftingProcess();
 				}
 				if (this.craftingProgress >= CRAFTING_TIME && recipe != null) {
 					ItemStack stack = recipe.getOutput(new ItemStack[]{this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)});
 					stack.setCount(1);
-					setInventorySlotContents(1, null);
-					setInventorySlotContents(2, null);
-					setInventorySlotContents(3, null);
-					setInventorySlotContents(4, null);
+					setInventorySlotContents(1, ItemStack.EMPTY);
+					setInventorySlotContents(2, ItemStack.EMPTY);
+					setInventorySlotContents(3, ItemStack.EMPTY);
+					setInventorySlotContents(4, ItemStack.EMPTY);
 					setInventorySlotContents(0, stack);
 					stopCraftingProcess();
 					removeSpawner();
@@ -104,10 +104,10 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		this.inventory.set(slot, stack);
-		if (stack != null && stack.getCount() > getInventoryStackLimit()) {
+		if (!stack.isEmpty() && stack.getCount() > getInventoryStackLimit()) {
 			stack.setCount( getInventoryStackLimit());
 		}
-		IDruidAltarRecipe recipe = DruidAltarRecipe.getOutput(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
+		IDruidAltarRecipe recipe = DruidAltarRecipe.getDruidAltarRecipe(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
 		if (!this.world.isRemote && recipe != null && !stack.isEmpty() && this.inventory.get(0).isEmpty() && this.craftingProgress == 0) {
 			startCraftingProcess();
 		}
