@@ -39,7 +39,7 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 
 	@Override
 	public void setStitchedSprites(Frame[][] frames) {
-		if (this.animation != null) {
+		if (this.animation != null && frames != null) {
 			this.animation.setFrames(frames[0]);
 			if (this.particleTexture == null) {
 				this.setParticleTexture(frames[0][0].getSprite());

@@ -44,8 +44,9 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	private BetweenlandsWorldData worldData;
 
 	public WorldProviderBetweenlands() {
-		this.hasSkyLight = true;
+
 	}
+
 
 	/**
 	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
@@ -94,6 +95,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public void init() {
 		this.setDimension(ConfigHandler.dimensionId);
 		this.biomeProvider = new BiomeProviderBetweenlands(this.world.getWorldInfo());
+		this.hasSkyLight = true;
 	}
 
 	@Override

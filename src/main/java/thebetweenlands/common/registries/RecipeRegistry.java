@@ -151,7 +151,7 @@ public class RecipeRegistry {
 		
 		OreDictionary.registerOre("sugarcane", new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
 		
-		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
+		//OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1)); Doing this to fix our recipes
 		
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ASTATOS));
 		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.BETWEEN_YOU_AND_ME));
@@ -177,32 +177,6 @@ public class RecipeRegistry {
 
 		
 //		// Tools & Weapons
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SLIMY_BONE.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_PICKAXE, 1), "XXX", " # ", " # ", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHOVEL, 1), "X", "#", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_AXE, 1), "XX", "X#", " #", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_SWORD, 1), "X", "X", "#", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.VALONITE_SHARD.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_SHIELD), "XXX", "XXX", " X ", 'X', ItemRegistry.OCTINE_INGOT);
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.VALONITE_SHARD.create(1), 'I', BlockRegistry.PITSTONE);
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_SHIELD), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHIELD), "XXX", "XXX", " X ", 'X', EnumItemMisc.SYRMORITE_INGOT.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.SLIMY_BONE.create(1), 'I', EnumItemMisc.SWAMP_REED_ROPE.create(1));
 //		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
 //		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
 //		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));

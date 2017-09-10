@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "###",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "I": {
+      "item": "thebetweenlands:pitstone"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:valonite_shield"
+  }
+}

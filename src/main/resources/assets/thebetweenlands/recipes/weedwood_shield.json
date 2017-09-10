@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "###",
+    " # "
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:weedwood_planks"
+      },
+      {
+        "item": "thebetweenlands:weedwood_log"
+      }
+    ],
+    "I": {
+      "item": "thebetweenlands:item_misx",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:octine_shield"
+  }
+}

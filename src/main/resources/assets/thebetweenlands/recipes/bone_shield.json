@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "###",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:item_misc",
+      "data": 14
+    },
+    "I": {
+      "item": "thebetweenlands:item_misc",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:valonite_shield"
+  }
+}
