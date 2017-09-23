@@ -9,8 +9,8 @@ public class TabPlants extends CreativeTabBetweenlands {
 		super("thebetweenlands.plants");
 	}
 
-	@Override
-	public ItemStack getTabIconItem() {
-		return new ItemStack(Item.getItemFromBlock(BlockRegistry.MIRE_CORAL));
-	}
+//	@Override
+//	public ItemStack getTabIconItem() {
+//		return new ItemStack(Item.getItemFromBlock(BlockRegistry.MIRE_CORAL));
+//	}
 }

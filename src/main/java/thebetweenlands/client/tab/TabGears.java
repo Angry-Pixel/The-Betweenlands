@@ -9,8 +9,8 @@ public class TabGears extends CreativeTabBetweenlands {
 		super("thebetweenlands.gear");
 	}
 
-	@Override
-	public ItemStack getTabIconItem() {
-		return new ItemStack(ItemRegistry.VALONITE_PICKAXE);
-	}
+//	@Override
+//	public ItemStack getTabIconItem() {
+//		return new ItemStack(ItemRegistry.VALONITE_PICKAXE);
+//	}
 }

@@ -14,15 +14,15 @@ import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
-		ItemStack tool = null;
+		ItemStack tool = ItemStack.EMPTY;
 		int coating = 0;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(EnumItemMisc.SCABYST.isItemOf(stack)) {
 					coating++;
 				} else if(stack.getItem() instanceof ICorrodible) {
-					if(tool != null) {
+					if(!tool.isEmpty()) {
 						return false;
 					}
 					ICorrodible corrodible = (ICorrodible) stack.getItem();
@@ -41,10 +41,10 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting crafter) {
 		int coating = 0;
-		ItemStack tool = null;
+		ItemStack tool = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() instanceof ICorrodible) {
 					tool = stack;
 				} else if(EnumItemMisc.SCABYST.isItemOf(stack)) {
@@ -66,7 +66,7 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 
 		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null && stack.getItem() instanceof ICorrodible) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();
 				requiredCoating += MathHelper.ceil(((float)corrodible.getMaxCoating(stack) - (float)corrodible.getCoating(stack)) / 75.0F);
 			}
@@ -85,7 +85,7 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 
 		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null && EnumItemMisc.SCABYST.isItemOf(stack)) {
+			if(!stack.isEmpty() && EnumItemMisc.SCABYST.isItemOf(stack)) {
 				if(requiredCoating > 0) {
 					requiredCoating--;
 				} else {

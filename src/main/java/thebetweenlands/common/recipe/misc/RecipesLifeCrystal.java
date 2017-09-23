@@ -17,12 +17,12 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
 		int hearts = 0;
-		ItemStack crystal = null;
+		ItemStack crystal = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() == ItemRegistry.LIFE_CRYSTAL) {
-					if(crystal != null)
+					if(!crystal.isEmpty())
 						return false;
 					if(stack.getItemDamage() == 0)
 						return false;
@@ -34,16 +34,16 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 				}
 			}
 		}
-		return hearts > 0 && crystal != null;
+		return hearts > 0 && !crystal.isEmpty();
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting crafter) {
 		int hearts = 0;
-		ItemStack crystal = null;
+		ItemStack crystal = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() == ItemRegistry.LIFE_CRYSTAL) {
 					crystal = stack;
 				} else if(stack.getItem() == ItemRegistry.WIGHT_HEART) {
@@ -63,7 +63,7 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

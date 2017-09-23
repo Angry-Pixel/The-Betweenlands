@@ -8,8 +8,8 @@ public class TabHerblore extends CreativeTabBetweenlands {
 		super("thebetweenlands.herbLore");
 	}
 
-	@Override
-	public ItemStack getIconItemStack() {  
-		return EnumItemCrushed.GROUND_GENERIC_LEAF.create(1);  
-		} 
+//	@Override
+//	public ItemStack getIconItemStack() {
+//		return EnumItemCrushed.GROUND_GENERIC_LEAF.create(1);
+//		}
 }

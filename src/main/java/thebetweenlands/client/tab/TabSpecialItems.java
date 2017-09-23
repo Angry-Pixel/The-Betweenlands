@@ -9,8 +9,8 @@ public class TabSpecialItems extends CreativeTabBetweenlands {
 		super("thebetweenlands.special");
 	}
 
-	@Override
-	public ItemStack getTabIconItem() {
-		return new ItemStack(ItemRegistry.ASTATOS);
-	}
+//	@Override
+//	public ItemStack getTabIconItem() {
+//		return new ItemStack(ItemRegistry.ASTATOS);
+//	}
 }

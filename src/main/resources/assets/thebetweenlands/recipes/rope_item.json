@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:hanger"
+      },
+      {
+        "item": "thebetweenlands:items_misc",
+        "data": 7
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:rope_item"
+  }
+}

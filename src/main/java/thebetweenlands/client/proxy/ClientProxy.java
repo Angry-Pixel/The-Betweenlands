@@ -318,35 +318,10 @@ public class ClientProxy extends CommonProxy {
 	public void registerItemAndBlockRenderers() {
 		CustomModelManager.INSTANCE.registerLoader();
 		//TODO ItemRegistry.registerRenderers();
-		registerBlockRenderers();
+		//registerBlockRenderers();
 	}
 
-	private static void registerBlockRenderers() {
-		for (Block block : BlockRegistry.BLOCKS) {
-			if (block instanceof IStateMappedBlock) {
-				AdvancedStateMap.Builder builder = new AdvancedStateMap.Builder();
-				((IStateMappedBlock) block).setStateMapper(builder);
-				ModelLoader.setCustomStateMapper(block, builder.build());
-			}
-			if (block instanceof ICustomItemBlock) {
-				ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
-				if (customItemBlock.getRenderedItem() != null) {
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(customItemBlock.getRenderedItem().getRegistryName(), "inventory"));
-					continue;
-				}
-			}
-			ResourceLocation name = block.getRegistryName();
-			if (block instanceof ISubtypeBlock) {
-				ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
-				for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
-					int meta = subtypeBlock.getSubtypeMeta(i);
-					ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
-				}
-			} else {
-				ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(name, "inventory"));
-			}
-		}
-	}
+
 
 	@Override
 	public void setCustomStateMap(Block block, StateMap stateMap) {

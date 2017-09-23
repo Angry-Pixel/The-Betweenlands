@@ -4,12 +4,16 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
@@ -466,6 +470,35 @@ public class BlockRegistry {
             item = new ItemBlock(block);
         ITEM_BLOCKS.add(item);
         item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent
+    public static void registerBlockRenderers(ModelRegistryEvent event) {
+        for (Block block : BlockRegistry.BLOCKS) {
+            if (block instanceof IStateMappedBlock) {
+                AdvancedStateMap.Builder builder = new AdvancedStateMap.Builder();
+                ((IStateMappedBlock) block).setStateMapper(builder);
+                ModelLoader.setCustomStateMapper(block, builder.build());
+            }
+            if (block instanceof ICustomItemBlock) {
+                ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
+                if (customItemBlock.getRenderedItem() != null) {
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(customItemBlock.getRenderedItem().getRegistryName(), "inventory"));
+                    continue;
+                }
+            }
+            ResourceLocation name = block.getRegistryName();
+            if (block instanceof ISubtypeBlock) {
+                ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
+                for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
+                    int meta = subtypeBlock.getSubtypeMeta(i);
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
+                }
+            } else {
+                ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(name, "inventory"));
+            }
+        }
     }
 
     public interface ICustomItemBlock {

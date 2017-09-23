@@ -174,56 +174,7 @@ public class RecipeRegistry {
 		IForgeRegistry<IRecipe> registry = register.getRegistry();
 //		RecipeSorter.register("thebetweenlands:shaped", ShapedRecipesBetweenlands.class, SHAPED, "before:minecraft:shaped");
 //		RecipeSorter.register("thebetweenlands:shapeless", ShapelessRecipesBetweenlands.class, SHAPELESS, "after:thebetweenlands:shaped before:minecraft:shapeless");
-
-		
-//		// Tools & Weapons
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_GREEN_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.GREEN.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.DENTROTHYST_SHIELD_ORANGE_POLISHED), "XIX", "XXX", " X ", 'X', new ItemStack(BlockRegistry.POLISHED_DENTROTHYST, 1, EnumDentrothyst.ORANGE.getMeta()), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_SHIELD), "XIX", "XXX", " X ", 'X', EnumItemMisc.LURKER_SKIN.create(1), 'I', EnumItemMisc.WEEDWOOD_STICK.create(1));
 //
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.WEEDWOOD_BOW, 1), " #X", "# X", " #X", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', EnumItemMisc.ANGLER_TOOTH.create(1), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.OCTINE_ARROW, 4), "X", "#", "Y", '#', EnumItemMisc.WEEDWOOD_STICK.create(1), 'X', new ItemStack(ItemRegistry.OCTINE_INGOT), 'Y', EnumItemMisc.DRAGONFLY_WING.create(1));
-//		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.POISONED_ANGLER_TOOTH_ARROW, 1), EnumItemMisc.POISON_GLAND.create(1), new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_SHEARS, 1), " #", "# ", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SICKLE, 1), " vv", "v s", "  r", 'v', EnumItemMisc.VALONITE_SHARD.create(1), 's', EnumItemMisc.WEEDWOOD_STICK.create(1), 'r', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', new ItemStack(BlockRegistry.HANGER));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.ROPE_ITEM, 1), "#", "#", "#", '#', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.NET, 1), "SRR", "SRR", "S  ", 'S', EnumItemMisc.WEEDWOOD_STICK.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_POUCH), "RRR", "L L", "LLL", 'L', EnumItemMisc.LURKER_SKIN.create(1), 'R', EnumItemMisc.SWAMP_REED_ROPE.create(1));
-//		GameRegistry.addRecipe(new RecipeLurkerSkinPouchUpgrades());
-//
-//		//Swamp talisman made from BL materials for a return portal (or in case portal doesn't generate in BL)
-//		RecipeHelper.addShapelessRecipe(new ItemStack(ItemRegistry.SWAMP_TALISMAN, 1), EnumItemPlantDrop.MOSS_ITEM.create(1), EnumItemMisc.SLIMY_BONE.create(1), new ItemStack(ItemRegistry.LIFE_CRYSTAL, 1));
-//
-//		// Armour
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_HELMET, 1), "###", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.LURKER_SKIN.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.LURKER_SKIN_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.LURKER_SKIN.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_HELMET, 1), "###", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.SLIMY_BONE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.BONE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.SLIMY_BONE.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_HELMET, 1), "###", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.SYRMORITE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.SYRMORITE_INGOT.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_HELMET, 1), "###", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_CHESTPLATE, 1), "# #", "###", "###", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_LEGGINGS, 1), "###", "# #", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.VALONITE_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.VALONITE_SHARD.create(1));
-//
-//		RecipeHelper.addRecipe(new ItemStack(ItemRegistry.RUBBER_BOOTS, 1), "# #", "# #", '#', EnumItemMisc.RUBBER_BALL.create(1));
 //
 //		// Miscellaneous
 //		RecipeHelper.addRecipe(new ItemStack(BlockRegistry.SULFUR_TORCH, 4), "#", "I", 'I', EnumItemMisc.WEEDWOOD_STICK.create(1), '#', EnumItemMisc.SULFUR.create(1));
@@ -460,10 +411,11 @@ public class RecipeRegistry {
 //		GameRegistry.addRecipe(new RecipesPlantTonic());
 
 //
-//		registry.register(new RecipesCircleGems().setRegistryName("thebetweenlands:recipesCircleGems"));
-//		registry.register(new RecipesCoating().setRegistryName("thebetweenlands:recipesCoating"));
-//		registry.register(new RecipesLifeCrystal().setRegistryName("thebetweenlands:recipesLifeCrystal"));
-//		registry.register(new RecipesPlantTonic().setRegistryName("thebetweenlands:recipesPlantTonic"));
+		registry.register(new RecipesCircleGems().setRegistryName("thebetweenlands:recipesCircleGems"));
+		registry.register(new RecipesCoating().setRegistryName("thebetweenlands:recipesCoating"));
+		registry.register(new RecipesLifeCrystal().setRegistryName("thebetweenlands:recipesLifeCrystal"));
+		registry.register(new RecipesPlantTonic().setRegistryName("thebetweenlands:recipesPlantTonic"));
+		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName("thebetweenlands:recipesLurkerSkinPouchUpgrade"));
 	}
 
 	private static void registerSmelting() {

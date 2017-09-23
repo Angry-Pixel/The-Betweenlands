@@ -68,7 +68,7 @@ public class ModelRegistry {
 
 	//Generic
 	public static final IModel BLANK = new ModelBlank();
-	public static final IModel MODEL_COMBINED = new ModelCombined();
+//	public static final IModel MODEL_COMBINED = new ModelCombined();
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
 	
 	//Plant models

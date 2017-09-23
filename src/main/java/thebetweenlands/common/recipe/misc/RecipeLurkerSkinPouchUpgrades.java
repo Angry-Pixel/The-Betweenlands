@@ -50,7 +50,7 @@ public class RecipeLurkerSkinPouchUpgrades  extends IForgeRegistryEntry.Impl<IRe
 		}
 
 		if (is == null) {
-			return null;
+			return ItemStack.EMPTY;
 		}
 
 		is = is.copy();

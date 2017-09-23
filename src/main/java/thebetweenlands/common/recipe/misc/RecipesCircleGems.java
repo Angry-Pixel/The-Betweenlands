@@ -41,11 +41,11 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting crafter) {
-		ItemStack tool = null;
-		ItemStack gem = null;
+		ItemStack tool = ItemStack.EMPTY;
+		ItemStack gem = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() instanceof ItemGem) {
 					gem = stack;
 				} else {
@@ -67,7 +67,7 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 			}
 			return result;
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

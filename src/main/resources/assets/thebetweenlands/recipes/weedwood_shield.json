@@ -11,11 +11,11 @@
         "item": "thebetweenlands:weedwood_planks"
       },
       {
-        "item": "thebetweenlands:weedwood_log"
+        "item": "thebetweenlands:weedwood"
       }
     ],
     "I": {
-      "item": "thebetweenlands:item_misx",
+      "item": "thebetweenlands:items_misc",
       "data": 7
     }
   },

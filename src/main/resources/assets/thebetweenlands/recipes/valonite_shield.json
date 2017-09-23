@@ -7,7 +7,8 @@
   ],
   "key": {
     "#": {
-      "item": "thebetweenlands:octine_ingot"
+      "item": "thebetweenlands:items_misc",
+      "data": 19
     },
     "I": {
       "item": "thebetweenlands:pitstone"

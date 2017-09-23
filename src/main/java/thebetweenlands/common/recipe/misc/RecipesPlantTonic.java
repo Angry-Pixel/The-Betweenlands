@@ -18,12 +18,12 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
 		int sap = 0;
-		ItemStack bucket = null;
+		ItemStack bucket = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED) {
-					if(bucket != null)
+					if(!bucket.isEmpty())
 						return false;
 					bucket = stack;
 				} else if(stack.getItem() == ItemRegistry.SAP_BALL) {
@@ -33,7 +33,7 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 				}
 			}
 		}
-		if(bucket == null || sap != 1) {
+		if(bucket.isEmpty() || sap != 1) {
 			return false;
 		}
 		if(bucket.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
@@ -48,10 +48,10 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting crafter) {
-		ItemStack bucket = null;
+		ItemStack bucket = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED) {
 					bucket = stack;
 					break;
@@ -73,7 +73,7 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public ItemStack getRecipeOutput() {
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	@Override

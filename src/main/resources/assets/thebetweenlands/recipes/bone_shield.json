@@ -7,11 +7,11 @@
   ],
   "key": {
     "#": {
-      "item": "thebetweenlands:item_misc",
+      "item": "thebetweenlands:items_misc",
       "data": 14
     },
     "I": {
-      "item": "thebetweenlands:item_misc",
+      "item": "thebetweenlands:items_misc",
       "data": 7
     }
   },
