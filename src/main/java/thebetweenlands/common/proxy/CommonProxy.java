@@ -138,6 +138,10 @@ public class CommonProxy implements IGuiHandler {
 
 	}
 
+	public void  registerEventHandlersPreInit(){
+
+	}
+
 	public EntityPlayer getClientPlayer() {
 		return null;
 	}

@@ -429,6 +429,8 @@ public class ClientProxy extends CommonProxy {
 				}, stitcher.getTextures()).setSplitFrames(stitcher.shouldSplitAnimations()));
 			}
 		}
+
+		registerEventHandlersPreInit();
 	}
 
 	@Override
@@ -537,8 +539,12 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void registerEventHandlers() {
+	public void registerEventHandlersPreInit(){
 		MinecraftForge.EVENT_BUS.register(TextureStitchHandler.INSTANCE);
+	}
+
+	@Override
+	public void registerEventHandlers() {
 		MinecraftForge.EVENT_BUS.register(ShaderHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(FogHandler.class);
 		MinecraftForge.EVENT_BUS.register(AmbienceSoundPlayHandler.class);

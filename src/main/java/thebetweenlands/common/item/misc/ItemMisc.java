@@ -42,7 +42,6 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 	public Map<Integer, ResourceLocation> getModels() {
 		Map<Integer, ResourceLocation> models = new HashMap<>();
 		for(EnumItemMisc type : EnumItemMisc.values()) {
-			System.out.println(type.getModelName());
 			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
 		}
 		return models;
