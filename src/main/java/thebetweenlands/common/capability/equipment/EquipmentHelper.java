@@ -43,7 +43,7 @@ public class EquipmentHelper {
 						return result;
 					}
 
-					if(stack.isEmpty() || result.getCount() != stack.getCount()) {
+					if(result.isEmpty() || result.getCount() != stack.getCount()) {
 						equippable.onEquip(stack, target, inv);
 						return ItemHandlerHelper.insertItem(wrapper, stack, false);
 					}
@@ -86,7 +86,7 @@ public class EquipmentHelper {
 							return result;
 						}
 
-						if(stack.isEmpty() || result.getCount() != stack.getCount()) {
+						if(result.isEmpty() || result.getCount() != stack.getCount()) {
 							equippable.onEquip(stack, target, inv);
 							return ItemHandlerHelper.insertItem(wrapper, stack, false);
 						}

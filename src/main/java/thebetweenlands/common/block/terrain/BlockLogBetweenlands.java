@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockNewLog;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -56,7 +57,7 @@ public class BlockLogBetweenlands extends BlockLog {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { LOG_AXIS });
+		return new BlockStateContainer.Builder(this).add(LOG_AXIS).build();
 	}
 
 }

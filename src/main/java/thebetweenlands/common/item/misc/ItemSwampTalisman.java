@@ -91,7 +91,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 	public List<String> getTypes() {
 		List<String> models = new ArrayList<String>();
 		for (EnumTalisman type : EnumTalisman.values())
-			models.add(type.name());
+			models.add(type.getUnlocalizedName());
 		return models;
 	}
 

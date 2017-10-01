@@ -4,12 +4,10 @@
       "model": "thebetweenlands:bulb_capped_mushroom_stalk"
     },
     "axis=z,ground=false": {
-      "model": "thebetweenlands:bulb_capped_mushroom_stalk",
-      "x": 90
+      "model": "thebetweenlands:bulb_capped_mushroom_stalk"
     },
     "axis=x,ground=false": {
       "model": "thebetweenlands:bulb_capped_mushroom_stalk",
-      "x": 90,
       "y": 90
     },
     "axis=none,ground=false": {
@@ -19,12 +17,10 @@
       "model": "thebetweenlands:bulb_capped_mushroom_stalk_ground"
     },
     "axis=z,ground=true": {
-      "model": "thebetweenlands:bulb_capped_mushroom_stalk_ground",
-      "x": 90
+      "model": "thebetweenlands:bulb_capped_mushroom_stalk_ground"
     },
     "axis=x,ground=true": {
       "model": "thebetweenlands:bulb_capped_mushroom_stalk_ground",
-      "x": 90,
       "y": 90
     },
     "axis=none,ground=true": {
