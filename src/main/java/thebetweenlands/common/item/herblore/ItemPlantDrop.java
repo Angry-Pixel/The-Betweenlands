@@ -26,8 +26,10 @@ public class ItemPlantDrop extends Item implements ItemRegistry.ISubItemsItem {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-		for (EnumItemPlantDrop type : EnumItemPlantDrop.values())
-			list.add(type.create(1));
+		if (isInCreativeTab(tab)) {
+			for (EnumItemPlantDrop type : EnumItemPlantDrop.values())
+				list.add(type.create(1));
+		}
 	}
 
 	@Override
@@ -35,7 +37,7 @@ public class ItemPlantDrop extends Item implements ItemRegistry.ISubItemsItem {
 		try {
 			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemPlantDrop.class, stack).getUnlocalizedName();
 		} catch (Exception e) {
-			return "item.thebetweenlands.unknownPlantDrop";
+			return "item.thebetweenlands.unknown_plant_drop";
 		}
 	}
 
@@ -97,7 +99,7 @@ public class ItemPlantDrop extends Item implements ItemRegistry.ISubItemsItem {
 		EnumItemPlantDrop(int id) {
 			this.id = id;
 			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
-			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
+			this.unlocalizedName = this.modelName;
 		}
 
 		@Override

@@ -26,7 +26,9 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-		Stream.of(EnumItemMisc.values()).forEach(t -> list.add(t.create(1)));
+		if (this.isInCreativeTab(tab)) {
+			Stream.of(EnumItemMisc.values()).forEach(t -> list.add(t.create(1)));
+		}
 	}
 
 	@Override
@@ -34,7 +36,7 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		try {
 			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemMisc.class, stack).getUnlocalizedName();
 		} catch (Exception e) {
-			return "item.thebetweenlands.unknownGeneric";
+			return "item.thebetweenlands.unknown_generic";
 		}
 	}
 
@@ -89,7 +91,7 @@ public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
 		EnumItemMisc(int id) {
 			this.id = id;
 			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
-			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
+			this.unlocalizedName = this.modelName;
 		}
 
 		@Override

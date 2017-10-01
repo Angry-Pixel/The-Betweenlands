@@ -82,10 +82,12 @@ public class ItemLoreScrap extends Item implements ItemRegistry.ISubItemsItem {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems( CreativeTabs tab, NonNullList<ItemStack> subItems) {
-		for(int i = 0; i < PAGE_NAMES.length; i++) {
-			ItemStack stack = new ItemStack(this);
-			setPage(stack, i);
-			subItems.add(stack);
+		if (this.isInCreativeTab(tab)) {
+			for (int i = 0; i < PAGE_NAMES.length; i++) {
+				ItemStack stack = new ItemStack(this);
+				setPage(stack, i);
+				subItems.add(stack);
+			}
 		}
 	}
 

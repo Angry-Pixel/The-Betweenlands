@@ -106,19 +106,21 @@ public class ItemAspectVial extends Item {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(this, 1, 0)); //green
-        list.add(new ItemStack(this, 1, 1)); //orange
+        if (this.isInCreativeTab(tab)) {
+            list.add(new ItemStack(this, 1, 0)); //green
+            list.add(new ItemStack(this, 1, 1)); //orange
 
-        //Add all aspects
-        for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
-            ItemStack stackGreen = new ItemStack(this, 1, 0);
-            ItemAspectContainer greenAspectContainer = ItemAspectContainer.fromItem(stackGreen);
-            greenAspectContainer.add(aspect, 400);
-            list.add(stackGreen);
-            ItemStack stackOrange = new ItemStack(this, 1, 1);
-            ItemAspectContainer orangeAspectContainer = ItemAspectContainer.fromItem(stackOrange);
-            orangeAspectContainer.add(aspect, 400);
-            list.add(stackOrange);
+            //Add all aspects
+            for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
+                ItemStack stackGreen = new ItemStack(this, 1, 0);
+                ItemAspectContainer greenAspectContainer = ItemAspectContainer.fromItem(stackGreen);
+                greenAspectContainer.add(aspect, 400);
+                list.add(stackGreen);
+                ItemStack stackOrange = new ItemStack(this, 1, 1);
+                ItemAspectContainer orangeAspectContainer = ItemAspectContainer.fromItem(stackOrange);
+                orangeAspectContainer.add(aspect, 400);
+                list.add(stackOrange);
+            }
         }
     }
 
@@ -134,9 +136,9 @@ public class ItemAspectVial extends Item {
         try {
             switch (stack.getItemDamage()) {
                 case 0:
-                    return "item.thebetweenlands.aspectVial.green";
+                    return "item.thebetweenlands.aspect_vial.green";
                 case 1:
-                    return "item.thebetweenlands.aspectVial.orange";
+                    return "item.thebetweenlands.aspect_vial.orange";
             }
         } catch (Exception e) {
         }

@@ -29,9 +29,11 @@ public class ItemDentrothystVial extends Item {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(this, 1, 0)); //green
-        list.add(new ItemStack(this, 1, 1)); //green dirty
-        list.add(new ItemStack(this, 1, 2)); //orange
+        if (isInCreativeTab(tab)) {
+            list.add(new ItemStack(this, 1, 0)); //green
+            list.add(new ItemStack(this, 1, 1)); //green dirty
+            list.add(new ItemStack(this, 1, 2)); //orange
+        }
     }
 
     @Override
@@ -39,11 +41,11 @@ public class ItemDentrothystVial extends Item {
         try {
             switch(stack.getItemDamage()) {
                 case 0:
-                    return "item.thebetweenlands.elixir.dentrothystVial.green";
+                    return "item.thebetweenlands.elixir.dentrothyst_vial.green";
                 case 1:
-                    return "item.thebetweenlands.elixir.dentrothystVial.dirty";
+                    return "item.thebetweenlands.elixir.dentrothyst_vial.dirty";
                 case 2:
-                    return "item.thebetweenlands.elixir.dentrothystVial.orange";
+                    return "item.thebetweenlands.elixir.dentrothyst_vial.orange";
             }
         } catch (Exception e) { }
         return "item.thebetweenlands.unknown";

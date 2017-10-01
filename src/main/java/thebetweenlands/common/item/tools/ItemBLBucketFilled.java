@@ -96,13 +96,15 @@ public class ItemBLBucketFilled extends UniversalBucket {
 
 	@Override
 	public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
-		for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
-			if (fluid != FluidRegistry.WATER && fluid != FluidRegistry.LAVA && !fluid.getName().equals("milk") && !ItemSpecificBucket.hasSpecificBucket(this.getEmpty().getItem(), fluid)) {
-				// add all fluids that the bucket can be filled  with
-				FluidStack fs = new FluidStack(fluid, getCapacity());
-				ItemStack stack = new ItemStack(this);
-				if (!getFilledBucket(fs).isEmpty()) {
-					subItems.add(getFilledBucket(fs));
+		if (this.isInCreativeTab(tab)) {
+			for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
+				if (fluid != FluidRegistry.WATER && fluid != FluidRegistry.LAVA && !fluid.getName().equals("milk") && !ItemSpecificBucket.hasSpecificBucket(this.getEmpty().getItem(), fluid)) {
+					// add all fluids that the bucket can be filled  with
+					FluidStack fs = new FluidStack(fluid, getCapacity());
+					ItemStack stack = new ItemStack(this);
+					if (!getFilledBucket(fs).isEmpty()) {
+						subItems.add(getFilledBucket(fs));
+					}
 				}
 			}
 		}

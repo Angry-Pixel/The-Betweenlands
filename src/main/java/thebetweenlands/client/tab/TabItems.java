@@ -8,8 +8,8 @@ public class TabItems extends CreativeTabBetweenlands {
 		super("thebetweenlands.item");
 	}
 
-//	@Override
-//	public ItemStack getIconItemStack() {
-//		return EnumTalisman.SWAMP_TALISMAN_0.create(1);
-//	}
+	@Override
+	public ItemStack getIconItemStack() {
+		return EnumTalisman.SWAMP_TALISMAN_0.create(1);
+	}
 }

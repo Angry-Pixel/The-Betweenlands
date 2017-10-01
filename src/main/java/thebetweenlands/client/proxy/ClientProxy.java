@@ -2,6 +2,7 @@ package thebetweenlands.client.proxy;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -353,19 +354,16 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerDefaultItemRenderer(Item item) {
 		if (item instanceof ItemRegistry.ISubItemsItem) {
-			Iterator<Entry<Integer, ResourceLocation>> modelsIT = ((ItemRegistry.ISubItemsItem) item).getModels().entrySet().iterator();
-			while (modelsIT.hasNext()) {
-				Entry<Integer, ResourceLocation> model = modelsIT.next();
+			for (Entry<Integer, ResourceLocation> model : ((ItemRegistry.ISubItemsItem) item).getModels().entrySet()) {
 				ModelLoader.setCustomModelResourceLocation(item, model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
 			}
 		} else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
 			List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
 			for (int i = 0; i < types.size(); i++) {
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + item.getRegistryName().getResourcePath(), types.get(i)));
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName().toString(), types.get(i)));
 			}
 		} else {
-			String itemName = item.getRegistryName().getResourcePath();
-			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + itemName, "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
 		}
 	}
 

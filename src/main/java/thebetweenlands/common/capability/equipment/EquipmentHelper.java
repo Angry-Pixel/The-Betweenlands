@@ -155,7 +155,7 @@ public class EquipmentHelper {
 			if(slot >= 0 && slot < inv.getSizeInventory()) {
 				ItemStack stack = inv.getStackInSlot(slot);
 
-				if(stack != null && stack.getItem() instanceof IEquippable && 
+				if(!stack.isEmpty() && stack.getItem() instanceof IEquippable &&
 						!((IEquippable) stack.getItem()).canUnequip(stack, player, target, cap.getInventory(((IEquippable) stack.getItem()).getEquipmentCategory(stack)))) {
 					return stack;
 				}
@@ -164,7 +164,7 @@ public class EquipmentHelper {
 					return stack;
 				}
 
-				if(stack != null && stack.getItem() instanceof IEquippable) {
+				if(!stack.isEmpty() && stack.getItem() instanceof IEquippable) {
 					((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
 				}
 

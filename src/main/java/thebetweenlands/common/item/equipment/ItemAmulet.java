@@ -194,10 +194,12 @@ public class ItemAmulet extends Item implements IEquippable {
     @Override
     @SideOnly(Side.CLIENT)
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(createStack(CircleGemType.NONE));
-        list.add(createStack(CircleGemType.AQUA));
-        list.add(createStack(CircleGemType.CRIMSON));
-        list.add(createStack(CircleGemType.GREEN));
+        if (this.isInCreativeTab(tab)) {
+            list.add(createStack(CircleGemType.NONE));
+            list.add(createStack(CircleGemType.AQUA));
+            list.add(createStack(CircleGemType.CRIMSON));
+            list.add(createStack(CircleGemType.GREEN));
+        }
     }
 
     @Override

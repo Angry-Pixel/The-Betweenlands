@@ -69,7 +69,7 @@ public abstract class MobSpawnerLogicBetweenlands {
      * @param entity
      */
     public MobSpawnerLogicBetweenlands setNextEntity(WeightedSpawnerEntity entity) {
-        this.randomEntity = entity;
+         this.randomEntity = entity;
         return this;
     }
 

@@ -38,16 +38,20 @@ public class ItemWeedwoodRowboat extends Item {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(this));
+        if (this.isInCreativeTab(tab)) {
+            list.add(new ItemStack(this));
 
-        ItemStack tarred = new ItemStack(this);
-        NBTTagCompound attrs = new NBTTagCompound();
-        attrs.setBoolean("isTarred", true);
-        tarred.setTagInfo("attributes", attrs);
-        list.add(tarred);
+            ItemStack tarred = new ItemStack(this);
+            NBTTagCompound attrs = new NBTTagCompound();
+            attrs.setBoolean("isTarred", true);
+            tarred.setTagInfo("attributes", attrs);
+            list.add(tarred);
+        }
     }
 
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         Vec3d pos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
         Vec3d look = player.getLookVec();
         Vec3d lookExtent = pos.addVector(look.x * REACH, look.y * REACH, look.z * REACH);
