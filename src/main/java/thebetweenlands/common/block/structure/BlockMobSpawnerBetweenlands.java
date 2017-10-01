@@ -21,11 +21,11 @@ import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 
 	public static enum RandomSpawnerMob {
-		SWAMP_HAG("thebetweenlands.swamp_hag", 200, 500, 4), 
-		WIGHT("thebetweenlands.wight", 400, 800, 2), 
-		BLOOD_SNAIL("thebetweenlands.blood_snail", 100, 400, 4), 
-		TERMITE("thebetweenlands.termite", 100, 300, 6), 
-		LEECH("thebetweenlands.leech", 150, 500, 3);
+		SWAMP_HAG("thebetweenlands:swamp_hag", 200, 500, 4),
+		WIGHT("thebetweenlands:wight", 400, 800, 2),
+		BLOOD_SNAIL("thebetweenlands:blood_snail", 100, 400, 4),
+		TERMITE("thebetweenlands:termite", 100, 300, 6),
+		LEECH("thebetweenlands:leech", 150, 500, 3);
 
 		private String name;
 		private int minDelay, maxDelay, maxEntities;

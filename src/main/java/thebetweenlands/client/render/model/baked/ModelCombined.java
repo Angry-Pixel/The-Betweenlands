@@ -20,6 +20,7 @@ import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import org.apache.commons.lang3.tuple.Pair;
+import thebetweenlands.common.registries.ModelRegistry;
 
 import javax.vecmath.Matrix4f;
 import java.util.ArrayList;
@@ -71,10 +72,13 @@ public class ModelCombined implements IModel {
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		
-        IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
-        IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
-        return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
+		if(baseModel != null && additionalModel != null) {
+            IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
+            IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
+            return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
+        } else {
+		    return ModelLoaderRegistry.getMissingModel().bake(state, format, bakedTextureGetter);
+        }
     }
 
     @Override

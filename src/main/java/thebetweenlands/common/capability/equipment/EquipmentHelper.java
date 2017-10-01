@@ -43,7 +43,7 @@ public class EquipmentHelper {
 						return result;
 					}
 
-					if(result == null || result.getCount() != stack.getCount()) {
+					if(result.isEmpty() || result.getCount() != stack.getCount()) {
 						equippable.onEquip(stack, target, inv);
 						return ItemHandlerHelper.insertItem(wrapper, stack, false);
 					}
@@ -86,7 +86,7 @@ public class EquipmentHelper {
 							return result;
 						}
 
-						if(result == null || result.getCount() != stack.getCount()) {
+						if(result.isEmpty() || result.getCount() != stack.getCount()) {
 							equippable.onEquip(stack, target, inv);
 							return ItemHandlerHelper.insertItem(wrapper, stack, false);
 						}
@@ -115,7 +115,7 @@ public class EquipmentHelper {
 				for(int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack stack = inv.getStackInSlot(i);
 
-					if(stack != null && stack.getItem() instanceof IEquippable && 
+					if(!stack.isEmpty() && stack.getItem() instanceof IEquippable &&
 							!((IEquippable) stack.getItem()).canUnequip(stack, player, target, cap.getInventory(((IEquippable) stack.getItem()).getEquipmentCategory(stack)))) {
 						continue;
 					}
@@ -124,12 +124,12 @@ public class EquipmentHelper {
 						return stack;
 					}
 
-					if(stack != null) {
+					if(!stack.isEmpty()) {
 						if(stack.getItem() instanceof IEquippable) {
 							((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
 						}
 
-						inv.setInventorySlotContents(i, null);
+						inv.setInventorySlotContents(i, ItemStack.EMPTY);
 						return stack;
 					}
 				}
@@ -168,7 +168,7 @@ public class EquipmentHelper {
 					((IEquippable) stack.getItem()).onUnequip(stack, target, inv);
 				}
 
-				inv.setInventorySlotContents(slot, null);
+				inv.setInventorySlotContents(slot, ItemStack.EMPTY);
 
 				return stack;
 			}

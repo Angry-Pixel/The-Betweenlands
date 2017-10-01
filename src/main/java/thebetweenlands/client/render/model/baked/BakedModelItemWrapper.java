@@ -108,8 +108,8 @@ public class BakedModelItemWrapper implements IBakedModel {
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		Pair<? extends IBakedModel, Matrix4f> result;
-		if(this.transformsModel instanceof PerspectiveMapWrapper) {
-			result = ((PerspectiveMapWrapper)this.transformsModel).handlePerspective(cameraTransformType);
+		if(this.transformsModel != null) {
+			result = ((IBakedModel)this.transformsModel).handlePerspective(cameraTransformType);
 		} else 
 			result = PerspectiveMapWrapper.handlePerspective(this, this.getItemCameraTransforms().getTransform(cameraTransformType), cameraTransformType);
 		return Pair.of(this, result.getValue());

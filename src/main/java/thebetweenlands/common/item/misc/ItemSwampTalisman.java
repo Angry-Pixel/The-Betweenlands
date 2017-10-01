@@ -89,7 +89,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 	public List<String> getTypes() {
 		List<String> models = new ArrayList<String>();
 		for (EnumTalisman type : EnumTalisman.values())
-			models.add(type.name());
+			models.add(type.getUnlocalizedName());
 		return models;
 	}
 
@@ -105,7 +105,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 
 		EnumTalisman() {
 			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
-			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
+			this.unlocalizedName = this.modelName;
 		}
 
 		@Override

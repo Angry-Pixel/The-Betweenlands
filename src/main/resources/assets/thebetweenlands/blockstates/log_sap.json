@@ -1,8 +1,8 @@
 {
 	"variants": {
 			"axis=y":    { "model": "thebetweenlands:log_sap" },
-        	"axis=z":    { "model": "thebetweenlands:log_sap_side" },
-        	"axis=x":    { "model": "thebetweenlands:log_sap_side", "y": 90 },
+        	"axis=z":    { "model": "thebetweenlands:log_sap" },
+        	"axis=x":    { "model": "thebetweenlands:log_sap", "y": 90 },
         	"axis=none": { "model": "thebetweenlands:log_sap_bark" }
 	}
 }
