@@ -58,7 +58,9 @@ public class ItemSpecificBucket extends ItemBLBucketFilled {
 
     @Override
     public void getSubItems(@Nullable CreativeTabs tab, @Nonnull NonNullList<ItemStack> subItems) {
-        subItems.add(new ItemStack(this));
+        if (this.isInCreativeTab(tab)) {
+            subItems.add(new ItemStack(this));
+        }
     }
 
     @Override

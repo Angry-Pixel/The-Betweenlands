@@ -38,13 +38,15 @@ public class ItemWeedwoodRowboat extends Item {
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
-        list.add(new ItemStack(this));
+        if (this.isInCreativeTab(tab)) {
+            list.add(new ItemStack(this));
 
-        ItemStack tarred = new ItemStack(this);
-        NBTTagCompound attrs = new NBTTagCompound();
-        attrs.setBoolean("isTarred", true);
-        tarred.setTagInfo("attributes", attrs);
-        list.add(tarred);
+            ItemStack tarred = new ItemStack(this);
+            NBTTagCompound attrs = new NBTTagCompound();
+            attrs.setBoolean("isTarred", true);
+            tarred.setTagInfo("attributes", attrs);
+            list.add(tarred);
+        }
     }
 
     public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {

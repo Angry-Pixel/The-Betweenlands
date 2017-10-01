@@ -34,8 +34,10 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		for (EnumTalisman type : EnumTalisman.values())
-			items.add(type.create(1));
+		if (this.isInCreativeTab(tab)) {
+			for (EnumTalisman type : EnumTalisman.values())
+				items.add(type.create(1));
+		}
 	}
 
 	@Override
@@ -43,7 +45,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 		try {
 			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumTalisman.class, stack).getUnlocalizedName();
 		} catch (Exception e) {
-			return "item.thebetweenlands.unknownTalisman";
+			return "item.thebetweenlands.unknown_talisman";
 		}
 	}
 
@@ -105,7 +107,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 
 		EnumTalisman() {
 			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
-			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
+			this.unlocalizedName = this.modelName;
 		}
 
 		@Override

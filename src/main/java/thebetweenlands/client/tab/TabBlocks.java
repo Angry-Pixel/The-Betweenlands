@@ -13,8 +13,8 @@ public class TabBlocks extends CreativeTabBetweenlands {
 		super("thebetweenlands.block");
 	}
 
-//	@Override
-//	public ItemStack getTabIconItem() {
-//		return new ItemStack(BlockRegistry.SWAMP_GRASS);
-//	}
+	@Override
+	public ItemStack getTabIconItem() {
+		return new ItemStack(BlockRegistry.SWAMP_GRASS);
+	}
 }

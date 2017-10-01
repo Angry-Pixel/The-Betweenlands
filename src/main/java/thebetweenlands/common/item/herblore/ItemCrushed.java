@@ -51,9 +51,10 @@ public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		super.getSubItems(tab, items);
-		for (EnumItemCrushed type : EnumItemCrushed.values())
-			items.add(type.create(1));
+		if (this.isInCreativeTab(tab)) {
+			for (EnumItemCrushed type : EnumItemCrushed.values())
+				items.add(type.create(1));
+		}
 	}
 
 	@Override
@@ -61,7 +62,7 @@ public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 		try {
 			return "item.thebetweenlands." + IGenericItem.getFromStack(EnumItemCrushed.class, stack).getUnlocalizedName();
 		} catch (Exception e) {
-			return "item.thebetweenlands.unknownCrushed";
+			return "item.thebetweenlands.unknown_crushed";
 		}
 	}
 
@@ -136,7 +137,7 @@ public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
 		EnumItemCrushed(int id) {
 			this.id = id;
 			this.modelName = this.name().toLowerCase(Locale.ENGLISH);
-			this.unlocalizedName = CaseFormat.LOWER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, this.modelName);
+			this.unlocalizedName = this.modelName;
 		}
 
 		@Override

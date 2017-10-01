@@ -43,7 +43,7 @@ public class Starfield extends PostProcessingEffect<Starfield> {
 	@Override
 	protected ResourceLocation[] getShaders() {
 		return new ResourceLocation[] {new ResourceLocation("thebetweenlands:shaders/postprocessing/starfield/starfield.vsh"), 
-				this.faded ? new ResourceLocation("thebetweenlands:shaders/postprocessing/starfield/starfieldFaded.fsh") : new ResourceLocation("thebetweenlands:shaders/postprocessing/starfield/starfield.fsh")};
+				this.faded ? new ResourceLocation("thebetweenlands:shaders/postprocessing/starfield/starfieldfaded.fsh") : new ResourceLocation("thebetweenlands:shaders/postprocessing/starfield/starfield.fsh")};
 	}
 
 	@Override
