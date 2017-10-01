@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
@@ -40,6 +41,8 @@ public class ModelCombined implements IModel {
     }
 
     public static ImmutableMap<String, String> getCustomDataFor(JsonParser parser, String customData) {
+        if (customData == null)
+            return null;
         JsonElement element = parser.parse(customData);
         JsonObject jsonObj = element.getAsJsonObject();
         Builder<String, String> parsedElements = ImmutableMap.<String, String>builder();
@@ -71,10 +74,14 @@ public class ModelCombined implements IModel {
 
     @Override
     public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		
-        IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
-        IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
-        return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
+        if (baseModel != null && additionalModel != null) {
+            IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
+            IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
+            return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
+        } else {
+            IModel missing = ModelLoaderRegistry.getMissingModel();
+            return missing.bake(missing.getDefaultState(), format, bakedTextureGetter);
+        }
     }
 
     @Override
@@ -93,17 +100,9 @@ public class ModelCombined implements IModel {
         ResourceLocation additionalModelLocation = new ResourceLocation(parser.parse(additionalJsonStr).getAsString());
 
         IModel baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
-        if (baseModel instanceof IModel) {
-            if (!customData.containsKey("model_base_data"))
-                return this;
-            baseModel = ((IModel) baseModel).process(getCustomDataFor(parser, customData.get("model_base_data")));
-        }
+        baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_base_data")));
         IModel additionalModel = ModelLoaderRegistry.getModelOrLogError(additionalModelLocation, "Could not find additional model for combined model");
-        if (additionalModel instanceof IModel) {
-            if (!customData.containsKey("model_additional_data"))
-                return this;
-            additionalModel = ((IModel) additionalModel).process(getCustomDataFor(parser, customData.get("model_additional_data")));
-        }
+        additionalModel = additionalModel.process(getCustomDataFor(parser, customData.get("model_additional_data")));
 
         return new ModelCombined(baseModel, additionalModel);
     }

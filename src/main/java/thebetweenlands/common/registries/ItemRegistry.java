@@ -292,10 +292,6 @@ public class ItemRegistry {
         }
 
         registerProperties();
-
-        for (Item item : ITEMS) {
-            TheBetweenlands.proxy.registerDefaultItemRenderer(item);
-        }
     }
 
     private static void registerItem(Item item, String fieldName) {
@@ -352,16 +348,9 @@ public class ItemRegistry {
     @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public static void registerModels(ModelRegistryEvent event) {
-        for (Item item : ITEMS)
-            if (item instanceof ISubItemsItem) {
-                Map<Integer, ResourceLocation> models = ((ISubItemsItem) item).getModels();
-                for (int i = 0; i < models.size(); i++) {
-                    if (models.get(i) != null)
-                        ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(models.get(i), "inventory"));
-                }
-            } else {
-                ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
-            }
+        for (Item item : ITEMS) {
+            TheBetweenlands.proxy.registerDefaultItemRenderer(item);
+        }
     }
 
     public interface ISubItemsItem {

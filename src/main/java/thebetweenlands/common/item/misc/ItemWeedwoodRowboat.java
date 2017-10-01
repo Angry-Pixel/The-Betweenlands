@@ -49,7 +49,9 @@ public class ItemWeedwoodRowboat extends Item {
         }
     }
 
-    public ActionResult<ItemStack> onItemRightClick(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
+    @Override
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+        ItemStack stack = player.getHeldItem(hand);
         Vec3d pos = new Vec3d(player.posX, player.posY + player.getEyeHeight(), player.posZ);
         Vec3d look = player.getLookVec();
         Vec3d lookExtent = pos.addVector(look.x * REACH, look.y * REACH, look.z * REACH);

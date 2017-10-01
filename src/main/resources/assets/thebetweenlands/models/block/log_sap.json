@@ -2,6 +2,6 @@
 	"parent": "block/cube_column",
 	"textures": {
 		"side": "thebetweenlands:blocks/log_sap",
-        	"end": "thebetweenlands:blocks/log_sap_top"
+		"end": "thebetweenlands:blocks/log_sap_top"
 	}
 }
