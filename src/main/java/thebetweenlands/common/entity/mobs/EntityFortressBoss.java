@@ -797,6 +797,10 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		}
 	}
 
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
 
 	@Override
 	protected boolean canDespawn() {

@@ -66,6 +66,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 		setBloodConsumed(0);
 	}
 
+
 	@Override
 	protected void initEntityAI() {
 		this.aiAttackTarget = new EntityAINearestAttackableTarget<EntityLivingBase>(this, EntityLivingBase.class, true, true);

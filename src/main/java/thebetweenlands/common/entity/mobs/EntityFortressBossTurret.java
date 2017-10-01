@@ -61,6 +61,11 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		this.getDataManager().register(DEFLECTION_STATE, false);
 	}
 
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
+
 	public void setDeflectable(boolean deflectable) {
 		this.getDataManager().set(DEFLECTION_STATE, deflectable);
 	}

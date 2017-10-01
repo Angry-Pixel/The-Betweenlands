@@ -38,6 +38,11 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     }
 
     @Override
+    public boolean isAIDisabled() {
+        return false;
+    }
+
+    @Override
     protected void initEntityAI() {
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
         tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));

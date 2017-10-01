@@ -433,4 +433,11 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 	public void setPreparing() {
 		this.getDataManager().set(SUCKING_STATE_DW, (byte)2);
 	}
+
+
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
+
 }

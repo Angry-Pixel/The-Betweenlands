@@ -52,6 +52,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 	public void applyEntityCollision(Entity entity) {
 	}
 
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();

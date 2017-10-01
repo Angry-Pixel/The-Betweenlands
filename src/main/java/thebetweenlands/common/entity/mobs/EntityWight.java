@@ -481,4 +481,10 @@ public class EntityWight extends EntityMob implements IEntityBL {
     public void setCanTurnVolatile(boolean canTurnVolatile) {
         this.canTurnVolatile = canTurnVolatile;
     }
+
+    @Override
+    public boolean isAIDisabled() {
+        return false;
+    }
+
 }

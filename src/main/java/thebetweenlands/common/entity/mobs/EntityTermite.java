@@ -98,4 +98,11 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.TERMITE;
 	}
+
+
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
+
 }

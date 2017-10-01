@@ -52,6 +52,11 @@ public class EntityFortressBossSpawner extends EntityMob implements IEntityBL {
 		this.getDataManager().register(OWNER, Optional.absent());
 	}
 
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
+
 	public void setOwner(@Nullable Entity entity) {
 		this.getDataManager().set(OWNER, entity == null ? Optional.absent() : Optional.of(entity.getUniqueID()));
 	}

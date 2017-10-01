@@ -37,6 +37,11 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     }
 
     @Override
+    public boolean isAIDisabled() {
+        return false;
+    }
+
+    @Override
     protected void initEntityAI() {
         tasks.addTask(0, new EntityAIAttackMelee(this, 0.7D, true) {
             @Override

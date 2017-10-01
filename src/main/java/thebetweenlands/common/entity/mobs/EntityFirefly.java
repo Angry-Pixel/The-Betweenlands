@@ -187,4 +187,9 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 	public float getGlowTicks(float partialTicks) {
 		return this.prevGlowTicks + (this.glowTicks - this.prevGlowTicks) * partialTicks;
 	}
+
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
 }

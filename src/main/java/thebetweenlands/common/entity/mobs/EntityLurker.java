@@ -120,6 +120,11 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     }
 
     @Override
+    public boolean isAIDisabled() {
+        return false;
+    }
+
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.5);

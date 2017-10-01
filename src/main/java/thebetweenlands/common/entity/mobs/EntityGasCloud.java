@@ -90,6 +90,12 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 		};
 	}
 
+
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
+
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(5, new EntityAIFlyRandomly<EntityGasCloud>(this) {

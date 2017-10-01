@@ -118,6 +118,10 @@ public class EntityChiromaw extends EntityFlying implements IMob, IEntityBL {
         }
     }
 
+    @Override
+    public boolean isAIDisabled() {
+        return false;
+    }
 
     @Override
     protected void updateAITasks() {

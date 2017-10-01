@@ -242,4 +242,10 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	protected boolean canDropLoot() {
 		return false; //Loot dropping is handled in death update
 	}
+
+	@Override
+	public boolean isAIDisabled() {
+		return false;
+	}
+
 }
