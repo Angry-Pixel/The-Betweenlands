@@ -81,7 +81,7 @@ public class ModelCombined implements IModel {
             IBakedModel additionalBakedModel = this.additionalModel.bake(state, format, bakedTextureGetter);
             return new BakedCombinedModel(baseBakedModel, additionalBakedModel);
         } else {
-		        return ModelLoaderRegistry.getMissingModel().bake(state, format, bakedTextureGetter);
+            return ModelLoaderRegistry.getMissingModel().bake(state, format, bakedTextureGetter);
         }
     }
 
