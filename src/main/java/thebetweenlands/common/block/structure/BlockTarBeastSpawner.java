@@ -21,7 +21,7 @@ public class BlockTarBeastSpawner extends BlockMobSpawner {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		TileEntityTarBeastSpawner tile = new TileEntityTarBeastSpawner();
 		MobSpawnerLogicBetweenlands spawnerLogic = tile.getSpawnerLogic();
-		spawnerLogic.setNextEntity("thebetweenlands.tar_beast");
+		spawnerLogic.setNextEntity("thebetweenlands:tar_beast");
 		spawnerLogic.setParticles(false);
 		spawnerLogic.setMaxEntities(1);
 		spawnerLogic.setCheckRange(16.0D);
