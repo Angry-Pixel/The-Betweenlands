@@ -53,15 +53,20 @@ public class ItemBLBucketFilled extends UniversalBucket {
 		}
 
 		@Override
-		protected void setFluid(Fluid fluid) {
-			if(fluid == null && this.container.getItem() instanceof UniversalBucket) {
-				this.container.deserializeNBT(((UniversalBucket)this.container.getItem()).getEmpty().writeToNBT(new NBTTagCompound()));
-			} else if (FluidRegistry.getBucketFluids().contains(fluid) && this.container.getItem() instanceof UniversalBucket) {
-				ItemStack filledBucket = UniversalBucket.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluid);
-				this.container.deserializeNBT(filledBucket.serializeNBT());
+		protected void setFluid(@Nullable FluidStack fluidStack) {
+			if(fluidStack == null && this.container.getItem() instanceof UniversalBucket) {
+				this.container = new ItemStack(((UniversalBucket)this.container.getItem()).getEmpty().writeToNBT(new NBTTagCompound()));
+			} else if (FluidRegistry.getBucketFluids().contains(fluidStack.getFluid()) && this.container.getItem() instanceof UniversalBucket) {
+				ItemStack filledBucket = ItemBLBucketEmpty.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidStack);
+				this.container = new ItemStack(filledBucket.serializeNBT());
 			} else {
-				super.setFluid(fluid);
+				super.setFluid(fluidStack);
 			}
+		}
+
+		@Override
+		protected void setFluid(Fluid fluid) {
+			setFluid(new FluidStack(fluid, Fluid.BUCKET_VOLUME));
 		}
 	}
 

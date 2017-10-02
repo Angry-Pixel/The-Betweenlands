@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,6 +28,8 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
+
+import javax.annotation.Nonnull;
 
 public abstract class ItemBLBucketEmpty extends Item {
     public ItemBLBucketEmpty() {
@@ -91,7 +94,7 @@ public abstract class ItemBLBucketEmpty extends Item {
                         worldIn.setBlockState(blockpos, Blocks.AIR.getDefaultState(), 11);
                         playerIn.addStat(StatList.getObjectUseStats(this));
                         playerIn.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(stack, playerIn, fluid));
+                        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(stack, playerIn, new FluidStack(fluid, Fluid.BUCKET_VOLUME)));
                     } else {
                         TileEntity te = worldIn.getTileEntity(blockpos);
                         if (te != null && te instanceof IFluidHandler) {
@@ -101,7 +104,7 @@ public abstract class ItemBLBucketEmpty extends Item {
                                 drained = handler.drain(Fluid.BUCKET_VOLUME, true);
                                 playerIn.addStat(StatList.getObjectUseStats(this));
                                 playerIn.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
-                                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(stack, playerIn, drained.getFluid()));
+                                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, this.fillBucket(stack, playerIn, drained));
                             }
                         }
                         return new ActionResult<ItemStack>(EnumActionResult.FAIL, stack);
@@ -111,8 +114,22 @@ public abstract class ItemBLBucketEmpty extends Item {
         }
     }
 
-    private ItemStack fillBucket(ItemStack emptyBuckets, EntityPlayer player, Fluid fluid) {
-        ItemStack fullBucket = UniversalBucket.getFilledBucket(this.getFilledBucket(), fluid);
+    public static ItemStack getFilledBucket(@Nonnull UniversalBucket item, FluidStack fluidStack) {
+        if (net.minecraftforge.fluids.FluidRegistry.getBucketFluids().contains(fluidStack.getFluid())) {
+            ItemStack bucket = new ItemStack(item);
+            // fill the container
+            NBTTagCompound tag = new NBTTagCompound();
+            FluidStack fluidContents = new FluidStack(fluidStack.getFluid(), item.getCapacity());
+            fluidContents.writeToNBT(tag);
+            bucket.setTagCompound(tag);
+            return bucket;
+        }
+
+        return ItemStack.EMPTY;
+    }
+
+    private ItemStack fillBucket(ItemStack emptyBuckets, EntityPlayer player, FluidStack fluid) {
+        ItemStack fullBucket = getFilledBucket(this.getFilledBucket(), fluid);
         if (player.capabilities.isCreativeMode) {
             return emptyBuckets;
         } else if (emptyBuckets.getCount() - 1<= 0) {
