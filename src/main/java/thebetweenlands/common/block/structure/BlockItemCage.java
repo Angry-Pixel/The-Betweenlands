@@ -62,19 +62,19 @@ public class BlockItemCage extends BlockContainer {
 				EntitySwordEnergy energyBall = (EntitySwordEnergy) swordStone.isSwordEnergyBelow();
 				world.playSound(null, pos, SoundRegistry.FORTRESS_PUZZLE_CAGE_BREAK, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				switch (swordStone.type) {
-				case 0:
-					energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
-					break;
-				case 1:
-					energyBall.setSwordPart2Pos(energyBall.getSwordPart2Pos() - 0.05F);
-					break;
-				case 2:
-					energyBall.setSwordPart3Pos(energyBall.getSwordPart3Pos() - 0.05F);
-					break;
-				case 3:
-					energyBall.setSwordPart4Pos(energyBall.getSwordPart4Pos() - 0.05F);
-					break;
-				}
+					case 0:
+						energyBall.setSwordPart1Pos(energyBall.getSwordPart1Pos() - 0.05F);
+						break;
+					case 1:
+						energyBall.setSwordPart2Pos(energyBall.getSwordPart2Pos() - 0.05F);
+						break;
+					case 2:
+						energyBall.setSwordPart3Pos(energyBall.getSwordPart3Pos() - 0.05F);
+						break;
+					case 3:
+						energyBall.setSwordPart4Pos(energyBall.getSwordPart4Pos() - 0.05F);
+						break;
+					}
 			}
 		}
 		super.breakBlock(world, pos, state);

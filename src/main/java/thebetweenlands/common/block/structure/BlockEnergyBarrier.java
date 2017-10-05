@@ -97,7 +97,7 @@ public class BlockEnergyBarrier extends Block {
 			EnumHand swordHand = null;
 			for (EnumHand hand : EnumHand.values()) {
 				ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-				if (stack != null && stack.getItem() == ItemRegistry.SHOCKWAVE_SWORD) {
+				if (!stack.isEmpty() && stack.getItem() == ItemRegistry.SHOCKWAVE_SWORD) {
 					swordHand = hand;
 					break;
 				}

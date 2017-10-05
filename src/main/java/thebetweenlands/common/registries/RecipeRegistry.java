@@ -620,7 +620,7 @@ public class RecipeRegistry {
 					entityitem.motionZ = 0;
 					entityitem.motionY = 0.11000000298023224D;
 					world.spawnEntity(entityitem);
-					animator.setInventorySlotContents(0, null);
+					animator.setInventorySlotContents(0, ItemStack.EMPTY);
 					return false;
 				}
 				return true;
@@ -641,7 +641,7 @@ public class RecipeRegistry {
 		PurifierRecipe.addRecipe(new IPurifierRecipe() {
 			@Override
 			public boolean matchesInput(ItemStack stack) {
-				return stack != null && stack.getItem() == ItemRegistry.WEEDWOOD_ROWBOAT && EntityWeedwoodRowboat.isTarred(stack);
+				return !stack.isEmpty() && stack.getItem() == ItemRegistry.WEEDWOOD_ROWBOAT && EntityWeedwoodRowboat.isTarred(stack);
 			}
 
 			@Override

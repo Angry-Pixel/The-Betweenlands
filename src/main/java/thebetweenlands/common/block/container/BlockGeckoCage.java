@@ -83,7 +83,7 @@ public class BlockGeckoCage extends BlockContainer {
 			if(player.isSneaking())
 				return false;
 
-			if(heldItemStack != null) {
+			if(!heldItemStack.isEmpty()) {
 
 				Item heldItem = heldItemStack.getItem();
 				if(heldItem == ItemRegistry.GECKO) {
@@ -109,17 +109,15 @@ public class BlockGeckoCage extends BlockContainer {
 									case NEW:
 									case LAST:
 										DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
-										if(!world.isRemote) {
-											tile.setAspectType(discovery.discovered.type, 600);
-											player.sendMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
-											if(discovery.result == EnumDiscoveryResult.LAST) {
-												player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.last"));
-											} else {
-												player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.more"));
-											}
-											if(!player.capabilities.isCreativeMode) 
-												heldItemStack.shrink(1);
-										}
+										tile.setAspectType(discovery.discovered.type, 600);
+										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
+										if(discovery.result == EnumDiscoveryResult.LAST) {
+                                            player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.last"));
+                                        } else {
+                                            player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.more"));
+                                        }
+										if(!player.capabilities.isCreativeMode)
+                                            heldItemStack.shrink(1);
 										return true;
 									case END:
 										//already all discovered
@@ -131,12 +129,11 @@ public class BlockGeckoCage extends BlockContainer {
 										return false;
 									}
 								} else {
+									player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
 									return true;
 								}
 							} else {
 								//no aspects
-								if(!world.isRemote) 
-									player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
 								return false;
 							}
 						} else {

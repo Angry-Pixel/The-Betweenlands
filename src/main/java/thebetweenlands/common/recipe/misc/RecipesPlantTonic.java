@@ -36,8 +36,8 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		if(bucket.isEmpty() || sap != 1) {
 			return false;
 		}
-		if(bucket.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-			IFluidHandler handler = bucket.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+		if(bucket.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
+			IFluidHandler handler = bucket.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 			FluidStack extracted = handler.drain(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME), false);
 			if(extracted != null && extracted.amount == Fluid.BUCKET_VOLUME) {
 				return true;
@@ -82,8 +82,8 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null && (stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED)) {
-				remaining.set(i, null);
+			if(!stack.isEmpty() && (stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED)) {
+				remaining.set(i, ItemStack.EMPTY);
 			} else {
 				remaining.set(i, ForgeHooks.getContainerItem(stack));
 			}

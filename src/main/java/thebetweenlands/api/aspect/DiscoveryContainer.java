@@ -272,7 +272,7 @@ public class DiscoveryContainer<T> {
 		InventoryPlayer inventory = player.inventory;
 		for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if(stack != null && stack.getItem() instanceof IDiscoveryProvider)
+			if(!stack.isEmpty() && stack.getItem() instanceof IDiscoveryProvider)
 				return true;
 		}
 		return false;
@@ -288,7 +288,7 @@ public class DiscoveryContainer<T> {
 		InventoryPlayer inventory = player.inventory;
 		for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if(stack != null && stack.getItem() instanceof IDiscoveryProvider) {
+			if(!stack.isEmpty() && stack.getItem() instanceof IDiscoveryProvider) {
 				@SuppressWarnings("unchecked")
 				IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
 				DiscoveryContainer<?> container = provider.getContainer(stack);

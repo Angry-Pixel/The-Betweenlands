@@ -11,11 +11,13 @@ import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemLead;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -55,36 +57,33 @@ public class BlockFenceBetweenlands extends Block {
 		super(state.getMaterial(), MapColor.WOOD);
 		setSoundType(state.getBlock().getSoundType());
 		setHardness(2.0F);
-		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)));
+		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.FALSE).withProperty(EAST, Boolean.FALSE).withProperty(SOUTH, Boolean.FALSE).withProperty(WEST, Boolean.FALSE));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
-	{
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
 		state = state.getActualState(worldIn, pos);
 		addCollisionBoxToList(pos, entityBox, collidingBoxes, PILLAR_AABB);
 
-		if (((Boolean)state.getValue(NORTH)).booleanValue())
-		{
+		if (state.getValue(NORTH)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, NORTH_AABB);
 		}
 
-		if (((Boolean)state.getValue(EAST)).booleanValue())
-		{
+		if (state.getValue(EAST)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, EAST_AABB);
 		}
 
-		if (((Boolean)state.getValue(SOUTH)).booleanValue())
-		{
+		if (state.getValue(SOUTH)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, SOUTH_AABB);
 		}
 
-		if (((Boolean)state.getValue(WEST)).booleanValue())
-		{
+		if (state.getValue(WEST)) {
 			addCollisionBoxToList(pos, entityBox, collidingBoxes, WEST_AABB);
 		}
 	}
 
+	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
 	{
 		state = this.getActualState(state, source, pos);
@@ -94,27 +93,22 @@ public class BlockFenceBetweenlands extends Block {
 	/**
 	 * Returns the correct index into boundingBoxes, based on what the fence is connected to.
 	 */
-	private static int getBoundingBoxIdx(IBlockState state)
-	{
+	private static int getBoundingBoxIdx(IBlockState state) {
 		int i = 0;
 
-		if (((Boolean)state.getValue(NORTH)).booleanValue())
-		{
+		if (state.getValue(NORTH)) {
 			i |= 1 << EnumFacing.NORTH.getHorizontalIndex();
 		}
 
-		if (((Boolean)state.getValue(EAST)).booleanValue())
-		{
+		if (state.getValue(EAST)) {
 			i |= 1 << EnumFacing.EAST.getHorizontalIndex();
 		}
 
-		if (((Boolean)state.getValue(SOUTH)).booleanValue())
-		{
+		if (state.getValue(SOUTH)) {
 			i |= 1 << EnumFacing.SOUTH.getHorizontalIndex();
 		}
 
-		if (((Boolean)state.getValue(WEST)).booleanValue())
-		{
+		if (state.getValue(WEST)) {
 			i |= 1 << EnumFacing.WEST.getHorizontalIndex();
 		}
 
@@ -124,43 +118,55 @@ public class BlockFenceBetweenlands extends Block {
 	/**
 	 * Used to determine ambient occlusion and culling when rebuilding chunks for render
 	 */
+	@Override
 	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isFullCube(IBlockState state)
 	{
 		return false;
 	}
 
+	@Override
 	public boolean isPassable(IBlockAccess worldIn, BlockPos pos)
 	{
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
-	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos)
-	{
+	public boolean canConnectTo(IBlockAccess worldIn, BlockPos pos, EnumFacing facing) {
 		IBlockState iblockstate = worldIn.getBlockState(pos);
+		BlockFaceShape blockfaceshape = iblockstate.getBlockFaceShape(worldIn, pos, facing);
 		Block block = iblockstate.getBlock();
-		return block == Blocks.BARRIER ? false : ((!(block instanceof BlockFence || block instanceof BlockFenceBetweenlands) || block.getMaterial(iblockstate) != this.blockMaterial) && !(block instanceof BlockFenceGate || block instanceof BlockFenceGateBetweenlands) ? (block.getMaterial(iblockstate).isOpaque() && iblockstate.isFullCube() ? block.getMaterial(iblockstate) != Material.GOURD : false) : true);
+		boolean flag = blockfaceshape == BlockFaceShape.MIDDLE_POLE && (iblockstate.getMaterial() == this.blockMaterial || (block instanceof BlockFenceGate || block instanceof BlockFenceGateBetweenlands));
+		return !isExcepBlockForAttachWithPiston(block) && blockfaceshape == BlockFaceShape.SOLID || flag;
+	}
+
+	protected static boolean isExcepBlockForAttachWithPiston(Block block) {
+		return Block.isExceptBlockForAttachWithPiston(block) || block == Blocks.BARRIER || block == Blocks.MELON_BLOCK || block == Blocks.PUMPKIN || block == Blocks.LIT_PUMPKIN;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
-	{
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;
 	}
 
-	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ)
-	{
-		return worldIn.isRemote ? true : ItemLead.attachToFence(playerIn, worldIn, pos);
+	@Override
+	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (!worldIn.isRemote) {
+			return ItemLead.attachToFence(playerIn, worldIn, pos);
+		} else {
+			ItemStack itemstack = playerIn.getHeldItem(hand);
+			return itemstack.getItem() == Items.LEAD || itemstack.isEmpty();
+		}
 	}
 
 	/**
 	 * Convert the BlockState into the correct metadata value
 	 */
+	@Override
 	public int getMetaFromState(IBlockState state)
 	{
 		return 0;
@@ -170,27 +176,29 @@ public class BlockFenceBetweenlands extends Block {
 	 * Get the actual Block state of this Block at the given position. This applies properties not visible in the
 	 * metadata, such as fence connections.
 	 */
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos)
-	{
-		return state.withProperty(NORTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.north()))).withProperty(EAST, Boolean.valueOf(this.canConnectTo(worldIn, pos.east()))).withProperty(SOUTH, Boolean.valueOf(this.canConnectTo(worldIn, pos.south()))).withProperty(WEST, Boolean.valueOf(this.canConnectTo(worldIn, pos.west())));
+	@Override
+	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return state.withProperty(NORTH, canFenceConnectTo(worldIn, pos, EnumFacing.NORTH))
+					.withProperty(EAST,  canFenceConnectTo(worldIn, pos, EnumFacing.EAST))
+					.withProperty(SOUTH, canFenceConnectTo(worldIn, pos, EnumFacing.SOUTH))
+					.withProperty(WEST,  canFenceConnectTo(worldIn, pos, EnumFacing.WEST));
 	}
 
 	/**
 	 * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
 	 * blockstate.
 	 */
-	public IBlockState withRotation(IBlockState state, Rotation rot)
-	{
-		switch (rot)
-		{
-		case CLOCKWISE_180:
-			return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(EAST, state.getValue(WEST)).withProperty(SOUTH, state.getValue(NORTH)).withProperty(WEST, state.getValue(EAST));
-		case COUNTERCLOCKWISE_90:
-			return state.withProperty(NORTH, state.getValue(EAST)).withProperty(EAST, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(WEST)).withProperty(WEST, state.getValue(NORTH));
-		case CLOCKWISE_90:
-			return state.withProperty(NORTH, state.getValue(WEST)).withProperty(EAST, state.getValue(NORTH)).withProperty(SOUTH, state.getValue(EAST)).withProperty(WEST, state.getValue(SOUTH));
-		default:
-			return state;
+	@Override
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		switch (rot) {
+			case CLOCKWISE_180:
+				return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(EAST, state.getValue(WEST)).withProperty(SOUTH, state.getValue(NORTH)).withProperty(WEST, state.getValue(EAST));
+			case COUNTERCLOCKWISE_90:
+				return state.withProperty(NORTH, state.getValue(EAST)).withProperty(EAST, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(WEST)).withProperty(WEST, state.getValue(NORTH));
+			case CLOCKWISE_90:
+				return state.withProperty(NORTH, state.getValue(WEST)).withProperty(EAST, state.getValue(NORTH)).withProperty(SOUTH, state.getValue(EAST)).withProperty(WEST, state.getValue(SOUTH));
+			default:
+				return state;
 		}
 	}
 
@@ -199,27 +207,55 @@ public class BlockFenceBetweenlands extends Block {
 	 * blockstate.
 	 */
 	@SuppressWarnings("deprecation")
-	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
-	{
-		switch (mirrorIn)
-		{
-		case LEFT_RIGHT:
-			return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(NORTH));
-		case FRONT_BACK:
-			return state.withProperty(EAST, state.getValue(WEST)).withProperty(WEST, state.getValue(EAST));
-		default:
-			return super.withMirror(state, mirrorIn);
+	@Override
+	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
+		switch (mirrorIn) {
+			case LEFT_RIGHT:
+				return state.withProperty(NORTH, state.getValue(SOUTH)).withProperty(SOUTH, state.getValue(NORTH));
+			case FRONT_BACK:
+				return state.withProperty(EAST, state.getValue(WEST)).withProperty(WEST, state.getValue(EAST));
+			default:
+				return super.withMirror(state, mirrorIn);
 		}
 	}
 
-	protected BlockStateContainer createBlockState()
-	{
+	@Override
+	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {NORTH, EAST, WEST, SOUTH});
 	}
 
 	@Override
-	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos)
-    {
+	public boolean canPlaceTorchOnTop(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return true;
     }
+
+    /* ======================================== FORGE START ======================================== */
+
+	@Override
+	public boolean canBeConnectedTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+		Block connector = world.getBlockState(pos.offset(facing)).getBlock();
+
+		if(connector instanceof BlockFence || connector instanceof BlockFenceBetweenlands) {
+			if(this != Blocks.NETHER_BRICK_FENCE && connector == Blocks.NETHER_BRICK_FENCE) {
+				return false;
+			} else if(this == Blocks.NETHER_BRICK_FENCE && connector != Blocks.NETHER_BRICK_FENCE) {
+				return false;
+			}
+			return true;
+		}
+		return false;
+	}
+
+	private boolean canFenceConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
+		BlockPos other = pos.offset(facing);
+		Block block = world.getBlockState(other).getBlock();
+		return block.canBeConnectedTo(world, other, facing.getOpposite()) || canConnectTo(world, other, facing.getOpposite());
+	}
+
+    /* ======================================== FORGE END ======================================== */
+
+    @Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing facing) {
+		return facing != EnumFacing.UP && facing != EnumFacing.DOWN ? BlockFaceShape.MIDDLE_POLE : BlockFaceShape.CENTER;
+	}
 }

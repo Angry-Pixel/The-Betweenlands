@@ -75,6 +75,8 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
                         if (!inventory.get(0).isEmpty())
                             if (inventory.get(0).getCount() - 1 <= 0)
                                 inventory.set(0, ItemStack.EMPTY);
+                            else
+                                inventory.get(0).shrink(1);
                         if (inventory.get(2).isEmpty())
                             inventory.set(2,output.copy());
                         else if (inventory.get(2).isItemEqual(output))

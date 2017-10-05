@@ -51,7 +51,7 @@ public class ContainerPouch extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-		ItemStack stack = null;
+		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = (Slot) this.inventorySlots.get(slotIndex);
 
 		if (slot != null && slot.getHasStack()) {

@@ -45,8 +45,8 @@ public class OverworldItemHandler {
 	public static void onPlayerTorchPlacement(PlaceEvent event) {
 		ItemStack mainHand = event.getPlayer().getHeldItemMainhand();
 		ItemStack offHand = event.getPlayer().getHeldItemMainhand();
-		boolean isHoldingTorchMainhand = mainHand != null && Block.getBlockFromItem(mainHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(mainHand.getItem())) && !WHITELIST.contains(mainHand.getItem());
-		boolean isHoldingTorchOffhand = offHand != null && Block.getBlockFromItem(offHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(offHand.getItem())) && !WHITELIST.contains(offHand.getItem());
+		boolean isHoldingTorchMainhand = !mainHand.isEmpty() && Block.getBlockFromItem(mainHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(mainHand.getItem())) && !WHITELIST.contains(mainHand.getItem());
+		boolean isHoldingTorchOffhand = !offHand.isEmpty() && Block.getBlockFromItem(offHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(offHand.getItem())) && !WHITELIST.contains(offHand.getItem());
 		if (isHoldingTorchMainhand || isHoldingTorchOffhand) {
 			if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
 				for(int x = -2; x <= 2; x++) {
@@ -69,7 +69,7 @@ public class OverworldItemHandler {
 	@SubscribeEvent
 	public static void onUseItem(PlayerInteractEvent.RightClickBlock event) {
 		ItemStack item = event.getItemStack();
-		if(item != null && event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
+		if(!item.isEmpty() && event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
 			if(item.getItem() instanceof ItemFlintAndSteel && !WHITELIST.contains(item.getItem())) {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
@@ -86,11 +86,11 @@ public class OverworldItemHandler {
 		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
 			ItemStack mainHand = event.getEntityPlayer().getHeldItemMainhand();
 			ItemStack offHand = event.getEntityPlayer().getHeldItemOffhand();
-			if(mainHand != null && mainHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
+			if(!mainHand.isEmpty() && mainHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 			}
-			if(offHand != null && offHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
+			if(!offHand.isEmpty() && offHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 			}
@@ -117,7 +117,7 @@ public class OverworldItemHandler {
 			//Set to rotten food/tainted potion
 			for(int i = 0; i < invCount; i++) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
-				if(stack != null) {
+				if(!stack.isEmpty()) {
 					if(isRotting(stack)) {
 						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.getCount());
 						stack.setCount(1);
@@ -135,14 +135,14 @@ public class OverworldItemHandler {
 			//Revert rotten food/tainted potion
 			for(int i = 0; i < invCount; i++) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
-				if(stack != null) {
+				if(!stack.isEmpty()) {
 					if(stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
 						ItemStack originalStack = ItemRegistry.ROTTEN_FOOD.getOriginalStack(stack);
 						if(originalStack != null) {
 							originalStack.setCount(stack.getCount());
 							player.inventory.setInventorySlotContents(i, originalStack);
 						} else {
-							player.inventory.setInventorySlotContents(i, null);
+							player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
 						}
 					} else if(stack.getItem() == ItemRegistry.TAINTED_POTION) {
 						ItemStack originalStack = ItemRegistry.TAINTED_POTION.getOriginalStack(stack);
@@ -150,7 +150,7 @@ public class OverworldItemHandler {
 							originalStack.setCount(stack.getCount());
 							player.inventory.setInventorySlotContents(i, originalStack);
 						} else {
-							player.inventory.setInventorySlotContents(i, null);
+							player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
 						}
 					}
 				}
@@ -163,7 +163,7 @@ public class OverworldItemHandler {
 		EntityPlayer player = event.getEntityPlayer();
 		if(player != null && !player.world.isRemote && !player.capabilities.isCreativeMode) {
 			ItemStack stack = event.getItem().getItem();
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(player.dimension == ConfigHandler.dimensionId) {
 					if(isRotting(stack)) {
 						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.getCount());

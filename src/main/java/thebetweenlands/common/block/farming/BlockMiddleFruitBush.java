@@ -14,6 +14,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -65,7 +66,12 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 
 	@Override
 	public ItemStack getCropDrop(IBlockAccess world, BlockPos pos, Random rand) {
-		return this.isDecayed(world, pos) ? null : new ItemStack(ItemRegistry.MIDDLE_FRUIT);
+		return this.isDecayed(world, pos) ? ItemStack.EMPTY : new ItemStack(ItemRegistry.MIDDLE_FRUIT);
+	}
+
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
 	}
 
 	@Override

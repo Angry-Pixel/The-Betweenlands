@@ -267,7 +267,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
                     boolean removeSeeds = false;
                     while (it.hasNext()) {
                         ItemStack stack = it.next();
-                        if (stack != null) {
+                        if (!stack.isEmpty()) {
                             if (!removeSeeds && stack.getItem() instanceof ItemSeeds) {
                                 removeSeeds = true;
                                 continue;
@@ -514,7 +514,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack heldItem = playerIn.getHeldItem(hand);
         TileEntityDugSoil te = getTile(world, pos);
-        if (te != null && te.getCompost() == 0 && heldItem != null && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
+        if (te != null && te.getCompost() == 0 && !heldItem.isEmpty() && EnumItemMisc.COMPOST.isItemOf(heldItem)) {
             if (!world.isRemote) {
                 world.playSound(null, pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 1, 0.5f + world.rand.nextFloat() * 0.5f);
                 te.setCompost(30);

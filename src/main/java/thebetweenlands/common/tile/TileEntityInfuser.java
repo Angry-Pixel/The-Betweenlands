@@ -337,7 +337,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 					ItemStack stack = getStackInSlot(i);
 					if (stack != null && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
 						//Return empty vials
-						ItemStack ret = null;
+						ItemStack ret = ItemStack.EMPTY;
 						switch (stack.getItemDamage()) {
 						case 0:
 						default:
@@ -350,7 +350,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 						EntityItem entity = new EntityItem(this.world, this.getPos().getX() + 0.5D, this.getPos().getY() + 1.0D, this.getPos().getZ() + 0.5D, ret);
 						this.world.spawnEntity(entity);
 					}
-					setInventorySlotContents(i, null);
+					setInventorySlotContents(i, ItemStack.EMPTY);
 				}
 				if (evaporation == 600) {
 					EntityGasCloud gasCloud = new EntityGasCloud(this.world);

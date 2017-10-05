@@ -38,6 +38,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityTarLootPot2.class, "tar_loot_pot_2");
 		registerTileEntity(TileEntityTarLootPot3.class, "tar_loot_pot_3");
 		registerTileEntity(TileEntityHopperBetweenlands.class, "syrmorite_hopper");
+		registerTileEntity(TileEntityMossBed.class, "moss_bed");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

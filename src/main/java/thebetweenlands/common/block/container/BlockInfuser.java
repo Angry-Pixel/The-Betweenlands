@@ -80,16 +80,16 @@ public class BlockInfuser extends BlockContainer {
 			}
 
 			if (!player.isSneaking()) {
-				if (tile != null && heldItem == null && tile.getStirProgress() >= 90) {
+				if (tile != null && heldItem.isEmpty() && tile.getStirProgress() >= 90) {
 					tile.setStirProgress(0);
 					return true;
 				}
-				if (heldItem != null && !tile.hasInfusion()) {
+				if (!heldItem.isEmpty() && !tile.hasInfusion()) {
 					ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(heldItem, AspectManager.get(world));
 					if(aspectContainer.getAspects().size() > 0) {
 						ItemStack ingredient = heldItem;
 						for (int i = 0; i < TileEntityInfuser.MAX_INGREDIENTS; i++) {
-							if(tile.getStackInSlot(i) == null) {
+							if(tile.getStackInSlot(i).isEmpty()) {
 								ItemStack singleIngredient = ingredient.copy();
 								singleIngredient.setCount(1);
 								tile.setInventorySlotContents(i, singleIngredient);
@@ -103,11 +103,11 @@ public class BlockInfuser extends BlockContainer {
 					}
 				}
 
-				if(heldItem != null && heldItem.getItem() == ItemRegistry.LIFE_CRYSTAL) {
-					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) == null) {
+				if(!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.LIFE_CRYSTAL) {
+					if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).isEmpty()) {
 						tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, heldItem);
 						tile.updateInfusingRecipe();
-						if (!player.capabilities.isCreativeMode) player.setHeldItem(hand, null);
+						if (!player.capabilities.isCreativeMode) player.setHeldItem(hand, ItemStack.EMPTY);
 					}
 					return true;
 				}
@@ -115,10 +115,10 @@ public class BlockInfuser extends BlockContainer {
 
 			if(player.isSneaking() && !tile.hasInfusion()) {
 				for (int i = TileEntityInfuser.MAX_INGREDIENTS; i >= 0; i--) {
-					if(tile.getStackInSlot(i) != null) {
+					if(!tile.getStackInSlot(i).isEmpty()) {
 						EntityItem itemEntity = player.dropItem(tile.getStackInSlot(i).copy(), false);
 						if(itemEntity != null) itemEntity.setPickupDelay(0);
-						tile.setInventorySlotContents(i, null);
+						tile.setInventorySlotContents(i, ItemStack.EMPTY);
 						tile.updateInfusingRecipe();
 						world.notifyBlockUpdate(pos, state, state, 2);
 						return true;
@@ -127,10 +127,10 @@ public class BlockInfuser extends BlockContainer {
 			}
 
 			if(player.isSneaking()) {
-				if(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1) != null) {
+				if(!tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).isEmpty()) {
 					EntityItem itemEntity = player.dropItem(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).copy(), false);
 					if(itemEntity != null) itemEntity.setPickupDelay(0);
-					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, null);
+					tile.setInventorySlotContents(TileEntityInfuser.MAX_INGREDIENTS + 1, ItemStack.EMPTY);
 					tile.updateInfusingRecipe();
 					world.notifyBlockUpdate(pos, state, state, 2);
 					return true;
@@ -154,8 +154,8 @@ public class BlockInfuser extends BlockContainer {
 			if (tileInventory != null && !tile.hasInfusion()) {
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS + 1; i++) {
 					ItemStack stack = tileInventory.getStackInSlot(i);
-					if (stack != null) {
-						if (!world.isRemote && world.getGameRules().getBoolean("doTileDrops")) {
+					if (!stack.isEmpty()) {
+						if (world.getGameRules().getBoolean("doTileDrops")) {
 							float f = 0.7F;
 							double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 							double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
@@ -168,8 +168,8 @@ public class BlockInfuser extends BlockContainer {
 				}
 			} else if (tileInventory != null && tile.hasInfusion()) {
 				ItemStack stack = tileInventory.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1);
-				if (stack != null) {
-					if (!world.isRemote && world.getGameRules().getBoolean("doTileDrops")) {
+				if (!stack.isEmpty()) {
+					if (world.getGameRules().getBoolean("doTileDrops")) {
 						float f = 0.7F;
 						double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
 						double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;

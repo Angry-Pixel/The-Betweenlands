@@ -86,7 +86,7 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 	    ItemStack heldItem = playerIn.getHeldItem(hand);
-		if (heldItem != null && playerIn != null && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && facing.getOpposite().equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && facing.getOpposite().equals(EnumFacing.UP)))){
+		if (!heldItem.isEmpty() && playerIn != null && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && facing.equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && facing.equals(EnumFacing.UP)))){
 			if (heldItem.getItem() == Item.getItemFromBlock(this)) {
 				worldIn.setBlockState(pos, state.withProperty(HALF, EnumBlockHalfBL.FULL));
 				if(!playerIn.capabilities.isCreativeMode)

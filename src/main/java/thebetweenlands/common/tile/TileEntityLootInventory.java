@@ -52,7 +52,7 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 			//Get empty slots
 			List<Integer> emptySlots = Lists.<Integer>newArrayList();
 			for (int i = 0; i < this.inventoryHandler.getSlots(); ++i) {
-				if (this.inventoryHandler.getStackInSlot(i) == null) {
+				if (this.inventoryHandler.getStackInSlot(i).isEmpty()) {
 					emptySlots.add(Integer.valueOf(i));
 				}
 			}
@@ -101,13 +101,13 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 
 			//Fill inventory
 			for (ItemStack itemstack : loot) {
-				if (itemstack != null && emptySlots.isEmpty()) {
+				if (!itemstack.isEmpty() && emptySlots.isEmpty()) {
 					System.out.println("Tried to over-fill a container");
 					return;
 				}
 
-				if (itemstack == null) {
-					this.inventoryHandler.setStackInSlot(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), (ItemStack)null);
+				if (itemstack.isEmpty()) {
+					this.inventoryHandler.setStackInSlot(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), ItemStack.EMPTY);
 				} else {
 					this.inventoryHandler.setStackInSlot(((Integer)emptySlots.remove(emptySlots.size() - 1)).intValue(), itemstack);
 				}

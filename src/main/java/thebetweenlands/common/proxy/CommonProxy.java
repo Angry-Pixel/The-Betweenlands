@@ -94,10 +94,10 @@ public class CommonProxy implements IGuiHandler {
 
 		case GUI_LURKER_POUCH: {
 			ItemStack item = player.getHeldItemMainhand();
-			if(item == null || item.getItem() instanceof ItemLurkerSkinPouch == false) {
+			if(item.isEmpty() || !(item.getItem() instanceof ItemLurkerSkinPouch)) {
 				item = player.getHeldItemOffhand();
 			}
-			if(item != null && item.getItem() instanceof ItemLurkerSkinPouch) {
+			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
 				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), "container.lurkerSkinPouch"));
 			}
 			break;

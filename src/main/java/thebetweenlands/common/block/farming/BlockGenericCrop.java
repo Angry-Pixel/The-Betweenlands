@@ -2,6 +2,7 @@ package thebetweenlands.common.block.farming;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -109,12 +110,12 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	@Override
 	public void onBlockHarvested(World worldIn, BlockPos pos, IBlockState state, EntityPlayer player) {
 		if(!player.isCreative()) {
-			ItemStack stack = player.getHeldItemMainhand() != null ? player.getHeldItemMainhand().copy() : null;
+			ItemStack stack = !player.getHeldItemMainhand().isEmpty() ? player.getHeldItemMainhand().copy() : ItemStack.EMPTY;
 			if (this.canSilkHarvest(worldIn, pos, state, player) && EnchantmentHelper.getEnchantmentLevel(Enchantments.SILK_TOUCH, stack) > 0) {
-				java.util.List<ItemStack> items = new java.util.ArrayList<ItemStack>();
-				ItemStack itemstack = this.getItem(worldIn, pos, state);
+				List<ItemStack> items = new java.util.ArrayList<ItemStack>();
+				ItemStack itemstack = this.getPickBlock(state, null, worldIn, pos, player);
 
-				if (itemstack != null) {
+				if (!itemstack.isEmpty()) {
 					items.add(itemstack);
 				}
 
@@ -173,13 +174,13 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		ItemStack seedDrop = this.getSeedDrop(world, pos, rand);
 		ItemStack cropDrop = this.getCropDrop(world, pos, rand);
 
-		if(seedDrop != null) {
+		if(!seedDrop.isEmpty()) {
 			for(int i = 0; i < this.getSeedDrops(world, pos, rand, fortune); i++) {
 				ret.add(seedDrop);
 			}
 		}
 
-		if(cropDrop != null) {
+		if(!cropDrop.isEmpty()) {
 			for(int i = 0; i < this.getCropDrops(world, pos, rand, fortune); i++) {
 				ret.add(cropDrop);
 			}
@@ -225,7 +226,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @return
 	 */
 	public ItemStack getSeedDrop(IBlockAccess world, BlockPos pos, Random rand) {
-		return null;	
+		return ItemStack.EMPTY;
 	}
 
 	/**
@@ -236,7 +237,7 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 	 * @return
 	 */
 	public ItemStack getCropDrop(IBlockAccess world, BlockPos pos, Random rand) {
-		return null;	
+		return ItemStack.EMPTY;
 	}
 
 	@Override

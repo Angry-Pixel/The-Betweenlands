@@ -56,7 +56,7 @@ public class BlockAlembic extends BlockContainer {
                 if (player.isSneaking())
                     return false;
 
-                if (player.getHeldItem(hand) != null) {
+                if (!player.getHeldItem(hand).isEmpty()) {
                     ItemStack heldStack = player.getHeldItem(hand);
                     if (heldStack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_INFUSION) {
                         if (!tile.isFull()) {

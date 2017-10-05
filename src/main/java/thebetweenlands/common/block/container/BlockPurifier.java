@@ -71,10 +71,10 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 				return false;
 			}
 
-			if (heldItem != null) {
-				if(heldItem.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+			if (!heldItem.isEmpty()) {
+				if(heldItem.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null)) {
 					Fluid fluid = FluidRegistry.SWAMP_WATER;
-					IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+					IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 					FluidStack bucketFluid = handler.drain(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);
 					if(bucketFluid != null) {
 						int toFill = tile.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);

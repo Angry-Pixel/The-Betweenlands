@@ -160,10 +160,10 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
 
     private void loadFromInfusion() {
         this.recipe = null;
-        if (this.infusionBucket == null) return;
+        if (this.infusionBucket == null || infusionBucket.getTagCompound() == null) return;
         int infusionTime = this.infusionBucket.getTagCompound().getInteger("infusionTime");
         this.bucketInfusionTime = infusionTime;
-        if (!this.infusionBucket.getTagCompound().hasKey("ingredients")) {
+        if ( this.infusionBucket.getTagCompound() == null || !this.infusionBucket.getTagCompound().hasKey("ingredients")) {
             this.addInvalidInfusion();
             return;
         }

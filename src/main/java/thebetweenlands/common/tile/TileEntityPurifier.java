@@ -182,10 +182,12 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
                     setIlluminated(true);
                 if (time >= MAX_TIME) {
                     for (int i = 0; i < 2; i++)
-                        if (inventory.get(i) != null)
+                        if (!inventory.get(i).isEmpty())
                             if (inventory.get(i).getCount() - 1 <= 0)
                                 inventory.set(i, ItemStack.EMPTY);
                     extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+                    inventory.get(1).shrink(1);
+                    inventory.get(0).shrink(1);
                     if (inventory.get(2).isEmpty()) {
                         inventory.set(2, output.copy());
                     } else if (inventory.get(2).isItemEqual(output)) {
@@ -193,7 +195,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
                     }
                     time = 0;
                     markDirty();
-                    boolean canRun = output != null && getWaterAmount() > 0 && inventory.get(2) == null || output != null && getWaterAmount() > 0 && inventory.get(2) != null && inventory.get(2).isItemEqual(output);
+                    boolean canRun = !output.isEmpty() && getWaterAmount() > 0 && inventory.get(2).isEmpty() || !output.isEmpty() && getWaterAmount() > 0 && !inventory.get(2).isEmpty() && inventory.get(2).isItemEqual(output);
                     if (!canRun) setIlluminated(false);
                 }
             }
@@ -201,19 +203,19 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
         if (time > 0) {
             markDirty();
         }
-        if (getStackInSlot(0) == null || getStackInSlot(1) == null || outputIsFull()) {
+        if (getStackInSlot(0).isEmpty() || getStackInSlot(1).isEmpty() || outputIsFull()) {
             time = 0;
             markDirty();
             setIlluminated(false);
         }
-        if (this.prevStackSize != (inventory.get(2) != null ? inventory.get(2).getCount() : 0)) {
+        if (this.prevStackSize != (!inventory.get(2).isEmpty() ? inventory.get(2).getCount() : 0)) {
             markDirty();
         }
-        if (this.prevItem != (inventory.get(2) != null ? inventory.get(2).getItem() : null)) {
+        if (this.prevItem != (!inventory.get(2).isEmpty() ? inventory.get(2).getItem() : null)) {
             markDirty();
         }
-        this.prevItem = inventory.get(2) != null ? inventory.get(2).getItem() : null;
-        this.prevStackSize = inventory.get(2) != null ? inventory.get(2).getCount() : 0;
+        this.prevItem = !inventory.get(2).isEmpty() ? inventory.get(2).getItem() : null;
+        this.prevStackSize = !inventory.get(2).isEmpty() ? inventory.get(2).getCount() : 0;
     }
 
     private void extractFluids(FluidStack fluid) {
@@ -223,11 +225,11 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
     }
 
     public boolean hasFuel() {
-        return getStackInSlot(0) != null && EnumItemMisc.SULFUR.isItemOf(getStackInSlot(0)) && getStackInSlot(0).getCount() >= 1;
+        return !getStackInSlot(0).isEmpty() && EnumItemMisc.SULFUR.isItemOf(getStackInSlot(0)) && getStackInSlot(0).getCount() >= 1;
     }
 
     private boolean outputIsFull() {
-        return getStackInSlot(2) != null && getStackInSlot(2).getCount() >= getInventoryStackLimit();
+        return !getStackInSlot(2).isEmpty() && getStackInSlot(2).getCount() >= getInventoryStackLimit();
     }
 
     public void setIlluminated(boolean state) {

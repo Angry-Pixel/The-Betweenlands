@@ -22,12 +22,10 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -99,7 +97,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 		TileEntityMudFlowerPot te = TileEntityHelper.getTileEntityThreadSafe(world, pos, TileEntityMudFlowerPot.class);
 
-		if(te != null && te.getFlowerItemStack() != null) {
+		if(te != null && !te.getFlowerItemStack().isEmpty()) {
 			IBlockState blockState = this.getPlantBlockStateFromItem(te.getFlowerItemStack());
 			if(blockState != null) {
 				state = ((IExtendedBlockState)state).withProperty(FLOWER, blockState);
@@ -112,32 +110,37 @@ public class BlockMudFlowerPot extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = playerIn.getHeldItem(hand);
-		if (!heldItem.isEmpty()) {
-			TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
+		TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
 
-			if (te == null) {
-				return false;
-			} else if (te.getFlowerPotItem() != null) {
-				return false;
-			} else {
+		if (te == null) {
+			return false;
+		} else {
+			ItemStack itemstack1 = te.getFlowerItemStack();
+
+			if (itemstack1.isEmpty()) {
 				if (this.getPlantBlockStateFromItem(heldItem) != null) {
 					te.setItemStack(heldItem);
-					te.markDirty();
-					worldIn.notifyBlockUpdate(pos, state, state, 3);
 					playerIn.addStat(StatList.FLOWER_POTTED);
 
 					if (!playerIn.capabilities.isCreativeMode) {
 						heldItem.shrink(1);
 					}
-
-					return true;
+				} else {
+					return false;
 				}
-			}
-		} else {
-			return false;
-		}
+			} else {
+				if (heldItem.isEmpty()) {
+					playerIn.setHeldItem(hand, itemstack1);
+				} else if (!playerIn.addItemStackToInventory(itemstack1)) {
+					playerIn.dropItem(itemstack1, false);
+				}
 
-		return false;
+				te.setItemStack(ItemStack.EMPTY);
+			}
+			te.markDirty();
+			worldIn.notifyBlockUpdate(pos, state, state, 3);
+			return true;
+		}
 	}
 
 	/**
@@ -148,20 +151,19 @@ public class BlockMudFlowerPot extends BlockContainer {
 	 */
 	@Nullable
 	protected IBlockState getPlantBlockStateFromItem(ItemStack itemStack) {
-		if(itemStack != null) {
+		if(!itemStack.isEmpty()) {
 			Item item = itemStack.getItem();
 
-			if(item instanceof ItemBlock) {
-				Block blockIn = Block.getBlockFromItem((ItemBlock) item);
+			Block block = Block.getBlockFromItem(itemStack.getItem());
+			if(block != Blocks.AIR) {
+				if(block == Blocks.YELLOW_FLOWER || block == Blocks.RED_FLOWER ||
+						block == Blocks.CACTUS || block == Blocks.BROWN_MUSHROOM ||
+						block == Blocks.RED_MUSHROOM || block == Blocks.SAPLING ||
+						block == Blocks.DEADBUSH ||
+						(block == Blocks.TALLGRASS && itemStack.getMetadata() == BlockTallGrass.EnumType.FERN.getMeta())
+						|| (block instanceof BlockPlant && !(block instanceof BlockStackablePlant))) {
 
-				if(blockIn == Blocks.YELLOW_FLOWER || blockIn == Blocks.RED_FLOWER ||
-						blockIn == Blocks.CACTUS || blockIn == Blocks.BROWN_MUSHROOM ||
-						blockIn == Blocks.RED_MUSHROOM || blockIn == Blocks.SAPLING ||
-						blockIn == Blocks.DEADBUSH ||
-						(blockIn == Blocks.TALLGRASS && itemStack.getMetadata() == BlockTallGrass.EnumType.FERN.getMeta())
-						|| (blockIn instanceof BlockPlant && !(blockIn instanceof BlockStackablePlant))) {
-
-					return blockIn.getDefaultState();
+					return block.getStateFromMeta(itemStack.getMetadata());
 				}
 			} else if(item == ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM) {
 				return BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState();
@@ -181,13 +183,13 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Override
-	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		TileEntityMudFlowerPot te = this.getTileEntity(worldIn, pos);
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		TileEntityMudFlowerPot te = this.getTileEntity(world, pos);
 
 		if (te != null) {
 			ItemStack itemstack = te.getFlowerItemStack();
 
-			if (itemstack != null) {
+			if (!itemstack.isEmpty()) {
 				return itemstack;
 			}
 		}
@@ -222,7 +224,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 	}
 
 	@Nullable
-	private TileEntityMudFlowerPot getTileEntity(World worldIn, BlockPos pos) {
+	private TileEntityMudFlowerPot getTileEntity(IBlockAccess worldIn, BlockPos pos) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		return tileentity instanceof TileEntityMudFlowerPot ? (TileEntityMudFlowerPot) tileentity : null;
 	}
@@ -235,13 +237,11 @@ public class BlockMudFlowerPot extends BlockContainer {
 
 	/*============================FORGE START=====================================*/
 	@Override
-	public List<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune)
-	{
-		List<ItemStack> ret = super.getDrops(world, pos, state, fortune);
-		TileEntityMudFlowerPot te = world.getTileEntity(pos) instanceof TileEntityMudFlowerPot ? (TileEntityMudFlowerPot) world.getTileEntity(pos) : null;
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		super.getDrops(drops, world, pos, state, fortune);
+		TileEntityMudFlowerPot te = getTileEntity(world, pos);
 		if (te != null && te.getFlowerPotItem() != null)
-			ret.add(new ItemStack(te.getFlowerPotItem(), 1, te.getFlowerPotData()));
-		return ret;
+			drops.add(new ItemStack(te.getFlowerPotItem(), 1, te.getFlowerPotData()));
 	}
 
 	@Override

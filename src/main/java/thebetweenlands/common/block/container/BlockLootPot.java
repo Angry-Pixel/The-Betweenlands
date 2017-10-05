@@ -135,13 +135,13 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 			if (worldIn.getTileEntity(pos) instanceof TileEntityLootPot) {
 				TileEntityLootPot tile = (TileEntityLootPot) worldIn.getTileEntity(pos);
 				InvWrapper wrapper = new InvWrapper(tile);
-				if (playerIn.getHeldItem(hand) != null) {
+				if (!playerIn.getHeldItem(hand).isEmpty()) {
 					ItemStack stack = playerIn.getHeldItem(hand);
 					ItemStack prevStack = stack.copy();
-					for(int i = 0; i < wrapper.getSlots() && stack != null; i++) {
+					for(int i = 0; i < wrapper.getSlots() && !stack.isEmpty(); i++) {
 						stack = wrapper.insertItem(i, stack, false);
 					}
-					if(stack == null || stack.getCount() != prevStack.getCount()) {
+					if(stack.isEmpty() || stack.getCount() != prevStack.getCount()) {
 						if(!playerIn.isCreative()) {
 							playerIn.setHeldItem(hand, stack);
 						}
@@ -150,7 +150,7 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 				} else if(playerIn.isSneaking() && hand == EnumHand.MAIN_HAND) {
 					for(int i = 0; i < wrapper.getSlots(); i++) {
 						ItemStack extracted = wrapper.extractItem(i, 1, false);
-						if(extracted != null) {
+						if(!extracted.isEmpty()) {
 							EntityItem item = new EntityItem(worldIn, pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, extracted);
 							item.motionX = item.motionY = item.motionZ = 0D;
 							worldIn.spawnEntity(item);
