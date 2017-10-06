@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "shs",
+    "bbb"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "h": {
+      "item": "thebetweenlands:wight_heart"
+    },
+    "b": {
+      "item": "thebetweenlands:betweenstone"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:animator"
+  }
+}

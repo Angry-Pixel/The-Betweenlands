@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xfx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:betweenstone"
+    },
+    "f": {
+      "item": "thebetweenlands:sulfur_furnace"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:sulfur_furnace_dual"
+  }
+}

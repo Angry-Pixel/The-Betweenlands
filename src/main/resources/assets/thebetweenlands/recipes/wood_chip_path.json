@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_crushed",
+      "data": 16
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:wood_chip_path",
+    "count": 4
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:betweenstone"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:betweenstone_stairs",
+    "count": 4
+  }
+}

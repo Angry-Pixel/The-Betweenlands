@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SxS",
+    "SxS"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:log_weedwood"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_log_fence",
+    "count": 3
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:cracked_betweenstone_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:cracked_betweenstone_brick_wall",
+    "count": 6
+  }
+}

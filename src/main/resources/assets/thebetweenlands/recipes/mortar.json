@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "xxx",
+    "s s"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:cragrock",
+      "data": 0
+    },
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mortar"
+  }
+}

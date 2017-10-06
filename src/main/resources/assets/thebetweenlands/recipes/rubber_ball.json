@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:rubber_block"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 23,
+    "count": 9
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:smooth_cragrock"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:smooth_cragrock_wall",
+    "count": 6
+  }
+}

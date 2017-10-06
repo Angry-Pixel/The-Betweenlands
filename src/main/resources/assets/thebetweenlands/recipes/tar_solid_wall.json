@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:tar_solid"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:tar_solid_wall",
+    "count": 6
+  }
+}

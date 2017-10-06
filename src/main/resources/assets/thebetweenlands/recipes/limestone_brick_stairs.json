@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:limestone_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:limestone_brick_stairs",
+    "count": 4
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:sulfur_block"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:items_misc",
+    "data": 18,
+    "count": 9
+  }
+}

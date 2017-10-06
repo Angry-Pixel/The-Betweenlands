@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_plant_drop",
+      "data": 5
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mire_coral_block",
+    "count": 4
+  }
+}

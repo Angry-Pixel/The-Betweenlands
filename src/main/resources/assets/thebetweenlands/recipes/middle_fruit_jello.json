@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:sludge_jello"
+    },
+    {
+      "item": "thebetweenlands:middle_fruit"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:middle_fruit_jello"
+  }
+}

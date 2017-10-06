@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "s s",
+    "scs",
+    " s "
+  ],
+  "key": {
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    },
+    "c": {
+      "item": "thebetweenlands:weedwood_chest"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:syrmorite_hopper"
+  }
+}

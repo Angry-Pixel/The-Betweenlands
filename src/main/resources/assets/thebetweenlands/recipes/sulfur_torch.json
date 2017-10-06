@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "I"
+  ],
+  "key": {
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 18
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:sulfur_torch",
+    "count": 4
+  }
+}

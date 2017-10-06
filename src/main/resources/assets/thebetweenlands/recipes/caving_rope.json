@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "rrr",
+    "ror",
+    "rrr"
+  ],
+  "key": {
+    "r": {
+      "item": "thebetweenlands:rope_item"
+    },
+    "o": {
+      "item": "thebetweenlands:octine_ingot"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:caving_rope",
+    "count": 8
+  }
+}

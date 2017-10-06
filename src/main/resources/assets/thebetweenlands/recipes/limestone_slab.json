@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:limestone"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:limestone_slab",
+    "count": 6
+  }
+}

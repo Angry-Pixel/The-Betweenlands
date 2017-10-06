@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:crimson_middle_gem_block"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:crimson_middle_gem",
+    "count": 9
+  }
+}

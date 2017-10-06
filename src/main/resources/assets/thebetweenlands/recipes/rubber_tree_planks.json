@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:log_rubber",
+      "data": 32767
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:rubber_tree_planks",
+    "count": 4
+  }
+}

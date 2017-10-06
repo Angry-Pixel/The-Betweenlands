@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:temple_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:temple_brick_stairs",
+    "count": 4
+  }
+}

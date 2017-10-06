@@ -119,7 +119,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		for (int xi = 0; xi < 2; xi++) {
 			for (int zi = 0; zi < 2; zi++) {
 				ItemStack item = tile.getStackInSlot(zi * 2 + xi + 1);
-				if (item == null) {
+				if (item.isEmpty()) {
 					continue;
 				}
 				float xOff = xi == 0 ? -0.18f : 1.18f;
@@ -150,7 +150,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 		//Render swamp talisman
 		ItemStack itemTalisman = tile.getStackInSlot(0);
-		if (itemTalisman != null) {
+		if (!itemTalisman.isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, y + 3.1D, z + 0.5D);
 			GlStateManager.rotate(renderRotation * 2.0f, 0, 1, 0);

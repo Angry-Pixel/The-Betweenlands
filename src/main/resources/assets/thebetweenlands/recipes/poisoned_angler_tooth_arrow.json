@@ -1,6 +1,5 @@
 {
   "type": "minecraft:crafting_shapeless",
-
   "ingredients": [
     {
       "item": "thebetweenlands:items_misc",

@@ -154,7 +154,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		TileEntity te = world.getTileEntity(altar.down());
 		if(te instanceof TileEntityMobSpawnerBetweenlands) {
 			MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
-			logic.setNextEntityName("thebetweenlands.dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
+			logic.setNextEntityName("thebetweenlands:dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
 		}
 		this.guard.setGuarded(world, altar, true);
 		this.guard.setGuarded(world, altar.down(), true);
