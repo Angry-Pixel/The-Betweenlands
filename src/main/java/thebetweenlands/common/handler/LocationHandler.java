@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
@@ -129,7 +130,7 @@ public class LocationHandler {
 	@SubscribeEvent
 	public static void onBlockRightClick(RightClickBlock event) {
 		EntityPlayer player = event.getEntityPlayer();
-		if(!player.isCreative() && event.getItemStack() != null && Block.getBlockFromItem(event.getItemStack().getItem()) != null) {
+		if(!player.isCreative() && !event.getItemStack().isEmpty() && Block.getBlockFromItem(event.getItemStack().getItem()) != Blocks.AIR) {
 			BlockPos resultingPos = event.getPos();
 			IBlockState blockState = player.world.getBlockState(resultingPos);
 			if(!blockState.getBlock().isReplaceable(player.world, resultingPos)) {

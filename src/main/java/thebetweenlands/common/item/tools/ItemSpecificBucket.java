@@ -68,7 +68,7 @@ public class ItemSpecificBucket extends ItemBLBucketFilled {
     public void onFillBucket(FillBucketEvent event) {
         // not for us to handle
         ItemStack emptyBucket = event.getEmptyBucket();
-        if (emptyBucket == null ||
+        if (emptyBucket.isEmpty() ||
                 !emptyBucket.isItemEqual(getEmpty()) ||
                 (isNbtSensitive() && ItemStack.areItemStackTagsEqual(emptyBucket, getEmpty()))) {
             return;

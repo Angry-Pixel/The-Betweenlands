@@ -57,7 +57,7 @@ public class ItemOctineIngot extends Item {
 				hasTinder = true;
 				isBlockTinder = true;
 			} else {
-				List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> entity.getItem() != null && this.isTinder(null, entity.getItem()));
+				List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> !entity.getItem().isEmpty() && this.isTinder(null, entity.getItem()));
 				if(!tinder.isEmpty()) {
 					hasTinder = true;
 				}
@@ -85,7 +85,7 @@ public class ItemOctineIngot extends Item {
 					hasTinder = true;
 					isBlockTinder = true;
 				} else {
-					List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> entity.getItem() != null && this.isTinder(null, entity.getItem()));
+					List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> !entity.getItem().isEmpty() && this.isTinder(null, entity.getItem()));
 					if(!tinder.isEmpty()) {
 						hasTinder = true;
 					}

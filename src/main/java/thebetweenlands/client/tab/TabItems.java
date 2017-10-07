@@ -9,7 +9,7 @@ public class TabItems extends CreativeTabBetweenlands {
 	}
 
 	@Override
-	public ItemStack getIconItemStack() {
+	public ItemStack getTabIconItem() {
 		return EnumTalisman.SWAMP_TALISMAN_0.create(1);
 	}
 }

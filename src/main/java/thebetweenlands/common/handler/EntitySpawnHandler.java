@@ -72,14 +72,14 @@ public class EntitySpawnHandler {
 	 */
 	private static void copyGemModifier(EntityLivingBase source, Entity entity) {
 		ItemStack activeItem = source.getHeldItem(source.getActiveHand());
-		if (activeItem == null) {
+		if (activeItem.isEmpty()) {
 			activeItem = source.getActiveItemStack();
 		}
-		if (activeItem == null) {
+		if (activeItem.isEmpty()) {
 			activeItem = source.getHeldItemMainhand();
 		}
 
-		if (activeItem != null) {
+		if (activeItem.isEmpty()) {
 			CircleGemType gem = CircleGemHelper.getGem(activeItem);
 			if (gem != CircleGemType.NONE) {
 				CircleGemHelper.addGem(entity, gem, CombatType.OFFENSIVE);

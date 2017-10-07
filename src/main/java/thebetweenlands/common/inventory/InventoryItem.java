@@ -47,7 +47,7 @@ public class InventoryItem implements IInventory {
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
 		ItemStack stack = getStackInSlot(slot);
-		if(stack != null) {
+		if(!stack.isEmpty()) {
 			if(stack.getCount() > amount) {
 				stack = stack.splitStack(amount);
 				this.markDirty();
@@ -75,7 +75,7 @@ public class InventoryItem implements IInventory {
 	@Override
 	public void markDirty() {
 		for (int i = 0; i < this.getSizeInventory(); ++i) {
-			if (this.getStackInSlot(i) != null && this.getStackInSlot(i).getCount() == 0) {
+			if (!this.getStackInSlot(i).isEmpty() && this.getStackInSlot(i).getCount() == 0) {
 				this.inventory.set(i, ItemStack.EMPTY);
 			}
 		}

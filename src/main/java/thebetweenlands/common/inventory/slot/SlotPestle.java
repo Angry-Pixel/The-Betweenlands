@@ -20,7 +20,7 @@ public class SlotPestle extends Slot {
 
     @Override
     public ItemStack onTake(EntityPlayer thePlayer, ItemStack stack) {
-        if (stack != null && slotNumber == 1)
+        if (!stack.isEmpty() && slotNumber == 1)
             if(stack.getTagCompound().getBoolean("active"))
                 stack.getTagCompound().setBoolean("active", false);
         return super.onTake(thePlayer, stack);

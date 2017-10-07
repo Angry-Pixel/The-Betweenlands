@@ -138,7 +138,7 @@ public class OverworldItemHandler {
 				if(!stack.isEmpty()) {
 					if(stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
 						ItemStack originalStack = ItemRegistry.ROTTEN_FOOD.getOriginalStack(stack);
-						if(originalStack != null) {
+						if(!originalStack.isEmpty()) {
 							originalStack.setCount(stack.getCount());
 							player.inventory.setInventorySlotContents(i, originalStack);
 						} else {
@@ -146,7 +146,7 @@ public class OverworldItemHandler {
 						}
 					} else if(stack.getItem() == ItemRegistry.TAINTED_POTION) {
 						ItemStack originalStack = ItemRegistry.TAINTED_POTION.getOriginalStack(stack);
-						if(originalStack != null) {
+						if(!originalStack.isEmpty()) {
 							originalStack.setCount(stack.getCount());
 							player.inventory.setInventorySlotContents(i, originalStack);
 						} else {
@@ -176,7 +176,7 @@ public class OverworldItemHandler {
 					}
 				} else if(stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
 					ItemStack originalStack = ItemRegistry.ROTTEN_FOOD.getOriginalStack(stack);
-					if(originalStack != null) {
+					if(!originalStack.isEmpty()) {
 						event.getItem().setItem(originalStack);
 					} else {
 						event.getItem().setDead();
@@ -184,7 +184,7 @@ public class OverworldItemHandler {
 					}
 				} else if(stack.getItem() == ItemRegistry.TAINTED_POTION) {
 					ItemStack originalStack = ItemRegistry.TAINTED_POTION.getOriginalStack(stack);
-					if(originalStack != null) {
+					if(!originalStack.isEmpty()) {
 						event.getItem().setItem(originalStack);
 					} else {
 						event.getItem().setDead();

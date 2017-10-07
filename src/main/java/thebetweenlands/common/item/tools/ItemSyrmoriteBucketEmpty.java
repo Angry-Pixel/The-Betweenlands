@@ -48,7 +48,7 @@ public class ItemSyrmoriteBucketEmpty extends ItemBLBucketEmpty {
 
 								for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 									ItemStack invStack = player.inventory.getStackInSlot(i);
-									if(invStack != null && EnumItemMisc.SWAMP_REED_ROPE.isItemOf(invStack)) {
+									if(!invStack.isEmpty() && EnumItemMisc.SWAMP_REED_ROPE.isItemOf(invStack)) {
 										player.inventory.decrStackSize(i, 1);
 										break;
 									}

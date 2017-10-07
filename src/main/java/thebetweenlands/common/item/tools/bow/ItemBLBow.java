@@ -12,6 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Enchantments;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
@@ -48,7 +49,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 					return 0.0F;
 				} else {
 					ItemStack itemStack = entityIn.getActiveItemStack();
-					return itemStack != null && itemStack == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
+					return !itemStack.isEmpty() && itemStack == stack ? (float)(stack.getMaxItemUseDuration() - entityIn.getItemInUseCount()) / 20.0F : 0.0F;
 				}
 			}
 		});
@@ -66,12 +67,12 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 					return stack;
 				}
 			}
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
-	protected boolean isArrow(@Nullable ItemStack stack) {
-		return stack != null && stack.getItem() instanceof ItemArrow;
+	protected boolean isArrow(ItemStack stack) {
+		return !stack.isEmpty() && stack.getItem() instanceof ItemArrow;
 	}
 
 	@Override
@@ -82,14 +83,14 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 			ItemStack arrow = this.findArrows(player);
 
 			int usedTicks = this.getMaxItemUseDuration(stack) - timeLeft;
-			usedTicks = ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) entityLiving, usedTicks, arrow != null || infiniteArrows);
+			usedTicks = ForgeEventFactory.onArrowLoose(stack, world, (EntityPlayer) entityLiving, usedTicks, !arrow.isEmpty() || infiniteArrows);
 
 			if (usedTicks < 0) {
 				return;
 			}
 
-			if (arrow != null || infiniteArrows) {
-				if (arrow == null) {
+			if (!arrow.isEmpty() || infiniteArrows) {
+				if (arrow.isEmpty()) {
 					arrow = new ItemStack(ItemRegistry.ANGLER_TOOTH_ARROW);
 				}
 
@@ -125,7 +126,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 
 						stack.damageItem(1, player);
 
-						if (infiniteArrows) {
+						if (infiniteArrows || player.capabilities.isCreativeMode && (arrow.getItem() == Items.SPECTRAL_ARROW || arrow.getItem() == Items.TIPPED_ARROW)) {
 							entityArrow.pickupStatus = EntityArrow.PickupStatus.CREATIVE_ONLY;
 						}
 
@@ -169,15 +170,15 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
-		ItemStack itemStackIn = playerIn.getHeldItem(hand);
-		boolean flag = this.findArrows(playerIn) != null;
-		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemStackIn, worldIn, playerIn, hand, flag);
+		ItemStack itemstack = playerIn.getHeldItem(hand);
+		boolean flag = !this.findArrows(playerIn).isEmpty();
+		ActionResult<ItemStack> ret = net.minecraftforge.event.ForgeEventFactory.onArrowNock(itemstack, worldIn, playerIn, hand, flag);
 		if (ret != null) return ret;
 		if (!playerIn.capabilities.isCreativeMode && !flag) {
-			return !flag ? new ActionResult<>(EnumActionResult.FAIL, itemStackIn) : new ActionResult<>(EnumActionResult.PASS, itemStackIn);
+			return new ActionResult<>(EnumActionResult.FAIL, itemstack);
 		} else {
 			playerIn.setActiveHand(hand);
-			return new ActionResult<>(EnumActionResult.SUCCESS, itemStackIn);
+			return new ActionResult<>(EnumActionResult.SUCCESS, itemstack);
 		}
 	}
 

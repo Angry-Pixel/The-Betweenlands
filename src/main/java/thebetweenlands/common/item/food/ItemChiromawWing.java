@@ -6,6 +6,9 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -38,16 +41,17 @@ public class ItemChiromawWing extends ItemBLFood {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
-        //TODO find way to add player
-//        if (player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-//            IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-//            if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
-//                list.add(TranslationHelper.translateToLocal("tooltip.chiromawWing.eat"));
-//            } else {
-//                list.add(TranslationHelper.translateToLocal("tooltip.chiromawWing.dontEat"));
-//            }
-//        }
+        EntityPlayer player = FMLClientHandler.instance().getClientPlayerEntity();
+        if (player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
+            IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+            if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
+                tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromawWing.eat"));
+            } else {
+                tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromawWing.dontEat"));
+            }
+        }
     }
 
     @Override

@@ -8,6 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.DiscoveryContainer;
@@ -31,6 +34,7 @@ public class ItemWeedwoodBucketInfusion extends Item {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         if (hasTag(stack)) {
             if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
@@ -54,22 +58,21 @@ public class ItemWeedwoodBucketInfusion extends Item {
                         stackMap.put(ingredient, 1);
                     }
                 }
-                //TODO find a way to use the player
-//                for (Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
-//                    ItemStack ingredient = stackCount.getKey();
-//                    int count = stackCount.getValue();
-//                    if (ingredient != null) {
-//                        list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
-//                        List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(player));
-//                        if (ingredientAspects.size() >= 1) {
-//                            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-//                                for (Aspect aspect : ingredientAspects) {
-//                                    list.add("  - " + aspect.type.getName() + " (" + aspect.getDisplayAmount() * count + ")");
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
+                for (Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
+                    ItemStack ingredient = stackCount.getKey();
+                    int count = stackCount.getValue();
+                    if (ingredient != null) {
+                        list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
+                        List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
+                        if (ingredientAspects.size() >= 1) {
+                            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+                                for (Aspect aspect : ingredientAspects) {
+                                    list.add("  - " + aspect.type.getName() + " (" + aspect.getDisplayAmount() * count + ")");
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
                 list.add("This Infusion Contains Nothing");
             }

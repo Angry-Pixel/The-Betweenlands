@@ -304,7 +304,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 8, 3, 12, getStateFromRotation(1, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 3, 13, getStateFromRotation(3, direction, SMOOTH_CRAGROCK_STAIRS, EnumRotationSequence.UPSIDE_DOWN_STAIR), 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 1, 14, SMOOTH_CRAGROCK, 1, 3, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 2, 13, direction, "thebetweenlands.termite").setMaxEntities(6).setDelayRange(120, 300).setSpawnInAir(false);
+		rotatedSpawner(world, x, y, z, 8, 2, 13, direction, "thebetweenlands:termite").setMaxEntities(6).setDelayRange(120, 300).setSpawnInAir(false);
 		rotatedCubeVolume(world, x, y, z, 9, 1, 11, ROOT, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 4, 1, 10, ROOT, 1, 2 + random.nextInt(2), 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 1, 14, ROOT, 1, 1 + random.nextInt(2), 1, direction);
@@ -541,7 +541,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 15, 10, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 16, 10, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 17, 10, direction, "thebetweenlands.chiromaw").setMaxEntities(4).setCheckRange(16.0D).setSpawnRange(3).setDelayRange(180, 500);
+		rotatedSpawner(world, x, y, z, 8, 17, 10, direction, "thebetweenlands:chiromaw").setMaxEntities(4).setCheckRange(16.0D).setSpawnRange(3).setDelayRange(180, 500);
 		rotatedCubeVolume(world, x, y, z, 6, 15, 8, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 7, 15, 8, SMOOTH_CRAGROCK, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 15, 8, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 1, 1, 1, direction);
@@ -651,7 +651,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 24, 10, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 25, 10, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 26, 10, direction, "thebetweenlands.swamp_hag").setMaxEntities(3).setCheckRange(16.0D).setDelayRange(180, 500).setSpawnInAir(false);
+		rotatedSpawner(world, x, y, z, 8, 26, 10, direction, "thebetweenlands:swamp_hag").setMaxEntities(3).setCheckRange(16.0D).setDelayRange(180, 500).setSpawnInAir(false);
 		rotatedCubeVolume(world, x, y, z, 10, 24, 8, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 24, 9, SMOOTH_CRAGROCK, 2, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 10, 24, 10, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 2, 1, 1, direction);
@@ -715,12 +715,12 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		NBTTagCompound entityNbt = new NBTTagCompound();
-		entityNbt.setString("id", "thebetweenlands.pyrad");
+		entityNbt.setString("id", "thebetweenlands:pyrad");
 		EntityPyrad pyrad = new EntityPyrad(world);
 		pyrad.getEntityAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
 		entityNbt.setTag("Attributes", SharedMonsterAttributes.writeBaseAttributeMapToNBT(pyrad.getAttributeMap()));
 		nbt.setTag("Entity", entityNbt);
-		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands.pyrad")
+		rotatedSpawner(world, x, y, z, 8, 35, 10, direction, "thebetweenlands:pyrad")
 		.setMaxEntities(3)
 		.setCheckRange(16.0D)
 		.setDelayRange(180, 500)
@@ -786,7 +786,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		//INTERIOR
 		rotatedCubeVolume(world, x, y, z, 8, 42, 10, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 43, 10, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 44, 10, direction, "thebetweenlands.wight").setMaxEntities(2).setCheckRange(24.0D).setDelayRange(300, 600).setSpawnInAir(false);
+		rotatedSpawner(world, x, y, z, 8, 44, 10, direction, "thebetweenlands:wight").setMaxEntities(2).setCheckRange(24.0D).setDelayRange(300, 600).setSpawnInAir(false);
 		rotatedCubeVolume(world, x, y, z, 6, 42, 12, SMOOTH_CRAGROCK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 42, 11, SMOOTH_CRAGROCK, 2, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 42, 10, SMOOTH_CRAGROCK_SLAB_UPSIDEDOWN, 2, 1, 1, direction);
@@ -970,10 +970,10 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		rotatedCubeVolume(world, x, y, z, 13, 57, 11, AIR, 1, 1, 1, direction, pos -> inactiveWisps.add(pos));
 		rotatedCubeVolume(world, x, y, z, 8, 52, 5, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 53, 5, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 54, 5, direction, "thebetweenlands.swamp_hag").setMaxEntities(3).setCheckRange(10.0D).setDelayRange(150, 500).setSpawnInAir(false);
+		rotatedSpawner(world, x, y, z, 8, 54, 5, direction, "thebetweenlands:swamp_hag").setMaxEntities(3).setCheckRange(10.0D).setDelayRange(150, 500).setSpawnInAir(false);
 		rotatedCubeVolume(world, x, y, z, 8, 52, 15, CRAGROCK_BRICK_WALL, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 8, 53, 15, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
-		rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands.wight").setMaxEntities(2).setCheckRange(24.0D).setDelayRange(300, 600).setSpawnInAir(false);
+		rotatedSpawner(world, x, y, z, 8, 54, 15, direction, "thebetweenlands:wight").setMaxEntities(2).setCheckRange(24.0D).setDelayRange(300, 600).setSpawnInAir(false);
 		rotatedLootChest(world, random, x, y, z, 7, 52, 5, direction, 5, 8, 2, 1, LootTableRegistry.DUNGEON_CHEST_LOOT);
 		rotatedLootChest(world, random, x, y, z, 9, 52, 5, direction, 5, 8, 2, 1, LootTableRegistry.DUNGEON_CHEST_LOOT);
 		rotatedLootChest(world, random, x, y, z, 7, 52, 15, direction, 5, 8, 2, 3, LootTableRegistry.DUNGEON_CHEST_LOOT);

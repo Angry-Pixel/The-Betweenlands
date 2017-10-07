@@ -39,13 +39,13 @@ public class ContainerPurifier extends Container {
 			if (slotIndex > 2) {
 				if (EnumItemMisc.SULFUR.isItemOf(slotStack)) {
 					if (!mergeItemStack(slotStack, 0, 1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				} else if (!mergeItemStack(slotStack, 1, 2, true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			} else if (!mergeItemStack(slotStack, 3, inventorySlots.size(), false))
-				return null;
+				return ItemStack.EMPTY;
 			if (slotStack.getCount() == 0)
 				slot.putStack(ItemStack.EMPTY);
 			else

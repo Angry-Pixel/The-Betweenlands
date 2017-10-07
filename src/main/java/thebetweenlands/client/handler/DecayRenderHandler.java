@@ -121,7 +121,7 @@ public class DecayRenderHandler {
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
 				int decay = capability.getDecayStats().getDecayLevel();
 				boolean isMainHand = event.getHand() == EnumHand.MAIN_HAND;
-				if(isMainHand && !player.isInvisible() && event.getItemStack() == null) {
+				if(isMainHand && !player.isInvisible() && event.getItemStack().isEmpty()) {
 					EnumHandSide enumhandside = isMainHand ? player.getPrimaryHand() : player.getPrimaryHand().opposite();
 					renderArmFirstPersonWithDecay(event.getEquipProgress(), event.getSwingProgress(), enumhandside, decay);
 					event.setCanceled(true);

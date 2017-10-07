@@ -448,10 +448,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, pos, 10, -8, 10, betweenstoneTilesFortress, 0, 1, 1, 1, direction);
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, pos, 10, -6, 10, spawner, 0, 1, 1, 1, direction);
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(10, -6, 10), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(21, -6, 21), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(10, -6, 21), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(21, -6, 10), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : rand.nextBoolean() ? "thebetweenlands.chiromaw" : "thebetweenlands.termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(10, -6, 10), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : rand.nextBoolean() ? "thebetweenlands:chiromaw" : "thebetweenlands:termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(21, -6, 21), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : rand.nextBoolean() ? "thebetweenlands:chiromaw" : "thebetweenlands:termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(10, -6, 21), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : rand.nextBoolean() ? "thebetweenlands:chiromaw" : "thebetweenlands:termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(21, -6, 10), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : rand.nextBoolean() ? "thebetweenlands:chiromaw" : "thebetweenlands:termite");
 
 			rotatedCubeVolume(world, rand, pos, 11, -8, 10, betweenstoneTiles, 0, 5, 1, 1, direction);
 			rotatedCubeVolume(world, rand, pos, 10, -8, 11, betweenstoneTiles, 0, 1, 1, 5, direction);
@@ -504,10 +504,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, pos, 6, 2, 6, spawner, 0, 1, 1, 1, direction);
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 2, 6), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : "thebetweenlands.chiromaw");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 2, 6), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : "thebetweenlands.chiromaw");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 2, 25), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : "thebetweenlands.chiromaw");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 2, 25), rand.nextBoolean() ? "thebetweenlands.swamp_hag" : "thebetweenlands.chiromaw");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 2, 6), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : "thebetweenlands:chiromaw");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 2, 6), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : "thebetweenlands:chiromaw");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 2, 25), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : "thebetweenlands:chiromaw");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 2, 25), rand.nextBoolean() ? "thebetweenlands:swamp_hag" : "thebetweenlands:chiromaw");
 
 			//1st floors
 			rotatedCubeVolume(world, rand, pos, 3, 5, 3, limestonePolished, 0, 7, 1, 7, direction);
@@ -520,26 +520,26 @@ public class WorldGenWightFortress extends WorldGenerator {
 			//Make Pyrads always active
 			NBTTagCompound nbt = new NBTTagCompound();
 			NBTTagCompound entityNbt = new NBTTagCompound();
-			entityNbt.setString("id", "thebetweenlands.pyrad");
+			entityNbt.setString("id", "thebetweenlands:pyrad");
 			EntityPyrad pyrad = new EntityPyrad(world);
 			pyrad.getEntityAttribute(EntityPyrad.AGRESSIVE).setBaseValue(1);
 			entityNbt.setTag("Attributes", SharedMonsterAttributes.writeBaseAttributeMapToNBT(pyrad.getAttributeMap()));
 			nbt.setTag("Entity", entityNbt);
 
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 8, 6), "thebetweenlands.pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 8, 6), "thebetweenlands.pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 8, 25), "thebetweenlands.pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 8, 25), "thebetweenlands.pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 8, 6), "thebetweenlands:pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 8, 6), "thebetweenlands:pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 8, 25), "thebetweenlands:pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 8, 25), "thebetweenlands:pyrad", logic -> logic.setNextEntity(new WeightedSpawnerEntity(nbt)).setCheckRange(16.0D).setMaxEntities(1));
 
 			//2nd floors
 			rotatedCubeVolume(world, rand, pos, 4, 11, 4, limestonePolished, 0, 5, 1, 5, direction);
 			rotatedCubeVolume(world, rand, pos, 6, 11, 6, limestoneChiselled, 0, 1, 1, 1, direction);
 			if(rand.nextBoolean())
 				rotatedCubeVolume(world, rand, pos, 6, 14, 6, spawner, 0, 1, 1, 1, direction);
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 14, 6), "thebetweenlands.termite");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 14, 6), "thebetweenlands.termite");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 14, 25), "thebetweenlands.termite");
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 14, 25), "thebetweenlands.termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 14, 6), "thebetweenlands:termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 14, 6), "thebetweenlands:termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 14, 25), "thebetweenlands:termite");
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 14, 25), "thebetweenlands:termite");
 
 			//3rd floors
 			rotatedCubeVolume(world, rand, pos, 4, 16, 4, limestoneChiselled, 0, 5, 1, 5, direction);
@@ -556,17 +556,17 @@ public class WorldGenWightFortress extends WorldGenerator {
 			rotatedCubeVolume(world, rand, pos, 5, 16, 8, betweenstoneTiles, 0, 3, 1, 1, direction);
 
 			rotatedCubeVolume(world, rand, pos, 6, 19, 6, spawner, 0, 1, 1, 1, direction);
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 6), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 6), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 25), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 25), "thebetweenlands.wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 6), "thebetweenlands:wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 6), "thebetweenlands:wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(25, 19, 25), "thebetweenlands:wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(6, 19, 25), "thebetweenlands:wight", logic -> logic.setCheckRange(32.0D).setDelayRange(3000, 5000).setMaxEntities(3));
 
 			if (rand.nextBoolean())
 				rotatedCubeVolume(world, rand, pos, 16, 26, 16, spawner, 0, 1, 1, 1, direction);
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(16, 26, 16), "thebetweenlands.chiromaw", logic -> logic.setSpawnRange(2));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(16, 26, 15), "thebetweenlands.chiromaw", logic -> logic.setSpawnRange(2));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(15, 26, 16), "thebetweenlands.chiromaw", logic -> logic.setSpawnRange(2));
-			BlockMobSpawnerBetweenlands.setMob(world, pos.add(15, 26, 15), "thebetweenlands.chiromaw", logic -> logic.setSpawnRange(2));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(16, 26, 16), "thebetweenlands:chiromaw", logic -> logic.setSpawnRange(2));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(16, 26, 15), "thebetweenlands:chiromaw", logic -> logic.setSpawnRange(2));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(15, 26, 16), "thebetweenlands:chiromaw", logic -> logic.setSpawnRange(2));
+			BlockMobSpawnerBetweenlands.setMob(world, pos.add(15, 26, 15), "thebetweenlands:chiromaw", logic -> logic.setSpawnRange(2));
 
 		}
 

@@ -151,7 +151,7 @@ public class CorrosionHelper {
 					float probability = holder.isInWater() ? 0.0014F : 0.0007F;
 					if (holder instanceof EntityPlayer) {
 						EntityPlayer player = (EntityPlayer) holder;
-						probability *= (isHeldItem && player.getActiveItemStack() != null ? 2.8F : 1.0F);
+						probability *= (isHeldItem && !player.getActiveItemStack().isEmpty() ? 2.8F : 1.0F);
 						if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 							IDecayCapability decay = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 							float playerCorruption = decay.getDecayStats().getDecayLevel() / 20.0F;
@@ -178,7 +178,7 @@ public class CorrosionHelper {
 	 * @param advancedItemTooltips
 	 */
 	public static void addCorrosionTooltips(ItemStack stack, List<String> lines, boolean advancedItemTooltips) {
-		if(stack != null && stack.getItem() instanceof ICorrodible) {
+		if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
 			int corrosion = corrodible.getCorrosion(stack);
 			int coating = corrodible.getCoating(stack);
@@ -212,7 +212,7 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static int getCorrosionStage(ItemStack stack) {
-		if(stack != null && stack.getItem() instanceof ICorrodible) {
+		if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
 			return getCorrosionStage(corrodible.getCorrosion(stack));
 		}

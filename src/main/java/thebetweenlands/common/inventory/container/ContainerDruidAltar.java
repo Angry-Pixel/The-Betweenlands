@@ -42,7 +42,7 @@ public class ContainerDruidAltar extends Container {
                 //Prevents wrong items from being shift-clicked into the slots
                 if (DruidAltarRecipe.isValidItem(stack1)) {
                     if (!mergeItemStack(stack1, 1, 5, false))
-                        return null;
+                        return ItemStack.EMPTY;
                 } else {
                     //Moves items from hotbar to inventory and vice versa
                     if (slotIndex < 32) {
@@ -54,7 +54,7 @@ public class ContainerDruidAltar extends Container {
                     }
                 }
             } else if (!mergeItemStack(stack1, 5, inventorySlots.size(), false))
-                return null;
+                return ItemStack.EMPTY;
             if (stack1.getCount() == 0)
                 slot.putStack(ItemStack.EMPTY);
             else
@@ -62,7 +62,7 @@ public class ContainerDruidAltar extends Container {
             if (stack1.getCount() != stack.getCount())
                 slot.onTake(player, stack1);
             else
-                return null;
+                return ItemStack.EMPTY;
         }
         return stack;
     }

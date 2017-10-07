@@ -36,7 +36,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 			int k = row + col * INV_WIDTH;
 			return this.getStackInSlot(k);
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -52,7 +52,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (this.stackList.get(slot) != null) {
+		if (!this.stackList.get(slot).isEmpty()) {
 			ItemStack stack;
 
 			if (this.stackList.get(slot).getCount() <= amount) {
@@ -71,7 +71,7 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 				return stack;
 			}
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 

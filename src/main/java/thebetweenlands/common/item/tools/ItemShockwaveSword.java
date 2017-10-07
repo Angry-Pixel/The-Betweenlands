@@ -102,7 +102,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 
 							IBlockState block = world.getBlockState(new BlockPos(originX, originY, originZ));
 
-							if (block != null && block.isNormalCube() && !block.getBlock().hasTileEntity(block) 
+							if (block.isNormalCube() && !block.getBlock().hasTileEntity(block)
 									&& block.getBlockHardness(world, origin) <= 5.0F && block.getBlockHardness(world, origin) >= 0.0F
 									&& !world.getBlockState(origin.up()).isOpaqueCube()) {
 								stack.getTagCompound().setInteger("blockID", Block.getIdFromBlock(world.getBlockState(origin).getBlock()));

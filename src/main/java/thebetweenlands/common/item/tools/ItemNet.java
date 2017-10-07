@@ -28,7 +28,7 @@ public class ItemNet extends Item {
 				receivedItem = new ItemStack(ItemRegistry.GECKO);
 			}
 			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
-				if (target.getCustomNameTag() != null) {
+				if (!target.getCustomNameTag().isEmpty()) {
 					receivedItem.setStackDisplayName(target.getCustomNameTag());
 				}
 				player.world.spawnEntity(new EntityItem(player.world, player.posX, player.posY, player.posZ, receivedItem));

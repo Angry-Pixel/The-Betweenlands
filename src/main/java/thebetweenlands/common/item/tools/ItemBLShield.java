@@ -105,7 +105,7 @@ public class ItemBLShield extends ItemShield {
 		if(!attacked.world.isRemote && source.getTrueSource() instanceof EntityLivingBase) {
 			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
 			ItemStack activeItem = attacker.getActiveItemStack();
-			if(activeItem != null && activeItem.getItem() instanceof ItemAxe) {
+			if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemAxe) {
 				float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
 				float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
 				if(attacker.isSprinting() && attackStrength > 0.9F) {
@@ -164,7 +164,7 @@ public class ItemBLShield extends ItemShield {
 		@SubscribeEvent
 		public void onLivingAttacked(LivingAttackEvent event) {
 			EntityLivingBase attacked = event.getEntityLiving();
-			if(attacked.getActiveItemStack() != null && 
+			if(!attacked.getActiveItemStack().isEmpty() &&
 					attacked.getActiveItemStack().getItem() instanceof ItemBLShield &&
 					this.canBlockDamageSource(attacked, event.getSource())) {
 
@@ -230,9 +230,9 @@ public class ItemBLShield extends ItemShield {
 						if(attacked instanceof EntityPlayer)
 							net.minecraftforge.event.ForgeEventFactory.onPlayerDestroyItem((EntityPlayer)attacked, stack, enumhand);
 						if (enumhand == EnumHand.MAIN_HAND)
-							attacked.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, null);
+							attacked.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, ItemStack.EMPTY);
 						else
-							attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
+							attacked.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
 						//Shield break sound effect
 						attacked.world.setEntityState(attacked, (byte)30);
 					}

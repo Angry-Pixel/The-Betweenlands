@@ -1,21 +1,11 @@
 package thebetweenlands.common.tile;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityHopper;
 
 public class TileEntityHopperBetweenlands extends TileEntityHopper {
-    private String customName;
-
-    @Override
-    public void readFromNBT(NBTTagCompound compound) {
-        super.readFromNBT(compound);
-        if (compound.hasKey("CustomName", 8)) {
-            this.customName = compound.getString("CustomName");
-        }
-    }
 
     @Override
     public String getName() {
-        return this.hasCustomName() ? this.customName : "thebetweenlands.container.syrmorite_hopper";
+        return this.hasCustomName() ? this.customName : "tile.thebetweenlands.syrmorite_hopper.name";
     }
 }

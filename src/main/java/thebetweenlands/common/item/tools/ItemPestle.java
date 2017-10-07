@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.util.TranslationHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -30,8 +31,8 @@ public class ItemPestle extends Item {
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
-        list.add("Place Pestle in Mortar");
-        list.add(Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "% Remaining: " + (getMaxDamage() - getDamage(stack)) +" more uses." );
+        list.add(TranslationHelper.translateToLocal("tooltip.pestle"));
+        list.add(TranslationHelper.translateToLocal("tooltip.pestle.remaining", Math.round(100F - 100F / getMaxDamage() * getDamage(stack)), (getMaxDamage() - getDamage(stack))));
     }
 
     @Override

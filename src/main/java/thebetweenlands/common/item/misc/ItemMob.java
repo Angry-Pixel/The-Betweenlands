@@ -43,7 +43,7 @@ public class ItemMob extends Item {
                 entity.setCustomNameTag(stack.getDisplayName());
             world.spawnEntity(entity);
             entity.playLivingSound();
-            player.setHeldItem(hand, null);
+            player.setHeldItem(hand, ItemStack.EMPTY);
             return EnumActionResult.SUCCESS;
         }
         return EnumActionResult.FAIL;

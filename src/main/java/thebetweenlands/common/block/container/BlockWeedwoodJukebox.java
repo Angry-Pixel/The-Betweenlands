@@ -18,9 +18,9 @@ public class BlockWeedwoodJukebox extends BlockJukebox {
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
         ItemStack itemstack = ((BlockJukebox.TileEntityJukebox) world.getTileEntity(pos)).getRecord();
-        if (itemstack != null && itemstack.getItem() instanceof ItemBLRecord)
+        if (!itemstack.isEmpty() && itemstack.getItem() instanceof ItemBLRecord)
             return Item.getIdFromItem(itemstack.getItem()) + 1 - Item.getIdFromItem(ItemRegistry.ASTATOS);
-        else if (itemstack != null && itemstack.getItem() == ItemRegistry.GERTS_DONUT)
+        else if (!itemstack.isEmpty() && itemstack.getItem() == ItemRegistry.GERTS_DONUT)
             return 15;
         return 0;
     }

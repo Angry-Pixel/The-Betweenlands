@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.food;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,7 +28,7 @@ public class ItemRottenFood extends ItemBLFood {
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		ItemStack originalStack = this.getOriginalStack(stack);
-		if (originalStack != null && originalStack.getItem() != null) {
+		if (!originalStack.isEmpty() && originalStack.getItem() != Items.AIR) {
 			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getDisplayName()).trim();
 		}
 		return super.getItemStackDisplayName(stack);
@@ -38,7 +39,7 @@ public class ItemRottenFood extends ItemBLFood {
 	}
 
 	public ItemStack getOriginalStack(ItemStack stack) {
-		return stack.getTagCompound() != null ? new ItemStack(stack.getTagCompound().getCompoundTag("originalStack")) : null;
+		return stack.getTagCompound() != null ? new ItemStack(stack.getTagCompound().getCompoundTag("originalStack")) : ItemStack.EMPTY;
 	}
 
 	@Override

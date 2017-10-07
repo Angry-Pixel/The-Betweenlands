@@ -59,7 +59,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 				stack.setTagInfo("burningTicks", new NBTTagInt(80));
 			} else if(attacker instanceof EntityLivingBase && attacked.world.rand.nextFloat() < 0.25F) {
 				ItemStack activeItem = ((EntityLivingBase)attacker).getActiveItemStack();
-				if(activeItem != null) {
+				if(!activeItem.isEmpty()) {
 					Item item = activeItem.getItem();
 					if(item == ItemRegistry.OCTINE_AXE || item == ItemRegistry.OCTINE_PICKAXE || item == ItemRegistry.OCTINE_SHIELD || 
 							item == ItemRegistry.OCTINE_SHOVEL || item == ItemRegistry.OCTINE_SWORD)
@@ -84,10 +84,10 @@ public class ItemWeedwoodShield extends ItemBLShield {
 					stack.damageItem(1, (EntityLivingBase)entityIn);
 				if(stack.getCount() <= 0 && entityIn instanceof EntityLivingBase) {
 					if(entityIn instanceof EntityPlayer) {
-						((EntityPlayer)entityIn).inventory.setInventorySlotContents(itemSlot, null);
+						((EntityPlayer)entityIn).inventory.setInventorySlotContents(itemSlot, ItemStack.EMPTY);
 						EntityLivingBase entityLiving = (EntityLivingBase) entityIn;
 						if(entityLiving.getHeldItemOffhand() == stack)
-							entityLiving.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, null);
+							entityLiving.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, ItemStack.EMPTY);
 					}
 				}
 			}

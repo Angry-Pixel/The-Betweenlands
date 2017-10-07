@@ -42,7 +42,7 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class ItemRegistry {
-    public final static Set<Item> ITEMS = new HashSet<Item>();
+    public final static Set<Item> ITEMS = new LinkedHashSet<>();
     //generic
     public static final Item ITEMS_MISC = new ItemMisc().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item ITEMS_CRUSHED = new ItemCrushed().setCreativeTab(BLCreativeTabs.HERBLORE);
@@ -340,6 +340,9 @@ public class ItemRegistry {
     @SubscribeEvent
     public static void registerItems(final RegistryEvent.Register<Item> event) {
         final IForgeRegistry<Item> registry = event.getRegistry();
+        for (Item item : BlockRegistry.ITEM_BLOCKS) {
+            registry.register(item);
+        }
         for (Item item : ITEMS) {
             registry.register(item);
         }

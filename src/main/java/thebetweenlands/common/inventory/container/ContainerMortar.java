@@ -61,7 +61,7 @@ public class ContainerMortar  extends Container {
                     if (!mergeItemStack(stack1, 3, 4, true))
                         return ItemStack.EMPTY;
             } else if (!mergeItemStack(stack1, 4, inventorySlots.size(), false))
-                return null;
+                return ItemStack.EMPTY;
             if (stack1.getCount() == 0)
                 slot.putStack(ItemStack.EMPTY);
             else

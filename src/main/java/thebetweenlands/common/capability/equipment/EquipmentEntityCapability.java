@@ -111,7 +111,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
                 if (inventoryNbt.hasKey("items")) {
                     int id = inventoryNbt.getInteger("id");
                     if (id < this.inventories.length) {
-                        NonNullList inventoryStacks = this.inventories[id];
+                        NonNullList<ItemStack> inventoryStacks = this.inventories[id];
                         NBTTagList slotList = inventoryNbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
                         for (int c = 0; c < slotList.tagCount(); c++) {
                             NBTTagCompound slotNbt = slotList.getCompoundTagAt(c);

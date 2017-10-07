@@ -26,11 +26,4 @@ public abstract class CreativeTabBetweenlands extends CreativeTabs {
 			}
 		}
 	}
-
-	@Override  
-	public ItemStack getTabIconItem() {
-//		if(!this.getIconItemStack().isEmpty())
-//			return this.getIconItemStack();
-		return new ItemStack(Items.LAVA_BUCKET);
-	}  
 }

@@ -48,7 +48,7 @@ public interface IGenericItem {
 	 * @return
 	 */
 	default boolean isItemOf(ItemStack stack) {
-		return !stack.isEmpty()&& stack.getItem() == this.getItem() && stack.getItemDamage() == this.getID();
+		return !stack.isEmpty() && stack.getItem() == this.getItem() && stack.getItemDamage() == this.getID();
 	}
 
 	/**
@@ -103,6 +103,6 @@ public interface IGenericItem {
 	 * @return
 	 */
 	public static IGenericItem getFromStack(Class<? extends Enum<?>> type, ItemStack stack) {
-		return stack == null ? null : getFromID(type, stack.getItemDamage());
+		return stack.isEmpty() ? null : getFromID(type, stack.getItemDamage());
 	}
 }

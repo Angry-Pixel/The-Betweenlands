@@ -48,13 +48,13 @@ public class PlayerDecayHandler {
 					int decay = stats.getDecayLevel();
 
 					if (decay >= 16) {
-						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 2, true, false));
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 2, true, false));
 						player.jumpMovementFactor = 0.001F;
 					} else if (decay >= 13) {
-						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 1, true, false));
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, true, false));
 						player.jumpMovementFactor = 0.002F;
 					} else if (decay >= 10) {
-						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 1, 0, true, false));
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 0, true, false));
 					}
 
 					if(!event.player.isRiding()) {
@@ -94,7 +94,7 @@ public class PlayerDecayHandler {
 
 	@SubscribeEvent
 	public static void onUseItem(LivingEntityUseItemEvent.Finish event) {
-		if (event.getItem() != null && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
+		if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
@@ -106,7 +106,7 @@ public class PlayerDecayHandler {
 
 	@SubscribeEvent
 	public static void onStartUsingItem(LivingEntityUseItemEvent.Start event) {
-		if(event.getItem() != null && event.getEntityLiving() instanceof EntityPlayer) {
+		if(!event.getItem().isEmpty() && event.getEntityLiving() instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
 			boolean isDecayFood = event.getItem().getItem() instanceof IDecayFood;
 			if(isDecayFood) {

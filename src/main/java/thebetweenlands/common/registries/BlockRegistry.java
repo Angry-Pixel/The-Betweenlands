@@ -434,7 +434,7 @@ public class BlockRegistry {
     public static final Block WALKWAY = new BlockWalkway();
     public static final Block WOOD_CHIP_PATH = new BlockChipPath();
     public static final Block THATCH_ROOF = new BlockThatchRoof();
-    public static final Set<Block> BLOCKS = new HashSet<Block>();
+    public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
     private BlockRegistry() {
     }
@@ -573,13 +573,6 @@ public class BlockRegistry {
         }
     }
 
-    @SubscribeEvent
-    public static void registerItemBlocks(final RegistryEvent.Register<Item> event) {
-        final IForgeRegistry<Item> registry = event.getRegistry();
-        for (ItemBlock item : ITEM_BLOCKS) {
-            registry.register(item);
-        }
-    }
 }
 
 

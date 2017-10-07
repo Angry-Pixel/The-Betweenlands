@@ -52,7 +52,7 @@ public class InventoryEquipment implements IInventory, ITickable {
     @Override
     @Nullable
     public ItemStack removeStackFromSlot(int index) {
-        ItemStack stack = null;
+        ItemStack stack = ItemStack.EMPTY;
         if (index < this.getSizeInventory()) {
             stack = ItemStackHelper.getAndRemove(inventory, index);
             this.markDirty();
@@ -63,7 +63,7 @@ public class InventoryEquipment implements IInventory, ITickable {
     @Override
     @Nullable
     public ItemStack decrStackSize(int index, int count) {
-        ItemStack stack = null;
+        ItemStack stack = ItemStack.EMPTY;
         if (index < this.getSizeInventory()) {
             stack = ItemStackHelper.getAndSplit(inventory, index, count);
             this.markDirty();
@@ -151,7 +151,7 @@ public class InventoryEquipment implements IInventory, ITickable {
     @Override
     @Nullable
     public ItemStack getStackInSlot(int index) {
-        return index >= this.getSizeInventory() ? null : this.inventory.get(index);
+        return index >= this.getSizeInventory() ? ItemStack.EMPTY : this.inventory.get(index);
     }
 
     @Override
