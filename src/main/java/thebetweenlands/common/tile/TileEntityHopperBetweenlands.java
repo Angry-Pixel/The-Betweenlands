@@ -18,9 +18,4 @@ public class TileEntityHopperBetweenlands extends TileEntityHopper {
     public String getName() {
         return this.hasCustomName() ? this.customName : "thebetweenlands.container.syrmorite_hopper";
     }
-
-    @Override
-    public String getGuiID() {
-        return "thebetweenands:syrmorite_hopper";
-    }
 }
