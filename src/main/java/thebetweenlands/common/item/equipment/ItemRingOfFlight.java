@@ -168,7 +168,7 @@ public class ItemRingOfFlight extends ItemRing {
 						IInventory inv = equipmentCap.getInventory(EnumEquipmentInventory.RING);
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							ItemStack stack = inv.getStackInSlot(i);
-							if(stack != null && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
+							if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
 								canPlayerFly = true;
 								break;
 							}

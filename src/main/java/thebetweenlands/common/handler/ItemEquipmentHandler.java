@@ -73,14 +73,14 @@ public class ItemEquipmentHandler {
 		if(player != null && target != null && target instanceof EntityPlayer == false) {
 			ItemStack heldItem = event.getItemStack();
 
-			if(!player.isSneaking() && heldItem != null) {
+			if(!player.isSneaking() && !heldItem.isEmpty()) {
 				if(heldItem.getItem() instanceof IEquippable) {
 					IEquippable equippable = (IEquippable) heldItem.getItem();
 
 					if(equippable.canEquipOnRightClick(heldItem, player, target)) {
 						ItemStack result = EquipmentHelper.equipItem(player, target, heldItem, false);
 
-						if(result == null || result.getCount() != heldItem.getCount()) {
+						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
 							if(!player.capabilities.isCreativeMode) {
 								player.setHeldItem(event.getHand(), result);
 							}
@@ -89,7 +89,7 @@ public class ItemEquipmentHandler {
 						}
 					}
 				}
-			} else if(player.isSneaking() && heldItem == null) {
+			} else if(player.isSneaking() && heldItem.isEmpty()) {
 				if(EquipmentHelper.tryPlayerUnequip(player, target)) {
 					player.swingArm(EnumHand.MAIN_HAND);
 					event.setCanceled(true);
@@ -108,7 +108,7 @@ public class ItemEquipmentHandler {
 				heldItem = player.getHeldItemMainhand();
 			}
 
-			if(player != null && heldItem != null && heldItem.getItem() instanceof IEquippable) {
+			if(player != null && !heldItem.isEmpty() && heldItem.getItem() instanceof IEquippable) {
 				IEquippable equippable = (IEquippable) heldItem.getItem();
 
 				if(equippable.canEquipOnRightClick(heldItem, player, player)) {
@@ -121,7 +121,7 @@ public class ItemEquipmentHandler {
 					} else {
 						ItemStack result = EquipmentHelper.equipItem(player, player, heldItem, false);
 
-						if(result == null || result.getCount() != heldItem.getCount()) {
+						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
 							if(!player.capabilities.isCreativeMode) {
 								player.setHeldItem(event.getHand(), result);
 							}
@@ -148,7 +148,7 @@ public class ItemEquipmentHandler {
 					for(int i = 0; i < inv.getSizeInventory(); i++) {
 						ItemStack stack = inv.getStackInSlot(i);
 
-						if(stack != null) {
+						if(!stack.isEmpty()) {
 							if(stack.getItem() instanceof IEquippable) {
 								IEquippable equippable = (IEquippable) stack.getItem();
 								equippable.onUnequip(stack, entity, inv);

@@ -57,7 +57,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
-                if (stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+                if (!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
                     return stack;
                 }
             }
@@ -66,7 +66,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
         InventoryPlayer playerInventory = player.inventory;
         for (int i = 0; i < InventoryPlayer.getHotbarSize(); i++) {
             ItemStack stack = playerInventory.getStackInSlot(i);
-            if (stack != null && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+            if (!stack.isEmpty() && stack.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
                 return stack;
             }
         }

@@ -62,7 +62,7 @@ public class CommandAspectDiscovery extends CommandBase {
 		case "discover":
 			switch(args[1]) {
 			case "held":
-				if(player.getHeldItemMainhand() == null) {
+				if(player.getHeldItemMainhand().isEmpty()) {
 					throw new CommandException("command.aspectdiscovery.held.null");
 				}
 				DiscoveryContainer<?> mergedKnowledge = DiscoveryContainer.getMergedDiscoveryContainer(player);
@@ -86,7 +86,7 @@ public class CommandAspectDiscovery extends CommandBase {
 			List<DiscoveryContainer<?>> discoveryContainers = DiscoveryContainer.getWritableDiscoveryContainers(player);
 			switch(args[1]) {
 			case "held":
-				if(player.getHeldItemMainhand() == null) {
+				if(player.getHeldItemMainhand().isEmpty()) {
 					throw new CommandException("command.aspectdiscovery.held.null");
 				}
 				for(DiscoveryContainer<?> container : discoveryContainers)

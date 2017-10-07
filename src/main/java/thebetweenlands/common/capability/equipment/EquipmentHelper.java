@@ -1,5 +1,6 @@
 package thebetweenlands.common.capability.equipment;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
@@ -21,7 +22,7 @@ public class EquipmentHelper {
 	 * @param stack
 	 * @return
 	 */
-	@Nullable
+	@Nonnull
 	public static ItemStack equipItem(@Nullable EntityPlayer player, Entity target, ItemStack stack, boolean simulate) {
 		if(stack.getItem() instanceof IEquippable) {
 			if(target.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {

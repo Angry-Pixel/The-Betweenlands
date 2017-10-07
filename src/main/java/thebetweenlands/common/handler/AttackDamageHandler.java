@@ -43,7 +43,7 @@ public class AttackDamageHandler {
 				//BL mobs overworld item resistance
 				EntityPlayer entityPlayer = (EntityPlayer) source.getTrueSource();
 				ItemStack heldItem = entityPlayer.getHeldItem(entityPlayer.getActiveHand());
-				if (heldItem != null) {
+				if (!heldItem.isEmpty()) {
 					boolean isWhitelisted = heldItem.getItem() instanceof ItemBLSword || heldItem.getItem() instanceof ItemBLAxe || heldItem.getItem() instanceof ItemBLPickaxe || heldItem.getItem() instanceof ItemBLShovel || OverworldItemHandler.WHITELIST.contains(heldItem.getItem());
 					if (!isWhitelisted) {
 						damage = damage * DAMAGE_REDUCTION;
@@ -64,7 +64,7 @@ public class AttackDamageHandler {
 
 				for(int i = 0; i < inv.getSizeInventory(); i++) {
 					ItemStack stack = inv.getStackInSlot(i);
-					if(stack != null && stack.getItem() == ItemRegistry.RING_OF_POWER) {
+					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_POWER) {
 						rings++;
 					}
 				}

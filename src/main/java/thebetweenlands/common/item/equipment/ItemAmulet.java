@@ -78,7 +78,7 @@ public class ItemAmulet extends Item implements IEquippable {
 
         ItemStack result = EquipmentHelper.equipItem(null, entity, amulet, false);
 
-        return result == null || result.getCount() != amulet.getCount();
+        return result.isEmpty() || result.getCount() != amulet.getCount();
 
     }
 
@@ -111,7 +111,7 @@ public class ItemAmulet extends Item implements IEquippable {
 
             for (int i = 0; i < inv.getSizeInventory(); i++) {
                 ItemStack stack = inv.getStackInSlot(i);
-                if (stack != null && CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
+                if (!stack.isEmpty() && CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
                     items.add(stack);
                 }
             }

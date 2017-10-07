@@ -20,13 +20,13 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityCapability, IEquipmentCapability, EntityPlayer> implements IEquipmentCapability, ISerializableCapability {
-    private ItemStack[][] inventories;
+    private NonNullList<ItemStack>[] inventories;
     private int amuletSlots = 1;
 
     public EquipmentEntityCapability() {
-        this.inventories = new ItemStack[EnumEquipmentInventory.values().length][];
+        this.inventories = new NonNullList[EnumEquipmentInventory.values().length];
         for (EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
-            this.inventories[inventory.id] = new ItemStack[inventory.maxSize];
+            this.inventories[inventory.id] = NonNullList.withSize(inventory.maxSize, ItemStack.EMPTY);
         }
     }
 
@@ -62,24 +62,11 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
 
     @Override
     public IInventory getInventory(EnumEquipmentInventory inventory) {
-        NonNullList<ItemStack> list;
         switch (inventory) {
             case AMULET:
-                list = NonNullList.withSize(this.inventories[inventory.id].length, ItemStack.EMPTY);
-                for (int i = 0; i < inventories[inventory.id].length; i++) {
-                    if (inventories[inventory.id][i] != null)
-                        list.set(i, inventories[inventory.id][i]);
-                    list.set(i, ItemStack.EMPTY);
-                }
-                return new InventoryEquipmentAmulets(this, list);
+                return new InventoryEquipmentAmulets(this, inventories[inventory.id]);
             default:
-                list = NonNullList.withSize(this.inventories[inventory.id].length, ItemStack.EMPTY);
-                for (int i = 0; i < inventories[inventory.id].length; i++) {
-                    if (inventories[inventory.id][i] != null)
-                        list.set(i, inventories[inventory.id][i]);
-                    list.set(i, ItemStack.EMPTY);
-                }
-                return new InventoryEquipment(this, list);
+                return new InventoryEquipment(this, inventories[inventory.id]);
         }
     }
 
@@ -90,9 +77,9 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
         for (int i = 0; i < this.inventories.length; i++) {
             NBTTagCompound inventoryNbt = new NBTTagCompound();
             NBTTagList slotList = new NBTTagList();
-            for (int c = 0; c < this.inventories[i].length; c++) {
-                ItemStack stack = this.inventories[i][c];
-                if (stack != null) {
+            for (int c = 0; c < this.inventories[i].size(); c++) {
+                ItemStack stack = this.inventories[i].get(c);
+                if (!stack.isEmpty()) {
                     NBTTagCompound slotNbt = new NBTTagCompound();
                     slotNbt.setInteger("slot", c);
                     slotNbt.setTag("stack", stack.writeToNBT(new NBTTagCompound()));
@@ -112,7 +99,7 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         for (EnumEquipmentInventory inventory : EnumEquipmentInventory.values()) {
-            this.inventories[inventory.id] = new ItemStack[inventory.maxSize];
+            this.inventories[inventory.id] = NonNullList.withSize(inventory.maxSize, ItemStack.EMPTY);
         }
         if (nbt.hasKey("amuletSlots")) {
             this.amuletSlots = nbt.getInteger("amuletSlots");
@@ -124,13 +111,13 @@ public class EquipmentEntityCapability extends EntityCapability<EquipmentEntityC
                 if (inventoryNbt.hasKey("items")) {
                     int id = inventoryNbt.getInteger("id");
                     if (id < this.inventories.length) {
-                        ItemStack[] inventoryStacks = this.inventories[id];
+                        NonNullList inventoryStacks = this.inventories[id];
                         NBTTagList slotList = inventoryNbt.getTagList("items", Constants.NBT.TAG_COMPOUND);
                         for (int c = 0; c < slotList.tagCount(); c++) {
                             NBTTagCompound slotNbt = slotList.getCompoundTagAt(c);
                             int slot = slotNbt.getInteger("slot");
-                            if (slot < inventoryStacks.length) {
-                                inventoryStacks[slot] = new ItemStack(slotNbt.getCompoundTag("stack"));
+                            if (slot < inventoryStacks.size()) {
+                                inventoryStacks.set(slot, new ItemStack(slotNbt.getCompoundTag("stack")));
                             }
                         }
                     }

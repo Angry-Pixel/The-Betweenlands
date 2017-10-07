@@ -142,14 +142,14 @@ public class RadialMenuHandler {
 					for(int i = 0; i < inventory.getSizeInventory(); i++) {
 						ItemStack stack = inventory.getStackInSlot(i);
 
-						if(stack != null && stack.getItem() instanceof IEquippable) {
+						if(!stack.isEmpty() && stack.getItem() instanceof IEquippable) {
 							IEquippable equippable = (IEquippable) stack.getItem();
 
 							if(equippable.getEquipmentCategory(stack) == type) {
 								if(equippable.canEquip(stack, player, player)) {
 									ItemStack res = EquipmentHelper.equipItem(player, player, stack, true);
 
-									if(res == null || res.getCount() != stack.getCount()) {
+									if(res.isEmpty() || res.getCount() != stack.getCount()) {
 										categories.add(new Categories.EquipCategory(I18n.format("equipment.menu.equip", stack.getDisplayName()), 0x6010AA10, 0xDD10AA10, stack, type, i));
 									}
 								}
@@ -165,7 +165,7 @@ public class RadialMenuHandler {
 					for(int i = 0; i < inv.getSizeInventory(); i++) {
 						ItemStack stack = inv.getStackInSlot(i);
 
-						if(stack != null) {
+						if(!stack.isEmpty()) {
 							if(stack.getItem() instanceof IEquippable &&
 									!((IEquippable) stack.getItem()).canUnequip(stack, player, player, inv)) {
 								continue;
@@ -348,7 +348,7 @@ public class RadialMenuHandler {
 					List<ItemStack> currentEquippables = new ArrayList<ItemStack>();
 					for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 						ItemStack stack = player.inventory.getStackInSlot(i);
-						if(stack != null && stack.getItem() instanceof IEquippable) {
+						if(!stack.isEmpty() && stack.getItem() instanceof IEquippable) {
 							currentEquippables.add(stack);
 						}
 					}

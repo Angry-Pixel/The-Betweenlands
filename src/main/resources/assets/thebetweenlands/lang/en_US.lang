@@ -731,14 +731,22 @@ chat.foodSickness.sick.11=I think I'll need a rest before I eat more of that
 chat.foodSickness.sick.12=No thanks, I'll have something else for a change
 chat.foodSickness.sick.13=It smells even worse than it looks, I'll find something else to eat
 chat.foodSickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here
+
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
+
 chat.rope.alreadyConnected=Already connected to another climbing rope
 chat.rope.disconnected=You were disconnected from the climbing rope
 chat.rope.tooFar=You're too far away from the last anchor point
+
 chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
+
 chat.tap.needsRope=You need a Reed Rope to create a %s
+
 chat.flintandsteel=It's too damp to set something on fire with %s
+
+chat.amulet.slot.added=Added a new amulet slot
+chat.amulet.slot.full=Can't add any more amulet slots
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

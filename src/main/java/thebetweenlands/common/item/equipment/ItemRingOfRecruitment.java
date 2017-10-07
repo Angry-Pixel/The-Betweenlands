@@ -91,7 +91,7 @@ public class ItemRingOfRecruitment extends ItemRing {
 
 			for(int i = 0; i < inv.getSizeInventory(); i++) {
 				ItemStack stack = inv.getStackInSlot(i);
-				if(stack != null && stack.getItem() == ItemRegistry.RING_OF_RECRUITMENT) {
+				if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_RECRUITMENT) {
 					hasRing = true;
 					break;
 				}

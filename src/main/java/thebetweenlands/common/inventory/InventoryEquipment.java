@@ -29,7 +29,7 @@ public class InventoryEquipment implements IInventory, ITickable {
 
         for (int i = 0; i < this.inventory.size(); i++) {
             ItemStack stack = this.inventory.get(i);
-            if (stack != null && !stack.isEmpty())
+            if (!stack.isEmpty())
                 this.prevTickStacks.set(i, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
         }
     }
