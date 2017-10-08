@@ -222,7 +222,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	protected boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
-		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(distanceX, distanceY, distanceZ));
+		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(distanceX, distanceY, distanceZ));
 		for (Entity entityNeighbor : entities) {
 			if (entityNeighbor instanceof EntityPlayer && this.getDistanceToEntity(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.disableDamage && this.getEntitySenses().canSee(entityNeighbor)))
 				return true;

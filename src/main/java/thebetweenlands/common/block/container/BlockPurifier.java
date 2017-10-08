@@ -23,11 +23,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidActionResult;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
@@ -76,15 +80,16 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 					Fluid fluid = FluidRegistry.SWAMP_WATER;
 					IFluidHandler handler = heldItem.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null);
 					FluidStack bucketFluid = handler.drain(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);
-					if(bucketFluid != null) {
-						int toFill = tile.fill(new FluidStack(fluid, Fluid.BUCKET_VOLUME), false);
-						if(toFill > 0) {
-							ItemStack prevItem = heldItem.copy();
-							tile.fill(handler.drain(new FluidStack(fluid, toFill), true), true);
-							if (player.capabilities.isCreativeMode) {
-								player.inventory.setInventorySlotContents(player.inventory.currentItem, prevItem);
+
+					if (bucketFluid != null) {
+						IItemHandler playerInventory = player.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+						if (playerInventory != null) {
+							FluidActionResult fluidActionResult = FluidUtil.tryEmptyContainerAndStow(heldItem, tile, playerInventory, Integer.MAX_VALUE, player);
+
+							if (fluidActionResult.isSuccess()) {
+								player.setHeldItem(hand, fluidActionResult.getResult());
+								return true;
 							}
-							return true;
 						}
 					}
 				}

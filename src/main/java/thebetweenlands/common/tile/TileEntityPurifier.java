@@ -185,9 +185,9 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
                         if (!inventory.get(i).isEmpty())
                             if (inventory.get(i).getCount() - 1 <= 0)
                                 inventory.set(i, ItemStack.EMPTY);
+                            else
+                                inventory.get(i).shrink(1);
                     extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
-                    inventory.get(1).shrink(1);
-                    inventory.get(0).shrink(1);
                     if (inventory.get(2).isEmpty()) {
                         inventory.set(2, output.copy());
                     } else if (inventory.get(2).isItemEqual(output)) {
@@ -257,29 +257,6 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
             return new int[]{1};
         return new int[]{0};
     }
-
-	/*public ItemStack fillTankWithBucket(ItemStack bucket) {
-        FluidStack fluid = FluidContainerRegistry.getFluidForFilledItem(bucket);
-		System.out.println(fluid);
-		if (fluid == null && bucket.getItem() instanceof IFluidContainerItem) {
-			fluid = ((IFluidContainerItem)bucket.getItem()).getFluid(bucket);
-			int amountFilled = fill(null, fluid, false);
-			if (amountFilled == fluid.amount) {
-				fill(null, fluid, true);
-				ItemStack t = bucket;
-				((IFluidContainerItem)bucket.getItem()).drain(t, ((IFluidContainerItem)bucket.getItem()).getCapacity(t), true);
-				return t;
-			}
-		}
-		if (fluid != null) {
-			int amountFilled = fill(null, fluid, false);
-			if (amountFilled == fluid.amount) {
-				fill(null, fluid, true);
-				return FluidContainerRegistry.drainFluidContainer(bucket);
-			}
-		}
-		return bucket;
-	}*/
 
     @Override
     public IFluidTankProperties[] getTankProperties() {

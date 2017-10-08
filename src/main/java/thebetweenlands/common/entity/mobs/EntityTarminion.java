@@ -148,7 +148,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 					for(int i = 0; i < 8; i++) {
 						this.playSound(SoundRegistry.TAR_BEAST_STEP, 1F, (this.rand.nextFloat() * 0.4F + 0.8F) * 0.8F);
 					}
-					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getEntityBoundingBox().expand(5.25F, 5.25F, 5.25F));
+					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getEntityBoundingBox().grow(5.25F, 5.25F, 5.25F));
 					for(EntityCreature e : affectedEntities) {
 						if(e == this || e.getDistanceToEntity(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarminion) continue;
 						double dst = e.getDistanceToEntity(this);

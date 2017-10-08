@@ -118,7 +118,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			} else {
 				damageSource = DamageSource.GENERIC;
 			}
-			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D));
+			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D));
 			for(EntityLivingBase entity : entities) {
 				if (entity != null) {
 					if (entity instanceof EntityLivingBase) {

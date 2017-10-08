@@ -124,7 +124,7 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		LocationPortal location = new LocationPortal(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), pos);
-		location.addBounds(new AxisAlignedBB(pos).expand(8, 10, 8).offset(0, 8, 0));
+		location.addBounds(new AxisAlignedBB(pos).grow(8, 10, 8).offset(0, 8, 0));
 		location.setSeed(rand.nextLong());
 		location.setDirty(true);
 		location.setVisible(false);

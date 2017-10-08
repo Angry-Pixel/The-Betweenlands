@@ -62,7 +62,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 			this.puppeteer = null;
 		} else if(this.puppeteer == null || !this.puppeteer.isEntityAlive() || !this.puppeteer.getUniqueID().equals(this.puppeteerUUID)) {
 			this.puppeteer = null;
-			for(Entity entity : this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getEntityBoundingBox().expand(24.0D, 24.0D, 24.0D))) {
+			for(Entity entity : this.getEntity().getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntity().getEntityBoundingBox().grow(24.0D, 24.0D, 24.0D))) {
 				if(entity.getUniqueID().equals(this.puppeteerUUID)) {
 					this.puppeteer = entity;
 					break;

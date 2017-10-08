@@ -145,7 +145,7 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 						if (rand.nextFloat() < 0.3F) sendRustleEffect((rand.nextFloat() + 0.2F) * 0.06F);
 					}
 					if (timeHiding > MIN_HIDE_TIME) {
-						List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));
+						List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE, PLAYER_MIN_DISTANCE));
 						if (players.size() < 1 && rand.nextFloat() < UNHIDE_CHANCE) {
 							stopHiding();
 						}

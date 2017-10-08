@@ -135,7 +135,7 @@ public class EntityRopeNode extends Entity {
 				if(nextNode.getDistanceToEntity(this) > 1.5D) {
 					this.pickUp = true;
 				}
-				if(this.pickUp && nextNode.getEntityBoundingBox().expand(0.4D, 0.4D, 0.4D).intersects(this.getEntityBoundingBox())) {
+				if(this.pickUp && nextNode.getEntityBoundingBox().grow(0.4D, 0.4D, 0.4D).intersects(this.getEntityBoundingBox())) {
 					this.removeNode(nextNode);
 					EntityPlayer player = (EntityPlayer) nextNode;
 					if(player.inventory.addItemStackToInventory(new ItemStack(ItemRegistry.CAVING_ROPE, 1))) {
@@ -368,7 +368,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public boolean isAttached() {
-		return !this.world.getCollisionBoxes(this, this.getEntityBoundingBox().expand(0.1D, 0.1D, 0.1D)).isEmpty();
+		return !this.world.getCollisionBoxes(this, this.getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D)).isEmpty();
 	}
 
 	public EntityRopeNode extendRope(Entity entity, double x, double y, double z) {
@@ -469,7 +469,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	private Entity getEntityByUUID(UUID uuid) {
-		for(Entity entity : (List<Entity>) this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(24, 24, 24))) {
+		for(Entity entity : (List<Entity>) this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(24, 24, 24))) {
 			if (uuid.equals(entity.getUniqueID())) {
 				return entity;
 			}

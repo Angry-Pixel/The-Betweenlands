@@ -85,7 +85,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -181,7 +181,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			this.rotation += 1.0F;
 			this.getDataManager().set(ROTATION, this.rotation);
 
-			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().expand(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
+			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
 			for(EntityPlayer target : targets) {
 				Vec3d[] vertices = this.getTriangleVertices(1);
 				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, this.posY + 1, target.posZ - this.posZ), new Vec3d(0, -16, 0), vertices[0], vertices[1], vertices[2])) {

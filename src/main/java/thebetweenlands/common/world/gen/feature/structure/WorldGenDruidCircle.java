@@ -98,7 +98,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 		LocationGuarded location = new LocationGuarded(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(altar), "druidAltar", EnumLocationType.NONE);
 		this.guard = location.getGuard();
-		location.addBounds(new AxisAlignedBB(new BlockPos(altar)).expand(8, 10, 8));
+		location.addBounds(new AxisAlignedBB(new BlockPos(altar)).grow(8, 10, 8));
 		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(rand.nextLong());

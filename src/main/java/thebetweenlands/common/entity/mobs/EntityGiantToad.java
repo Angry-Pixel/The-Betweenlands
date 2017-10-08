@@ -197,7 +197,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 			}
 			if (this.isBeingRidden()) {
-				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(0.6D, 0.6D, 0.6D));
+				List<EntityLivingBase> targets = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(0.6D, 0.6D, 0.6D));
 				EntityLivingBase closestTarget = null;
 				float lastAngDiff = 0.0F;
 				Entity controllingPassenger = this.getControllingPassenger();

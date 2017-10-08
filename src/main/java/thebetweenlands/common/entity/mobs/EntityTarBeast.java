@@ -271,7 +271,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					this.sheddingProgress = 0;
 					this.setShedding(false);
 					if(this.getAttackTarget() != null) {
-						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(6.0F, 6.0F, 6.0F));
+						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(6.0F, 6.0F, 6.0F));
 						for(EntityLivingBase e : affectedEntities) {
 							if(e == this || e.getDistanceToEntity(this) > 6.0F || !e.canEntityBeSeen(this) || e instanceof EntityTarBeast) continue;
 							if(e instanceof EntityPlayer) {
@@ -321,7 +321,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 				if(this.isSucking()) {
 					this.suckingProgress++;
 
-					List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(10.0F, 10.0F, 10.0F));
+					List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(10.0F, 10.0F, 10.0F));
 					for(Entity e : affectedEntities) {
 						if(e == this || e.getDistanceToEntity(this) > 10.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
 						Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);

@@ -57,7 +57,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
                 return false;
             }
         } else {
-            List list = entity.world.getEntitiesWithinAABB(targetEntityClass, entity.getEntityBoundingBox().expand(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
+            List list = entity.world.getEntitiesWithinAABB(targetEntityClass, entity.getEntityBoundingBox().grow(targetDistanceFromEntity, 3, targetDistanceFromEntity), Predicates.and(EntitySelectors.IS_ALIVE, EntitySelectors.CAN_AI_TARGET));
             if (list.isEmpty()) {
                 return false;
             }

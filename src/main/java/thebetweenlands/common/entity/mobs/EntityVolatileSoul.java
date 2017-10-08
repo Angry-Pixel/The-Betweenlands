@@ -153,7 +153,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz, ParticleArgs.get().withMotion(vec.x * 0.05F, vec.y * 0.05F, vec.z * 0.05F));
 			}
 			if(this.target == null || this.target.isDead) {
-				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
+				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
 				List<Entity> eligibleTargets = new ArrayList<Entity>();
 				if(this.world.rand.nextInt(4) > 0) {
 					for(Entity e : targetList) {
@@ -200,13 +200,13 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				nextPos = new Vec3d(hitObject.hitVec.x, hitObject.hitVec.y, hitObject.hitVec.z);
 			}
 			Entity hitEntity = null;
-			List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).expand(2.0D, 2.0D, 2.0D));
+			List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(this.motionX, this.motionY, this.motionZ).grow(2.0D, 2.0D, 2.0D));
 			double minDist = 0.0D;
 			for (int i = 0; i < hitEntities.size(); ++i) {
 				Entity entity1 = (Entity)hitEntities.get(i);
 				if (entity1.canBeCollidedWith() && (this.ticksInAir >= 10)) {
 					float f = 0.3F;
-					AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().expand((double)f, (double)f, (double)f);
+					AxisAlignedBB axisalignedbb = entity1.getEntityBoundingBox().grow((double)f, (double)f, (double)f);
 					RayTraceResult movingobjectposition1 = axisalignedbb.calculateIntercept(currentPos, nextPos);
 					if (movingobjectposition1 != null) {
 						double d1 = currentPos.distanceTo(movingobjectposition1.hitVec);

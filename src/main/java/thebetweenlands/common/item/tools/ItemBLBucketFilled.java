@@ -54,7 +54,7 @@ public class ItemBLBucketFilled extends UniversalBucket {
 
 		@Override
 		protected void setFluid(@Nullable FluidStack fluidStack) {
-			if(fluidStack == null && this.container.getItem() instanceof UniversalBucket) {
+			if(fluidStack == null) {
 				this.container = new ItemStack(((UniversalBucket)this.container.getItem()).getEmpty().writeToNBT(new NBTTagCompound()));
 			} else if (FluidRegistry.getBucketFluids().contains(fluidStack.getFluid()) && this.container.getItem() instanceof UniversalBucket) {
 				ItemStack filledBucket = ItemBLBucketEmpty.getFilledBucket(ForgeModContainer.getInstance().universalBucket, fluidStack);

@@ -35,7 +35,7 @@ public class LocationDebugItem extends Item {
 				if(locations.isEmpty()) {
 					int rndID = world.rand.nextInt();
 					LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "Test Location ID: " + rndID, EnumLocationType.NONE);
-					location.addBounds(new AxisAlignedBB(pos).expand(16, 16, 16));
+					location.addBounds(new AxisAlignedBB(pos).grow(16, 16, 16));
 					location.setSeed(world.rand.nextLong());
 					location.linkChunks();
 					location.setDirty(true);

@@ -91,7 +91,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.cachedOwner = null;
 		} else if(this.cachedOwner == null || !this.cachedOwner.isEntityAlive() || !this.cachedOwner.getUniqueID().equals(uuid)) {
 			this.cachedOwner = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedOwner = entity;
 					break;
@@ -118,7 +118,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			this.cachedTarget = null;
 		} else if(this.cachedTarget == null || !this.cachedTarget.isEntityAlive() || !this.cachedTarget.getUniqueID().equals(uuid)) {
 			this.cachedTarget = null;
-			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().expand(64.0D, 64.0D, 64.0D))) {
+			for(Entity entity : this.getEntityWorld().getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(64.0D, 64.0D, 64.0D))) {
 				if(entity.getUniqueID().equals(uuid)) {
 					this.cachedTarget = entity;
 					break;
@@ -206,7 +206,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		}
 
 		if(this.getTarget() == null) {
-			AxisAlignedBB searchBB = this.getEntityBoundingBox().expand(16, 16, 16);
+			AxisAlignedBB searchBB = this.getEntityBoundingBox().grow(16, 16, 16);
 			List<EntityPlayer> eligiblePlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, searchBB);
 			EntityPlayer closest = null;
 			for(EntityPlayer player : eligiblePlayers) {
@@ -251,13 +251,13 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 		Vec3d currentPos = new Vec3d(this.posX, this.posY, this.posZ);
 		Vec3d nextPos = currentPos.addVector(ray.x * 64.0D, ray.y * 64.0D, ray.z * 64.0D);
 		Entity hitEntity = null;
-		List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().expand(64, 64, 64));
+		List<Entity> hitEntities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(64, 64, 64));
 		double minDist = 0.0D;
 		for (int i = 0; i < hitEntities.size(); ++i) {
 			Entity entity = (Entity)hitEntities.get(i);
 			if (entity.canBeCollidedWith()) {
 				float f = 0.65F / 2.0F + 0.1F + 0.1F;
-				AxisAlignedBB entityBB = entity.getEntityBoundingBox().expand((double)f, (double)f, (double)f);
+				AxisAlignedBB entityBB = entity.getEntityBoundingBox().grow((double)f, (double)f, (double)f);
 				RayTraceResult result = entityBB.calculateIntercept(currentPos, nextPos);
 				if (result != null) {
 					double dst = currentPos.distanceTo(result.hitVec);

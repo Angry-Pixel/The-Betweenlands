@@ -125,7 +125,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		// Does the metadata stuff for the circle animated textures
 		checkDruidCircleBlocks(world);
 
-		AxisAlignedBB aabb = new AxisAlignedBB(this.pos).expand(8, 6, 8);
+		AxisAlignedBB aabb = new AxisAlignedBB(this.pos).grow(8, 6, 8);
 		List<EntityDarkDruid> druids = this.world.getEntitiesWithinAABB(EntityDarkDruid.class, aabb);
 		for(EntityDarkDruid druid : druids) {
 			druid.attackEntityFrom(DamageSource.GENERIC, druid.getHealth());

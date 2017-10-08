@@ -476,7 +476,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				}
 
 				//Teleport entities back
-				List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().expand(this.anchorRadius*2, 512, this.anchorRadius*2));
+				List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
 				while(it.hasNext()) {
 					EntityLivingBase living = it.next();
@@ -507,14 +507,14 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				this.trackedEntities.addAll(currentlyTrackedEntities);
 			}
 
-			AxisAlignedBB checkArea = this.getEntityBoundingBox().expand(32, 16, 32);
+			AxisAlignedBB checkArea = this.getEntityBoundingBox().grow(32, 16, 32);
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkArea);
 			if(!players.isEmpty()) {
 				if(!this.world.isRemote) {
 					this.getDataManager().set(SHIELD_STATE, this.packShieldData());
 
 					if(this.isFloating() && this.posY >= this.anchor.y) {
-						AxisAlignedBB checkAABB = this.getEntityBoundingBox().expand(16, 16, 16);
+						AxisAlignedBB checkAABB = this.getEntityBoundingBox().grow(16, 16, 16);
 						List<EntityWight> wights = this.world.getEntitiesWithinAABB(EntityWight.class, checkAABB);
 						List<EntityFortressBossSpawner> spawners = this.world.getEntitiesWithinAABB(EntityFortressBossSpawner.class, checkAABB);
 						if(wights.isEmpty() && spawners.isEmpty()) {
@@ -725,7 +725,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 			if(!this.world.isRemote) {
 				this.world.playSound(null, this.anchor.x, this.anchor.y, this.anchor.z, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
 				this.setPosition(this.anchor.x, this.anchor.y, this.anchor.z);
-				List<Entity> trackedEntities = this.world.getEntitiesWithinAABB(EntityWight.class, this.getEntityBoundingBox().expand(this.anchorRadius*2, 512, this.anchorRadius*2));
+				List<Entity> trackedEntities = this.world.getEntitiesWithinAABB(EntityWight.class, this.getEntityBoundingBox().grow(this.anchorRadius*2, 512, this.anchorRadius*2));
 				Iterator<Entity> it = trackedEntities.iterator();
 				while(it.hasNext()) {
 					Entity entity = it.next();

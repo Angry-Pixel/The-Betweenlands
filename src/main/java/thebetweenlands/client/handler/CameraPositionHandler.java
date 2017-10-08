@@ -63,7 +63,7 @@ public class CameraPositionHandler {
 			BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
 
 			//Crumbling cragrock tower
-			List<LocationCragrockTower> towers = worldData.getSharedStorageAt(LocationCragrockTower.class, location -> location.getInnerBoundingBox().expand(4, 4, 4).contains(renderViewEntity.getPositionVector()), renderViewEntity.posX, renderViewEntity.posZ);
+			List<LocationCragrockTower> towers = worldData.getSharedStorageAt(LocationCragrockTower.class, location -> location.getInnerBoundingBox().grow(4, 4, 4).contains(renderViewEntity.getPositionVector()), renderViewEntity.posX, renderViewEntity.posZ);
 			for(LocationCragrockTower tower : towers) {
 				if(tower.isCrumbling()) {
 					shakeStrength += Math.min(Math.pow((tower.getCrumblingTicks() + event.renderTickTime) / 400.0f, 4) * 0.08f, 0.08f);
@@ -72,7 +72,7 @@ public class CameraPositionHandler {
 
 
 			//Ring of Summoning
-			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getEntityBoundingBox().expand(32, 32, 32), entity -> entity.getDistanceToEntity(renderViewEntity) <= 32.0D);
+			List<EntityPlayer> nearbyPlayers = renderViewEntity.world.getEntitiesWithinAABB(EntityPlayer.class, renderViewEntity.getEntityBoundingBox().grow(32, 32, 32), entity -> entity.getDistanceToEntity(renderViewEntity) <= 32.0D);
 
 			for(EntityPlayer player : nearbyPlayers) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_SUMMON, null)) {

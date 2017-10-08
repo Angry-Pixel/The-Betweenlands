@@ -243,7 +243,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		double maxY = this.levelYBounds[level][1] + this.structurePos.getY();
 		AxisAlignedBB inside = this.getInnerBoundingBox();
 		if(level == 0) {
-			inside = inside.expand(1, 1, 1); //Basement is wider
+			inside = inside.grow(1, 1, 1); //Basement is wider
 		}
 		return new AxisAlignedBB(inside.minX, minY, inside.minZ, inside.maxX, maxY, inside.maxZ);
 	}
@@ -504,7 +504,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	 * @return
 	 */
 	protected BlockPos getRandomPosInTower() {
-		AxisAlignedBB innerBB = this.getInnerBoundingBox().expand(-1, -1, -1);
+		AxisAlignedBB innerBB = this.getInnerBoundingBox().grow(-1, -1, -1);
 
 		int x = MathHelper.ceil(innerBB.minX);
 		int y = MathHelper.ceil(innerBB.minY);

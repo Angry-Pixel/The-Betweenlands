@@ -1178,7 +1178,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			break;
 		}
 
-		stairsAABB = stairsAABB.expand(4, 0, 4);
+		stairsAABB = stairsAABB.grow(4, 0, 4);
 
 		rotatedCubeVolume(world, x, y, z, 1, 0, 8, CRAGROCK_BRICK_SLAB, 1, 1, 1, direction);
 		rotatedCubeVolume(world, x, y, z, 1, 0, 9, CRAGROCK_BRICKS, 1, 1, 1, direction);
@@ -1487,19 +1487,19 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		switch (direction) {
 		default:
 		case 0:
-			locationBounds = new AxisAlignedBB(x - 1, y - 8, z + 1, x + width + 1, y + height, z + depth + 1).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x - 1, y - 8, z + 1, x + width + 1, y + height, z + depth + 1).grow(6, 6, 6);
 			entrance = new BlockPos(x + width / 2, y + 5, z + depth / 2 + 8);
 			break;
 		case 1:
-			locationBounds = new AxisAlignedBB(x + 1, y - 8, z + depth - width - 1, x + depth + 1, y + height, z + depth + 1).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x + 1, y - 8, z + depth - width - 1, x + depth + 1, y + height, z + depth + 1).grow(6, 6, 6);
 			entrance = new BlockPos(x + width / 2 + 9, y + 5, z + depth / 2 + 1);
 			break;
 		case 2:
-			locationBounds = new AxisAlignedBB(x - 1 + width - width, y - 8, z + depth - depth - 1, x + 1 + width, y + height, z + depth - 1).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x - 1 + width - width, y - 8, z + depth - depth - 1, x + 1 + width, y + height, z + depth - 1).grow(6, 6, 6);
 			entrance = new BlockPos(x + width / 2, y + 5, z + depth / 2 - 8);
 			break;
 		case 3:
-			locationBounds = new AxisAlignedBB(x - 1 + width - depth, y - 8, z - 1, x - 1 + width, y + height, z + 1 + width).expand(6, 6, 6);
+			locationBounds = new AxisAlignedBB(x - 1 + width - depth, y - 8, z - 1, x - 1 + width, y + height, z + 1 + width).grow(6, 6, 6);
 			entrance = new BlockPos(x + width / 2 - 9, y + 5, z + depth / 2 - 1);
 			break;
 		}
@@ -1508,10 +1508,10 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 
 		if(stairsAABB.minY < locationBounds.minY) {
 			double addY = (locationBounds.minY - stairsAABB.minY) / 2;
-			locationBounds = locationBounds.expand(0, addY, 0).offset(0, -addY, 0);
+			locationBounds = locationBounds.grow(0, addY, 0).offset(0, -addY, 0);
 		}
 
-		this.towerLocation.addBounds(locationBounds, locationBounds.expand(-12, -10, -12), stairsAABB);
+		this.towerLocation.addBounds(locationBounds, locationBounds.grow(-12, -10, -12), stairsAABB);
 		this.towerLocation.linkChunks();
 		this.towerLocation.setLayer(0);
 		this.towerLocation.setSeed(random.nextLong());

@@ -58,7 +58,7 @@ public class LocationHandler {
 						if(!location.isTopReached()) {
 							location.setTopReached(true);
 						}
-					} else if(!location.isTopReached() && !location.getInnerBoundingBox().expand(0.5D, 0.5D, 0.5D).contains(player.getPositionVector()) && player.posY - structurePos.getY() > 12) {
+					} else if(!location.isTopReached() && !location.getInnerBoundingBox().grow(0.5D, 0.5D, 0.5D).contains(player.getPositionVector()) && player.posY - structurePos.getY() > 12) {
 						//Player trying to bypass tower, teleport to entrance
 
 						player.dismountRidingEntity();

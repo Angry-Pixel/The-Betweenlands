@@ -62,7 +62,7 @@ public class Categories {
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				ItemStack res = EquipmentHelper.equipItem(sender, sender, item, false);
 
-				if(res == null || res.getCount() != item.getCount()) {
+				if(res.isEmpty() || res.getCount() != item.getCount()) {
 					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(this.slot, sender));
 
 					if(!sender.capabilities.isCreativeMode) {

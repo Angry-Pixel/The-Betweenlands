@@ -37,6 +37,7 @@ public class GuiLorePage extends GuiScreen {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void drawScreen(int mouseX, int mouseY, float renderPartials) {
+		this.drawDefaultBackground();
 		super.drawScreen(mouseX, mouseY, renderPartials);
 
 		if (this.pageTexture != null) {

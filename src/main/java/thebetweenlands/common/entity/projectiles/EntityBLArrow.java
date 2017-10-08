@@ -120,12 +120,12 @@ public class EntityBLArrow extends EntityArrow {
 		}
 
 		Entity collidedEntity = null;
-		List<Entity> entityList = ea.world.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().expand(ea.motionX, ea.motionY, ea.motionZ).expand(1.05D, 1.05D, 1.05D));
+		List<Entity> entityList = ea.world.getEntitiesWithinAABBExcludingEntity(ea, ea.getEntityBoundingBox().grow(ea.motionX, ea.motionY, ea.motionZ).grow(1.05D, 1.05D, 1.05D));
 		double lastDistance = 0.0D;
 		for (Object anEntityList : entityList) {
 			Entity currentEntity = (Entity) anEntityList;
 			if (currentEntity.canBeCollidedWith() && (currentEntity != ea.shootingEntity || ea.ticksExisted > 5)) {
-				AxisAlignedBB entityBoundingBox = currentEntity.getEntityBoundingBox().expand((double) 0.35F, (double) 0.35F, (double) 0.35F);
+				AxisAlignedBB entityBoundingBox = currentEntity.getEntityBoundingBox().grow((double) 0.35F, (double) 0.35F, (double) 0.35F);
 				RayTraceResult collision = entityBoundingBox.calculateIntercept(start, dest);
 				if (collision != null) {
 					double currentDistance = start.distanceTo(collision.hitVec);

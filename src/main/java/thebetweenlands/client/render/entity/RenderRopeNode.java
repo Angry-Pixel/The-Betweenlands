@@ -38,7 +38,7 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 		AxisAlignedBB boundingBox = ropeNode.getEntityBoundingBox().offset(-ropeNode.posX, -ropeNode.posY, -ropeNode.posZ);
 
 		if(ropeNode.getNextNode() == null) {
-			boundingBox = boundingBox.expand(0.025D, 0.025D, 0.025D);
+			boundingBox = boundingBox.grow(0.025D, 0.025D, 0.025D);
 			GlStateManager.color(1, 0.8F, 0.05F, 1.0F);
 		}
 		

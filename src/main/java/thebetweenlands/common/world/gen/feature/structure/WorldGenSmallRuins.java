@@ -274,7 +274,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		if (!SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + width - 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))))
 			return false;
 		if (doGen) {
-			location.addBounds(new AxisAlignedBB(x - width, y, z, x, y + height, z + width).expand(6, 6, 6));
+			location.addBounds(new AxisAlignedBB(x - width, y, z, x, y + height, z + width).grow(6, 6, 6));
 			
 			for (int yy = y; yy < y + height; yy++) {
 				if (yy <= y + height - 5) {
@@ -553,16 +553,16 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		z -= depth / 2;
 		switch (direction) {
 		case 0:
-			location.addBounds(new AxisAlignedBB(x+offsetA, y+offsetB, z+offsetC, x+offsetA+sizeWidth, y+offsetB+sizeHeight, z+offsetC+sizeDepth).expand(6, 6, 6));
+			location.addBounds(new AxisAlignedBB(x+offsetA, y+offsetB, z+offsetC, x+offsetA+sizeWidth, y+offsetB+sizeHeight, z+offsetC+sizeDepth).grow(6, 6, 6));
 			break;
 		case 1:
-			location.addBounds(new AxisAlignedBB(x+offsetC, y+offsetB, z + depth - offsetA - sizeWidth - 1, x+offsetC+sizeDepth, y+offsetB+sizeHeight, z + depth - offsetA - 1).expand(6, 6, 6));
+			location.addBounds(new AxisAlignedBB(x+offsetC, y+offsetB, z + depth - offsetA - sizeWidth - 1, x+offsetC+sizeDepth, y+offsetB+sizeHeight, z + depth - offsetA - 1).grow(6, 6, 6));
 			break;
 		case 2:
-			location.addBounds(new AxisAlignedBB(x + width - offsetA - sizeWidth - 1, y+offsetB, z + depth - offsetC - sizeDepth - 1, x + width - offsetA - 1, y+offsetB+sizeHeight, z + depth - offsetC - 1).expand(6, 6, 6));
+			location.addBounds(new AxisAlignedBB(x + width - offsetA - sizeWidth - 1, y+offsetB, z + depth - offsetC - sizeDepth - 1, x + width - offsetA - 1, y+offsetB+sizeHeight, z + depth - offsetC - 1).grow(6, 6, 6));
 			break;
 		case 3:
-			location.addBounds(new AxisAlignedBB(x + width - offsetC - sizeDepth - 1, y+offsetB, z + offsetA, x + width - offsetC - 1, y+offsetB+sizeHeight, z + offsetA + sizeWidth).expand(6, 6, 6));
+			location.addBounds(new AxisAlignedBB(x + width - offsetC - sizeDepth - 1, y+offsetB, z + offsetA, x + width - offsetC - 1, y+offsetB+sizeHeight, z + offsetA + sizeWidth).grow(6, 6, 6));
 			break;
 		}
 		return true;

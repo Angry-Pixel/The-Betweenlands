@@ -212,7 +212,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                     this.setRotationYawHead(0);
 
                     if (this.ticksExisted % 5 == 0) {
-                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().expand(16.0D, 16.0D, 16.0D));
+                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
                         if (existingSouls.size() < 26) {
                             EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
                             float mx = this.world.rand.nextFloat() - 0.5F;

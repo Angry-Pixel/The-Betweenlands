@@ -396,7 +396,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             }
         }
         if (!world.isRemote) {
-            world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
+            world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(0.2, 0.05, 0.2)).forEach(this::applyEntityCollision);
         }
         rotationYaw = MathHelper.wrapDegrees(rotationYaw);
         prevRotationYaw = MathUtils.adjustAngleForInterpolation(rotationYaw, prevRotationYaw);

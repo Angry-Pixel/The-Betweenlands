@@ -3,6 +3,7 @@ package thebetweenlands.client.gui.inventory;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
@@ -27,6 +28,7 @@ public class GuiPurifier extends GuiContainer {
         int yy = (height - ySize) / 2;
         drawTexturedModalRect(xx, yy, 0, 0, xSize, ySize);
 
+
         int water = purifier.getScaledWaterAmount(60);
         drawTexturedModalRect(xx + 34, yy + 72 - water, 176, 74 - water, 11, water);
 
@@ -38,10 +40,8 @@ public class GuiPurifier extends GuiContainer {
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(int x, int y) {
-    }
-    @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
         super.drawScreen(mouseX, mouseY, partialTicks);
         this.renderHoveredToolTip(mouseX, mouseY);
     }

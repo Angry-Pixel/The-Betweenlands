@@ -79,7 +79,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 				return false;
 			}
 		} else {
-			List<Entity> list = gecko.world.getEntitiesWithinAABB(avoidingEntityClass, gecko.getEntityBoundingBox().expand(distance, 3.0D, distance), viableSelector);
+			List<Entity> list = gecko.world.getEntitiesWithinAABB(avoidingEntityClass, gecko.getEntityBoundingBox().grow(distance, 3.0D, distance), viableSelector);
 			if (list.isEmpty()) {
 				return false;
 			}

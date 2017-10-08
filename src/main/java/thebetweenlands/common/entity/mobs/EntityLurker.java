@@ -400,7 +400,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         if (this.getAttackTarget() != null) {
             return this.getAttackTarget();
         }
-        List<Entity> nearEntities = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(8, 10, 8));
+        List<Entity> nearEntities = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().grow(8, 10, 8));
         for (int i = 0; i < nearEntities.size(); i++) {
             Entity entity = nearEntities.get(i);
             for (int n = 0; n < prey.length; n++) {
@@ -451,7 +451,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         }
         Entity attacker = source.getTrueSource();
         if (attacker instanceof EntityPlayer) {
-            List<EntityLurker> nearLurkers = world.getEntitiesWithinAABB(EntityLurker.class, getEntityBoundingBox().expand(16, 16, 16));
+            List<EntityLurker> nearLurkers = world.getEntitiesWithinAABB(EntityLurker.class, getEntityBoundingBox().grow(16, 16, 16));
             for (EntityLurker fellowLurker : nearLurkers) {
                 // Thou shouldst joineth me! F'r thither is a great foe comest!
                 // RE: lol
