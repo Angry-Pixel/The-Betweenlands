@@ -67,7 +67,7 @@ public class EntityAIDruidTeleport extends EntityAIBase {
 
 		@Override
 		public boolean test(Entity entity) {
-			return this.entity.getDistanceSqToEntity(entity) > minDistanceSquared;
+			return this.entity.getDistanceSq(entity) > minDistanceSquared;
 		}
 	}
 }

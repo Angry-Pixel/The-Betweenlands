@@ -187,7 +187,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
             if (this.getAttackTarget() != null) {
                 EntityLivingBase attackTarget = this.getAttackTarget();
 
-                if (this.getDistanceToEntity(attackTarget) < 1.0D) {
+                if (this.getDistance(attackTarget) < 1.0D) {
                     this.startRiding(attackTarget, true);
                     this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(attackTarget));
                 }
@@ -221,7 +221,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
                             Vec3d dir = new Vec3d(mx, my, mz).normalize();
                             soul.setOwner(this.getUniqueID());
                             soul.setLocationAndAngles(this.posX + dir.x * 0.5D, this.posY + dir.y * 1.5D, this.posZ + dir.z * 0.5D, 0, 0);
-                            soul.setThrowableHeading(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
+                            soul.shoot(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
                             this.world.spawnEntity(soul);
                         }
                     }

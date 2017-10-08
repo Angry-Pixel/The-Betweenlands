@@ -114,7 +114,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 				this.setDead();
 				return true;
 			}
-			this.setBeenAttacked();
+			this.markVelocityChanged();
 			if (source.getTrueSource() != null) {
 				if(!this.world.isRemote) {
 					Vec3d vec3 = source.getTrueSource().getLookVec();
@@ -230,7 +230,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	@Override
-	public void setThrowableHeading(double x, double y, double z, float speed, float randMotion) {
+	public void shoot(double x, double y, double z, float speed, float randMotion) {
 		float f2 = MathHelper.sqrt(x * x + y * y + z * z);
 		x /= (double)f2;
 		y /= (double)f2;

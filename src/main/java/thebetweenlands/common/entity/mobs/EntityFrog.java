@@ -135,7 +135,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 								this.velocityChanged = true;
 								this.strokeTicks = 40;
 								this.world.setEntityState(this, (byte) 8);
-							} else if (this.isCollidedHorizontally) {
+							} else if (this.collidedHorizontally) {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
 							}

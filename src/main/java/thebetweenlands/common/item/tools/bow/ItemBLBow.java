@@ -102,7 +102,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 					if (!world.isRemote) {
 						ItemArrow itemArrow = (ItemArrow)arrow.getItem();
 						EntityArrow entityArrow = itemArrow.createArrow(world, arrow, player);
-						entityArrow.setAim(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
+						entityArrow.shoot(player, player.rotationPitch, player.rotationYaw, 0.0F, strength * 3.0F, 1.0F);
 
 						if (strength == 1.0F) {
 							entityArrow.setIsCritical(true);
@@ -193,8 +193,8 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
+		return CorrosionHelper.getDestroySpeed(super.getDestroySpeed(stack, state), stack, state);
 	}
 
 	@Override

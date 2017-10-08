@@ -750,6 +750,8 @@ chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
 
 chat.tap.needsRope=You need a Reed Rope to create a %s
 
+chat.talisman.noplace=The space is not large enough
+
 chat.item.forbiddenfig=Cursed are those who eat the Forbidden Fig!
 
 chat.flintandsteel=It's too damp to set something on fire with %s

@@ -18,7 +18,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 	public final Predicate<Entity> entitySelector = new Predicate<Entity>() {
 		@Override
 		public boolean apply(Entity entity) {
-			return entity.isEntityAlive() && entity.getDistanceToEntity(EntityAIApproachItem.this.entity) <= EntityAIApproachItem.this.targetDistance 
+			return entity.isEntityAlive() && entity.getDistance(EntityAIApproachItem.this.entity) <= EntityAIApproachItem.this.targetDistance
 					&& entity instanceof EntityItem && 
 					(EntityAIApproachItem.this.ignoreDamage ? ((EntityItem)entity).getItem().getItem() == EntityAIApproachItem.this.targetItem.getItem() : ((EntityItem)entity).getItem().isItemEqual(EntityAIApproachItem.this.targetItem));
 		}
@@ -85,7 +85,7 @@ public class EntityAIApproachItem extends EntityAIBase {
 	@Override
 	public void resetTask() {
 		this.targetEntity = null;
-		this.entityPathNavigate.clearPathEntity();
+		this.entityPathNavigate.clearPath();
 	}
 
 	@Override
@@ -95,9 +95,9 @@ public class EntityAIApproachItem extends EntityAIBase {
 			this.entityPathNavigate.setPath(this.entityPathEntity, this.farSpeed);
 			this.targetPos = new Vec3d(this.targetEntity.posX, this.targetEntity.posY, this.targetEntity.posZ);;
 		}
-		if (this.entity.getDistanceToEntity(this.targetEntity) < 4.0D) {
+		if (this.entity.getDistance(this.targetEntity) < 4.0D) {
 			this.entity.getNavigator().setSpeed(this.getNearSpeed());
-			if(this.entity.getDistanceToEntity(this.targetEntity) < 2.0D) {
+			if(this.entity.getDistance(this.targetEntity) < 2.0D) {
 				this.distractionTicks++;
 				if(this.distractionTicks > this.getDistractionTime()) {
 					this.targetEntity.setDead();

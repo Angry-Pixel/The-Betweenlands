@@ -132,7 +132,7 @@ public class EntityRopeNode extends Entity {
 
 		if(!this.world.isRemote) {
 			if(nextNode instanceof EntityPlayer) {
-				if(nextNode.getDistanceToEntity(this) > 1.5D) {
+				if(nextNode.getDistance(this) > 1.5D) {
 					this.pickUp = true;
 				}
 				if(this.pickUp && nextNode.getEntityBoundingBox().grow(0.4D, 0.4D, 0.4D).intersects(this.getEntityBoundingBox())) {
@@ -146,10 +146,10 @@ public class EntityRopeNode extends Entity {
 						this.world.spawnEntity(itemEntity);
 					}
 				}
-				if(nextNode.getDistanceToEntity(this) < ROPE_LENGTH - 1) {
+				if(nextNode.getDistance(this) < ROPE_LENGTH - 1) {
 					this.canExtend = true;
 				}
-				if(this.canExtend && nextNode.getDistanceToEntity(this) > ROPE_LENGTH + 1) {
+				if(this.canExtend && nextNode.getDistance(this) > ROPE_LENGTH + 1) {
 					IInventory inventory = ((EntityPlayer)nextNode).inventory;
 					int invSize = inventory.getSizeInventory();
 					for(int i = 0; i < invSize; ++i) {
@@ -173,7 +173,7 @@ public class EntityRopeNode extends Entity {
 						}
 					}
 				}
-				if(nextNode.getDistanceToEntity(this) > ROPE_LENGTH_MAX) {
+				if(nextNode.getDistance(this) > ROPE_LENGTH_MAX) {
 					if(nextNode instanceof ICommandSender) {
 						((ICommandSender) nextNode).sendMessage(new TextComponentTranslation("chat.rope.disconnected"));
 					}
@@ -189,7 +189,7 @@ public class EntityRopeNode extends Entity {
 		if(!attached && !this.onGround && !this.inWater) {
 			boolean isFloating = false;
 
-			if(nextNode != null && this.getDistanceToEntity(nextNode) >= ROPE_LENGTH) {
+			if(nextNode != null && this.getDistance(nextNode) >= ROPE_LENGTH) {
 				Vec3d connection = this.getConnectionToNext();
 				if(connection != null) {
 					double mx = connection.x * 0.02D;

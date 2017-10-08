@@ -14,12 +14,12 @@ public class ItemSwiftPick extends ItemBLPickaxe {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		float digSpeed = this.efficiencyOnProperMaterial;
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
+		float digSpeed = this.efficiency;
 		if (this.isEffective(stack, state)) {
 			digSpeed = 100.0F;
 		}
-		return CorrosionHelper.getStrVsBlock(digSpeed, stack, state); 
+		return CorrosionHelper.getDestroySpeed(digSpeed, stack, state);
 	}
 
 	private boolean isEffective(ItemStack stack, IBlockState state) {

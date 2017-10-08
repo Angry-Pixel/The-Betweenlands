@@ -658,7 +658,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	@Override
 	public float getShakeIntensity(Entity viewer, float partialTicks) {
 		if(this.isScreaming()) {
-			double dist = this.getDistanceToEntity(viewer);
+			double dist = this.getDistance(viewer);
 			float screamMult = (float) (1.0F - dist / 30.0F);
 			if(dist >= 30.0F) {
 				return 0.0F;

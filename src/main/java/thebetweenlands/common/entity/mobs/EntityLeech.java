@@ -132,7 +132,7 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		if (!world.isRemote) {
-			if (fleeingTick == 0 && getAttackTarget() != null && getDistanceToEntity(getAttackTarget()) < 2) {
+			if (fleeingTick == 0 && getAttackTarget() != null && getDistance(getAttackTarget()) < 2) {
 				onCollideWithEntity(getAttackTarget());
 			}
 			if (getRidingEntity() != null) {

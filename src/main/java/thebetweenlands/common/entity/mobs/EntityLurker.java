@@ -267,7 +267,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
         if (!this.world.isRemote) {
             Entity target = this.getAttackTarget();
-            if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistanceToEntity(this) < 3.2D && target.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && target.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
+            if (target instanceof EntityDragonFly && attackTime <= 0 && target.getDistance(this) < 3.2D && target.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && target.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && ticksUntilBiteDamage == -1) {
                 setShouldMouthBeOpen(true);
                 setMouthMoveSpeed(10);
                 ticksUntilBiteDamage = 10;
@@ -384,7 +384,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
                 setAttackTarget(findEnemyToAttack());
             }
         } else {
-            if (getAttackTarget().getDistanceSqToEntity(this) > 256) {
+            if (getAttackTarget().getDistanceSq(this) > 256) {
                 setAttackTarget(null);
             }
         }
@@ -420,7 +420,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     @Override
     public boolean attackEntityAsMob(Entity entityIn) {
-        float distance = entityIn.getDistanceToEntity(this);
+        float distance = entityIn.getDistance(this);
         if (entityBeingBit != null || getRidingEntity() != null || entityIn.getRidingEntity() != null) {
             return false;
         }
@@ -579,7 +579,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
                 d4 = Math.sin((double) (lurker.ticksExisted + lurker.getEntityId()) * 0.75D) * 0.05D;
                 lurker.motionY += d4 * (d6 + d5) * 0.25D;
                 if (Math.abs(lurker.motionY) < 0.35) {
-                    lurker.motionY += (double) lurker.getAIMoveSpeed() * d1 * 0.1D * (2 + (d1 > 0 ? 0.4 : 0) + (lurker.isCollidedHorizontally ? 20 : 0));
+                    lurker.motionY += (double) lurker.getAIMoveSpeed() * d1 * 0.1D * (2 + (d1 > 0 ? 0.4 : 0) + (lurker.collidedHorizontally ? 20 : 0));
                 }
                 EntityLookHelper entitylookhelper = lurker.getLookHelper();
                 double d7 = lurker.posX + d0 / d3 * 2.0D;

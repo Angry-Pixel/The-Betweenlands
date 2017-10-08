@@ -499,7 +499,7 @@ public class ClientProxy extends CommonProxy {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
 				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
 					@Override
-					public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+					public int colorMultiplier(ItemStack stack, int tintIndex) {
 						IBlockState blockState = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
 						return tintedBlock.getColorMultiplier(blockState, null, null, tintIndex);
 					}
@@ -519,7 +519,7 @@ public class ClientProxy extends CommonProxy {
 				final ITintedItem tintedItem = (ITintedItem) item;
 				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
 					@Override
-					public int getColorFromItemstack(ItemStack stack, int tintIndex) {
+					public int colorMultiplier(ItemStack stack, int tintIndex) {
 						return tintedItem.getColorMultiplier(stack, tintIndex);
 					}
 				}, item);

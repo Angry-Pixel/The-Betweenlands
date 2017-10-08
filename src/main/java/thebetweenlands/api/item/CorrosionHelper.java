@@ -78,7 +78,7 @@ public class CorrosionHelper {
 	 * @param blockState
 	 * @return
 	 */
-	public static float getStrVsBlock(float normalStrength, ItemStack itemStack, IBlockState blockState) {
+	public static float getDestroySpeed(float normalStrength, ItemStack itemStack, IBlockState blockState) {
 		return normalStrength * getModifier(itemStack);
 	}
 

@@ -9,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
@@ -23,16 +22,16 @@ import javax.annotation.Nullable;
 
 public class ItemBLAxe extends ItemAxe implements ICorrodible {
 	public ItemBLAxe(ToolMaterial material) {
-		super(material, 5.0F + material.getDamageVsEntity(), -3.2F);
+		super(material, 5.0F + material.getAttackDamage(), -3.2F);
 
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
 		Material material = state.getMaterial();
-		float str = material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getStrVsBlock(stack, state) : this.efficiencyOnProperMaterial;
-		str = CorrosionHelper.getStrVsBlock(str, stack, state);
+		float str = material != Material.WOOD && material != Material.PLANTS && material != Material.VINE ? super.getDestroySpeed(stack, state) : this.efficiency;
+		str = CorrosionHelper.getDestroySpeed(str, stack, state);
 		return str; 
 	}
 	
@@ -53,7 +52,7 @@ public class ItemBLAxe extends ItemAxe implements ICorrodible {
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-        return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.damageVsEntity);
+        return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.attackDamage);
 	}
 
 	@Override

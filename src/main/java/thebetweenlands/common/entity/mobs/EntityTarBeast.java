@@ -258,7 +258,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			}
 
 			if(!this.isSucking() && !this.isPreparing()) {
-				if(this.shedCooldown == 0 && this.getAttackTarget() != null && this.getAttackTarget().getDistanceToEntity(this) < 6.0D && this.canEntityBeSeen(this.getAttackTarget())) {
+				if(this.shedCooldown == 0 && this.getAttackTarget() != null && this.getAttackTarget().getDistance(this) < 6.0D && this.canEntityBeSeen(this.getAttackTarget())) {
 					this.setShedding(true);
 					this.shedCooldown = this.getSheddingCooldown() + this.world.rand.nextInt(this.getSheddingCooldown() / 2);
 				}
@@ -273,11 +273,11 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 					if(this.getAttackTarget() != null) {
 						List<EntityLivingBase> affectedEntities = (List<EntityLivingBase>)this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(6.0F, 6.0F, 6.0F));
 						for(EntityLivingBase e : affectedEntities) {
-							if(e == this || e.getDistanceToEntity(this) > 6.0F || !e.canEntityBeSeen(this) || e instanceof EntityTarBeast) continue;
+							if(e == this || e.getDistance(this) > 6.0F || !e.canEntityBeSeen(this) || e instanceof EntityTarBeast) continue;
 							if(e instanceof EntityPlayer) {
 								if(((EntityPlayer)e).isActiveItemStackBlocking()) continue;
 							}
-							double dst = e.getDistanceToEntity(this);
+							double dst = e.getDistance(this);
 							float dmg = (float) (this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() / dst * 7.0F);
 							e.attackEntityFrom(DamageSource.causeMobDamage(this), dmg);
 							e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int)(20 + (1.0F - dst / 6.0F) * 150), 1));
@@ -297,7 +297,7 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 			}
 
 			if(!this.isShedding()) {
-				if(this.suckingCooldown == 0 && this.getAttackTarget() != null && this.getAttackTarget().getDistanceToEntity(this) <= 10.0D && this.canEntityBeSeen(this.getAttackTarget())) {
+				if(this.suckingCooldown == 0 && this.getAttackTarget() != null && this.getAttackTarget().getDistance(this) <= 10.0D && this.canEntityBeSeen(this.getAttackTarget())) {
 					this.setPreparing();
 				}
 
@@ -323,10 +323,10 @@ public class EntityTarBeast extends EntityMob implements IEntityBL {
 
 					List<Entity> affectedEntities = (List<Entity>)this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(10.0F, 10.0F, 10.0F));
 					for(Entity e : affectedEntities) {
-						if(e == this || e.getDistanceToEntity(this) > 10.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
+						if(e == this || e.getDistance(this) > 10.0F || !this.canEntityBeSeen(e) || e instanceof EntityTarBeast) continue;
 						Vec3d vec = new Vec3d(this.posX - e.posX, this.posY - e.posY, this.posZ - e.posZ);
 						vec = vec.normalize();
-						float dst = e.getDistanceToEntity(this);
+						float dst = e.getDistance(this);
 						float mod = (float) Math.pow(1.0F - dst / 13.0F, 1.2D);
 						if(e instanceof EntityPlayer) {
 							if(((EntityPlayer)e).isActiveItemStackBlocking()) mod *= 0.18F;

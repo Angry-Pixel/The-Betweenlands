@@ -211,7 +211,7 @@ public class PuppetHandler {
 				EntityCreature creature = (EntityCreature) activatingEntity;
 
 				if(!event.player.world.isRemote) {
-					if(creature.getDistanceToEntity(event.player) > 5.0D) {
+					if(creature.getDistance(event.player) > 5.0D) {
 						cap.setActivatingEntity(null);
 						cap.setActivatingTicks(0);
 					} else {
@@ -238,7 +238,7 @@ public class PuppetHandler {
 							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F, 
 							(event.player.world.rand.nextFloat() - 0.5F) / 3.0F);
 					vec = vec.normalize();
-					double dist = event.player.getDistanceToEntity(creature);
+					double dist = event.player.getDistance(creature);
 					vec = vec.scale(dist / 15.0F);
 					BLParticles.SPAWNER.spawn(event.player.world, event.player.posX, event.player.posY + event.player.getEyeHeight() * 0.8F, event.player.posZ, 
 							ParticleArgs.get().withData(40).withColor(0.2F, 0.8F, 0.4F, 1).withMotion(vec.x, vec.y, vec.z));

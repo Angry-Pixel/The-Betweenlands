@@ -24,7 +24,7 @@ public class EntityAIGoTo extends EntityAIBase {
 	public void setTarget(@Nullable BlockPos pos) {
 		this.pos = pos;
 		this.failedPathFindingPenalty = 0;
-		this.taskOwner.getNavigator().clearPathEntity();
+		this.taskOwner.getNavigator().clearPath();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class EntityAIGoTo extends EntityAIBase {
 
 	@Override
 	public void resetTask() {
-		this.taskOwner.getNavigator().clearPathEntity();
+		this.taskOwner.getNavigator().clearPath();
 	}
 
 	@Override

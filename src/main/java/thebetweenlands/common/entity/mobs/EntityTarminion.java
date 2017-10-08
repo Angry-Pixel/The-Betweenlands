@@ -150,8 +150,8 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 					}
 					List<EntityCreature> affectedEntities = (List<EntityCreature>)this.world.getEntitiesWithinAABB(EntityCreature.class, this.getEntityBoundingBox().grow(5.25F, 5.25F, 5.25F));
 					for(EntityCreature e : affectedEntities) {
-						if(e == this || e.getDistanceToEntity(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarminion) continue;
-						double dst = e.getDistanceToEntity(this);
+						if(e == this || e.getDistance(this) > 5.25F || !e.canEntityBeSeen(this) || e instanceof EntityTarminion) continue;
+						double dst = e.getDistance(this);
 						e.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue() * 4);
 						e.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, (int)(20 + (1.0F - dst / 5.25F) * 150), 1));
 					}

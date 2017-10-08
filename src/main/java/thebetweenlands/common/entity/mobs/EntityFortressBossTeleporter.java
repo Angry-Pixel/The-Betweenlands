@@ -67,7 +67,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 					List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
 					EntityPlayer closestPlayer = null;
 					for(EntityPlayer player : players) {
-						if((closestPlayer == null || player.getDistanceToEntity(this) < closestPlayer.getDistanceToEntity(this)) && player.getDistanceToEntity(this) < radius && player.canEntityBeSeen(this)) {
+						if((closestPlayer == null || player.getDistance(this) < closestPlayer.getDistance(this)) && player.getDistance(this) < radius && player.canEntityBeSeen(this)) {
 							Vec3d playerLook = player.getLook(1.0F).normalize();
 							Vec3d vecDiff = new Vec3d(this.posX - player.posX, this.getEntityBoundingBox().minY + (double)(this.height / 2.0F) - (player.posY + (double)player.getEyeHeight()), this.posZ - player.posZ);
 							double dist = vecDiff.lengthVector();
@@ -80,7 +80,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 					if(closestPlayer != null)
 						this.target = closestPlayer;
 				} else {
-					if(this.target.getDistanceToEntity(this) > radius) {
+					if(this.target.getDistance(this) > radius) {
 						this.target = null;
 					} else {
 						Vec3d playerLook = this.target.getLook(1.0F).normalize();
@@ -154,7 +154,7 @@ public class EntityFortressBossTeleporter extends Entity implements IEntityScree
 			List<EntityPlayer> players = this.world.getEntitiesWithinAABB(EntityPlayer.class, checkAABB);
 			EntityPlayer closestPlayer = null;
 			for(EntityPlayer player : players) {
-				if((closestPlayer == null || player.getDistanceToEntity(this) < closestPlayer.getDistanceToEntity(this)) && player.getDistanceToEntity(this) < lookRadius && player.canEntityBeSeen(this)) {
+				if((closestPlayer == null || player.getDistance(this) < closestPlayer.getDistance(this)) && player.getDistance(this) < lookRadius && player.canEntityBeSeen(this)) {
 					closestPlayer = player;
 				}
 			}

@@ -12,7 +12,7 @@ public class ElixirMasking extends ElixirEffect {
 		if(this.isActive(target)) {
 			int strength = this.getStrength(target);
 			double minDist = 6.0D - 4.0D / 4.0D * strength;
-			if(target.getDistanceToEntity(watcher) < minDist) {
+			if(target.getDistance(watcher) < minDist) {
 				return true;
 			} else {
 				return false;

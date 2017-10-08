@@ -46,8 +46,8 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible {
 	}
 
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
+		return CorrosionHelper.getDestroySpeed(super.getDestroySpeed(stack, state), stack, state);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible {
 
 	@Override
 	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
-		return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.damageVsEntity);
+		return CorrosionHelper.getAttributeModifiers(super.getAttributeModifiers(slot, stack), slot, stack, ItemTool.ATTACK_DAMAGE_MODIFIER, this.attackDamage);
 	}
 
 	@Override

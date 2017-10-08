@@ -28,7 +28,7 @@ public class ItemTarminion extends Item {
 			EntityThrownTarminion tarminion = new EntityThrownTarminion(world, player);
 			Vec3d lookVec = player.getLookVec();
 			tarminion.setPosition(player.posX, player.posY + player.getEyeHeight(), player.posZ);
-			tarminion.setThrowableHeading(lookVec.x, lookVec.y, lookVec.z, 0.8F, 0.1F);
+			tarminion.shoot(lookVec.x, lookVec.y, lookVec.z, 0.8F, 0.1F);
 			world.spawnEntity(tarminion);
 
 			if (!player.capabilities.isCreativeMode) {

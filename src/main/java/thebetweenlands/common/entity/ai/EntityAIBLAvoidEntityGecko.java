@@ -96,7 +96,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 		}
 		if (target == null) {
 			return false;
-		} else if (!bushBound && closestLivingEntity.getDistanceSq(target) < closestLivingEntity.getDistanceSqToEntity(gecko)) {
+		} else if (!bushBound && closestLivingEntity.getDistanceSq(target) < closestLivingEntity.getDistanceSq(gecko)) {
 			return false;
 		} else {
 			path = navigator.getPathToPos(target);
@@ -189,7 +189,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 
 	@Override
 	public void updateTask() {
-		if (gecko.getDistanceSqToEntity(closestLivingEntity) < 49) {
+		if (gecko.getDistanceSq(closestLivingEntity) < 49) {
 			gecko.getNavigator().setSpeed(nearSpeed);
 		} else {
 			gecko.getNavigator().setSpeed(farSpeed);

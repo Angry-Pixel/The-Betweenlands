@@ -141,7 +141,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 								float speed = 0.8F;
 								EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this.getOwner());
 								bullet.setLocationAndAngles(boss.posX, boss.posY, boss.posZ, 0, 0);
-								bullet.setThrowableHeading(dir.x, dir.y, dir.z, speed, 0.0F);
+								bullet.shoot(dir.x, dir.y, dir.z, speed, 0.0F);
 								this.world.spawnEntity(bullet);
 							}
 						}
@@ -176,7 +176,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 			return false;
 		} else {
 			if(this.isDeflectable()) {
-				this.setBeenAttacked();
+				this.markVelocityChanged();
 				if (source.getTrueSource() instanceof EntityPlayer) {
 					ItemStack heldItem = ((EntityPlayer)source.getTrueSource()).getHeldItem(EnumHand.MAIN_HAND);
 					if(heldItem != null && heldItem.getItem() instanceof ItemSword) {
@@ -264,7 +264,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 							if(this.canDismount) {
 								Vec3d look = this.getRidingEntity().getLookVec();
 								look.normalize();
-								this.setThrowableHeading(look.x, look.y, look.z, 0.5F, 0.0F);
+								this.shoot(look.x, look.y, look.z, 0.5F, 0.0F);
 								this.dismountRidingEntity();
 								this.setThrower(player);
 							}
@@ -280,7 +280,7 @@ public class EntityFortressBossProjectile extends Entity implements IProjectile 
 	}
 
 	@Override
-	public void setThrowableHeading(double x, double y, double z, float speed, float randMotion) {
+	public void shoot(double x, double y, double z, float speed, float randMotion) {
 		float f2 = MathHelper.sqrt(x * x + y * y + z * z);
 		x /= (double)f2;
 		y /= (double)f2;

@@ -210,7 +210,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 			List<EntityPlayer> eligiblePlayers = this.world.getEntitiesWithinAABB(EntityPlayer.class, searchBB);
 			EntityPlayer closest = null;
 			for(EntityPlayer player : eligiblePlayers) {
-				if(closest == null || closest.getDistanceToEntity(this) > player.getDistanceToEntity(this))
+				if(closest == null || closest.getDistance(this) > player.getDistance(this))
 					closest = player;
 			}
 			if(closest != null) 
@@ -232,7 +232,7 @@ public class EntityFortressBossTurret extends EntityMob implements IEntityBL {
 						bullet.setDeflectable(this.isDeflectable());
 						bullet.setLocationAndAngles(this.posX, this.posY, this.posZ, 0, 0);
 						float speed = 0.5F;
-						bullet.setThrowableHeading(-diff.x, -diff.y, -diff.z, speed, 0.0F);
+						bullet.shoot(-diff.x, -diff.y, -diff.z, speed, 0.0F);
 						this.world.spawnEntity(bullet);
 					}
 				} else {

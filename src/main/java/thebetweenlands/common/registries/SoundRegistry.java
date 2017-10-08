@@ -4,13 +4,14 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.sound.BLSoundEvent;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class SoundRegistry {
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
     // Music
@@ -167,7 +168,7 @@ public class SoundRegistry {
     @SubscribeEvent
     public static void registerSounds(RegistryEvent.Register<SoundEvent> register) {
         try {
-            for (Field field : BlockRegistry.class.getDeclaredFields()) {
+            for (Field field : SoundRegistry.class.getDeclaredFields()) {
                 Object obj = field.get(null);
                 if (obj instanceof BLSoundEvent) {
                     register.getRegistry().register((BLSoundEvent)obj);

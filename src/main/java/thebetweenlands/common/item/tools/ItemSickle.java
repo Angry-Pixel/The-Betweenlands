@@ -75,8 +75,8 @@ public class ItemSickle extends Item implements ICorrodible {
 	}
 	
 	@Override
-	public float getStrVsBlock(ItemStack stack, IBlockState state) {
-		return CorrosionHelper.getStrVsBlock(super.getStrVsBlock(stack, state), stack, state); 
+	public float getDestroySpeed(ItemStack stack, IBlockState state) {
+		return CorrosionHelper.getDestroySpeed(super.getDestroySpeed(stack, state), stack, state);
 	}
 	
 	@Override

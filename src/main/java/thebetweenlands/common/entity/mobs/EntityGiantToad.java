@@ -163,7 +163,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								motionZ += speedMultiplier * 0.8F * MathHelper.sin(angle);
 								this.world.setEntityState(this, (byte) 8);
 								this.strokeTicks = 40;
-							} else if (this.isCollidedHorizontally) {
+							} else if (this.collidedHorizontally) {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
 							}
@@ -186,7 +186,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 								motionX += speedMultiplier * 0.5 * MathHelper.cos(angle);
 								motionZ += speedMultiplier * 0.5 * MathHelper.sin(angle);
 								ForgeHooks.onLivingJump(this);
-							} else if (this.isCollidedHorizontally) {
+							} else if (this.collidedHorizontally) {
 								motionX += 0.01 * MathHelper.cos(angle);
 								motionZ += 0.01 * MathHelper.sin(angle);
 							}
@@ -399,7 +399,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 				}
 
 				if (!this.world.isRemote) {
-					if (this.isCollidedHorizontally) {
+					if (this.collidedHorizontally) {
 						this.motionY += 0.2D;
 						this.strokeTicks = 0;
 					}

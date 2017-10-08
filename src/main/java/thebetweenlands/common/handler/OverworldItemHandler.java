@@ -82,15 +82,9 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onBonemeal(BonemealEvent event) {
-		//ffs why does this event not pass on the item stack...
 		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
-			ItemStack mainHand = event.getEntityPlayer().getHeldItemMainhand();
-			ItemStack offHand = event.getEntityPlayer().getHeldItemOffhand();
-			if(!mainHand.isEmpty() && mainHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
-				event.setResult(Result.DENY);
-				event.setCanceled(true);
-			}
-			if(!offHand.isEmpty() && offHand.getItem() == Items.DYE && !WHITELIST.contains(mainHand.getItem())) {
+			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
+			if(!stack.isEmpty() && stack.getItem() == Items.DYE && !WHITELIST.contains(stack.getItem())) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 			}

@@ -71,11 +71,11 @@ public class ItemRingOfSummoning extends ItemRing {
 						cap.setActive(false);
 						cap.setCooldownTicks(USE_COOLDOWN);
 					} else {
-						int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().grow(18), e -> e.getDistanceToEntity(entity) <= 18.0D).size();
+						int arms = entity.world.getEntitiesWithinAABB(EntityMummyArm.class, entity.getEntityBoundingBox().grow(18), e -> e.getDistance(entity) <= 18.0D).size();
 
 						if(arms < MAX_ARMS) {
 							List<EntityLivingBase> targets = entity.world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(16),
-									e -> e instanceof EntityLiving && e.getDistanceToEntity(entity) <= 16.0D && e != entity);
+									e -> e instanceof EntityLiving && e.getDistance(entity) <= 16.0D && e != entity);
 
 							BlockPos targetPos = null;
 

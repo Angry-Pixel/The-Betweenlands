@@ -27,7 +27,7 @@ public class ItemAngryPebble extends Item {
 		if (!world.isRemote) {
 			world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SORRY, SoundCategory.PLAYERS, 0.7F, 0.8F);
 			EntityAngryPebble pebble = new EntityAngryPebble(world, player);
-			pebble.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, -10, 1.2F, 3.5F);
+			pebble.shoot(player, player.rotationPitch, player.rotationYaw, -10, 1.2F, 3.5F);
 			world.spawnEntity(pebble);
 		}
 

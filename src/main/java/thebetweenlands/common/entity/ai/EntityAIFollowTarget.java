@@ -48,7 +48,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 			return false;
 		} else if (target instanceof EntityPlayer && ((EntityPlayer)target).isSpectator()) {
 			return false;
-		} else if (this.taskOwner.getDistanceSqToEntity(target) < (double)(this.minDist * this.minDist)) {
+		} else if (this.taskOwner.getDistanceSq(target) < (double)(this.minDist * this.minDist)) {
 			return false;
 		}
 
@@ -58,7 +58,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 	@Override
 	public boolean shouldContinueExecuting() {
 		EntityLivingBase target = this.target.get();
-		return target != null && !this.navigator.noPath() && this.taskOwner.getDistanceSqToEntity(target) > (double)(this.maxDist * this.maxDist);
+		return target != null && !this.navigator.noPath() && this.taskOwner.getDistanceSq(target) > (double)(this.maxDist * this.maxDist);
 	}
 
 	@Override
@@ -70,7 +70,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 
 	@Override
 	public void resetTask() {
-		this.navigator.clearPathEntity();
+		this.navigator.clearPath();
 		this.taskOwner.setPathPriority(PathNodeType.WATER, this.oldWaterCost);
 	}
 
@@ -92,7 +92,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 
 				if (!this.navigator.tryMoveToEntityLiving(target, this.speed)) {
 					if (!this.taskOwner.getLeashed()) {
-						if (this.taskOwner.getDistanceSqToEntity(target) >= 144.0D) {
+						if (this.taskOwner.getDistanceSq(target) >= 144.0D) {
 							int i = MathHelper.floor(target.posX) - 2;
 							int j = MathHelper.floor(target.posZ) - 2;
 							int k = MathHelper.floor(target.getEntityBoundingBox().minY);
@@ -101,7 +101,7 @@ public class EntityAIFollowTarget extends EntityAIBase {
 								for (int i1 = 0; i1 <= 4; ++i1) {
 									if ((l < 1 || i1 < 1 || l > 3 || i1 > 3) && this.theWorld.getBlockState(new BlockPos(i + l, k - 1, j + i1)).isBlockNormalCube() && this.isEmptyBlock(new BlockPos(i + l, k, j + i1)) && this.isEmptyBlock(new BlockPos(i + l, k + 1, j + i1))) {
 										this.taskOwner.setLocationAndAngles((double)((float)(i + l) + 0.5F), (double)k, (double)((float)(j + i1) + 0.5F), this.taskOwner.rotationYaw, this.taskOwner.rotationPitch);
-										this.navigator.clearPathEntity();
+										this.navigator.clearPath();
 										return;
 									}
 								}

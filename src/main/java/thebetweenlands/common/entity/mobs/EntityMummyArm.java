@@ -124,7 +124,7 @@ public class EntityMummyArm extends EntityCreature implements IEntityBL {
 
 			Entity owner = this.getOwner();
 
-			if(owner == null || owner.getDistanceToEntity(this) > 32.0D) {
+			if(owner == null || owner.getDistance(this) > 32.0D) {
 				this.setHealth(0);
 			} else if(owner instanceof EntityPlayer) {
 				EntityPlayer player = (EntityPlayer) owner;

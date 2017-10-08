@@ -35,7 +35,7 @@ public class EntityAIStay extends EntityAIBase {
 	public void updateTask() {
 		PathNavigate navigator = this.taskOwner.getNavigator();
 		if(navigator != null && !navigator.noPath()) {
-			navigator.clearPathEntity();
+			navigator.clearPath();
 		}
 	}
 }

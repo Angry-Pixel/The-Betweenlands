@@ -493,7 +493,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		public void updateTask() {
 			--this.attackTime;
 			EntityLivingBase target = this.pyrad.getAttackTarget();
-			double distSq = this.pyrad.getDistanceSqToEntity(target);
+			double distSq = this.pyrad.getDistanceSq(target);
 
 			if (distSq < 4.0D) {
 				if (this.attackTime <= 0) {

@@ -632,7 +632,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 									float speed = 0.8F;
 									EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this);
 									bullet.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ, 0, 0);
-									bullet.setThrowableHeading(dir.x, dir.y, dir.z, speed, 0.0F);
+									bullet.shoot(dir.x, dir.y, dir.z, speed, 0.0F);
 									this.world.spawnEntity(bullet);
 								}
 							}
@@ -774,7 +774,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 						float speed = 0.8F;
 						EntityFortressBossProjectile bullet = new EntityFortressBossProjectile(this.world, this);
 						bullet.setLocationAndAngles(this.posX, this.posY + 0.5D, this.posZ, 0, 0);
-						bullet.setThrowableHeading(dir.x, dir.y, dir.z, speed, 0.0F);
+						bullet.shoot(dir.x, dir.y, dir.z, speed, 0.0F);
 						this.world.spawnEntity(bullet);
 					}
 				}
@@ -788,6 +788,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 					if(location.getType() == EnumLocationType.WIGHT_TOWER) {
 						if(location.getGuard() != null) {
 							location.getGuard().clear(this.world);
+							location.setDirty(true, true);
 						}
 					}
 				}

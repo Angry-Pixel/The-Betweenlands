@@ -66,7 +66,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
         Vec3d pos = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 16, 7, new Vec3d(closestLivingEntity.posX, closestLivingEntity.posY, closestLivingEntity.posZ));
         if (pos == null) {
             return false;
-        } else if (closestLivingEntity.getDistanceSq(pos.x, pos.y, pos.z) < closestLivingEntity.getDistanceSqToEntity(entity)) {
+        } else if (closestLivingEntity.getDistanceSq(pos.x, pos.y, pos.z) < closestLivingEntity.getDistanceSq(entity)) {
             return false;
         } else {
             entityPathEntity = entityPathNavigate.getPathToXYZ(pos.x, pos.y, pos.z);
@@ -91,7 +91,7 @@ public class EntityAIBLAvoidEntity extends EntityAIBase {
 
     @Override
     public void updateTask() {
-        if (entity.getDistanceSqToEntity(closestLivingEntity) < 49) {
+        if (entity.getDistanceSq(closestLivingEntity) < 49) {
             entity.getNavigator().setSpeed(nearSpeed);
         } else {
             entity.getNavigator().setSpeed(farSpeed);

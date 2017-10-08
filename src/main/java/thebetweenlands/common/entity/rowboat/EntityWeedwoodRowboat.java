@@ -262,7 +262,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             setForwardDirection(-getForwardDirection());
             setTimeSinceHit(10);
             setDamageTaken(getDamageTaken() + amount * 10);
-            setBeenAttacked();
+            markVelocityChanged();
             boolean creative = source.getTrueSource() instanceof EntityPlayer && ((EntityPlayer) source.getTrueSource()).capabilities.isCreativeMode;
             if (creative || getDamageTaken() > 20) {
                 if (!creative && world.getGameRules().getBoolean("doEntityDrops")) {

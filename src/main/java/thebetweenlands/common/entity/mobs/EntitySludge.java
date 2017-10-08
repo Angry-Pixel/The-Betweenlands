@@ -181,7 +181,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	}
 
 	protected void dealDamage(EntityLivingBase entityIn) {
-		if (this.canEntityBeSeen(entityIn) && this.getDistanceSqToEntity(entityIn) < 2.5D && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())) {
+		if (this.canEntityBeSeen(entityIn) && this.getDistanceSq(entityIn) < 2.5D && entityIn.attackEntityFrom(DamageSource.causeMobDamage(this), (float)this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue())) {
 			this.playSound(SoundEvents.ENTITY_SLIME_ATTACK, 1.0F, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F + 1.0F);
 		}
 	}
@@ -224,7 +224,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	protected boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
 		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(distanceX, distanceY, distanceZ));
 		for (Entity entityNeighbor : entities) {
-			if (entityNeighbor instanceof EntityPlayer && this.getDistanceToEntity(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.disableDamage && this.getEntitySenses().canSee(entityNeighbor)))
+			if (entityNeighbor instanceof EntityPlayer && this.getDistance(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.disableDamage && this.getEntitySenses().canSee(entityNeighbor)))
 				return true;
 		}
 		return false;

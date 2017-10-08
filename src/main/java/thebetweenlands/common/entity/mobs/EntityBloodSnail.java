@@ -142,7 +142,7 @@ public class EntityBloodSnail extends EntityMob implements IEntityBL {
 			double targetY = entity.posY + entity.getEyeHeight() / 2.0D - this.posY;
 			double targetZ = entity.posZ + entity.motionZ - this.posZ;
 			float target = MathHelper.sqrt(targetX * targetX + targetZ * targetZ);
-			missile.setThrowableHeading(targetX, targetY + target * 0.1F, targetZ, 0.75F, 8.0F);
+			missile.shoot(targetX, targetY + target * 0.1F, targetZ, 0.75F, 8.0F);
 			world.spawnEntity(missile);
 		}
 	}

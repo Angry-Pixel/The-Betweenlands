@@ -96,7 +96,7 @@ public class EntityDarkDruid extends EntityMob {
         super.onUpdate();
         if (!world.isRemote) {
             if (getAttackTarget() != null) {
-                if (this.attackDelayCounter > 0 && !this.isCasting() && getAttackTarget().getDistanceToEntity(this) < 10.0D) {
+                if (this.attackDelayCounter > 0 && !this.isCasting() && getAttackTarget().getDistance(this) < 10.0D) {
                     this.attackDelayCounter--;
                 }
                 if (this.attackDelayCounter <= 0 || this.attackCounter > 0) {
@@ -247,7 +247,7 @@ public class EntityDarkDruid extends EntityMob {
     }
 
     public void chargeSpell(Entity entity) {
-        if (entity.getDistanceToEntity(this) <= 4) {
+        if (entity.getDistance(this) <= 4) {
             double dx = entity.posX - this.posX;
             double dz = entity.posZ - this.posZ;
             double len = Math.sqrt(dx * dx + dz * dz);

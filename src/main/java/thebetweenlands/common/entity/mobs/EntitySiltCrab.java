@@ -108,7 +108,7 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
-		if (!this.world.isRemote && getDistanceToEntity(player) <= 1.5F && this.canAttack) {
+		if (!this.world.isRemote && getDistance(player) <= 1.5F && this.canAttack) {
 			this.aggroCooldown = 0;
 		}
 	}

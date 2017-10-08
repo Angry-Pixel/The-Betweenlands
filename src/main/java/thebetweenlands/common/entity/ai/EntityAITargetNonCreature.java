@@ -84,7 +84,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 			{
 				double d0 = this.getTargetDistance();
 
-				if (this.taskOwner.getDistanceSqToEntity(entitylivingbase) > d0 * d0)
+				if (this.taskOwner.getDistanceSq(entitylivingbase) > d0 * d0)
 				{
 					return false;
 				}
