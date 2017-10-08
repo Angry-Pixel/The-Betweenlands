@@ -2,6 +2,7 @@ package thebetweenlands.compat.jei.recipes.animator;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -18,7 +19,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnimatorRecipeJEI extends BlankRecipeWrapper {
+public class AnimatorRecipeJEI implements IRecipeWrapper {
     private final ItemStack input;
     private int requiredFuel, requiredLife;
     private ItemStack result = null;

@@ -2,6 +2,7 @@ package thebetweenlands.compat.jei.recipes.compost;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.common.item.misc.ItemMisc;
@@ -13,7 +14,7 @@ import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompostRecipeJEI extends BlankRecipeWrapper {
+public class CompostRecipeJEI implements IRecipeWrapper {
     private ItemStack input;
     private int compostAmount;
     private int compostTime;

@@ -2,6 +2,7 @@ package thebetweenlands.compat.jei.recipes.purifier;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
+import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -11,7 +12,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 
 import java.util.ArrayList;
 
-public class PurifierRecipeJEI extends BlankRecipeWrapper {
+public class PurifierRecipeJEI implements IRecipeWrapper {
 
     private ItemStack input;
     private ItemStack output;

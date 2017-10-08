@@ -194,7 +194,7 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	@Override
 	public ItemStack removeStackFromSlot(int index) {
 		this.accessSlot(index);
-		return this.inventoryHandler.extractItem(index, this.inventoryHandler.getStackInSlot(index) != null ? this.inventoryHandler.getStackInSlot(index).getCount() : 0, false);
+		return this.inventoryHandler.extractItem(index, !this.inventoryHandler.getStackInSlot(index).isEmpty() ? this.inventoryHandler.getStackInSlot(index).getCount() : 0, false);
 	}
 
 	@Override

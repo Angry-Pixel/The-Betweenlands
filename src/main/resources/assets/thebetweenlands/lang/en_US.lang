@@ -181,6 +181,9 @@ tile.thebetweenlands.swamp_grass.name=Swamp Grass
 tile.thebetweenlands.swamp_kelp.name=Swamp Kelp
 tile.thebetweenlands.swamp_plant.name=Swamp Plant
 tile.thebetweenlands.swamp_water.name=Swamp Water
+tile.thebetweenlands.stagnant_water.name=Stagnant Water
+tile.thebetweenlands.tar.name=Tar
+tile.thebetweenlands.rubber.name=Rubber
 tile.thebetweenlands.syrmorite_block.name=Block of Syrmorite
 tile.thebetweenlands.syrmorite_ore.name=Syrmorite Ore
 tile.thebetweenlands.temple_pillar.name=Temple Pillar
@@ -506,6 +509,7 @@ item.thebetweenlands.tar_beast_heart.name=Tar Beast Heart
 item.thebetweenlands.tar_beast_heart_animated.name=Animated Tar Beast Heart
 item.thebetweenlands.tar_drip.name=Tar Drip
 item.thebetweenlands.test_item.name=Test Item
+item.thebetweenlands.location_item.name=Location Debug
 item.thebetweenlands.the_explorer.name=Explorer's Disc
 item.thebetweenlands.thorns_item.name=Thorn Branch
 item.thebetweenlands.valonite_axe.name=Valonite Axe
@@ -606,9 +610,9 @@ item.thebetweenlands.lurker_skin_shield.name=Lurker Skin Shield
 
 
 # Fluids
-fluid.swampWater=Swamp Water
+fluid.swamp_water=Swamp Water
 fluid.tar=Tar
-fluid.stagnantWater=Stagnant Water
+fluid.stagnant_water=Stagnant Water
 fluid.rubber=Rubber
 
 # Creative Tabs

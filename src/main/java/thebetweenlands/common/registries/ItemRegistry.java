@@ -323,17 +323,17 @@ public class ItemRegistry {
     }
 
     public static boolean isIngotFromOre(ItemStack input, ItemStack output) {
-        if (input == null || output == null) return false;
+        if (input.isEmpty() || output.isEmpty()) return false;
         return isOre(input) && isIngot(output);
     }
 
     public static boolean isOre(ItemStack stack) {
-        if (stack == null) return false;
+        if (stack.isEmpty()) return false;
         return containsItem(ORES, stack);
     }
 
     public static boolean isIngot(ItemStack stack) {
-        if (stack == null) return false;
+        if (stack.isEmpty()) return false;
         return containsItem(INGOTS, stack);
     }
 
