@@ -5,7 +5,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.sun.istack.internal.NotNull;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemShears;
@@ -28,7 +27,7 @@ public class BlockWeepingBlue extends BlockDoublePlantBL {
 	}
 
 	@Override
-	public void harvestBlock(World worldIn, @NotNull EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @NotNull ItemStack stack) {
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if(!worldIn.isRemote && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
 			player.addStat(StatList.getBlockStats(this));
 			player.addExhaustion(0.025F);
