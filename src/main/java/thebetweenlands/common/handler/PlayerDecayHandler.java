@@ -10,10 +10,12 @@ import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.GameruleRegistry;
 
 public class PlayerDecayHandler {
 	@SubscribeEvent
@@ -86,7 +88,9 @@ public class PlayerDecayHandler {
 						}
 					}
 
-					capability.getDecayStats().onUpdate(player);
+					if(GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY)) {
+						capability.getDecayStats().onUpdate(player);
+					}
 				}
 			}
 		}

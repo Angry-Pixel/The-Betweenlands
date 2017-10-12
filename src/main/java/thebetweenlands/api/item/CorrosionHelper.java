@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.util.NBTHelper;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -140,9 +141,9 @@ public class CorrosionHelper {
 	 * @param isHeldItem
 	 */
 	public static void updateCorrosion(ItemStack stack, World world, Entity holder, int slot, boolean isHeldItem) {
-		/*if (world.isRemote || !BLGamerules.getGameRuleBooleanValue(BLGamerules.BL_CORROSION)) { TODO: BLGamerules
+		if (world.isRemote || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_CORROSION)) {
 			return;
-		}*/
+		}
 		if(!world.isRemote && holder.dimension == ConfigHandler.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
 			if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();

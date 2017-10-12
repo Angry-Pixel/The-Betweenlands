@@ -43,6 +43,7 @@ import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.common.registries.MessageRegistry;
 import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -138,8 +139,8 @@ public class TheBetweenlands {
 		event.registerServerCommand(new CommandAspectDiscovery());
 		/*if (ConfigHandler.DEBUG) {
 			event.registerServerCommand(new CommandTickSpeed());
-		}
-		BLGamerules.INSTANCE.onServerStarting(event);*/
+		}*/
+		GameruleRegistry.INSTANCE.onServerStarting(event);
 		event.registerServerCommand(new CommandReloadRecipes());
 	}
 
