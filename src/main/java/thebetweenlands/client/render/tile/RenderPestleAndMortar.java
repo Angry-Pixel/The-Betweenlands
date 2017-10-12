@@ -64,7 +64,7 @@ public class RenderPestleAndMortar extends TileEntitySpecialRenderer<TileEntityM
 
 		GlStateManager.popMatrix();
 
-		if (te != null && te.getStackInSlot(3) != null) {
+		if (te != null && !te.getStackInSlot(3).isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, y + 1.43D, z + 0.5D);
 			GlStateManager.scale(0.15D, 0.15D, 0.15D);

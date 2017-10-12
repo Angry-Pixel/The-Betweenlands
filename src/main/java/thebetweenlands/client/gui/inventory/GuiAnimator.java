@@ -110,7 +110,7 @@ public class GuiAnimator extends GuiContainer {
 		super.updateScreen();
 		boolean shouldClose = false;
 		ItemStack input = tile.getStackInSlot(0);
-		if (input != null) {
+		if (!input.isEmpty()) {
 			IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(input);
 			if(recipe != null)
 				shouldClose = recipe.getCloseOnFinish(input);

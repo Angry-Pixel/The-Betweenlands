@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.ImmutableList;
 
+import com.sun.istack.internal.NotNull;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -163,8 +164,8 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 	}
 	
 	@Override
-	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
-		if(!worldIn.isRemote && stack != null && stack.getItem() instanceof ItemShears) {
+	public void harvestBlock(World worldIn, @NotNull EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @NotNull ItemStack stack) {
+		if(!worldIn.isRemote && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
 			player.addStat(StatList.getBlockStats(this));
 			player.addExhaustion(0.025F);
 		} else {

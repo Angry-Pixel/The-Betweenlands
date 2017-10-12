@@ -101,7 +101,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 	protected void renderItemInSlot(TileEntityItemShelf te, int slot, double x, double y, double z, float rotation) {
 		ItemStack stack = te.getStackInSlot(slot);
 
-		if (stack != null) {
+		if (!stack.isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.pushAttrib();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);

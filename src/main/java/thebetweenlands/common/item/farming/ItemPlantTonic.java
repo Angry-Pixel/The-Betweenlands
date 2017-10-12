@@ -65,7 +65,7 @@ public class ItemPlantTonic extends Item {
 				if(!world.isRemote && !player.isCreative()) {
 					stack.setItemDamage(stack.getItemDamage() + 1);
 					if(stack.getItemDamage() >= stack.getMaxDamage()) {
-						player.setHeldItem(hand, this.empty != null ? this.empty.copy() : null);
+						player.setHeldItem(hand, !this.empty.isEmpty() ? this.empty.copy() : ItemStack.EMPTY);
 					}
 				}
 

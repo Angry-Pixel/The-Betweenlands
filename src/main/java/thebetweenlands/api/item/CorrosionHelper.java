@@ -64,7 +64,7 @@ public class CorrosionHelper {
 	 * @return
 	 */
 	public static float getModifier(ItemStack stack) {
-		if(stack != null && stack.getItem() instanceof ICorrodible) {
+		if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
 			return (-0.7F * (corrodible.getCorrosion(stack) / (float)corrodible.getMaxCorrosion(stack)) + 1);
 		}
@@ -144,7 +144,7 @@ public class CorrosionHelper {
 			return;
 		}*/
 		if(!world.isRemote && holder.dimension == ConfigHandler.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
-			if(stack != null && stack.getItem() instanceof ICorrodible) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();
 				int corrosion = corrodible.getCorrosion(stack);
 				if (corrosion < corrodible.getMaxCorrosion(stack)) {

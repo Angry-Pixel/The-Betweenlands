@@ -74,7 +74,7 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 
 		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() == ItemRegistry.LIFE_CRYSTAL) {
 					requiredHearts += MathHelper.ceil(stack.getItemDamage() / (stack.getMaxDamage() / 8.0F));
 				}
@@ -83,7 +83,7 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 
 		for (int i = 0; i < remaining.size() ;++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(stack != null && stack.getItem() == ItemRegistry.WIGHT_HEART) {
+			if(!stack.isEmpty() && stack.getItem() == ItemRegistry.WIGHT_HEART) {
 				if(requiredHearts > 0) {
 					requiredHearts--;
 				} else {

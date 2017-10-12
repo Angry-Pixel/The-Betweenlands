@@ -137,7 +137,7 @@ public class EquipmentHelper {
 			}
 		}
 
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class EquipmentHelper {
 	 */
 	public static boolean tryPlayerUnequip(EntityPlayer player, Entity target) {
 		ItemStack unequipped = unequipItem(player, target, false);
-		if(unequipped != null) {
+		if(!unequipped.isEmpty()) {
 			if(!player.inventory.addItemStackToInventory(unequipped)) {
 				target.entityDropItem(unequipped, target.getEyeHeight());
 			}

@@ -80,7 +80,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 			for (int i = 0; i < te.getSizeInventory(); i++) {
 				ItemStack stack = te.getStackInSlot(i);
 
-				if (stack != null) {
+				if (!stack.isEmpty()) {
 					GlStateManager.pushMatrix();
 
 					// 0.4 for items, 0.5 for compost

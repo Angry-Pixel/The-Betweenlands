@@ -38,7 +38,7 @@ import thebetweenlands.util.config.ConfigHandler;
 public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
-		if(StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false).anyMatch(stack -> stack != null && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
+		if(StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false).anyMatch(stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
 			World world = Minecraft.getMinecraft().world;
 			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
 

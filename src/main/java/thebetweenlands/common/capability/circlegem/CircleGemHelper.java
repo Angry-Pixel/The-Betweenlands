@@ -170,7 +170,7 @@ public class CircleGemHelper {
 				CircleGemType attackerItemGem = CircleGemType.NONE;
 				if(attacker instanceof EntityLivingBase) {
 					ItemStack heldItem = getActiveItem(attacker);
-					if(heldItem != null) attackerItemGem = CircleGemHelper.getGem(heldItem);
+					if(!heldItem.isEmpty()) attackerItemGem = CircleGemHelper.getGem(heldItem);
 				}
 				//At this point either userGem or attackerItemGem are set because either there's a user shooting a (non-living) projectile (user != attacker) or the user is attacking directly (user == attacker)
 				List<CircleGem> attackedGems = CircleGemHelper.getGems(attackedEntity); 
@@ -178,7 +178,7 @@ public class CircleGemHelper {
 				if(attacker instanceof EntityPlayer) {
 					EntityPlayer player = (EntityPlayer) attacker;
 					ItemStack heldItem = player.getActiveItemStack();
-					if(heldItem != null && player.isActiveItemStackBlocking()) {
+					if(!heldItem.isEmpty() && player.isActiveItemStackBlocking()) {
 						attackedBlockingItemGem = CircleGemHelper.getGem(heldItem);
 					}
 				}
@@ -212,7 +212,7 @@ public class CircleGemHelper {
 				if(attackedEntity instanceof EntityLivingBase) {
 					Iterable<ItemStack> equipment = ((EntityLivingBase)attackedEntity).getEquipmentAndArmor();
 					for(ItemStack equipmentStack : equipment) {
-						if(equipmentStack != null && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
+						if(!equipmentStack.isEmpty() && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
 							CircleGemType armorGem = CircleGemHelper.getGem(equipmentStack);
 							for(CircleGem gem : attackerGems) {
 								if(gem.matchCombatType(CircleGem.CombatType.OFFENSIVE)) {
@@ -264,7 +264,7 @@ public class CircleGemHelper {
 				if(attackedEntity instanceof EntityLivingBase) {
 					Iterable<ItemStack> equipment = ((EntityLivingBase)attackedEntity).getEquipmentAndArmor();
 					for(ItemStack equipmentStack : equipment) {
-						if(equipmentStack != null && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
+						if(!equipmentStack.isEmpty() && !equipmentStack.equals(getActiveItem(attackedEntity)) && equipmentStack.getItem() instanceof ItemArmor) {
 							CircleGemType armorGem = CircleGemHelper.getGem(equipmentStack);
 							if(armorGem != CircleGemType.NONE) {
 								defenderGemCounts.adjustOrPutValue(armorGem, 1, 1);
@@ -314,12 +314,12 @@ public class CircleGemHelper {
 	private static ItemStack getActiveItem(Entity entity) {
 		if(entity instanceof EntityLivingBase) {
 			EntityLivingBase living = (EntityLivingBase) entity;
-			if(living.getActiveItemStack() != null) {
+			if(!living.getActiveItemStack().isEmpty()) {
 				return living.getActiveItemStack();
 			}
 			return living.getHeldItem(living.getActiveHand());
 		}
-		return null;
+		return ItemStack.EMPTY;
 	}
 
 	private static float getMultipleProcStrength(int procs, float strength) {

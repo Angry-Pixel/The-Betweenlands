@@ -77,7 +77,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 			double viewRot = 180D + Math.toDegrees(Math.atan2(x + 0.5D, z + 0.5D));
 
 			// Sulfur rendering
-			if (te.getStackInSlot(2) != null) {
+			if (!te.getStackInSlot(2).isEmpty()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 0.27D, z + 0.5D);
 				GlStateManager.rotate(180, 1, 0, 0);
@@ -101,7 +101,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 			}
 
 			// Life crystal
-			if (te.getStackInSlot(1) != null) {
+			if (!te.getStackInSlot(1).isEmpty()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 0.43D, z + 0.5D);
 				GlStateManager.scale(0.18D, 0.18D, 0.18D);
@@ -116,7 +116,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 
 			// Item
 			ItemStack input = te.getStackInSlot(0);
-			if (input != null) {
+			if (!input.isEmpty()) {
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 1.43D, z + 0.5D);
 

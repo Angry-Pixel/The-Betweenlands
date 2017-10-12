@@ -40,7 +40,7 @@ public class Categories {
 
 		@Override
 		public void renderCategory(double centerX, double centerY, double dirX, double dirY, double radius, double startX, double startY, double angle, double segmentAngle) {
-			if(this.item != null) {
+			if(!this.item.isEmpty()) {
 				GlStateManager.pushMatrix();
 				double posX = centerX + startX + dirX * radius / 2.0D - 8;
 				double posY = centerY + startY + dirY * radius / 2.0D - 8;
@@ -97,7 +97,7 @@ public class Categories {
 			if(sender.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 				ItemStack unequipped = EquipmentHelper.unequipItem(sender, sender, this.inventory, this.slot, false);
 
-				if(unequipped != null) {
+				if(!unequipped.isEmpty()) {
 					TheBetweenlands.networkWrapper.sendToServer(new MessageEquipItem(sender, this.inventory, this.slot));
 
 					sender.inventory.addItemStackToInventory(unequipped);

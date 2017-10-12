@@ -53,10 +53,10 @@ public class BlockFenceBetweenlands extends Block {
 	public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.625D, 0.0D, 0.375D, 1.0D, 1.5D, 0.625D);
 
 	public BlockFenceBetweenlands(IBlockState state) {
-		//TODO state.getMapColor()
-		super(state.getMaterial(), MapColor.WOOD);
+		super(state.getMaterial(), state.getMaterial().getMaterialMapColor());
 		setSoundType(state.getBlock().getSoundType());
 		setHardness(2.0F);
+		setResistance(5.0F);
 		setDefaultState(this.blockState.getBaseState().withProperty(NORTH, Boolean.FALSE).withProperty(EAST, Boolean.FALSE).withProperty(SOUTH, Boolean.FALSE).withProperty(WEST, Boolean.FALSE));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}

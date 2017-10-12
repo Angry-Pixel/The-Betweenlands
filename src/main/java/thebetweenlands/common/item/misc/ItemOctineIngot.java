@@ -53,7 +53,7 @@ public class ItemOctineIngot extends Item {
 			boolean hasTinder = false;
 			boolean isBlockTinder = false;
 			IBlockState blockState = worldIn.getBlockState(result.getBlockPos());
-			if(this.isTinder(blockState, null)) {
+			if(this.isTinder(blockState, ItemStack.EMPTY)) {
 				hasTinder = true;
 				isBlockTinder = true;
 			} else {
@@ -81,7 +81,7 @@ public class ItemOctineIngot extends Item {
 				boolean hasTinder = false;
 				boolean isBlockTinder = false;
 				IBlockState blockState = worldIn.getBlockState(pos);
-				if(this.isTinder(blockState, null)) {
+				if(this.isTinder(blockState, ItemStack.EMPTY)) {
 					hasTinder = true;
 					isBlockTinder = true;
 				} else {
@@ -126,7 +126,7 @@ public class ItemOctineIngot extends Item {
 					block == BlockRegistry.LICHEN ||
 					block == BlockRegistry.THORNS;
 		}
-		if(stack != null) {
+		if(!stack.isEmpty()) {
 			if(stack.getItem() instanceof ItemBlock) {
 				ItemBlock itemBlock = (ItemBlock) stack.getItem();
 				return this.isTinder(itemBlock.getBlock().getDefaultState(), null);

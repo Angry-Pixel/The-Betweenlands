@@ -184,7 +184,7 @@ public class ScreenRenderHandler extends Gui {
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							ItemStack stack = inv.getStackInSlot(i);
 
-							if(stack != null) {
+							if(!stack.isEmpty()) {
 								float scale = 1.0F;
 
 								GlStateManager.pushMatrix();

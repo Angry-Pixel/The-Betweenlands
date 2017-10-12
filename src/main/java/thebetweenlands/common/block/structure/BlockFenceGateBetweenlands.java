@@ -45,8 +45,7 @@ public class BlockFenceGateBetweenlands extends BlockHorizontal implements IStat
     protected static final AxisAlignedBB AABB_COLLISION_BOX_XAXIS = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.5D, 1.0D);
 
     public BlockFenceGateBetweenlands(IBlockState state) {
-        //TODO state.getMapColor (maybe have wood ENUM's like vanilla)
-        super(state.getMaterial(), MapColor.WOOD);
+        super(state.getMaterial(), state.getMaterial().getMaterialMapColor());
         setSoundType(state.getBlock().getSoundType());
         setHardness(2.0F);
         this.setDefaultState(this.blockState.getBaseState().withProperty(OPEN, Boolean.FALSE).withProperty(POWERED, Boolean.FALSE).withProperty(IN_WALL, Boolean.FALSE));

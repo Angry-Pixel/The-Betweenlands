@@ -40,19 +40,19 @@ public class BlockGenericOre extends BasicBlock {
 	@Override
 	public int quantityDropped(Random random) {
 		ItemStack oreDrop = this.getOreDrop(random, 0);
-		return oreDrop != null ? oreDrop.getCount() : 0;
+		return !oreDrop.isEmpty() ? oreDrop.getCount() : 0;
 	}
 
 	@Override
 	public int quantityDroppedWithBonus(int fortune, Random random) {
 		ItemStack oreDrop = this.getOreDrop(random, fortune);
-		return oreDrop != null ? oreDrop.getCount() : 0;
+		return !oreDrop.isEmpty() ? oreDrop.getCount() : 0;
 	}
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		ItemStack oreDrop = this.getOreDrop(rand, fortune);
-		return oreDrop != null ? oreDrop.getItem() : null;
+		return !oreDrop.isEmpty() ? oreDrop.getItem() : null;
 	}
 
 	@Override
@@ -63,7 +63,7 @@ public class BlockGenericOre extends BasicBlock {
 	@Override
 	public int damageDropped(IBlockState state) {
 		ItemStack oreDrop = this.getOreDrop(this.rand, 0);
-		return oreDrop != null ? oreDrop.getItemDamage() : 0;
+		return !oreDrop.isEmpty() ? oreDrop.getItemDamage() : 0;
 	}
 
 	@Override

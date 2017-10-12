@@ -14,13 +14,13 @@ import thebetweenlands.common.item.misc.ItemGem;
 public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
-		ItemStack tool = null;
-		ItemStack gem = null;
+		ItemStack tool = ItemStack.EMPTY;
+		ItemStack gem = ItemStack.EMPTY;
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
-			if(stack != null) {
+			if(!stack.isEmpty()) {
 				if(stack.getItem() instanceof ItemGem) {
-					if(gem != null) {
+					if(!gem.isEmpty()) {
 						return false;
 					}
 					gem = stack;
@@ -28,7 +28,7 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 					if(!CircleGemHelper.isApplicable(stack.getItem())) {
 						return false;
 					} else {
-						if(tool != null) {
+						if(!tool.isEmpty()) {
 							return false;
 						}
 						tool = stack;
@@ -36,7 +36,7 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 				}
 			}
 		}
-		return (tool != null && gem != null) && (CircleGemHelper.getGem(tool) != ((ItemGem)gem.getItem()).type);
+		return (!tool.isEmpty() && !gem.isEmpty()) && (CircleGemHelper.getGem(tool) != ((ItemGem)gem.getItem()).type);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 				}
 			}
 		}
-		if(tool != null && gem != null) {
+		if(!tool.isEmpty() && !gem.isEmpty()) {
 			ItemStack result = tool.copy();
 			CircleGemType appliedGem = ((ItemGem)gem.getItem()).type;
 			CircleGemType toolGem = CircleGemHelper.getGem(tool);

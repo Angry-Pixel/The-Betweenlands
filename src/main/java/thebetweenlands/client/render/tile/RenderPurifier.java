@@ -58,7 +58,7 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 		float size = 1F / capacity * amount;
 
 
-		if (tile.getStackInSlot(2) != null) {
+		if (!tile.getStackInSlot(2).isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5D, y + 0.27D, z + 0.5D);
 			GlStateManager.rotate(180, 1, 0, 0);

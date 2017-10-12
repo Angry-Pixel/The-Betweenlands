@@ -71,7 +71,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
             }
         }
 
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override

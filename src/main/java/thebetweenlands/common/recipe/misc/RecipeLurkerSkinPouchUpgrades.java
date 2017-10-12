@@ -22,7 +22,7 @@ public class RecipeLurkerSkinPouchUpgrades  extends IForgeRegistryEntry.Impl<IRe
 		}
 
 		for (int i = 0; i < size; i++) {
-			if ((is = craftMatrix.getStackInSlot(i)) == null) {
+			if ((is = craftMatrix.getStackInSlot(i)).isEmpty()) {
 				return false;
 			}
 
@@ -40,16 +40,16 @@ public class RecipeLurkerSkinPouchUpgrades  extends IForgeRegistryEntry.Impl<IRe
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting craftMatrix) {
-		ItemStack is = null;
+		ItemStack is = ItemStack.EMPTY;
 
 		for (int a = 0; a < craftMatrix.getSizeInventory(); a++) {
 			is = craftMatrix.getStackInSlot(a);
-			if (is != null && is.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
+			if (!is.isEmpty() && is.getItem() == ItemRegistry.LURKER_SKIN_POUCH) {
 				break;
 			}
 		}
 
-		if (is == null) {
+		if (is.isEmpty()) {
 			return ItemStack.EMPTY;
 		}
 

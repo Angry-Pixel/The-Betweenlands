@@ -845,8 +845,8 @@ jei.thebetweenlands.recipe.purifier=Purifier
 jei.thebetweenlands.recipe.compost=Compost
 jei.thebetweenlands.compost.amount=Compost amount: %d
 jei.thebetweenlands.time=Process time: %d minutes and %d seconds
-jei.thebetweenlands.time.minutes=Process time: %d seconds
-jei.thebetweenlands.time.seconds=Process time: %d minutes
+jei.thebetweenlands.time.minutes=Process time: %d minutes
+jei.thebetweenlands.time.seconds=Process time: %d seconds
 jei.thebetweenlands.animator.life=Life amount: %d
 jei.thebetweenlands.animator.fuel=Fuel amount: %d
 

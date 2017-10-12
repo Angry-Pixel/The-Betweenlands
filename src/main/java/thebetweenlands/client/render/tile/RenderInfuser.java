@@ -140,7 +140,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 	}
 
 	private void renderItemInSlot(TileEntityInfuser infuser, int slotIndex, double x, double y, double z, double itemBob, double rotation) {
-		if (infuser.getStackInSlot(slotIndex) != null) {
+		if (!infuser.getStackInSlot(slotIndex).isEmpty()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.translate(x, y, z);
