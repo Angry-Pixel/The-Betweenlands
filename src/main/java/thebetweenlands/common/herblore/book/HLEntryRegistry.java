@@ -12,6 +12,8 @@ import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.ButtonWidget;
 import thebetweenlands.common.herblore.book.widgets.PictureWidget;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
+import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -114,7 +116,6 @@ public class HLEntryRegistry {
         ArrayList<Page> infusionPages = new ArrayList<>();
         ArrayList<Page> antiInfusionPages = new ArrayList<>();
 
-        /*TODO add when elixir item is added
         for (ElixirEffect effect : ElixirEffectRegistry.getEffects()) {
             if (effect != ElixirEffectRegistry.EFFECT_PETRIFY && effect != ElixirEffectRegistry.EFFECT_ISOLATEDSENSES && effect != ElixirEffectRegistry.EFFECT_LIMBLESS && effect != ElixirEffectRegistry.EFFECT_DEFORMED && effect != ElixirEffectRegistry.EFFECT_HUNTERSSENSEMASTER && effect != ElixirEffectRegistry.EFFECT_WINGS && effect != ElixirEffectRegistry.EFFECT_GILLSGROWTH) {
                 if (effect.isAntiInfusion())
@@ -122,7 +123,7 @@ public class HLEntryRegistry {
                 else
                     infusionPages.addAll(PageCreators.elixirPages(ItemRegistry.ELIXIR.getElixirItem(effect, 1, 1, 0), manualType, effect));
             }
-        }*/
+        }
 
         ArrayList<Page> temp = new ArrayList<>();
         while (infusionPages.size() > 0) {

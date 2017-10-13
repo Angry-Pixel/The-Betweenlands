@@ -4,6 +4,7 @@ import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -11,6 +12,7 @@ import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -25,10 +27,9 @@ public class BlockStagnantWater extends BlockFluidClassic implements IStateMappe
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		//TODO: Requires exliris
-		//		if (entity instanceof EntityPlayer && !world.isRemote && !((EntityPlayer)entity).isPotionActive(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect())) {
-		//			((EntityPlayer)entity).addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(60, 3));
-		//		}
+		if (entityIn instanceof EntityPlayer && !worldIn.isRemote && !((EntityPlayer)entityIn).isPotionActive(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect())) {
+			((EntityPlayer)entityIn).addPotionEffect(ElixirEffectRegistry.EFFECT_DECAY.createEffect(60, 3));
+		}
 		if(!worldIn.isRemote && entityIn.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 			IDecayCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			cap.getDecayStats().addDecayAcceleration(0.1F);

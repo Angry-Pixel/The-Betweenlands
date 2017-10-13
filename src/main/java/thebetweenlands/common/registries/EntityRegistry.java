@@ -11,6 +11,7 @@ import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
+import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -64,6 +65,7 @@ public class EntityRegistry {
 		registerEntity(EntityFortressBossTurret.class, "fortress_boss_turret", 64, 20, false);
 		registerEntity(EntityFortressBossTeleporter.class, "fortress_boss_teleporter", 64, 5, false);
         registerEntity(EntityWeedwoodRowboat.class, "weedwood_rowboat");
+		registerEntity(EntityElixir.class, "bl_elexir", 64, 20, true);
 	}
 
 	private static int id = 0;

@@ -32,6 +32,7 @@ import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
+import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
@@ -67,6 +68,7 @@ public class RecipeRegistry {
 		registerCompostRecipes();
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
+		ElixirRecipes.init();
 		
 		CustomRecipeRegistry.loadCustomRecipes();
 	}

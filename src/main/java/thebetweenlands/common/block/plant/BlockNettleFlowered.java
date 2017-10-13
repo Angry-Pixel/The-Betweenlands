@@ -9,6 +9,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockNettleFlowered extends BlockPlant {
@@ -28,8 +29,7 @@ public class BlockNettleFlowered extends BlockPlant {
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
-		//TODO add && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entity) when elxirs are added
-		if(!worldIn.isRemote && entityIn instanceof IEntityBL == false && entityIn instanceof EntityLivingBase) {
+		if(!worldIn.isRemote && entityIn instanceof IEntityBL == false && entityIn instanceof EntityLivingBase && !ElixirEffectRegistry.EFFECT_TOUGHSKIN.isActive((EntityLivingBase)entityIn)) {
 			entityIn.attackEntityFrom(DamageSource.CACTUS, 1);
 		}
 	}

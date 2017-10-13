@@ -251,6 +251,7 @@ public class ItemRegistry {
     public static final Item TARMINION = new ItemTarminion();
     public static final Item MOSS_BED_ITEM = new ItemMossBed();
     public static final Item SLUDGE_BALL = new Item().setCreativeTab(BLCreativeTabs.ITEMS);
+    public static final ItemElixir ELIXIR = new ItemElixir();
     public static final ItemDentrothystVial DENTROTHYST_VIAL = new ItemDentrothystVial();
     public static final ItemAspectVial ASPECT_VIAL = new ItemAspectVial();
     public static final Item GLUE = new ItemGlue();

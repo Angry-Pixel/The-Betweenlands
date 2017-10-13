@@ -8,7 +8,7 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 import thebetweenlands.common.registries.AspectRegistry;
 
 public class ElixirRecipes {
-	private static final List<ElixirRecipe> REGISTERED_RECIPES = new ArrayList<ElixirRecipe>();
+	private static final List<ElixirRecipe> REGISTERED_RECIPES = new ArrayList<>();
 
 	public static void registerRecipe(ElixirRecipe recipe) {
 		REGISTERED_RECIPES.add(recipe);

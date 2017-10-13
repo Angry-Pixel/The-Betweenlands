@@ -18,8 +18,10 @@ import thebetweenlands.common.herblore.book.widgets.ManualWidgetBase;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextWidget;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
 
 public class PageCreators {
@@ -110,14 +112,13 @@ public class PageCreators {
             height += 18;
         }
 
-        /*TODO add when elixirs are added
         if (height + 10 + 18 < 152) {
             widgets.add(new TextWidget(18, 12 + height, "manual.aspect.used.in"));
             height += 10;
             ArrayList<ItemStack> items = new ArrayList<>();
             for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
-                items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
-                items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
+                items.add(ItemRegistry.ELIXIR.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
+                items.add(ItemRegistry.ELIXIR.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
             widgets.add(new AspectItemSlideShowWidget(18, 12 + height, items));
             height += 18;
@@ -130,12 +131,12 @@ public class PageCreators {
             height += 10;
             ArrayList<ItemStack> items = new ArrayList<>();
             for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
-                items.add(BLItemRegistry.elixir.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
-                items.add(BLItemRegistry.elixir.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
+                items.add(ItemRegistry.ELIXIR.getElixirItem(recipe.positiveElixir, recipe.baseDuration, 1, 0));
+                items.add(ItemRegistry.ELIXIR.getElixirItem(recipe.negativeElixir, recipe.baseDuration, 1, 1));
             }
             widgets.add(new AspectItemSlideShowWidget(18, 12 + height, items));
             height += 18;
-        }*/
+        }
 
         if (widgets.size() > 0) {
             if (newPages.size() > 0)

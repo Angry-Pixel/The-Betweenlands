@@ -7,6 +7,10 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -16,13 +20,17 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
+import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.util.TranslationHelper;
 
 public class ElixirEffect {
 	private final String effectName;
 	private final int effectID;
 	private final ResourceLocation icon;
 	private final int color;
-	private List<ElixirAttributeModifier> elixirAttributeModifiers = new ArrayList<ElixirAttributeModifier>();
+	private List<ElixirAttributeModifier> elixirAttributeModifiers = new ArrayList<>();
 	private ElixirPotionEffect potionEffect;
 	private ResourceLocation potionID;
 	private boolean isAntiInfusion = false;
@@ -47,12 +55,11 @@ public class ElixirEffect {
 		return new PotionEffect(Potion.getPotionFromResourceLocation(this.potionID.toString()), duration, strength);
 	}
 
-	public void registerPotion() {
-		this.potionID = null;//TODO Potion IDs/*ConfigHandler.potionIDs.get(this.getID())*/;
-		this.potionEffect = new ElixirPotionEffect(this, this.effectName, this.color, this.icon);
-		Potion.REGISTRY.register(this.getID(), this.potionID, this.potionEffect);
+	public void registerPotion(String name) {
+		this.potionEffect = (ElixirPotionEffect) new ElixirPotionEffect(this, this.effectName, this.color, this.icon).setRegistryName(ModInfo.ID, name);
+		this.potionID = potionEffect.getRegistryName();
 		for(ElixirAttributeModifier modifier : this.elixirAttributeModifiers) {
-			this.potionEffect.registerPotionAttributeModifier(modifier.attribute, modifier.uuid.toString(), modifier.modifier, modifier.operation);
+			this.potionEffect.registerPotionAttributeModifier(modifier.attribute, modifier.uuid, modifier.modifier, modifier.operation);
 		}
 	}
 
@@ -194,13 +201,13 @@ public class ElixirEffect {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
 
-		//private final String elixirName;
-		//private TextContainer nameContainer;
+		private final String elixirName;
+		private TextContainer nameContainer;
 
 		protected ElixirPotionEffect(ElixirEffect effect, String name, int color, ResourceLocation icon) {
 			super(false, color);
 			this.setPotionName(name);
-			//this.elixirName = I18n.format(name);
+			this.elixirName = TranslationHelper.translateToLocal(name);
 			this.effect = effect;
 			this.icon = icon;
 		}
@@ -219,18 +226,18 @@ public class ElixirEffect {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
-			super.renderInventoryEffect(x, y, effect, mc);
-			//TODO: Potion icon renderer
-			/*if(this.icon != null) {
-				GL11.glEnable(GL11.GL_TEXTURE_2D);
-				GL11.glEnable(GL11.GL_BLEND);
+			if(this.icon != null) {
+				GlStateManager.enableTexture2D();
+				GlStateManager.enableBlend();
 				Minecraft.getMinecraft().renderEngine.bindTexture(this.icon);
-				Tessellator tessellator = Tessellator.instance;
-				tessellator.startDrawingQuads();
-				tessellator.addVertexWithUV(x+6, y+6, 0, 0, 0);
-				tessellator.addVertexWithUV(x+6, y+6+20, 0, 0, 1);
-				tessellator.addVertexWithUV(x+6+20, y+6+20, 0, 1, 1);
-				tessellator.addVertexWithUV(x+6+20, y+6, 0, 1, 0);
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder vertexBuffer = tessellator.getBuffer();
+
+				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				vertexBuffer.pos(x+6, y+6, 0).tex(0, 0).endVertex();
+				vertexBuffer.pos(x+6, y+6+20, 0).tex(0, 1).endVertex();
+				vertexBuffer.pos(x+6+20, y+6+20, 0).tex(1, 1).endVertex();
+				vertexBuffer.pos(x+6+20, y+6, 0).tex(1, 0).endVertex();
 				tessellator.draw();
 			}
 			if(this.nameContainer == null) {
@@ -254,9 +261,28 @@ public class ElixirEffect {
 			}
 			if(this.nameContainer != null && this.nameContainer.getPages().size() > 0) {
 				this.setPotionName("");
-				TextPage page0 = this.nameContainer.getPages().get(0);
+				TextContainer.TextPage page0 = this.nameContainer.getPages().get(0);
 				page0.render(x + 28, y + 6);
-			}*/
+			}
+		}
+
+		@Override
+		public void renderHUDEffect(int x, int y, PotionEffect effect, Minecraft mc, float alpha) {
+			if(this.icon != null) {
+				GlStateManager.enableTexture2D();
+				GlStateManager.enableBlend();
+				Minecraft.getMinecraft().renderEngine.bindTexture(this.icon);
+
+				Tessellator tessellator = Tessellator.getInstance();
+				BufferBuilder vertexBuffer = tessellator.getBuffer();
+
+				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+				vertexBuffer.pos(x+2, y+2, 0).tex(0, 0).endVertex();
+				vertexBuffer.pos(x+2, y+2+20, 0).tex(0, 1).endVertex();
+				vertexBuffer.pos(x+2+20, y+2+20, 0).tex(1, 1).endVertex();
+				vertexBuffer.pos(x+2+20, y+2, 0).tex(1, 0).endVertex();
+				tessellator.draw();
+			}
 		}
 
 		@Override
