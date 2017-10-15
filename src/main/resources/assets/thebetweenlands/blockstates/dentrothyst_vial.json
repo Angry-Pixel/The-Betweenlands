@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {"transform": "forge:default-item"},
+  "variants": {
+    "green": {
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/strictly_herblore/misc/vial_green"
+      }
+    },
+    "dirty":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/strictly_herblore/misc/vial_dirty"
+      }
+    },
+    "orange":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/strictly_herblore/misc/vial_orange"
+      }
+    }
+  }
+}

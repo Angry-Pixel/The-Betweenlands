@@ -2,13 +2,19 @@ package thebetweenlands.common.item.herblore;
 
 import java.util.List;
 
+import com.google.common.collect.Lists;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -16,13 +22,19 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.handler.ScreenRenderHandler;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedRecipeHelper;
+import thebetweenlands.util.ColorUtils;
+import thebetweenlands.util.TranslationHelper;
 
 import javax.annotation.Nullable;
 
-public class ItemAspectVial extends Item {
+public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.ISingleJsonSubItems {
     public ItemAspectVial() {
         this.setUnlocalizedName("item.thebetweenlands.aspectVial");
 
@@ -30,15 +42,10 @@ public class ItemAspectVial extends Item {
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
 
-        setCreativeTab(null);
+        setCreativeTab(BLCreativeTabs.HERBLORE);
         this.setContainerItem(ItemRegistry.DENTROTHYST_VIAL);
     }
 
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.RED + "Not yet implemented!");
-	}
-    
     @Override
     public String getItemStackDisplayName(ItemStack stack) {
         List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
@@ -52,43 +59,6 @@ public class ItemAspectVial extends Item {
 
 
     /* TODO all this stuff
-    @Override
-
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass) {
-        switch(pass){
-            case 0:
-                //Liquid
-                List<Aspect> aspects = AspectManager.getDynamicAspects(stack);
-                if(aspects.size() > 0) {
-                    Aspect aspect = aspects.get(0);
-                    float[] aspectRGBA = ColorUtils.getRGBA(aspect.type.getColor());
-                    return ColorUtils.toHex(aspectRGBA[0], aspectRGBA[1], aspectRGBA[2], 1.0F);
-                }
-                return 0xFFFFFFFF;
-            case 2:
-                return 0xFFFFFFFF;
-        }
-        return 0xFFFFFFFF;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses() {
-        return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
-        return pass == 0 ? this.iconLiquid : super.getIconFromDamageForRenderPass(damage, pass);
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamage(int damage) {
-        return damage % 2 == 0 ? this.itemIcon : this.iconVialOrange;
-    }
 
     @Override
     @SideOnly(Side.CLIENT)
@@ -163,53 +133,80 @@ public class ItemAspectVial extends Item {
         return containerRubberBoots != null ? containerRubberBoots : (containerBait != null ? containerBait : containerDefault);
     }
 
-    /*
     @Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemStack) {
-        return false;
+    public List<String> getTypes() {
+        return Lists.newArrayList("green", "orange");
     }
 
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack stack, EntityPlayer player, List lst, boolean debug) {
-        if(!AspectManager.getDynamicAspects(stack).isEmpty() && AspectManager.getDynamicAspects(stack).get(0).type == AspectRegistry.BYARIIS) {
-            lst.add(StatCollector.translateToLocal("aspectvial.byariis.fuel"));
+    public int getColorMultiplier(ItemStack stack, int tintIndex) {
+        //TODO get color for the liquid somehow
+        /*switch(tintIndex){
+            case 0:
+                //Liquid
+                List<Aspect> aspects = AspectManager.get(world).getStaticAspects(stack);
+                if(aspects.size() > 0) {
+                    Aspect aspect = aspects.get(0);
+                    float[] aspectRGBA = ColorUtils.getRGBA(aspect.type.getColor());
+                    return ColorUtils.toHex(aspectRGBA[0], aspectRGBA[1], aspectRGBA[2], 1.0F);
+                }
+                return 0xFFFFFFFF;
+            case 2:
+                return 0xFFFFFFFF;
+        }*/
+        return 0xFFFFFFFF;
+    }
+
+    /*@Override
+    public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemStack) {
+        return false;
+    }*/
+
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
+        if (world != null) {
+            List<Aspect> itemAspects = AspectManager.get(world).getStaticAspects(stack);
+            if (!itemAspects.isEmpty() && itemAspects.get(0).type == AspectRegistry.BYARIIS) {
+                tooltip.add(TranslationHelper.translateToLocal("aspectvial.byariis.fuel"));
+            }
         }
+        tooltip.add(TextFormatting.RED + "Not yet implemented!");
     }
 
     /**
      * Places an aspect vial with the specified aspects in it (can be null)
-     * @param x
-     * @param y
-     * @param z
+     * @param pos
      * @param vialType Vial type: 0: green, 1: orange
      * @param aspect
      */
-    /*TODO vial block
-    public static void placeAspectVial(World world, int x, int y, int z, int vialType, Aspect aspect) {
-        world.setBlock(x, y, z, BLBlockRegistry.vial, vialType, 2);
-        TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(x, y, z);
+    public static void placeAspectVial(World world, BlockPos pos, int vialType, Aspect aspect) {
+        //TODO vial block
+        /*world.setBlock(x, y, z, BLBlockRegistry.vial, vialType, 2);
+        TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
         if(tile != null)
-            tile.setAspect(aspect);
+            tile.setAspect(aspect);*/
     }
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
-        return world.getBlockState(pos).getBlock() == BlockRegistry.VIAL;
+        //TODO vial block
+        return true;//world.getBlockState(pos).getBlock() == BlockRegistry.VIAL;
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack stack, EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        ItemStack stack = player.getHeldItem(hand);
         List<Aspect> itemAspects = AspectManager.get(world).getStaticAspects(stack);
         if(player.isSneaking() && itemAspects.size() == 1 && facing == EnumFacing.UP) {
             if(world.isAirBlock(pos.up())) {
                 if(!world.isRemote) {
                     ItemAspectVial.placeAspectVial(world, pos.up(), stack.getItemDamage(), itemAspects.get(0));
-                    stack.stackSize--;
+                    stack.shrink(1);
                 }
                 return EnumActionResult.SUCCESS;
             }
         }
         return EnumActionResult.FAIL;
-    }*/
+    }
 }

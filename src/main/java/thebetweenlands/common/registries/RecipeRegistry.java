@@ -437,8 +437,7 @@ public class RecipeRegistry {
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM, 1), new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
 		PurifierRecipe.addRecipe(new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM, 1), new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
 		PurifierRecipe.addRecipe(new ItemStack(BlockRegistry.PURIFIED_SWAMP_DIRT), new ItemStack(BlockRegistry.SWAMP_DIRT));
-		//TODO add vials
-		//PurifierRecipe.addRecipe(ItemRegistry.dentrothystVial.createStack(0), ItemRegistry.dentrothystVial.createStack(1));
+		PurifierRecipe.addRecipe(ItemRegistry.DENTROTHYST_VIAL.createStack(0), ItemRegistry.DENTROTHYST_VIAL.createStack(1));
 		PurifierRecipe.addRecipe(new IPurifierRecipe() {
 			@Override
 			public boolean matchesInput(ItemStack stack) {

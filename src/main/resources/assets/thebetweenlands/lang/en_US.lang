@@ -608,6 +608,12 @@ item.thebetweenlands.dentrothyst_shield_green_polished.name=Green Polished Dentr
 item.thebetweenlands.dentrothyst_shield_orange_polished.name=Orange Polished Dentrothyst Shield
 item.thebetweenlands.lurker_skin_shield.name=Lurker Skin Shield
 
+# Herblore
+item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
+item.thebetweenlands.elixir.dentrothyst_vial.orange.name=Orange Dentrothyst Vial
+item.thebetweenlands.elixir.dentrothyst_vial.dirty.name=Dirty Dentrothyst Vial
+item.thebetweenlands.aspect_vial.green.name=Green Dentrothyst Aspect Vial
+item.thebetweenlands.aspect_vial.orange.name=Orange Dentrothyst Aspect Vial
 
 # Fluids
 fluid.swamp_water=Swamp Water
