@@ -59,7 +59,7 @@ public class EntityElixir extends EntityThrowable {
     @Override
     protected void onImpact(RayTraceResult result) {
         if (!this.world.isRemote) {
-            AxisAlignedBB hitBB = this.getEntityBoundingBox().expand(4.0D, 2.0D, 4.0D);
+            AxisAlignedBB hitBB = this.getEntityBoundingBox().grow(4.0D, 2.0D, 4.0D);
             List hitEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, hitBB);
             if (!hitEntities.isEmpty()) {
                 Iterator hitEntitiesIT = hitEntities.iterator();
@@ -79,19 +79,6 @@ public class EntityElixir extends EntityThrowable {
             this.setDead();
         }
     }
-
-    //TODO check what these are
-    /*
-    @Override
-    protected float func_70182_d() {
-        return 0.5F;
-    }
-
-    @Override
-    protected float func_70183_g() {
-        return -20.0F;
-    }
-    */
 
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {

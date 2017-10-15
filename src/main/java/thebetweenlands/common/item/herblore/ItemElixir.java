@@ -147,12 +147,12 @@ public class ItemElixir extends Item implements ITintedItem, ItemMeshDefinition 
 
     @Override
     public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
-        playerIn.setActiveHand(handIn);
         ItemStack stack = playerIn.getHeldItem(handIn);
         if(stack.getTagCompound() == null) {
             stack.setTagCompound(new NBTTagCompound());
         }
         stack.getTagCompound().setBoolean("throwing", playerIn.isSneaking());
+        playerIn.setActiveHand(handIn);
         return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
     }
 

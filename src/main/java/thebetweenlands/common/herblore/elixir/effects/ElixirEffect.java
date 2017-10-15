@@ -263,7 +263,14 @@ public class ElixirEffect {
 				this.setPotionName("");
 				TextContainer.TextPage page0 = this.nameContainer.getPages().get(0);
 				page0.render(x + 28, y + 6);
+				String s = Potion.getPotionDurationString(effect, 1.0F);
+				mc.fontRenderer.drawStringWithShadow(s, (float)(x + 10 + 18), (float)(y + 6 + 10), 8355711);
 			}
+		}
+
+		@Override
+		public boolean shouldRenderInvText(PotionEffect effect) {
+			return false;
 		}
 
 		@Override

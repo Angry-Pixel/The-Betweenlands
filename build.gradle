@@ -52,6 +52,7 @@ processResources {
     from (sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+    rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
 //Builds the universal jar
@@ -157,6 +158,7 @@ String getModIdFromJava() {
 def addManifestAttributes(Manifest m) {
 	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
     m.attributes ('FMLCorePluginContainsFMLMod': 'true')
+    m.attributes ('FMLAT': 'thebetweenlands_at.cfg')
 }
 
 

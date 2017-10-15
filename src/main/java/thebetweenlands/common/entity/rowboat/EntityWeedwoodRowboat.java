@@ -992,7 +992,7 @@ public class EntityWeedwoodRowboat extends EntityBoat implements IEntityAddition
             return ((IFluidBlock) block).getFilledPercentage(world, pos);
         }
         if (block instanceof BlockLiquid) {
-            return getLiquidHeight(state, world, pos);
+            return BlockLiquid.getBlockLiquidHeight(state, world, pos);
         }
         return 1;
     }

@@ -25,20 +25,7 @@ import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
-import thebetweenlands.common.handler.AnvilEventHandler;
-import thebetweenlands.common.handler.ArmorHandler;
-import thebetweenlands.common.handler.AspectSyncHandler;
-import thebetweenlands.common.handler.AttackDamageHandler;
-import thebetweenlands.common.handler.BlockBreakHandler;
-import thebetweenlands.common.handler.EntitySpawnHandler;
-import thebetweenlands.common.handler.EnvironmentEventHandler;
-import thebetweenlands.common.handler.FoodSicknessHandler;
-import thebetweenlands.common.handler.ItemEquipmentHandler;
-import thebetweenlands.common.handler.LocationHandler;
-import thebetweenlands.common.handler.OverworldItemHandler;
-import thebetweenlands.common.handler.PlayerDecayHandler;
-import thebetweenlands.common.handler.PlayerPortalHandler;
-import thebetweenlands.common.handler.PuppetHandler;
+import thebetweenlands.common.handler.*;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
@@ -174,5 +161,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(PlayerPortalHandler.class);
 		MinecraftForge.EVENT_BUS.register(FoodSicknessHandler.class);
 		MinecraftForge.EVENT_BUS.register(BlockGenericDugSoil.class);
+		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 	}
 }

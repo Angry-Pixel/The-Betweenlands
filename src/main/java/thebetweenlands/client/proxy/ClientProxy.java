@@ -48,23 +48,7 @@ import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
-import thebetweenlands.client.handler.AmbienceSoundPlayHandler;
-import thebetweenlands.client.handler.BrightnessHandler;
-import thebetweenlands.client.handler.CameraPositionHandler;
-import thebetweenlands.client.handler.DebugHandlerClient;
-import thebetweenlands.client.handler.DecayRenderHandler;
-import thebetweenlands.client.handler.DruidAltarSoundHandler;
-import thebetweenlands.client.handler.FogHandler;
-import thebetweenlands.client.handler.InputHandler;
-import thebetweenlands.client.handler.ItemTooltipHandler;
-import thebetweenlands.client.handler.MusicHandler;
-import thebetweenlands.client.handler.OverlayHandler;
-import thebetweenlands.client.handler.ScreenRenderHandler;
-import thebetweenlands.client.handler.ShaderHandler;
-import thebetweenlands.client.handler.TextureStitchHandler;
-import thebetweenlands.client.handler.ThemHandler;
-import thebetweenlands.client.handler.WeedwoodRowboatHandler;
-import thebetweenlands.client.handler.WorldRenderHandler;
+import thebetweenlands.client.handler.*;
 import thebetweenlands.client.handler.TextureStitchHandler.TextureStitcher;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
 import thebetweenlands.client.render.entity.*;
@@ -534,6 +518,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(GuiBLMainMenu.class);
         MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(OverlayHandler.class);
+        MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
 	}
 
 	@Override
