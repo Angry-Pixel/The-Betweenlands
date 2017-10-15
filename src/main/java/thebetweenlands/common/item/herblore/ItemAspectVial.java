@@ -1,23 +1,20 @@
 package thebetweenlands.common.item.herblore;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import com.google.common.collect.Lists;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -26,15 +23,12 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.registries.AspectRegistry;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedRecipeHelper;
-import thebetweenlands.util.ColorUtils;
-import thebetweenlands.util.TranslationHelper;
 
 import javax.annotation.Nullable;
 
-public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.ISingleJsonSubItems {
+public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.ISubItemsItem {
     public ItemAspectVial() {
         this.setUnlocalizedName("item.thebetweenlands.aspectVial");
 
@@ -44,6 +38,13 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
 
         setCreativeTab(BLCreativeTabs.HERBLORE);
         this.setContainerItem(ItemRegistry.DENTROTHYST_VIAL);
+        addPropertyOverride(new ResourceLocation("aspect"), (stack, worldIn, entityIn) -> {
+            List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
+            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && itemAspects.size() >= 1) {
+                return AspectRegistry.ASPECT_TYPES.indexOf(itemAspects.get(0).type) + 1;
+            }
+            return 0;
+        });
     }
 
     @Override
@@ -56,23 +57,6 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
         }
         return super.getItemStackDisplayName(stack);
     }
-
-
-    /* TODO all this stuff
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(ItemStack stack, int pass) {
-        if(pass == 2) {
-            List<Aspect> itemAspects = AspectManager.getDynamicAspects(stack);
-            if(itemAspects.size() >= 1) {
-                Aspect aspect = itemAspects.get(0);
-                return this.aspectIcons[aspect.type.getIconIndex()];
-            }
-        }
-        return super.getIcon(stack, pass);
-    }
-*/
 
     @Override
     public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
@@ -93,13 +77,6 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
             }
         }
     }
-
-
-    /*@Override
-    @SideOnly(Side.CLIENT)
-    public int getRenderPasses(int metadata) {
-        return Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) ? 3 : 2;
-    }*/
 
     @Override
     public String getUnlocalizedName(ItemStack stack) {
@@ -134,10 +111,12 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
     }
 
     @Override
-    public List<String> getTypes() {
-        return Lists.newArrayList("green", "orange");
+    public Map<Integer, ResourceLocation> getModels() {
+        Map<Integer, ResourceLocation> models = new HashMap<>();
+        models.put(0, new ResourceLocation(getRegistryName().toString() + "_green"));
+        models.put(1, new ResourceLocation(getRegistryName().toString() + "_orange"));
+        return models;
     }
-
 
     @Override
     public int getColorMultiplier(ItemStack stack, int tintIndex) {
@@ -145,7 +124,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
         /*switch(tintIndex){
             case 0:
                 //Liquid
-                List<Aspect> aspects = AspectManager.get(world).getStaticAspects(stack);
+                List<Aspect> aspects = ItemAspectContainer.fromItem(stack).getAspects();
                 if(aspects.size() > 0) {
                     Aspect aspect = aspects.get(0);
                     float[] aspectRGBA = ColorUtils.getRGBA(aspect.type.getColor());
@@ -166,9 +145,10 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
         if (world != null) {
-            List<Aspect> itemAspects = AspectManager.get(world).getStaticAspects(stack);
+            List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
             if (!itemAspects.isEmpty() && itemAspects.get(0).type == AspectRegistry.BYARIIS) {
-                tooltip.add(TranslationHelper.translateToLocal("aspectvial.byariis.fuel"));
+                //TODO add then Repeller is added
+                //tooltip.add(TranslationHelper.translateToLocal("tooltip.aspectvial.byariis.fuel"));
             }
         }
         tooltip.add(TextFormatting.RED + "Not yet implemented!");
