@@ -93,15 +93,15 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * Generates the default ores
      */
     protected void generateOres() {
-		this.generateOre(22, 14, OreGens.SULFUR, 0, 128);
-		this.generateOre(10, 8, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, 8, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, 8, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(22, 12, OreGens.SULFUR, 0, 128);
+		this.generateOre(10, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(10, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(10, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(0.2F, 14, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(1, 8, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(3, 8, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(8, 8, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(1, 12, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(3, 12, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
+		this.generateOre(8, 12, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
         Random rand = this.getRand();
         World world = this.getWorld();
@@ -153,7 +153,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
             int xx = this.getX() + this.offsetXZ(padding);
             int yy = minY + this.getRand().nextInt(maxY - minY);
             int zz = this.getZ() + this.offsetXZ(padding);
-            if (this.getWorld().isChunkGeneratedAt(xx, zz))
+            if (this.getWorld().isBlockLoaded(new BlockPos(xx, yy, zz), true))
                 oreGen.generate(this.getWorld(), this.getRand(), new BlockPos(xx, yy, zz));
         }
     }
