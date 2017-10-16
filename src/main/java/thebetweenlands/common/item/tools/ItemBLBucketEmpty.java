@@ -72,7 +72,7 @@ public abstract class ItemBLBucketEmpty extends Item {
                             NBTTagList nbtList = new NBTTagList();
                             for (int i = 0; i < tile.getSizeInventory() - 1; i++) {
                                 ItemStack stackInSlot = tile.getStackInSlot(i);
-                                if (stackInSlot != null) {
+                                if (!stackInSlot.isEmpty()) {
                                     nbtList.appendTag(stackInSlot.writeToNBT(new NBTTagCompound()));
                                 }
                             }

@@ -15,10 +15,12 @@ import org.lwjgl.input.Keyboard;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
+import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
+import thebetweenlands.common.item.ITintedItem;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
@@ -27,7 +29,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ItemWeedwoodBucketInfusion extends Item {
+public class ItemWeedwoodBucketInfusion extends Item implements ITintedItem {
 
     public ItemWeedwoodBucketInfusion() {
         this.setMaxStackSize(1);
@@ -61,7 +63,7 @@ public class ItemWeedwoodBucketInfusion extends Item {
                 for (Map.Entry<ItemStack, Integer> stackCount : stackMap.entrySet()) {
                     ItemStack ingredient = stackCount.getKey();
                     int count = stackCount.getValue();
-                    if (ingredient != null) {
+                    if (!ingredient.isEmpty()) {
                         list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
                         List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
                         if (ingredientAspects.size() >= 1) {
@@ -92,26 +94,6 @@ public class ItemWeedwoodBucketInfusion extends Item {
         return true;
     }
 
-    /*TODO rendering
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister reg) {
-        super.registerIcons(reg);
-        this.iconLiquid = reg.registerIcon("thebetweenlands:strictlyHerblore/misc/infusionLiquid");
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses() {
-        return true;
-    }
-
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
-        return pass == 1 ? this.iconLiquid : super.getIconFromDamageForRenderPass(damage, pass);
-    }*/
-
     public ElixirRecipe getInfusionElixirRecipe(ItemStack stack) {
         return ElixirRecipes.getFromAspects(this.getInfusingAspects(stack));
     }
@@ -121,10 +103,13 @@ public class ItemWeedwoodBucketInfusion extends Item {
         if (hasTag(stack)) {
             if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
                 NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
-                Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
                 for (int i = 0; i < nbtList.tagCount(); i++) {
                     ItemStack ingredient = new ItemStack(nbtList.getCompoundTagAt(i));
-                    infusingAspects.addAll(AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
+                    ItemAspectContainer container = ItemAspectContainer.fromItem(ingredient, AspectManager.get(TheBetweenlands.proxy.getClientWorld()));
+                    for (Aspect aspect : container.getAspects()) {
+                        infusingAspects.add(aspect.type);
+                    }
+                    //infusingAspects.addAll(AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
                 }
             }
         }
@@ -134,18 +119,15 @@ public class ItemWeedwoodBucketInfusion extends Item {
     public int getInfusionTime(ItemStack stack) {
         if (hasTag(stack)) {
             if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
-                int infusionTime = stack.getTagCompound().getInteger("infusionTime");
-                return infusionTime;
+                return stack.getTagCompound().getInteger("infusionTime");
             }
         }
         return 0;
     }
 
-    /*TODO rendering
     @Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass) {
-        if(pass == 1) {
+    public int getColorMultiplier(ItemStack stack, int tintIndex) {
+        if(tintIndex == 1) {
             ElixirRecipe recipe = this.getInfusionElixirRecipe(stack);
             int infusionTime = this.getInfusionTime(stack);
             //Infusion liquid
@@ -176,7 +158,7 @@ public class ItemWeedwoodBucketInfusion extends Item {
             }
         }
         return 0xFFFFFFFF;
-    }*/
+    }
 
     private int getColorFromRGBA(float r, float g, float b, float a) {
         return ((int) (a * 255.0F) << 24) | ((int) (r * 255.0F) << 16) | ((int) (g * 255.0F) << 8) | ((int) (b * 255.0F));

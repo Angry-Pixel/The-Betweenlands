@@ -46,7 +46,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     private boolean loadInfusionData = false;
 
     public void addInfusion(ItemStack bucket) {
-        this.infusionBucket = bucket;
+        this.infusionBucket = bucket.copy();
         this.loadFromInfusion();
         world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }
@@ -241,7 +241,11 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     public List<IAspectType> getInfusionAspects(List<ItemStack> ingredients) {
         List<IAspectType> infusingAspects = new ArrayList<IAspectType>();
         for (ItemStack ingredient : ingredients) {
-            infusingAspects.addAll(AspectManager.get(this.world).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
+            ItemAspectContainer container = ItemAspectContainer.fromItem(ingredient, AspectManager.get(this.world));
+            for (Aspect aspect : container.getAspects()) {
+                infusingAspects.add(aspect.type);
+            }
+            //infusingAspects.addAll(AspectManager.get(this.world).getDiscoveredAspectTypes(AspectManager.getAspectItem(ingredient), null));
         }
         return infusingAspects;
     }
@@ -249,7 +253,9 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     private List<Aspect> getInfusionItemAspects(List<ItemStack> ingredients) {
         List<Aspect> infusingItemAspects = new ArrayList<Aspect>();
         for (ItemStack ingredient : ingredients) {
-            infusingItemAspects.addAll(AspectManager.get(this.world).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
+            ItemAspectContainer container = ItemAspectContainer.fromItem(ingredient, AspectManager.get(this.world));
+            infusingItemAspects.addAll(container.getAspects());
+            //infusingItemAspects.addAll(AspectManager.get(this.world).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), null));
         }
         return infusingItemAspects;
     }

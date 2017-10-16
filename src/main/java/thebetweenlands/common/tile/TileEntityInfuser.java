@@ -335,7 +335,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
 					ItemStack stack = getStackInSlot(i);
-					if (stack != null && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
+					if (!stack.isEmpty() && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
 						//Return empty vials
 						ItemStack ret = ItemStack.EMPTY;
 						switch (stack.getItemDamage()) {
@@ -492,7 +492,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	public boolean hasFullIngredients() {
 		for (int i = 0; i <= MAX_INGREDIENTS; i++) {
-			if (inventory.get(i) == null) return false;
+			if (inventory.get(i).isEmpty()) return false;
 		}
 		return true;
 	}

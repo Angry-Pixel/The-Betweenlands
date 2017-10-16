@@ -57,7 +57,7 @@ public class BlockGenericOre extends BasicBlock {
 
 	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
-		return minXP + RANDOM.nextInt(maxXP - minXP);
+		return MathHelper.getInt(rand, this.minXP, this.maxXP);
 	}
 
 	@Override
