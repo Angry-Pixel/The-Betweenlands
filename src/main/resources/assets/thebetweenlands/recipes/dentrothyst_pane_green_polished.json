@@ -6,11 +6,13 @@
   ],
   "key": {
     "x": {
-      "item": "thebetweenlands:smooth_betweenstone"
+      "item": "thebetweenlands:polished_dentrothyst",
+      "data": 0
     }
   },
   "result": {
-    "item": "thebetweenlands:smooth_betweenstone_wall",
+    "item": "thebetweenlands:polished_dentrothyst_pane",
+    "data": 0,
     "count": 6
   }
 }

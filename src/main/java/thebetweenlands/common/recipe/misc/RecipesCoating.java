@@ -90,8 +90,7 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 					requiredCoating--;
 				} else {
 					remaining.set(i,stack.copy());
-					remaining.get(i).shrink(1);
-					continue;
+					remaining.get(i).setCount(1);
 				}
 			} else {
 				remaining.set(i, ForgeHooks.getContainerItem(stack));

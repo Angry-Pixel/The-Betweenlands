@@ -72,7 +72,7 @@ public class RecipesCircleGems extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return true; //TODO what does this do
+		return width * height >= 2;
 	}
 
 

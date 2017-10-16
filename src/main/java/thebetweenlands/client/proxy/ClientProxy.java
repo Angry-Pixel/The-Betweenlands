@@ -222,11 +222,11 @@ public class ClientProxy extends CommonProxy {
 
 		case GUI_LURKER_POUCH: {
 			ItemStack item = player.getHeldItemMainhand();
-			if(item.isEmpty() || item.getItem() instanceof ItemLurkerSkinPouch == false) {
+			if(item.isEmpty() || !(item.getItem() instanceof ItemLurkerSkinPouch)) {
 				item = player.getHeldItemOffhand();
 			}
-			if(item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
-				return new GuiPouch((ContainerPouch) new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), I18n.format("container.lurkerSkinPouch"))));
+			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), I18n.format("container.lurkerSkinPouch"))));
 			}
 			break;
 		}
@@ -234,7 +234,7 @@ public class ClientProxy extends CommonProxy {
 		case GUI_LURKER_POUCH_KEYBIND: {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(!item.isEmpty()) {
-				return new GuiPouch((ContainerPouch) new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), I18n.format("container.lurkerSkinPouch"))));
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), I18n.format("container.lurkerSkinPouch"))));
 			}
 		}
 

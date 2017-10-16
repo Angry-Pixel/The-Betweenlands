@@ -67,7 +67,7 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return true; //TODO what is this
+		return width * height >= 2;
 	}
 
 

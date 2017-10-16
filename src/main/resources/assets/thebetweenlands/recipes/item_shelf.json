@@ -11,6 +11,7 @@
     }
   },
   "result": {
-    "item": "thebetweenlands:item_shelf"
+    "item": "thebetweenlands:item_shelf",
+    "count": 3
   }
 }

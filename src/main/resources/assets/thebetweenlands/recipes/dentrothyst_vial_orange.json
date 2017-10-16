@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " I ",
+    "X X",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:dentrothyst",
+      "data": 1
+    },
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 23
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:dentrothyst_vial",
+    "data": 2,
+    "count": 3
+  }
+}

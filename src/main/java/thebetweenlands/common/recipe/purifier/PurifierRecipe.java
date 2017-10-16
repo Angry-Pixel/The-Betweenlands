@@ -13,7 +13,7 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 	private static final List<IPurifierRecipe> RECIPES = new ArrayList<IPurifierRecipe>();
 
 	private static final PurifierRecipeCorrodible CORRODIBLE_ITEMS_RECIPE = new PurifierRecipeCorrodible();
-	//private static final PurifierRecipeAspectVial ASPECT_VIAL_ITEMS_RECIPE = new PurifierRecipeAspectVial();
+	private static final PurifierRecipeAspectVial ASPECT_VIAL_ITEMS_RECIPE = new PurifierRecipeAspectVial();
 	
 	@Override
 	public abstract ItemStack getOutput(ItemStack input);
@@ -23,6 +23,7 @@ public abstract class PurifierRecipe implements IPurifierRecipe {
 
 	static {
 		addRecipe(CORRODIBLE_ITEMS_RECIPE);
+		addRecipe(ASPECT_VIAL_ITEMS_RECIPE);
 	}
 
 	/**

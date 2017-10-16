@@ -11,9 +11,14 @@
     {
       "item": "thebetweenlands:flat_head_mushroom_item"
     },
-    {
-      "item": "thebetweenlands:nettle"
-    }
+    [
+      {
+        "item": "thebetweenlands:nettle"
+      },
+      {
+        "item": "thebetweenlands:nettle_flowered"
+      }
+    ]
   ],
   "result": {
     "item": "thebetweenlands:nettle_soup"

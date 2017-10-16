@@ -37,7 +37,7 @@ public class MessagePouchNaming extends MessageBase {
 		if(ctx.getServerHandler() != null) {
 			EntityPlayer player = ctx.getServerHandler().player;
 			ItemStack heldItem = player.getHeldItem(this.hand);
-			if(heldItem != null && heldItem.getItem() == ItemRegistry.LURKER_SKIN_POUCH && this.name != null) {
+			if(!heldItem.isEmpty() && heldItem.getItem() == ItemRegistry.LURKER_SKIN_POUCH && this.name != null) {
 				if(this.name.length() == 0) {
 					heldItem.clearCustomName();
 				} else {

@@ -6,11 +6,11 @@
   ],
   "key": {
     "x": {
-      "item": "thebetweenlands:smooth_betweenstone"
+      "item": "thebetweenlands:mossy_smooth_betweenstone"
     }
   },
   "result": {
-    "item": "thebetweenlands:smooth_betweenstone_wall",
+    "item": "thebetweenlands:mossy_smooth_betweenstone_wall",
     "count": 6
   }
 }

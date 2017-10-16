@@ -58,7 +58,7 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return false;
+		return width * height >= 2;
 	}
 
 	@Override
@@ -89,7 +89,6 @@ public class RecipesLifeCrystal extends IForgeRegistryEntry.Impl<IRecipe> implem
 				} else {
 					remaining.set(i,stack.copy());
 					remaining.get(i).setCount(1);
-					continue;
 				}
 			} else {
 				remaining.set(i, ForgeHooks.getContainerItem(stack));

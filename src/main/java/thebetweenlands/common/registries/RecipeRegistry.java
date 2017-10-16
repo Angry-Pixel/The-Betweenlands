@@ -40,17 +40,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
-import thebetweenlands.common.recipe.misc.AnimatorRecipe;
-import thebetweenlands.common.recipe.misc.CompostRecipe;
-import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
-import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
-import thebetweenlands.common.recipe.misc.RecipesCircleGems;
-import thebetweenlands.common.recipe.misc.RecipesCoating;
-import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
-import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
-import thebetweenlands.common.recipe.misc.ShapedRecipesBetweenlands;
-import thebetweenlands.common.recipe.misc.ShapelessRecipesBetweenlands;
+import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.util.RecipeHelper;
@@ -176,23 +166,13 @@ public class RecipeRegistry {
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> register) {
 		IForgeRegistry<IRecipe> registry = register.getRegistry();
-//		RecipeSorter.register("thebetweenlands:shaped", ShapedRecipesBetweenlands.class, SHAPED, "before:minecraft:shaped");
-//		RecipeSorter.register("thebetweenlands:shapeless", ShapelessRecipesBetweenlands.class, SHAPELESS, "after:thebetweenlands:shaped before:minecraft:shapeless");
-//
-//
-//
+
 		//TODO Recipes
 		/*RecipeSorter.register("thebetweenlands:bookCloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		RecipeHelper.addRecipe(new BookCloneRecipe());
 
 		RecipeSorter.register("thebetweenlands:bookMerging", BookMergeRecipe.class, SHAPELESS, "after:minecraft:shapeless");
 		RecipeHelper.addRecipe(new BookMergeRecipe());*/
-
-//		RecipeSorter.register("thebetweenlands:recipesCircleGems", RecipesCircleGems.class, SHAPELESS, "after:minecraft:shapeless");
-//		GameRegistry.addRecipe(new RecipesCircleGems());
-//
-//		/*RecipeSorter.register("thebetweenlands:recipesAspectVials", RecipesAspectVials.class, SHAPELESS, "after:minecraft:shapeless");
-//		RecipeHelper.addRecipe(new RecipesAspectVials());
 //
 //		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
 //		RecipeHelper.addRecipe(new RecipesAspectrusSeeds());
@@ -202,21 +182,23 @@ public class RecipeRegistry {
 //
 //		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
 //		RecipeHelper.addRecipe(new RecipeSummonMummy());*/
-//
-//		RecipeSorter.register("thebetweenlands:recipesCoating", RecipesCoating.class, SHAPELESS, "before:minecraft:shapeless");
-//		GameRegistry.addRecipe(new RecipesCoating());
-//
-//		RecipeSorter.register("thebetweenlands:recipesLifeCrystal", RecipesLifeCrystal.class, SHAPELESS, "after:minecraft:shapeless");
-//		GameRegistry.addRecipe(new RecipesLifeCrystal());
-//
-//		RecipeSorter.register("thebetweenlands:recipesPlantTonic", RecipesPlantTonic.class, SHAPELESS, "after:minecraft:shapeless");
-//		GameRegistry.addRecipe(new RecipesPlantTonic());
+
+		//TODO Manual
+		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
+
+		//TODO: Volarkite
+		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
+		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
+
+		//TODO Repeller
+		//RecipeHelper.addRecipe(new ItemStack(BlockRegistry.REPELLER), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Repeller
 
 		registry.register(new RecipesCircleGems().setRegistryName("thebetweenlands:recipes_circle_gems"));
 		registry.register(new RecipesCoating().setRegistryName("thebetweenlands:recipes_coating"));
 		registry.register(new RecipesLifeCrystal().setRegistryName("thebetweenlands:recipes_life_rystal"));
 		registry.register(new RecipesPlantTonic().setRegistryName("thebetweenlands:recipes_plant_tonic"));
 		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName("thebetweenlands:recipes_lurker_skin_pouch_upgrade"));
+		registry.register(new RecipesAspectVials().setRegistryName("thebetweenlands:recipes_aspect_vial"));
 	}
 
 	private static void registerSmelting() {

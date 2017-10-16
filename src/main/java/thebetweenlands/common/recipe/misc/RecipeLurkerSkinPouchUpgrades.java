@@ -60,7 +60,7 @@ public class RecipeLurkerSkinPouchUpgrades  extends IForgeRegistryEntry.Impl<IRe
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return true;//TODO what does this do?
+		return width * height >= 9;
 	}
 
 	@Override

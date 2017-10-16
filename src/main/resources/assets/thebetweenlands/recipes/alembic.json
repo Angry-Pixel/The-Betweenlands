@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " o ",
+    " dv",
+    "coc"
+  ],
+  "key": {
+    "o": {
+      "item": "thebetweenlands:octine_ingot"
+    },
+    "d": {
+      "item": "thebetweenlands:dentrothyst",
+      "data": 0
+    },
+    "v": {
+      "item": "thebetweenlands:dentrothyst_vial",
+      "data": 0
+    },
+    "c": {
+      "item": "thebetweenlands:cragrock",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:alembic"
+  }
+}
