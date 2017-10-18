@@ -13,7 +13,7 @@ import org.objectweb.asm.tree.VarInsnNode;
 
 public class PreRenderShadersHookTransformer extends TransformerModule {
 	public PreRenderShadersHookTransformer() {
-		this.addAcceptedClass("bnz", "net.minecraft.client.renderer.EntityRenderer");
+		this.addAcceptedClass("buq", "net.minecraft.client.renderer.EntityRenderer");
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class PreRenderShadersHookTransformer extends TransformerModule {
 		if(node instanceof MethodInsnNode) {
 			MethodInsnNode methodCallNode = (MethodInsnNode) node;
 			if(methodCallNode.name.equals(this.getMappedName("c", "renderEntityOutlineFramebuffer")) && methodCallNode.desc.equals("()V")
-					&& methodCallNode.owner.equals(this.getMappedName("boh", "net/minecraft/client/renderer/RenderGlobal"))) {
+					&& methodCallNode.owner.equals(this.getMappedName("buy", "net/minecraft/client/renderer/RenderGlobal"))) {
 				List<AbstractInsnNode> insertions = new ArrayList<AbstractInsnNode>();
 
 				//Call ClientHooks#onPreRenderShaders(float partialTicks)

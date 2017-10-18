@@ -95,7 +95,6 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 	/**
 	 * Checks if all modules were successful and throws a {@link ClassTransformationException} otherwise.
-	 * @param modules
 	 */
 	public static void checkModules() {
 		checkModules(modules);
