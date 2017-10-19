@@ -1,5 +1,6 @@
 package thebetweenlands.client.handler;
 
+import net.minecraft.init.MobEffects;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -11,7 +12,6 @@ import net.minecraft.client.renderer.GlStateManager.FogMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -30,6 +30,7 @@ import thebetweenlands.api.misc.Fog.MutableFog;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
@@ -105,8 +106,11 @@ public class FogHandler {
 		if(renderView != null && renderView.dimension == ConfigHandler.dimensionId) {
 			float partialTicks = (float) event.getRenderPartialTicks();
 			Fog fog = state.getFog(partialTicks);
-			float fogStart = currentFogStart = fog.getStart();
-			float fogEnd = currentFogEnd = fog.getEnd();
+			Fog currentFog = state.getFog(1.0F);
+			currentFogStart = currentFog.getStart();
+			currentFogEnd = currentFog.getEnd();
+			float fogStart = fog.getStart();
+			float fogEnd = fog.getEnd();
 			fogMode = fog.getGlFogType();
 			switch(fog.getFogType()) {
 			default:
@@ -142,7 +146,7 @@ public class FogHandler {
 				state.update(world, player.getPositionVector().addVector(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
 
-			Biome biome = world.getBiomeForCoordsBody(player.getPosition());
+			Biome biome = world.getBiome(player.getPosition());
 			if(biome instanceof BiomeBetweenlands) {
 				((BiomeBetweenlands)biome).updateFog();
 			}
@@ -190,7 +194,7 @@ public class FogHandler {
 			if(block instanceof BlockSwampWater) {
 				fogMode = GL11.GL_EXP;
 				GlStateManager.setFog(FogMode.EXP);
-				if (renderView instanceof EntityLivingBase && ((EntityLivingBase)renderView).isPotionActive(Potion.getPotionById(13)/*Water breathing*/)) {
+				if (renderView instanceof EntityLivingBase && ((EntityLivingBase)renderView).isPotionActive(MobEffects.WATER_BREATHING/*Water breathing*/)) {
 					event.setDensity(0.1F);
 				} else {
 					event.setDensity(0.4F);
@@ -205,20 +209,32 @@ public class FogHandler {
 	public static void updateFog(UpdateFogEvent event) {
 		Vec3d position = event.getPosition();
 		World world = event.getWorld();
+		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 		FogState state = event.getFogState();
 		Fog biomeFog = event.getBiomeFog();
 		MutableFog fog = new MutableFog(event.getAmbientFog());
 
 		float fogBrightness = 0;
 
+		float uncloudedStrength = 0.0F;
+		if(ElixirEffectRegistry.EFFECT_UNCLOUDED.isActive(player)) {
+			uncloudedStrength += Math.min((ElixirEffectRegistry.EFFECT_UNCLOUDED.getStrength(player) + 1) / 3.0F, 1.0F);
+		}
+
+		if(ElixirEffectRegistry.EFFECT_FOGGEDMIND.isActive(player)) {
+			float additionalFogStrength = (ElixirEffectRegistry.EFFECT_FOGGEDMIND.getStrength(player) + 1) * 0.85F;
+			fog.setStart(fog.getStart() / (additionalFogStrength * 2.0F));
+			fog.setEnd((fog.getEnd() / additionalFogStrength));
+		}
+
 		if(hasDenseFog()) {
 			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
 				fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
 			}
-			float lowViewDistanceFogReduction = state.getLowDistanceFogReduction(biomeFog.getEnd());
+			float lowViewDistanceFogReduction = biomeFog.getEnd() > 64 ? 1.0F : (64.0F - biomeFog.getEnd()) / 64.0F;
 			float[] range = fogGenerator.getFogRange(0.2F, 1.0F);
-			float denseFogStart = 0.0F;//state.getFixedFogStart(biomeFog.getStart()) / Math.max(8.0f * lowViewDistanceFogReduction, 1) * range[0];
-			float denseFogEnd = state.getFixedFogEnd(biomeFog.getEnd()) / Math.max(3.0f * lowViewDistanceFogReduction, 1) * range[1];
+			float denseFogStart = state.getFixedFogStart(biomeFog.getStart()) / Math.max(8.0f / (1.0F + uncloudedStrength * 4.0F) * lowViewDistanceFogReduction, 1) * range[0];
+			float denseFogEnd = state.getFixedFogEnd(biomeFog.getEnd()) / Math.max(3.0f/ (1.0F + uncloudedStrength * 2.0F) * lowViewDistanceFogReduction, 1) * range[1];
 
 			fog.setStart(Math.min(fog.getStart(), denseFogStart));
 			fog.setEnd(Math.min(fog.getEnd(), denseFogEnd));
