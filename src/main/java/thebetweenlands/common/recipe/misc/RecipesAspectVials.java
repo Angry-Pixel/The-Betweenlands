@@ -3,6 +3,7 @@ package thebetweenlands.common.recipe.misc;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -44,6 +45,11 @@ public class RecipesAspectVials extends IForgeRegistryEntry.Impl<IRecipe> implem
     }
 
     @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    @Override
     public boolean canFit(int width, int height) {
         return width * height >= 1;
     }
@@ -53,4 +59,8 @@ public class RecipesAspectVials extends IForgeRegistryEntry.Impl<IRecipe> implem
         return ItemStack.EMPTY;
     }
 
+    @Override
+    public NonNullList<ItemStack> getRemainingItems(InventoryCrafting inv) {
+        return NonNullList.withSize(inv.getSizeInventory(), ItemStack.EMPTY);
+    }
 }

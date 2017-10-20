@@ -697,6 +697,7 @@ tooltip.fig=Looks tempting...
 tooltip.pestle=Place Pestle in Mortar
 tooltip.pestle.remaining=%d%% Remaining: %d more uses.
 tooltip.aspectvial.byariis.fuel=Can be used as fuel for the Repeller
+tooltip.rubber_bucket=Right click to extract the rubber from the bucket
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing

@@ -11,7 +11,9 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.items.wrapper.SidedInvWrapper;
 
 import javax.annotation.Nonnull;
 
@@ -21,39 +23,15 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	protected final ItemStackHandler inventoryHandler;
 
 	public TileEntityBasicInventory(int invtSize, String name) {
-		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.<ItemStack>withSize(invtSize, ItemStack.EMPTY)) {
+		this.inventoryHandler = new ItemStackHandler(this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY)) {
 			@Override
 			public void setSize(int size) {
-				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.<ItemStack>withSize(invtSize, ItemStack.EMPTY);
+				this.stacks = TileEntityBasicInventory.this.inventory = NonNullList.withSize(invtSize, ItemStack.EMPTY);
 			}
 
 			@Override
 			protected void onContentsChanged(int slot) {
 				TileEntityBasicInventory.this.markDirty();
-			}
-
-			@Override
-			public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
-				TileEntityBasicInventory.this.accessSlot(slot);
-				super.setStackInSlot(slot, stack);
-			}
-
-			@Override
-			public ItemStack getStackInSlot(int slot) {
-				TileEntityBasicInventory.this.accessSlot(slot);
-				return super.getStackInSlot(slot);
-			}
-
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				TileEntityBasicInventory.this.accessSlot(slot);
-				return super.insertItem(slot, stack, simulate);
-			}
-
-			@Override
-			public ItemStack extractItem(int slot, int amount, boolean simulate) {
-				TileEntityBasicInventory.this.accessSlot(slot);
-				return super.extractItem(slot, amount, simulate);
 			}
 		};
 		this.name = name;
@@ -218,6 +196,13 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 
 	}
 
+	protected IItemHandler handlerUp = new SidedInvWrapper(this, EnumFacing.UP);
+	protected IItemHandler handlerDown = new SidedInvWrapper(this, EnumFacing.DOWN);
+	protected IItemHandler handlerNorth = new SidedInvWrapper(this, EnumFacing.NORTH);
+	protected IItemHandler handlerSouth = new SidedInvWrapper(this, EnumFacing.SOUTH);
+	protected IItemHandler handlerEast = new SidedInvWrapper(this, EnumFacing.EAST);
+	protected IItemHandler handlerWest = new SidedInvWrapper(this, EnumFacing.WEST);
+
 	@Override
 	public boolean hasCapability(net.minecraftforge.common.capabilities.Capability<?> capability, net.minecraft.util.EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
@@ -230,7 +215,18 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 	@Override
 	public <T> T getCapability(net.minecraftforge.common.capabilities.Capability<T> capability, net.minecraft.util.EnumFacing facing) {
 		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return (T) this.inventoryHandler;
+			if (facing == EnumFacing.UP)
+				return (T) this.handlerUp;
+			else if (facing == EnumFacing.DOWN)
+				return (T) this.handlerDown;
+			else if (facing == EnumFacing.NORTH)
+				return (T) this.handlerNorth;
+			else if (facing == EnumFacing.SOUTH)
+				return (T) this.handlerSouth;
+			else if (facing == EnumFacing.EAST)
+				return (T) this.handlerEast;
+			else if (facing == EnumFacing.WEST)
+				return (T) this.handlerWest;
 		}
 		return super.getCapability(capability, facing);
 	}

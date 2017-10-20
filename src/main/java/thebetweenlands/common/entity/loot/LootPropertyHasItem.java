@@ -107,10 +107,10 @@ public class LootPropertyHasItem implements EntityProperty {
 	}
 
 	private boolean doesItemMatch(ItemStack stack) {
-		if(this.item == null && stack == null) {
+		if(this.item.isEmpty() && stack.isEmpty()) {
 			return true;
 		}
-		if(stack == null) {
+		if(stack.isEmpty()) {
 			return false;
 		}
 		return stack.getItem() == this.item.getItem() && (this.item.getItemDamage() == OreDictionary.WILDCARD_VALUE || this.item.getItemDamage() == stack.getItemDamage());

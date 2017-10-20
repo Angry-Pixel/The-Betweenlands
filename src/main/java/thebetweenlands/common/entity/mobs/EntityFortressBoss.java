@@ -17,11 +17,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EntityDamageSourceIndirect;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -38,6 +34,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.serializer.Serializers;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
 import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
@@ -779,10 +776,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 					}
 				}
 
-				//TODO: Loot tables
-				this.dropItem(ItemRegistry.RING_OF_RECRUITMENT, 1);
-				this.dropItem(ItemRegistry.AMULET_SLOT, 1);
-
 				List<LocationStorage> locations = LocationStorage.getLocations(this.world, this.getPositionVector());
 				for(LocationStorage location : locations) {
 					if(location.getType() == EnumLocationType.WIGHT_TOWER) {
@@ -796,6 +789,12 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 				this.setDead();
 			}
 		}
+	}
+
+	@Nullable
+	@Override
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.FORTRESS_BOSS;
 	}
 
 	@Override

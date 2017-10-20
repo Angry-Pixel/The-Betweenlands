@@ -1,0 +1,26 @@
+{
+  "pools": [
+    {
+      "name": "fortress_boss_ring",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:ring_of_recruitment",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "fortress_boss_amulet",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:amulet_slot",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

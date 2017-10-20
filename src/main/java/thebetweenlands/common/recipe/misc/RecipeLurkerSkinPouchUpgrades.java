@@ -64,6 +64,11 @@ public class RecipeLurkerSkinPouchUpgrades  extends IForgeRegistryEntry.Impl<IRe
 	}
 
 	@Override
+	public boolean isDynamic() {
+		return true;
+	}
+
+	@Override
 	public ItemStack getRecipeOutput() {
 		return new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
 	}

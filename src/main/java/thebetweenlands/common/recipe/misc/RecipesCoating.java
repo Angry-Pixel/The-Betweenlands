@@ -60,9 +60,13 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return true; //TODO what is this?
+		return width * height >= 2;
 	}
 
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
 
 	@Override
 	public ItemStack getRecipeOutput() {

@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.tools;
 
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -11,11 +12,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.TranslationHelper;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class ItemSyrmoriteBucketSolidRubber extends Item {
 	public ItemSyrmoriteBucketSolidRubber() {
 		//this.setCreativeTab(null);
 		this.setMaxStackSize(1);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.add(TranslationHelper.translateToLocal("tooltip.rubber_bucket"));
 	}
 
 	@Override

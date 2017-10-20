@@ -70,6 +70,10 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		return width * height >= 2;
 	}
 
+	@Override
+	public boolean isDynamic() {
+		return true;
+	}
 
 	@Override
 	public ItemStack getRecipeOutput() {

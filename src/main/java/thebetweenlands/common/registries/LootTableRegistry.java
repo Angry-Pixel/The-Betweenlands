@@ -61,6 +61,9 @@ public class LootTableRegistry {
     public static final ResourceLocation TOAD = register("entities/toad");
     public static final ResourceLocation WIGHT = register("entities/wight");
 
+    //BOSSES
+    public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
+
     //LOOT PROPERTIES
     public static final ResourceLocation PROPERTY_FROG_TYPE = register(new LootPropertyFrogType.Serializer());
     public static final ResourceLocation PROPERTY_PEAT_MUMMY_SHIMMERSTONE = register(new LootPropertyPeatMummyShimmerstone.Serializer());
