@@ -10,7 +10,7 @@ import thebetweenlands.common.lib.ModInfo;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Custom Recipes", "Potion effects", "Mob Spawning"};
+	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning"};
 
 	//////// Values ///////
 	public static int dimensionId;
@@ -69,8 +69,8 @@ public class ConfigHandler {
 		
 		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
 
-		maxEntitiesPerLoadedArea = config.get(CATEGORIES[5], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
-		hardEntityLimit = config.get(CATEGORIES[5], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);
+		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
+		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);
 		
 		save();
 	}

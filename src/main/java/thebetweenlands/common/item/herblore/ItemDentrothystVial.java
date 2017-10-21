@@ -9,14 +9,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ItemDentrothystVial extends Item implements ItemRegistry.ISingleJsonSubItems {
 
@@ -83,8 +80,7 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.ISingleJso
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
-        //TODO vial block
-        return true; //world.getBlockState(pos).getBlock() == BlockRegistry.VIAL;
+        return world.getBlockState(pos).getBlock() == BlockRegistry.ASPECT_VIAL_BLOCK;
     }
 
     @Override

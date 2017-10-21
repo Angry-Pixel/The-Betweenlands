@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -48,7 +49,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     public void addInfusion(ItemStack bucket) {
         this.infusionBucket = bucket.copy();
         this.loadFromInfusion();
-        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        markDirty();
     }
 
 
@@ -63,7 +64,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             this.progress++;
             if (!this.world.isRemote) {
                 if (!this.running || this.progress % 20 == 0) {
-                    world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+                    markDirty();
                 }
                 this.running = true;
                 if (this.hasFinished()) {
@@ -73,7 +74,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         } else {
             if (!this.world.isRemote) {
                 if (this.running) {
-                    world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+                    markDirty();
                 }
                 this.running = false;
             }
@@ -119,8 +120,26 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     }
 
     @Override
+    public void markDirty() {
+        IBlockState state = world.getBlockState(pos);
+        world.notifyBlockUpdate(getPos(), state, state, 3);
+        world.markBlockRangeForRenderUpdate(getPos(), getPos());
+        super.markDirty();
+    }
+
+    @Override
     public SPacketUpdateTileEntity getUpdatePacket() {
-        NBTTagCompound nbt = new NBTTagCompound();
+        return new SPacketUpdateTileEntity(pos, 0, getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+        handleUpdateTag(pkt.getNbtCompound());
+    }
+
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        NBTTagCompound nbt = super.getUpdateTag();
         nbt.setBoolean("running", this.running);
         NBTTagCompound itemStackCompound = new NBTTagCompound();
         if (!this.infusionBucket.isEmpty()) {
@@ -128,22 +147,23 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         }
         nbt.setTag("infusionBucket", itemStackCompound);
         nbt.setInteger("progress", this.progress);
-        return new SPacketUpdateTileEntity(pos, 0, nbt);
+        return nbt;
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity packet) {
-        this.running = packet.getNbtCompound().getBoolean("running");
-        NBTTagCompound itemStackCompound = packet.getNbtCompound().getCompoundTag("infusionBucket");
+    public void handleUpdateTag(NBTTagCompound tag) {
+        super.handleUpdateTag(tag);
+        this.running = tag.getBoolean("running");
+        NBTTagCompound itemStackCompound = tag.getCompoundTag("infusionBucket");
         ItemStack oldStack = this.infusionBucket;
-        if (itemStackCompound != null && itemStackCompound.getShort("id") != 0)
+        if (itemStackCompound.hasKey("id") && !itemStackCompound.getString("id").isEmpty())
             this.infusionBucket = new ItemStack(itemStackCompound);
         else
             this.infusionBucket = ItemStack.EMPTY;
         if (!this.infusionBucket.isEmpty() && !ItemStack.areItemStacksEqual(this.infusionBucket, oldStack)) {
             this.loadFromInfusion();
         }
-        this.progress = packet.getNbtCompound().getInteger("progress");
+        this.progress = tag.getInteger("progress");
     }
 
     public ElixirRecipe getElixirRecipe() {

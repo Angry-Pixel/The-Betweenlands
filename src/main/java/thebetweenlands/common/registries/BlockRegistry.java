@@ -425,6 +425,7 @@ public class BlockRegistry {
     public static final Block MUD_FLOWER_POT = new BlockMudFlowerPot();
     public static final Block GECKO_CAGE = new BlockGeckoCage();
     public static final Block INFUSER = new BlockInfuser();
+    public static final Block ASPECT_VIAL_BLOCK = new BlockAspectVial();
     public static final Block MORTAR = new BlockMortar();
     public static final Block ANIMATOR = new BlockAnimator();
     public static final Block ALEMBIC = new BlockAlembic();

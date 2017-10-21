@@ -20,10 +20,13 @@ import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.handler.ScreenRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.block.container.BlockAspectVial;
+import thebetweenlands.common.block.terrain.BlockDentrothyst;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.AdvancedRecipeHelper;
 
 import javax.annotation.Nullable;
@@ -120,20 +123,20 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
 
     @Override
     public int getColorMultiplier(ItemStack stack, int tintIndex) {
-        //TODO get color for the liquid somehow
-        /*switch(tintIndex){
+        switch(tintIndex){
             case 0:
+                //TODO get color for the liquid somehow
                 //Liquid
-                List<Aspect> aspects = ItemAspectContainer.fromItem(stack).getAspects();
+                /*List<Aspect> aspects = ItemAspectContainer.fromItem(stack).getAspects();
                 if(aspects.size() > 0) {
                     Aspect aspect = aspects.get(0);
                     float[] aspectRGBA = ColorUtils.getRGBA(aspect.type.getColor());
                     return ColorUtils.toHex(aspectRGBA[0], aspectRGBA[1], aspectRGBA[2], 1.0F);
-                }
+                }*/
                 return 0xFFFFFFFF;
             case 2:
                 return 0xFFFFFFFF;
-        }*/
+        }
         return 0xFFFFFFFF;
     }
 
@@ -151,7 +154,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
                 //tooltip.add(TranslationHelper.translateToLocal("tooltip.aspectvial.byariis.fuel"));
             }
         }
-        tooltip.add(TextFormatting.RED + "Not yet implemented!");
+        tooltip.add(TextFormatting.RED + "Not yet fully implemented!");
     }
 
     /**
@@ -161,23 +164,21 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
      * @param aspect
      */
     public static void placeAspectVial(World world, BlockPos pos, int vialType, Aspect aspect) {
-        //TODO vial block
-        /*world.setBlock(x, y, z, BLBlockRegistry.vial, vialType, 2);
+        world.setBlockState(pos, BlockRegistry.ASPECT_VIAL_BLOCK.getDefaultState().withProperty(BlockAspectVial.TYPE, BlockDentrothyst.EnumDentrothyst.values()[vialType]), 2);
         TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
         if(tile != null)
-            tile.setAspect(aspect);*/
+            tile.setAspect(aspect);
     }
 
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
-        //TODO vial block
-        return true;//world.getBlockState(pos).getBlock() == BlockRegistry.VIAL;
+        return world.getBlockState(pos).getBlock() == BlockRegistry.ASPECT_VIAL_BLOCK;
     }
 
     @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
-        List<Aspect> itemAspects = AspectManager.get(world).getStaticAspects(stack);
+        List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
         if(player.isSneaking() && itemAspects.size() == 1 && facing == EnumFacing.UP) {
             if(world.isAirBlock(pos.up())) {
                 if(!world.isRemote) {

@@ -57,28 +57,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.tile.RenderAlembic;
-import thebetweenlands.client.render.tile.RenderAnimator;
-import thebetweenlands.client.render.tile.RenderChestBetweenlands;
-import thebetweenlands.client.render.tile.RenderCompostBin;
-import thebetweenlands.client.render.tile.RenderDruidAltar;
-import thebetweenlands.client.render.tile.RenderGeckoCage;
-import thebetweenlands.client.render.tile.RenderInfuser;
-import thebetweenlands.client.render.tile.RenderItemCage;
-import thebetweenlands.client.render.tile.RenderItemShelf;
-import thebetweenlands.client.render.tile.RenderLootPot;
-import thebetweenlands.client.render.tile.RenderMudFlowerPot;
-import thebetweenlands.client.render.tile.RenderPestleAndMortar;
-import thebetweenlands.client.render.tile.RenderPossessedBlock;
-import thebetweenlands.client.render.tile.RenderPurifier;
-import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
-import thebetweenlands.client.render.tile.RenderSpikeTrap;
-import thebetweenlands.client.render.tile.RenderTarLootPot1;
-import thebetweenlands.client.render.tile.RenderTarLootPot2;
-import thebetweenlands.client.render.tile.RenderTarLootPot3;
-import thebetweenlands.client.render.tile.RenderWeedwoodSign;
-import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
-import thebetweenlands.client.render.tile.RenderWisp;
+import thebetweenlands.client.render.tile.*;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -141,29 +120,7 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
-import thebetweenlands.common.tile.TileEntityAlembic;
-import thebetweenlands.common.tile.TileEntityAnimator;
-import thebetweenlands.common.tile.TileEntityBLDualFurnace;
-import thebetweenlands.common.tile.TileEntityBLFurnace;
-import thebetweenlands.common.tile.TileEntityChestBetweenlands;
-import thebetweenlands.common.tile.TileEntityCompostBin;
-import thebetweenlands.common.tile.TileEntityDruidAltar;
-import thebetweenlands.common.tile.TileEntityGeckoCage;
-import thebetweenlands.common.tile.TileEntityInfuser;
-import thebetweenlands.common.tile.TileEntityItemCage;
-import thebetweenlands.common.tile.TileEntityItemShelf;
-import thebetweenlands.common.tile.TileEntityLootPot;
-import thebetweenlands.common.tile.TileEntityMortar;
-import thebetweenlands.common.tile.TileEntityMudFlowerPot;
-import thebetweenlands.common.tile.TileEntityPossessedBlock;
-import thebetweenlands.common.tile.TileEntityPurifier;
-import thebetweenlands.common.tile.TileEntitySpikeTrap;
-import thebetweenlands.common.tile.TileEntityTarLootPot1;
-import thebetweenlands.common.tile.TileEntityTarLootPot2;
-import thebetweenlands.common.tile.TileEntityTarLootPot3;
-import thebetweenlands.common.tile.TileEntityWeedwoodSign;
-import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
-import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.common.tile.*;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.GLUProjection;
@@ -264,8 +221,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerItemAndBlockRenderers() {
 		CustomModelManager.INSTANCE.registerLoader();
-		//TODO ItemRegistry.registerRenderers();
-		//registerBlockRenderers();
 	}
 
 
@@ -420,6 +375,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot1.class, new RenderTarLootPot1());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot2.class, new RenderTarLootPot2());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new RenderTarLootPot3());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectVial.class, new RenderAspectVial());
 		
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);

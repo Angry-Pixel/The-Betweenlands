@@ -36,8 +36,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.client.render.model.ControlledAnimation;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -307,11 +309,10 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (!this.world.isRemote) {
-			//TODO: handle equipment
-			//			boolean holdsEquipment = player.getHeldItem(Hand) != null /*&& (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == Registries.INSTANCE.itemRegistry.amuletSlot)*/;
-			//			if (holdsEquipment)
-			//				return false;
-			boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(hand))/*player.getHeldItem(Hand) != null && player.getHeldItem(Hand).getItem() == ItemRegistry.ITEMS_GENERIC && player.getHeldItem(Hand).getItemDamage() == ItemGeneric.EnumItemGeneric.DRAGONFLY_WING.ordinal()*/;
+			boolean holdsEquipment = !player.getHeldItem(hand).isEmpty() && (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == ItemRegistry.AMULET_SLOT);
+			if (holdsEquipment)
+				return false;
+			boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(hand));
 			if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
 				player.startRiding(this);
 			} else if (holdsWings) {
