@@ -1,8 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
-import java.util.Random;
-
-import net.minecraft.entity.EntityFlying;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
@@ -10,16 +9,19 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateFlying;
+import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
+import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 
-public class EntityFirefly extends EntityFlying implements IEntityBL {
+public class EntityFirefly extends EntityCreature implements IEntityBL {
 	public static final IAttribute GLOW_STRENGTH_ATTRIB = (new RangedAttribute(null, "bl.fireflyGlowStrength", 1, 0, 8)).setDescription("Firefly glow strength").setShouldWatch(true);
 	public static final IAttribute GLOW_START_CHANCE = (new RangedAttribute(null, "bl.fireflyGlowStartChance", 0.0025D, 0, 1)).setDescription("Firefly glow start chance per tick");
 	public static final IAttribute GLOW_STOP_CHANCE = (new RangedAttribute(null, "bl.fireflyGlowStopChance", 0.00083D, 0, 1)).setDescription("Firefly glow stop chance per tick");
@@ -36,55 +38,21 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 		this.setSize(0.6F, 0.6F);
 		this.ignoreFrustumCheck = true;
 		this.moveHelper = new FlightMoveHelper(this);
+		setPathPriority(PathNodeType.WATER, -8F);
+		setPathPriority(PathNodeType.BLOCKED, -8.0F);
+		setPathPriority(PathNodeType.OPEN, 8.0F);
 	}
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(5, new EntityAIFlyRandomly<EntityFirefly>(this) {
-			@Override
-			protected double getTargetY(Random rand, double distanceMultiplier) {
-				int worldHeight = MathHelper.floor(EntityFirefly.this.aboveLayer);
-
-				PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-
-				for(int yo = 0; yo < MathHelper.ceil(EntityFirefly.this.aboveLayer); yo++) {
-					checkPos.setPos(this.entity.posX, this.entity.posY - yo, this.entity.posZ);
-
-					if(!this.entity.getEntityWorld().isBlockLoaded(checkPos))
-						return this.entity.posY;
-
-					if(!this.entity.getEntityWorld().isAirBlock(checkPos)) {
-						worldHeight = checkPos.getY();
-						break;
-					}
-				}
-
-				checkPos.release();
-
-				if(this.entity.posY > worldHeight + EntityFirefly.this.aboveLayer) {
-					return this.entity.posY + (-rand.nextFloat() * 2.0F) * 16.0F * distanceMultiplier;
-				} else {
-					float rndFloat = rand.nextFloat() * 2.0F - 1.0F;
-					if(rndFloat > 0.0D) {
-						double maxRange = worldHeight + EntityFirefly.this.aboveLayer - this.entity.posY;
-						return this.entity.posY + (-rand.nextFloat() * 2.0F) * maxRange * distanceMultiplier;
-					} else {
-						return this.entity.posY + (rand.nextFloat() * 2.0F - 1.0F) * 16.0F * distanceMultiplier;
-					}
-				}
-			}
-
-			@Override
-			protected double getFlightSpeed() {
-				return 0.035D;
-			}
-		});
+		tasks.addTask(0, new EntityAIFlyingWander(this, 0.15D));
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.075D);
 		this.getAttributeMap().registerAttribute(GLOW_STRENGTH_ATTRIB);
 		this.getAttributeMap().registerAttribute(GLOW_START_CHANCE);
 		this.getAttributeMap().registerAttribute(GLOW_STOP_CHANCE);
@@ -107,12 +75,25 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 	}
 
 	@Override
+    protected PathNavigate createNavigator(World world) {
+		return new PathNavigateFlying(this, world);
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
 		if (this.isInWater()) {
 			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.1D);
 		}
+		
+        this.motionY += 0.05D;
+ 
+        if (motionY < 0.0D)
+        	motionY *= 0.1D;
+
+		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
+		getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
 
 		this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
 
@@ -142,6 +123,14 @@ public class EntityFirefly extends EntityFlying implements IEntityBL {
 	protected boolean canDespawn() {
 		return true;
 	}
+
+    @Override
+    public void fall(float distance, float damageMultiplier) {
+    }
+
+    @Override
+    protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
+    }
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {

@@ -6,15 +6,20 @@ import java.util.Random;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateFlying;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -32,7 +37,7 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
+public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 	public static final IAttribute GAS_CLOUD_COLOR_R = (new RangedAttribute(null, "bl.gasCloudColorRed", 104, 0, 255)).setDescription("Gas cloud color red component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_G = (new RangedAttribute(null, "bl.gasCloudColorGreen", 196, 0, 255)).setDescription("Gas cloud color green component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_B = (new RangedAttribute(null, "bl.gasCloudColorBlue", 179, 0, 255)).setDescription("Gas cloud color blue component").setShouldWatch(true);
@@ -88,8 +93,10 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 				return true;
 			}
 		};
+		setPathPriority(PathNodeType.WATER, -8F);
+		setPathPriority(PathNodeType.BLOCKED, -8.0F);
+		setPathPriority(PathNodeType.OPEN, 8.0F);
 	}
-
 
 	@Override
 	public boolean isAIDisabled() {
@@ -142,7 +149,7 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 			}
 		});
 
-		this.targetTasks.addTask(1, new EntityAIFindEntityNearestPlayer(this));
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
 	}
 
 	/**
@@ -190,6 +197,11 @@ public class EntityGasCloud extends EntityFlying implements IMob, IEntityBL {
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
+	}
+
+	@Override
+    protected PathNavigate createNavigator(World world) {
+		return new PathNavigateFlying(this, world);
 	}
 
 	@Override

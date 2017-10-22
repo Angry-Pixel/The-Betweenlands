@@ -84,7 +84,7 @@ public class EntityDarkDruid extends EntityMob {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23);
+        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.45);
         getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(50);
         getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(5);
         getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16);
