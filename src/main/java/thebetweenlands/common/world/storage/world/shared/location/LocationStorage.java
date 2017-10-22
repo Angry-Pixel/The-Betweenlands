@@ -46,7 +46,6 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 * Creates a new location
 	 * @param worldStorage
 	 * @param id
-	 * @param boundingBox
 	 */
 	public LocationStorage(WorldDataBase<?> worldStorage, String id, @Nullable SharedRegion region, String name, EnumLocationType type) {
 		super(worldStorage, id, region);
@@ -119,10 +118,10 @@ public class LocationStorage extends BetweenlandsSharedStorage {
 	 */
 	public LocationStorage linkChunks() {
 		for(AxisAlignedBB boundingBox : this.boundingBoxes) {
-			int sx = MathHelper.floor(boundingBox.minX) / 16;
-			int sz = MathHelper.floor(boundingBox.minZ) / 16;
-			int ex = MathHelper.floor(boundingBox.maxX) / 16;
-			int ez = MathHelper.floor(boundingBox.maxZ) / 16;
+			int sx = MathHelper.floor(boundingBox.minX) >> 4;
+			int sz = MathHelper.floor(boundingBox.minZ) >> 4;
+			int ex = MathHelper.floor(boundingBox.maxX) >> 4;
+			int ez = MathHelper.floor(boundingBox.maxZ) >> 4;
 			for(int cx = sx; cx <= ex; cx++) {
 				for(int cz = sz; cz <= ez; cz++) {
 					Chunk chunk = this.getWorldStorage().getWorld().getChunkFromChunkCoords(cx, cz);

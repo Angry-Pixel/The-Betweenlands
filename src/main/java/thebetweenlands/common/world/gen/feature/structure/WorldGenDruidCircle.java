@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
@@ -54,28 +55,27 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		MutableBlockPos pos = new MutableBlockPos();
 
 		//Try to find a suitable location
-		BlockPos center = new BlockPos(startX, 64, startZ);
-		if(world.isAreaLoaded(center.add(-baseRadius - 1, 0, -baseRadius - 1), center.add(baseRadius + 1, 0, baseRadius + 1))) {
-			check:
-				for (int xo = this.baseRadius + 1; xo <= this.checkRadius - this.baseRadius - 1; xo++) {
-					for (int zo = this.baseRadius + 1; zo <= this.checkRadius - this.baseRadius - 1; zo++) {
-						int x = startX + xo;
-						int z = startZ + zo;
-						pos.setPos(x, 0, z);
-						Biome biome = world.getBiome(pos);
-						if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)) {
-							int newY = world.getHeight(pos).getY() - 1;
-							pos.setY(newY);
-							IBlockState block = world.getBlockState(pos);
-							if (block == biome.topBlock) {
-								if(this.canGenerateAt(world, pos.up())) {
-									genPos = pos.up();
-									break check;
-								}
+		check:
+		for (int xo = this.baseRadius + 1; xo <= this.checkRadius - (this.baseRadius + 1); xo++) {
+			for (int zo = this.baseRadius + 1; zo <= this.checkRadius - (this.baseRadius + 1); zo++) {
+				int x = startX + xo;
+				int z = startZ + zo;
+				if(world.isAreaLoaded(new BlockPos(x - baseRadius - 2, 64, z - baseRadius - 2), new BlockPos(x + baseRadius + 3, 64, z + baseRadius + 3))) {
+					pos.setPos(x, 0, z);
+					Biome biome = world.getBiome(pos);
+					if (BiomeDictionary.hasType(biome, BiomeDictionary.Type.SWAMP)) {
+						int newY = world.getHeight(pos).getY() - 1;
+						pos.setY(newY);
+						IBlockState block = world.getBlockState(pos);
+						if (block == biome.topBlock) {
+							if(this.canGenerateAt(world, pos.up())) {
+								genPos = pos.up();
+								break check;
 							}
 						}
 					}
 				}
+			}
 		}
 
 		if(genPos != null && random.nextInt(ConfigHandler.druidCircleFrequency) == 0) {
