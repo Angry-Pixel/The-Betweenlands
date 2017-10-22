@@ -768,6 +768,8 @@ chat.flintandsteel=It's too damp to set something on fire with %s
 chat.amulet.slot.added=Added a new amulet slot
 chat.amulet.slot.full=Can't add any more amulet slots
 
+chat.event.spook=You feel a chill in the air... the haunting season has begun!
+
 # Elixirs
 bl.elixir.petrify=Petrify
 bl.elixir.strength=Elixir of Strength

@@ -191,7 +191,8 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 		for (int x = blockX - maxRadius; x <= blockX + maxRadius; x += 2) {
 			for (int z = blockZ - maxRadius; z <= blockZ + maxRadius; z += 2) {
 				for (int y = blockY; y < blockY + 10 + height; y += 2) {
-					if (world.getBlockState(new BlockPos(x, y, z)).getMaterial() == Material.WOOD) {
+					BlockPos pos = new BlockPos(x, y, z);
+					if (!world.isBlockLoaded(pos) || world.getBlockState(pos).getMaterial() == Material.WOOD) {
 						return true;
 					}
 				}
