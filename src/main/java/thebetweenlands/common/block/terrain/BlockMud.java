@@ -1,26 +1,29 @@
 package thebetweenlands.common.block.terrain;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
+import thebetweenlands.common.registries.ItemRegistry;
 
 
 public class BlockMud extends Block {
+	protected static final AxisAlignedBB MUD_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
+	
 	public BlockMud() {
 		super(BLMaterialRegistry.MUD);
 		setHardness(0.5F);
@@ -29,18 +32,27 @@ public class BlockMud extends Block {
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-	@SuppressWarnings("deprecation")
+	public boolean canEntityWalkOnMud(Entity entity) {
+		if (entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase) entity))
+			return false;
+		boolean canWalk = entity instanceof EntityPlayer && !((EntityPlayer) entity).inventory.armorItemInSlot(0).isEmpty() && ((EntityPlayer) entity).inventory.armorItemInSlot(0).getItem() instanceof ItemRubberBoots;
+		boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && !((EntityPlayer) entity).inventory.armorItemInSlot(0).isEmpty() && ((EntityPlayer) entity).inventory.armorItemInSlot(0).getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
+		return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode && ((EntityPlayer) entity).capabilities.isFlying);
+	}
+
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean p_185477_7_) {
-		AxisAlignedBB blockAABB = this.getCollisionBoundingBox(state, world, pos).offset(pos);
-		if (blockAABB != null && entityBox.intersects(blockAABB) && (entity == null || ItemRubberBoots.canEntityWalkOnMud(entity))) {
-			collidingBoxes.add(blockAABB);
-		}
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return FULL_BLOCK_AABB;
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+		return MUD_AABB;
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
-		if (!ItemRubberBoots.canEntityWalkOnMud(entity)) {
+		if (!canEntityWalkOnMud(entity)) {
 			entity.motionX *= 0.08D;
 			if(!entity.isInWater() && entity.motionY < 0 && entity.onGround) entity.motionY = -0.1D;
 			entity.motionZ *= 0.08D;
@@ -62,15 +74,9 @@ public class BlockMud extends Block {
 	}
 
 	@Override
-	public boolean isNormalCube(IBlockState blockState) {
-		return true;
-	}
-
-	@Override
 	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return true;
+		return false;
 	}
-
 
 	@Override
 	public boolean isOpaqueCube(IBlockState blockState) {
