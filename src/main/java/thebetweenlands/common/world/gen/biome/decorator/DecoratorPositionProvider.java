@@ -52,7 +52,7 @@ public class DecoratorPositionProvider {
 	public int offsetXZ(int padding) {
 		int bind = 32 - padding * 2;
 		int rand = this.rand.nextInt(bind);
-		return rand;// + padding;
+		return rand + padding;
 	}
 
 	/**

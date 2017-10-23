@@ -31,6 +31,9 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 		this.ivy = BlockRegistry.POISON_IVY.getDefaultState();
 
+		if (!world.isAreaLoaded(pos, maxRadius))
+			return false;
+
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)
 			for (int zz = - maxRadius; zz <= maxRadius; zz++)
 				for (int yy = 2; yy < height; yy++)

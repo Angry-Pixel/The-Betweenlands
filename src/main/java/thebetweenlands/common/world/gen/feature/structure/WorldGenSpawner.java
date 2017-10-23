@@ -57,9 +57,11 @@ public class WorldGenSpawner extends WorldGenerator {
 
 			for (int xx = 0; xx < 16; ++xx)
 				for (int zz = 0; zz < 16; ++zz)
-					for (int yy = 0; yy < 8; ++yy)
-						if(this.blackListedBlocks.contains(world.getBlockState(position.add(xx, yy, zz)).getBlock()))
+					for (int yy = 0; yy < 8; ++yy) {
+						BlockPos pos = position.add(xx, yy, zz);
+						if (!world.isBlockLoaded(pos) || this.blackListedBlocks.contains(world.getBlockState(pos).getBlock()))
 							return false;
+					}
 
 			boolean canGenerateNearCave = rand.nextInt(8) == 0;
 

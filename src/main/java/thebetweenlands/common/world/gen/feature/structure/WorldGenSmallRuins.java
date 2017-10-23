@@ -145,6 +145,10 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
 
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, height, depth, direction).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
+
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, location);
 
@@ -180,6 +184,11 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			return false;
 		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
+
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, height, depth, direction).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
+
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, location);
 
@@ -223,6 +232,11 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			return false;
 		if (!rotatedCubeMatches(world, x, y, z, 2, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 2, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, 6, -1, 4, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
+
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 7, depth, direction).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
+
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 7, depth, direction, location);
 
@@ -270,6 +284,10 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 				for (int xx = x; xx > x - width; xx--)
 					if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !(world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == Blocks.AIR || (world.getBlockState(new BlockPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_WATER && yy < y + height - 2)))
 						return false;
+
+		AxisAlignedBB aabb = new AxisAlignedBB(x - width, y, z, x, y + height, z + width).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
 
 		if (!SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - width, y - 1, z + width - 1))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))) || !SurfaceType.MIXED_GROUND.matches(world.getBlockState(new BlockPos(x - 1, y - 1, z + width))))
 			return false;
@@ -368,6 +386,11 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			return false;
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
+
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, height, depth, direction).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
+
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, height, depth, direction, location);
 
@@ -387,6 +410,11 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			return false;
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND) || !rotatedCubeMatches(world, x, y, z, width - 1, -1, 0, 1, 1, 1, direction, SurfaceType.MIXED_GROUND))
 			return false;
+
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 1, depth, direction).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
+
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 1, depth, direction, location);
 
@@ -413,6 +441,9 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 13, depth, direction))
 			return false;
 
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 13, depth, direction).grow(6, 6, 6);
+		if (!world.isAreaLoaded(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)))
+			return false;
 
 		if (doGen) {
 			this.addLocationArea(world, x, y, z, 0, 0, 0, width, 13, depth, direction, location);
@@ -548,23 +579,8 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 	}
 
 
-	private boolean addLocationArea(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction, LocationStorage location) {
-		x -= width / 2;
-		z -= depth / 2;
-		switch (direction) {
-		case 0:
-			location.addBounds(new AxisAlignedBB(x+offsetA, y+offsetB, z+offsetC, x+offsetA+sizeWidth, y+offsetB+sizeHeight, z+offsetC+sizeDepth).grow(6, 6, 6));
-			break;
-		case 1:
-			location.addBounds(new AxisAlignedBB(x+offsetC, y+offsetB, z + depth - offsetA - sizeWidth - 1, x+offsetC+sizeDepth, y+offsetB+sizeHeight, z + depth - offsetA - 1).grow(6, 6, 6));
-			break;
-		case 2:
-			location.addBounds(new AxisAlignedBB(x + width - offsetA - sizeWidth - 1, y+offsetB, z + depth - offsetC - sizeDepth - 1, x + width - offsetA - 1, y+offsetB+sizeHeight, z + depth - offsetC - 1).grow(6, 6, 6));
-			break;
-		case 3:
-			location.addBounds(new AxisAlignedBB(x + width - offsetC - sizeDepth - 1, y+offsetB, z + offsetA, x + width - offsetC - 1, y+offsetB+sizeHeight, z + offsetA + sizeWidth).grow(6, 6, 6));
-			break;
-		}
+	private boolean addLocationArea(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int sizeWidth, int sizeHeight, int sizeDepth, int direction, LocationStorage location) {
+		location.addBounds(rotatedAABB(world, x, y, z, offsetX, offsetY, offsetZ, sizeWidth, sizeHeight, sizeDepth, direction).grow(6, 6, 6));
 		return true;
 	}
 

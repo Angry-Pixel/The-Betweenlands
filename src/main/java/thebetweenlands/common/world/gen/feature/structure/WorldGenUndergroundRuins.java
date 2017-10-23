@@ -391,84 +391,96 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		z -= depth / 2;
 		switch (direction) {
 		case 0:
-			for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
-				for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
-					int yy = y + offsetY;
-					int times = 0;
-					while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
-						if (!simulate)
-							world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2);
-						yy--;
-						times++;
-						if (times > 4) {
-							if(simulate) {
-								return false;
-							} else {
-								break;
+			if (world.isAreaLoaded(new BlockPos(x + offsetX, y, z + offsetZ), new BlockPos(x + offsetX + sizeWidth, y + offsetZ, z + offsetZ + sizeWidth))) {
+				for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
+					for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
+						int yy = y + offsetY;
+						int times = 0;
+						while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
+							if (!simulate)
+								world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2 | 16);
+							yy--;
+							times++;
+							if (times > 4) {
+								if (simulate) {
+									return false;
+								} else {
+									break;
+								}
 							}
 						}
 					}
-				}
+			} else
+				return false;
 			break;
 		case 1:
-			for (int zz = z + depth - offsetX - 1; zz > z + depth - offsetX - sizeWidth - 1; zz--)
-				for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
-					int yy = y + offsetY;
-					int times = 0;
-					while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
-						if (!simulate)
-							world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2);
-						yy--;
-						times++;
-						if (times > 4) {
-							if(simulate) {
-								return false;
-							} else {
-								break;
+			if (world.isAreaLoaded(new BlockPos(x + offsetZ, y, z + depth - offsetX - sizeWidth - 1), new BlockPos(x + offsetZ + sizeDepth, y + offsetZ, z + depth - offsetX - 1))) {
+				for (int zz = z + depth - offsetX - 1; zz > z + depth - offsetX - sizeWidth - 1; zz--)
+					for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
+						int yy = y + offsetY;
+						int times = 0;
+						while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
+							if (!simulate)
+								world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2 | 16);
+							yy--;
+							times++;
+							if (times > 4) {
+								if (simulate) {
+									return false;
+								} else {
+									break;
+								}
 							}
 						}
 					}
-				}
+			} else
+				return false;
 			break;
 		case 2:
-			for (int xx = x + width - offsetX - 1; xx > x + width - offsetX - sizeWidth - 1; xx--)
-				for (int zz = z + depth - offsetZ - 1; zz > z + depth - offsetZ - sizeDepth - 1; zz--) {
-					int yy = y + offsetY;
-					int times = 0;
-					while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
-						if (!simulate)
-							world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2);
-						yy--;
-						times++;
-						if (times > 4) {
-							if(simulate) {
-								return false;
-							} else {
-								break;
+			if (world.isAreaLoaded(new BlockPos(x - offsetX - sizeWidth - 1, y, z + depth - offsetZ - sizeDepth - 1), new BlockPos(x + width - offsetX - 1, y + offsetZ, z + depth - offsetZ - 1))) {
+				for (int xx = x + width - offsetX - 1; xx > x + width - offsetX - sizeWidth - 1; xx--)
+					for (int zz = z + depth - offsetZ - 1; zz > z + depth - offsetZ - sizeDepth - 1; zz--) {
+						int yy = y + offsetY;
+						int times = 0;
+						while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
+							if (!simulate)
+								world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2 | 16);
+							yy--;
+							times++;
+							if (times > 4) {
+								if (simulate) {
+									return false;
+								} else {
+									break;
+								}
 							}
 						}
 					}
-				}
+			} else
+				return false;
 			break;
 		case 3:
-			for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
-				for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
-					int yy = y + offsetY;
-					int times = 0;
-					while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
-						if (!simulate)
-							world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2);
-						yy--;
-						times++;
-						if (times > 4) {
-							if(simulate) {
-								return false;
-							} else {
-								break;
+			if (world.isAreaLoaded(new BlockPos(x + width - offsetZ - sizeDepth - 1, y, z + offsetX), new BlockPos(x + width - offsetZ - 1, y + offsetZ, z + offsetX + sizeWidth))) {
+				for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
+					for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
+						int yy = y + offsetY;
+						int times = 0;
+						while (world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))) {
+							if (!simulate)
+								world.setBlockState(new BlockPos(xx, yy, zz), BlockRegistry.PITSTONE.getDefaultState(), 2 | 16);
+							yy--;
+							times++;
+							if (times > 4) {
+								if (simulate) {
+									return false;
+								} else {
+									break;
+								}
 							}
 						}
 					}
-				}
+			} else
+				return false;
 			break;
 		}
 

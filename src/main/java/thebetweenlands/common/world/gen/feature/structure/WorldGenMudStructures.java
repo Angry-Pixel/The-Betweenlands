@@ -84,7 +84,11 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
 			return false;
 
-		this.bounds.add(this.rotatedAABB(world, x, y, z, 0, -2, 0, width, 8, depth, direction));
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, -2, 0, width, 8, depth, direction);
+		AxisAlignedBB aabbGrown = aabb.grow(2, 1, 2);
+		if (!world.isAreaLoaded(new BlockPos(aabbGrown.minX, aabbGrown.minY, aabbGrown.minZ), new BlockPos(aabbGrown.maxX, aabbGrown.maxY, aabbGrown.maxZ)))
+			return false;
+		this.bounds.add(aabb);
 
 		rotatedCubeVolumeExtendedDown(world, x, y, z, 0, -1, 0, MUD_BRICKS, width, 1, depth, direction);
 
@@ -118,7 +122,11 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
 			return false;
 
-		this.bounds.add(this.rotatedAABB(world, x, y, z, 0, -2, 0, width, 8, depth, direction));
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, -2, 0, width, 8, depth, direction);
+		AxisAlignedBB aabbGrown = aabb.grow(2, 1, 2);
+		if (!world.isAreaLoaded(new BlockPos(aabbGrown.minX, aabbGrown.minY, aabbGrown.minZ), new BlockPos(aabbGrown.maxX, aabbGrown.maxY, aabbGrown.maxZ)))
+			return false;
+		this.bounds.add(aabb);
 
 		rotatedCubeVolumeExtendedDown(world, x, y, z, 0, -1, 1, MUD_BRICKS, width, 1, depth - 1, direction);
 		rotatedCubeVolumeExtendedDown(world, x, y, z, 1, -1, 0, MUD_BRICKS, width - 2, 1, 1, direction);
@@ -159,7 +167,11 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		if (!rotatedCubeMatches(world, x, y, z, 0, -1, 0, width, 1, depth, direction, SurfaceType.MIXED_GROUND))
 			return false;
 
-		this.bounds.add(this.rotatedAABB(world, x, y, z, 0, -2, 0, width, 8, depth, direction));
+		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, -2, 0, width, 8, depth, direction);
+		AxisAlignedBB aabbGrown = aabb.grow(2, 1, 2);
+		if (!world.isAreaLoaded(new BlockPos(aabbGrown.minX, aabbGrown.minY, aabbGrown.minZ), new BlockPos(aabbGrown.maxX, aabbGrown.maxY, aabbGrown.maxZ)))
+			return false;
+		this.bounds.add(aabb);
 
 		rotatedCubeVolumeExtendedDown(world, x, y, z, 0, -1, 1, MUD_BRICKS, width, 1, depth - 2, direction);
 

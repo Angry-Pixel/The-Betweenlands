@@ -35,6 +35,9 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 		int y = pos.getY();
 		int z = pos.getZ();
 
+		if (!world.isAreaLoaded(pos, halfSize + 1))
+			return false;
+
 		if (y + height + 1 >= WorldProviderBetweenlands.LAYER_HEIGHT - height || y - 1 <= WorldProviderBetweenlands.CAVE_WATER_HEIGHT + height)
 			return false;
 
