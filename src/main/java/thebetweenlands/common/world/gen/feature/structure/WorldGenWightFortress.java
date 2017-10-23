@@ -1139,7 +1139,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			//energy barrier
 			rotatedCubeVolume(world, rand, pos, 15, 29, 13, energyBarrier, 0, 2, 4, 1, direction);
 		}
-
+		System.out.println("FORTRESS GEN HERE!: " + pos);
 		return true;
 	}
 
