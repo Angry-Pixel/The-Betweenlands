@@ -53,9 +53,9 @@ public class WorldGenWaterRootsCluster extends WorldGenerator {
 			if(!SurfaceType.WATER.matches(state)) {
 				if(state.getBlock() != Blocks.AIR)
 					break;
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.ROOT.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.ROOT.getDefaultState(), 2 | 16);
 			} else {
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.ROOT_UNDERWATER.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.ROOT_UNDERWATER.getDefaultState(), 2 | 16);
 			}
 		}
 		return true;

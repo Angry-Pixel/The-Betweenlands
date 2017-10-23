@@ -22,7 +22,7 @@ public class WorldGenBladderwortCluster extends WorldGenerator {
 		for (int i = 0; i < 128; ++i) {
 			BlockPos pos = position.add(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
 
-			if(SurfaceType.WATER.matches(world, pos.up()) && SurfaceType.DIRT.matches(world, pos)) {
+			if(world.isBlockLoaded(pos) && SurfaceType.WATER.matches(world, pos.up()) && SurfaceType.DIRT.matches(world, pos)) {
 				if(this.generateBladderwortStack(world, rand, pos.up()))
 					generated = true;
 			}
@@ -49,10 +49,10 @@ public class WorldGenBladderwortCluster extends WorldGenerator {
 			BlockPos offsetPos = pos.add(0, yo, 0);
 			IBlockState state = world.getBlockState(offsetPos);
 			if(!SurfaceType.WATER.matches(state)) {
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.BLADDERWORT_FLOWER.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.BLADDERWORT_FLOWER.getDefaultState(), 2 | 16);
 				break;
 			} else {
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.BLADDERWORT_STALK.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.BLADDERWORT_STALK.getDefaultState(), 2 | 16);
 			}
 		}
 		return true;

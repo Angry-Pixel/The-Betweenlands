@@ -385,6 +385,7 @@ public class DecorationHelper {
 	public static boolean generateSwampReedCluster(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPosSeaGround(10);
 		World world = decorator.getWorld();
+
 		if(SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
 			return GEN_SWAMP_REED.generate(decorator.getWorld(), decorator.getRand(), pos);
 		} else if(SurfaceType.MIXED_GROUND.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
@@ -745,7 +746,7 @@ public class DecorationHelper {
 						}
 						if(hasLeaves && (SurfaceType.GRASS_AND_DIRT.matches(cBlockState) || cBlockState.getBlock() == BlockRegistry.LOG_WEEDWOOD)) {
 							if(world.isAirBlock(checkPos.setPos(px, py-yo+1, pz)) && decorator.getRand().nextInt(3) == 0) {
-								world.setBlockState(new BlockPos(px, py-yo+1, pz), BlockRegistry.FALLEN_LEAVES.getDefaultState());
+								world.setBlockState(new BlockPos(px, py-yo+1, pz), BlockRegistry.FALLEN_LEAVES.getDefaultState(), 2 | 16);
 								generated = true;
 							}
 						}

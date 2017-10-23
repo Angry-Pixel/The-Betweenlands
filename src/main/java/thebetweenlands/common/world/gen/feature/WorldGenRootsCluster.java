@@ -46,7 +46,7 @@ public class WorldGenRootsCluster extends WorldGenerator {
 		height = rand.nextInt(height) + 1 + rand.nextInt(4);
 		for(int yo = 0; yo < height; yo++) {
 			BlockPos offsetPos = pos.add(0, yo, 0);
-			this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.ROOT.getDefaultState());
+			world.setBlockState(offsetPos, BlockRegistry.ROOT.getDefaultState(), 2 | 16);
 		}
 		return true;
 	}

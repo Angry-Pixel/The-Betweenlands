@@ -88,7 +88,7 @@ public enum SurfaceType implements Predicate<IBlockState> {
 	}
 
 	public boolean matches(World world, BlockPos pos) {
-		return this.apply(world.getBlockState(pos));
+		return world.isBlockLoaded(pos) && this.apply(world.getBlockState(pos));
 	}
 
 	public boolean matches(IBlockState state) {

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.block.BlockLog.EnumAxis;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -37,7 +38,7 @@ public class WorldGenRottenLogs extends WorldGenerator {
 				for (int zz = z - length; length + z - 1 >= zz; zz++) {
 					for (int yy = y + 1; yy <= y + baseRadius * 2; yy++) {
 						BlockPos offsetPos = new BlockPos(xx, yy, zz);
-						if (!world.getBlockState(offsetPos).getBlock().isReplaceable(world, offsetPos)) {
+						if (!world.isBlockLoaded(offsetPos) || !world.getBlockState(offsetPos).getBlock().isReplaceable(world, offsetPos)) {
 							return false;
 						}
 					}
@@ -50,13 +51,13 @@ public class WorldGenRottenLogs extends WorldGenerator {
 						double dSq = i * i + j * j;
 						BlockPos offsetPos = new BlockPos(x + i, y + j + baseRadius, zz);
 						if (Math.round(Math.sqrt(dSq)) == baseRadius) {
-							world.setBlockState(offsetPos, log);
+							world.setBlockState(offsetPos, log, 2 | 16);
 							if (rand.nextInt(12) == 0)
-								world.setBlockToAir(offsetPos);
+								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
 							if (zz == z - length && rand.nextInt(2) == 0 || zz == z + length - 1 && rand.nextInt(2) == 0)
-								world.setBlockToAir(offsetPos);
+								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
 						} else
-							world.setBlockToAir(offsetPos);
+							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
 					}
 
 		} else {
@@ -66,7 +67,7 @@ public class WorldGenRottenLogs extends WorldGenerator {
 				for (int zz = z - baseRadius; baseRadius + z >= zz; zz++) {
 					for (int yy = y + 1; yy <= y + baseRadius * 2; yy++) {
 						BlockPos offsetPos = new BlockPos(xx, yy, zz);
-						if (!world.getBlockState(offsetPos).getBlock().isReplaceable(world, offsetPos)) {
+						if (!world.isBlockLoaded(offsetPos) || !world.getBlockState(offsetPos).getBlock().isReplaceable(world, offsetPos)) {
 							return false;
 						}
 					}
@@ -79,13 +80,13 @@ public class WorldGenRottenLogs extends WorldGenerator {
 						double dSq = i * i + j * j;
 						BlockPos offsetPos = new BlockPos(xx, y + j + baseRadius, z + i);
 						if (Math.round(Math.sqrt(dSq)) == baseRadius) {
-							world.setBlockState(offsetPos, log);
+							world.setBlockState(offsetPos, log, 2 | 16);
 							if (rand.nextInt(12) == 0)
-								world.setBlockToAir(offsetPos);
+								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
 							if (xx == x - length && rand.nextInt(2) == 0 || xx == x + length - 1 && rand.nextInt(2) == 0)
-								world.setBlockToAir(offsetPos);
+								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
 						} else
-							world.setBlockToAir(offsetPos);
+							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
 					}
 		}
 		return true;

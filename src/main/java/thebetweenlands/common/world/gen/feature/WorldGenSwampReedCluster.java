@@ -22,12 +22,14 @@ public class WorldGenSwampReedCluster extends WorldGenerator {
 		for (int i = 0; i < 128; ++i) {
 			BlockPos pos = position.add(rand.nextInt(10) - rand.nextInt(10), rand.nextInt(8) - rand.nextInt(8), rand.nextInt(10) - rand.nextInt(10));
 
-			if(SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
-				this.generateReedStack(world, rand, pos.up());
-				generated = true;
-			} else if(SurfaceType.MIXED_GROUND.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
-				this.generateReedStack(world, rand, pos.up());
-				generated = true;
+			if (world.isBlockLoaded(pos)) {
+				if (SurfaceType.WATER.matches(world, pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.MUD && world.isAirBlock(pos.up(2))) {
+					this.generateReedStack(world, rand, pos.up());
+					generated = true;
+				} else if (SurfaceType.MIXED_GROUND.matches(world, pos) && BlockRegistry.SWAMP_REED.canPlaceBlockAt(world, pos.up())) {
+					this.generateReedStack(world, rand, pos.up());
+					generated = true;
+				}
 			}
 		}
 
@@ -43,9 +45,9 @@ public class WorldGenSwampReedCluster extends WorldGenerator {
 				break;
 			}
 			if(SurfaceType.WATER.matches(state)) {
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.SWAMP_REED_UNDERWATER.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.SWAMP_REED_UNDERWATER.getDefaultState(), 2 | 16);
 			} else {
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.SWAMP_REED.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.SWAMP_REED.getDefaultState(), 2 | 16);
 			}
 		}
 	}

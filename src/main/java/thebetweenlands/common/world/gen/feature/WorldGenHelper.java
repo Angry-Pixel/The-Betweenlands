@@ -98,7 +98,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
 					for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
+						world.setBlockState(pos, blockState, 2 | 16);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -109,7 +109,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + depth - offsetX - 1; zz > z + depth - offsetX - sizeWidth - 1; zz--)
 					for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
+						world.setBlockState(pos, blockState, 2 | 16);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -120,7 +120,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + width - offsetX - 1; xx > x + width - offsetX - sizeWidth - 1; xx--)
 					for (int zz = z + depth - offsetZ - 1; zz > z + depth - offsetZ - sizeDepth - 1; zz--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
+						world.setBlockState(pos, blockState, 2 | 16);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -131,7 +131,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
 					for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
+						world.setBlockState(pos, blockState, 2 | 16);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}

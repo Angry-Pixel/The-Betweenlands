@@ -6,7 +6,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeCrystalType;
@@ -14,28 +13,28 @@ import thebetweenlands.common.registries.BlockRegistry;
 
 public class OreGens {
 	public static final WorldGenerator SULFUR = 
-			new WorldGenMinable(BlockRegistry.SULFUR_ORE.getDefaultState(), 14, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.SULFUR_ORE.getDefaultState(), 14, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator SYRMORITE = 
-			new WorldGenMinable(BlockRegistry.SYRMORITE_ORE.getDefaultState(), 9, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.SYRMORITE_ORE.getDefaultState(), 9, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator BONE_ORE = 
-			new WorldGenMinable(BlockRegistry.SLIMY_BONE_ORE.getDefaultState(), 11, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.SLIMY_BONE_ORE.getDefaultState(), 11, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
-	public static final WorldGenerator OCTINE = 
-			new WorldGenMinable(BlockRegistry.OCTINE_ORE.getDefaultState(), 8, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+	public static final WorldGenerator OCTINE =
+			new WorldGenBLMinable(BlockRegistry.OCTINE_ORE.getDefaultState(), 8, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator SWAMP_DIRT = 
-			new WorldGenMinable(BlockRegistry.SWAMP_DIRT.getDefaultState(), 25, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.SWAMP_DIRT.getDefaultState(), 25, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator LIMESTONE = 
-			new WorldGenMinable(BlockRegistry.LIMESTONE.getDefaultState(), 100, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.LIMESTONE.getDefaultState(), 100, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator VALONITE = 
-			new WorldGenMinable(BlockRegistry.VALONITE_ORE.getDefaultState(), 5, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
+			new WorldGenBLMinable(BlockRegistry.VALONITE_ORE.getDefaultState(), 5, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
 
 	public static final WorldGenerator SCABYST = 
-			new WorldGenMinable(BlockRegistry.SCABYST_ORE.getDefaultState(), 6, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
+			new WorldGenBLMinable(BlockRegistry.SCABYST_ORE.getDefaultState(), 6, BlockMatcher.forBlock(BlockRegistry.PITSTONE));
 
 	public static final WorldGenerator LIFE_GEM = 
 			new WorldGenerator() {

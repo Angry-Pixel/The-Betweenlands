@@ -49,7 +49,8 @@ public class WorldGenSwampKelpCluster extends WorldGenerator {
 			BlockPos offsetPos = pos.add(0, yo, 0);
 			IBlockState state = world.getBlockState(offsetPos);
 			if(SurfaceType.WATER.matches(state)) {
-				this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.SWAMP_KELP.getDefaultState());
+				world.setBlockState(offsetPos, BlockRegistry.SWAMP_KELP.getDefaultState(), 2 | 16);
+				//this.setBlockAndNotifyAdequately(world, offsetPos, BlockRegistry.SWAMP_KELP.getDefaultState());
 			}
 		}
 		return true;

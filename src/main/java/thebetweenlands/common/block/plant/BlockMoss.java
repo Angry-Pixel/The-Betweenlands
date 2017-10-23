@@ -250,7 +250,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
                 for (xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
                     for (zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
                         for (yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {
-                            if (!world.isAreaLoaded(checkPos.setPos(xx, yy, zz), 0))
+                            if (!world.isBlockLoaded(checkPos.setPos(xx, yy, zz)))
                                 return;
                             if (world.getBlockState(checkPos.setPos(xx, yy, zz)).getBlock() == this) {
                                 --maxNearbyMossBlocks;

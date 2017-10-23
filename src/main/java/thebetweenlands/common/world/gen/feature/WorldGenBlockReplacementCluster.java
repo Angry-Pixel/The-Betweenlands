@@ -45,23 +45,25 @@ public class WorldGenBlockReplacementCluster extends WorldGenerator {
 		}
 
 		for (int i = 0; i < this.attempts; ++i) {
-			BlockPos blockpos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset/2+1) - rand.nextInt(this.offset/2+1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
+			BlockPos blockpos = position.add(rand.nextInt(this.offset) - rand.nextInt(this.offset), rand.nextInt(this.offset / 2 + 1) - rand.nextInt(this.offset / 2 + 1), rand.nextInt(this.offset) - rand.nextInt(this.offset));
 
-			IBlockState state = worldIn.getBlockState(blockpos);
-			if (this.matcher.apply(state)) {
-				IBlockState setState = this.blockState;
-				if(this.inheritProperties) {
-					ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
-					for(Entry<IProperty<?>, Comparable<?>> property : properties.entrySet()) {
-						IProperty sourceProperty = property.getKey();
-						IProperty targetProperty = setState.getBlock().getBlockState().getProperty(sourceProperty.getName());
-						if(targetProperty != null && sourceProperty.getValueClass() == targetProperty.getValueClass()) {
-							setState = setState.withProperty(targetProperty, (Comparable)property.getValue());
+			if (worldIn.isBlockLoaded(blockpos)) {
+				IBlockState state = worldIn.getBlockState(blockpos);
+				if (this.matcher.apply(state)) {
+					IBlockState setState = this.blockState;
+					if (this.inheritProperties) {
+						ImmutableMap<IProperty<?>, Comparable<?>> properties = state.getProperties();
+						for (Entry<IProperty<?>, Comparable<?>> property : properties.entrySet()) {
+							IProperty sourceProperty = property.getKey();
+							IProperty targetProperty = setState.getBlock().getBlockState().getProperty(sourceProperty.getName());
+							if (targetProperty != null && sourceProperty.getValueClass() == targetProperty.getValueClass()) {
+								setState = setState.withProperty(targetProperty, (Comparable) property.getValue());
+							}
 						}
 					}
+					this.setBlockAndNotifyAdequately(worldIn, blockpos, setState);
+					generated = true;
 				}
-				this.setBlockAndNotifyAdequately(worldIn, blockpos, setState);
-				generated = true;
 			}
 		}
 

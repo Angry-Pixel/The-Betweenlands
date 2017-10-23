@@ -153,8 +153,10 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
             int xx = this.getX() + this.offsetXZ(padding);
             int yy = minY + this.getRand().nextInt(maxY - minY);
             int zz = this.getZ() + this.offsetXZ(padding);
-            if (this.getWorld().isBlockLoaded(new BlockPos(xx, yy, zz), true))
-                oreGen.generate(this.getWorld(), this.getRand(), new BlockPos(xx, yy, zz));
+            BlockPos pos = new BlockPos(xx, yy, zz);
+            if (this.getWorld().isAreaLoaded(pos, padding)) {
+                oreGen.generate(this.getWorld(), this.getRand(), pos);
+            }
         }
     }
 

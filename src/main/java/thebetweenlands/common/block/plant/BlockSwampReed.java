@@ -68,9 +68,11 @@ public class BlockSwampReed extends BlockStackablePlant {
 				return true;
 			BlockPos blockpos = pos.down();
 			for (EnumFacing enumfacing : EnumFacing.Plane.HORIZONTAL) {
-				IBlockState iblockstate = worldIn.getBlockState(blockpos.offset(enumfacing));
-				if (iblockstate.getMaterial() == Material.WATER) {
-					return true;
+				if (worldIn.isBlockLoaded(blockpos.offset(enumfacing))) {
+					IBlockState iblockstate = worldIn.getBlockState(blockpos.offset(enumfacing));
+					if (iblockstate.getMaterial() == Material.WATER) {
+						return true;
+					}
 				}
 			}
 		}
