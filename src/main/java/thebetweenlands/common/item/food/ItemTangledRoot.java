@@ -42,6 +42,7 @@ public class ItemTangledRoot extends Item {
 		return EnumAction.EAT;
 	}
 
+	@Override
 	@Nullable
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		stack.shrink(1);

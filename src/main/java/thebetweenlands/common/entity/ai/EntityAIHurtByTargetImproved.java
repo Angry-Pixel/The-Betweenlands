@@ -19,7 +19,8 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
     /**
      * Returns whether the EntityAIBase should begin execution.
      */
-    public boolean shouldExecute() {
+    @Override
+	public boolean shouldExecute() {
         int i = this.taskOwner.getRevengeTimer();
         return i != this.revengeTimer && this.isSuitableTarget(this.taskOwner.getAttackTarget(), false);
     }
@@ -27,7 +28,8 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting() {
+    @Override
+	public void startExecuting() {
         this.taskOwner.setAttackTarget(this.taskOwner.getRevengeTarget());
         this.revengeTimer = this.taskOwner.getRevengeTimer();
 

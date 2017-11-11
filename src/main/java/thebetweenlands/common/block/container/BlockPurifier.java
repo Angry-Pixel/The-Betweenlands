@@ -176,6 +176,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 		return this.getDefaultState().withProperty(FACING, facing);
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
@@ -201,6 +202,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 		return new TileEntityPurifier();
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return true;

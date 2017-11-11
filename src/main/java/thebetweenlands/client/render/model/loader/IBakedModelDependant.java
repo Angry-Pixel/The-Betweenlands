@@ -54,6 +54,7 @@ public interface IBakedModelDependant {
 	static enum DefaultTextureGetter implements Function<ResourceLocation, TextureAtlasSprite> {
 		INSTANCE;
 
+		@Override
 		public TextureAtlasSprite apply(ResourceLocation location) {
 			return Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(location.toString());
 		}

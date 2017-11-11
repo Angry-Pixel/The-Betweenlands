@@ -99,7 +99,8 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
             this.meta = meta;
         }
 
-        public String toString() {
+        @Override
+		public String toString() {
             return this.getName();
         }
 
@@ -107,7 +108,8 @@ public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICusto
             return this.meta;
         }
 
-        public String getName() {
+        @Override
+		public String getName() {
             return this == GREEN ? "green" : "orange";
         }
     }

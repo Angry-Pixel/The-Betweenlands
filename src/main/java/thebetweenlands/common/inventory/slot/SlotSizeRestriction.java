@@ -17,7 +17,8 @@ public class SlotSizeRestriction extends Slot {
         return true;
     }
 
-    public int getSlotStackLimit()
+    @Override
+	public int getSlotStackLimit()
     {
         return maxItems;
     }

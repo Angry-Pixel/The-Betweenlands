@@ -278,7 +278,8 @@ public class AdvancedModelRenderer extends MowzieModelRenderer {
         this.rotationPointZ = rotationPointZ;
     }
 
-    public void setRotationAngles(float rotateAngleX, float rotateAngleY, float rotateAngleZ) {
+    @Override
+	public void setRotationAngles(float rotateAngleX, float rotateAngleY, float rotateAngleZ) {
         this.rotateAngleX = rotateAngleX;
         this.rotateAngleY = rotateAngleY;
         this.rotateAngleZ = rotateAngleZ;

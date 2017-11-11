@@ -112,6 +112,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 			return this.ordinal();
 		}
 
+		@Override
 		public String toString() {
 			return this.name;
 		}
@@ -123,6 +124,7 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 			return EnumLifeCrystalType.values()[metadata];
 		}
 
+		@Override
 		public String getName() {
 			return this.name;
 		}

@@ -41,7 +41,8 @@ public class ItemWidget extends ManualWidgetBase {
     }
 
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void drawForeGround() {
         RenderItem render = Minecraft.getMinecraft().getRenderItem();
         GlStateManager.pushMatrix();

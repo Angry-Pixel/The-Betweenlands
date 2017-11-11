@@ -56,6 +56,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 		this.setMutexBits(1);
 		this.targetEntitySelector = new Predicate<T>()
 		{
+			@Override
 			public boolean apply(@Nullable T p_apply_1_)
 			{
 				return p_apply_1_ == null ? false : (targetSelector != null && !targetSelector.apply(p_apply_1_) ? false : (!EntitySelectors.NOT_SPECTATING.apply(p_apply_1_) ? false : EntityAINearestAttackableTargetNonCreature.this.isSuitableTarget(p_apply_1_, false)));
@@ -66,6 +67,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 	/**
 	 * Returns whether the EntityAIBase should begin execution.
 	 */
+	@Override
 	@SuppressWarnings("unchecked")
 	public boolean shouldExecute()
 	{
@@ -92,6 +94,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 		{
 			this.targetEntity = (T)this.taskOwner.getEntityWorld().getNearestAttackablePlayer(this.taskOwner.posX, this.taskOwner.posY + (double)this.taskOwner.getEyeHeight(), this.taskOwner.posZ, this.getTargetDistance(), this.getTargetDistance(), new Function<EntityPlayer, Double>()
 			{
+				@Override
 				@Nullable
 				public Double apply(@Nullable EntityPlayer p_apply_1_)
 				{
@@ -125,6 +128,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting()
 	{
 		this.taskOwner.setAttackTarget(this.targetEntity);
@@ -140,6 +144,7 @@ public class EntityAINearestAttackableTargetNonCreature<T extends EntityLivingBa
 			this.theEntity = theEntityIn;
 		}
 
+		@Override
 		public int compare(Entity p_compare_1_, Entity p_compare_2_)
 		{
 			double d0 = this.theEntity.getDistanceSq(p_compare_1_);

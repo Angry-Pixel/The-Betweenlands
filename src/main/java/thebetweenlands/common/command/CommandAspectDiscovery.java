@@ -18,10 +18,12 @@ import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 
 public class CommandAspectDiscovery extends CommandBase {
+	@Override
 	public String getName() {
 		return "aspectDiscovery";
 	}
 
+	@Override
 	public String getUsage(ICommandSender sender) {
 		return "/aspectDiscovery <reset|discover> <held|all>";
 	}

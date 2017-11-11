@@ -107,6 +107,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 			return this.ordinal();
 		}
 
+		@Override
 		public String toString() {
 			return this.name;
 		}
@@ -118,6 +119,7 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 			return values()[metadata];
 		}
 
+		@Override
 		public String getName() {
 			return this.name;
 		}

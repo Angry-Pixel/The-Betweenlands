@@ -125,6 +125,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 	/**
 	 * Execute a one shot task or start executing a continuous task
 	 */
+	@Override
 	public void startExecuting()
 	{
 		this.targetSearchStatus = 0;
@@ -135,6 +136,7 @@ public abstract class EntityAITargetNonCreature extends EntityAIBase
 	/**
 	 * Resets the task
 	 */
+	@Override
 	public void resetTask()
 	{
 		this.taskOwner.setAttackTarget((EntityLivingBase)null);

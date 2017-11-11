@@ -32,6 +32,7 @@ public class ParticleTarBeastDrip extends Particle {
 		particleMaxAge = 40 + (int)(Math.random() * 40);
 	}
 
+	@Override
 	public void onUpdate() {
 		prevPosX = posX;
 		prevPosY = posY;

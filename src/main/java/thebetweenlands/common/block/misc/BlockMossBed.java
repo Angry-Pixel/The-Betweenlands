@@ -57,6 +57,7 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 		return true;
 	}
 
+	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}

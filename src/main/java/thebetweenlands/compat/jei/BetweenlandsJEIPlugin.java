@@ -94,7 +94,8 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         jeiRuntime = runtime;
     }
 
-    public void registerCategories(IRecipeCategoryRegistration registry) {
+    @Override
+	public void registerCategories(IRecipeCategoryRegistration registry) {
         jeiHelper = registry.getJeiHelpers();
         registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory());
     }

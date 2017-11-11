@@ -243,7 +243,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
             this.angler = angler;
         }
 
-        public void onUpdateMoveHelper() {
+        @Override
+		public void onUpdateMoveHelper() {
             if (action == EntityMoveHelper.Action.MOVE_TO && !angler.getNavigator().noPath()) {
                 double d0 = posX - angler.posX;
                 double d1 = posY - angler.posY;

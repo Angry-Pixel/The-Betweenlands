@@ -43,6 +43,7 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 			list.add(new ItemStack(this, 1, type.getMetadata()));
 	}
 
+	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
@@ -51,14 +52,17 @@ public class BlockGenericStone extends Block implements BlockRegistry.ICustomIte
 		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumStoneType)state.getValue(VARIANT)).getMetadata());
 	}
 
+	@Override
 	public int damageDropped(IBlockState state) {
 		return ((EnumStoneType)state.getValue(VARIANT)).getMetadata();
 	}
 
+	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(VARIANT).getMetadata();
 	}
 
+	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(VARIANT, EnumStoneType.byMetadata(meta));
 	}

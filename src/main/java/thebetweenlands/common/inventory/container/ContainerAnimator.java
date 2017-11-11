@@ -82,7 +82,8 @@ public class ContainerAnimator extends Container {
             animator.sendGUIData(this, (IContainerListener) crafter);
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value)
     {
         super.updateProgressBar(id, value);

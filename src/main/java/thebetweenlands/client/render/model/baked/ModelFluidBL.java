@@ -66,10 +66,12 @@ public final class ModelFluidBL implements IModel {
         this.fluid = fluid;
     }
 
+	@Override
     public Collection<ResourceLocation> getDependencies() {
         return Collections.emptySet();
     }
 
+	@Override
     public Collection<ResourceLocation> getTextures() {
         return ImmutableSet.of(fluid.getStill(), fluid.getFlowing());
     }
@@ -80,6 +82,7 @@ public final class ModelFluidBL implements IModel {
         return new BakedFluid(state.apply(Optional.empty()), map, format, fluid.getColor(), bakedTextureGetter.apply(fluid.getStill()), bakedTextureGetter.apply(fluid.getFlowing()), fluid.isGaseous(), Optional.empty());
     }
 
+	@Override
     public IModelState getDefaultState() {
         return ModelRotation.X0_Y0;
     }
@@ -101,9 +104,11 @@ public final class ModelFluidBL implements IModel {
     public static enum FluidLoader implements ICustomModelLoader {
         INSTANCE;
 
+		@Override
         public void onResourceManagerReload(IResourceManager resourceManager) {
         }
 
+		@Override
         public boolean accepts(ResourceLocation modelLocation) {
             return modelLocation.getResourceDomain().equals("forge") && (
                     modelLocation.getResourcePath().equals("fluid") ||
@@ -111,6 +116,7 @@ public final class ModelFluidBL implements IModel {
                             modelLocation.getResourcePath().equals("models/item/fluid"));
         }
 
+		@Override
         public IModel loadModel(ResourceLocation modelLocation) {
             return WATER;
         }
@@ -127,7 +133,8 @@ public final class ModelFluidBL implements IModel {
         private final TextureAtlasSprite still, flowing;
         private final boolean gas;
         private final LoadingCache<Long, BakedFluid> modelCache = CacheBuilder.newBuilder().maximumSize(200).build(new CacheLoader<Long, BakedFluid>() {
-            public BakedFluid load(Long key) throws Exception {
+    		@Override
+        	public BakedFluid load(Long key) throws Exception {
                 boolean statePresent = (key & 1) != 0;
                 key >>>= 1;
                 int[] cornerRound = new int[4];
@@ -319,26 +326,32 @@ public final class ModelFluidBL implements IModel {
             }
         }
 
+		@Override
         public boolean isAmbientOcclusion() {
             return true;
         }
 
+		@Override
         public boolean isGui3d() {
             return false;
         }
 
+		@Override
         public boolean isBuiltInRenderer() {
             return false;
         }
 
+		@Override
         public TextureAtlasSprite getParticleTexture() {
             return still;
         }
 
+		@Override
         public ItemCameraTransforms getItemCameraTransforms() {
             return ItemCameraTransforms.DEFAULT;
         }
 
+		@Override
         public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
             BakedFluid model = this;
             if (state instanceof IExtendedBlockState) {
@@ -358,6 +371,7 @@ public final class ModelFluidBL implements IModel {
             return model.faceQuads.get(side);
         }
 
+		@Override
         public ItemOverrideList getOverrides() {
             return ItemOverrideList.NONE;
         }

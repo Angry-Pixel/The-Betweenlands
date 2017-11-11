@@ -85,6 +85,7 @@ public class BlockEnergyBarrier extends Block {
 	}
 
 
+	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
 		return FULL_BLOCK_AABB.offset(pos);

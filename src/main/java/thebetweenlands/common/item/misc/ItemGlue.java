@@ -46,6 +46,7 @@ public class ItemGlue extends Item {
 		return EnumAction.EAT;
 	}
 
+	@Override
 	@Nullable
 	public ItemStack onItemUseFinish(ItemStack stack, World worldIn, EntityLivingBase entityLiving) {
 		stack.shrink(1);

@@ -21,7 +21,8 @@ public class BlockHopperBetweenlands extends BlockHopper implements BlockRegistr
 		this.setSoundType(SoundType.METAL);
 	}
 	
-    public TileEntity createNewTileEntity(World worldIn, int meta) {
+    @Override
+	public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntityHopperBetweenlands();
     }
 

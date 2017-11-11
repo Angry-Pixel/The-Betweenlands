@@ -190,10 +190,12 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 		UPPER,
 		LOWER;
 
+		@Override
 		public String toString() {
 			return this.getName();
 		}
 
+		@Override
 		public String getName() {
 			return this == UPPER ? "upper" : "lower";
 		}

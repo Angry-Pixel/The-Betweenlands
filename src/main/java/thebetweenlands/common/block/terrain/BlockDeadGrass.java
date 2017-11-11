@@ -40,6 +40,7 @@ public class BlockDeadGrass extends BasicBlock implements IGrowable {
 	/**
 	 * Get the Item that this Block should drop when harvested.
 	 */
+	@Override
 	@Nullable
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return BlockRegistry.SWAMP_DIRT.getItemDropped(BlockRegistry.SWAMP_DIRT.getDefaultState(), rand, fortune);

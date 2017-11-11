@@ -63,7 +63,8 @@ public class AspectItemSlideShowWidget extends ManualWidgetBase {
         }
     }
 
-    public void mouseClicked(int x, int y, int mouseButton) {
+    @Override
+	public void mouseClicked(int x, int y, int mouseButton) {
         super.mouseClicked(x, y, mouseButton);
         if (mouseButton == 2 && x >= xStart && x <= xStart + 96 && y >= yStart && y <= yStart + 16) {
             if (currentItems + 1 < items.size() && items.size() - currentItems > 6) {

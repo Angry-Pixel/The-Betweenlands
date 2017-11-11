@@ -37,6 +37,7 @@ public class ItemWeedwoodShield extends ItemBLShield {
 	public ItemWeedwoodShield() {
 		super(BLMaterialRegistry.TOOL_WEEDWOOD);
 		this.addPropertyOverride(new ResourceLocation("burning"), new IItemPropertyGetter() {
+			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				NBTTagCompound tag = stack.getTagCompound();

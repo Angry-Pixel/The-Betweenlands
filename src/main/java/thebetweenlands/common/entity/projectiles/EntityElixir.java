@@ -37,7 +37,8 @@ public class EntityElixir extends EntityThrowable {
         this.motionZ *= strength;
     }
 
-    protected void entityInit()
+    @Override
+	protected void entityInit()
     {
         this.getDataManager().register(ITEM, ItemStack.EMPTY);
     }

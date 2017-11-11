@@ -43,6 +43,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 
 		this.addPropertyOverride(new ResourceLocation("pull"), new IItemPropertyGetter() {
+			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
 				if (entityIn == null) {
@@ -71,6 +72,7 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 		}
 	}
 
+	@Override
 	protected boolean isArrow(ItemStack stack) {
 		return !stack.isEmpty() && stack.getItem() instanceof ItemArrow;
 	}

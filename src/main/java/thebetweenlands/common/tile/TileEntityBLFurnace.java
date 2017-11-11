@@ -85,7 +85,8 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         return itemstack.getItem() == ItemRegistry.ITEMS_MISC && itemstack.getItemDamage() == EnumItemMisc.LIMESTONE_FLUX.getID();
     }
 
-    public int getSizeInventory() {
+    @Override
+	public int getSizeInventory() {
         return inventory.size();
     }
 
@@ -94,7 +95,8 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         return inventory.size() <= 0;
     }
 
-    public ItemStack getStackInSlot(int slot) {
+    @Override
+	public ItemStack getStackInSlot(int slot) {
         return inventory.get(slot);
     }
 

@@ -22,7 +22,8 @@ public class FlightMoveHelper extends EntityMoveHelper {
         this.entity = entity;
     }
 
-    public void onUpdateMoveHelper() {
+    @Override
+	public void onUpdateMoveHelper() {
         if (this.action == EntityMoveHelper.Action.MOVE_TO) {
             double x = this.posX - this.entity.posX;
             double y = this.posY + 0.5D - this.entity.posY;

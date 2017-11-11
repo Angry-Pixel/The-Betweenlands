@@ -88,7 +88,8 @@ public class ContainerMortar  extends Container {
             pestleAndMortar.sendGUIData(this, (IContainerListener) crafter);
     }
 
-    @SideOnly(Side.CLIENT)
+    @Override
+	@SideOnly(Side.CLIENT)
     public void updateProgressBar(int id, int value)
     {
         super.updateProgressBar(id, value);

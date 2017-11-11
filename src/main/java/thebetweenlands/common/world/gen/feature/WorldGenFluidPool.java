@@ -39,6 +39,7 @@ public class WorldGenFluidPool extends WorldGenerator {
 		return this;
 	}
 
+	@Override
 	public boolean generate(World worldIn, Random rand, BlockPos position) {
 		for (position = position.add(-8, 0, -8); position.getY() > 5 && worldIn.isAirBlock(position); position = position.down()) {
 			;
