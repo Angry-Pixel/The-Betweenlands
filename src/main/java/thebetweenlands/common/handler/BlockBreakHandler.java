@@ -10,9 +10,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class BlockBreakHandler {
 	@SubscribeEvent
@@ -24,8 +24,8 @@ public class BlockBreakHandler {
 
 			//Wake up nearby Pyrads
 			if(blockState.getBlock() == BlockRegistry.WEEDWOOD || blockState.getBlock() == BlockRegistry.LOG_WEEDWOOD) {
-				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(event.getWorld());
-				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(event.getWorld());
+				List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
 
 				for(LocationStorage location : locations) {
 					if(location.getType() == EnumLocationType.GIANT_TREE) {

@@ -27,8 +27,8 @@ import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.LocationGuarded;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
 
 public class TileEntityDruidAltar extends TileEntityBasicInventory implements ITickable {
 	public final static double FINAL_HEIGHT = 2.0D;
@@ -150,13 +150,13 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		// Does the metadata stuff for the circle animated textures
 		checkDruidCircleBlocks(world);
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		List<LocationGuarded> locations = worldStorage.getSharedStorageAt(LocationGuarded.class, (location) -> {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		List<LocationGuarded> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationGuarded.class, this.pos.getX(), this.pos.getZ(), (location) -> {
 			return location.isInside(this.pos);
-		}, this.pos.getX(), this.pos.getZ());
+		});
 		for(LocationGuarded location : locations) {
 			if("druidAltar".equals(location.getName())) {
-				worldStorage.removeSharedStorage(location);
+				worldStorage.getLocalStorageHandler().removeLocalStorage(location);
 			}
 		}
 	}

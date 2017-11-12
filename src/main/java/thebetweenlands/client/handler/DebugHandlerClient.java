@@ -3,17 +3,18 @@ package thebetweenlands.client.handler;
 import java.util.Random;
 import java.util.stream.StreamSupport;
 
-import net.minecraft.client.renderer.BufferBuilder;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.Tessellator;import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -27,27 +28,28 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedStorage;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
-import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void renderWorld(RenderWorldLastEvent event) {
-		if(StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false).anyMatch(stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
+		if (StreamSupport.stream(Minecraft.getMinecraft().player.getHeldEquipment().spliterator(), false)
+				.anyMatch(stack -> !stack.isEmpty() && stack.getItem() == ItemRegistry.LOCATION_DEBUG)) {
 			World world = Minecraft.getMinecraft().world;
-			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
-			for(SharedStorage sharedStorage : worldStorage.getSharedStorage()) {
-				if(sharedStorage instanceof LocationStorage) {
+			for (ILocalStorage sharedStorage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
+				if (sharedStorage instanceof LocationStorage) {
 					LocationStorage location = (LocationStorage) sharedStorage;
 
 					GlStateManager.pushMatrix();
-					if(Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+					if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
 						GlStateManager.disableDepth();
 					}
 					GlStateManager.disableTexture2D();
@@ -67,33 +69,49 @@ public class DebugHandlerClient {
 					float alpha = 0.25F;
 
 					GlStateManager.color(red, green, blue, alpha);
-					for(AxisAlignedBB bb : location.getBounds()) {
-						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					for (AxisAlignedBB bb : location.getBounds()) {
+						drawBoundingBox(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 					}
 
 					GlStateManager.color(red / 1.5F, green / 1.5F, blue / 1.5F, 1.0F);
-					for(AxisAlignedBB bb : location.getBounds()) {
-						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					for (AxisAlignedBB bb : location.getBounds()) {
+						drawBoundingBoxOutline(bb.offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 					}
 
-					GlStateManager.color(red, green, blue, 1.0F);
-					drawBoundingBoxOutline(location.getEnclosingBounds().offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+					if (location.getEnclosingBounds() != null) {
+						GlStateManager.color(red, green, blue, 1.0F);
+						drawBoundingBoxOutline(location.getEnclosingBounds().offset(
+								-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+								-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 
-					AxisAlignedBB aabb = location.getEnclosingBounds();
-					Vec3d center = new Vec3d((aabb.maxX + aabb.minX) / 2.0D, (aabb.maxY + aabb.minY) / 2.0D, (aabb.maxZ + aabb.minZ) / 2.0D).addVector(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ);
+						AxisAlignedBB aabb = location.getEnclosingBounds();
+						Vec3d center = new Vec3d((aabb.maxX + aabb.minX) / 2.0D, (aabb.maxY + aabb.minY) / 2.0D,
+								(aabb.maxZ + aabb.minZ) / 2.0D).addVector(
+										-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+										-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+										-Minecraft.getMinecraft().getRenderManager().viewerPosZ);
 
-					GlStateManager.pushMatrix();
-					GlStateManager.translate(center.x, center.y, center.z);
+						GlStateManager.pushMatrix();
+						GlStateManager.translate(center.x, center.y, center.z);
 
-					float scale = Math.max(2.0F, (float)center.lengthVector() / 10.0F);
+						float scale = Math.max(2.0F, (float) center.lengthVector() / 10.0F);
 
-					GlStateManager.scale(scale, scale, scale);
+						GlStateManager.scale(scale, scale, scale);
 
-					renderTag(Minecraft.getMinecraft().fontRenderer, location.getLocalizedName(), 0, 0, 0, 0, Minecraft.getMinecraft().getRenderManager().playerViewY, Minecraft.getMinecraft().getRenderManager().playerViewX, Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);
+						renderTag(Minecraft.getMinecraft().fontRenderer, location.getLocalizedName(), 0, 0, 0, 0,
+								Minecraft.getMinecraft().getRenderManager().playerViewY,
+								Minecraft.getMinecraft().getRenderManager().playerViewX,
+								Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);
 
-					GlStateManager.enableBlend();
-					
-					GlStateManager.popMatrix();
+						GlStateManager.enableBlend();
+
+						GlStateManager.popMatrix();
+					}
 
 					GlStateManager.disableTexture2D();
 					GlStateManager.color(1, 1, 1, 1);
@@ -102,23 +120,29 @@ public class DebugHandlerClient {
 					GlStateManager.glLineWidth(2F);
 
 					ILocationGuard guard = location.getGuard();
-					if(guard != null) {
+					if (guard != null) {
 						GlStateManager.doPolygonOffset(-0.1F, -10.0F);
 						GlStateManager.enablePolygonOffset();
-						for(int xo = -8; xo <= 8; xo++) {
-							for(int yo = -8; yo <= 8; yo++) {
-								for(int zo = -8; zo <= 8; zo++) {
+						for (int xo = -8; xo <= 8; xo++) {
+							for (int yo = -8; yo <= 8; yo++) {
+								for (int zo = -8; zo <= 8; zo++) {
 									BlockPos pos = Minecraft.getMinecraft().player.getPosition().add(xo, yo, zo);
-									if(pos.getY() >= 0) {
+									if (pos.getY() >= 0) {
 										IBlockState state = world.getBlockState(pos);
 										boolean guarded = guard.isGuarded(world, Minecraft.getMinecraft().player, pos);
-										if(guarded) {
-											if(state.getBlock() != Blocks.AIR) {
+										if (guarded) {
+											if (state.getBlock() != Blocks.AIR) {
 												GlStateManager.color(1, 0, 0, 0.25F);
-												drawBoundingBox(state.getBoundingBox(world, pos).offset(pos).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+												drawBoundingBox(state.getBoundingBox(world, pos).offset(pos).offset(
+														-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+														-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+														-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 											} else {
 												GlStateManager.color(1, 0, 0, 0.8F);
-												drawBoundingBoxOutline(new AxisAlignedBB(pos).offset(-Minecraft.getMinecraft().getRenderManager().viewerPosX, -Minecraft.getMinecraft().getRenderManager().viewerPosY, -Minecraft.getMinecraft().getRenderManager().viewerPosZ));
+												drawBoundingBoxOutline(new AxisAlignedBB(pos).offset(
+														-Minecraft.getMinecraft().getRenderManager().viewerPosX,
+														-Minecraft.getMinecraft().getRenderManager().viewerPosY,
+														-Minecraft.getMinecraft().getRenderManager().viewerPosZ));
 											}
 										}
 									}
@@ -141,29 +165,32 @@ public class DebugHandlerClient {
 		}
 	}
 
-	public static void renderTag(FontRenderer fontRenderer, String str, float x, float y, float z, int yOffset, float playerViewY, float playerViewX, boolean thirdPerson) {
+	public static void renderTag(FontRenderer fontRenderer, String str, float x, float y, float z, int yOffset,
+			float playerViewY, float playerViewX, boolean thirdPerson) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x, y, z);
 		GlStateManager.glNormal3f(0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(-playerViewY, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate((float)(thirdPerson ? -1 : 1) * playerViewX, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate((float) (thirdPerson ? -1 : 1) * playerViewX, 1.0F, 0.0F, 0.0F);
 		GlStateManager.scale(-0.025F, -0.025F, 0.025F);
 
 		GlStateManager.enableBlend();
-		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+				GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
+				GlStateManager.DestFactor.ZERO);
 		int i = fontRenderer.getStringWidth(str) / 2;
 		GlStateManager.disableTexture2D();
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexbuffer = tessellator.getBuffer();
 		vertexbuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
-		vertexbuffer.pos((double)(-i - 1), (double)(-1 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-		vertexbuffer.pos((double)(-i - 1), (double)(8 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-		vertexbuffer.pos((double)(i + 1), (double)(8 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
-		vertexbuffer.pos((double)(i + 1), (double)(-1 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double) (-i - 1), (double) (-1 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double) (-i - 1), (double) (8 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double) (i + 1), (double) (8 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
+		vertexbuffer.pos((double) (i + 1), (double) (-1 + yOffset), 0.0D).color(0.0F, 0.0F, 0.0F, 0.25F).endVertex();
 		tessellator.draw();
 		GlStateManager.enableTexture2D();
 
-		fontRenderer.drawString(str, -fontRenderer.getStringWidth(str) / 2, yOffset,  0xFFFFFFFF);
+		fontRenderer.drawString(str, -fontRenderer.getStringWidth(str) / 2, yOffset, 0xFFFFFFFF);
 		GlStateManager.disableBlend();
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.popMatrix();
@@ -252,25 +279,29 @@ public class DebugHandlerClient {
 	@SubscribeEvent
 	public static void onKey(InputEvent.KeyInputEvent event) {
 		if (ConfigHandler.debug && Keyboard.getEventKeyState()) {
-			if(Keyboard.getEventKey() == Keyboard.KEY_Y) {
+			if (Keyboard.getEventKey() == Keyboard.KEY_Y) {
 				WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
 				if (world != null) {
-					ChunkGeneratorBetweenlands cgb = (ChunkGeneratorBetweenlands) world.getChunkProvider().chunkGenerator;
-					if(Keyboard.getEventKey() == Keyboard.KEY_Y) {
+					ChunkGeneratorBetweenlands cgb = (ChunkGeneratorBetweenlands) world
+							.getChunkProvider().chunkGenerator;
+					if (Keyboard.getEventKey() == Keyboard.KEY_Y) {
 						if (Keyboard.isKeyDown(Keyboard.KEY_LMENU) || Keyboard.isKeyDown(Keyboard.KEY_RMENU)) {
 							cgb.debugProvideReset();
-							if(Minecraft.getMinecraft().player != null) {
-								Minecraft.getMinecraft().player.sendMessage(new TextComponentString(String.format("Reset chunk provider debug")));
+							if (Minecraft.getMinecraft().player != null) {
+								Minecraft.getMinecraft().player.sendMessage(
+										new TextComponentString(String.format("Reset chunk provider debug")));
 							}
 						} else {
 							cgb.debugGenerateChunkProvidesImage(true);
 						}
 					}
 				}
-			} else if(Keyboard.getEventKey() == Keyboard.KEY_X) {
+			} else if (Keyboard.getEventKey() == Keyboard.KEY_X) {
 				ChunkGeneratorBetweenlands.debugRecord = !ChunkGeneratorBetweenlands.debugRecord;
-				if(Minecraft.getMinecraft().player != null) {
-					Minecraft.getMinecraft().player.sendMessage(new TextComponentString(String.format("Chunk provider debug is now %s", ChunkGeneratorBetweenlands.debugRecord ? "enabled" : "disabled")));
+				if (Minecraft.getMinecraft().player != null) {
+					Minecraft.getMinecraft().player
+							.sendMessage(new TextComponentString(String.format("Chunk provider debug is now %s",
+									ChunkGeneratorBetweenlands.debugRecord ? "enabled" : "disabled")));
 				}
 			}
 		}

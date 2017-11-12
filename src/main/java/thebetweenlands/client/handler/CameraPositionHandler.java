@@ -19,8 +19,8 @@ import thebetweenlands.api.entity.IEntityCameraOffset;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.item.equipment.ItemRingOfSummoning;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 
 public class CameraPositionHandler {
 	public static CameraPositionHandler INSTANCE = new CameraPositionHandler();
@@ -60,10 +60,10 @@ public class CameraPositionHandler {
 			}
 
 			World world = renderViewEntity.world;
-			BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(world);
+			BetweenlandsWorldStorage worldData = BetweenlandsWorldStorage.forWorld(world);
 
 			//Crumbling cragrock tower
-			List<LocationCragrockTower> towers = worldData.getSharedStorageAt(LocationCragrockTower.class, location -> location.getInnerBoundingBox().grow(4, 4, 4).contains(renderViewEntity.getPositionVector()), renderViewEntity.posX, renderViewEntity.posZ);
+			List<LocationCragrockTower> towers = worldData.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, renderViewEntity.posX, renderViewEntity.posZ, location -> location.getInnerBoundingBox().grow(4, 4, 4).contains(renderViewEntity.getPositionVector()));
 			for(LocationCragrockTower tower : towers) {
 				if(tower.isCrumbling()) {
 					shakeStrength += Math.min(Math.pow((tower.getCrumblingTicks() + event.renderTickTime) / 400.0f, 4) * 0.08f, 0.08f);

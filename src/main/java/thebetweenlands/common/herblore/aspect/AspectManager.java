@@ -23,7 +23,7 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.IAspectType;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class AspectManager {
 	public static enum AspectTier {
@@ -234,7 +234,7 @@ public class AspectManager {
 	 * @return
 	 */
 	public static AspectManager get(World world) {
-		return BetweenlandsWorldData.forWorld(world).getAspectManager();
+		return BetweenlandsWorldStorage.forWorld(world).getAspectManager();
 	}
 
 	/**

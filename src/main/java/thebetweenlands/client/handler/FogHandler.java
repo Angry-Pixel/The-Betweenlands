@@ -34,8 +34,8 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
-import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.location.LocationAmbience;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.FogGenerator;
 import thebetweenlands.util.config.ConfigHandler;
 

@@ -25,7 +25,22 @@ import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
-import thebetweenlands.common.handler.*;
+import thebetweenlands.common.handler.AnvilEventHandler;
+import thebetweenlands.common.handler.ArmorHandler;
+import thebetweenlands.common.handler.AspectSyncHandler;
+import thebetweenlands.common.handler.AttackDamageHandler;
+import thebetweenlands.common.handler.BlockBreakHandler;
+import thebetweenlands.common.handler.ElixirCommonHandler;
+import thebetweenlands.common.handler.EntitySpawnHandler;
+import thebetweenlands.common.handler.EnvironmentEventHandler;
+import thebetweenlands.common.handler.FoodSicknessHandler;
+import thebetweenlands.common.handler.ItemEquipmentHandler;
+import thebetweenlands.common.handler.LocationHandler;
+import thebetweenlands.common.handler.OverworldItemHandler;
+import thebetweenlands.common.handler.PlayerDecayHandler;
+import thebetweenlands.common.handler.PlayerPortalHandler;
+import thebetweenlands.common.handler.PuppetHandler;
+import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
@@ -36,10 +51,8 @@ import thebetweenlands.common.registries.Registries;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
-import thebetweenlands.common.world.storage.chunk.BetweenlandsChunkData;
-import thebetweenlands.common.world.storage.chunk.ChunkDataBase;
-import thebetweenlands.common.world.storage.world.global.WorldDataBase;
-import thebetweenlands.common.world.teleporter.TeleporterHandler;
+import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
+import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -137,11 +150,12 @@ public class TheBetweenlands {
 	private void registerEventHandlers() {
 		proxy.registerEventHandlers();
 
+		WorldStorageImpl.register();
+		
 		MinecraftForge.EVENT_BUS.register(ConfigHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
-		MinecraftForge.EVENT_BUS.register(WorldDataBase.WORLD_EVENT_HANDLER);
-		MinecraftForge.EVENT_BUS.register(ChunkDataBase.CHUNK_EVENT_HANDLER);
-		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkData.class);
+		MinecraftForge.EVENT_BUS.register(WorldEventHandler.class);
+		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkStorage.class);
 		MinecraftForge.EVENT_BUS.register(new AnvilEventHandler());
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(EntityCapabilityHandler.class);

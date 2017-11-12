@@ -21,7 +21,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.config.ConfigHandler;
 
 /**
@@ -41,7 +41,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	protected float[] originalLightBrightnessTable = new float[16];
 
 	private boolean allowHostiles, allowAnimals;
-	private BetweenlandsWorldData worldData;
+	private BetweenlandsWorldStorage worldData;
 
 	public WorldProviderBetweenlands() {
 
@@ -143,11 +143,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return spawnPos;
 	}
 
-	public BetweenlandsWorldData getWorldData() {
-		if(this.worldData == null) {
-			this.worldData = BetweenlandsWorldData.forWorld(this.world);
-		}
-		return this.worldData;
+	public BetweenlandsWorldStorage getWorldData() {
+		return BetweenlandsWorldStorage.forWorld(this.world);
 	}
 
 	@Override
@@ -213,9 +210,10 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	//Fix for buggy rain (?)
 	@Override
 	public void calculateInitialWeather() {
-		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
-		this.world.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
-		this.world.getWorldInfo().setThundering(false);
+		//TODO Doesn't work anymore since this is called before capabilities are attached. Is this even necessary anymore?
+		//EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
+		//this.world.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
+		//this.world.getWorldInfo().setThundering(false);
 		super.calculateInitialWeather();
 	}
 

@@ -20,7 +20,7 @@ import thebetweenlands.common.world.biome.spawning.spawners.EventSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.LocationSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.util.IWeightProvider;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {

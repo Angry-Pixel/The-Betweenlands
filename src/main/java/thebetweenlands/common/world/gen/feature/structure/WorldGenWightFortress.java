@@ -21,6 +21,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
@@ -41,14 +43,13 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityItemCage;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience;
-import thebetweenlands.common.world.storage.world.shared.location.LocationAmbience.EnumLocationAmbience;
-import thebetweenlands.common.world.storage.world.shared.location.LocationGuarded;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
-import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationAmbience;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenWightFortress extends WorldGenerator {
 
@@ -181,13 +182,13 @@ public class WorldGenWightFortress extends WorldGenerator {
 		}
 
 		
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
 		long locationSeed = rand.nextLong();
 
-		SharedRegion region = SharedRegion.getFromBlockPos(pos);
+		LocalRegion region = LocalRegion.getFromBlockPos(pos);
 
-		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, UUID.randomUUID().toString(), region, "translate:wight_tower", EnumLocationType.WIGHT_TOWER);
+		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower", EnumLocationType.WIGHT_TOWER);
 		this.guard = fortressLocation.getGuard();
 		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
 		fortressLocation.linkChunks();
@@ -196,21 +197,21 @@ public class WorldGenWightFortress extends WorldGenerator {
 		fortressLocation.setDirty(true);
 		fortressLocation.setSeed(locationSeed);
 
-		LocationStorage puzzleLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
+		LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
 		puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
 		puzzleLocation.linkChunks();
 		puzzleLocation.setLayer(1);
 		puzzleLocation.setDirty(true);
 		puzzleLocation.setSeed(locationSeed);
 
-		LocationStorage teleporterLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
+		LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
 		teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
 		teleporterLocation.linkChunks();
 		teleporterLocation.setLayer(2);
 		teleporterLocation.setDirty(true);
 		teleporterLocation.setSeed(locationSeed);
 
-		LocationStorage bossLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), region, "translate:wight_tower_boss", EnumLocationType.WIGHT_TOWER);
+		LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower_boss", EnumLocationType.WIGHT_TOWER);
 		bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
 		bossLocation.linkChunks();
 		bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
@@ -219,10 +220,10 @@ public class WorldGenWightFortress extends WorldGenerator {
 		bossLocation.setSeed(locationSeed);
 
 		if(generateStructure(world, rand, pos)) {
-			worldStorage.addSharedStorage(fortressLocation);
-			worldStorage.addSharedStorage(puzzleLocation);
-			worldStorage.addSharedStorage(teleporterLocation);
-			worldStorage.addSharedStorage(bossLocation);
+			worldStorage.getLocalStorageHandler().addLocalStorage(fortressLocation);
+			worldStorage.getLocalStorageHandler().addLocalStorage(puzzleLocation);
+			worldStorage.getLocalStorageHandler().addLocalStorage(teleporterLocation);
+			worldStorage.getLocalStorageHandler().addLocalStorage(bossLocation);
 			return true;
 		}
 

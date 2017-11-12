@@ -7,7 +7,7 @@ import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EventAmbienceType extends AmbienceType {
 	private final Class<? extends EnvironmentEvent> event;
@@ -28,7 +28,7 @@ public class EventAmbienceType extends AmbienceType {
 
 	@Override
 	public boolean isActive() {
-		BetweenlandsWorldData worldData = BetweenlandsWorldData.forWorld(this.getPlayer().world);
+		BetweenlandsWorldStorage worldData = BetweenlandsWorldStorage.forWorld(this.getPlayer().world);
 		if(worldData != null) {
 			EnvironmentEventRegistry eventRegistry = worldData.getEnvironmentEventRegistry();
 			for(EnvironmentEvent event : eventRegistry.getActiveEvents())

@@ -7,19 +7,20 @@ import java.util.UUID;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class LocationDebugItem extends Item {
 	public LocationDebugItem() {
@@ -29,21 +30,21 @@ public class LocationDebugItem extends Item {
 	@Override
 	public EnumActionResult onItemUse( EntityPlayer playerIn, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
-			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 			if(playerIn.isSneaking()) {
-				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
+				List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)));
 				if(locations.isEmpty()) {
 					int rndID = world.rand.nextInt();
-					LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "Test Location ID: " + rndID, EnumLocationType.NONE);
+					LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "Test Location ID: " + rndID, EnumLocationType.NONE);
 					location.addBounds(new AxisAlignedBB(pos).grow(16, 16, 16));
 					location.setSeed(world.rand.nextLong());
 					location.linkChunks();
 					location.setDirty(true);
-					worldStorage.addSharedStorage(location);
+					worldStorage.getLocalStorageHandler().addLocalStorage(location);
 					playerIn.sendMessage(new TextComponentString(String.format("Added new location: %s", location.getName())));
 				} else {
 					for(LocationStorage location : locations) {
-						worldStorage.removeSharedStorage(location);
+						worldStorage.getLocalStorageHandler().removeLocalStorage(location);
 					}
 					playerIn.sendMessage(new TextComponentString(String.format("Removed %s locations:",  locations.size())));
 					for(LocationStorage location : locations) {
@@ -51,7 +52,7 @@ public class LocationDebugItem extends Item {
 					}
 				}
 			} else {
-				List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
+				List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(new Vec3d(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ)));
 				List<EntityPlayerMP> watchers = new ArrayList<EntityPlayerMP>();
 				boolean guard = false;
 				for(LocationStorage location : locations) {
@@ -77,7 +78,7 @@ public class LocationDebugItem extends Item {
 					playerIn.sendMessage(new TextComponentString(String.format("Marked %s locations as dirty and queued update packets to %s watchers:", locations.size(), watchers.size())));
 					playerIn.sendMessage(new TextComponentString("  Locations:"));
 					for(LocationStorage location : locations) {
-						playerIn.sendMessage(new TextComponentString("    " + location.getName()));
+						playerIn.sendMessage(new TextComponentString("    " + location.getName() + " (" + location.getID().getStringID() + ")"));
 						playerIn.sendMessage(new TextComponentTranslation("      Guarded at %s, %s: %s", new TextComponentTranslation(world.getBlockState(pos).getBlock().getUnlocalizedName() + ".name"), "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), (location.getGuard() == null ? String.valueOf(false) : location.getGuard().isGuarded(world, playerIn, pos))));
 						playerIn.sendMessage(new TextComponentString("      Watchers:"));
 						for(EntityPlayerMP watcher : location.getWatchers()) {

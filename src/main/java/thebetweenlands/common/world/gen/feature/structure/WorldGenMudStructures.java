@@ -9,15 +9,16 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenMudStructures extends WorldGenHelper {
 	private static final IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
@@ -60,15 +61,15 @@ public class WorldGenMudStructures extends WorldGenHelper {
 		}
 
 		if(generated) {
-			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(worldIn);
-			LocationStorage locationStorage = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "translate:abandoned_shack", EnumLocationType.RUINS);
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
+			LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "translate:abandoned_shack", EnumLocationType.RUINS);
 			locationStorage.setSeed(rand.nextLong());
 			for(AxisAlignedBB aabb : this.bounds) {
 				locationStorage.addBounds(aabb.grow(2, 1, 2));
 			}
 			locationStorage.linkChunks();
 			locationStorage.setDirty(true);
-			worldStorage.addSharedStorage(locationStorage);
+			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 		}
 
 		return generated;

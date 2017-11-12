@@ -24,8 +24,8 @@ import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedwoodPortalTree;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.LocationPortal;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.util.config.ConfigHandler;
 
 public final class TeleporterBetweenlands extends Teleporter {
@@ -97,9 +97,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 */
 	@Nullable
 	protected LocationPortal getPortalLocation(Entity entity) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.world);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
 		AxisAlignedBB aabb = entity.getEntityBoundingBox();
-		List<LocationPortal> portals = worldStorage.getSharedStorageAt(LocationPortal.class, loc -> loc.intersects(aabb), aabb);
+		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, aabb, loc -> loc.intersects(aabb));
 		this.validatePortals(portals);
 		if(!portals.isEmpty()) {
 			return portals.get(0);
@@ -114,8 +114,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 	@Nullable
 	protected LocationPortal getOtherPortalLocation(@Nullable BlockPos pos) {
 		if(pos != null) {
-			BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(this.targetWorld);
-			List<LocationPortal> otherPortals = worldStorage.getSharedStorageAt(LocationPortal.class, loc -> loc.getPortalPosition().equals(pos), pos.getX(), pos.getZ());
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.targetWorld);
+			List<LocationPortal> otherPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX(), pos.getZ(), loc -> loc.getPortalPosition().equals(pos));
 			this.validatePortals(otherPortals);
 			if(!otherPortals.isEmpty()) {
 				return otherPortals.get(0);
@@ -134,7 +134,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		while(it.hasNext()) {
 			LocationPortal portal = it.next();
 			if(!this.checkPortal(portal)) {
-				portal.getWorldStorage().removeSharedStorage(portal);
+				portal.getWorldStorage().getLocalStorageHandler().removeLocalStorage(portal);
 				it.remove();
 			}
 		}
@@ -208,8 +208,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 						LocationPortal portal = this.getPortalLocation(entity);
 
 						if(portal != null) {
-							BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(this.targetWorld);
-							List<LocationPortal> newPortals = worldStorage.getSharedStorageAt(LocationPortal.class, loc -> loc.isInside(checkPos.up()), checkPos.up().getX(), checkPos.up().getZ());
+							BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.targetWorld);
+							List<LocationPortal> newPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, checkPos.up().getX(), checkPos.up().getZ(), loc -> loc.isInside(checkPos.up()));
 							if(!newPortals.isEmpty()) {
 								//Link portals
 								LocationPortal newPortal = newPortals.get(0);

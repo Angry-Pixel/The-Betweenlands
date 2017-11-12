@@ -11,16 +11,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenSpawnerStructure extends WorldGenerator {
 	@Override
@@ -144,14 +145,14 @@ public class WorldGenSpawnerStructure extends WorldGenerator {
 			}
 		}
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(x, z), "translate:small_dungeon", EnumLocationType.DUNGEON);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(x, z), "translate:small_dungeon", EnumLocationType.DUNGEON);
 		location.addBounds(new AxisAlignedBB(x, y, z, x + 5, y + 5, z + 5).grow(2, 2, 2));
 		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(random.nextLong());
 		location.setDirty(true);
-		worldStorage.addSharedStorage(location);
+		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 		
 		return true;
 	}

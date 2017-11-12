@@ -15,6 +15,8 @@ import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
@@ -23,10 +25,9 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
-import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenCragrockTower extends WorldGenHelper {
 	private static IBlockState CRAGROCK;
@@ -51,7 +52,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 
 	private ILocationGuard guard;
 	private LocationCragrockTower towerLocation;
-	private BetweenlandsWorldData worldStorage;
+	private BetweenlandsWorldStorage worldStorage;
 
 	public WorldGenCragrockTower() {
 		super(17, 64, 19);
@@ -102,8 +103,8 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			pos = pos.add(0, -1, 0);
 
 
-		this.worldStorage = BetweenlandsWorldData.forWorld(worldIn);
-		this.towerLocation = new LocationCragrockTower(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos));
+		this.worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
+		this.towerLocation = new LocationCragrockTower(this.worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos));
 		this.guard = this.towerLocation.getGuard();
 
 		return tower(worldIn, rand, pos.getX(), pos.getY(), pos.getZ());
@@ -1526,7 +1527,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			this.towerLocation.setLevelBlockadeBlocks(i, levelBlockades[i]);
 		}
 		this.towerLocation.setDirty(true);
-		this.worldStorage.addSharedStorage(this.towerLocation);
+		this.worldStorage.getLocalStorageHandler().addLocalStorage(this.towerLocation);
 
 		return true;
 	}

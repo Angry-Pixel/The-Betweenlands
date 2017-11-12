@@ -49,8 +49,8 @@ import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
 import thebetweenlands.util.config.ConfigHandler;
@@ -73,8 +73,8 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
 
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(entity.world);
-		return worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity), entity.posX, entity.posZ);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
+		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity));
 	}
 
 	@SubscribeEvent

@@ -11,6 +11,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
@@ -20,11 +22,9 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
-import thebetweenlands.common.world.gen.feature.WorldGenHelper.EnumRotationSequence;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenSmallRuins extends WorldGenHelper {
 
@@ -55,8 +55,8 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int y;
 		int z;
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage locationStorage = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(position), "translate:ruins", EnumLocationType.RUINS);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "translate:ruins", EnumLocationType.RUINS);
 
 		List<RuinLocation> ruinLocations = new ArrayList<>();
 		int attempts = 40;
@@ -128,7 +128,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 			locationStorage.setSeed(random.nextLong());
 			locationStorage.linkChunks();
 			locationStorage.setDirty(true);
-			worldStorage.addSharedStorage(locationStorage);
+			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
 
 			return true;
 		} else

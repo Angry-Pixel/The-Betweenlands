@@ -6,9 +6,9 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 /**
  * Spawns entities only in the specified world location type.
@@ -28,8 +28,8 @@ public class LocationSpawnEntry extends BLSpawnEntry {
 
 	@Override
 	public void update(World world, BlockPos pos) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		List<LocationStorage> locations = worldStorage.getSharedStorageAt(LocationStorage.class, location -> location.isInside(pos) && this.locationType.equals(location.getType()), pos.getX(), pos.getZ());
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(pos) && this.locationType.equals(location.getType()));
 		if(locations.isEmpty()) {
 			this.setWeight((short) 0);
 		} else {

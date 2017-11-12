@@ -38,9 +38,6 @@ public class EnvironmentEventHandler {
 		if(event.phase == Phase.END && event.world.provider instanceof WorldProviderBetweenlands && !event.world.isRemote) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)event.world.provider;
 
-			//Always save the world data
-			provider.getWorldData().markDirty();
-
 			EnvironmentEventRegistry reg = provider.getWorldData().getEnvironmentEventRegistry();
 			for(EnvironmentEvent eevent : reg.getEvents().values()) {
 				if(!eevent.isLoaded()) continue;

@@ -8,11 +8,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 	@Override
@@ -192,13 +193,13 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 	}
 
 	protected void generateWorldLocation(World world, Random rand, BlockPos pos) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage treeLocation = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "giant_tree", EnumLocationType.GIANT_TREE);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationStorage treeLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "giant_tree", EnumLocationType.GIANT_TREE);
 		treeLocation.addBounds(new AxisAlignedBB(pos.getX() - 32, pos.getY() - 10, pos.getZ() - 32, pos.getX() + 32, pos.getY() + 80, pos.getZ() + 32));
 		treeLocation.linkChunks();
 		treeLocation.setDirty(true);
 		treeLocation.setSeed(rand.nextLong());
 		treeLocation.setVisible(false);
-		worldStorage.addSharedStorage(treeLocation);
+		worldStorage.getLocalStorageHandler().addLocalStorage(treeLocation);
 	}
 }

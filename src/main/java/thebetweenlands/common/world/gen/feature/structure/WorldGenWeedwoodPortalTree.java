@@ -10,11 +10,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.LocationPortal;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationPortal;
 
 public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 	private IBlockState bark;
@@ -122,14 +123,14 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 			}
 		}
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationPortal location = new LocationPortal(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), pos);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
 		location.addBounds(new AxisAlignedBB(pos).grow(8, 10, 8).offset(0, 8, 0));
 		location.setSeed(rand.nextLong());
 		location.setDirty(true);
 		location.setVisible(false);
 		location.linkChunks();
-		worldStorage.addSharedStorage(location);
+		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 
 		return true;
 	}

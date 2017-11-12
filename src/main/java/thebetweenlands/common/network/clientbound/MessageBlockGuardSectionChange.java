@@ -1,5 +1,7 @@
 package thebetweenlands.common.network.clientbound;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.math.BlockPos;
@@ -8,11 +10,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.network.MessageBase;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedStorage;
-import thebetweenlands.common.world.storage.world.shared.location.LocationGuarded;
-import thebetweenlands.common.world.storage.world.shared.location.guard.BlockLocationGuard.GuardChunkSection;
+import thebetweenlands.common.world.storage.BetweenlandsLocalStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.guard.BlockLocationGuard.GuardChunkSection;
 
 public class MessageBlockGuardSectionChange extends MessageBase {
 	private String id;
@@ -21,10 +25,10 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 
 	public MessageBlockGuardSectionChange() {}
 
-	public MessageBlockGuardSectionChange(SharedStorage storage, BlockPos pos, GuardChunkSection section) {
-		this.id = storage.getID();
+	public MessageBlockGuardSectionChange(BetweenlandsLocalStorage storage, BlockPos pos, @Nullable GuardChunkSection section) {
+		this.id = storage.getID().getStringID();
 		this.pos = pos;
-		if(section.getBlockRefCount() > 0) {
+		if(section != null && section.getBlockRefCount() > 0) {
 			this.data = new byte[512];
 			section.writeData(this.data);
 		} else {
@@ -67,8 +71,8 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		SharedStorage storage = worldStorage.getSharedStorage(this.id);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(this.id));
 		if(storage != null && storage instanceof LocationGuarded) {
 			LocationGuarded location = (LocationGuarded) storage;
 			if(location.getGuard() != null) {

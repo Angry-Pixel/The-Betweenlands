@@ -1,6 +1,5 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
-import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
 
@@ -20,15 +19,16 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationGuarded;
-import thebetweenlands.common.world.storage.world.shared.location.guard.ILocationGuard;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
@@ -95,8 +95,8 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	private ILocationGuard guard;
 
 	public void generateStructure(World world, Random rand, BlockPos altar) {
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationGuarded location = new LocationGuarded(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(altar), "druidAltar", EnumLocationType.NONE);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationGuarded location = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(altar), "druidAltar", EnumLocationType.NONE);
 		this.guard = location.getGuard();
 		location.addBounds(new AxisAlignedBB(new BlockPos(altar)).grow(8, 10, 8));
 		location.linkChunks();
@@ -159,7 +159,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		this.guard.setGuarded(world, altar, true);
 		this.guard.setGuarded(world, altar.down(), true);
 
-		worldStorage.addSharedStorage(location);
+		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 	}
 
 	private void placeAir(World world, MutableBlockPos pos) {

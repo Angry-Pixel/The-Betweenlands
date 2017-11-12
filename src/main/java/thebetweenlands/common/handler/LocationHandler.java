@@ -33,9 +33,9 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class LocationHandler {
 	@SubscribeEvent
@@ -44,8 +44,8 @@ public class LocationHandler {
 			EntityPlayer player = event.player;
 
 			if(player != null && !player.isCreative() && !player.world.isRemote) {
-				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(player.world);
-				List<LocationCragrockTower> locations = worldStorage.getSharedStorageAt(LocationCragrockTower.class, location -> location.isInside(player), player.posX, player.posZ);
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
+				List<LocationCragrockTower> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, player.posX, player.posZ, location -> location.isInside(player));
 
 				for(LocationCragrockTower location : locations) {
 					BlockPos structurePos = location.getStructurePos();
@@ -88,8 +88,8 @@ public class LocationHandler {
 			IBlockState blockState = event.getState();
 
 			if(blockState.getBlock() == BlockRegistry.MOB_SPAWNER) {
-				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(event.getWorld());
-				List<LocationCragrockTower> towers = worldStorage.getSharedStorageAt(LocationCragrockTower.class, location -> location.isInside(pos), pos.getX(), pos.getZ());
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(event.getWorld());
+				List<LocationCragrockTower> towers = worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
 
 				for(LocationCragrockTower tower : towers) {
 					int level = tower.getLevel(pos.getY());
@@ -167,17 +167,17 @@ public class LocationHandler {
 	public static void onExplosion(ExplosionEvent.Detonate event) {
 		Explosion explosion = event.getExplosion();
 		World world = event.getWorld();
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 
 		Long2ObjectMap<List<LocationStorage>> locationCache = new Long2ObjectOpenHashMap<List<LocationStorage>>();
 		List<LocationStorage> affectedLocations = new ArrayList<LocationStorage>();
 
 		for(BlockPos pos : explosion.getAffectedBlockPositions()) {
-			long chunkId = ChunkPos.asLong(pos.getX() / 16, pos.getZ() / 16);
+			long chunkId = ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4);
 			List<LocationStorage> locations = locationCache.get(chunkId);
 
 			if(locations == null) {
-				locations = worldStorage.getSharedStorageAt(LocationStorage.class, storage -> storage.getGuard() != null, pos.getX(), pos.getZ());
+				locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), storage -> storage.getGuard() != null);
 				locationCache.put(chunkId, locations);
 			}
 

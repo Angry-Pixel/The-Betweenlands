@@ -19,11 +19,12 @@ import thebetweenlands.common.network.clientbound.MessageGemProc;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
-import thebetweenlands.common.network.clientbound.MessageRemoveSharedStorage;
-import thebetweenlands.common.network.clientbound.MessageSyncChunkData;
+import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
-import thebetweenlands.common.network.clientbound.MessageSyncSharedStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncLocalStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferences;
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
@@ -42,13 +43,10 @@ public class MessageRegistry {
 
 	public static void preInit() {
 		registerMessage(MessageDruidAltarProgress.class, Side.CLIENT);
-		registerMessage(MessageSyncChunkData.class, Side.CLIENT);
 		registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
 		registerMessage(MessageWeedwoodBushRustle.class, Side.CLIENT);
 		registerMessage(MessageSyncEntityCapabilities.class, Side.CLIENT);
 		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);
-		registerMessage(MessageSyncSharedStorage.class, Side.CLIENT);
-		registerMessage(MessageRemoveSharedStorage.class, Side.CLIENT);
 		registerMessage(MessageDruidTeleportParticles.class, Side.CLIENT);
 		registerMessage(MessageWightVolatileParticles.class, Side.CLIENT);
 		registerMessage(MessageGemProc.class, Side.CLIENT);
@@ -58,6 +56,10 @@ public class MessageRegistry {
 		registerMessage(MessageClearBlockGuard.class, Side.CLIENT);
 		registerMessage(MessagePlayEntityIdle.class, Side.CLIENT);
 		registerMessage(MessagePowerRingParticles.class, Side.CLIENT);
+		registerMessage(MessageRemoveLocalStorage.class, Side.CLIENT);
+		registerMessage(MessageSyncChunkStorage.class, Side.CLIENT);
+		registerMessage(MessageSyncLocalStorage.class, Side.CLIENT);
+		registerMessage(MessageSyncLocalStorageReferences.class, Side.CLIENT);
 
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

@@ -11,6 +11,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -18,10 +20,9 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.SharedRegion;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenTarPoolDungeon extends WorldGenHelper {
 	public static final ResourceLocation loot = LootTableRegistry.DUNGEON_POT_LOOT;
@@ -90,15 +91,15 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 
 		world.setBlockState(new BlockPos(x + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), y, z + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2)), BlockRegistry.TAR_BEAST_SPAWNER.getDefaultState());
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		LocationStorage location = new LocationStorage(worldStorage, UUID.randomUUID().toString(), SharedRegion.getFromBlockPos(pos), "translate:tar_pool_dungeon", EnumLocationType.DUNGEON);
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "translate:tar_pool_dungeon", EnumLocationType.DUNGEON);
 		location.addBounds(new AxisAlignedBB(x - halfSize, y - 1, z - halfSize, x + halfSize, y + height, z + halfSize).grow(1, 1, 1));
 		location.linkChunks();
 		location.setLayer(0);
 		location.setSeed(rand.nextLong());
 		location.setVisible(true);
 		location.setDirty(true);
-		worldStorage.addSharedStorage(location);
+		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 
 		return true;
 	}

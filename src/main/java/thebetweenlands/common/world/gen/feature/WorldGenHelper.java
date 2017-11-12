@@ -21,13 +21,15 @@ import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public abstract class WorldGenHelper extends WorldGenerator {
+	private final boolean doBlockNotify;
+
 	/**
 	 * Enums to get the meta data of a stair with when a structure is rotated
 	 */
 	public enum EnumRotationSequence {
 		//TODO: This ought to be removed and replaced with the proper block states at some point
 		//E.g. enum.getRotatedBlockState(IProperty propertyThatContainsTheRotation, IBlockState theBlockStateToRotate)
-		
+
 		STAIR(0, 3, 1, 2),
 		UPSIDE_DOWN_STAIR(4, 7, 5, 6),
 		CHEST(2, 5, 3, 4),
@@ -62,6 +64,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param depth  the depth of the structure (z axis)
 	 */
 	public WorldGenHelper(int width, int height, int depth, IBlockState... replaceable) {
+		this(false);
 		this.width = width;
 		this.height = height;
 		this.depth = depth;
@@ -69,7 +72,18 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	}
 
 	public WorldGenHelper(IBlockState... replaceable) {
+		this(false);
 		this.replaceable = replaceable;
+	}
+	
+	public WorldGenHelper() {
+		super(false);
+		this.doBlockNotify = false;
+	}
+
+	public WorldGenHelper(boolean notify) {
+		super(notify);
+		this.doBlockNotify = notify;
 	}
 
 	/**
@@ -98,7 +112,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
 					for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2 | 16);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -109,7 +123,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + depth - offsetX - 1; zz > z + depth - offsetX - sizeWidth - 1; zz--)
 					for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2 | 16);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -120,7 +134,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + width - offsetX - 1; xx > x + width - offsetX - sizeWidth - 1; xx--)
 					for (int zz = z + depth - offsetZ - 1; zz > z + depth - offsetZ - sizeDepth - 1; zz--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2 | 16);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -131,7 +145,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
 					for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						world.setBlockState(pos, blockState, 2 | 16);
+						this.setBlockAndNotifyAdequately(world, pos, blockState);
 						for(Consumer<BlockPos> callback : callbacks) {
 							callback.accept(pos);
 						}
@@ -139,7 +153,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			break;
 		}
 	}
-	
+
 	/**
 	 * Returns a rotated AABB
 	 * @param world
@@ -210,7 +224,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			return new BlockPos(x + width - offsetZ - 1, y + offsetY, z + offsetX);
 		}
 	}
-	
+
 	/**
 	 * Rotates the specified position
 	 * @param world
@@ -238,7 +252,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			return new BlockPos(x + width - offsetZ, y + offsetY, z + offsetX);
 		}
 	}
-	
+
 	/**
 	 * Rotates the specified position
 	 * @param world
@@ -252,7 +266,7 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	public final BlockPos rotatePos(World world, BlockPos pos, int offsetX, int offsetY, int offsetZ, int rotation) {
 		return this.rotatePos(world, pos.getX(), pos.getY(), pos.getZ(), offsetX, offsetY, offsetZ, rotation);
 	}
-	
+
 
 	/**
 	 * Creates a WorldGenHelper#rotatedCubeVolume that also extends down until it hits a non replaceable block
@@ -327,45 +341,45 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param offsetY  Where to generate relative from the y
 	 * @param offsetZ  Where to generate relative from the z
 	 * @param rotation The rotation for the cube volume (0 to 3)
-     * @param type the surface type
-     * @return
-     */
+	 * @param type the surface type
+	 * @return
+	 */
 	public boolean rotatedCubeMatches(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, int sizeWidth, int sizeHeight, int sizeDepth,  int rotation, SurfaceType type) {
 		x -= width / 2;
 		z -= depth / 2;
 		switch (rotation) {
-			case 0:
-				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
-					for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
-						for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-								return false;
-						}
-				break;
-			case 1:
-				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
-					for (int zz = z + sizeDepth - offsetX - 1; zz > z + sizeDepth - offsetX - sizeWidth - 1; zz--)
-						for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-								return false;
-						}
-				break;
-			case 2:
-				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
-					for (int xx = x + sizeWidth - offsetX - 1; xx > x + sizeWidth - offsetX - sizeWidth - 1; xx--)
-						for (int zz = z + sizeDepth - offsetZ - 1; zz > z + sizeDepth - offsetZ - sizeDepth - 1; zz--) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-								return false;
-						}
-				break;
-			case 3:
-				for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
-					for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
-						for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
-								return false;
-						}
-				break;
+		case 0:
+			for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+				for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
+					for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 1:
+			for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+				for (int zz = z + sizeDepth - offsetX - 1; zz > z + sizeDepth - offsetX - sizeWidth - 1; zz--)
+					for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 2:
+			for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+				for (int xx = x + sizeWidth - offsetX - 1; xx > x + sizeWidth - offsetX - sizeWidth - 1; xx--)
+					for (int zz = z + sizeDepth - offsetZ - 1; zz > z + sizeDepth - offsetZ - sizeDepth - 1; zz--) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
+		case 3:
+			for (int yy = y + offsetY; yy < y + offsetY + sizeHeight; yy++)
+				for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
+					for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !type.matches(world.getBlockState(this.getCheckPos(xx, yy, zz))))
+							return false;
+					}
+			break;
 		}
 		return true;
 	}
@@ -496,45 +510,45 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param sizeWidth
 	 * @param sizeHeight
 	 * @param sizeDepth
-     * @param direction
-     * @return
-     */
+	 * @param direction
+	 * @return
+	 */
 	public boolean rotatedCubeCantReplace(World world, int x, int y, int z, int offsetA, int offsetB, int offsetC, int sizeWidth, int sizeHeight, int sizeDepth, int direction) {
 		x -= width / 2;
 		z -= depth / 2;
 		switch (direction) {
-			case 0:
-				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-					for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
-						for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								return true;
-						}
-				break;
-			case 1:
-				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-					for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
-						for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								return true;
-						}
-				break;
-			case 2:
-				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-					for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
-						for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								return true;
-						}
-				break;
-			case 3:
-				for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
-					for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
-						for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
-							if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
-								return true;
-						}
-				break;
+		case 0:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int xx = x + offsetA; xx < x + offsetA + sizeWidth; xx++)
+					for (int zz = z + offsetC; zz < z + offsetC + sizeDepth; zz++) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+							return true;
+					}
+			break;
+		case 1:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int zz = z + depth - offsetA - 1; zz > z + depth - offsetA - sizeWidth - 1; zz--)
+					for (int xx = x + offsetC; xx < x + offsetC + sizeDepth; xx++) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+							return true;
+					}
+			break;
+		case 2:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int xx = x + width - offsetA - 1; xx > x + width - offsetA - sizeWidth - 1; xx--)
+					for (int zz = z + depth - offsetC - 1; zz > z + depth - offsetC - sizeDepth - 1; zz--) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+							return true;
+					}
+			break;
+		case 3:
+			for (int yy = y + offsetB; yy < y + offsetB + sizeHeight; yy++)
+				for (int zz = z + offsetA; zz < z + offsetA + sizeWidth; zz++)
+					for (int xx = x + width - offsetC - 1; xx > x + width - offsetC - sizeDepth - 1; xx--) {
+						if (!world.isBlockLoaded(this.getCheckPos(xx, yy, zz)) || !world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz)))
+							return true;
+					}
+			break;
 		}
 		return false;
 	}
@@ -620,5 +634,14 @@ public abstract class WorldGenHelper extends WorldGenerator {
 			if (block == block1)
 				return true;
 		return false;
+	}
+
+	@Override
+	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
+		if (this.doBlockNotify) {
+			worldIn.setBlockState(pos, state, 3 | 16);
+		} else {
+			worldIn.setBlockState(pos, state, 2 | 16);
+		}
 	}
 }

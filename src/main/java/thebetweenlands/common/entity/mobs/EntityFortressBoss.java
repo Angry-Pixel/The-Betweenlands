@@ -36,8 +36,8 @@ import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-import thebetweenlands.common.world.storage.world.shared.location.EnumLocationType;
-import thebetweenlands.common.world.storage.world.shared.location.LocationStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.RotationMatrix;
 
 public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/*, IEntityMusic*/ {

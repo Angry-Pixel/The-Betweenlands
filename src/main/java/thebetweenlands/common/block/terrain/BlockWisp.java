@@ -28,8 +28,8 @@ import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
-import thebetweenlands.common.world.storage.world.global.BetweenlandsWorldData;
-import thebetweenlands.common.world.storage.world.shared.location.LocationCragrockTower;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
 public class BlockWisp extends BlockContainer implements IStateMappedBlock {
@@ -54,8 +54,8 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 			}
 		}
 
-		BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(world);
-		if(!worldStorage.getSharedStorageAt(LocationCragrockTower.class, location -> location.isInside(pos), pos.getX(), pos.getZ()).isEmpty()) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
 			return true;
 		}
 
