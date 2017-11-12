@@ -24,7 +24,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntity;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -211,11 +210,18 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 
 	@Override
 	public double getYOffset() {
-		if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer && this.getRidingEntity() == TheBetweenlands.proxy.getClientPlayer()) {
-			return -2;
-		}
-		return 0.0;
+		if (getRidingEntity() != null && getRidingEntity() instanceof EntityPlayer)
+			return getRidingEntity().height -2.25F;
+		else if (getRidingEntity() != null)
+			return getRidingEntity().height * 0.5D - 1.25D;
+		else
+			return super.getYOffset();
 	}
+
+	@Override
+    public boolean canRiderInteract() {
+        return true;
+    }
 
 	@Override
 	@SuppressWarnings("rawtypes")
