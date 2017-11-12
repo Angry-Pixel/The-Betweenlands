@@ -38,8 +38,6 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	public static final int CAVE_START = LAYER_HEIGHT - 10;
 
-	protected float[] originalLightBrightnessTable = new float[16];
-
 	private boolean allowHostiles, allowAnimals;
 	private BetweenlandsWorldStorage worldData;
 
@@ -67,13 +65,13 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public float calculateCelestialAngle(long worldTime, float partialTickTime) {
-		return 0.35F;
+		return 0.8F;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float partialTicks) {
-		return 0.2F;
+		return super.getSunBrightness(partialTicks);
 	}
 
 	@Override
@@ -83,12 +81,11 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float minBrightness = (float) (1.0F / 10000000.0F * Math.pow(ConfigHandler.dimensionBrightness, 3.2F) + 0.002F);
+		float configBrightness = ConfigHandler.dimensionBrightness / 100.0F;
 		for(int i = 0; i <= 15; i++) {
-			float f1 = 1F - (i*i) / (15F*15F);
-			this.lightBrightnessTable[i] = ((1F - f1) / (f1 * 6F + 1F) * (1F - minBrightness) + minBrightness);
+			float f1 = 1F - (float)Math.pow(i / 15F, 1.1F + 0.35F * (1.0F - configBrightness));
+			this.lightBrightnessTable[i] = Math.max((1.0F - f1) / (f1 * f1 * (0.75F + configBrightness * 0.6F) + 1.0F) * (0.4F + configBrightness * 0.5F) - 0.1F, 0.0F);
 		}
-		System.arraycopy(this.lightBrightnessTable, 0, this.originalLightBrightnessTable, 0, 16);
 	}
 
 	@Override
@@ -184,13 +181,27 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	 * @param player
 	 */
 	public void updateLightTable(EntityPlayer player) {
-		double diff = Math.max(WorldProviderBetweenlands.CAVE_START - player.posY, 0.0D);
-		float multiplier = (float) diff / WorldProviderBetweenlands.CAVE_START;
-		multiplier = 1.0F - multiplier;
-		multiplier *= Math.pow(multiplier, 6);
-		multiplier = multiplier * 0.9F + 0.1F;
+		float configBrightness = ConfigHandler.dimensionBrightness / 100.0F;
+
+		float[] surfaceTable = new float[16];
+		float[] undergroundTable = new float[16];
+
+		for(int i = 0; i <= 15; i++) {
+			float f1 = 1F - (float)Math.pow(i / 15F, 1.1F + 0.35F * (1.0F - configBrightness));
+			surfaceTable[i] = Math.max((1.0F - f1) / (f1 * f1 * (0.75F + configBrightness * 0.6F) + 1.0F) * (0.4F + configBrightness * 0.5F) - 0.1F, 0.0F);
+		}
+
+		for(int i = 0; i <= 15; i++) {
+			float f1 = 1F - (float)Math.pow(i / 15F, 0.4D);
+			undergroundTable[i] = Math.max((1.0F - f1) / (f1 * 2.5F * (1.0F - configBrightness) + 1.0F) * 0.425F - 0.05F, -0.035F + 0.035F * configBrightness * configBrightness);
+		}
+
+		double caveHeightDiff = Math.max(WorldProviderBetweenlands.CAVE_START - player.posY, 0.0D);
+		float caveMultiplier = (float) caveHeightDiff / WorldProviderBetweenlands.CAVE_START;
+		caveMultiplier = 1.0F - caveMultiplier;
+		caveMultiplier *= Math.pow(caveMultiplier, 6);
 		for(int i = 0; i < 16; i++) {
-			this.lightBrightnessTable[i] = this.originalLightBrightnessTable[i] * (multiplier + (float)Math.pow(i, (1.0F - multiplier) * 2.2F) / 32.0F + multiplier * 0.5F);
+			this.lightBrightnessTable[i] = surfaceTable[i] + (undergroundTable[i] - surfaceTable[i]) * (1.0F - caveMultiplier);
 		}
 	}
 
