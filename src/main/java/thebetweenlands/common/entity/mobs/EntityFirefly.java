@@ -2,9 +2,14 @@ package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
+import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -52,7 +57,7 @@ public class EntityFirefly extends EntityCreature implements IEntityBL {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.075D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.1D);
 		this.getAttributeMap().registerAttribute(GLOW_STRENGTH_ATTRIB);
 		this.getAttributeMap().registerAttribute(GLOW_START_CHANCE);
 		this.getAttributeMap().registerAttribute(GLOW_STOP_CHANCE);
@@ -90,7 +95,7 @@ public class EntityFirefly extends EntityCreature implements IEntityBL {
         this.motionY += 0.05D;
  
         if (motionY < 0.0D)
-        	motionY *= 0.1D;
+        	motionY *= 0.05D;
 
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
 		getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
@@ -175,10 +180,5 @@ public class EntityFirefly extends EntityCreature implements IEntityBL {
 	 */
 	public float getGlowTicks(float partialTicks) {
 		return this.prevGlowTicks + (this.glowTicks - this.prevGlowTicks) * partialTicks;
-	}
-
-	@Override
-	public boolean isAIDisabled() {
-		return false;
 	}
 }

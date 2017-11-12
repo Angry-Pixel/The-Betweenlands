@@ -36,16 +36,17 @@ public class EntityAIFlyingWander extends EntityAIBase {
 
 	@Nullable
 	protected Vec3d getPosition() {
-		return RandomPositionGenerator.findRandomTarget(entity, 32, 32);
+		return RandomPositionGenerator.findRandomTarget(entity, 15, 4);
 	}
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return !entity.getNavigator().noPath();
+		return !entity.getNavigator().noPath() && !entity.getMoveHelper().isUpdating();
 	}
 
 	@Override
 	public void startExecuting() {
-		entity.getNavigator().tryMoveToXYZ(x, y, z, speed);
+		if(!entity.getMoveHelper().isUpdating())
+			entity.getNavigator().tryMoveToXYZ(x, y, z, speed);
 	}
 }

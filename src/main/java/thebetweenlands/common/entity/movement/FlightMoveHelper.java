@@ -1,7 +1,6 @@
 package thebetweenlands.common.entity.movement;
 
 import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
@@ -34,7 +33,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
                 this.courseChangeCooldown += this.entity.getRNG().nextInt(5) + 2;
                 if(distance >= 1D) {
                 	this.entity.motionX += (Math.signum(x) * 0.5D - entity.motionX) * entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue() * 0.5D;
-                	this.entity.motionY += (Math.signum(y) * 0.5D - entity.motionY) * 0.2D;
+                	this.entity.motionY += (Math.signum(y) * 0.5D - entity.motionY) * 0.05D;
                     this.entity.motionZ += (Math.signum(z) * 0.5D - entity.motionZ) * entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue() * 0.5D;
 					float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
 					float rotation = MathHelper.wrapDegrees(angle - entity.rotationYaw);
