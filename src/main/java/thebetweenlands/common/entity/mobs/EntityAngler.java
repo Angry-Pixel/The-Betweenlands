@@ -24,6 +24,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
@@ -45,12 +46,10 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     public EntityAngler(World world) {
         super(world);
         setSize(0.8F, 0.7F);
-        this.moveHelper = new EntityAngler.AnglerMoveHelper(this);
-    }
-
-    @Override
-    public boolean isAIDisabled() {
-        return false;
+        moveHelper = new EntityAngler.AnglerMoveHelper(this);
+		setPathPriority(PathNodeType.WALKABLE, -8.0F);
+		setPathPriority(PathNodeType.BLOCKED, -8.0F);
+		setPathPriority(PathNodeType.WATER, 16.0F);
     }
 
     @Override
@@ -62,7 +61,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
             }
         });
         tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
-        tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));
+        tasks.addTask(2, new EntityAIWander(this, 0.5D, 20));
         tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
         tasks.addTask(4, new EntityAILookIdle(this));
         targetTasks.addTask(0, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, 0, true, true, null));
@@ -93,8 +92,8 @@ public class EntityAngler extends EntityMob implements IEntityBL {
     }
 
     @Override
-    protected SoundEvent getHurtSound(DamageSource p_184601_1_) {
-        return super.getHurtSound(p_184601_1_);
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return super.getHurtSound(source);
     }
 
     @Override
@@ -142,90 +141,91 @@ public class EntityAngler extends EntityMob implements IEntityBL {
         return world.getBlockState(pos).getMaterial() == Material.WATER ? 10.0F + world.getLightBrightness(pos) - 0.5F : super.getBlockPathWeight(pos);
     }
 
-    @Override
-    public void onLivingUpdate() {
-        if (world.isRemote) {
-            if (isInWater()) {
-                Vec3d vec3d = this.getVectorForRotation(this.rotationPitch, this.renderYawOffset);
-                for (int i = 0; i < 2; ++i)
-                    world.spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.y * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
-            }
-        }
+	@Override
+	public void onLivingUpdate() {
+		if (getEntityWorld().isRemote) {
+			if (isInWater()) {
+				Vec3d vec3d = getLook(0.0F);
+				for (int i = 0; i < 2; ++i)
+					getEntityWorld().spawnParticle(EnumParticleTypes.WATER_BUBBLE, posX + (rand.nextDouble() - 0.5D) * (double) width - vec3d.x * 1.5D, posY + rand.nextDouble() * (double) height - vec3d.y * 1.5D, posZ + (rand.nextDouble() - 0.5D) * (double) width - vec3d.z * 1.5D, 0.0D, 0.0D, 0.0D, new int[0]);
+			}
+		}
 
-        if (inWater) {
-            setAir(300);
-        } else if (onGround) {
-            motionY += 0.25D;
-            motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.1F);
-            motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.1F);
-            rotationYaw = rand.nextFloat() * 360.0F;
-            if (isLeaping())
-                setIsLeaping(false);
-            onGround = false;
-            isAirBorne = true;
-            if (world.getWorldTime() % 5 == 0)
-                world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
-            this.damageEntity(DamageSource.DROWN, 0.5F);
-        }
-        super.onLivingUpdate();
-    }
+		if (inWater) {
+			setAir(300);
+		} else if (onGround) {
+			motionY += 0.5D;
+			motionX += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
+			motionZ += (double) ((rand.nextFloat() * 2.0F - 1.0F) * 0.4F);
+			rotationYaw = rand.nextFloat() * 360.0F;
+			if(isLeaping())
+				setIsLeaping(false);
+			onGround = false;
+			isAirBorne = true;
+			if(getEntityWorld().getWorldTime()%5==0)
+				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
+				damageEntity(DamageSource.DROWN, 0.5F);
+		}
 
-    @Override
-    public void onUpdate() {
-        if (!world.isRemote) {
-            if (getAttackTarget() != null && !world.containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
-                Double distance = this.getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
-                if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
-                    if (isInWater() && world.isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
-                        if (!isLeaping()) {
-                            setIsLeaping(true);
-                            world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
-                        }
-                        double distanceX = getAttackTarget().posX - posX;
-                        double distanceZ = getAttackTarget().posZ - posZ;
-                        float distanceSqrRoot = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ);
-                        motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
-                        motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
-                        motionY = 0.4D;
-                    }
-            }
-        }
-        super.onUpdate();
-    }
+		super.onLivingUpdate();
+	}
 
-    @Override
-    public void travel(float strafe, float up, float forward) {
-        if (isServerWorld()) {
-            if (isInWater()) {
-                moveRelative(strafe, up, forward, 0.1F);
-                move(MoverType.SELF, motionX, motionY, motionZ);
-                motionX *= 0.8999999761581421D;
-                motionY *= 0.8999999761581421D;
-                motionZ *= 0.8999999761581421D;
+	@Override
+	public void onUpdate() {
+		if(!getEntityWorld().isRemote) {
+		if(getAttackTarget() != null && !getEntityWorld().containsAnyLiquid(getAttackTarget().getEntityBoundingBox())) {
+			Double distance = getPosition().getDistance((int) getAttackTarget().posX, (int) getAttackTarget().posY, (int) getAttackTarget().posZ);
+			if (distance > 1.0F && distance < 6.0F) // && getAttackTarget().getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && getAttackTarget().getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && rand.nextInt(3) == 0)
+				if (isInWater() && getEntityWorld().isAirBlock(new BlockPos((int) posX, (int) posY + 1, (int) posZ))) {
+					if(!isLeaping()) {
+						setIsLeaping(true);
+						getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, SoundCategory.HOSTILE, 1F, 2F);
+					}
+					double distanceX = getAttackTarget().posX - posX;
+					double distanceZ = getAttackTarget().posZ - posZ;
+					float distanceSqrRoot = MathHelper.sqrt(distanceX * distanceX + distanceZ * distanceZ);
+					motionX = distanceX / distanceSqrRoot * 0.5D * 0.900000011920929D + motionX * 0.70000000298023224D;
+					motionZ = distanceZ / distanceSqrRoot * 0.5D * 0.900000011920929D + motionZ * 0.70000000298023224D;
+					motionY = 0.4D;
+					}
+			}
+		}
+		super.onUpdate();
+	}
 
-                if (getAttackTarget() == null) {
-                    motionY -= 0.005D;
-                }
-            } else {
-                super.travel(strafe, up, forward);
-            }
-        } else {
-            super.travel(strafe, up, forward);
-        }
-    }
+	@Override
+	public void travel(float strafe, float up, float forward) {
+		if (isServerWorld()) {
+			if (isInWater()) {
+				moveRelative(strafe, up,  forward, 0.1F);
+				move(MoverType.SELF, motionX, motionY, motionZ);
+				motionX *= 0.8999999761581421D;
+				motionY *= 1D;
+				motionZ *= 0.8999999761581421D;
+
+				if (getAttackTarget() == null) {
+					motionY -= 0.005D;
+				}
+			} else {
+				super.travel(strafe, up, forward);
+			}
+		} else {
+			super.travel(strafe, up, forward);
+		}
+	}
 
     @Override
     public boolean attackEntityAsMob(Entity entity) {
         if (super.attackEntityAsMob(entity)) {
-            this.playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
+            playSound(SoundRegistry.ANGLER_ATTACK, 1, 1);
             return true;
         }
         return false;
     }
 
-    @Override
+	@Override
     public boolean isNotColliding() {
-        return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+		 return getEntityWorld().checkNoEntityCollision(getEntityBoundingBox(), this) && getEntityWorld().getCollisionBoxes(this, getEntityBoundingBox()).isEmpty();
     }
 
     @Override
