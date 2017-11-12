@@ -27,7 +27,6 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathNavigateGround;
-import net.minecraft.pathfinding.PathNavigateSwimmer;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
@@ -148,7 +147,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
     @Override
     public PathNavigate getNavigator() {
-        return new PathNavigateSwimmer(this, getEntityWorld());
+        return this.navigator;
     }
 
     private Block getRelativeBlock(int offsetY) {
