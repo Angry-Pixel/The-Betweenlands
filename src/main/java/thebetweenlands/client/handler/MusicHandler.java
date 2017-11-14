@@ -22,8 +22,10 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -34,8 +36,8 @@ public class MusicHandler {
 
 	private static final Field f_accessorList = ReflectionHelper.findField(SoundEventAccessor.class, "accessorList", "a", "field_188716_a");
 
-	private static final int MIN_WAIT = 6000;
-	private static final int MAX_WAIT = 12000;
+	private static final int MIN_WAIT = 3000;
+	private static final int MAX_WAIT = 6000;
 	private static final int MIN_WAIT_MENU = 20;
 	private static final int MAX_WAIT_MENU = 600;
 
@@ -50,30 +52,32 @@ public class MusicHandler {
 
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
-		EntityPlayer player = getPlayer();
+		if(event.phase == TickEvent.Phase.START) {
+			EntityPlayer player = getPlayer();
 
-		menu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && ConfigHandler.blMainMenu;
+			menu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && ConfigHandler.blMainMenu;
 
-		if((menu || (player != null && player.dimension == ConfigHandler.dimensionId)) && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
-			if(this.currentSound != null) {
+			if ((menu || (player != null && player.dimension == ConfigHandler.dimensionId)) && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
+				if (this.currentSound != null) {
 
-				if ((!menu && SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(this.currentSound.getSoundLocation())) || (menu && SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(this.currentSound.getSoundLocation()))) {
-					this.mc.getSoundHandler().stopSound(this.currentSound);
-					this.timeUntilMusic = MathHelper.getInt(this.RNG, 0, (menu ? MIN_WAIT_MENU: MIN_WAIT) / 2);
+					if ((!menu && SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(this.currentSound.getSoundLocation())) || (menu && SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(this.currentSound.getSoundLocation()))) {
+						this.mc.getSoundHandler().stopSound(this.currentSound);
+						this.timeUntilMusic = MathHelper.getInt(this.RNG, 0, (menu ? MIN_WAIT_MENU : MIN_WAIT) / 2);
+					}
+					//Wait for sound track to finish
+					if (!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
+						this.currentSound = null;
+						this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, (menu ? MIN_WAIT_MENU : MIN_WAIT), (menu ? MAX_WAIT_MENU : MAX_WAIT)), this.timeUntilMusic);
+					}
 				}
-				//Wait for sound track to finish
-				if(!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
-					this.currentSound = null;
-					this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, (menu ? MIN_WAIT_MENU: MIN_WAIT), (menu ? MAX_WAIT_MENU: MAX_WAIT)), this.timeUntilMusic);
+
+				this.timeUntilMusic = Math.min(this.timeUntilMusic, (menu ? MAX_WAIT_MENU : MAX_WAIT));
+
+				if (this.currentSound == null && this.timeUntilMusic-- <= 0) {
+					//Start new sound track
+					this.timeUntilMusic = Integer.MAX_VALUE;
+					this.playRandomSoundTrack();
 				}
-			}
-
-			this.timeUntilMusic = Math.min(this.timeUntilMusic, (menu ? MAX_WAIT_MENU: MAX_WAIT));
-
-			if(this.currentSound == null && this.timeUntilMusic-- <= 0) {
-				//Start new sound track
-				this.timeUntilMusic = MathHelper.getInt(this.RNG, (menu ? MIN_WAIT_MENU: MIN_WAIT), (menu ? MAX_WAIT_MENU: MAX_WAIT));
-				this.playRandomSoundTrack();
 			}
 		}
 	}
