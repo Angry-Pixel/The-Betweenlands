@@ -39,7 +39,6 @@ public class RenderMudFlowerPot extends TileEntitySpecialRenderer<TileEntityMudF
 			RenderHelper.disableStandardItemLighting();
 			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			GlStateManager.enableBlend();
-			GlStateManager.disableCull();
 
 			if (Minecraft.isAmbientOcclusionEnabled()) {
                 GlStateManager.shadeModel(GL11.GL_SMOOTH);
