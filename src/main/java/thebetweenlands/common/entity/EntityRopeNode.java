@@ -154,9 +154,9 @@ public class EntityRopeNode extends Entity {
 					int invSize = inventory.getSizeInventory();
 					for(int i = 0; i < invSize; ++i) {
 						ItemStack stack = inventory.getStackInSlot(i);
-						if(stack != null && stack.getItem() == ItemRegistry.CAVING_ROPE) {
+						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
 							stack.shrink(1);
-							inventory.setInventorySlotContents(i, stack.getCount() > 0 ? stack : null);
+							inventory.setInventorySlotContents(i, stack.getCount() > 0 ? stack : ItemStack.EMPTY);
 							Vec3d connection = this.getConnectionToNext();
 							if(connection != null) {
 								Vec3d newPos = nextNode.getPositionVector().add(connection.scale(-0.5D)).addVector(0, 0.1D, 0);
