@@ -84,7 +84,13 @@ public class BlockRegistry {
     public static final Block COARSE_SWAMP_DIRT = new BlockSwampDirt(Material.GROUND).setItemDropped(() -> Item.getItemFromBlock(BlockRegistry.SWAMP_DIRT));
     public static final Block SWAMP_GRASS = new BlockSwampGrass();
     public static final Block WISP = new BlockWisp();
-    public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK).setHarvestLevel2("pickaxe", 1).setLightLevel(0.875F);
+    public static final Block OCTINE_ORE = new BlockGenericOre(Material.ROCK){
+        @SideOnly(Side.CLIENT)
+        @Override
+        public void spawnParticle(World world, double x, double y, double z) {
+            BLParticles.FLAME.spawn(world, x, y, z);
+        }
+    }.setHarvestLevel2("pickaxe", 1).setLightLevel(0.875F);
     public static final Block VALONITE_ORE = new BlockGenericOre(Material.ROCK) {
         @Override
         protected ItemStack getOreDrop(Random rand, int fortune) {
