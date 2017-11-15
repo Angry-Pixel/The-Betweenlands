@@ -12,12 +12,8 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.item.EntityXPOrb;
-import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
-import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateFlying;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -36,7 +32,7 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
+public class EntityGasCloud extends EntityFlyingMob implements IEntityBL {
 	public static final IAttribute GAS_CLOUD_COLOR_R = (new RangedAttribute(null, "bl.gasCloudColorRed", 104, 0, 255)).setDescription("Gas cloud color red component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_G = (new RangedAttribute(null, "bl.gasCloudColorGreen", 196, 0, 255)).setDescription("Gas cloud color green component").setShouldWatch(true);
 	public static final IAttribute GAS_CLOUD_COLOR_B = (new RangedAttribute(null, "bl.gasCloudColorBlue", 179, 0, 255)).setDescription("Gas cloud color blue component").setShouldWatch(true);
@@ -92,6 +88,7 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 				return true;
 			}
 		};
+
 		setPathPriority(PathNodeType.WATER, -8F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.OPEN, 8.0F);
@@ -104,7 +101,7 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		this.tasks.addTask(5, new EntityAIFlyRandomly<EntityGasCloud>(this) {
+		this.tasks.addTask(1, new EntityAIFlyRandomly<EntityGasCloud>(this) {
 			@Override
 			protected double getTargetY(Random rand, double distanceMultiplier) {
 				if(this.entity.posY <= 0.0D) {
@@ -144,11 +141,25 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 
 			@Override
 			protected double getFlightSpeed() {
-				return 0.015D;
+				return 0.3D;
 			}
 		});
 
-		targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityPlayer.class, false));
+
+		targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, false));
+	}
+
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.065D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_R);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_G);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_B);
+		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_A);
 	}
 
 	/**
@@ -177,18 +188,6 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 	};
 
 	@Override
-	protected void applyEntityAttributes() {
-		super.applyEntityAttributes();
-		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
-		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(2.0D);
-		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_R);
-		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_G);
-		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_B);
-		getAttributeMap().registerAttribute(GAS_CLOUD_COLOR_A);
-	}
-
-	@Override
 	public boolean getCanSpawnHere() {
 		return super.getCanSpawnHere() && this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
@@ -196,11 +195,6 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 	@Override
 	public int getMaxSpawnedInChunk() {
 		return 1;
-	}
-
-	@Override
-    protected PathNavigate createNavigator(World world) {
-		return new PathNavigateFlying(this, world);
 	}
 
 	@Override
@@ -235,10 +229,10 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 		}
 
 		if (this.isInWater()) {
-			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.1D);
+			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 1.0D);
 		} else {
 			if(this.getAttackTarget() != null) {
-				this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().posY + this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, 0.06D);
+				this.moveHelper.setMoveTo(this.getAttackTarget().posX, this.getAttackTarget().posY + this.getAttackTarget().getEyeHeight(), this.getAttackTarget().posZ, 1.0D);
 			}
 		}
 
@@ -311,7 +305,7 @@ public class EntityGasCloud extends EntityMob implements IMob, IEntityBL {
 			this.setDead();
 		}
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.GAS_CLOUD;

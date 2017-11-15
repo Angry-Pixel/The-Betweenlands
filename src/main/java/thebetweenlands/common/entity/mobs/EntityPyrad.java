@@ -6,10 +6,8 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -20,7 +18,6 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -45,7 +42,7 @@ import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class EntityPyrad extends EntityMob implements IEntityBL {
+public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 	public static final IAttribute FLAMES_PER_ATTACK = (new RangedAttribute(null, "bl.flamesPerAttack", 6.0D, 1.0D, 64.0D)).setDescription("Number range of flames per attack");
 	public static final IAttribute AGRESSIVE = (new BooleanAttribute(null, "bl.pyradAgressive", false)).setDescription("Whether the Pyrad is agressive and doesn't go inactive");
 
@@ -95,7 +92,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		this.activeTasks = new ArrayList<EntityAIBase>();
 		this.activeTargetTasks = new ArrayList<EntityAIBase>();
 
-		this.activeTasks.add(new EntityAIMoveToDirect<EntityPyrad>(this, 0.1D) {
+		this.activeTasks.add(new EntityAIMoveToDirect<EntityPyrad>(this, 1.0D) {
 			@Override
 			protected Vec3d getTarget() {
 				EntityLivingBase target = this.entity.getAttackTarget();
@@ -106,11 +103,11 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 					double dst = dir.lengthVector();
 					if(dst > 10) {
 						dir = dir.normalize();
-						this.setSpeed(0.08D);
+						this.setSpeed(0.75D);
 						return new Vec3d(this.entity.posX + dir.x * (dst - 10), Math.min(this.entity.posY + dir.y * (dst - 10), Math.max(groundHeight + 2, target.posY + 2)), this.entity.posZ + dir.z * (dst - 10));
 					} else if(dst < 5) {
 						dir = dir.normalize();
-						this.setSpeed(0.1D);
+						this.setSpeed(1.0D);
 						return new Vec3d(this.entity.posX - dir.x * 2, Math.min(this.entity.posY - dir.y * 2, Math.max(groundHeight + (this.entity.isCharging() ? 6 : 2), target.posY + 2)), this.entity.posZ - dir.z * 2);
 					}
 				}
@@ -135,7 +132,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 
 			@Override
 			protected double getFlightSpeed() {
-				return 0.04D;
+				return 0.5D;
 			}
 		});
 		this.activeTasks.add(new EntityPyrad.AIPyradAttack(this));
@@ -152,7 +149,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60.0D);;
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(6.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.04D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.1D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(28.0D);
 		this.getAttributeMap().registerAttribute(FLAMES_PER_ATTACK);
 		this.getAttributeMap().registerAttribute(AGRESSIVE);
@@ -284,13 +281,13 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 		super.updateAITasks();
 	}
 
-	@Override
+	/*@Override
 	public void fall(float distance, float damageMultiplier) {
 	}
 
 	@Override
 	protected void updateFallState(double y, boolean onGroundIn, IBlockState state, BlockPos pos) {
-	}
+	}*/
 
 	@Override
 	@Nullable
@@ -305,62 +302,14 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 	}
 
 	@Override
-	public void travel(float strafe, float up, float forward) {
+	public void travel(float strafe, float vertical, float forward) {
 		if(!this.isActive()) {
 			this.motionX = 0;
 			this.motionZ = 0;
 			this.motionY -= 0.1D;
 		}
 
-		if (this.isInWater()) {
-			this.moveRelative(strafe, up ,forward, 0.02F);
-			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.800000011920929D;
-			this.motionY *= 0.800000011920929D;
-			this.motionZ *= 0.800000011920929D;
-		} else if (this.isInLava()) {
-			this.moveRelative(strafe, up, forward, 0.02F);
-			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-			this.motionX *= 0.5D;
-			this.motionY *= 0.5D;
-			this.motionZ *= 0.5D;
-		} else {
-			float friction = 0.91F;
-
-			if (this.onGround) {
-				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
-			}
-
-			float f1 = 0.16277136F / (friction * friction * friction);
-			this.moveRelative(strafe, up, forward, this.onGround ? 0.1F * f1 : 0.02F);
-			friction = 0.91F;
-
-			if (this.onGround) {
-				friction = this.world.getBlockState(new BlockPos(MathHelper.floor(this.posX), MathHelper.floor(this.getEntityBoundingBox().minY) - 1, MathHelper.floor(this.posZ))).getBlock().slipperiness * 0.91F;
-			}
-
-			this.move(MoverType.SELF, this.motionX, this.motionY, this.motionZ);
-			this.motionX *= (double)friction;
-			this.motionY *= (double)friction;
-			this.motionZ *= (double)friction;
-		}
-
-		this.prevLimbSwingAmount = this.limbSwingAmount;
-		double d1 = this.posX - this.prevPosX;
-		double d0 = this.posZ - this.prevPosZ;
-		float f2 = MathHelper.sqrt(d1 * d1 + d0 * d0) * 4.0F;
-
-		if (f2 > 1.0F) {
-			f2 = 1.0F;
-		}
-
-		this.limbSwingAmount += (f2 - this.limbSwingAmount) * 0.4F;
-		this.limbSwing += this.limbSwingAmount;
-	}
-
-	@Override
-	public boolean isOnLadder() {
-		return false;
+		super.travel(strafe, vertical, forward);
 	}
 
 	@Override
@@ -424,7 +373,7 @@ public class EntityPyrad extends EntityMob implements IEntityBL {
 			}
 		}
 	}
-	
+
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.PYRAD;

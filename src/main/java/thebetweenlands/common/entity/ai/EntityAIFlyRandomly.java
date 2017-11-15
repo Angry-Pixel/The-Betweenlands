@@ -35,7 +35,8 @@ public class EntityAIFlyRandomly<T extends EntityLiving> extends EntityAIBase {
 
 	@Override
 	public boolean shouldContinueExecuting() {
-		return true;
+		//Only run startExecuting once and then stop the task!
+		return false;
 	}
 
 	@Override

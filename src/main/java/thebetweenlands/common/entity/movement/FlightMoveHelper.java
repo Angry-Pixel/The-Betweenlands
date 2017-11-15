@@ -1,9 +1,9 @@
 package thebetweenlands.common.entity.movement;
 
-import net.minecraft.entity.EntityCreature;
-import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -11,52 +11,44 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class FlightMoveHelper extends EntityMoveHelper {
+	protected int courseChangeCooldown;
+	protected boolean blocked = false;
 
-    public EntityCreature entity;
-    private int courseChangeCooldown;
-    protected boolean blocked = false;
+	public FlightMoveHelper(EntityLiving entity) {
+		super(entity);
+	}
 
-    public FlightMoveHelper(EntityCreature entity) {
-        super(entity);
-        this.entity = entity;
-    }
-
-    @Override
+	@Override
 	public void onUpdateMoveHelper() {
-        if (this.action == EntityMoveHelper.Action.MOVE_TO) {
-            double x = this.posX - this.entity.posX;
-            double y = this.posY + 0.5D - this.entity.posY;
-            double z = this.posZ - this.entity.posZ;
-            float distance = (float) Math.sqrt(x * x + y * y + z * z);
+		if(this.action == EntityMoveHelper.Action.MOVE_TO) {
+			double dx = this.posX - this.entity.posX;
+			double dy = this.posY + 0.5D - this.entity.posY;
+			double dz = this.posZ - this.entity.posZ;
+			double dist = dx * dx + dy * dy + dz * dz;
 
-            if (this.courseChangeCooldown-- <= 0) {
-                this.courseChangeCooldown += this.entity.getRNG().nextInt(5) + 2;
-                if(distance >= 1D) {
-                	this.entity.motionX += (Math.signum(x) * 0.5D - entity.motionX) * entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue() * 0.5D;
-                	this.entity.motionY += (Math.signum(y) * 0.5D - entity.motionY) * 0.05D;
-                    this.entity.motionZ += (Math.signum(z) * 0.5D - entity.motionZ) * entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getBaseValue() * 0.5D;
-					float angle = (float) (Math.atan2(entity.motionZ, entity.motionX) * 180.0D / Math.PI) - 90.0F;
-					float rotation = MathHelper.wrapDegrees(angle - entity.rotationYaw);
-					entity.rotationYaw += rotation;
+			if(this.courseChangeCooldown-- <= 0) {
+				this.courseChangeCooldown += this.getCourseChangeCooldown();
+
+				dist = (double)MathHelper.sqrt(dist);
+				
+				IAttributeInstance entityMoveSpeedAttribute = this.entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
+				double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getAttributeValue() : 1.0D;
+				double speed = this.getFlightSpeed() * entityMoveSpeed;
+				
+				if(dist >= Math.max(speed * 1.5D, 0.25D) && this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
+					this.entity.motionX += dx / dist * speed;
+					this.entity.motionY += dy / dist * speed;
+					this.entity.motionZ += dz / dist * speed;
 					this.blocked = false;
-                }
-                else {
-                    this.action = EntityMoveHelper.Action.WAIT;
-                    this.blocked = true;
-                }
-            }
-        }
-
-        if (this.entity.getAttackTarget() != null) {
-            EntityLivingBase entitylivingbase = this.entity.getAttackTarget();
-            double distanceX = entitylivingbase.posX - this.entity.posX;
-            double distanceZ = entitylivingbase.posZ - this.entity.posZ;
-            this.entity.renderYawOffset = this.entity.rotationYaw = -((float)MathHelper.atan2(distanceX, distanceZ)) * (180F / (float)Math.PI);
-        }
-        else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
-            this.entity.renderYawOffset = this.entity.rotationYaw = -((float)MathHelper.atan2(this.entity.motionX, this.entity.motionZ)) * (180F / (float)Math.PI);
-        }
-    }
+				} else {
+					this.action = EntityMoveHelper.Action.WAIT;
+					this.blocked = true;
+				}
+			}
+		} else if(this.action == EntityMoveHelper.Action.STRAFE) {
+			
+		}
+	}
 
 	/**
 	 * Returns whether the path is currently blocked
@@ -66,6 +58,13 @@ public class FlightMoveHelper extends EntityMoveHelper {
 		return this.blocked;
 	}
 
+	/**
+	 * Returns the amount of ticks before the course can be changed again
+	 * @return
+	 */
+	protected int getCourseChangeCooldown() {
+		return this.entity.getRNG().nextInt(5) + 2;
+	}
 
 	/**
 	 * Returns whether the entity will collide on the current path
@@ -101,7 +100,7 @@ public class FlightMoveHelper extends EntityMoveHelper {
 	 * @return
 	 */
 	protected boolean isBlocked(AxisAlignedBB aabb) {
-		return !this.entity.world.getCollisionBoxes(this.entity, aabb).isEmpty();
+		return false;
 	}
 
 	/**
