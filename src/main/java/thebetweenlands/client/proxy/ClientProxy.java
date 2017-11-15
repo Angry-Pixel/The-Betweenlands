@@ -1,20 +1,12 @@
 package thebetweenlands.client.proxy;
 
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.client.renderer.color.IBlockColor;
-import net.minecraft.client.renderer.color.IItemColor;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
@@ -30,7 +22,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.model.ModelLoader;
@@ -40,14 +31,7 @@ import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.GuiBLMainMenu;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiPouchNaming;
-import thebetweenlands.client.gui.inventory.GuiAnimator;
-import thebetweenlands.client.gui.inventory.GuiBLDualFurnace;
-import thebetweenlands.client.gui.inventory.GuiBLFurnace;
-import thebetweenlands.client.gui.inventory.GuiDruidAltar;
-import thebetweenlands.client.gui.inventory.GuiMortar;
-import thebetweenlands.client.gui.inventory.GuiPouch;
-import thebetweenlands.client.gui.inventory.GuiPurifier;
-import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.gui.inventory.*;
 import thebetweenlands.client.handler.*;
 import thebetweenlands.client.handler.TextureStitchHandler.TextureStitcher;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
@@ -61,45 +45,8 @@ import thebetweenlands.client.render.tile.*;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
-import thebetweenlands.common.entity.EntityAngryPebble;
-import thebetweenlands.common.entity.EntityRopeNode;
-import thebetweenlands.common.entity.EntityShockwaveBlock;
-import thebetweenlands.common.entity.EntityShockwaveSwordItem;
-import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
-import thebetweenlands.common.entity.mobs.EntityBloodSnail;
-import thebetweenlands.common.entity.mobs.EntityChiromaw;
-import thebetweenlands.common.entity.mobs.EntityDarkDruid;
-import thebetweenlands.common.entity.mobs.EntityDragonFly;
-import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.entity.mobs.EntityFortressBoss;
-import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
-import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
-import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
-import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
-import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
-import thebetweenlands.common.entity.mobs.EntityFrog;
-import thebetweenlands.common.entity.mobs.EntityGasCloud;
-import thebetweenlands.common.entity.mobs.EntityGecko;
-import thebetweenlands.common.entity.mobs.EntityGiantToad;
-import thebetweenlands.common.entity.mobs.EntityLeech;
-import thebetweenlands.common.entity.mobs.EntityLurker;
-import thebetweenlands.common.entity.mobs.EntityMireSnail;
-import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
-import thebetweenlands.common.entity.mobs.EntityMummyArm;
-import thebetweenlands.common.entity.mobs.EntityPeatMummy;
-import thebetweenlands.common.entity.mobs.EntityPyrad;
-import thebetweenlands.common.entity.mobs.EntityPyradFlame;
-import thebetweenlands.common.entity.mobs.EntitySiltCrab;
-import thebetweenlands.common.entity.mobs.EntitySludge;
-import thebetweenlands.common.entity.mobs.EntitySporeling;
-import thebetweenlands.common.entity.mobs.EntitySwampHag;
-import thebetweenlands.common.entity.mobs.EntityTarBeast;
-import thebetweenlands.common.entity.mobs.EntityTarminion;
-import thebetweenlands.common.entity.mobs.EntityTermite;
-import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
-import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.entity.*;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
@@ -112,18 +59,17 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
-import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 import thebetweenlands.common.tile.*;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
-import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.GLUProjection;
+
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class ClientProxy extends CommonProxy {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
@@ -407,19 +353,8 @@ public class ClientProxy extends CommonProxy {
 		for (Block block : BlockRegistry.BLOCKS) {
 			if (block instanceof ITintedBlock) {
 				final ITintedBlock tintedBlock = (ITintedBlock) block;
-				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-					@Override
-					public int colorMultiplier(ItemStack stack, int tintIndex) {
-						IBlockState blockState = ((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata());
-						return tintedBlock.getColorMultiplier(blockState, null, null, tintIndex);
-					}
-				}, block);
-				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(new IBlockColor() {
-					@Override
-					public int colorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
-						return tintedBlock.getColorMultiplier(state, worldIn, pos, tintIndex);
-					}
-				}, block);
+				Minecraft.getMinecraft().getItemColors().registerItemColorHandler((stack, tintIndex) -> tintedBlock.getColorMultiplier(((ItemBlock) stack.getItem()).getBlock().getStateFromMeta(stack.getMetadata()), null, null, tintIndex), block);
+				Minecraft.getMinecraft().getBlockColors().registerBlockColorHandler(tintedBlock::getColorMultiplier, block);
 			}
 		}
 
@@ -427,12 +362,7 @@ public class ClientProxy extends CommonProxy {
 		for (Item item : ItemRegistry.ITEMS) {
 			if (item instanceof ITintedItem) {
 				final ITintedItem tintedItem = (ITintedItem) item;
-				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(new IItemColor() {
-					@Override
-					public int colorMultiplier(ItemStack stack, int tintIndex) {
-						return tintedItem.getColorMultiplier(stack, tintIndex);
-					}
-				}, item);
+				Minecraft.getMinecraft().getItemColors().registerItemColorHandler(tintedItem::getColorMultiplier, item);
 			}
 		}
 
@@ -444,6 +374,25 @@ public class ClientProxy extends CommonProxy {
 		HLEntryRegistry.init();
 
 		WeedwoodRowboatHandler.INSTANCE.init();
+		//Turn dirt background in menus into temple bricks
+		//Disabled for now as it was test, could be used if it's suitable
+		/*
+		if (ConfigHandler.blMainMenu) {
+			Field background = ReflectionHelper.findField(Gui.class, "OPTIONS_BACKGROUND");
+			try {
+				setFinalStatic(background, new ResourceLocation(ModInfo.ID, "textures/blocks/temple_bricks.png"));
+			} catch (IllegalAccessException | NoSuchFieldException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private static void setFinalStatic(Field field, Object newValue) throws NoSuchFieldException, IllegalAccessException {
+		field.setAccessible(true);
+		Field modifiers = field.getClass().getDeclaredField("modifiers");
+		modifiers.setAccessible(true);
+		modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+		field.set(null, newValue);*/
 	}
 
 	@Override

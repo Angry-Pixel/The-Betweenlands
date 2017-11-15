@@ -1,7 +1,7 @@
 {
 	"variants": {
-		"normal": [
-            { "model": "thebetweenlands:sludge" }
-        ]
+		"normal": {
+			"model": "thebetweenlands:sludge"
+		}
 	}
 }

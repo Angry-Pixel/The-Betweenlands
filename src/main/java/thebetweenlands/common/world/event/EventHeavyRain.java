@@ -4,6 +4,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.common.block.farming.BlockGenericCrop;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 import java.util.Iterator;
@@ -40,11 +42,10 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 					if(world.rand.nextInt(4) == 0) {
 						int cbx = world.rand.nextInt(16);
 						int cbz = world.rand.nextInt(16);
-						BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(cbx, -999, cbz));
-						//TODO: Re-implement rain
-						/*if(world.getBlockState(pos.add(0, -1, 0)).getBlock() != BLBlockRegistry.puddle && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() instanceof BlockBLGenericCrop) && BLBlockRegistry.puddle.canPlaceBlockAt(world, bx, by, bz)) {
-							world.setBlock(bx, by, bz, BLBlockRegistry.puddle);
-						}*/
+						BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz));
+						if(world.getBlockState(pos.add(0, -1, 0)).getBlock() != BlockRegistry.PUDDLE && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() instanceof BlockGenericCrop) && BlockRegistry.PUDDLE.canPlaceBlockAt(world, pos)) {
+							world.setBlockState(pos, BlockRegistry.PUDDLE.getDefaultState());
+						}
 					}
 				}
 			}

@@ -34,7 +34,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 		float compostHeight = te != null ? Math.min(te.getCompostedAmount() / (float) TileEntityCompostBin.MAX_COMPOST_AMOUNT, 0.82f) : 0;
 
 		if (compostHeight > 0.01f) {
-			IBlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
+			IBlockState compost = BlockRegistry.COMPOST_BLOCK.getDefaultState();
 			BlockPos blockPos = te.getPos();
 
 			this.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -52,7 +52,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 			vertexbuffer.begin(7, DefaultVertexFormats.BLOCK);
 
 			BlockRendererDispatcher blockRenderer = Minecraft.getMinecraft().getBlockRendererDispatcher();
-			blockRenderer.getBlockModelRenderer().renderModel(te.getWorld(), blockRenderer.getModelForState(leaves), leaves, blockPos, vertexbuffer, false, MathHelper.getPositionRandom(blockPos));
+			blockRenderer.getBlockModelRenderer().renderModel(te.getWorld(), blockRenderer.getModelForState(compost), compost, blockPos, vertexbuffer, false, MathHelper.getPositionRandom(blockPos));
 			tessellator.draw();
 
 			GlStateManager.enableCull();
