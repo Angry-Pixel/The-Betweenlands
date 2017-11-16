@@ -39,7 +39,7 @@ public class ContainerMortar  extends Container {
     @Override
     @MethodsReturnNonnullByDefault
     public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
-        ItemStack stack = null;
+        ItemStack stack = ItemStack.EMPTY;
         Slot slot = (Slot) inventorySlots.get(slotIndex);
         if (slot != null && slot.getHasStack()) {
             ItemStack stack1 = slot.getStack();
