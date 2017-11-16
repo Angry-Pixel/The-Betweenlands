@@ -166,4 +166,14 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 	public int getMaxSpawnedInChunk() {
 		return 3;
 	}
+	
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }

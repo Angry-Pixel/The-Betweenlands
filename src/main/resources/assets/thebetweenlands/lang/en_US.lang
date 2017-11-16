@@ -651,7 +651,7 @@ location.wight_tower_puzzle.name=80:Armory
 location.wight_tower_teleporter.name=200:<scale:1>Beware that, when fighting monsters, you yourself do not become a monster... <nl>for when you gaze long into the abyss. The abyss gazes also into you.</scale>
 location.wight_tower_boss.name=80:Primordial Malevolence
 location.abandoned_shack.name=<scale:1.75>Abandoned Shack</scale>
-
+location.underground_ruins.name=80:Underground Ruins
 
 
 # Tooltips

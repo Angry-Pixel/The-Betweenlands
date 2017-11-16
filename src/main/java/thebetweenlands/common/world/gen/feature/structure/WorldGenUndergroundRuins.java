@@ -1,15 +1,24 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
+import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class WorldGenUndergroundRuins extends WorldGenHelper {
 	public IBlockState PITSTONE_TILES = BlockRegistry.PITSTONE_TILES.getDefaultState();
@@ -21,7 +30,9 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 	public IBlockState PITSTONE_BRICK_SLAB_UPSIDE_DOWN = BlockRegistry.PITSTONE_BRICK_SLAB.getDefaultState();
 	public IBlockState PITSTONE_BRICK_STAIRS = BlockRegistry.PITSTONE_BRICK_STAIRS.getDefaultState();
 
-	private boolean structure1(World world, Random random, int x, int y, int z) {
+	private List<AxisAlignedBB> locationAABBs = new ArrayList<>();
+	
+	private boolean structure1(World world, Random random, int x, int y, int z, LocationStorage location) {
 		width = 7;
 		depth = 6;
 		int direction = random.nextInt(4);
@@ -32,8 +43,14 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			return false;
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
+		
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, 1, 4, depth, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 6, 0, 0, 1, 4, depth, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 4, 1, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 5, width, 4, 1, direction).grow(2, 1, 2));
+		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
-
+		
 		rotatedCubeVolume(world, x, y, z, 0, 0, 0, PITSTONE_TILES, 1, 1, 6, direction);
 		rotatedCubeVolume(world, x, y, z, 6, 0, 0, PITSTONE_TILES, 1, 1, 6, direction);
 		rotatedCubeVolume(world, x, y, z, 5, 0, 0, PITSTONE_TILES, 1, 1, 1, direction);
@@ -63,7 +80,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 	}
 
 
-	private boolean structure2(World world, Random random, int x, int y, int z) {
+	private boolean structure2(World world, Random random, int x, int y, int z, LocationStorage location) {
 		width = 9;
 		depth = 11;
 		int direction = random.nextInt(4);
@@ -79,6 +96,9 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 				|| !makePitstoneSupport(world, x, y, z, 8, -1, 10, 1, 1, direction, true)
 				|| !makePitstoneSupport(world, x, y, z, 8, -1, 2, 1, 1, direction, true))
 			return false;
+		
+		location.addBounds(this.rotatedAABB(world, x, y, z, 4, height - 3, 0, 5, height - 3, depth, direction).grow(2, 2, 2));
+		
 		makePitstoneSupport(world, x, y, z, 0, -1, 6, 1, 1, direction, false);
 		makePitstoneSupport(world, x, y, z, 0, -1, 10, 1, 1, direction, false);
 		makePitstoneSupport(world, x, y, z, 4, -1, 6, 1, 1, direction, false);
@@ -139,7 +159,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		return true;
 	}
 
-	private boolean structure3(World world, Random random, int x, int y, int z) {
+	private boolean structure3(World world, Random random, int x, int y, int z, LocationStorage location) {
 		width = 6;
 		depth = 6;
 		int direction = 0;
@@ -147,6 +167,9 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			return false;
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
+
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 7, depth, direction).grow(2, 1, 2));
+		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
 		rotatedCubeVolume(world, x, y, z, 1, 0, 1, PITSTONE_TILES, 4, 1, 4, direction);
@@ -186,7 +209,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		return true;
 	}
 
-	private boolean structure4(World world, Random random, int x, int y, int z) {
+	private boolean structure4(World world, Random random, int x, int y, int z, LocationStorage location) {
 		depth = 11;
 		width = 5;
 		int direction = random.nextInt(4);
@@ -194,6 +217,9 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			return false;
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
+		
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 4, depth, direction).grow(2, 1, 2));
+		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
 		rotatedCubeVolume(world, x, y, z, 0, 0, 0, PITSTONE_BRICKS, 1, 1, 11, direction);
@@ -231,7 +257,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 	}
 
 
-	private boolean structure5(World world, Random random, int x, int y, int z) {
+	private boolean structure5(World world, Random random, int x, int y, int z, LocationStorage location) {
 		depth = 8;
 		width = 7;
 		int direction = random.nextInt(4);
@@ -240,6 +266,9 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			return false;
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
+		
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 5, depth, direction).grow(2, 1, 2));
+		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
 		rotatedCubeVolume(world, x, y, z, 1, 0, 0, PITSTONE_BRICKS, 7, 1, 1, direction);
@@ -285,7 +314,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		return true;
 	}
 
-	private boolean structure6(World world, Random random, int x, int y, int z) {
+	private boolean structure6(World world, Random random, int x, int y, int z, LocationStorage location) {
 		width = 7;
 		depth = 7;
 		int direction = random.nextInt(4);
@@ -296,6 +325,12 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			return false;
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
+		
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, 3, 2, 1, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 1, 0, 0, 1, 1, 1, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 6, 0, 3, 1, 2, 3, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 2, 0, 6, 4, 3, 1, direction).grow(2, 1, 2));
+		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 
 		rotatedCubeVolume(world, x, y, z, 0, 0, 0, PITSTONE_BRICKS, 1, 1, 3, direction);
@@ -504,22 +539,42 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		if (shouldStop)
 			return false;
 
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "translate:underground_ruins", EnumLocationType.RUINS);
+		
+		boolean generated = false;
+		
 		int randomInt = random.nextInt(6);
 		switch (randomInt) {
 		case 0:
-			return structure1(world, random, x, y, z);
+			generated = structure1(world, random, x, y, z, locationStorage);
+			break;
 		case 1:
-			return structure2(world, random, x, y, z);
+			generated = structure2(world, random, x, y, z, locationStorage);
+			break;
 		case 2:
-			return structure3(world, random, x, y, z);
+			generated = structure3(world, random, x, y, z, locationStorage);
+			break;
 		case 3:
-			return structure4(world, random, x, y, z);
+			generated = structure4(world, random, x, y, z, locationStorage);
+			break;
 		case 4:
-			return structure5(world, random, x, y, z);
+			generated = structure5(world, random, x, y, z, locationStorage);
+			break;
 		case 5:
-			return structure6(world, random, x, y, z);
+			generated = structure6(world, random, x, y, z, locationStorage);
+			break;
 		default:
-			return false;
 		}
+		
+		if(generated) {
+			locationStorage.setSeed(random.nextLong());
+			locationStorage.linkChunks();
+			locationStorage.setDirty(true);
+			worldStorage.getLocalStorageHandler().addLocalStorage(locationStorage);
+			return true;
+		}
+		
+		return false;
 	}
 }

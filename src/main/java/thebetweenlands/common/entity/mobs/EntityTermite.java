@@ -105,4 +105,13 @@ public class EntityTermite extends EntityMob implements IEntityBL {
 		return false;
 	}
 
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }

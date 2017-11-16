@@ -43,7 +43,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
     public static final IAttribute VOLATILE_HEALTH_START_ATTRIB = (new RangedAttribute(null, "bl.volatileHealthStart", 1.0D, 0.0D, 1.0D)).setDescription("Volatile Health Percentage Start");
     public static final IAttribute VOLATILE_COOLDOWN_ATTRIB = (new RangedAttribute(null, "bl.volatileCooldown", 400.0D, 10.0D, Integer.MAX_VALUE)).setDescription("Volatile Cooldown");
-    public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute(null, "bl.volatileFlightSpeed", 0.25D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
+    public static final IAttribute VOLATILE_FLIGHT_SPEED_ATTRIB = (new RangedAttribute(null, "bl.volatileFlightSpeed", 0.32D, 0.0D, 5.0D)).setDescription("Volatile Flight Speed");
     public static final IAttribute VOLATILE_LENGTH_ATTRIB = (new RangedAttribute(null, "bl.volatileLength", 600.0D, 0.0D, Integer.MAX_VALUE)).setDescription("Volatile Length");
     public static final IAttribute VOLATILE_MAX_DAMAGE_ATTRIB = (new RangedAttribute(null, "bl.volatileMaxDamage", 20.0D, 0.0D, Double.MAX_VALUE)).setDescription("Volatile Max Damage");
 
@@ -66,7 +66,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
         this.flightMoveHelper = new FlightMoveHelper(this) {
             @Override
             protected double getFlightSpeed() {
-                return 0.1D;
+                return this.entity.getAttributeMap().getAttributeInstance(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue();
             }
         };
         this.moveHelper = this.groundMoveHelper = new EntityMoveHelper(this);
@@ -79,7 +79,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIWightAttack(this, 1.0D, false));
-        this.tasks.addTask(2, new EntityAIMoveToDirect<EntityWight>(this, 0.6D) {
+        this.tasks.addTask(2, new EntityAIMoveToDirect<EntityWight>(this, this.getAttributeMap().getAttributeInstance(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue()) {
             @Override
             protected Vec3d getTarget() {
                 if (this.entity.volatileTicks >= 20) {
@@ -101,7 +101,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
             @Override
             protected double getFlightSpeed() {
-                return 0.04D;
+                return 0.1D;
             }
         });
         this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -187,7 +187,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
             if (this.getAttackTarget() != null) {
                 EntityLivingBase attackTarget = this.getAttackTarget();
 
-                if (this.getDistance(attackTarget) < 1.0D) {
+                if (this.getDistance(attackTarget) < 1.75D) {
                     this.startRiding(attackTarget, true);
                     this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(attackTarget));
                 }
@@ -487,4 +487,13 @@ public class EntityWight extends EntityMob implements IEntityBL {
         return false;
     }
 
+    @Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }

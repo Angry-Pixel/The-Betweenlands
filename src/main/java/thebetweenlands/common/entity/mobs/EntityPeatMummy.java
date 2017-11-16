@@ -668,4 +668,14 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 			return 0.0F;
 		}
 	}
+	
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }

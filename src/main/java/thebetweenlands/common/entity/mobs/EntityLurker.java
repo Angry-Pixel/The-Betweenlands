@@ -577,4 +577,14 @@ public class EntityLurker extends EntityMob implements IEntityBL {
             }
         }
     }
+    
+    @Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }

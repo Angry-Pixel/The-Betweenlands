@@ -131,4 +131,14 @@ public class EntitySiltCrab extends EntityMob implements IEntityBL {
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.SILT_CRAB;
 	}
+	
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }

@@ -490,4 +490,14 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 			super.updateTask();
 		}
 	}
+	
+	@Override
+    public float getBlockPathWeight(BlockPos pos) {
+        return 0.5F;
+    }
+
+    @Override
+    protected boolean isValidLightLevel() {
+    	return true;
+    }
 }
