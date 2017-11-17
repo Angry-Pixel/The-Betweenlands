@@ -105,13 +105,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 				}
 			}
 		} else {
-			if (this.getAttackTarget() != null) {
-				double distanceX = this.getAttackTarget().posX - this.posX;
-				double distanceZ = this.getAttackTarget().posZ - this.posZ;
-				this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(distanceX, distanceZ)) * 180.0F / (float) Math.PI;
-			} else {
-				this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
-
+			if (this.getAttackTarget() == null) {
 				if (!this.world.isRemote && this.rand.nextInt(20) == 0 && world.getBlockState(new BlockPos(this.posX, this.posY + 1, this.posZ)).isNormalCube()) {
 					setIsHanging(true);
 				}

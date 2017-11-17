@@ -44,10 +44,10 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
 		
-		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, 1, 4, depth, direction).grow(2, 1, 2));
-		location.addBounds(this.rotatedAABB(world, x, y, z, 6, 0, 0, 1, 4, depth, direction).grow(2, 1, 2));
-		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 4, 1, direction).grow(2, 1, 2));
-		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 5, width, 4, 1, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, 1, 4, depth, direction).grow(3, 2, 3));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 6, 0, 0, 1, 4, depth, direction).grow(3, 2, 3));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 4, 1, direction).grow(3, 2, 3));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 5, width, 4, 1, direction).grow(3, 2, 3));
 		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 		
@@ -326,10 +326,10 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 		if (!makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, true))
 			return false;
 		
-		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, 3, 2, 1, direction).grow(2, 1, 2));
-		location.addBounds(this.rotatedAABB(world, x, y, z, 1, 0, 0, 1, 1, 1, direction).grow(2, 1, 2));
-		location.addBounds(this.rotatedAABB(world, x, y, z, 6, 0, 3, 1, 2, 3, direction).grow(2, 1, 2));
-		location.addBounds(this.rotatedAABB(world, x, y, z, 2, 0, 6, 4, 3, 1, direction).grow(2, 1, 2));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 0, 0, 0, 3, 2, 1, direction).grow(3, 2, 3));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 1, 0, 0, 1, 1, 1, direction).grow(3, 2, 3));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 6, 0, 3, 1, 2, 3, direction).grow(3, 2, 3));
+		location.addBounds(this.rotatedAABB(world, x, y, z, 2, 0, 6, 4, 3, 1, direction).grow(3, 2, 3));
 		
 		makePitstoneSupport(world, x, y, z, 0, -1, 0, width, depth, direction, false);
 

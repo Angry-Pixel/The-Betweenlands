@@ -257,10 +257,6 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 			}
 		}
 
-		if(this.isActive()) {
-			this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI / 1.0F;
-		}
-
 		super.onLivingUpdate();
 	}
 

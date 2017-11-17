@@ -31,20 +31,21 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
     @Override
 	public void startExecuting() {
         this.taskOwner.setAttackTarget(this.taskOwner.getRevengeTarget());
-        this.revengeTimer = this.taskOwner.getRevengeTimer();
-
-        if (this.entityCallsForHelp) {
-            double dist = this.getTargetDistance();
-            List list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).grow(dist, 10.0D, dist));
-            for (Object aList : list) {
-                EntityCreature creature = (EntityCreature) aList;
-
-                if (this.taskOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.taskOwner.getAttackTarget()) && creature != this.taskOwner.getAttackTarget()) {
-                    creature.setAttackTarget(this.taskOwner.getRevengeTarget());
-                }
-            }
+        if(this.taskOwner.getAttackTarget() != null) {
+	        this.revengeTimer = this.taskOwner.getRevengeTimer();
+	
+	        if (this.entityCallsForHelp) {
+	            double dist = this.getTargetDistance();
+	            List list = this.taskOwner.world.getEntitiesWithinAABB(this.taskOwner.getClass(), new AxisAlignedBB(this.taskOwner.posX, this.taskOwner.posY, this.taskOwner.posZ, this.taskOwner.posX + 1.0D, this.taskOwner.posY + 1.0D, this.taskOwner.posZ + 1.0D).grow(dist, 10.0D, dist));
+	            for (Object aList : list) {
+	                EntityCreature creature = (EntityCreature) aList;
+	
+	                if (this.taskOwner != creature && creature.getAttackTarget() == null && !creature.isOnSameTeam(this.taskOwner.getAttackTarget()) && creature != this.taskOwner.getAttackTarget()) {
+	                    creature.setAttackTarget(this.taskOwner.getRevengeTarget());
+	                }
+	            }
+	        }
         }
-
         super.startExecuting();
     }
 }

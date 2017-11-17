@@ -40,14 +40,14 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 
 	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAIFlyingWander(this, 0.6D));
+		tasks.addTask(0, new EntityAIFlyingWander(this, 0.5D));
 	}
 
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
-		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.05D);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.035D);
 		this.getAttributeMap().registerAttribute(GLOW_STRENGTH_ATTRIB);
 		this.getAttributeMap().registerAttribute(GLOW_START_CHANCE);
 		this.getAttributeMap().registerAttribute(GLOW_STOP_CHANCE);
@@ -79,8 +79,6 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
 			getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
-
-		this.renderYawOffset = this.rotationYaw = -((float) Math.atan2(this.motionX, this.motionZ)) * 180.0F / (float) Math.PI;
 
 		this.prevGlowTicks = this.glowTicks;
 

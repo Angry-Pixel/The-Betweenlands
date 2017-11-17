@@ -2,8 +2,11 @@ package thebetweenlands.common.entity.ai;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.annotation.Nullable;
+
+import com.google.common.collect.Sets;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -29,7 +32,27 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 
 	@Override
 	public PathPoint getStart() {
-		return this.openPoint(MathHelper.floor(this.entity.getEntityBoundingBox().minX), MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D), MathHelper.floor(this.entity.getEntityBoundingBox().minZ));
+		int startY = MathHelper.floor(this.entity.getEntityBoundingBox().minY + 0.5D);
+		BlockPos blockpos1 = new BlockPos(this.entity);
+		PathNodeType startNodeType = this.isFree(blockpos1.getX(), startY, blockpos1.getZ());
+
+		if (startNodeType == PathNodeType.BLOCKED) {
+			Set<BlockPos> set = Sets.<BlockPos>newHashSet();
+			set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, startY, this.entity.getEntityBoundingBox().minZ));
+			set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, startY, this.entity.getEntityBoundingBox().maxZ));
+			set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, startY, this.entity.getEntityBoundingBox().minZ));
+			set.add(new BlockPos(this.entity.getEntityBoundingBox().maxX, startY, this.entity.getEntityBoundingBox().maxZ));
+
+			for (BlockPos blockpos : set) {
+				PathNodeType pathnodetype = this.isFree(blockpos.getX(), blockpos.getY(), blockpos.getZ());//this.getPathNodeType(this.entity, blockpos);
+
+				if (pathnodetype != PathNodeType.BLOCKED) {
+					return this.openPoint(blockpos.getX(), blockpos.getY(), blockpos.getZ());
+				}
+			}
+		}
+
+		return this.openPoint(blockpos1.getX(), startY, blockpos1.getZ());
 	}
 
 	@Override
@@ -42,20 +65,21 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 		int i = 0;
 		for (EnumFacing enumfacing : EnumFacing.values()) {
 			PathPoint pathpoint = this.getAirNode(currentPoint.x + enumfacing.getFrontOffsetX(), currentPoint.y + enumfacing.getFrontOffsetY(), currentPoint.z + enumfacing.getFrontOffsetZ(), targetPoint);
-			if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance)
+			if (pathpoint != null && !pathpoint.visited && pathpoint.distanceTo(targetPoint) < maxDistance) {
 				pathOptions[i++] = pathpoint;
+			}
 		}
 		return i;
 	}
 
 	@Override
 	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z, EntityLiving entitylivingIn, int xSize, int ySize, int zSize, boolean canBreakDoorsIn, boolean canEnterDoorsIn) {
-		return PathNodeType.OPEN;
+		return this.isFree(x, y, z);
 	}
 
 	@Override
 	public PathNodeType getPathNodeType(IBlockAccess blockaccessIn, int x, int y, int z) {
-		return PathNodeType.OPEN;
+		return this.isFree(x, y, z);
 	}
 
 	@Nullable
@@ -85,17 +109,17 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 	}
 
 	private PathNodeType isFree(int x, int y, int z) {
-		BlockPos.MutableBlockPos blockpos$mutableblockpos = new BlockPos.MutableBlockPos();
+		BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
 		for (int i = x; i < x + this.entitySizeX; ++i) {
 			for (int j = y; j < y + this.entitySizeY; ++j) {
 				for (int k = z; k < z + this.entitySizeZ; ++k) {
-					IBlockState iblockstate = this.blockaccess.getBlockState(blockpos$mutableblockpos.setPos(i, j, k));
+					checkPos.setPos(i, j, k);
 
-					/*if (iblockstate.getMaterial() != Material.AIR && iblockstate.getMaterial() != Material.PLANTS)
-						return PathNodeType.BLOCKED;*/
+					IBlockState state = this.blockaccess.getBlockState(checkPos);
+					state = state.getActualState(this.blockaccess, checkPos);
 
 					List<AxisAlignedBB> collidingAABBs = new ArrayList<>();
-					iblockstate.addCollisionBoxToList(this.entity.world, blockpos$mutableblockpos.setPos(i, j, k), new AxisAlignedBB(x, y, z, x + this.entitySizeX, y + this.entitySizeY, z + this.entitySizeZ), collidingAABBs, this.entity, true);
+					state.addCollisionBoxToList(this.entity.world, checkPos, new AxisAlignedBB(x, y, z, x + this.entitySizeX, y + this.entitySizeY, z + this.entitySizeZ), collidingAABBs, this.entity, true);
 					if(!collidingAABBs.isEmpty()) {
 						return PathNodeType.BLOCKED;
 					}

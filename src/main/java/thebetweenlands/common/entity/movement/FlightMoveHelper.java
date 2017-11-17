@@ -20,9 +20,13 @@ public class FlightMoveHelper extends EntityMoveHelper {
 
 	@Override
 	public void onUpdateMoveHelper() {
+		IAttributeInstance entityMoveSpeedAttribute = this.entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
+		double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getAttributeValue() : 1.0D;
+		double speed = this.getFlightSpeed() * entityMoveSpeed;
+
 		if(this.action == EntityMoveHelper.Action.MOVE_TO) {
 			double dx = this.posX - this.entity.posX;
-			double dy = this.posY + 0.5D - this.entity.posY;
+			double dy = this.posY - this.entity.posY;
 			double dz = this.posZ - this.entity.posZ;
 			double dist = dx * dx + dy * dy + dz * dz;
 
@@ -30,23 +34,44 @@ public class FlightMoveHelper extends EntityMoveHelper {
 				this.courseChangeCooldown += this.getCourseChangeCooldown();
 
 				dist = (double)MathHelper.sqrt(dist);
-				
-				IAttributeInstance entityMoveSpeedAttribute = this.entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MOVEMENT_SPEED);
-				double entityMoveSpeed = entityMoveSpeedAttribute != null ? entityMoveSpeedAttribute.getAttributeValue() : 1.0D;
-				double speed = this.getFlightSpeed() * entityMoveSpeed;
-				
-				if(dist >= Math.max(speed * 1.5D, 0.25D) && this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
+
+				if(dist < this.entity.width + speed) {
+					this.blocked = false;
+				} else if(this.isNotColliding(this.posX, this.posY, this.posZ, dist)) {
 					this.entity.motionX += dx / dist * speed;
 					this.entity.motionY += dy / dist * speed;
 					this.entity.motionZ += dz / dist * speed;
+
+					float yaw = (float)(MathHelper.atan2(dz, dx) * (180D / Math.PI)) - 90.0F;
+					this.entity.rotationYaw = this.limitAngle(this.entity.rotationYaw, yaw, 90.0F);
+
+					this.entity.setAIMoveSpeed((float)speed);
+
 					this.blocked = false;
 				} else {
-					this.action = EntityMoveHelper.Action.WAIT;
 					this.blocked = true;
 				}
+				
+				this.action = EntityMoveHelper.Action.WAIT;
 			}
 		} else if(this.action == EntityMoveHelper.Action.STRAFE) {
+			float forward = this.moveForward;
+			float strafe = this.moveStrafe;
+			float dist = MathHelper.sqrt(forward * forward + strafe * strafe);
+
+			float rotX = MathHelper.sin(this.entity.rotationYaw * 0.017453292F);
+			float rotZ = MathHelper.cos(this.entity.rotationYaw * 0.017453292F);
+			float strafeX = strafe * rotZ - forward * rotX;
+			float strafeZ = forward * rotZ + strafe * rotX;
+
+			this.entity.motionX += strafeX / dist * speed * 0.15D;
+			this.entity.motionZ += strafeZ / dist * speed * 0.15D;
+
+			this.entity.setAIMoveSpeed((float)speed);
+			this.entity.setMoveForward(this.moveForward);
+			this.entity.setMoveStrafing(this.moveStrafe);
 			
+			this.action = EntityMoveHelper.Action.WAIT;
 		}
 	}
 
