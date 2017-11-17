@@ -4,6 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import thebetweenlands.common.capability.decay.DecayStats;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemWeepingBluePetal extends ItemBLFood {
@@ -19,6 +20,6 @@ public class ItemWeepingBluePetal extends ItemBLFood {
         	DecayStats stats = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null).getDecayStats();
         	stats.addStats(-6, 1);
         }
-        //player.addPotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.createEffect(600, 2));
+        player.addPotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.createEffect(600, 2));
     }
 }

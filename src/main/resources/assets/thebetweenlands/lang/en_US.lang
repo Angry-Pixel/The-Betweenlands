@@ -371,7 +371,7 @@ item.thebetweenlands.ground_angler_tooth.name=Ground Angler Tooth
 item.thebetweenlands.ground_aqua_middle_gem.name=Ground Aqua Middle Gem
 item.thebetweenlands.ground_arrow_arum.name=Ground Arrow Arum
 item.thebetweenlands.ground_blackhat_mushroom.name=Ground Black Hat Mushroom
-item.thebetweenlands.ground_blood_snail_shell.name=Ground Blood Snail Shell
+item.thebetweenlands.ground_blood_snail_shell.name=Ground Crimson Snail Shell
 item.thebetweenlands.ground_blue_eyed_grass.name=Ground Blue Eyed Grass
 item.thebetweenlands.ground_blue_iris.name=Ground Blue Iris
 item.thebetweenlands.ground_bog_bean.name=Ground Bog Bean
@@ -399,7 +399,7 @@ item.thebetweenlands.ground_marsh_mallow.name=Ground Marsh Mallow
 item.thebetweenlands.ground_marsh_marigold.name=Ground Marsh Marigold
 item.thebetweenlands.ground_milkweed.name=Ground Milkweed
 item.thebetweenlands.ground_mire_coral.name=Ground Mire Coral
-item.thebetweenlands.ground_mire_snail_shell.name=Ground Mire Snail Shell
+item.thebetweenlands.ground_mire_snail_shell.name=Ground Ochre Snail Shell
 item.thebetweenlands.ground_moss.name=Ground Moss
 item.thebetweenlands.ground_nettle.name=Ground Nettle
 item.thebetweenlands.ground_phragmites.name=Ground Phragmites
@@ -770,6 +770,9 @@ chat.amulet.slot.added=Added a new amulet slot
 chat.amulet.slot.full=Can't add any more amulet slots
 
 chat.event.spook=You feel a chill in the air... the haunting season has begun!
+
+# Damage Source
+death.attack.suffocation=%s suffocated in a Gas Cloud
 
 # Elixirs
 bl.elixir.petrify=Petrify
