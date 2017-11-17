@@ -110,9 +110,9 @@ public class ItemElixir extends Item implements ITintedItem, ItemMeshDefinition 
             world.playSound((EntityPlayer)entityLiving, entityLiving.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
             if (!world.isRemote) {
                 int useCount = this.getMaxItemUseDuration(stack) - timeLeft;
-                float strength = Math.min(0.4F + useCount / 15.0F, 2.0F);
-                EntityElixir elixir = new EntityElixir(world, entityLiving, stack, strength);
-                elixir.shoot(entityLiving, ((EntityPlayer)entityLiving).rotationPitch, ((EntityPlayer)entityLiving).rotationYaw, -20.0F, 0.5F, 1.0F);
+                EntityElixir elixir = new EntityElixir(world, entityLiving, stack);
+                float strength = Math.min(0.2F + useCount / 20.0F, 1.0F);
+                elixir.shoot(entityLiving, ((EntityPlayer)entityLiving).rotationPitch, ((EntityPlayer)entityLiving).rotationYaw, -20.0F, strength, 1.0F);
                 world.spawnEntity(elixir);
             }
         }

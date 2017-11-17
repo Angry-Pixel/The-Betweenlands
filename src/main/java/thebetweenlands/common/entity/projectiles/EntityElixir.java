@@ -29,12 +29,9 @@ public class EntityElixir extends EntityThrowable {
         this.setItem(new ItemStack(ItemRegistry.ELIXIR));
     }
 
-    public EntityElixir(World world, EntityLivingBase thrower, ItemStack elixir, float strength) {
+    public EntityElixir(World world, EntityLivingBase thrower, ItemStack elixir) {
         super(world, thrower);
         this.setItem(elixir.copy());
-        this.motionX *= strength;
-        this.motionY *= strength;
-        this.motionZ *= strength;
     }
 
     @Override
