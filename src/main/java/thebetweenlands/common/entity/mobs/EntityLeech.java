@@ -149,8 +149,10 @@ public class EntityLeech extends EntityMob implements IEntityBL {
 				}
 			}
 			if (getBloodConsumed() == MAX_BLOOD_LEVEL && getRidingEntity() != null) {
+				Entity mount = this.getRidingEntity();
 				dismountEntity(getRidingEntity());
 				dismountRidingEntity();
+				this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(mount));
 			}
 			if (fleeingTick > 0) {
 				fleeingTick--;
