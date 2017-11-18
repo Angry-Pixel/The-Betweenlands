@@ -97,6 +97,9 @@ public class BlockMortar extends BlockContainer {
                         double d0 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
                         double d1 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
                         double d2 = world.rand.nextFloat() * f + (1.0F - f) * 0.5D;
+                        if (stack.getItem() == ItemRegistry.PESTLE){
+                            stack.getTagCompound().setBoolean("active", false);
+                        }
                         EntityItem entityitem = new EntityItem(world, pos.getX() + d0, pos.getY() + d1, pos.getZ() + d2, stack);
                         entityitem.setPickupDelay(10);
                         world.spawnEntity(entityitem);

@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -239,5 +240,33 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 	public void handleUpdateTag(NBTTagCompound nbt) {
 		super.handleUpdateTag(nbt);
 		this.readInventoryNBT(nbt);
+	}
+
+	@Override
+	public int[] getSlotsForFace(EnumFacing side) {
+		switch (side){
+
+			case DOWN:
+				return new int[]{0};
+			case UP:
+			case NORTH:
+			case SOUTH:
+			case WEST:
+			case EAST:
+				return new int[]{1, 2, 3, 4};
+		}
+		return super.getSlotsForFace(side);
+	}
+
+	@Override
+	public ItemStack decrStackSize(int index, int count) {
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+		return super.decrStackSize(index, count);
+	}
+
+	@Override
+	public ItemStack removeStackFromSlot(int index) {
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+		return super.removeStackFromSlot(index);
 	}
 }

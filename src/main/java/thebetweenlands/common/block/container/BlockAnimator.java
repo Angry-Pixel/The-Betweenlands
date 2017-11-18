@@ -13,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryHelper;
 import net.minecraft.item.ItemStack;
@@ -150,5 +151,20 @@ public class BlockAnimator extends BlockContainer {
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(FACING).getHorizontalIndex();
+	}
+
+
+	@Override
+	public boolean hasComparatorInputOverride(IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
+		TileEntity tileEntityAnimator = world.getTileEntity(pos);
+		if (tileEntityAnimator instanceof TileEntityAnimator ) {
+			return Math.round(((float) ((TileEntityAnimator) tileEntityAnimator).fuelConsumed / (float) ((TileEntityAnimator) tileEntityAnimator).requiredFuelCount) * 16.0f);
+		}
+		return 0;
 	}
 }

@@ -353,7 +353,7 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
             this.markDirty();
             return itemstack;
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 

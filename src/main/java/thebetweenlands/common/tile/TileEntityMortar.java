@@ -193,11 +193,24 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
 
     @Override
     public int[] getSlotsForFace(EnumFacing side) {
-        if (side == EnumFacing.DOWN)
-            return new int[]{2};
-        if (side == EnumFacing.UP)
-            return new int[]{0};
+        switch(side) {
+            case DOWN:
+                return new int[]{2};
+            case UP:
+                return new int[]{0};
+            case NORTH:
+            case EAST:
+            case SOUTH:
+            case WEST:
+                return new int[]{1, 3};
+        }
         return new int[]{};
+    }
+
+
+    @Override
+    public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+        return slot == 1 && itemstack.getItem() == ItemRegistry.PESTLE || slot == 3 && itemstack.getItem() == ItemRegistry.LIFE_CRYSTAL || slot != 1 && itemstack.getItem() != ItemRegistry.PESTLE && slot != 3 && itemstack.getItem() != ItemRegistry.LIFE_CRYSTAL;
     }
 
 }
