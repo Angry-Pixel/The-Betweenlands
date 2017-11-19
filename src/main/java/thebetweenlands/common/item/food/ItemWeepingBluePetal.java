@@ -16,10 +16,6 @@ public class ItemWeepingBluePetal extends ItemBLFood {
     @Override
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
-        if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-        	DecayStats stats = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null).getDecayStats();
-        	stats.addStats(-6, 1);
-        }
         player.addPotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.createEffect(600, 2));
     }
 }

@@ -16,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
 public class ItemTaintedPotion extends Item {
 	public ItemTaintedPotion() {
@@ -60,6 +61,7 @@ public class ItemTaintedPotion extends Item {
 		}
 
 		if (!world.isRemote) {
+			player.addPotionEffect(new PotionEffect(ElixirEffectRegistry.EFFECT_DECAY.getPotionEffect(), 180, 3));
 			player.addPotionEffect(new PotionEffect(MobEffects.POISON, 120, 2));
 		}
 
