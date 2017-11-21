@@ -290,7 +290,6 @@ public class ItemRegistry {
             ex.printStackTrace();
         }
 
-        registerProperties();
     }
 
     private static void registerItem(Item item, String fieldName) {
@@ -299,7 +298,7 @@ public class ItemRegistry {
         item.setRegistryName(ModInfo.ID, name).setUnlocalizedName(ModInfo.ID + "." + name);
     }
 
-    private static void registerProperties() {
+    public static void init() {
         ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.OCTINE_ORE)));
         ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.SYRMORITE_ORE)));
         ORES.add(new ItemStack(Item.getItemFromBlock(BlockRegistry.SULFUR_ORE)));

@@ -27,7 +27,7 @@ public class Registries {
 
 	public void init() {
 		//this.blockRegistry.init();
-		//this.itemRegistry.init();
+		ItemRegistry.init();
 		RecipeRegistry.init();
 		TileEntityRegistry.init();
 		AspectRegistry.init();
