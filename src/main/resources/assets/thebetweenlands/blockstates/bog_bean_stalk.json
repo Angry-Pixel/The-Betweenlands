@@ -3,11 +3,20 @@
   "variants": {
     "normal": {
       "model": "thebetweenlands:internal/model_combined",
-      "custom": { 
-        "model_base": "thebetweenlands:block/bog_bean_stalk",
-        "model_additional": "thebetweenlands:block/internal/fluid",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/layer_selection",
+        "model_base_data": {
+          "model": "thebetweenlands:block/bog_bean_stalk",
+          "layers": ["cutout_mipped"]
+        },
+        
+        "model_additional": "thebetweenlands:block/internal/layer_selection",
         "model_additional_data": {
-          "fluid": "swamp_water"
+          "model": "thebetweenlands:block/internal/fluid",
+          "layers": ["translucent"],
+          "model_data": {
+            "fluid": "swamp_water"
+          }
         }
       }
     }

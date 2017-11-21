@@ -69,13 +69,13 @@ public class BlockAlgae extends BlockPlant {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.TRANSLUCENT;
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
 		Block block = iblockaccess.getBlockState(pos.offset(side)).getBlock();
-		return block != BlockRegistry.ALGAE;
+		return block != BlockRegistry.ALGAE && block != BlockRegistry.SWAMP_WATER;
 	}
 
 	@Override

@@ -3,10 +3,19 @@
   "defaults": {
     "model": "thebetweenlands:internal/model_combined",
     "custom": { 
-      "model_base": "thebetweenlands:block/swamp_reed",
-      "model_additional": "thebetweenlands:block/internal/fluid",
+      "model_base": "thebetweenlands:block/internal/layer_selection",
+      "model_base_data": {
+        "model": "thebetweenlands:block/swamp_reed",
+        "layers": ["cutout_mipped"]
+      },
+      
+      "model_additional": "thebetweenlands:block/internal/layer_selection",
       "model_additional_data": {
-        "fluid": "swamp_water"
+        "model": "thebetweenlands:block/internal/fluid",
+        "layers": ["translucent"],
+        "model_data": {
+          "fluid": "swamp_water"
+        }
       }
     }
   },

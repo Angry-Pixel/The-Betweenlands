@@ -15,6 +15,7 @@ import thebetweenlands.client.render.model.baked.ModelDynBucketBL;
 import thebetweenlands.client.render.model.baked.ModelFluidBL;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
+import thebetweenlands.client.render.model.baked.ModelLayerSelection;
 import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
@@ -70,6 +71,7 @@ public class ModelRegistry {
 	public static final IModel BLANK = new ModelBlank();
 	public static final IModel MODEL_COMBINED = new ModelCombined();
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
+	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
 	
 	//Plant models
 	public static final IModel PITCHER_PLANT = new ModelFromModelBase(new ModelPitcherPlant(), new ResourceLocation("thebetweenlands:blocks/pitcher_plant"), 128, 128);

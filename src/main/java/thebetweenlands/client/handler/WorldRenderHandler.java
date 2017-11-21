@@ -16,6 +16,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
@@ -69,12 +70,11 @@ public class WorldRenderHandler {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
 
+		ITextureObject texture = MC.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		
+		texture.setBlurMipmap(true, false);
+		
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-
-		int prevMinFilter = GL11.glGetTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER);
-		int prevMagFilter = GL11.glGetTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER);
-		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexBuffer = tessellator.getBuffer();
@@ -135,8 +135,7 @@ public class WorldRenderHandler {
 
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, prevMinFilter);
-		GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, prevMagFilter);
+		texture.restoreLastBlurMipmap();
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
