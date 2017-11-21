@@ -24,4 +24,9 @@ public class AspectFreiwynn implements IAspectType {
 	public ResourceLocation getIcon() {
 		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_freiwynn.png");
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFC1D8F4;
+	}
 }

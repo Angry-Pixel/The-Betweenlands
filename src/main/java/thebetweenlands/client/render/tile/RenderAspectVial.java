@@ -40,9 +40,7 @@ public class RenderAspectVial extends TileEntitySpecialRenderer<TileEntityAspect
 
         if(te.getAspect() != null) {
             GL11.glDisable(GL11.GL_TEXTURE_2D);
-            //TODO figure out how to get the color
-            //float[] aspectRGBA = ColorUtils.getRGBA(te.getAspect().type.getColor());
-            float[] aspectRGBA = ColorUtils.getRGBA(0xFFFFFFFF);
+            float[] aspectRGBA = ColorUtils.getRGBA(te.getAspect().type.getColor());
             GL11.glColor4f(aspectRGBA[0] * 2, aspectRGBA[1] * 2, aspectRGBA[2] * 2, 0.98F);
 
             float filled = te.getAspect().amount / TileEntityAspectVial.MAX_AMOUNT;

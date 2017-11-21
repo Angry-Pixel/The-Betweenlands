@@ -24,4 +24,9 @@ public class AspectByariis implements IAspectType {
 	public ResourceLocation getIcon() {
 		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_byariis.png");
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF293828;
+	}
 }

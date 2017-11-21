@@ -24,4 +24,9 @@ public class AspectYeowynn implements IAspectType {
 	public ResourceLocation getIcon() {
 		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_yeowynn.png");
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFFC0069;
+	}
 }

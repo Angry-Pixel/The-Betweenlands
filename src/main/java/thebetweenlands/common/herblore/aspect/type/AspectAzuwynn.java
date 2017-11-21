@@ -24,4 +24,9 @@ public class AspectAzuwynn implements IAspectType {
 	public ResourceLocation getIcon() {
 		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_azuwynn.png");
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFE01414;
+	}
 }

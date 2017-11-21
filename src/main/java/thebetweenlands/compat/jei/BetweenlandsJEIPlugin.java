@@ -64,6 +64,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.STANDING_WEEDWOOD_SIGN).getItemBlock()));
         blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.WALL_WEEDWOOD_SIGN).getItemBlock()));
         blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.MOSS_BED).getItemBlock()));
+        blacklist.addIngredientToBlacklist(new ItemStack(((BlockRegistry.ICustomItemBlock)BlockRegistry.ASPECT_VIAL_BLOCK).getItemBlock()));
         blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_KELP));
         blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_REED));
         blacklist.addIngredientToBlacklist(new ItemStack(BlockRegistry.SWAMP_REED_UNDERWATER));
@@ -76,7 +77,6 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.GLUE));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TAINTED_POTION));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ROTTEN_FOOD));
-        blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.MANUAL_HL));
 
         if (!ConfigHandler.debug) {
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));

@@ -32,6 +32,12 @@ public interface IAspectType {
 	public ResourceLocation getIcon();
 
 	/**
+	 * Returns the color of the aspect
+	 * @return
+	 */
+	public int getColor();
+
+	/**
 	 * Writes this aspect type to the specified NBT
 	 * @param nbt
 	 * @return

@@ -102,10 +102,10 @@ public class BlockAlembic extends BlockContainer {
                         BLParticles.FLAME.spawn(world, pos.getX() + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, ParticleFactory.ParticleArgs.get().withMotion((rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F));
                         break;
                     case EAST:
-                        BLParticles.FLAME.spawn(world, pos.getX() + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, ParticleFactory.ParticleArgs.get().withMotion((rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F));
+                        BLParticles.FLAME.spawn(world, pos.getX() + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, ParticleFactory.ParticleArgs.get().withMotion((rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F));
                         break;
                     case WEST:
-                        BLParticles.FLAME.spawn(world, pos.getX() + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, ParticleFactory.ParticleArgs.get().withMotion((rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F));
+                        BLParticles.FLAME.spawn(world, pos.getX() + 0.6F + (rand.nextFloat() - 0.5F) * 0.1F, pos.getY(), pos.getZ() + 0.375F + (rand.nextFloat() - 0.5F) * 0.1F, ParticleFactory.ParticleArgs.get().withMotion((rand.nextFloat() - 0.5F) * 0.01F, 0.01F, 0F));
                         break;
                 }
             }

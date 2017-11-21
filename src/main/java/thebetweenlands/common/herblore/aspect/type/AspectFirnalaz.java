@@ -24,4 +24,9 @@ public class AspectFirnalaz implements IAspectType {
 	public ResourceLocation getIcon() {
 		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_firnalaz.png");
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFFFF7F00;
+	}
 }

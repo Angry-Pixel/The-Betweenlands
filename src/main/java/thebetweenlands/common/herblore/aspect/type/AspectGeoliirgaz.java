@@ -24,4 +24,9 @@ public class AspectGeoliirgaz implements IAspectType {
 	public ResourceLocation getIcon() {
 		return new ResourceLocation(ModInfo.ID, "textures/items/strictly_herblore/misc/aspect_geoliirgaz.png");
 	}
+
+	@Override
+	public int getColor() {
+		return 0xFF222228;
+	}
 }

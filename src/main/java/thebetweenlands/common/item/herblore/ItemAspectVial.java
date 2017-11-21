@@ -28,6 +28,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.AdvancedRecipeHelper;
+import thebetweenlands.util.ColorUtils;
 
 import javax.annotation.Nullable;
 
@@ -116,7 +117,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
     @Override
     public Map<Integer, ResourceLocation> getModels() {
         Map<Integer, ResourceLocation> models = new HashMap<>();
-        models.put(0, new ResourceLocation(getRegistryName().toString() + "_green"));
+        models.put(0, new ResourceLocation(getRegistryName().toString()));
         models.put(1, new ResourceLocation(getRegistryName().toString() + "_orange"));
         return models;
     }
@@ -125,14 +126,12 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
     public int getColorMultiplier(ItemStack stack, int tintIndex) {
         switch(tintIndex){
             case 0:
-                //TODO get color for the liquid somehow
-                //Liquid
-                /*List<Aspect> aspects = ItemAspectContainer.fromItem(stack).getAspects();
+                List<Aspect> aspects = ItemAspectContainer.fromItem(stack).getAspects();
                 if(aspects.size() > 0) {
                     Aspect aspect = aspects.get(0);
                     float[] aspectRGBA = ColorUtils.getRGBA(aspect.type.getColor());
                     return ColorUtils.toHex(aspectRGBA[0], aspectRGBA[1], aspectRGBA[2], 1.0F);
-                }*/
+                }
                 return 0xFFFFFFFF;
             case 2:
                 return 0xFFFFFFFF;
@@ -154,7 +153,6 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
                 //tooltip.add(TranslationHelper.translateToLocal("tooltip.aspectvial.byariis.fuel"));
             }
         }
-        tooltip.add(TextFormatting.RED + "Not yet fully implemented!");
     }
 
     /**
