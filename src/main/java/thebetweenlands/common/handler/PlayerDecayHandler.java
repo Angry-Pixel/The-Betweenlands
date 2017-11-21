@@ -1,16 +1,20 @@
 package thebetweenlands.common.handler;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemFood;
+import net.minecraft.network.play.server.SPacketEntityProperties;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.capability.decay.DecayStats;
@@ -26,73 +30,87 @@ public class PlayerDecayHandler {
 			if(!player.world.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
-				float currentMaxHealth = (float) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
-				float decayMaxHealth = (int)(capability.getMaxPlayerHealth() / 2.0F) * 2;
+				int currentMaxHealth = (int) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
 
 				DecayStats stats = capability.getDecayStats();
 
-				//Only reset the health to default once, hopefully should improve mod compatilibity?
-				boolean requiresHealthReset = capability.isDecayEnabled() ? (stats.getDecayLevel() != stats.getPrevDecayLevel() && currentMaxHealth < 20.0F && decayMaxHealth >= 20.0F) : (currentMaxHealth < 20.0F);
+				int decayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;
+				int prevDecayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
+				int healthDiff = decayMaxHealth - prevDecayMaxHealth;
 
-				if(!capability.isDecayEnabled()) {
-					if(requiresHealthReset) {
-						player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0F);
-					}
-				} else {
-					//Clamp health
-					if(decayMaxHealth < 20.0F || requiresHealthReset) {
-						player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(decayMaxHealth);
-						if(player.getHealth() > decayMaxHealth) {
-							player.setHealth(decayMaxHealth);
-						}
-					}
+				if(healthDiff != 0) {
+					//Don't go below 3 hearts
+					int newHealth = Math.max(currentMaxHealth + healthDiff, 6);
 
-					int decay = stats.getDecayLevel();
+					healthDiff = newHealth - currentMaxHealth;
 
-					if (decay >= 16) {
-						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 2, true, false));
-						player.jumpMovementFactor = 0.001F;
-					} else if (decay >= 13) {
-						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, true, false));
-						player.jumpMovementFactor = 0.002F;
-					} else if (decay >= 10) {
-						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 0, true, false));
+					//Don't give more health back than was removed
+					healthDiff = Math.min(healthDiff, capability.getRemovedHealth());
+
+					//Update health
+					player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(currentMaxHealth + healthDiff);
+					if(player.getHealth() > currentMaxHealth + healthDiff) {
+						player.setHealth(currentMaxHealth + healthDiff);
 					}
 
-					if(!event.player.isRiding()) {
-						EnumDifficulty difficulty = player.world.getDifficulty();
+					//Keep track of how much was removed
+					capability.setRemovedHealth(capability.getRemovedHealth() - healthDiff);
+				}
 
-						float decaySpeed = 0.0F;
+				int decay = stats.getDecayLevel();
 
-						switch(difficulty) {
-						case PEACEFUL:
-							decaySpeed = 0.0F;
-							break;
-						case EASY:
-							decaySpeed = 0.0025F;
-							break;
-						case NORMAL:
-							decaySpeed = 0.0033F;
-							break;
-						case HARD:
-							decaySpeed = 0.005F;
-							break;
-						}
+				if (decay >= 16) {
+					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 2, true, false));
+					player.jumpMovementFactor = 0.001F;
+				} else if (decay >= 13) {
+					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, true, false));
+					player.jumpMovementFactor = 0.002F;
+				} else if (decay >= 10) {
+					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 0, true, false));
+				}
 
-						if(player.isInWater()) {
-							decaySpeed *= 2.75F;
-						}
+				if(!event.player.isRiding()) {
+					EnumDifficulty difficulty = player.world.getDifficulty();
 
-						if(decaySpeed > 0.0F) {
-							stats.addDecayAcceleration(decaySpeed);
-						}
+					float decaySpeed = 0.0F;
+
+					switch(difficulty) {
+					case PEACEFUL:
+						decaySpeed = 0.0F;
+						break;
+					case EASY:
+						decaySpeed = 0.0025F;
+						break;
+					case NORMAL:
+						decaySpeed = 0.0033F;
+						break;
+					case HARD:
+						decaySpeed = 0.005F;
+						break;
 					}
 
-					if(GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY)) {
-						capability.getDecayStats().onUpdate(player);
+					if(player.isInWater()) {
+						decaySpeed *= 2.75F;
+					}
+
+					if(decaySpeed > 0.0F) {
+						stats.addDecayAcceleration(decaySpeed);
 					}
 				}
+
+				if(GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_DECAY)) {
+					capability.getDecayStats().onUpdate(player);
+				}
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onPlayerTick(PlayerRespawnEvent event) {
+		//Workaround for client not receiving the new MAX_HEALTH attribute after a respawn
+		EntityPlayer player = event.player;
+		if(!player.world.isRemote && player instanceof EntityPlayerMP) {
+			((EntityPlayerMP)player).connection.sendPacket(new SPacketEntityProperties(player.getEntityId(), ImmutableList.of(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH))));
 		}
 	}
 

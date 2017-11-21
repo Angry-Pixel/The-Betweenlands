@@ -5,7 +5,6 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.EnumDifficulty;
 
 public class DecayStats {
 	private int decayLevel = 0;
@@ -36,27 +35,23 @@ public class DecayStats {
 	 * @param player
 	 */
 	public void onUpdate(EntityPlayer player) {
-		EnumDifficulty difficulty = player.world.getDifficulty();
-
-		this.prevDecayLevel = this.decayLevel;
-
-		if (difficulty != EnumDifficulty.PEACEFUL) {
+		this.prevDecayLevel = this.getDecayLevel();
+		
+		if(this.capability == null || this.capability.isDecayEnabled()) {
 			if (this.decayAccelerationLevel > 4.0F) {
 				this.decayAccelerationLevel -= 4.0F;
-	
+
 				if (this.decaySaturationLevel > 0.0F) {
 					this.decaySaturationLevel = Math.max(this.decaySaturationLevel - 1.0F, 0.0F);
 				} else {
 					this.decaySaturationLevel = 0.0F;
 					this.decayLevel = Math.min(this.decayLevel + 1, 20);
-	
+
 					if(this.capability != null) {
 						this.capability.markDirty();
 					}
 				}
 			}
-		} else if(this.getDecayLevel() < 20){
-			this.addStats(-1, 0);
 		}
 	}
 
@@ -67,6 +62,7 @@ public class DecayStats {
 	public void readNBT(NBTTagCompound nbt) {
 		if (nbt.hasKey("decayLevel", 99)) {
 			this.decayLevel = nbt.getInteger("decayLevel");
+			this.prevDecayLevel = nbt.getInteger("prevDecayLevel");
 			this.decaySaturationLevel = nbt.getFloat("decaySaturationLevel");
 			this.decayAccelerationLevel = nbt.getFloat("decayExhaustionLevel");
 		}
@@ -78,6 +74,7 @@ public class DecayStats {
 	 */
 	public void writeNBT(NBTTagCompound nbt) {
 		nbt.setInteger("decayLevel", this.decayLevel);
+		nbt.setInteger("prevDecayLevel", this.prevDecayLevel);
 		nbt.setFloat("decaySaturationLevel", this.decaySaturationLevel);
 		nbt.setFloat("decayExhaustionLevel", this.decayAccelerationLevel);
 	}
@@ -87,6 +84,9 @@ public class DecayStats {
 	 * @return
 	 */
 	public int getDecayLevel() {
+		if(this.capability != null) {
+			return this.capability.isDecayEnabled() ? this.decayLevel : 0;
+		}
 		return this.decayLevel;
 	}
 

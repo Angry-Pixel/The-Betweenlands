@@ -4,6 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
@@ -44,30 +45,46 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 
 
 	private DecayStats decayStats = new DecayStats(this);
-
+	private int removedHealth = 0;
+	
 	@Override
 	public DecayStats getDecayStats() {
 		return this.decayStats;
 	}
+	
+	@Override
+	public int getRemovedHealth() {
+		return this.removedHealth;
+	}
 
 	@Override
-	public float getMaxPlayerHealth() {
-		return Math.min(26f - this.decayStats.getDecayLevel(), 20f);
+	public void setRemovedHealth(int removedHealth) {
+		this.removedHealth = removedHealth;
+	}
+	
+	@Override
+	public float getMaxPlayerHealth(int decayLevel) {
+		return Math.min(26f - decayLevel, 20f);
 	}
 
 	@Override
 	public boolean isDecayEnabled() {
-		return this.getEntity().dimension == ConfigHandler.dimensionId && !this.getEntity().capabilities.isCreativeMode && !this.getEntity().capabilities.disableDamage;
+		return this.getEntity().getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && 
+				this.getEntity().dimension == ConfigHandler.dimensionId && 
+				!this.getEntity().capabilities.isCreativeMode && 
+				!this.getEntity().capabilities.disableDamage;
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		this.decayStats.writeNBT(nbt);
+		nbt.setInteger("removedHealth", this.removedHealth);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		this.decayStats.readNBT(nbt);
+		this.removedHealth = nbt.getInteger("removedHealth");
 	}
 
 	@Override

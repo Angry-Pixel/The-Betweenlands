@@ -10,14 +10,27 @@ public interface IDecayCapability {
 	public DecayStats getDecayStats();
 
 	/**
-	 * Returns the maximum player health with the current decay level
+	 * Returns the maximum player health with the specified decay level
+	 * @param decayLevel
 	 * @return
 	 */
-	public float getMaxPlayerHealth();
+	public float getMaxPlayerHealth(int decayLevel);
 
 	/**
 	 * Returns whether decay is currently enabled for this player
 	 * @return
 	 */
 	public boolean isDecayEnabled();
+	
+	/**
+	 * Returns how much health has been removed from the player
+	 * @return
+	 */
+	public int getRemovedHealth();
+	
+	/**
+	 * Sets how much health has been removed from the player
+	 * @param health
+	 */
+	public void setRemovedHealth(int health);
 }
