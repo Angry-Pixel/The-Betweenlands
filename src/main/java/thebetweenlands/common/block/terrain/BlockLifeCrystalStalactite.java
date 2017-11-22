@@ -211,4 +211,8 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 		return state.getValue(VARIANT) == EnumLifeCrystalType.ORE ? ItemRegistry.LIFE_CRYSTAL : null;
 	}
 
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
 }

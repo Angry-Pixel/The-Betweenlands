@@ -105,4 +105,9 @@ public class BlockRootUnderwater extends BlockSwampWater {
 
 		return state.withProperty(BlockRoot.POS_X, pos.getX()).withProperty(BlockRoot.POS_Y, pos.getY()).withProperty(BlockRoot.POS_Z, pos.getZ()).withProperty(BlockRoot.DIST_UP, distUp).withProperty(BlockRoot.DIST_DOWN, distDown).withProperty(BlockRoot.NO_TOP, noTop).withProperty(BlockRoot.NO_BOTTOM, noBottom);
 	}
+	
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
 }
