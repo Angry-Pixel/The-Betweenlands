@@ -208,9 +208,9 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	public int quantityDropped(Random par1Random) {
 		return 0;
 	}
-	
+
 	@Override
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-        return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT_MIPPED;
-    }
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
 }
