@@ -29,6 +29,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import thebetweenlands.client.gui.GuiBLMainMenu;
+import thebetweenlands.client.gui.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiPouchNaming;
 import thebetweenlands.client.gui.inventory.*;
@@ -424,6 +425,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(OverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(GuiDownloadTerrainBetweenlands.class);
 	}
 
 	@Override
