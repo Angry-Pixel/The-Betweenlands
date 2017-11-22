@@ -66,11 +66,12 @@ public class RenderAspectrusCrop extends TileEntitySpecialRenderer<TileEntityAsp
 		if(index >= 4 && ShaderHelper.INSTANCE.isWorldShaderActive() && aspect != null) {
 			float[] rgba = ColorUtils.getRGBA(aspect.type.getColor());
 			ShaderHelper.INSTANCE.require();
+			float brightness = ((float)Math.sin((tile.glowTicks + partialTicks) / 15.0F) * (float)Math.cos((tile.glowTicks + partialTicks + 4) / 80.0F) + 1.0F) / 2.0F;
 			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(tile.getPos().getX() + 0.5D, tile.getPos().getY() + 0.5D, tile.getPos().getZ() + 0.5D, 
-					(float)Math.sin((tile.glowTicks + partialTicks) / 20.0F) + 1.0F,
-					rgba[0] * 2.5F,
-					rgba[1] * 2.5F,
-					rgba[2] * 2.5F));
+					brightness * brightness * 4.0F,
+					rgba[0] * brightness * brightness * 2.5F,
+					rgba[1] * brightness * brightness * 2.5F,
+					rgba[2] * brightness * brightness * 2.5F));
 		}
 
 		switch(index) {
