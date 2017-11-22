@@ -21,7 +21,7 @@ public final class Aspect implements Comparable<Aspect> {
 	}
 	
 	public float getDisplayAmount() {
-		return this.amount / 100.0F;
+		return this.amount / 1000.0F;
 	}
 
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
