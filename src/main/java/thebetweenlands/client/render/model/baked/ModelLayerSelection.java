@@ -36,15 +36,18 @@ import net.minecraftforge.common.model.IModelState;
 
 public class ModelLayerSelection implements IModel {
 	private IModel model;
-	private final boolean[] renderLayer = new boolean[BlockRenderLayer.values().length];
+	private final boolean[] renderLayer = new boolean[BlockRenderLayer.values().length + 1];
 
 	public ModelLayerSelection() {
 	}
 
-	public ModelLayerSelection(IModel model, List<BlockRenderLayer> layers) {
+	public ModelLayerSelection(IModel model, List<BlockRenderLayer> layers, boolean renderNone) {
 		this.model = model;
 		for(BlockRenderLayer layer : layers) {
-			this.renderLayer[layer.ordinal()] = true;
+			this.renderLayer[layer.ordinal() + 1] = true;
+		}
+		if(renderNone) {
+			this.renderLayer[0] = true;
 		}
 	}
 
@@ -105,6 +108,7 @@ public class ModelLayerSelection implements IModel {
 		String layers = customData.get("layers");
 		JsonArray layersArray = parser.parse(layers).getAsJsonArray();
 		List<BlockRenderLayer> renderLayers = new ArrayList<>();
+		boolean renderNone = false;
 		for(JsonElement element : layersArray) {
 			String layer = element.getAsString();
 			switch(layer) {
@@ -120,10 +124,13 @@ public class ModelLayerSelection implements IModel {
 			case "translucent":
 				renderLayers.add(BlockRenderLayer.TRANSLUCENT);
 				break;
+			case "none":
+				renderNone = true;
+				break;
 			}
 		}
 
-		return new ModelLayerSelection(baseModel, renderLayers);
+		return new ModelLayerSelection(baseModel, renderLayers, renderNone);
 	}
 
 	public static class BakedLayerSelectionModel implements IBakedModel {
@@ -137,7 +144,8 @@ public class ModelLayerSelection implements IModel {
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-			if(this.renderLayer[MinecraftForgeClient.getRenderLayer().ordinal()]) {
+			BlockRenderLayer layer = MinecraftForgeClient.getRenderLayer();
+			if((layer == null && this.renderLayer[0]) || (layer != null && this.renderLayer[layer.ordinal() + 1])) {
 				return this.model.getQuads(state, side, rand);
 			}
 			return Collections.emptyList();

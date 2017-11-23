@@ -7,7 +7,7 @@
         "model_base": "thebetweenlands:block/internal/layer_selection",
         "model_base_data": {
           "model": "thebetweenlands:block/internal/life_crystal_stalactite",
-          "layers": ["cutout"]
+          "layers": ["cutout", "none"]
         },
       
         "model_additional": "thebetweenlands:block/internal/layer_selection",

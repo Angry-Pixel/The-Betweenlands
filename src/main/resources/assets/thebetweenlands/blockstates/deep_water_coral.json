@@ -6,7 +6,7 @@
       "model_base": "thebetweenlands:block/internal/layer_selection",
       "model_base_data": {
         "model": "thebetweenlands:block/deep_water_coral",
-        "layers": ["cutout"]
+        "layers": ["cutout", "none"]
       },
       
       "model_additional": "thebetweenlands:block/internal/layer_selection",
