@@ -6,6 +6,13 @@
       "conditions": [
         {
           "condition": "killed_by_player"
+        },
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:is_boss_mummy": "false"
+          }
         }
       ],
       "entries": [
@@ -48,6 +55,13 @@
           "entity": "this",
           "properties": {
             "thebetweenlands:has_shimmerstone": "true"
+          }
+        },
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:is_boss_mummy": "false"
           }
         }
       ],

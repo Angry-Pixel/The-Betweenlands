@@ -41,6 +41,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.entity.ai.EntityAIApproachItem;
 import thebetweenlands.common.entity.ai.EntityAIPeatMummyCharge;
+import thebetweenlands.common.entity.attributes.BooleanAttribute;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -57,6 +58,9 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute(null, "bl.chargingSpeed", 0.55D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
 	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute(null, "bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
+	public static final IAttribute CARRY_SHIMMERSTONE = (new BooleanAttribute(null, "bl.carryShimmerstone", false)).setDescription("Whether this Peat Mummy carries a Shimmerstone");
+	public static final IAttribute IS_BOSS = (new BooleanAttribute(null, "bl.isDreadfulPeatMummyBoss", false)).setDescription("Whether this Peat Mummy was spawned by a Dreadful Peat Mummy");
+	
 	private static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 
 	private static final int BREAK_COUNT = 5;
@@ -76,8 +80,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 
 	//Adjust to length of screaming sound
 	private static final int SCREAMING_TIMER_MAX = 50;
-
-	private boolean carryShimmerstone = false;
 
 	private float prevSpawningOffset = 0.0F;
 	private float prevSpawningProgress = 0.0F;
@@ -166,6 +168,8 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(40.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 
+		this.getAttributeMap().registerAttribute(CARRY_SHIMMERSTONE);
+		this.getAttributeMap().registerAttribute(IS_BOSS);
 		this.getAttributeMap().registerAttribute(SPAWN_LENGTH_ATTRIB);
 		this.getAttributeMap().registerAttribute(SPAWN_OFFSET_ATTRIB);
 		this.getAttributeMap().registerAttribute(SPAWN_RANGE_ATTRIB);
@@ -194,7 +198,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		nbt.setInteger("spawningTicks", this.getSpawningTicks());
 		nbt.setInteger("chargingPreparation", this.chargingPreparation);
 		nbt.setByte("chargingState", this.getDataManager().get(CHARGING_STATE));
-		nbt.setBoolean("carryShimmerstone", this.carryShimmerstone);
 
 		super.writeEntityToNBT(nbt);
 	}
@@ -209,9 +212,6 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 		}
 		if(nbt.hasKey("chargingState")) {
 			this.getDataManager().set(CHARGING_STATE, nbt.getByte("chargingState"));
-		}
-		if(nbt.hasKey("carryShimmerstone")) {
-			this.carryShimmerstone = nbt.getBoolean("carryShimmerstone");
 		}
 
 		super.readEntityFromNBT(nbt);
@@ -638,7 +638,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @param shimmerStone
 	 */
 	public void setCarryShimmerstone(boolean shimmerStone) {
-		this.carryShimmerstone = shimmerStone;
+		this.getEntityAttribute(CARRY_SHIMMERSTONE).setBaseValue(shimmerStone ? 1 : 0);
 	}
 	
 	/**
@@ -646,7 +646,23 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	 * @return
 	 */
 	public boolean doesCarryShimmerstone() {
-		return this.carryShimmerstone;
+		return this.getEntityAttribute(CARRY_SHIMMERSTONE).getBaseValue() > 0;
+	}
+	
+	/**
+	 * Sets whether the peat mummy was spawned by a Dreadful Peat Mummy
+	 * @param shimmerStone
+	 */
+	public void setBossMummy(boolean boss) {
+		this.getEntityAttribute(IS_BOSS).setBaseValue(boss ? 1 : 0);
+	}
+	
+	/**
+	 * Returns whether the Peat Mummy was spawned by a Dreadful Peat Mummy
+	 * @return
+	 */
+	public boolean isBossMummy() {
+		return this.getEntityAttribute(IS_BOSS).getBaseValue() > 0;
 	}
 
 	@Override

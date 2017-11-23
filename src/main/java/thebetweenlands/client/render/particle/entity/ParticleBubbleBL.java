@@ -5,8 +5,9 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
 
 public class ParticleBubbleBL extends Particle {
-	protected ParticleBubbleBL(World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+	protected ParticleBubbleBL(World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale) {
 		super(world, x, y, z, vecX, vecY, vecZ);
+		this.particleScale = scale;
 	}
 
 	@Override
@@ -31,7 +32,7 @@ public class ParticleBubbleBL extends Particle {
 
 		@Override
 		public ParticleBubbleBL createParticle(ImmutableParticleArgs args) {
-			return new ParticleBubbleBL(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ);
+			return new ParticleBubbleBL(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.scale);
 		}
 	}
 }

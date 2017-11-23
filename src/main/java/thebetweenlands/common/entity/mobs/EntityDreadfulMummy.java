@@ -37,12 +37,15 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityCameraOffset;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.api.entity.IEntityScreenShake;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
+import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -259,11 +262,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 		if(!getEntityWorld().isRemote && isEntityAlive()) {
 			if (getAttackTarget() != null) {
-				AxisAlignedBB checkAABB = getEntityBoundingBox().expand(32, 32, 32);
+				AxisAlignedBB checkAABB = getEntityBoundingBox().expand(64, 64, 64);
 				List<EntityPeatMummy> peatMummies = getEntityWorld().getEntitiesWithinAABB(EntityPeatMummy.class, checkAABB);
 				int mummies = 0;
 				for(EntityPeatMummy mummy : peatMummies) {
-					if(mummy.getDistance(this) <= 32.0D)
+					if(mummy.getDistance(this) <= 64.0D && mummy.isSpawningFinished())
 						mummies++;
 				}
 				//Max. 4 peat mummies
@@ -305,7 +308,9 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			mummy.setHealth(30);
 			getEntityWorld().spawnEntity(mummy);
 			mummy.setCarryShimmerstone(false);
+			mummy.setBossMummy(true);
 			getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SCREAM, SoundCategory.HOSTILE, 1F, 1.0F);
+			TheBetweenlands.networkWrapper.sendToAllAround(new MessageSummonPeatMummyParticles(mummy), new TargetPoint(this.dimension, mummy.posX, mummy.posY, mummy.posZ, 64));
 		} else {
 			//Try again the next tick
 			untilSpawnMummy = 1;
@@ -342,7 +347,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	private void updateEatPrey() {
 		double direction = Math.toRadians(renderYawOffset);
-		currentEatPrey.setPositionAndRotation(posX - Math.sin(direction) * 1.7, posY + 1.7, posZ + Math.cos(direction) * 1.7, (float) (Math.toDegrees(direction) + 180), 0);
+		currentEatPrey.setPositionAndRotation(posX - Math.sin(direction) * 1.7, posY + 0.25, posZ + Math.cos(direction) * 1.7, (float) (Math.toDegrees(direction) + 180), 0);
 		currentEatPrey.rotationYawHead = currentEatPrey.prevRotationYawHead = currentEatPrey.rotationYaw = currentEatPrey.prevRotationYaw = ((float) (Math.toDegrees(direction) + 180));
 		currentEatPrey.fallDistance = 0;
 		if (ticksExisted % 10 == 0) {

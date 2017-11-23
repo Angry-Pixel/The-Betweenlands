@@ -7,8 +7,9 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
 
 public class ParticleBreakingBL extends ParticleBreaking {
-	protected ParticleBreakingBL(World worldIn, double posXIn, double posYIn, double posZIn, Item itemIn, int meta) {
+	protected ParticleBreakingBL(World worldIn, double posXIn, double posYIn, double posZIn, Item itemIn, int meta, float scale) {
 		super(worldIn, posXIn, posYIn, posZIn, itemIn, meta);
+		this.particleScale = scale;
 	}
 
 	public static final class Factory extends ParticleFactory<Factory, ParticleBreaking> {
@@ -18,7 +19,7 @@ public class ParticleBreakingBL extends ParticleBreaking {
 
 		@Override
 		public ParticleBreaking createParticle(ImmutableParticleArgs args) {
-			return new ParticleBreakingBL(args.world, args.x, args.y, args.z, args.data.getObject(Item.class, 0), args.data.getInt(1));
+			return new ParticleBreakingBL(args.world, args.x, args.y, args.z, args.data.getObject(Item.class, 0), args.data.getInt(1), args.scale);
 		}
 
 		@Override

@@ -20,6 +20,7 @@ import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.common.entity.loot.LootPropertyFrogType;
 import thebetweenlands.common.entity.loot.LootPropertyHasItem;
+import thebetweenlands.common.entity.loot.LootPropertyIsBossPeatMummy;
 import thebetweenlands.common.entity.loot.LootPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.entity.loot.LootPropertyPyradCharging;
 import thebetweenlands.common.lib.ModInfo;
@@ -69,6 +70,7 @@ public class LootTableRegistry {
     public static final ResourceLocation PROPERTY_PEAT_MUMMY_SHIMMERSTONE = register(new LootPropertyPeatMummyShimmerstone.Serializer());
     public static final ResourceLocation PROPERTY_PYRAD_CHARGING = register(new LootPropertyPyradCharging.Serializer());
     public static final ResourceLocation PROPERTY_HAS_ITEM = register(new LootPropertyHasItem.Serializer());
+    public static final ResourceLocation PROPERTY_IS_BOSS_MUMMY = register(new LootPropertyIsBossPeatMummy.Serializer());
     
 
     private static ResourceLocation register(String id) {

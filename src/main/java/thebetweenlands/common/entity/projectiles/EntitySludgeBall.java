@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.projectiles;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,9 +15,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -89,40 +92,47 @@ public class EntitySludgeBall extends EntityThrowable {
 		if(collision.typeOfHit == RayTraceResult.Type.BLOCK) {
 			IBlockState state = getEntityWorld().getBlockState(collision.getBlockPos());
 			if (state.getBlock().canCollideCheck(state, false)) {
-				AxisAlignedBB collisionBox = state.getCollisionBoundingBox(this.getEntityWorld(), collision.getBlockPos());
-				if(collisionBox != null) {
-					RayTraceResult intercept = collisionBox.calculateIntercept(new Vec3d(this.posX, this.posY, this.posZ), new Vec3d(this.posX+this.motionX, this.posY+this.motionY, this.posZ+this.motionZ));
-					if(intercept != null) {
-						if (collision.sideHit.getIndex() == 1 || collision.sideHit.getIndex() == 0) {
-							this.motionY *= -0.9D;
-							this.velocityChanged = true;
-							this.bounces++;
-							if (this.bounces >= 3) {
-								if(this.getEntityWorld().isRemote)
-									this.motionX = this.motionY = this.motionZ = 0.0D;
+				List<AxisAlignedBB> aabbs = new ArrayList<>();
+				state.addCollisionBoxToList(this.world, collision.getBlockPos(), this.getEntityBoundingBox().offset(this.motionX, this.motionY, this.motionZ), aabbs, this, true);
+				if(!aabbs.isEmpty()) {
+					if(Math.abs(this.motionY) <= 0.001) {
+						if(this.getEntityWorld().isRemote)
+							this.motionX = this.motionY = this.motionZ = 0.0D;
+						else 
+							explode();
+					}
+					if (collision.sideHit.getAxis() == Axis.Y) {
+						this.motionY *= -0.9D;
+						this.velocityChanged = true;
+						this.bounces++;
+						if (this.bounces >= 3) {
+							if(this.getEntityWorld().isRemote)
+								this.motionX = this.motionY = this.motionZ = 0.0D;
+							else 
 								explode();
-							} else {
-								getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.9f);
-								spawnBounceParticles(8);
-							}
-						} else if (collision.sideHit.getIndex() == 2 || collision.sideHit.getIndex() == 3) {
-							this.motionZ *= -0.9D;
-							this.velocityChanged = true;
-							this.bounces++;
-							if(this.bounces >= 3) {
-								if(this.getEntityWorld().isRemote)
-									this.motionX = this.motionY = this.motionZ = 0.0D;
+						} else {
+							getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.9f);
+							spawnBounceParticles(8);
+						}
+					} else if (collision.sideHit.getAxis() == Axis.Z) {
+						this.motionZ *= -0.9D;
+						this.velocityChanged = true;
+						this.bounces++;
+						if(this.bounces >= 3) {
+							if(this.getEntityWorld().isRemote)
+								this.motionX = this.motionY = this.motionZ = 0.0D;
+							else 
 								explode();
-							}
-						} else if (collision.sideHit.getIndex() == 4 || collision.sideHit.getIndex() == 5) {
-							this.motionX *= -0.9D;
-							this.velocityChanged = true;
-							this.bounces++;
-							if(this.bounces >= 3) {
-								if(this.getEntityWorld().isRemote)
-									this.motionX = this.motionY = this.motionZ = 0.0D;
+						}
+					} else if (collision.sideHit.getAxis() == Axis.X) {
+						this.motionX *= -0.9D;
+						this.velocityChanged = true;
+						this.bounces++;
+						if(this.bounces >= 3) {
+							if(this.getEntityWorld().isRemote)
+								this.motionX = this.motionY = this.motionZ = 0.0D;
+							else 
 								explode();
-							}
 						}
 					}
 				}
