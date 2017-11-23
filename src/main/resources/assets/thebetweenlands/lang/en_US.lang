@@ -306,6 +306,7 @@ tile.thebetweenlands.walkway.name=Walkway
 tile.thebetweenlands.wood_chip_path.name=Weedwood Chip Path
 tile.thebetweenlands.thatch_roof.name=Thatch Roof
 tile.thebetweenlands.thatch.name=Thatch
+tile.thebetweenlands.repeller.name=Repeller
 
 # Items
 
@@ -774,6 +775,8 @@ chat.amulet.slot.added=Added a new amulet slot
 chat.amulet.slot.full=Can't add any more amulet slots
 
 chat.event.spook=You feel a chill in the air... the haunting season has begun!
+
+chat.repeller.shimmerstone_missing=The repeller needs a Shimmerstone to run
 
 # Damage Source
 death.attack.suffocation=%s was suffocated by a Shallowbreath

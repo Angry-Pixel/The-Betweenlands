@@ -48,6 +48,7 @@ import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockMortar;
 import thebetweenlands.common.block.container.BlockPurifier;
+import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.block.container.BlockTarLootPot;
 import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 import thebetweenlands.common.block.container.BlockWeedwoodWorkbench;
@@ -567,8 +568,11 @@ public class BlockRegistry {
     public static final Block WALKWAY = new BlockWalkway();
     public static final Block WOOD_CHIP_PATH = new BlockChipPath();
     public static final Block THATCH_ROOF = new BlockThatchRoof();
+    public static final Block REPELLER = new BlockRepeller();
+    
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
     public static final List<ItemBlock> ITEM_BLOCKS = new ArrayList<ItemBlock>();
+    
     private BlockRegistry() {
     }
 

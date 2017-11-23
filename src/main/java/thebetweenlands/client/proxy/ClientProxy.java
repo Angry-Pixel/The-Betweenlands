@@ -132,6 +132,7 @@ import thebetweenlands.client.render.tile.RenderMudFlowerPot;
 import thebetweenlands.client.render.tile.RenderPestleAndMortar;
 import thebetweenlands.client.render.tile.RenderPossessedBlock;
 import thebetweenlands.client.render.tile.RenderPurifier;
+import thebetweenlands.client.render.tile.RenderRepeller;
 import thebetweenlands.client.render.tile.RenderSpawnerBetweenlands;
 import thebetweenlands.client.render.tile.RenderSpikeTrap;
 import thebetweenlands.client.render.tile.RenderTarLootPot1;
@@ -219,6 +220,7 @@ import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -484,6 +486,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityTarLootPot3.class, new RenderTarLootPot3());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectVial.class, new RenderAspectVial());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectrusCrop.class, new RenderAspectrusCrop());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new RenderRepeller());
 		
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -505,6 +508,7 @@ public class ClientProxy extends CommonProxy {
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ANIMATOR), 0, TileEntityAnimator.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ALEMBIC), 0, TileEntityAlembic.class);
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.ITEM_SHELF), 0, TileEntityItemShelf.class);
+		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.REPELLER), 0, TileEntityRepeller.class);
 		for(EnumFacing facing : EnumFacing.HORIZONTALS) {
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_1.getMetadata(facing), TileEntityTarLootPot1.class);
 			ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.TAR_LOOT_POT), EnumLootPot.POT_2.getMetadata(facing), TileEntityTarLootPot2.class);

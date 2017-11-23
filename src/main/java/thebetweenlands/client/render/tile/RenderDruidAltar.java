@@ -223,7 +223,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 	private void renderShine(float rotation, int iterations) {
 		Random random = new Random(432L);
 		GlStateManager.disableTexture2D();
-		GL11.glShadeModel(GL11.GL_SMOOTH);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 		GlStateManager.disableAlpha();
@@ -258,7 +258,7 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		GlStateManager.depthMask(true);
 		GlStateManager.disableCull();
 		GlStateManager.disableBlend();
-		GL11.glShadeModel(GL11.GL_FLAT);
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableAlpha();
