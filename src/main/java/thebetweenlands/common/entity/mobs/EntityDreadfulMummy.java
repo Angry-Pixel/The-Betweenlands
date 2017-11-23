@@ -2,6 +2,8 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -28,6 +30,7 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -47,6 +50,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss, IEntityScreenShake, IEntityCameraOffset, IEntityMusic {
@@ -560,15 +564,11 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
         super.removeTrackingPlayer(player);
         bossInfo.removePlayer(player);
     }
-
+	
+	@Nullable
 	@Override
-	protected void dropFewItems(boolean killedByPlayer, int looting) {
-		//TODO loot table
-		dropItem(ItemRegistry.RING_OF_SUMMONING, 1);
-		for(int i = 0; i < getEntityWorld().rand.nextInt(3) + 1 + getEntityWorld().rand.nextInt(looting + 1) * 2; i++) {
-			dropItem(ItemRegistry.SHIMMER_STONE, 1);
-		}
-		dropItem(ItemRegistry.AMULET_SLOT, 1);
+	protected ResourceLocation getLootTable() {
+		return LootTableRegistry.DREADFUL_PEAT_MUMMY;
 	}
 
 	@Override

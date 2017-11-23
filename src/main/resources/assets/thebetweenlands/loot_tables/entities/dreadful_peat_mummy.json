@@ -1,0 +1,40 @@
+{
+  "pools": [
+    {
+      "name": "ring_of_summoning",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:ring_of_summoning",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "amulet_slot",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:amulet_slot",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "shimmer_stone",
+      "rolls": {
+        "min": 3,
+        "max": 6
+      },
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:shimmer_stone",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}
