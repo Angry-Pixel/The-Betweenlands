@@ -775,7 +775,7 @@ chat.amulet.slot.full=Can't add any more amulet slots
 chat.event.spook=You feel a chill in the air... the haunting season has begun!
 
 # Damage Source
-death.attack.suffocation=%s suffocated in a Gas Cloud
+death.attack.suffocation=%s was suffocated by a Shallowbreath
 
 # Elixirs
 bl.elixir.petrify=Petrify
@@ -856,7 +856,7 @@ entity.thebetweenlands.pyrad.name=Pyrad
 entity.thebetweenlands.pyrad_flame.name=Pyrad Flame
 entity.thebetweenlands.shockwave_block.name=ShockWave Block
 entity.thebetweenlands.frog.name=Frog
-entity.thebetweenlands.gas_cloud.name=Gas Cloud
+entity.thebetweenlands.gas_cloud.name=Shallowbreath
 entity.thebetweenlands.weedwood_rowboat.name=Weedwood Rowboat
 entity.thebetweenlands.bl_arrow.name=Arrow
 
