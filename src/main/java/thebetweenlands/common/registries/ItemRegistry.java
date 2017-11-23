@@ -108,6 +108,7 @@ public class ItemRegistry {
     public static final Item VALONITE_LEGGINGS = new ItemValoniteArmor(EntityEquipmentSlot.LEGS);
     public static final Item VALONITE_BOOTS = new ItemValoniteArmor(EntityEquipmentSlot.FEET);
     public static final Item RUBBER_BOOTS = new ItemRubberBoots();
+    public static final Item MARSH_RUNNER_BOOTS = new ItemMarshRunnerBoots();
     public static final Item SKULL_MASK = new ItemSkullMask();
     public static final Item EXPLORERS_HAT = new ItemExplorersHat();
     //TOOLS

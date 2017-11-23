@@ -1,13 +1,17 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -22,6 +26,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.ITintedBlock;
+import thebetweenlands.common.item.armor.ItemMarshRunnerBoots;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -42,6 +47,24 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		return this;
 	}
 
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+		if(entityIn instanceof EntityPlayer && ItemMarshRunnerBoots.checkPlayerWalkOnWater((EntityPlayer) entityIn)) {
+				addCollisionBoxToList(pos, entityBox, collidingBoxes, new AxisAlignedBB(0, 0, 0, 1, ((float)this.getQuantaValue(worldIn, pos) / (float)this.quantaPerBlock) * 0.8F + 0.3F, 1));
+				return;
+		}
+		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+    }
+	
+	@Override
+    @Nonnull
+    public Vec3d modifyAcceleration(@Nonnull World world, @Nonnull BlockPos pos, @Nonnull Entity entity, @Nonnull Vec3d vec) {
+		if(entity instanceof EntityPlayer && ItemMarshRunnerBoots.checkPlayerWalkOnWater((EntityPlayer) entity)) {
+			return Vec3d.ZERO;
+		}
+		return super.modifyAcceleration(world, pos, entity, vec);
+    }
+	
 	@Override
 	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
 		if (world.isAirBlock(pos)) return true;

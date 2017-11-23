@@ -8,54 +8,43 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import thebetweenlands.api.aspect.ItemAspectContainer;
-import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class RecipeMummyBait extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
+public class RecipeMarshRunnerBoots extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	@Override
 	public boolean matches(InventoryCrafting crafter, World world) {
 		boolean vial = false;
-		boolean shimmerstone = false;
-		boolean heart = false;
-		boolean sludge = false;
+		boolean boots = false;
 
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
 			if(!stack.isEmpty()) {
-				if(stack.getItem() == ItemRegistry.SHIMMER_STONE) {
-					if(shimmerstone)
+				if(stack.getItem() == ItemRegistry.RUBBER_BOOTS) {
+					if(boots)
 						return false;
-					shimmerstone = true;
-				} else if(EnumItemMisc.TAR_BEAST_HEART_ANIMATED.isItemOf(stack)) {
-					if(heart)
-						return false;
-					heart = true;
-				} else if(stack.getItem() == ItemRegistry.SLUDGE_BALL) {
-					if(sludge)
-						return false;
-					sludge = true;
+					boots = true;
 				} else if(stack.getItem() == ItemRegistry.ASPECT_VIAL) {
 					if(vial)
 						return false;
 					ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(stack);
-					int amount = aspectContainer.get(AspectRegistry.ARMANIIS);
+					int amount = aspectContainer.get(AspectRegistry.BYRGINAZ);
 					if(amount >= 1000)
 						vial = true;
 				}
 			}
 		}
-		return vial && shimmerstone && heart && sludge;
+		return vial && boots;
 	}
 
 	@Override
 	public ItemStack getCraftingResult(InventoryCrafting crafter) {
-		return new ItemStack(ItemRegistry.MUMMY_BAIT);
+		return new ItemStack(ItemRegistry.MARSH_RUNNER_BOOTS);
 	}
 
 	@Override
 	public boolean canFit(int width, int height) {
-		return width * height >= 4;
+		return width * height >= 2;
 	}
 
 	@Override
@@ -77,8 +66,8 @@ public class RecipeMummyBait extends IForgeRegistryEntry.Impl<IRecipe> implement
 			if(!stack.isEmpty() && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
 				ItemStack newStack = stack.copy();
 				ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(newStack);
-				int leftAmount = aspectContainer.get(AspectRegistry.ARMANIIS) - 1000;
-				aspectContainer.set(AspectRegistry.ARMANIIS, leftAmount);
+				int leftAmount = aspectContainer.get(AspectRegistry.BYRGINAZ) - 1000;
+				aspectContainer.set(AspectRegistry.BYRGINAZ, leftAmount);
 				if (leftAmount <= 0) {
 					remaining.set(i, ForgeHooks.getContainerItem(stack));
 				} else {

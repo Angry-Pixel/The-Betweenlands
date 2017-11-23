@@ -38,7 +38,7 @@ public class BlockMud extends Block {
 	public boolean canEntityWalkOnMud(Entity entity) {
 		if (entity instanceof EntityLivingBase && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive((EntityLivingBase) entity))
 			return false;
-		boolean canWalk = entity instanceof EntityPlayer && !((EntityPlayer) entity).inventory.armorItemInSlot(0).isEmpty() && ((EntityPlayer) entity).inventory.armorItemInSlot(0).getItem() instanceof ItemRubberBoots;
+		boolean canWalk = entity instanceof EntityPlayer && ItemRubberBoots.canEntityWalkOnMud(entity);
 		boolean hasLurkerArmor = entity instanceof EntityPlayer && entity.isInWater() && !((EntityPlayer) entity).inventory.armorItemInSlot(0).isEmpty() && ((EntityPlayer) entity).inventory.armorItemInSlot(0).getItem() == ItemRegistry.LURKER_SKIN_BOOTS;
 		return entity instanceof IEntityBL || entity instanceof EntityItem || canWalk || hasLurkerArmor || (entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode && ((EntityPlayer) entity).capabilities.isFlying);
 	}

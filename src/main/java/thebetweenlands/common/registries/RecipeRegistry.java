@@ -197,6 +197,7 @@ public class RecipeRegistry {
 		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName("thebetweenlands:recipes_lurker_skin_pouch_upgrade"));
 		registry.register(new RecipeMummyBait().setRegistryName("thebetweenlands:recipes_mummy_bait"));
 		registry.register(new RecipesAspectVials().setRegistryName("thebetweenlands:recipes_aspect_vial"));
+		registry.register(new RecipeMarshRunnerBoots().setRegistryName("thebetweenlands:marsh_runner_boots"));
 	}
 
 	private static void registerSmelting() {
