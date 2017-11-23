@@ -195,7 +195,7 @@ public class RecipeRegistry {
 		registry.register(new RecipesLifeCrystal().setRegistryName("thebetweenlands:recipes_life_rystal"));
 		registry.register(new RecipesPlantTonic().setRegistryName("thebetweenlands:recipes_plant_tonic"));
 		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName("thebetweenlands:recipes_lurker_skin_pouch_upgrade"));
-		registry.register(new RecipeSummonMummy().setRegistryName("thebetweenlands:recipes_mummy_bait"));
+		registry.register(new RecipeMummyBait().setRegistryName("thebetweenlands:recipes_mummy_bait"));
 		registry.register(new RecipesAspectVials().setRegistryName("thebetweenlands:recipes_aspect_vial"));
 	}
 

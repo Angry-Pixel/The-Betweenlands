@@ -4,17 +4,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
+import org.lwjgl.input.Keyboard;
+
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.lwjgl.input.Keyboard;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -27,10 +33,7 @@ import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
-import thebetweenlands.util.AdvancedRecipeHelper;
 import thebetweenlands.util.ColorUtils;
-
-import javax.annotation.Nullable;
 
 public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.ISubItemsItem {
     public ItemAspectVial() {
@@ -99,19 +102,17 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
 
     @Override
     public ItemStack getContainerItem(ItemStack itemStack) {
-        ItemStack containerDefault;
+        ItemStack containerEmpty;
         switch (itemStack.getItemDamage()) {
             default:
             case 0:
-                containerDefault = ItemRegistry.DENTROTHYST_VIAL.createStack(0);
+                containerEmpty = ItemRegistry.DENTROTHYST_VIAL.createStack(0);
                 break;
             case 1:
-                containerDefault = ItemRegistry.DENTROTHYST_VIAL.createStack(2);
+                containerEmpty = ItemRegistry.DENTROTHYST_VIAL.createStack(2);
                 break;
         }
-        ItemStack containerRubberBoots = AdvancedRecipeHelper.getContainerItem(itemStack, ItemStack.EMPTY, "rubberBoots");
-        ItemStack containerBait = AdvancedRecipeHelper.getContainerItem(itemStack, ItemStack.EMPTY, "bait");
-        return !containerRubberBoots.isEmpty() ? containerRubberBoots : (!containerBait.isEmpty() ? containerBait : containerDefault);
+        return containerEmpty;
     }
 
     @Override
@@ -138,11 +139,6 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
         }
         return 0xFFFFFFFF;
     }
-
-    /*@Override
-    public boolean doesContainerItemLeaveCraftingGrid(ItemStack itemStack) {
-        return false;
-    }*/
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
