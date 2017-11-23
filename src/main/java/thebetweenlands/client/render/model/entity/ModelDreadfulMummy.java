@@ -285,11 +285,11 @@ public class ModelDreadfulMummy extends MowzieModelBase {
 			this.legright1.rotateAngleX += contractAngle;
 			f1 += Math.cos(mummy.deathTicks) / 2.0F * Math.sin(mummy.deathTicks / 2.0D);
 
-			if(mummy.deathTicks > 80) {
-				float progress = (mummy.deathTicks - 80) / 40.0F;
-				double rotateAngle = progress * Math.PI * 2.0F / 6.5F;
-				this.shoulders.rotateAngleX += rotateAngle;
-				this.body_base.rotateAngleX += rotateAngle;
+			if(mummy.deathTicks > 60) {
+				float progress = (mummy.deathTicks - 60) / 40.0F;
+				float rotateAngle = progress * (float)Math.PI * 2.0F / 8F;
+				this.shoulders.rotateAngleX = rotateAngle;
+				this.body_base.rotateAngleX = rotateAngle;
 			}
 		}
 

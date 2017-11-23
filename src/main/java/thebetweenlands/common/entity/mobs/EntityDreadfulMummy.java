@@ -197,10 +197,6 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			currentEatPrey = null;
 		}
 
-		if(deathTicks > 80) {
-			setYOffset(-(deathTicks - 80) * 0.08F);
-		}
-
 		if(getEntityWorld().isRemote) {
 			if(getSpawningProgress() < 1.0F) {
 				setYOffset(getCurrentOffset());
@@ -226,10 +222,33 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 						getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(state));
 					}
 				}
-			} else {
+			} else if(this.deathTicks == 0) {
 				setYOffset(0F);
+			} else if(this.deathTicks > 60) {
+				motionX = 0;
+				motionY = 0;
+				motionZ = 0;
+				if (this.deathTicks % 5 == 0) {
+					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
+					IBlockState state = getEntityWorld().getBlockState(pos);
+					double px = posX + rand.nextDouble() - 0.5F;
+					double py = posY + rand.nextDouble() * 0.2 + 0.075;
+					double pz = posZ + rand.nextDouble() - 0.5F;
+					for (int i = 0, amount = rand.nextInt(20) + 15; i < amount; i++) {
+						double ox = rand.nextDouble() * 0.1F - 0.05F;
+						double oz = rand.nextDouble() * 0.1F - 0.05F;
+						double motionX = rand.nextDouble() * 0.2 - 0.1;
+						double motionY = rand.nextDouble() * 0.25 + 0.1;
+						double motionZ = rand.nextDouble() * 0.2 - 0.1;
+						getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(state));
+					}
+				}
 			}
 		} else {
+			if(deathTicks > 60) {
+				setYOffset(-(deathTicks - 60) * 0.05F);
+			}
+			
 			if(getSpawningProgress() < 1.0F) {
 
 				if(getSpawningState() == 0) {
@@ -254,7 +273,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 				if(getSpawningState() == getSpawningLength() - 1) {
 					setPosition(posX, posY, posZ);
 				}
-			} else if(deathTicks < 80) {
+			} else if(deathTicks < 60) {
 				setYOffset(0);
 				prevYOffset = 0;
 			}
