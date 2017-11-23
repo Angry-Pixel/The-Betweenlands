@@ -86,7 +86,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		dataManager.register(SPAWNING_STATE_DW, 20);
+		dataManager.register(SPAWNING_STATE_DW, 0);
 		dataManager.register(PREY, 0);
 		dataManager.register(Y_OFFSET, 0F);
 	}
@@ -127,14 +127,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	@Override
 	public double getYOffset() {
 		return dataManager.get(Y_OFFSET);
-	/*	if(deathTicks > 80) {
-			return -(deathTicks - 80) * 0.08F;
-		} else {
-			return super.getYOffset();
-		}
-		*/
 	}
-	
+
 	public void setYOffset(float yOffset) {
 		dataManager.set(Y_OFFSET, yOffset);
 	}
@@ -169,6 +163,15 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		return 1.0F / getSpawningLength() * (getSpawningState() + (getSpawningState() == getSpawningLength() ? 0 : delta));
 	}
 
+	/**
+	 * Returns the interpolated relative spawning progress
+	 * @param partialTicks
+	 * @return
+	 */
+	public float getInterpolatedYOffsetProgress(float partialTicks) {
+		return this.prevYOffset + (((float)this.getYOffset()) - this.prevYOffset) * partialTicks;
+	}
+
 	public void updateSpawningState() {
 		int spawningState = getSpawningState();
 		if(spawningState < getSpawningLength()) {
@@ -179,6 +182,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		this.prevYOffset = (float) getYOffset();
+
 		Entity prey = getPrey();
 		if(prey instanceof EntityLivingBase) {
 			currentEatPrey = (EntityLivingBase)prey;
@@ -200,24 +205,22 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 				motionY = 0;
 				motionZ = 0;
 				if(getSpawningState() == getSpawningLength() - 1) {
-					setPosition(posX, posY + 0.22D, posZ);
+					setPosition(posX, posY, posZ);
 				}
 				int breakPoint = getSpawningLength() / BREAK_COUNT;
 				if ((getSpawningState() - breakPoint / 2 - 1) % breakPoint == 0) {
-					int x = MathHelper.floor(posX), y = MathHelper.floor(posY - getYOffset()), z = MathHelper.floor(posZ);
-					IBlockState state = getEntityWorld().getBlockState(getPosition().down());
-					Block block = state.getBlock();
+					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
+					IBlockState state = getEntityWorld().getBlockState(pos);
 					double px = posX + rand.nextDouble() - 0.5F;
-					double py = posY - getYOffset() + rand.nextDouble() * 0.2 + 0.075;
+					double py = posY + rand.nextDouble() * 0.2 + 0.075;
 					double pz = posZ + rand.nextDouble() - 0.5F;
-					getEntityWorld().playSound(null, getPosition(), block.getSoundType(state, getEntityWorld(), getPosition().down(), null).getBreakSound(), SoundCategory.BLOCKS, rand.nextFloat() * 0.3F + 0.3F, rand.nextFloat() * 0.15F + 0.7F);
 					for (int i = 0, amount = rand.nextInt(20) + 15; i < amount; i++) {
 						double ox = rand.nextDouble() * 0.1F - 0.05F;
 						double oz = rand.nextDouble() * 0.1F - 0.05F;
 						double motionX = rand.nextDouble() * 0.2 - 0.1;
 						double motionY = rand.nextDouble() * 0.25 + 0.1;
 						double motionZ = rand.nextDouble() * 0.2 - 0.1;
-						getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getIdFromBlock(block));
+						getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox, py, pz + oz, motionX, motionY, motionZ, Block.getStateId(state));
 					}
 				}
 			} else {
@@ -225,7 +228,6 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			}
 		} else {
 			if(getSpawningProgress() < 1.0F) {
-				prevYOffset = (float) getYOffset();
 
 				if(getSpawningState() == 0) {
 					getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_EMERGE, SoundCategory.HOSTILE, 1.2F, 1.0F);
@@ -237,9 +239,17 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 				motionX = 0;
 				motionZ = 0;
 				velocityChanged = true;
+
+				int breakPoint = getSpawningLength() / BREAK_COUNT;
+				if ((getSpawningState() - breakPoint / 2 - 1) % breakPoint == 0) {
+					BlockPos pos = new BlockPos(this.posX, this.posY - 1, this.posZ);
+					IBlockState blockState = this.world.getBlockState(pos);
+					playSound(blockState.getBlock().getSoundType().getBreakSound(), this.rand.nextFloat() * 0.3F + 0.3F, this.rand.nextFloat() * 0.15F + 0.7F);
+				}
+
 				if(getAttackTarget() != null) faceEntity(getAttackTarget(), 360, 360);
 				if(getSpawningState() == getSpawningLength() - 1) {
-					setPosition(posX, posY + 0.22D, posZ);
+					setPosition(posX, posY, posZ);
 				}
 			} else if(deathTicks < 80) {
 				setYOffset(0);
@@ -326,7 +336,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			setPrey((EntityLivingBase)target);
 		}
 		if(attacked)
-		getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SWIPE, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
+			getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_SWIPE, SoundCategory.HOSTILE, 1F, 0.7F + rand.nextFloat() * 0.6F);
 		return attacked;
 	}
 
@@ -432,7 +442,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 								double motionX = rand.nextDouble() * 0.2 - 0.1;
 								double motionY = rand.nextDouble() * 0.25 + 0.1;
 								double motionZ = rand.nextDouble() * 0.2 - 0.1;
-								getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox + xo, py, pz + oz + zo, motionX, motionY, motionZ, Block.getIdFromBlock(block));
+								getEntityWorld().spawnParticle(EnumParticleTypes.BLOCK_DUST, px + ox + xo, py, pz + oz + zo, motionX, motionY, motionZ, Block.getStateId(state));
 							}
 						}
 					}
@@ -529,6 +539,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	@Override
 	protected void dropFewItems(boolean killedByPlayer, int looting) {
+		//TODO loot table
 		dropItem(ItemRegistry.RING_OF_SUMMONING, 1);
 		for(int i = 0; i < getEntityWorld().rand.nextInt(3) + 1 + getEntityWorld().rand.nextInt(looting + 1) * 2; i++) {
 			dropItem(ItemRegistry.SHIMMER_STONE, 1);
@@ -537,8 +548,18 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	}
 
 	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return 0.5F;
+	}
+
+	@Override
+	protected boolean isValidLightLevel() {
+		return true;
+	}
+
+	@Override
 	public String getMusicFile(EntityPlayer listener) {
-		return "thebetweenlands:dreadfulPeatMummyLoop";
+		return "thebetweenlands:dreadful_peat_mummy_loop";
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class AdvancedRecipeHelper {
     public static ItemStack getContainerItem(ItemStack stack, ItemStack defaultContainer, String recipe) {
         NBTTagCompound nbt = stack.getTagCompound() != null ? stack.getTagCompound() : new NBTTagCompound();
         boolean hasContainerItem = nbt.hasKey("containerItem." + recipe);
-        ItemStack containerItem = hasContainerItem ? new ItemStack(nbt.getCompoundTag("containerItem." + recipe)) : null;
+        ItemStack containerItem = hasContainerItem ? new ItemStack(nbt.getCompoundTag("containerItem." + recipe)) : ItemStack.EMPTY;
         if(hasContainerItem)
             nbt.removeTag("containerItem." + recipe);
         return hasContainerItem ? containerItem : defaultContainer;

@@ -20,4 +20,9 @@ public class RenderDreadfulMummy extends RenderLiving<EntityDreadfulMummy> {
 	protected ResourceLocation getEntityTexture(EntityDreadfulMummy entity) {
 		return TEXTURE;
 	}
+
+	@Override
+	public void doRender(EntityDreadfulMummy entity, double x, double y, double z, float entityYaw, float partialTicks) {
+		super.doRender(entity, x, y + entity.getInterpolatedYOffsetProgress(partialTicks), z, entityYaw, partialTicks);
+	}
 }

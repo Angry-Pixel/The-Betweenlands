@@ -101,8 +101,8 @@ public class EntityRegistry {
 		registerEntity(EntityFortressBossTeleporter.class, "fortress_boss_teleporter", 64, 5, false);
         registerEntity(EntityWeedwoodRowboat.class, "weedwood_rowboat");
 		registerEntity(EntityElixir.class, "bl_elexir", 64, 20, true);
-		registerEntity(EntityDreadfulMummy.class, "dreadfulMummy", 0x000000, 0x591E08, 64, 1, true);
-		registerEntity(EntitySludgeBall.class, "sludgeBall", 64, 20, true);
+		registerEntity(EntityDreadfulMummy.class, "dreadful_mummy", 0x000000, 0x591E08, 64, 1, true);
+		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
 	}
 
 	private static int id = 0;

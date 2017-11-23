@@ -179,9 +179,6 @@ public class RecipeRegistry {
 //
 //		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
 //		RecipeHelper.addRecipe(new RecipeImprovedRubberBoots());
-//
-//		RecipeSorter.register("thebetweenlands:summonMummy", RecipeSummonMummy.class, SHAPELESS, "after:minecraft:shapeless");
-//		RecipeHelper.addRecipe(new RecipeSummonMummy());*/
 
 		//TODO Manual
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
@@ -198,6 +195,7 @@ public class RecipeRegistry {
 		registry.register(new RecipesLifeCrystal().setRegistryName("thebetweenlands:recipes_life_rystal"));
 		registry.register(new RecipesPlantTonic().setRegistryName("thebetweenlands:recipes_plant_tonic"));
 		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName("thebetweenlands:recipes_lurker_skin_pouch_upgrade"));
+		registry.register(new RecipeSummonMummy().setRegistryName("thebetweenlands:recipes_mummy_bait"));
 		registry.register(new RecipesAspectVials().setRegistryName("thebetweenlands:recipes_aspect_vial"));
 	}
 

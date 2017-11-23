@@ -20,6 +20,9 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemRubberBoots;
 import thebetweenlands.common.registries.ItemRegistry;
 
+import javax.annotation.Nullable;
+import java.util.List;
+
 
 public class BlockMud extends Block {
 	protected static final AxisAlignedBB MUD_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.875D, 1.0D);
@@ -48,6 +51,15 @@ public class BlockMud extends Block {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
 		return MUD_AABB;
+	}
+
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entity, boolean isActualState) {
+		AxisAlignedBB blockAABB = FULL_BLOCK_AABB.offset(pos);
+		if (entityBox.intersects(blockAABB) && (entity == null || canEntityWalkOnMud(entity)))
+			collidingBoxes.add(blockAABB);
+		else
+			if (world.isRemote) collidingBoxes.add(MUD_AABB.offset(pos));
 	}
 
 	@Override

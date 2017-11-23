@@ -109,9 +109,9 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
                 containerDefault = ItemRegistry.DENTROTHYST_VIAL.createStack(2);
                 break;
         }
-        ItemStack containerRubberBoots = AdvancedRecipeHelper.getContainerItem(itemStack, null, "rubberBoots");
-        ItemStack containerBait = AdvancedRecipeHelper.getContainerItem(itemStack, null, "bait");
-        return containerRubberBoots != null ? containerRubberBoots : (containerBait != null ? containerBait : containerDefault);
+        ItemStack containerRubberBoots = AdvancedRecipeHelper.getContainerItem(itemStack, ItemStack.EMPTY, "rubberBoots");
+        ItemStack containerBait = AdvancedRecipeHelper.getContainerItem(itemStack, ItemStack.EMPTY, "bait");
+        return !containerRubberBoots.isEmpty() ? containerRubberBoots : (!containerBait.isEmpty() ? containerBait : containerDefault);
     }
 
     @Override
