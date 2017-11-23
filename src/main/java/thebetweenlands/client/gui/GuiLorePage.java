@@ -1,5 +1,6 @@
 package thebetweenlands.client.gui;
 
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.gui.GuiScreen;
@@ -42,8 +43,9 @@ public class GuiLorePage extends GuiScreen {
 		super.drawScreen(mouseX, mouseY, renderPartials);
 
 		if (this.pageTexture != null) {
-			ITextureObject texture = this.mc.renderEngine.getTexture(this.pageTexture);
+			GlStateManager.color(1F, 1F, 1F, 1F);
 			this.mc.renderEngine.bindTexture(this.pageTexture);
+			ITextureObject texture = this.mc.renderEngine.getTexture(this.pageTexture);
 			texture.setBlurMipmap(true, false);
 			drawTexture(xStart, yStart, (int) WIDTH, (int) HEIGHT, WIDTH, HEIGHT, 0.0D, WIDTH, 0.0D, HEIGHT);
 			texture.restoreLastBlurMipmap();
