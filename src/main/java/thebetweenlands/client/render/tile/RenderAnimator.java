@@ -62,6 +62,9 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 			meta = te.getBlockMetadata();
 		}
 
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(x + 0.5F, y + 1.5F, z + 0.5F);
