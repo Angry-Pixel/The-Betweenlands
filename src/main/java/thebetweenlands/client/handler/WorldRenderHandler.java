@@ -176,7 +176,7 @@ public class WorldRenderHandler {
 						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 						GlStateManager.color(0.0F, 0.4F + (float)(Math.sin(System.nanoTime() / 500000000.0F) + 1.0F) * 0.2F, 0.8F - (float)(Math.cos(System.nanoTime() / 400000000.0F) + 1.0F) * 0.2F, 1.0F);
 						GlStateManager.disableCull();
-						
+
 						//Render to G-Buffer 1
 						for(Entry<Vec3d, Float> e : REPELLER_SHIELDS) {
 							Vec3d pos = e.getKey();
@@ -186,16 +186,16 @@ public class WorldRenderHandler {
 							GL11.glCallList(sphereDispList);
 							GlStateManager.popMatrix();
 						}
-	
+
 						GlStateManager.enableTexture2D();
 						GlStateManager.enableCull();
 						GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 						GlStateManager.color(1, 1, 1, 1);
-	
-						mainFramebuffer.bindFramebuffer(false);
 					}
-					
+
 					gBuffer.updateDepthBuffer();
+
+					mainFramebuffer.bindFramebuffer(false);
 				}
 			}
 		} else if(sphereDispList >= 0 && !REPELLER_SHIELDS.isEmpty()) {
