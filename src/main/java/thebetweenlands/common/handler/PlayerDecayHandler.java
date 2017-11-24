@@ -57,44 +57,46 @@ public class PlayerDecayHandler {
 					capability.setRemovedHealth(capability.getRemovedHealth() - healthDiff);
 				}
 
-				int decay = stats.getDecayLevel();
-
-				if (decay >= 16) {
-					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 2, true, false));
-					player.jumpMovementFactor = 0.001F;
-				} else if (decay >= 13) {
-					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, true, false));
-					player.jumpMovementFactor = 0.002F;
-				} else if (decay >= 10) {
-					player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 0, true, false));
-				}
-
-				if(!event.player.isRiding()) {
-					EnumDifficulty difficulty = player.world.getDifficulty();
-
-					float decaySpeed = 0.0F;
-
-					switch(difficulty) {
-					case PEACEFUL:
-						decaySpeed = 0.0F;
-						break;
-					case EASY:
-						decaySpeed = 0.0025F;
-						break;
-					case NORMAL:
-						decaySpeed = 0.0033F;
-						break;
-					case HARD:
-						decaySpeed = 0.005F;
-						break;
+				if(capability.isDecayEnabled()) {
+					int decay = stats.getDecayLevel();
+	
+					if (decay >= 16) {
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 2, true, false));
+						player.jumpMovementFactor = 0.001F;
+					} else if (decay >= 13) {
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 1, true, false));
+						player.jumpMovementFactor = 0.002F;
+					} else if (decay >= 10) {
+						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 0, true, false));
 					}
-
-					if(player.isInWater()) {
-						decaySpeed *= 2.75F;
-					}
-
-					if(decaySpeed > 0.0F) {
-						stats.addDecayAcceleration(decaySpeed);
+	
+					if(!event.player.isRiding()) {
+						EnumDifficulty difficulty = player.world.getDifficulty();
+	
+						float decaySpeed = 0.0F;
+	
+						switch(difficulty) {
+						case PEACEFUL:
+							decaySpeed = 0.0F;
+							break;
+						case EASY:
+							decaySpeed = 0.0025F;
+							break;
+						case NORMAL:
+							decaySpeed = 0.0033F;
+							break;
+						case HARD:
+							decaySpeed = 0.005F;
+							break;
+						}
+	
+						if(player.isInWater()) {
+							decaySpeed *= 2.75F;
+						}
+	
+						if(decaySpeed > 0.0F) {
+							stats.addDecayAcceleration(decaySpeed);
+						}
 					}
 				}
 
