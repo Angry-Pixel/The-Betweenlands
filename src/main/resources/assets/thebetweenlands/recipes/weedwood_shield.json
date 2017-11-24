@@ -6,14 +6,9 @@
     " # "
   ],
   "key": {
-    "#": [
-      {
-        "item": "thebetweenlands:weedwood_planks"
-      },
-      {
-        "item": "thebetweenlands:weedwood"
-      }
-    ],
+    "#": {
+      "item": "thebetweenlands:log_weedwood"
+    },
     "I": {
       "item": "thebetweenlands:items_misc",
       "data": 7
