@@ -27,7 +27,7 @@ public class Serializers {
 
 		@Override
 		public Vec3d copyValue(Vec3d value) {
-			return null;
+			return new Vec3d(value.x, value.y, value.z);
 		}
 	};
 
