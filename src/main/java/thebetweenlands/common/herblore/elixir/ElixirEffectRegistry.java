@@ -21,7 +21,6 @@ import thebetweenlands.common.herblore.elixir.effects.ElixirStarvation;
 import thebetweenlands.common.herblore.elixir.effects.ElixirSwiftarm;
 import thebetweenlands.common.lib.ModInfo;
 
-@Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class ElixirEffectRegistry {
 	//Elixirs
 	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE, "241751b1-7e4c-409a-bc66-70ce1330b6f6", 3.0D, 2);

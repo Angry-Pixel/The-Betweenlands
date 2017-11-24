@@ -77,8 +77,8 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getRenderedItem() {
-		return ItemRegistry.MOSS_BED_ITEM;
+	public ItemStack getRenderedItem() {
+		return new ItemStack(ItemRegistry.MOSS_BED_ITEM);
 	}
 
 	@Override

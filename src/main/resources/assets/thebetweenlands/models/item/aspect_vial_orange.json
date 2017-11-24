@@ -1,5 +1,5 @@
 {
-  "parent": "thebetweenlands:item/aspect_vial",
+  "parent": "thebetweenlands:item/aspect_vial_green",
   "textures": {
     "layer1": "thebetweenlands:items/strictly_herblore/misc/vial_orange"
   },

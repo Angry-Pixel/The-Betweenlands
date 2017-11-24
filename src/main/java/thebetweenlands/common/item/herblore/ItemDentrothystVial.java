@@ -13,9 +13,11 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class ItemDentrothystVial extends Item implements ItemRegistry.ISingleJsonSubItems {
+public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStateItemModelDefinition {
 
     public ItemDentrothystVial() {
         this.setCreativeTab(BLCreativeTabs.HERBLORE);
@@ -70,14 +72,14 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.ISingleJso
     }
 
     @Override
-    public List<String> getTypes() {
-        List<String> models = new ArrayList<String>();
-        models.add("green");
-        models.add("dirty");
-        models.add("orange");
-        return models;
+    public Map<Integer, String> getVariants() {
+        Map<Integer, String> variants = new HashMap<>();
+        variants.put(0, "green");
+        variants.put(1, "dirty");
+        variants.put(2, "orange");
+        return variants;
     }
-
+    
     @Override
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return world.getBlockState(pos).getBlock() == BlockRegistry.ASPECT_VIAL_BLOCK;

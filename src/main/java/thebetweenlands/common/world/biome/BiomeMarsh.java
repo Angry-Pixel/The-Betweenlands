@@ -2,6 +2,7 @@ package thebetweenlands.common.world.biome;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,6 +15,7 @@ import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
@@ -30,7 +32,14 @@ public class BiomeMarsh extends BiomeBetweenlands {
 	private FogGenerator fogGenerator;
 
 	public BiomeMarsh(int type) {
-		super(new BiomeProperties("marsh_" + type).setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1).setHeightVariation(1.1F).setWaterColor(0x485E18).setTemperature(0.8F).setRainfall(0.9F));
+		super(new ResourceLocation(ModInfo.ID, "marsh_" + type),
+				new BiomeProperties("Marsh " + type)
+				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1)
+				.setHeightVariation(1.1F)
+				.setWaterColor(0x485E18)
+				.setTemperature(0.8F)
+				.setRainfall(0.9F));
+		
 		this.setWeight(type == 0 ? 10 : 4);
 		this.getBiomeGenerator()
 		.addFeature(type == 0 ? new Marsh1Feature() : new Marsh2Feature())

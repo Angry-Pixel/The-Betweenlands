@@ -30,7 +30,7 @@ public abstract class BlockDoorBetweenlands extends BlockDoor implements ICustom
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getRenderedItem() {
+	public ItemStack getRenderedItem() {
 		return this.getDoorItem();
 	}
 
@@ -43,13 +43,13 @@ public abstract class BlockDoorBetweenlands extends BlockDoor implements ICustom
 	@Override
 	@Nullable
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER ? null : this.getDoorItem();
+		return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER ? null : this.getDoorItem().getItem();
 	}
 
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(this.getDoorItem());
+		return this.getDoorItem().copy();
 	}
 
-	protected abstract Item getDoorItem();
+	protected abstract ItemStack getDoorItem();
 }

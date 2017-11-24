@@ -42,14 +42,14 @@ import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlockModelDefinition;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
 import java.util.Iterator;
 import java.util.Random;
 
-public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeBlock, IStateMappedBlock, ICustomItemBlock {
+public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeBlockModelDefinition, IStateMappedBlock, ICustomItemBlock {
     //-1, +1, -1, quadrant 0
     public static final IUnlistedProperty<Integer> TOP_NORTH_WEST_INDEX = new PropertyIntegerUnlisted("top_north_west_index");
     //+1, +1, -1, quadrant 1

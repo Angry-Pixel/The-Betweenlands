@@ -77,7 +77,7 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 	@Override
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	public Item getRenderedItem() {
-		return ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS;
+	public ItemStack getRenderedItem() {
+		return new ItemStack(ItemRegistry.MIDDLE_FRUIT_BUSH_SEEDS);
 	}
 }

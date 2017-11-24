@@ -1,8 +1,11 @@
 package thebetweenlands.common.item.herblore;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,7 +16,12 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatList;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
@@ -25,10 +33,7 @@ import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class ItemElixir extends Item implements ITintedItem, ItemMeshDefinition {
+public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlockStateItemModelDefinition {
     private final List<ElixirEffect> effects = new ArrayList<>();
 
     public ItemElixir() {
@@ -214,10 +219,15 @@ public class ItemElixir extends Item implements ITintedItem, ItemMeshDefinition 
         }
         return -1;
     }
-
-    @Override
-    public ModelResourceLocation getModelLocation(ItemStack stack) {
-        return new ModelResourceLocation(getRegistryName().toString(), stack.getItemDamage() % 2 == 0 ? "green": "orange");
+	
+	@Override
+    public Map<Integer, String> getVariants() {
+        Map<Integer, String> variants = new HashMap<>();
+        for (ElixirEffect effect : this.effects) {
+        	variants.put(effect.getID() * 2, "green");
+        	variants.put(effect.getID() * 2 + 1, "orange");
+        }
+        return variants;
     }
 }
 

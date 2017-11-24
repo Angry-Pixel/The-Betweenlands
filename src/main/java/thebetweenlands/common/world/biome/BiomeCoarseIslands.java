@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.biome;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -13,6 +14,7 @@ import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -25,12 +27,17 @@ import thebetweenlands.common.world.gen.biome.feature.CoarseIslandsFeature;
 public class BiomeCoarseIslands extends BiomeBetweenlands {
 
 	public BiomeCoarseIslands() {
-		super(new BiomeProperties("coarse_islands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 5).setHeightVariation(4.0F).setWaterColor(0x1b3944).setTemperature(0.8F).setRainfall(0.9F));
+		super(new ResourceLocation(ModInfo.ID, "coarse_islands"), 
+				new BiomeProperties("Coarse Islands")
+				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 5)
+				.setHeightVariation(4.0F)
+				.setWaterColor(0x1b3944)
+				.setTemperature(0.8F)
+				.setRainfall(0.9F));
 		this.setWeight(16);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorCoarseIslands(this))
 		.addFeature(new CoarseIslandsFeature())
 		.addFeature(new AlgaeFeature());
-
 	}
 
 	@Override

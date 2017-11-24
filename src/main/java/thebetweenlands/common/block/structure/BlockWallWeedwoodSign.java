@@ -44,8 +44,8 @@ public class BlockWallWeedwoodSign extends BlockWallSign implements ICustomItemB
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getRenderedItem() {
-		return this.getSignItem();
+	public ItemStack getRenderedItem() {
+		return new ItemStack(this.getSignItem());
 	}
 
 	protected Item getSignItem() {

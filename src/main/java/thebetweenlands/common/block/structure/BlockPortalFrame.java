@@ -28,9 +28,9 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
-import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlockModelDefinition;
 
-public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, ISubtypeBlock {
+public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, ISubtypeBlockModelDefinition {
 	public static final PropertyEnum<EnumPortalFrame> FRAME_POSITION = PropertyEnum.create("frame_position", EnumPortalFrame.class);
 	public static final PropertyBool X_AXIS = PropertyBool.create("x_axis");
 

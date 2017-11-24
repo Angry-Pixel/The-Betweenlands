@@ -38,7 +38,6 @@ import thebetweenlands.util.config.ConfigHandler;
 import java.lang.reflect.Field;
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class ItemRegistry {
     public final static Set<Item> ITEMS = new LinkedHashSet<>();
     //generic
@@ -356,11 +355,21 @@ public class ItemRegistry {
         }
     }
 
-    public interface ISubItemsItem {
+    public interface IMultipleItemModelDefinition {
+    	/**
+    	 * A map from item meta values to different item models
+    	 * @return
+    	 */
+    	@SideOnly(Side.CLIENT)
         Map<Integer, ResourceLocation> getModels();
     }
 
-    public interface ISingleJsonSubItems {
-        List<String> getTypes();
+    public interface IBlockStateItemModelDefinition {
+    	/**
+    	 * A maps from item meta values to blockstate variants
+    	 * @return
+    	 */
+    	@SideOnly(Side.CLIENT)
+        Map<Integer, String> getVariants();
     }
 }

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
@@ -32,6 +33,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.container.BlockAlembic;
 import thebetweenlands.common.block.container.BlockAnimator;
@@ -169,7 +171,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.config.ConfigHandler;
 
-@Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class BlockRegistry {
     public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
     public static final Block STAGNANT_WATER = new BlockStagnantWater();
@@ -534,20 +535,20 @@ public class BlockRegistry {
     public static final Block ENERGY_BARRIER = new BlockEnergyBarrier();
     public static final Block WEEDWOOD_DOOR = new BlockDoorBetweenlands(Material.WOOD) {
         @Override
-        public Item getDoorItem() {
-            return ItemRegistry.WEEDWOOD_DOOR_ITEM;
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.WEEDWOOD_DOOR_ITEM);
         }
     }.setSoundType(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
     public static final Block RUBBER_TREE_PLANK_DOOR = new BlockDoorBetweenlands(Material.WOOD) {
         @Override
-        public Item getDoorItem() {
-            return ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM;
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.RUBBER_TREE_PLANK_DOOR_ITEM);
         }
     }.setSoundType(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block SYRMORITE_DOOR = new BlockDoorBetweenlands(Material.IRON) {
         @Override
-        public Item getDoorItem() {
-            return ItemRegistry.SYRMORITE_DOOR_ITEM;
+        public ItemStack getDoorItem() {
+            return new ItemStack(ItemRegistry.SYRMORITE_DOOR_ITEM);
         }
     }.setSoundType(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
     public static final Block STANDING_WEEDWOOD_SIGN = new BlockStandingWeedwoodSign();
@@ -622,14 +623,17 @@ public class BlockRegistry {
             }
             if (block instanceof ICustomItemBlock) {
                 ICustomItemBlock customItemBlock = (ICustomItemBlock) block;
-                if (customItemBlock.getRenderedItem() != null) {
-                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(customItemBlock.getRenderedItem().getRegistryName(), "inventory"));
+                ItemStack renderedItem = customItemBlock.getRenderedItem();
+                if (!renderedItem.isEmpty()) {
+                	Map<Integer, ResourceLocation> map = TheBetweenlands.proxy.getItemModelMap(renderedItem.getItem());
+                	ModelResourceLocation model = (ModelResourceLocation) map.get(renderedItem.getMetadata());
+                    ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, model);
                     continue;
                 }
             }
             ResourceLocation name = block.getRegistryName();
-            if (block instanceof ISubtypeBlock) {
-                ISubtypeBlock subtypeBlock = (ISubtypeBlock) block;
+            if (block instanceof ISubtypeBlockModelDefinition) {
+                ISubtypeBlockModelDefinition subtypeBlock = (ISubtypeBlockModelDefinition) block;
                 for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
                     int meta = subtypeBlock.getSubtypeMeta(i);
                     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
@@ -660,13 +664,12 @@ public class BlockRegistry {
          * @return
          */
         @SideOnly(Side.CLIENT)
-        @Nullable
-        default Item getRenderedItem() {
-            return null;
+        default ItemStack getRenderedItem() {
+            return ItemStack.EMPTY;
         }
     }
 
-    public interface ISubtypeBlock {
+    public interface ISubtypeBlockModelDefinition {
         /**
          * Returns the amount of subtypes
          *
@@ -711,7 +714,6 @@ public class BlockRegistry {
             registry.register(block);
         }
     }
-
 }
 
 

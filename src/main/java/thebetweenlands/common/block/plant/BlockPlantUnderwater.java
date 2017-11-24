@@ -209,6 +209,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 		return 0;
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;

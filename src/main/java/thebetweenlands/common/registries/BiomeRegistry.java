@@ -14,7 +14,7 @@ import java.lang.ref.Reference;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-@Mod.EventBusSubscriber
+
 public class BiomeRegistry {
     public static final BiomeBetweenlands PATCHY_ISLANDS = new BiomePatchyIslands();
     public static final BiomeBetweenlands SWAMPLANDS = new BiomeSwamplands();
@@ -23,6 +23,7 @@ public class BiomeRegistry {
     public static final BiomeBetweenlands SLUDGE_PLAINS = new BiomeSludgePlains();
     public static final BiomeBetweenlands MARSH_0 = new BiomeMarsh(0);
     public static final BiomeBetweenlands MARSH_1 = new BiomeMarsh(1);
+    
     public static final List<BiomeBetweenlands> REGISTERED_BIOMES = new ArrayList<BiomeBetweenlands>();
 
     private BiomeRegistry() {
@@ -36,7 +37,7 @@ public class BiomeRegistry {
                 Object obj = f.get(null);
                 if (obj instanceof BiomeBetweenlands) {
                     BiomeBetweenlands biome = (BiomeBetweenlands) obj;
-                    registry.register(biome.setRegistryName(new ResourceLocation(ModInfo.ID, biome.getBiomeName())));
+                    registry.register(biome);
                     biome.addTypes();
                     REGISTERED_BIOMES.add(biome);
                 }

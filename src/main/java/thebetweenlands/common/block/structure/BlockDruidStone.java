@@ -22,7 +22,7 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockDruidStone extends BasicBlock implements BlockRegistry.ISubtypeBlock {
+public class BlockDruidStone extends BasicBlock implements BlockRegistry.ISubtypeBlockModelDefinition {
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
 	public static final PropertyBool ACTIVE = PropertyBool.create("active");

@@ -190,8 +190,8 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	@Override
 	@SideOnly(Side.CLIENT)
 	@Nullable
-	public Item getRenderedItem() {
-		return ItemRegistry.ASPECTRUS_SEEDS;
+	public ItemStack getRenderedItem() {
+		return new ItemStack(ItemRegistry.ASPECTRUS_SEEDS);
 	}
 
 	@Override

@@ -201,13 +201,15 @@ public class ElixirEffect {
 		private final ElixirEffect effect;
 		private final ResourceLocation icon;
 
-		private final String elixirName;
+		@SideOnly(Side.CLIENT)
+		private String localizedElixirName;
+		
+		@SideOnly(Side.CLIENT)
 		private TextContainer nameContainer;
 
-		protected ElixirPotionEffect(ElixirEffect effect, String name, int color, ResourceLocation icon) {
+		protected ElixirPotionEffect(ElixirEffect effect, String unlocalizedName, int color, ResourceLocation icon) {
 			super(false, color);
-			this.setPotionName(name);
-			this.elixirName = TranslationHelper.translateToLocal(name);
+			this.setPotionName(unlocalizedName);
 			this.effect = effect;
 			this.icon = icon;
 		}
@@ -240,9 +242,12 @@ public class ElixirEffect {
 				vertexBuffer.pos(x+6+20, y+6, 0).tex(1, 0).endVertex();
 				tessellator.draw();
 			}
+			if(this.localizedElixirName == null) {
+				this.localizedElixirName = TranslationHelper.translateToLocal(this.getName());
+			}
 			if(this.nameContainer == null) {
-				this.nameContainer = new TextContainer(88, 100, this.elixirName, Minecraft.getMinecraft().fontRenderer);
-				int width = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.elixirName);
+				this.nameContainer = new TextContainer(88, 100, this.localizedElixirName, Minecraft.getMinecraft().fontRenderer);
+				int width = Minecraft.getMinecraft().fontRenderer.getStringWidth(this.localizedElixirName);
 				float scale = 1.0F;
 				if(width > 88) {
 					scale = 88.0F / (float)width;

@@ -11,7 +11,6 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = ModInfo.ID)
 public class SoundRegistry {
     public static final List<SoundEvent> SOUNDS = new ArrayList<>();
     // Music

@@ -41,13 +41,19 @@ import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.handler.PlayerPortalHandler;
 import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
+import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
+import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.MessageRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.common.registries.Registries;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
@@ -96,6 +102,13 @@ public class TheBetweenlands {
 		//Renderers
 		proxy.registerItemAndBlockRenderers();
 		proxy.preInit();
+		
+		MinecraftForge.EVENT_BUS.register(BlockRegistry.class);
+		MinecraftForge.EVENT_BUS.register(ItemRegistry.class);
+		MinecraftForge.EVENT_BUS.register(RecipeRegistry.class);
+		MinecraftForge.EVENT_BUS.register(BiomeRegistry.class);
+		MinecraftForge.EVENT_BUS.register(SoundRegistry.class);
+		MinecraftForge.EVENT_BUS.register(ElixirEffectRegistry.class);
 	}
 
 	@InstanceFactory

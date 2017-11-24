@@ -35,7 +35,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.ColorUtils;
 
-public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.ISubItemsItem {
+public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
     public ItemAspectVial() {
         this.setUnlocalizedName("item.thebetweenlands.aspectVial");
 
@@ -118,7 +118,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IS
     @Override
     public Map<Integer, ResourceLocation> getModels() {
         Map<Integer, ResourceLocation> models = new HashMap<>();
-        models.put(0, new ResourceLocation(getRegistryName().toString()));
+        models.put(0, new ResourceLocation(getRegistryName().toString() + "_green"));
         models.put(1, new ResourceLocation(getRegistryName().toString() + "_orange"));
         return models;
     }

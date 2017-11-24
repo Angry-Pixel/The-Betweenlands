@@ -1,8 +1,10 @@
 package thebetweenlands.common.item.misc;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 
@@ -25,7 +27,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedwoodPortalTree;
 
-public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonSubItems{
+public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateItemModelDefinition{
 	public ItemSwampTalisman() {
 		this.setMaxDamage(0);
 		this.maxStackSize = 1;
@@ -86,14 +88,14 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.ISingleJsonS
 		}
 		return false;
 	}
-
+	
 	@Override
-	public List<String> getTypes() {
-		List<String> models = new ArrayList<String>();
-		for (EnumTalisman type : EnumTalisman.values())
-			models.add(type.getUnlocalizedName());
-		return models;
-	}
+    public Map<Integer, String> getVariants() {
+        Map<Integer, String> variants = new HashMap<>();
+        for (EnumTalisman type : EnumTalisman.values())
+			variants.put(type.ordinal(), type.getUnlocalizedName());
+        return variants;
+    }
 
 	public enum EnumTalisman implements IGenericItem {
 		SWAMP_TALISMAN_0,

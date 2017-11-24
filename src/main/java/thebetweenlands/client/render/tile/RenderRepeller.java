@@ -15,6 +15,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.model.tile.ModelRepeller;
@@ -53,8 +54,7 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 			GlStateManager.pushMatrix();
 			GlStateManager.translate((float)(x + 0.5F + xOff), (float)(y + 1.15F), (float)(z + 0.5F - zOff));
 			GlStateManager.scale(0.008F, 0.008F, 0.008F);
-			float rot = ((float)Math.sin((tile.renderTicks + partialTicks) / 40.0F) + 1.0F) / 10.0F + 1.4F;
-			this.renderShine(rot, 20, 
+			this.renderShine(tile.renderTicks + partialTicks, 20, 
 					1.0F, 0.8F, 0.0F, 0.0F,
 					1.0F, 0.8F, 0.0F, 1.0F);
 			GlStateManager.color(1, 1, 1, 1);
@@ -69,7 +69,7 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 		}
 	}
 
-	protected void renderShine(float rotation, int iterations, float or, float og, float ob, float oa, float ir, float ig, float ib, float ia) {
+	protected void renderShine(float ticks, int iterations, float or, float og, float ob, float oa, float ir, float ig, float ib, float ia) {
 		Random random = new Random(432L);
 		GlStateManager.disableTexture2D();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
@@ -79,31 +79,9 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 		GlStateManager.enableCull();
 		GlStateManager.depthMask(false);
 		GlStateManager.pushMatrix();
-		float f1 = rotation;
-		float f2 = 0.0f;
-		if( f1 > 0.8F ) {
-			f2 = (f1 - 0.8F) / 0.2F;
-		}
-		/*Tessellator tessellator = Tessellator.instance;
-		for( int i = 0; (float) i < iterations; ++i ) {
-			GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
-			tessellator.startDrawing(6);
-			float pos1 = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
-			float pos2 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
-			tessellator.setColorRGBA_F(ir, ig, ib, ia * f2);
-			tessellator.addVertex(0.0D, 0.0D, 0.0D);
-			tessellator.setColorRGBA_F(or, og, ob, oa * f2);
-			tessellator.addVertex(-0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2));
-			tessellator.addVertex(0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2));
-			tessellator.addVertex(0.0D, (double) pos1, (double) (1.0F * pos2));
-			tessellator.addVertex(-0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2));
-			tessellator.draw();
-		}*/
+		float rotation = ticks / 360.0F;
+		float size = ((float)Math.sin(ticks / 40.0F) + 1.0F) * 1.8F + 1.1F;
+		float brightness = MathHelper.clamp(size / 2.0F + 0.45F, 0.0f, 1.0f);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 		for (int i = 0; (float) i < iterations; ++i) {
@@ -112,15 +90,16 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
 			GlStateManager.rotate(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GlStateManager.rotate(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
-			float pos1 = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
-			float pos2 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
+			GlStateManager.rotate(random.nextFloat() * 360.0F + rotation * 90.0F, 0.0F, 0.0F, 1.0F);
+			GlStateManager.rotate(random.nextFloat() * 360.0F + rotation * 180.0F, 1.0F, 0.0F, 0.0F);
+			float pos1 = random.nextFloat() * 20.0F + 5.0F + size * 10.0F;
+			float pos2 = random.nextFloat() * 2.0F + 1.0F + size * 2.0F;
 			buffer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
-			buffer.pos(0.0D, 0.0D, 0.0D).color(255, 255, 255, (int) (255.0F * (1.0F - f2))).endVertex();
-			buffer.pos(-0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2)).color(0, 0, 255, 0).endVertex();
-			buffer.pos(0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2)).color(0, 0, 255, 0).endVertex();
-			buffer.pos(0.0D, (double) pos1, (double) (1.0F * pos2)).color(0, 0, 255, 0).endVertex();
-			buffer.pos(-0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2)).color(0, 0, 255, 0).endVertex();
+			buffer.pos(0.0D, 0.0D, 0.0D).color(ir, ig, ib, ia * brightness).endVertex();
+			buffer.pos(-0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2)).color(or, og, ob, oa * brightness).endVertex();
+			buffer.pos(0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2)).color(or, og, ob, oa * brightness).endVertex();
+			buffer.pos(0.0D, (double) pos1, (double) (1.0F * pos2)).color(or, og, ob, oa * brightness).endVertex();
+			buffer.pos(-0.866D * (double) pos2, (double) pos1, (double) (-0.5F * pos2)).color(or, og, ob, oa * brightness).endVertex();
 			tessellator.draw();
 		}
 		GlStateManager.popMatrix();

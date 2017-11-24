@@ -22,7 +22,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemLoreScrap extends Item implements ItemRegistry.ISubItemsItem {
+public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public static final String[] PAGE_NAMES = new String[]{"them", "mutants", "shadows", "ruins", "heads", "tar", "dungeon", "pitstone", "tower", "fort"};
 
 	public ItemLoreScrap() {

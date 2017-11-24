@@ -46,7 +46,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 
         if (!wasDecorating) {
             profiledGenerators.clear();
-            this.getProfiler().startSection(this.getBiome().getBiomeName());
+            this.getProfiler().startSection(this.getBiome().getRegistryName().getResourcePath());
         }
 
         this.decorate();

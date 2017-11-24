@@ -18,7 +18,7 @@ import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemPlantDrop extends Item implements ItemRegistry.ISubItemsItem {
+public class ItemPlantDrop extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public ItemPlantDrop() {
 		setMaxDamage(0);
 		setHasSubtypes(true);

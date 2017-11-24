@@ -18,7 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class ItemMisc extends Item implements ItemRegistry.ISubItemsItem {
+public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public ItemMisc() {
 		setMaxDamage(0);
 		setHasSubtypes(true);

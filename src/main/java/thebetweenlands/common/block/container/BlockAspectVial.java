@@ -67,8 +67,8 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
     @Nullable
     @Override
-    public Item getRenderedItem() {
-        return ItemRegistry.ASPECT_VIAL;
+    public ItemStack getRenderedItem() {
+        return new ItemStack(ItemRegistry.ASPECT_VIAL);
     }
 
     @Override

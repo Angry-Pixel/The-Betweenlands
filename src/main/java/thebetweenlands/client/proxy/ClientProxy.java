@@ -1,7 +1,9 @@
 package thebetweenlands.client.proxy;
 
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
@@ -360,25 +362,27 @@ public class ClientProxy extends CommonProxy {
 	 */
 	@Override
 	public void registerDefaultItemRenderer(Item item) {
-		if (item instanceof ItemRegistry.ISubItemsItem) {
-			for (Entry<Integer, ResourceLocation> model : ((ItemRegistry.ISubItemsItem) item).getModels().entrySet()) {
-				ModelLoader.setCustomModelResourceLocation(item, model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
+		Map<Integer, ResourceLocation> map = this.getItemModelMap(item);
+		for(Entry<Integer, ResourceLocation> entry : map.entrySet()) {
+			ModelLoader.setCustomModelResourceLocation(item, entry.getKey(), (ModelResourceLocation) entry.getValue());
+		}
+	}
+	
+	@Override
+	public Map<Integer, ResourceLocation> getItemModelMap(Item item) {
+		Map<Integer, ResourceLocation> map = new HashMap<>();
+		if (item instanceof ItemRegistry.IMultipleItemModelDefinition) {
+			for (Entry<Integer, ResourceLocation> model : ((ItemRegistry.IMultipleItemModelDefinition) item).getModels().entrySet()) {
+				map.put(model.getKey(), new ModelResourceLocation(model.getValue(), "inventory"));
 			}
-		} else if (item instanceof ItemRegistry.ISingleJsonSubItems) {
-			List<String> types = ((ItemRegistry.ISingleJsonSubItems) item).getTypes();
-			for (int i = 0; i < types.size(); i++) {
-				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName().toString(), types.get(i)));
-			}
-		} else if (item instanceof ItemMeshDefinition) {
-			ModelLoader.setCustomMeshDefinition(item, (ItemMeshDefinition) item);
-			NonNullList<ItemStack> stacks = NonNullList.create();
-			item.getSubItems(item.getCreativeTab(), stacks);
-			for (ItemStack stack: stacks) {
-				ModelBakery.registerItemVariants(item, ((ItemMeshDefinition) item).getModelLocation(stack));
+		} else if (item instanceof ItemRegistry.IBlockStateItemModelDefinition) {
+			for (Entry<Integer, String> variant : ((ItemRegistry.IBlockStateItemModelDefinition) item).getVariants().entrySet()) {
+				map.put(variant.getKey(), new ModelResourceLocation(item.getRegistryName().toString(), variant.getValue()));
 			}
 		} else {
-			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
+			map.put(0, new ModelResourceLocation(item.getRegistryName().toString(), "inventory"));
 		}
+		return map;
 	}
 
 	@Override

@@ -1,5 +1,8 @@
 package thebetweenlands.common.proxy;
 
+import java.util.Collections;
+import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.statemap.StateMap;
@@ -8,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
@@ -158,6 +162,10 @@ public class CommonProxy implements IGuiHandler {
 
 	}
 
+	public Map<Integer, ResourceLocation> getItemModelMap(Item item) {
+		return Collections.emptyMap();
+	}
+	
 	public void registerItemAndBlockRenderers() {
 
 	}

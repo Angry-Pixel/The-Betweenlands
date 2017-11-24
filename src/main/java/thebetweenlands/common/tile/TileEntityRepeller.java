@@ -199,11 +199,13 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 			if(this.radius > desiredRadius) {
 				this.radius = desiredRadius;
 			}
-		} else if(!this.running && this.radius > 0.0F || this.radius > desiredRadius) {
+		} else if((!this.running && this.radius > 0.0F) || this.radius > desiredRadius) {
 			this.deployTicks++;
-			this.radius = (float) this.easeInOut(this.deployTicks, desiredRadius, -desiredRadius, DEPLOY_TIME);
-			if(this.radius < 0.0F) {
+			this.radius = (float) this.easeInOut(this.deployTicks, !this.running ? desiredRadius : this.radius, -desiredRadius, DEPLOY_TIME);
+			if(!this.running && this.radius < 0.0F) {
 				this.radius = 0.0F;
+			} else if(this.running && this.radius < desiredRadius) {
+				this.radius = desiredRadius;
 			}
 		}
 	}

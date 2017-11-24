@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.biome;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -9,6 +10,7 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityLurker;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -22,13 +24,19 @@ import thebetweenlands.common.world.gen.biome.feature.DeepWatersFeature;
 public class BiomeDeepWaters extends BiomeBetweenlands {
 
 	public BiomeDeepWaters() {
-		super(new BiomeProperties("deep_waters").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 12).setHeightVariation(5.0F).setWaterColor(0x1b3944).setTemperature(0.8F).setRainfall(0.9F));
+		super(new ResourceLocation(ModInfo.ID, "deep_waters"),
+				new BiomeProperties("Deep Waters")
+				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 12)
+				.setHeightVariation(5.0F)
+				.setWaterColor(0x1b3944)
+				.setTemperature(0.8F)
+				.setRainfall(0.9F));
+		
 		this.setWeight(12);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorDeepWaters(this))
 		.addFeature(new DeepWatersFeature())
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());
-
 	}
 
 	@Override

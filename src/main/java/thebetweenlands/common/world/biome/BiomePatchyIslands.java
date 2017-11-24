@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.biome;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.common.entity.mobs.EntityAngler;
@@ -17,6 +18,7 @@ import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
@@ -30,13 +32,19 @@ import thebetweenlands.common.world.gen.biome.feature.SiltBeachFeature;
 public class BiomePatchyIslands extends BiomeBetweenlands {
 
 	public BiomePatchyIslands() {
-		super(new BiomeProperties("patchy_islands").setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1.25F).setHeightVariation(4.75F).setWaterColor(0x184220).setTemperature(0.8F).setRainfall(0.9F));
+		super(new ResourceLocation(ModInfo.ID, "patchy_islands"),
+				new BiomeProperties("Patchy Islands")
+				.setBaseHeight(WorldProviderBetweenlands.LAYER_HEIGHT - 1.25F)
+				.setHeightVariation(4.75F)
+				.setWaterColor(0x184220)
+				.setTemperature(0.8F)
+				.setRainfall(0.9F));
+		
 		this.setWeight(20);
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorPatchyIslands(this))
 		.addFeature(new SiltBeachFeature())
 		.addFeature(new AlgaeFeature());
 		this.setFoliageColors(0x1FC66D, 0x1FC66D);
-
 	}
 
 	@Override

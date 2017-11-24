@@ -22,7 +22,7 @@ import thebetweenlands.common.item.IGenericItem;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemCrushed extends Item implements ItemRegistry.ISubItemsItem {
+public class ItemCrushed extends Item implements ItemRegistry.IMultipleItemModelDefinition {
 	public ItemCrushed() {
 		setMaxDamage(0);
 		setHasSubtypes(true);
