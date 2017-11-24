@@ -128,7 +128,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 			if(this.fuel <= 0) {
 				this.fuel = 0;
 			} else {
-				float fuelCost = 0.000004F * (this.radiusState + 1);
+				float fuelCost = 0;
 				double centerX = this.pos.getX() + 0.5F;
 				double centerY = this.pos.getY() + 1.15F;
 				double centerZ = this.pos.getZ() + 0.5F;
@@ -150,7 +150,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 								((EntityLivingBase)entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 10, 6));
 							}
 							if(!entity.collidedHorizontally) {
-								fuelCost += 0.00028F;
+								fuelCost += 0.00028F * (this.radiusState / 1.5F + 1);
 							}
 						}
 					}
@@ -169,7 +169,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 							((IProjectile)entity).shoot(diffX / len, diffY / len, diffZ / len, 1.0F, 1.0F);
 							entity.velocityChanged = true;
 							if(!entity.collidedHorizontally && !entity.collidedVertically && !entity.onGround) {
-								fuelCost += 0.0004F;
+								fuelCost += 0.0004F * (this.radiusState / 1.5F + 1);
 							}
 						}
 					}
