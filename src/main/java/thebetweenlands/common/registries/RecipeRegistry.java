@@ -176,9 +176,6 @@ public class RecipeRegistry {
 //
 //		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
 //		RecipeHelper.addRecipe(new RecipesAspectrusSeeds());
-//
-//		RecipeSorter.register("thebetweenlands:recipeImprovedRubberBoots", RecipeImprovedRubberBoots.class, SHAPELESS, "after:minecraft:shapeless");
-//		RecipeHelper.addRecipe(new RecipeImprovedRubberBoots());
 
 		//TODO Manual
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.manualHL), "LLL", "xxx", "LLL", 'x',  EnumItemMisc.PARCHMENT), 'L', ItemGeneric.createStack(EnumItemGeneric.LURKER_SKIN));
@@ -186,9 +183,6 @@ public class RecipeRegistry {
 		//TODO: Volarkite
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
-
-		//TODO Repeller
-		//RecipeHelper.addRecipe(new ItemStack(BlockRegistry.REPELLER), " wv", " w ", " c ", 'w', ItemGeneric.createStack(EnumItemGeneric.WEEDWOOD_STICK), 'v', new ItemStack(ItemRegistry.dentrothystVial), 'c', new ItemStack(BlockRegistry.genericStone, 1, 1)); //TODO: Repeller
 
 		registry.register(new RecipesCircleGems().setRegistryName("thebetweenlands:recipes_circle_gems"));
 		registry.register(new RecipesCoating().setRegistryName("thebetweenlands:recipes_coating"));
@@ -221,6 +215,7 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.SILT), new ItemStack(BlockRegistry.SILT_GLASS), 0.2F);	
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_TILES), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_TILES), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICKS), 0.1F);
+		GameRegistry.addSmelting(new ItemStack(BlockRegistry.LIMESTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_LIMESTONE_BRICKS), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_RUBBER), EnumItemMisc.RUBBER_BALL.create(1), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SYRMORITE_BUCKET_RUBBER), new ItemStack(ItemRegistry.SYRMORITE_BUCKET_SOLID_RUBBER), 0.5F);
 	}
