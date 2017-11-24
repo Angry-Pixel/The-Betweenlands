@@ -222,7 +222,7 @@ public class BlockRepeller extends BlockContainer {
 						double radius = Math.max(tile.getRadius(0.0F), 1.0D);
 						double rotX = Math.sin(rot) * radius;
 						double rotZ = Math.cos(rot) * radius;
-						double xOff = facing.getFrontOffsetX() * 0.23F;
+						double xOff = -facing.getFrontOffsetX() * 0.23F;
 						double zOff = facing.getFrontOffsetZ() * 0.23F;
 						double centerX = pos.getX() + 0.5F + xOff;
 						double centerY = pos.getY() + 1.3F;

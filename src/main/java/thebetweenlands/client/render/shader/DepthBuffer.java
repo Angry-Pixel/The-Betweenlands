@@ -2,6 +2,7 @@ package thebetweenlands.client.render.shader;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 
 public class DepthBuffer {
@@ -28,7 +29,7 @@ public class DepthBuffer {
 		}
 
 		input.bindFramebuffer(false);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, this.depthBufferFBO.framebufferTexture);
+		GlStateManager.bindTexture(this.depthBufferFBO.framebufferTexture);
 		GL11.glCopyTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_DEPTH_COMPONENT, 0, 0, 
 				this.depthBufferFBO.framebufferTextureWidth, 
 				this.depthBufferFBO.framebufferTextureHeight, 
@@ -59,9 +60,9 @@ public class DepthBuffer {
 	public void clear(float r, float g, float b, float a, double depth) {
 		if(this.depthBufferFBO != null) {
 			this.depthBufferFBO.bindFramebuffer(false);
-			GL11.glClearColor(r, g, b, a);
-			GL11.glClearDepth(depth);
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+			GlStateManager.clearColor(r, g, b, a);
+			GlStateManager.clearDepth(depth);
+			GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 		}
 	}
 

@@ -2,6 +2,7 @@ package thebetweenlands.client.render.shader;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 
 public class GeometryBuffer {
@@ -91,6 +92,14 @@ public class GeometryBuffer {
 	}
 
 	/**
+	 * Returns whether the buffer has been initialized already
+	 * @return
+	 */
+	public boolean isInitialized() {
+		return this.geometryBuffer != null;
+	}
+	
+	/**
 	 * Clears the buffer
 	 * <p><b>Note:</b> Binds the FBO
 	 * @param r Red
@@ -102,9 +111,9 @@ public class GeometryBuffer {
 	public void clear(float r, float g, float b, float a, double depth) {
 		if(this.geometryBuffer != null) {
 			this.geometryBuffer.bindFramebuffer(false);
-			GL11.glClearColor(r, g, b, a);
-			GL11.glClearDepth(depth);
-			GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
+			GlStateManager.clearColor(r, g, b, a);
+			GlStateManager.clearDepth(depth);
+			GlStateManager.clear(GL11.GL_DEPTH_BUFFER_BIT | GL11.GL_COLOR_BUFFER_BIT);
 		}
 	}
 

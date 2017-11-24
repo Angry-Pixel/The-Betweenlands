@@ -176,7 +176,7 @@ void main() {
             
             //Calculate color distortion
             float fragDistortion = (shieldFragPos.y + u_camPos.y + (cos(shieldFragPos.x + u_camPos.x) * sin(shieldFragPos.z + u_camPos.z)) * 2.0F) * 8.0F;
-            float colorDistortion = ((sin(fragDistortion + u_worldTime * 50.0F / 300.0F) + 1.0F) / 800.0F);
+            float colorDistortion = ((sin(fragDistortion + u_worldTime * 50.0F / 300.0F) + 1.0F) / 200.0F);
             shieldFragColor += vec4(repellerShieldBuffCol.rgb * colorDistortion * 10.0F, 0.0F);
         }
         

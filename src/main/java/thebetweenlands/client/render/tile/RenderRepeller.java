@@ -2,6 +2,7 @@ package thebetweenlands.client.render.tile;
 
 import java.util.Random;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.BufferBuilder;
@@ -14,7 +15,10 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.model.tile.ModelRepeller;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.util.TileEntityHelper;
@@ -27,8 +31,8 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 	@Override
 	public void render(TileEntityRepeller tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumFacing facing = TileEntityHelper.getStatePropertySafely(tile, BlockRepeller.class, BlockRepeller.FACING, EnumFacing.NORTH);
-		
-		double xOff = facing.getFrontOffsetX() * 0.12F;
+
+		double xOff = -facing.getFrontOffsetX() * 0.12F;
 		double zOff = facing.getFrontOffsetZ() * 0.12F;
 
 		GlStateManager.pushMatrix();
@@ -57,9 +61,12 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 			GlStateManager.popMatrix();
 		}
 
-		/*if(tileRepeller.isRunning()) {
-			WorldRenderHandler.INSTANCE.repellerShields.add(new SimpleEntry(new Vector3d(x + 0.5F + xOff, y + 1.15F, z + 0.5F - zOff), tileRepeller.getRadius(partialTicks)));
-		}*/
+		if(tile != null && tile.isRunning()) {
+			if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+				ShaderHelper.INSTANCE.require();
+			}
+			WorldRenderHandler.REPELLER_SHIELDS.add(Pair.of(new Vec3d(x + 0.5F + xOff, y + 1.15F, z + 0.5F - zOff), tile.getRadius(partialTicks)));
+		}
 	}
 
 	protected void renderShine(float rotation, int iterations, float or, float og, float ob, float oa, float ir, float ig, float ib, float ia) {

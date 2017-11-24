@@ -346,6 +346,14 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	}
 
 	/**
+	 * Returns the repeller shield geometry buffer
+	 * @return
+	 */
+	public GeometryBuffer getRepellerShieldBuffer() {
+		return this.repellerShieldBuffer;
+	}
+	
+	/**
 	 * Adds a dynamic light source for this frame
 	 *
 	 * @param light
@@ -405,17 +413,12 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	public void updateTextures(float partialTicks) {
 		World world = Minecraft.getMinecraft().world;
 		if (world != null && !Minecraft.getMinecraft().isGamePaused()) {
-			//Update repeller shield
-			this.updateRepellerShieldTexture(partialTicks);
-
 			//Update gas particles
 			this.updateGasParticlesTexture(world, partialTicks);
 
 			//Update starfield texture
 			this.updateStarfieldTexture(partialTicks);
 		}
-
-
 	}
 
 	/**
@@ -594,19 +597,6 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		}
 	}
 
-	private void updateRepellerShieldTexture(float partialTicks) {
-		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-
-		this.repellerShieldBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
-		this.repellerShieldBuffer.clear(0, 0, 0, 0, 1);
-		this.repellerShieldBuffer.bind();
-
-		//TODO: Render repeller shields
-
-		this.repellerShieldBuffer.updateDepthBuffer();
-
-		mainFramebuffer.bindFramebuffer(false);
-	}
 
 	private void updateGasParticlesTexture(World world, float partialTicks) {
 		boolean hasCloud = false;

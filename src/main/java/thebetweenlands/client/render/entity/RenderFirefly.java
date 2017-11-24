@@ -1,20 +1,19 @@
 package thebetweenlands.client.render.entity;
 
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Random;
 
-import javax.vecmath.Vector3d;
-
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.WorldRenderHandler;
@@ -50,7 +49,7 @@ public class RenderFirefly extends RenderLiving<EntityFirefly> {
 		super.doRender(entity, x, y, z, yaw, partialTicks);
 		GlStateManager.popMatrix();
 
-		WorldRenderHandler.fireflies.add(new SimpleEntry<>(new SimpleEntry<>(this, entity), new Vector3d(x, y, z)));
+		WorldRenderHandler.FIREFLIES.add(Pair.of(Pair.of(this, entity), new Vec3d(x, y, z)));
 
 		if (ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			float radius = entity.getGlowTicks(partialTicks) / 20.0F * 7.0F * (float)glowStrength;
