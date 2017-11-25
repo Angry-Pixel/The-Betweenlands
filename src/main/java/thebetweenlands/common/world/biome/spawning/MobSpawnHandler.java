@@ -79,6 +79,7 @@ public class MobSpawnHandler {
 		private int worldLimit = -1;
 		private int minGroupSize = 1, maxGroupSize = 1;
 		private double spawnCheckRadius = 16.0D;
+		private double spawnCheckRangeY = 6.0D;
 		private double groupSpawnRadius = 6.0D;
 		private int spawningInterval = 0;
 		private long lastSpawn = -1;
@@ -222,6 +223,15 @@ public class MobSpawnHandler {
 			return this.spawnCheckRadius;
 		}
 
+		public final BLSpawnEntry setSpawnCheckRangeY(double y) {
+			this.spawnCheckRangeY = y;
+			return this;
+		}
+
+		public final double getSpawnCheckRangeY() {
+			return this.spawnCheckRangeY;
+		}
+		
 		public final BLSpawnEntry setGroupSpawnRadius(double radius) {
 			this.groupSpawnRadius = radius;
 			return this;
@@ -406,10 +416,10 @@ public class MobSpawnHandler {
 				int desiredGroupSize = spawnEntry.getMinGroupSize() + world.rand.nextInt(spawnEntry.getMaxGroupSize() - spawnEntry.getMinGroupSize() + 1);
 				double groupCheckRadius = spawnEntry.spawnCheckRadius;
 				//Check whether chunks are loaded in the check radius, prevents entities from spawning somewhere even though the group limit was already reached in an unloaded chunk
-				int csx = MathHelper.floor((spawnPos.getX() - groupCheckRadius) / 16.0D);
-				int cex = MathHelper.floor((spawnPos.getX() + groupCheckRadius) / 16.0D);
-				int csz = MathHelper.floor((spawnPos.getZ() - groupCheckRadius) / 16.0D);
-				int cez = MathHelper.floor((spawnPos.getZ() + groupCheckRadius) / 16.0D);
+				int csx = MathHelper.floor(spawnPos.getX() - groupCheckRadius) >> 4;
+				int cex = MathHelper.floor(spawnPos.getX() + groupCheckRadius) >> 4;
+				int csz = MathHelper.floor(spawnPos.getZ() - groupCheckRadius) >> 4;
+				int cez = MathHelper.floor(spawnPos.getZ() + groupCheckRadius) >> 4;
 				for (int cx = csx; cx <= cex; ++cx) {
 					for (int cz = csz; cz <= cez; ++cz) {
 						if(world.getChunkProvider().getLoadedChunk(cx, cz) == null) {
@@ -423,16 +433,13 @@ public class MobSpawnHandler {
 
 				if(checkExistingGroups) {
 					List<Entity> foundGroupEntities = world.getEntitiesWithinAABB(entityType, new AxisAlignedBB(
-							spawnPos.getX() - groupCheckRadius, spawnPos.getY() - 6, spawnPos.getZ() - groupCheckRadius, 
-							spawnPos.getX() + groupCheckRadius, spawnPos.getY() + 6, spawnPos.getZ() + groupCheckRadius));
-					Iterator<Entity> foundGroupEntitiesIT = foundGroupEntities.iterator();
-					while(foundGroupEntitiesIT.hasNext()) {
-						Entity foundEntity = foundGroupEntitiesIT.next();
-						if(foundEntity.getDistance(spawnPos.getX(), foundEntity.posY, spawnPos.getZ()) > groupCheckRadius) {
-							foundGroupEntitiesIT.remove();
+							spawnPos.getX() - groupCheckRadius, spawnPos.getY() - spawnEntry.spawnCheckRangeY, spawnPos.getZ() - groupCheckRadius, 
+							spawnPos.getX() + groupCheckRadius, spawnPos.getY() + spawnEntry.spawnCheckRangeY, spawnPos.getZ() + groupCheckRadius));
+					for(Entity foundGroupEntity : foundGroupEntities) {
+						if(foundGroupEntity.getDistance(spawnPos.getX(), foundGroupEntity.posY + (spawnPos.getY() - foundGroupEntity.posY) / spawnEntry.spawnCheckRangeY * groupCheckRadius, spawnPos.getZ()) <= groupCheckRadius) {
+							desiredGroupSize--;
 						}
 					}
-					desiredGroupSize -= foundGroupEntities.size();
 				}
 
 				if(desiredGroupSize > 0) {

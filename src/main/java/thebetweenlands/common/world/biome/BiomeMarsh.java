@@ -62,11 +62,11 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityWight.class, (short) 5).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityWight.class, (short) 14).setHostile(true).setSpawnCheckRadius(64.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 12).setHostile(true).setSpawnCheckRadius(64.0D));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(64.0D));
-		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 54).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityChiromaw.class, (short) 40).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(20.0D));
+		this.blSpawnEntries.add(new CaveSpawnEntry(EntityChiromaw.class, (short) 54).setHostile(true).setSpawnCheckRadius(40.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new SwampHagCaveSpawnEntry((short) 100).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityAngler.class, (short) 35).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
-		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 5).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(64.0D));
+		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGasCloud.class, (short) 1).setCanSpawnOnWater(true).setHostile(true).setSpawnCheckRadius(64.0D).setSpawnCheckRangeY(64.0D));
 	}
 
 	private float fogRangeInterpolateStart = 0.0F;
