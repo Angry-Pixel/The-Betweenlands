@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.BlockRenderLayer;
@@ -15,18 +17,22 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.property.ExtendedBlockState;
+import net.minecraftforge.common.property.IExtendedBlockState;
+import net.minecraftforge.common.property.IUnlistedProperty;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.block.IConnectedTextureBlock;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockAlgae extends BlockPlant {
-	protected static final AxisAlignedBB ALGAE_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 0.125D, 1D);
+public class BlockAlgae extends BlockPlant implements IConnectedTextureBlock {
+	protected static final AxisAlignedBB ALGAE_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1D, 0.08D, 1D);
 
 	public BlockAlgae() {
 		this.setReplaceable(true);
 	}
-	
+
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		if(entityIn instanceof EntityWeedwoodRowboat == false) {
@@ -75,12 +81,25 @@ public class BlockAlgae extends BlockPlant {
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
 		Block block = iblockaccess.getBlockState(pos.offset(side)).getBlock();
-		return block != BlockRegistry.ALGAE && block != BlockRegistry.SWAMP_WATER;
+		return block != BlockRegistry.ALGAE;
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public Block.EnumOffsetType getOffsetType() {
 		return Block.EnumOffsetType.NONE;
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{TOP_NORTH_WEST_INDEX, TOP_NORTH_EAST_INDEX, TOP_SOUTH_WEST_INDEX, TOP_SOUTH_EAST_INDEX});
+	}
+
+	@Override
+	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
+		IExtendedBlockState state = (IExtendedBlockState) oldState;
+		return this.getExtendedConnectedTextureState(state, worldIn, pos, p -> {
+			return worldIn.getBlockState(p).getBlock() == this || worldIn.getBlockState(p.down()).isFullCube();
+		});
 	}
 }

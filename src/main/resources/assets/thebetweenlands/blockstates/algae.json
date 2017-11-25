@@ -1,7 +1,58 @@
 {
+  "forge_marker": 1,
   "variants": { 
     "normal": {
-      "model": "thebetweenlands:algae"
-    } 
+      "model": "thebetweenlands:internal/connected_texture",
+      "custom": {
+        "particle_texture": "thebetweenlands:blocks/algae_0",
+        "ambient_occlusion": true,
+        "connected_texture_faces": [
+          {
+            "cullface": "up",
+            "connected_textures": [
+              "thebetweenlands:blocks/algae_0",
+              "thebetweenlands:blocks/algae_1",
+              "thebetweenlands:blocks/algae_2",
+              "thebetweenlands:blocks/algae_3",
+              "thebetweenlands:blocks/algae_4"
+            ],
+            "indices": [
+              "top_north_west_index",
+              "top_south_west_index",
+              "top_south_east_index",
+              "top_north_east_index"
+            ],
+            "vertices": [
+              { "x": 0.0, "y": -0.05, "z": 0.0 },
+              { "x": 0.0, "y": -0.05, "z": 1.0 },
+              { "x": 1.0, "y": -0.05, "z": 1.0 },
+              { "x": 1.0, "y": -0.05, "z": 0.0 }
+            ]
+          },
+          {
+            "cullface": "up",
+            "connected_textures": [
+              "thebetweenlands:blocks/algae_0",
+              "thebetweenlands:blocks/algae_1",
+              "thebetweenlands:blocks/algae_2",
+              "thebetweenlands:blocks/algae_3",
+              "thebetweenlands:blocks/algae_4"
+            ],
+            "indices": [
+              "top_south_west_index",
+              "top_north_west_index",
+              "top_north_east_index",
+              "top_south_east_index"
+            ],
+            "vertices": [
+              { "x": 0.0, "y": -0.05, "z": 1.0 },
+              { "x": 0.0, "y": -0.05, "z": 0.0 },
+              { "x": 1.0, "y": -0.05, "z": 0.0 },
+              { "x": 1.0, "y": -0.05, "z": 1.0 }
+            ]
+          }
+        ]
+      }
+    }
   } 
 }
