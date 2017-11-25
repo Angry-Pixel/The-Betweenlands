@@ -31,7 +31,7 @@ public class MessageRemoveLocalStorage extends MessageBase {
 		try {
 			this.id = StorageID.readFromNBT(buf.readCompoundTag());
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

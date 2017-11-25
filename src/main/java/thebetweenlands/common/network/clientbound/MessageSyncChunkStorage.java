@@ -39,7 +39,7 @@ public class MessageSyncChunkStorage extends MessageBase {
 			this.pos = new ChunkPos(buf.readInt(), buf.readInt());
 			this.nbt = buf.readCompoundTag();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 

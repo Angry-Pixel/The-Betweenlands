@@ -2,7 +2,7 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class EventAuroras extends TimedEnvironmentEvent {
@@ -59,15 +59,15 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void loadEventPacket(PacketBuffer buffer) {
-		super.loadEventPacket(buffer);
-		this.auroraType = buffer.readShort();
+	public void loadEventPacket(NBTTagCompound nbt) {
+		super.loadEventPacket(nbt);
+		this.auroraType = nbt.getShort("auroraType");
 	}
 
 	@Override
-	public void sendEventPacket(PacketBuffer buffer) { 
-		super.sendEventPacket(buffer);
-		buffer.writeShort(this.auroraType);
+	public void sendEventPacket(NBTTagCompound nbt) { 
+		super.sendEventPacket(nbt);
+		nbt.setShort("auroraType", this.auroraType);
 	}
 
 	public short getAuroraType() {

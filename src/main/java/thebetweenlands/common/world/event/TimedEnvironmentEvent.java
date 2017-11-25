@@ -2,7 +2,7 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
-import net.minecraft.network.PacketBuffer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
@@ -87,17 +87,17 @@ public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
 	}
 
 	@Override
-	public void loadEventPacket(PacketBuffer buffer) {
-		super.loadEventPacket(buffer);
-		this.ticks = buffer.readInt();
-		this.startTicks = buffer.readInt();
+	public void loadEventPacket(NBTTagCompound nbt) {
+		super.loadEventPacket(nbt);
+		this.ticks = nbt.getInteger("ticks");
+		this.startTicks = nbt.getInteger("startTicks");
 	}
 
 	@Override
-	public void sendEventPacket(PacketBuffer buffer) {
-		super.sendEventPacket(buffer);
-		buffer.writeInt(this.ticks);
-		buffer.writeInt(this.startTicks);
+	public void sendEventPacket(NBTTagCompound nbt) {
+		super.sendEventPacket(nbt);
+		nbt.setInteger("ticks", this.ticks);
+		nbt.setInteger("startTicks", this.startTicks);
 	}
 
 	@Override

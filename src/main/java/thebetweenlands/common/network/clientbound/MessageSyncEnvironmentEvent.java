@@ -1,6 +1,9 @@
 package thebetweenlands.common.network.clientbound;
 
+import java.io.IOException;
+
 import net.minecraft.client.Minecraft;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -16,7 +19,7 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 	private EnvironmentEvent event;
 	private String eventName;
 	private boolean active;
-	private PacketBuffer receivedBuffer;
+	private NBTTagCompound nbt;
 
 	public MessageSyncEnvironmentEvent() {}
 
@@ -24,21 +27,26 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 		this.event = eevent;
 		this.eventName = eevent.getEventName();
 		this.active = eevent.isActive();
+		this.nbt = new NBTTagCompound();
+		eevent.sendEventPacket(this.nbt);
 	}
 
 	@Override
 	public void serialize(PacketBuffer buffer) {
 		buffer.writeString(this.eventName);
 		buffer.writeBoolean(this.active);
-		PacketBuffer pkt = new PacketBuffer(buffer);
-		this.event.sendEventPacket(pkt);
+		buffer.writeCompoundTag(this.nbt);
 	}
 
 	@Override
 	public void deserialize(PacketBuffer buffer) {
-		this.receivedBuffer = buffer;
 		this.eventName = buffer.readString(128);
 		this.active = buffer.readBoolean();
+		try {
+			this.nbt = buffer.readCompoundTag();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	@Override
@@ -51,15 +59,17 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handleMessage() {
-		World world = Minecraft.getMinecraft().world;
-		if(world.provider instanceof WorldProviderBetweenlands) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			EnvironmentEvent eevent = eeRegistry.forName(this.eventName);
-			if(eevent != null) {
-				eevent.loadEventPacket(new PacketBuffer(this.receivedBuffer));
-				eevent.setActive(this.active, false);
-				eevent.setLoaded();
+		if(this.nbt != null) {
+			World world = Minecraft.getMinecraft().world;
+			if(world.provider instanceof WorldProviderBetweenlands) {
+				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
+				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+				EnvironmentEvent eevent = eeRegistry.forName(this.eventName);
+				if(eevent != null) {
+					eevent.loadEventPacket(this.nbt);
+					eevent.setActive(this.active, false);
+					eevent.setLoaded();
+				}
 			}
 		}
 	}

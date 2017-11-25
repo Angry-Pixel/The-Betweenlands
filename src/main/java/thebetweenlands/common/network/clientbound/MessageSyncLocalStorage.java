@@ -31,7 +31,7 @@ public class MessageSyncLocalStorage extends MessageBase {
 		try {
 			this.nbt = buf.readCompoundTag();
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
