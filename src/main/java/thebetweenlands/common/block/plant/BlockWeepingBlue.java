@@ -11,9 +11,12 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockWeepingBlue extends BlockDoublePlantBL {
@@ -33,6 +36,14 @@ public class BlockWeepingBlue extends BlockDoublePlantBL {
 			player.addExhaustion(0.025F);
 		} else {
 			super.harvestBlock(worldIn, player, pos, state, te, stack);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		if(rand.nextInt(4) == 0 && worldIn.getBlockState(pos).getValue(HALF) == EnumBlockHalf.UPPER) {
+			worldIn.spawnParticle(EnumParticleTypes.DRIP_WATER, pos.getX() + 0.25D + rand.nextFloat() * 0.5D, pos.getY() + 0.6D, pos.getZ() + 0.25D + rand.nextFloat() * 0.5D, 0.0D, 0.0D, 0.0D);
 		}
 	}
 }
