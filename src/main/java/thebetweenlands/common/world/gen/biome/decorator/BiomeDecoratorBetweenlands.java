@@ -101,7 +101,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
 		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(1, 12, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
 		this.generateOre(3, 12, OreGens.SCABYST, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
-		this.generateOre(70, 12, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
+		this.generateOre(70, 2, OreGens.LIFE_GEM, 0, WorldProviderBetweenlands.CAVE_WATER_HEIGHT);
 
         Random rand = this.getRand();
         World world = this.getWorld();
