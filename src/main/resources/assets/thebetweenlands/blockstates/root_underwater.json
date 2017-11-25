@@ -12,7 +12,7 @@
       
         "model_additional": "thebetweenlands:block/internal/layer_selection",
         "model_additional_data": {
-          "model": "thebetweenlands:block/internal/fluid",
+          "model": "forge:block/fluid",
           "layers": ["translucent"],
           "model_data": {
             "fluid": "swamp_water"
