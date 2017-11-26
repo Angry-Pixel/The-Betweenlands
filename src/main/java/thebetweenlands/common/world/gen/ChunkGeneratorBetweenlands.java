@@ -504,6 +504,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 			}
 			if(this.worldObj instanceof WorldServer) {
 				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z);
+				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x+1, z);
+				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x+1, z+1);
+				MobSpawnHandler.INSTANCE.populateChunk((WorldServer) this.worldObj, x, z+1);
 			}
 		} else {
 			biome.decorate(this.worldObj, this.rand, new BlockPos(bx, 0, bz));

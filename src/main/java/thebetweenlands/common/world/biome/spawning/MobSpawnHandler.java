@@ -360,7 +360,7 @@ public class MobSpawnHandler {
 		}
 	}
 
-	private int populateChunk(World world, ChunkPos chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreTimers,
+	private int populateChunk(World world, ChunkPos chunkPos, boolean spawnHostiles, boolean spawnAnimals, boolean loadChunks, boolean ignoreRestrictions,
 			int attemptsPerChunk, int maxSpawnsPerChunk, int attemptsPerGroup, int entityLimit, float loadedAreas) {
 		int attempts = 0, chunkSpawnedEntities = 0;
 		spawnLoop:
@@ -422,7 +422,7 @@ public class MobSpawnHandler {
 				int cez = MathHelper.floor(spawnPos.getZ() + groupCheckRadius) >> 4;
 				for (int cx = csx; cx <= cex; ++cx) {
 					for (int cz = csz; cz <= cez; ++cz) {
-						if(world.getChunkProvider().getLoadedChunk(cx, cz) == null) {
+						if(world.getChunkProvider().getLoadedChunk(cx, cz) == null && (cx != chunkPos.x || cz != chunkPos.z)) {
 							continue spawnLoop;
 						}
 					}
@@ -446,7 +446,7 @@ public class MobSpawnHandler {
 					int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 					int maxGroupSpawnAttempts = attemptsPerGroup + desiredGroupSize * 2;
 
-					if(!ignoreTimers) {
+					if(!ignoreRestrictions) {
 						if(spawnEntry.lastSpawn == -1) {
 							spawnEntry.lastSpawn = world.getTotalWorldTime();
 							continue;
@@ -532,7 +532,7 @@ public class MobSpawnHandler {
 						}
 					}
 
-					if(!ignoreTimers && groupSpawnedEntities > 0)
+					if(!ignoreRestrictions && groupSpawnedEntities > 0)
 						spawnEntry.lastSpawn = world.getTotalWorldTime();
 				}
 			}
