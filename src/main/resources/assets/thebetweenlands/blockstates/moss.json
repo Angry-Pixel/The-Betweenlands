@@ -1,28 +1,29 @@
 {
   "forge_marker": 1,
+  "defaults": {
+  	"model": "thebetweenlands:internal/spook_event",
+	"custom": {
+		"model_base": "thebetweenlands:block/moss_north",
+		"model_spook": "thebetweenlands:block/moss_north_spook"
+	}
+  },
   "variants": {
     "facing": {
       "up": {
-        "model": "thebetweenlands:moss_north",
         "x": 90
       },
       "down": {
-        "model": "thebetweenlands:moss_north",
         "x": -90
       },
       "south": {
-        "model": "thebetweenlands:moss_north"
       },
       "west": {
-        "model": "thebetweenlands:moss_north",
         "y": 90
       },
       "north": {
-        "model": "thebetweenlands:moss_north",
         "y": 180
       },
       "east": {
-        "model": "thebetweenlands:moss_north",
         "y": 270
       }
     }

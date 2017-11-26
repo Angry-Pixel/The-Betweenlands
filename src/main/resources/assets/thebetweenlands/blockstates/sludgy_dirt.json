@@ -1,10 +1,26 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "thebetweenlands:sludgy_dirt" },
-            { "model": "thebetweenlands:sludgy_dirt", "y": 90 },
-            { "model": "thebetweenlands:sludgy_dirt", "y": 180 },
-            { "model": "thebetweenlands:sludgy_dirt", "y": 270 }
-        ]
-    }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/spook_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/sludgy_dirt",
+			"model_spook": "thebetweenlands:block/sludgy_dirt_spook"
+		}
+	},
+	"variants": {
+		"normal": [
+			{
+				
+			},
+			{
+				"y": 90
+			},
+			{
+				"y": 180
+			},
+			{
+				"y": 270
+			}
+		]
+	}
 }

@@ -1,5 +1,12 @@
 {
+	"forge_marker": 1,
 	"variants": {
-		"normal": { "model": "thebetweenlands:swamp_tallgrass" }
+		"normal": {
+			"model": "thebetweenlands:internal/spook_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/swamp_tallgrass",
+				"model_spook": "thebetweenlands:block/swamp_tallgrass_spook"
+			}
+		}
 	}
 }

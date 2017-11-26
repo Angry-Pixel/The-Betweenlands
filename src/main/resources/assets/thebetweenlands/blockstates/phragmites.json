@@ -1,10 +1,21 @@
 {
-    "variants": {
-        "half=lower": {
-            "model": "thebetweenlands:phragmites_bottom"
-        },
-        "half=upper": { 
-            "model": "thebetweenlands:phragmites_top"
-        }
-    }
+	"forge_marker": 1,
+	"variants": {
+		"half": {
+			"lower": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/phragmites_bottom",
+					"model_spook": "thebetweenlands:block/phragmites_bottom_spook"
+				}
+			},
+			"upper": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/phragmites_top",
+					"model_spook": "thebetweenlands:block/phragmites_top_spook"
+				}
+			}
+		}
+	}
 }

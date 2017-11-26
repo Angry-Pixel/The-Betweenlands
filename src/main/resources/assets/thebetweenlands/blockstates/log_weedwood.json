@@ -1,8 +1,31 @@
 {
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/spook_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/log_weedwood",
+			"model_spook": "thebetweenlands:block/log_weedwood_spook"
+		}
+	},
 	"variants": {
-			"axis=y":    { "model": "thebetweenlands:log_weedwood" },
-        	"axis=z":    { "model": "thebetweenlands:log_weedwood", "x": 90 },
-        	"axis=x":    { "model": "thebetweenlands:log_weedwood", "x": 90, "y": 90 },
-        	"axis=none": { "model": "thebetweenlands:log_weedwood_bark" }
+		"axis": {
+			"y": {
+				
+			},
+			"z": {
+				"x": 90
+			},
+			"x": {
+				"x": 90,
+				"y": 90
+			},
+			"none": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/log_weedwood_bark",
+					"model_spook": "thebetweenlands:block/log_weedwood_bark_spook"
+				}
+			}
+		}
 	}
 }

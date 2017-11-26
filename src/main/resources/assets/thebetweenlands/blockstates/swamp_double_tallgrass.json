@@ -1,10 +1,21 @@
 {
-    "variants": {
-        "half=lower": {
-            "model": "thebetweenlands:swamp_double_tallgrass_bottom"
-        },
-        "half=upper": { 
-            "model": "thebetweenlands:swamp_double_tallgrass_top"
-        }
-    }
+	"forge_marker": 1,
+	"variants": {
+		"half": {
+			"lower": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_double_tallgrass_bottom",
+					"model_spook": "thebetweenlands:block/swamp_double_tallgrass_bottom_spook"
+				}
+			},
+			"upper": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_double_tallgrass_top",
+					"model_spook": "thebetweenlands:block/swamp_double_tallgrass_top_spook"
+				}
+			}
+		}
+	}
 }

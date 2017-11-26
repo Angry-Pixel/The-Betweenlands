@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mossy_cragrock_side_1_spook",
+    "up": "thebetweenlands:blocks/mossy_cragrock_top_spook",
+    "down": "thebetweenlands:blocks/mossy_cragrock_side_2_spook",
+    "north": "thebetweenlands:blocks/mossy_cragrock_side_1_spook",
+    "east": "thebetweenlands:blocks/mossy_cragrock_side_1_spook",
+    "south": "thebetweenlands:blocks/mossy_cragrock_side_1_spook",
+    "west": "thebetweenlands:blocks/mossy_cragrock_side_1_spook"
+  }
+}

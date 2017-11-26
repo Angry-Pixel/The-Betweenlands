@@ -1,7 +1,12 @@
 {
-  "variants": {
-    "normal": {
-      "model": "thebetweenlands:hanger"
-    }
-  }
+	"forge_marker": 1,
+	"variants": {
+		"normal": {
+			"model": "thebetweenlands:internal/spook_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/hanger",
+				"model_spook": "thebetweenlands:block/hanger_spook"
+			}
+		}
+	}
 }

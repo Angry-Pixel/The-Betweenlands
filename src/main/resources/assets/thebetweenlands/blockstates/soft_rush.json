@@ -1,5 +1,12 @@
 {
+	"forge_marker": 1,
 	"variants": {
-		"normal": { "model": "thebetweenlands:soft_rush" }
+		"normal": {
+			"model": "thebetweenlands:internal/spook_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/soft_rush",
+				"model_spook": "thebetweenlands:block/soft_rush_spook"
+			}
+		}
 	}
 }

@@ -1,36 +1,61 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "thebetweenlands:internal/model_combined",
-    "custom": { 
-      "model_base": "thebetweenlands:block/internal/layer_selection",
-      "model_base_data": {
-        "model": "thebetweenlands:block/swamp_reed",
-        "layers": ["cutout", "none"]
-      },
-      
-      "model_additional": "thebetweenlands:block/internal/layer_selection",
-      "model_additional_data": {
-        "model": "forge:block/fluid",
-        "layers": ["translucent"],
-        "model_data": {
-          "fluid": "swamp_water"
-        }
-      }
-    }
-  },
-  "variants": {
-    "is_top": {
-      "true": {
-        "custom": { 
-          "model_base": "thebetweenlands:block/swamp_reed_top"
-        }
-      },
-      "false": { }
-    },
-    "is_bottom": {
-      "true": { },
-      "false": { }
-    }
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/model_combined",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/layer_selection",
+			"model_base_data": {
+				"model": "thebetweenlands:block/internal/spook_event",
+				"model_data": {
+					"model_base": "thebetweenlands:block/swamp_reed",
+					"model_spook": "thebetweenlands:block/swamp_reed_spook"
+				},
+				"layers": [
+					"cutout",
+					"none"
+				]
+			},
+			"model_additional": "thebetweenlands:block/internal/layer_selection",
+			"model_additional_data": {
+				"model": "forge:block/fluid",
+				"layers": [
+					"translucent"
+				],
+				"model_data": {
+					"fluid": "swamp_water"
+				}
+			}
+		}
+	},
+	"variants": {
+		"is_top": {
+			"true": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/layer_selection",
+					"model_base_data": {
+						"model": "thebetweenlands:block/internal/spook_event",
+						"model_data": {
+							"model_base": "thebetweenlands:block/swamp_reed_top",
+							"model_spook": "thebetweenlands:block/swamp_reed_top_spook"
+						},
+						"layers": [
+							"cutout",
+							"none"
+						]
+					}
+				}
+			},
+			"false": {
+				
+			}
+		},
+		"is_bottom": {
+			"true": {
+				
+			},
+			"false": {
+				
+			}
+		}
+	}
 }

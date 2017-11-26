@@ -19,6 +19,7 @@ import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
+import thebetweenlands.client.render.model.baked.ModelSpookEvent;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelThatchRoof;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
@@ -71,6 +72,7 @@ public class ModelRegistry {
 	public static final IModel MODEL_COMBINED = new ModelCombined();
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
 	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
+	public static final IModel SPOOK_EVENT = new ModelSpookEvent();
 	
 	//Plant models
 	public static final IModel PITCHER_PLANT = new ModelFromModelBase(new ModelPitcherPlant(), new ResourceLocation("thebetweenlands:blocks/pitcher_plant"), 128, 128);
@@ -134,7 +136,8 @@ public class ModelRegistry {
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
 	public static final IModel STALACTITE = new ModelStalactite();
-	public static final IModel ROOT = new ModelRoot();
+	public static final IModel ROOT = new ModelRoot(new ResourceLocation(ModInfo.ID, "blocks/root_top"), new ResourceLocation(ModInfo.ID, "blocks/root_middle"), new ResourceLocation(ModInfo.ID, "blocks/root_bottom"));
+	public static final IModel ROOT_SPOOK = new ModelRoot(new ResourceLocation(ModInfo.ID, "blocks/root_top_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_middle_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_bottom_spook"));
 	public static final IModel RUBBER_TAP_LIQUID = new ModelRubberTapLiquid(null, 0);
 	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"));
 	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"));

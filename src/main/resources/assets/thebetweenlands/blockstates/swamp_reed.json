@@ -1,18 +1,32 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "thebetweenlands:swamp_reed"
-  },
-  "variants": {
-    "is_top": {
-      "true": {
-        "model": "thebetweenlands:swamp_reed_top"
-      },
-      "false": { }
-    },
-    "is_bottom": {
-      "true": { },
-      "false": { }
-    }
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/spook_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/swamp_reed",
+			"model_spook": "thebetweenlands:block/swamp_reed_spook"
+		}
+	},
+	"variants": {
+		"is_top": {
+			"true": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_reed_top",
+					"model_spook": "thebetweenlands:block/swamp_reed_top_spook"
+				}
+			},
+			"false": {
+				
+			}
+		},
+		"is_bottom": {
+			"true": {
+				
+			},
+			"false": {
+				
+			}
+		}
+	}
 }

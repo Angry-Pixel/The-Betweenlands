@@ -1,7 +1,12 @@
 {
-  "variants": {
-    "normal": {
-      "model": "thebetweenlands:shelf_fungus"
-    }
-  }
+	"forge_marker": 1,
+	"variants": {
+		"normal": {
+			"model": "thebetweenlands:internal/spook_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/shelf_fungus",
+				"model_spook": "thebetweenlands:block/shelf_fungus_spook"
+			}
+		}
+	}
 }

@@ -27,10 +27,16 @@ import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 
 public class ModelRoot implements IModel {
-	public static final ResourceLocation TEXTURE_TOP = new ResourceLocation(ModInfo.ID, "blocks/root_top");
-	public static final ResourceLocation TEXTURE_MIDDLE = new ResourceLocation(ModInfo.ID, "blocks/root_middle");
-	public static final ResourceLocation TEXTURE_BOTTOM = new ResourceLocation(ModInfo.ID, "blocks/root_bottom");
-
+	public final ResourceLocation textureTop;
+	public final ResourceLocation textureMiddle;
+	public final ResourceLocation textureBottom;
+	
+	public ModelRoot(ResourceLocation textureTop, ResourceLocation textureMiddle, ResourceLocation textureBottom) {
+		this.textureTop = textureTop;
+		this.textureMiddle = textureMiddle;
+		this.textureBottom = textureBottom;
+	}
+	
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
 		return Collections.emptyList();
@@ -38,12 +44,12 @@ public class ModelRoot implements IModel {
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{TEXTURE_TOP, TEXTURE_MIDDLE, TEXTURE_BOTTOM}));
+		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{this.textureTop, this.textureMiddle, this.textureBottom}));
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-		return new ModelBakedRoot(format, bakedTextureGetter.apply(TEXTURE_TOP), bakedTextureGetter.apply(TEXTURE_MIDDLE), bakedTextureGetter.apply(TEXTURE_BOTTOM));
+		return new ModelBakedRoot(format, bakedTextureGetter.apply(this.textureTop), bakedTextureGetter.apply(this.textureMiddle), bakedTextureGetter.apply(this.textureBottom));
 	}
 
 	@Override

@@ -1,0 +1,6 @@
+{
+	"parent": "block/cross",
+	"textures": {
+		"cross": "thebetweenlands:blocks/swamp_double_tallgrass_top_spook"
+	}
+}
