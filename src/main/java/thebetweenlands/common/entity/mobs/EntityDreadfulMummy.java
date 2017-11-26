@@ -49,9 +49,9 @@ import thebetweenlands.api.entity.IEntityScreenShake;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.sound.BLSoundEvent;
 
 public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss, IEntityScreenShake, IEntityCameraOffset, IEntityMusic {
 	
@@ -413,6 +413,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	@Override
 	protected void onDeathUpdate() {
+		bossInfo.setPercent(0);
 		if(deathTicks == 0) {
 			if(!getEntityWorld().isRemote) {
 				getEntityWorld().playSound(null, getPosition(), SoundRegistry.DREADFUL_PEAT_MUMMY_DEATH, SoundCategory.HOSTILE, 1F, 1F);
@@ -582,8 +583,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	}
 
 	@Override
-	public String getMusicFile(EntityPlayer listener) {
-		return "thebetweenlands:dreadful_peat_mummy_loop";
+	public BLSoundEvent getMusicFile(EntityPlayer listener) {
+		return SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP;
 	}
 
 	@Override
@@ -596,4 +597,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		return isEntityAlive();
 	}
 
+	@Override
+	public BossInfoServer getBossInfo() {
+		return bossInfo;
+	}
 }

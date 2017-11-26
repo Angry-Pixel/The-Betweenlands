@@ -15,6 +15,7 @@ import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.GuiWinGame;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -25,8 +26,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.api.entity.IEntityMusic;
+import thebetweenlands.client.audio.EntityMusicSound;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class MusicHandler {
@@ -49,6 +53,7 @@ public class MusicHandler {
 	private ISound currentSound;
 	private Sound previousSound;
 	private boolean menu;
+	private EntityMusicSound currentlyPlayingEntityMusic = null;
 
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
@@ -58,25 +63,74 @@ public class MusicHandler {
 			menu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && ConfigHandler.blMainMenu;
 
 			if ((menu || (player != null && player.dimension == ConfigHandler.dimensionId)) && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
-				if (this.currentSound != null) {
 
-					if ((!menu && SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(this.currentSound.getSoundLocation())) || (menu && SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(this.currentSound.getSoundLocation()))) {
-						this.mc.getSoundHandler().stopSound(this.currentSound);
-						this.timeUntilMusic = MathHelper.getInt(this.RNG, 0, (menu ? MIN_WAIT_MENU : MIN_WAIT) / 2);
-					}
-					//Wait for sound track to finish
-					if (!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
-						this.currentSound = null;
-						this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, (menu ? MIN_WAIT_MENU : MIN_WAIT), (menu ? MAX_WAIT_MENU : MAX_WAIT)), this.timeUntilMusic);
+				Entity closestMusicEntity = null;
+				if(mc.world != null) {
+					for(Entity entity : this.mc.world.loadedEntityList) {
+						if(entity instanceof IEntityMusic) {
+							if((closestMusicEntity == null || entity.getDistance(player) < closestMusicEntity.getDistance(player))
+									&& entity.getDistance(player) <= ((IEntityMusic)entity).getMusicRange(player)
+									&& ((IEntityMusic)entity).isMusicActive(player))
+								closestMusicEntity = entity;
+						}
 					}
 				}
 
-				this.timeUntilMusic = Math.min(this.timeUntilMusic, (menu ? MAX_WAIT_MENU : MAX_WAIT));
+				if(this.currentlyPlayingEntityMusic != null && !this.mc.getSoundHandler().isSoundPlaying(this.currentlyPlayingEntityMusic)) {
+					this.currentlyPlayingEntityMusic = null;
+				}
 
-				if (this.currentSound == null && this.timeUntilMusic-- <= 0) {
-					//Start new sound track
-					this.timeUntilMusic = Integer.MAX_VALUE;
-					this.playRandomSoundTrack();
+				if(closestMusicEntity != null) {
+					if(this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
+						this.mc.getSoundHandler().stopSound(this.currentSound);
+						this.currentSound = null;
+						this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, MIN_WAIT, MAX_WAIT), this.timeUntilMusic);
+					}
+
+					if(this.currentlyPlayingEntityMusic != null) {
+						if(this.currentlyPlayingEntityMusic.entity != closestMusicEntity) {
+							if(!this.currentlyPlayingEntityMusic.isDonePlaying() && this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
+								this.currentlyPlayingEntityMusic.stop();
+								this.currentlyPlayingEntityMusic = null;
+							}
+						}
+					}
+					if(this.currentlyPlayingEntityMusic == null) {
+						IEntityMusic entityMusic = (IEntityMusic)closestMusicEntity;
+						BLSoundEvent soundEvent = entityMusic.getMusicFile(player);
+						this.currentlyPlayingEntityMusic = new EntityMusicSound(soundEvent, soundEvent.category, closestMusicEntity, 1);
+						this.mc.getSoundHandler().playSound(this.currentlyPlayingEntityMusic);
+					}
+				}
+
+				if(this.currentlyPlayingEntityMusic != null && !this.currentlyPlayingEntityMusic.isDonePlaying()) {
+					if(!((IEntityMusic)this.currentlyPlayingEntityMusic.entity).isMusicActive(player)) {
+						if(this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
+							this.currentlyPlayingEntityMusic.stop();
+							this.currentlyPlayingEntityMusic = null;
+						}
+					}
+				} else {
+					if (this.currentSound != null) {
+
+						if ((!menu && SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(this.currentSound.getSoundLocation())) || (menu && SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(this.currentSound.getSoundLocation()))) {
+							this.mc.getSoundHandler().stopSound(this.currentSound);
+							this.timeUntilMusic = MathHelper.getInt(this.RNG, 0, (menu ? MIN_WAIT_MENU : MIN_WAIT) / 2);
+						}
+						//Wait for sound track to finish
+						if (!this.mc.getSoundHandler().isSoundPlaying(this.currentSound)) {
+							this.currentSound = null;
+							this.timeUntilMusic = Math.min(MathHelper.getInt(this.RNG, (menu ? MIN_WAIT_MENU : MIN_WAIT), (menu ? MAX_WAIT_MENU : MAX_WAIT)), this.timeUntilMusic);
+						}
+					}
+
+					this.timeUntilMusic = Math.min(this.timeUntilMusic, (menu ? MAX_WAIT_MENU : MAX_WAIT));
+
+					if (this.currentSound == null && this.timeUntilMusic-- <= 0) {
+						//Start new sound track
+						this.timeUntilMusic = Integer.MAX_VALUE;
+						this.playRandomSoundTrack();
+					}
 				}
 			}
 		}
@@ -101,6 +155,10 @@ public class MusicHandler {
 		if(SoundRegistry.BL_MUSIC_DIMENSION.getSoundName().equals(sound.getSoundLocation()))
 			return true;
 		if (SoundRegistry.BL_MUSIC_MENU.getSoundName().equals(sound.getSoundLocation()))
+			return true;
+		if (SoundRegistry.FORTRESS_BOSS_LOOP.getSoundName().equals(sound.getSoundLocation()))
+			return true;
+		if (SoundRegistry.DREADFUL_PEAT_MUMMY_LOOP.getSoundName().equals(sound.getSoundLocation()))
 			return true;
 		List<Sound> betweenlandsSoundTracks = new ArrayList<>(this.getBetweenlandsMusicTracks());
 		betweenlandsSoundTracks.addAll(getBetweenlandsMenuMusicTracks());

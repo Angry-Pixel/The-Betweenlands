@@ -395,16 +395,16 @@
   "fortress_boss_living": {
     "sounds": [
       {
-        "name": "thebetweenlands:fortress_boss_living_1",
-        "stream": true
+        "name": "thebetweenlands:fortress_boss_living_1"
+
       },
       {
-        "name": "thebetweenlands:fortress_boss_living_2",
-        "stream": true
+        "name": "thebetweenlands:fortress_boss_living_2"
+
       },
       {
-        "name": "thebetweenlands:fortress_boss_living_3",
-        "stream": true
+        "name": "thebetweenlands:fortress_boss_living_3"
+
       }
     ]
   },

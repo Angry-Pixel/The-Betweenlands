@@ -4,7 +4,11 @@ import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -40,6 +44,10 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.entity.IBLBoss;
+import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.shader.postprocessing.PostProcessingEffect;
+import thebetweenlands.client.render.shader.postprocessing.Starfield;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -53,6 +61,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
+import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ScreenRenderHandler extends Gui {
@@ -61,6 +70,7 @@ public class ScreenRenderHandler extends Gui {
 	public static ScreenRenderHandler INSTANCE = new ScreenRenderHandler();
 
 	private static final ResourceLocation DECAY_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/decay_bar.png");
+	private static final ResourceLocation BOSS_BAR_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/boss_health_bar.png");
 
 	private Random random = new Random();
 	private int updateCounter;
@@ -326,6 +336,69 @@ public class ScreenRenderHandler extends Gui {
 				tessellator.draw();
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public void onBossBarRender(RenderGameOverlayEvent.BossInfo event) {
+		Entity boss = null;
+		Minecraft mc = Minecraft.getMinecraft();
+		for(Entity entity : mc.world.loadedEntityList) {
+			if(entity instanceof IBLBoss) {
+				if(boss == null || entity.getDistance(mc.player) < boss.getDistance(mc.player))
+					boss = entity;
+			}
+		}
+		if(boss != null) {
+			event.setCanceled(true);
+
+			BossInfoClient info = event.getBossInfo();
+			float percent = info.getPercent();
+			ITextComponent name = info.getName();
+
+			int texWidth = 256;
+			int texHeight = 32/2;
+			event.setIncrement(texHeight + 2);
+			double renderWidth = 250;
+			double renderHeight = (double)texHeight / (double)texWidth * renderWidth;
+			double renderHealth  = (renderWidth - 16.0F / texWidth * renderWidth - (renderWidth - 16.0F / texWidth * renderWidth) * percent);
+
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			mc.getTextureManager().bindTexture(BOSS_BAR_TEXTURE);
+			//Old rendering code
+			GlStateManager.enableBlend();
+
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(event.getResolution().getScaledWidth() / 2 - renderWidth / 2.0D, event.getY() - 2, 0);
+			GlStateManager.glBegin(GL11.GL_QUADS);
+			//Background
+			GlStateManager.glTexCoord2f(0, 0);
+			GL11.glVertex2d(0, 0);
+			GlStateManager.glTexCoord2f(0, 0.5F);
+			GL11.glVertex2d(0, renderHeight);
+			GlStateManager.glTexCoord2f(1, 0.5F);
+			GL11.glVertex2d(renderWidth, renderHeight);
+			GlStateManager.glTexCoord2f(1, 0);
+			GL11.glVertex2d(renderWidth, 0);
+			//Foreground
+			if (percent > 0) {
+				GlStateManager.glTexCoord2f(0, 0.5F);
+				GL11.glVertex2d(0, 0);
+				GlStateManager.glTexCoord2f(0, 1.0F);
+				GL11.glVertex2d(0, renderHeight);
+				GlStateManager.glTexCoord2f(16.0F / texWidth + (1.0F - 16.0F / texWidth) * percent, 1.0F);
+				GL11.glVertex2d(renderWidth - renderHealth, renderHeight);
+				GlStateManager.glTexCoord2f(16.0F / texWidth + (1.0F - 16.0F / texWidth) * percent, 0.5F);
+				GL11.glVertex2d(renderWidth - renderHealth, 0);
+			}
+			GlStateManager.glEnd();
+			GlStateManager.popMatrix();
+			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			int strWidth = TheBetweenlands.proxy.getCustomFontRenderer().getStringWidth(name.getFormattedText());
+			TheBetweenlands.proxy.getCustomFontRenderer().drawString(name.getFormattedText(), event.getResolution().getScaledWidth() / 2 - strWidth / 2, event.getY() + 1, 0xFFFFFFFF);
 		}
 	}
 

@@ -13,7 +13,7 @@ public class EntitySound<T extends Entity> extends SafeStreamSound {
 	public final T entity;
 	public final Predicate<T> isPlaying;
 
-	private boolean fadeOut = false;
+	protected boolean fadeOut = false;
 
 	public EntitySound(SoundEvent sound, SoundCategory category, T entity, Predicate<T> isPlaying) {
 		super(sound, category);
@@ -51,6 +51,11 @@ public class EntitySound<T extends Entity> extends SafeStreamSound {
 	public void stopImmediately() {
 		this.donePlaying = true;
 		this.repeat = false;
+	}
+
+	@Override
+	public boolean isDonePlaying() {
+		return donePlaying;
 	}
 
 	/**

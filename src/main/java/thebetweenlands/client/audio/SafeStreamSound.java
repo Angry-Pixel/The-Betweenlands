@@ -26,7 +26,7 @@ public class SafeStreamSound extends MovingSound {
     }
 
     @Override
-    public final boolean isDonePlaying() {
+    public boolean isDonePlaying() {
         return isDone;
     }
 

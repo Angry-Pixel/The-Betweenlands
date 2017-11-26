@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.*;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
@@ -23,26 +25,29 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IBLBoss;
 import thebetweenlands.api.entity.IEntityBL;
-import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.api.entity.IEntityMusic;
+import thebetweenlands.client.audio.EntitySound;
+import thebetweenlands.client.audio.FortressBossIdleSound;
 import thebetweenlands.common.entity.serializer.Serializers;
-import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
-import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.RotationMatrix;
 
-public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/*, IEntityMusic*/ {
+public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss, IEntityMusic {
 	public static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
 
+	private final BossInfoServer bossInfo = (BossInfoServer)(new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.PROGRESS)).setDarkenSky(false);
 	protected static final DataParameter<Integer> SHIELD_STATE = EntityDataManager.<Integer>createKey(EntityFortressBoss.class, DataSerializers.VARINT);
 	protected static final DataParameter<Float> SHIELD_ROTATION = EntityDataManager.<Float>createKey(EntityFortressBoss.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Boolean> FLOATING_STATE = EntityDataManager.<Boolean>createKey(EntityFortressBoss.class, DataSerializers.BOOLEAN);
@@ -96,6 +101,8 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 	private int blockadeSpawnTicks = -1;
 
 	private int deathTicks = 0;
+
+	private ISound currentIdleSound;
 
 	public EntityFortressBoss(World world) {
 		super(world);
@@ -386,6 +393,26 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		this.teleportTicks = nbt.getInteger("teleportTicks");
 		this.blockadeSpawnTicks = nbt.getInteger("blockadeSpawnTicks");
 		this.deathTicks = nbt.getInteger("deathTicks");
+		if(hasCustomName())
+			bossInfo.setName(this.getDisplayName());
+	}
+
+	@Override
+	public void setCustomNameTag(String name) {
+		super.setCustomNameTag(name);
+		bossInfo.setName(this.getDisplayName());
+	}
+
+	@Override
+	public void addTrackingPlayer(EntityPlayerMP player) {
+		super.addTrackingPlayer(player);
+		bossInfo.addPlayer(player);
+	}
+
+	@Override
+	public void removeTrackingPlayer(EntityPlayerMP player) {
+		super.removeTrackingPlayer(player);
+		bossInfo.removePlayer(player);
 	}
 
 	@Override
@@ -402,6 +429,34 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 		this.motionX = 0;
 		this.motionY = 0;
 		this.motionZ = 0;
+	}
+
+	@Override
+	protected void updateAITasks() {
+		super.updateAITasks();
+		bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+	}
+
+	@Override
+	public void onEntityUpdate() {
+		super.onEntityUpdate();
+
+		if (world.isRemote && isEntityAlive()) {
+			updateAmbientSounds();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void updateAmbientSounds() {
+		if (currentIdleSound != null) {
+			if (!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(currentIdleSound)) {
+				currentIdleSound = null;
+			}
+		}
+		if (currentIdleSound == null) {
+			currentIdleSound = new FortressBossIdleSound(this);
+			Minecraft.getMinecraft().getSoundHandler().playSound(currentIdleSound);
+		}
 	}
 
 	@Override
@@ -718,6 +773,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 
 	@Override
 	protected void onDeathUpdate() {
+		bossInfo.setPercent(0);
 		if(this.deathTicks == 0) {
 			if(!this.world.isRemote) {
 				this.world.playSound(null, this.anchor.x, this.anchor.y, this.anchor.z, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.HOSTILE, 1.0F, 1.0F);
@@ -798,6 +854,11 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 	}
 
 	@Override
+	public boolean isNonBoss() {
+		return false;
+	}
+
+	@Override
 	public boolean isAIDisabled() {
 		return false;
 	}
@@ -825,7 +886,27 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss/
 	@Override
 	public void playLivingSound() {
 		if(!this.world.isRemote && !this.isSilent()) {
-			TheBetweenlands.networkWrapper.sendToAllAround(new MessagePlayEntityIdle(this, SoundRegistry.FORTRESS_BOSS_LIVING, SoundCategory.HOSTILE, 1, 1), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 16.0D));
+			//TheBetweenlands.networkWrapper.sendToAllAround(new MessagePlayEntityIdle(this, SoundRegistry.FORTRESS_BOSS_LIVING, SoundCategory.HOSTILE, 1, 1), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 16.0D));
 		}
+	}
+
+	@Override
+	public BLSoundEvent getMusicFile(EntityPlayer listener) {
+		return SoundRegistry.FORTRESS_BOSS_LOOP;
+	}
+
+	@Override
+	public double getMusicRange(EntityPlayer listener) {
+		return 20.0D;
+	}
+
+	@Override
+	public boolean isMusicActive(EntityPlayer listener) {
+		return this.isEntityAlive();
+	}
+
+	@Override
+	public BossInfoServer getBossInfo() {
+		return bossInfo;
 	}
 }
