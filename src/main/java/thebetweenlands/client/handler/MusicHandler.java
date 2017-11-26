@@ -14,6 +14,7 @@ import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
+import net.minecraft.client.audio.ISound.AttenuationType;
 import net.minecraft.client.gui.GuiWinGame;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -98,7 +99,7 @@ public class MusicHandler {
 					if(this.currentlyPlayingEntityMusic == null) {
 						IEntityMusic entityMusic = (IEntityMusic)closestMusicEntity;
 						BLSoundEvent soundEvent = entityMusic.getMusicFile(player);
-						this.currentlyPlayingEntityMusic = new EntityMusicSound(soundEvent, soundEvent.category, closestMusicEntity, 1);
+						this.currentlyPlayingEntityMusic = new EntityMusicSound(soundEvent, soundEvent.category, closestMusicEntity, 1, AttenuationType.NONE);
 						this.mc.getSoundHandler().playSound(this.currentlyPlayingEntityMusic);
 					}
 				}
