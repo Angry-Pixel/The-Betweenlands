@@ -10,6 +10,7 @@ import javax.vecmath.Vector4f;
 
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
@@ -25,8 +26,9 @@ public class QuadBuilder {
 		public final TRSRTransformation transformation;
 		public final float[] color;
 		public final Vec3d normal;
+		public final int blockLight, skyLight;
 
-		private Vertex(Vec3d pos, float u, float v, TextureAtlasSprite sprite, boolean switchUV, TRSRTransformation transformation, float[] color, Vec3d normal) {
+		private Vertex(Vec3d pos, float u, float v, TextureAtlasSprite sprite, boolean switchUV, TRSRTransformation transformation, float[] color, Vec3d normal, int blockLight, int skyLight) {
 			this.pos = pos;
 			this.u = u;
 			this.v = v;
@@ -35,6 +37,8 @@ public class QuadBuilder {
 			this.transformation = transformation;
 			this.color = color;
 			this.normal = normal;
+			this.blockLight = blockLight;
+			this.skyLight = skyLight;
 		}
 	}
 
@@ -47,15 +51,45 @@ public class QuadBuilder {
 
 	private final List<Vertex> vertices;
 
+	private int blockLight = -1, skyLight = -1;
+	private boolean hasLightmapElement;
+	
 	public QuadBuilder(VertexFormat format) {
 		this(50, format);
 	}
 
 	public QuadBuilder(int vertices, VertexFormat format) {
 		this.vertices = new ArrayList<Vertex>(vertices);
-		this.format = format;
+		this.format = new VertexFormat(format);
+		this.hasLightmapElement = this.format.getElements().contains(DefaultVertexFormats.TEX_2S);
 	}
 
+	/**
+	 * Sets the lightmap values
+	 * @param blockLight
+	 * @param skyLight
+	 * @return
+	 */
+	public QuadBuilder setLightmap(int blockLight, int skyLight) {
+		this.blockLight = blockLight;
+		this.skyLight = skyLight;
+		if(!this.hasLightmapElement) {
+			this.format.addElement(DefaultVertexFormats.TEX_2S);
+			this.hasLightmapElement = true;
+		}
+		return this;
+	}
+	
+	/**
+	 * Removes the lightmap values and uses the default ones
+	 * @return
+	 */
+	public QuadBuilder removeLightmap() {
+		this.blockLight = -1;
+		this.skyLight = -1;
+		return this;
+	}
+	
 	/**
 	 * Sets the normal.
 	 * Set to null for cross product normal.
@@ -185,7 +219,7 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public QuadBuilder addVertex(Vec3d pos, float u, float v) {
-		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal));
+		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight));
 		return this;
 	}
 
@@ -195,7 +229,7 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public QuadBuilder addVertex(Vec3d pos) {
-		this.vertices.add(new Vertex(pos, 0.0F, 0.0F, this.sprite, this.switchUV, this.transformation, this.color, this.normal));
+		this.vertices.add(new Vertex(pos, 0.0F, 0.0F, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight));
 		return this;
 	}
 
@@ -234,7 +268,7 @@ public class QuadBuilder {
 			u = 16.0F;
 			break;
 		}
-		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal));
+		this.vertices.add(new Vertex(pos, u, v, this.sprite, this.switchUV, this.transformation, this.color, this.normal, this.blockLight, this.skyLight));
 		return this;
 	}
 
@@ -269,7 +303,7 @@ public class QuadBuilder {
 
 	private void putVertex(TRSRTransformation transformation, VertexFormat format, UnpackedBakedQuad.Builder builder, 
 			Vec3d quadNormal, double x, double y, double z, float u, float v, @Nullable TextureAtlasSprite sprite, 
-			boolean switchUV, float[] color, Vec3d vertexNormal) {
+			boolean switchUV, float[] color, Vec3d vertexNormal, int blockLight, int skyLight) {
 		for (int e = 0; e < format.getElementCount(); e++) {
 			switch (format.getElement(e).getUsage()) {
 			case POSITION:
@@ -319,6 +353,9 @@ public class QuadBuilder {
 					}
 					builder.put(e, u, v, switchUV ? 1f : 0f, switchUV ? 0f : 1f);
 					break;
+				} else if (blockLight >= 0 && skyLight >= 0 && format.getElement(e).getIndex() == 1){
+					builder.put(e, ((float)blockLight * 0x20) / 0xFFFF, ((float)skyLight * 0x20) / 0xFFFF);
+					break;
 				}
 			default:
 				builder.put(e);
@@ -333,13 +370,13 @@ public class QuadBuilder {
 			quadNormal = vert1.pos.subtract(vert2.pos).crossProduct(vert3.pos.subtract(vert2.pos));
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
 		builder.setTexture(vert1.sprite);
-		putVertex(vert1.transformation, format, builder, quadNormal, vert1.pos.x, vert1.pos.y, vert1.pos.z, vert1.u, vert1.v, vert1.sprite, vert1.switchUV, vert1.color, vert1.normal);
+		putVertex(vert1.transformation, format, builder, quadNormal, vert1.pos.x, vert1.pos.y, vert1.pos.z, vert1.u, vert1.v, vert1.sprite, vert1.switchUV, vert1.color, vert1.normal, vert1.blockLight, vert1.skyLight);
 		builder.setTexture(vert2.sprite);
-		putVertex(vert2.transformation, format, builder, quadNormal, vert2.pos.x, vert2.pos.y, vert2.pos.z, vert2.u, vert2.v, vert2.sprite, vert2.switchUV, vert2.color, vert2.normal);
+		putVertex(vert2.transformation, format, builder, quadNormal, vert2.pos.x, vert2.pos.y, vert2.pos.z, vert2.u, vert2.v, vert2.sprite, vert2.switchUV, vert2.color, vert2.normal, vert2.blockLight, vert2.skyLight);
 		builder.setTexture(vert3.sprite);
-		putVertex(vert3.transformation, format, builder, quadNormal, vert3.pos.x, vert3.pos.y, vert3.pos.z, vert3.u, vert3.v, vert3.sprite, vert3.switchUV, vert3.color, vert3.normal);
+		putVertex(vert3.transformation, format, builder, quadNormal, vert3.pos.x, vert3.pos.y, vert3.pos.z, vert3.u, vert3.v, vert3.sprite, vert3.switchUV, vert3.color, vert3.normal, vert3.blockLight, vert3.skyLight);
 		builder.setTexture(vert4.sprite);
-		putVertex(vert4.transformation, format, builder, quadNormal, vert4.pos.x, vert4.pos.y, vert4.pos.z, vert4.u, vert4.v, vert4.sprite, vert4.switchUV, vert4.color, vert4.normal);
+		putVertex(vert4.transformation, format, builder, quadNormal, vert4.pos.x, vert4.pos.y, vert4.pos.z, vert4.u, vert4.v, vert4.sprite, vert4.switchUV, vert4.color, vert4.normal, vert4.blockLight, vert4.skyLight);
 		if(quadConsumer != null)
 			quadConsumer.accept(builder);
 		return builder.build();

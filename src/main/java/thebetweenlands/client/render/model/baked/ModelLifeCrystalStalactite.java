@@ -146,6 +146,10 @@ public class ModelLifeCrystalStalactite implements IModel {
 								builder.setSprite(this.textureOre);
 						}
 
+						if(i == 1) {
+							builder.setLightmap(15, 15);
+						}
+						
 						// front
 						builder.addVertex(core.bX - halfSize, 0, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
 						builder.addVertex(core.bX - halfSize, 0, core.bZ + halfSize, umin, vmax);
