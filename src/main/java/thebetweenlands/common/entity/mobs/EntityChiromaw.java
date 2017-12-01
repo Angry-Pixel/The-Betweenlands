@@ -39,6 +39,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 		setPathPriority(PathNodeType.WATER, -8F);
 		setPathPriority(PathNodeType.BLOCKED, -8.0F);
 		setPathPriority(PathNodeType.OPEN, 8.0F);
+		setPathPriority(PathNodeType.FENCE, -8.0F);
 	}
 
 	@Override
