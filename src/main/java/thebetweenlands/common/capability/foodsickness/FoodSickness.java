@@ -12,9 +12,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public enum FoodSickness {
-	FINE(6 * 5),
-	HALF(12 * 5),
-	SICK(24 * 5);
+	FINE(10 * 5),
+	HALF(22 * 5),
+	SICK(36 * 5);
 
 	public final List<String> lines = new ArrayList<String>();
 	public final int maxHatred;
