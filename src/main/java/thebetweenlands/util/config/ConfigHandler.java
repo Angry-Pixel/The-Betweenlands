@@ -15,24 +15,21 @@ public class ConfigHandler {
 	//////// Values ///////
 	public static int dimensionId;
 	public static int druidCircleFrequency;
-	public static int biomeIdSwamplands;
-	public static int biomeIdCoarseIslands;
-	public static int biomeIdDeepWater;
-	public static int biomeIdPatchyIslands;
-	public static int biomeIdMarsh1;
-	public static int biomeIdMarsh2;
-	public static int biomeIdSludgePlains;
-	public static boolean biomeIdLimit;
 	public static int dimensionBrightness;
+
 	public static int wispQuality;
 	public static boolean useShader;
+	public static int skyResolution;
+
 	public static boolean debug;
 	public static boolean debugModelLoader;
-	public static int skyResolution;
+
 	public static boolean rowboatView;
+	public static boolean blMainMenu;
+	public static boolean useFoodSickness;
+
 	public static int maxEntitiesPerLoadedArea;
 	public static int hardEntityLimit;
-	public static boolean blMainMenu;
 
 	public Configuration config;
 	public static String path = "";
@@ -47,14 +44,6 @@ public class ConfigHandler {
 	private void syncConfigs() {
 		dimensionId = config.get(CATEGORIES[0], "The Betweenlands Dimension ID", 20).getInt(20);
 		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 80).getInt(80);
-		biomeIdSwamplands = config.get(CATEGORIES[0], "Swamplands Biome ID", 50).getInt(50);
-		biomeIdCoarseIslands = config.get(CATEGORIES[0], "Coarse Islands Biome ID", 51).getInt(51);
-		biomeIdDeepWater = config.get(CATEGORIES[0], "Deep Water Biome ID", 52).getInt(52);
-		biomeIdPatchyIslands = config.get(CATEGORIES[0], "Patchy Islands Biome ID", 53).getInt(53);
-		biomeIdMarsh1 = config.get(CATEGORIES[0], "Marsh 1 Biome ID", 54).getInt(54);
-		biomeIdMarsh2 = config.get(CATEGORIES[0], "Marsh 2 Biome ID", 55).getInt(55);
-		biomeIdSludgePlains = config.get(CATEGORIES[0], "Sludge Plains Biome ID", 56).getInt(56);
-		biomeIdLimit = config.getBoolean("Biome ID Limit", CATEGORIES[0], true, "Prevents any biome IDs higher than 127. Setting this to false \nis NOT recommended unless you know what you're doing!");
 		dimensionBrightness = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
 
 		wispQuality = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 50).setMinValue(0).setMaxValue(100).getInt(100);
@@ -66,8 +55,8 @@ public class ConfigHandler {
 		debugModelLoader = config.getBoolean("Model loader debug", CATEGORIES[2], false, "");
 
 		blMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
-		
 		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
+		useFoodSickness = config.getBoolean("Food Sickness", CATEGORIES[2], true, "If true the food sickness system will be enabled");
 
 		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
 		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);

@@ -18,6 +18,7 @@ import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessEntityCapability, IFoodSicknessCapability, EntityPlayer> implements IFoodSicknessCapability, ISerializableCapability {
 	@Override
@@ -83,6 +84,8 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 
 	@Override
 	public void increaseFoodHatred(ItemFood food, int amount, int decreaseForOthers) {
+		if (!ConfigHandler.useFoodSickness)
+			return;
 		int finalMaxHatred = FoodSickness.VALUES[Math.max(FoodSickness.VALUES.length - 1, 0)].maxHatred;
 		if (this.hatredMap.containsKey(food)) {
 			int currentAmount = this.hatredMap.get(food);

@@ -21,6 +21,7 @@ import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemTooltipHandler {
 	@SubscribeEvent
@@ -42,7 +43,7 @@ public class ItemTooltipHandler {
 			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
 		}
 
-		if(stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(stack)) {
+		if(ConfigHandler.useFoodSickness && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(stack)) {
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);

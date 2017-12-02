@@ -51,7 +51,7 @@ public class FoodSicknessHandler {
 		EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && player.dimension == ConfigHandler.dimensionId && !itemStack.isEmpty() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(itemStack)) {
+		if (player != null && player.dimension == ConfigHandler.dimensionId && !itemStack.isEmpty() && ConfigHandler.useFoodSickness && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(itemStack)) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				ItemFood food = (ItemFood) itemStack.getItem();
@@ -69,7 +69,7 @@ public class FoodSicknessHandler {
 		EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && player.dimension == ConfigHandler.dimensionId && !itemStack.isEmpty() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(itemStack)) {
+		if (player != null && player.dimension == ConfigHandler.dimensionId && !itemStack.isEmpty() && ConfigHandler.useFoodSickness && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(itemStack)) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 
