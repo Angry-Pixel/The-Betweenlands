@@ -20,16 +20,22 @@ import net.minecraftforge.fluids.FluidRegistry;
 public class ModelDynBucketBL implements IModel {
 	private final IModel model;
 	private final ResourceLocation baseLocation, liquidLocation, coverLocation;
-
+	private final Fluid fluid;
+	private final boolean flipGas;
+	
 	public ModelDynBucketBL() {
 		this.model = ModelDynBucket.MODEL;
 		this.baseLocation = null;
 		this.liquidLocation = null;
 		this.coverLocation = null;
+		this.fluid = null;
+		this.flipGas = false;
 	}
 
 	public ModelDynBucketBL(ResourceLocation baseLocation, ResourceLocation liquidLocation, ResourceLocation coverLocation, Fluid fluid, boolean flipGas) {
 		this.model = new ModelDynBucket(baseLocation, liquidLocation, coverLocation, fluid, flipGas);
+		this.fluid = fluid;
+		this.flipGas = flipGas;
 		this.baseLocation = baseLocation;
 		this.liquidLocation = liquidLocation;
 		this.coverLocation = coverLocation;
@@ -59,13 +65,13 @@ public class ModelDynBucketBL implements IModel {
 	public IModel process(ImmutableMap<String, String> customData) {
 		JsonParser parser = new JsonParser();
 
-		Fluid fluid = null;
+		Fluid fluid = this.fluid;
 		if(customData.containsKey("default_fluid")) {
 			String fluidName = parser.parse(customData.get("default_fluid")).getAsString();
 			fluid = FluidRegistry.getFluid(fluidName);
 		}
 
-		boolean flip = false;
+		boolean flip = this.flipGas;
 		if (customData.containsKey("flipGas")) {
 			String flipStr = parser.parse(customData.get("flipGas")).getAsString();
 			switch (flipStr) {
