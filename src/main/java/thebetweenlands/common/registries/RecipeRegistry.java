@@ -44,6 +44,7 @@ import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class RecipeRegistry {
 	private RecipeRegistry() { }
@@ -385,23 +386,25 @@ public class RecipeRegistry {
 		});
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.TAR_BEAST_HEART.create(1), 32, 32, EnumItemMisc.TAR_BEAST_HEART_ANIMATED.create(1)).setRenderEntity(new ResourceLocation("thebetweenlands:tarminion")));
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(EnumItemMisc.INANIMATE_TARMINION.create(1), 8, 8, new ItemStack(ItemRegistry.TARMINION)).setRenderEntity(new ResourceLocation("thebetweenlands:tarminion")));
-		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.TEST_ITEM), 2, 1) {
-			@Override
-			public boolean onRetrieved(World world, BlockPos pos, ItemStack stack) {
-				TileEntity te = world.getTileEntity(pos);
-				if(te instanceof TileEntityAnimator) {
-					TileEntityAnimator animator = (TileEntityAnimator) te;
-					EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, new ItemStack(ItemRegistry.TEST_ITEM));
-					entityitem.motionX = 0;
-					entityitem.motionZ = 0;
-					entityitem.motionY = 0.11000000298023224D;
-					world.spawnEntity(entityitem);
-					animator.setInventorySlotContents(0, ItemStack.EMPTY);
-					return false;
+		if (ConfigHandler.debug) {
+			AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.TEST_ITEM), 2, 1) {
+				@Override
+				public boolean onRetrieved(World world, BlockPos pos, ItemStack stack) {
+					TileEntity te = world.getTileEntity(pos);
+					if (te instanceof TileEntityAnimator) {
+						TileEntityAnimator animator = (TileEntityAnimator) te;
+						EntityItem entityitem = new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 1D, pos.getZ() + 0.5D, new ItemStack(ItemRegistry.TEST_ITEM));
+						entityitem.motionX = 0;
+						entityitem.motionZ = 0;
+						entityitem.motionY = 0.11000000298023224D;
+						world.spawnEntity(entityitem);
+						animator.setInventorySlotContents(0, ItemStack.EMPTY);
+						return false;
+					}
+					return true;
 				}
-				return true;
-			}
-		});
+			});
+		}
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity(new ResourceLocation("thebetweenlands:sporeling")));
 	}
 

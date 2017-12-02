@@ -1,6 +1,7 @@
 package thebetweenlands.common.command;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -106,7 +107,7 @@ public class CommandBLEvent extends CommandBase {
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
 		if (!(sender.getEntityWorld().provider instanceof WorldProviderBetweenlands)) {
-			return null;
+			return Collections.<String>emptyList();
 		}
 		List<String> completions = null;
 		if (args.length == 1) {
@@ -126,7 +127,7 @@ public class CommandBLEvent extends CommandBase {
 				}
 			} catch(Exception ex) { }
 		}
-		return completions == null ? null : getListOfStringsMatchingLastWord(args, completions.toArray(new String[0]));
+		return completions == null ? Collections.<String>emptyList() : getListOfStringsMatchingLastWord(args, completions.toArray(new String[0]));
 	}
 
 	private EnvironmentEventRegistry getEnvironmentEventRegistry(ICommandSender sender) throws CommandException {

@@ -32,7 +32,7 @@ public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
 			this.throwException("At least one output item or entity must be specified");
 		}
 
-		ItemStack output = outputItem.isPresent() ? outputItem.get().create() : null;
+		ItemStack output = outputItem.isPresent() ? outputItem.get().create() : ItemStack.EMPTY;
 		AnimatorRecipe recipe;
 
 		if(outputEntity.isPresent()) {
@@ -42,7 +42,7 @@ public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
 					TileEntity te = world.getTileEntity(pos);
 					if(te instanceof TileEntityAnimator) {
 						TileEntityAnimator animator = (TileEntityAnimator) te;
-						animator.setInventorySlotContents(0, output == null ? null : output.copy());
+						animator.setInventorySlotContents(0, output.isEmpty() ? ItemStack.EMPTY : output.copy());
 						Entity entity = outputEntity.get().create(world, new Vec3d(pos), null);
 						if(entity != null) {
 							entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 1.0D, pos.getZ() + 0.5D, 0, 0);
