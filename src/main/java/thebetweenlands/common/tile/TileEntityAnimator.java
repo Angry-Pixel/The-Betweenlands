@@ -24,12 +24,12 @@ import thebetweenlands.common.registries.SoundRegistry;
 import javax.annotation.Nullable;
 
 public class TileEntityAnimator extends TileEntityBasicInventory implements ITickable {
-    public ItemStack itemToAnimate = null;
+    public ItemStack itemToAnimate = ItemStack.EMPTY;
     public int fuelBurnProgress, lifeCrystalLife, fuelConsumed = 0, requiredFuelCount = 32, requiredLifeCount = 32;
     public boolean itemAnimated = false;
     //public static final WeightedRandomItem[] items = new WeightedRandomItem[] { new WeightedRandomItem(new ItemStack(BLItemRegistry.lifeCrystal), 10), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.VALONITE_SHARD), 20), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.OCTINE_INGOT), 30), new WeightedRandomItem(ItemGeneric.createStack(EnumItemGeneric.SULFUR), 40) };
     private int prevStackSize = 0;
-    private ItemStack prevItem;
+    private ItemStack prevItem = ItemStack.EMPTY;
 
     private boolean soundPlaying = false;
 
@@ -39,12 +39,15 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
 
     @Override
     public void update() {
-        if (this.itemToAnimate != null) {
+        if (isSlotInUse(0) && isValidFocalItem()) {
+            this.itemToAnimate = this.inventory.get(0);
             IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(this.itemToAnimate);
             if (recipe != null) {
                 this.requiredFuelCount = recipe.getRequiredFuel(this.itemToAnimate);
                 this.requiredLifeCount = recipe.getRequiredLife(this.itemToAnimate);
             }
+        } else {
+            this.itemToAnimate = ItemStack.EMPTY;
         }
         if (!world.isRemote) {
             if (isCrystalInslot())
@@ -53,18 +56,20 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
                 fuelBurnProgress = 0;
                 fuelConsumed = 0;
             }
-            if (isSlotInUse(0) && isCrystalInslot() && isSulfurInSlot() && fuelConsumed < requiredFuelCount && isValidFocalItem()) {
-                this.itemToAnimate = this.inventory.get(1);
+
+            if (!this.itemToAnimate.isEmpty() && isCrystalInslot() && isSulfurInSlot() && fuelConsumed < requiredFuelCount && isValidFocalItem()) {
                 if (lifeCrystalLife >= this.requiredLifeCount) {
                     fuelBurnProgress++;
                     if (fuelBurnProgress >= 42) {
                         fuelBurnProgress = 0;
                         decrStackSize(2, 1);
                         fuelConsumed++;
+                        markDirty();
                     }
                     this.itemAnimated = false;
                 }
             }
+
             if (isSlotInUse(2) && !this.itemAnimated) {
                 if (!isSlotInUse(0) || !isSlotInUse(1)) {
                     fuelBurnProgress = 0;
@@ -78,16 +83,16 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
                 if (result.isEmpty()) result = recipe.getResult(inventory.get(0));
                 if (!result.isEmpty()) {
                     setInventorySlotContents(0, result.copy());
-                    world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
                 }
                 inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + recipe.getRequiredLife(inventory.get(1)));
+                markDirty();
                 this.itemAnimated = true;
             }
             if (prevStackSize != (isSlotInUse(0) ? inventory.get(0).getCount() : 0))
-                world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
-            if (prevItem != (isSlotInUse(0) ? inventory.get(0) : null))
-                world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
-            prevItem = isSlotInUse(0) ? inventory.get(0) : null;
+                markDirty();
+            if (prevItem != (isSlotInUse(0) ? inventory.get(0) : ItemStack.EMPTY))
+                markDirty();
+            prevItem = isSlotInUse(0) ? inventory.get(0) : ItemStack.EMPTY;
             prevStackSize = isSlotInUse(0) ? inventory.get(0).getCount() : 0;
             updateContainingBlockInfo();
         } else {
@@ -113,6 +118,12 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     @Override
     public int getInventoryStackLimit() {
         return 64;
+    }
+
+    @Override
+    public void markDirty() {
+        super.markDirty();
+        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }
 
     @Override
@@ -166,7 +177,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     }
 
     public boolean isRunning() {
-        return this.isSlotInUse(0) && this.isCrystalInslot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && this.isValidFocalItem();
+        return this.isSlotInUse(0) && this.isCrystalInslot() && this.isSulfurInSlot() && this.fuelConsumed < this.requiredFuelCount && lifeCrystalLife >= this.requiredLifeCount && this.isValidFocalItem();
     }
 
     @Override
@@ -182,7 +193,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
         nbt.setInteger("itemsConsumed", fuelConsumed);
         nbt.setBoolean("lifeDepleted", itemAnimated);
         NBTTagCompound toAnimateCompound = new NBTTagCompound();
-        if (this.itemToAnimate != null) {
+        if (!this.itemToAnimate.isEmpty()) {
             this.itemToAnimate.writeToNBT(toAnimateCompound);
         }
         nbt.setTag("toAnimate", toAnimateCompound);
@@ -203,7 +214,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
         if (toAnimateStackCompound.hasKey("id", Constants.NBT.TAG_STRING))
             this.itemToAnimate = new ItemStack(toAnimateStackCompound);
         else
-            this.itemToAnimate = null;
+            this.itemToAnimate = ItemStack.EMPTY;
     }
 
     @Nullable

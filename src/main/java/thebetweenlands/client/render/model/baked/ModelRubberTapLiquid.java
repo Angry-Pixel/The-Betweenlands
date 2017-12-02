@@ -22,6 +22,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -65,13 +66,17 @@ public class ModelRubberTapLiquid implements IModel {
 
 	@Override
 	public ModelRubberTapLiquid process(ImmutableMap<String, String> customData) {
-		if(!customData.containsKey("fluid_texture")) 
-			return this;
-
 		JsonParser parser = new JsonParser();
 
-		String fluidJsonStr = customData.get("fluid_texture");
-		String fluid = parser.parse(fluidJsonStr).getAsString();
+		ResourceLocation fluidTexture = this.fluidTexture;
+		
+		if(customData.containsKey("fluid_texture")) {
+			fluidTexture = new ResourceLocation(parser.parse(customData.get("fluid_texture")).getAsString());
+		}
+		
+		if(fluidTexture == null) {
+			fluidTexture = TextureMap.LOCATION_MISSING_TEXTURE;
+		}
 
 		int height = 0;
 
@@ -80,7 +85,7 @@ public class ModelRubberTapLiquid implements IModel {
 			height = parser.parse(fluidHeightJsonStr).getAsInt();
 		}
 
-		return new ModelRubberTapLiquid(new ResourceLocation(fluid), height);
+		return new ModelRubberTapLiquid(fluidTexture, height);
 	}
 
 	private static final class BakedModelRubberTapLiquid implements IBakedModel {

@@ -5,6 +5,16 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.concurrent.FutureTask;
 
+import com.mojang.authlib.GameProfile;
+import net.minecraft.network.play.client.CPacketClientSettings;
+import net.minecraft.stats.StatBase;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 
@@ -30,6 +40,7 @@ import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.Matrix;
+import thebetweenlands.util.config.ConfigHandler;
 
 public final class WeedwoodRowboatHandler {
     public static final WeedwoodRowboatHandler INSTANCE = new WeedwoodRowboatHandler();
@@ -41,8 +52,7 @@ public final class WeedwoodRowboatHandler {
     private MouseHelper lastMouseHelper;
 
     private View view = View.ROWBOAT;
-
-    private int lastView;
+    private View changedTo = null;
 
     private WeedwoodRowboatHandler() {}
 
@@ -68,7 +78,12 @@ public final class WeedwoodRowboatHandler {
 
     public void onPilotEnterWeedwoodRowboat(Entity pilot) {
         if (pilot == MC.player) {
-            enterRowboatPerspective();
+            if (MC.gameSettings.thirdPersonView > 0)
+                changedTo = View.ROWBOAT;
+            if ((changedTo != null && changedTo == View.ROWBOAT) || ConfigHandler.rowboatView)
+                enterRowboatPerspective();
+            else
+                leaveRowboatPerspective();
         }
     }
 
@@ -84,6 +99,9 @@ public final class WeedwoodRowboatHandler {
             pilot.setRotationYawHead(yaw);
             pilot.setRenderYawOffset(yaw);
             leaveRowboatPerspective();
+            if (changedTo != null && changedTo == View.ROWBOAT)
+                MC.gameSettings.thirdPersonView = 1;
+            changedTo = null;
         }
     }
 
@@ -95,6 +113,24 @@ public final class WeedwoodRowboatHandler {
                 ((RowboatCam) entity).update(MC.player.getRidingEntity(), event.renderTickTime);
             }
         }
+    }
+
+    private Entity prevRenderViewEntity = null;
+    
+    @SubscribeEvent
+    public void onOverlayRender(RenderGameOverlayEvent event) {
+    	if(isPlayerInRowboat) {
+	        if (event instanceof RenderGameOverlayEvent.Pre && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+	        	//Set render view entity to player during GUI overlay rendering so that HUD renders
+	            this.prevRenderViewEntity = MC.getRenderViewEntity();
+	            MC.setRenderViewEntity(MC.player);
+	            GuiIngameForge.renderFood = true;
+	        } else if (event instanceof RenderGameOverlayEvent.Post && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+	        	if(MC.getRenderViewEntity() == MC.player || this.prevRenderViewEntity instanceof RowboatCam) {
+	        		MC.setRenderViewEntity(this.prevRenderViewEntity);
+	        	}
+	        }
+    	}
     }
 
     @SubscribeEvent
@@ -113,15 +149,21 @@ public final class WeedwoodRowboatHandler {
     }
 
     @SubscribeEvent
-    public void onTickAfterKeyboard(InputEvent.MouseInputEvent event) {
-        int v = MC.gameSettings.thirdPersonView;
-        if (isPlayerInRowboat && v != lastView) {
-            if (v != 0 && view == View.FIRST_PERSON) {
-                enterRowboatPerspective();
-                lastView = 0;
-            } else {
-                leaveRowboatPerspective();
-                lastView = v;
+    public void onTickAfterKeyboard(InputEvent.KeyInputEvent event) {
+        if (isPlayerInRowboat && Keyboard.getEventKeyState()) {
+            int press = ObfuscationReflectionHelper.getPrivateValue(KeyBinding.class, MC.gameSettings.keyBindTogglePerspective,"pressTime", "field_151474_i", "j");
+            if (press > 0) {
+                if (view == View.FIRST_PERSON) {
+                    enterRowboatPerspective();
+                    view = View.ROWBOAT;
+                    ConfigHandler.rowboatView = true;
+                } else {
+                    leaveRowboatPerspective();
+                    view = View.FIRST_PERSON;
+                    ConfigHandler.rowboatView = false;
+                }
+                MC.gameSettings.thirdPersonView = 2;
+                changedTo = view;
             }
         }
     }

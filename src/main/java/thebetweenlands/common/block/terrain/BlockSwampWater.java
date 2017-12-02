@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockStairs;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
@@ -62,7 +63,12 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 		if(entity instanceof EntityPlayer && ItemMarshRunnerBoots.checkPlayerWalkOnWater((EntityPlayer) entity)) {
 			return Vec3d.ZERO;
 		}
-		return super.modifyAcceleration(world, pos, entity, vec);
+		if (densityDir > 0) return vec;
+        Vec3d vec_flow = this.getFlowVector(world, pos);
+        return vec.addVector(
+                vec_flow.x,
+                vec_flow.y,
+                vec_flow.z);
     }
 	
 	@Override
@@ -189,28 +195,37 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 				vec = vec.addVector((pos2.getX() - pos.getX()) * power, 0, (pos2.getZ() - pos.getZ()) * power);
 			}
 		}
-
-		if (world.getBlockState(pos.up()).getBlock() instanceof BlockSwampWater)
-		{
-			boolean flag =
-					isBlockSolid(world, pos.add( 0,  0, -1), EnumFacing.NORTH) ||
-					isBlockSolid(world, pos.add( 0,  0,  1), EnumFacing.SOUTH) ||
-					isBlockSolid(world, pos.add(-1,  0,  0), EnumFacing.WEST) ||
-					isBlockSolid(world, pos.add( 1,  0,  0), EnumFacing.EAST) ||
-					isBlockSolid(world, pos.add( 0,  1, -1), EnumFacing.NORTH) ||
-					isBlockSolid(world, pos.add( 0,  1,  1), EnumFacing.SOUTH) ||
-					isBlockSolid(world, pos.add(-1,  1,  0), EnumFacing.WEST) ||
-					isBlockSolid(world, pos.add( 1,  1,  0), EnumFacing.EAST);
-
-			if (flag)
-			{
-				vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
-			}
-		}
+		
+		if (!this.isSourceBlock(world, pos) && world.getBlockState(pos.up()).getBlock() instanceof BlockSwampWater) {
+            for (EnumFacing dir : EnumFacing.Plane.HORIZONTAL) {
+                if (this.causesDownwardCurrent(world, pos.offset(dir), dir) || this.causesDownwardCurrent(world, pos.offset(dir).up(), dir)) {
+                	vec = vec.normalize().addVector(0.0D, -6.0D, 0.0D);
+                    break;
+                }
+            }
+        }
+		
 		vec = vec.normalize();
 		return vec;
 	}
 
+	private boolean causesDownwardCurrent(IBlockAccess world, BlockPos pos, EnumFacing side) {
+        IBlockState state = world.getBlockState(pos);
+        Block block = state.getBlock();
+        Material material = state.getMaterial();
+
+        if (material == this.blockMaterial) {
+            return false;
+        } else if (side == EnumFacing.UP) {
+            return true;
+        } else if (material == Material.ICE) {
+            return false;
+        } else {
+            boolean flag = isExceptBlockForAttachWithPiston(block) || block instanceof BlockStairs;
+            return !flag && isBlockSolid(world, pos, side);
+        }
+    }
+	
 	@Override
 	public int getQuantaValue(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
@@ -474,4 +489,9 @@ public class BlockSwampWater extends BlockFluidClassic implements IStateMappedBl
 	private boolean isBlockSolid(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		return world.getBlockState(pos).getBlockFaceShape(world, pos, face) == BlockFaceShape.SOLID;
 	}
+	
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.UNDEFINED;
+    }
 }

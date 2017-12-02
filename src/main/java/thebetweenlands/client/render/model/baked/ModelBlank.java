@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;
@@ -16,6 +15,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -28,15 +28,17 @@ public class ModelBlank implements IModel {
 	private final List<ResourceLocation> texturesToLoad = new ArrayList<ResourceLocation>();
 
 	public ModelBlank() {
-		this.particleTexture = null;
+		this.particleTexture = TextureMap.LOCATION_MISSING_TEXTURE;
 	}
 
 	public ModelBlank(ResourceLocation texture) {
-		if(texture == null)
-			throw new IllegalArgumentException("No particle texture specified!");
-		this.particleTexture = texture;
+		if(texture == null) {
+			this.particleTexture = TextureMap.LOCATION_MISSING_TEXTURE;
+		} else {
+			this.particleTexture = texture;
+		}
 	}
-	
+
 	public ModelBlank(List<ResourceLocation> texturesToLoad) {
 		this.texturesToLoad.addAll(texturesToLoad);
 		this.particleTexture = texturesToLoad.get(0);
@@ -113,10 +115,18 @@ public class ModelBlank implements IModel {
 
 	@Override
 	public IModel process(ImmutableMap<String, String> customData) {
-		if(!customData.containsKey("particle_texture")) 
-			throw new IllegalArgumentException("No particle texture specified!");
 		JsonParser parser = new JsonParser();
-		ResourceLocation particleTextureLocation = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
+
+		ResourceLocation particleTextureLocation = this.particleTexture;
+
+		if(customData.containsKey("particle_texture")) {
+			particleTextureLocation = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
+		}
+
+		if(particleTextureLocation == null) {
+			particleTextureLocation = TextureMap.LOCATION_MISSING_TEXTURE;
+		}
+
 		return new ModelBlank(particleTextureLocation);
 	}
 }

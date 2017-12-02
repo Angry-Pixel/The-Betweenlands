@@ -67,7 +67,7 @@ public class BlockAnimator extends BlockContainer {
 		}
 		if (world.getTileEntity(pos) instanceof TileEntityAnimator) {
 			TileEntityAnimator animator = (TileEntityAnimator) world.getTileEntity(pos);
-			if (animator.fuelConsumed < animator.requiredFuelCount) {
+			if (!animator.itemAnimated) {
 				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_ANIMATOR, world, pos.getX(), pos.getY(), pos.getZ());
 			} else {
 				IAnimatorRecipe recipe = AnimatorRecipe.getRecipe(animator.itemToAnimate);
@@ -76,7 +76,7 @@ public class BlockAnimator extends BlockContainer {
 				}
 				animator.fuelConsumed = 0;
 			}
-			animator.itemToAnimate = null;
+			animator.itemToAnimate = ItemStack.EMPTY;
 			animator.itemAnimated = false;
 		}
 

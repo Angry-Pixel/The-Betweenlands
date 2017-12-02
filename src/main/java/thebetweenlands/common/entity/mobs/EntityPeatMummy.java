@@ -56,7 +56,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	public static final IAttribute CHARGING_PREPARATION_SPEED_ATTRIB = (new RangedAttribute(null, "bl.chargingPreparationSpeed", 60.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Preparation Speed");
 	public static final IAttribute CHARGING_TIME_ATTRIB = (new RangedAttribute(null, "bl.chargingTime", 320.0D, 0, Integer.MAX_VALUE)).setDescription("Charging Time");
 	public static final IAttribute CHARGING_SPEED_ATTRIB = (new RangedAttribute(null, "bl.chargingSpeed", 0.55D, 0, Double.MAX_VALUE)).setDescription("Charging Movement Speed");
-	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute(null, "bl.chargingDamageMultiplier", 2.0D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
+	public static final IAttribute CHARGING_DAMAGE_MULTIPLIER_ATTRIB = (new RangedAttribute(null, "bl.chargingDamageMultiplier", 1.65D, 0, Double.MAX_VALUE)).setDescription("Charging Damage Multiplier");
 
 	public static final IAttribute CARRY_SHIMMERSTONE = (new BooleanAttribute(null, "bl.carryShimmerstone", false)).setDescription("Whether this Peat Mummy carries a Shimmerstone");
 	public static final IAttribute IS_BOSS = (new BooleanAttribute(null, "bl.isDreadfulPeatMummyBoss", false)).setDescription("Whether this Peat Mummy was spawned by a Dreadful Peat Mummy");
@@ -66,7 +66,7 @@ public class EntityPeatMummy extends EntityMob implements IEntityBL, IEntityScre
 	private static final int BREAK_COUNT = 5;
 
 	public static final float BASE_SPEED = 0.2F;
-	public static final float BASE_DAMAGE = 8.0F;
+	public static final float BASE_DAMAGE = 6.0F;
 
 	private static final DataParameter<Integer> SPAWNING_TICKS = EntityDataManager.<Integer>createKey(EntityPeatMummy.class, DataSerializers.VARINT);
 

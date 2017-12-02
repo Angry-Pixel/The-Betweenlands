@@ -304,7 +304,7 @@ public abstract class CustomRecipes<C> {
 	public final <T, F extends RecipeArg<T>> Optional<IRecipeEntry<T>> get(String id, RecipeArg<T> arg) {
 		Optional<IRecipeEntry<?>> entry = this.loadedEntries.get(id);
 		if(entry != null && entry.isPresent()) {
-			return Optional.of((IRecipeEntry<T>)(IRecipeEntry<?>)entry.get());
+			return Optional.of((IRecipeEntry<T>) entry.get());
 		}
 		return Optional.absent();
 	}

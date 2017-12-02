@@ -229,7 +229,7 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 
-				if (!player.isRiding() && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				if (player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 					if(capability.isDecayEnabled()) {
@@ -264,7 +264,7 @@ public class ScreenRenderHandler extends Gui {
 								maxHealthHearts -= renderedHearts;
 								guiOffsetY -= 10;
 							}
-							startY += guiOffsetY + 10;
+							startY += guiOffsetY;
 						}
 
 						int decay = 20 - capability.getDecayStats().getDecayLevel();

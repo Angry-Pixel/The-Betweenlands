@@ -39,6 +39,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decay
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
+import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTapPouring;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
 import thebetweenlands.client.render.model.baked.modelbase.ModelVenusFlyTrap;
@@ -139,6 +140,7 @@ public class ModelRegistry {
 	public static final IModel ROOT = new ModelRoot(new ResourceLocation(ModInfo.ID, "blocks/root_top"), new ResourceLocation(ModInfo.ID, "blocks/root_middle"), new ResourceLocation(ModInfo.ID, "blocks/root_bottom"));
 	public static final IModel ROOT_SPOOK = new ModelRoot(new ResourceLocation(ModInfo.ID, "blocks/root_top_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_middle_spook"), new ResourceLocation(ModInfo.ID, "blocks/root_bottom_spook"));
 	public static final IModel RUBBER_TAP_LIQUID = new ModelRubberTapLiquid(null, 0);
+	public static final IModel RUBBER_TAP_POURING = new ModelFromModelBase(new ModelRubberTapPouring(), new ResourceLocation(ModInfo.ID, "fluids/rubber_flowing"), 64, 64);
 	public static final IModel WEEDWOOD_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/weedwood_rubber_tap"));
 	public static final IModel SYRMORITE_RUBBER_TAP = new ModelRubberTapCombined(new ResourceLocation("thebetweenlands:blocks/syrmorite_rubber_tap"));
 	public static final IModel MUD_FLOWER_POT_BASE = new ModelFromModelBase(new ModelMudFlowerPot(), new ResourceLocation("thebetweenlands:blocks/mud_flower_pot"), 32, 32);

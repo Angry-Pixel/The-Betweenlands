@@ -7,7 +7,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -36,7 +39,16 @@ public class BlockSyrmoriteRubberTap extends BlockRubberTap {
 			} else {
 				spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.SYRMORITE_BUCKET));
 			}
-			spawnAsEntity(worldIn, pos, EnumItemMisc.SWAMP_REED_ROPE.create(1));
 		}
+	}
+	
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		drops.add(new ItemStack(ItemRegistry.SYRMORITE_BUCKET));
+	}
+	
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(ItemRegistry.SYRMORITE_BUCKET);
 	}
 }
