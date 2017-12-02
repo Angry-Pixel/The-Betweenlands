@@ -12,7 +12,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.UniversalBucket;
 import thebetweenlands.common.block.misc.BlockRubberTap;
@@ -42,24 +41,20 @@ public class ItemSyrmoriteBucketEmpty extends ItemBLBucketEmpty {
 					if(blockState.getBlock() == BlockRegistry.LOG_RUBBER && blockState.getValue(BlockRubberLog.NATURAL)) {
 						if(world.getBlockState(pos.offset(result.sideHit)).getBlock().isReplaceable(world, pos.offset(result.sideHit))
 								&& BlockRegistry.SYRMORITE_RUBBER_TAP.canPlaceBlockAt(world, pos.offset(result.sideHit))) {
-							if(player.inventory.hasItemStack(EnumItemMisc.SWAMP_REED_ROPE.create(1))) {
-								world.setBlockState(pos.offset(result.sideHit), BlockRegistry.SYRMORITE_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
-								itemStack.shrink(1);
+							world.setBlockState(pos.offset(result.sideHit), BlockRegistry.SYRMORITE_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
+							itemStack.shrink(1);
 
-								for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
-									ItemStack invStack = player.inventory.getStackInSlot(i);
-									if(!invStack.isEmpty() && EnumItemMisc.SWAMP_REED_ROPE.isItemOf(invStack)) {
-										player.inventory.decrStackSize(i, 1);
-										break;
-									}
+							for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
+								ItemStack invStack = player.inventory.getStackInSlot(i);
+								if(!invStack.isEmpty() && EnumItemMisc.SWAMP_REED_ROPE.isItemOf(invStack)) {
+									player.inventory.decrStackSize(i, 1);
+									break;
 								}
-
-								world.playSound(null, pos, SoundEvents.BLOCK_METAL_PLACE, SoundCategory.PLAYERS, 1, 1);
-
-								return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
-							} else {
-								player.sendMessage(new TextComponentTranslation("chat.tap.needsRope", new TextComponentTranslation(BlockRegistry.SYRMORITE_RUBBER_TAP.getUnlocalizedName() + ".name")));
 							}
+
+							world.playSound(null, pos, SoundEvents.BLOCK_METAL_PLACE, SoundCategory.PLAYERS, 1, 1);
+
+							return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
 						}
 					}
 				}

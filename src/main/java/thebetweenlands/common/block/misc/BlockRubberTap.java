@@ -10,10 +10,13 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
@@ -49,6 +52,16 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	}
 
 	@Override
+	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos) {
+		return 0.075F; //breaking speed shouldn't depend on tool
+    }
+	
+	@Override
+	public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player) {
+		return true; //shouldn't depend on tool
+    }
+	
+	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		if (this.canPlaceAt(world, pos, facing)) {
 			return this.getDefaultState().withProperty(FACING, facing);
@@ -78,7 +91,7 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (this.checkForDrop(world, pos, world.getBlockState(fromPos))) {
+		if (this.checkForDrop(world, pos, world.getBlockState(pos))) {
 			EnumFacing facing = (EnumFacing)state.getValue(FACING);
 			EnumFacing.Axis axis = facing.getAxis();
 			EnumFacing oppositeFacing = facing.getOpposite();
@@ -143,6 +156,11 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 		return BlockRenderLayer.CUTOUT;
 	}
 
+	@Override
+	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
+		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
+	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));

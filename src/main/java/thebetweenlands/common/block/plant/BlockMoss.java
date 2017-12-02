@@ -41,7 +41,7 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
 
     public BlockMoss() {
         super(Material.PLANTS);
-        this.setHardness(0.6F);
+        this.setHardness(0.2F);
         this.setSoundType(SoundType.PLANT);
         this.setCreativeTab(BLCreativeTabs.PLANTS);
         this.setTickRandomly(true);

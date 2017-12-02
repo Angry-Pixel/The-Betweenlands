@@ -8,6 +8,7 @@ import com.google.gson.JsonParser;
 
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
@@ -19,6 +20,7 @@ public class ModelRubberTapCombined implements IModel {
 	private final int height;
 	private final ResourceLocation tapTexture;
 	private final ResourceLocation particleTexture;
+	private final ResourceLocation fluidTexture;
 
 	public ModelRubberTapCombined(ResourceLocation texture) {
 		this(texture, texture, null, 0);
@@ -29,6 +31,7 @@ public class ModelRubberTapCombined implements IModel {
 		this.tapTexture = texture;
 		this.particleTexture = particleTexture;
 		this.height = height;
+		this.fluidTexture = fluidTexture;
 	}
 
 	@Override
@@ -53,13 +56,17 @@ public class ModelRubberTapCombined implements IModel {
 
 	@Override
 	public ModelRubberTapCombined process(ImmutableMap<String, String> customData) {
-		if(!customData.containsKey("fluid_texture")) 
-			return this;
-
 		JsonParser parser = new JsonParser();
 
-		String fluidJsonStr = customData.get("fluid_texture");
-		String fluid = parser.parse(fluidJsonStr).getAsString();
+		ResourceLocation fluidTexture = this.fluidTexture;
+		
+		if(customData.containsKey("fluid_texture")) {
+			fluidTexture = new ResourceLocation(parser.parse(customData.get("fluid_texture")).getAsString());
+		}
+		
+		if(fluidTexture == null) {
+			fluidTexture = TextureMap.LOCATION_MISSING_TEXTURE;
+		}
 
 		int height = this.height;
 		if(customData.containsKey("fluid_height")) {
@@ -73,6 +80,6 @@ public class ModelRubberTapCombined implements IModel {
 			particleTexture = new ResourceLocation(parser.parse(particleTextureJsonStr).getAsString());
 		}
 
-		return new ModelRubberTapCombined(this.tapTexture, particleTexture, new ResourceLocation(fluid), height);
+		return new ModelRubberTapCombined(this.tapTexture, particleTexture, fluidTexture, height);
 	}
 }

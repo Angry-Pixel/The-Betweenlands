@@ -96,37 +96,55 @@ public class ModelLayerSelection implements IModel {
 
 	@Override
 	public IModel process(ImmutableMap<String, String> customData) {
-		if (!customData.containsKey("model") || !customData.containsKey("layers")) return this;
-
 		JsonParser parser = new JsonParser();
-		String baseJsonStr = customData.get("model");
-		ResourceLocation baseModelLocation = new ResourceLocation(parser.parse(baseJsonStr).getAsString());
+		
+		IModel baseModel = this.model;
+		
+		if(customData.containsKey("model")) {
+			ResourceLocation baseModelLocation = new ResourceLocation(parser.parse(customData.get("model")).getAsString());
+			baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
+		}
+		
+		if(baseModel == null) {
+			baseModel = ModelLoaderRegistry.getMissingModel();
+		}
+		
+		if(customData.containsKey("model_data")) {
+			baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_data")));
+		}
 
-		IModel baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
-		baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_data")));
-
-		String layers = customData.get("layers");
-		JsonArray layersArray = parser.parse(layers).getAsJsonArray();
 		List<BlockRenderLayer> renderLayers = new ArrayList<>();
 		boolean renderNone = false;
-		for(JsonElement element : layersArray) {
-			String layer = element.getAsString();
-			switch(layer) {
-			case "solid":
-				renderLayers.add(BlockRenderLayer.SOLID);
-				break;
-			case "cutout_mipped":
-				renderLayers.add(BlockRenderLayer.CUTOUT_MIPPED);
-				break;
-			case "cutout":
-				renderLayers.add(BlockRenderLayer.CUTOUT);
-				break;
-			case "translucent":
-				renderLayers.add(BlockRenderLayer.TRANSLUCENT);
-				break;
-			case "none":
-				renderNone = true;
-				break;
+		
+		if(!customData.containsKey("layers")) {
+			for(int i = 1; i < this.renderLayer.length; i++) {
+				if(this.renderLayer[i]) {
+					renderLayers.add(BlockRenderLayer.values()[i - 1]);
+				}
+			}
+			renderNone = this.renderLayer[0];
+		} else {
+			String layers = customData.get("layers");
+			JsonArray layersArray = parser.parse(layers).getAsJsonArray();
+			for(JsonElement element : layersArray) {
+				String layer = element.getAsString();
+				switch(layer) {
+				case "solid":
+					renderLayers.add(BlockRenderLayer.SOLID);
+					break;
+				case "cutout_mipped":
+					renderLayers.add(BlockRenderLayer.CUTOUT_MIPPED);
+					break;
+				case "cutout":
+					renderLayers.add(BlockRenderLayer.CUTOUT);
+					break;
+				case "translucent":
+					renderLayers.add(BlockRenderLayer.TRANSLUCENT);
+					break;
+				case "none":
+					renderNone = true;
+					break;
+				}
 			}
 		}
 

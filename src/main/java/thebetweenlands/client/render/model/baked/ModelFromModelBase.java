@@ -24,6 +24,7 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -189,17 +190,24 @@ public class ModelFromModelBase implements IModel {
 
 	@Override
 	public ModelFromModelBase process(ImmutableMap<String, String> customData) {
-		if(!customData.containsKey("particle_texture")) 
-			return this;
-
 		JsonParser parser = new JsonParser();
-		String particleTexture = parser.parse(customData.get("particle_texture")).getAsString();
+		
+		ResourceLocation particleTexture = this.particleTexture;
+		
+		if(customData.containsKey("particle_texture")) {
+			particleTexture = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
+		}
+		
+		if(particleTexture == null) {
+			particleTexture = TextureMap.LOCATION_MISSING_TEXTURE;
+		}
 
 		boolean ambientOcclusion = this.isAmbientOcclusion();
+		
 		if(customData.containsKey("ambient_occlusion")) {
 			ambientOcclusion = parser.parse(customData.get("ambient_occlusion")).getAsBoolean();
 		}
 
-		return new ModelFromModelBase(this.model, this.texture, new ResourceLocation(particleTexture), this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+		return new ModelFromModelBase(this.model, this.texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
 	}
 }
