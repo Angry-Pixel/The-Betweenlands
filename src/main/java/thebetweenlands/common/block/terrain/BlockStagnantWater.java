@@ -21,8 +21,6 @@ import thebetweenlands.util.AdvancedStateMap;
 public class BlockStagnantWater extends BlockFluidClassic implements IStateMappedBlock {
 	public BlockStagnantWater() {
 		super(FluidRegistry.STAGNANT_WATER, Material.WATER);
-		this.setLightLevel(1.0F);
-		this.setMaxScaledLight(0);
 	}
 
 	@Override
