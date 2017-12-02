@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -18,9 +19,9 @@ import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower.BipedT
 import thebetweenlands.client.render.model.entity.rowboat.ModelPlayerRower;
 
 public class RenderPlayerRower extends RenderLivingBase<AbstractClientPlayer> {
-    private ModelBipedRower[] models;
+    private ModelBiped[] models;
 
-    private ModelBipedRower wearModel;
+    private ModelBiped wearModel;
 
     public RenderPlayerRower(RenderManager mgr, boolean slimArms) {
         super(mgr, new ModelPlayerRower(0, slimArms, new BipedTextureUVs(32, 48, 40, 16, 16, 48, 0, 16)), 0.5F);
@@ -32,7 +33,7 @@ public class RenderPlayerRower extends RenderLivingBase<AbstractClientPlayer> {
         addLayer(new DecayRenderHandler.LayerDecay(this, box -> {
         	return false;
         }));
-        models = new ModelBipedRower[] { (ModelBipedRower) mainModel, wear.getModel(), armor.getChest(), armor.getLeggings() };
+        models = new ModelBiped[] { (ModelBiped) mainModel, wear.getModel(), armor.getChest(), armor.getLeggings() };
         wearModel = wear.getModel();
     }
 
@@ -42,19 +43,21 @@ public class RenderPlayerRower extends RenderLivingBase<AbstractClientPlayer> {
     }
 
     public void renderPilot(AbstractClientPlayer player, ArmArticulation leftArm, ArmArticulation rightArm, float bodyRotateAngleX, float bodyRotateAngleY, double x, double y, double z, float delta) {
-        for (ModelBipedRower model : models) {
-            model.bipedLeftArm.rotateAngleX = leftArm.shoulderAngleX;
-            model.bipedLeftArm.rotateAngleY = leftArm.shoulderAngleY;
-            model.setLeftArmFlexionAngle(leftArm.flexionAngle);
-            model.bipedRightArm.rotateAngleX = rightArm.shoulderAngleX;
-            model.bipedRightArm.rotateAngleY = rightArm.shoulderAngleY;
-            model.setRightArmFlexionAngle(rightArm.flexionAngle);
-            model.bipedBody.rotateAngleX = bodyRotateAngleX;
-            model.bipedBody.rotateAngleY = bodyRotateAngleY;
-            model.bipedHead.rotateAngleX = -bodyRotateAngleX * 0.75F;
-            model.bipedHead.rotateAngleY = -bodyRotateAngleY * 0.75F;
-            model.bipedLeftArm.rotationPointZ = leftArm.shoulderZ * 16;
-            model.bipedRightArm.rotationPointZ = rightArm.shoulderZ * 16;
+        for (ModelBiped model : models) {
+        	if(model instanceof ModelBipedRower) {
+	            model.bipedLeftArm.rotateAngleX = leftArm.shoulderAngleX;
+	            model.bipedLeftArm.rotateAngleY = leftArm.shoulderAngleY;
+            	((ModelBipedRower)model).setLeftArmFlexionAngle(leftArm.flexionAngle);
+	            model.bipedRightArm.rotateAngleX = rightArm.shoulderAngleX;
+	            model.bipedRightArm.rotateAngleY = rightArm.shoulderAngleY;
+            	((ModelBipedRower)model).setRightArmFlexionAngle(rightArm.flexionAngle);
+	            model.bipedBody.rotateAngleX = bodyRotateAngleX;
+	            model.bipedBody.rotateAngleY = bodyRotateAngleY;
+	            model.bipedHead.rotateAngleX = -bodyRotateAngleX * 0.75F;
+	            model.bipedHead.rotateAngleY = -bodyRotateAngleY * 0.75F;
+	            model.bipedLeftArm.rotationPointZ = leftArm.shoulderZ * 16;
+	            model.bipedRightArm.rotationPointZ = rightArm.shoulderZ * 16;
+        	}
         }
         doRender(player, x, y, z, player.prevRotationYaw + (player.rotationYaw - player.prevRotationYaw) * delta, delta);
     }

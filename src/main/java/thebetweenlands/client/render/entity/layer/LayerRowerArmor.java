@@ -1,12 +1,13 @@
 package thebetweenlands.client.render.entity.layer;
 
+import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
 import net.minecraft.client.renderer.entity.layers.LayerArmorBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 
 import thebetweenlands.client.render.model.entity.rowboat.ModelBipedRower;
 
-public class LayerRowerArmor extends LayerArmorBase<ModelBipedRower> {
+public class LayerRowerArmor extends LayerArmorBase<ModelBiped> {
     public LayerRowerArmor(RenderLivingBase<?> renderer) {
         super(renderer);
     }
@@ -17,16 +18,16 @@ public class LayerRowerArmor extends LayerArmorBase<ModelBipedRower> {
         modelArmor = new ModelBipedRower(1);
     }
 
-    public ModelBipedRower getLeggings() {
+    public ModelBiped getLeggings() {
         return modelLeggings;
     }
 
-    public ModelBipedRower getChest() {
+    public ModelBiped getChest() {
         return modelArmor;
     }
 
     @Override
-    protected void setModelSlotVisible(ModelBipedRower armor, EntityEquipmentSlot slot) {
+    protected void setModelSlotVisible(ModelBiped armor, EntityEquipmentSlot slot) {
         armor.setVisible(true);
         switch (slot) {
             case HEAD:
@@ -48,5 +49,10 @@ public class LayerRowerArmor extends LayerArmorBase<ModelBipedRower> {
                 armor.bipedLeftLeg.showModel = true;
             default:
         }
+    }
+    
+    @Override
+    protected ModelBiped getArmorModelHook(net.minecraft.entity.EntityLivingBase entity, net.minecraft.item.ItemStack itemStack, EntityEquipmentSlot slot, ModelBiped model) {
+        return net.minecraftforge.client.ForgeHooksClient.getArmorModel(entity, itemStack, slot, model);
     }
 }

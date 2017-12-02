@@ -19,12 +19,12 @@ public class EventAuroras extends TimedEnvironmentEvent {
 
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(42000) + 28000;
+		return rnd.nextInt(8000) + 28000;
 	}
 
 	@Override
 	public int getOnTime(Random rnd) {
-		return rnd.nextInt(20000) + 8000;
+		return rnd.nextInt(5000) + 8000;
 	}
 
 	@Override

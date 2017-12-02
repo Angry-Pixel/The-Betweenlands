@@ -115,11 +115,22 @@ public final class WeedwoodRowboatHandler {
         }
     }
 
+    private Entity prevRenderViewEntity = null;
+    
     @SubscribeEvent
-    public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
-        if (event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
-            GuiIngameForge.renderFood = true;
-        }
+    public void onOverlayRender(RenderGameOverlayEvent event) {
+    	if(isPlayerInRowboat) {
+	        if (event instanceof RenderGameOverlayEvent.Pre && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+	        	//Set render view entity to player during GUI overlay rendering so that HUD renders
+	            this.prevRenderViewEntity = MC.getRenderViewEntity();
+	            MC.setRenderViewEntity(MC.player);
+	            GuiIngameForge.renderFood = true;
+	        } else if (event instanceof RenderGameOverlayEvent.Post && event.getType() == RenderGameOverlayEvent.ElementType.ALL) {
+	        	if(MC.getRenderViewEntity() == MC.player || this.prevRenderViewEntity instanceof RowboatCam) {
+	        		MC.setRenderViewEntity(this.prevRenderViewEntity);
+	        	}
+	        }
+    	}
     }
 
     @SubscribeEvent
