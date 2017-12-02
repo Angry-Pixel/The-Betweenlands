@@ -155,11 +155,6 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
-
-	@Override
-	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
-		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
-	}
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
