@@ -26,7 +26,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.event.ForgeEventFactory;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.CorrosionHelper;
@@ -207,5 +209,20 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onUpdateFov(FOVUpdateEvent event) {
+		ItemStack activeItem = event.getEntity().getActiveItemStack();
+		if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemBLBow) {
+			int usedTicks = activeItem.getItem().getMaxItemUseDuration(activeItem) - event.getEntity().getItemInUseCount();
+			float strength = (float) usedTicks / 20.0F;
+			strength = (strength * strength + strength * 2.0F) / 3.0F * 1.15F;
+			if (strength > 1.0F) {
+				strength = 1.0F;
+			}
+			event.setNewfov(1.0F - strength * 0.25F);
+		}
 	}
 }
