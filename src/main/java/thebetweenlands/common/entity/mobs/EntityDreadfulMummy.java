@@ -1,9 +1,11 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -62,6 +64,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	private static final DataParameter<Integer> SPAWNING_STATE_DW = EntityDataManager.<Integer>createKey(EntityDreadfulMummy.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> PREY = EntityDataManager.<Integer>createKey(EntityDreadfulMummy.class, DataSerializers.VARINT);
 	private static final DataParameter<Float> Y_OFFSET = EntityDataManager.<Float>createKey(EntityDreadfulMummy.class, DataSerializers.FLOAT);
+	private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntityDreadfulMummy.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	private static final int BREAK_COUNT = 20;
 
@@ -96,6 +99,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		dataManager.register(SPAWNING_STATE_DW, 0);
 		dataManager.register(PREY, 0);
 		dataManager.register(Y_OFFSET, 0F);
+		this.getDataManager().register(BOSSINFO_ID, Optional.absent());
 	}
 /*
 	@Override
@@ -184,6 +188,13 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 		if(spawningState < getSpawningLength()) {
 			dataManager.set(SPAWNING_STATE_DW, spawningState + 1);
 		}
+	}
+
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		if (!world.isRemote)
+			dataManager.set(BOSSINFO_ID, Optional.of(bossInfo.getUniqueId()));
 	}
 
 	@Override
@@ -598,7 +609,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	}
 
 	@Override
-	public BossInfoServer getBossInfo() {
-		return bossInfo;
+	public UUID getBossInfoUuid() {
+		return dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
 	}
 }

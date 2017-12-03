@@ -3,9 +3,11 @@ package thebetweenlands.common.entity.mobs;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.google.common.base.Optional;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.entity.*;
@@ -54,6 +56,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	protected static final DataParameter<Boolean> GROUND_ATTACK_STATE = EntityDataManager.<Boolean>createKey(EntityFortressBoss.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Vec3d> ANCHOR = EntityDataManager.<Vec3d>createKey(EntityFortressBoss.class, Serializers.VEC3D);
 	protected static final DataParameter<Float> ANCHOR_RADIUS = EntityDataManager.<Float>createKey(EntityFortressBoss.class, DataSerializers.FLOAT);
+	private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntityFortressBoss.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
 	public static final double SHIELD_OFFSET_X = 0.0D;
 	public static final double SHIELD_OFFSET_Y = 1D;
@@ -133,6 +136,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 		this.getDataManager().register(GROUND_ATTACK_STATE, false);
 		this.getDataManager().register(ANCHOR, Vec3d.ZERO);
 		this.getDataManager().register(ANCHOR_RADIUS, 0.0F);
+		this.getDataManager().register(BOSSINFO_ID, Optional.absent());
 	}
 
 	public float getShieldExplosion(float partialTicks) {
@@ -457,6 +461,13 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 			currentIdleSound = new FortressBossIdleSound(this);
 			Minecraft.getMinecraft().getSoundHandler().playSound(currentIdleSound);
 		}
+	}
+
+	@Override
+	public void onLivingUpdate() {
+		super.onLivingUpdate();
+		if (!world.isRemote)
+			dataManager.set(BOSSINFO_ID, Optional.of(bossInfo.getUniqueId()));
 	}
 
 	@Override
@@ -906,7 +917,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	}
 
 	@Override
-	public BossInfoServer getBossInfo() {
-		return bossInfo;
+	public UUID getBossInfoUuid() {
+		return dataManager.get(BOSSINFO_ID).or(new UUID(0, 0));
 	}
 }
