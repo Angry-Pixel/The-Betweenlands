@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumActionResult;
@@ -32,18 +31,74 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
-				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack && (entityIn.getEntityData().getInteger("thebetweenlands.shield.chargingTicks") > 0 || (stack.getTagCompound() != null && stack.getTagCompound().hasKey("thebetweenlands.shield.charging") && stack.getTagCompound().getBoolean("thebetweenlands.shield.charging"))) ? 1.0F : 0.0F;
+				return entityIn != null && entityIn.isHandActive() && entityIn.getActiveItemStack() == stack && (getRemainingChargeTicks(stack, entityIn) > 0 || isPreparingCharge(stack, entityIn)) ? 1.0F : 0.0F;
 			}
 		});
+	}
+
+	/**
+	 * Sets whether the specified user is preparing for a charge attack
+	 * @param stack
+	 * @param user
+	 * @param charging
+	 */
+	public void setPreparingCharge(ItemStack stack, EntityLivingBase user, boolean charging) {
+		user.getEntityData().setBoolean("thebetweenlands.shield.charging", charging);
+	}
+
+	/**
+	 * Returns whether the specified user is preparing for a charge attack
+	 * @param stack
+	 * @param user
+	 * @return
+	 */
+	public boolean isPreparingCharge(ItemStack stack, EntityLivingBase user) {
+		return user.getEntityData().getBoolean("thebetweenlands.shield.charging");
+	}
+
+	/**
+	 * Sets how long the specified user has been preparing for a charge attack
+	 * @param stack
+	 * @param user
+	 * @param ticks
+	 */
+	public void setPreparingChargeTicks(ItemStack stack, EntityLivingBase user, int ticks) {
+		user.getEntityData().setInteger("thebetweenlands.shield.chargingTicks", ticks);
+	}
+
+	/**
+	 * Returns how long the specified user has been preparing for a charge attack
+	 * @param stack
+	 * @param user
+	 * @return
+	 */
+	public int getPreparingChargeTicks(ItemStack stack, EntityLivingBase user) {
+		return user.getEntityData().getInteger("thebetweenlands.shield.chargingTicks");
+	}
+
+	/**
+	 * Sets for how much longer the specified user can charge
+	 * @param stack
+	 * @param user
+	 * @param ticks
+	 */
+	public void setRemainingChargeTicks(ItemStack stack, EntityLivingBase user, int ticks) {
+		user.getEntityData().setInteger("thebetweenlands.shield.remainingRunningTicks", ticks);
+	}
+
+	/**
+	 * Returns for how much longer the specified user can charge
+	 * @param stack
+	 * @param user
+	 * @return
+	 */
+	public int getRemainingChargeTicks(ItemStack stack, EntityLivingBase user) {
+		return user.getEntityData().getInteger("thebetweenlands.shield.remainingRunningTicks");
 	}
 
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		if(stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-		stack.getTagCompound().setBoolean("thebetweenlands.shield.charging", playerIn.isSneaking());
 		playerIn.setActiveHand(handIn);
 		return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 	}
@@ -51,28 +106,33 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
 		if(player instanceof EntityPlayer) {
-			int chargingTicks = player.getEntityData().getInteger("thebetweenlands.shield.chargingTicks");
+			boolean preparing = this.isPreparingCharge(stack, player);
 
-			if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("thebetweenlands.shield.charging") && stack.getTagCompound().getBoolean("thebetweenlands.shield.charging") && !player.isSneaking() && chargingTicks <= 0) {
-				int useCount = this.getMaxItemUseDuration(stack) - count;
-				float strength = MathHelper.clamp(useCount / 20.0F - 0.2F, 0.0F, 1.0F);
-				player.getEntityData().setInteger("thebetweenlands.shield.chargingTicks", (int)(80 * strength));
-				stack.getTagCompound().setBoolean("thebetweenlands.shield.charging", false);
-			} else if(player.isSneaking()) {
-				if(stack.getTagCompound() == null) {
-					stack.setTagCompound(new NBTTagCompound());
-				}
-				stack.getTagCompound().setBoolean("thebetweenlands.shield.charging", true);
+			int runningTicks = this.getRemainingChargeTicks(stack, player);
+
+			if(preparing && runningTicks <= 0) {
+				this.setPreparingChargeTicks(stack, player, this.getPreparingChargeTicks(stack, player) + 1);
 			}
 
-			if(chargingTicks > 0) {
+			if(preparing && !player.isSneaking() && runningTicks <= 0) {
+				float strength = MathHelper.clamp(this.getPreparingChargeTicks(stack, player) / 20.0F - 0.2F, 0, 1);
+				this.setRemainingChargeTicks(stack, player, (int)(strength * strength * 80));
+				this.setPreparingChargeTicks(stack, player, 0);
+				this.setPreparingCharge(stack, player, false);
+			} else if(!preparing && player.isSneaking()) {
+				this.setRemainingChargeTicks(stack, player, 0);
+				this.setPreparingChargeTicks(stack, player, 0);
+				this.setPreparingCharge(stack, player, true);
+			}
+
+			if(runningTicks > 0) {
 				if(player.onGround && !player.isSneaking()) {
 					Vec3d dir = player.getLookVec();
 					dir = new Vec3d(dir.x, 0, dir.z).normalize();
 					player.motionX += dir.x * 0.35D;
 					player.motionZ += dir.z * 0.35D;
 
-					((EntityPlayer) player).getFoodStats().addExhaustion(0.75F);
+					((EntityPlayer) player).getFoodStats().addExhaustion(0.25F);
 				}
 				if(Math.sqrt(player.motionX*player.motionX + player.motionZ*player.motionZ) > 0.2D) {
 					Vec3d moveDir = new Vec3d(player.motionX, player.motionY, player.motionZ).normalize();
@@ -82,8 +142,8 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 						target.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)player), 10.0F);
 					}
 				}
-				player.getEntityData().setInteger("thebetweenlands.shield.chargingTicks", --chargingTicks);
-				if(chargingTicks == 0) {
+				this.setRemainingChargeTicks(stack, player, --runningTicks);
+				if(runningTicks == 0) {
 					player.stopActiveHand();
 				}
 			}
@@ -95,16 +155,14 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		super.onPlayerStoppedUsing(stack, worldIn, entityLiving, timeLeft);
-		entityLiving.getEntityData().setInteger("thebetweenlands.shield.chargingTicks", 0);
-		if(stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-		stack.getTagCompound().setBoolean("thebetweenlands.shield.charging", false);
+		this.setPreparingChargeTicks(stack, entityLiving, 0);
+		this.setRemainingChargeTicks(stack, entityLiving, 0);
+		this.setPreparingCharge(stack, entityLiving, false);
 	}
 
 	@Override
 	public boolean canBlockDamageSource(ItemStack stack, EntityLivingBase attacked, EnumHand hand, DamageSource source) {
-		if(attacked.getEntityData().getInteger("thebetweenlands.shield.chargingTicks") > 0) {
+		if(this.getRemainingChargeTicks(stack, attacked) > 0) {
 			return true;
 		}
 		return super.canBlockDamageSource(stack, attacked, hand, source);
@@ -112,7 +170,7 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 
 	@Override
 	public float getBlockedDamage(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(attacked.getEntityData().getInteger("thebetweenlands.shield.chargingTicks") > 0) {
+		if(this.getRemainingChargeTicks(stack, attacked) > 0) {
 			return 0;
 		}
 		return super.getBlockedDamage(stack, attacked, damage, source);
@@ -120,7 +178,7 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 
 	@Override
 	public float getDefenderKnockbackMultiplier(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		if(attacked.getEntityData().getInteger("thebetweenlands.shield.chargingTicks") > 0) {
+		if(this.getRemainingChargeTicks(stack, attacked) > 0) {
 			return 0;
 		}
 		return super.getDefenderKnockbackMultiplier(stack, attacked, damage, source);
@@ -130,10 +188,10 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 	@SubscribeEvent
 	public static void onUpdateFov(FOVUpdateEvent event) {
 		ItemStack activeItem = event.getEntity().getActiveItemStack();
-		if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemSyrmoriteShield && activeItem.getTagCompound() != null && activeItem.getTagCompound().getBoolean("thebetweenlands.shield.charging")) {
+		if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemSyrmoriteShield && ((ItemSyrmoriteShield)activeItem.getItem()).isPreparingCharge(activeItem, event.getEntity())) {
 			int usedTicks = activeItem.getItem().getMaxItemUseDuration(activeItem) - event.getEntity().getItemInUseCount();
 			float strength = MathHelper.clamp(usedTicks / 20.0F - 0.2F, 0.0F, 1.0F);
-			event.setNewfov(1.0F - strength * 0.25F);
+			event.setNewfov(1.0F - strength * strength * 0.25F);
 		}
 	}
 }
