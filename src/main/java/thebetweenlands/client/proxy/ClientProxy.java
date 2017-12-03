@@ -2,15 +2,14 @@ package thebetweenlands.client.proxy;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.ItemMeshDefinition;
-import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.block.statemap.StateMap;
 import net.minecraft.client.renderer.entity.Render;
@@ -25,7 +24,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -103,6 +102,7 @@ import thebetweenlands.client.render.entity.RenderSiltCrab;
 import thebetweenlands.client.render.entity.RenderSludge;
 import thebetweenlands.client.render.entity.RenderSludgeBall;
 import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSporeJet;
 import thebetweenlands.client.render.entity.RenderSporeling;
 import thebetweenlands.client.render.entity.RenderSwampHag;
 import thebetweenlands.client.render.entity.RenderSwordEnergy;
@@ -143,6 +143,7 @@ import thebetweenlands.client.render.tile.RenderTarLootPot3;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
+import thebetweenlands.client.render.tile.TileEntityPuffshroomRenderer;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -180,6 +181,7 @@ import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySporeJet;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
@@ -223,6 +225,7 @@ import thebetweenlands.common.tile.TileEntityLootPot;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
+import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
@@ -436,6 +439,7 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, RenderDreadfulMummy::new);
         RenderingRegistry.registerEntityRenderingHandler(EntitySludgeBall.class, RenderSludgeBall::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDarkLight.class, RenderDarkLight::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySporeJet.class, RenderSporeJet::new);
  
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
@@ -493,6 +497,7 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectVial.class, new RenderAspectVial());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityAspectrusCrop.class, new RenderAspectrusCrop());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRepeller.class, new RenderRepeller());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityPuffshroom.class, new TileEntityPuffshroomRenderer());
 		
 		//item models
 		ForgeHooksClient.registerTESRItemStack(Item.getItemFromBlock(BlockRegistry.DRUID_ALTAR), 0, TileEntityDruidAltar.class);
@@ -545,7 +550,7 @@ public class ClientProxy extends CommonProxy {
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
 		HLEntryRegistry.init();
 
-		WeedwoodRowboatHandler.INSTANCE.init();
+		//WeedwoodRowboatHandler.INSTANCE.init();
 		//Turn dirt background in menus into temple bricks
 		//Disabled for now as it was test, could be used if it's suitable
 		/*
@@ -593,7 +598,7 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(DruidAltarSoundHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
 		MinecraftForge.EVENT_BUS.register(GuiBLMainMenu.class);
-        MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
+  //      MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(OverlayHandler.class);
         MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GuiDownloadTerrainBetweenlands.class);
@@ -630,4 +635,15 @@ public class ClientProxy extends CommonProxy {
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
         WeedwoodRowboatHandler.INSTANCE.onPilotExitWeedwoodRowboat(rowboat, pilot);
     }
+    
+	@Override
+	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
+		Particle fx = null;
+
+		if (particleName.equals("spell"))
+			fx = new ParticleSpell.Factory().createParticle(EnumParticleTypes.SPELL.getParticleID(), world, x, y, z, vecX, vecY, vecZ, 0);
+
+		if (fx != null)
+			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+	}
 }

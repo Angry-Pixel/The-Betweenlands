@@ -10,7 +10,6 @@ import java.util.Random;
 import java.util.Set;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
@@ -27,7 +26,6 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -114,6 +112,7 @@ import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
 import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
+import thebetweenlands.common.block.structure.BlockDrippingMud;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.block.structure.BlockEnergyBarrier;
 import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
@@ -122,6 +121,7 @@ import thebetweenlands.common.block.structure.BlockItemCage;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
+import thebetweenlands.common.block.structure.BlockPuffshroom;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSpikeTrap;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -133,6 +133,7 @@ import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.structure.BlockWalkway;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
+import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
@@ -437,6 +438,13 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BUTTON = new BlockButtonBetweenlands(false);
     public static final Block WEEDWOOD_LADDER = new BlockLadderBetweenlands();
     public static final Block WEEDWOOD_LEVER = new BlockLeverBetweenlands();
+    
+    //Worm Dungeon
+    public static final Block WORM_DUNGEON_PILLAR = new BlockWormDungeonPillar();
+    public static final Block DRIPPING_MUD = new BlockDrippingMud();
+    public static final Block MUD_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block PUFFSHROOM = new BlockPuffshroom();
+    
     //Plants
     public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
     public static final BlockDoublePlantBL WEEPING_BLUE = new BlockWeepingBlue();

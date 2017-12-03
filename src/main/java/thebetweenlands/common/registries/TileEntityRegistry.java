@@ -22,6 +22,7 @@ import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityMossBed;
 import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
+import thebetweenlands.common.tile.TileEntityPuffshroom;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
@@ -71,6 +72,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityAspectVial.class, "aspect_vial");
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectrus_crop");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
+		registerTileEntity(TileEntityPuffshroom.class, "puffshroom");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

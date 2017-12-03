@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:mud_tiles" },
+            { "model": "thebetweenlands:mud_tiles", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles", "y": 270 }
+        ]
+    }
+}

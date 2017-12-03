@@ -38,6 +38,7 @@ import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntityPyradFlame;
 import thebetweenlands.common.entity.mobs.EntitySiltCrab;
 import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySporeJet;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
@@ -105,6 +106,7 @@ public class EntityRegistry {
 		registerEntity(EntityDreadfulMummy.class, "dreadful_mummy", 0x000000, 0x591E08, 64, 1, true);
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
 		registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
+		registerEntity(EntitySporeJet.class, "spore_jet", 64, 1, true);
 	}
 
 	private static int id = 0;
