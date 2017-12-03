@@ -706,13 +706,13 @@ tooltip.pestle=Place Pestle in Mortar
 tooltip.pestle.remaining=%d%% Remaining: %d more uses.
 tooltip.aspectvial.byariis.fuel=Can be used as fuel for the Repeller
 tooltip.rubber_bucket=Right click to extract the rubber from the bucket
-tooltip.gem.aqua=\nWhen on armor:\n §9- Chance to gain defense when attacked
-tooltip.gem.crimson=\nWhen on tool:\n §9- Chance to gain strength when attacking
-tooltip.gem.green=\nWhen on tool:\n §9- Chance to heal when attacking
+tooltip.gem.aqua=\nWhen on tool:\n §9- Chance to weaken the enemy when attacking\nWhen on armor:\n §9- Chance to gain defense when attacked
+tooltip.gem.crimson=\nWhen on tool:\n §9- Chance to gain strength when attacking\nWhen on armor:\n §9- Chance to hurt the enemy when attacked
+tooltip.gem.green=\nWhen on tool:\n §9- Chance to heal when attacking\nWhen on armor:\n §9- Chance to absorb damage when attacked
 tooltip.amulet.none=\nNo effect.\nCan be combined with a Gem
-tooltip.amulet.aqua=\nWhen equipped:\n §9- Chance to gain defense when attacked
-tooltip.amulet.crimson=\nWhen equipped:\n §9- Chance to gain strength when attacking
-tooltip.amulet.green=\nWhen equipped:\n §9- Chance to heal when attacking
+tooltip.amulet.aqua=\nWhen equipped:\n §9- Chance to weaken the enemy when attacking\n §9- Chance to gain defense when attacked
+tooltip.amulet.crimson=\nWhen equipped:\n §9- Chance to gain strength when attacking\n §9- Chance to hurt the enemy when attacked
+tooltip.amulet.green=\nWhen equipped:\n §9- Chance to heal when attacking\n §9- Chance to absorb damage when attacked
 tooltip.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by right-clicking
 
 # Chat
