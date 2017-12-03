@@ -680,13 +680,25 @@
         "stream": true
       },
       {
-        "name": "thebetweenlands:menu/leeches_and_fireflies",
+        "name": "thebetweenlands:menu/this_is_where_it_starts",
         "stream": true
       }
     ]
   },
   "bl_dimension": {
     "sounds": [
+      {
+        "name": "thebetweenlands:music/enter_the_mire",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/numbskull",
+        "stream": true
+      },
+      {
+        "name": "thebetweenlands:music/the_quietus",
+        "stream": true
+      },
       {
         "name": "thebetweenlands:music/emerald_embers",
         "stream": true
@@ -709,10 +721,6 @@
       },
       {
         "name": "thebetweenlands:music/murk_beneath_a_twinkling_void",
-        "stream": true
-      },
-      {
-        "name": "thebetweenlands:music/darkness",
         "stream": true
       },
       {
