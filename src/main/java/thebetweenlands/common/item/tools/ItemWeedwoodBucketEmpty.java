@@ -1,6 +1,12 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -15,6 +21,7 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.UniversalBucket;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -63,5 +70,10 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 		}
 
 		return super.onItemRightClick(world, player, hand);
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
+		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.weedwood_bucket"), 0));
 	}
 }

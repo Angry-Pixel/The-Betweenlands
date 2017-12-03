@@ -714,6 +714,8 @@ tooltip.amulet.aqua=\nWhen equipped:\n §9- Chance to weaken the enemy when atta
 tooltip.amulet.crimson=\nWhen equipped:\n §9- Chance to gain strength when attacking\n §9- Chance to hurt the enemy when attacked
 tooltip.amulet.green=\nWhen equipped:\n §9- Chance to heal when attacking\n §9- Chance to absorb damage when attacked
 tooltip.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by right-clicking
+tooltip.weedwood_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
+tooltip.syrmorite_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
