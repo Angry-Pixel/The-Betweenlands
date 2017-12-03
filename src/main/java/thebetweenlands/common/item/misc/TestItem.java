@@ -7,12 +7,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSludgeWormDungeon;
 
 //MINE!!
 public class TestItem extends Item {
 	public TestItem() {
 		this.setMaxStackSize(1);
+		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
 	@Override
@@ -72,10 +74,13 @@ public class TestItem extends Item {
 			}
 		*/
 		
-			WorldGenCragrockTower tower = new WorldGenCragrockTower();
+		/*	WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
+		*/
+			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
+			dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
 		
 		}
 
