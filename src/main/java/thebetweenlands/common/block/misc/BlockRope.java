@@ -58,7 +58,7 @@ public class BlockRope extends Block {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if(heldItem == null && player.isSneaking()) {
+		if(heldItem.isEmpty() && player.isSneaking()) {
 			BlockPos offsetPos = pos.down();
 			while(world.getBlockState(offsetPos).getBlock() == this) {
 				offsetPos = offsetPos.down();
