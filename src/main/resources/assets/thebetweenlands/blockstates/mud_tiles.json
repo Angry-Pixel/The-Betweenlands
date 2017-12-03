@@ -1,10 +1,64 @@
 {
     "variants": {
-        "normal": [
+        "variant=mud_tiles": [
             { "model": "thebetweenlands:mud_tiles" },
             { "model": "thebetweenlands:mud_tiles", "y": 90 },
             { "model": "thebetweenlands:mud_tiles", "y": 180 },
             { "model": "thebetweenlands:mud_tiles", "y": 270 }
+        ],
+        "variant=mud_tiles_decay_1": [
+            { "model": "thebetweenlands:mud_tiles_decay_1" },
+            { "model": "thebetweenlands:mud_tiles_decay_1", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_decay_1", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_decay_1", "y": 270 }
+        ],
+        "variant=mud_tiles_decay_2": [
+            { "model": "thebetweenlands:mud_tiles_decay_2" },
+            { "model": "thebetweenlands:mud_tiles_decay_2", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_decay_2", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_decay_2", "y": 270 }
+        ],
+        "variant=mud_tiles_decay_3": [
+            { "model": "thebetweenlands:mud_tiles_decay_3" },
+            { "model": "thebetweenlands:mud_tiles_decay_3", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_decay_3", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_decay_3", "y": 270 }
+        ],
+        "variant=mud_tiles_decay_4": [
+            { "model": "thebetweenlands:mud_tiles_decay_4" },
+            { "model": "thebetweenlands:mud_tiles_decay_4", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_decay_4", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_decay_4", "y": 270 }
+        ],
+        "variant=mud_tiles_cracked": [
+            { "model": "thebetweenlands:mud_tiles_cracked" },
+            { "model": "thebetweenlands:mud_tiles_cracked", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_cracked", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_cracked", "y": 270 }
+        ],
+        "variant=mud_tiles_cracked_decay_1": [
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_1" },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_1", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_1", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_1", "y": 270 }
+        ],
+        "variant=mud_tiles_cracked_decay_2": [
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_2" },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_2", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_2", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_2", "y": 270 }
+        ],
+        "variant=mud_tiles_cracked_decay_3": [
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_3" },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_3", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_3", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_3", "y": 270 }
+        ],
+        "variant=mud_tiles_cracked_decay_4": [
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_4" },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_4", "y": 90 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_4", "y": 180 },
+            { "model": "thebetweenlands:mud_tiles_cracked_decay_4", "y": 270 }
         ]
     }
 }

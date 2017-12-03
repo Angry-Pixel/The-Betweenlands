@@ -119,6 +119,7 @@ import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
 import thebetweenlands.common.block.structure.BlockItemCage;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
+import thebetweenlands.common.block.structure.BlockMudTiles;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
 import thebetweenlands.common.block.structure.BlockPuffshroom;
@@ -442,7 +443,7 @@ public class BlockRegistry {
     //Worm Dungeon
     public static final Block WORM_DUNGEON_PILLAR = new BlockWormDungeonPillar();
     public static final Block DRIPPING_MUD = new BlockDrippingMud();
-    public static final Block MUD_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
+    public static final Block MUD_TILES = new BlockMudTiles();
     public static final Block PUFFSHROOM = new BlockPuffshroom();
     
     //Plants

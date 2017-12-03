@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "thebetweenlands:blocks/mud_tiles_cracked"
+    "all": "thebetweenlands:blocks/mud_tiles_decay_3"
   }
 }
