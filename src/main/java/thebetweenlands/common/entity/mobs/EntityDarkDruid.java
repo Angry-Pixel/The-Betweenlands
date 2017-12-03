@@ -205,13 +205,15 @@ public class EntityDarkDruid extends EntityMob {
                     world.spawnEntity(newDruid);
                     druidParticlePacketOrigin();
                     druidParticlePacketTarget(newDruid);
+                    
+                    this.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
+                    newDruid.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
                 } else
                     newDruid.setDead();
             }
         }
 
         if (successful) {
-            this.playSound(SoundRegistry.DRUID_TELEPORT, 1.0F, 1.0F);
             return true;
         }
         setPosition(x, y, z);
