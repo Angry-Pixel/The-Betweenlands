@@ -28,7 +28,7 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 	public ItemSyrmoriteShield() {
 		super(BLMaterialRegistry.TOOL_SYRMORITE);
 
-		this.addPropertyOverride(new ResourceLocation("thebetweenlands.shield.charging"), new IItemPropertyGetter() {
+		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
 			@Override
 			@SideOnly(Side.CLIENT)
 			public float apply(ItemStack stack, @Nullable World worldIn, @Nullable EntityLivingBase entityIn) {
