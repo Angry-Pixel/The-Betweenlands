@@ -162,7 +162,7 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 
 	@Override
 	public boolean canBlockDamageSource(ItemStack stack, EntityLivingBase attacked, EnumHand hand, DamageSource source) {
-		if(this.getRemainingChargeTicks(stack, attacked) > 0) {
+		if(this.getRemainingChargeTicks(stack, attacked) > 0 && source.getImmediateSource() != null) {
 			return true;
 		}
 		return super.canBlockDamageSource(stack, attacked, hand, source);

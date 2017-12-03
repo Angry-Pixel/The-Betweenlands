@@ -12,6 +12,8 @@ import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.MathHelper;
@@ -181,68 +183,116 @@ public class ItemBLShield extends ItemShield {
 		INSTANCE;
 
 		private boolean ignoreEvent = false;
-		
+
 		@SubscribeEvent
 		public void onLivingAttacked(LivingAttackEvent event) {
-			if(this.ignoreEvent) return;
+			if(this.ignoreEvent) {
+				return;
+			}
 			EntityLivingBase attacked = event.getEntityLiving();
+			DamageSource source = event.getSource();
 			for(EnumHand hand : EnumHand.values()) {
 				ItemStack stack = attacked.getHeldItem(hand);
 				if(!stack.isEmpty() && stack.getItem() instanceof ItemBLShield) {
 					ItemBLShield shield = (ItemBLShield) stack.getItem();
-	
-					if(shield.canBlockDamageSource(stack, attacked, hand, event.getSource())) {
+
+					if(shield.canBlockDamageSource(stack, attacked, hand, source)) {
 						//Cancel event
 						if(!attacked.world.isRemote) {
 							event.setCanceled(true);
 						}
-	
+
 						if(!attacked.world.isRemote) {
 							//Apply damage with multiplier
-							float defenderKbMultiplier = shield.getDefenderKnockbackMultiplier(stack, attacked, event.getAmount(), event.getSource());
-							float newDamage = shield.getBlockedDamage(stack, attacked, event.getAmount(), event.getSource());
+							float defenderKbMultiplier = shield.getDefenderKnockbackMultiplier(stack, attacked, event.getAmount(), source);
+							float newDamage = shield.getBlockedDamage(stack, attacked, event.getAmount(), source);
 							if(newDamage > 0.0F) {
 								double prevMotionX = attacked.motionX;
 								double prevMotionY = attacked.motionY;
 								double prevMotionZ = attacked.motionZ;
 								this.ignoreEvent = true;
-								attacked.attackEntityFrom(event.getSource(), newDamage);
+								DamageSource newSource;
+								//getDamageLocation() == null so that vanilla shield blocking does not happen
+								if(source instanceof EntityDamageSourceIndirect) {
+									newSource = new EntityDamageSourceIndirect(source.damageType, source.getImmediateSource(), source.getTrueSource()) {
+										@Override
+										public Vec3d getDamageLocation() {
+											return null;
+										}
+									};
+								} else if(source instanceof EntityDamageSource) {
+									newSource = new EntityDamageSource(source.damageType, source.getTrueSource()) {
+										@Override
+										public Vec3d getDamageLocation() {
+											return null;
+										}
+									};
+								} else {
+									newSource = new DamageSource(source.damageType) {
+										@Override
+										public Vec3d getDamageLocation() {
+											return null;
+										}
+									};
+								}
+								if(source.isDamageAbsolute()) {
+									newSource.setDamageIsAbsolute();
+								}
+								if(source.isUnblockable()) {
+									newSource.setDamageBypassesArmor();
+								}
+								if(source.isFireDamage()) {
+									newSource.setFireDamage();
+								}
+								if(source.isMagicDamage()) {
+									newSource.setMagicDamage();
+								}
+								if(source.isDifficultyScaled()) {
+									newSource.setDifficultyScaled();
+								}
+								if(source.isExplosion()) {
+									newSource.setExplosion();
+								}
+								if(source.isProjectile()) {
+									newSource.setProjectile();
+								}
+								attacked.attackEntityFrom(newSource, newDamage);
 								this.ignoreEvent = false;
 								attacked.motionX = prevMotionX;
 								attacked.motionY = prevMotionY;
 								attacked.motionZ = prevMotionZ;
 							}
-							if(event.getSource().getTrueSource() != null) {
+							if(source.getTrueSource() != null) {
 								//Knock back defender
 								double prevMotionY = attacked.motionY;
-								attacked.knockBack(event.getSource().getTrueSource(), defenderKbMultiplier, event.getSource().getTrueSource().posX - attacked.posX, event.getSource().getTrueSource().posZ - attacked.posZ);
+								attacked.knockBack(source.getTrueSource(), defenderKbMultiplier, source.getTrueSource().posX - attacked.posX, source.getTrueSource().posZ - attacked.posZ);
 								attacked.motionY = prevMotionY;
 								attacked.velocityChanged = true;
 							}
 							//Shield block sound effect
 							attacked.world.setEntityState(attacked, (byte)29);
 						}
-	
+
 						//Knock back attacker
 						if(!attacked.world.isRemote) {
-							if (event.getSource().getTrueSource() == event.getSource().getImmediateSource() && event.getSource().getTrueSource() instanceof EntityLivingBase) {
-								float attackerKbMultiplier = shield.getAttackerKnockbackMultiplier(stack, attacked, event.getAmount(), event.getSource());
+							if (source.getTrueSource() == source.getImmediateSource() && source.getTrueSource() instanceof EntityLivingBase) {
+								float attackerKbMultiplier = shield.getAttackerKnockbackMultiplier(stack, attacked, event.getAmount(), source);
 								if(attackerKbMultiplier > 0.0F) {
-									((EntityLivingBase)event.getSource().getTrueSource()).knockBack(attacked, attackerKbMultiplier, attacked.posX - event.getSource().getTrueSource().posX, attacked.posZ - event.getSource().getTrueSource().posZ);
+									((EntityLivingBase)source.getTrueSource()).knockBack(attacked, attackerKbMultiplier, attacked.posX - source.getTrueSource().posX, attacked.posZ - source.getTrueSource().posZ);
 								}
 							}
 						}
-	
+
 						if(attacked instanceof EntityPlayer) {
-							int cooldown = shield.getShieldBlockingCooldown(stack, (EntityPlayer)attacked, event.getAmount(), event.getSource());
+							int cooldown = shield.getShieldBlockingCooldown(stack, (EntityPlayer)attacked, event.getAmount(), source);
 							if(cooldown > 0) {
 								((EntityPlayer)attacked).getCooldownTracker().setCooldown(shield, cooldown);
 								attacked.stopActiveHand();
 							}
 						}
-	
-						shield.onAttackBlocked(stack, attacked, event.getAmount(), event.getSource());
-	
+
+						shield.onAttackBlocked(stack, attacked, event.getAmount(), source);
+
 						if(!attacked.world.isRemote) {
 							//Damage item
 							int itemDamage = 1 + MathHelper.floor(event.getAmount());
@@ -260,7 +310,7 @@ public class ItemBLShield extends ItemShield {
 								attacked.world.setEntityState(attacked, (byte)30);
 							}
 						}
-						
+
 						break;
 					}
 				}
