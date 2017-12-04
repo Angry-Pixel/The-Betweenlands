@@ -19,6 +19,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.container.BlockChestBetweenlands;
 import thebetweenlands.common.block.misc.BlockSulfurTorch;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
+import thebetweenlands.common.block.structure.BlockMudTiles;
+import thebetweenlands.common.block.structure.BlockMudTiles.EnumMudTileType;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands.EnumBlockHalfBL;
 import thebetweenlands.common.block.structure.BlockStairsBetweenlands;
@@ -30,17 +32,6 @@ import thebetweenlands.common.world.gen.feature.structure.utils.MazeGenerator;
 import thebetweenlands.common.world.gen.feature.structure.utils.PerfectMazeGenerator;
 
 public class WorldGenSludgeWormDungeon extends WorldGenerator {
-	
-	private IBlockState betweenstoneBricks = BlockRegistry.BETWEENSTONE_BRICKS.getDefaultState();
-	private IBlockState betweenstoneBricksMossy = BlockRegistry.MOSSY_BETWEENSTONE_BRICKS.getDefaultState();
-	private IBlockState betweenstoneBricksCracked = BlockRegistry.CRACKED_BETWEENSTONE_BRICKS.getDefaultState();
-	private IBlockState betweenstoneTiles = BlockRegistry.BETWEENSTONE_TILES.getDefaultState();
-	private IBlockState betweenstoneTilesMossy = BlockRegistry.MOSSY_BETWEENSTONE_TILES.getDefaultState();
-	private IBlockState betweenstoneTilesCracked = BlockRegistry.CRACKED_BETWEENSTONE_TILES.getDefaultState();
-	private IBlockState betweenstoneBrickStairs = BlockRegistry.BETWEENSTONE_BRICK_STAIRS.getDefaultState();
-	private IBlockState betweenstoneBrickStairsMossy = BlockRegistry.MOSSY_BETWEENSTONE_BRICK_STAIRS.getDefaultState();
-	private IBlockState betweenstoneBrickStairsCracked = BlockRegistry.CRACKED_BETWEENSTONE_BRICK_STAIRS.getDefaultState();
-	private IBlockState limestonePolished = BlockRegistry.POLISHED_LIMESTONE.getDefaultState();
 
 	private IBlockState spawner = BlockRegistry.MOB_SPAWNER.getDefaultState();
 	private IBlockState mushroomBlackHat = BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState();
@@ -72,11 +63,22 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_4 = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_4);
 	private IBlockState WORM_DUNGEON_PILLAR_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_VERTICAL_DECAY_FULL);
 	private IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
+
+	private IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
+	private IBlockState MUD_TILES_DECAY_1 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_1);
+	private IBlockState MUD_TILES_DECAY_2 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_2);
+	private IBlockState MUD_TILES_DECAY_3 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_3);
+	private IBlockState MUD_TILES_DECAY_4 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_4);
+	private IBlockState MUD_TILES_CRACKED = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED);
+	private IBlockState MUD_TILES_CRACKED_DECAY_1 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_1);
+	private IBlockState MUD_TILES_CRACKED_DECAY_2 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_2);
+	private IBlockState MUD_TILES_CRACKED_DECAY_3 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_3);
+	private IBlockState MUD_TILES_CRACKED_DECAY_4 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_4);
+
 	private IBlockState MUD_BRICK_STAIRS = BlockRegistry.MUD_BRICK_STAIRS.getDefaultState();
 	private IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
 	private IBlockState MUD = BlockRegistry.MUD.getDefaultState();
 	private IBlockState DRIPPING_MUD = BlockRegistry.DRIPPING_MUD.getDefaultState();
-	private IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
 	private IBlockState PUFFSHROOM = BlockRegistry.PUFFSHROOM.getDefaultState();
 	private IBlockState ROTTEN_BARK = BlockRegistry.LOG_ROTTEN_BARK.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, EnumAxis.NONE);
 	private IBlockState MUD_BRICK_SLAB = BlockRegistry.MUD_BRICK_SLAB.getDefaultState().withProperty(BlockSlabBetweenlands.HALF, EnumBlockHalfBL.TOP);
@@ -128,26 +130,26 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					world.setBlockState(pos.add(1, yy + 1, 1), getRandomBricks(rand));
 					world.setBlockState(pos.add(1, yy + 2, 1), getRandomBricks(rand));
 					world.setBlockState(pos.add(1, yy + 3, 1), getRandomBricks(rand));
-					world.setBlockState(pos.add(1, yy + 4, 1), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(1, yy + 4, 1), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
 					if (world.isAirBlock(pos.add(1, yy + 1, 2)))
 						world.setBlockState(pos.add(1, yy + 1, 2), getRandomBricks(rand));
 					world.setBlockState(pos.add(1, yy + 2, 2), getRandomBricks(rand));
-					world.setBlockState(pos.add(1, yy + 3, 2), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
-					world.setBlockState(pos.add(1, yy + 2, 3), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(1, yy + 3, 2), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(1, yy + 2, 3), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(1, yy + 1, 3), getRandomBricks(rand));
-					world.setBlockState(pos.add(2, yy + 1, 3), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(2, yy + 1, 3), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.BOTTOM), 2);
 				} else {
 					world.setBlockState(pos.add(27, yy + 1, 27), getRandomBricks(rand));
 					world.setBlockState(pos.add(27, yy + 2, 27), getRandomBricks(rand));
 					world.setBlockState(pos.add(27, yy + 3, 27), getRandomBricks(rand));
-					world.setBlockState(pos.add(27, yy + 4, 27), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(27, yy + 4, 27), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
 					if (world.isAirBlock(pos.add(27, yy + 1, 26)))
 						world.setBlockState(pos.add(27, yy + 1, 26), getRandomBricks(rand));
 					world.setBlockState(pos.add(27, yy + 2, 26), getRandomBricks(rand));
-					world.setBlockState(pos.add(27, yy + 3, 26), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
-					world.setBlockState(pos.add(27, yy + 2, 25), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(27, yy + 3, 26), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(27, yy + 2, 25), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
 					world.setBlockState(pos.add(27, yy + 1, 25), getRandomBricks(rand));
-					world.setBlockState(pos.add(26, yy + 1, 25), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
+					world.setBlockState(pos.add(26, yy + 1, 25), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.BOTTOM), 2);
 				}
 				if (level != 7)
 					buildBeams(world, pos.add(0, yy + 4, 0), 7, 7, rand, level);
@@ -209,18 +211,18 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			for (int j = 0; j < w; j++)
 				if ((maze[j][i] & 1) == 0) {
 					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getRandomBricks(rand), 2);
-					world.setBlockState(pos.add(j * 4 + 1, 0, i * 4), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
-					world.setBlockState(pos.add(j * 4 + 2, 0, i * 4), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
-					world.setBlockState(pos.add(j * 4 + 3, 0, i * 4), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
+					world.setBlockState(pos.add(j * 4 + 1, 0, i * 4), layer == 2 ? MUD: getRandomBricks(rand), 2);
+					world.setBlockState(pos.add(j * 4 + 2, 0, i * 4), layer == 2 ? MUD: getRandomBricks(rand), 2);
+					world.setBlockState(pos.add(j * 4 + 3, 0, i * 4), layer == 2 ? MUD: getRandomBricks(rand), 2);
 				} else
-					world.setBlockState(pos.add(j * 4, 0, i * 4), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
+					world.setBlockState(pos.add(j * 4, 0, i * 4), layer == 2 ? MUD: getRandomBricks(rand), 2);
 			// draw the west edge
 			for (int j = 0; j < w; j++)
 				if ((maze[j][i] & 8) == 0) {
 					world.setBlockState(pos.add(j * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) : getRandomBricks(rand), 2);
 					world.setBlockState(pos.add(j * 4, 0, i * 4 + 1), layer == 2 ? MUD/*getRandomTiles(rand)*/: getRandomBricks(rand), 2);
-					world.setBlockState(pos.add(j * 4, 0, i * 4 + 2), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
-					world.setBlockState(pos.add(j * 4, 0, i * 4 + 3), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
+					world.setBlockState(pos.add(j * 4, 0, i * 4 + 2), layer == 2 ? MUD: getRandomBricks(rand), 2);
+					world.setBlockState(pos.add(j * 4, 0, i * 4 + 3), layer == 2 ? MUD: getRandomBricks(rand), 2);
 				}
 			
 			for (int j = 0; j < w; j++)
@@ -234,13 +236,13 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 				}
 
 			world.setBlockState(pos.add(w * 4, 0, i * 4), (layer == 1 || layer == 2 || layer == 3) ? getPillarsForLevel(rand, level, layer) :getRandomBricks(rand), 2);
-			world.setBlockState(pos.add(w * 4, 0, i * 4 + 1), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
-			world.setBlockState(pos.add(w * 4, 0, i * 4 + 2), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
-			world.setBlockState(pos.add(w * 4, 0, i * 4 + 3), layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
+			world.setBlockState(pos.add(w * 4, 0, i * 4 + 1), layer == 2 ? MUD: getRandomBricks(rand), 2);
+			world.setBlockState(pos.add(w * 4, 0, i * 4 + 2), layer == 2 ? MUD: getRandomBricks(rand), 2);
+			world.setBlockState(pos.add(w * 4, 0, i * 4 + 3), layer == 2 ? MUD: getRandomBricks(rand), 2);
 		}
 		// draw the bottom line
 		for (int j = 0; j <= w * 4; j++)
-			world.setBlockState(pos.add(j, 0, h * 4), (j%4 == 0 && (layer == 1 || layer == 2 || layer == 3)) ? getPillarsForLevel(rand, level, layer) : layer == 2 ? MUD/*getRandomTiles(rand)*/ : getRandomBricks(rand), 2);
+			world.setBlockState(pos.add(j, 0, h * 4), (j%4 == 0 && (layer == 1 || layer == 2 || layer == 3)) ? getPillarsForLevel(rand, level, layer) : layer == 2 ? MUD: getRandomBricks(rand), 2);
 	}
 
 	// Level Feature Placements
@@ -278,12 +280,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(j * 4, 0, 1 + i * 4))))
-							world.setBlockState(pos.add(j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(2 + j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(3 + j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(2 + j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(3 + j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(4 + j * 4, 0, 1 + i * 4))))
-							world.setBlockState(pos.add(4 + j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(4 + j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.NORTH, EnumHalf.TOP), 2);
 					}
 				}
 
@@ -309,12 +311,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, i * 4))))
-							world.setBlockState(pos.add(1 + j * 4, 0, i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(1 + j * 4, 0, 2 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(1 + j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(1 + j * 4, 0, i * 4), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(1 + j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(1 + j * 4, 0, 2 + i * 4), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(1 + j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(1 + j * 4, 0, 4 + i * 4))))
-							world.setBlockState(pos.add(1 + j * 4, 0, 4 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(1 + j * 4, 0, 4 + i * 4), getRandomStairs(rand, EnumFacing.WEST, EnumHalf.TOP), 2);
 					}
 				}
 
@@ -340,12 +342,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, i * 4))))
-							world.setBlockState(pos.add(3 + j * 4, 0, i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(3 + j * 4, 0, 1 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(3 + j * 4, 0, 2 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(3 + j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(3 + j * 4, 0, i * 4), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(3 + j * 4, 0, 1 + i * 4), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(3 + j * 4, 0, 2 + i * 4), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(3 + j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(3 + j * 4, 0, 4 + i * 4))))
-							world.setBlockState(pos.add(3 + j * 4, 0, 4 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(3 + j * 4, 0, 4 + i * 4), getRandomStairs(rand, EnumFacing.EAST, EnumHalf.TOP), 2);
 					}
 				}
 
@@ -371,12 +373,12 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 
 					if(layer == 4) {
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(j * 4, 0, 3 + i * 4))))
-							world.setBlockState(pos.add(j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(1 + j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(2 + j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
-						world.setBlockState(pos.add(3 + j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(1 + j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(2 + j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
+						world.setBlockState(pos.add(3 + j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
 						if (!isSolidStructureBlock(world.getBlockState(pos.add(4 + j * 4, 0, 3 + i * 4))))
-							world.setBlockState(pos.add(4 + j * 4, 0, 3 + i * 4), getRandomBetweenstoneBrickStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
+							world.setBlockState(pos.add(4 + j * 4, 0, 3 + i * 4), getRandomStairs(rand, EnumFacing.SOUTH, EnumHalf.TOP), 2);
 					}
 				}
 		}
@@ -437,7 +439,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 						world.setBlockState(pos.add(j, 0, i), PUFFSHROOM, 2);
 				}
 				else 
-					world.setBlockState(pos.add(j, 0, i), MUD_TILES/*getRandomTiles(rand)*/, 2);
+					world.setBlockState(pos.add(j, 0, i), getTilesForLevel(rand, level), 2);
 				
 				if(world.getBlockState(pos.add(j, 0, i)).isNormalCube() && world.isAirBlock(pos.add(j, 1, i)))
 					if(rand.nextInt(40) == 0)
@@ -462,17 +464,17 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 					if(level == 0)
 						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 1)
-						world.setBlockState(pos.add(j, 0, i), betweenstoneBricks, 2);
+						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 2)
-						world.setBlockState(pos.add(j, 0, i), betweenstoneBricksMossy, 2);
+						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 3)
-						world.setBlockState(pos.add(j, 0, i), limestonePolished, 2);
+						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 4)
-						world.setBlockState(pos.add(j, 0, i), betweenstoneTiles, 2);
+						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 5)
-						world.setBlockState(pos.add(j, 0, i), betweenstoneTilesMossy, 2);
+						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					if(level == 6)
-						world.setBlockState(pos.add(j, 0, i), DRIPPING_MUD, 2);
+						world.setBlockState(pos.add(j, 0, i), ROTTEN_BARK, 2);
 					
 				}
 				else if(world.isAirBlock(pos.add(j, 0, i)) && !isSolidStructureBlock(world.getBlockState(pos.add(j, 0, i))))
@@ -546,26 +548,88 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		return WORM_DUNGEON_PILLAR;
 	}
 	
-	//Unused atm - just some forwards compat for block variation per level
-	public @Nullable IBlockState getBricksForLevel(Random rand, int level, int layer) {
-		int type = rand.nextInt(3);
+	public @Nullable IBlockState getTilesForLevel(Random rand, int level) {
+		int type = rand.nextInt(8);
 		switch (level) {
 		case 0:
-			return null;
+			if(type == 0 || type == 1)
+				return MUD_TILES_CRACKED;
+			else
+				return MUD_TILES;
 		case 1:
-			return null;
+			if(type == 0 || type == 1)
+				return MUD_TILES_CRACKED;
+			if(type == 2)
+				return MUD_TILES_CRACKED_DECAY_1;
+			else
+				return MUD_TILES;
 		case 2:
-			return null;
+			if(type == 0 || type == 1)
+				return MUD_TILES_DECAY_1;
+			if(type == 2)
+				return MUD_TILES_CRACKED_DECAY_1;
+			else
+				return MUD_TILES;
 		case 3:
-			return null;
+			if(type == 0)
+				return MUD_TILES_DECAY_1;
+			if(type == 1)
+				return MUD_TILES_CRACKED_DECAY_1;
+			if(type == 3)
+				return MUD_TILES_CRACKED;
+			if(type == 4)
+				return MUD_TILES_DECAY_2;
+			if(type == 5)
+				return MUD_TILES_CRACKED_DECAY_2;
+			else
+				return MUD_TILES;
 		case 4:
-			return null;
+			if(type == 0)
+				return MUD_TILES_DECAY_1;
+			if(type == 1)
+				return MUD_TILES_CRACKED_DECAY_1;
+			if(type == 3)
+				return MUD_TILES_CRACKED_DECAY_2;
+			if(type == 4)
+				return MUD_TILES_DECAY_2;
+			if(type == 5)
+				return MUD_TILES_CRACKED_DECAY_3;
+			if(type == 6)
+				return MUD_TILES_DECAY_3;
+			else
+				return MUD_TILES;
 		case 5:
-			return null;
+			if(type == 0)
+				return MUD_TILES_DECAY_2;
+			if(type == 1)
+				return MUD_TILES_CRACKED_DECAY_2;
+			if(type == 3)
+				return MUD_TILES_CRACKED_DECAY_3;
+			if(type == 4)
+				return MUD_TILES_DECAY_3;
+			if(type == 5)
+				return MUD_TILES_CRACKED_DECAY_4;
+			if(type == 6)
+				return MUD_TILES_DECAY_4;
+			else
+				return MUD_TILES_DECAY_1;
 		case 6:
-			return null;
+			if(type == 0)
+				return MUD_TILES_DECAY_2;
+			if(type == 1)
+				return MUD_TILES_CRACKED_DECAY_2;
+			if(type == 3)
+				return MUD_TILES_CRACKED_DECAY_3;
+			if(type == 4)
+				return MUD_TILES_DECAY_3;
+			if(type == 5)
+				return MUD_TILES_CRACKED_DECAY_4;
+			if(type == 6)
+				return MUD_TILES_DECAY_4;
+			else
+				return MUD_TILES_DECAY_2;
 		case 7:
-			return null;
+			return MUD_BRICKS;
 		}
 		return MUD_BRICKS;//betweenstoneBricks;
 	}
@@ -582,21 +646,8 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 		}*/
 		return MUD_BRICKS;//betweenstoneBricks;
 	}
-
-	public IBlockState getRandomTiles(Random rand) {
-		int type = rand.nextInt(3);
-		switch (type) {
-		case 0:
-			return betweenstoneTiles;
-		case 1:
-			return betweenstoneTilesMossy;
-		case 2:
-			return betweenstoneTilesCracked;
-		}
-		return betweenstoneTiles;
-	}
 	
-	public IBlockState getRandomBetweenstoneBrickStairs(Random rand, EnumFacing facing, EnumHalf half) {
+	public IBlockState getRandomStairs(Random rand, EnumFacing facing, EnumHalf half) {
 		int type = rand.nextInt(8);
 		IBlockState state = MUD_BRICK_STAIRS;
 		/*IBlockState state = betweenstoneBrickStairs;
@@ -638,7 +689,6 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			STRUCTURE_BLOCKS.put(DRIPPING_MUD, true);
 			STRUCTURE_BLOCKS.put(ROTTEN_BARK, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_SLAB, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES, true);
 			STRUCTURE_BLOCKS.put(MUD, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICKS, true);
 			STRUCTURE_BLOCKS.put(MUD_BRICK_STAIRS, true);
@@ -654,6 +704,16 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_3, true);
 			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_4, true);
 			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_FULL, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_1, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_2, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_3, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_4, true);
 		}
 	}
 }

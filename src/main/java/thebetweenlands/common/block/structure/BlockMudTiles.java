@@ -45,7 +45,7 @@ public class BlockMudTiles extends BasicBlock implements BlockRegistry.ICustomIt
 
 	@Override
     public boolean isOpaqueCube(IBlockState state) {
-        return false;
+        return true;
     }
 
 	@Override
