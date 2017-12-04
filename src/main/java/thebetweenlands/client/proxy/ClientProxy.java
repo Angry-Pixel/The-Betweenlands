@@ -200,7 +200,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
-import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
+import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -598,7 +598,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GuiDownloadTerrainBetweenlands.class);
         MinecraftForge.EVENT_BUS.register(ItemBLBow.class);
-        MinecraftForge.EVENT_BUS.register(ItemSyrmoriteShield.class);
+        MinecraftForge.EVENT_BUS.register(ItemSwatShield.class);
 	}
 
 	@Override

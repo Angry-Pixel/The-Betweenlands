@@ -129,8 +129,9 @@ public class ItemBLShield extends ItemShield {
 	 * @return
 	 */
 	public float getBlockedDamage(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
-		float multiplier = 0.4F - Math.min(this.material.getAttackDamage() / 3.0F, 1.0F) * 0.4F;
-		return Math.min(damage * multiplier, 8.0F);
+		//float multiplier = 0.4F - Math.min(this.material.getAttackDamage() / 3.0F, 1.0F) * 0.4F;
+		//return Math.min(damage * multiplier, 8.0F);
+		return 0.0F;
 	}
 
 	/**

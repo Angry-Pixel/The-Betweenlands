@@ -3,9 +3,15 @@
   "overrides": [
     {
       "predicate": {
-        "blocking": 1
+        "blocking": 1, "charging": 0
       },
       "model": "thebetweenlands:item/valonite_shield_blocking"
+    },
+    {
+      "predicate": {
+        "blocking": 0, "charging": 1
+      },
+      "model": "thebetweenlands:item/valonite_shield_charging"
     }
   ],
   "display": {

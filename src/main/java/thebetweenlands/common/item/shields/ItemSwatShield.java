@@ -20,12 +20,11 @@ import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.tools.ItemBLShield;
 
-public class ItemSyrmoriteShield extends ItemBLShield {
-	public ItemSyrmoriteShield() {
-		super(BLMaterialRegistry.TOOL_SYRMORITE);
+public class ItemSwatShield extends ItemBLShield {
+	public ItemSwatShield(ToolMaterial material) {
+		super(material);
 
 		this.addPropertyOverride(new ResourceLocation("charging"), new IItemPropertyGetter() {
 			@Override
@@ -96,6 +95,69 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 		return user.getEntityData().getInteger("thebetweenlands.shield.remainingRunningTicks");
 	}
 
+	/**
+	 * Returns for how many ticks the user can charge for the specified preparation ticks
+	 * @param stack
+	 * @param user
+	 * @param preparingTicks
+	 * @return
+	 */
+	public int getChargeTime(ItemStack stack, EntityLivingBase user, int preparingTicks) {
+		float strength = MathHelper.clamp(this.getPreparingChargeTicks(stack, user) / 20.0F - 0.2F, 0, 1);
+		return (int)(strength * strength * this.getMaxChargeTime(stack, user));
+	}
+
+	/**
+	 * Returns the maximum charge ticks
+	 * @param stack
+	 * @param user
+	 * @return
+	 */
+	public int getMaxChargeTime(ItemStack stack, EntityLivingBase user) {
+		return 80;
+	}
+
+	/**
+	 * Called when an enemy is rammed
+	 * @param stack
+	 * @param user
+	 * @param enemy
+	 * @param rammingDir
+	 */
+	public void onEnemyRammed(ItemStack stack, EntityLivingBase user, EntityLivingBase enemy, Vec3d rammingDir) {
+		enemy.knockBack(user, 6.0F, -rammingDir.x, -rammingDir.z);
+		if(user instanceof EntityPlayer) {
+			enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)user), 10.0F);
+		} else {
+			enemy.attackEntityFrom(DamageSource.causeMobDamage(user), 10.0F);
+		}
+	}
+
+	/**
+	 * Called every tick when charging
+	 * @param stack
+	 * @param user
+	 */
+	public void onChargingUpdate(ItemStack stack, EntityLivingBase user) {
+		if(user.onGround && !user.isSneaking()) {
+			Vec3d dir = user.getLookVec();
+			dir = new Vec3d(dir.x, 0, dir.z).normalize();
+			user.motionX += dir.x * 0.35D;
+			user.motionZ += dir.z * 0.35D;
+
+			if(user instanceof EntityPlayer) {
+				((EntityPlayer) user).getFoodStats().addExhaustion(0.15F);
+			}
+		}
+		if(Math.sqrt(user.motionX*user.motionX + user.motionZ*user.motionZ) > 0.2D) {
+			Vec3d moveDir = new Vec3d(user.motionX, user.motionY, user.motionZ).normalize();
+			List<EntityLivingBase> targets = user.world.getEntitiesWithinAABB(EntityLivingBase.class, user.getEntityBoundingBox().grow(1), e -> e != user);
+			for(EntityLivingBase target : targets) {
+				this.onEnemyRammed(stack, user, target, moveDir);
+			}
+		}
+	}
+
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
@@ -104,52 +166,34 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 	}
 
 	@Override
-	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
-		if(player instanceof EntityPlayer) {
-			boolean preparing = this.isPreparingCharge(stack, player);
+	public void onUsingTick(ItemStack stack, EntityLivingBase user, int count) {
+		boolean preparing = this.isPreparingCharge(stack, user);
 
-			int runningTicks = this.getRemainingChargeTicks(stack, player);
+		int runningTicks = this.getRemainingChargeTicks(stack, user);
 
-			if(preparing && runningTicks <= 0) {
-				this.setPreparingChargeTicks(stack, player, this.getPreparingChargeTicks(stack, player) + 1);
-			}
+		if(preparing && runningTicks <= 0) {
+			this.setPreparingChargeTicks(stack, user, this.getPreparingChargeTicks(stack, user) + 1);
+		}
 
-			if(preparing && !player.isSneaking() && runningTicks <= 0) {
-				float strength = MathHelper.clamp(this.getPreparingChargeTicks(stack, player) / 20.0F - 0.2F, 0, 1);
-				this.setRemainingChargeTicks(stack, player, (int)(strength * strength * 80));
-				this.setPreparingChargeTicks(stack, player, 0);
-				this.setPreparingCharge(stack, player, false);
-			} else if(!preparing && player.isSneaking()) {
-				this.setRemainingChargeTicks(stack, player, 0);
-				this.setPreparingChargeTicks(stack, player, 0);
-				this.setPreparingCharge(stack, player, true);
-			}
+		if(preparing && !user.isSneaking() && runningTicks <= 0) {
+			this.setRemainingChargeTicks(stack, user, this.getChargeTime(stack, user, this.getPreparingChargeTicks(stack, user)));
+			this.setPreparingChargeTicks(stack, user, 0);
+			this.setPreparingCharge(stack, user, false);
+		} else if(!preparing && user.isSneaking()) {
+			this.setRemainingChargeTicks(stack, user, 0);
+			this.setPreparingChargeTicks(stack, user, 0);
+			this.setPreparingCharge(stack, user, true);
+		}
 
-			if(runningTicks > 0) {
-				if(player.onGround && !player.isSneaking()) {
-					Vec3d dir = player.getLookVec();
-					dir = new Vec3d(dir.x, 0, dir.z).normalize();
-					player.motionX += dir.x * 0.35D;
-					player.motionZ += dir.z * 0.35D;
-
-					((EntityPlayer) player).getFoodStats().addExhaustion(0.25F);
-				}
-				if(Math.sqrt(player.motionX*player.motionX + player.motionZ*player.motionZ) > 0.2D) {
-					Vec3d moveDir = new Vec3d(player.motionX, player.motionY, player.motionZ).normalize();
-					List<EntityLivingBase> targets = player.world.getEntitiesWithinAABB(EntityLivingBase.class, player.getEntityBoundingBox().grow(1), e -> e != player);
-					for(EntityLivingBase target : targets) {
-						target.knockBack(player, 6.0F, -moveDir.x, -moveDir.z);
-						target.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)player), 10.0F);
-					}
-				}
-				this.setRemainingChargeTicks(stack, player, --runningTicks);
-				if(runningTicks == 0) {
-					player.stopActiveHand();
-				}
+		if(runningTicks > 0) {
+			this.onChargingUpdate(stack, user);
+			this.setRemainingChargeTicks(stack, user, --runningTicks);
+			if(runningTicks == 0) {
+				user.stopActiveHand();
 			}
 		}
 
-		super.onUsingTick(stack, player, count);
+		super.onUsingTick(stack, user, count);
 	}
 
 	@Override
@@ -188,10 +232,11 @@ public class ItemSyrmoriteShield extends ItemBLShield {
 	@SubscribeEvent
 	public static void onUpdateFov(FOVUpdateEvent event) {
 		ItemStack activeItem = event.getEntity().getActiveItemStack();
-		if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemSyrmoriteShield && ((ItemSyrmoriteShield)activeItem.getItem()).isPreparingCharge(activeItem, event.getEntity())) {
-			int usedTicks = activeItem.getItem().getMaxItemUseDuration(activeItem) - event.getEntity().getItemInUseCount();
-			float strength = MathHelper.clamp(usedTicks / 20.0F - 0.2F, 0.0F, 1.0F);
-			event.setNewfov(1.0F - strength * strength * 0.25F);
+		ItemSwatShield swatShield;
+		if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemSwatShield && (swatShield = (ItemSwatShield) activeItem.getItem()).isPreparingCharge(activeItem, event.getEntity())) {
+			int preparingTicks = swatShield.getPreparingChargeTicks(activeItem, event.getEntity());
+			float progress = Math.min(swatShield.getChargeTime(activeItem, event.getEntity(), preparingTicks) / (float)swatShield.getMaxChargeTime(activeItem, event.getEntity()), 1);
+			event.setNewfov(1.0F - progress * 0.25F);
 		}
 	}
 }
