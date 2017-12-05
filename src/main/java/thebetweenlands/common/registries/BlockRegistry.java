@@ -134,6 +134,7 @@ import thebetweenlands.common.block.structure.BlockWalkway;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
+import thebetweenlands.common.block.terrain.BlockBlackIce;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDeadGrass;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
@@ -514,6 +515,8 @@ public class BlockRegistry {
     public static final Block DUG_PURIFIED_SWAMP_DIRT = new BlockDugDirt(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
     public static final Block DUG_SWAMP_GRASS = new BlockDugGrass(false).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
     public static final Block DUG_PURIFIED_SWAMP_GRASS = new BlockDugGrass(true).setItemDropped(() -> Item.getItemFromBlock(SWAMP_DIRT));
+    public static final Block BLACK_ICE = new BlockBlackIce();
+    
     //Misc
     public static final Block LOG_PORTAL = new BlockLogBetweenlands();
     public static final Block TREE_PORTAL = new BlockTreePortal();

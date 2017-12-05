@@ -5,16 +5,15 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.vecmath.Matrix4f;
 
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.base.Function;
-import java.util.Optional;
 import com.google.common.collect.ImmutableMap;
+import com.google.gson.JsonParser;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -24,11 +23,12 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.common.model.IModelPart;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
@@ -37,8 +37,18 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
 
 public class ModelWeedwoodBush implements IModel {
-	public static final ResourceLocation TEXTURE_LEAVES = new ResourceLocation(ModInfo.ID, "blocks/leaves_weedwood_tree");
-	public static final ResourceLocation TEXTURE_STICKS = new ResourceLocation(ModInfo.ID, "items/weedwood_stick");
+	private final ResourceLocation leavesTexture;
+	private final ResourceLocation sticksTexture;
+
+	public ModelWeedwoodBush() {
+		this.leavesTexture = new ResourceLocation(ModInfo.ID, "blocks/leaves_weedwood_tree");
+		this.sticksTexture = new ResourceLocation(ModInfo.ID, "items/weedwood_stick");
+	}
+
+	public ModelWeedwoodBush(ResourceLocation leaves, ResourceLocation sticks) {
+		this.leavesTexture = leaves;
+		this.sticksTexture = sticks;
+	}
 
 	@Override
 	public Collection<ResourceLocation> getDependencies() {
@@ -47,18 +57,45 @@ public class ModelWeedwoodBush implements IModel {
 
 	@Override
 	public Collection<ResourceLocation> getTextures() {
-		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{TEXTURE_LEAVES, TEXTURE_STICKS}));
+		return Collections.unmodifiableCollection(Arrays.asList(new ResourceLocation[]{this.leavesTexture, this.sticksTexture}));
 	}
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
-		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, bakedTextureGetter.apply(TEXTURE_LEAVES), bakedTextureGetter.apply(TEXTURE_STICKS));
+		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, bakedTextureGetter.apply(this.leavesTexture), bakedTextureGetter.apply(this.sticksTexture));
 	}
 
 	@Override
 	public IModelState getDefaultState() {
 		return TRSRTransformation.identity();
+	}
+
+	@Override
+	public ModelWeedwoodBush process(ImmutableMap<String, String> customData) {
+		JsonParser parser = new JsonParser();
+
+		ResourceLocation leaves = this.leavesTexture;
+
+		if(customData.containsKey("texture_leaves")) {
+			leaves = new ResourceLocation(parser.parse(customData.get("texture_leaves")).getAsString());
+		}
+
+		if(leaves == null) {
+			leaves = TextureMap.LOCATION_MISSING_TEXTURE;
+		}
+
+		ResourceLocation sticks = this.sticksTexture;
+
+		if(customData.containsKey("texture_sticks")) {
+			sticks = new ResourceLocation(parser.parse(customData.get("texture_sticks")).getAsString());
+		}
+
+		if(sticks == null) {
+			sticks = TextureMap.LOCATION_MISSING_TEXTURE;
+		}	
+
+		return new ModelWeedwoodBush(leaves, sticks);
 	}
 
 	public static class ModelBakedWeedwoodBush implements IBakedModel {

@@ -8,12 +8,14 @@ import thebetweenlands.client.render.model.entity.ModelWight;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.world.event.EventWinter;
 
 public class RenderWight extends RenderLiving<EntityWight> {
-	private final ResourceLocation texture = new ResourceLocation("thebetweenlands:textures/entity/wight.png");
-
-	private static final ModelWight MODEL = new ModelWight();
-	private static final ModelWight MODEL_HEAD_ONLY = new ModelWight().setRenderHeadOnly(true);
+	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/wight.png");
+	public static final ResourceLocation TEXTURE_FROSTY = new ResourceLocation("thebetweenlands:textures/entity/wight_frosty.png");
+	
+	public static final ModelWight MODEL = new ModelWight();
+	public static final ModelWight MODEL_HEAD_ONLY = new ModelWight().setRenderHeadOnly(true);
 
 	public RenderWight(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, MODEL, 0.5f);
@@ -21,7 +23,10 @@ public class RenderWight extends RenderLiving<EntityWight> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityWight entity) {
-		return texture;
+		if(EventWinter.isFroooosty(entity.world)) {
+			return TEXTURE_FROSTY;
+		}
+		return TEXTURE;
 	}
 
 	@Override
