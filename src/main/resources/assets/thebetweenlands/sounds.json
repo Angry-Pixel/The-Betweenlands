@@ -20,6 +20,22 @@
       }
     ]
   },
+  "ambient_frosty": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_frosty",
+        "stream": true
+      }
+    ]
+  },
+  "ambient_snowfall": {
+    "sounds": [
+      {
+        "name": "thebetweenlands:ambience/ambient_snowfall",
+        "stream": true
+      }
+    ]
+  },
   "ambient_wight_fortress": {
     "sounds": [
       {

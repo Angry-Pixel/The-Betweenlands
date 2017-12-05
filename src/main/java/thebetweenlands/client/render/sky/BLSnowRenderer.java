@@ -53,7 +53,7 @@ public class BLSnowRenderer extends IRenderHandler {
 			this.snowingStrength = 0;
 		}
 		this.prevRenderUpdateTicks = this.renderUpdateTicks;
-		this.renderUpdateTicks += 1 + (int)(this.snowingStrength * 2.0F);
+		this.renderUpdateTicks += 1 + (int)(this.snowingStrength * 2.3F);
 	}
 
 	@Override
@@ -86,8 +86,7 @@ public class BLSnowRenderer extends IRenderHandler {
 			}
 
 			float interpTicks = this.prevRenderUpdateTicks + (this.renderUpdateTicks - this.prevRenderUpdateTicks) * partialTicks;
-			
-			int renderedLayers = -1;
+
 			builder.setTranslation(-interpX, -interpY, -interpZ);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			BlockPos.MutableBlockPos checkPos = new BlockPos.MutableBlockPos();
@@ -146,15 +145,11 @@ public class BLSnowRenderer extends IRenderHandler {
 						builder.pos((double) layerX - rainXCoord + 0.5D, (double) layerY, (double) layerZ - rainYCoord + 0.5D)
 						.tex(0.0D + randUvShiftX, (double) maxLayerY * 0.25D + uvShiftY + randUvShiftY).color(1.0F, 1.0F, 1.0F, visibility)
 						.lightmap(lightmapX, lightmapY).endVertex();
-
-						renderedLayers++;
 					}
 				}
 			}
 
-			if (renderedLayers >= 0) {
-				tessellator.draw();
-			}
+			tessellator.draw();
 
 			builder.setTranslation(0.0D, 0.0D, 0.0D);
 			GlStateManager.enableCull();

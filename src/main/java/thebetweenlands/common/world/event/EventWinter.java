@@ -64,6 +64,16 @@ public class EventWinter extends EnvironmentEvent {
 		return false;
 	}
 
+	public static float getSnowingStrength(World world) {
+		if(world != null) {
+			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+			if(provider != null) {
+				return provider.getEnvironmentEventRegistry().WINTER.getSnowingStrength();
+			}
+		}
+		return 0;
+	}
+
 	public float getSnowingStrength() {
 		return this.snowingStrength;
 	}
