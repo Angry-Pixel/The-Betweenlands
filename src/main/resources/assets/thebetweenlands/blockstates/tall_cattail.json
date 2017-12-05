@@ -6,14 +6,14 @@
 				"model": "thebetweenlands:internal/spook_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/tall_cattail_bottom",
-					"model_spook": "thebetweenlands:block/tall_cattail_bottom_spook"
+					"model_active": "thebetweenlands:block/tall_cattail_bottom_spook"
 				}
 			},
 			"upper": {
 				"model": "thebetweenlands:internal/spook_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/tall_cattail_top",
-					"model_spook": "thebetweenlands:block/tall_cattail_top_spook"
+					"model_active": "thebetweenlands:block/tall_cattail_top_spook"
 				}
 			}
 		}

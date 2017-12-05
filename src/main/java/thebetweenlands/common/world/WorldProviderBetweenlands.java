@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
@@ -91,7 +92,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public void init() {
 		this.setDimension(ConfigHandler.dimensionId);
-		this.biomeProvider = new BiomeProviderBetweenlands(this.world.getWorldInfo());
+		this.biomeProvider = new BiomeProviderBetweenlands(this, this.world.getWorldInfo());
 		this.hasSkyLight = true;
 	}
 
@@ -175,7 +176,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 			this.world.rainingStrength = rainingStrength;
 		}
 	}
-
+	
 	/**
 	 * Updates the brightness table relative to the specified player
 	 * @param player
@@ -216,6 +217,15 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public IRenderHandler getSkyRenderer() {
 		return BLSkyRenderer.INSTANCE;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public IRenderHandler getWeatherRenderer() {
+		if(this.getEnvironmentEventRegistry().WINTER.isActive()) {
+			return BLSnowRenderer.INSTANCE;
+		}
+		return null;
 	}
 
 	//Fix for buggy rain (?)

@@ -5,7 +5,7 @@
 			"model": "thebetweenlands:internal/spook_event",
 			"custom": {
 				"model_base": "thebetweenlands:block/soft_rush",
-				"model_spook": "thebetweenlands:block/soft_rush_spook"
+				"model_active": "thebetweenlands:block/soft_rush_spook"
 			}
 		}
 	}

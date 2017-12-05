@@ -5,7 +5,7 @@
 			"model": "thebetweenlands:internal/spook_event",
 			"custom": {
 				"model_base": "thebetweenlands:block/leaves_weedwood_tree",
-				"model_spook": "thebetweenlands:block/leaves_weedwood_tree_spook"
+				"model_active": "thebetweenlands:block/leaves_weedwood_tree_spook"
 			}
 		}
 	}

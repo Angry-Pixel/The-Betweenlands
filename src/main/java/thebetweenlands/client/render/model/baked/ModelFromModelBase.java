@@ -207,7 +207,18 @@ public class ModelFromModelBase implements IModel {
 		if(customData.containsKey("ambient_occlusion")) {
 			ambientOcclusion = parser.parse(customData.get("ambient_occlusion")).getAsBoolean();
 		}
+		
+		ResourceLocation texture = this.texture;
+		
+		if(customData.containsKey("texture")) {
+			texture = new ResourceLocation(parser.parse(customData.get("texture")).getAsString());
+			System.out.println("NEW TEX: " + texture);
+		}
+		
+		if(texture == null) {
+			texture = TextureMap.LOCATION_MISSING_TEXTURE;
+		}
 
-		return new ModelFromModelBase(this.model, this.texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+		return new ModelFromModelBase(this.model, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
 	}
 }

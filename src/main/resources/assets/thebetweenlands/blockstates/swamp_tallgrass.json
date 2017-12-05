@@ -5,7 +5,7 @@
 			"model": "thebetweenlands:internal/spook_event",
 			"custom": {
 				"model_base": "thebetweenlands:block/swamp_tallgrass",
-				"model_spook": "thebetweenlands:block/swamp_tallgrass_spook"
+				"model_active": "thebetweenlands:block/swamp_tallgrass_spook"
 			}
 		}
 	}

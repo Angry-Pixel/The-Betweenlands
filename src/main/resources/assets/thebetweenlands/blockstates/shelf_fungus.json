@@ -5,7 +5,7 @@
 			"model": "thebetweenlands:internal/spook_event",
 			"custom": {
 				"model_base": "thebetweenlands:block/shelf_fungus",
-				"model_spook": "thebetweenlands:block/shelf_fungus_spook"
+				"model_active": "thebetweenlands:block/shelf_fungus_spook"
 			}
 		}
 	}

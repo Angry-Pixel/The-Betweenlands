@@ -4,7 +4,7 @@
   	"model": "thebetweenlands:internal/spook_event",
 	"custom": {
 		"model_base": "thebetweenlands:block/moss_north",
-		"model_spook": "thebetweenlands:block/moss_north_spook"
+		"model_active": "thebetweenlands:block/moss_north_spook"
 	}
   },
   "variants": {

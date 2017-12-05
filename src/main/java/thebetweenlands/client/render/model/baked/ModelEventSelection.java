@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.function.BooleanSupplier;
 
 import javax.vecmath.Matrix4f;
 
@@ -16,7 +17,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
@@ -30,19 +30,37 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 
-public class ModelSpookEvent implements IModel {
+public class ModelEventSelection implements IModel {
 	private IModel baseModel;
 	private IModel altModel;
 
-	public ModelSpookEvent() {
-	}
+	private BooleanSupplier predicate;
 
-	public ModelSpookEvent(IModel baseModel, IModel altModel) {
+	private volatile boolean active;
+
+	public ModelEventSelection() {
+		this(null, null);
+	}
+	
+	public ModelEventSelection(IModel baseModel, IModel altModel) {
 		this.baseModel = baseModel;
 		this.altModel = altModel;
+		this.predicate = () -> this.isActive();
+	}
+
+	public ModelEventSelection(BooleanSupplier predicate, IModel baseModel, IModel altModel) {
+		this.baseModel = baseModel;
+		this.altModel = altModel;
+		this.predicate = predicate;
+	}
+
+	public final synchronized void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public final synchronized boolean isActive() {
+		return this.active;
 	}
 
 	public static ImmutableMap<String, String> getCustomDataFor(JsonParser parser, String customData) {
@@ -79,11 +97,10 @@ public class ModelSpookEvent implements IModel {
 
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
-
 		if(baseModel != null && altModel != null) {
 			IBakedModel baseBakedModel = this.baseModel.bake(state, format, bakedTextureGetter);
 			IBakedModel altBakedModel = this.altModel.bake(state, format, bakedTextureGetter);
-			return new BakedSpookEventModel(baseBakedModel, altBakedModel);
+			return new BakedEventSelectionModel(this.predicate, baseBakedModel, altBakedModel);
 		} else {
 			return ModelLoaderRegistry.getMissingModel().bake(state, format, bakedTextureGetter);
 		}
@@ -96,39 +113,48 @@ public class ModelSpookEvent implements IModel {
 
 	@Override
 	public IModel process(ImmutableMap<String, String> customData) {
-		if (!customData.containsKey("model_base") || !customData.containsKey("model_spook")) return this;
-
 		JsonParser parser = new JsonParser();
-		String baseJsonStr = customData.get("model_base");
-		String altJsonStr = customData.get("model_spook");
-		ResourceLocation baseModelLocation = new ResourceLocation(parser.parse(baseJsonStr).getAsString());
-		ResourceLocation altModelLocation = new ResourceLocation(parser.parse(altJsonStr).getAsString());
 
-		IModel baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
-		baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_base_data")));
-		IModel altModel = ModelLoaderRegistry.getModelOrLogError(altModelLocation, "Could not find spook event model for combined model");
-		altModel = altModel.process(getCustomDataFor(parser, customData.get("model_spook_data")));
+		IModel baseModel = this.baseModel;
 
-		return new ModelSpookEvent(baseModel, altModel);
+		if(customData.containsKey("model_base") || baseModel == null) {
+			ResourceLocation baseModelLocation = new ResourceLocation(parser.parse(customData.get("model_base")).getAsString());
+			baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for event selection model");
+		}
+
+		if(customData.containsKey("model_base_data")) {
+			baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_base_data")));
+		}
+
+		IModel altModel = this.altModel;
+
+		if(customData.containsKey("model_active") || altModel == null) {
+			ResourceLocation additionalModelLocation = new ResourceLocation(parser.parse(customData.get("model_active")).getAsString());
+			altModel = ModelLoaderRegistry.getModelOrLogError(additionalModelLocation, "Could not find active model for event selection model");
+		}
+
+		if(customData.containsKey("model_active_data")) {
+			altModel = altModel.process(getCustomDataFor(parser, customData.get("model_active_data")));
+		}
+
+		return new ModelEventSelection(this.predicate, baseModel, altModel);
 	}
 
-	public static class BakedSpookEventModel implements IBakedModel {
+	public static class BakedEventSelectionModel implements IBakedModel {
 		private final IBakedModel baseBakedModel;
 		private final IBakedModel altBakedModel;
+		private final BooleanSupplier isActive;
 
-		public BakedSpookEventModel(IBakedModel baseBakedModel, IBakedModel altBakedModel) {
+		public BakedEventSelectionModel(BooleanSupplier isActive, IBakedModel baseBakedModel, IBakedModel altBakedModel) {
 			this.baseBakedModel = baseBakedModel;
 			this.altBakedModel = altBakedModel;
+			this.isActive = isActive;
 		}
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-			Minecraft mc = Minecraft.getMinecraft();
-			if(mc != null && mc.world != null && mc.world.provider instanceof WorldProviderBetweenlands) {
-				EnvironmentEventRegistry eeRegistry = ((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry();
-				if(eeRegistry.SPOOPY.isActive()) {
-					return this.altBakedModel.getQuads(state, side, rand);
-				}
+			if(this.isActive.getAsBoolean()) {
+				return this.altBakedModel.getQuads(state, side, rand);
 			}
 			return this.baseBakedModel.getQuads(state, side, rand);
 		}

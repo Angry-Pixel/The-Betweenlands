@@ -4,7 +4,7 @@
 		"model": "thebetweenlands:internal/spook_event",
 		"custom": {
 			"model_base": "thebetweenlands:block/swamp_reed",
-			"model_spook": "thebetweenlands:block/swamp_reed_spook"
+			"model_active": "thebetweenlands:block/swamp_reed_spook"
 		}
 	},
 	"variants": {
@@ -13,7 +13,7 @@
 				"model": "thebetweenlands:internal/spook_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/swamp_reed_top",
-					"model_spook": "thebetweenlands:block/swamp_reed_top_spook"
+					"model_active": "thebetweenlands:block/swamp_reed_top_spook"
 				}
 			},
 			"false": {

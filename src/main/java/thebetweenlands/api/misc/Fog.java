@@ -197,6 +197,13 @@ public class Fog {
 			return this;
 		}
 
+		public MutableFog setColor(float red, float green, float blue) {
+			this.setRed(red);
+			this.setGreen(green);
+			this.setBlue(blue);
+			return this;
+		}
+		
 		public MutableFog setStart(float start) {
 			this.start = start;
 			return this;

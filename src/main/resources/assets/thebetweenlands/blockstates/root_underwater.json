@@ -9,7 +9,7 @@
 					"model": "thebetweenlands:block/internal/spook_event",
 					"model_data": {
 						"model_base": "thebetweenlands:block/internal/root",
-						"model_spook": "thebetweenlands:block/internal/root_spook"
+						"model_active": "thebetweenlands:block/internal/root_spook"
 					},
 					"layers": [
 						"cutout",

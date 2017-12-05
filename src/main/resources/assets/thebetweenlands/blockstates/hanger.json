@@ -5,7 +5,7 @@
 			"model": "thebetweenlands:internal/spook_event",
 			"custom": {
 				"model_base": "thebetweenlands:block/hanger",
-				"model_spook": "thebetweenlands:block/hanger_spook"
+				"model_active": "thebetweenlands:block/hanger_spook"
 			}
 		}
 	}

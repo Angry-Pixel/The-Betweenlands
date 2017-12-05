@@ -19,7 +19,7 @@ import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
-import thebetweenlands.client.render.model.baked.ModelSpookEvent;
+import thebetweenlands.client.render.model.baked.ModelEventSelection;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelThatchRoof;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
@@ -73,7 +73,8 @@ public class ModelRegistry {
 	public static final IModel MODEL_COMBINED = new ModelCombined();
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
 	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
-	public static final IModel SPOOK_EVENT = new ModelSpookEvent();
+	public static final ModelEventSelection SPOOK_EVENT = new ModelEventSelection();
+	public static final ModelEventSelection WINTER_EVENT = new ModelEventSelection();
 	
 	//Plant models
 	public static final IModel PITCHER_PLANT = new ModelFromModelBase(new ModelPitcherPlant(), new ResourceLocation("thebetweenlands:blocks/pitcher_plant"), 128, 128);
@@ -184,7 +185,7 @@ public class ModelRegistry {
 	public static void preInit() {
 		try {
 			for (Field field : ModelRegistry.class.getDeclaredFields()) {
-				if (field.getType().isAssignableFrom(IModel.class)) {
+				if (IModel.class.isAssignableFrom(field.getType())) {
 					IModel model = (IModel) field.get(null);
 					MODELS.add(model);
 					ResourceLocation blockLocation = new ResourceLocation(ModInfo.ID, "models/block/internal/" + field.getName().toLowerCase(Locale.ENGLISH));

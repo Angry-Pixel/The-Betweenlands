@@ -5,7 +5,7 @@
 			"model": "thebetweenlands:internal/spook_event",
 			"custom": {
 				"model_base": "thebetweenlands:block/internal/root",
-				"model_spook": "thebetweenlands:block/internal/root_spook"
+				"model_active": "thebetweenlands:block/internal/root_spook"
 			}
 		}
 	}

@@ -14,6 +14,7 @@ public class EnvironmentEventRegistry {
 	public final EventAuroras AURORAS;
 	public final EventBloodSky BLOODSKY;
 	public final EventSpoopy SPOOPY;
+	public final EventWinter WINTER;
 
 	private World world;
 
@@ -25,6 +26,7 @@ public class EnvironmentEventRegistry {
 		AURORAS = new EventAuroras(this);
 		BLOODSKY = new EventBloodSky(this);
 		SPOOPY = new EventSpoopy(this);
+		WINTER = new EventWinter(this);
 	}
 
 	public World getWorld() {
@@ -37,6 +39,7 @@ public class EnvironmentEventRegistry {
 		register(AURORAS);
 		register(BLOODSKY);
 		register(SPOOPY);
+		register(WINTER);
 	}
 
 	private final Map<String, EnvironmentEvent> REGISTERED_EVENTS = new HashMap<String, EnvironmentEvent>();

@@ -8,7 +8,7 @@
 				"model": "thebetweenlands:block/internal/spook_event",
 				"model_data": {
 					"model_base": "thebetweenlands:block/swamp_reed",
-					"model_spook": "thebetweenlands:block/swamp_reed_spook"
+					"model_active": "thebetweenlands:block/swamp_reed_spook"
 				},
 				"layers": [
 					"cutout",
@@ -36,7 +36,7 @@
 						"model": "thebetweenlands:block/internal/spook_event",
 						"model_data": {
 							"model_base": "thebetweenlands:block/swamp_reed_top",
-							"model_spook": "thebetweenlands:block/swamp_reed_top_spook"
+							"model_active": "thebetweenlands:block/swamp_reed_top_spook"
 						},
 						"layers": [
 							"cutout",

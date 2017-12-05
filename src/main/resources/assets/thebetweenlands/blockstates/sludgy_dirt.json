@@ -4,7 +4,7 @@
 		"model": "thebetweenlands:internal/spook_event",
 		"custom": {
 			"model_base": "thebetweenlands:block/sludgy_dirt",
-			"model_spook": "thebetweenlands:block/sludgy_dirt_spook"
+			"model_active": "thebetweenlands:block/sludgy_dirt_spook"
 		}
 	},
 	"variants": {

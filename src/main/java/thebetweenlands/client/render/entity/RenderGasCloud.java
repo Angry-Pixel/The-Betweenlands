@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 
@@ -56,18 +57,21 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			//Render particles to gas fbo
-			ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer().bind();
-
-			//GlStateManager.disableBlend();
-
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-			this.renderGasParticles(buffer, entity, partialTicks);
-			tessellator.draw();
-
-			//GlStateManager.enableBlend();
-
-			Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+			GeometryBuffer fbo = ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer();
+			if(fbo != null && fbo.isInitialized()) {
+				//Render particles to gas fbo
+				fbo.bind();
+	
+				//GlStateManager.disableBlend();
+	
+				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+				this.renderGasParticles(buffer, entity, partialTicks);
+				tessellator.draw();
+	
+				//GlStateManager.enableBlend();
+	
+				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
+			}
 		}
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
