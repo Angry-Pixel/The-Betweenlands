@@ -32,7 +32,7 @@ import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventWinter extends EnvironmentEvent {
-	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 12, 1, 0, 0).getTime().getTime();
+	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 1, 0, 0).getTime().getTime();
 
 	private World world;
 	private World lastWorld;
@@ -101,7 +101,7 @@ public class EventWinter extends EnvironmentEvent {
 
 		if(!world.isRemote) {
 			long dayDiff = this.getDayDiff();
-			if(dayDiff >= 0 && dayDiff <= 8) {
+			if(dayDiff >= 0 && dayDiff <= 31) {
 				if(!this.isActive() && !this.wasSet) {
 					this.setActive(true, true);
 					this.wasSet = true;
