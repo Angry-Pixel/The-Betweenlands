@@ -1,51 +1,216 @@
 {
-    "forge_marker": 1,
-    "variants": {
-        "normal": [
-            { "model": "thebetweenlands:internal/swamp_plant" },
-            { "model": "thebetweenlands:internal/swamp_plant", "y": 90 },
-            { "model": "thebetweenlands:internal/swamp_plant", "y": 180 },
-            { "model": "thebetweenlands:internal/swamp_plant", "y": 270 }
-        ],
-        "inventory": { 
-            "model": "thebetweenlands:internal/swamp_plant",
-            "transform": {
-                "gui": {
-                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
-                    "translation": [0, 0.15, 0],
-                    "scale":[0.725, 0.725, 0.725]
-                },
-                "ground": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0.2, 0],
-                    "scale":[0.6, 0.6, 0.6]
-                },
-                "fixed": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0, 0],
-                    "scale":[0.75, 0.75, 0.75]
-                },
-                "thirdperson_righthand": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0.35, 0.15],
-                    "scale": [0.75, 0.75, 0.75]
-                },
-                "thirdperson_lefthand": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0.35, 0.15],
-                    "scale": [0.75, 0.75, 0.75]
-                },
-                "firstperson_righthand": {
-                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
-                    "translation": [0, 0.35, 0],
-                    "scale": [0.75, 0.75, 0.75]
-                },
-                "firstperson_lefthand": {
-                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
-                    "translation": [0, 0.35, 0],
-                    "scale": [0.75, 0.75, 0.75]
-                }
-            }
-        }
-    }
+	"forge_marker": 1,
+	"variants": {
+		"normal": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/swamp_plant",
+					"model_active": "thebetweenlands:block/internal/swamp_plant",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+					}
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/swamp_plant",
+					"model_active": "thebetweenlands:block/internal/swamp_plant",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+					}
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/swamp_plant",
+					"model_active": "thebetweenlands:block/internal/swamp_plant",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+					}
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/swamp_plant",
+					"model_active": "thebetweenlands:block/internal/swamp_plant",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/swamp_plant_frosty"
+					}
+				},
+				"y": 270
+			}
+		],
+		"inventory": {
+			"model": "thebetweenlands:internal/swamp_plant",
+			"transform": {
+				"gui": {
+					"rotation": [
+						{
+							"x": 30
+						},
+						{
+							"y": 225
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.15,
+						0
+					],
+					"scale": [
+						0.725,
+						0.725,
+						0.725
+					]
+				},
+				"ground": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.2,
+						0
+					],
+					"scale": [
+						0.6,
+						0.6,
+						0.6
+					]
+				},
+				"fixed": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"thirdperson_righthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0.15
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"thirdperson_lefthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0.15
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"firstperson_righthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 45
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"firstperson_lefthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": -315
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				}
+			}
+		}
+	}
 }

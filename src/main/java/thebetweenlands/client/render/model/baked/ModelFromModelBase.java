@@ -212,7 +212,6 @@ public class ModelFromModelBase implements IModel {
 		
 		if(customData.containsKey("texture")) {
 			texture = new ResourceLocation(parser.parse(customData.get("texture")).getAsString());
-			System.out.println("NEW TEX: " + texture);
 		}
 		
 		if(texture == null) {

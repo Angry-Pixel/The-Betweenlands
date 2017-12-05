@@ -1,55 +1,259 @@
 {
-    "forge_marker": 1,
-    "variants": {
-        "normal": [
-            { "model": "thebetweenlands:internal/flat_head_mushroom_1" },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_1", "y": 90 },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_1", "y": 180 },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_1", "y": 270 },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_2" },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_2", "y": 90 },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_2", "y": 180 },
-            { "model": "thebetweenlands:internal/flat_head_mushroom_2", "y": 270 }
-        ],
-        "inventory": { 
-            "model": "thebetweenlands:internal/flat_head_mushroom_1",
-            "transform": {
-                "gui": {
-                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
-                    "translation": [0, 0, 0],
-                    "scale":[0.75, 0.75, 0.75]
-                },
-                "ground": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0, 0],
-                    "scale":[0.75, 0.75, 0.75]
-                },
-                "fixed": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0, 0],
-                    "scale":[0.75, 0.75, 0.75]
-                },
-                "thirdperson_righthand": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0.35, 0.15],
-                    "scale": [0.75, 0.75, 0.75]
-                },
-                "thirdperson_lefthand": {
-                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
-                    "translation": [0, 0.35, 0.15],
-                    "scale": [0.75, 0.75, 0.75]
-                },
-                "firstperson_righthand": {
-                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
-                    "translation": [0, 0.35, 0],
-                    "scale": [0.75, 0.75, 0.75]
-                },
-                "firstperson_lefthand": {
-                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
-                    "translation": [0, 0.35, 0],
-                    "scale": [0.75, 0.75, 0.75]
-                }
-            }
-        }
-    }
+	"forge_marker": 1,
+	"variants": {
+		"normal": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+					}
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+					}
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+					}
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_1",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_1_frosty"
+					}
+				},
+				"y": 270
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+					}
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+					}
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+					}
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active": "thebetweenlands:block/internal/flat_head_mushroom_2",
+					"model_active_data": {
+						"texture": "thebetweenlands:blocks/flat_head_mushroom_2_frosty"
+					}
+				},
+				"y": 270
+			}
+		],
+		"inventory": {
+			"model": "thebetweenlands:internal/flat_head_mushroom_1",
+			"transform": {
+				"gui": {
+					"rotation": [
+						{
+							"x": 30
+						},
+						{
+							"y": 225
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"ground": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"fixed": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"thirdperson_righthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0.15
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"thirdperson_lefthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 0
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0.15
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"firstperson_righthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": 45
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				},
+				"firstperson_lefthand": {
+					"rotation": [
+						{
+							"x": 0
+						},
+						{
+							"y": -315
+						},
+						{
+							"z": 0
+						}
+					],
+					"translation": [
+						0,
+						0.35,
+						0
+					],
+					"scale": [
+						0.75,
+						0.75,
+						0.75
+					]
+				}
+			}
+		}
+	}
 }
