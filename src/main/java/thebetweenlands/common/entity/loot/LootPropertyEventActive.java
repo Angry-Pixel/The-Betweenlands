@@ -29,7 +29,7 @@ public class LootPropertyEventActive implements EntityProperty {
 		boolean isEventOn = false;
 		if(entity.world.provider instanceof WorldProviderBetweenlands) {
 			EnvironmentEvent event = ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().forName(this.event);
-			if(event != null && this.event.equals(event.getEventName())) {
+			if(event != null && event.isActive()) {
 				isEventOn = true;
 			}
 		}

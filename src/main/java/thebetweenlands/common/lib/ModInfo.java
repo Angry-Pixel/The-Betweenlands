@@ -13,5 +13,5 @@ public class ModInfo {
 
 	public static final String MC_VERSIONS = "1.12.1";
 	public static final String VERSION = "3.0.0-alpha-snapshot";
-	public static final String API_VERSION = "1.4.0";
+	public static final String API_VERSION = "1.5.0";
 }

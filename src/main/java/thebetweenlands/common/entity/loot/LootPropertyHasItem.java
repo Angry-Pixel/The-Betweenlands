@@ -179,10 +179,10 @@ public class LootPropertyHasItem implements EntityProperty {
 			boolean hasItem = JsonUtils.getBoolean(obj.get("has_item"), "has_item");
 			boolean combineStacks = obj.has("combine_stacks") ? JsonUtils.getBoolean(obj.get("combine_stacks"), "combine_stacks") : false;
 			JsonObject itemJson = JsonUtils.getJsonObject(obj.get("item"), "item");
-			String id = JsonUtils.getString(itemJson.get("id"), "id");
+			Item item = JsonUtils.getItem(itemJson.get("id"), "id");
 			int meta = itemJson.has("meta") ? JsonUtils.getInt(itemJson.get("meta"), "meta") : OreDictionary.WILDCARD_VALUE;
 			int size = itemJson.has("size") ? JsonUtils.getInt(itemJson.get("size"), "size") : 1;
-			ItemStack stack = new ItemStack(Item.getByNameOrId(id), size, meta);
+			ItemStack stack = new ItemStack(item, size, meta);
 			boolean held = false, armor = false, main = false;
 			JsonArray inventories = JsonUtils.getJsonArray(obj.get("inventories"), "inventories");
 			for(JsonElement inventoryType : inventories) {
