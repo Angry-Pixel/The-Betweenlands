@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -30,10 +31,13 @@ import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
+import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -208,6 +212,20 @@ public class EventWinter extends EnvironmentEvent {
 										checkPos.release();
 										if(hasEnoughSnowAround) {
 											world.setBlockState(pos.up(), stateAbove.withProperty(BlockSnowBetweenlands.LAYERS, layers + 1));
+										}
+									}
+								}
+							}
+
+							if(world.rand.nextInt(3500) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
+								if(world.isSideSolid(pos, EnumFacing.UP)) {
+									IBlockState stateAbove = world.getBlockState(pos.up());
+									if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
+										world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().withProperty(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
+										TileEntityPresent tile = BlockPresent.getTileEntity(world, pos.up());
+										if (tile != null) {
+											tile.setLootTable(LootTableRegistry.PRESENT, world.rand.nextLong());
+											tile.markDirty();
 										}
 									}
 								}

@@ -311,6 +311,7 @@ tile.thebetweenlands.thatch.name=Thatch
 tile.thebetweenlands.repeller.name=Repeller
 tile.thebetweenlands.black_ice.name=Black Ice
 tile.thebetweenlands.snow.name=Snow
+tile.thebetweenlands.present.name=Present
 
 # Items
 
@@ -618,6 +619,8 @@ item.thebetweenlands.dentrothyst_shield_orange.name=Orange Dentrothyst Shield
 item.thebetweenlands.dentrothyst_shield_green_polished.name=Green Polished Dentrothyst Shield
 item.thebetweenlands.dentrothyst_shield_orange_polished.name=Orange Polished Dentrothyst Shield
 item.thebetweenlands.lurker_skin_shield.name=Lurker Skin Shield
+item.thebetweenlands.christmas_pudding.name=Christmas Pudding
+item.thebetweenlands.candy_cane.name=Candy Cane
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial

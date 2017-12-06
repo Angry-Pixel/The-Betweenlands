@@ -49,6 +49,7 @@ import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockMortar;
+import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.block.container.BlockTarLootPot;
@@ -439,6 +440,7 @@ public class BlockRegistry {
     public static final Block BETWEENSTONE_BUTTON = new BlockButtonBetweenlands(false);
     public static final Block WEEDWOOD_LADDER = new BlockLadderBetweenlands();
     public static final Block WEEDWOOD_LEVER = new BlockLeverBetweenlands();
+    public static final Block PRESENT = new BlockPresent();
     //Plants
     public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
     public static final BlockDoublePlantBL WEEPING_BLUE = new BlockWeepingBlue();

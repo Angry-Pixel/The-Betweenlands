@@ -40,7 +40,7 @@ import thebetweenlands.util.Vec3UV;
 
 public class ModelFromModelBase implements IModel {
 	public static interface IVertexProcessor {
-		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box);
+		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder);
 	}
 
 	public final ModelBase model;
@@ -136,7 +136,7 @@ public class ModelFromModelBase implements IModel {
 					for(int i = 0; i < quad.getVertices().length; i++) {
 						Vec3UV vert = quad.getVertices()[i];
 						if(vertexProcessor != null)
-							vert = vertexProcessor.process(vert, quad, box);
+							vert = vertexProcessor.process(vert, quad, box, builder);
 						if(vert != null)
 							builder.addVertex(vert.x + 0.5F, 1.5F - vert.y, vert.z + 0.5F, vert.getU(16.0F, width), vert.getV(16.0F, height));
 					}

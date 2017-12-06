@@ -5,6 +5,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelWalkwayBlock;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
+import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelWalkway extends ModelFromModelBase {
@@ -16,7 +17,7 @@ public class ModelWalkway extends ModelFromModelBase {
 	public ModelWalkway(boolean hasStands) {
 		super(MODEL, TEXTURE, PARTICLE_TEXTURE, 128, 128, new IVertexProcessor() {
 			@Override
-			public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
+			public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
 				if(!hasStands && (box.getModelRenderer() == MODEL.standright || box.getModelRenderer() == MODEL.standleft)) {
 					return null;
 				}

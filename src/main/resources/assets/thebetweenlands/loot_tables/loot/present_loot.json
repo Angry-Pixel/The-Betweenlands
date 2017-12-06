@@ -1,0 +1,71 @@
+{
+	"pools": [
+		{
+			"name": "present",
+			"rolls": 1,
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:mince_pie",
+					"functions": [
+						{
+							"conditions": [],
+							"function": "set_count",
+							"count": {
+								"min": 3,
+								"max": 8
+							}
+						}
+					],
+					"weight": 66,
+					"quality": 0
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:christmas_pudding",
+					"functions": [
+						{
+							"conditions": [],
+							"function": "set_count",
+							"count": {
+								"min": 3,
+								"max": 8
+							}
+						}
+					],
+					"weight": 66,
+					"quality": 0
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_cane",
+					"functions": [
+						{
+							"conditions": [],
+							"function": "set_count",
+							"count": {
+								"min": 3,
+								"max": 8
+							}
+						}
+					],
+					"weight": 66,
+					"quality": 0
+				},
+				{
+					"type": "item",
+					"name": "minecraft:coal",
+					"functions": [
+						{
+							"conditions": [],
+							"function": "set_count",
+							"count": 1
+						}
+					],
+					"weight": 1,
+					"quality": 0
+				}
+			]
+		}
+	]
+}

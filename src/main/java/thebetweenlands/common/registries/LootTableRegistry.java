@@ -35,7 +35,8 @@ public class LootTableRegistry {
     public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
     public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
-
+    public static final ResourceLocation PRESENT = register("loot/present_loot");
+    
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
     public static final ResourceLocation BLIND_CAVE_FISH = register("entities/blind_cave_fish");

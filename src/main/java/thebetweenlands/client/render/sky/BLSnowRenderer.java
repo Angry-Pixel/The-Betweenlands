@@ -75,6 +75,7 @@ public class BLSnowRenderer extends IRenderHandler {
 			GlStateManager.enableBlend();
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 			GlStateManager.alphaFunc(516, 0.1F);
+			GlStateManager.depthMask(true);
 			double interpX = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double)partialTicks;
 			double interpY = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * (double)partialTicks;
 			double interpZ = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * (double)partialTicks;

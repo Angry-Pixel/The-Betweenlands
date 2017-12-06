@@ -160,7 +160,9 @@ public class ItemRegistry {
     public static final Item KRAKEN_TENTACLE = new ItemBLFood(8, 0.9F, false);
     public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1.2F, false);
     public static final Item MIDDLE_FRUIT = new ItemBLFood(6, 0.6F, false);
-    public static final Item MINCE_PIE = new ItemBLFood(4, 0.85F, false);
+    public static final Item MINCE_PIE = new ItemBLFood(8, 1F, false);
+    public static final Item CHRISTMAS_PUDDING = new ItemBLFood(6, 0.95F, false);
+    public static final Item CANDY_CANE = new ItemBLFood(4, 0.85F, false);
     public static final Item WEEPING_BLUE_PETAL = new ItemWeepingBluePetal();
     public static final Item WIGHT_HEART = new ItemWightHeart();
     public static final Item YELLOW_DOTTED_FUNGUS = new ItemBLFood(8, 0.6F, false);
@@ -179,9 +181,9 @@ public class ItemRegistry {
     public static final Item SWAMP_KELP_ITEM = new ItemSwampKelp();
     public static final Item FRIED_SWAMP_KELP = new ItemBLFood(5, 0.6F, false);
     public static final Item FORBIDDEN_FIG = new ItemForbiddenFig();
-    public static final Item CANDY_BLUE = new ItemBLFood(3, 1.0F, false);
-    public static final Item CANDY_RED = new ItemBLFood(3, 1.0F, false);
-    public static final Item CANDY_YELLOW = new ItemBLFood(3, 1.0F, false);
+    public static final Item CANDY_BLUE = new ItemBLFood(4, 1.0F, false);
+    public static final Item CANDY_RED = new ItemBLFood(4, 1.0F, false);
+    public static final Item CANDY_YELLOW = new ItemBLFood(4, 1.0F, false);
     public static final Item CHIROMAW_WING = new ItemChiromawWing();
     public static final Item TANGLED_ROOT = new ItemTangledRoot();
     //armor
