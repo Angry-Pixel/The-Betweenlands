@@ -9,6 +9,7 @@ import thebetweenlands.client.audio.ambience.list.CaveAmbienceType;
 import thebetweenlands.client.audio.ambience.list.EventAmbienceType;
 import thebetweenlands.client.audio.ambience.list.FrostyAmbienceType;
 import thebetweenlands.client.audio.ambience.list.LocationAmbienceType;
+import thebetweenlands.client.audio.ambience.list.PresentAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SnowFallAmbienceType;
 import thebetweenlands.client.audio.ambience.list.SurfaceAmbienceType;
 import thebetweenlands.client.audio.ambience.list.WaterAmbienceType;
@@ -50,5 +51,6 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new EventAmbienceType(EventBloodSky.class, SoundRegistry.AMBIENT_BLOOD_SKY, 1).setDelay(140));
 		AmbienceManager.INSTANCE.registerAmbience(new FrostyAmbienceType());
 		AmbienceManager.INSTANCE.registerAmbience(new SnowFallAmbienceType());
+		AmbienceManager.INSTANCE.registerAmbience(new PresentAmbienceType());
 	}
 }
