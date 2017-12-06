@@ -25,6 +25,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelPart;
@@ -71,7 +72,7 @@ public class ModelRubberTapLiquid implements IModel {
 		ResourceLocation fluidTexture = this.fluidTexture;
 		
 		if(customData.containsKey("fluid_texture")) {
-			fluidTexture = new ResourceLocation(parser.parse(customData.get("fluid_texture")).getAsString());
+			fluidTexture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("fluid_texture")), "fluid_texture"));
 		}
 		
 		if(fluidTexture == null) {
@@ -82,7 +83,7 @@ public class ModelRubberTapLiquid implements IModel {
 
 		if(customData.containsKey("fluid_height")) {
 			String fluidHeightJsonStr = customData.get("fluid_height");
-			height = parser.parse(fluidHeightJsonStr).getAsInt();
+			height = JsonUtils.getInt(parser.parse(fluidHeightJsonStr), "fluid_height");
 		}
 
 		return new ModelRubberTapLiquid(fluidTexture, height);

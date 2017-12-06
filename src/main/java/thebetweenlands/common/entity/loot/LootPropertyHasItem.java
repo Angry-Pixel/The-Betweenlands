@@ -16,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
@@ -174,16 +175,16 @@ public class LootPropertyHasItem implements EntityProperty {
 
 		@Override
 		public LootPropertyHasItem deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			JsonObject obj = element.getAsJsonObject();
-			boolean hasItem = obj.get("has_item").getAsBoolean();
-			boolean combineStacks = obj.has("combine_stacks") ? obj.get("combine_stacks").getAsBoolean() : false;
-			JsonObject itemJson = obj.get("item").getAsJsonObject();
-			String id = itemJson.get("id").getAsString();
-			int meta = itemJson.has("meta") ? itemJson.get("meta").getAsInt() : OreDictionary.WILDCARD_VALUE;
-			int size = itemJson.has("size") ? itemJson.get("size").getAsInt() : 1;
+			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getResourcePath());
+			boolean hasItem = JsonUtils.getBoolean(obj.get("has_item"), "has_item");
+			boolean combineStacks = obj.has("combine_stacks") ? JsonUtils.getBoolean(obj.get("combine_stacks"), "combine_stacks") : false;
+			JsonObject itemJson = JsonUtils.getJsonObject(obj.get("item"), "item");
+			String id = JsonUtils.getString(itemJson.get("id"), "id");
+			int meta = itemJson.has("meta") ? JsonUtils.getInt(itemJson.get("meta"), "meta") : OreDictionary.WILDCARD_VALUE;
+			int size = itemJson.has("size") ? JsonUtils.getInt(itemJson.get("size"), "size") : 1;
 			ItemStack stack = new ItemStack(Item.getByNameOrId(id), size, meta);
 			boolean held = false, armor = false, main = false;
-			JsonArray inventories = obj.get("inventories").getAsJsonArray();
+			JsonArray inventories = JsonUtils.getJsonArray(obj.get("inventories"), "inventories");
 			for(JsonElement inventoryType : inventories) {
 				switch(inventoryType.getAsString()) {
 				case "held":
@@ -201,7 +202,7 @@ public class LootPropertyHasItem implements EntityProperty {
 			}
 			StackSizeMatcher sizeMatcher = null;
 			if(obj.has("size_operator")) {
-				String sizeOperator = obj.get("size_operator").getAsString();
+				String sizeOperator = JsonUtils.getString(obj.get("size_operator"), "size_operator");
 				switch(sizeOperator) {
 				case ">":
 					sizeMatcher = StackSizeMatcher.GREATER;

@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -195,7 +196,7 @@ public class ModelFromModelBase implements IModel {
 		ResourceLocation particleTexture = this.particleTexture;
 		
 		if(customData.containsKey("particle_texture")) {
-			particleTexture = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
+			particleTexture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("particle_texture")), "particle_texture"));
 		}
 		
 		if(particleTexture == null) {
@@ -205,13 +206,13 @@ public class ModelFromModelBase implements IModel {
 		boolean ambientOcclusion = this.isAmbientOcclusion();
 		
 		if(customData.containsKey("ambient_occlusion")) {
-			ambientOcclusion = parser.parse(customData.get("ambient_occlusion")).getAsBoolean();
+			ambientOcclusion = JsonUtils.getBoolean(parser.parse(customData.get("ambient_occlusion")), "ambient_occlusion");
 		}
 		
 		ResourceLocation texture = this.texture;
 		
 		if(customData.containsKey("texture")) {
-			texture = new ResourceLocation(parser.parse(customData.get("texture")).getAsString());
+			texture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("texture")), "texture"));
 		}
 		
 		if(texture == null) {

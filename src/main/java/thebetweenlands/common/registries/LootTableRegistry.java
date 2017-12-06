@@ -18,6 +18,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.common.entity.loot.LootPropertyEventActive;
 import thebetweenlands.common.entity.loot.LootPropertyFrogType;
 import thebetweenlands.common.entity.loot.LootPropertyHasItem;
 import thebetweenlands.common.entity.loot.LootPropertyIsBossPeatMummy;
@@ -72,7 +73,7 @@ public class LootTableRegistry {
     public static final ResourceLocation PROPERTY_PYRAD_CHARGING = register(new LootPropertyPyradCharging.Serializer());
     public static final ResourceLocation PROPERTY_HAS_ITEM = register(new LootPropertyHasItem.Serializer());
     public static final ResourceLocation PROPERTY_IS_BOSS_MUMMY = register(new LootPropertyIsBossPeatMummy.Serializer());
-    
+    public static final ResourceLocation PROPERTY_IS_EVENT_ACTIVE = register(new LootPropertyEventActive.Serializer());
 
     private static ResourceLocation register(String id) {
         return LootTableList.register(new ResourceLocation(ModInfo.ID, id));

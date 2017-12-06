@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -50,7 +51,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 		}
 
 		protected ImmutableMap<String, String> parseCustomData(JsonParser parser) {
-			return parseJsonElementList(parser, this.customData);
+			return parseJsonElementList(parser, this.customData, this.source.toString() + " model metadata");
 		}
 	}
 
@@ -74,12 +75,12 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 	 */
 	protected ModelContext parseContextData(ResourceLocation location, String metadata) {
 		JsonParser parser = new JsonParser();
-		ImmutableMap<String, String> dataMap = parseJsonElementList(parser, metadata);
+		ImmutableMap<String, String> dataMap = parseJsonElementList(parser, metadata, location.toString() + " model metadata");
 
 		if(!dataMap.containsKey("source"))
 			this.throwLoaderException("Source model was not specified");
 
-		String sourceItem = parser.parse(dataMap.get("source")).getAsString();
+		String sourceItem = JsonUtils.getString(parser.parse(dataMap.get("source")), "source");
 
 		String customData = null;
 		if(dataMap.containsKey("custom")) {
@@ -89,7 +90,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 		boolean inheritOverrides = true;
 		if(dataMap.containsKey("inherit_overrides")) {
 			try {
-				inheritOverrides = parser.parse(dataMap.get("inherit_overrides")).getAsBoolean();
+				inheritOverrides = JsonUtils.getBoolean(parser.parse(dataMap.get("inherit_overrides")), "inherit_overrides");
 			} catch(Exception ex) {
 				this.throwLoaderException("Malformed inherit_overrides value. Must be a boolean", ex);
 			}
@@ -98,7 +99,7 @@ public class AdvancedItemLoaderExtension extends LoaderExtension {
 		boolean shouldCacheOverrides = true;
 		if(dataMap.containsKey("cache_overrides")) {
 			try {
-				shouldCacheOverrides = parser.parse(dataMap.get("cache_overrides")).getAsBoolean();
+				shouldCacheOverrides = JsonUtils.getBoolean(parser.parse(dataMap.get("cache_overrides")), "cache_overrides");
 			} catch(Exception ex) {
 				this.throwLoaderException("Malformed cache_overrides value. Must be a boolean", ex);
 			}

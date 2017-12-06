@@ -26,6 +26,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
@@ -78,7 +79,7 @@ public class ModelWeedwoodBush implements IModel {
 		ResourceLocation leaves = this.leavesTexture;
 
 		if(customData.containsKey("texture_leaves")) {
-			leaves = new ResourceLocation(parser.parse(customData.get("texture_leaves")).getAsString());
+			leaves = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("texture_leaves")), "texture_leaves"));
 		}
 
 		if(leaves == null) {
@@ -88,7 +89,7 @@ public class ModelWeedwoodBush implements IModel {
 		ResourceLocation sticks = this.sticksTexture;
 
 		if(customData.containsKey("texture_sticks")) {
-			sticks = new ResourceLocation(parser.parse(customData.get("texture_sticks")).getAsString());
+			sticks = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("texture_sticks")), "texture_sticks"));
 		}
 
 		if(sticks == null) {

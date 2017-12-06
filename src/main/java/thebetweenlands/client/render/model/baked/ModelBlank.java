@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
@@ -120,7 +121,7 @@ public class ModelBlank implements IModel {
 		ResourceLocation particleTextureLocation = this.particleTexture;
 
 		if(customData.containsKey("particle_texture")) {
-			particleTextureLocation = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
+			particleTextureLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("particle_texture")), "particle_texture"));
 		}
 
 		if(particleTextureLocation == null) {

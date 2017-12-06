@@ -24,11 +24,13 @@ import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
+import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 
 public class ModelCombined implements IModel {
 	private IModel baseModel;
@@ -40,18 +42,6 @@ public class ModelCombined implements IModel {
 	public ModelCombined(IModel baseModel, IModel additionalModel) {
 		this.baseModel = baseModel;
 		this.additionalModel = additionalModel;
-	}
-
-	public static ImmutableMap<String, String> getCustomDataFor(JsonParser parser, String customData) {
-		if (customData == null)
-			return null;
-		JsonElement element = parser.parse(customData);
-		JsonObject jsonObj = element.getAsJsonObject();
-		Builder<String, String> parsedElements = ImmutableMap.<String, String>builder();
-		for (Entry<String, JsonElement> elementEntry : jsonObj.entrySet()) {
-			parsedElements.put(elementEntry.getKey(), elementEntry.getValue().toString());
-		}
-		return parsedElements.build();
 	}
 
 	@Override
@@ -98,23 +88,23 @@ public class ModelCombined implements IModel {
 		IModel baseModel = this.baseModel;
 		
 		if(customData.containsKey("model_base") || baseModel == null) {
-			ResourceLocation baseModelLocation = new ResourceLocation(parser.parse(customData.get("model_base")).getAsString());
+			ResourceLocation baseModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model_base")), "model_base"));
 			baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
 		}
 
 		if(customData.containsKey("model_base_data")) {
-			baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_base_data")));
+			baseModel = baseModel.process(LoaderExtension.parseJsonElementList(parser, customData.get("model_base_data"), "model_base_data"));
 		}
 
 		IModel additionalModel = this.additionalModel;
 
 		if(customData.containsKey("model_additional") || additionalModel == null) {
-			ResourceLocation additionalModelLocation = new ResourceLocation(parser.parse(customData.get("model_additional")).getAsString());
+			ResourceLocation additionalModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model_additional")), "model_additional"));
 			additionalModel = ModelLoaderRegistry.getModelOrLogError(additionalModelLocation, "Could not find additional model for combined model");
 		}
 
 		if(customData.containsKey("model_additional_data")) {
-			additionalModel = additionalModel.process(getCustomDataFor(parser, customData.get("model_additional_data")));
+			additionalModel = additionalModel.process(LoaderExtension.parseJsonElementList(parser, customData.get("model_additional_data"), "model_additional_data"));
 		}
 
 		return new ModelCombined(baseModel, additionalModel);
