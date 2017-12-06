@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +30,7 @@ import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
@@ -155,29 +157,60 @@ public class EventWinter extends EnvironmentEvent {
 					WorldServer worldServer = (WorldServer)world;
 					for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
 						Chunk chunk = iterator.next();
-						if(world.rand.nextInt(3) == 0) {
-							int cbx = world.rand.nextInt(16);
-							int cbz = world.rand.nextInt(16);
-							BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz)).down();
-							boolean hasSuitableNeighbourBlock = false;
-							PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-							for(EnumFacing dir : EnumFacing.HORIZONTALS) {
-								checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY(), pos.getZ() + dir.getFrontOffsetZ());
-								if(world.isBlockLoaded(checkPos)) {
-									if(!hasSuitableNeighbourBlock) {
-										IBlockState neighourState = world.getBlockState(checkPos);
-										if(neighourState.getBlock() == BlockRegistry.BLACK_ICE || neighourState.isSideSolid(world, checkPos, dir.getOpposite())) {
-											hasSuitableNeighbourBlock = true;
+						int cbx = world.rand.nextInt(16);
+						int cbz = world.rand.nextInt(16);
+						BlockPos pos = chunk.getPrecipitationHeight(new BlockPos(chunk.getPos().getXStart() + cbx, -999, chunk.getPos().getZStart() + cbz)).down();
+						if(world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER) {
+							if(world.rand.nextInt(3) == 0) {
+								boolean hasSuitableNeighbourBlock = false;
+								PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
+								for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+									checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY(), pos.getZ() + dir.getFrontOffsetZ());
+									if(world.isBlockLoaded(checkPos)) {
+										if(!hasSuitableNeighbourBlock) {
+											IBlockState neighourState = world.getBlockState(checkPos);
+											if(neighourState.getBlock() == BlockRegistry.BLACK_ICE || neighourState.isSideSolid(world, checkPos, dir.getOpposite())) {
+												hasSuitableNeighbourBlock = true;
+											}
 										}
+									} else {
+										hasSuitableNeighbourBlock = false;
+										break;
 									}
-								} else {
-									hasSuitableNeighbourBlock = false;
-									break;
+								}
+								checkPos.release();
+								if(hasSuitableNeighbourBlock) {
+									world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
 								}
 							}
-							checkPos.release();
-							if(hasSuitableNeighbourBlock && world.isAirBlock(pos.up()) && world.getBlockState(pos).getBlock() == BlockRegistry.SWAMP_WATER) {
-								world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
+						} else if(this.snowingTicks > 0) {
+							if(world.rand.nextInt(Math.max(6 - (int)(this.getSnowingStrength() / 8.0F * 4.0F), 2)) == 0) {
+								IBlockState stateAbove = world.getBlockState(pos.up());
+								if(stateAbove.getBlock() == Blocks.AIR && BlockRegistry.SNOW.canPlaceBlockAt(world, pos.up())) {
+									world.setBlockState(pos.up(), BlockRegistry.SNOW.getDefaultState());
+								} else if(stateAbove.getBlock() instanceof BlockSnowBetweenlands) {
+									int layers = stateAbove.getValue(BlockSnowBetweenlands.LAYERS);
+									if(layers < 5) {
+										boolean hasEnoughSnowAround = true;
+										PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
+										for(EnumFacing dir : EnumFacing.HORIZONTALS) {
+											checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY() + 1, pos.getZ() + dir.getFrontOffsetZ());
+											if(world.isBlockLoaded(checkPos)) {
+												IBlockState neighourState = world.getBlockState(checkPos);
+												if(BlockRegistry.SNOW.canPlaceBlockAt(world, checkPos) && (neighourState.getBlock() != BlockRegistry.SNOW || neighourState.getValue(BlockSnowBetweenlands.LAYERS) < layers)) {
+													hasEnoughSnowAround = false;
+												}
+											} else {
+												hasEnoughSnowAround = false;
+												break;
+											}
+										}
+										checkPos.release();
+										if(hasEnoughSnowAround) {
+											world.setBlockState(pos.up(), stateAbove.withProperty(BlockSnowBetweenlands.LAYERS, layers + 1));
+										}
+									}
+								}
 							}
 						}
 					}
