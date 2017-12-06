@@ -1,5 +1,6 @@
 package thebetweenlands.common.command;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,11 +12,12 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 
 public class CommandBLEvent extends CommandBase {
@@ -44,7 +46,7 @@ public class CommandBLEvent extends CommandBase {
 
 	private void processToggle(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
 		checkArg(args, 2, "toggle");
-		String eventName = getChatComponentFromNthArg(sender, args, 1).getUnformattedText();
+		ResourceLocation eventName = new ResourceLocation(getChatComponentFromNthArg(sender, args, 1).getUnformattedText());
 		EnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		boolean isActive = event.isActive();
 		event.setActive(!isActive, true);
@@ -53,7 +55,7 @@ public class CommandBLEvent extends CommandBase {
 
 	private void processOn(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
 		checkArg(args, 2, "on");
-		processEventState(sender, getChatComponentFromNthArg(sender, args, 1).getUnformattedText(), true);
+		processEventState(sender, new ResourceLocation(getChatComponentFromNthArg(sender, args, 1).getUnformattedText()), true);
 	}
 
 	private void processOff(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
@@ -64,7 +66,7 @@ public class CommandBLEvent extends CommandBase {
 			}
 			notifyCommandListener(sender, this, "command.blevent.success.alloff");
 		} else {
-			processEventState(sender, getChatComponentFromNthArg(sender, args, 1).getUnformattedText(), false);
+			processEventState(sender, new ResourceLocation(getChatComponentFromNthArg(sender, args, 1).getUnformattedText()), false);
 		}
 	}
 
@@ -94,7 +96,7 @@ public class CommandBLEvent extends CommandBase {
 		sender.sendMessage(new TextComponentString(environmentEventRegistry.getGrammaticalActiveEventNameList()));
 	}
 
-	private void processEventState(ICommandSender sender, String eventName, boolean isActive) throws CommandException {
+	private void processEventState(ICommandSender sender, ResourceLocation eventName, boolean isActive) throws CommandException {
 		EnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		if (event.isActive() == isActive) {
 			throw new CommandException("command.blevent.failure.already" + (isActive ? "on" : "off"), eventName);
@@ -114,16 +116,23 @@ public class CommandBLEvent extends CommandBase {
 			completions = childCommands;
 		} else if (args.length == 2) {
 			try {
+				List<ResourceLocation> foundEvents = null;
 				switch (args[0]) {
 				case "toggle":
-					completions = getEnvironmentEventRegistry(sender).getEventNames();
+					foundEvents = getEnvironmentEventRegistry(sender).getEventNames();
 					break;
 				case "on":
-					completions = getEnvironmentEventRegistry(sender).getEventNamesOfState(false);
+					foundEvents = getEnvironmentEventRegistry(sender).getEventNamesOfState(false);
 					break;
 				case "off":
-					completions = getEnvironmentEventRegistry(sender).getEventNamesOfState(true);
+					foundEvents = getEnvironmentEventRegistry(sender).getEventNamesOfState(true);
 					break;
+				}
+				if(foundEvents != null && !foundEvents.isEmpty()) {
+					completions = new ArrayList<>();
+					for(ResourceLocation event : foundEvents) {
+						completions.add(event.toString());
+					}
 				}
 			} catch(Exception ex) { }
 		}
@@ -139,7 +148,7 @@ public class CommandBLEvent extends CommandBase {
 		}
 	}
 
-	private EnvironmentEvent getEnvironentEvent(ICommandSender sender, String eventName) throws CommandException {
+	private EnvironmentEvent getEnvironentEvent(ICommandSender sender, ResourceLocation eventName) throws CommandException {
 		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 		EnvironmentEvent event = environmentEventRegistry.forName(eventName);
 		if (event == null) {

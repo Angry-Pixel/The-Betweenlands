@@ -11,15 +11,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEvent;
 
 public class LootPropertyEventActive implements EntityProperty {
-	private final String event;
+	private final ResourceLocation event;
 	private final boolean active;
 
-	public LootPropertyEventActive(String event, boolean active) {
+	public LootPropertyEventActive(ResourceLocation event, boolean active) {
 		this.event = event;
 		this.active = active;
 	}
@@ -28,11 +28,9 @@ public class LootPropertyEventActive implements EntityProperty {
 	public boolean testProperty(Random random, Entity entity) {
 		boolean isEventOn = false;
 		if(entity.world.provider instanceof WorldProviderBetweenlands) {
-			for(EnvironmentEvent event : ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().getActiveEvents()) {
-				if(this.event.equals(event.getEventName())) {
-					isEventOn = true;
-					break;
-				}
+			EnvironmentEvent event = ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().forName(this.event);
+			if(event != null && this.event.equals(event.getEventName())) {
+				isEventOn = true;
 			}
 		}
 		return isEventOn == this.active;
@@ -46,7 +44,7 @@ public class LootPropertyEventActive implements EntityProperty {
 		@Override
 		public JsonElement serialize(LootPropertyEventActive property, JsonSerializationContext serializationContext) {
 			JsonObject obj = new JsonObject();
-			obj.addProperty("event", property.event);
+			obj.addProperty("event", property.event.toString());
 			obj.addProperty("active", property.active);
 			return obj;
 		}
@@ -54,7 +52,7 @@ public class LootPropertyEventActive implements EntityProperty {
 		@Override
 		public LootPropertyEventActive deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
 			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getResourcePath());
-			return new LootPropertyEventActive(JsonUtils.getString(obj.get("event"), "event"), JsonUtils.getBoolean(obj.get("active"), "active"));
+			return new LootPropertyEventActive(new ResourceLocation(JsonUtils.getString(obj.get("event"), "event")), JsonUtils.getBoolean(obj.get("active"), "active"));
 		}
 	}
 }

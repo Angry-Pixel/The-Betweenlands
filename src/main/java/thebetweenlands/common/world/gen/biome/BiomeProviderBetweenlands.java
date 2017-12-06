@@ -35,7 +35,7 @@ public class BiomeProviderBetweenlands extends BiomeProvider {
 	
 	@Override
 	public float getTemperatureAtHeight(float biomeTemp, int y) {
-		if(this.provider.getEnvironmentEventRegistry().WINTER.isActive()) {
+		if(this.provider.getEnvironmentEventRegistry().winter.isActive()) {
 			return 0.1F;
 		}
         return biomeTemp;

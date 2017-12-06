@@ -2,7 +2,9 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.common.lib.ModInfo;
 
 public class EventDenseFog extends TimedEnvironmentEvent {
 	private float fade = 1.0F;
@@ -13,8 +15,8 @@ public class EventDenseFog extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public String getEventName() {
-		return "denseFog";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "dense_fog");
 	}
 
 	@Override

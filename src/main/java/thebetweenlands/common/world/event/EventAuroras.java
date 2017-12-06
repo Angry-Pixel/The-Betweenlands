@@ -3,7 +3,10 @@ package thebetweenlands.common.world.event;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.common.lib.ModInfo;
 
 public class EventAuroras extends TimedEnvironmentEvent {
 	public EventAuroras(EnvironmentEventRegistry registry) {
@@ -13,8 +16,8 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	private short auroraType = 0;
 
 	@Override
-	public String getEventName() {
-		return "auroras";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "auroras");
 	}
 
 	@Override
@@ -76,7 +79,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	
 	protected boolean canBeActive() {
 		for(EnvironmentEvent event : this.getRegistry().getActiveEvents()) {
-			if(event != this && event != this.getRegistry().WINTER) {
+			if(event != this && event != this.getRegistry().winter) {
 				return false;
 			}
 		}

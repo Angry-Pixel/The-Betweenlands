@@ -2,9 +2,9 @@ package thebetweenlands.common.world.storage;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {

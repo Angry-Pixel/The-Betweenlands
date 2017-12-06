@@ -91,7 +91,7 @@ public class FogHandler {
 		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			if(eeRegistry.DENSE_FOG.isActive()) {
+			if(eeRegistry.denseFog.isActive()) {
 				return true;
 			}
 		}
@@ -279,13 +279,13 @@ public class FogHandler {
 			}
 		}
 
-		if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().BLOODSKY.isActive()) {
+		if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().bloodSky.isActive()) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.74F).setGreen(0.18F).setBlue(0.08F);
 			} else {
 				fogBrightness = 0;
 			}
-		} else if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().SPOOPY.isActive()) {
+		} else if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().spoopy.isActive()) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.4F).setGreen(0.22F).setBlue(0.08F);
 			} else {

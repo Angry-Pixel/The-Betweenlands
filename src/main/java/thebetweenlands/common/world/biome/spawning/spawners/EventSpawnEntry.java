@@ -1,23 +1,24 @@
 package thebetweenlands.common.world.biome.spawning.spawners;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
-import thebetweenlands.common.world.event.EnvironmentEvent;
 
 public class EventSpawnEntry extends BLSpawnEntry {
 	private final BLSpawnEntry parent;
-	private final String eventName;
+	private final ResourceLocation eventName;
 
 	/**
 	 * The parent spawn entry defines the spawning conditions and base weight
 	 * @param parent
 	 * @param eventName
 	 */
-	public EventSpawnEntry(BLSpawnEntry parent, String eventName) {
+	public EventSpawnEntry(BLSpawnEntry parent, ResourceLocation eventName) {
 		super(parent.getEntityType(), parent.getBaseWeight());
 		this.parent = parent;
 		this.eventName = eventName;

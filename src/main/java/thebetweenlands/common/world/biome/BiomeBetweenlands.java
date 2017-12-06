@@ -15,6 +15,7 @@ import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.EventSpawnEntry;
@@ -53,8 +54,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 * Adds the entity spawn entries
 	 */
 	protected void addSpawnEntries() {
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), "bloodSky").setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), "bloodSky") {
+		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), new ResourceLocation(ModInfo.ID, "blood_sky")).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
+		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), new ResourceLocation(ModInfo.ID, "blood_sky")) {
 			@Override
 			protected EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -63,7 +64,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 				return entity;
 			}
 		}.setHostile(true));
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), "bloodSky") {
+		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), new ResourceLocation(ModInfo.ID, "blood_sky")) {
 			@Override
 			protected EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);

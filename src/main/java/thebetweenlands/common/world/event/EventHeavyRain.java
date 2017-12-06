@@ -3,11 +3,13 @@ package thebetweenlands.common.world.event;
 import java.util.Iterator;
 import java.util.Random;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -15,10 +17,10 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	public EventHeavyRain(EnvironmentEventRegistry registry) {
 		super(registry);
 	}
-
+	
 	@Override
-	public String getEventName() {
-		return "heavyRain";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "heavy_rain");
 	}
 
 	@Override
@@ -32,7 +34,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
-		if((active && !this.getRegistry().WINTER.isActive()) || !active) {
+		if((active && !this.getRegistry().winter.isActive()) || !active) {
 			super.setActive(active, markDirty);
 		}
 	}
@@ -41,7 +43,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		if(!world.isRemote && this.getRegistry().WINTER.isActive()) {
+		if(!world.isRemote && this.getRegistry().winter.isActive()) {
 			this.setActive(false, true);
 		}
 		

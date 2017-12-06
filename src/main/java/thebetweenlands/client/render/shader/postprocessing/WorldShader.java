@@ -448,11 +448,11 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		if (world != null) {
 			if (world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
-				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().BLOODSKY.getSkyTransparency(partialTicks);
+				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().bloodSky.getSkyTransparency(partialTicks);
 				if (skyTransparency > 0.01F) {
 					hasBeat = true;
 				}
-				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().SPOOPY.getSkyTransparency(partialTicks);
+				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().spoopy.getSkyTransparency(partialTicks);
 			}
 		}
 

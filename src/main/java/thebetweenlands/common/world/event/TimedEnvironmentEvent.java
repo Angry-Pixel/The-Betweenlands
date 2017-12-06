@@ -4,6 +4,7 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+import thebetweenlands.api.environment.EnvironmentEvent;
 
 public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
 	public TimedEnvironmentEvent(EnvironmentEventRegistry registry) {

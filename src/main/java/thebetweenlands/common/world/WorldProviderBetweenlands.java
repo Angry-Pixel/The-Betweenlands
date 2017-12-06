@@ -153,12 +153,12 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public void updateWeather() {
 		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
-		this.world.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
+		this.world.getWorldInfo().setRaining(eeRegistry.heavyRain.isActive());
 		this.world.getWorldInfo().setThundering(false);
 		this.world.prevRainingStrength = this.world.rainingStrength;
 		if(!this.world.isRemote) {
 			float rainingStrength = this.world.rainingStrength;
-			if(eeRegistry.HEAVY_RAIN.isActive()) {
+			if(eeRegistry.heavyRain.isActive()) {
 				if (rainingStrength < 0.5F) {
 					rainingStrength += 0.0125F;
 				}
@@ -222,7 +222,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getWeatherRenderer() {
-		if(this.getEnvironmentEventRegistry().WINTER.isActive()) {
+		if(this.getEnvironmentEventRegistry().winter.isActive()) {
 			return BLSnowRenderer.INSTANCE;
 		}
 		return null;

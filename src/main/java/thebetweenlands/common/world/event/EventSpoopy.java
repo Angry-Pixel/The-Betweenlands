@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
@@ -13,7 +14,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
@@ -50,15 +53,15 @@ public class EventSpoopy extends EnvironmentEvent {
 		if(world != null) {
 			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
 			if(provider != null) {
-				return provider.getEnvironmentEventRegistry().SPOOPY.isActive();
+				return provider.getEnvironmentEventRegistry().spoopy.isActive();
 			}
 		}
 		return false;
 	}
 
 	@Override
-	public String getEventName() {
-		return "Spook";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "spook");
 	}
 
 	@Override
@@ -134,7 +137,7 @@ public class EventSpoopy extends EnvironmentEvent {
 	public static void onClientTick(ClientTickEvent event) {
 		World world = Minecraft.getMinecraft().world;
 		if(world != null && world.provider instanceof WorldProviderBetweenlands) {
-			updateModelActiveState(((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().SPOOPY.isActive());
+			updateModelActiveState(((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().spoopy.isActive());
 		} else {
 			updateModelActiveState(false);
 		}

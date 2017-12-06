@@ -10,6 +10,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.PooledMutableBlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -22,11 +23,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -59,7 +62,7 @@ public class EventWinter extends EnvironmentEvent {
 		if(world != null) {
 			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
 			if(provider != null) {
-				return provider.getEnvironmentEventRegistry().WINTER.isActive();
+				return provider.getEnvironmentEventRegistry().winter.isActive();
 			}
 		}
 		return false;
@@ -69,7 +72,7 @@ public class EventWinter extends EnvironmentEvent {
 		if(world != null) {
 			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
 			if(provider != null) {
-				return provider.getEnvironmentEventRegistry().WINTER.getSnowingStrength();
+				return provider.getEnvironmentEventRegistry().winter.getSnowingStrength();
 			}
 		}
 		return 0;
@@ -78,10 +81,10 @@ public class EventWinter extends EnvironmentEvent {
 	public float getSnowingStrength() {
 		return this.snowingStrength;
 	}
-
+	
 	@Override
-	public String getEventName() {
-		return "Winter";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "winter");
 	}
 
 	@Override
@@ -237,7 +240,7 @@ public class EventWinter extends EnvironmentEvent {
 	public static void onClientTick(ClientTickEvent event) {
 		World world = Minecraft.getMinecraft().world;
 		if(world != null && world.provider instanceof WorldProviderBetweenlands) {
-			updateModelActiveState(((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().WINTER.isActive());
+			updateModelActiveState(((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.isActive());
 		} else {
 			updateModelActiveState(false);
 		}
@@ -252,8 +255,8 @@ public class EventWinter extends EnvironmentEvent {
 	@SideOnly(Side.CLIENT)
 	public static void onUpdateFog(UpdateFogEvent event) {
 		World world = event.getWorld();
-		if(world.provider instanceof WorldProviderBetweenlands && ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().WINTER.isActive()) {
-			float snowingStrength = ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().WINTER.getSnowingStrength();
+		if(world.provider instanceof WorldProviderBetweenlands && ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.isActive()) {
+			float snowingStrength = ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.getSnowingStrength();
 			FogState state = event.getFogState();
 			Fog.MutableFog newFog = new Fog.MutableFog(state.getFog());
 			newFog.setStart(Math.min(2.0F + event.getFarPlaneDistance() * 0.8F / (1.0F + snowingStrength), state.getTargetFog().getStart()));

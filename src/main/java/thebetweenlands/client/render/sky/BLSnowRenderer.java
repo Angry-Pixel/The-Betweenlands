@@ -48,7 +48,7 @@ public class BLSnowRenderer extends IRenderHandler {
 		this.prevSnowingStrength = this.snowingStrength;
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
-			this.snowingStrength = provider.getEnvironmentEventRegistry().WINTER.getSnowingStrength();
+			this.snowingStrength = provider.getEnvironmentEventRegistry().winter.getSnowingStrength();
 		} else {
 			this.snowingStrength = 0;
 		}

@@ -49,7 +49,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
 			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			if(eeRegistry.AURORAS.isActive()) {
+			if(eeRegistry.auroras.isActive()) {
 				return true;
 			}
 		}
