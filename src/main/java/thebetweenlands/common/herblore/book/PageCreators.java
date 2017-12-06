@@ -21,6 +21,7 @@ import thebetweenlands.common.herblore.book.widgets.text.TextWidget;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
+import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.TranslationHelper;
 
@@ -127,7 +128,7 @@ public class PageCreators {
                 newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setAspect(aspect).setLocalizedPageName(aspect.getName()));
             else
                 newPages.add(new Page(aspect.getName().toLowerCase(), widgets, false, manualType).setParent().setAspect(aspect).setLocalizedPageName(aspect.getName()));
-            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.found.in"));
+            widgets.add(new TextWidget(18, 12 + height, "manual.aspect.used.in"));
             height += 10;
             ArrayList<ItemStack> items = new ArrayList<>();
             for (ElixirRecipe recipe : ElixirRecipes.getFromAspect(aspect)) {
@@ -160,8 +161,7 @@ public class PageCreators {
         ItemStack itemStack = item.getOriginal();
         ArrayList<ManualWidgetBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, itemStack, 1f));
-        //TODO add when pam is added
-        //widgets.add(new ItemWidget(118, 12, PestleAndMortarRecipe.getInput(itemStack), 1f));
+        widgets.add(new ItemWidget(118, 12, PestleAndMortarRecipe.getInput(itemStack), 1f));
         widgets.add((new TextWidget(38, 16, itemStack.getDisplayName(), true)).setWidth(70));
         height += 28;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getUnlocalizedName() + ".description"));
@@ -171,8 +171,7 @@ public class PageCreators {
         widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
         height += 18;
         widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
-        //TODO add when pem is added
-        // /newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).addItem(PestleAndMortarRecipe.getInput(itemStack)).setLocalizedPageName(itemStack.getDisplayName()));
+        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).addItem(PestleAndMortarRecipe.getInput(itemStack)).setLocalizedPageName(itemStack.getDisplayName()));
         return newPages;
     }
 

@@ -64,10 +64,11 @@ public class ManualWidgetBase {
         if (lighting)
             RenderHelper.disableStandardItemLighting();
 
+        int var7 = -12;
         if (!tooltipData.isEmpty()) {
             int var5 = 0;
             int var6;
-            int var7;
+
             FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
             for (var6 = 0; var6 < tooltipData.size(); ++var6) {
                 var7 = fontRenderer.getStringWidth(tooltipData.get(var6));
@@ -100,37 +101,34 @@ public class ManualWidgetBase {
                 var7 += 10;
             }
             GlStateManager.enableDepth();
-
-            return var7 + 12;
         }
         if (!lighting)
             RenderHelper.disableStandardItemLighting();
         GlStateManager.color(1F, 1F, 1F, 1F);
-
-        return 0;
+        return var7 + 12;
     }
 
     /**
      * To be honest I have no idea how this works
      *
-     * @param x
-     * @param y
+     * @param left
+     * @param top
      * @param z
-     * @param par3
-     * @param par4
-     * @param par5
-     * @param par6
+     * @param right
+     * @param bottom
+     * @param startColor
+     * @param endColor
      */
     @SideOnly(Side.CLIENT)
-    public static void drawGradientRect(int x, int y, float z, int par3, int par4, int par5, int par6) {
-        float var7 = (par5 >> 24 & 255) / 255F;
-        float var8 = (par5 >> 16 & 255) / 255F;
-        float var9 = (par5 >> 8 & 255) / 255F;
-        float var10 = (par5 & 255) / 255F;
-        float var11 = (par6 >> 24 & 255) / 255F;
-        float var12 = (par6 >> 16 & 255) / 255F;
-        float var13 = (par6 >> 8 & 255) / 255F;
-        float var14 = (par6 & 255) / 255F;
+    public static void drawGradientRect(int left, int top, float z, int right, int bottom, int startColor, int endColor) {
+        float var7 = (startColor >> 24 & 255) / 255F;
+        float var8 = (startColor >> 16 & 255) / 255F;
+        float var9 = (startColor >> 8 & 255) / 255F;
+        float var10 = (startColor & 255) / 255F;
+        float var11 = (endColor >> 24 & 255) / 255F;
+        float var12 = (endColor >> 16 & 255) / 255F;
+        float var13 = (endColor >> 8 & 255) / 255F;
+        float var14 = (endColor & 255) / 255F;
         GlStateManager.disableTexture2D();
         GlStateManager.enableBlend();
         GlStateManager.disableAlpha();
@@ -138,13 +136,11 @@ public class ManualWidgetBase {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Tessellator tessellator = Tessellator.getInstance();
         BufferBuilder vertexBuffer = tessellator.getBuffer();
-        vertexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
-        vertexBuffer.color(var8, var9, var10, var7);
-        vertexBuffer.pos(par3, y, z);
-        vertexBuffer.pos(x, y, z);
-        vertexBuffer.color(var12, var13, var14, var11);
-        vertexBuffer.pos(x, par4, z);
-        vertexBuffer.pos(par3, par4, z);
+        vertexBuffer.begin(7, DefaultVertexFormats.POSITION_COLOR);
+        vertexBuffer.pos(right, top, z).color(var8, var9, var10, var7).endVertex();
+        vertexBuffer.pos(left, top, z).color(var8, var9, var10, var7).endVertex();
+        vertexBuffer.pos(left, bottom, z).color(var12, var13, var14, var11).endVertex();
+        vertexBuffer.pos(right, bottom, z).color(var12, var13, var14, var11).endVertex();
         tessellator.draw();
         GlStateManager.shadeModel(GL11.GL_FLAT);
         GlStateManager.disableBlend();
@@ -251,9 +247,10 @@ public class ManualWidgetBase {
         GlStateManager.enableRescaleNormal();
         GlStateManager.enableDepth();
         render.renderItemAndEffectIntoGUI(stack, xPos, yPos);
-        render.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stack, xPos, yPos, null);
+        render.renderItemOverlays(Minecraft.getMinecraft().fontRenderer, stack, xPos, yPos);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
+
         boolean shouldShowTooltip = false;
         if (addPageLink) {
             int lengthBefore = pageLinks.size();
@@ -263,9 +260,9 @@ public class ManualWidgetBase {
             shouldShowTooltip = pageLinks.size() > lengthBefore;
         }
         if (!hasSpecialTooltip && mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
-            if (stack != null) {
+            if (!stack.isEmpty()) {
                 List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
-                List<String> parsedTooltip = new ArrayList();
+                List<String> parsedTooltip = new ArrayList<>();
                 boolean first = true;
                 if (addPageLink && shouldShowTooltip)
                     tooltipData.add("Open guide book entry");
@@ -279,8 +276,8 @@ public class ManualWidgetBase {
                 renderTooltip(mouseX, mouseY, parsedTooltip, 0xffffff, 0xf0100010);
             }
         }
-
-        GlStateManager.disableLighting();
+        GlStateManager.enableAlpha();
+        GlStateManager.color(1F, 1F, 1F, 1F);
     }
 
     /**
@@ -296,7 +293,7 @@ public class ManualWidgetBase {
         if (mouseX >= xPos && mouseY >= yPos && mouseX <= xPos + 16 && mouseY <= yPos + 16) {
             if (stack != null) {
                 List<String> tooltipData = stack.getTooltip(Minecraft.getMinecraft().player, ITooltipFlag.TooltipFlags.NORMAL);
-                List<String> parsedTooltip = new ArrayList();
+                List<String> parsedTooltip = new ArrayList<>();
                 boolean first = true;
 
                 for (String tip : toolTips)

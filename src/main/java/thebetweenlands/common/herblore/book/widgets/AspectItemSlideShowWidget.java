@@ -24,18 +24,22 @@ public class AspectItemSlideShowWidget extends ManualWidgetBase {
     public AspectItemSlideShowWidget(int xStart, int yStart, IAspectType aspectType) {
         super(xStart, yStart);
         this.aspectType = aspectType;
+        currentItems = 0;
     }
 
     public AspectItemSlideShowWidget(int xStart, int yStart, ArrayList<ItemStack> items) {
         super(xStart, yStart);
         this.items = items;
+        currentItems = 0;
     }
 
 
     @Override
     public void drawForeGround() {
         super.drawForeGround();
-        List<ItemStack> subItems = items.subList(currentItems, currentItems + (items.size() - currentItems > 5 ? 6 : items.size() - currentItems));
+        if (items.size() < currentItems)
+            currentItems = items.size();
+        List<ItemStack> subItems = items.subList(currentItems, currentItems + ((items.size() - currentItems) > 5 ? 6 : items.size() - currentItems));
         int width = 0;
         for (ItemStack itemStack : subItems) {
             renderItem(xStart + width, yStart, itemStack, false, true, manual.manualType);

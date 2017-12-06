@@ -43,12 +43,13 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
         return ItemStack.EMPTY;
     }
 
-    /*public static ItemStack getInput(ItemStack output) {
+    public static ItemStack getInput(ItemStack output) {
         for (IPestleAndMortarRecipe recipe : recipes) {
-
+            if (recipe.matchesOutput(output))
+                return recipe.getInputs();
         }
         return null;
-    }*/
+    }
 
     public static List<IPestleAndMortarRecipe> getRecipes() {
         return Collections.unmodifiableList(recipes);
@@ -68,12 +69,9 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
             throw new IllegalArgumentException("Input must be an ItemStack");
     }
 
+    @Override
     public ItemStack getInputs() {
         return input.copy();
-    }
-
-    public ItemStack getOutput() {
-        return output.copy();
     }
 
     public boolean matches(ItemStack stacks) {
@@ -85,9 +83,10 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
         return false;
     }
 
+    @Override
     public boolean matchesOutput(ItemStack stacks) {
         if (stacks != null)
-            if (areStacksTheSame(getOutput(), stacks)) {
+            if (areStacksTheSame(output, stacks)) {
                 stacks = null;
                 return true;
             }

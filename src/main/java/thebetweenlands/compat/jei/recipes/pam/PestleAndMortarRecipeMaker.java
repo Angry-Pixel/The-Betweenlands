@@ -13,9 +13,7 @@ public class PestleAndMortarRecipeMaker {
     public static List<PestleAndMortarRecipeJEI> getRecipes() {
         ArrayList<PestleAndMortarRecipeJEI> recipes = new ArrayList<PestleAndMortarRecipeJEI>();
         for (IPestleAndMortarRecipe recipe : PestleAndMortarRecipe.getRecipes()) {
-        	if(recipe instanceof PestleAndMortarRecipe) {
-        		recipes.add(new PestleAndMortarRecipeJEI((PestleAndMortarRecipe) recipe));
-        	}
+            recipes.add(new PestleAndMortarRecipeJEI(recipe));
         }
         return recipes;
     }

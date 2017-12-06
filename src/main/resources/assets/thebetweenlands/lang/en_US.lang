@@ -767,6 +767,28 @@ chat.foodSickness.sick.12=No thanks, I'll have something else for a change
 chat.foodSickness.sick.13=It smells even worse than it looks, I'll find something else to eat
 chat.foodSickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here
 
+chat.aspect.discovery.book.none=You don't have a book to write down your discoveries
+chat.aspect.discovery.gecko.none=You can't conduct this experiment without a gecko
+chat.aspect.discovery.gecko.recovering=The gecko is still recovering from the last experiment
+chat.aspect.discovery.none=This item doesn't seem to have any aspects
+chat.aspect.discovery.more=This item still seems to have some more undiscovered aspects
+chat.aspect.discovery.end=You've already discovered all aspects on this item
+chat.aspect.discovery.last=This seems to be the last undiscovered aspect on this item
+chat.aspect.discovery.Ordaniis=The gecko's scales seem to be glowing slightly
+chat.aspect.discovery.Celawynn=You can hear its belly rumbling and it seems to burp a lot
+chat.aspect.discovery.Yeowynn=You've never seen a healthier gecko, it's bursting with energy
+chat.aspect.discovery.Azuwynn=You can see its muscles twitching uncontrollably
+chat.aspect.discovery.Freiwynn=Its eyes are pulsating
+chat.aspect.discovery.Dayuniis=The gecko is walking around like a drunkard and looks around in a schizophrenic manner
+chat.aspect.discovery.Fergalaz=The gecko's scales seem to become rock hard, it can barely move
+chat.aspect.discovery.Yunugaz=The gecko seems light, and its breath sounds like a hollow wind
+chat.aspect.discovery.Firnalaz=Its scales have a red glow and it breathes a hot breath
+chat.aspect.discovery.Byrginaz=It's drooling, sweating and peeing around its cage
+chat.aspect.discovery.Armaniis=It seems very calm and looks at you with loving eyes
+chat.aspect.discovery.Geoliirgaz=The gecko has an empty look in its eyes and doesn't seem to respond to anything
+chat.aspect.discovery.Yihinren=Its scales became puffy and its head looks... different
+chat.aspect.discovery.Byariis=The gecko is chewing furiously on its tail and looks around as if possessed
+
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
 
