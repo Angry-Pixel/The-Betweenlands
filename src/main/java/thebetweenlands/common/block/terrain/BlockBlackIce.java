@@ -22,6 +22,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.EventWinter;
 
@@ -33,7 +34,7 @@ public class BlockBlackIce extends BlockBreakable {
 		this.setSoundType(SoundType.GLASS);
 		this.slipperiness = 0.98F;
 		this.setTickRandomly(true);
-		this.setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
 	@Override

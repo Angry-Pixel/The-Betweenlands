@@ -16,6 +16,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class EventSpoopy extends EnvironmentEvent {
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
@@ -85,15 +86,17 @@ public class EventSpoopy extends EnvironmentEvent {
 		super.update(world);
 		this.world = world;
 		if(!world.isRemote) {
-			long dayDiff = this.getDayDiff();
-			if(dayDiff >= 0 && dayDiff <= 8) {
-				if(!this.isActive() && !this.wasSet) {
-					this.setActive(true, true);
-					this.wasSet = true;
+			if (ConfigHandler.enableSeasonalEvents) {
+				long dayDiff = this.getDayDiff();
+				if (dayDiff >= 0 && dayDiff <= 8 && ConfigHandler.enableSeasonalEvents) {
+					if (!this.isActive() && !this.wasSet) {
+						this.setActive(true, true);
+						this.wasSet = true;
+					}
+				} else if (this.wasSet) {
+					this.wasSet = false;
+					this.setActive(false, true);
 				}
-			} else if(this.wasSet) {
-				this.wasSet = false;
-				this.setActive(false, true);
 			}
 		} else {
 			if(this.isActive()) {
