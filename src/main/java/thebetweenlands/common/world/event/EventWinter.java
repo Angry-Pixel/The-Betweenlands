@@ -81,7 +81,7 @@ public class EventWinter extends EnvironmentEvent {
 	public float getSnowingStrength() {
 		return this.snowingStrength;
 	}
-	
+
 	@Override
 	public ResourceLocation getEventName() {
 		return new ResourceLocation(ModInfo.ID, "winter");
@@ -131,7 +131,6 @@ public class EventWinter extends EnvironmentEvent {
 				if(this.snowingTicks <= 0) {
 					if(this.snowingCooldownTicks <= 0) {
 						this.snowingTicks = 4800 + world.rand.nextInt(6000);
-						this.targetSnowingStrength = 0.5F + world.rand.nextFloat() * 7.5F;
 						this.markDirty();
 					} else {
 						this.snowingCooldownTicks--;
@@ -140,9 +139,16 @@ public class EventWinter extends EnvironmentEvent {
 					this.snowingTicks--;
 					if(this.snowingTicks <= 0) {
 						this.snowingCooldownTicks = 18000 + world.rand.nextInt(18000);
-						this.targetSnowingStrength = 0;
 						this.markDirty();
 					}
+				}
+
+				if(this.snowingTicks > 0 && this.targetSnowingStrength <= 0) {
+					this.targetSnowingStrength = 0.5F + world.rand.nextFloat() * 7.5F;
+					this.markDirty();
+				} else if(this.snowingTicks <= 0 && this.targetSnowingStrength > 0) {
+					this.targetSnowingStrength = 0;
+					this.markDirty();
 				}
 
 				if(world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
@@ -256,16 +262,22 @@ public class EventWinter extends EnvironmentEvent {
 	public static void onUpdateFog(UpdateFogEvent event) {
 		World world = event.getWorld();
 		if(world.provider instanceof WorldProviderBetweenlands && ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.isActive()) {
+			Fog targetFog = event.getAmbientFog();
+			float interp = (float) MathHelper.clamp((Minecraft.getMinecraft().player.posY - WorldProviderBetweenlands.CAVE_START + 10) / 10.0F, 0.0F, 1.0F);
 			float snowingStrength = ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.getSnowingStrength();
 			FogState state = event.getFogState();
-			Fog.MutableFog newFog = new Fog.MutableFog(state.getFog());
-			newFog.setStart(Math.min(2.0F + event.getFarPlaneDistance() * 0.8F / (1.0F + snowingStrength), state.getTargetFog().getStart()));
-			newFog.setEnd(Math.min(8.0F + event.getFarPlaneDistance() / (1.0F + snowingStrength * 0.5F), state.getTargetFog().getEnd()));
+			Fog.MutableFog newFog = new Fog.MutableFog(event.getAmbientFog());
+			float newStart = Math.min(2.0F + event.getFarPlaneDistance() * 0.8F / (1.0F + snowingStrength), targetFog.getStart());
+			newFog.setStart(targetFog.getStart() + (newStart - targetFog.getStart()) * interp);
+			float newEnd = Math.min(8.0F + event.getFarPlaneDistance() / (1.0F + snowingStrength * 0.5F),targetFog.getEnd());
+			newFog.setEnd(targetFog.getEnd() + (newEnd - targetFog.getEnd()) * interp);
+			float fogBrightness = MathHelper.clamp(0.8F / 4.0F * snowingStrength, 0.5F, 0.8F);
 			newFog.setColor(
-					MathHelper.clamp(0.8F / 4.0F * snowingStrength, 0.5F, 0.8F), 
-					MathHelper.clamp(0.8F / 4.0F * snowingStrength, 0.5F, 0.8F), 
-					MathHelper.clamp(0.8F / 4.0F * snowingStrength, 0.5F, 0.8F)
+					targetFog.getRed() + (fogBrightness - targetFog.getRed()) * interp, 
+					targetFog.getGreen() + (fogBrightness - targetFog.getGreen()) * interp, 
+					targetFog.getBlue() + (fogBrightness - targetFog.getBlue()) * interp
 					);
+			newFog.setColorIncrement(Math.max(targetFog.getColorIncrement(), 0.008F));
 			state.setTargetFog(newFog.toImmutable());
 		}
 	}
