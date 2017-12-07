@@ -53,11 +53,11 @@ public class WorldGenRottenLogs extends WorldGenerator {
 						if (Math.round(Math.sqrt(dSq)) == baseRadius) {
 							world.setBlockState(offsetPos, log, 2 | 16);
 							if (rand.nextInt(12) == 0)
-								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
+								world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2 | 16);
 							if (zz == z - length && rand.nextInt(2) == 0 || zz == z + length - 1 && rand.nextInt(2) == 0)
-								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
+								world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2 | 16);
 						} else
-							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
+							world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2 | 16);
 					}
 
 		} else {
@@ -82,11 +82,11 @@ public class WorldGenRottenLogs extends WorldGenerator {
 						if (Math.round(Math.sqrt(dSq)) == baseRadius) {
 							world.setBlockState(offsetPos, log, 2 | 16);
 							if (rand.nextInt(12) == 0)
-								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
+								world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2 | 16);
 							if (xx == x - length && rand.nextInt(2) == 0 || xx == x + length - 1 && rand.nextInt(2) == 0)
-								world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
+								world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2 | 16);
 						} else
-							world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2 | 16);
+							world.setBlockState(offsetPos, Blocks.AIR.getDefaultState(), 2 | 16);
 					}
 		}
 		return true;
