@@ -52,14 +52,6 @@ public class ItemWeedwoodBucketEmpty extends ItemBLBucketEmpty {
 							world.setBlockState(pos.offset(result.sideHit), BlockRegistry.WEEDWOOD_RUBBER_TAP.getDefaultState().withProperty(BlockRubberTap.FACING, result.sideHit));
 							itemStack.shrink(1);
 
-							for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
-								ItemStack invStack = player.inventory.getStackInSlot(i);
-								if(!invStack.isEmpty() && EnumItemMisc.SWAMP_REED_ROPE.isItemOf(invStack)) {
-									player.inventory.decrStackSize(i, 1);
-									break;
-								}
-							}
-
 							world.playSound(null, pos, SoundEvents.BLOCK_WOOD_PLACE, SoundCategory.PLAYERS, 1, 1);
 
 							return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);

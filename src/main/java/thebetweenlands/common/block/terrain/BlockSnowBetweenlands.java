@@ -19,8 +19,10 @@ import thebetweenlands.common.world.event.EventWinter;
 public class BlockSnowBetweenlands extends BlockSnow {
 	public BlockSnowBetweenlands() {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
-		this.setHardness(0.2F);
+		this.setHardness(0.1F);
 		this.setSoundType(SoundType.SNOW);
+		this.setLightOpacity(0);
+		this.setHarvestLevel("shovel", 0);
 	}
 
 	@Override

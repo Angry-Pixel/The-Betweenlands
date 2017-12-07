@@ -1,10 +1,12 @@
 package thebetweenlands.common.block.structure;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -287,5 +289,10 @@ public class BlockTreePortal extends BasicBlock {
         if (rand.nextInt(100) == 0) {
             worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL, SoundCategory.BLOCKS, 0.2F, rand.nextFloat() * 0.4F + 0.8F);
         }
+    }
+    
+    @Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    	return BlockFaceShape.UNDEFINED;
     }
 }

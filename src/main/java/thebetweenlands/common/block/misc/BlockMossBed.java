@@ -2,8 +2,6 @@ package thebetweenlands.common.block.misc;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
@@ -46,6 +44,13 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 		return new ItemStack(ItemRegistry.MOSS_BED_ITEM);
 	}
 
+	@Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+        if (state.getValue(PART) == BlockBed.EnumPartType.HEAD) {
+            spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.MOSS_BED_ITEM));
+        }
+    }
+	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void setStateMapper(Builder builder) {
