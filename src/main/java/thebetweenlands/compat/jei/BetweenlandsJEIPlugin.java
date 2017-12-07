@@ -83,11 +83,6 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.LOCATION_DEBUG));
         }
-
-        //TODO remove when added
-        blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.MANUAL_HL));
-        blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ASPECTRUS_FRUIT));
-        blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ASPECTRUS_SEEDS));
     }
 
     @Override

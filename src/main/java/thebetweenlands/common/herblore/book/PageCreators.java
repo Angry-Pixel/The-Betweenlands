@@ -96,7 +96,7 @@ public class PageCreators {
         widgets.add(new TextWidget(38, 14, "<font:custom>" + aspect.getName() + "</font>", true));
         height += 24;
         widgets.add(new TextWidget(18, 12 + height, "manual." + aspect.getName().toLowerCase() + ".description"));
-        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, TranslationHelper.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"), Minecraft.getMinecraft().fontRenderer));
+        TextContainer textContainer = parseTextContainer(new TextContainer(112, 144, TranslationHelper.translateToLocal("manual." + aspect.getName().toLowerCase() + ".description"), Minecraft.getMinecraft().fontRenderer));
 
         height += textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 18;
 
@@ -165,7 +165,7 @@ public class PageCreators {
         widgets.add((new TextWidget(38, 16, itemStack.getDisplayName(), true)).setWidth(70));
         height += 28;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getUnlocalizedName() + ".description"));
-        TextContainer textContainer = parseTextContainer(new TextContainer(116, 144, TranslationHelper.translateToLocal("manual." + itemStack.getUnlocalizedName() + ".description"), Minecraft.getMinecraft().fontRenderer));
+        TextContainer textContainer = parseTextContainer(new TextContainer(112, 144, TranslationHelper.translateToLocal("manual." + itemStack.getUnlocalizedName() + ".description"), Minecraft.getMinecraft().fontRenderer));
 
         height += 18 + textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y;
         widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
@@ -183,14 +183,14 @@ public class PageCreators {
         widgets.add(new ItemWidget(18, 12, item, 1f));
         widgets.add(new TextWidget(38, 14, item.getDisplayName(), true));
         height += 32;
-        TextContainer textContainer = new TextContainer(114, 130, TranslationHelper.translateToLocal("manual." + item.getUnlocalizedName() + ".description"), Minecraft.getMinecraft().fontRenderer);
+        TextContainer textContainer = new TextContainer(115, 130, TranslationHelper.translateToLocal("manual." + item.getUnlocalizedName() + ".description"), Minecraft.getMinecraft().fontRenderer);
         textContainer = parseTextContainer(textContainer);
         Page temp = null;
         if (textContainer.getPages().size() > 1) {
-            widgets.add(new TextWidget(15, height, "manual." + item.getUnlocalizedName() + ".description", 0, 114, 130));
+            widgets.add(new TextWidget(15, height, "manual." + item.getUnlocalizedName() + ".description", 0, 115, 130));
             newPages.add(new Page(item.getDisplayName().toLowerCase().replace(" ", ""), (ArrayList<ManualWidgetBase>) widgets.clone(), false, manualType).setParent().setLocalizedPageName(item.getDisplayName()).addItem(item));
             widgets.clear();
-            widgets.add(new TextWidget(15, 14, "manual." + item.getUnlocalizedName() + ".description", 1, 114, 130));
+            widgets.add(new TextWidget(15, 14, "manual." + item.getUnlocalizedName() + ".description", 1, 115, 130));
             if (ElixirRecipes.getFromEffect(effect) != null && ElixirRecipes.getFromEffect(effect).aspects != null) {
                 if (textContainer.getPages().get(1).getSegments().get(textContainer.getPages().get(1).getSegments().size() - 1).y + 38 < 142)
                     widgets.add(new AspectSlideShowWidget(18, (int) (textContainer.getPages().get(1).getSegments().get(textContainer.getPages().get(1).getSegments().size() - 1).y + 22), ElixirRecipes.getFromEffect(effect).aspects));
@@ -201,7 +201,7 @@ public class PageCreators {
             if (temp != null)
                 newPages.add(temp);
         } else {
-            widgets.add(new TextWidget(15, height, "manual." + item.getUnlocalizedName() + ".description"));
+            widgets.add(new TextWidget(15, height, "manual." + item.getUnlocalizedName() + ".description", 0, 115, 1130));
             if (ElixirRecipes.getFromEffect(effect) != null && ElixirRecipes.getFromEffect(effect).aspects != null) {
                 if (height + 24 < 142)
                     widgets.add(new AspectSlideShowWidget(18, height + (int) (textContainer.getPages().get(0).getSegments().get(textContainer.getPages().get(0).getSegments().size() - 1).y + 8), ElixirRecipes.getFromEffect(effect).aspects));

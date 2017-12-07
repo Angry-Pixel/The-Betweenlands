@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ConfigHandler {
@@ -98,6 +99,7 @@ public class ConfigHandler {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (event.getModID().equals(ModInfo.ID)) {
 			syncConfigs();
+			HLEntryRegistry.init();
 		}
 	}
 }

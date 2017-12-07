@@ -47,6 +47,7 @@ public class GuiManualHerblore extends GuiScreen {
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
+        HLEntryRegistry.CATEGORIES.forEach(manualCategory -> manualCategory.init(this, true));
         changeCategory(ManualManager.getCurrentCategory(manualType, player), ManualManager.getCurrentPageNumber(manualType, player));
     }
 
