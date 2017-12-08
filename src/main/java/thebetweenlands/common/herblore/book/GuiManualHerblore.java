@@ -47,6 +47,7 @@ public class GuiManualHerblore extends GuiScreen {
         xStartRightPage = xStart + 146;
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
+        HLEntryRegistry.CATEGORIES.forEach(manualCategory -> manualCategory.init(this, true));
         changeCategory(ManualManager.getCurrentCategory(manualType, player), ManualManager.getCurrentPageNumber(manualType, player));
     }
 
@@ -58,7 +59,6 @@ public class GuiManualHerblore extends GuiScreen {
     @Override
     public void onGuiClosed() {
         super.onGuiClosed();
-        ManualManager.setCurrentPage(currentCategory.getName(), currentCategory.getCurrentPage(), manualType, player);
         ManualManager.setCurrentPage(currentCategory.getName(), currentCategory.getCurrentPage(), manualType, player);
     }
 
@@ -152,11 +152,8 @@ public class GuiManualHerblore extends GuiScreen {
         vetrexBuffer.begin(7, DefaultVertexFormats.POSITION_TEX);
         vetrexBuffer.pos(xStart, yStart, this.zLevel).tex(umin, vmin).endVertex();
         vetrexBuffer.pos(xStart, yStart + height, this.zLevel).tex(umin, vmax).endVertex();
-        ;
         vetrexBuffer.pos(xStart + width, yStart + height, this.zLevel).tex(umax, vmax).endVertex();
-        ;
         vetrexBuffer.pos(xStart + width, yStart, this.zLevel).tex(umax, vmin).endVertex();
-        ;
         tessellator.draw();
     }
 

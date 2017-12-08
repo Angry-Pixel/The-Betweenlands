@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
@@ -61,7 +62,7 @@ public class ModelRubberTapCombined implements IModel {
 		ResourceLocation fluidTexture = this.fluidTexture;
 		
 		if(customData.containsKey("fluid_texture")) {
-			fluidTexture = new ResourceLocation(parser.parse(customData.get("fluid_texture")).getAsString());
+			fluidTexture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("fluid_texture")), "fluid_texture"));
 		}
 		
 		if(fluidTexture == null) {
@@ -71,13 +72,13 @@ public class ModelRubberTapCombined implements IModel {
 		int height = this.height;
 		if(customData.containsKey("fluid_height")) {
 			String fluidHeightJsonStr = customData.get("fluid_height");
-			height = parser.parse(fluidHeightJsonStr).getAsInt();
+			height = JsonUtils.getInt(parser.parse(fluidHeightJsonStr), "fluid_height");
 		}
 
 		ResourceLocation particleTexture = this.particleTexture;
 		if(customData.containsKey("particle_texture")) {
 			String particleTextureJsonStr = customData.get("particle_texture");
-			particleTexture = new ResourceLocation(parser.parse(particleTextureJsonStr).getAsString());
+			particleTexture = new ResourceLocation(JsonUtils.getString(parser.parse(particleTextureJsonStr), "particle_texture"));
 		}
 
 		return new ModelRubberTapCombined(this.tapTexture, particleTexture, fluidTexture, height);

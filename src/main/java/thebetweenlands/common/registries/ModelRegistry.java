@@ -12,6 +12,7 @@ import thebetweenlands.client.render.model.baked.ModelBlank;
 import thebetweenlands.client.render.model.baked.ModelCombined;
 import thebetweenlands.client.render.model.baked.ModelConnectedTexture;
 import thebetweenlands.client.render.model.baked.ModelDynBucketBL;
+import thebetweenlands.client.render.model.baked.ModelEventSelection;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase;
 import thebetweenlands.client.render.model.baked.ModelFromModelBase.IVertexProcessor;
 import thebetweenlands.client.render.model.baked.ModelLayerSelection;
@@ -19,7 +20,6 @@ import thebetweenlands.client.render.model.baked.ModelLifeCrystalStalactite;
 import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
-import thebetweenlands.client.render.model.baked.ModelSpookEvent;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
 import thebetweenlands.client.render.model.baked.ModelThatchRoof;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
@@ -39,6 +39,7 @@ import thebetweenlands.client.render.model.baked.modelbase.ModelFungusCrop4Decay
 import thebetweenlands.client.render.model.baked.modelbase.ModelMossBed;
 import thebetweenlands.client.render.model.baked.modelbase.ModelMudFlowerPot;
 import thebetweenlands.client.render.model.baked.modelbase.ModelPitcherPlant;
+import thebetweenlands.client.render.model.baked.modelbase.ModelPresent;
 import thebetweenlands.client.render.model.baked.modelbase.ModelRubberTapPouring;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSundew;
 import thebetweenlands.client.render.model.baked.modelbase.ModelSwampPlant;
@@ -63,6 +64,7 @@ import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
 import thebetweenlands.util.ModelConverter.Quad;
+import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.Vec3UV;
 
 public class ModelRegistry {
@@ -73,8 +75,9 @@ public class ModelRegistry {
 	public static final IModel MODEL_COMBINED = new ModelCombined();
 	public static final IModel CONNECTED_TEXTURE = new ModelConnectedTexture();
 	public static final IModel LAYER_SELECTION = new ModelLayerSelection();
-	public static final IModel SPOOK_EVENT = new ModelSpookEvent();
-	
+	public static final ModelEventSelection SPOOK_EVENT = new ModelEventSelection();
+	public static final ModelEventSelection WINTER_EVENT = new ModelEventSelection();
+
 	//Plant models
 	public static final IModel PITCHER_PLANT = new ModelFromModelBase(new ModelPitcherPlant(), new ResourceLocation("thebetweenlands:blocks/pitcher_plant"), 128, 128);
 	public static final IModel BLACK_HAT_MUSHROOM_1 = new ModelFromModelBase(new ModelBlackHatMushroom1(), new ResourceLocation("thebetweenlands:blocks/black_hat_mushroom_1"), 64, 64);
@@ -110,7 +113,7 @@ public class ModelRegistry {
 	//Items
 	public static final IVertexProcessor SHIELD_VERTEX_PROCESSOR = new IVertexProcessor() {
 		@Override
-		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
+		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
 			return new Vec3UV(-vertexIn.x - 0.5D, vertexIn.y + 1.5D, -vertexIn.z - 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	};
@@ -129,7 +132,7 @@ public class ModelRegistry {
 	public static final IModel WEEDWOOD_CHEST = new ModelFromModelBase(new ModelChest(), new ResourceLocation("thebetweenlands:tiles/weedwood_chest"), 64, 32,
 			new IVertexProcessor() {
 		@Override
-		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box) {
+		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
 			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	});
@@ -148,7 +151,14 @@ public class ModelRegistry {
 	public static final IModel WALKWAY = new ModelWalkway(true);
 	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(false);
 	public static final IModel THATCH_ROOF = new ModelThatchRoof();
-	
+	public static final IModel PRESENT = new ModelFromModelBase(new ModelPresent(), new ResourceLocation("thebetweenlands:blocks/present"), 64, 64, new IVertexProcessor() {
+		@Override
+		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {
+			builder.setTintIndex(0);
+			return vertexIn;
+		}
+	});
+
 	public final static List<IModel> MODELS = new ArrayList<IModel>();
 
 	private static final ICustomRegistrar DEFAULT_REGISTRAR = new DefaultRegistrar(CustomModelManager.INSTANCE);
@@ -184,7 +194,7 @@ public class ModelRegistry {
 	public static void preInit() {
 		try {
 			for (Field field : ModelRegistry.class.getDeclaredFields()) {
-				if (field.getType().isAssignableFrom(IModel.class)) {
+				if (IModel.class.isAssignableFrom(field.getType())) {
 					IModel model = (IModel) field.get(null);
 					MODELS.add(model);
 					ResourceLocation blockLocation = new ResourceLocation(ModInfo.ID, "models/block/internal/" + field.getName().toLowerCase(Locale.ENGLISH));

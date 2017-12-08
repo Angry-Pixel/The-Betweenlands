@@ -6,6 +6,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.herblore.book.HLEntryRegistry;
 import thebetweenlands.common.lib.ModInfo;
 
 public class ConfigHandler {
@@ -16,6 +17,7 @@ public class ConfigHandler {
 	public static int dimensionId;
 	public static int druidCircleFrequency;
 	public static int dimensionBrightness;
+	public static boolean enableSeasonalEvents;
 
 	public static int wispQuality;
 	public static boolean useShader;
@@ -45,6 +47,7 @@ public class ConfigHandler {
 		dimensionId = config.get(CATEGORIES[0], "The Betweenlands Dimension ID", 20).getInt(20);
 		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 80).getInt(80);
 		dimensionBrightness = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
+		enableSeasonalEvents = config.getBoolean("Enable Seasonal Events", CATEGORIES[0], true, "If true seasonal events will occur during special periods during a year");
 
 		wispQuality = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 50).setMinValue(0).setMaxValue(100).getInt(100);
 		useShader = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", CATEGORIES[1], true, "");
@@ -96,6 +99,7 @@ public class ConfigHandler {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (event.getModID().equals(ModInfo.ID)) {
 			syncConfigs();
+			HLEntryRegistry.init();
 		}
 	}
 }

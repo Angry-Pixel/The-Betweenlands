@@ -2,10 +2,14 @@
 	"forge_marker": 1,
 	"variants": {
 		"normal": {
-			"model": "thebetweenlands:internal/spook_event",
+			"model": "thebetweenlands:internal/winter_event",
 			"custom": {
-				"model_base": "thebetweenlands:block/cattail",
-				"model_spook": "thebetweenlands:block/cattail_spook"
+				"model_base": "thebetweenlands:block/internal/spook_event",
+				"model_base_data": {
+					"model_base": "thebetweenlands:block/cattail",
+					"model_active": "thebetweenlands:block/cattail_spook"				
+				},
+				"model_active": "thebetweenlands:block/cattail_frosty"
 			}
 		}
 	}

@@ -27,12 +27,14 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
+import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 
 public class ModelLayerSelection implements IModel {
 	private IModel model;
@@ -49,18 +51,6 @@ public class ModelLayerSelection implements IModel {
 		if(renderNone) {
 			this.renderLayer[0] = true;
 		}
-	}
-
-	public static ImmutableMap<String, String> getCustomDataFor(JsonParser parser, String customData) {
-		if (customData == null)
-			return null;
-		JsonElement element = parser.parse(customData);
-		JsonObject jsonObj = element.getAsJsonObject();
-		Builder<String, String> parsedElements = ImmutableMap.<String, String>builder();
-		for (Entry<String, JsonElement> elementEntry : jsonObj.entrySet()) {
-			parsedElements.put(elementEntry.getKey(), elementEntry.getValue().toString());
-		}
-		return parsedElements.build();
 	}
 
 	@Override
@@ -101,7 +91,7 @@ public class ModelLayerSelection implements IModel {
 		IModel baseModel = this.model;
 		
 		if(customData.containsKey("model")) {
-			ResourceLocation baseModelLocation = new ResourceLocation(parser.parse(customData.get("model")).getAsString());
+			ResourceLocation baseModelLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("model")), "model"));
 			baseModel = ModelLoaderRegistry.getModelOrLogError(baseModelLocation, "Could not find base model for combined model");
 		}
 		
@@ -110,7 +100,7 @@ public class ModelLayerSelection implements IModel {
 		}
 		
 		if(customData.containsKey("model_data")) {
-			baseModel = baseModel.process(getCustomDataFor(parser, customData.get("model_data")));
+			baseModel = baseModel.process(LoaderExtension.parseJsonElementList(parser, customData.get("model_data"), "model_data"));
 		}
 
 		List<BlockRenderLayer> renderLayers = new ArrayList<>();
@@ -125,7 +115,7 @@ public class ModelLayerSelection implements IModel {
 			renderNone = this.renderLayer[0];
 		} else {
 			String layers = customData.get("layers");
-			JsonArray layersArray = parser.parse(layers).getAsJsonArray();
+			JsonArray layersArray = JsonUtils.getJsonArray(parser.parse(layers), "layers");
 			for(JsonElement element : layersArray) {
 				String layer = element.getAsString();
 				switch(layer) {

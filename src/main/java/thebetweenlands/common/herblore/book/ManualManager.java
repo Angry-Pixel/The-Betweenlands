@@ -40,7 +40,7 @@ public class ManualManager {
                     stack = player.inventory.getStackInSlot(i);
                 else
                     stack = player.getHeldItem(EnumHand.OFF_HAND);
-                if (stack != null && stack.getItem() == itemManual) {
+                if (!stack.isEmpty() && stack.getItem() == itemManual) {
                     NBTTagCompound nbt = stack.getTagCompound();
                     if (nbt == null)
                         nbt = new NBTTagCompound();
@@ -88,15 +88,13 @@ public class ManualManager {
                     stack = player.inventory.getStackInSlot(i);
                 else
                     stack = player.getHeldItem(EnumHand.OFF_HAND);
-                if (stack != null && stack.getItem() == itemManual) {
+                if (!stack.isEmpty() && stack.getItem() == itemManual) {
                     NBTTagCompound nbt = stack.getTagCompound();
                     if (nbt != null) {
                         NBTTagList tag = nbt.getTagList("pages", 10);
-                        if (tag != null) {
-                            for (int j = 0; j < tag.tagCount(); j++) {
-                                NBTTagCompound data = tag.getCompoundTagAt(j);
-                                foundPages.add(data.getString("page"));
-                            }
+                        for (int j = 0; j < tag.tagCount(); j++) {
+                            NBTTagCompound data = tag.getCompoundTagAt(j);
+                            foundPages.add(data.getString("page"));
                         }
                         return foundPages;
                     }
@@ -116,7 +114,7 @@ public class ManualManager {
      */
     public static boolean hasFoundPage(EntityPlayer player, String page, Item itemManual) {
         ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
-        if (stack != null && stack.getItem() == ItemRegistry.MANUAL_HL) {
+        if (!stack.isEmpty() && stack.getItem() == ItemRegistry.MANUAL_HL) {
             IDiscoveryProvider<ItemStack> provider = (IDiscoveryProvider<ItemStack>) stack.getItem();
             DiscoveryContainer container = provider.getContainer(stack);
             ItemStack ingredient = null;
@@ -160,11 +158,11 @@ public class ManualManager {
      * @param player     a player with a manual
      */
     public static void setCurrentPage(String category, int pageNumber, Item itemManual, EntityPlayer player) {
-        if (player != null && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual && category != null) {
+        if (player != null && !player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual && category != null) {
             if (player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound() == null)
                 player.getHeldItem(EnumHand.MAIN_HAND).setTagCompound(new NBTTagCompound());
             NBTTagCompound tagCompound = player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound();
-            tagCompound.setInteger("pageNumber", pageNumber);
+            tagCompound.setInteger("page_number", pageNumber);
             tagCompound.setString("category", category);
             player.getHeldItem(EnumHand.MAIN_HAND).setTagCompound(tagCompound);
         }
@@ -179,8 +177,8 @@ public class ManualManager {
      */
     public static int getCurrentPageNumber(Item itemManual, EntityPlayer player) {
         player = player.world.getClosestPlayerToEntity(player, 20);
-        if (player != null && player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual)
-            if (player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound() != null && player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().hasKey("pageNumber"))
+        if (player != null && !player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual)
+            if (player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound() != null && player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().hasKey("page_number"))
                 return player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound().getInteger("page_number");
         return 1;
     }
@@ -194,7 +192,7 @@ public class ManualManager {
      */
     public static ManualCategory getCurrentCategory(Item itemManual, EntityPlayer player) {
         player = player.world.getClosestPlayerToEntity(player, 20);
-        if (player != null &&player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual) {
+        if (player != null && !player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() == itemManual) {
             NBTTagCompound nbt = player.getHeldItem(EnumHand.MAIN_HAND).getTagCompound();
             if (nbt != null && nbt.hasKey("category") && getCategoryFromString(nbt.getString("category"), itemManual) != null)
                 return getCategoryFromString(nbt.getString("category"), itemManual);

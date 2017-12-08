@@ -6,25 +6,31 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.event.InitializeEnvironmentEventsEvent;
 
 public class EnvironmentEventRegistry {
-	public final EventDenseFog DENSE_FOG;
-	public final EnvironmentEvent HEAVY_RAIN;
-	public final EventAuroras AURORAS;
-	public final EventBloodSky BLOODSKY;
-	public final EventSpoopy SPOOPY;
+	public final EventDenseFog denseFog;
+	public final EnvironmentEvent heavyRain;
+	public final EventAuroras auroras;
+	public final EventBloodSky bloodSky;
+	public final EventSpoopy spoopy;
+	public final EventWinter winter;
 
 	private World world;
 
 	public EnvironmentEventRegistry(World world) {
 		this.world = world;
 
-		DENSE_FOG = new EventDenseFog(this);
-		HEAVY_RAIN = new EventHeavyRain(this);
-		AURORAS = new EventAuroras(this);
-		BLOODSKY = new EventBloodSky(this);
-		SPOOPY = new EventSpoopy(this);
+		denseFog = new EventDenseFog(this);
+		heavyRain = new EventHeavyRain(this);
+		auroras = new EventAuroras(this);
+		bloodSky = new EventBloodSky(this);
+		spoopy = new EventSpoopy(this);
+		winter = new EventWinter(this);
 	}
 
 	public World getWorld() {
@@ -32,27 +38,37 @@ public class EnvironmentEventRegistry {
 	}
 
 	public void init() {
-		register(DENSE_FOG);
-		register(HEAVY_RAIN);
-		register(AURORAS);
-		register(BLOODSKY);
-		register(SPOOPY);
+		register(denseFog);
+		register(heavyRain);
+		register(auroras);
+		register(bloodSky);
+		register(spoopy);
+		register(winter);
+		
+		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));
 	}
 
-	private final Map<String, EnvironmentEvent> REGISTERED_EVENTS = new HashMap<String, EnvironmentEvent>();
+	private final Map<ResourceLocation, EnvironmentEvent> registeredEvents = new HashMap<>();
 
 	private boolean disabled = false;
 
 	public void register(EnvironmentEvent event) {
-		REGISTERED_EVENTS.put(event.getEventName(), event);
+		if(registeredEvents.containsKey(event.getEventName())) {
+			throw new RuntimeException("Duplicate environment event name: " + event.getEventName());
+		}
+		registeredEvents.put(event.getEventName(), event);
+	}
+	
+	public EnvironmentEvent unregister(EnvironmentEvent event) {
+		return registeredEvents.remove(event.getEventName());
 	}
 
-	public Map<String, EnvironmentEvent> getEvents() {
-		return Collections.unmodifiableMap(REGISTERED_EVENTS);
+	public Map<ResourceLocation, EnvironmentEvent> getEvents() {
+		return Collections.unmodifiableMap(registeredEvents);
 	}
 
-	public EnvironmentEvent forName(String eventName) {
-		return REGISTERED_EVENTS.get(eventName);
+	public EnvironmentEvent forName(ResourceLocation eventName) {
+		return registeredEvents.get(eventName);
 	}
 
 	public List<EnvironmentEvent> getActiveEvents() {
@@ -61,7 +77,7 @@ public class EnvironmentEventRegistry {
 
 	public List<EnvironmentEvent> getEventsOfState(boolean isActive) {
 		List<EnvironmentEvent> list = new ArrayList<EnvironmentEvent>();
-		for (EnvironmentEvent event : REGISTERED_EVENTS.values()) {
+		for (EnvironmentEvent event : registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				list.add(event);
 			}
@@ -69,17 +85,17 @@ public class EnvironmentEventRegistry {
 		return list;
 	}
 
-	public List<String> getEventNames() {
-		List<String> eventNames = new ArrayList<String>();
-		for (EnvironmentEvent event : REGISTERED_EVENTS.values()) {
+	public List<ResourceLocation> getEventNames() {
+		List<ResourceLocation> eventNames = new ArrayList<>();
+		for (EnvironmentEvent event : registeredEvents.values()) {
 			eventNames.add(event.getEventName());
 		}
 		return eventNames;
 	}
 
-	public List<String> getEventNamesOfState(boolean isActive) {
-		List<String> eventNames = new ArrayList<String>();
-		for (EnvironmentEvent event : REGISTERED_EVENTS.values()) {
+	public List<ResourceLocation> getEventNamesOfState(boolean isActive) {
+		List<ResourceLocation> eventNames = new ArrayList<>();
+		for (EnvironmentEvent event : registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				eventNames.add(event.getEventName());
 			}
@@ -89,9 +105,9 @@ public class EnvironmentEventRegistry {
 
 	public String getGrammaticalActiveEventNameList() {
 		StringBuilder list = new StringBuilder();
-		EnvironmentEvent[] events = REGISTERED_EVENTS.values().toArray(new EnvironmentEvent[0]);
+		EnvironmentEvent[] events = registeredEvents.values().toArray(new EnvironmentEvent[0]);
 		for (int i = 0; i < events.length; i++) {
-			String eventName = events[i].getEventName();
+			ResourceLocation eventName = events[i].getEventName();
 			if (i > 0) {
 				list.append(", ");
 				if (i == events.length - 1) {

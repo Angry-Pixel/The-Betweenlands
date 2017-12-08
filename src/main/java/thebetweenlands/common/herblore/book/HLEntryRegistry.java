@@ -47,12 +47,12 @@ public class HLEntryRegistry {
         itemPages.clear();
         ArrayList<Page> temp = new ArrayList<>();
         ArrayList<Page> entryPages = new ArrayList<>();
-        aspectPages.add(new Page("aspectInfo", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 454, 271, 1024.0D, 1024.0D)));
+        aspectPages.add(new Page("aspect_info", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 454, 271, 1024.0D, 1024.0D)));
         for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
             aspectPages.addAll(PageCreators.AspectPages(aspect, manualType));
         }
 
-        entryPages.add(new Page("aspectList", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 162, 271, 1024.0D, 1024.0D)));
+        entryPages.add(new Page("aspect_list", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 162, 271, 1024.0D, 1024.0D)));
         int pageNumber = 1;
         for (Page page : aspectPages) {
             page.setPageNumber(pageNumber);
@@ -186,7 +186,7 @@ public class HLEntryRegistry {
         elixirPages.clear();
         elixirPages.addAll(infusionPages);
         elixirPages.addAll(antiInfusionPages);
-        elixirCategory = new ManualCategory(elixirPages, 2, manualType, "elixirCategory");
+        elixirCategory = new ManualCategory(elixirPages, 2, manualType, "elixir_category");
         CATEGORIES.add(elixirCategory);
     }
 }

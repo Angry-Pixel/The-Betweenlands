@@ -208,7 +208,7 @@
                             }
                         }
                     ],
-                    "weight": 1,
+                    "weight": 4,
                     "quality": 0
                 },
                 {
@@ -275,7 +275,7 @@
                             }
                         }
                     ],
-                    "weight": 2,
+                    "weight": 6,
                     "quality": 0
                 }
             ],

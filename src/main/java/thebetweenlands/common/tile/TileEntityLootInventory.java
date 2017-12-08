@@ -20,8 +20,8 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 
 public class TileEntityLootInventory extends TileEntityBasicInventory implements ILootContainer {
-	public ResourceLocation lootTable;
-	public long lootTableSeed;
+	protected ResourceLocation lootTable;
+	protected long lootTableSeed;
 
 	public TileEntityLootInventory(int invtSize, String name) {
 		super(invtSize, name);

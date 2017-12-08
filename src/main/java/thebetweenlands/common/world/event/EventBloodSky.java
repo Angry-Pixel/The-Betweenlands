@@ -3,9 +3,11 @@ package thebetweenlands.common.world.event;
 import java.util.Random;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventBloodSky extends TimedEnvironmentEvent {
@@ -27,8 +29,8 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public String getEventName() {
-		return "bloodSky";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "blood_sky");
 	}
 
 	@Override

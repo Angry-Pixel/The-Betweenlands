@@ -3,7 +3,10 @@ package thebetweenlands.common.world.event;
 import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.common.lib.ModInfo;
 
 public class EventAuroras extends TimedEnvironmentEvent {
 	public EventAuroras(EnvironmentEventRegistry registry) {
@@ -13,8 +16,8 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	private short auroraType = 0;
 
 	@Override
-	public String getEventName() {
-		return "auroras";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "auroras");
 	}
 
 	@Override
@@ -29,7 +32,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
-		if((active && this.getRegistry().getActiveEvents().size() <= 1) || !active) {
+		if((active && this.canBeActive()) || !active) {
 			super.setActive(active, markDirty);
 			if(active && !this.getWorld().isRemote) {
 				this.auroraType = (short)this.getWorld().rand.nextInt(3);
@@ -40,7 +43,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
-		if(!world.isRemote && this.getRegistry().getActiveEvents().size() > 1 && this.ticks > 500) {
+		if(!world.isRemote && !this.canBeActive() && this.ticks > 500) {
 			this.ticks = 500; //Start fading out
 			this.setDirty(true);
 		}
@@ -72,5 +75,14 @@ public class EventAuroras extends TimedEnvironmentEvent {
 
 	public short getAuroraType() {
 		return this.auroraType;
+	}
+	
+	protected boolean canBeActive() {
+		for(EnvironmentEvent event : this.getRegistry().getActiveEvents()) {
+			if(event != this && event != this.getRegistry().winter) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

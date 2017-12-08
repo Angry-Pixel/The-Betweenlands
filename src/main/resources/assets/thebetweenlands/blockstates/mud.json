@@ -1,10 +1,38 @@
 {
-    "variants": {
-        "normal": [
-            { "model": "thebetweenlands:mud" },
-            { "model": "thebetweenlands:mud", "y": 90 },
-            { "model": "thebetweenlands:mud", "y": 180 },
-            { "model": "thebetweenlands:mud", "y": 270 }
-        ]
-    }
+	"forge_marker": 1,
+	"variants": {
+		"normal": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/mud",
+					"model_active": "thebetweenlands:block/mud_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/mud",
+					"model_active": "thebetweenlands:block/mud_frosty"
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/mud",
+					"model_active": "thebetweenlands:block/mud_frosty"
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/mud",
+					"model_active": "thebetweenlands:block/mud_frosty"
+				},
+				"y": 270
+			}
+		]
+	}
 }

@@ -67,7 +67,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
             if(world.provider instanceof WorldProviderBetweenlands) {
                 WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
                 EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-                if(!eeRegistry.HEAVY_RAIN.isActive()) {
+                if(!eeRegistry.heavyRain.isActive()) {
                     world.setBlockToAir(pos);
                     amount = 0;
                 } else if(world.canBlockSeeSky(pos)) {

@@ -251,7 +251,7 @@ public class CircleGemHelper {
 				}
 				attackerGemCounts.adjustOrPutValue(attackerItemGem, 1, 1);
 				for(CircleGemType gem : attackerGemCounts.keySet()) {
-					if(applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage))) {
+					if(applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage), damageSource, damage)) {
 						attackerProcd = true;
 						if(!attackerProcdGems.contains(gem)){
 							attackerProcdGems.add(gem);
@@ -279,7 +279,7 @@ public class CircleGemHelper {
 				}
 				defenderGemCounts.adjustOrPutValue(attackedBlockingItemGem, 1, 1);
 				for(CircleGemType gem : defenderGemCounts.keySet()) {
-					if(applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage))) {
+					if(applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage), damageSource, damage)) {
 						defenderProcd = true;
 						if(!defenderProcdGems.contains(gem)){
 							defenderProcdGems.add(gem);
@@ -330,10 +330,10 @@ public class CircleGemHelper {
 		return ret;
 	}
 
-	private static boolean applyProc(CircleGemType gem, Entity owner, Entity source, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength) {
+	private static boolean applyProc(CircleGemType gem, Entity owner, Entity source, Entity attacker, Entity defender, boolean attackerProc, boolean defenderProc, float strength, DamageSource damageSource, float damage) {
 		boolean isAttacker = owner == attacker;
 		if((isAttacker && attackerProc) || (!isAttacker && defenderProc)) {
-			return gem.applyProc(isAttacker, owner, source, attacker, defender, strength);
+			return gem.applyProc(isAttacker, owner, source, attacker, defender, strength, damageSource, damage);
 		}
 		return false;
 	}

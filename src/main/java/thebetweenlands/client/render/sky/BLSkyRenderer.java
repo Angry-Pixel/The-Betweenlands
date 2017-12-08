@@ -352,7 +352,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		EventAuroras event = null;
 		if(mc.world != null && mc.world.provider instanceof WorldProviderBetweenlands) {
-			event = ((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry().AURORAS;
+			event = ((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry().auroras;
 		}
 		if(event != null) {
 			switch(event.getAuroraType()) {
@@ -497,7 +497,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		float fade = 1.0F;
 		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(mc.world);
 		if(provider != null) {
-			fade = provider.getEnvironmentEventRegistry().DENSE_FOG.getFade(partialTicks) * 0.95F + 0.05F;
+			fade = provider.getEnvironmentEventRegistry().denseFog.getFade(partialTicks) * 0.95F + 0.05F;
 		}
 		starBrightness *= fade;
 		if (starBrightness > 0.0F && !useShaderSky) {
@@ -729,7 +729,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		}
 
 		if(mc.world != null && mc.world.provider instanceof WorldProviderBetweenlands) {
-			if(((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry().AURORAS.isActive()) {
+			if(((WorldProviderBetweenlands)mc.world.provider).getWorldData().getEnvironmentEventRegistry().auroras.isActive()) {
 				GL11.glDisable(GL11.GL_FOG);
 				this.renderAuroras(mc, partialTicks);
 				GL11.glEnable(GL11.GL_FOG);

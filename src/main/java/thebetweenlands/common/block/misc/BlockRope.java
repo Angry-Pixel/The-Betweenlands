@@ -10,6 +10,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -58,7 +59,7 @@ public class BlockRope extends Block {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if(heldItem == null && player.isSneaking()) {
+		if(heldItem.isEmpty() && player.isSneaking()) {
 			BlockPos offsetPos = pos.down();
 			while(world.getBlockState(offsetPos).getBlock() == this) {
 				offsetPos = offsetPos.down();
@@ -178,4 +179,9 @@ public class BlockRope extends Block {
 			return this.name;
 		}
 	}
+	
+	@Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    	return BlockFaceShape.UNDEFINED;
+    }
 }

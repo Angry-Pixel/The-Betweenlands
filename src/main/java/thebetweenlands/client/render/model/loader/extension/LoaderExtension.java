@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
@@ -115,7 +116,7 @@ public abstract class LoaderExtension {
 	 * @return
 	 */
 	protected ImmutableMap<String, String> parseMetadata(JsonParser parser, ResourceLocation location) {
-		return parseJsonElementList(parser, this.readMetadata(location));
+		return parseJsonElementList(parser, this.readMetadata(location), location.toString() + " model metadata");
 	}
 
 	/**
@@ -154,12 +155,11 @@ public abstract class LoaderExtension {
 	 * Parses a json string into a map
 	 * @param parser
 	 * @param json
+	 * @param member
 	 * @return
 	 */
-	protected static ImmutableMap<String, String> parseJsonElementList(JsonParser parser, String json) {
-		JsonElement element = parser.parse(json);
-		JsonObject jsonObj = element.getAsJsonObject();
-		return parseJsonElementList(jsonObj);
+	public static ImmutableMap<String, String> parseJsonElementList(JsonParser parser, String json, String member) {
+		return parseJsonElementList(JsonUtils.getJsonObject(parser.parse(json), member));
 	}
 
 	/**
@@ -168,7 +168,7 @@ public abstract class LoaderExtension {
 	 * @param json
 	 * @return
 	 */
-	protected static ImmutableMap<String, String> parseJsonElementList(JsonObject jsonObj) {
+	public static ImmutableMap<String, String> parseJsonElementList(JsonObject jsonObj) {
 		Builder<String, String> parsedElements = ImmutableMap.<String, String>builder();
 		for(Entry<String, JsonElement> elementEntry : jsonObj.entrySet()) {
 			parsedElements.put(elementEntry.getKey(), elementEntry.getValue().toString());

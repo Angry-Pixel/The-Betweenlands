@@ -138,6 +138,7 @@ public abstract class ItemBLBucketEmpty extends Item {
             if (!player.inventory.addItemStackToInventory(fullBucket.copy())) {
                 player.dropItem(fullBucket.copy(), false);
             }
+            emptyBuckets.shrink(1);
             return emptyBuckets;
         }
     }

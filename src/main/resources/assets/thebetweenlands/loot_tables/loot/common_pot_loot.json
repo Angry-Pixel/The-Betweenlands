@@ -282,7 +282,7 @@
                             "data": 38
                         }
                     ],
-                    "weight": 1,
+                    "weight": 2,
                     "quality": 0
                 },
                 {
@@ -299,7 +299,7 @@
                             }
                         }
                     ],
-                    "weight": 1,
+                    "weight": 4,
                     "quality": 0
                 },
                 {
@@ -316,7 +316,7 @@
                             }
                         }
                     ],
-                    "weight": 1,
+                    "weight": 3,
                     "quality": 0
                 },
                 {

@@ -1,10 +1,14 @@
 {
 	"forge_marker": 1,
 	"defaults": {
-		"model": "thebetweenlands:internal/spook_event",
+		"model": "thebetweenlands:internal/winter_event",
 		"custom": {
-			"model_base": "thebetweenlands:block/log_weedwood",
-			"model_spook": "thebetweenlands:block/log_weedwood_spook"
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/log_weedwood",
+				"model_active": "thebetweenlands:block/log_weedwood_spook"
+			},
+			"model_active": "thebetweenlands:block/log_weedwood_frosty"
 		}
 	},
 	"variants": {
@@ -20,10 +24,14 @@
 				"y": 90
 			},
 			"none": {
-				"model": "thebetweenlands:internal/spook_event",
+				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/log_weedwood_bark",
-					"model_spook": "thebetweenlands:block/log_weedwood_bark_spook"
+					"model_base": "thebetweenlands:block/internal/spook_event",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/log_weedwood_bark",
+						"model_active": "thebetweenlands:block/log_weedwood_bark_spook"
+					},
+					"model_active": "thebetweenlands:block/log_weedwood_bark_frosty"
 				}
 			}
 		}

@@ -14,6 +14,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.item.IDiscoveryProvider;
+import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.proxy.CommonProxy;
 
@@ -22,12 +23,12 @@ import javax.annotation.Nullable;
 public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
     public ItemManualHL() {
         setMaxStackSize(1);
-        this.setCreativeTab(null);
+        this.setCreativeTab(BLCreativeTabs.HERBLORE);
     }
 
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.RED + "Not yet implemented!");
+		tooltip.add(TextFormatting.RED + "Not yet fully tested!");
 	}
     
     @Override

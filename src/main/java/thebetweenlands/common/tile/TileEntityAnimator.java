@@ -254,7 +254,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             return true;
         else if (slot == 2 && !stack.isEmpty() && stack.getItem().equals(ItemRegistry.ITEMS_MISC) && stack.getItemDamage() == ItemMisc.EnumItemMisc.SULFUR.getID())
             return true;
-        else if (slot == 0)
+        else if (slot == 0 && inventory.get(0).isEmpty())
             return true;
         return false;
     }

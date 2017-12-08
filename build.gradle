@@ -168,5 +168,5 @@ repositories {
 }
 
 dependencies {
-    deobfCompile "mezz.jei:jei_1.12.1:4.7.8.92:api"
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.134:api"
 }

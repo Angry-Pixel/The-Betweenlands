@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/mossy_cragrock_side_1_frosty",
+    "up": "thebetweenlands:blocks/mossy_cragrock_top_frosty",
+    "down": "thebetweenlands:blocks/mossy_cragrock_side_2_frosty",
+    "north": "thebetweenlands:blocks/mossy_cragrock_side_1_frosty",
+    "east": "thebetweenlands:blocks/mossy_cragrock_side_1_frosty",
+    "south": "thebetweenlands:blocks/mossy_cragrock_side_1_frosty",
+    "west": "thebetweenlands:blocks/mossy_cragrock_side_1_frosty"
+  }
+}

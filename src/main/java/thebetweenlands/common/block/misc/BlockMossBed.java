@@ -2,13 +2,12 @@ package thebetweenlands.common.block.misc;
 
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -38,12 +37,28 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? null : ItemRegistry.MOSS_BED_ITEM;
+		return state.getValue(PART) == BlockBed.EnumPartType.HEAD ? Items.AIR : ItemRegistry.MOSS_BED_ITEM;
 	}
 
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(ItemRegistry.MOSS_BED_ITEM);
+	}
+
+	@Override
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune) {
+        if (state.getValue(PART) == BlockBed.EnumPartType.HEAD) {
+            spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.MOSS_BED_ITEM));
+        }
+    }
+
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+		if (state.getValue(PART) == BlockBed.EnumPartType.HEAD && te instanceof TileEntityMossBed) {
+			spawnAsEntity(worldIn, pos, new ItemStack(ItemRegistry.MOSS_BED_ITEM));
+		} else {
+			super.harvestBlock(worldIn, player, pos, state, null, stack);
+		}
 	}
 
 	@Override

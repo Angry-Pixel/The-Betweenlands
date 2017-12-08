@@ -1,8 +1,8 @@
 package thebetweenlands.api.entity;
 
-import net.minecraft.world.BossInfoServer;
+import java.util.UUID;
 
 public interface IBLBoss {
 
-    public BossInfoServer getBossInfo();
+    public UUID getBossInfoUuid();
 }

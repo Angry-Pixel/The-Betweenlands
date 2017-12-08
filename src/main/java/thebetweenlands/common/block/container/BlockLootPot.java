@@ -12,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
@@ -54,8 +55,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	public BlockLootPot(Material material) {
 		super(material);
-		setHardness(1.0f);
+		setHardness(0.4f);
 		setSoundType(SoundType.GLASS);
+		setHarvestLevel("pickaxe", 0);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(VARIANT, EnumLootPot.POT_1));
 	}
 	
@@ -260,4 +262,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 	public void setStateMapper(Builder builder) {
 		builder.ignore(VARIANT).withPropertySuffix(VARIANT, e -> e.getName());
 	}
+	
+	@Override
+    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+    	return BlockFaceShape.UNDEFINED;
+    }
 }

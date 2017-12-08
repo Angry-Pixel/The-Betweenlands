@@ -4,6 +4,7 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.BlankRecipeWrapper;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -13,9 +14,9 @@ public class PestleAndMortarRecipeJEI implements IRecipeWrapper {
     private final ItemStack output;
     private final ItemStack input;
 
-    public PestleAndMortarRecipeJEI(PestleAndMortarRecipe recipe){
-        output = recipe.getOutput();
+    public PestleAndMortarRecipeJEI(IPestleAndMortarRecipe recipe){
         input = recipe.getInputs();
+        output = recipe.getOutput(input);
     }
 
     @Override

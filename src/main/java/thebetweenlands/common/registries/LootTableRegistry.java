@@ -18,6 +18,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.common.entity.loot.LootPropertyEventActive;
 import thebetweenlands.common.entity.loot.LootPropertyFrogType;
 import thebetweenlands.common.entity.loot.LootPropertyHasItem;
 import thebetweenlands.common.entity.loot.LootPropertyIsBossPeatMummy;
@@ -34,7 +35,8 @@ public class LootTableRegistry {
     public static final ResourceLocation DUNGEON_POT_LOOT = register("loot/dungeon_pot_loot");
     public static final ResourceLocation MUSIC_DISC = register("loot/music_disc");
     public static final ResourceLocation ANIMATOR_SCROLL = register("animator/scroll");
-
+    public static final ResourceLocation PRESENT = register("loot/present_loot");
+    
     //MOBS
     public static final ResourceLocation ANGLER = register("entities/angler");
     public static final ResourceLocation BLIND_CAVE_FISH = register("entities/blind_cave_fish");
@@ -72,7 +74,7 @@ public class LootTableRegistry {
     public static final ResourceLocation PROPERTY_PYRAD_CHARGING = register(new LootPropertyPyradCharging.Serializer());
     public static final ResourceLocation PROPERTY_HAS_ITEM = register(new LootPropertyHasItem.Serializer());
     public static final ResourceLocation PROPERTY_IS_BOSS_MUMMY = register(new LootPropertyIsBossPeatMummy.Serializer());
-    
+    public static final ResourceLocation PROPERTY_IS_EVENT_ACTIVE = register(new LootPropertyEventActive.Serializer());
 
     private static ResourceLocation register(String id) {
         return LootTableList.register(new ResourceLocation(ModInfo.ID, id));

@@ -105,7 +105,8 @@ import thebetweenlands.common.item.misc.ItemWeedwoodSign;
 import thebetweenlands.common.item.misc.LocationDebugItem;
 import thebetweenlands.common.item.misc.TestItem;
 import thebetweenlands.common.item.shields.ItemOctineShield;
-import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
+import thebetweenlands.common.item.shields.ItemSwatShield;
+import thebetweenlands.common.item.shields.ItemValoniteShield;
 import thebetweenlands.common.item.shields.ItemWeedwoodShield;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLBucketFilled;
@@ -159,7 +160,9 @@ public class ItemRegistry {
     public static final Item KRAKEN_TENTACLE = new ItemBLFood(8, 0.9F, false);
     public static final Item KRAKEN_CALAMARI = new ItemBLFood(14, 1.2F, false);
     public static final Item MIDDLE_FRUIT = new ItemBLFood(6, 0.6F, false);
-    public static final Item MINCE_PIE = new ItemBLFood(4, 0.85F, false);
+    public static final Item MINCE_PIE = new ItemBLFood(8, 1F, false);
+    public static final Item CHRISTMAS_PUDDING = new ItemBLFood(6, 0.95F, false);
+    public static final Item CANDY_CANE = new ItemBLFood(4, 0.85F, false);
     public static final Item WEEPING_BLUE_PETAL = new ItemWeepingBluePetal();
     public static final Item WIGHT_HEART = new ItemWightHeart();
     public static final Item YELLOW_DOTTED_FUNGUS = new ItemBLFood(8, 0.6F, false);
@@ -178,9 +181,9 @@ public class ItemRegistry {
     public static final Item SWAMP_KELP_ITEM = new ItemSwampKelp();
     public static final Item FRIED_SWAMP_KELP = new ItemBLFood(5, 0.6F, false);
     public static final Item FORBIDDEN_FIG = new ItemForbiddenFig();
-    public static final Item CANDY_BLUE = new ItemBLFood(3, 1.0F, false);
-    public static final Item CANDY_RED = new ItemBLFood(3, 1.0F, false);
-    public static final Item CANDY_YELLOW = new ItemBLFood(3, 1.0F, false);
+    public static final Item CANDY_BLUE = new ItemBLFood(4, 1.0F, false);
+    public static final Item CANDY_RED = new ItemBLFood(4, 1.0F, false);
+    public static final Item CANDY_YELLOW = new ItemBLFood(4, 1.0F, false);
     public static final Item CHIROMAW_WING = new ItemChiromawWing();
     public static final Item TANGLED_ROOT = new ItemTangledRoot();
     //armor
@@ -258,9 +261,9 @@ public class ItemRegistry {
     public static final Item VALONITE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item VALONITE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item OCTINE_SHIELD = new ItemOctineShield();
-    public static final Item VALONITE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_VALONITE);
+    public static final Item VALONITE_SHIELD = new ItemValoniteShield();
     public static final Item WEEDWOOD_SHIELD = new ItemWeedwoodShield();
-    public static final Item SYRMORITE_SHIELD = new ItemSyrmoriteShield();
+    public static final Item SYRMORITE_SHIELD = new ItemSwatShield(BLMaterialRegistry.TOOL_SYRMORITE);
     public static final Item BONE_SHIELD = new ItemBLShield(BLMaterialRegistry.TOOL_BONE);
     public static final Item DENTROTHYST_SHIELD_GREEN = new ItemBLShield(BLMaterialRegistry.TOOL_DENTROTHYST);
     public static final Item DENTROTHYST_SHIELD_GREEN_POLISHED = new ItemBLShield(BLMaterialRegistry.TOOL_DENTROTHYST);

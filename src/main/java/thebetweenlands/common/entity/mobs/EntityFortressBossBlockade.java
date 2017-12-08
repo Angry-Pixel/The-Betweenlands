@@ -184,7 +184,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 			List<EntityPlayer> targets = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(this.getTriangleSize()*2, 0, this.getTriangleSize()*2));
 			for(EntityPlayer target : targets) {
 				Vec3d[] vertices = this.getTriangleVertices(1);
-				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, this.posY + 1, target.posZ - this.posZ), new Vec3d(0, -16, 0), vertices[0], vertices[1], vertices[2])) {
+				if(EntityFortressBoss.rayTraceTriangle(new Vec3d(target.posX - this.posX, 1, target.posZ - this.posZ), new Vec3d(0, -2, 0), vertices[0], vertices[1], vertices[2])) {
 					float damage = (float) this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
 					if(target.attackEntityFrom(DamageSource.MAGIC, damage) && this.getOwner() != null && this.getOwner() instanceof EntityLivingBase) {
 						EntityLivingBase owner = (EntityLivingBase) this.getOwner();
@@ -304,4 +304,14 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 
 	@Override
 	protected void collideWithEntity(Entity entityIn) { }
+	
+	@Override
+	public boolean isEntityInvulnerable(DamageSource source) {
+        return source != DamageSource.OUT_OF_WORLD;
+    }
+
+	@Override
+    public boolean getIsInvulnerable() {
+		return true;
+	}
 }

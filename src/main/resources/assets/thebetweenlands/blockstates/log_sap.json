@@ -4,7 +4,7 @@
 		"model": "thebetweenlands:internal/spook_event",
 		"custom": {
 			"model_base": "thebetweenlands:block/log_sap",
-			"model_spook": "thebetweenlands:block/log_sap_spook"
+			"model_active": "thebetweenlands:block/log_sap_spook"
 		}
 	},
 	"variants": {
@@ -23,7 +23,7 @@
 				"model": "thebetweenlands:internal/spook_event",
 				"custom": {
 					"model_base": "thebetweenlands:block/log_sap_bark",
-					"model_spook": "thebetweenlands:block/log_sap_spook"
+					"model_active": "thebetweenlands:block/log_sap_spook"
 				}
 			}
 		}

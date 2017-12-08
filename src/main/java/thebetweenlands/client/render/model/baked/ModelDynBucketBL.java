@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.VertexFormat;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelDynBucket;
@@ -67,13 +68,13 @@ public class ModelDynBucketBL implements IModel {
 
 		Fluid fluid = this.fluid;
 		if(customData.containsKey("default_fluid")) {
-			String fluidName = parser.parse(customData.get("default_fluid")).getAsString();
+			String fluidName = JsonUtils.getString(parser.parse(customData.get("default_fluid")), "default_fluid");
 			fluid = FluidRegistry.getFluid(fluidName);
 		}
 
 		boolean flip = this.flipGas;
 		if (customData.containsKey("flipGas")) {
-			String flipStr = parser.parse(customData.get("flipGas")).getAsString();
+			String flipStr = JsonUtils.getString(parser.parse(customData.get("flipGas")), "flipGas");
 			switch (flipStr) {
 				case "true":
 					flip = true;
@@ -91,19 +92,19 @@ public class ModelDynBucketBL implements IModel {
 		ResourceLocation coverLocation = null;
 
 		if(customData.containsKey("base_texture")) {
-			baseLocation = new ResourceLocation(parser.parse(customData.get("base_texture")).getAsString());
+			baseLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("base_texture")), "base_texture"));
 		} else {
 			baseLocation = this.baseLocation;
 		}
 
 		if(customData.containsKey("liquid_template")) {
-			liquidLocation = new ResourceLocation(parser.parse(customData.get("liquid_template")).getAsString());
+			liquidLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("liquid_template")), "liquid_template"));
 		} else {
 			liquidLocation = this.liquidLocation;
 		}
 
 		if(customData.containsKey("cover_texture")) {
-			coverLocation = new ResourceLocation(parser.parse(customData.get("cover_texture")).getAsString());
+			coverLocation = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("cover_texture")), "cover_texture"));
 		} else {
 			coverLocation = this.coverLocation;
 		}

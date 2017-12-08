@@ -3,17 +3,25 @@
 	"variants": {
 		"half": {
 			"lower": {
-				"model": "thebetweenlands:internal/spook_event",
+				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/tall_cattail_bottom",
-					"model_spook": "thebetweenlands:block/tall_cattail_bottom_spook"
+					"model_base": "thebetweenlands:block/internal/spook_event",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/tall_cattail_bottom",
+						"model_active": "thebetweenlands:block/tall_cattail_bottom_spook"				
+					},
+					"model_active": "thebetweenlands:block/tall_cattail_bottom_frosty"
 				}
 			},
 			"upper": {
-				"model": "thebetweenlands:internal/spook_event",
+				"model": "thebetweenlands:internal/winter_event",
 				"custom": {
-					"model_base": "thebetweenlands:block/tall_cattail_top",
-					"model_spook": "thebetweenlands:block/tall_cattail_top_spook"
+					"model_base": "thebetweenlands:block/internal/spook_event",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/tall_cattail_top",
+						"model_active": "thebetweenlands:block/tall_cattail_top_spook"				
+					},
+					"model_active": "thebetweenlands:block/tall_cattail_top_frosty"
 				}
 			}
 		}

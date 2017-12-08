@@ -5,8 +5,10 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -82,6 +84,16 @@ public class BlockSlabBetweenlands extends BasicBlock {
 		}
 	}
 
+	@Override
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+        if (state.getValue(HALF) == EnumBlockHalfBL.FULL) {
+            return BlockFaceShape.SOLID;
+        } else if (face == EnumFacing.UP && state.getValue(HALF) == EnumBlockHalfBL.TOP) {
+            return BlockFaceShape.SOLID;
+        } else {
+            return face == EnumFacing.DOWN && state.getValue(HALF) == EnumBlockHalfBL.BOTTOM ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
+        }
+    }
 
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

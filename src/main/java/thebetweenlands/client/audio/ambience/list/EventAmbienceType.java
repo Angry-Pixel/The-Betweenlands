@@ -2,10 +2,10 @@ package thebetweenlands.client.audio.ambience.list;
 
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.client.audio.ambience.AmbienceLayer;
 import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
-import thebetweenlands.common.world.event.EnvironmentEvent;
 import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 

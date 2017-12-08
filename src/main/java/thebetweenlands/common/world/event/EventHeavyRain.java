@@ -1,24 +1,26 @@
 package thebetweenlands.common.world.event;
 
+import java.util.Iterator;
+import java.util.Random;
+
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-
-import java.util.Iterator;
-import java.util.Random;
 
 public class EventHeavyRain extends TimedEnvironmentEvent {
 	public EventHeavyRain(EnvironmentEventRegistry registry) {
 		super(registry);
 	}
-
+	
 	@Override
-	public String getEventName() {
-		return "heavyRain";
+	public ResourceLocation getEventName() {
+		return new ResourceLocation(ModInfo.ID, "heavy_rain");
 	}
 
 	@Override
@@ -31,9 +33,20 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	}
 
 	@Override
+	public void setActive(boolean active, boolean markDirty) {
+		if((active && !this.getRegistry().winter.isActive()) || !active) {
+			super.setActive(active, markDirty);
+		}
+	}
+	
+	@Override
 	public void update(World world) {
 		super.update(world);
 
+		if(!world.isRemote && this.getRegistry().winter.isActive()) {
+			this.setActive(false, true);
+		}
+		
 		if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world.rand.nextInt(20) == 0) {
 			if(!world.isRemote && world instanceof WorldServer) {
 				WorldServer worldServer = (WorldServer)world;

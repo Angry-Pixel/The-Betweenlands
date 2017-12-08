@@ -341,15 +341,17 @@ public class ScreenRenderHandler extends Gui {
 
 	@SubscribeEvent
 	public void onBossBarRender(RenderGameOverlayEvent.BossInfo event) {
-		Entity boss = null;
+		boolean foundBoss = false;
 		Minecraft mc = Minecraft.getMinecraft();
 		for(Entity entity : mc.world.loadedEntityList) {
 			if(entity instanceof IBLBoss) {
-				if(boss == null || entity.getDistance(mc.player) < boss.getDistance(mc.player))
-					boss = entity;
+				if(event.getBossInfo().getUniqueId().equals(((IBLBoss) entity).getBossInfoUuid())) {
+					foundBoss = true;
+					break;
+				}
 			}
 		}
-		if(boss != null) {
+		if(foundBoss) {
 			event.setCanceled(true);
 
 			BossInfoClient info = event.getBossInfo();

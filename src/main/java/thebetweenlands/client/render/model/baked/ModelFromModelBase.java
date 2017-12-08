@@ -27,6 +27,7 @@ import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
@@ -39,7 +40,7 @@ import thebetweenlands.util.Vec3UV;
 
 public class ModelFromModelBase implements IModel {
 	public static interface IVertexProcessor {
-		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box);
+		Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder);
 	}
 
 	public final ModelBase model;
@@ -135,7 +136,7 @@ public class ModelFromModelBase implements IModel {
 					for(int i = 0; i < quad.getVertices().length; i++) {
 						Vec3UV vert = quad.getVertices()[i];
 						if(vertexProcessor != null)
-							vert = vertexProcessor.process(vert, quad, box);
+							vert = vertexProcessor.process(vert, quad, box, builder);
 						if(vert != null)
 							builder.addVertex(vert.x + 0.5F, 1.5F - vert.y, vert.z + 0.5F, vert.getU(16.0F, width), vert.getV(16.0F, height));
 					}
@@ -195,7 +196,7 @@ public class ModelFromModelBase implements IModel {
 		ResourceLocation particleTexture = this.particleTexture;
 		
 		if(customData.containsKey("particle_texture")) {
-			particleTexture = new ResourceLocation(parser.parse(customData.get("particle_texture")).getAsString());
+			particleTexture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("particle_texture")), "particle_texture"));
 		}
 		
 		if(particleTexture == null) {
@@ -205,9 +206,19 @@ public class ModelFromModelBase implements IModel {
 		boolean ambientOcclusion = this.isAmbientOcclusion();
 		
 		if(customData.containsKey("ambient_occlusion")) {
-			ambientOcclusion = parser.parse(customData.get("ambient_occlusion")).getAsBoolean();
+			ambientOcclusion = JsonUtils.getBoolean(parser.parse(customData.get("ambient_occlusion")), "ambient_occlusion");
+		}
+		
+		ResourceLocation texture = this.texture;
+		
+		if(customData.containsKey("texture")) {
+			texture = new ResourceLocation(JsonUtils.getString(parser.parse(customData.get("texture")), "texture"));
+		}
+		
+		if(texture == null) {
+			texture = TextureMap.LOCATION_MISSING_TEXTURE;
 		}
 
-		return new ModelFromModelBase(this.model, this.texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
+		return new ModelFromModelBase(this.model, texture, particleTexture, this.width, this.height, this.vertexProcessor).setAmbientOcclusion(ambientOcclusion);
 	}
 }

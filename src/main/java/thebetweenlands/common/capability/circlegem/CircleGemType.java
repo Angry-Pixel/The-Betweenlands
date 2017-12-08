@@ -2,8 +2,10 @@ package thebetweenlands.common.capability.circlegem;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
 
 public enum CircleGemType {
@@ -68,9 +70,11 @@ public enum CircleGemType {
 	 * @param source The source (damage source, e.g. the entity that shot the projectile)
 	 * @param attacker The entity that is actually attacking (can be both the owner himself or a projectile)
 	 * @param defender The defending entity
-	 * @param strength Attack strength
+	 * @param strength Proc strength
+	 * @param damageSource The damage source
+	 * @param damage The damage that was dealt
 	 */
-	public boolean applyProc(boolean isAttacker, Entity owner, Entity source, Entity attacker, Entity defender, float strength) {
+	public boolean applyProc(boolean isAttacker, Entity owner, Entity source, Entity attacker, Entity defender, float strength, DamageSource damageSource, float damage) {
 		switch(this) {
 		case CRIMSON:
 			if(isAttacker) {
@@ -100,6 +104,20 @@ public enum CircleGemType {
 					}
 					return true;
 				}
+			} else {
+				DamageSource returnedDamageSource;
+				if(defender instanceof EntityPlayer) {
+					returnedDamageSource = DamageSource.causePlayerDamage((EntityPlayer)defender);
+				} else if(defender instanceof EntityLivingBase) {
+					returnedDamageSource = DamageSource.causeMobDamage((EntityLivingBase)defender);
+				} else {
+					returnedDamageSource = DamageSource.GENERIC;
+				}
+				attacker.attackEntityFrom(returnedDamageSource, Math.min(damage / 16.0F * strength, damage / 1.5F));
+				if(source != attacker) {
+					source.attackEntityFrom(returnedDamageSource, Math.min(damage / 16.0F * strength, damage / 1.5F));
+				}
+				return true;
 			}
 			break;
 		case GREEN:
@@ -114,10 +132,30 @@ public enum CircleGemType {
 					healed = true;
 				}
 				return healed;
+			} else {
+				if(defender instanceof EntityLivingBase) {
+					((EntityLivingBase)defender).addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 260, Math.min(MathHelper.floor(strength * 0.25F), 2)));
+					return true;
+				}
 			}
 			break;
 		case AQUA:
-			if(!isAttacker) {
+			if(isAttacker) {
+				if(defender instanceof EntityLivingBase) {
+					int amplifier = Math.min(MathHelper.floor(strength * 0.1F), 2);
+					switch(amplifier) {
+					case 0:
+						((EntityLivingBase)defender).addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 80, 0));
+						break;
+					case 1:
+					case 2:
+						((EntityLivingBase)defender).addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 40, amplifier));
+						break;
+					}
+					return true;
+				}
+				break;
+			} else {
 				if(defender instanceof EntityLivingBase) {
 					((EntityLivingBase)defender).addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 130, Math.min(MathHelper.floor(strength * 0.3F), 2)));
 					return true;

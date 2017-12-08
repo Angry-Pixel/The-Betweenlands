@@ -202,7 +202,7 @@ import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.item.ITintedItem;
 import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
-import thebetweenlands.common.item.shields.ItemSyrmoriteShield;
+import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -236,6 +236,8 @@ import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
+import thebetweenlands.common.world.event.EventSpoopy;
+import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
 
 public class ClientProxy extends CommonProxy {
@@ -603,7 +605,9 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ElixirClientHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(GuiDownloadTerrainBetweenlands.class);
         MinecraftForge.EVENT_BUS.register(ItemBLBow.class);
-        MinecraftForge.EVENT_BUS.register(ItemSyrmoriteShield.class);
+        MinecraftForge.EVENT_BUS.register(ItemSwatShield.class);
+        MinecraftForge.EVENT_BUS.register(EventWinter.class);
+        MinecraftForge.EVENT_BUS.register(EventSpoopy.class);
 	}
 
 	@Override

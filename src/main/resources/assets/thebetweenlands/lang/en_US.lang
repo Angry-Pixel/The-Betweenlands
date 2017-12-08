@@ -309,6 +309,9 @@ tile.thebetweenlands.wood_chip_path.name=Weedwood Chip Path
 tile.thebetweenlands.thatch_roof.name=Thatch Roof
 tile.thebetweenlands.thatch.name=Thatch
 tile.thebetweenlands.repeller.name=Repeller
+tile.thebetweenlands.black_ice.name=Black Ice
+tile.thebetweenlands.snow.name=Snow
+tile.thebetweenlands.present.name=Present
 
 # Items
 
@@ -616,6 +619,9 @@ item.thebetweenlands.dentrothyst_shield_orange.name=Orange Dentrothyst Shield
 item.thebetweenlands.dentrothyst_shield_green_polished.name=Green Polished Dentrothyst Shield
 item.thebetweenlands.dentrothyst_shield_orange_polished.name=Orange Polished Dentrothyst Shield
 item.thebetweenlands.lurker_skin_shield.name=Lurker Skin Shield
+item.thebetweenlands.christmas_pudding.name=Christmas Pudding
+item.thebetweenlands.candy_cane.name=Candy Cane
+item.thebetweenlands.manual_hl.name=Herblore Book
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -706,6 +712,16 @@ tooltip.pestle=Place Pestle in Mortar
 tooltip.pestle.remaining=%d%% Remaining: %d more uses.
 tooltip.aspectvial.byariis.fuel=Can be used as fuel for the Repeller
 tooltip.rubber_bucket=Right click to extract the rubber from the bucket
+tooltip.gem.aqua=\nWhen on tool:\n §9- Chance to weaken the enemy when attacking\nWhen on armor:\n §9- Chance to gain defense when attacked
+tooltip.gem.crimson=\nWhen on tool:\n §9- Chance to gain strength when attacking\nWhen on armor:\n §9- Chance to hurt the enemy when attacked
+tooltip.gem.green=\nWhen on tool:\n §9- Chance to heal when attacking\nWhen on armor:\n §9- Chance to absorb damage when attacked
+tooltip.amulet.none=\nNo effect.\nCan be combined with a Gem
+tooltip.amulet.aqua=\nWhen equipped:\n §9- Chance to weaken the enemy when attacking\n §9- Chance to gain defense when attacked
+tooltip.amulet.crimson=\nWhen equipped:\n §9- Chance to gain strength when attacking\n §9- Chance to hurt the enemy when attacked
+tooltip.amulet.green=\nWhen equipped:\n §9- Chance to heal when attacking\n §9- Chance to absorb damage when attacked
+tooltip.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by right-clicking
+tooltip.weedwood_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
+tooltip.syrmorite_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -756,6 +772,28 @@ chat.foodSickness.sick.12=No thanks, I'll have something else for a change
 chat.foodSickness.sick.13=It smells even worse than it looks, I'll find something else to eat
 chat.foodSickness.sick.15=I can't bring myself to eat any more of that, there must surely be some other food around here
 
+chat.aspect.discovery.book.none=You don't have a book to write down your discoveries
+chat.aspect.discovery.gecko.none=You can't conduct this experiment without a gecko
+chat.aspect.discovery.gecko.recovering=The gecko is still recovering from the last experiment
+chat.aspect.discovery.none=This item doesn't seem to have any aspects
+chat.aspect.discovery.more=This item still seems to have some more undiscovered aspects
+chat.aspect.discovery.end=You've already discovered all aspects on this item
+chat.aspect.discovery.last=This seems to be the last undiscovered aspect on this item
+chat.aspect.discovery.Ordaniis=The gecko's scales seem to be glowing slightly
+chat.aspect.discovery.Celawynn=You can hear its belly rumbling and it seems to burp a lot
+chat.aspect.discovery.Yeowynn=You've never seen a healthier gecko, it's bursting with energy
+chat.aspect.discovery.Azuwynn=You can see its muscles twitching uncontrollably
+chat.aspect.discovery.Freiwynn=Its eyes are pulsating
+chat.aspect.discovery.Dayuniis=The gecko is walking around like a drunkard and looks around in a schizophrenic manner
+chat.aspect.discovery.Fergalaz=The gecko's scales seem to become rock hard, it can barely move
+chat.aspect.discovery.Yunugaz=The gecko seems light, and its breath sounds like a hollow wind
+chat.aspect.discovery.Firnalaz=Its scales have a red glow and it breathes a hot breath
+chat.aspect.discovery.Byrginaz=It's drooling, sweating and peeing around its cage
+chat.aspect.discovery.Armaniis=It seems very calm and looks at you with loving eyes
+chat.aspect.discovery.Geoliirgaz=The gecko has an empty look in its eyes and doesn't seem to respond to anything
+chat.aspect.discovery.Yihinren=Its scales became puffy and its head looks... different
+chat.aspect.discovery.Byariis=The gecko is chewing furiously on its tail and looks around as if possessed
+
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
 
@@ -775,6 +813,7 @@ chat.amulet.slot.added=Added a new amulet slot
 chat.amulet.slot.full=Can't add any more amulet slots
 
 chat.event.spook=You feel a chill in the air... the haunting season has begun!
+chat.event.winter=You hear the sound of sleigh bells in the distance...
 
 chat.repeller.shimmerstone_missing=The repeller needs a Shimmerstone to run
 
@@ -950,3 +989,110 @@ key.radialmenu=Open Equipment Menu
 key.return_scout=Return Scout (NYI)
 key.send_scout=Send Scout (NYI)
 key.useRing=Use Ring
+
+#Manual
+manual.aspect.found.in=This aspect is found in:
+manual.aspect.used.in=This aspect is used in:
+manual.has.aspects=This item has the following aspects:
+manual.aspect_info.title=Aspect Info
+manual.ingredient_info.title=Ingredient Info
+
+manual.azuwynn.description=The aspect that has effect on the muscles.<nl> Tier I aspect.
+manual.armaniis.description=The aspect that influences the desire of a being or a thought.<nl> Tier II aspect.
+manual.byariis.description=The aspect that changes the nature of anything to its opposite.<nl> Tier I special aspect.
+manual.byrginaz.description=The aspect that correlates to the element of water.<nl> Tier II aspect.
+manual.celawynn.description=The aspect that influences the digestive organs and immune system.<nl> Tier I aspect.
+manual.dayuniis.description=The aspect that has effect on the mind and the border between reality and imagination.<nl> Tier II aspect.
+manual.fergalaz.description=The aspect that correlates to the element of earth.<nl> Tier II aspect.
+manual.firnalaz.description=The aspect that correlates to the element of fire.<nl> Tier II aspect.
+manual.freiwynn.description=The aspect that has effect on the perception of light.<nl> Tier II aspect.
+manual.geoliirgaz.description=The aspect that correlates to the formless element of void or ether.<nl> Tier III aspect.
+manual.ordaniis.description=The aspect that activates other aspects or enhances power in any form.<nl> Tier I aspect.
+manual.yeowynn.description=The aspect that influences physical health and recovery.<nl> Tier I aspect.
+manual.yunugaz.description=The aspect that correlates to the element of wind.<nl> Tier II aspect.
+manual.yihinren.description=The aspect that affects both physical and psychological form.<nl> Tier III aspect.
+
+#ground items
+manual.item.thebetweenlands.ground_algae.description=Large patches of algae can be found quite commonly in any biome on the surface of the water.
+manual.item.thebetweenlands.ground_arrow_arum.description=Arrow Arum is a leafy plane that grows in the wet Marshes of The Betweenlands.
+manual.item.thebetweenlands.ground_blackhat_mushroom.description=Black Hat Mushrooms can be found scattered about everywhere in Swamplands biomes.
+manual.item.thebetweenlands.ground_bog_bean.description=Found in the Patchy Islands biome, Bog Bean grows on mud in shallow water.
+manual.item.thebetweenlands.ground_boneset.description=Boneset is a flower that grows in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_bottle_brush_grass.description=Bottle Brush Grass is a small plant that grows in Marsh biomes.
+manual.item.thebetweenlands.ground_broom_sedge.description=Broom Sedges are tall plants that can be found in Marsh biomes.
+manual.item.thebetweenlands.ground_button_bush.description=Button Bushes are small plants that grow in Marsh Biomes.
+manual.item.thebetweenlands.ground_cattail.description=Cattails are very common plants that grow in all biomes apart from the Deep Waters and Sludge Plains.
+manual.item.thebetweenlands.ground_cave_grass.description=Cave Grass grows deep underground in the Pitstone layer, away from the light.
+manual.item.thebetweenlands.ground_cave_moss.description=Cave Moss can be found growing down underground in caves.
+manual.item.thebetweenlands.ground_copper_iris.description=Copper Iris is one of the two iris plants found growing in the Coarse Islands biome.
+manual.item.thebetweenlands.ground_dried_swamp_reed.description=Swamp Reeds grow in the water in Patchy Islands and Coarse Islands biomes, and on land in Swamplands biomes
+manual.item.thebetweenlands.ground_flathead_mushroom.description=Flathead Mushrooms grow very commonly in the Swamplands biome.
+manual.item.thebetweenlands.ground_hanger.description=Hangers are vine-like plants that grow off the canopies of Giant Weedwood Trees.
+manual.item.thebetweenlands.ground_lichen.description=Lichen is a plant can be found growing on Cragrock Spires in the Deep Waters biome, and also sometimes underground or on stone based structures.
+manual.item.thebetweenlands.ground_marsh_hibiscus.description=The Marsh Hibiscus is a pretty looking flower that grows in the Marsh biome.
+manual.item.thebetweenlands.ground_marsh_mallow.description=Marshmallows are small pink and white flowers that can be found in Marsh biomes. Quite contrary to their name, they don't taste particularly nice.
+manual.item.thebetweenlands.ground_milkweed.description=Milkweed is a bright pink flower than growns in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_moss.description=Moss is a plant that grows and spreads around almost anywhere.
+manual.item.thebetweenlands.ground_nettle.description=Nettles can be found in Coarse Islands, Marshes and Swamplands biomes. They will sting you if you touch them, so be careful.
+manual.item.thebetweenlands.ground_phragmites.description=Phragmites are tall plants that grow everywhere in Marsh biomes.
+manual.item.thebetweenlands.ground_pickerel_weed.description=Pickerel Weed is a flower that can be found in Marsh biomes.
+manual.item.thebetweenlands.ground_shoots.description=Shoots are small young plants found growing in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_sludgecreep.description=Sludgecreep is a slime-feeding plant found in the Sludge Plains.
+manual.item.thebetweenlands.ground_soft_rush.description=Soft Rush is a small plant that grows in the Marsh Biome.
+manual.item.thebetweenlands.ground_swamp_kelp.description=Swamp Kelp is an aquatic plant that grows commonly in Deep Waters biomes and Coarse Island biomes.
+manual.item.thebetweenlands.ground_swamp_grass_tall.description=Swamp Tallgrass is a common plant found in Patchy Islands, Coarse Islands and Marshes.
+manual.item.thebetweenlands.ground_tangled_roots.description=Tangled Roots grow in the water in Coarse Island biomes and on land in Sludge Plains biomes.
+manual.item.thebetweenlands.ground_weedwood_bark.description=Weedwood Bark grows around the soft wood inside Weedwood trees.
+manual.item.thebetweenlands.ground_water_weeds.description=Waterweeds can be found growing in mud at the bottom of the water in Deep Waters biomes.
+manual.item.thebetweenlands.ground_volarpad.description=Volarpads are very large plants that grown commonly in Coarse Islands biomes and sometimes in Swamplands biomes.
+manual.item.thebetweenlands.ground_thorns.description=Thorns are dangerous hanging plants that grow deep down underground in caves.
+manual.item.thebetweenlands.ground_poison_ivy.description=Poison Ivy is a poisonous hanging plant that grows commonly on small Weedwood trees.
+manual.item.thebetweenlands.ground_generic_leaf.description=Leaves are dropped by the small leafy Swamp Plants that grow in Swamplands biomes.
+manual.item.thebetweenlands.ground_blood_snail_shell.description=Blood Snail Shells are dropped by Blood Snails, which spawn in Swamplands biomes and Patchy Islands biomes.
+manual.item.thebetweenlands.ground_blue_iris.description=Blue Iris is one of the two iris plants found growing in the Coarse Islands biome.
+manual.item.thebetweenlands.ground_blue_eyed_grass.description=Blue Eyed Grass is a plant with tiny blue flowers that can be found in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_cardinal_flower.description=Cardinal Flowers are tall bright red plants that grow in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_mire_coral.description=Mire Coral is an orange luminous aquatic plant that grows in mud in Deep Waters biomes and Coarse Islands biomes.
+manual.item.thebetweenlands.ground_marsh_marigold.description=Marsh Marigolds are yellow flowers that grow in water in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_golden_club.description=Golden Clubs are strange orange flowers that grow in water in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_deep_water_coral.description=Deep Water Coral is a blue luminous aquatic plant that grows in mud in Deep Waters biomes.
+manual.item.thebetweenlands.ground_mire_snail_shell.description=Mire Snail Shells are dropped by Mire Snails, which are found in the Swamplands and Patchy Islands biomes.
+manual.item.thebetweenlands.ground_bulb_capped_mushroom.description=<scale:0.9>Bulb-Capped Mushrooms are luminous bright blue mushrooms that can be found growing around Giant Bulb-Capped Mushrooms in Patchy Islands biomes. They have also been known to cause minor trips.</scale>
+manual.item.thebetweenlands.ground_angler_tooth.description=Angler Teeth are dropped by Anglers, which can be found lurking in the murky waters of The Betweenlands.
+manual.item.thebetweenlands.ground_sundew.description=Sundews are large plants that grow in Marsh biomes.
+manual.item.thebetweenlands.ground_pitcher_plant.description=Pitchers are large plants that grow in Swamplands biomes.
+manual.item.thebetweenlands.ground_venus_fly_trap.description=Venus Fly Traps are large plants that grow in Swamplands biomes.
+manual.item.thebetweenlands.ground_green_middle_gem.description=Green Middle Gems are one of three Middle Gem types that can be found stuck in the mud.
+manual.item.thebetweenlands.ground_crimson_middle_gem.description=Crimson Middle Gems are one of three Middle Gem types that can be found stuck in the mud.
+manual.item.thebetweenlands.ground_aqua_middle_gem.description=Aqua Middle Gems are one of three Middle Gem types that can be found stuck in the mud.
+manual.item.thebetweenlands.ground_water_flower.description=Bladderworts are tall underwater plants that grow in the Deep Waters biome.
+manual.item.thebetweenlands.ground_water_flower_stalk.description=The stalk of the Bladderwort plant that grows in the Deep Waters biome.
+
+manual.item.thebetweenlands.bl.elixir.foggedMind.description=<scale:0.75>This draught causes one's mind to become clouded with thought and worries, creating the illusion of a thick mist. <nl>To achieve such an effect, one will need to work with the aspects Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, Yunugaz and Byariis. To get a more clouded mind one will need to improve the strength of the effect by adding more Geoliirgaz. To achieve a longer duration it requires more Dayuniis. <nl>When one leaves Byariis out of the recipe, one will end up with the Draught of the Unclouded, which seems to clear any fog on one's path.</scale>
+manual.item.thebetweenlands.bl.elixir.heavyweight.description=<scale:0.75>This draught affects the cells of one's body, resulting in increased bodyweight. <nl>To make this draught one would need to use the aspects Azuwynn, Byrginaz, Yunugaz, Yihinren, Geoliirgaz and Byariis. <nl>To improve the strength of the effect, more Yunugaz needs to be added. To increase the duration Geoliirgaz is required.</scale>
+manual.item.thebetweenlands.bl.elixir.basilisk.description=<scale:0.75>As counterpart of the agile Spiderbreed Draught, this draught causes to petrify one for a certain amount of time. <nl>To get this to work one will need to brew with the aspects Azuwynn, Fergalaz, Dayuniis, Yunugaz, Byariis and the very rare Yihinren, which will adjust ones form. To improve the strentgh of the effect one will need to work with more Azuwynn for the muscles. To keep the form for a longer time, one needs to add more of the rare Yihinren. <nl>Leaving out the aspect Byariis will result in the aforementioned Spiderbreed Draught, which allows one to climb like a spider.</scale>
+manual.item.thebetweenlands.bl.elixir.weakbow.description=<scale:0.75>This weird draught strongly decreases your efficiency with the bow. You won't be able to shoot any farther than three meters. <nl>To achieve this mysterious effect one needs to work with the aspects Freiwynn, Dayuniis, Armaniis, and Ordaniis. To enhance the accuracy of this potion, one needs to add more Freiwynn, for it improves the vision. To increase the duration of the effect, it requires Dayuniis. <nl>hen Byariis is added to the recipe, it will result in the Draught of Sagittarius, which allows for great accuracy with the bow.</scale>
+manual.item.thebetweenlands.bl.elixir.blindman.description=<scale:0.75>This brew immediately blinds anyone who gets it in their system. <nl>To achieve this, one will need to work with the aspects Freiwynn, Dayuniis, Ordaniis, Geoliirgaz and Byariis.  <nl>The more Freiwynn one uses, the stronger the effect of the potion. Dayuniis increases the duration of the effect. <nl>When Byariis is left out, it will end up as the Brew of the Cat's Eye, which actually allows you to see more clearly in dark areas.</scale>
+manual.item.thebetweenlands.bl.elixir.slugarm.description=<scale:0.75>The Slugarm Brew makes one's arms feel numb, decreasing swing speed, mining speed, and even pulling the string of a bow. <nl>To achieve this effect, one will need to work with the aspects Azuwynn, Dayuniis, Yunugaz, Ordaniis and, to corrupt the muscles, Byariis. Since the effect works on the muscles, Azuwynn increases its strength. In the meantime, Ordaniis will increase the duration of the effect. <nl>Leaving out the aspect Byariis will result in the Swiftarm Brew, which allows the muscles in your arms to work at full capacity.</scale>
+manual.item.thebetweenlands.bl.elixir.stenching.description=<scale:0.8>This brew causes a stench which is, weirdly, desired by many beasts, allowing them to detect you easily. <nl>To make this brew one will need to play with the desire and mind of the beasts. Therefore the aspects Dayuniis, Armaniis are required. Armaniis will increase the masking strength, while Dayuniis increases the duration. <nl>When Byariis is added to this brew, it will result into the Masking Brew, which masks your scent, making you harder to detect.</scale>
+manual.item.thebetweenlands.bl.elixir.drunkard.description=<scale:0.75>This brew intoxicates anyone who consumes it, causing them to experience some heavy nausea. <nl>To achieve this effect, one would need to work with the aspects Freiwynn, Dayuniis, Ordaniis, Firnalaz and, to corrupt the vision and mind, Byariis. <nl> Since the influence on the mind and vision are most important, Freiwynn increases the strength of the brew and Dayuniis increases its duration. <nl>By leaving out Byariis of the recipe, one would en up with the Hunter's Sense Brew, which will allow one to sense scent trails of any creature.</scale>
+manual.item.thebetweenlands.bl.elixir.starvation.description=<scale:0.75>This elixir causes one's stomach fluids to digest any food faster and less effective. This results in a constant hunger. <nl>To make this elixir possible, one needs to brew with the aspects of Yeowynn, Ordaniis, Celawynn and Byariis, to corrupt the stomach. <nl>To increase the power of this famishing elixir, one will need to add more Celawynn to it. To extend the duration of its effect, it requires more Ordaniis. <nl>Without using Byariis in the recipe, you would end up with the Elixir of Feating, which will satisfy your hunger.</scale>
+manual.item.thebetweenlands.bl.elixir.poisonsting.description=<scale:0.8>This elixir strongly resembles a potion we find in the Overworld. It causes one to become poisoned. <nl>To make this elixir, one needs the aspects of Azuwynn, Yeowynn, Celawynn and Byariis. To improve the strength of this potion one will need to add more Yeowynn. To improve the duration one would need more Celawynn. <nl>When Byariis is left out, one would end up with the Toughskin Elixir, which protects one against the harmful plants of the realm.</scale>
+manual.item.thebetweenlands.bl.elixir.decay.description=<scale:0.85>This elixir makes one's body and mind more vulnerable to the decay of the realm. <nl>To achieve this effect, one needs to brew with the aspects Yeowynn, Ordaniis, Dayuniis and Byariis. As sanity is most affected by the realm's decay, Dayuniis increases the strength of this elixir. Ordaniis increases the duration. <nl>By leaving out the aspect Byariis, you will end up with the Elixir of Ripening, which strengthens your body and mind against the decay instead.</scale>
+manual.item.thebetweenlands.bl.elixir.draining.description=<scale:0.75>The Elixir of Draining looks like one of the potions we find in the Overworld. It drains one's health over time. <nl>The Elixir of Draining is made by simply using the two aspects Yeowynn and Ordaniis, as the combination of these two enhances the health of a being. Then One needs to add Byariis to corrupt this healing effect, causing it to drain. The potion can be made stronger by using more Yeowynn, and the duration can be increased by using Ordaniis. <nl>When Byariis is not added, it will simply result in the Elixir of Healing, which heals you over time.</scale>
+manual.item.thebetweenlands.bl.elixir.lumbering.description=<scale:0.75>This elixir looks a lot like one we find in the Overworld. It makes one's movement very slow. <nl>The Lumbering Elixir is brewed by using the aspects Azuwynn, Ordaniis, Yunugaz and Byariis. Yunugaz makes it so it does not simply enhance your muscles, but specifically their swiftness. This results in Yunugaz increasing the strength of the potion. While Ordaniis increases duration. <nl>Leaving out Byariis of the recipe will result in the Nimblefeet Elixir, which increases one's movement speed.</scale>
+manual.item.thebetweenlands.bl.elixir.weakness.description=<scale:0.75>Very much like one of the potions we find in the Overworld, this elixir weakens one's muscles, reducing any damage dealt by the affected. The Elixir of Weakness is made by using the aspects Azuwynn and Ordaniis, as it enhances the muscle, and Byariis, for the corruption of the effect. Besides, by adding more Azuwynn one can increase the strength of the elixir, and by using more Ordaniis one can increase the duration of its effect. <nl>By leaving out Byariis, one would end up with the Elixir of Strength, which increases the damage you deal to any entity.</scale>
+manual.item.thebetweenlands.bl.elixir.unclouded.description=<scale:0.75>This strange draught seems to clear up a foggy mind. You will be able to see through a dense fog, as if it evaporates right in front of you. To achieve such an effect, one will need to work with the aspects Dayuniis, Freiwynn, Geoliirgaz, Ordaniis and Yunugaz. To get a clearer view one will need to improve the strength of the effect by adding more Geoliirgaz. To achieve a longer duration it requires more Dayuniis. <nl>By adding Byariis to its recipe, this draught ends up being the Draught of the Fogged Mind, which causes one to hallucinate an extremely dense fog.</scale>
+manual.item.thebetweenlands.bl.elixir.lightweight.description=<scale:0.75>This draught is the improved, and tastier version of your improved rubber boots. Being as light as a feather, you will be able to walk on water and jump higher than ever before. To make this draught one would need to use the aspects Azuwynn, Byrginaz, Yunugaz, Yihinren for a lighter form and Geoliirgaz to reach the state of an empty and pure mind. To improve the strength of the effect, more Yunugaz needs to be added. To increase the duration, one will need to keep an empty and pure mind for longer, therefore Geoliirgaz is required. <nl>When corrupting this draught with the aspect Byariis, this draught becomes the Heavyweight Draught, which makes the affected so heavy, he or she will be unable to swim and sink into mud, even when wearing rubber boots.</scale>
+manual.item.thebetweenlands.bl.elixir.spiderbreed.description=<scale:0.75>This draught changes the workings of the skin and muscle. It allows you to climb on any obstacle like it is a simple ladder. To get this to work one will need to brew with the aspects Azuwynn, Fergalaz, Dayuniis, Yunugaz, and the very rare Yihinren, which will adjust ones form. To improve the strentgh of the effect one will need to work with more Azuwynn for the muscles. To keep the form for a longer time, one needs to add more of the rare Yihinren. <nl>When Byariis is added to the draught, it will become corrupted and turn into the Basilisk Draught, which will paralize anyone or anything who comes in contact with the substance.</scale>
+manual.item.thebetweenlands.bl.elixir.sagittarius.description=<scale:0.75>This draught blesses you with the power of Sagittarius. Therefore you will be able to see exactly what path your arrow will take and where it will land. To achieve this wonderful effect one needs to work with the aspects Freiwynn, Dayuniis, Armaniis, and strangely enough Byariis and Ordaniis. Apparently ones mind needs to be corrupted for this to work. To enhance the accuracy of this potion, one needs to add more Freiwynn, for it improves the vision. To increase the duration of the effect, it requires Dayuniis. <nl>When leaving out Byariis completely one ends up with the Weakbow Draught, which heavily reduces one's shooting range.</scale>
+manual.item.thebetweenlands.bl.elixir.catsEyes.description=<scale:0.8>Similar to a potion of the overworld, this brew will make your eyes extremely sensitive to light. It allows you to see in the dark. To achieve this, one will need to work with the aspects Freiwynn, Dayuniis, Ordaniis and Geoliirgaz.  <nl>The more Freiwynn one uses, the stronger the effect of the potion. Dayuniis increases the duration of the effect. <nl>When corrupted by adding the aspect Byariis, this brew turns into the Blindman's Brew, which blinds anyone or anything it is used on.</scale>
+manual.item.thebetweenlands.bl.elixir.swiftarm.description=<scale:0.75>This brew enables your arm muscles to work to the fullest. It will increase the speed of your arm, be it during mining, pulling your bow, or smacking your foes. To achieve this effect, one will need to work with the aspects Azuwynn, Dayuniis, Yunugaz and, to enhance the bunch, Ordaniis. Since the effect works on the muscles, Azuwynn increases its strength. In the meantime, Ordaniis will increase the duration of the effect. <nl>When this brew is corrupted by using the aspect Byariis, it will turn into the Slugarm Brew, which heavily decrease ones arm speed.</scale>
+manual.item.thebetweenlands.bl.elixir.masking.description=<scale:0.75>This brew will mask your natural odour like a perfume. Therefore you will be harder to detect by predators of any kind. To make this brew one will need to play with the desire and mind of the beasts and corrupt them. Therefore the aspects Dayuniis, Armaniis and Byariis are required. Armaniis will increase the masking strength, while Dayuniis increases the duration. <nl>One can corrupt this brew by using the aspect Byariis, this will result in the Stenching Brew, which leaves a strong smell on the person which it is used on. This will make that person easier to detect for predators.</scale>
+manual.item.thebetweenlands.bl.elixir.huntersSense.description=<scale:0.75>This wonderful brew strongly enhances your senses. You will be able to see and smell the trails of any creature. To achieve this effect, one would need to work with the aspects of vision and the mind, Freiwynn and Dayuniis, and the aspects Ordaniis and Firnalaz. Since the influence on the mind and vision are most important, Freiwynn increases the strength of the brew and Dayuniis increases its duration. <nl>When corrupted by using the aspect Byariis, this brew turns into the Drunkard's Brew, which causes some heavy nausea to anyone who gets it into their system.</scale>
+manual.item.thebetweenlands.bl.elixir.feasting.description=<scale:0.75>This elixir gives the stomach something tough to feed on. It will satisfy your hunger quickly. <nl>To make this elixir possible, one needs to brew with the aspects of Yeowynn, Ordaniis and Celawynn, as they will enhance the stomach strongly. <nl>To increase the power of this nourishing elixir, one will need to add more Celawynn to it. To extend the duration of its effect, it requires more Ordaniis. <nl>Corrupting this elixir by using the aspect Byariis will result in the Elixir of Starvation, which causes the stomach fluids to digest food faster and less efficient, causing some severe hunger.</scale>
+manual.item.thebetweenlands.bl.elixir.toughskin.description=<scale:0.8>In a realm full of harmfull plants, this elixir makes your skin tough and protects it against the flora. To make this elixir, one needs the aspects of Azuwynn, Yeowynn, and, very important, the aspect of the stomach, Celawynn. To improve the strength of this potion one will need to add more Yeowynn. To improve the duration one would need more Celawynn. <nl>When corrupted by using the aspect Byariis, this potion will turn into the Poisonsting Elixir, which instantly poisons a creature.</scale>
+manual.item.thebetweenlands.bl.elixir.ripening.description=<scale:0.75>This elixir restores your physical and psychological health from the decay of the Betweenlands. To achieve this effect, one needs to brew with the aspects Yeowynn, Ordaniis and Dayuniis. As sanity is most affected by the realm's decay, Dayuniis increases the strength of this elixir. Ordaniis increases the duration. <nl>When this elixir is corrupted by using the aspect Byariis one will end up with an Elixir of Decay, which speeds up the process of decay in someone.</scale>
+manual.item.thebetweenlands.bl.elixir.healing.description=<scale:0.75>This elixir is based on a potion we find in the Overworld. It heals one's wounds with incredible speed, unmatched by normal medicine or bandages. The Elixir of Healing is made by simply using the two aspects Yeowynn and Ordaniis. The combination of these two enhances the health of a being. The potion can be made stronger by using more Yeowynn, and the duration can be increased by using Ordaniis. <nl>By using the aspect Byariis, one corrupts the elixir. It will then turn into the Elixir of Draining, which drains ones health.</scale>
+manual.item.thebetweenlands.bl.elixir.nimblefeet.description=<scale:0.75>This potion resembles a potion we find in the Overworld. It makes nimble on your feet and thus increases your speed. The Nimblefeet Elixir is brewed by using the aspects Azuwynn, Ordaniis and, for the nimble and swift effect, Yunugaz. Yunugaz makes it so it does not simply enhance your muscles, but specifically their swiftness. This results in Yunugaz increasing the strength of the potion. While Ordaniis increases duration. <nl>When one corrupts the effect of this elixir with the aspect Byariis, it will turn into the Lumbering Elixir, which will slow down your target.</scale>
+manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.75>This potion is based on one of the brews we find in the Overworld. It lets you deal more damage to any entity you hit. <nl>The Elixir of Strength is made by using the aspects Azuwynn and Ordaniis, as it enhances the muscle. Besides, by adding more Azuwynn one can increase the strength of the elixir, and by using more Ordaniis one can increase the duration of its effect. <nl>When one corrupts this elixir by using the aspect Byariis, it will turn into the Elixir of Weakness, which reduces the damage dealth to any entity the affected creature hits.</scale>

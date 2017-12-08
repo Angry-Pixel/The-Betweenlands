@@ -1,8 +1,10 @@
-package thebetweenlands.common.world.event;
+package thebetweenlands.api.environment;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 
 public abstract class EnvironmentEvent {
 	private final EnvironmentEventRegistry registry;
@@ -147,14 +149,14 @@ public abstract class EnvironmentEvent {
 	 * Returns the name of this event.
 	 * @return
 	 */
-	public abstract String getEventName();
+	public abstract ResourceLocation getEventName();
 
 	/**
 	 * Returns the localization name of this event.
 	 * @return
 	 */
 	public String getLocalizationEventName() {
-		return "event." + getEventName() + ".name";
+		return "event." + getEventName().getResourceDomain() + "." + getEventName().getResourcePath() + ".name";
 	}
 
 	/**
