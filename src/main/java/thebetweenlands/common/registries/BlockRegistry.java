@@ -47,6 +47,7 @@ import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.container.BlockItemShelf;
 import thebetweenlands.common.block.container.BlockLootPot;
 import thebetweenlands.common.block.container.BlockMortar;
+import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.container.BlockPurifier;
 import thebetweenlands.common.block.container.BlockRepeller;
 import thebetweenlands.common.block.container.BlockTarLootPot;
@@ -445,6 +446,8 @@ public class BlockRegistry {
     public static final Block DRIPPING_MUD = new BlockDrippingMud();
     public static final Block MUD_TILES = new BlockMudTiles();
     public static final Block PUFFSHROOM = new BlockPuffshroom();
+    
+    public static final Block PRESENT = new BlockPresent();
     
     //Plants
     public static final BlockDoublePlantBL PITCHER_PLANT = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.PITCHER_PLANT_TRAP.create(1));
