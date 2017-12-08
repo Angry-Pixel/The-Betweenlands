@@ -109,6 +109,8 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_THORNS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_POISON_IVY.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.45F, 1.0F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_GENERIC_LEAF.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.15F, 0.2F, 4);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_BLADDERWORT_FLOWER.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 	AspectTier.COMMON, AspectGroup.HERB, 0.25F, 0.5F, 2);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_BLADDERWORT_STALK.create(1), DefaultItemStackMatchers.ITEM_DAMAGE,		AspectTier.COMMON, AspectGroup.HERB, 0.15F, 0.5F, 4);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_BLOOD_SNAIL_SHELL.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.UNCOMMON, AspectGroup.HERB, 1.6F, 1.0F, 2);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_BLUE_IRIS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.UNCOMMON, AspectGroup.HERB, 1.6F, 1.0F);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_BLUE_EYED_GRASS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.UNCOMMON, AspectGroup.HERB, 1.6F, 0.65F);
