@@ -12,12 +12,16 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -25,7 +29,9 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySporeling extends EntityCreature implements IEntityBL {
-	public boolean isFalling;
+	private static final DataParameter<Boolean> IS_FALLING = EntityDataManager.<Boolean>createKey(EntitySporeling.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> FLOATING_ROTATION = EntityDataManager.<Integer>createKey(EntitySporeling.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> PREV_FLOATING_ROTATION = EntityDataManager.<Integer>createKey(EntitySporeling.class, DataSerializers.VARINT);
 
 	public EntitySporeling(World world) {
 		super(world);
@@ -33,6 +39,14 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 		stepHeight = 1.0F;
 
 		this.setPathPriority(PathNodeType.WATER, -1.0F);
+	}
+
+	@Override
+	protected void entityInit() {
+		super.entityInit();
+		dataManager.register(IS_FALLING, false);
+		dataManager.register(FLOATING_ROTATION, 0);
+		dataManager.register(PREV_FLOATING_ROTATION, 0);
 	}
 
 	@Override
@@ -55,11 +69,6 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	}
 
 	@Override
-	public boolean isAIDisabled() {
-		return false;
-	}
-
-	@Override
 	public void onLivingUpdate() {
 		if(this.world.isRemote) {
 			BLParticles.REDSTONE_DUST.spawn(this.world, posX + (rand.nextDouble() - 0.5D) * width, posY + rand.nextDouble() * height - 0.25D, posZ + (rand.nextDouble() - 0.5D) * width, 
@@ -70,23 +79,56 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 
 	@Override
 	public void onUpdate() {
-		if (!this.isInWater()) {
-			if (!onGround && motionY < 0D && world.getBlockState(getPosition().down()).getBlock() == Blocks.AIR) {
-				motionY *= 0.7D;
-				renderYawOffset += 10;
-				setIsFalling(true);
-			} else if (getIsFalling())
-				setIsFalling(false);
+		if (!getEntityWorld().isRemote) {
+			if (!this.isInWater()) {
+				if (!onGround && motionY < 0D && world.isAirBlock(getPosition().down())) {
+					if (!getIsFalling())
+						setIsFalling(true);
+					motionY *= 0.7D;
+					if (getFloatingRotation() < 360)
+						setFloatingRotation(getFloatingRotation() + 10);
+					if (getFloatingRotation() >= 360)
+						setFloatingRotation(0);
+					setPrevFloatingRotation(getFloatingRotation());
+				} else {
+					if (onGround && getIsFalling()) {
+						setFloatingRotation(0);
+						setPrevFloatingRotation(getFloatingRotation());
+						setIsFalling(false);
+					}
+				}
+			}
 		}
 		super.onUpdate();
 	}
 
-	public boolean getIsFalling() {
-		return isFalling;
-	}
+    @SideOnly(Side.CLIENT)
+    public float smoothedAngle(float partialTicks) {
+        return getPrevFloatingRotation() + (getFloatingRotation() - getPrevFloatingRotation()) * partialTicks;
+    }
 
 	private void setIsFalling(boolean state) {
-		isFalling = state;
+		dataManager.set(IS_FALLING, state);
+	}
+
+	public boolean getIsFalling() {
+		return dataManager.get(IS_FALLING);
+	}
+
+	private void setFloatingRotation(int rotation) {
+		dataManager.set(FLOATING_ROTATION, rotation);
+	}
+
+	public int getFloatingRotation() {
+		return dataManager.get(FLOATING_ROTATION);
+	}
+
+	private void setPrevFloatingRotation(int rotation) {
+		dataManager.set(PREV_FLOATING_ROTATION, rotation);
+	}
+
+	public int getPrevFloatingRotation() {
+		return dataManager.get(PREV_FLOATING_ROTATION);
 	}
 
 	@Override
