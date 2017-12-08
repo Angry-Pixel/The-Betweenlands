@@ -83,6 +83,12 @@ public class ModelSporeling extends ModelBase {
         super.render(entity, limbSwing, prevLimbSwing, entityTickTime, rotationYaw, rotationPitch, unitPixel);
         setRotationAngles(limbSwing, prevLimbSwing, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
         EntitySporeling sporeling = (EntitySporeling) entity;
+        
+        GlStateManager.pushMatrix();
+        if(sporeling.isRiding()) {
+        	GlStateManager.translate(0, 0.15F, 0);
+        }
+        
         torso.render(unitPixel);
         legleft1.render(unitPixel);
         legright1.render(unitPixel);
@@ -92,7 +98,6 @@ public class ModelSporeling extends ModelBase {
         armleft.render(unitPixel);
         armright.render(unitPixel);
         if (sporeling.getIsFalling()) {
-            GlStateManager.pushMatrix();
             GlStateManager.translate(0F, 0.125F, -1.125F);
             GlStateManager.scale(2F, 1F, 2F);
             GlStateManager.rotate(29.822046437F, 1, 0, 0);
@@ -100,13 +105,13 @@ public class ModelSporeling extends ModelBase {
             head2.render(unitPixel);
             eyeleft.render(unitPixel);
             eyeright.render(unitPixel);
-            GlStateManager.popMatrix();
         } else {
             head1.render(unitPixel);
             head2.render(unitPixel);
             eyeleft.render(unitPixel);
             eyeright.render(unitPixel);
         }
+        GlStateManager.popMatrix();
     }
 
     private void setRotation(ModelRenderer model, float x, float y, float z) {
@@ -121,7 +126,12 @@ public class ModelSporeling extends ModelBase {
         armleft.rotateAngleX = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 2.0F * prevLimbSwing * 0.5F;
         armright.rotateAngleX = MathHelper.cos(limbSwing * 1.5F) * 2.0F * prevLimbSwing * 0.5F;
 
-        legleft2.rotateAngleX = MathHelper.cos(limbSwing * 1.5F) * 1.4F * prevLimbSwing;
-        legright2.rotateAngleX = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 1.4F * prevLimbSwing;
+        if(!entity.isRiding()) {
+	        legleft2.rotateAngleX = MathHelper.cos(limbSwing * 1.5F) * 1.4F * prevLimbSwing;
+	        legright2.rotateAngleX = MathHelper.cos(limbSwing * 1.5F + (float) Math.PI) * 1.4F * prevLimbSwing;
+        } else {
+        	legleft2.rotateAngleX = -80 / 360.0F * (float)Math.PI * 2;
+        	legright2.rotateAngleX = -80 / 360.0F * (float)Math.PI * 2;
+        }
     }
 }

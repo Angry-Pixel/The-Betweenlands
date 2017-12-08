@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -266,6 +267,14 @@ public class MobSpawnHandler {
 		public final Class<? extends EntityLiving> getEntityType() {
 			return this.entityType;
 		}
+		
+		/**
+		 * Called right after the entity is spawned in the world
+		 * @param entity
+		 */
+		protected void onSpawned(EntityLivingBase entity) {
+			
+		}
 	}
 
 	@SubscribeEvent
@@ -459,6 +468,8 @@ public class MobSpawnHandler {
 						}
 					}
 
+					IEntityLivingData groupData = null;
+					
 					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
 						BlockPos entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor(groupSpawnRadius));
 
@@ -510,7 +521,7 @@ public class MobSpawnHandler {
 							if(newEntity != null) {
 								newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
 
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz);
+								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz, false);
 								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere() && newEntity.isNotColliding())) {
 									groupSpawnedEntities++;
 									chunkSpawnedEntities++;
@@ -519,11 +530,13 @@ public class MobSpawnHandler {
 									entityNBT.setBoolean("naturallySpawned", true);
 
 									world.spawnEntity(newEntity);
-
+									
 									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz)) {
-										newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), null);
+										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
 									}
 
+									spawnEntry.onSpawned(newEntity);
+									
 									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
 										break;
 									}
