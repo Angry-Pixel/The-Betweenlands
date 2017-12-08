@@ -8,12 +8,12 @@ import thebetweenlands.client.audio.ambience.AmbienceType;
 import thebetweenlands.common.registries.AmbienceRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EventWinter;
+import thebetweenlands.common.world.event.EventSnowfall;
 
 public class SnowFallAmbienceType extends AmbienceType {
 	@Override
 	public boolean isActive() {
-		return EventWinter.isFroooosty(this.getPlayer().world) && EventWinter.getSnowingStrength(this.getPlayer().world) > 0;
+		return EventSnowfall.getSnowingStrength(this.getPlayer().world) > 0;
 	}
 
 	@Override
@@ -48,12 +48,12 @@ public class SnowFallAmbienceType extends AmbienceType {
 		} else {
 			volume = 1.0F;
 		}
-		float strength = EventWinter.getSnowingStrength(this.getPlayer().world) / 8.0F;
+		float strength = EventSnowfall.getSnowingStrength(this.getPlayer().world) / 8.0F;
 		return volume * (0.08F + Math.min(strength * strength * 0.22F, 0.22F));
 	}
 
 	@Override
 	public float getLowerPriorityVolume() {
-		return 1.0F - Math.min(EventWinter.getSnowingStrength(this.getPlayer().world) / 8.0F, 0.9F);
+		return 1.0F - Math.min(EventSnowfall.getSnowingStrength(this.getPlayer().world) / 8.0F, 0.9F);
 	}
 }

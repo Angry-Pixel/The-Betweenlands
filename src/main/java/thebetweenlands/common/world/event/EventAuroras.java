@@ -79,7 +79,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	
 	protected boolean canBeActive() {
 		for(EnvironmentEvent event : this.getRegistry().getActiveEvents()) {
-			if(event != this && event != this.getRegistry().winter) {
+			if(event != this && event != this.getRegistry().winter && event != this.getRegistry().snowfall) {
 				return false;
 			}
 		}

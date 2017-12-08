@@ -48,7 +48,7 @@ public class BLSnowRenderer extends IRenderHandler {
 		this.prevSnowingStrength = this.snowingStrength;
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
-			this.snowingStrength = provider.getEnvironmentEventRegistry().winter.getSnowingStrength();
+			this.snowingStrength = provider.getEnvironmentEventRegistry().snowfall.getSnowingStrength();
 		} else {
 			this.snowingStrength = 0;
 		}
@@ -129,7 +129,7 @@ public class BLSnowRenderer extends IRenderHandler {
 						double dx = (double)((float)layerX + 0.5F) - entity.posX;
 						double dz = (double)((float)layerZ + 0.5F) - entity.posZ;
 						float distance = MathHelper.sqrt(dx * dx + dz * dz) / (float)layers;
-						float visibility = ((1.0F - distance * distance) * 0.3F + 0.5F) * snowingStrength;
+						float visibility = MathHelper.clamp(((1.0F - distance * distance) * 0.5F + 0.5F) * snowingStrength / 5.0F, 0, 1);
 						checkPos.setPos(layerX, maxHeight, layerZ);
 						int lightmap = (world.getCombinedLight(checkPos, 0) * 3 + 15728880) / 4;
 						int lightmapX = (lightmap >> 16 & 65535);

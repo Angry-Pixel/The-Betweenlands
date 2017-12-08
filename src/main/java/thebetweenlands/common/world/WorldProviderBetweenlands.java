@@ -222,7 +222,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getWeatherRenderer() {
-		if(this.getEnvironmentEventRegistry().winter.isActive()) {
+		if(this.getEnvironmentEventRegistry().snowfall.isSnowing()) {
 			return BLSnowRenderer.INSTANCE;
 		}
 		return null;
