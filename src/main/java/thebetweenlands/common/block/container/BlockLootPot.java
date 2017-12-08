@@ -55,8 +55,9 @@ public class BlockLootPot extends BasicBlock implements ITileEntityProvider, ICu
 
 	public BlockLootPot(Material material) {
 		super(material);
-		setHardness(1.0f);
+		setHardness(0.4f);
 		setSoundType(SoundType.GLASS);
+		setHarvestLevel("pickaxe", 0);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(VARIANT, EnumLootPot.POT_1));
 	}
 	

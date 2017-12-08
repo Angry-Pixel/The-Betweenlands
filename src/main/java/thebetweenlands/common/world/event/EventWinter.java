@@ -217,7 +217,7 @@ public class EventWinter extends EnvironmentEvent {
 								}
 							}
 
-							if(world.rand.nextInt(3500) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
+							if(world.rand.nextInt(3000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
 								if(world.isSideSolid(pos, EnumFacing.UP)) {
 									IBlockState stateAbove = world.getBlockState(pos.up());
 									if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
