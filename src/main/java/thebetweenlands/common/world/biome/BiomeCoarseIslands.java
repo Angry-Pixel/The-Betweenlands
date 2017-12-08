@@ -17,6 +17,7 @@ import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.spawners.CaveSpawnEntry;
+import thebetweenlands.common.world.biome.spawning.spawners.SporelingSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SwampHagCaveSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.TreeSpawnEntry;
@@ -54,7 +55,7 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityGecko.class, (short) 52).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityFrog.class, (short) 30).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(100));
 		this.blSpawnEntries.add(new CaveSpawnEntry(EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
-		this.blSpawnEntries.add(new TreeSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
+		this.blSpawnEntries.add(new SporelingSpawnEntry(EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityLurker.class, (short) 32).setCanSpawnInWater(true).setHostile(true).setSpawnCheckRadius(16.0D));
 		this.blSpawnEntries.add(new SurfaceSpawnEntry(EntityAngler.class, (short) 42).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));

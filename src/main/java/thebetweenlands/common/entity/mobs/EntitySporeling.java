@@ -81,11 +81,15 @@ public class EntitySporeling extends EntityCreature implements IEntityBL {
 	public void onUpdate() {
 		if (!getEntityWorld().isRemote) {
 			if (!this.isInWater()) {
-				boolean canSpin = !onGround && !this.isInWeb && !this.isInWater() && !this.isInLava() && world.isAirBlock(getPosition().down());
-				if (canSpin && motionY < 0D) {
+				boolean canSpin = (this.getRidingEntity() != null ? !this.getRidingEntity().onGround : !onGround) && !this.isInWeb && !this.isInWater() && !this.isInLava() && world.isAirBlock(getPosition().down());
+				if (canSpin && (motionY < 0D || (this.getRidingEntity() != null && this.getRidingEntity().motionY < 0))) {
 					if (!getIsFalling())
 						setIsFalling(true);
 					motionY *= 0.7D;
+					if(this.getRidingEntity() != null) {
+						this.getRidingEntity().motionY *= 0.7D;
+						this.getRidingEntity().fallDistance = 0;
+					}
 				} else {
 					if (!canSpin && getIsFalling()) {
 						setIsFalling(false);
