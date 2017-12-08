@@ -34,6 +34,8 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 		if (!world.isAreaLoaded(pos, maxRadius))
 			return false;
 
+		boolean hasPoisonIvy = rand.nextInt(7) == 0;
+		
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)
 			for (int zz = - maxRadius; zz <= maxRadius; zz++)
 				for (int yy = 2; yy < height; yy++)
@@ -57,15 +59,15 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 					}
 
 				if (yy == height/2 + 2) {
-					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), 0), 1, false, rand.nextInt(2) + 4);
-					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), 0), 2, false, rand.nextInt(2) + 4);
-					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), radius + 1), 3, false, rand.nextInt(2) + 4);
-					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - radius - 1), 4, false, rand.nextInt(2) + 4);
+					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), 0), 1, false, rand.nextInt(2) + 4, hasPoisonIvy);
+					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), 0), 2, false, rand.nextInt(2) + 4, hasPoisonIvy);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), radius + 1), 3, false, rand.nextInt(2) + 4, hasPoisonIvy);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - radius - 1), 4, false, rand.nextInt(2) + 4, hasPoisonIvy);
 
-					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), radius + 1), 5, false, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), - radius - 1), 6, false, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), radius + 1), 7, false, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), - radius - 1), 8, false, rand.nextInt(2) + 3);
+					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), radius + 1), 5, false, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), - radius - 1), 6, false, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), radius + 1), 7, false, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), - radius - 1), 8, false, rand.nextInt(2) + 3, hasPoisonIvy);
 				}
 
 				if (yy == height/2 + 4) {
@@ -93,15 +95,15 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 				}
 
 				if (yy == 0) {
-					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), 0), 1, true, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), 0), 2, true, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), radius + 1), 3, true, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - radius - 1), 4, true, rand.nextInt(2) + 3);
+					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), 0), 1, true, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), 0), 2, true, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), radius + 1), 3, true, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(0, yy - rand.nextInt(2), - radius - 1), 4, true, rand.nextInt(2) + 3, hasPoisonIvy);
 
-					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), radius + 1), 5, true, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), - radius - 1), 6, true, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), radius + 1), 7, true, rand.nextInt(2) + 3);
-					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), - radius - 1), 8, true, rand.nextInt(2) + 3);
+					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), radius + 1), 5, true, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), - radius - 1), 6, true, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(- radius - 1, yy - rand.nextInt(2), radius + 1), 7, true, rand.nextInt(2) + 3, hasPoisonIvy);
+					createBranch(world, rand, pos.add(radius + 1, yy - rand.nextInt(2), - radius - 1), 8, true, rand.nextInt(2) + 3, hasPoisonIvy);
 				}
 			}
 			return true;
@@ -172,10 +174,10 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 	}
 
 	private boolean isALog(IBlockState state) {
-		return state == logX ? true : state == logY ? true : state == logZ ? true : false; // ewww :(
+		return state == logX ? true : state == logY ? true : state == logZ ? true : false; // ewww :( - why not just use .getBlock() == ...?
 	}
 
-	private void createBranch(World world, Random rand, BlockPos pos, int dir, boolean root, int branchLength) {
+	private void createBranch(World world, Random rand, BlockPos pos, int dir, boolean root, int branchLength, boolean ivy) {
 		int y = 0;
 		boolean branchBend = false;
 		for (int i = 0; i <= branchLength; ++i) {
@@ -190,7 +192,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 				
 				if (!root) {
 					world.setBlockState(pos.east(i).up(y), branchBend ? logY : logX, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.east(i).up(y - 1), EnumFacing.EAST);
 				}
 				else {
@@ -202,7 +204,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 2:
 				if (!root) {
 					world.setBlockState(pos.west(i).up(y), branchBend ? logY : logX, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.west(i).up(y - 1), EnumFacing.WEST);
 				}
 				else {
@@ -214,7 +216,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 3:
 				if (!root) {
 					world.setBlockState(pos.south(i).up(y), branchBend ? logY : logZ, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.south(i).up(y - 1), EnumFacing.SOUTH);
 				}
 				else {
@@ -226,7 +228,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 4:
 				if (!root) {
 					world.setBlockState(pos.north(i).up(y), branchBend ? logY : logZ, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.north(i).up(y - 1), EnumFacing.NORTH);
 				}
 				else {
@@ -238,7 +240,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 5:
 				if (!root) {
 					world.setBlockState(pos.east(i - 1).up(y).south(i - 1), branchBend ? logY : logX, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.east(i - 1).up(y - 1).south(i - 1), EnumFacing.EAST);
 				}
 				else {
@@ -250,7 +252,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 6:
 				if (!root) {
 					world.setBlockState(pos.west(i - 1).up(y).north(i - 1), branchBend ? logY : logX, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.west(i - 1).up(y - 1).north(i - 1), EnumFacing.WEST);
 				}
 				else {
@@ -262,7 +264,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 7:
 				if (!root) {
 					world.setBlockState(pos.west(i - 1).up(y).south(i - 1), branchBend ? logY : logZ, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.west(i - 1).up(y - 1).south(i - 1), EnumFacing.SOUTH);
 				}
 				else {
@@ -274,7 +276,7 @@ public class WorldGenWeedwoodTree extends WorldGenerator {
 			case 8:
 				if (!root) {
 					world.setBlockState(pos.east(i - 1).up(y).north(i - 1), branchBend ? logY : logZ, 2);
-					if (i <= branchLength)
+					if (i <= branchLength && ivy)
 						addVines(world, rand, pos.east(i - 1).up(y - 1).north(i - 1), EnumFacing.NORTH);
 				}
 				else {

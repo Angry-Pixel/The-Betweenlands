@@ -17,10 +17,11 @@ import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.WorldGenBigBulbCappedMushroom;
 import thebetweenlands.common.world.gen.feature.WorldGenBladderwortCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveGrass;
+import thebetweenlands.common.world.gen.feature.WorldGenCaveHangers;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
 import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
-import thebetweenlands.common.world.gen.feature.WorldGenDeadWeedwoodTree;
+import thebetweenlands.common.world.gen.feature.WorldGenRottenWeedwoodTree;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
@@ -53,12 +54,13 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_CAVE_POTS = new WorldGenCavePots();
 	public static final WorldGenerator GEN_CAVE_THORNS = new WorldGenCaveThorns();
 	public static final WorldGenerator GEN_CAVE_MOSS = new WorldGenCaveMoss();
+	public static final WorldGenerator GEN_CAVE_HANGERS = new WorldGenCaveHangers();
 	public static final WorldGenerator GEN_CAVE_GRASS = new WorldGenCaveGrass();
 	public static final WorldGenerator GEN_WEEDWOOD_TREE = new WorldGenWeedwoodTree();
-	public static final WorldGenerator GEN_DEAD_WEEDWOOD_TREE = new WorldGenDeadWeedwoodTree();
+	public static final WorldGenerator GEN_ROTTEN_WEEDWOOD_TREE = new WorldGenRottenWeedwoodTree();
 	public static final WorldGenerator GEN_SMALL_HOLLOW_LOG = new WorldGenSmallHollowLog();
 	public static final WorldGenerator GEN_SWAMP_TALLGRASS = new WorldGenPlantCluster(BlockRegistry.SWAMP_TALLGRASS.getDefaultState());
-	public static final WorldGenerator GEN_NETTLES = new WorldGenPlantCluster(BlockRegistry.NETTLE.getDefaultState());
+	public static final WorldGenerator GEN_NETTLES = new WorldGenPlantCluster(BlockRegistry.NETTLE.getDefaultState(), 3, 128);
 	public static final WorldGenerator GEN_ARROW_ARUM = new WorldGenPlantCluster(BlockRegistry.ARROW_ARUM.getDefaultState());
 	public static final WorldGenerator GEN_PICKEREL_WEED = new WorldGenPlantCluster(BlockRegistry.PICKEREL_WEED.getDefaultState());
 	public static final WorldGenerator GEN_MARSH_HIBISCUS = new WorldGenPlantCluster(BlockRegistry.MARSH_HIBISCUS.getDefaultState());
@@ -70,8 +72,8 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_TAR_POOL_SURFACE = new WorldGenFluidPool(BlockRegistry.TAR).setMinY(WorldProviderBetweenlands.CAVE_START + 5);
 	public static final WorldGenerator GEN_SWAMP_REED = new WorldGenSwampReedCluster();
 	public static final WorldGenerator GEN_SWAMP_PLANT = new WorldGenPlantCluster(BlockRegistry.SWAMP_PLANT.getDefaultState(), 8, 256);
-	public static final WorldGenerator GEN_FLAT_HEAD_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState(), 5, 15);
-	public static final WorldGenerator GEN_BLACK_HAT_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState(), 5, 15);
+	public static final WorldGenerator GEN_FLAT_HEAD_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState(), 5, 40);
+	public static final WorldGenerator GEN_BLACK_HAT_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_CATTAIL = new WorldGenPlantCluster(BlockRegistry.CATTAIL.getDefaultState());
 	public static final WorldGenerator GEN_VENUS_FLY_TRAP = new WorldGenPlantCluster(BlockRegistry.VENUS_FLY_TRAP.getDefaultState(), 5, 20);
 	public static final WorldGenerator GEN_MIRE_CORAL = new WorldGenPlantCluster(BlockRegistry.MIRE_CORAL.getDefaultState(), 4, 10).setUnderwater(true);
@@ -113,8 +115,9 @@ public class DecorationHelper {
 	private static final CubicBezier SPELEOTHEM_Y_CDF = new CubicBezier(0, 0.5F, 1, 0.2F);
 	private static final CubicBezier CAVE_POTS_Y_CDF = new CubicBezier(0, 1, 0, 1);
 	private static final CubicBezier THORNS_Y_CDF = new CubicBezier(1, 0.5F, 1, -0.25F);
-	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0, 1, 0, 1);
-	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0, 1, 0, 1);
+	private static final CubicBezier CAVE_MOSS_Y_CDF = new CubicBezier(0.5F, 1, 0.8F, 1);
+	private static final CubicBezier CAVE_HANGERS_Y_CDF = new CubicBezier(0.8F, 1, 0.5F, 0);
+	private static final CubicBezier CAVE_GRASS_Y_CDF = new CubicBezier(0.25F, 1, 0.9F, 1);
 
 	private static boolean canShortThingsGenerateHere(DecoratorPositionProvider decorator) {
 		return ((ChunkGeneratorBetweenlands)decorator.getChunkGenerator()).evalTreeNoise(decorator.getX() * 0.01, decorator.getZ() * 0.01) > -0.25;
@@ -138,6 +141,7 @@ public class DecorationHelper {
 		decorator.generate(decorator.getRand().nextInt(3) == 0 ? 2 : 1, DecorationHelper::generateCavePotsCluster);
 		decorator.generate(140, DecorationHelper::generateCaveThornsCluster);
 		decorator.generate(120, DecorationHelper::generateCaveMossCluster);
+		decorator.generate(120, DecorationHelper::generateCaveHangersCluster);
 		decorator.generate(25, DecorationHelper::generateUndergroundMossCluster);
 		decorator.generate(5, DecorationHelper::generateUndergroundLichenCluster);
 		decorator.generate(120, DecorationHelper::generateCaveGrassCluster);
@@ -189,6 +193,14 @@ public class DecorationHelper {
 		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
 		int z = decorator.getRandomPosZ();
 		return GEN_CAVE_MOSS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
+	}
+	
+	public static boolean generateCaveHangersCluster(DecoratorPositionProvider decorator) {
+		int x = decorator.getRandomPosX(9);
+		float v = CAVE_HANGERS_Y_CDF.eval(decorator.getRand().nextFloat());
+		int y = (int) (v * (WorldProviderBetweenlands.LAYER_HEIGHT - WorldProviderBetweenlands.CAVE_WATER_HEIGHT) + WorldProviderBetweenlands.CAVE_WATER_HEIGHT + 0.5F);
+		int z = decorator.getRandomPosZ(9);
+		return GEN_CAVE_HANGERS.generate(decorator.getWorld(), decorator.getRand(), new BlockPos(x, y, z));
 	}
 
 	public static boolean generateUndergroundMossCluster(DecoratorPositionProvider decorator) {
@@ -246,12 +258,12 @@ public class DecorationHelper {
 		return false;
 	}
 
-	public static boolean generateDeadWeedwoodTree(DecoratorPositionProvider decorator) {
+	public static boolean generateRottenWeedwoodTree(DecoratorPositionProvider decorator) {
 		if (canShortThingsGenerateHere(decorator)) {
 			BlockPos pos = decorator.getRandomPos(14);
 			World world = decorator.getWorld();
 			if (world.isAirBlock(pos) && world.getBlockState(pos.down()).getBlock() == BlockRegistry.MUD)
-				return GEN_DEAD_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
+				return GEN_ROTTEN_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
 		}
 		return false;
 	}

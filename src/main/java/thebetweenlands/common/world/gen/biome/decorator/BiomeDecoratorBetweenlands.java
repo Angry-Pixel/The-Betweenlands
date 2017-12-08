@@ -2,6 +2,7 @@ package thebetweenlands.common.world.gen.biome.decorator;
 
 import net.minecraft.profiler.Profiler;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -77,7 +78,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
         this.endProfilerSection();
 
         this.startProfilerSection("undergroundRuins");
-        this.generate(120, DecorationHelper::generateUndergroundRuins);
+        this.generate(200, DecorationHelper::generateUndergroundRuins);
         this.endProfilerSection();
 
         this.startProfilerSection("undergroundSpawners");
@@ -93,10 +94,10 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * Generates the default ores
      */
     protected void generateOres() {
-		this.generateOre(22, 12, OreGens.SULFUR, 0, 128);
-		this.generateOre(10, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
-		this.generateOre(10, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
+		this.generateOre(22, 12, OreGens.SULFUR, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(6, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT + 40, WorldProviderBetweenlands.CAVE_START - 5);
+		this.generateOre(10, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(4.5F, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 40);
 		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(1, 12, OreGens.VALONITE, 0, WorldProviderBetweenlands.PITSTONE_HEIGHT);
@@ -148,7 +149,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * @param maxY
      */
     protected void generateOre(float tries, int padding, WorldGenerator oreGen, int minY, int maxY) {
-        tries = tries >= 1.0F ? tries : (this.getRand().nextFloat() <= tries ? 1 : 0);
+        tries = MathHelper.floor(tries) + (this.getRand().nextFloat() <= (tries - MathHelper.floor(tries)) ? 1 : 0);
         for (int i = 0; i < tries; i++) {
             int xx = this.getX() + this.offsetXZ(padding);
             int yy = minY + this.getRand().nextInt(maxY - minY);
@@ -169,21 +170,10 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      */
     public boolean generate(float tries, Function<BiomeDecoratorBetweenlands, Boolean> generator) {
         boolean generated = false;
-        if (tries < 1.0F) {
-            if (this.getRand().nextFloat() <= tries) {
-                generated = generator.apply(this);
-            }
-        } else {
-            float remainder = tries % 1.0F;
-
-            if (this.getRand().nextFloat() <= remainder) {
-                tries++;
-            }
-
-            for (int i = 0; i < tries; i++) {
-                if (generator.apply(this))
-                    generated = true;
-            }
+        tries = MathHelper.floor(tries) + (this.getRand().nextFloat() <= (tries - MathHelper.floor(tries)) ? 1 : 0);
+        for (int i = 0; i < tries; i++) {
+            if (generator.apply(this))
+                generated = true;
         }
         return generated;
     }

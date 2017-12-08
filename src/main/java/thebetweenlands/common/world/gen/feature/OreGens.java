@@ -16,13 +16,13 @@ public class OreGens {
 			new WorldGenBLMinable(BlockRegistry.SULFUR_ORE.getDefaultState(), 14, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator SYRMORITE = 
-			new WorldGenBLMinable(BlockRegistry.SYRMORITE_ORE.getDefaultState(), 9, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.SYRMORITE_ORE.getDefaultState(), 7, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator BONE_ORE = 
 			new WorldGenBLMinable(BlockRegistry.SLIMY_BONE_ORE.getDefaultState(), 11, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator OCTINE =
-			new WorldGenBLMinable(BlockRegistry.OCTINE_ORE.getDefaultState(), 8, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
+			new WorldGenBLMinable(BlockRegistry.OCTINE_ORE.getDefaultState(), 6, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
 
 	public static final WorldGenerator SWAMP_DIRT = 
 			new WorldGenBLMinable(BlockRegistry.SWAMP_DIRT.getDefaultState(), 25, BlockMatcher.forBlock(BlockRegistry.BETWEENSTONE));
