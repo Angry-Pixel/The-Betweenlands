@@ -554,7 +554,7 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			if(type == 0 || type == 1)
 				return MUD_TILES_CRACKED;
 			if(type == 2)
-				return MUD_TILES_CRACKED_DECAY;
+				return MUD_TILES_DECAY;
 			else
 				return MUD_TILES;
 		case 2:
