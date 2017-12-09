@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -154,7 +153,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public void update() {
 		BlockPos pos = this.getPos();
-
+		
 		if (this.updateRecipe) {
 			this.updateInfusingRecipe();
 			this.updateRecipe = false;
@@ -165,14 +164,14 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				this.infusionTime++;
 			} else {
 				if (this.prevInfusionState != this.currentInfusionState) {
-					if (this.currentInfusionState == 2) {
-						this.world.playSound(Minecraft.getMinecraft().player, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
-					}
 					this.prevInfusionColor = this.currentInfusionColor;
 					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
 				} else {
 					this.currentInfusionColor = ElixirRecipe.getInfusionColor(this.infusingRecipe, this.infusionTime);
 				}
+			}
+			if(this.prevInfusionState != this.currentInfusionState && this.currentInfusionState == 2) {
+				this.world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
 			}
 			this.prevInfusionState = this.currentInfusionState;
 			if (!this.world.isRemote) {

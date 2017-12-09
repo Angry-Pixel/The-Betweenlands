@@ -3,6 +3,7 @@ package thebetweenlands.common.registries;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import thebetweenlands.api.capability.ICircleGemCapability;
+import thebetweenlands.api.capability.ICustomStepSoundCapability;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEntityCircleGemCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
@@ -12,6 +13,7 @@ import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.capability.IPuppetCapability;
 import thebetweenlands.api.capability.IPuppeteerCapability;
 import thebetweenlands.api.capability.ISummoningCapability;
+import thebetweenlands.common.capability.CustomStepSoundCapability;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
 import thebetweenlands.common.capability.decay.DecayEntityCapability;
@@ -53,6 +55,9 @@ public class CapabilityRegistry {
 	@CapabilityInject(IFoodSicknessCapability.class)
 	public static final Capability<IFoodSicknessCapability> CAPABILITY_FOOD_SICKNESS = null;
 
+	@CapabilityInject(ICustomStepSoundCapability.class)
+	public static final Capability<ICustomStepSoundCapability> CAPABILITY_CUSTOM_STEP_SOUND = null;
+	
 	public static void preInit() {
 		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
@@ -63,7 +68,8 @@ public class CapabilityRegistry {
 		EntityCapabilityHandler.registerEntityCapability(new EntitySummoningCapability());
 		EntityCapabilityHandler.registerEntityCapability(new PortalEntityCapability());
 		EntityCapabilityHandler.registerEntityCapability(new FoodSicknessEntityCapability());
-
+		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
+		
 		EntityCapabilityHandler.registerCapabilities();
 		//ItemCapabilityHandler.registerCapabilities();
 	}
