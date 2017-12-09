@@ -2,6 +2,7 @@ package thebetweenlands.common.block.structure;
 
 import java.util.Locale;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -21,13 +22,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockMudTiles extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition, IStateMappedBlock {
+public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition, IStateMappedBlock {
 
 	public static final PropertyEnum<EnumMudTileType> VARIANT = PropertyEnum.<EnumMudTileType>create("variant", EnumMudTileType.class);
     public static final PropertyBool CONNECTED_DOWN = PropertyBool.create("connected_down");
