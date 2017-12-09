@@ -92,14 +92,14 @@ public class BlockAlgae extends BlockPlant implements IConnectedTextureBlock {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[]{TOP_NORTH_WEST_INDEX, TOP_NORTH_EAST_INDEX, TOP_SOUTH_WEST_INDEX, TOP_SOUTH_EAST_INDEX});
+		return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[0], new IUnlistedProperty[0]));
 	}
 
 	@Override
 	public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
 		IExtendedBlockState state = (IExtendedBlockState) oldState;
 		return this.getExtendedConnectedTextureState(state, worldIn, pos, p -> {
-			return worldIn.getBlockState(p).getBlock() == this || worldIn.getBlockState(p.down()).isFullCube();
-		});
+			return p.getY() <= pos.getY() && (worldIn.getBlockState(p).getBlock() == this || worldIn.getBlockState(p.down()).isFullCube());
+		}, false);
 	}
 }
