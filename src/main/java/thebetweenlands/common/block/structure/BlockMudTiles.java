@@ -24,10 +24,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition, IStateMappedBlock {
+public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
 
 	public static final PropertyEnum<EnumMudTileType> VARIANT = PropertyEnum.<EnumMudTileType>create("variant", EnumMudTileType.class);
     public static final PropertyBool CONNECTED_DOWN = PropertyBool.create("connected_down");
@@ -143,9 +141,4 @@ public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlo
 		return EnumMudTileType.values()[meta].getName();
 	}
 
-	@Override
-	public void setStateMapper(Builder builder) {
-		builder.ignore(new IProperty[] { CONNECTED_DOWN, CONNECTED_UP, CONNECTED_NORTH, CONNECTED_SOUTH, CONNECTED_WEST, CONNECTED_EAST}).build();
-		
-	}
 }
