@@ -90,12 +90,14 @@ public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlo
     private boolean isSideConnectable (IBlockAccess world, BlockPos pos, EnumFacing side) {
     	final IBlockState state = world.getBlockState(pos);
     	final IBlockState stateConnection = world.getBlockState(pos.offset(side));
-    	if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)
-    		if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
-    		return false;
-     	if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
-     		if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)
-    		return false;
+    	if(stateConnection.getBlock() == this && state.getBlock() == this) {
+    		if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)
+    			if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
+    				return false;
+    		if(state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_DECAY || state.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED_DECAY)
+    			if(stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES || stateConnection.getValue(VARIANT) == EnumMudTileType.MUD_TILES_CRACKED)
+    				return false; 
+    	}
         return (stateConnection == null) ? false : stateConnection.getBlock() == this;
     }
 
