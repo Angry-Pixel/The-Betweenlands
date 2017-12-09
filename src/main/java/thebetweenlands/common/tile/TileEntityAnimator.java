@@ -84,7 +84,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
                 if (!result.isEmpty()) {
                     setInventorySlotContents(0, result.copy());
                 }
-                inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + recipe.getRequiredLife(inventory.get(1)));
+                inventory.get(1).setItemDamage(inventory.get(1).getItemDamage() + this.requiredLifeCount);
                 markDirty();
                 this.itemAnimated = true;
             }
