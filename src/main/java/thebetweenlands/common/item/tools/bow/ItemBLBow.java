@@ -32,11 +32,13 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemBLBow extends ItemBow implements ICorrodible {
+public class ItemBLBow extends ItemBow implements ICorrodible, IAnimatorRepairable {
 	public ItemBLBow() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(600);
@@ -224,5 +226,25 @@ public class ItemBLBow extends ItemBow implements ICorrodible {
 			}
 			event.setNewfov(1.0F - strength * 0.25F);
 		}
+	}
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_WEEDWOOD);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_WEEDWOOD);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_WEEDWOOD);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_WEEDWOOD);
 	}
 }

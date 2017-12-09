@@ -4,12 +4,14 @@ import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.lib.ModInfo;
 
-public class ItemBLArmor extends ItemArmor {
+public class ItemBLArmor extends ItemArmor implements IAnimatorRepairable {
 	protected final String armorTexture1, armorTexture2;
 	protected final String gemArmorTextures[][] = new String[CircleGemType.values().length][2];
 	protected final String armorName;
@@ -59,5 +61,25 @@ public class ItemBLArmor extends ItemArmor {
 		} else {
 			return texture1;
 		}
+	}
+	
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(this.getArmorMaterial());
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(this.getArmorMaterial());
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(this.getArmorMaterial());
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(this.getArmorMaterial());
 	}
 }

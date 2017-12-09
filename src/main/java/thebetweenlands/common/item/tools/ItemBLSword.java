@@ -14,15 +14,19 @@ import net.minecraft.item.ItemSword;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
+import thebetweenlands.common.item.BLMaterialRegistry;
 
 import javax.annotation.Nullable;
 
-public class ItemBLSword extends ItemSword implements ICorrodible {
+public class ItemBLSword extends ItemSword implements ICorrodible, IAnimatorRepairable {
+	protected final ToolMaterial toolMaterial;
+	
 	public ItemBLSword(ToolMaterial material) {
 		super(material);
-
+		this.toolMaterial = material;
 		CorrosionHelper.addCorrosionPropertyOverrides(this);
 		CircleGemHelper.addGemPropertyOverrides(this);
 	}
@@ -55,5 +59,25 @@ public class ItemBLSword extends ItemSword implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
+	}
+	
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(this.toolMaterial);
 	}
 }

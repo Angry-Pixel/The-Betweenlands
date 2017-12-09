@@ -15,12 +15,14 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemTool;
 import net.minecraft.world.World;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.item.BLMaterialRegistry;
 
 import javax.annotation.Nullable;
 
 
-public class ItemBLAxe extends ItemAxe implements ICorrodible {
+public class ItemBLAxe extends ItemAxe implements ICorrodible, IAnimatorRepairable {
 	public ItemBLAxe(ToolMaterial material) {
 		super(material, 5.0F + material.getAttackDamage(), -3.2F);
 
@@ -58,5 +60,25 @@ public class ItemBLAxe extends ItemAxe implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
+	}
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(this.toolMaterial);
 	}
 }

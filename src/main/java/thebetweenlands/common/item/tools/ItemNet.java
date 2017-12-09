@@ -6,12 +6,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class ItemNet extends Item {
+public class ItemNet extends Item implements IAnimatorRepairable {
 	public ItemNet() {
 		this.maxStackSize = 1;
 		this.setMaxDamage(32);
@@ -38,5 +39,25 @@ public class ItemNet extends Item {
 			player.swingArm(hand);
 		}
 		return true;
+	}
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return 2;
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return 8;
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return 4;
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return 12;
 	}
 }

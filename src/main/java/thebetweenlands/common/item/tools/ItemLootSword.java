@@ -30,4 +30,9 @@ public class ItemLootSword extends ItemBLSword {
         }
         return super.hitEntity(stack, attacked, attacker);
     }
+    
+    @Override
+    public boolean isRepairableByAnimator(ItemStack stack) {
+    	return false;
+    }
 }
