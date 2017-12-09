@@ -15,7 +15,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigateGround;
+import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -38,6 +40,8 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	AnimationMathHelper animationBreathe = new AnimationMathHelper();
 	private int animationTick;
 
+	private int pathingCooldown = 0;
+	
 	public EntitySwampHag(World world) {
 		super(world);
 		this.setSize(0.6F, 1.8F);
@@ -50,7 +54,7 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 		//Works as long as the material is wood
 		this.tasks.addTask(1, new EntityAIBreakDoor(this));
 		// this.tasks.addTask(2, new EntityAIBLBreakDoor(this, Blocks.iron_door, 20));
-		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1D, false));
+		this.tasks.addTask(3, new EntityAIAttackMelee(this, 1D, true));
 		this.tasks.addTask(4, new EntityAIMoveTowardsRestriction(this, 1.0D));
 		this.tasks.addTask(5, new EntityAIWander(this, 0.75D));
 		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -127,7 +131,18 @@ public class EntitySwampHag extends EntityMob implements IEntityBL {
 	@Override
 	public void onLivingUpdate() {
 		breatheFloat = animationBreathe.swing(0.2F, 0.5F, false);
-
+		
+		if(this.getAttackTarget() != null && !this.getRecursivePassengersByType(EntityWight.class).isEmpty()) {
+			if(this.pathingCooldown <= 0) {
+				//No idea why the swamp hag doesn't want to move when possessed, this seems to work as hackish solution
+				if(!this.navigator.tryMoveToEntityLiving(this.getAttackTarget(), 1)) {
+					this.pathingCooldown = 20;
+				}
+			} else {
+				this.pathingCooldown--;
+			}
+		}
+		
 		if (!world.isRemote) {
 			updateLivingSoundTime();
 		}

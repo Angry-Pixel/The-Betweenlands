@@ -13,6 +13,7 @@ public abstract class EntityAIMoveToDirect<T extends EntityLiving> extends Entit
 	public EntityAIMoveToDirect(T entity, double speed) {
 		this.entity = entity;
 		this.speed = speed;
+		this.setMutexBits(1 << 8);
 	}
 
 	public void setSpeed(double speed) {
