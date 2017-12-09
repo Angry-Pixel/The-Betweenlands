@@ -43,7 +43,7 @@ public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlo
 		setSoundType(SoundType.STONE);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
