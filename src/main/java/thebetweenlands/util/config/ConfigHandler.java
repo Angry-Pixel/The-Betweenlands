@@ -1,13 +1,16 @@
 package thebetweenlands.util.config;
 
-import java.io.File;
-
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.herblore.book.HLEntryRegistry;
+import net.minecraftforge.oredict.OreDictionary;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
+
+import java.io.File;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
@@ -29,6 +32,7 @@ public class ConfigHandler {
 	public static boolean rowboatView;
 	public static boolean blMainMenu;
 	public static boolean useFoodSickness;
+	public static String[] rottenFoodWhitelist;
 
 	public static int maxEntitiesPerLoadedArea;
 	public static int hardEntityLimit;
@@ -60,6 +64,7 @@ public class ConfigHandler {
 		blMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
 		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
 		useFoodSickness = config.getBoolean("Food Sickness", CATEGORIES[2], true, "If true the food sickness system will be enabled");
+		rottenFoodWhitelist = config.getStringList("Rotten Food Whitelist", CATEGORIES[2], new String[0], "A list of items that should be whitelisted from rotting in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used");
 
 		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
 		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);
@@ -71,6 +76,26 @@ public class ConfigHandler {
 		if (config.hasChanged()) {
 			config.save();
 		}
+	}
+
+	public static boolean isFoodConfigWhitelisted(ItemStack stack) {
+		if (stack.isEmpty())
+			return false;
+
+		ResourceLocation name = stack.getItem().getRegistryName();
+		for (String s : rottenFoodWhitelist) {
+			try {
+				String[] data = s.split(":");
+				String item = data[0] + ":" + data[1];
+				int meta = data.length == 2 ? 0 : "*".equals(data[2]) ? OreDictionary.WILDCARD_VALUE : Integer.parseInt(data[2]);
+
+				if (name != null && name.toString().equals(item) && (meta == OreDictionary.WILDCARD_VALUE || stack.getItemDamage() == meta))
+					return true;
+			} catch (Exception e) {
+				TheBetweenlands.logger.error("Failed to parse food whitelist item: " + s);
+			}
+		}
+		return false;
 	}
 
 	/*public static void userRecipes() {
@@ -99,7 +124,6 @@ public class ConfigHandler {
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event) {
 		if (event.getModID().equals(ModInfo.ID)) {
 			syncConfigs();
-			HLEntryRegistry.init();
 		}
 	}
 }

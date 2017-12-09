@@ -6,6 +6,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
 public class ItemRottenFood extends ItemBLFood {
@@ -29,7 +30,7 @@ public class ItemRottenFood extends ItemBLFood {
 	public String getItemStackDisplayName(ItemStack stack) {
 		ItemStack originalStack = this.getOriginalStack(stack);
 		if (!originalStack.isEmpty() && originalStack.getItem() != Items.AIR) {
-			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getDisplayName()).trim();
+			return net.minecraft.util.text.translation.I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".name", originalStack.getRarity().rarityColor + originalStack.getDisplayName() + TextFormatting.WHITE).trim();
 		}
 		return super.getItemStackDisplayName(stack);
 	}
