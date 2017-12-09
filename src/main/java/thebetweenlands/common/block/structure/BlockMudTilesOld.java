@@ -5,18 +5,15 @@ import java.util.Locale;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -25,19 +22,13 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockMudTiles extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
+public class BlockMudTilesOld extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
 
 	public static final PropertyEnum<EnumMudTileType> VARIANT = PropertyEnum.<EnumMudTileType>create("variant", EnumMudTileType.class);
-    public static final PropertyBool CONNECTED_DOWN = PropertyBool.create("connected_down");
-    public static final PropertyBool CONNECTED_UP = PropertyBool.create("connected_up");
-    public static final PropertyBool CONNECTED_NORTH = PropertyBool.create("connected_north");
-    public static final PropertyBool CONNECTED_SOUTH = PropertyBool.create("connected_south");
-    public static final PropertyBool CONNECTED_WEST = PropertyBool.create("connected_west");
-    public static final PropertyBool CONNECTED_EAST = PropertyBool.create("connected_east");
-
-	public BlockMudTiles() {
+	
+	public BlockMudTilesOld() {
 		super(Material.ROCK);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumMudTileType.MUD_TILES).withProperty(CONNECTED_DOWN, Boolean.FALSE).withProperty(CONNECTED_EAST, Boolean.FALSE).withProperty(CONNECTED_NORTH, Boolean.FALSE).withProperty(CONNECTED_SOUTH, Boolean.FALSE).withProperty(CONNECTED_UP, Boolean.FALSE).withProperty(CONNECTED_WEST, Boolean.FALSE));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumMudTileType.MUD_TILES));
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
@@ -72,14 +63,9 @@ public class BlockMudTiles extends BasicBlock implements BlockRegistry.ICustomIt
 		return ((EnumMudTileType)state.getValue(VARIANT)).getMetadata();
 	}
 
-    @Override
-    public IBlockState getActualState (IBlockState state, IBlockAccess world, BlockPos position) {
-        return state.withProperty(CONNECTED_DOWN, this.isSideConnectable(world, position, EnumFacing.DOWN)).withProperty(CONNECTED_EAST, this.isSideConnectable(world, position, EnumFacing.EAST)).withProperty(CONNECTED_NORTH, this.isSideConnectable(world, position, EnumFacing.NORTH)).withProperty(CONNECTED_SOUTH, this.isSideConnectable(world, position, EnumFacing.SOUTH)).withProperty(CONNECTED_UP, this.isSideConnectable(world, position, EnumFacing.UP)).withProperty(CONNECTED_WEST, this.isSideConnectable(world, position, EnumFacing.WEST));
-    }
-
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] {VARIANT, CONNECTED_DOWN, CONNECTED_UP, CONNECTED_NORTH, CONNECTED_SOUTH, CONNECTED_WEST, CONNECTED_EAST});
+		return new BlockStateContainer(this, new IProperty[] {VARIANT});
 	}
 
 	@Override
@@ -87,16 +73,17 @@ public class BlockMudTiles extends BasicBlock implements BlockRegistry.ICustomIt
 		return ((EnumMudTileType)state.getValue(VARIANT)).getMetadata();
 	}
 
-    private boolean isSideConnectable (IBlockAccess world, BlockPos pos, EnumFacing side) {
-    	final IBlockState state = world.getBlockState(pos.offset(side));
-        return (state == null) ? false : state.getBlock() == this;
-    }
-
 	public static enum EnumMudTileType implements IStringSerializable {
 		MUD_TILES,
-		MUD_TILES_DECAY,
+		MUD_TILES_DECAY_1,
+		MUD_TILES_DECAY_2,
+		MUD_TILES_DECAY_3,
+		MUD_TILES_DECAY_4,
 		MUD_TILES_CRACKED,
-		MUD_TILES_CRACKED_DECAY;
+		MUD_TILES_CRACKED_DECAY_1,
+		MUD_TILES_CRACKED_DECAY_2,
+		MUD_TILES_CRACKED_DECAY_3,
+		MUD_TILES_CRACKED_DECAY_4;
 
 		private final String name;
 
