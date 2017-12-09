@@ -65,15 +65,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	private IBlockState WORM_DUNGEON_PILLAR_TOP_DECAY_FULL = BlockRegistry.WORM_DUNGEON_PILLAR.getDefaultState().withProperty(BlockWormDungeonPillar.VARIANT, EnumWormPillarType.WORM_PILLAR_TOP_DECAY_FULL);
 
 	private IBlockState MUD_TILES = BlockRegistry.MUD_TILES.getDefaultState();
-	private IBlockState MUD_TILES_DECAY_1 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_1);
-	private IBlockState MUD_TILES_DECAY_2 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_2);
-	private IBlockState MUD_TILES_DECAY_3 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_3);
-	private IBlockState MUD_TILES_DECAY_4 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY_4);
+	private IBlockState MUD_TILES_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_DECAY);
 	private IBlockState MUD_TILES_CRACKED = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED);
-	private IBlockState MUD_TILES_CRACKED_DECAY_1 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_1);
-	private IBlockState MUD_TILES_CRACKED_DECAY_2 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_2);
-	private IBlockState MUD_TILES_CRACKED_DECAY_3 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_3);
-	private IBlockState MUD_TILES_CRACKED_DECAY_4 = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY_4);
+	private IBlockState MUD_TILES_CRACKED_DECAY = BlockRegistry.MUD_TILES.getDefaultState().withProperty(BlockMudTiles.VARIANT, EnumMudTileType.MUD_TILES_CRACKED_DECAY);
 
 	private IBlockState MUD_BRICK_STAIRS = BlockRegistry.MUD_BRICK_STAIRS.getDefaultState();
 	private IBlockState MUD_BRICKS = BlockRegistry.MUD_BRICKS.getDefaultState();
@@ -560,74 +554,74 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			if(type == 0 || type == 1)
 				return MUD_TILES_CRACKED;
 			if(type == 2)
-				return MUD_TILES_CRACKED_DECAY_1;
+				return MUD_TILES_CRACKED_DECAY;
 			else
 				return MUD_TILES;
 		case 2:
 			if(type == 0 || type == 1)
-				return MUD_TILES_DECAY_1;
+				return MUD_TILES_DECAY;
 			if(type == 2)
-				return MUD_TILES_CRACKED_DECAY_1;
+				return MUD_TILES_CRACKED_DECAY;
 			else
 				return MUD_TILES;
 		case 3:
 			if(type == 0)
-				return MUD_TILES_DECAY_1;
+				return MUD_TILES_DECAY;
 			if(type == 1)
-				return MUD_TILES_CRACKED_DECAY_1;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 3)
 				return MUD_TILES_CRACKED;
 			if(type == 4)
-				return MUD_TILES_DECAY_2;
+				return MUD_TILES_DECAY;
 			if(type == 5)
-				return MUD_TILES_CRACKED_DECAY_2;
+				return MUD_TILES_CRACKED_DECAY;
 			else
 				return MUD_TILES;
 		case 4:
 			if(type == 0)
-				return MUD_TILES_DECAY_1;
+				return MUD_TILES_DECAY;
 			if(type == 1)
-				return MUD_TILES_CRACKED_DECAY_1;
+				return MUD_TILES_CRACKED;
 			if(type == 3)
-				return MUD_TILES_CRACKED_DECAY_2;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 4)
-				return MUD_TILES_DECAY_2;
+				return MUD_TILES_DECAY;
 			if(type == 5)
-				return MUD_TILES_CRACKED_DECAY_3;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 6)
-				return MUD_TILES_DECAY_3;
+				return MUD_TILES_DECAY;
 			else
 				return MUD_TILES;
 		case 5:
 			if(type == 0)
-				return MUD_TILES_DECAY_2;
+				return MUD_TILES_DECAY;
 			if(type == 1)
-				return MUD_TILES_CRACKED_DECAY_2;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 3)
-				return MUD_TILES_CRACKED_DECAY_3;
+				return MUD_TILES_CRACKED;
 			if(type == 4)
-				return MUD_TILES_DECAY_3;
+				return MUD_TILES_DECAY;
 			if(type == 5)
-				return MUD_TILES_CRACKED_DECAY_4;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 6)
-				return MUD_TILES_DECAY_4;
+				return MUD_TILES_DECAY;
 			else
-				return MUD_TILES_DECAY_1;
+				return MUD_TILES;
 		case 6:
 			if(type == 0)
-				return MUD_TILES_DECAY_2;
+				return MUD_TILES_DECAY;
 			if(type == 1)
-				return MUD_TILES_CRACKED_DECAY_2;
+				return MUD_TILES_CRACKED;
 			if(type == 3)
-				return MUD_TILES_CRACKED_DECAY_3;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 4)
-				return MUD_TILES_DECAY_3;
+				return MUD_TILES_DECAY;
 			if(type == 5)
-				return MUD_TILES_CRACKED_DECAY_4;
+				return MUD_TILES_CRACKED_DECAY;
 			if(type == 6)
-				return MUD_TILES_DECAY_4;
+				return MUD_TILES_DECAY;
 			else
-				return MUD_TILES_DECAY_2;
+				return MUD_TILES;
 		case 7:
 			return MUD_BRICKS;
 		}
@@ -705,15 +699,9 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_4, true);
 			STRUCTURE_BLOCKS.put(WORM_DUNGEON_PILLAR_DECAY_FULL, true);
 			STRUCTURE_BLOCKS.put(MUD_TILES, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_1, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_2, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_3, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_DECAY, true);
 			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_1, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_2, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_3, true);
-			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY_4, true);
+			STRUCTURE_BLOCKS.put(MUD_TILES_CRACKED_DECAY, true);
 		}
 	}
 }
