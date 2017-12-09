@@ -62,7 +62,7 @@ public class ItemRingOfFlight extends ItemRing {
 				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
 				cap.setFlightRing(true);
 				if(!player.capabilities.isCreativeMode && this.canFly(player, stack)) {
-					double flightHeight = 4.1D;
+					double flightHeight = 3.5D;
 					if(player.world.isRemote || cap.isFlying())
 						player.capabilities.allowFlying = true;
 					boolean isFlying = cap.isFlying();
@@ -83,8 +83,8 @@ public class ItemRingOfFlight extends ItemRing {
 								Vec3d dir = new Vec3d(entity.getLookVec().x, 0, entity.getLookVec().z).normalize();
 
 								if(player.moveForward > 0) {
-									entity.motionX += dir.x * 0.035F;
-									entity.motionZ += dir.z * 0.035F;
+									entity.motionX += dir.x * 0.02F;
+									entity.motionZ += dir.z * 0.02F;
 								}
 
 								double my = 0.0D;
