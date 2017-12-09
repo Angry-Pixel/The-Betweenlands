@@ -258,3 +258,4 @@
         "variant=mud_tiles_cracked_decay,connected_down=true,connected_east=true,connected_north=true,connected_south=true,connected_up=true,connected_west=true": { "model": "thebetweenlands:mud_tiles_decay_middle" }
 	}
 }
+
