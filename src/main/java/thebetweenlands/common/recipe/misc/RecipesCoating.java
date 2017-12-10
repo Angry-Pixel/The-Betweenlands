@@ -35,7 +35,7 @@ public class RecipesCoating extends IForgeRegistryEntry.Impl<IRecipe> implements
 				}
 			}
 		}
-		return coating > 0 && tool != null;
+		return coating > 0 && !tool.isEmpty();
 	}
 
 	@Override
