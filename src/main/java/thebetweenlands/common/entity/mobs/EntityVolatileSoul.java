@@ -1,6 +1,9 @@
 package thebetweenlands.common.entity.mobs;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Deque;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +25,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
@@ -33,6 +38,8 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 
 	protected static final DataParameter<Optional<UUID>> OWNER_UUID_DW = EntityDataManager.createKey(EntityVolatileSoul.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 
+	protected Deque<Vec3d> trail = new LinkedList<>();
+	
 	public EntityVolatileSoul(World world) {
 		super(world);
 		this.setSize(0.3F, 0.3F);
@@ -146,11 +153,10 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 		if(!this.isDead) {
 			this.ticksInAir++;
 			if(this.world.isRemote) {
-				double px = this.posX + this.world.rand.nextFloat() * 0.25F;
-				double py = this.posY + this.world.rand.nextFloat() * 0.25F;
-				double pz = this.posZ + this.world.rand.nextFloat() * 0.25F;
-				Vec3d vec = new Vec3d(px, py, pz).subtract(new Vec3d(this.posX + 0.125F, this.posY + 0.125F, this.posZ + 0.125F)).normalize();
-				BLParticles.STEAM_PURIFIER.spawn(this.world, px, py, pz, ParticleArgs.get().withMotion(vec.x * 0.05F, vec.y * 0.05F, vec.z * 0.05F));
+				this.trail.push(this.getPositionVector());
+				while(this.trail.size() > 4) {
+					this.trail.removeLast();
+				}
 			}
 			if(this.target == null || this.target.isDead) {
 				List<Entity> targetList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
@@ -263,5 +269,10 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setUniqueId("ownerUUID", this.getOwnerUUID());
 		nbt.setInteger("strikes", this.strikes);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public Collection<Vec3d> getTrail() {
+		return this.trail;
 	}
 }
