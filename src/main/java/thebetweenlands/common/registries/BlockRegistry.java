@@ -112,6 +112,7 @@ import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
 import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick.EnumCarvedMudBrickType;
 import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDrippingMud;
@@ -450,6 +451,12 @@ public class BlockRegistry {
     public static final Block MUD_TILES = new BlockMudTiles();
     public static final Block PUFFSHROOM = new BlockPuffshroom();
     public static final Block MUD_BRICKS_CARVED = new BlockCarvedMudBrick();
+    public static final Block MUD_BRICK_STAIRS_DECAY_1 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1));
+    public static final Block MUD_BRICK_STAIRS_DECAY_2 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2));
+    public static final Block MUD_BRICK_STAIRS_DECAY_3 = new BlockStairsBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3));
+    public static final Block MUD_BRICK_SLAB_DECAY_1 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1).getBlock());
+    public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
+    public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
 
     public static final Block PRESENT = new BlockPresent();
     
