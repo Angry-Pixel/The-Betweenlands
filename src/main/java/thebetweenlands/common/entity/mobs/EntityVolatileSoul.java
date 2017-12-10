@@ -73,7 +73,7 @@ public class EntityVolatileSoul extends Entity implements IProjectile, IEntityBL
 	}
 
 	protected void onImpact(RayTraceResult target) {
-		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase && target.entityHit instanceof EntityWight == false) {
+		if (target.entityHit != null && target.entityHit instanceof EntityLivingBase && target.entityHit instanceof EntityWight == false && target.entityHit instanceof EntitySwampHag == false) {
 			if(!this.world.isRemote) {
 				if(target.entityHit instanceof EntityPlayer && ((EntityPlayer)target.entityHit).isActiveItemStackBlocking() && ((EntityPlayer)target.entityHit).getItemInUseCount() <= 15) {
 					this.motionX *= -6;

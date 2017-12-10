@@ -54,4 +54,172 @@ public class BLMaterialRegistry {
 	public static final Material TAR = new MaterialLiquid(MapColor.BLACK);
 	public static final Material RUBBER = new MaterialLiquid(MapColor.WATER);
 	public static final Material SLUDGE = new BLMaterial(MapColor.DIRT).setRequiresTool();
+
+	public static int getMinRepairFuelCost(ToolMaterial material) {
+		if(material == TOOL_WEEDWOOD) {
+			return 2;
+		} else if(material == TOOL_BONE) {
+			return 3;
+		} else if(material == TOOL_LURKER_SKIN) {
+			return 4;
+		} else if(material == TOOL_DENTROTHYST) {
+			return 5;
+		} else if(material == TOOL_OCTINE) {
+			return 5;
+		} else if(material == TOOL_SYRMORITE) {
+			return 5;
+		} else if(material == TOOL_VALONITE) {
+			return 6;
+		} else if(material == TOOL_LOOT) {
+			return 16;
+		} else if(material == TOOL_LEGEND) {
+			return 24;
+		}
+		return 4;
+	}
+
+	public static int getFullRepairFuelCost(ToolMaterial material) {
+		if(material == TOOL_WEEDWOOD) {
+			return 6;
+		} else if(material == TOOL_BONE) {
+			return 8;
+		} else if(material == TOOL_LURKER_SKIN) {
+			return 10;
+		} else if(material == TOOL_DENTROTHYST) {
+			return 10;
+		} else if(material == TOOL_OCTINE) {
+			return 12;
+		} else if(material == TOOL_SYRMORITE) {
+			return 12;
+		} else if(material == TOOL_VALONITE) {
+			return 16;
+		} else if(material == TOOL_LOOT) {
+			return 32;
+		} else if(material == TOOL_LEGEND) {
+			return 48;
+		}
+		return 8;
+	}
+
+	public static int getMinRepairLifeCost(ToolMaterial material) {
+		if(material == TOOL_WEEDWOOD) {
+			return 4;
+		} else if(material == TOOL_BONE) {
+			return 4;
+		} else if(material == TOOL_LURKER_SKIN) {
+			return 4;
+		} else if(material == TOOL_DENTROTHYST) {
+			return 4;
+		} else if(material == TOOL_OCTINE) {
+			return 5;
+		} else if(material == TOOL_SYRMORITE) {
+			return 5;
+		} else if(material == TOOL_VALONITE) {
+			return 12;
+		} else if(material == TOOL_LOOT) {
+			return 32;
+		} else if(material == TOOL_LEGEND) {
+			return 48;
+		}
+		return 4;
+	}
+
+	public static int getFullRepairLifeCost(ToolMaterial material) {
+		if(material == TOOL_WEEDWOOD) {
+			return 16;
+		} else if(material == TOOL_BONE) {
+			return 16;
+		} else if(material == TOOL_LURKER_SKIN) {
+			return 16;
+		} else if(material == TOOL_DENTROTHYST) {
+			return 16;
+		} else if(material == TOOL_OCTINE) {
+			return 32;
+		} else if(material == TOOL_SYRMORITE) {
+			return 32;
+		} else if(material == TOOL_VALONITE) {
+			return 48;
+		} else if(material == TOOL_LOOT) {
+			return 64;
+		} else if(material == TOOL_LEGEND) {
+			return 110;
+		}
+		return 8;
+	}
+
+	public static int getMinRepairFuelCost(ArmorMaterial material) {
+		if(material == ARMOR_BL_CLOTH) {
+			return 2;
+		} else if(material == ARMOR_BONE) {
+			return 3;
+		} else if(material == ARMOR_RUBBER) {
+			return 3;
+		} else if(material == ARMOR_LURKER_SKIN) {
+			return 4;
+		} else if(material == ARMOR_SYRMORITE) {
+			return 5;
+		} else if(material == ARMOR_VALONITE) {
+			return 6;
+		} else if(material == ARMOR_LEGEND) {
+			return 24;
+		}
+		return 4;
+	}
+
+	public static int getFullRepairFuelCost(ArmorMaterial material) {
+		if(material == ARMOR_BL_CLOTH) {
+			return 6;
+		} else if(material == ARMOR_BONE) {
+			return 8;
+		} else if(material == ARMOR_RUBBER) {
+			return 8;
+		} else if(material == ARMOR_LURKER_SKIN) {
+			return 10;
+		} else if(material == ARMOR_SYRMORITE) {
+			return 12;
+		} else if(material == ARMOR_VALONITE) {
+			return 16;
+		} else if(material == ARMOR_LEGEND) {
+			return 48;
+		}
+		return 8;
+	}
+
+	public static int getMinRepairLifeCost(ArmorMaterial material) {
+		if(material == ARMOR_BL_CLOTH) {
+			return 4;
+		} else if(material == ARMOR_BONE) {
+			return 4;
+		} else if(material == ARMOR_RUBBER) {
+			return 4;
+		} else if(material == ARMOR_LURKER_SKIN) {
+			return 4;
+		} else if(material == ARMOR_SYRMORITE) {
+			return 5;
+		} else if(material == ARMOR_VALONITE) {
+			return 12;
+		} else if(material == ARMOR_LEGEND) {
+			return 48;
+		}
+		return 4;
+	}
+
+	public static int getFullRepairLifeCost(ArmorMaterial material) {
+		if(material == ARMOR_BL_CLOTH) {
+			return 16;
+		} else if(material == ARMOR_BONE) {
+			return 16;
+		} else if(material == ARMOR_RUBBER) {
+			return 16;
+		} else if(material == ARMOR_LURKER_SKIN) {
+			return 16;
+		} else if(material == ARMOR_SYRMORITE) {
+			return 32;
+		} else if(material == ARMOR_VALONITE) {
+			return 48;
+		} else if(material == ARMOR_LEGEND) {
+			return 110;
+		}
+		return 8;
+	}
 }

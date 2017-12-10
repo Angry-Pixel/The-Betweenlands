@@ -20,6 +20,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.command.CommandAspectDiscovery;
@@ -194,5 +195,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(FoodSicknessHandler.class);
 		MinecraftForge.EVENT_BUS.register(BlockGenericDugSoil.class);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BlockWeedwoodBush.class);
 	}
 }

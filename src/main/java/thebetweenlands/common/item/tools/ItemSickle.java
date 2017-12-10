@@ -18,12 +18,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
 
 import javax.annotation.Nullable;
 
-public class ItemSickle extends Item implements ICorrodible {
+public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable {
 	public ItemSickle() {
 		this.setUnlocalizedName("thebetweenlands.sickle");
 		this.setMaxStackSize(1);
@@ -87,5 +88,25 @@ public class ItemSickle extends Item implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());
+	}
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return 6;
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return 16;
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return 12;
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return 32;
 	}
 }

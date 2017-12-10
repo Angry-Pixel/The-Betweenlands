@@ -34,9 +34,12 @@ public class WorldGenWeedwoodBush extends WorldGenerator {
 
 		this.setBlockAndNotifyAdequately(world, pos, BlockRegistry.WEEDWOOD_BUSH.getDefaultState());
 
-		for (int by = y; by <= y + (world.rand.nextInt(2) == 0 ? world.rand.nextInt(4) + 1 : 1); ++by) {
+		int startRadius = world.rand.nextInt(6) + 3;
+		int height = world.rand.nextInt(2) + 1;
+		
+		for (int by = y; by < y + height; ++by) {
 			int yo = by - y;
-			int radius = (int)((world.rand.nextInt(3) - yo) / (world.rand.nextFloat() * (yo * 2 + 1) * 0.1 + 1.0));
+			int radius = (int)((startRadius - yo) / (0.5 * (yo * 2 + 1) + 1.0));
 
 			for (int bx = x - radius; bx <= x + radius; ++bx) {
 				int xo = bx - x;
@@ -48,7 +51,7 @@ public class WorldGenWeedwoodBush extends WorldGenerator {
 
 					IBlockState checkBlockState = world.getBlockState(offsetPos);
 
-					if ((Math.abs(xo) != radius || Math.abs(zo) != radius || rand.nextInt(4) == 0) && checkBlockState.getBlock().canBeReplacedByLeaves(checkBlockState, world, offsetPos) && rand.nextInt((int)((xo*xo+zo*zo)*1.5+1)) < 2) {
+					if (checkBlockState.getBlock().canBeReplacedByLeaves(checkBlockState, world, offsetPos) && rand.nextInt((int)((xo*xo+zo*zo)*1.25+1)) < 2) {
 						IBlockState blockStateBelow = world.getBlockState(offsetPos.setPos(bx, by - 1, bz));
 						if(blockStateBelow.getBlock() == BlockRegistry.WEEDWOOD_BUSH || SurfaceType.GRASS_AND_DIRT.matches(blockStateBelow)) {
 							this.setBlockAndNotifyAdequately(world, new BlockPos(bx, by, bz), BlockRegistry.WEEDWOOD_BUSH.getDefaultState());

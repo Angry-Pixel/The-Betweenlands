@@ -19,6 +19,7 @@ public class EnvironmentEventRegistry {
 	public final EventBloodSky bloodSky;
 	public final EventSpoopy spoopy;
 	public final EventWinter winter;
+	public final EventSnowfall snowfall;
 
 	private World world;
 
@@ -31,6 +32,7 @@ public class EnvironmentEventRegistry {
 		bloodSky = new EventBloodSky(this);
 		spoopy = new EventSpoopy(this);
 		winter = new EventWinter(this);
+		snowfall = new EventSnowfall(this);
 	}
 
 	public World getWorld() {
@@ -44,6 +46,7 @@ public class EnvironmentEventRegistry {
 		register(bloodSky);
 		register(spoopy);
 		register(winter);
+		register(snowfall);
 		
 		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));
 	}

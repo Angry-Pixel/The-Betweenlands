@@ -8,11 +8,33 @@ import net.minecraft.item.ItemShears;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.BLMaterialRegistry;
 
-public class ItemSyrmoriteShears extends ItemShears {
+public class ItemSyrmoriteShears extends ItemShears implements IAnimatorRepairable {
 	public ItemSyrmoriteShears() {
 		this.setCreativeTab(BLCreativeTabs.GEARS);
+	}
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_SYRMORITE);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_SYRMORITE);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_SYRMORITE);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_SYRMORITE);
 	}
 	
 	//TODO: For sickle

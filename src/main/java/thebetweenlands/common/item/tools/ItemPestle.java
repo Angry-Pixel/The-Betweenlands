@@ -10,13 +10,14 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.util.TranslationHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemPestle extends Item {
+public class ItemPestle extends Item implements IAnimatorRepairable {
 
     public ItemPestle() {
         setMaxDamage(128);
@@ -59,4 +60,24 @@ public class ItemPestle extends Item {
         }
         return true;
     }
+
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return 4;
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return 8;
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return 4;
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return 12;
+	}
 }

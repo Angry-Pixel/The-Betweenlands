@@ -14,6 +14,14 @@ public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 	private float tiltOffsetX;
 	private float tiltOffsetZ;
 
+	private boolean genIvy;
+	
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos) {
+		this.genIvy = rand.nextInt(5) == 0;
+		return super.generate(world, rand, pos);
+	}
+	
 	@Override
 	protected boolean canFungusGenerateAtY(int dy, int height) {
 		return super.canFungusGenerateAtY(dy, height) && dy > 5 && dy <= height - 4;
@@ -40,7 +48,9 @@ public class WorldGenGiantTreeDead extends WorldGenGiantTreeTrunk {
 		int tilt = calculateTilt(dx, dz);
 		if (distanceToTop > radius * 0.75F && height - tilt > dy) {
 			super.placeBark(world, rand, radius, height, blockX, blockY, blockZ, dx, dy, dz);
-			addVineToRandomBlockSide(world, rand, blockX + dx, blockY + dy, blockZ + dz);
+			if(this.genIvy) {
+				addVineToRandomBlockSide(world, rand, blockX + dx, blockY + dy, blockZ + dz);
+			}
 		}
 	}
 

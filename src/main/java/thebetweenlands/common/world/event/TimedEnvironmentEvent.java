@@ -29,9 +29,19 @@ public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
 				} else {
 					this.startTicks = this.ticks = this.getOnTime(world.rand);
 				}
-				this.setActive(!this.isActive(), true);
+				if(this.isActive() || this.canActivate()) {
+					this.setActive(!this.isActive(), true);
+				}
 			}
 		}
+	}
+	
+	/**
+	 * Returns whether the event can activate right now
+	 * @return
+	 */
+	protected boolean canActivate() {
+		return true;
 	}
 
 	/**

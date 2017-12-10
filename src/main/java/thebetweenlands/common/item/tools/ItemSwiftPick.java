@@ -33,4 +33,9 @@ public class ItemSwiftPick extends ItemBLPickaxe {
 		}
 		return false;
 	}
+	
+	@Override
+	public boolean isRepairableByAnimator(ItemStack stack) {
+		return false;
+	}
 }

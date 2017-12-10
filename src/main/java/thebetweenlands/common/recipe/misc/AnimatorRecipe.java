@@ -135,11 +135,6 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 		return this.closeOnFinish;
 	}
 
-	@Override
-	public ItemStack input() {
-		return input;
-	}
-
 	/**
 	 * Sets whether the GUI should close when the animator has finished
 	 * @param close

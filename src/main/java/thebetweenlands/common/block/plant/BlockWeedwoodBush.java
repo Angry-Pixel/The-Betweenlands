@@ -1,5 +1,6 @@
 package thebetweenlands.common.block.plant;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -16,6 +17,7 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -25,20 +27,32 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.common.property.ExtendedBlockState;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
+import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
+import thebetweenlands.api.capability.ICustomStepSoundCapability;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarvestable {
 	public static final PropertyBool NORTH = PropertyBool.create("north");
@@ -158,12 +172,20 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-		if (entityIn instanceof WeedWoodBushUncollidableEntity) {
+		if (entityIn instanceof EntityPlayer || entityIn instanceof WeedWoodBushUncollidableEntity) {
 			return;
 		}
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, p_185477_7_);
 	}
-	
+
+	@Override
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity){
+		if(entity instanceof EntityPlayer) {
+			entity.motionX *= 0.06D;
+			entity.motionZ *= 0.06D;
+		}
+	}
+
 	@Override
 	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, ItemStack stack) {
 		if(!worldIn.isRemote && !stack.isEmpty() && stack.getItem() instanceof ItemShears) {
@@ -173,9 +195,50 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 			super.harvestBlock(worldIn, player, pos, state, te, stack);
 		}
 	}
-	
+
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return BlockFaceShape.UNDEFINED;
-    }
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
+	}
+
+	@SubscribeEvent
+	public static void onLivingUpdate(LivingUpdateEvent event) {
+		EntityLivingBase entity = event.getEntityLiving();
+		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null)) {
+			ICustomStepSoundCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_CUSTOM_STEP_SOUND, null);
+			if(entity.distanceWalkedOnStepModified > cap.getNextWeedwoodBushStep()) {
+				boolean inBush = false;
+				AxisAlignedBB aabb = entity.getEntityBoundingBox();
+				Iterator<MutableBlockPos> it = BlockPos.getAllInBoxMutable(new BlockPos(aabb.minX, aabb.minY, aabb.minZ), new BlockPos(aabb.maxX, aabb.maxY, aabb.maxZ)).iterator();
+				while(it.hasNext()) {
+					MutableBlockPos pos = it.next();
+					if(entity.world.isBlockLoaded(pos) && entity.world.getBlockState(pos).getBlock() == BlockRegistry.WEEDWOOD_BUSH) {
+						inBush = true;
+						if(entity.world.isRemote) {
+							spawnLeafParticles(entity.world, pos, Math.min((entity.distanceWalkedOnStepModified - cap.getNextWeedwoodBushStep()) * 40, 1));
+						}
+					}
+				}
+				if(inBush) {
+					entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundRegistry.GECKO_HIDE, SoundCategory.BLOCKS, 0.4F, entity.world.rand.nextFloat() * 0.3F + 0.7F);
+				}
+				cap.setNextWeeedwoodBushStep(entity.distanceWalkedOnStepModified + 0.8F);
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected static void spawnLeafParticles(World world, BlockPos pos, float strength) {
+		int leafCount = (int)(60 * strength) + 1;
+		float x = pos.getX() + 0.5F;
+		float y = pos.getY() + 0.5F;
+		float z = pos.getZ() + 0.5F;
+		while (leafCount-- > 0) {
+			float dx = world.rand.nextFloat() * 2 - 1;
+			float dy = world.rand.nextFloat() * 2 - 0.5F;
+			float dz = world.rand.nextFloat() * 2 - 1;
+			float mag = 0.01F + world.rand.nextFloat() * 0.07F;
+			BLParticles.WEEDWOOD_LEAF.spawn(world, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
+		}
+	}
 }

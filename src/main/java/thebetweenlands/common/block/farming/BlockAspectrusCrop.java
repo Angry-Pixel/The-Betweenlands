@@ -211,4 +211,18 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityAspectrusCrop();
 	}
+	
+	@Override
+	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+		int age = state.getValue(AGE) + (rand.nextInt(2) == 0 ? 1 : 0);
+		if(age > 15) {
+			age = 15;
+			int height;
+			for (height = 1; worldIn.getBlockState(pos.down(height)).getBlock() == this; ++height);
+			if(this.canGrowUp(worldIn, pos, state, height)) {
+				this.growUp(worldIn, pos);
+			}
+		}
+		worldIn.setBlockState(pos, state.withProperty(AGE, age));
+	}
 }

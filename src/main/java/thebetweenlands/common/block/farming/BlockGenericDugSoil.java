@@ -135,7 +135,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new ExtendedBlockState(this, new IProperty[]{COMPOSTED, DECAYED}, new IUnlistedProperty[]{TOP_NORTH_WEST_INDEX, TOP_NORTH_EAST_INDEX, TOP_SOUTH_WEST_INDEX, TOP_SOUTH_EAST_INDEX});
+        return this.getConnectedTextureBlockStateContainer(new ExtendedBlockState(this, new IProperty[]{COMPOSTED, DECAYED}, new IUnlistedProperty[0]));
     }
 
     @Override
@@ -161,7 +161,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     @Override
     public IBlockState getExtendedState(IBlockState oldState, IBlockAccess worldIn, BlockPos pos) {
         IExtendedBlockState state = (IExtendedBlockState) oldState;
-        return this.getExtendedConnectedTextureState(state, worldIn, pos, p -> worldIn.getBlockState(p).getBlock() instanceof BlockGenericDugSoil /*TODO: Add canConnectTo similar to fence?*/);
+        return this.getExtendedConnectedTextureState(state, worldIn, pos, p -> worldIn.getBlockState(p).getBlock() instanceof BlockGenericDugSoil /*TODO: Add canConnectTo similar to fence?*/, false);
     }
 
     @Override

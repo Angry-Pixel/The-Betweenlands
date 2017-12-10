@@ -3,7 +3,11 @@ package thebetweenlands.common.item.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Multimap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -11,7 +15,10 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,15 +31,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.NBTHelper;
-
-import javax.annotation.Nullable;
 
 
 public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
@@ -49,13 +54,17 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
-		tooltip.add(I18n.format("tooltip.shockwaveSword.usage"));
+		if(stack.getItemDamage() == stack.getMaxDamage()) {
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwaveSword.broken"), 0));
+		} else {
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwaveSword.usage"), 0));
+		}
 	}
 
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int slot, boolean isHeldItem) {
 		CorrosionHelper.updateCorrosion(stack, world, entity, slot, isHeldItem);
-		
+
 		if (!stack.hasTagCompound())
 			stack.setTagCompound(new NBTTagCompound());
 		if (!stack.getTagCompound().hasKey("cooldown"))
@@ -76,10 +85,17 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		ItemStack stack = player.getHeldItem(hand);
+
 		if (!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 			return EnumActionResult.PASS;
 		}
+
+		if(stack.getItemDamage() == stack.getMaxDamage()) {
+			stack.getTagCompound().setInteger("cooldown", 0);
+			return EnumActionResult.PASS;
+		}
+
 		if (stack.getTagCompound().getInteger("uses") < 3) {
 			if (!world.isRemote) {
 				stack.damageItem(2, player);
@@ -136,5 +152,45 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		boolean wasCharging = oldStack.getTagCompound() != null && oldStack.getTagCompound().getInteger("cooldown") < 60;
 		boolean isCharging = newStack.getTagCompound() != null && newStack.getTagCompound().getInteger("cooldown") < 60;
 		return (super.shouldCauseReequipAnimation(oldStack, newStack, slotChanged) && !isCharging || isCharging != wasCharging) || !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
+	}
+
+	@Override
+	public void setDamage(ItemStack stack, int damage) {
+		int maxDamage = stack.getMaxDamage();
+		if(damage > maxDamage) {
+			//Don't let the sword break
+			damage = maxDamage;
+		}
+		super.setDamage(stack, damage);
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getAttributeModifiers(EntityEquipmentSlot slot, ItemStack stack) {
+		if(slot == EntityEquipmentSlot.MAINHAND && stack.getItemDamage() == stack.getMaxDamage()) {
+			Multimap<String, AttributeModifier> map = HashMultimap.<String, AttributeModifier>create();
+			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", -1, 1));
+			return map;
+		}
+		return super.getAttributeModifiers(slot, stack);
+	}
+	
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(BLMaterialRegistry.TOOL_LEGEND);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(BLMaterialRegistry.TOOL_LEGEND);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(BLMaterialRegistry.TOOL_LEGEND);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_LEGEND);
 	}
 }

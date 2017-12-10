@@ -29,7 +29,6 @@ import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
-import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
@@ -47,12 +46,6 @@ public class EventWinter extends EnvironmentEvent {
 	private World world;
 	private World lastWorld;
 	private boolean chatSent = false;
-
-	private float snowingStrength = 0.0F;
-	private float targetSnowingStrength = 0.0F;
-
-	private int snowingCooldownTicks = 0;
-	private int snowingTicks = 0;
 
 	public EventWinter(EnvironmentEventRegistry registry) {
 		super(registry);
@@ -72,20 +65,6 @@ public class EventWinter extends EnvironmentEvent {
 			}
 		}
 		return false;
-	}
-
-	public static float getSnowingStrength(World world) {
-		if(world != null) {
-			WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
-			if(provider != null) {
-				return provider.getEnvironmentEventRegistry().winter.getSnowingStrength();
-			}
-		}
-		return 0;
-	}
-
-	public float getSnowingStrength() {
-		return this.snowingStrength;
 	}
 
 	@Override
@@ -134,29 +113,6 @@ public class EventWinter extends EnvironmentEvent {
 			}
 
 			if(this.isActive()) {
-				if(this.snowingTicks <= 0) {
-					if(this.snowingCooldownTicks <= 0) {
-						this.snowingTicks = 4800 + world.rand.nextInt(6000);
-						this.markDirty();
-					} else {
-						this.snowingCooldownTicks--;
-					}
-				} else {
-					this.snowingTicks--;
-					if(this.snowingTicks <= 0) {
-						this.snowingCooldownTicks = 18000 + world.rand.nextInt(18000);
-						this.markDirty();
-					}
-				}
-
-				if(this.snowingTicks > 0 && this.targetSnowingStrength <= 0) {
-					this.targetSnowingStrength = 0.5F + world.rand.nextFloat() * 7.5F;
-					this.markDirty();
-				} else if(this.snowingTicks <= 0 && this.targetSnowingStrength > 0) {
-					this.targetSnowingStrength = 0;
-					this.markDirty();
-				}
-
 				if(world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(10) == 0) {
 					WorldServer worldServer = (WorldServer)world;
 					for (Iterator<Chunk> iterator = worldServer.getPersistentChunkIterable(worldServer.getPlayerChunkMap().getChunkIterator()); iterator.hasNext(); ) {
@@ -187,46 +143,17 @@ public class EventWinter extends EnvironmentEvent {
 									world.setBlockState(pos, BlockRegistry.BLACK_ICE.getDefaultState());
 								}
 							}
-						} else if(this.snowingTicks > 0) {
-							if(world.rand.nextInt(Math.max(6 - (int)(this.getSnowingStrength() / 8.0F * 4.0F), 2)) == 0) {
-								IBlockState stateAbove = world.getBlockState(pos.up());
-								if(stateAbove.getBlock() == Blocks.AIR && BlockRegistry.SNOW.canPlaceBlockAt(world, pos.up())) {
-									world.setBlockState(pos.up(), BlockRegistry.SNOW.getDefaultState());
-								} else if(stateAbove.getBlock() instanceof BlockSnowBetweenlands) {
-									int layers = stateAbove.getValue(BlockSnowBetweenlands.LAYERS);
-									if(layers < 5) {
-										boolean hasEnoughSnowAround = true;
-										PooledMutableBlockPos checkPos = PooledMutableBlockPos.retain();
-										for(EnumFacing dir : EnumFacing.HORIZONTALS) {
-											checkPos.setPos(pos.getX() + dir.getFrontOffsetX(), pos.getY() + 1, pos.getZ() + dir.getFrontOffsetZ());
-											if(world.isBlockLoaded(checkPos)) {
-												IBlockState neighourState = world.getBlockState(checkPos);
-												if(BlockRegistry.SNOW.canPlaceBlockAt(world, checkPos) && (neighourState.getBlock() != BlockRegistry.SNOW || neighourState.getValue(BlockSnowBetweenlands.LAYERS) < layers)) {
-													hasEnoughSnowAround = false;
-												}
-											} else {
-												hasEnoughSnowAround = false;
-												break;
-											}
-										}
-										checkPos.release();
-										if(hasEnoughSnowAround) {
-											world.setBlockState(pos.up(), stateAbove.withProperty(BlockSnowBetweenlands.LAYERS, layers + 1));
-										}
-									}
-								}
-							}
+						}
 
-							if(world.rand.nextInt(3000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
-								if(world.isSideSolid(pos, EnumFacing.UP)) {
-									IBlockState stateAbove = world.getBlockState(pos.up());
-									if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
-										world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().withProperty(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
-										TileEntityPresent tile = BlockPresent.getTileEntity(world, pos.up());
-										if (tile != null) {
-											tile.setLootTable(LootTableRegistry.PRESENT, world.rand.nextLong());
-											tile.markDirty();
-										}
+						if(world.rand.nextInt(3000) == 0 && world.getClosestPlayer(pos.getX(), pos.getY(), pos.getZ(), 64.0D, false) == null) {
+							if(world.isSideSolid(pos, EnumFacing.UP)) {
+								IBlockState stateAbove = world.getBlockState(pos.up());
+								if(stateAbove.getBlock() == Blocks.AIR || (stateAbove.getBlock() instanceof BlockSnowBetweenlands && stateAbove.getValue(BlockSnowBetweenlands.LAYERS) <= 5)) {
+									world.setBlockState(pos.up(), BlockRegistry.PRESENT.getDefaultState().withProperty(BlockPresent.COLOR, EnumDyeColor.values()[world.rand.nextInt(EnumDyeColor.values().length)]));
+									TileEntityPresent tile = BlockPresent.getTileEntity(world, pos.up());
+									if (tile != null) {
+										tile.setLootTable(LootTableRegistry.PRESENT, world.rand.nextLong());
+										tile.markDirty();
 									}
 								}
 							}
@@ -234,30 +161,7 @@ public class EventWinter extends EnvironmentEvent {
 					}
 				}
 			}
-		} else {
-			this.updateSnowRenderer(world);
 		}
-
-		if(!this.isActive()) {
-			this.targetSnowingStrength = 0;
-		}
-
-		if(this.snowingStrength < this.targetSnowingStrength) {
-			this.snowingStrength += 0.01F;
-			if(this.snowingStrength > this.targetSnowingStrength) {
-				this.snowingStrength = this.targetSnowingStrength;
-			}
-		} else if(this.snowingStrength > this.targetSnowingStrength) {
-			this.snowingStrength -= 0.01F;
-			if(this.snowingStrength < this.targetSnowingStrength) {
-				this.snowingStrength = this.targetSnowingStrength;
-			}
-		}
-	}
-
-	@SideOnly(Side.CLIENT)
-	protected void updateSnowRenderer(World world) {
-		BLSnowRenderer.INSTANCE.update(world);
 	}
 
 	@Override
@@ -265,9 +169,6 @@ public class EventWinter extends EnvironmentEvent {
 		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
 		nbt.setBoolean("wasSet", this.wasSet);
-		nbt.setInteger("snowingCooldownTicks", this.snowingCooldownTicks);
-		nbt.setInteger("snowingTicks", this.snowingTicks);
-		nbt.setFloat("targetSnowingStrength", this.targetSnowingStrength);
 	}
 
 	@Override
@@ -275,21 +176,6 @@ public class EventWinter extends EnvironmentEvent {
 		super.loadEventData();
 		NBTTagCompound nbt = this.getData();
 		this.wasSet = nbt.getBoolean("wasSet");
-		this.snowingCooldownTicks = nbt.getInteger("snowingCooldownTicks");
-		this.snowingTicks = nbt.getInteger("snowingTicks");
-		this.targetSnowingStrength = nbt.getFloat("targetSnowingStrength");
-	}
-
-	@Override
-	public void loadEventPacket(NBTTagCompound nbt) {
-		super.loadEventPacket(nbt);
-		this.targetSnowingStrength = nbt.getFloat("targetSnowingStrength");
-	}
-
-	@Override
-	public void sendEventPacket(NBTTagCompound nbt) {
-		super.sendEventPacket(nbt);
-		nbt.setFloat("targetSnowingStrength", this.targetSnowingStrength);
 	}
 
 	@SubscribeEvent
@@ -315,7 +201,7 @@ public class EventWinter extends EnvironmentEvent {
 		if(world.provider instanceof WorldProviderBetweenlands && ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.isActive()) {
 			Fog targetFog = event.getAmbientFog();
 			float interp = (float) MathHelper.clamp((Minecraft.getMinecraft().player.posY - WorldProviderBetweenlands.CAVE_START + 10) / 10.0F, 0.0F, 1.0F);
-			float snowingStrength = ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().winter.getSnowingStrength();
+			float snowingStrength = ((WorldProviderBetweenlands)world.provider).getEnvironmentEventRegistry().snowfall.getSnowingStrength();
 			FogState state = event.getFogState();
 			Fog.MutableFog newFog = new Fog.MutableFog(event.getAmbientFog());
 			float newStart = Math.min(2.0F + event.getFarPlaneDistance() * 0.8F / (1.0F + snowingStrength), targetFog.getStart());

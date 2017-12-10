@@ -52,9 +52,9 @@ public class OverworldItemHandler {
 				for(int x = -2; x <= 2; x++) {
 					for(int y = -2; y <= 2; y++) {
 						for(int z = -2; z <= 2; z++) {
-							IBlockState block = event.getWorld().getBlockState(event.getPos().add(x, y, z));
-							if(block.getBlock() == Blocks.TORCH && !BlockRegistry.BLOCKS.contains(block.getBlock()) && !WHITELIST.contains(Item.getItemFromBlock(block.getBlock()))) {
-								EnumFacing facing = block.getValue(BlockTorch.FACING);
+							IBlockState state = event.getWorld().getBlockState(event.getPos().add(x, y, z));
+							if(state.getBlock() == Blocks.TORCH && !BlockRegistry.BLOCKS.contains(state.getBlock()) && !WHITELIST.contains(Item.getItemFromBlock(state.getBlock()))) {
+								EnumFacing facing = state.getValue(BlockTorch.FACING);
 								IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
 								event.getWorld().setBlockState(event.getPos().add(x, y, z), dampTorch);
 								event.getWorld().playSound(null, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
@@ -190,7 +190,7 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isRotting(ItemStack stack) {
-		return stack.getItem() instanceof ItemFood && !WHITELIST.contains(stack.getItem());
+		return stack.getItem() instanceof ItemFood && !WHITELIST.contains(stack.getItem()) && !ConfigHandler.isFoodConfigWhitelisted(stack);
 	}
 
 	public static boolean isTainting(ItemStack stack) {

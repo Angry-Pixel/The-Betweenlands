@@ -8,10 +8,12 @@ import javax.annotation.Nullable;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,20 +24,27 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockHanger extends Block implements IShearable, ISickleHarvestable {
+public class BlockHanger extends Block implements IShearable, ISickleHarvestable, IStateMappedBlock {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 
+	public static final PropertyBool CAN_GROW = PropertyBool.create("can_grow");
+	
 	public BlockHanger() {
 		super(Material.PLANTS);
 		this.setSoundType(SoundType.PLANT);
 		this.setHardness(0.5F);
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setTickRandomly(true);
+		this.setDefaultState(this.blockState.getBaseState().withProperty(CAN_GROW, true));
 	}
 
 	@Override
@@ -50,8 +59,9 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		Material material = worldIn.getBlockState(pos.up()).getMaterial();
-		return super.canPlaceBlockAt(worldIn, pos) && (worldIn.getBlockState(pos.up()).getBlock() instanceof BlockLog || material == Material.LEAVES || worldIn.getBlockState(pos.up()).getBlock() == this);
+		IBlockState stateAbove = worldIn.getBlockState(pos.up());
+		boolean canHangOn = stateAbove.getMaterial() == Material.LEAVES || stateAbove.isSideSolid(worldIn, pos.up(), EnumFacing.DOWN) || stateAbove.getBlock() == this;
+		return super.canPlaceBlockAt(worldIn, pos) && canHangOn;
 	}
 
 	@Override
@@ -68,8 +78,9 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
-		Material material = worldIn.getBlockState(pos.up()).getMaterial();
-		if (!(worldIn.getBlockState(pos.up()).getBlock() instanceof BlockLog || material == Material.LEAVES || worldIn.getBlockState(pos.up()).getBlock() == this)) {
+		IBlockState stateAbove = worldIn.getBlockState(pos.up());
+		boolean canHangOn = stateAbove.getMaterial() == Material.LEAVES || stateAbove.isSideSolid(worldIn, pos.up(), EnumFacing.DOWN) || stateAbove.getBlock() == this;
+		if (!canHangOn) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
 			worldIn.setBlockToAir(pos);
 		}
@@ -112,4 +123,25 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+	@SideOnly(Side.CLIENT)
+	@Override
+	public void setStateMapper(Builder builder) {
+		builder.ignore(CAN_GROW);
+	}
+	
+	@Override
+	protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[] {CAN_GROW});
+    }
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(CAN_GROW, meta == 0);
+	}
+	
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(CAN_GROW) ? 0 : 1;
+	}
 }

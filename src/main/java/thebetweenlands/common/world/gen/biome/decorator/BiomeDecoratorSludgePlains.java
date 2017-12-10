@@ -16,7 +16,7 @@ public class BiomeDecoratorSludgePlains extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("deadWeedwoodTree");
-		this.generate(4, DecorationHelper::generateDeadWeedwoodTree);
+		this.generate(4, DecorationHelper::generateRottenWeedwoodTree);
 		this.endProfilerSection();
 
 		this.startProfilerSection("tarPoolSurface");

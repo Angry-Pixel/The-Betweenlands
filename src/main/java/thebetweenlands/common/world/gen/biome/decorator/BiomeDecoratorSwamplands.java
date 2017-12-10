@@ -36,7 +36,7 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("weedwoodBush");
-		this.generate(45, DecorationHelper::generateWeedwoodBush);
+		this.generate(35, DecorationHelper::generateWeedwoodBush);
 		this.endProfilerSection();
 
 		this.startProfilerSection("rubberTree");
@@ -48,19 +48,19 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("swampReedCluster");
-		this.generate(40, DecorationHelper::generateSwampReedCluster);
+		this.generate(90, DecorationHelper::generateSwampReedCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("swampPlantCluster");
-		this.generate(8, DecorationHelper::generateSwampPlantCluster);
+		this.generate(26, DecorationHelper::generateSwampPlantCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("swampTallgrassCluster");
-		this.generate(100, DecorationHelper::generateSwampTallgrassCluster);
+		this.generate(150, DecorationHelper::generateSwampTallgrassCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("swampDoubleTallgrassCluster");
-		this.generate(200, DecorationHelper::generateSwampDoubleTallgrass);
+		this.generate(120, DecorationHelper::generateSwampDoubleTallgrass);
 		this.endProfilerSection();
 
 		this.startProfilerSection("venusFlyTrapCluster");
@@ -72,15 +72,15 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("flatHeadMushroomCluster");
-		this.generate(2, DecorationHelper::generateFlatHeadMushroomCluster);
+		this.generate(12, DecorationHelper::generateFlatHeadMushroomCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("blackHatMushroomCluster");
-		this.generate(2, DecorationHelper::generateBlackHatMushroomCluster);
+		this.generate(12, DecorationHelper::generateBlackHatMushroomCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("volarpad");
-		this.generate(2, DecorationHelper::generateVolarpad);
+		this.generate(18, DecorationHelper::generateVolarpad);
 		this.endProfilerSection();
 
 		this.startProfilerSection("cattailCluster");
@@ -92,7 +92,7 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("nettlesCluster");
-		this.generate(8, DecorationHelper::generateNettlesCluster);
+		this.generate(2, DecorationHelper::generateNettlesCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("mossCluster");

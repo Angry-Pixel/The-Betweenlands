@@ -1,8 +1,8 @@
 package thebetweenlands.api.recipes;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import mcp.MethodsReturnNonnullByDefault;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -46,7 +46,7 @@ public interface IAnimatorRecipe {
 	 * @param stack
 	 * @return
 	 */
-	@MethodsReturnNonnullByDefault
+	@Nonnull
 	public ItemStack getResult(ItemStack stack);
 
 	/**
@@ -65,7 +65,7 @@ public interface IAnimatorRecipe {
 	 * @param stack
 	 * @return
 	 */
-	@MethodsReturnNonnullByDefault
+	@Nonnull
 	public ItemStack onAnimated(World world, BlockPos pos, ItemStack stack);
 
 	/**
@@ -83,6 +83,4 @@ public interface IAnimatorRecipe {
 	 * @return
 	 */
 	public boolean getCloseOnFinish(ItemStack stack);
-
-	public ItemStack input();
 }

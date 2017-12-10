@@ -31,6 +31,7 @@ import thebetweenlands.common.entity.ai.EntityAIFlyRandomly;
 import thebetweenlands.common.entity.ai.EntityAIMoveToDirect;
 import thebetweenlands.common.entity.ai.EntityAITargetNonSneaking;
 import thebetweenlands.common.entity.ai.EntityAIWightAttack;
+import thebetweenlands.common.entity.ai.EntityAIWightBuffSwampHag;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -79,7 +80,8 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
         this.tasks.addTask(0, new EntityAISwimming(this));
         this.tasks.addTask(1, new EntityAIWightAttack(this, 1.0D, false));
-        this.tasks.addTask(2, new EntityAIMoveToDirect<EntityWight>(this, this.getAttributeMap().getAttributeInstance(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue()) {
+        this.tasks.addTask(2, new EntityAIWightBuffSwampHag(this));
+        this.tasks.addTask(3, new EntityAIMoveToDirect<EntityWight>(this, this.getAttributeMap().getAttributeInstance(VOLATILE_FLIGHT_SPEED_ATTRIB).getAttributeValue()) {
             @Override
             protected Vec3d getTarget() {
                 if (this.entity.volatileTicks >= 20) {
@@ -140,7 +142,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
             } else {
                 this.setHiding(false);
 
-                if (this.canTurnVolatile && !this.isVolatile() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatileOnTarget) {
+                if (this.canTurnVolatile && !this.isVolatile() && !this.isRiding() && this.canPossess(this.getAttackTarget()) && this.canTurnVolatileOnTarget) {
                     if (this.volatileCooldownTicks > 0) {
                         this.volatileCooldownTicks--;
                     }
@@ -187,7 +189,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
             if (this.getAttackTarget() != null) {
                 EntityLivingBase attackTarget = this.getAttackTarget();
 
-                if (this.getDistance(attackTarget) < 1.75D) {
+                if (this.getRidingEntity() == null && this.getDistance(attackTarget) < 1.75D) {
                     this.startRiding(attackTarget, true);
                     this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(attackTarget));
                 }
@@ -213,7 +215,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
                     if (this.ticksExisted % 5 == 0) {
                         List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
-                        if (existingSouls.size() < 26) {
+                        if (existingSouls.size() < 16) {
                             EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
                             float mx = this.world.rand.nextFloat() - 0.5F;
                             float my = this.world.rand.nextFloat() / 2.0F;
@@ -475,7 +477,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
     public boolean canPossess(EntityLivingBase entity) {
-        return entity instanceof EntityPlayer && (((EntityPlayer) entity).inventory.getStackInSlot(103) == null || ((EntityPlayer) entity).inventory.getStackInSlot(103).getItem() != ItemRegistry.SKULL_MASK);
+        return entity instanceof EntitySwampHag || (entity instanceof EntityPlayer && (((EntityPlayer) entity).inventory.getStackInSlot(103) == null || ((EntityPlayer) entity).inventory.getStackInSlot(103).getItem() != ItemRegistry.SKULL_MASK));
     }
 
     public void setCanTurnVolatile(boolean canTurnVolatile) {

@@ -23,12 +23,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.item.CorrosionHelper;
+import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 
 import javax.annotation.Nullable;
 
-public class ItemBLShovel extends ItemSpade implements ICorrodible {
+public class ItemBLShovel extends ItemSpade implements ICorrodible, IAnimatorRepairable {
 	public ItemBLShovel(ToolMaterial material) {
 		super(material);
 
@@ -109,5 +111,25 @@ public class ItemBLShovel extends ItemSpade implements ICorrodible {
 			}
 		}
 		return EnumActionResult.PASS;
+	}
+	
+	@Override
+	public int getMinRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairFuelCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getFullRepairFuelCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairFuelCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getMinRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getMinRepairLifeCost(this.toolMaterial);
+	}
+
+	@Override
+	public int getFullRepairLifeCost(ItemStack stack) {
+		return BLMaterialRegistry.getFullRepairLifeCost(this.toolMaterial);
 	}
 }
