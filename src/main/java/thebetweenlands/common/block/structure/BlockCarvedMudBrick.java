@@ -22,13 +22,13 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockMudTilesOld extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
+public class BlockCarvedMudBrick extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
 
-	public static final PropertyEnum<EnumMudTileType> VARIANT = PropertyEnum.<EnumMudTileType>create("variant", EnumMudTileType.class);
+	public static final PropertyEnum<EnumCarvedMudBrickType> VARIANT = PropertyEnum.<EnumCarvedMudBrickType>create("variant", EnumCarvedMudBrickType.class);
 	
-	public BlockMudTilesOld() {
+	public BlockCarvedMudBrick() {
 		super(Material.ROCK);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumMudTileType.MUD_TILES));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_CARVED));
 		setHardness(1.5F);
 		setResistance(10.0F);
 		setSoundType(SoundType.STONE);
@@ -39,28 +39,28 @@ public class BlockMudTilesOld extends BasicBlock implements BlockRegistry.ICusto
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if (tab == BLCreativeTabs.BLOCKS)
-			for (EnumMudTileType type : EnumMudTileType.values())
+			for (EnumCarvedMudBrickType type : EnumCarvedMudBrickType.values())
 				list.add(new ItemStack(this, 1, type.ordinal()));
 	}
 
 	@Override
     public boolean isOpaqueCube(IBlockState state) {
-        return true;
+        return false;
     }
 
 	@Override
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
-		return new ItemStack(this, 1, ((EnumMudTileType)state.getValue(VARIANT)).getMetadata());
+		return new ItemStack(this, 1, ((EnumCarvedMudBrickType)state.getValue(VARIANT)).getMetadata());
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(VARIANT, EnumMudTileType.byMetadata(meta));
+		return this.getDefaultState().withProperty(VARIANT, EnumCarvedMudBrickType.byMetadata(meta));
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumMudTileType)state.getValue(VARIANT)).getMetadata();
+		return ((EnumCarvedMudBrickType)state.getValue(VARIANT)).getMetadata();
 	}
 
 	@Override
@@ -70,24 +70,28 @@ public class BlockMudTilesOld extends BasicBlock implements BlockRegistry.ICusto
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return ((EnumMudTileType)state.getValue(VARIANT)).getMetadata();
+		return ((EnumCarvedMudBrickType)state.getValue(VARIANT)).getMetadata();
 	}
 
-	public static enum EnumMudTileType implements IStringSerializable {
-		MUD_TILES,
-		MUD_TILES_DECAY_1,
-		MUD_TILES_DECAY_2,
-		MUD_TILES_DECAY_3,
-		MUD_TILES_DECAY_4,
-		MUD_TILES_CRACKED,
-		MUD_TILES_CRACKED_DECAY_1,
-		MUD_TILES_CRACKED_DECAY_2,
-		MUD_TILES_CRACKED_DECAY_3,
-		MUD_TILES_CRACKED_DECAY_4;
+	public static enum EnumCarvedMudBrickType implements IStringSerializable {
+		MUD_BRICKS_CARVED,
+		MUD_BRICKS_CARVED_DECAY_1,
+		MUD_BRICKS_CARVED_DECAY_2,
+		MUD_BRICKS_CARVED_DECAY_3,
+		MUD_BRICKS_CARVED_DECAY_4,
+		MUD_BRICKS_CARVED_EDGE,
+		MUD_BRICKS_CARVED_EDGE_DECAY_1,
+		MUD_BRICKS_CARVED_EDGE_DECAY_2,
+		MUD_BRICKS_CARVED_EDGE_DECAY_3,
+		MUD_BRICKS_CARVED_EDGE_DECAY_4,
+		MUD_BRICKS_DECAY_1,
+		MUD_BRICKS_DECAY_2,
+		MUD_BRICKS_DECAY_3,
+		MUD_BRICKS_DECAY_4;
 
 		private final String name;
 
-		private EnumMudTileType() {
+		private EnumCarvedMudBrickType() {
 			this.name = name().toLowerCase(Locale.ENGLISH);
 		}
 
@@ -100,7 +104,7 @@ public class BlockMudTilesOld extends BasicBlock implements BlockRegistry.ICusto
 			return this.name;
 		}
 
-		public static EnumMudTileType byMetadata(int metadata) {
+		public static EnumCarvedMudBrickType byMetadata(int metadata) {
 			if (metadata < 0 || metadata >= values().length) {
 				metadata = 0;
 			}
@@ -115,16 +119,16 @@ public class BlockMudTilesOld extends BasicBlock implements BlockRegistry.ICusto
 
 	@Override
 	public ItemBlock getItemBlock() {
-		return ItemBlockEnum.create(this, EnumMudTileType.class);
+		return ItemBlockEnum.create(this, EnumCarvedMudBrickType.class);
 	}
 
 	@Override
 	public int getSubtypeNumber() {
-		return EnumMudTileType.values().length;
+		return EnumCarvedMudBrickType.values().length;
 	}
 
 	@Override
 	public String getSubtypeName(int meta) {
-		return EnumMudTileType.values()[meta].getName();
+		return EnumCarvedMudBrickType.values()[meta].getName();
 	}
 }

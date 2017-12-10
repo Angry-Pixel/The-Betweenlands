@@ -111,6 +111,7 @@ import thebetweenlands.common.block.plant.BlockVenusFlyTrap;
 import thebetweenlands.common.block.plant.BlockWaterWeeds;
 import thebetweenlands.common.block.plant.BlockWeedwoodBush;
 import thebetweenlands.common.block.plant.BlockWeepingBlue;
+import thebetweenlands.common.block.structure.BlockCarvedMudBrick;
 import thebetweenlands.common.block.structure.BlockChipPath;
 import thebetweenlands.common.block.structure.BlockDoorBetweenlands;
 import thebetweenlands.common.block.structure.BlockDrippingMud;
@@ -448,7 +449,8 @@ public class BlockRegistry {
     public static final Block DRIPPING_MUD = new BlockDrippingMud();
     public static final Block MUD_TILES = new BlockMudTiles();
     public static final Block PUFFSHROOM = new BlockPuffshroom();
-    
+    public static final Block MUD_BRICKS_CARVED = new BlockCarvedMudBrick();
+
     public static final Block PRESENT = new BlockPresent();
     
     //Plants
