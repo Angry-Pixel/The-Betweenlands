@@ -249,9 +249,14 @@ public class CircleGemHelper {
 						attackerGemCounts.adjustOrPutValue(gem.getGemType(), 1, 1);
 					}
 				}
+				for(CircleGem gem : sourceGems) {
+					if(gem.matchCombatType(CircleGem.CombatType.OFFENSIVE)) {
+						attackerGemCounts.adjustOrPutValue(gem.getGemType(), 1, 1);
+					}
+				}
 				attackerGemCounts.adjustOrPutValue(attackerItemGem, 1, 1);
 				for(CircleGemType gem : attackerGemCounts.keySet()) {
-					if(applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage), damageSource, damage)) {
+					if(gem != CircleGemType.NONE && applyProc(gem, attacker, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(attackerGemCounts.get(gem), damage), damageSource, damage)) {
 						attackerProcd = true;
 						if(!attackerProcdGems.contains(gem)){
 							attackerProcdGems.add(gem);
@@ -279,7 +284,7 @@ public class CircleGemHelper {
 				}
 				defenderGemCounts.adjustOrPutValue(attackedBlockingItemGem, 1, 1);
 				for(CircleGemType gem : defenderGemCounts.keySet()) {
-					if(applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage), damageSource, damage)) {
+					if(gem != CircleGemType.NONE && applyProc(gem, attackedEntity, source, attacker, attackedEntity, attackerProc, defenderProc, getMultipleProcStrength(defenderGemCounts.get(gem), damage), damageSource, damage)) {
 						defenderProcd = true;
 						if(!defenderProcdGems.contains(gem)){
 							defenderProcdGems.add(gem);
