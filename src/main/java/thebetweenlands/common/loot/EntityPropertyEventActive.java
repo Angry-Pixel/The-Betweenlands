@@ -29,7 +29,7 @@ public class EntityPropertyEventActive implements EntityProperty {
 		boolean isEventOn = false;
 		if(entity.world.provider instanceof WorldProviderBetweenlands) {
 			EnvironmentEvent event = ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().forName(this.event);
-			if(event != null && event.isActive()) {
+			if(event != null && event.isActiveAt(entity.posX, entity.posY, entity.posZ)) {
 				isEventOn = true;
 			}
 		}
