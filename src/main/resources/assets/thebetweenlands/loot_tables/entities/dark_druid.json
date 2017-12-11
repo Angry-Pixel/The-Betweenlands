@@ -24,20 +24,29 @@
           ],
           "conditions": [
             {
-              "condition": "entity_properties",
-              "entity": "killer",
-              "properties": {
-                "thebetweenlands:has_item": {
-                  "has_item": false,
-                  "item": {
-                    "id": "thebetweenlands:swamp_talisman",
-                    "meta": 1
-                  },
-                  "combine_stacks": true,
-                  "inventories": ["held", "main"],
-                  "size_operator": ">="
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 1
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
                 }
-              }
+              ]
             }
           ],
           "weight": 1
@@ -58,20 +67,29 @@
           ],
           "conditions": [
             {
-              "condition": "entity_properties",
-              "entity": "killer",
-              "properties": {
-                "thebetweenlands:has_item": {
-                  "has_item": false,
-                  "item": {
-                    "id": "thebetweenlands:swamp_talisman",
-                    "meta": 2
-                  },
-                  "combine_stacks": true,
-                  "inventories": ["held", "main"],
-                  "size_operator": ">="
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 2
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
                 }
-              }
+              ]
             }
           ],
           "weight": 1
@@ -92,20 +110,29 @@
           ],
           "conditions": [
             {
-              "condition": "entity_properties",
-              "entity": "killer",
-              "properties": {
-                "thebetweenlands:has_item": {
-                  "has_item": false,
-                  "item": {
-                    "id": "thebetweenlands:swamp_talisman",
-                    "meta": 3
-                  },
-                  "combine_stacks": true,
-                  "inventories": ["held", "main"],
-                  "size_operator": ">="
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 3
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
                 }
-              }
+              ]
             }
           ],
           "weight": 1
@@ -126,20 +153,29 @@
           ],
           "conditions": [
             {
-              "condition": "entity_properties",
-              "entity": "killer",
-              "properties": {
-                "thebetweenlands:has_item": {
-                  "has_item": false,
-                  "item": {
-                    "id": "thebetweenlands:swamp_talisman",
-                    "meta": 4
-                  },
-                  "combine_stacks": true,
-                  "inventories": ["held", "main"],
-                  "size_operator": ">="
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 4
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
                 }
-              }
+              ]
             }
           ],
           "weight": 1

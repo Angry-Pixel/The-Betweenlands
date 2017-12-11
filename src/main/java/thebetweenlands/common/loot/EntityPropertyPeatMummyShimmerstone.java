@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.loot;
+package thebetweenlands.common.loot;
 
 import java.util.Random;
 
@@ -14,10 +14,10 @@ import net.minecraft.world.storage.loot.properties.EntityProperty;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.lib.ModInfo;
 
-public class LootPropertyPeatMummyShimmerstone implements EntityProperty {
+public class EntityPropertyPeatMummyShimmerstone implements EntityProperty {
 	private final boolean hasShimmerstone;
 
-	public LootPropertyPeatMummyShimmerstone(boolean hasShimmerstone) {
+	public EntityPropertyPeatMummyShimmerstone(boolean hasShimmerstone) {
 		this.hasShimmerstone = hasShimmerstone;
 	}
 
@@ -26,19 +26,19 @@ public class LootPropertyPeatMummyShimmerstone implements EntityProperty {
 		return entity instanceof EntityPeatMummy && ((EntityPeatMummy)entity).doesCarryShimmerstone() == this.hasShimmerstone;
 	}
 
-	public static class Serializer extends EntityProperty.Serializer<LootPropertyPeatMummyShimmerstone> {
+	public static class Serializer extends EntityProperty.Serializer<EntityPropertyPeatMummyShimmerstone> {
 		public Serializer() {
-			super(new ResourceLocation(ModInfo.ID, "has_shimmerstone"), LootPropertyPeatMummyShimmerstone.class);
+			super(new ResourceLocation(ModInfo.ID, "has_shimmerstone"), EntityPropertyPeatMummyShimmerstone.class);
 		}
 
 		@Override
-		public JsonElement serialize(LootPropertyPeatMummyShimmerstone property, JsonSerializationContext serializationContext) {
+		public JsonElement serialize(EntityPropertyPeatMummyShimmerstone property, JsonSerializationContext serializationContext) {
 			return new JsonPrimitive(property.hasShimmerstone);
 		}
 
 		@Override
-		public LootPropertyPeatMummyShimmerstone deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new LootPropertyPeatMummyShimmerstone(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
+		public EntityPropertyPeatMummyShimmerstone deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
+			return new EntityPropertyPeatMummyShimmerstone(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
 		}
 	}
 }

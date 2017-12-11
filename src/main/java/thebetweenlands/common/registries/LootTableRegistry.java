@@ -15,16 +15,19 @@ import net.minecraft.world.storage.loot.LootEntryItem;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.conditions.LootCondition;
+import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
-import thebetweenlands.common.entity.loot.LootPropertyEventActive;
-import thebetweenlands.common.entity.loot.LootPropertyFrogType;
-import thebetweenlands.common.entity.loot.LootPropertyHasItem;
-import thebetweenlands.common.entity.loot.LootPropertyIsBossPeatMummy;
-import thebetweenlands.common.entity.loot.LootPropertyPeatMummyShimmerstone;
-import thebetweenlands.common.entity.loot.LootPropertyPyradCharging;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.loot.EntityPropertyEventActive;
+import thebetweenlands.common.loot.EntityPropertyFrogType;
+import thebetweenlands.common.loot.EntityPropertyHasItem;
+import thebetweenlands.common.loot.EntityPropertyIsBossPeatMummy;
+import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
+import thebetweenlands.common.loot.EntityPropertyPyradCharging;
+import thebetweenlands.common.loot.LootConditionOr;
 
 public class LootTableRegistry {
 
@@ -68,14 +71,17 @@ public class LootTableRegistry {
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");
     
-    //LOOT PROPERTIES
-    public static final ResourceLocation PROPERTY_FROG_TYPE = register(new LootPropertyFrogType.Serializer());
-    public static final ResourceLocation PROPERTY_PEAT_MUMMY_SHIMMERSTONE = register(new LootPropertyPeatMummyShimmerstone.Serializer());
-    public static final ResourceLocation PROPERTY_PYRAD_CHARGING = register(new LootPropertyPyradCharging.Serializer());
-    public static final ResourceLocation PROPERTY_HAS_ITEM = register(new LootPropertyHasItem.Serializer());
-    public static final ResourceLocation PROPERTY_IS_BOSS_MUMMY = register(new LootPropertyIsBossPeatMummy.Serializer());
-    public static final ResourceLocation PROPERTY_IS_EVENT_ACTIVE = register(new LootPropertyEventActive.Serializer());
+    //LOOT ENTITY PROPERTIES
+    public static final ResourceLocation ENTITY_PROPERTY_FROG_TYPE = register(new EntityPropertyFrogType.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_PEAT_MUMMY_SHIMMERSTONE = register(new EntityPropertyPeatMummyShimmerstone.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_PYRAD_CHARGING = register(new EntityPropertyPyradCharging.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_HAS_ITEM = register(new EntityPropertyHasItem.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_IS_BOSS_MUMMY = register(new EntityPropertyIsBossPeatMummy.Serializer());
+    public static final ResourceLocation ENTITY_PROPERTY_IS_EVENT_ACTIVE = register(new EntityPropertyEventActive.Serializer()); //TODO Make loot condition
 
+    //LOOT CONDITIONS
+    public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
+    
     private static ResourceLocation register(String id) {
         return LootTableList.register(new ResourceLocation(ModInfo.ID, id));
     }
@@ -83,6 +89,11 @@ public class LootTableRegistry {
     private static ResourceLocation register(EntityProperty.Serializer<?> serializer) {
         EntityPropertyManager.registerProperty(serializer);
         return serializer.getName();
+    }
+    
+    private static ResourceLocation register(LootCondition.Serializer<?> serializer) {
+        LootConditionManager.registerCondition(serializer);
+        return serializer.getLootTableLocation();
     }
 
     public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world) {
