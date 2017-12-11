@@ -131,7 +131,13 @@ public class ScreenRenderHandler extends Gui {
 						if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
 							highestLocation = storage;
 					}
-					this.currentLocation = highestLocation.getLocalizedName();
+					int displayCooldown = 60*20; //1 minute cooldown for title
+					if(highestLocation.getTitleDisplayCooldown(player) == 0) {
+						highestLocation.setTitleDisplayCooldown(player, displayCooldown);
+						this.currentLocation = highestLocation.getLocalizedName();
+					} else if(highestLocation.getTitleDisplayCooldown(player) > 0) {
+						highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
+					}
 				}
 
 				if(this.currentLocation.length() > 0) {
