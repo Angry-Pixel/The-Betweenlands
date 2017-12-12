@@ -75,7 +75,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_FLAT_HEAD_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.FLAT_HEAD_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_BLACK_HAT_MUSHROOM = new WorldGenPlantCluster(BlockRegistry.BLACK_HAT_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_CATTAIL = new WorldGenPlantCluster(BlockRegistry.CATTAIL.getDefaultState());
-	public static final WorldGenerator GEN_VENUS_FLY_TRAP = new WorldGenPlantCluster(BlockRegistry.VENUS_FLY_TRAP.getDefaultState(), 5, 20);
+	public static final WorldGenerator GEN_VENUS_FLY_TRAP = new WorldGenPlantCluster(BlockRegistry.VENUS_FLY_TRAP.getDefaultState(), 5, 64);
 	public static final WorldGenerator GEN_MIRE_CORAL = new WorldGenPlantCluster(BlockRegistry.MIRE_CORAL.getDefaultState(), 4, 10).setUnderwater(true);
 	public static final WorldGenerator GEN_DEEP_WATER_CORAL = new WorldGenPlantCluster(BlockRegistry.DEEP_WATER_CORAL.getDefaultState(), 4, 10).setUnderwater(true);
 	public static final WorldGenerator GEN_BLADDERWORT = new WorldGenBladderwortCluster();
