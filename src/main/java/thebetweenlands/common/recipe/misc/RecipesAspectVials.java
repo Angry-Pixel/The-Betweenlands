@@ -17,7 +17,7 @@ public class RecipesAspectVials extends IForgeRegistryEntry.Impl<IRecipe> implem
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             if(!stack.isEmpty()) {
-                if(stack.getItem() instanceof ItemAspectVial && ItemAspectContainer.fromItem(stack).getAspects().size() == 1) {
+                if(stack.getItem() instanceof ItemAspectVial) {
                     if(vial != null) {
                         return false;
                     }
@@ -36,7 +36,7 @@ public class RecipesAspectVials extends IForgeRegistryEntry.Impl<IRecipe> implem
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack stack = inv.getStackInSlot(i);
             if(!stack.isEmpty()) {
-                if(stack.getItem() instanceof ItemAspectVial && ItemAspectContainer.fromItem(stack).getAspects().size() == 1) {
+                if(stack.getItem() instanceof ItemAspectVial) {
                     vial = stack;
                 }
             }

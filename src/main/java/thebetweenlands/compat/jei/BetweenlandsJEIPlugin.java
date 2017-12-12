@@ -5,15 +5,20 @@ import mezz.jei.api.ingredients.IIngredientBlacklist;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
-import net.minecraft.block.Block;
-import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.oredict.ShapedOreRecipe;
+import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
+import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.compat.jei.recipes.animator.AnimatorRecipeCategory;
 import thebetweenlands.compat.jei.recipes.animator.AnimatorRecipeMaker;
@@ -21,11 +26,15 @@ import thebetweenlands.compat.jei.recipes.compost.CompostRecipeCategory;
 import thebetweenlands.compat.jei.recipes.compost.CompostRecipeMaker;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeCategory;
 import thebetweenlands.compat.jei.recipes.druid_altar.DruidAltarRecipeMaker;
+import thebetweenlands.compat.jei.recipes.misc.*;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarCategory;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarRecipeMaker;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
 import thebetweenlands.util.config.ConfigHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @JEIPlugin
 public class BetweenlandsJEIPlugin implements IModPlugin{
@@ -48,6 +57,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         registry.addRecipes(DruidAltarRecipeMaker.getRecipes(), ModInfo.ID + ":druid_altar");
         registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes(), ModInfo.ID + ":pestle_and_mortar");
         registry.addRecipes(PurifierRecipeMaker.getRecipes(), ModInfo.ID + ":purifier");
+        addDynamicRecipes(registry);
 
         registry.addRecipeClickArea(GuiWeedwoodWorkbench.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
 
@@ -83,6 +93,60 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.LOCATION_DEBUG));
         }
+    }
+
+    private void addDynamicRecipes(IModRegistry registry) {
+        List<IRecipe> recipes = new ArrayList<>();
+
+        //MummyBait
+        registry.handleRecipes(RecipeMummyBait.class, recipe -> new MummyBaitRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+
+        //Vials
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)));
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 1)));
+
+        //Plant Tonic
+        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.WEEDWOOD_BUCKET_PLANT_TONIC, ItemRegistry.WEEDWOOD_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL));
+        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.SYRMORITE_BUCKET_PLANT_TONIC, ItemRegistry.SYRMORITE_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL));
+
+        //Lurker skin
+        ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
+        ItemStack input = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
+        ItemStack skin = ItemMisc.EnumItemMisc.LURKER_SKIN.create(1);
+        for (int i = 0; i < 3; i++) {
+            input.setItemDamage(i);
+            output.setItemDamage(i+1);
+            recipes.add(new ShapedOreRecipe(null, output.copy(), "LLL", "LPL", "LLL", 'L', skin, 'P', input.copy()));
+        }
+
+        //MarshRunnerBoots
+        registry.handleRecipes(RecipeMarshRunnerBoots.class, recipe -> new MarshRunnerBootsRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+
+        //Life Crystal
+        registry.handleRecipes(RecipesLifeCrystal.class, recipe -> new LifeCrystalRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+
+        //Coating
+        CoatingRecipeJEI.setCoatableItems(registry.getIngredientRegistry());
+        registry.handleRecipes(RecipesCoating.class, recipe -> new CoatingRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
+
+        //CircleGems
+        CircleGemsRecipeJEI.setApplicableItems(registry.getIngredientRegistry());
+        registry.handleRecipes(RecipesCircleGems.class, recipe -> new CircleGemsRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
+
+        registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
+    }
+
+    @Override
+    public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
+        //Makes mummy bait and runner boots work better, but vials recipe won't work
+        /*subtypeRegistry.registerSubtypeInterpreter(ItemRegistry.ASPECT_VIAL, itemStack -> {
+            NBTTagCompound nbtTagCompound = itemStack.getTagCompound();
+            if (nbtTagCompound == null || nbtTagCompound.hasNoTags()) {
+                return itemStack.getItemDamage() + ISubtypeRegistry.ISubtypeInterpreter.NONE;
+            }
+            return itemStack.getItemDamage() + nbtTagCompound.toString();
+        });*/
+        subtypeRegistry.useNbtForSubtypes(ItemRegistry.AMULET);
     }
 
     @Override
