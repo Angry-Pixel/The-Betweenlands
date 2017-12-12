@@ -5,16 +5,18 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.BlockFence;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
@@ -28,12 +30,13 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectrusCrop;
+import thebetweenlands.common.tile.TileEntityDugSoil;
 
 public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemBlock, ITileEntityProvider {
 	protected static final float ASPECT_FRUIT_MULTIPLIER = 0.5F;
 	protected static final int ASPECT_SEEDS_DEGRADATION = 180;
 	protected static final int MAX_HEIGHT = 3;
-	protected static final int DECAY_CHANCE = 180;
+	protected static final int DECAY_CHANCE = 15;
 
 	public BlockAspectrusCrop() {
 		this.setCreativeTab(null);
@@ -82,9 +85,28 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
 		super.updateTick(worldIn, pos, state, rand);
 		Aspect aspect = this.getAspect(worldIn, pos);
-		if(aspect != null && worldIn.rand.nextInt(Math.max((int)(DECAY_CHANCE - aspect.amount * 35), 2)) == 0) {
-			//TODO: Increase soil decay chance
+		if(aspect != null && worldIn.rand.nextInt(Math.max((int)(DECAY_CHANCE - aspect.amount / 1000.0F * 15.0F), 2)) == 0) {
+			MutableBlockPos checkPos = new MutableBlockPos();
+			checkPos.setPos(pos.getX(), pos.getY() - 1, pos.getZ());
+			for(int i = 0; i < MAX_HEIGHT; i++) {
+				IBlockState offsetState = worldIn.getBlockState(checkPos);
+				if(offsetState.getBlock() instanceof BlockGenericDugSoil) {
+					if(!((BlockGenericDugSoil)offsetState.getBlock()).purified) {
+						TileEntityDugSoil te = BlockGenericDugSoil.getTile(worldIn, checkPos);
+						if(te != null && !te.isFullyDecayed()) {
+							te.setDecay(te.getDecay() + 5);
+						}
+					}
+					break;
+				}
+				checkPos.setPos(checkPos.getX(), checkPos.getY() - 1, checkPos.getZ());
+			}
 		}
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return BlockFence.PILLAR_AABB;
 	}
 
 	@Override
@@ -120,7 +142,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	@Override
 	protected float getGrowthChance(World world, BlockPos pos, IBlockState state, Random rand) {
 		Aspect aspect = this.getAspect(world, pos);
-		return 1.0F / (1.0F + aspect.amount * 8.0F);
+		return 1.0F / (1.0F + aspect.amount / 1000.0F * 8.0F);
 	}
 
 	@Override
@@ -211,7 +233,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
 		return new TileEntityAspectrusCrop();
 	}
-	
+
 	@Override
 	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
 		int age = state.getValue(AGE) + (rand.nextInt(2) == 0 ? 1 : 0);
