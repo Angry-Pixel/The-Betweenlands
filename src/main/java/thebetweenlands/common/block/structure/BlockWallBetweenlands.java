@@ -41,7 +41,7 @@ public class BlockWallBetweenlands extends Block {
 		super(state.getMaterial());
 		setSoundType(state.getBlock().getSoundType());
 		setHardness(2.0F);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(UP, Boolean.valueOf(false)).withProperty(NORTH, Boolean.valueOf(false)).withProperty(EAST, Boolean.valueOf(false)).withProperty(SOUTH, Boolean.valueOf(false)).withProperty(WEST, Boolean.valueOf(false)));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(UP, Boolean.FALSE).withProperty(NORTH, Boolean.FALSE).withProperty(EAST, Boolean.FALSE).withProperty(SOUTH, Boolean.FALSE).withProperty(WEST, Boolean.FALSE));
 		setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
@@ -52,8 +52,8 @@ public class BlockWallBetweenlands extends Block {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean p_185477_7_) {
-		if (!p_185477_7_) {
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+		if (!isActualState) {
 			state = this.getActualState(state, worldIn, pos);
 		}
 
@@ -191,7 +191,7 @@ public class BlockWallBetweenlands extends Block {
 	@Override
 	public boolean canBeConnectedTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
 		Block connector = world.getBlockState(pos.offset(facing)).getBlock();
-		return connector instanceof BlockWall || connector instanceof BlockFenceGate || connector instanceof BlockFenceBetweenlands || connector instanceof BlockFenceGateBetweenlands;
+		return connector instanceof BlockWall || connector instanceof BlockFenceGate || connector instanceof BlockWallBetweenlands || connector instanceof BlockFenceGateBetweenlands;
 	}
 
 	private boolean canWallConnectTo(IBlockAccess world, BlockPos pos, EnumFacing facing) {
