@@ -24,7 +24,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
+public class BlockDentrothyst extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition {
     public static PropertyEnum<EnumDentrothyst> TYPE = PropertyEnum.create("type", EnumDentrothyst.class);
 
     public BlockDentrothyst(Material materialIn) {

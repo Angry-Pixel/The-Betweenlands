@@ -20,7 +20,7 @@ import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockDentrothystPane extends BlockPaneBetweenlands implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition, BlockRegistry.IStateMappedBlock {
+public class BlockDentrothystPane extends BlockPaneBetweenlands implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeItemBlockModelDefinition, BlockRegistry.IStateMappedBlock {
 	public static PropertyEnum<EnumDentrothyst> TYPE = PropertyEnum.create("type", EnumDentrothyst.class);
 
 	public BlockDentrothystPane() {

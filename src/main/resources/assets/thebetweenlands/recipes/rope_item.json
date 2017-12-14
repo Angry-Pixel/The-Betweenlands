@@ -7,9 +7,24 @@
   ],
   "key": {
     "#": [
-      {
-        "item": "thebetweenlands:hanger"
-      },
+      [
+        {
+          "item": "thebetweenlands:hanger",
+          "data": 0
+        },
+        {
+          "item": "thebetweenlands:hanger",
+          "data": 1
+        },
+        {
+          "item": "thebetweenlands:hanger",
+          "data": 2
+        },
+        {
+          "item": "thebetweenlands:hanger",
+          "data": 3
+        }
+      ],
       {
         "item": "thebetweenlands:items_misc",
         "data": 7

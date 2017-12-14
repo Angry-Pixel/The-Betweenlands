@@ -639,8 +639,8 @@ public class BlockRegistry {
                 }
             }
             ResourceLocation name = block.getRegistryName();
-            if (block instanceof ISubtypeBlockModelDefinition) {
-                ISubtypeBlockModelDefinition subtypeBlock = (ISubtypeBlockModelDefinition) block;
+            if (block instanceof ISubtypeItemBlockModelDefinition) {
+                ISubtypeItemBlockModelDefinition subtypeBlock = (ISubtypeItemBlockModelDefinition) block;
                 for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
                     int meta = subtypeBlock.getSubtypeMeta(i);
                     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
@@ -676,7 +676,7 @@ public class BlockRegistry {
         }
     }
 
-    public interface ISubtypeBlockModelDefinition {
+    public interface ISubtypeItemBlockModelDefinition {
         /**
          * Returns the amount of subtypes
          *

@@ -142,23 +142,6 @@
                 {
                     "conditions": [],
                     "type": "item",
-                    "name": "thebetweenlands:middle_fruit_bush_seeds",
-                    "functions": [
-                        {
-                            "conditions": [],
-                            "function": "set_count",
-                            "count": {
-                                "min": 1,
-                                "max": 8
-                            }
-                        }
-                    ],
-                    "weight": 15,
-                    "quality": 0
-                },
-                {
-                    "conditions": [],
-                    "type": "item",
                     "entryName": "valonite_shard",
                     "name": "thebetweenlands:items_misc",
                     "functions": [
@@ -275,7 +258,7 @@
                             }
                         }
                     ],
-                    "weight": 6,
+                    "weight": 12,
                     "quality": 0
                 }
             ],

@@ -169,7 +169,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		 * @param nameTrue
 		 * @return
 		 */
-		public AdvancedStateMap.Builder withPropertySuffix(IProperty<Boolean> property, String nameFalse, String nameTrue) {
+		public AdvancedStateMap.Builder withPropertySuffix(IProperty<Boolean> property, @Nullable String nameFalse, @Nullable String nameTrue) {
 			return this.withPropertySuffix(property, (bool) -> bool ? nameTrue : nameFalse);
 		}
 
@@ -179,7 +179,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		 * @param nameTrue
 		 * @return
 		 */
-		public AdvancedStateMap.Builder withPropertySuffixTrue(IProperty<Boolean> property, String nameTrue) {
+		public AdvancedStateMap.Builder withPropertySuffixTrue(IProperty<Boolean> property, @Nullable String nameTrue) {
 			return this.withPropertySuffix(property, b -> b ? nameTrue : null);
 		}
 
@@ -189,7 +189,7 @@ public class AdvancedStateMap extends StateMapperBase {
 		 * @param nameFalse
 		 * @return
 		 */
-		public AdvancedStateMap.Builder withPropertySuffixFalse(IProperty<Boolean> property, String nameFalse) {
+		public AdvancedStateMap.Builder withPropertySuffixFalse(IProperty<Boolean> property, @Nullable String nameFalse) {
 			return this.withPropertySuffix(property, b -> !b ? nameFalse : null);
 		}
 
