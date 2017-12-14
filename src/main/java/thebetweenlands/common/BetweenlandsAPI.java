@@ -138,7 +138,7 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 	}
 
 	@Override
-	public void registerAspectType(IAspectType aspect, int tier, int group, float baseAmount) {
+	public void registerAspectType(IAspectType aspect, int tier, int group, int baseAmount) {
 		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		AspectManager.registerAspect(aspect, tier, group, baseAmount);
 	}

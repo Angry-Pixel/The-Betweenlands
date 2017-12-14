@@ -132,7 +132,7 @@ public interface IBetweenlandsAPI {
 	 * @param group
 	 * @param baseAmount
 	 */
-	public void registerAspectType(IAspectType aspect, int tier, int group, float baseAmount);
+	public void registerAspectType(IAspectType aspect, int tier, int group, int baseAmount);
 
 	/**
 	 * Adds static aspects to an item
