@@ -8,7 +8,7 @@ import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 @SideOnly(Side.CLIENT)
 public class DruidAltarSound extends TileEntitySound<TileEntityDruidAltar> {
-	public DruidAltarSound(SoundEvent sound, SoundCategory category, TileEntityDruidAltar animator) {
-		super(sound, category, animator, (tile) -> tile.craftingProgress > 0);
+	public DruidAltarSound(SoundEvent sound, SoundCategory category, TileEntityDruidAltar altar) {
+		super(sound, category, altar, (tile) -> tile.craftingProgress > 0);
 	}
 }

@@ -50,14 +50,14 @@ public class AspectManager {
 		public final IAspectType aspect;
 		public final int tier;
 		public final int group;
-		public final float baseAmount;
+		public final int baseAmount;
 		public final String aspectName;
 
-		private AspectEntry(IAspectType aspect, AspectTier tier, AspectGroup group, float baseAmount) {
+		private AspectEntry(IAspectType aspect, AspectTier tier, AspectGroup group, int baseAmount) {
 			this(aspect, tier.id, group.id, baseAmount);
 		}
 
-		private AspectEntry(IAspectType aspect, int tier, int group, float baseAmount) {
+		private AspectEntry(IAspectType aspect, int tier, int group, int baseAmount) {
 			this.aspect = aspect;
 			this.tier = tier;
 			this.group = group;
@@ -125,7 +125,7 @@ public class AspectManager {
 	 * @param type
 	 * @param baseAmount
 	 */
-	public static void registerAspect(IAspectType aspect, AspectTier tier, AspectGroup type, float baseAmount) {
+	public static void registerAspect(IAspectType aspect, AspectTier tier, AspectGroup type, int baseAmount) {
 		registerAspect(aspect, tier.id, type.id, baseAmount);
 	}
 
@@ -136,7 +136,7 @@ public class AspectManager {
 	 * @param type
 	 * @param baseAmount
 	 */
-	public static void registerAspect(IAspectType aspect, int tier, int type, float baseAmount) {
+	public static void registerAspect(IAspectType aspect, int tier, int type, int baseAmount) {
 		REGISTERED_ASPECTS.add(new AspectEntry(aspect, tier, type, baseAmount));
 	}
 
