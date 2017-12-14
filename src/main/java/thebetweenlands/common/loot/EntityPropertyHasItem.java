@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.loot;
+package thebetweenlands.common.loot;
 
 import java.util.Iterator;
 import java.util.Random;
@@ -23,7 +23,7 @@ import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.common.lib.ModInfo;
 
-public class LootPropertyHasItem implements EntityProperty {
+public class EntityPropertyHasItem implements EntityProperty {
 	private final boolean hasItem, combineStacks, held, armor, main;
 	private final ItemStack item;
 	private final StackSizeMatcher sizeMatcher;
@@ -42,7 +42,7 @@ public class LootPropertyHasItem implements EntityProperty {
 		}
 	}
 
-	public LootPropertyHasItem(boolean hasItem, boolean combineStacks, ItemStack item, StackSizeMatcher sizeMatcher, boolean held, boolean armor, boolean main) {
+	public EntityPropertyHasItem(boolean hasItem, boolean combineStacks, ItemStack item, StackSizeMatcher sizeMatcher, boolean held, boolean armor, boolean main) {
 		this.hasItem = hasItem;
 		this.combineStacks = combineStacks;
 		this.item = item;
@@ -121,13 +121,13 @@ public class LootPropertyHasItem implements EntityProperty {
 		return this.sizeMatcher == null || this.sizeMatcher.matcher.apply(this.item.getCount(), size);
 	}
 
-	public static class Serializer extends EntityProperty.Serializer<LootPropertyHasItem> {
+	public static class Serializer extends EntityProperty.Serializer<EntityPropertyHasItem> {
 		public Serializer() {
-			super(new ResourceLocation(ModInfo.ID, "has_item"), LootPropertyHasItem.class);
+			super(new ResourceLocation(ModInfo.ID, "has_item"), EntityPropertyHasItem.class);
 		}
 
 		@Override
-		public JsonElement serialize(LootPropertyHasItem property, JsonSerializationContext serializationContext) {
+		public JsonElement serialize(EntityPropertyHasItem property, JsonSerializationContext serializationContext) {
 			JsonObject obj = new JsonObject();
 			obj.add("has_item", new JsonPrimitive(property.hasItem));
 			obj.add("combine_stacks", new JsonPrimitive(property.combineStacks));
@@ -174,7 +174,7 @@ public class LootPropertyHasItem implements EntityProperty {
 		}
 
 		@Override
-		public LootPropertyHasItem deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
+		public EntityPropertyHasItem deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
 			JsonObject obj = JsonUtils.getJsonObject(element, this.getName().getResourcePath());
 			boolean hasItem = JsonUtils.getBoolean(obj.get("has_item"), "has_item");
 			boolean combineStacks = obj.has("combine_stacks") ? JsonUtils.getBoolean(obj.get("combine_stacks"), "combine_stacks") : false;
@@ -223,7 +223,7 @@ public class LootPropertyHasItem implements EntityProperty {
 					throw new JsonParseException("Invalid size operator. Valid size operators: >, <, <=, >=, =");
 				}
 			}
-			return new LootPropertyHasItem(hasItem, combineStacks, stack, sizeMatcher, held, armor, main);
+			return new EntityPropertyHasItem(hasItem, combineStacks, stack, sizeMatcher, held, armor, main);
 		}
 	}
 }

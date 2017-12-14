@@ -3,10 +3,13 @@ package thebetweenlands.common.world.storage.location;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.annotation.Nullable;
 
+import gnu.trove.map.TObjectIntMap;
+import gnu.trove.map.hash.TObjectIntHashMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,6 +22,8 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -36,6 +41,8 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	private boolean visible = true;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
+	
+	private TObjectIntMap<Entity> titleDisplayCooldowns = new TObjectIntHashMap<Entity>();
 
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region);
@@ -393,6 +400,33 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	 */
 	public boolean isVisible(Entity entity) {
 		return this.visible;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public int getTitleDisplayCooldown(Entity entity) {
+		return this.titleDisplayCooldowns.containsKey(entity) ? this.titleDisplayCooldowns.get(entity) : 0;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void setTitleDisplayCooldown(Entity entity, int cooldown) {
+		this.titleDisplayCooldowns.put(entity, cooldown);
+	}
+	
+	@Override
+	public void update() {
+		super.update();
+		
+		if(this.getWorldStorage().getWorld().isRemote) {
+			Iterator<Entity> it = this.titleDisplayCooldowns.keySet().iterator();
+			while(it.hasNext()) {
+				Entity entity = it.next();
+				if(this.titleDisplayCooldowns.adjustValue(entity, -1)) {
+					if(this.titleDisplayCooldowns.get(entity) <= 0) {
+						it.remove();
+					}
+				}
+			}
+		}
 	}
 
 	private static final Comparator<LocationStorage> LAYER_SORTER = new Comparator<LocationStorage>() {

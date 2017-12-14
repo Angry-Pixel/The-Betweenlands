@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.loot;
+package thebetweenlands.common.loot;
 
 import java.util.Random;
 
@@ -14,10 +14,10 @@ import net.minecraft.world.storage.loot.properties.EntityProperty;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.lib.ModInfo;
 
-public class LootPropertyPyradCharging implements EntityProperty {
+public class EntityPropertyPyradCharging implements EntityProperty {
 	private final boolean isCharging;
 
-	public LootPropertyPyradCharging(boolean isCharging) {
+	public EntityPropertyPyradCharging(boolean isCharging) {
 		this.isCharging = isCharging;
 	}
 
@@ -26,19 +26,19 @@ public class LootPropertyPyradCharging implements EntityProperty {
 		return entity instanceof EntityPyrad && ((EntityPyrad)entity).isCharging() == this.isCharging;
 	}
 
-	public static class Serializer extends EntityProperty.Serializer<LootPropertyPyradCharging> {
+	public static class Serializer extends EntityProperty.Serializer<EntityPropertyPyradCharging> {
 		public Serializer() {
-			super(new ResourceLocation(ModInfo.ID, "pyrad_charging"), LootPropertyPyradCharging.class);
+			super(new ResourceLocation(ModInfo.ID, "pyrad_charging"), EntityPropertyPyradCharging.class);
 		}
 
 		@Override
-		public JsonElement serialize(LootPropertyPyradCharging property, JsonSerializationContext serializationContext) {
+		public JsonElement serialize(EntityPropertyPyradCharging property, JsonSerializationContext serializationContext) {
 			return new JsonPrimitive(property.isCharging);
 		}
 
 		@Override
-		public LootPropertyPyradCharging deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new LootPropertyPyradCharging(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
+		public EntityPropertyPyradCharging deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
+			return new EntityPropertyPyradCharging(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
 		}
 	}
 }

@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.loot;
+package thebetweenlands.common.loot;
 
 import java.util.Random;
 
@@ -14,10 +14,10 @@ import net.minecraft.world.storage.loot.properties.EntityProperty;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.lib.ModInfo;
 
-public class LootPropertyIsBossPeatMummy implements EntityProperty {
+public class EntityPropertyIsBossPeatMummy implements EntityProperty {
 	private final boolean bossMummy;
 
-	public LootPropertyIsBossPeatMummy(boolean bossMummy) {
+	public EntityPropertyIsBossPeatMummy(boolean bossMummy) {
 		this.bossMummy = bossMummy;
 	}
 
@@ -26,19 +26,19 @@ public class LootPropertyIsBossPeatMummy implements EntityProperty {
 		return entity instanceof EntityPeatMummy && ((EntityPeatMummy)entity).isBossMummy() == this.bossMummy;
 	}
 
-	public static class Serializer extends EntityProperty.Serializer<LootPropertyIsBossPeatMummy> {
+	public static class Serializer extends EntityProperty.Serializer<EntityPropertyIsBossPeatMummy> {
 		public Serializer() {
-			super(new ResourceLocation(ModInfo.ID, "is_boss_mummy"), LootPropertyIsBossPeatMummy.class);
+			super(new ResourceLocation(ModInfo.ID, "is_boss_mummy"), EntityPropertyIsBossPeatMummy.class);
 		}
 
 		@Override
-		public JsonElement serialize(LootPropertyIsBossPeatMummy property, JsonSerializationContext serializationContext) {
+		public JsonElement serialize(EntityPropertyIsBossPeatMummy property, JsonSerializationContext serializationContext) {
 			return new JsonPrimitive(property.bossMummy);
 		}
 
 		@Override
-		public LootPropertyIsBossPeatMummy deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new LootPropertyIsBossPeatMummy(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
+		public EntityPropertyIsBossPeatMummy deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
+			return new EntityPropertyIsBossPeatMummy(JsonUtils.getBoolean(element, this.getName().getResourcePath()));
 		}
 	}
 }

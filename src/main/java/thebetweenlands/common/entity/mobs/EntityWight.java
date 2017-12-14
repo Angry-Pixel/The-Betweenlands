@@ -59,6 +59,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
     private float volatileReceivedDamage = 0.0F;
     private boolean canTurnVolatile = true;
     private boolean canTurnVolatileOnTarget = false;
+    private boolean didTurnVolatileOnPlayer = false;
 
     public EntityWight(World world) {
         super(world);
@@ -149,6 +150,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
                     if (this.getHealth() <= this.getMaxHealth() * this.getEntityAttribute(VOLATILE_HEALTH_START_ATTRIB).getAttributeValue() && this.volatileCooldownTicks <= 0) {
                         this.setVolatile(true);
+                        this.didTurnVolatileOnPlayer = true;
                         this.volatileReceivedDamage = 0.0F;
                         this.volatileCooldownTicks = this.getMaxVolatileCooldown() + this.world.rand.nextInt(this.getMaxVolatileCooldown()) + 20;
                         this.volatileTicks = 0;
@@ -156,8 +158,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
                         TheBetweenlands.networkWrapper.sendToAllAround(new MessageWightVolatileParticles(this), new TargetPoint(this.dimension, this.posX, this.posY, this.posZ, 32));
                         this.world.playSound(null, this.posX, this.posY, this.posZ, SoundRegistry.WIGHT_ATTACK, SoundCategory.HOSTILE, 1.6F, 1.0F);
                     }
-                } else if (this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
+                } else if (this.didTurnVolatileOnPlayer && this.isVolatile() && !this.canPossess(this.getAttackTarget())) {
                     this.setVolatile(false);
+                    this.didTurnVolatileOnPlayer = false;
                 }
             }
         }
@@ -174,8 +177,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
                     this.fallDistance = 0;
 
-                    if (this.onGround) {
+                    if (this.didTurnVolatileOnPlayer && this.onGround) {
                         this.setVolatile(false);
+                        this.didTurnVolatileOnPlayer = false;
                     }
                 }
 
@@ -348,10 +352,11 @@ public class EntityWight extends EntityMob implements IEntityBL {
         float prevHealth = this.getHealth();
         boolean ret = super.attackEntityFrom(source, damage);
         float dealtDamage = prevHealth - this.getHealth();
-        if (this.isVolatile() && this.getRidingEntity() != null) {
+        if (this.didTurnVolatileOnPlayer && this.isVolatile() && this.getRidingEntity() != null) {
             this.volatileReceivedDamage += dealtDamage;
             if (this.volatileReceivedDamage >= this.getEntityAttribute(VOLATILE_MAX_DAMAGE_ATTRIB).getAttributeValue()) {
                 this.setVolatile(false);
+                this.didTurnVolatileOnPlayer = false;
             }
         }
         if (this.getAttackTarget() != null && source instanceof EntityDamageSource && source.getTrueSource() == this.getAttackTarget()) {
@@ -398,6 +403,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
         nbt.setFloat("volatileReceivedDamage", this.volatileReceivedDamage);
         nbt.setBoolean("canTurnVolatileOnTarget", this.canTurnVolatileOnTarget);
         nbt.setBoolean("canTurnVolatile", this.canTurnVolatile);
+        nbt.setBoolean("turnVolatileOnPlayer", this.didTurnVolatileOnPlayer);
     }
 
     @Override
@@ -406,6 +412,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
 
         if (nbt.hasKey("volatileState")) {
             this.setVolatile(nbt.getBoolean("volatileState"));
+        }
+        if (nbt.hasKey("turnVolatileOnPlayer")) {
+            this.didTurnVolatileOnPlayer = nbt.getBoolean("turnVolatileOnPlayer");
         }
         if (nbt.hasKey("volatileCooldown")) {
             this.volatileCooldownTicks = nbt.getInteger("volatileCooldown");

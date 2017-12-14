@@ -55,11 +55,18 @@ public class EntitySnailPoisonJet extends EntityThrowable {
 	protected void onImpact(RayTraceResult result) {
 		if (result.entityHit != null) {
 			if (result.entityHit instanceof EntityLivingBase && !(result.entityHit instanceof EntityBloodSnail)) {
-				if (!world.isRemote) {
-					((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
-					result.entityHit.attackEntityFrom(DamageSource.causeMobDamage(getThrower()), 1.0F);
+				if(result.entityHit.attackEntityFrom(getThrower() != null ? DamageSource.causeIndirectDamage(this, getThrower()).setProjectile() : DamageSource.causeThrownDamage(this, null), 1.0F)) {
+					if (!world.isRemote) {
+						((EntityLivingBase) result.entityHit).addPotionEffect(new PotionEffect(MobEffects.POISON, 5 * 20, 0));
+						this.setDead();
+					}
+				} else {
+					this.motionX *= -0.1D;
+	                this.motionY *= -0.1D;
+	                this.motionZ *= -0.1D;
+	                this.rotationYaw += 180.0F;
+	                this.prevRotationYaw += 180.0F;
 				}
-				this.setDead();
 			}
 		} else {
 			if(result.typeOfHit == Type.BLOCK) {

@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.loot;
+package thebetweenlands.common.loot;
 
 import java.util.Random;
 
@@ -14,10 +14,10 @@ import net.minecraft.world.storage.loot.properties.EntityProperty;
 import thebetweenlands.common.entity.mobs.EntityFrog;
 import thebetweenlands.common.lib.ModInfo;
 
-public class LootPropertyFrogType implements EntityProperty {
+public class EntityPropertyFrogType implements EntityProperty {
 	private final int type;
 
-	public LootPropertyFrogType(int type) {
+	public EntityPropertyFrogType(int type) {
 		this.type = type;
 	}
 
@@ -26,19 +26,19 @@ public class LootPropertyFrogType implements EntityProperty {
 		return entity instanceof EntityFrog && ((EntityFrog)entity).getSkin() == this.type;
 	}
 
-	public static class Serializer extends EntityProperty.Serializer<LootPropertyFrogType> {
+	public static class Serializer extends EntityProperty.Serializer<EntityPropertyFrogType> {
 		public Serializer() {
-			super(new ResourceLocation(ModInfo.ID, "frog_type"), LootPropertyFrogType.class);
+			super(new ResourceLocation(ModInfo.ID, "frog_type"), EntityPropertyFrogType.class);
 		}
 
 		@Override
-		public JsonElement serialize(LootPropertyFrogType property, JsonSerializationContext serializationContext) {
+		public JsonElement serialize(EntityPropertyFrogType property, JsonSerializationContext serializationContext) {
 			return new JsonPrimitive(property.type);
 		}
 
 		@Override
-		public LootPropertyFrogType deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
-			return new LootPropertyFrogType(JsonUtils.getInt(element, this.getName().getResourcePath()));
+		public EntityPropertyFrogType deserialize(JsonElement element, JsonDeserializationContext deserializationContext) {
+			return new EntityPropertyFrogType(JsonUtils.getInt(element, this.getName().getResourcePath()));
 		}
 	}
 }

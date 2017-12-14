@@ -139,8 +139,16 @@ public class EntitySludgeBall extends EntityThrowable {
 			}
 		}
 		if (collision.typeOfHit == RayTraceResult.Type.ENTITY) {
-			if(!(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy))
-				explode();
+			if(!(collision.entityHit instanceof EntityPeatMummy) && !(collision.entityHit instanceof EntityDreadfulMummy)) {
+				if(this.attackEntity(collision.entityHit)) {
+					explode();
+				} else {
+					this.motionX *= -0.1D;
+	                this.motionY *= -0.1D;
+	                this.motionZ *= -0.1D;
+	                this.bounces++;
+				}
+			}
 		}
 	}
 
@@ -152,13 +160,7 @@ public class EntitySludgeBall extends EntityThrowable {
 			double radiusSq = radius * radius;
 			for (Entity entity : entities) {
 				if (entity instanceof EntityLivingBase && !(entity instanceof EntityPeatMummy) && !(entity instanceof EntityDreadfulMummy) && getDistanceSq(entity) < radiusSq) {
-					((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 3));
-					Entity owner = this.getOwner();
-					if (owner != null) {
-						entity.attackEntityFrom(new EntityDamageSourceIndirect("mob", this, owner), 8);
-					} else {
-						entity.attackEntityFrom(new EntityDamageSource("entity", this), 8);
-					}
+					this.attackEntity(entity);
 				}
 			}
 			getEntityWorld().playSound(null, getPosition(), SoundEvents.ENTITY_SLIME_SQUISH, SoundCategory.HOSTILE, 1, 0.5f);
@@ -170,6 +172,20 @@ public class EntitySludgeBall extends EntityThrowable {
 		}
 	}
 
+	private boolean attackEntity(Entity entity) {
+		boolean attacked = false;
+		Entity owner = this.getOwner();
+		if (owner != null) {
+			attacked = entity.attackEntityFrom(new EntityDamageSourceIndirect("mob", this, owner).setProjectile(), 8);
+		} else {
+			attacked = entity.attackEntityFrom(new EntityDamageSource("entity", this).setProjectile(), 8);
+		}
+		if(!this.world.isRemote && attacked) {
+			((EntityLivingBase) entity).addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 80, 3));
+		}
+		return attacked;
+	}
+	
 	@Override
 	protected float getGravityVelocity() {
 		return 0.08F;

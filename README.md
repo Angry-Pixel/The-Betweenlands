@@ -32,7 +32,66 @@ Feel free to include pictures of the problem you are having, if that helps.
 You may also create issues for suggestions. If you have multiple suggestions please post them in one single issue.
 <p>
 If you do not follow these rules your issues will be closed and ignored.
+  
+**But before you start writing an issue, please read up on the following common issues**
 </p>
+<br>
+
+<p align="center">
+  <img src="http://i.imgur.com/5AgEXax.png">
+</p>
+
+<p align="center"><b>Common Issues</b></p>
+
+<p align="center">
+
+<ol>
+  <li><b>Common issues caused by OptiFine</b>
+    <ol>
+      <br><li><b>My screen is totally black!</b><br>
+       This is a common issue when OptiFine is installed.<br>
+       The "Fast Render" option in OptiFine causes our shaders to not work.<br>
+       To fix this problem you can either set "Fast Render" to OFF<br>
+       or disable the Betweenlands shaders in the Betweenlands config.
+      </li>
+      <br><li><b>Everything is invisible!</b><br>
+       Newer versions of OptiFine have built-in shaders that<br>
+       don't work well with our shaders. You can either disable the<br>
+       Betweenlands shaders or disable the OptiFine shaders by going to the<br>
+       main Minecraft directory, opening optionsshaders.txt and changing<br>
+       <code>shaderPack=...</code> to <code>shaderPack=OFF</code>.
+      </li>
+      <br><li><b>The mod crashes on startup in 1.7.10</b><br>
+       The 1.7.10 version of the Betweenlands is incompatible with some<br>
+       OptiFine versions. Try <code>OptiFine HD U D3</code> instead which should<br>
+       work.
+      </li>
+    </ol>
+  </li>
+  <br><li><b>Other common issues</b>
+    <ol>
+      <br><li><b>The water is only yellow/brown/beige</b><br>
+        Download the latest recommended version of Forge.
+      </li>
+      <br><li><b>Everything is black, invisible or looks strange</b><br>
+        If you have any other mods installed that add shaders, make sure you either<br>
+        disable the shaders of those mods, or disable the Betweenlands shaders (see 1.1)
+      </li>
+      <br><li><b>The sounds or music sometimes stop working</b><br>
+        That's something we're still working on. If this happens to you, you<br>
+        can fix it by pressing F3+T (might freeze the game for a few seconds)<br>
+        instead of restarting the game.
+      </li>
+      <br><li><b>This mod makes my game lag horribly!!1!</b><br>
+        Try disabling the Betweenlands shaders (see 1.1). Some graphics cards,<br>
+        especially integrated ones such as Intel HD Graphics, cannot handle the<br>
+        shaders well.
+      </li>
+    </ol>
+  </li>
+</ol>
+</p>
+
 <br>
 
 <p align="center">

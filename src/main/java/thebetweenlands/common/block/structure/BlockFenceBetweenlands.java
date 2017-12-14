@@ -237,12 +237,7 @@ public class BlockFenceBetweenlands extends Block {
 		Block connector = world.getBlockState(pos.offset(facing)).getBlock();
 
 		if(connector instanceof BlockFence || connector instanceof BlockFenceBetweenlands) {
-			if(this != Blocks.NETHER_BRICK_FENCE && connector == Blocks.NETHER_BRICK_FENCE) {
-				return false;
-			} else if(this == Blocks.NETHER_BRICK_FENCE && connector != Blocks.NETHER_BRICK_FENCE) {
-				return false;
-			}
-			return true;
+			return connector != Blocks.NETHER_BRICK_FENCE;
 		}
 		return false;
 	}

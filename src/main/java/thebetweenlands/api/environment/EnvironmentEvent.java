@@ -28,13 +28,28 @@ public abstract class EnvironmentEvent {
 	}
 	
 	/**
-	 * Returns whether this event is currently active.
+	 * Returns whether this event is currently active
 	 * @return
 	 */
 	public boolean isActive() {
 		return this.active;
 	}
 
+	/**
+	 * Returns whether the event affects the specified position.
+	 * Can be used by events that should only affect certain locations, e.g.
+	 * biomes, height etc.
+	 * <br>
+	 * Returns {@link #isActive()} by default
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @return
+	 */
+	public boolean isActiveAt(double x, double y, double z) {
+		return this.active;
+	}
+	
 	/**
 	 * Marks this event as dirty, indicating that something has changed. Forces the server to send a packet to the client
 	 * and save the data when the world is saved.

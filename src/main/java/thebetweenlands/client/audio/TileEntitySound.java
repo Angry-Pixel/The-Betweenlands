@@ -72,4 +72,9 @@ public class TileEntitySound<T extends TileEntity> extends SafeStreamSound {
 	public boolean isStopping() {
 		return this.donePlaying || this.fadeOut;
 	}
+
+	@Override
+	public boolean isDonePlaying() {
+		return donePlaying;
+	}
 }
