@@ -7,28 +7,30 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
+import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
+public class BookMergeRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
 
     private final ICraftingGridHelper craftingGridHelper;
 
-    public LifeCrystalRecipeJEI(IGuiHelper guiHelper) {
+    public BookMergeRecipeJEI(IGuiHelper guiHelper) {
         craftingGridHelper = guiHelper.createCraftingGridHelper(1, 0);
     }
 
     @Override
     public void getIngredients(IIngredients ingredients) {
-        ItemStack inCrystal = new ItemStack(ItemRegistry.LIFE_CRYSTAL);
-        ItemStack outCrystal = new ItemStack(ItemRegistry.LIFE_CRYSTAL);
-        inCrystal.setItemDamage(inCrystal.getMaxDamage());
+        ItemStack inBook = new ItemStack(ItemRegistry.MANUAL_HL);
+        ItemStack outBook = new ItemStack(ItemRegistry.MANUAL_HL, 2);
+
 
         List<List<ItemStack>> inputLists = new ArrayList<>(9);
         List<List<ItemStack>> outputLists = new ArrayList<>(9);
@@ -37,11 +39,7 @@ public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper, ICustomCraf
 
         for (int i = 0; i < 8; i++) {
             List<ItemStack> crystalStacks = inputLists.get(0);
-            crystalStacks.add(inCrystal);
-
-            List<ItemStack> outputStacks = outputLists.get(0);
-            outCrystal.setItemDamage(outCrystal.getMaxDamage() - MathHelper.ceil((i+1) * outCrystal.getMaxDamage() / 8.0F));
-            outputStacks.add(outCrystal.copy());
+            crystalStacks.add(inBook);
 
             for (int j = 0; j < 8; j++) {
                 List<ItemStack> inputStacks;
@@ -51,8 +49,12 @@ public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper, ICustomCraf
                 } else
                     inputStacks = inputLists.get(j+1);
                 if (j <= i)
-                    inputStacks.set(i, new ItemStack(ItemRegistry.WIGHT_HEART));
+                    inputStacks.set(i, inBook);
             }
+
+            List<ItemStack> outputStacks = outputLists.get(0);
+            outputStacks.add(outBook.copy());
+            outBook.grow(1);
         }
 
         ingredients.setInputLists(ItemStack.class, inputLists);

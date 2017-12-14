@@ -123,7 +123,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         registry.handleRecipes(RecipeMarshRunnerBoots.class, recipe -> new MarshRunnerBootsRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
 
         //Life Crystal
-        registry.handleRecipes(RecipesLifeCrystal.class, recipe -> new LifeCrystalRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(RecipesLifeCrystal.class, recipe -> new LifeCrystalRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
         //Coating
         CoatingRecipeJEI.setCoatableItems(registry.getIngredientRegistry());
@@ -132,6 +132,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         //CircleGems
         CircleGemsRecipeJEI.setApplicableItems(registry.getIngredientRegistry());
         registry.handleRecipes(RecipesCircleGems.class, recipe -> new CircleGemsRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
+
+        //Book merging
+        registry.handleRecipes(BookMergeRecipe.class, recipe -> new BookMergeRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
     }
