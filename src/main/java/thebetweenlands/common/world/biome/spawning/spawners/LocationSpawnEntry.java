@@ -16,13 +16,13 @@ import thebetweenlands.common.world.storage.location.LocationStorage;
 public class LocationSpawnEntry extends BLSpawnEntry {
 	protected final EnumLocationType locationType;
 
-	public LocationSpawnEntry(Class<? extends EntityLiving> entityType, EnumLocationType locationType) {
-		super(entityType);
+	public LocationSpawnEntry(int id, Class<? extends EntityLiving> entityType, EnumLocationType locationType) {
+		super(id, entityType);
 		this.locationType = locationType;
 	}
 
-	public LocationSpawnEntry(Class<? extends EntityLiving> entityType, short weight, EnumLocationType locationType) {
-		super(entityType, weight);
+	public LocationSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight, EnumLocationType locationType) {
+		super(id, entityType, weight);
 		this.locationType = locationType;
 	}
 

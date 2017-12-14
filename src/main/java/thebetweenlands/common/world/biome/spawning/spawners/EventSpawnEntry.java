@@ -18,8 +18,8 @@ public class EventSpawnEntry extends BLSpawnEntry {
 	 * @param parent
 	 * @param eventName
 	 */
-	public EventSpawnEntry(BLSpawnEntry parent, ResourceLocation eventName) {
-		super(parent.getEntityType(), parent.getBaseWeight());
+	public EventSpawnEntry(int id, BLSpawnEntry parent, ResourceLocation eventName) {
+		super(id, parent.getEntityType(), parent.getBaseWeight());
 		this.parent = parent;
 		this.eventName = eventName;
 	}

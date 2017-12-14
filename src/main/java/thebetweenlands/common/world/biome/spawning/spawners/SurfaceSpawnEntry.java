@@ -24,12 +24,12 @@ public class SurfaceSpawnEntry extends BLSpawnEntry {
 		}
 	};
 
-	public SurfaceSpawnEntry(Class<? extends EntityLiving> entityType) {
-		super(entityType);
+	public SurfaceSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
+		super(id, entityType);
 	}
 
-	public SurfaceSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
-		super(entityType, weight);
+	public SurfaceSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
+		super(id, entityType, weight);
 	}
 
 	public SurfaceSpawnEntry setSurfacePredicate(Predicate<IBlockState> surfacePredicate) {
