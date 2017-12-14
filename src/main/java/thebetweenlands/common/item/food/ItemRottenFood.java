@@ -47,4 +47,13 @@ public class ItemRottenFood extends ItemBLFood {
 	public boolean canGetSickOf(ItemStack stack) {
 		return false;
 	}
+	
+	@Override
+	public int getItemStackLimit(ItemStack stack) {
+		ItemStack original = this.getOriginalStack(stack);
+		if(!original.isEmpty()) {
+			return original.getItem().getItemStackLimit(original);
+		}
+		return super.getItemStackLimit(stack);
+	}
 }

@@ -1,10 +1,12 @@
 package thebetweenlands.api;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
@@ -114,15 +116,17 @@ public interface IBetweenlandsAPI {
 
 	/**
 	 * Adds an item to the overworld item whitelist
-	 * @param item
+	 * @param id The ID of the predicate
+	 * @param predicate The predicate that returns whether an item is whitelisted
 	 */
-	public void registerWhitelistedOverworldItem(Item item);
+	public void registerWhitelistedOverworldItem(ResourceLocation id, Predicate<ItemStack> predicate);
 
 	/**
 	 * Removes an item from the overworld item whitelist
-	 * @param item
+	 * @param id The ID of the predicate
+	 * @param predicate The predicate that returns whether an item is whitelisted
 	 */
-	public void unregisterWhitelistedOverworldItem(Item item);
+	public void unregisterWhitelistedOverworldItem(ResourceLocation id);
 
 	/**
 	 * Registers an aspect type
