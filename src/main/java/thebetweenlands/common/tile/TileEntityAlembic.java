@@ -320,12 +320,12 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
                 if (this.producableItemAspects.size() >= 1) {
                     Aspect aspect = this.producableItemAspects.get(0);
                     this.producableItemAspects.remove(0);
-                    float totalAmount = aspect.getDisplayAmount() * 100;
+                    float totalAmount = aspect.getDisplayAmount() * 1000;
                     Iterator<Aspect> itemAspectIT = this.producableItemAspects.iterator();
                     while (itemAspectIT.hasNext()) {
                         Aspect currentAspect = itemAspectIT.next();
                         if (currentAspect.type == aspect.type) {
-                            totalAmount += currentAspect.getDisplayAmount() * 100;
+                            totalAmount += currentAspect.getDisplayAmount() * 1000;
                             itemAspectIT.remove();
                         }
                     }

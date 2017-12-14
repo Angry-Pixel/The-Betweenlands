@@ -1,5 +1,6 @@
 package thebetweenlands.client.handler;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
@@ -81,6 +82,12 @@ public class ScreenRenderHandler extends Gui {
 	private int maxTitleTicks = 120;
 
 	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
+
+	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
+
+	static {
+		ASPECT_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
+	}
 
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
@@ -416,8 +423,6 @@ public class ScreenRenderHandler extends Gui {
 		buffer.pos(x2, y, 0.0D).tex(umax, vmin).endVertex();
 		buffer.pos(x, y, 0.0D).tex(umin, vmin).endVertex();
 	}
-
-	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
 
 	@SubscribeEvent
 	public void onRenderScreen(DrawScreenEvent.Post event) {
