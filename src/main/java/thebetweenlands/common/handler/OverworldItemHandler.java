@@ -153,50 +153,30 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTorchPlacement(PlaceEvent event) {
-		ItemStack held = event.getPlayer().getHeldItem(event.getHand());
-		if(!held.isEmpty()) {
-			for(ITorchPlaceHandler handler : TORCH_PLACE_HANDLERS.values()) {
-				if(handler.isTorchItem(held)) {
-					if(!handler.onTorchItemPlaced(event.getWorld(), event.getPos(), held)) {
-						for(int x = -2; x <= 2; x++) {
-							for(int y = -2; y <= 2; y++) {
-								for(int z = -2; z <= 2; z++) {
-									BlockPos offset = event.getPos().add(x, y, z);
-									IBlockState state = event.getWorld().getBlockState(offset);
-									if(handler.isTorchBlock(event.getWorld(), offset, state, held)) {
-										handler.onTorchBlockPlaced(event.getWorld(), offset, state, held);
+		if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
+			ItemStack held = event.getPlayer().getHeldItem(event.getHand());
+			if(!held.isEmpty()) {
+				for(ITorchPlaceHandler handler : TORCH_PLACE_HANDLERS.values()) {
+					if(handler.isTorchItem(held)) {
+						if(!handler.onTorchItemPlaced(event.getWorld(), event.getPos(), held)) {
+							for(int x = -2; x <= 2; x++) {
+								for(int y = -2; y <= 2; y++) {
+									for(int z = -2; z <= 2; z++) {
+										BlockPos offset = event.getPos().add(x, y, z);
+										IBlockState state = event.getWorld().getBlockState(offset);
+										if(handler.isTorchBlock(event.getWorld(), offset, state, held)) {
+											handler.onTorchBlockPlaced(event.getWorld(), offset, state, held);
+										}
 									}
 								}
 							}
+						} else {
+							break;
 						}
-					} else {
-						break;
 					}
 				}
 			}
 		}
-		/*ItemStack mainHand = event.getPlayer().getHeldItemMainhand();
-		ItemStack offHand = event.getPlayer().getHeldItemMainhand();
-		event.getPos()
-		boolean isHoldingTorchMainhand = !mainHand.isEmpty() && Block.getBlockFromItem(mainHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(mainHand.getItem())) && !WHITELIST.contains(mainHand.getItem());
-		boolean isHoldingTorchOffhand = !offHand.isEmpty() && Block.getBlockFromItem(offHand.getItem()) instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(Block.getBlockFromItem(offHand.getItem())) && !WHITELIST.contains(offHand.getItem());
-		if (isHoldingTorchMainhand || isHoldingTorchOffhand) {
-			if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
-				for(int x = -2; x <= 2; x++) {
-					for(int y = -2; y <= 2; y++) {
-						for(int z = -2; z <= 2; z++) {
-							IBlockState state = event.getWorld().getBlockState(event.getPos().add(x, y, z));
-							if(state.getBlock() == Blocks.TORCH && !BlockRegistry.BLOCKS.contains(state.getBlock()) && !WHITELIST.contains(Item.getItemFromBlock(state.getBlock()))) {
-								EnumFacing facing = state.getValue(BlockTorch.FACING);
-								IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
-								event.getWorld().setBlockState(event.getPos().add(x, y, z), dampTorch);
-								event.getWorld().playSound(null, event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
-							}
-						}
-					}
-				}
-			}
-		}*/
 	}
 
 	@SubscribeEvent
