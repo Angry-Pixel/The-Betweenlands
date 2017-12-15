@@ -132,12 +132,13 @@ public class OverworldItemHandler {
 
 			@Override
 			public boolean isTorchItem(ItemStack stack) {
-				return Block.getBlockFromItem(stack.getItem()) == Blocks.TORCH;
+				Block block = Block.getBlockFromItem(stack.getItem());
+				return block instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(block);
 			}
 
 			@Override
 			public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack) {
-				return state.getBlock() == Blocks.TORCH;
+				return state.getBlock() instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(state.getBlock());
 			}
 
 			@Override
