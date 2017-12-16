@@ -34,6 +34,7 @@ import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
 import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
+import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -122,7 +123,12 @@ public class OverworldItemHandler {
 
 		BONEMEAL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() == Items.DYE);
 
-		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() instanceof ItemBLSword == false && stack.getItem() instanceof ItemBLAxe == false && stack.getItem() instanceof ItemBLPickaxe == false && stack.getItem() instanceof ItemBLShovel == false);
+		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() instanceof ItemBLSword == false && 
+				stack.getItem() instanceof ItemBLAxe == false && 
+				stack.getItem() instanceof ItemBLPickaxe == false && 
+				stack.getItem() instanceof ItemBLShovel == false &&
+				stack.getItem() instanceof ItemBLBow == false &&
+				!ItemRegistry.ITEMS.contains(stack.getItem()));
 
 		ITorchPlaceHandler vanillaTorchPlaceHandler = new ITorchPlaceHandler() {
 			@Override

@@ -34,6 +34,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -51,12 +52,14 @@ import thebetweenlands.client.render.shader.postprocessing.PostProcessingEffect;
 import thebetweenlands.client.render.shader.postprocessing.Starfield;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -81,8 +84,14 @@ public class ScreenRenderHandler extends Gui {
 	private int titleTicks = 0;
 	private int maxTitleTicks = 120;
 
+	private int cavingRopeConnectTicks = 0;
+	private int cavingRopeCount = 0;
+	
 	public static final ResourceLocation TITLE_TEXTURE = new ResourceLocation("thebetweenlands:textures/gui/location_title.png");
 
+	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
+	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
+	
 	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
 
 	static {
@@ -102,78 +111,92 @@ public class ScreenRenderHandler extends Gui {
 			if(this.titleTicks > 0) {
 				this.titleTicks--;
 			}
+			
+			this.cavingRopeCount = 0;
+			if(this.cavingRopeConnectTicks > 0) {
+				this.cavingRopeConnectTicks--;
+			}
 
 			EntityPlayer player = Minecraft.getMinecraft().player;
-			if(player != null && player.dimension == ConfigHandler.dimensionId) {
-				String prevLocation = this.currentLocation;
-
-				List<LocationStorage> locations = getVisibleLocations(player);
-				if(locations.isEmpty()) {
-					String location;
-					if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
-						String strippedName = I18n.format("location.wilderness.name");
-						if(strippedName.startsWith("translate:")) {
-							int startIndex = strippedName.indexOf("translate:");
-							strippedName = strippedName.substring(startIndex+1, strippedName.length());
-						}
-						if(this.currentLocation.equals(strippedName)) {
-							prevLocation = "";
-						}
-						location = I18n.format("location.caverns.name");
-					} else {
-						String strippedName = I18n.format("location.caverns.name");
-						if(strippedName.startsWith("translate:")) {
-							int startIndex = strippedName.indexOf("translate:");
-							strippedName = strippedName.substring(startIndex+1, strippedName.length());
-						}
-						if(this.currentLocation.equals(strippedName)) {
-							prevLocation = "";
-						}
-						location = I18n.format("location.wilderness.name");
-					}
-					this.currentLocation = location;
-				} else {
-					LocationStorage highestLocation = null;
-					for(LocationStorage storage : locations) {
-						if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
-							highestLocation = storage;
-					}
-					int displayCooldown = 60*20; //1 minute cooldown for title
-					if(highestLocation.getTitleDisplayCooldown(player) == 0) {
-						highestLocation.setTitleDisplayCooldown(player, displayCooldown);
-						this.currentLocation = highestLocation.getLocalizedName();
-					} else if(highestLocation.getTitleDisplayCooldown(player) > 0) {
-						highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
+			
+			if(player != null) {
+				for(ItemStack stack : player.inventory.mainInventory) {
+					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
+						this.cavingRopeCount += stack.getCount();
 					}
 				}
-
-				if(this.currentLocation.length() > 0) {
-					if(this.currentLocation.contains(":")) {
-						int startIndex = this.currentLocation.indexOf(":");
-						try {
-							String ticks = this.currentLocation.substring(0, startIndex);
-							this.maxTitleTicks = Integer.parseInt(ticks);
-							this.currentLocation = this.currentLocation.substring(startIndex+1, this.currentLocation.length());
-						} catch(Exception ex) {
-							this.maxTitleTicks = 80;
+				
+				if(player.dimension == ConfigHandler.dimensionId) {
+					String prevLocation = this.currentLocation;
+	
+					List<LocationStorage> locations = getVisibleLocations(player);
+					if(locations.isEmpty()) {
+						String location;
+						if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+							String strippedName = I18n.format("location.wilderness.name");
+							if(strippedName.startsWith("translate:")) {
+								int startIndex = strippedName.indexOf("translate:");
+								strippedName = strippedName.substring(startIndex+1, strippedName.length());
+							}
+							if(this.currentLocation.equals(strippedName)) {
+								prevLocation = "";
+							}
+							location = I18n.format("location.caverns.name");
+						} else {
+							String strippedName = I18n.format("location.caverns.name");
+							if(strippedName.startsWith("translate:")) {
+								int startIndex = strippedName.indexOf("translate:");
+								strippedName = strippedName.substring(startIndex+1, strippedName.length());
+							}
+							if(this.currentLocation.equals(strippedName)) {
+								prevLocation = "";
+							}
+							location = I18n.format("location.wilderness.name");
+						}
+						this.currentLocation = location;
+					} else {
+						LocationStorage highestLocation = null;
+						for(LocationStorage storage : locations) {
+							if(highestLocation == null || storage.getLayer() > highestLocation.getLayer())
+								highestLocation = storage;
+						}
+						int displayCooldown = 60*20; //1 minute cooldown for title
+						if(highestLocation.getTitleDisplayCooldown(player) == 0) {
+							highestLocation.setTitleDisplayCooldown(player, displayCooldown);
+							this.currentLocation = highestLocation.getLocalizedName();
+						} else if(highestLocation.getTitleDisplayCooldown(player) > 0) {
+							highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
 						}
 					}
-					if(prevLocation != null && !prevLocation.equals(this.currentLocation)) {
-						this.titleTicks = this.maxTitleTicks;
-						this.titleContainer = new TextContainer(2048, 2048, this.currentLocation, TheBetweenlands.proxy.getCustomFontRenderer());
-						this.titleContainer.setCurrentScale(2.0f).setCurrentColor(0xFFFFFFFF);
-						this.titleContainer.registerTag(new FormatTags.TagNewLine());
-						this.titleContainer.registerTag(new FormatTags.TagScale(2.0F));
-						this.titleContainer.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
-						this.titleContainer.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
-						this.titleContainer.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
-						this.titleContainer.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
-						this.titleContainer.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
-						try {
-							this.titleContainer.parse();
-						} catch (Exception e) {
-							this.titleContainer = null;
-							e.printStackTrace();
+	
+					if(this.currentLocation.length() > 0) {
+						if(this.currentLocation.contains(":")) {
+							int startIndex = this.currentLocation.indexOf(":");
+							try {
+								String ticks = this.currentLocation.substring(0, startIndex);
+								this.maxTitleTicks = Integer.parseInt(ticks);
+								this.currentLocation = this.currentLocation.substring(startIndex+1, this.currentLocation.length());
+							} catch(Exception ex) {
+								this.maxTitleTicks = 80;
+							}
+						}
+						if(prevLocation != null && !prevLocation.equals(this.currentLocation)) {
+							this.titleTicks = this.maxTitleTicks;
+							this.titleContainer = new TextContainer(2048, 2048, this.currentLocation, TheBetweenlands.proxy.getCustomFontRenderer());
+							this.titleContainer.setCurrentScale(2.0f).setCurrentColor(0xFFFFFFFF);
+							this.titleContainer.registerTag(new FormatTags.TagNewLine());
+							this.titleContainer.registerTag(new FormatTags.TagScale(2.0F));
+							this.titleContainer.registerTag(new FormatTags.TagSimple("bold", TextFormatting.BOLD));
+							this.titleContainer.registerTag(new FormatTags.TagSimple("obfuscated", TextFormatting.OBFUSCATED));
+							this.titleContainer.registerTag(new FormatTags.TagSimple("italic", TextFormatting.ITALIC));
+							this.titleContainer.registerTag(new FormatTags.TagSimple("strikethrough", TextFormatting.STRIKETHROUGH));
+							this.titleContainer.registerTag(new FormatTags.TagSimple("underline", TextFormatting.UNDERLINE));
+							try {
+								this.titleContainer.parse();
+							} catch (Exception e) {
+								this.titleContainer = null;
+								e.printStackTrace();
+							}
 						}
 					}
 				}
@@ -183,13 +206,66 @@ public class ScreenRenderHandler extends Gui {
 
 	@SubscribeEvent
 	public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-		if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
-			int width = event.getResolution().getScaledWidth();
-			int height = event.getResolution().getScaledHeight();
-
-			Minecraft mc = Minecraft.getMinecraft();
-			EntityPlayer player = mc.player;
-
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+		int width = event.getResolution().getScaledWidth();
+		int height = event.getResolution().getScaledHeight();
+		
+		if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
+			if(player != null) {
+				boolean connected = false;
+				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
+				for(EntityRopeNode rope : ropeNodes) {
+					if(rope.getNextNode() == player) {
+						connected = true;
+						break;
+					}
+				}
+				if(connected) {
+					this.cavingRopeConnectTicks = 80;
+					
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(width / 2, height / 2, 0);
+					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+					GlStateManager.disableBlend();
+					
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(14, 14, 0);
+					GlStateManager.scale(0.5D, 0.5D, 1);
+					mc.fontRenderer.drawString(String.valueOf(this.cavingRopeCount), 0, 0, 0xFFFFFFFF);
+					GlStateManager.popMatrix();
+					
+					Minecraft.getMinecraft().renderEngine.bindTexture(CAVING_ROPE_CONNECTED);
+					
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder buffer = tessellator.getBuffer();
+					buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+					this.renderTexturedRect(buffer, 2, 2, 18, 18, 0, 1, 0, 1);
+					tessellator.draw();
+					
+					GlStateManager.enableBlend();
+					GlStateManager.popMatrix();
+				} else if(!connected && this.cavingRopeConnectTicks > 0) {
+					GlStateManager.pushMatrix();
+					GlStateManager.translate(width / 2, height / 2, 0);
+					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+					GlStateManager.enableBlend();
+					GlStateManager.color(1.0F, 1.0F, 1.0F, MathHelper.clamp(this.cavingRopeConnectTicks / 80.0F * (0.8F + 0.2F * (float)Math.sin((this.cavingRopeConnectTicks + 1 - event.getPartialTicks()) / 2.0F)), 0, 1));
+					
+					Minecraft.getMinecraft().renderEngine.bindTexture(CAVING_ROPE_DISCONNECTED);
+					
+					Tessellator tessellator = Tessellator.getInstance();
+					BufferBuilder buffer = tessellator.getBuffer();
+					buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+					this.renderTexturedRect(buffer, 2, 2, 18, 18, 0, 1, 0, 1);
+					tessellator.draw();
+					
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+					GlStateManager.popMatrix();
+				}
+			}
+		} else if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
 			if(player != null) {
 				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
@@ -307,8 +383,6 @@ public class ScreenRenderHandler extends Gui {
 		} else if(event.getType() == ElementType.TEXT) {
 			if(this.titleTicks > 0 && this.titleContainer != null && !this.titleContainer.getPages().isEmpty()) {
 				TextPage page = this.titleContainer.getPages().get(0);
-				int width = event.getResolution().getScaledWidth();
-				int height = event.getResolution().getScaledHeight();
 				double strWidth = page.getTextWidth();
 				double strHeight = page.getTextHeight();
 				double strX = width / 2.0D - strWidth / 2.0F;
@@ -333,7 +407,6 @@ public class ScreenRenderHandler extends Gui {
 				GlStateManager.popMatrix();
 				Minecraft.getMinecraft().renderEngine.bindTexture(TITLE_TEXTURE);
 				GlStateManager.color(1, 1, 1, fade);
-				GlStateManager.disableCull();
 				double sidePadding = 6;
 				double yOffset = 5;
 				double sy = Math.ceil(strY + strHeight - yOffset * averageScale);
