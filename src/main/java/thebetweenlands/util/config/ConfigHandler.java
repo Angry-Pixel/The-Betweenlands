@@ -40,6 +40,8 @@ public class ConfigHandler {
 
 	public static int maxEntitiesPerLoadedArea;
 	public static int hardEntityLimit;
+	
+	public static boolean cavingRopeIndicator;
 
 	public Configuration config;
 	public static String path = "";
@@ -70,6 +72,7 @@ public class ConfigHandler {
 		useFoodSickness = config.getBoolean("Food Sickness", CATEGORIES[2], true, "If true the food sickness system will be enabled");
 		String[] rottenFoodWhitelistUnparsed = config.getStringList("Rotten Food Whitelist", CATEGORIES[2], new String[0], "A list of items that should be whitelisted from rotting in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used");
 		parseFoodWhitelist(rottenFoodWhitelistUnparsed);
+		cavingRopeIndicator = config.getBoolean("Caving Rope Indicator", CATEGORIES[2], true, "Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left");
 		
 		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
 		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);

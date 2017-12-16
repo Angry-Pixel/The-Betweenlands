@@ -120,9 +120,11 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			
 			if(player != null) {
-				for(ItemStack stack : player.inventory.mainInventory) {
-					if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
-						this.cavingRopeCount += stack.getCount();
+				if(ConfigHandler.cavingRopeIndicator) {
+					for(ItemStack stack : player.inventory.mainInventory) {
+						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
+							this.cavingRopeCount += stack.getCount();
+						}
 					}
 				}
 				
@@ -212,7 +214,7 @@ public class ScreenRenderHandler extends Gui {
 		int height = event.getResolution().getScaledHeight();
 		
 		if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
-			if(player != null) {
+			if(ConfigHandler.cavingRopeIndicator && player != null) {
 				boolean connected = false;
 				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
 				for(EntityRopeNode rope : ropeNodes) {
