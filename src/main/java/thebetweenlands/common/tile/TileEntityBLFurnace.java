@@ -154,15 +154,6 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
     @Override
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
-        NBTTagList nbttaglist = nbt.getTagList("Items", 10);
-//        inventory = new ItemStack[getSizeInventory()];
-//
-//        for (int i = 0; i < nbttaglist.tagCount(); ++i) {
-//            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-//            byte slot = nbttagcompound1.getByte("Slot");
-//            if (slot >= 0 && slot < inventory.length)
-//                inventory.get(slot) = new ItemStack(nbttagcompound1);
-//        }
         furnaceBurnTime = nbt.getShort("BurnTime");
         furnaceCookTime = nbt.getShort("CookTime");
         currentItemBurnTime = getItemBurnTime(inventory.get(1));
@@ -175,16 +166,6 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         super.writeToNBT(nbt);
         nbt.setShort("BurnTime", (short) furnaceBurnTime);
         nbt.setShort("CookTime", (short) furnaceCookTime);
-//        NBTTagList nbttaglist = new NBTTagList();
-//        for (int slot = 0; slot < inventory.length; ++slot) {
-//            if (inventory.get(slot) != null) {
-//                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-//                nbttagcompound1.setByte("Slot", (byte) slot);
-//                inventory.get(slot).writeToNBT(nbttagcompound1);
-//                nbttaglist.appendTag(nbttagcompound1);
-//            }
-//        }
-//        nbt.setTag("Items", nbttaglist);
         if (hasCustomName())
             nbt.setString("CustomName", customName);
         return nbt;
@@ -222,9 +203,10 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         boolean isBurning = furnaceBurnTime > 0;
         boolean isDirty = false;
 
-        if (furnaceBurnTime > 0) {
-            --furnaceBurnTime;
-        }
+        if (furnaceBurnTime > 0)
+            furnaceBurnTime = Math.max(0, furnaceBurnTime - 1);
+        else if (furnaceBurnTime < 0)
+            furnaceBurnTime = 0;
 
         if (!world.isRemote) {
             if (furnaceBurnTime != 0 || !inventory.get(1).isEmpty()&& !inventory.get(0).isEmpty()) {
