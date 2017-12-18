@@ -30,9 +30,11 @@ import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery;
 import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscoveryResult;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
+import thebetweenlands.util.TranslationHelper;
 
 public class BlockGeckoCage extends BlockContainer {
 	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
@@ -77,10 +79,30 @@ public class BlockGeckoCage extends BlockContainer {
 	}
 
 	@Override
+	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
+		if (!world.isRemote) {
+			TileEntity te = world.getTileEntity(pos);
+			if (te instanceof TileEntityGeckoCage) {
+				TileEntityGeckoCage tile = (TileEntityGeckoCage) te;
+				if (tile.hasGecko()) {
+					EntityGecko gecko = new EntityGecko(world);
+					gecko.setHealth(tile.getGeckoUsages());
+					gecko.setLocationAndAngles(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, 0.0F, 0.0F);
+					if (!tile.getGeckoName().isEmpty())
+						gecko.setCustomNameTag(tile.getGeckoName());
+					world.spawnEntity(gecko);
+					gecko.playLivingSound();
+				}
+			}
+		}
+	}
+
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItemStack = player.getHeldItem(hand);
-		if (world.getTileEntity(pos) instanceof TileEntityGeckoCage) {
-			TileEntityGeckoCage tile = (TileEntityGeckoCage) world.getTileEntity(pos);
+		TileEntity te = world.getTileEntity(pos);
+		if (te instanceof TileEntityGeckoCage) {
+			TileEntityGeckoCage tile = (TileEntityGeckoCage) te;
 
 			if(player.isSneaking())
 				return false;
@@ -90,7 +112,11 @@ public class BlockGeckoCage extends BlockContainer {
 				Item heldItem = heldItemStack.getItem();
 				if(heldItem == ItemRegistry.GECKO) {
 					if(!tile.hasGecko()) {
-						tile.addGecko(12);
+						String name = "";
+						if (!(heldItemStack.getDisplayName().equals(TranslationHelper.translateToLocal(heldItemStack.getUnlocalizedName()))) && heldItemStack.hasDisplayName())
+								name = heldItemStack.getDisplayName();
+
+						tile.addGecko(heldItemStack.hasTagCompound() && heldItemStack.getTagCompound().hasKey("Health") ? (int) heldItemStack.getTagCompound().getFloat("Health") : 12, name);
 						if(!player.capabilities.isCreativeMode)
 							heldItemStack.shrink(1);
 						return true;

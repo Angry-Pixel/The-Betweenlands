@@ -5,6 +5,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -27,6 +28,9 @@ public class ItemNet extends Item implements IAnimatorRepairable {
 				receivedItem = new ItemStack(ItemRegistry.FIREFLY);
 			} else {
 				receivedItem = new ItemStack(ItemRegistry.GECKO);
+				if (receivedItem.getTagCompound() == null)
+					receivedItem.setTagCompound(new NBTTagCompound());
+				receivedItem.getTagCompound().setFloat("Health", target.getHealth());
 			}
 			if (!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == this && !player.world.isRemote) {
 				if (!target.getCustomNameTag().isEmpty()) {

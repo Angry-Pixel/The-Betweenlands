@@ -15,6 +15,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	private int recoverTicks = 0;
 	private IAspectType aspectType = null;
 	private int geckoUsages = 0;
+	private String geckoName;
 
 	@Override
 	public void update() {
@@ -28,12 +29,10 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 					this.world.notifyBlockUpdate(this.pos, state, state, 3);
 				}
 			} else {
-				if(this.aspectType != null && this.geckoUsages > 0) {
-					--this.geckoUsages;
-					if(this.geckoUsages == 0) {
-						IBlockState state = this.world.getBlockState(this.pos);
-						this.world.notifyBlockUpdate(this.pos, state, state, 3);
-					}
+				if(this.aspectType != null && this.geckoUsages == 0) {
+					this.geckoName = "";
+					IBlockState state = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, state, state, 3);
 				}
 				if(this.aspectType != null) {
 					this.aspectType = null;
@@ -57,6 +56,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 	}
 
 	public void setAspectType(IAspectType type, int recoverTime) {
+		--this.geckoUsages;
 		this.aspectType = type;
 		this.recoverTicks = recoverTime;
 		IBlockState state = this.world.getBlockState(this.pos);
@@ -67,8 +67,17 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		return this.geckoUsages > 0;
 	}
 
-	public void addGecko(int usages) {
+	public int getGeckoUsages() {
+		return this.geckoUsages;
+	}
+
+	public String getGeckoName() {
+		return this.geckoName;
+	}
+
+	public void addGecko(int usages, String name) {
 		this.geckoUsages = usages;
+		this.geckoName = name;
 		this.ticks = 0;
 		IBlockState state = this.world.getBlockState(this.pos);
 		this.world.notifyBlockUpdate(this.pos, state, state, 3);
