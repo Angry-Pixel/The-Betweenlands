@@ -21,8 +21,9 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 
-public class BlockCarvedMudBrick extends BasicBlock implements ICustomItemBlock, ISubtypeBlockModelDefinition {
+public class BlockCarvedMudBrick extends BasicBlock implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 
 	public static final PropertyEnum<EnumCarvedMudBrickType> VARIANT = PropertyEnum.<EnumCarvedMudBrickType>create("variant", EnumCarvedMudBrickType.class);
 	
