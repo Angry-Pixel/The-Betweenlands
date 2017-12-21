@@ -23,9 +23,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.ItemBlockEnum;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 
-public class BlockMudTiles extends Block implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
+public class BlockMudTiles extends Block implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 
 	public static final PropertyEnum<EnumMudTileType> VARIANT = PropertyEnum.<EnumMudTileType>create("variant", EnumMudTileType.class);
     public static final PropertyBool CONNECTED_DOWN = PropertyBool.create("connected_down");
