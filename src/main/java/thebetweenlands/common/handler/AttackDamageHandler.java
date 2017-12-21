@@ -44,8 +44,7 @@ public class AttackDamageHandler {
 				EntityPlayer entityPlayer = (EntityPlayer) source.getTrueSource();
 				ItemStack heldItem = entityPlayer.getHeldItem(entityPlayer.getActiveHand());
 				if (!heldItem.isEmpty()) {
-					boolean isWhitelisted = heldItem.getItem() instanceof ItemBLSword || heldItem.getItem() instanceof ItemBLAxe || heldItem.getItem() instanceof ItemBLPickaxe || heldItem.getItem() instanceof ItemBLShovel || OverworldItemHandler.WHITELIST.contains(heldItem.getItem());
-					if (!isWhitelisted) {
+					if (OverworldItemHandler.isToolWeakened(heldItem)) {
 						damage = damage * DAMAGE_REDUCTION;
 					}
 				}

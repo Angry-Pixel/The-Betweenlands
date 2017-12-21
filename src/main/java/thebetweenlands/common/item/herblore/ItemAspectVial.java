@@ -34,6 +34,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
 import thebetweenlands.util.ColorUtils;
+import thebetweenlands.util.TranslationHelper;
 
 public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
     public ItemAspectVial() {
@@ -145,8 +146,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
         if (world != null) {
             List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
             if (!itemAspects.isEmpty() && itemAspects.get(0).type == AspectRegistry.BYARIIS) {
-                //TODO add then Repeller is added
-                //tooltip.add(TranslationHelper.translateToLocal("tooltip.aspectvial.byariis.fuel"));
+                tooltip.add(TranslationHelper.translateToLocal("tooltip.aspectvial.byariis.fuel"));
             }
         }
     }

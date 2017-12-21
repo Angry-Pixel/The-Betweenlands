@@ -46,7 +46,7 @@ public class ItemOctineIngot extends Item {
 			boolean hasTinder = false;
 			boolean isBlockTinder = false;
 			IBlockState blockState = worldIn.getBlockState(result.getBlockPos());
-			if(this.isTinder(blockState, ItemStack.EMPTY)) {
+			if(isTinder(blockState, ItemStack.EMPTY)) {
 				hasTinder = true;
 				isBlockTinder = true;
 			} else {
@@ -74,7 +74,7 @@ public class ItemOctineIngot extends Item {
 				boolean hasTinder = false;
 				boolean isBlockTinder = false;
 				IBlockState blockState = worldIn.getBlockState(pos);
-				if(this.isTinder(blockState, ItemStack.EMPTY)) {
+				if(isTinder(blockState, ItemStack.EMPTY)) {
 					hasTinder = true;
 					isBlockTinder = true;
 				} else {
@@ -111,7 +111,7 @@ public class ItemOctineIngot extends Item {
 		}
 	}
 
-	protected boolean isTinder(IBlockState blockState, ItemStack stack) {
+	public static boolean isTinder(IBlockState blockState, ItemStack stack) {
 		if(blockState != null) {
 			Block block = blockState.getBlock();
 			return block == BlockRegistry.CAVE_MOSS || 
@@ -122,7 +122,7 @@ public class ItemOctineIngot extends Item {
 		if(!stack.isEmpty()) {
 			if(stack.getItem() instanceof ItemBlock) {
 				ItemBlock itemBlock = (ItemBlock) stack.getItem();
-				return this.isTinder(itemBlock.getBlock().getDefaultState(), null);
+				return isTinder(itemBlock.getBlock().getDefaultState(), ItemStack.EMPTY);
 			}
 			return EnumItemPlantDrop.CAVE_MOSS_ITEM.isItemOf(stack) ||
 					EnumItemPlantDrop.MOSS_ITEM.isItemOf(stack) ||

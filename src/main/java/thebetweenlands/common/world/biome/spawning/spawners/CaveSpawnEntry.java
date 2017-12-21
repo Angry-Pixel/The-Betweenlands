@@ -20,12 +20,12 @@ public class CaveSpawnEntry extends BLSpawnEntry {
 	private boolean canSpawnOnWater = false;
 	private boolean canSpawnInWater = false;
 
-	public CaveSpawnEntry(Class<? extends EntityLiving> entityType) {
-		super(entityType);
+	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
+		super(id, entityType);
 	}
 
-	public CaveSpawnEntry(Class<? extends EntityLiving> entityType, short baseWeight) {
-		super(entityType, baseWeight);
+	public CaveSpawnEntry(int id, Class<? extends EntityLiving> entityType, short baseWeight) {
+		super(id, entityType, baseWeight);
 	}
 
 	public CaveSpawnEntry setCanSpawnOnWater(boolean spawnOnWater) {

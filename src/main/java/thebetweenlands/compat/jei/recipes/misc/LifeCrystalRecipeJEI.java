@@ -1,7 +1,12 @@
 package thebetweenlands.compat.jei.recipes.misc;
 
+import mezz.jei.api.IGuiHelper;
+import mezz.jei.api.gui.ICraftingGridHelper;
+import mezz.jei.api.gui.IGuiItemStackGroup;
+import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
+import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.MathHelper;
@@ -11,7 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper {
+public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
+
+    private final ICraftingGridHelper craftingGridHelper;
+
+    public LifeCrystalRecipeJEI(IGuiHelper guiHelper) {
+        craftingGridHelper = guiHelper.createCraftingGridHelper(1, 0);
+    }
 
     @Override
     public void getIngredients(IIngredients ingredients) {
@@ -46,5 +57,18 @@ public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper {
 
         ingredients.setInputLists(ItemStack.class, inputLists);
         ingredients.setOutputLists(ItemStack.class, outputLists);
+    }
+
+    @Override
+    public void setRecipe(IRecipeLayout recipeLayout, IIngredients ingredients) {
+        recipeLayout.setShapeless();
+
+        IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
+        List<List<ItemStack>> inputs = ingredients.getInputs(ItemStack.class);
+        List<List<ItemStack>> outputs = ingredients.getOutputs(ItemStack.class);
+
+        guiItemStacks.setOverrideDisplayFocus(null);
+        craftingGridHelper.setInputs(guiItemStacks, inputs);
+        guiItemStacks.set(0, outputs.get(0));
     }
 }

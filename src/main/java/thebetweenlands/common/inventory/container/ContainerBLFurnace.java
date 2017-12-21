@@ -2,15 +2,13 @@ package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
-import net.minecraft.inventory.SlotFurnaceOutput;
+import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.inventory.slot.SlotBLFurnaceFuel;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -25,7 +23,7 @@ public class ContainerBLFurnace extends Container {
     public ContainerBLFurnace(InventoryPlayer inventory, TileEntityBLFurnace tile) {
         tileFurnace = tile;
         addSlotToContainer(new Slot(tile, 0, 56, 17));
-        addSlotToContainer(new Slot(tile, 1, 56, 53));
+        addSlotToContainer(new SlotBLFurnaceFuel(tile, 1, 56, 53));
         addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 2, 116, 35));
         Slot fluxSlot = new SlotRestriction(tile, 3, 26, 35, EnumItemMisc.LIMESTONE_FLUX.create(1), 64);
         addSlotToContainer(fluxSlot);

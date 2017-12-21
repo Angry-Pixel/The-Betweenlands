@@ -29,10 +29,12 @@ public class EntitySound<T extends Entity> extends SafeStreamSound {
 
 	@Override
 	public void update() {
+		super.update();
+		
 		this.xPosF = (float) this.entity.posX;
 		this.yPosF = (float) this.entity.posY;
 		this.zPosF = (float) this.entity.posZ;
-
+		
 		if(this.fadeOut || this.entity == null || !this.entity.isEntityAlive() || this.entity.isDead || !this.entity.world.isBlockLoaded(this.entity.getPosition())
 				|| !this.isPlaying.test(this.entity)) {
 			this.repeat = false;
@@ -41,6 +43,7 @@ public class EntitySound<T extends Entity> extends SafeStreamSound {
 			this.volume -= 0.05F;
 			if(this.volume <= 0.0F) {
 				this.donePlaying = true;
+				this.volume = 0;
 			}
 		}
 	}
@@ -51,11 +54,6 @@ public class EntitySound<T extends Entity> extends SafeStreamSound {
 	public void stopImmediately() {
 		this.donePlaying = true;
 		this.repeat = false;
-	}
-
-	@Override
-	public boolean isDonePlaying() {
-		return donePlaying;
 	}
 
 	/**

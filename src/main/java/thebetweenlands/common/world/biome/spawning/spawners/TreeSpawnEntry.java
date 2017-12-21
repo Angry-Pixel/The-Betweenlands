@@ -14,12 +14,12 @@ import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
  * Used for sporeling.
  */
 public class TreeSpawnEntry extends BLSpawnEntry {
-	public TreeSpawnEntry(Class<? extends EntityLiving> entityType) {
-		super(entityType);
+	public TreeSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
+		super(id, entityType);
 	}
 
-	public TreeSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
-		super(entityType, weight);
+	public TreeSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
+		super(id, entityType, weight);
 	}
 
 	@Override

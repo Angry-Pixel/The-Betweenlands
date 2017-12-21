@@ -8,8 +8,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityMusic;
 
-import java.util.function.Predicate;
-
 @SideOnly(Side.CLIENT)
 public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 	public final IEntityMusic music;
@@ -30,26 +28,38 @@ public class EntityMusicSound<T extends Entity> extends EntitySound<T> {
 
 	@Override
 	public void update() {
+		this.updateSafeStreamSound();
+
 		if(this.entity != null && !this.entity.isDead) {
-			if(fadeOut || !this.music.isMusicActive(Minecraft.getMinecraft().player) || this.entity.getDistance(Minecraft.getMinecraft().player) > this.music.getMusicRange(Minecraft.getMinecraft().player)) {
+			if(!this.music.isMusicActive(Minecraft.getMinecraft().player) || this.entity.getDistance(Minecraft.getMinecraft().player) > this.music.getMusicRange(Minecraft.getMinecraft().player)) {
 				this.repeat = false;
 				this.fadeOut = true;
 
-				this.volume -= 0.1F;
-				if(this.volume <= 0.0F) {
-					this.donePlaying = true;
+				if(this.volume > 0) {
+					this.volume -= 0.1F;
+					if(this.volume <= 0.0F) {
+						this.volume = 0;
+						this.donePlaying = true;
+					}
 				}
-			} else if(this.volume < this.originalVolume) {
-				this.volume += 0.1F;
-				if(this.volume > this.originalVolume)
-					this.volume = this.originalVolume;
+			} else {
+				if(this.fadeOut) {
+					this.cancelFade();
+					this.repeat = true;
+				}
+				if(this.volume < this.originalVolume) {
+					this.volume += 0.1F;
+					if(this.volume > this.originalVolume) {
+						this.volume = this.originalVolume;
+					}
+				}
 			}
 			this.xPosF = (float) this.entity.posX;
 			this.yPosF = (float) this.entity.posY;
 			this.zPosF = (float) this.entity.posZ;
 		} else {
 			this.donePlaying = true;
+			this.volume = 0;
 		}
 	}
-
 }

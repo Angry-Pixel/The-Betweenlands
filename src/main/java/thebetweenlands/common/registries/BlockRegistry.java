@@ -58,24 +58,7 @@ import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
-import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
-import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
-import thebetweenlands.common.block.misc.BlockDampTorch;
-import thebetweenlands.common.block.misc.BlockDentrothystPane;
-import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
-import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
-import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
-import thebetweenlands.common.block.misc.BlockMossBed;
-import thebetweenlands.common.block.misc.BlockMudFlowerPot;
-import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
-import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
-import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
-import thebetweenlands.common.block.misc.BlockRope;
-import thebetweenlands.common.block.misc.BlockSludge;
-import thebetweenlands.common.block.misc.BlockSulfurTorch;
-import thebetweenlands.common.block.misc.BlockSyrmoriteRubberTap;
-import thebetweenlands.common.block.misc.BlockTrapDoorBetweenlands;
-import thebetweenlands.common.block.misc.BlockWeedwoodRubberTap;
+import thebetweenlands.common.block.misc.*;
 import thebetweenlands.common.block.plant.BlockAlgae;
 import thebetweenlands.common.block.plant.BlockBlackHatMushroom;
 import thebetweenlands.common.block.plant.BlockBladderwortFlower;
@@ -323,7 +306,7 @@ public class BlockRegistry {
     public static final Block MOSSY_LIMESTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block MOSSY_SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block MUD_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
-    public static final Block OCTINE_BLOCK = new BasicBlock(Material.IRON).setSoundType2(SoundType.METAL).setHardness(1.5F).setResistance(10.0F);
+    public static final Block OCTINE_BLOCK = new BlockOctine();
     public static final Block RUBBER_BLOCK = new BlockBouncyBetweenlands(0.8f).setSoundType2(SoundType.SLIME).setHardness(1.0f);
     public static final Block PITSTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block PITSTONE_TILES = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
@@ -660,8 +643,8 @@ public class BlockRegistry {
                 }
             }
             ResourceLocation name = block.getRegistryName();
-            if (block instanceof ISubtypeBlockModelDefinition) {
-                ISubtypeBlockModelDefinition subtypeBlock = (ISubtypeBlockModelDefinition) block;
+            if (block instanceof ISubtypeItemBlockModelDefinition) {
+                ISubtypeItemBlockModelDefinition subtypeBlock = (ISubtypeItemBlockModelDefinition) block;
                 for (int i = 0; i < subtypeBlock.getSubtypeNumber(); i++) {
                     int meta = subtypeBlock.getSubtypeMeta(i);
                     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), meta, new ModelResourceLocation(name.getResourceDomain() + ":" + String.format(subtypeBlock.getSubtypeName(meta), name.getResourcePath()), "inventory"));
@@ -697,7 +680,7 @@ public class BlockRegistry {
         }
     }
 
-    public interface ISubtypeBlockModelDefinition {
+    public interface ISubtypeItemBlockModelDefinition {
         /**
          * Returns the amount of subtypes
          *

@@ -25,11 +25,6 @@ public class ItemManualHL extends Item implements IDiscoveryProvider<ItemStack>{
         setMaxStackSize(1);
         this.setCreativeTab(BLCreativeTabs.HERBLORE);
     }
-
-    @Override
-    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(TextFormatting.RED + "Not yet fully tested!");
-	}
     
     @Override
     public DiscoveryContainer<ItemStack> getContainer(ItemStack stack) {

@@ -7,8 +7,8 @@ import net.minecraft.world.World;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 
 public class SwampHagCaveSpawnEntry extends CaveSpawnEntry {
-	public SwampHagCaveSpawnEntry(short baseWeight) {
-		super(EntitySwampHag.class, baseWeight);
+	public SwampHagCaveSpawnEntry(int id, short baseWeight) {
+		super(id, EntitySwampHag.class, baseWeight);
 	}
 
 	@Override

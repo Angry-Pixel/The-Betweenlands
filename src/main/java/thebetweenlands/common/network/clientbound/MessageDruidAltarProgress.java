@@ -1,8 +1,10 @@
 package thebetweenlands.common.network.clientbound;
 
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -10,11 +12,12 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.handler.DruidAltarSoundHandler;
+import thebetweenlands.client.audio.DruidAltarSound;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 
 public class MessageDruidAltarProgress extends MessageBase {
@@ -76,9 +79,7 @@ public class MessageDruidAltarProgress extends MessageBase {
 					}
 				}
 
-				DruidAltarSoundHandler.playAltarSound(altar);
-			} else if(this.progress == -2) {
-				DruidAltarSoundHandler.stopAltarSound(altar);
+				Minecraft.getMinecraft().getSoundHandler().playSound(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
 			}
 		}
 	}

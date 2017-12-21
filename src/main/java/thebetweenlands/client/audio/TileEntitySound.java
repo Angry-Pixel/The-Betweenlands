@@ -31,6 +31,8 @@ public class TileEntitySound<T extends TileEntity> extends SafeStreamSound {
 
 	@Override
 	public void update() {
+		super.update();
+		
 		if(this.fadeOut || this.tile == null || !this.tile.hasWorld() || !this.tile.getWorld().isBlockLoaded(this.tile.getPos())
 				|| this.tile.getWorld().getTileEntity(this.tile.getPos()) != this.tile || !this.isPlaying.test(this.tile)) {
 			this.repeat = false;
@@ -39,6 +41,7 @@ public class TileEntitySound<T extends TileEntity> extends SafeStreamSound {
 			this.volume -= 0.05F;
 			if(this.volume <= 0.0F) {
 				this.donePlaying = true;
+				this.volume = 0;
 			}
 		}
 	}
@@ -71,10 +74,5 @@ public class TileEntitySound<T extends TileEntity> extends SafeStreamSound {
 	 */
 	public boolean isStopping() {
 		return this.donePlaying || this.fadeOut;
-	}
-
-	@Override
-	public boolean isDonePlaying() {
-		return donePlaying;
 	}
 }

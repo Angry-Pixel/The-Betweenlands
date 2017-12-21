@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.misc;
 
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +25,11 @@ public class ItemMob extends Item {
     }
 
     @Override
+    public boolean showDurabilityBar(ItemStack stack) {
+        return false;
+    }
+
+    @Override
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if (world.isRemote) return EnumActionResult.FAIL;
@@ -34,6 +40,7 @@ public class ItemMob extends Item {
                 break;
             case "gecko":
                 entity = new EntityGecko(world);
+                entity.setHealth(stack.hasTagCompound() && stack.getTagCompound().hasKey("Health") ? stack.getTagCompound().getFloat("Health"): (float) entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue());
                 break;
         }
         if (entity != null) {

@@ -34,6 +34,8 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
 import thebetweenlands.util.IWeightProvider;
 import thebetweenlands.util.WeightedList;
 import thebetweenlands.util.config.ConfigHandler;
@@ -83,13 +85,26 @@ public class MobSpawnHandler {
 		private double spawnCheckRangeY = 6.0D;
 		private double groupSpawnRadius = 6.0D;
 		private int spawningInterval = 0;
-		private long lastSpawn = -1;
+		
+		/**
+		 * The ID is used to save the spawn entry data such as last spawn time. A negative ID means that no data will be saved
+		 */
+		public final int id;
 
 		public BLSpawnEntry(Class<? extends EntityLiving> entityType) {
-			this(entityType, (short) 100);
+			this(-1, entityType, (short) 100);
 		}
 
 		public BLSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
+			this(-1, entityType, weight);
+		}
+		
+		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
+			this(id, entityType, (short) 100);
+		}
+
+		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
+			this.id = id;
 			this.entityType = entityType;
 			try {
 				this.entityCtor = this.entityType.getConstructor(World.class);
@@ -99,7 +114,15 @@ public class MobSpawnHandler {
 			this.weight = weight;
 			this.baseWeight = weight;
 		}
-
+		
+		/**
+		 * Returns whether the data of this spawn entry should be saved
+		 * @return
+		 */
+		public boolean isSaved() {
+			return this.id >= 0;
+		}
+		
 		/**
 		 * Returns whether an entity can spawn based on the spawning position and the surface block below
 		 * @param world
@@ -455,14 +478,22 @@ public class MobSpawnHandler {
 					int groupSpawnedEntities = 0, groupSpawnAttempts = 0;
 					int maxGroupSpawnAttempts = attemptsPerGroup + desiredGroupSize * 2;
 
+					BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+					BiomeSpawnEntriesData spawnEntriesData = null;
+					long lastSpawn = -1;
+					if(worldStorage != null) {
+						spawnEntriesData = worldStorage.getBiomeSpawnEntriesData((BiomeBetweenlands)biome);
+						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry.id);
+					}
+					
 					if(!ignoreRestrictions) {
-						if(spawnEntry.lastSpawn == -1) {
-							spawnEntry.lastSpawn = world.getTotalWorldTime();
+						if(spawnEntriesData != null && lastSpawn == -1) {
+							spawnEntriesData.setLastSpawn(spawnEntry.id, world.getTotalWorldTime());
 							continue;
 						}
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
 						int adjustedInterval = (int)(spawnEntry.spawningInterval / loadedAreas);
-						if(world.getTotalWorldTime() - spawnEntry.lastSpawn < adjustedInterval) {
+						if(spawnEntriesData != null && world.getTotalWorldTime() - lastSpawn < adjustedInterval) {
 							//Too early, don't spawn yet
 							continue;
 						}
@@ -545,8 +576,9 @@ public class MobSpawnHandler {
 						}
 					}
 
-					if(!ignoreRestrictions && groupSpawnedEntities > 0)
-						spawnEntry.lastSpawn = world.getTotalWorldTime();
+					if(spawnEntriesData != null && !ignoreRestrictions && groupSpawnedEntities > 0) {
+						spawnEntriesData.setLastSpawn(spawnEntry.id, world.getTotalWorldTime());
+					}
 				}
 			}
 		return chunkSpawnedEntities;

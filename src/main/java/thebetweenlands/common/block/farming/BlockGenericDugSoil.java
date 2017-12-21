@@ -48,11 +48,11 @@ import thebetweenlands.common.item.ItemBlockMeta;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.registries.BlockRegistry.ISubtypeBlockModelDefinition;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.util.AdvancedStateMap;
 
-public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeBlockModelDefinition, IStateMappedBlock, ICustomItemBlock, IConnectedTextureBlock {
+public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEntityProvider, ISubtypeItemBlockModelDefinition, IStateMappedBlock, ICustomItemBlock, IConnectedTextureBlock {
     public static final PropertyBool COMPOSTED = PropertyBool.create("composted");
     public static final PropertyBool DECAYED = PropertyBool.create("decayed");
 

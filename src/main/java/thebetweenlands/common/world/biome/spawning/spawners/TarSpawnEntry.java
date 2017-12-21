@@ -12,12 +12,12 @@ import thebetweenlands.common.registries.BlockRegistry;
  *
  */
 public class TarSpawnEntry extends SurfaceSpawnEntry {
-	public TarSpawnEntry(Class<? extends EntityLiving> entityType) {
-		super(entityType);
+	public TarSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
+		super(id, entityType);
 	}
 
-	public TarSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
-		super(entityType, weight);
+	public TarSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
+		super(id, entityType, weight);
 	}
 
 	@Override

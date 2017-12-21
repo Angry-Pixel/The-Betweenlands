@@ -2,12 +2,14 @@ package thebetweenlands.common;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
 
 import com.google.common.base.Preconditions;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.LoaderState;
 import thebetweenlands.api.IBetweenlandsAPI;
@@ -126,19 +128,19 @@ public class BetweenlandsAPI implements IBetweenlandsAPI {
 	public void unregisterAmuletSupportingEntity(Class<? extends EntityLivingBase> entity) {
 		ItemAmulet.SUPPORTED_ENTITIES.remove(entity);
 	}
-
+	
 	@Override
-	public void registerWhitelistedOverworldItem(Item item) {
-		OverworldItemHandler.WHITELIST.add(item);
+	public void registerWhitelistedOverworldItem(ResourceLocation id, Predicate<ItemStack> predicate) {
+		OverworldItemHandler.TOOL_WHITELIST.put(id, predicate);
 	}
 
 	@Override
-	public void unregisterWhitelistedOverworldItem(Item item) {
-		OverworldItemHandler.WHITELIST.remove(item);
+	public void unregisterWhitelistedOverworldItem(ResourceLocation id) {
+		OverworldItemHandler.TOOL_WHITELIST.remove(id);
 	}
 
 	@Override
-	public void registerAspectType(IAspectType aspect, int tier, int group, float baseAmount) {
+	public void registerAspectType(IAspectType aspect, int tier, int group, int baseAmount) {
 		Preconditions.checkState(Loader.instance().isInState(LoaderState.INITIALIZATION), "Must be called during INITIALIZATION");
 		AspectManager.registerAspect(aspect, tier, group, baseAmount);
 	}

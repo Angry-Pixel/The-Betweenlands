@@ -10,6 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
@@ -184,7 +185,11 @@ public class WorldGenGiantTree extends WorldGenGiantTreeTrunk {
 			int length = rand.nextInt(10) + 10;
 			for (int y = startY; y > startY - length; y--) {
 				if (world.getBlockState(new BlockPos(x, y, z)).getMaterial().isReplaceable()) {
-					this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER);
+					if(startY - y < 6 && rand.nextInt(5) == 0) {
+						this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER.withProperty(BlockHanger.SEEDED, true));
+					} else {
+						this.setBlockAndNotifyAdequately(world, new BlockPos(x, y, z), HANGER);
+					}
 				} else {
 					break;
 				}

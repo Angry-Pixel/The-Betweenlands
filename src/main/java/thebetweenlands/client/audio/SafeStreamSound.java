@@ -5,6 +5,8 @@ import java.util.Map;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.audio.Sound;
+import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
@@ -20,19 +22,31 @@ public class SafeStreamSound extends MovingSound {
     private boolean isDone;
 
     private int pauseTicks = 0;
-
+    
     protected SafeStreamSound(SoundEvent sound, SoundCategory category) {
         super(sound, category);
     }
 
+    protected boolean isSoundStreamed(boolean defaultVal) {
+    	Sound sound = this.getSound();
+    	if(sound != null) {
+    		return sound.isStreaming();
+    	}
+    	return defaultVal;
+    }
+    
     @Override
     public boolean isDonePlaying() {
-        return isDone;
+        return this.isSoundStreamed(false) ? isDone : donePlaying;
     }
 
     @Override
     public void update() {
-        if (donePlaying && !isDone) {
+        this.updateSafeStreamSound();
+    }
+    
+    protected void updateSafeStreamSound() {
+    	if (this.isSoundStreamed(false) && donePlaying && !isDone) {
             if (pauseTicks == 0) {
                 SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
                 SoundManager manager = ReflectionHelper.getPrivateValue(SoundHandler.class, handler, "field_147694_f", "sndManager");

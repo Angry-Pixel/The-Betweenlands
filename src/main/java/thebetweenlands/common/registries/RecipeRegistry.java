@@ -31,19 +31,9 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
-import thebetweenlands.common.recipe.misc.AnimatorRecipe;
-import thebetweenlands.common.recipe.misc.CompostRecipe;
-import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
-import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
-import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
-import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
-import thebetweenlands.common.recipe.misc.RecipeMummyBait;
-import thebetweenlands.common.recipe.misc.RecipesAspectVials;
-import thebetweenlands.common.recipe.misc.RecipesCircleGems;
-import thebetweenlands.common.recipe.misc.RecipesCoating;
-import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
-import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
+import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.util.config.ConfigHandler;
@@ -169,13 +159,7 @@ public class RecipeRegistry {
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> register) {
 		IForgeRegistry<IRecipe> registry = register.getRegistry();
 
-		//TODO Recipes
-		/*RecipeSorter.register("thebetweenlands:bookCloning", BookCloneRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-		RecipeHelper.addRecipe(new BookCloneRecipe());
-
-		RecipeSorter.register("thebetweenlands:bookMerging", BookMergeRecipe.class, SHAPELESS, "after:minecraft:shapeless");
-		RecipeHelper.addRecipe(new BookMergeRecipe());*/
-//
+		//TODO Recipe
 //		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
 //		RecipeHelper.addRecipe(new RecipesAspectrusSeeds());
 
@@ -183,14 +167,15 @@ public class RecipeRegistry {
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
 
-		registry.register(new RecipesCircleGems().setRegistryName("thebetweenlands:recipes_circle_gems"));
-		registry.register(new RecipesCoating().setRegistryName("thebetweenlands:recipes_coating"));
-		registry.register(new RecipesLifeCrystal().setRegistryName("thebetweenlands:recipes_life_rystal"));
-		registry.register(new RecipesPlantTonic().setRegistryName("thebetweenlands:recipes_plant_tonic"));
-		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName("thebetweenlands:recipes_lurker_skin_pouch_upgrade"));
-		registry.register(new RecipeMummyBait().setRegistryName("thebetweenlands:recipes_mummy_bait"));
-		registry.register(new RecipesAspectVials().setRegistryName("thebetweenlands:recipes_aspect_vial"));
-		registry.register(new RecipeMarshRunnerBoots().setRegistryName("thebetweenlands:marsh_runner_boots"));
+		registry.register(new RecipesCircleGems().setRegistryName(ModInfo.ID + "recipes_circle_gems"));
+		registry.register(new RecipesCoating().setRegistryName(ModInfo.ID + "recipes_coating"));
+		registry.register(new RecipesLifeCrystal().setRegistryName(ModInfo.ID + "recipes_life_rystal"));
+		registry.register(new RecipesPlantTonic().setRegistryName(ModInfo.ID + "recipes_plant_tonic"));
+		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName(ModInfo.ID + "recipes_lurker_skin_pouch_upgrade"));
+		registry.register(new RecipeMummyBait().setRegistryName(ModInfo.ID + "recipes_mummy_bait"));
+		registry.register(new RecipesAspectVials().setRegistryName(ModInfo.ID + "recipes_aspect_vial"));
+		registry.register(new RecipeMarshRunnerBoots().setRegistryName(ModInfo.ID + "marsh_runner_boots"));
+		registry.register(new BookMergeRecipe().setRegistryName(ModInfo.ID + "book_merge"));
 	}
 
 	private static void registerSmelting() {

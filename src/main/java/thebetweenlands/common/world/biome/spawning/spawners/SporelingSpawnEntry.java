@@ -6,8 +6,8 @@ import net.minecraft.util.math.BlockPos;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 
 public class SporelingSpawnEntry extends TreeSpawnEntry {
-	public SporelingSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
-		super(entityType, weight);
+	public SporelingSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
+		super(id, entityType, weight);
 	}
 
 	@Override

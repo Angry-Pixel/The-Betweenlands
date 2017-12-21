@@ -319,4 +319,14 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		//Crops shouldn't spread
 		return false;
 	}
+	
+	@Override
+	public boolean isHarvestable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
+	
+	@Override
+	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
 }

@@ -28,15 +28,15 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class TileEntityAlembic extends TileEntity implements ITickable {
     public static final int DISTILLING_TIME = 4800; //4 Minutes
 
-    public static final float AMOUNT_PER_VIAL = Amounts.VIAL;
+    public static final int AMOUNT_PER_VIAL = Amounts.VIAL;
 
     public static final float ISOLATION_LOSS_MULTIPLIER = 0.18F;
 
     private boolean running = false;
     private int progress = 0;
     private ItemStack infusionBucket = ItemStack.EMPTY;
-    private float producedAmount = 0.0F;
-    private float producableAmount = 0.0F;
+    private int producedAmount = 0;
+    private int producableAmount = 0;
     private int producableStrength;
     private int producableDuration;
     private ElixirEffect producableElixir = null;
@@ -87,7 +87,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         if (!this.infusionBucket.isEmpty())
             nbt.setTag("infusionBucket", this.infusionBucket.writeToNBT(new NBTTagCompound()));
         nbt.setInteger("progress", this.progress);
-        nbt.setFloat("producedAmount", this.producedAmount);
+        nbt.setInteger("producedAmount", this.producedAmount);
         nbt.setBoolean("running", this.running);
         NBTTagList aspectList = new NBTTagList();
         for (Aspect aspect : this.producableItemAspects) {
@@ -106,7 +106,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             this.infusionBucket = new ItemStack(nbt.getCompoundTag("infusionBucket"));
         this.loadInfusionData = true;
         this.progress = nbt.getInteger("progress");
-        this.producedAmount = nbt.getFloat("producedAmount");
+        this.producedAmount = nbt.getInteger("producedAmount");
         this.running = nbt.getBoolean("running");
         if (nbt.hasKey("producableItemAspects")) {
             this.producableItemAspects.clear();
@@ -200,15 +200,15 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             return;
         }
         List<Aspect> infusionItemAspects = this.getInfusionItemAspects(infusionIngredients);
-        float totalAmount = Amounts.VERY_LOW; //Base amount
-        float strengthAspectAmount = 0.0F;
-        float durationAspectAmount = 0.0F;
+        int totalAmount = Amounts.VERY_LOW; //Base amount
+        int strengthAspectAmount = 0;
+        int durationAspectAmount = 0;
         for (Aspect a : infusionItemAspects) {
-            totalAmount += a.getDisplayAmount();
+            totalAmount += a.amount;
             if (recipe.strengthAspect != null && a.type == recipe.strengthAspect)
-                strengthAspectAmount += a.getDisplayAmount();
+                strengthAspectAmount += a.amount;
             if (recipe.durationAspect != null && a.type == recipe.durationAspect)
-                durationAspectAmount += a.getDisplayAmount();
+                durationAspectAmount += a.amount;
         }
         int recipeByariis = 0;
         for (IAspectType a : recipe.aspects) {
@@ -228,8 +228,8 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             }
         }
         this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
-        float relStrengthAmount = strengthAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
-        float relDurationAmount = durationAspectAmount / Amounts.MAX_ASPECT_AMOUNT;
+        float relStrengthAmount = strengthAspectAmount / (float)Amounts.MAX_ASPECT_AMOUNT;
+        float relDurationAmount = durationAspectAmount / (float)Amounts.MAX_ASPECT_AMOUNT;
         this.producableStrength = MathHelper.floor(relStrengthAmount * 4.0F);
         if (isPositive) {
             this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount * 2.0F);
@@ -253,7 +253,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             }
             List<Aspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
             for (Aspect aspect : infusionAspects) {
-                this.producableItemAspects.add(new Aspect(aspect.type, (int) (aspect.getDisplayAmount() * ISOLATION_LOSS_MULTIPLIER * 100)));
+                this.producableItemAspects.add(new Aspect(aspect.type, MathHelper.floor(aspect.amount * ISOLATION_LOSS_MULTIPLIER)));
             }
         }
     }
@@ -320,12 +320,12 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
                 if (this.producableItemAspects.size() >= 1) {
                     Aspect aspect = this.producableItemAspects.get(0);
                     this.producableItemAspects.remove(0);
-                    float totalAmount = aspect.getDisplayAmount() * 100;
+                    int totalAmount = aspect.amount;
                     Iterator<Aspect> itemAspectIT = this.producableItemAspects.iterator();
                     while (itemAspectIT.hasNext()) {
                         Aspect currentAspect = itemAspectIT.next();
                         if (currentAspect.type == aspect.type) {
-                            totalAmount += currentAspect.getDisplayAmount() * 100;
+                            totalAmount += currentAspect.amount;
                             itemAspectIT.remove();
                         }
                     }
@@ -345,11 +345,11 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
     public void reset() {
         this.producableItemAspects.clear();
         this.infusionBucket = ItemStack.EMPTY;
-        this.producableAmount = 0.0F;
+        this.producableAmount = 0;
         this.producableDuration = 0;
         this.producableElixir = null;
         this.producableStrength = 0;
-        this.producedAmount = 0.0F;
+        this.producedAmount = 0;
         this.progress = 0;
         world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }

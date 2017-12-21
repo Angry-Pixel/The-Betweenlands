@@ -54,8 +54,8 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	 * Adds the entity spawn entries
 	 */
 	protected void addSpawnEntries() {
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityFirefly.class, (short) 280), new ResourceLocation(ModInfo.ID, "blood_sky")).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntitySwampHag.class, (short) 250), new ResourceLocation(ModInfo.ID, "blood_sky")) {
+		this.blSpawnEntries.add(new EventSpawnEntry(0, new SurfaceSpawnEntry(-1, EntityFirefly.class, (short) 280), new ResourceLocation(ModInfo.ID, "blood_sky")).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
+		this.blSpawnEntries.add(new EventSpawnEntry(1, new SurfaceSpawnEntry(-1, EntitySwampHag.class, (short) 250), new ResourceLocation(ModInfo.ID, "blood_sky")) {
 			@Override
 			protected EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -64,7 +64,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 				return entity;
 			}
 		}.setHostile(true));
-		this.blSpawnEntries.add(new EventSpawnEntry(new SurfaceSpawnEntry(EntityPeatMummy.class, (short) 65), new ResourceLocation(ModInfo.ID, "blood_sky")) {
+		this.blSpawnEntries.add(new EventSpawnEntry(2, new SurfaceSpawnEntry(-1, EntityPeatMummy.class, (short) 65), new ResourceLocation(ModInfo.ID, "blood_sky")) {
 			@Override
 			protected EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -74,7 +74,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));
 
-		this.blSpawnEntries.add(new LocationSpawnEntry(EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
+		this.blSpawnEntries.add(new LocationSpawnEntry(3, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
 	}
 
 	/**
