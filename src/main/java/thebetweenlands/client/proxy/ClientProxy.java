@@ -50,7 +50,6 @@ import thebetweenlands.client.handler.BrightnessHandler;
 import thebetweenlands.client.handler.CameraPositionHandler;
 import thebetweenlands.client.handler.DebugHandlerClient;
 import thebetweenlands.client.handler.DecayRenderHandler;
-import thebetweenlands.client.handler.DruidAltarSoundHandler;
 import thebetweenlands.client.handler.ElixirClientHandler;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.handler.InputHandler;
@@ -601,7 +600,6 @@ public class ClientProxy extends CommonProxy {
 		MinecraftForge.EVENT_BUS.register(ItemLurkerSkinPouch.class);
 		MinecraftForge.EVENT_BUS.register(BrightnessHandler.class);
 		MinecraftForge.EVENT_BUS.register(DebugHandlerClient.class);
-		MinecraftForge.EVENT_BUS.register(DruidAltarSoundHandler.class);
 		MinecraftForge.EVENT_BUS.register(ItemTooltipHandler.class);
 		MinecraftForge.EVENT_BUS.register(GuiBLMainMenu.class);
   //      MinecraftForge.EVENT_BUS.register(WeedwoodRowboatHandler.INSTANCE);
