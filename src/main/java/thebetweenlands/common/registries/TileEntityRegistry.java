@@ -34,6 +34,7 @@ import thebetweenlands.common.tile.TileEntityTarLootPot3;
 import thebetweenlands.common.tile.TileEntityWeedwoodSign;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
+import thebetweenlands.common.tile.TileEntityWormDungeonDoorWood;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityTarBeastSpawner;
 
@@ -75,6 +76,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityPresent.class, "present");
 		registerTileEntity(TileEntityPuffshroom.class, "puffshroom");
+		registerTileEntity(TileEntityWormDungeonDoorWood.class, "worm_dungeon_door_wood");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

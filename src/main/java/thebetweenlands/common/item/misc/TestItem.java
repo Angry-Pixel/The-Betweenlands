@@ -1,5 +1,7 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -80,7 +82,8 @@ public class TestItem extends Item {
 			}
 		*/
 			WorldGenSludgeWormDungeon dungeon = new WorldGenSludgeWormDungeon();
-			dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
+			//dungeon.makeMaze(worldIn, itemRand, pos.up().add(1, 0, 1));
+			dungeon.generate(worldIn, itemRand, pos);
 		
 		}
 

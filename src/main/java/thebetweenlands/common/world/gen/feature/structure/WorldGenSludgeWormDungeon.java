@@ -115,8 +115,47 @@ public class WorldGenSludgeWormDungeon extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		//conditions blah, blah...
-		makeMaze(world, rand, pos);
+		makeTreeStructure(world, rand, pos);
+		//makeBarrow(world, rand, pos);
+		//makeMaze(world, rand, pos);
 		return true;
+	}
+
+	public void makeTreeStructure(World world, Random rand, BlockPos pos) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		generateMainDome(world, pos.up());
+		//WorldGenStoneTree tree = new WorldGenStoneTree();
+		//tree.generateTree(world, rand, pos.add(0,16,0));
+		
+	}
+
+	private void generateMainDome(World world, BlockPos pos) {
+		for (int xx = - 16; xx <= 16; xx++) {
+			for (int zz = - 16; zz <= 16; zz++) {
+				for (int yy = 0; yy > -16; yy--) {
+					double dSqDome = Math.pow(xx, 2.0D) + Math.pow(zz, 2.0D) + Math.pow(yy, 2.0D);
+					if (Math.round(Math.sqrt(dSqDome)) < 17)
+						if (dSqDome >= Math.pow(15, 2.0D))
+							world.setBlockState(pos.add(xx, yy, zz), MUD_TILES_DECAY, 2);
+						else
+							world.setBlockToAir(pos.add(xx, yy, zz));
+				
+				if(xx < -12 || xx > 12)
+					world.setBlockToAir(pos.add(xx, yy, zz));
+				if(zz < -12 || zz > 12)
+					world.setBlockToAir(pos.add(xx, yy, zz));
+				}
+			}
+		}
+	}
+
+	public void makeBarrow(World world, Random rand, BlockPos pos) {
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		
 	}
 	
 	public void makeMaze(World world, Random rand, BlockPos pos) {

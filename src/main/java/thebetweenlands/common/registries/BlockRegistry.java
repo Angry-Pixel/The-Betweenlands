@@ -137,6 +137,7 @@ import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.block.structure.BlockWalkway;
 import thebetweenlands.common.block.structure.BlockWallBetweenlands;
 import thebetweenlands.common.block.structure.BlockWallWeedwoodSign;
+import thebetweenlands.common.block.structure.BlockWormDungeonDoorWood;
 import thebetweenlands.common.block.structure.BlockWormDungeonPillar;
 import thebetweenlands.common.block.terrain.BlockBetweenlandsBedrock;
 import thebetweenlands.common.block.terrain.BlockBlackIce;
@@ -457,7 +458,8 @@ public class BlockRegistry {
     public static final Block MUD_BRICK_SLAB_DECAY_1 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_1).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_2 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_2).getBlock());
     public static final Block MUD_BRICK_SLAB_DECAY_3 = new BlockSlabBetweenlands(MUD_BRICKS_CARVED.getDefaultState().withProperty(BlockCarvedMudBrick.VARIANT, EnumCarvedMudBrickType.MUD_BRICKS_DECAY_3).getBlock());
-
+    public static final Block WORM_DUNGEON_DOOR_WOOD = new BlockWormDungeonDoorWood();
+    
     public static final Block PRESENT = new BlockPresent();
     
     //Plants
