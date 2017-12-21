@@ -20,9 +20,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
+import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDefinition;
 
-public class BlockWormDungeonPillar extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
+public class BlockWormDungeonPillar extends BasicBlock implements ICustomItemBlock, ISubtypeItemBlockModelDefinition {
 
 	public static final PropertyEnum<EnumWormPillarType> VARIANT = PropertyEnum.<EnumWormPillarType>create("variant", EnumWormPillarType.class);
 	
