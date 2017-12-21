@@ -20,9 +20,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.ItemBlockEnum;
-import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 
-public class BlockCarvedMudBrick extends BasicBlock implements BlockRegistry.ICustomItemBlock, BlockRegistry.ISubtypeBlockModelDefinition {
+public class BlockCarvedMudBrick extends BasicBlock implements ICustomItemBlock, ISubtypeBlockModelDefinition {
 
 	public static final PropertyEnum<EnumCarvedMudBrickType> VARIANT = PropertyEnum.<EnumCarvedMudBrickType>create("variant", EnumCarvedMudBrickType.class);
 	
