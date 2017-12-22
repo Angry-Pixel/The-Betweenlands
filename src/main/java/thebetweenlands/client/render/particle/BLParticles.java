@@ -11,23 +11,7 @@ import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.client.particle.ParticleSplash;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
-import thebetweenlands.client.render.particle.entity.ParticleAnimated;
-import thebetweenlands.client.render.particle.entity.ParticleAnimator;
-import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
-import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
-import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
-import thebetweenlands.client.render.particle.entity.ParticleBug;
-import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
-import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
-import thebetweenlands.client.render.particle.entity.ParticleFish;
-import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
-import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
-import thebetweenlands.client.render.particle.entity.ParticleMoth;
-import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
-import thebetweenlands.client.render.particle.entity.ParticleThem;
-import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
-import thebetweenlands.client.render.particle.entity.ParticleWisp;
+import thebetweenlands.client.render.particle.entity.*;
 
 public enum BLParticles {
 
@@ -40,6 +24,10 @@ public enum BLParticles {
 			.withColor(0xFF2D4231)
 			.buildBaseArgs()
 			),
+	BEAM(new ParticleBeam.Factory()
+			.getBaseArgsBuilder()
+			.withColor(0xFF32CD32)
+			.buildBaseArgs()),
 	FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory())),
 	GREEN_FLAME(VanillaParticleFactory.create(ParticleFlame.class, new ParticleFlame.Factory())
 			.getBaseArgsBuilder()

@@ -15,6 +15,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.client.audio.AnimatorSound;
+import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
@@ -96,6 +98,7 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
             prevStackSize = isSlotInUse(0) ? inventory.get(0).getCount() : 0;
             updateContainingBlockInfo();
         } else {
+            BLParticles.BEAM.spawn(world, getPos().getX() + 0.5, getPos().getY() + 1.3, getPos().getZ() + 0.5, ParticleFactory.ParticleArgs.get().withMotion(0, 0.5, 0));
             if (this.isRunning() && !this.soundPlaying) {
                 this.playAnimatorSound();
                 this.soundPlaying = true;
