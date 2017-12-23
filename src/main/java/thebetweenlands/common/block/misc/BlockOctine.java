@@ -1,13 +1,11 @@
 package thebetweenlands.common.block.misc;
 
-import com.sun.javafx.geom.Vec3f;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -32,8 +30,10 @@ public class BlockOctine extends BasicBlock {
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         if (ItemOctineIngot.isTinder(worldIn.getBlockState(fromPos), ItemStack.EMPTY)) {
             boolean isTouching = true;
-            Vec3f dir = new Vec3f(pos.getX() - fromPos.getX(), pos.getY() - fromPos.getY(), pos.getZ() - fromPos.getZ());
-            EnumFacing facing = EnumFacing.getFacingFromVector(dir.x, dir.y, dir.z);
+            int x = pos.getX() - fromPos.getX();
+            int y = pos.getY() - fromPos.getY();
+            int z = pos.getZ() - fromPos.getZ();
+            EnumFacing facing = EnumFacing.getFacingFromVector(x, y, z);
 
             IBlockState stateIn = worldIn.getBlockState(fromPos);
             if (stateIn.getBlock() instanceof BlockMoss) {
