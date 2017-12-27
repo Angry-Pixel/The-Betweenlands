@@ -14,7 +14,7 @@ public class AnimatorRecipeMaker {
         ArrayList<AnimatorRecipeJEI> recipes = new ArrayList<AnimatorRecipeJEI>();
         for (IAnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
             if (recipe instanceof AnimatorRecipe)
-                if (((AnimatorRecipe) recipe).getLootTable() == null)
+                //if (((AnimatorRecipe) recipe).getLootTable() == null)
                     recipes.add(new AnimatorRecipeJEI((AnimatorRecipe) recipe));
         }
         return recipes;

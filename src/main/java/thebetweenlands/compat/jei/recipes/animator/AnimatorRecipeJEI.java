@@ -17,6 +17,7 @@ import thebetweenlands.util.TranslationHelper;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AnimatorRecipeJEI implements IRecipeWrapper {
@@ -57,9 +58,9 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
         ingredients.setInputs(ItemStack.class, l);
         if (result != null)
             ingredients.setOutput(ItemStack.class, result);
-        /*if (lootTableName != null && world != null){
-            ingredients.setOutputs(ItemStack.class, LootTableRegistry.getItemsFromTable(lootTableName, world));
-        }*/
+        if (lootTableName != null){
+            ingredients.setOutputLists(ItemStack.class, Collections.singletonList(LootTableRegistry.getItemsFromTable(lootTableName, Minecraft.getMinecraft().world, true)));
+        }
     }
 
 

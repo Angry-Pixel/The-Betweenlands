@@ -81,7 +81,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 	public final AxisAlignedBB coreBoundingBox;
 
-	private Vec3d anchor;
+	private Vec3d anchor = new Vec3d(0, 0, 0);
 	private double anchorRadius;
 
 	private float shieldRotationYaw, shieldRotationPitch, shieldRotationRoll, lastShieldRotationYaw, lastShieldRotationPitch, lastShieldRotationRoll, shieldExplosion, lastShieldExplosion;

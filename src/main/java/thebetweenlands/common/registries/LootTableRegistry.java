@@ -1,22 +1,22 @@
 package thebetweenlands.common.registries;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.loot.LootContext;
-import net.minecraft.world.storage.loot.LootEntry;
-import net.minecraft.world.storage.loot.LootEntryItem;
-import net.minecraft.world.storage.loot.LootPool;
-import net.minecraft.world.storage.loot.LootTable;
-import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.ISaveHandler;
+import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
@@ -29,6 +29,9 @@ import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionOr;
+import thebetweenlands.util.FakeClientWorld;
+
+import javax.annotation.Nullable;
 
 public class LootTableRegistry {
 
@@ -98,11 +101,12 @@ public class LootTableRegistry {
         return serializer.getLootTableLocation();
     }
 
-    public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world) {
+    public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world, boolean getCountSpan) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
-        LootTable table = world.getLootTableManager().getLootTableFromLocation(lootTable);
-        LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
+        LootTableManager manager = getManager(world);
+        LootTable table = manager.getLootTableFromLocation(lootTable);
+        LootContext lootContext = new LootContext(0, null, manager, null, null, null);
         Field f = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c", "c");
         List<LootPool> pools = null;
         try {
@@ -120,14 +124,68 @@ public class LootTableRegistry {
                     e.printStackTrace();
                 }
                 if (entries != null && entries.size() > 0) {
-                    for (LootEntry entry:entries) {
+                    for (LootEntry entry: entries) {
                         if (entry instanceof LootEntryItem) {
-                            entry.addLoot(items, new Random(), lootBuilder.build());
+                            LootFunction[] functions = null;
+                            try {
+                                functions = ReflectionHelper.getPrivateValue(LootEntryItem.class, (LootEntryItem) entry, "functions", "field_186369_b");
+                            } catch (ReflectionHelper.UnableToAccessFieldException e) {
+                                e.printStackTrace();
+                            }
+                            ArrayList<ItemStack> tmpItems = new ArrayList<>();
+                            entry.addLoot(tmpItems, new Random(), lootContext);
+                            if (getCountSpan && functions != null && functions.length > 0) {
+                                for (LootFunction function: functions) {
+                                    if (function instanceof SetCount) {
+                                        RandomValueRange valueRange = null;
+
+                                        try {
+                                            valueRange = ReflectionHelper.getPrivateValue(SetCount.class, (SetCount) function, "countRange", "field_186568_a");
+                                        } catch (ReflectionHelper.UnableToAccessFieldException e) {
+                                            e.printStackTrace();
+                                        }
+                                        if (valueRange == null)
+                                            continue;
+
+                                        if (!tmpItems.get(0).hasTagCompound()) {
+                                            tmpItems.get(0).setTagCompound(new NBTTagCompound());
+                                        }
+
+                                        NBTTagCompound compound = tmpItems.get(0).getTagCompound();
+                                        compound.setFloat("LootCountMin", valueRange.getMin());
+                                        compound.setFloat("LootCountMax", valueRange.getMax());
+                                        break;
+                                    }
+                                }
+                            }
+                            items.addAll(tmpItems);
+                        } else if (entry instanceof LootEntryTable) {
+                            ResourceLocation location = null;
+                            try {
+                                location = ReflectionHelper.getPrivateValue(LootEntryTable.class, (LootEntryTable) entry, "table", "field_186371_a");
+                            } catch (ReflectionHelper.UnableToAccessFieldException e) {
+                                e.printStackTrace();
+                            }
+                            if (location != null)
+                                items.addAll(getItemsFromTable(location, world, getCountSpan));
                         }
                     }
                 }
             }
         }
         return items;
+    }
+
+    private static LootTableManager manager;
+
+    public static LootTableManager getManager(@Nullable World world) {
+        if (world == null || world.getLootTableManager() == null) {
+            if (manager == null) {
+                ISaveHandler saveHandler = FakeClientWorld.saveHandler;
+                manager = new LootTableManager(new File(new File(saveHandler.getWorldDirectory(), "data"), "loot_tables"));
+            }
+            return manager;
+        }
+        return world.getLootTableManager();
     }
 }

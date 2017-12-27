@@ -1,6 +1,7 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
 import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.gui.IGuiIngredientGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeCategory;
@@ -66,6 +67,14 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
         if (ingredients.getOutputs(ItemStack.class).size() > 0) {
             recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class).get (0));
         }
+        IGuiIngredientGroup<ItemStack> debugIngredientsGroup = recipeLayout.getIngredientsGroup(ItemStack.class);
+        debugIngredientsGroup.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+            if (!input && ingredient.hasTagCompound() && ingredient.getTagCompound().hasKey("AnimatorMin")) {
+                int min = (int) ingredient.getTagCompound().getFloat("LootCountMin");
+                int max = (int) ingredient.getTagCompound().getFloat("LootCountMax");
+                tooltip.add("Output amount: " + min + " -> " + max);
+            }
+        });
     }
 
     @Override
