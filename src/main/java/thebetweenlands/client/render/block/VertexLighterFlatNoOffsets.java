@@ -14,5 +14,6 @@ public class VertexLighterFlatNoOffsets extends VertexLighterFlat {
 	@Override
 	public void updateBlockInfo() {
 		//Don't set shift
+		this.blockInfo.updateFlatLighting();
 	}
 }
