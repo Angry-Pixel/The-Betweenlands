@@ -694,7 +694,7 @@ tooltip.item.equippable=Equippable
 tooltip.ring.summoning=Equip using the radial \nmenu [press '%s'], \nscream using '%s'
 tooltip.ring.flight=Equip using the radial \nmenu [press '%s'], \ndouble tap '%s' to activate
 tooltip.ring.power=Equip using the radial \nmenu [press '%s']
-tooltip.ring.recruitment=Equip using the radial \nmenu [press '%s'], \nhold right mouse button\non mobs to take control\nover them
+tooltip.ring.recruitment=Equip using the radial \nmenu [press '%s'], \nhold '%s' \non mobs to take control\nover them
 tooltip.press.shift=Hold 'shift' to view more
 tooltip.lifeCrystal.remaining=%d remaining
 tooltip.shockwaveSword.usage=Right-click on the ground\nto create a shockwave
@@ -722,9 +722,13 @@ tooltip.amulet.none=\nNo effect.\nCan be combined with a Gem
 tooltip.amulet.aqua=\nWhen equipped:\n §9- Chance to weaken the enemy when attacking\n §9- Chance to gain defense when attacked
 tooltip.amulet.crimson=\nWhen equipped:\n §9- Chance to gain strength when attacking\n §9- Chance to hurt the enemy when attacked
 tooltip.amulet.green=\nWhen equipped:\n §9- Chance to heal when attacking\n §9- Chance to absorb damage when attacked
-tooltip.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by right-clicking
+tooltip.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by pressing '%s'
 tooltip.weedwood_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
 tooltip.syrmorite_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
+tooltip.octine_shield=Sets enemies on fire
+tooltip.syrmorite_shield=Hold '%s' + '%s' to charge\nup and then let to to charge\nat enemies
+tooltip.valonite_shield=Hold '%s' + '%s' to charge\nup and let then to to charge\nat enemies. Reflects projectiles
+tooltip.dentrothyst_shield=Blocks splash potion effects when blocking
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing

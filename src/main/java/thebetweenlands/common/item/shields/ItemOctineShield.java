@@ -1,10 +1,18 @@
 package thebetweenlands.common.item.shields;
 
+import java.util.List;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.tools.ItemBLShield;
+import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class ItemOctineShield extends ItemBLShield {
 	public ItemOctineShield() {
@@ -17,5 +25,10 @@ public class ItemOctineShield extends ItemBLShield {
 			source.getImmediateSource().setFire(4);
 		}
 		super.onAttackBlocked(stack, attacked, damage, source);
+	}
+	
+	@Override
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.octine_shield"), 0));
 	}
 }

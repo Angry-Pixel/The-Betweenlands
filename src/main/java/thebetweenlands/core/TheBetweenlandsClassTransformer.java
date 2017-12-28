@@ -13,6 +13,8 @@ import com.google.common.collect.ImmutableList;
 
 import net.minecraft.launchwrapper.IClassTransformer;
 import thebetweenlands.core.module.PreRenderShadersHookTransformer;
+import thebetweenlands.core.module.SplashPotionInstantHookTransformer;
+import thebetweenlands.core.module.SplashPotionNotInstantHookTransformer;
 import thebetweenlands.core.module.TransformerModule;
 
 public class TheBetweenlandsClassTransformer implements IClassTransformer {
@@ -22,6 +24,8 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 	static {
 		registerModule(new PreRenderShadersHookTransformer());
+		registerModule(new SplashPotionInstantHookTransformer());
+		registerModule(new SplashPotionNotInstantHookTransformer());
 	}
 
 	public TheBetweenlandsClassTransformer() {
@@ -82,7 +86,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 
 					for(TransformerModule module : currentMethodModules) {
 						if(!module.wasSuccessful())
-							i += module.transformMethodInstruction(method, insnNode, i);
+							module.transformMethodInstruction(method, insnNode, i);
 					}
 				}
 			}
@@ -120,7 +124,7 @@ public class TheBetweenlandsClassTransformer implements IClassTransformer {
 	}
 
 	private byte[] writeClass(ClassNode classNode) {
-		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+		ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_FRAMES | ClassWriter.COMPUTE_MAXS);
 		classNode.accept(classWriter);
 		return classWriter.toByteArray();
 	}

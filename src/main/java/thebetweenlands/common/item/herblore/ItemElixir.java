@@ -15,6 +15,7 @@ import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -202,6 +203,13 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
         int strength = this.getElixirStrength(stack);
         int duration = this.getElixirDuration(stack);
         entity.addPotionEffect(effect.createEffect(duration == -1 ? (int)(1200 * modifier) : (int)(duration * modifier), strength == -1 ? 0 : strength));
+    }
+    
+    public PotionEffect createPotionEffect(ItemStack stack, double modifier) {
+    	ElixirEffect effect = this.getElixirFromItem(stack);
+        int strength = this.getElixirStrength(stack);
+        int duration = this.getElixirDuration(stack);
+        return effect.createEffect(duration == -1 ? (int)(1200 * modifier) : (int)(duration * modifier), strength == -1 ? 0 : strength);
     }
 
     public int getElixirDuration(ItemStack stack) {

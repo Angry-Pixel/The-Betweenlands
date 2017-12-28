@@ -44,6 +44,7 @@ import thebetweenlands.common.handler.PuppetHandler;
 import thebetweenlands.common.handler.WorldEventHandler;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.item.equipment.ItemRingOfFlight;
+import thebetweenlands.common.item.shields.ItemDentrothystShield;
 import thebetweenlands.common.item.tools.ItemBLShield;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
@@ -191,5 +192,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(BlockGenericDugSoil.class);
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BlockWeedwoodBush.class);
+		MinecraftForge.EVENT_BUS.register(ItemDentrothystShield.class);
 	}
 }

@@ -7,10 +7,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 
 import java.util.Iterator;
 import java.util.List;
@@ -18,6 +20,7 @@ import java.util.List;
 import net.minecraft.entity.projectile.EntityThrowable;
 
 import net.minecraft.nbt.NBTTagCompound;
+import thebetweenlands.api.event.SplashPotionEvent;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityElixir extends EntityThrowable {
@@ -69,7 +72,12 @@ public class EntityElixir extends EntityThrowable {
                         if (affectedEntity == result.entityHit) {
                             modifier = 1.0D;
                         }
-                        ItemRegistry.ELIXIR.applyEffect(getElixirStack(), affectedEntity, modifier);
+                        PotionEffect effect = ItemRegistry.ELIXIR.createPotionEffect(getElixirStack(), modifier);
+                        SplashPotionEvent event = new SplashPotionEvent(this, affectedEntity, effect, effect.getPotion().isInstant());
+                        MinecraftForge.EVENT_BUS.post(event);
+                        if(!event.isCanceled()) {
+                        	affectedEntity.addPotionEffect(effect);
+                        }
                     }
                 }
             }
