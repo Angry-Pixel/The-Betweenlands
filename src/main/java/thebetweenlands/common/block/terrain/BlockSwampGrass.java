@@ -109,11 +109,11 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 			int decay = te.getDecay();
 
 			if(state.getBlock() == BlockRegistry.DUG_SWAMP_DIRT) {
-				world.setBlockState(pos, BlockRegistry.DUG_SWAMP_GRASS.getDefaultState());
+				world.setBlockState(pos, BlockRegistry.DUG_SWAMP_GRASS.getDefaultState(), 2); //don't do block update yet
 			}
 
 			if(state.getBlock() == BlockRegistry.DUG_PURIFIED_SWAMP_DIRT) {
-				world.setBlockState(pos, BlockRegistry.DUG_PURIFIED_SWAMP_GRASS.getDefaultState());
+				world.setBlockState(pos, BlockRegistry.DUG_PURIFIED_SWAMP_GRASS.getDefaultState(), 2); //don't do block update yet
 			}
 
 			te = BlockGenericDugSoil.getTile(world, pos);
@@ -121,6 +121,8 @@ public class BlockSwampGrass extends BasicBlock implements IGrowable, ITintedBlo
 				te.setCompost(compost);
 				te.setDecay(decay);
 			}
+			
+			world.notifyBlockUpdate(pos, state, world.getBlockState(pos), 1); //do block update now
 		}
 	}
 
