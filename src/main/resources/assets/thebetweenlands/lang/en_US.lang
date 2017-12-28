@@ -991,11 +991,12 @@ command.blreloadrecipes.success=Reloaded custom recipes
 
 # Keybinds
 key.categories.betweenlands=The Betweenlands
-key.openPouch=Open Lurker Skin Pouch
-key.radialmenu=Open Equipment Menu
+key.open_pouch=Open Lurker Skin Pouch
+key.radial_menu=Open Equipment Menu
 key.return_scout=Return Scout (NYI)
 key.send_scout=Send Scout (NYI)
-key.useRing=Use Ring
+key.use_ring=Use Ring
+key.connect_caving_rope=Connect/Disconnect Caving Rope
 
 #Manual
 manual.aspect.found.in=This aspect is found in:
