@@ -60,6 +60,7 @@ import thebetweenlands.client.render.model.baked.modelbase.shields.ModelOctineSh
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelSyrmoriteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValoniteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
+import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
@@ -136,6 +137,7 @@ public class ModelRegistry {
 			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	});
+	public static final IModel MIRE_SNAIL_EGG = new ModelFromModelBase(new ModelMireSnailEgg(), new ResourceLocation("thebetweenlands:items/mire_snail_egg"), 16, 16);
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();

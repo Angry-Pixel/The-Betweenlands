@@ -1,0 +1,35 @@
+{
+    "parent": "thebetweenlands:item/internal/mire_snail_egg$from_item(thebetweenlands:mire_snail_egg)",
+    "display": {
+        "gui": {
+            "rotation": [ 30, 45, 0 ],
+            "translation": [ 0, 12, 0],
+            "scale":[ 2, 2, 2 ]
+        },
+        "ground": {
+            "rotation": [ 0, 0, 0 ],
+            "translation": [ 0, 12, 0],
+            "scale":[ 2, 2, 2 ]
+        },
+        "head": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 12, 0],
+            "scale":[ 2, 2, 2 ]
+        },
+        "fixed": {
+            "rotation": [ 0, 180, 0 ],
+            "translation": [ 0, 21, 0],
+            "scale":[ 3, 3, 3 ]
+        },
+        "thirdperson_righthand": {
+            "rotation": [ 75, 315, 0 ],
+            "translation": [ 0, 3.5, 14],
+            "scale": [ 2, 2, 2 ]
+        },
+        "firstperson_righthand": {
+            "rotation": [ 0, 315, 0 ],
+            "translation": [ 0, 16, 0],
+            "scale": [ 2, 2, 2 ]
+        }
+    }
+}
