@@ -5,6 +5,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.util.TranslationHelper;
 
@@ -31,6 +33,7 @@ public class ItemLifeCrystal extends Item {
         setCreativeTab(BLCreativeTabs.ITEMS);
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TranslationHelper.translateToLocal("tooltip.lifeCrystal.remaining", Math.round(100F - 100F / getMaxDamage() * getDamage(stack)) + "%"));

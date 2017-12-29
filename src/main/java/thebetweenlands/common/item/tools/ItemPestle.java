@@ -30,6 +30,7 @@ public class ItemPestle extends Item implements IAnimatorRepairable {
         });
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         list.add(TranslationHelper.translateToLocal("tooltip.pestle"));

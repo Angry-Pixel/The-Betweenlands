@@ -268,6 +268,7 @@ public class ItemAmulet extends Item implements IEquippable {
 	public void onEquipmentTick(ItemStack stack, Entity entity, IInventory inventory) {
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet." + CircleGemHelper.getGem(stack).name), 0));

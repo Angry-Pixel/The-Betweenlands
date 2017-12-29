@@ -37,7 +37,7 @@ public class SplashPotionNotInstantHookTransformer extends TransformerModule {
 				List<AbstractInsnNode> insertionsAfter = new ArrayList<AbstractInsnNode>();
 
 				LabelNode jumpIfFalseTarget = new LabelNode();
-				LabelNode jumpToEnd = new LabelNode();
+				LabelNode jumpToEndTarget = new LabelNode();
 
 				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, 0));
 				insertionsBefore.add(new VarInsnNode(Opcodes.ALOAD, 6)); //entitylivingbase from "for (EntityLivingBase entitylivingbase : list)"
@@ -47,10 +47,10 @@ public class SplashPotionNotInstantHookTransformer extends TransformerModule {
 
 				this.insertBefore(method, node, insertionsBefore);
 
-				insertionsAfter.add(new JumpInsnNode(Opcodes.GOTO, jumpToEnd));
+				insertionsAfter.add(new JumpInsnNode(Opcodes.GOTO, jumpToEndTarget));
 				insertionsAfter.add(jumpIfFalseTarget);
 				insertionsAfter.add(new InsnNode(Opcodes.POP2));
-				insertionsAfter.add(jumpToEnd);
+				insertionsAfter.add(jumpToEndTarget);
 
 				this.insertAfter(method, node, insertionsAfter);
 

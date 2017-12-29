@@ -13,6 +13,7 @@ buildscript {
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply from: 'validateCoreJar.gradle'
 
 project.ext.buildnumber = ''
 if (System.getenv().BUILD_NUMBER) project.buildnumber = '-' + System.getenv().BUILD_NUMBER
@@ -57,12 +58,33 @@ processResources {
     rename '(.+_at.cfg)', 'META-INF/$1'
 }
 
+//Builds the coremod jar
+task coreJar(type: Jar) {
+    from(sourceSets.main.output) {
+        include 'thebetweenlands/core/**'
+    }
+    addCoreManifestAttributes(manifest)
+    classifier 'core'
+}
+reobf {
+    coreJar { mappingType = 'SEARGE' }
+}
+
 //Builds the universal jar
 jar {
+	dependsOn coreJar, validateCoreJar
+	
     classifier = 'universal'
-    exclude("**/pack.mcmeta");
-    exclude("**/pack.png");
-    addManifestAttributes(manifest)
+    
+    exclude("pack.mcmeta")
+    exclude("pack.png")
+    exclude("thebetweenlands/core/**")
+    
+    from(coreJar.archivePath.absolutePath) {
+        include '*'
+    }
+    
+    addMainManifestAttributes(manifest)
 }
 
 //Builds the source jar with all the source files of sourceSets.main
@@ -93,7 +115,7 @@ task serverJar(type: Jar, dependsOn: classes) {
 		exclude("**/assets/" + modid + "/blockstates/**")
 		
 	}
-	addManifestAttributes(manifest)
+	addMainManifestAttributes(manifest)
 }
 
 //Builds a zip file with all client side assets
@@ -106,7 +128,9 @@ task assetsZip(type: Zip) {
 		
 		exclude("mcmod.info")
 		exclude("thebetweenlands/**")
-		exclude("**/assets/" + modid + "/loot_tables/**")
+		exclude("assets/" + modid + "/loot_tables/**")
+		exclude("assets/" + modid + "/recipes/**")
+		exclude("META-INF/**")
 		
 	}
 }
@@ -156,11 +180,14 @@ String getModIdFromJava() {
     return "$id";
 }
 
-//Adds the manifest attributes to the specified Manifest
-def addManifestAttributes(Manifest m) {
-	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
-    m.attributes ('FMLCorePluginContainsFMLMod': 'true')
+//Adds the main jar manifest attributes to the specified Manifest
+def addMainManifestAttributes(Manifest m) {
     m.attributes ('FMLAT': 'thebetweenlands_at.cfg')
+    m.attributes ('ContainedDeps': coreJar.archivePath.name)
+}
+//Adds the coremod manifest attributes to the specified Manifest
+def addCoreManifestAttributes(Manifest m) {
+	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
 }
 
 

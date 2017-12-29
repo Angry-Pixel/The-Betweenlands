@@ -40,6 +40,7 @@ public class ItemRingOfSummoning extends ItemRing {
 		this.setMaxDamage(256);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add(I18n.format("tooltip.ring.summoning.bonus"));

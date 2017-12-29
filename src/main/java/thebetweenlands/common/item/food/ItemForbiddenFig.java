@@ -29,6 +29,7 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
         return 20;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         tooltip.add(TranslationHelper.translateToLocal("tooltip.fig"));
