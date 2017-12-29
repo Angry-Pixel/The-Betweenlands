@@ -1,5 +1,6 @@
 package thebetweenlands.common;
 
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import net.minecraft.world.DimensionType;
@@ -11,6 +12,7 @@ import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
 import net.minecraftforge.fml.common.Mod.InstanceFactory;
 import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLFingerprintViolationEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -64,7 +66,7 @@ import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 import thebetweenlands.util.config.ConfigHandler;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI, acceptedMinecraftVersions = ModInfo.MC_VERSIONS)
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI, acceptedMinecraftVersions = ModInfo.MC_VERSIONS, certificateFingerprint = "${fingerprint}")
 public class TheBetweenlands {
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands INSTANCE;
@@ -80,6 +82,15 @@ public class TheBetweenlands {
 
 	public static boolean isToughAsNailsModInstalled = false;
 
+	@EventHandler
+	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
+		LogManager.getLogger("Betweenlands Fingerprint Violation").warn("Invalid fingerprint for The Betweenlands detected!"
+        		+ "The Betweenlands jar file was either tampered with or"
+        		+ "is corrupted. Please remove the file and (re)download"
+        		+ "the mod from the official CurseForge project at"
+        		+ "https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod");
+    }
+	
 	@EventHandler
 	public static void preInit(FMLPreInitializationEvent event) {
 		logger = event.getModLog();

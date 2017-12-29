@@ -1,3 +1,20 @@
+/*
+* See https://gist.github.com/matthewprenger/9b2da059b89433a01c1c for JAR signing.
+* TLDR:
+* 0. Requires properly set up JDK
+* 1. Generate keystore with
+*		keytool -genkey -alias <alias here> -keyalg RSA -keysize 2048 -keystore keystore.jks
+* 2. Get fingerprint <fingerprint> with 
+*		keytool -list -alias <alias here> -keystore keystore.jks
+* 3. Add following to your gradle.properties
+*		blKeyStore=/path/to/keystore.jks
+*		blKeyStoreAlias=<alias here>
+*		blKeyStorePass=<password>
+*		blKeyStoreKeyPass=<password>
+*		blKeyStoreFingerprint=<fingerprint>
+* 4. Run 'gradle build'
+*/
+
 // For those who want the bleeding edge
 buildscript {
     repositories {
@@ -24,12 +41,15 @@ group = 'net.angrypixel'
 archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
 
+println(hasKeystore() ? "blKeyStore property found, jar files will be signed" : "No blKeyStore property found, jar files will not be signed")
+
 minecraft {
     version = "1.12.2-14.23.1.2554"
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '${mcversion}', project.minecraft.version
     replace '/*!*/true/*!*/', 'false'
+    replace '${fingerprint}', getProjectFingerprint()
     clientJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
     serverJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
 	
@@ -69,10 +89,24 @@ task coreJar(type: Jar) {
 reobf {
     coreJar { mappingType = 'SEARGE' }
 }
+reobfCoreJar.dependsOn validateCoreJar //Validate core jar before reobf
+task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
+	if(hasKeystore()) {
+	    keyStore = project.blKeyStore
+	    alias = project.blKeyStoreAlias
+	    storePass = project.blKeyStorePass
+	    keyPass = project.blKeyStoreKeyPass
+	    inputFile = coreJar.archivePath
+	    outputFile = coreJar.archivePath
+    }
+}
 
 //Builds the universal jar
 jar {
-	dependsOn coreJar, validateCoreJar
+	dependsOn reobfCoreJar
+	if(hasKeystore()) {
+		dependsOn signCoreJar //Sign core jar *before* including!
+	}
 	
     classifier = 'universal'
     
@@ -86,17 +120,15 @@ jar {
     
     addMainManifestAttributes(manifest)
 }
-
-//Builds the source jar with all the source files of sourceSets.main
-task sourcesJar(type: Jar, dependsOn: classes) << {
-    classifier = 'src'
-    from sourceSets.main.allSource
-}
-
-//Builds the dev jar with all the output files of sourceSets.main
-task devJar(type: Jar) << {
-    classifier = 'dev'
-    from sourceSets.main.output
+task signMainJar(type: SignJar, dependsOn: reobfJar) {
+	if(hasKeystore()) {
+	    keyStore = project.blKeyStore
+	    alias = project.blKeyStoreAlias
+	    storePass = project.blKeyStorePass
+	    keyPass = project.blKeyStoreKeyPass
+	    inputFile = jar.archivePath
+	    outputFile = jar.archivePath
+    }
 }
 
 //Builds the server jar
@@ -114,8 +146,33 @@ task serverJar(type: Jar, dependsOn: classes) {
 		exclude("**/assets/" + modid + "/sounds.json")
 		exclude("**/assets/" + modid + "/blockstates/**")
 		
+		//Remove and then regenerate and resign META-INF 
+		exclude("META-INF/**")
+		
 	}
 	addMainManifestAttributes(manifest)
+}
+task signServerJar(type: SignJar, dependsOn: serverJar) {
+	if(hasKeystore()) {
+	    keyStore = project.blKeyStore
+	    alias = project.blKeyStoreAlias
+	    storePass = project.blKeyStorePass
+	    keyPass = project.blKeyStoreKeyPass
+	    inputFile = serverJar.archivePath
+	    outputFile = serverJar.archivePath
+    }
+}
+
+//Builds the source jar with all the source files of sourceSets.main
+task sourcesJar(type: Jar, dependsOn: classes) << {
+    classifier = 'src'
+    from sourceSets.main.allSource
+}
+
+//Builds the dev jar with all the output files of sourceSets.main
+task devJar(type: Jar) << {
+    classifier = 'dev'
+    from sourceSets.main.output
 }
 
 //Builds a zip file with all client side assets
@@ -136,12 +193,27 @@ task assetsZip(type: Zip) {
 }
 
 build.finalizedBy serverJar
-
-artifacts {
-    //archives sourcesJar, devJar
-    archives assetsZip
+if(hasKeystore()) {
+	build.finalizedBy signServerJar
+	build.dependsOn signMainJar, signCoreJar
 }
 
+artifacts {
+    archives assetsZip/*, sourcesJar, devJar*/
+}
+
+//Returns whether the private keystore for signing is available
+boolean hasKeystore() {
+	return project.hasProperty("blKeyStore")
+}
+
+//Returns the public fingerprint, may be empty ("")
+String getProjectFingerprint() {
+	if(hasKeystore()) {
+		return project.blKeyStoreFingerprint.replaceAll(":", "").toLowerCase()
+	}
+	return ""
+}
 
 //Returns the current version by reading directly from the ModInfo.java file
 String getVersionFromJava() {
