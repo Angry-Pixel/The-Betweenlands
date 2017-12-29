@@ -8,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -35,6 +37,9 @@ public class RenderPurifier extends TileEntitySpecialRenderer<TileEntityPurifier
 	public void render(TileEntityPurifier tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		this.bindTexture(TEXTURE);
 
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		if (tile == null || !tile.hasWorld()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x + 0.5F, y + 1.5F, z + 0.5F);
