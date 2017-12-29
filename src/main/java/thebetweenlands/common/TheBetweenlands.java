@@ -84,11 +84,12 @@ public class TheBetweenlands {
 
 	@EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
-		LogManager.getLogger("Betweenlands Fingerprint Violation").warn("Invalid fingerprint for The Betweenlands detected!"
-        		+ "The Betweenlands jar file was either tampered with or"
-        		+ "is corrupted. Please remove the file and (re)download"
-        		+ "the mod from the official CurseForge project at"
-        		+ "https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod");
+		Logger fpLogger = LogManager.getLogger("Betweenlands Fingerprint Violation");
+		fpLogger.warn("Invalid fingerprint for The Betweenlands detected!");
+		fpLogger.warn("The Betweenlands jar file was either tampered with or");
+		fpLogger.warn("is corrupted. Please remove the file and (re)download");
+		fpLogger.warn("the mod from the official CurseForge project at");
+		fpLogger.warn("https://www.curseforge.com/minecraft/mc-mods/angry-pixel-the-betweenlands-mod");
     }
 	
 	@EventHandler
