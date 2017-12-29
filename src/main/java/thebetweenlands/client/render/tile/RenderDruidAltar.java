@@ -10,6 +10,8 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.Vector3d;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -48,7 +50,10 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 	public void renderTileAsItem(double x, double y, double z) {
 		bindTexture(NORMAL);
-
+		
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		GlStateManager.pushMatrix();
 		renderMainModel(x, y, z);
 		GlStateManager.popMatrix();

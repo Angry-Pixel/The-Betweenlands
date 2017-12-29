@@ -7,6 +7,8 @@ import net.minecraft.block.BlockChest;
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.model.ModelLargeChest;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -43,6 +45,7 @@ public class RenderChestBetweenlands extends TileEntitySpecialRenderer<TileEntit
 		if(te == null) {
 			GlStateManager.pushMatrix();
 			GlStateManager.enableRescaleNormal();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 			GlStateManager.translate((float)x, (float)y + 1.0F, (float)z + 1.0F);
 			GlStateManager.scale(1.0F, -1.0F, -1.0F);

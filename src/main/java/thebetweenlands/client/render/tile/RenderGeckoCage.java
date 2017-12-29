@@ -1,7 +1,8 @@
 package thebetweenlands.client.render.tile;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.aspect.IAspectType;
@@ -30,29 +31,33 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 	public void render(TileEntityGeckoCage cage, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		int meta = cage != null ? cage.getBlockMetadata() : 0;
 
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
-		GL11.glScalef(1F, -1F, -1F);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
+		GlStateManager.scale(1F, -1F, -1F);
 		switch (meta) {
 		case 2:
-			GL11.glRotatef(180F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(180F, 0.0F, 1F, 0F);
 			break;
 		case 3:
-			GL11.glRotatef(0F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
 			break;
 		case 4:
-			GL11.glRotatef(90F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(90F, 0.0F, 1F, 0F);
 			break;
 		case 5:
-			GL11.glRotatef(-90F, 0.0F, 1F, 0F);
+			GlStateManager.rotate(-90F, 0.0F, 1F, 0F);
 			break;
 		}
 
 		bindTexture(TEXTURE);
-		GL11.glDisable(GL11.GL_CULL_FACE);
+		
+		GlStateManager.disableCull();
 		MODEL.render();
-		GL11.glEnable(GL11.GL_CULL_FACE);
-
+		GlStateManager.enableCull();
+		
 		/*GL11.glPushMatrix();
 		GL11.glTranslatef(-1.0F, 0.5F, -0.5F);
 		ItemRenderHelper.renderItem(new ItemStack(BLBlockRegistry.weedwoodBush), 0);
@@ -61,12 +66,12 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 		if(cage != null && cage.hasGecko()) {
 			//float animationTicks = cage.getInterpolatedTicks(partialTickTime);
 
-			GL11.glTranslatef(0, 0.3F, 0);
+			GlStateManager.translate(0, 0.3F, 0);
 
 			//GL11.glRotated(animationTicks * 3.0F, 0, 1, 0);
 			//GL11.glTranslated(0.2D, 0, 0.07D);
 
-			GL11.glScalef(0.6F, 0.6F, 0.6F);
+			GlStateManager.scale(0.6F, 0.6F, 0.6F);
 
 			//float speed = 0.15F;
 			//float swing = animationTicks / 2.0F;
@@ -95,7 +100,7 @@ public class RenderGeckoCage extends TileEntitySpecialRenderer<TileEntityGeckoCa
 			}
 		}
 
-		GL11.glPopMatrix();
+		GlStateManager.popMatrix();
 	}
 }
 

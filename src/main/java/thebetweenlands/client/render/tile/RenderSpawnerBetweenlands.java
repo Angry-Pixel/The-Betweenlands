@@ -2,6 +2,8 @@ package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +42,8 @@ public class RenderSpawnerBetweenlands extends TileEntitySpecialRenderer<TileEnt
         GlStateManager.enableBlend();
         GlStateManager.enableTexture2D();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        
         LightingUtil.INSTANCE.setLighting(255);
         float counter1 = interpolatedCounter;
         GlStateManager.pushMatrix();

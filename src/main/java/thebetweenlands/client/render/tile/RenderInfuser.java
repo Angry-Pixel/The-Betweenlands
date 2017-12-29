@@ -8,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -36,6 +38,9 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 	public void render(TileEntityInfuser infuser, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		bindTexture(TEXTURE);
 
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		if(infuser == null || !infuser.hasWorld()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate((float) 0.5F, (float) 1.5F, (float) 0.5F);
