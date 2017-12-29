@@ -148,6 +148,7 @@ import thebetweenlands.common.block.terrain.BlockSwampDirt;
 import thebetweenlands.common.block.terrain.BlockSwampGrass;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.block.terrain.BlockTar;
+import thebetweenlands.common.block.terrain.BlockWeedwoodLeaves;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -254,12 +255,7 @@ public class BlockRegistry {
     public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
     public static final Block SAPLING_SAP = new BlockSaplingBetweenlands("SAP");
     public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands("RUBBER");
-    public static final Block LEAVES_WEEDWOOD_TREE = new BlockLeavesBetweenlands() {
-        @Override
-        public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-            return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
-        }
-    };
+    public static final Block LEAVES_WEEDWOOD_TREE = new BlockWeedwoodLeaves();
     public static final Block LEAVES_SAP_TREE = new BlockLeavesBetweenlands() {
         @Override
         public Item getItemDropped(IBlockState state, Random rand, int fortune) {

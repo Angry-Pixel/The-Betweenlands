@@ -146,6 +146,7 @@ public class ModelWeedwoodBush implements IModel {
 
 				QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation);
 
+				builder.setTintIndex(0);
 				builder.setSprite(this.textureLeaves);
 
 				// Right Side
@@ -336,6 +337,8 @@ public class ModelWeedwoodBush implements IModel {
 					long seed = posX * 0x2FC20FL ^ posY * 0x6EBFFF5L ^ posZ;
 					rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 
+					builder.setTintIndex(-1);
+					
 					for(int i = 0; i < cSticks; i++) {
 						double rotation = Math.PI * 2.0f / (float)cSticks * (float)i;
 						double xp1 = Math.sin(rotation) * 0.4f;
