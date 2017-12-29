@@ -175,10 +175,10 @@ public abstract class CustomRecipes<C> {
 	}
 
 	private final Map<String, Optional<IRecipeEntry<?>>> loadedEntries = new HashMap<>();
-	private final ImmutableMap<String, RecipeArg<?>> args;
-	private final ImmutableMap<String, RecipeArg<?>> optionalArgs;
+	private final Map<String, RecipeArg<?>> args;
+	private final Map<String, RecipeArg<?>> optionalArgs;
 
-	public CustomRecipes(String name, ImmutableMap<String, RecipeArg<?>> args, ImmutableMap<String, RecipeArg<?>> optionalArgs) {
+	public CustomRecipes(String name, Map<String, RecipeArg<?>> args, Map<String, RecipeArg<?>> optionalArgs) {
 		this.name = name;
 		this.args = args;
 		this.optionalArgs = optionalArgs;

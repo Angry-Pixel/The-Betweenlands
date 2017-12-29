@@ -17,6 +17,7 @@ import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
+import thebetweenlands.common.recipe.custom.CustomAnimatorRepairableRecipes;
 import thebetweenlands.common.recipe.custom.CustomCompostBinRecipes;
 import thebetweenlands.common.recipe.custom.CustomDruidAltarRecipes;
 import thebetweenlands.common.recipe.custom.CustomPestleAndMortarRecipes;
@@ -31,6 +32,7 @@ public class CustomRecipeRegistry {
 	private static final List<CustomRecipes<?>> RECIPE_TYPES = new ArrayList<>();
 
 	public static CustomRecipes<IAnimatorRecipe> animatorRecipes;
+	public static CustomRecipes<IAnimatorRecipe> animatorRepairableRecipes;
 	public static CustomRecipes<IPurifierRecipe> purifiedRecipes;
 	public static CustomRecipes<ICompostBinRecipe> compostBinRecipes;
 	public static CustomRecipes<IDruidAltarRecipe> druidAltarRecipes;
@@ -38,6 +40,7 @@ public class CustomRecipeRegistry {
 
 	public static void preInit() {
 		RECIPE_TYPES.add(animatorRecipes = new CustomAnimatorRecipes());
+		RECIPE_TYPES.add(animatorRepairableRecipes = new CustomAnimatorRepairableRecipes());
 		RECIPE_TYPES.add(purifiedRecipes = new CustomPurifierRecipes());
 		RECIPE_TYPES.add(compostBinRecipes = new CustomCompostBinRecipes());
 		RECIPE_TYPES.add(druidAltarRecipes = new CustomDruidAltarRecipes());
