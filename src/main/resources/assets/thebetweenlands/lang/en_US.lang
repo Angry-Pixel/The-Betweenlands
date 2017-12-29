@@ -726,9 +726,10 @@ tooltip.amulet.usage=Equip using the radial \nmenu [press '%s'] \nor by pressing
 tooltip.weedwood_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
 tooltip.syrmorite_bucket=Can be used as a rubber\ntree tap by right-clicking\non a rubber tree
 tooltip.octine_shield=Sets enemies on fire
-tooltip.syrmorite_shield=Hold '%s' + '%s' to charge\nup and then let to to charge\nat enemies
-tooltip.valonite_shield=Hold '%s' + '%s' to charge\nup and let then to to charge\nat enemies. Reflects projectiles
+tooltip.syrmorite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '%1$s' to charge\nat enemies
+tooltip.valonite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '%1$s' to charge\nat enemies. Reflects projectiles
 tooltip.dentrothyst_shield=Blocks splash potion effects when blocking
+tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
