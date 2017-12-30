@@ -14,15 +14,17 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
-	private EnvironmentEventRegistry environmentEventRegistry;
+	private BLEnvironmentEventRegistry environmentEventRegistry;
 	private AspectManager aspectManager = new AspectManager();
 
 	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
-	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+	private int environmentEventSyncTicks;
+	
+	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
 
@@ -40,7 +42,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	@Override
 	protected void init() {
-		this.environmentEventRegistry = new EnvironmentEventRegistry(this.getWorld());
+		this.environmentEventRegistry = new BLEnvironmentEventRegistry(this.getWorld());
 		this.environmentEventRegistry.init();
 
 		if(!this.getWorld().isRemote) {
@@ -151,5 +153,15 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void setEnvironmentEventSyncTicks(int ticks) {
+		this.environmentEventSyncTicks = ticks;
+	}
+
+	@Override
+	public int getEnvironmentEventSyncTicks() {
+		return this.environmentEventSyncTicks;
 	}
 }

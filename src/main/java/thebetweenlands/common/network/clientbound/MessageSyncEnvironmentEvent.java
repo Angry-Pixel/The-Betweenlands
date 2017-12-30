@@ -13,8 +13,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.network.MessageBase;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class MessageSyncEnvironmentEvent extends MessageBase {
 	private EnvironmentEvent event;
@@ -62,9 +62,9 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 	private void handleMessage() {
 		if(this.nbt != null) {
 			World world = Minecraft.getMinecraft().world;
-			if(world.provider instanceof WorldProviderBetweenlands) {
-				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-				EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
+			if(storage != null) {
+				BLEnvironmentEventRegistry eeRegistry = storage.getEnvironmentEventRegistry();
 				EnvironmentEvent eevent = eeRegistry.forName(this.eventName);
 				if(eevent != null) {
 					eevent.loadEventPacket(this.nbt);

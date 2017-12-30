@@ -22,6 +22,8 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class EventSpoopy extends EnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "spook");
+	
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
 
 	private World world;
@@ -39,7 +41,7 @@ public class EventSpoopy extends EnvironmentEvent {
 		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 2.0F;
 	}
 
-	public EventSpoopy(EnvironmentEventRegistry registry) {
+	public EventSpoopy(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -61,7 +63,7 @@ public class EventSpoopy extends EnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "spook");
+		return ID;
 	}
 
 	@Override

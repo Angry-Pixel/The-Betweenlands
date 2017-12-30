@@ -22,10 +22,12 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventSnowfall extends TimedEnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "snowfall");
+	
 	private float snowingStrength = 0.0F;
 	private float targetSnowingStrength = 0.0F;
 
-	public EventSnowfall(EnvironmentEventRegistry registry) {
+	public EventSnowfall(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -54,7 +56,7 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "snowfall");
+		return ID;
 	}
 
 	@Override

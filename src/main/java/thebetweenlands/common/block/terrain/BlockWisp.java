@@ -29,7 +29,7 @@ import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.util.AdvancedStateMap.Builder;
@@ -50,7 +50,7 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	public static boolean canSee(World world, BlockPos pos) {
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+			BLEnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			if(eeRegistry.auroras.isActive()) {
 				return true;
 			}

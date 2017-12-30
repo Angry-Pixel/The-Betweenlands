@@ -33,7 +33,7 @@ import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.FogGenerator;
@@ -90,7 +90,7 @@ public class FogHandler {
 		World world = Minecraft.getMinecraft().world;
 		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+			BLEnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
 			if(eeRegistry.denseFog.isActive()) {
 				return true;
 			}

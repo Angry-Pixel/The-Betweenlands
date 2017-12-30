@@ -9,7 +9,9 @@ import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 
 public class EventAuroras extends TimedEnvironmentEvent {
-	public EventAuroras(EnvironmentEventRegistry registry) {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "auroras");
+	
+	public EventAuroras(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -17,7 +19,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "auroras");
+		return ID;
 	}
 
 	@Override
@@ -78,8 +80,8 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 	
 	protected boolean canBeActive() {
-		for(EnvironmentEvent event : this.getRegistry().getActiveEvents()) {
-			if(event != this && event != this.getRegistry().winter && event != this.getRegistry().snowfall) {
+		for(EnvironmentEvent event : this.getRegistry().getEventsOfState(true)) {
+			if(event != this && event.getClass() != EventWinter.class && event.getClass() != EventSnowfall.class) {
 				return false;
 			}
 		}

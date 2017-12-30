@@ -6,8 +6,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.EnvironmentEvent;
 
-public abstract class TimedEnvironmentEvent extends EnvironmentEvent {
-	public TimedEnvironmentEvent(EnvironmentEventRegistry registry) {
+public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
+	public TimedEnvironmentEvent(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 

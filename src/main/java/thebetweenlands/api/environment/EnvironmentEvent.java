@@ -1,20 +1,18 @@
 package thebetweenlands.api.environment;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
 
 public abstract class EnvironmentEvent {
-	private final EnvironmentEventRegistry registry;
+	private final IEnvironmentEventRegistry registry;
 	private final World world;
 	private NBTTagCompound nbtt = new NBTTagCompound();
 	private boolean active = false;
 	private boolean dirty = false;
 	private boolean loaded = false;
 
-	public EnvironmentEvent(EnvironmentEventRegistry registry) {
+	public EnvironmentEvent(IEnvironmentEventRegistry registry) {
 		this.registry = registry;
 		this.world = registry.getWorld();
 	}
@@ -26,7 +24,7 @@ public abstract class EnvironmentEvent {
 	public World getWorld() {
 		return this.world;
 	}
-	
+
 	/**
 	 * Returns whether this event is currently active
 	 * @return
@@ -49,7 +47,7 @@ public abstract class EnvironmentEvent {
 	public boolean isActiveAt(double x, double y, double z) {
 		return this.active;
 	}
-	
+
 	/**
 	 * Marks this event as dirty, indicating that something has changed. Forces the server to send a packet to the client
 	 * and save the data when the world is saved.
@@ -178,7 +176,7 @@ public abstract class EnvironmentEvent {
 	 * Returns the event registry of this event.
 	 * @return
 	 */
-	public EnvironmentEventRegistry getRegistry() {
+	public IEnvironmentEventRegistry getRegistry() {
 		return this.registry;
 	}
 }

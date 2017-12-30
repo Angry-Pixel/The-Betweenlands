@@ -41,13 +41,15 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class EventWinter extends EnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
+	
 	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 1, 0, 0).getTime().getTime();
 
 	private World world;
 	private World lastWorld;
 	private boolean chatSent = false;
 
-	public EventWinter(EnvironmentEventRegistry registry) {
+	public EventWinter(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -69,7 +71,7 @@ public class EventWinter extends EnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "winter");
+		return ID;
 	}
 
 	@Override

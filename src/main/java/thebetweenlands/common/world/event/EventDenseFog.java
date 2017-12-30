@@ -7,16 +7,18 @@ import net.minecraft.world.World;
 import thebetweenlands.common.lib.ModInfo;
 
 public class EventDenseFog extends TimedEnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "dense_fog");
+	
 	private float fade = 1.0F;
 	private float lastFade = 1.0F;
 
-	public EventDenseFog(EnvironmentEventRegistry registry) {
+	public EventDenseFog(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "dense_fog");
+		return ID;
 	}
 
 	@Override

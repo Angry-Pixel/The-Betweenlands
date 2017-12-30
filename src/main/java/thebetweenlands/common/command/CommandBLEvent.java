@@ -18,7 +18,8 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class CommandBLEvent extends CommandBase {
 	private List<String> childCommands = Arrays.asList("toggle", "on", "off", "list", "enable", "disable");
@@ -60,7 +61,7 @@ public class CommandBLEvent extends CommandBase {
 
 	private void processOff(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
 		if (args.length < 2) {
-			EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+			BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 			for (EnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
 				event.setActive(false, true);
 			}
@@ -71,7 +72,7 @@ public class CommandBLEvent extends CommandBase {
 	}
 
 	private void processEnable(ICommandSender sender, String[] args) throws CommandException {
-		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+		BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 		if (environmentEventRegistry.isEnabled()) {
 			throw new CommandException("command.blevent.failure.alreadyenabled");
 		}
@@ -80,7 +81,7 @@ public class CommandBLEvent extends CommandBase {
 	}
 
 	private void processDisable(ICommandSender sender, String[] args) throws CommandException {
-		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+		BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 		if (environmentEventRegistry.isDisabled()) {
 			throw new CommandException("command.blevent.failure.alreadydisabled");
 		}
@@ -92,7 +93,7 @@ public class CommandBLEvent extends CommandBase {
 	}
 
 	private void processList(ICommandSender sender) throws CommandException {
-		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+		BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 		sender.sendMessage(new TextComponentString(environmentEventRegistry.getGrammaticalActiveEventNameList()));
 	}
 
@@ -108,7 +109,7 @@ public class CommandBLEvent extends CommandBase {
 
 	@Override
 	public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-		if (!(sender.getEntityWorld().provider instanceof WorldProviderBetweenlands)) {
+		if (BetweenlandsWorldStorage.forWorld(sender.getEntityWorld()) == null) {
 			return Collections.<String>emptyList();
 		}
 		List<String> completions = null;
@@ -139,17 +140,18 @@ public class CommandBLEvent extends CommandBase {
 		return completions == null ? Collections.<String>emptyList() : getListOfStringsMatchingLastWord(args, completions.toArray(new String[0]));
 	}
 
-	private EnvironmentEventRegistry getEnvironmentEventRegistry(ICommandSender sender) throws CommandException {
+	private BLEnvironmentEventRegistry getEnvironmentEventRegistry(ICommandSender sender) throws CommandException {
 		World world = sender.getEntityWorld();
-		if (world.provider instanceof WorldProviderBetweenlands) {
-			return ((WorldProviderBetweenlands) world.provider).getWorldData().getEnvironmentEventRegistry();
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
+		if(storage != null) {
+			return storage.getEnvironmentEventRegistry();
 		} else {
 			throw new CommandException("command.blevent.failure.wrongdimension");
 		}
 	}
 
 	private EnvironmentEvent getEnvironentEvent(ICommandSender sender, ResourceLocation eventName) throws CommandException {
-		EnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
+		BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 		EnvironmentEvent event = environmentEventRegistry.forName(eventName);
 		if (event == null) {
 			throw new CommandException("command.blevent.failure.unknown", eventName);

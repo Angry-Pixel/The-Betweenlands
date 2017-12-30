@@ -21,7 +21,7 @@ import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
 import javax.annotation.Nullable;
@@ -66,7 +66,7 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
             int amount = state.getValue(AMOUNT);
             if(world.provider instanceof WorldProviderBetweenlands) {
                 WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-                EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
+                BLEnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
                 if(!eeRegistry.heavyRain.isActive()) {
                     world.setBlockToAir(pos);
                     amount = 0;

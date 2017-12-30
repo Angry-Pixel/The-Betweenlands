@@ -10,9 +10,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEventRegistry;
 import thebetweenlands.api.event.InitializeEnvironmentEventsEvent;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 
-public class EnvironmentEventRegistry {
+public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public final EventDenseFog denseFog;
 	public final EnvironmentEvent heavyRain;
 	public final EventAuroras auroras;
@@ -23,7 +25,7 @@ public class EnvironmentEventRegistry {
 
 	private World world;
 
-	public EnvironmentEventRegistry(World world) {
+	public BLEnvironmentEventRegistry(World world) {
 		this.world = world;
 
 		denseFog = new EventDenseFog(this);
@@ -35,19 +37,23 @@ public class EnvironmentEventRegistry {
 		snowfall = new EventSnowfall(this);
 	}
 
+	@Override
 	public World getWorld() {
 		return this.world;
 	}
 
 	public void init() {
-		register(denseFog);
-		register(heavyRain);
-		register(auroras);
-		register(bloodSky);
-		register(spoopy);
-		register(winter);
-		register(snowfall);
-		
+		//Only add events to the dimension
+		if(this.world.provider instanceof WorldProviderBetweenlands) {
+			register(denseFog);
+			register(heavyRain);
+			register(auroras);
+			register(bloodSky);
+			register(spoopy);
+			register(winter);
+			register(snowfall);
+		}
+
 		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));
 	}
 
@@ -55,17 +61,23 @@ public class EnvironmentEventRegistry {
 
 	private boolean disabled = false;
 
+	@Override
 	public void register(EnvironmentEvent event) {
 		if(registeredEvents.containsKey(event.getEventName())) {
 			throw new RuntimeException("Duplicate environment event name: " + event.getEventName());
 		}
+		if(event.getRegistry() != this) {
+			throw new RuntimeException(String.format("Environment event %s is already registered in another registry: %s", event.getEventName(), this));
+		}
 		registeredEvents.put(event.getEventName(), event);
 	}
-	
+
+	@Override
 	public EnvironmentEvent unregister(EnvironmentEvent event) {
 		return registeredEvents.remove(event.getEventName());
 	}
 
+	@Override
 	public Map<ResourceLocation, EnvironmentEvent> getEvents() {
 		return Collections.unmodifiableMap(registeredEvents);
 	}
@@ -78,10 +90,22 @@ public class EnvironmentEventRegistry {
 		return getEventsOfState(true);
 	}
 
+	@Override
 	public List<EnvironmentEvent> getEventsOfState(boolean isActive) {
 		List<EnvironmentEvent> list = new ArrayList<EnvironmentEvent>();
 		for (EnvironmentEvent event : registeredEvents.values()) {
 			if (event.isActive() == isActive) {
+				list.add(event);
+			}
+		}
+		return list;
+	}
+
+	@Override
+	public List<EnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
+		List<EnvironmentEvent> list = new ArrayList<EnvironmentEvent>();
+		for (EnvironmentEvent event : this.getEvents().values()) {
+			if (event.isActiveAt(x, y, z) == active) {
 				list.add(event);
 			}
 		}
@@ -134,11 +158,34 @@ public class EnvironmentEventRegistry {
 		disabled = true;
 	}
 
+	@Override
 	public boolean isEnabled() {
 		return !disabled;
 	}
 
 	public boolean isDisabled() {
 		return disabled;
+	}
+
+	@Override
+	public boolean setEnabled(boolean enabled) {
+		return this.disabled = !enabled;
+	}
+
+	@Override
+	public EnvironmentEvent getEvent(ResourceLocation eventId) {
+		return this.registeredEvents.get(eventId);
+	}
+
+	@Override
+	public boolean isEventActive(ResourceLocation eventId) {
+		EnvironmentEvent event = this.getEvent(eventId);
+		return event != null && event.isActive();
+	}
+
+	@Override
+	public boolean isEventActiveAt(double x, double y, double z, ResourceLocation eventId) {
+		EnvironmentEvent event = this.getEvent(eventId);
+		return event != null && event.isActiveAt(x, y, z);
 	}
 }

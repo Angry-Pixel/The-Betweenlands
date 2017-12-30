@@ -88,4 +88,17 @@ public interface IWorldStorage {
 	 * Ticks the world storage
 	 */
 	public void tick();
+	
+	/**
+	 * Sets the environment event sync ticks
+	 * @param ticks
+	 * @return
+	 */
+	public void setEnvironmentEventSyncTicks(int ticks);
+	
+	/**
+	 * Returns the environment event sync ticks
+	 * @return
+	 */
+	public int getEnvironmentEventSyncTicks();
 }

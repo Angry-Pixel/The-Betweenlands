@@ -19,7 +19,7 @@ import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -152,7 +152,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public void updateWeather() {
-		EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
+		BLEnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
 		this.world.getWorldInfo().setRaining(eeRegistry.heavyRain.isActive());
 		this.world.getWorldInfo().setThundering(false);
 		this.world.prevRainingStrength = this.world.rainingStrength;
@@ -238,7 +238,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		super.calculateInitialWeather();
 	}
 
-	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.getWorldData().getEnvironmentEventRegistry();
 	}
 

@@ -11,11 +11,13 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EventBloodSky extends TimedEnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "blood_sky");
+	
 	private boolean soundPlayed = true;
 	private float skyTransparency = 0.0F;
 	private float lastSkyTransparency = 0.0F;
 
-	public EventBloodSky(EnvironmentEventRegistry registry) {
+	public EventBloodSky(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -30,7 +32,7 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "blood_sky");
+		return ID;
 	}
 
 	@Override
