@@ -243,4 +243,19 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+    
+    @Override
+    public boolean isBlockNormalCube(IBlockState state) {
+    	return false;
+    }
+    
+	@Override
+	public boolean isNormalCube(IBlockState state) {
+		return false;
+	}
+    
+    @Override
+    public boolean isFullBlock(IBlockState state) {
+    	return false;
+    }
 }
