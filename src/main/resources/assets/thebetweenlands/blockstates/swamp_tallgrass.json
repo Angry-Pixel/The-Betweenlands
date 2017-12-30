@@ -1,0 +1,16 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"normal": {
+			"model": "thebetweenlands:internal/winter_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/internal/spook_event",
+				"model_base_data": {
+					"model_base": "thebetweenlands:block/swamp_tallgrass",
+					"model_active": "thebetweenlands:block/swamp_tallgrass_spook"				
+				},
+				"model_active": "thebetweenlands:block/swamp_tallgrass_frosty"
+			}
+		}
+	}
+}

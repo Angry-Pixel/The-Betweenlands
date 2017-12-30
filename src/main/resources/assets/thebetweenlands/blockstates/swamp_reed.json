@@ -1,0 +1,40 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/swamp_reed",
+				"model_active": "thebetweenlands:block/swamp_reed_spook"
+			},
+			"model_active": "thebetweenlands:block/swamp_reed_frosty"
+		}
+	},
+	"variants": {
+		"is_top": {
+			"true": {
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/spook_event",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/swamp_reed_top",
+						"model_active": "thebetweenlands:block/swamp_reed_top_spook"
+					},
+					"model_active": "thebetweenlands:block/swamp_reed_top_frosty"
+				}
+			},
+			"false": {
+				
+			}
+		},
+		"is_bottom": {
+			"true": {
+				
+			},
+			"false": {
+				
+			}
+		}
+	}
+}

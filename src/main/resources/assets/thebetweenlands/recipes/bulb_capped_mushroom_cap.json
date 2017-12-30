@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "bulb_capped_mushroom_item"
+    }
+    },
+    "result": {
+      "item": "thebetweenlands:bulb_capped_mushroom_cap",
+      "count": 4
+    }
+  }

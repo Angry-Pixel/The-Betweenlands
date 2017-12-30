@@ -1,0 +1,31 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "PPP"
+  ],
+  "key": {
+    "x": [
+      {
+        "item": "thebetweenlands:cave_moss"
+      },
+      {
+        "item": "thebetweenlands:moss"
+      },
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 29
+      },
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 30
+      }
+    ],
+    "P": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:moss_bed_item"
+  }
+}

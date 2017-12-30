@@ -1,0 +1,7 @@
+{
+  "parent": "thebetweenlands:item/aspect_vial_green",
+  "textures": {
+
+    "layer2": "thebetweenlands:items/strictly_herblore/misc/aspect_dayuniis"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "X X",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 38
+    },
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:amulet"
+  }
+}

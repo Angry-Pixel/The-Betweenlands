@@ -1,0 +1,60 @@
+{
+  "variants": {
+    "frame_position=corner_bottom_right,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_corner_bottom_right"
+    },
+    "frame_position=top,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_top"
+    },
+    "frame_position=side_left,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_side_left"
+    },
+    "frame_position=bottom,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_bottom"
+    },
+    "frame_position=corner_top_right,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_corner_top_right"
+    },
+    "frame_position=corner_top_left,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_corner_top_left"
+    },
+    "frame_position=side_right,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_side_right"
+    },
+    "frame_position=corner_bottom_left,x_axis=false": {
+      "model": "thebetweenlands:portal_frame_corner_bottom_left"
+    },
+    "frame_position=corner_bottom_right,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_corner_bottom_right",
+      "y": 90
+    },
+    "frame_position=top,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_top",
+      "y": 90
+    },
+    "frame_position=side_left,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_side_left",
+      "y": 90
+    },
+    "frame_position=bottom,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_bottom",
+      "y": 90
+    },
+    "frame_position=corner_top_right,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_corner_top_right",
+      "y": 90
+    },
+    "frame_position=corner_top_left,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_corner_top_left",
+      "y": 90
+    },
+    "frame_position=side_right,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_side_right",
+      "y": 90
+    },
+    "frame_position=corner_bottom_left,x_axis=true": {
+      "model": "thebetweenlands:portal_frame_corner_bottom_left",
+      "y": 90
+    }
+  }
+}

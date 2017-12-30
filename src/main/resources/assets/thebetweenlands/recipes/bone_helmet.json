@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XXX",
+    "X X"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 14
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:bone_helmet"
+  }
+}

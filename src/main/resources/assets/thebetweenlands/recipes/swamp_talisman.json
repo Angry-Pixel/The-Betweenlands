@@ -1,0 +1,32 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    [
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 30
+      },
+      {
+        "item": "thebetweenlands:items_plant_drop",
+        "data": 29
+      },
+      {
+        "item": "thebetweenlands:cave_moss"
+      },
+      {
+        "item": "thebetweenlands:moss"
+      }
+    ],
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 14
+    },
+    {
+      "item": "thebetweenlands:life_crystal"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:swamp_talisman",
+    "data": 0
+  }
+}

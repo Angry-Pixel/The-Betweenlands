@@ -1,0 +1,38 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"normal": [
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_grass",
+					"model_active": "thebetweenlands:block/swamp_grass_frosty"
+				}
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_grass",
+					"model_active": "thebetweenlands:block/swamp_grass_frosty"
+				},
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_grass",
+					"model_active": "thebetweenlands:block/swamp_grass_frosty"
+				},
+				"y": 180
+			},
+			{
+				"model": "thebetweenlands:internal/winter_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/swamp_grass",
+					"model_active": "thebetweenlands:block/swamp_grass_frosty"
+				},
+				"y": 270
+			}
+		]
+	}
+}

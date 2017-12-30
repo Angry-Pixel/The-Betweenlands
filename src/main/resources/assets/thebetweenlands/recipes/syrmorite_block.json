@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:syrmorite_block"
+  }
+}

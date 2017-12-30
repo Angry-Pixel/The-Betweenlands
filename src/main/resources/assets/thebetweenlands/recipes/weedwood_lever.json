@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "x"
+  ],
+  "key": {
+    "x": [
+      {
+        "item": "thebetweenlands:log_weedwood",
+        "data": 0
+      },
+      {
+        "item": "thebetweenlands:log_weedwood",
+        "data": 12
+      }
+    ],
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_lever"
+  }
+}

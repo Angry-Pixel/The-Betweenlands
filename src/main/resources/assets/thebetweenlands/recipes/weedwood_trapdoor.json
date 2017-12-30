@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_trapdoor",
+    "count": 2
+  }
+}

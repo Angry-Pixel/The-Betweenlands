@@ -1,0 +1,273 @@
+/*
+* See https://gist.github.com/matthewprenger/9b2da059b89433a01c1c for JAR signing.
+* TLDR:
+* 0. Requires properly set up JDK
+* 1. Generate keystore with
+*		keytool -genkey -alias <alias here> -keyalg RSA -keysize 2048 -keystore keystore.jks
+* 2. Get fingerprint <fingerprint> with 
+*		keytool -list -alias <alias here> -keystore keystore.jks
+* 3. Add following to your gradle.properties
+*		blKeyStore=/path/to/keystore.jks
+*		blKeyStoreAlias=<alias here>
+*		blKeyStorePass=<password>
+*		blKeyStoreKeyPass=<password>
+*		blKeyStoreFingerprint=<fingerprint>
+* 4. Run 'gradle build'
+*/
+
+// For those who want the bleeding edge
+buildscript {
+    repositories {
+        jcenter()
+        maven {
+            name = "forge"
+            url = "http://files.minecraftforge.net/maven"
+        }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+apply from: 'validateCoreJar.gradle'
+
+project.ext.buildnumber = ''
+if (System.getenv().BUILD_NUMBER) project.buildnumber = '-' + System.getenv().BUILD_NUMBER
+
+def modid = getModIdFromJava()
+version = getVersionFromJava() + project.buildnumber
+group = 'net.angrypixel'
+archivesBaseName = 'TheBetweenlands'
+sourceCompatibility = targetCompatibility = '1.8'
+
+println(hasKeystore() ? "blKeyStore property found, jar files will be signed" : "No blKeyStore property found, jar files will not be signed")
+
+minecraft {
+    version = "1.12.2-14.23.1.2554"
+    runDir = 'minecraft'
+    replace '${version}', project.version
+    replace '${mcversion}', project.minecraft.version
+    replace '/*!*/true/*!*/', 'false'
+    replace '${fingerprint}', getProjectFingerprint()
+    clientJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
+    serverJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
+	
+    // the mappings can be changed at any time, and must be in the following format.
+    // snapshot_YYYYMMDD   snapshot are built nightly.
+    // stable_#            stables are built at the discretion of the MCP team.
+    // Use non-default mappings at your own risk. they may not allways work.
+    // simply re-run your setup task after changing the mappings to update your workspace.
+    mappings = "snapshot_20171003"
+    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+}
+
+//Processes the resources of sourceSets.main
+processResources {
+    inputs.property 'version', project.version
+    inputs.property 'mcversion', project.minecraft.version
+
+    from (sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version':project.version, 'mcversion':project.minecraft.version
+    }
+
+    from (sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+    rename '(.+_at.cfg)', 'META-INF/$1'
+}
+
+//Builds the coremod jar
+task coreJar(type: Jar) {
+    from(sourceSets.main.output) {
+        include 'thebetweenlands/core/**'
+    }
+    addCoreManifestAttributes(manifest)
+    classifier 'core'
+}
+reobf {
+    coreJar { mappingType = 'SEARGE' }
+}
+reobfCoreJar.dependsOn validateCoreJar //Validate core jar before reobf
+task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
+	if(hasKeystore()) {
+	    keyStore = project.blKeyStore
+	    alias = project.blKeyStoreAlias
+	    storePass = project.blKeyStorePass
+	    keyPass = project.blKeyStoreKeyPass
+	    inputFile = coreJar.archivePath
+	    outputFile = coreJar.archivePath
+    }
+}
+
+//Builds the universal jar
+jar {
+	dependsOn reobfCoreJar
+	if(hasKeystore()) {
+		dependsOn signCoreJar //Sign core jar *before* including!
+	}
+	
+    classifier = 'universal'
+    
+    exclude("pack.mcmeta")
+    exclude("pack.png")
+    exclude("thebetweenlands/core/**")
+    
+    from(coreJar.archivePath.absolutePath) {
+        include '*'
+    }
+    
+    addMainManifestAttributes(manifest)
+}
+task signMainJar(type: SignJar, dependsOn: reobfJar) {
+	if(hasKeystore()) {
+	    keyStore = project.blKeyStore
+	    alias = project.blKeyStoreAlias
+	    storePass = project.blKeyStorePass
+	    keyPass = project.blKeyStoreKeyPass
+	    inputFile = jar.archivePath
+	    outputFile = jar.archivePath
+    }
+}
+
+//Builds the server jar
+task serverJar(type: Jar, dependsOn: classes) {
+	dependsOn jar
+	classifier = 'server'
+	//sourceSets.main.output.classesDir does not work here because it contains the deobfuscated classes which we can't use
+	from (zipTree(jar.archivePath)) {
+	
+		//A list of files or folders to be excluded from the server build
+		exclude("**/assets/" + modid + "/models/**")
+		exclude("**/assets/" + modid + "/shaders/**")
+		exclude("**/assets/" + modid + "/sounds/**")
+		exclude("**/assets/" + modid + "/textures/**")
+		exclude("**/assets/" + modid + "/sounds.json")
+		exclude("**/assets/" + modid + "/blockstates/**")
+		
+		//Remove and then regenerate and resign META-INF 
+		exclude("META-INF/**")
+		
+	}
+	addMainManifestAttributes(manifest)
+}
+task signServerJar(type: SignJar, dependsOn: serverJar) {
+	if(hasKeystore()) {
+	    keyStore = project.blKeyStore
+	    alias = project.blKeyStoreAlias
+	    storePass = project.blKeyStorePass
+	    keyPass = project.blKeyStoreKeyPass
+	    inputFile = serverJar.archivePath
+	    outputFile = serverJar.archivePath
+    }
+}
+
+//Builds the source jar with all the source files of sourceSets.main
+task sourcesJar(type: Jar, dependsOn: classes) << {
+    classifier = 'src'
+    from sourceSets.main.allSource
+}
+
+//Builds the dev jar with all the output files of sourceSets.main
+task devJar(type: Jar) << {
+    classifier = 'dev'
+    from sourceSets.main.output
+}
+
+//Builds a zip file with all client side assets
+task assetsZip(type: Zip) {
+	dependsOn jar
+	classifier = 'assets'
+	destinationDir = file("$rootDir/build/libs")	
+	
+	from (sourceSets.main.output) {
+		
+		exclude("mcmod.info")
+		exclude("thebetweenlands/**")
+		exclude("assets/" + modid + "/loot_tables/**")
+		exclude("assets/" + modid + "/recipes/**")
+		exclude("META-INF/**")
+		
+	}
+}
+
+build.finalizedBy serverJar
+if(hasKeystore()) {
+	build.finalizedBy signServerJar
+	build.dependsOn signMainJar, signCoreJar
+}
+
+artifacts {
+    archives assetsZip/*, sourcesJar, devJar*/
+}
+
+//Returns whether the private keystore for signing is available
+boolean hasKeystore() {
+	return project.hasProperty("blKeyStore")
+}
+
+//Returns the public fingerprint, may be empty ("")
+String getProjectFingerprint() {
+	if(hasKeystore()) {
+		return project.blKeyStoreFingerprint.replaceAll(":", "").toLowerCase()
+	}
+	return ""
+}
+
+//Returns the current version by reading directly from the ModInfo.java file
+String getVersionFromJava() {
+    String major = "0";
+    String revision = "0";
+    String patch = "0";
+    String prefix = "public static final String VERSION = \"";
+    File file = file("src/main/java/thebetweenlands/common/lib/ModInfo.java")
+    file.eachLine { String s ->
+        s = s.trim();
+        if (s.startsWith(prefix)) {
+            s = s.substring(prefix.length(), s.length() - 2);
+            String[] pts = s.split("\\.");
+
+            major = pts[0];
+            revision = pts[1];
+            patch = pts[2];
+        }
+    }
+
+    return "$major.$revision.$patch";
+}
+
+//Returns the mod ID by reading directly from the ModInfo.java file
+String getModIdFromJava() {
+    String id = "N/A";
+    String prefix = "public static final String ID = \"";
+    File file = file("src/main/java/thebetweenlands/common/lib/ModInfo.java")
+    file.eachLine { String s ->
+        s = s.trim();
+        if (s.startsWith(prefix)) {
+            id = s.substring(prefix.length(), s.length() - 2);
+        }
+    }
+
+    return "$id";
+}
+
+//Adds the main jar manifest attributes to the specified Manifest
+def addMainManifestAttributes(Manifest m) {
+    m.attributes ('FMLAT': 'thebetweenlands_at.cfg')
+    m.attributes ('ContainedDeps': coreJar.archivePath.name)
+}
+//Adds the coremod manifest attributes to the specified Manifest
+def addCoreManifestAttributes(Manifest m) {
+	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
+}
+
+
+//JEI intergration
+repositories {
+    maven { url "http://dvs1.progwml6.com/files/maven" }
+}
+
+dependencies {
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.134:api"
+}

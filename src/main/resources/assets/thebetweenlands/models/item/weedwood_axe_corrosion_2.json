@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/weedwood_axe_corrodible",
+    "layer1": "thebetweenlands:items/weedwood_axe_corrosion_2"
+  }
+}

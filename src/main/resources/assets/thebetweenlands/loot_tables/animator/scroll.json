@@ -1,0 +1,138 @@
+{
+    "pools": [
+        {
+            "name": "scroll",
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:angry_pebble",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 4,
+                                "max": 30
+                            }
+                        }
+                    ],
+                    "weight": 8,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:voodoo_doll",
+                    "functions": [],
+                    "weight": 28,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:swift_pick",
+                    "functions": [],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:skull_mask",
+                    "functions": [],
+                    "weight": 16,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:wights_bane",
+                    "functions": [],
+                    "weight": 16,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:sludge_slicer",
+                    "functions": [],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:critter_cruncher",
+                    "functions": [],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:hag_hacker",
+                    "functions": [],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "amulet_socket",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 38
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "entryName": "valonite_shard",
+                    "name": "thebetweenlands:items_misc",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 3,
+                                "max": 8
+                            }
+                        },
+                        {
+                            "conditions": [],
+                            "function": "set_data",
+                            "data": 19
+                        }
+                    ],
+                    "weight": 20,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:ring_of_power",
+                    "functions": [],
+                    "weight": 5,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "loot_table",
+                    "name": "thebetweenlands:loot/music_disc",
+                    "functions": [],
+                    "weight": 2,
+                    "quality": 0
+                }
+            ],
+            "rolls": 1
+        }
+    ]
+}

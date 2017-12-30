@@ -1,0 +1,32 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/fungus_crop_1"
+  },
+  "variants": {
+    "stage=0": [
+      { "model": "thebetweenlands:internal/fungus_crop_1" },
+      { "model": "thebetweenlands:internal/fungus_crop_1", "y": 90 },
+      { "model": "thebetweenlands:internal/fungus_crop_1", "y": 180 },
+      { "model": "thebetweenlands:internal/fungus_crop_1", "y": 270 }
+    ],
+    "stage=1": [
+      { "model": "thebetweenlands:internal/fungus_crop_2" },
+      { "model": "thebetweenlands:internal/fungus_crop_2", "y": 90 },
+      { "model": "thebetweenlands:internal/fungus_crop_2", "y": 180 },
+      { "model": "thebetweenlands:internal/fungus_crop_2", "y": 270 }
+    ],
+    "stage=2": [
+      { "model": "thebetweenlands:internal/fungus_crop_3" },
+      { "model": "thebetweenlands:internal/fungus_crop_3", "y": 90 },
+      { "model": "thebetweenlands:internal/fungus_crop_3", "y": 180 },
+      { "model": "thebetweenlands:internal/fungus_crop_3", "y": 270 }
+    ],
+    "stage=3": [
+      { "model": "thebetweenlands:internal/fungus_crop_4" },
+      { "model": "thebetweenlands:internal/fungus_crop_4", "y": 90 },
+      { "model": "thebetweenlands:internal/fungus_crop_4", "y": 180 },
+      { "model": "thebetweenlands:internal/fungus_crop_4", "y": 270 }
+    ]
+  }
+}

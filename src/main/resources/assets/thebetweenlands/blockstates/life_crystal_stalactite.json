@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "normal": {
+      "model": "thebetweenlands:internal/model_combined",
+      "custom": { 
+        "model_base": "thebetweenlands:block/internal/layer_selection",
+        "model_base_data": {
+          "model": "thebetweenlands:block/internal/life_crystal_stalactite",
+          "layers": ["cutout", "none"]
+        },
+      
+        "model_additional": "thebetweenlands:block/internal/layer_selection",
+        "model_additional_data": {
+          "model": "forge:block/fluid",
+          "layers": ["translucent"],
+          "model_data": {
+            "fluid": "swamp_water"
+          }
+        }
+      }
+    }
+  }
+}

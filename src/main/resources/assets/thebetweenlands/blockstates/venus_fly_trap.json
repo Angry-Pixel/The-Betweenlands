@@ -1,0 +1,57 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "blooming=true": [
+            { "model": "thebetweenlands:internal/venus_fly_trap_blooming" },
+            { "model": "thebetweenlands:internal/venus_fly_trap_blooming", "y": 90 },
+            { "model": "thebetweenlands:internal/venus_fly_trap_blooming", "y": 180 },
+            { "model": "thebetweenlands:internal/venus_fly_trap_blooming", "y": 270 }
+        ],
+        "blooming=false": [ 
+            { "model": "thebetweenlands:internal/venus_fly_trap" },
+            { "model": "thebetweenlands:internal/venus_fly_trap", "y": 90 },
+            { "model": "thebetweenlands:internal/venus_fly_trap", "y": 180 },
+            { "model": "thebetweenlands:internal/venus_fly_trap", "y": 270 }
+        ],
+        "inventory": { 
+            "model": "thebetweenlands:internal/venus_fly_trap",
+            "transform": {
+                "gui": {
+                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
+                    "translation": [0, 0.1, 0],
+                    "scale":[0.75, 0.75, 0.75]
+                },
+                "ground": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.1, 0],
+                    "scale":[0.75, 0.75, 0.75]
+                },
+                "fixed": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.75, 0.75, 0.75]
+                },
+                "thirdperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.35, 0.15],
+                    "scale": [0.75, 0.75, 0.75]
+                },
+                "thirdperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.35, 0.15],
+                    "scale": [0.75, 0.75, 0.75]
+                },
+                "firstperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
+                    "translation": [0, 0.35, 0],
+                    "scale": [0.75, 0.75, 0.75]
+                },
+                "firstperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
+                    "translation": [0, 0.35, 0],
+                    "scale": [0.75, 0.75, 0.75]
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,31 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/spook_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/log_sap",
+			"model_active": "thebetweenlands:block/log_sap_spook"
+		}
+	},
+	"variants": {
+		"axis": {
+			"y": {
+				
+			},
+			"z": {
+				"x": 90
+			},
+			"x": {
+				"x": 90,
+				"y": 90
+			},
+			"none": {
+				"model": "thebetweenlands:internal/spook_event",
+				"custom": {
+					"model_base": "thebetweenlands:block/log_sap_bark",
+					"model_active": "thebetweenlands:block/log_sap_spook"
+				}
+			}
+		}
+	}
+}

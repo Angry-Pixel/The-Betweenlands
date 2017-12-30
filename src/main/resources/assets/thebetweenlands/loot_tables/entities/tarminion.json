@@ -1,0 +1,22 @@
+{
+  "pools": [
+    {
+      "name": "tarminion",
+      "rolls": 1,
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_data",
+              "data": 29
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

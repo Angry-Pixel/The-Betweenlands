@@ -1,0 +1,9 @@
+{
+  "variants": {
+    "facing=up": { "model": "thebetweenlands:damp_torch" },
+    "facing=east": { "model": "thebetweenlands:damp_torch_wall" },
+    "facing=south": { "model": "thebetweenlands:damp_torch_wall", "y": 90 },
+    "facing=west": { "model": "thebetweenlands:damp_torch_wall", "y": 180 },
+    "facing=north": { "model": "thebetweenlands:damp_torch_wall", "y": 270 }
+  }
+}

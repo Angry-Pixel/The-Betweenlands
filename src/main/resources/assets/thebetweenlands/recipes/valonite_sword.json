@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#",
+    "#",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 19
+    },
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:valonite_sword"
+  }
+}

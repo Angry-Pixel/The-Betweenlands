@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "sps",
+    "rrr",
+    "sps"
+  ],
+  "key": {
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    },
+    "p": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    },
+    "r": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:gecko_cage"
+  }
+}

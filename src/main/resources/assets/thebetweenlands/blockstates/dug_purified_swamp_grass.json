@@ -1,0 +1,73 @@
+{
+  "forge_marker": 1,
+  "variants": { 
+    "normal": {
+      "model": "thebetweenlands:internal/model_combined",
+      "custom": {
+        "model_base": "thebetweenlands:block/dug_purified_swamp_grass_base",
+        "model_additional": "thebetweenlands:block/internal/connected_texture",
+        "model_additional_data": {
+          "particle_texture": "thebetweenlands:blocks/purified_swamp_dirt",
+          "ambient_occlusion": true,
+          "connected_texture_faces": [
+            {
+              "cullface": "up",
+              "connected_textures": [
+                "thebetweenlands:blocks/dug_swamp_grass_0",
+                "thebetweenlands:blocks/dug_swamp_grass_1",
+                "thebetweenlands:blocks/dug_swamp_grass_2",
+                "thebetweenlands:blocks/dug_swamp_grass_3",
+                "thebetweenlands:blocks/dug_swamp_grass_4"
+              ],
+              "indices": [
+                "top_north_west_index",
+                "top_south_west_index",
+                "top_south_east_index",
+                "top_north_east_index"
+              ],
+              "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0 },
+                { "x": 0.0, "y": 1.0, "z": 1.0 },
+                { "x": 1.0, "y": 1.0, "z": 1.0 },
+                { "x": 1.0, "y": 1.0, "z": 0.0 }
+              ]
+            },
+            {
+              "cullface": "up",
+              "tintindex": 0,
+              "connected_textures": [
+                "thebetweenlands:blocks/dug_swamp_grass_0_overlay",
+                "thebetweenlands:blocks/dug_swamp_grass_1_overlay",
+                "thebetweenlands:blocks/dug_swamp_grass_2_overlay",
+                "thebetweenlands:blocks/dug_swamp_grass_3_overlay",
+                "thebetweenlands:blocks/dug_swamp_grass_4_overlay"
+              ],
+              "indices": [
+                "top_north_west_index",
+                "top_south_west_index",
+                "top_south_east_index",
+                "top_north_east_index"
+              ],
+              "vertices": [
+                { "x": 0.0, "y": 1.0, "z": 0.0 },
+                { "x": 0.0, "y": 1.0, "z": 1.0 },
+                { "x": 1.0, "y": 1.0, "z": 1.0 },
+                { "x": 1.0, "y": 1.0, "z": 0.0 }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "inventory": {
+      "model": "thebetweenlands:dug_grass_inventory",
+      "textures": {
+        "bottom": "thebetweenlands:blocks/purified_swamp_dirt",
+        "side": "thebetweenlands:blocks/purified_swamp_grass_side",
+        "side_overlay": "thebetweenlands:blocks/swamp_grass_side_overlay",
+        "top": "thebetweenlands:blocks/dug_swamp_grass_0",
+        "top_overlay": "thebetweenlands:blocks/dug_swamp_grass_0_overlay"
+      }
+    }
+  } 
+}

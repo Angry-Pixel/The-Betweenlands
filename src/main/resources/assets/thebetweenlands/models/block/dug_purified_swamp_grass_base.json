@@ -1,0 +1,9 @@
+{
+  "parent": "thebetweenlands:block/dug_grass_base",
+  "textures": {
+    "bottom": "thebetweenlands:blocks/purified_swamp_dirt",
+    "side": "thebetweenlands:blocks/purified_swamp_grass_side",
+    "side_overlay": "thebetweenlands:blocks/swamp_grass_side_overlay",
+    "particle": "thebetweenlands:blocks/purified_swamp_dirt"
+  }
+}

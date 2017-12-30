@@ -1,0 +1,10 @@
+{
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:purified_swamp_dirt" },
+            { "model": "thebetweenlands:purified_swamp_dirt", "y": 90 },
+            { "model": "thebetweenlands:purified_swamp_dirt", "y": 180 },
+            { "model": "thebetweenlands:purified_swamp_dirt", "y": 270 }
+        ]
+    }
+}

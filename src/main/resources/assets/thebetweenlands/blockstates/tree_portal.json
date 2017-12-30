@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "axis=z": { "model": "thebetweenlands:tree_portal_ew" },
+        "axis=x": { "model": "thebetweenlands:tree_portal_ns" }
+    }
+}

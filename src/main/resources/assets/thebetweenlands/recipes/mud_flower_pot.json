@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    " x "
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 10
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mud_flower_pot"
+  }
+}

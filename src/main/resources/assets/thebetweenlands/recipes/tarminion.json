@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ttt",
+    "tht",
+    "ttt"
+  ],
+  "key": {
+    "t": {
+      "item": "thebetweenlands:items_misc",
+      "data": 26
+    },
+    "h": {
+      "item": "thebetweenlands:items_misc",
+      "data": 25
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:tarminion"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:sludge_jello"
+    },
+    {
+      "item": "thebetweenlands:sap_ball"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:sap_jello"
+  }
+}

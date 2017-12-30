@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X",
+    "#",
+    "Y"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 21
+    },
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "Y": {
+      "item": "thebetweenlands:items_misc",
+      "data": 3
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:angler_tooth_arrow",
+    "count": 4
+  }
+}

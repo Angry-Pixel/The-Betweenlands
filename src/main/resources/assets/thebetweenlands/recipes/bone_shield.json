@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#I#",
+    "###",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 14
+    },
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:bone_shield"
+  }
+}

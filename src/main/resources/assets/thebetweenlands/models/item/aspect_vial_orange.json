@@ -1,0 +1,22 @@
+{
+  "parent": "thebetweenlands:item/aspect_vial_green",
+  "textures": {
+    "layer1": "thebetweenlands:items/strictly_herblore/misc/vial_orange"
+  },
+  "overrides": [
+    { "predicate": { "aspect": 1 }, "model": "thebetweenlands:item/aspect_azuwynn_orange" },
+    { "predicate": { "aspect": 2 }, "model": "thebetweenlands:item/aspect_armaniis_orange" },
+    { "predicate": { "aspect": 3 }, "model": "thebetweenlands:item/aspect_byariis_orange" },
+    { "predicate": { "aspect": 4 }, "model": "thebetweenlands:item/aspect_byrginaz_orange" },
+    { "predicate": { "aspect": 5 }, "model": "thebetweenlands:item/aspect_celawynn_orange" },
+    { "predicate": { "aspect": 6 }, "model": "thebetweenlands:item/aspect_dayuniis_orange" },
+    { "predicate": { "aspect": 7 }, "model": "thebetweenlands:item/aspect_fergalaz_orange" },
+    { "predicate": { "aspect": 8 }, "model": "thebetweenlands:item/aspect_firnalaz_orange" },
+    { "predicate": { "aspect": 9 }, "model": "thebetweenlands:item/aspect_freiwynn_orange" },
+    { "predicate": { "aspect": 10 }, "model": "thebetweenlands:item/aspect_geoliirgaz_orange" },
+    { "predicate": { "aspect": 11 }, "model": "thebetweenlands:item/aspect_ordaniis_orange" },
+    { "predicate": { "aspect": 12 }, "model": "thebetweenlands:item/aspect_yeowynn_orange" },
+    { "predicate": { "aspect": 13 }, "model": "thebetweenlands:item/aspect_yunugaz_orange" },
+    { "predicate": { "aspect": 14 }, "model": "thebetweenlands:item/aspect_yihinren_orange" }
+  ]
+}

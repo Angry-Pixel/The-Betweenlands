@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "thebetweenlands:sulfur_furnace", "y": 180 },
+        "facing=south": { "model": "thebetweenlands:sulfur_furnace" },
+        "facing=west":  { "model": "thebetweenlands:sulfur_furnace", "y": 90 },
+        "facing=east":  { "model": "thebetweenlands:sulfur_furnace", "y": 270 }
+    }
+}

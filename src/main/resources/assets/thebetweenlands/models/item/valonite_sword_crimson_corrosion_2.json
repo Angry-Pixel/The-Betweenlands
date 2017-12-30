@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/valonite_sword_crimson_corrodible",
+    "layer1": "thebetweenlands:items/valonite_sword_crimson_corrosion_2"
+  }
+}

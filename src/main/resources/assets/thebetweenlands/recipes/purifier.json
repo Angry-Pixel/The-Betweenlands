@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x x",
+    "xxx",
+    "ooo"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "o": {
+      "item": "thebetweenlands:octine_ingot"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:purifier"
+  }
+}

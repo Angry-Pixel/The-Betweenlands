@@ -1,0 +1,6 @@
+{
+	"parent": "block/cross",
+	"textures": {
+		"cross": "thebetweenlands:blocks/swamp_reed_top_frosty"
+	}
+}

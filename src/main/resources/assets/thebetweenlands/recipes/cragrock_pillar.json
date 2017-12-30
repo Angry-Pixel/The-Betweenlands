@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x",
+    "x"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:smooth_cragrock"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:cragrock_pillar",
+    "count": 2
+  }
+}

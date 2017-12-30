@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "variant=corrupt_betweenstone": {
+      "model": "thebetweenlands:corrupt_betweenstone"
+    }
+  }
+}

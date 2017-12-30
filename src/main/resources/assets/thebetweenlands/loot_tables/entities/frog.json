@@ -1,0 +1,81 @@
+{
+  "pools": [
+    {
+      "name": "frog",
+      "rolls": 1,
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:frog_legs_raw",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": {
+                "min": 1,
+                "max": 2
+              }
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 1
+              }
+            },
+            {
+              "function": "furnace_smelt",
+              "conditions": [
+                {
+                  "condition": "entity_properties",
+                  "entity": "this",
+                  "properties": {
+                    "on_fire": true
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "name": "poison_gland",
+      "rolls": 1,
+      "conditions": [
+        {
+          "condition": "entity_properties",
+          "entity": "this",
+          "properties": {
+            "thebetweenlands:frog_type": 4
+          }
+        }
+      ],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:items_misc",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 30
+            },
+            {
+              "function": "looting_enchant",
+              "count": {
+                "min": 0,
+                "max": 2
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

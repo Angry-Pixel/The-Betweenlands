@@ -1,0 +1,19 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"half=lower": {
+			"model": "thebetweenlands:internal/winter_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/broomsedge_bottom",
+				"model_active": "thebetweenlands:block/broomsedge_bottom_frosty"
+			}
+		},
+		"half=upper": {
+			"model": "thebetweenlands:internal/winter_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/broomsedge_top",
+				"model_active": "thebetweenlands:block/broomsedge_top_frosty"
+			}
+		}
+	}
+}

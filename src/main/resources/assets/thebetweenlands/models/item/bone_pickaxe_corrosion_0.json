@@ -1,0 +1,7 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/bone_pickaxe_corrodible",
+    "layer1": "thebetweenlands:items/bone_pickaxe_corrosion_0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SSS",
+    "x x"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "S": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:walkway",
+    "count": 2
+  }
+}

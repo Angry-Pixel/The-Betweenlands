@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "blind_cave_fish",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

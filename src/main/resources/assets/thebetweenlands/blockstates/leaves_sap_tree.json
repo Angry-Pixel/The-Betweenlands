@@ -1,0 +1,16 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"normal": {
+			"model": "thebetweenlands:internal/winter_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/internal/spook_event",
+				"model_base_data": {
+					"model_base": "thebetweenlands:block/leaves_sap_tree",
+					"model_active": "thebetweenlands:block/leaves_sap_tree_spook"				
+				},
+				"model_active": "thebetweenlands:block/leaves_sap_tree_frosty"
+			}
+		}
+	}
+}

@@ -1,0 +1,51 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "normal": [
+            { "model": "thebetweenlands:internal/bulb_capped_mushroom" },
+            { "model": "thebetweenlands:internal/bulb_capped_mushroom", "y": 90 },
+            { "model": "thebetweenlands:internal/bulb_capped_mushroom", "y": 180 },
+            { "model": "thebetweenlands:internal/bulb_capped_mushroom", "y": 270 }
+        ],
+        "inventory": { 
+            "model": "thebetweenlands:internal/bulb_capped_mushroom",
+            "transform": {
+                "gui": {
+                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
+                    "translation": [0, 0.2, 0],
+                    "scale":[0.75, 0.75, 0.75]
+                },
+                "ground": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.6, 0.6, 0.6]
+                },
+                "fixed": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.75, 0.75, 0.75]
+                },
+                "thirdperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.35, 0.15],
+                    "scale": [0.75, 0.75, 0.75]
+                },
+                "thirdperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.35, 0.15],
+                    "scale": [0.75, 0.75, 0.75]
+                },
+                "firstperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
+                    "translation": [0, 0.35, 0],
+                    "scale": [0.75, 0.75, 0.75]
+                },
+                "firstperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
+                    "translation": [0, 0.35, 0],
+                    "scale": [0.75, 0.75, 0.75]
+                }
+            }
+        }
+    }
+}

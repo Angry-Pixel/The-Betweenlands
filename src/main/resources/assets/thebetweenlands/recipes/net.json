@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SRR",
+    "SRR",
+    "S  "
+  ],
+  "key": {
+    "S": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "R": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:net"
+  }
+}

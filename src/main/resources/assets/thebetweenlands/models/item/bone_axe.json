@@ -1,0 +1,14 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "thebetweenlands:items/bone_axe_corrodible"
+  },
+  "overrides": [
+        { "predicate": { "corrosion": 0.0 }, "model": "thebetweenlands:item/bone_axe_corrosion_0" },
+        { "predicate": { "corrosion": 1.0 }, "model": "thebetweenlands:item/bone_axe_corrosion_1" },
+        { "predicate": { "corrosion": 2.0 }, "model": "thebetweenlands:item/bone_axe_corrosion_2" },
+        { "predicate": { "corrosion": 3.0 }, "model": "thebetweenlands:item/bone_axe_corrosion_3" },
+        { "predicate": { "corrosion": 4.0 }, "model": "thebetweenlands:item/bone_axe_corrosion_4" },
+        { "predicate": { "corrosion": 5.0 }, "model": "thebetweenlands:item/bone_axe_corrosion_5" }
+    ]
+}

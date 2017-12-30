@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:octine_ingot"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:octine_block"
+  }
+}

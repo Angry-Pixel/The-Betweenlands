@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "thebetweenlands:blocks/log_portal",
+    "up": "thebetweenlands:blocks/log_portal",
+    "down": "thebetweenlands:blocks/log_portal",
+    "north": "thebetweenlands:blocks/portal_side_right",
+    "east": "thebetweenlands:blocks/log_portal",
+    "south": "thebetweenlands:blocks/portal_side_left",
+    "west": "thebetweenlands:blocks/log_portal"
+  }
+}

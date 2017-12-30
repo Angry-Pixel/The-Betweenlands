@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:weedwood",
+        "data": 32767
+      },
+      {
+        "item": "thebetweenlands:log_weedwood",
+        "data": 32767
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_planks",
+    "count": 4
+  }
+}

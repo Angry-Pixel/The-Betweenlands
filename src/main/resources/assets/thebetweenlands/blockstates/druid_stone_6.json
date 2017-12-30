@@ -1,0 +1,12 @@
+{
+  "variants": {
+    "active=false,facing=north": { "model": "minecraft:stone" },
+    "active=false,facing=south": { "model": "minecraft:stone" },
+    "active=false,facing=west": { "model": "minecraft:stone" },
+    "active=false,facing=east": { "model": "minecraft:stone" },
+    "active=true,facing=north": { "model": "minecraft:stone" },
+    "active=true,facing=south": { "model": "minecraft:stone" },
+    "active=true,facing=west": { "model": "minecraft:stone" },
+    "active=true,facing=east": { "model": "minecraft:stone" }
+  }
+}

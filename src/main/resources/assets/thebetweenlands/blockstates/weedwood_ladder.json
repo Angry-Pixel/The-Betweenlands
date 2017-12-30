@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "texture": "thebetweenlands:blocks/weedwood_ladder",
+      "particle": "thebetweenlands:blocks/weedwood_ladder"
+    }
+  },
+  "variants": {
+    "facing=north": { "model": "ladder" },
+    "facing=east":  { "model": "ladder", "y": 90 },
+    "facing=south": { "model": "ladder", "y": 180 },
+    "facing=west":  { "model": "ladder", "y": 270 }
+  }
+}

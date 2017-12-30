@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "variant": {
+      "single": {
+        "model": "thebetweenlands:rope_single"
+      },
+      "top": {
+        "model": "thebetweenlands:rope_top"
+      },
+      "middle": {
+        "model": "thebetweenlands:rope_middle"
+      },
+      "bottom": {
+        "model": "thebetweenlands:rope_bottom"
+      }
+    }
+  }
+}

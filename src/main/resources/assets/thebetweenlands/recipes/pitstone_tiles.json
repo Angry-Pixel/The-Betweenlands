@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:smooth_pitstone"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:pitstone_tiles",
+    "count": 4
+  }
+}

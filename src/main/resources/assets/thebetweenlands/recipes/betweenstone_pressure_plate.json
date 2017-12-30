@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:smooth_betweenstone"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:betweenstone_pressure_plate"
+  }
+}

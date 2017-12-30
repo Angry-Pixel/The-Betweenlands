@@ -1,0 +1,200 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/model_combined"
+	},
+	"variants": {
+		"amount": {
+			"0": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 0,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"1": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 1,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"2": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 2,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"3": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 3,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"4": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 4,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"5": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 5,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"6": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 6,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"7": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 7,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"8": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 8,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"9": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 9,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"10": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 10,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"11": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 11,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"12": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 12,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"13": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 13,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"14": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 14,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/rubber_tap_pouring"
+				}
+			},
+			"15": {
+				"custom": {
+					"model_base": "thebetweenlands:block/internal/syrmorite_rubber_tap",
+					"model_base_data": {
+						"fluid_height": 15,
+						"fluid_texture": "thebetweenlands:fluids/rubber_still",
+						"particle_texture": "thebetweenlands:blocks/syrmorite_block"
+					},
+					"model_additional": "thebetweenlands:block/internal/blank"
+				}
+			}
+		},
+		"facing": {
+			"north": {
+				
+			},
+			"south": {
+				"y": 180
+			},
+			"east": {
+				"y": 90
+			},
+			"west": {
+				"y": 270
+			}
+		}
+	}
+}

@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "   ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:weedwood_plank_slab"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:item_shelf",
+    "count": 3
+  }
+}

@@ -1,0 +1,123 @@
+{
+    "pools": [
+        {
+            "name": "music_disc",
+            "rolls": 1,
+            "conditions": [],
+            "entries": [
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:astatos",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:between_you_and_me",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:christmas_on_the_marsh",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:the_explorer",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:hag_dance",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:lonely_fire",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:mysterious_record",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:ancient",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:beneath_a_green_sky",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:dj_wights_mixtape",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:onwards",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:stuck_in_the_mud",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:wandering_wisps",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:waterlogged",
+                    "functions": [],
+                    "weight": 1,
+                    "quality": 0
+                }
+            ]
+        }
+    ]
+}

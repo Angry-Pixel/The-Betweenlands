@@ -1,0 +1,7 @@
+{
+  "parent": "block/cube_column",
+  "textures": {
+    "side": "thebetweenlands:blocks/shelf_fungus_side_spook",
+    "end": "thebetweenlands:blocks/shelf_fungus_top_spook"
+  }
+}

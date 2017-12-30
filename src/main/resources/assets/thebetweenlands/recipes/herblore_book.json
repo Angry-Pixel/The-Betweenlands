@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "LLL",
+    "xxx",
+    "LLL"
+  ],
+  "key": {
+    "L": {
+      "item": "thebetweenlands:items_misc",
+      "data": 4
+    },
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 32
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:manual_hl"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " #X",
+    "# X",
+    " #X"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    },
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_bow"
+  }
+}

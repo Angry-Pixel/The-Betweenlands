@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:polished_dentrothyst",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:polished_dentrothyst_pane",
+    "data": 0,
+    "count": 16
+  }
+}

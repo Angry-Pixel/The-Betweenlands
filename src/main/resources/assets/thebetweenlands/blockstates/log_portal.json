@@ -1,0 +1,8 @@
+{
+	"variants": {
+			"axis=y":    { "model": "thebetweenlands:log_portal" },
+        	"axis=z":    { "model": "thebetweenlands:log_portal", "x": 90 },
+        	"axis=x":    { "model": "thebetweenlands:log_portal", "x": 90, "y": 90 },
+        	"axis=none": { "model": "thebetweenlands:log_portal_bark" }
+	}
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "XIX",
+    "XXX",
+    " X "
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:dentrothyst",
+      "data": 1
+    },
+    "I": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:dentrothyst_shield_orange"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "mire_snail_egg",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+package thebetweenlands.common.registries;
+
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityInject;
+import thebetweenlands.api.capability.ICircleGemCapability;
+import thebetweenlands.api.capability.ICustomStepSoundCapability;
+import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.api.capability.IEntityCircleGemCapability;
+import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.capability.IFlightCapability;
+import thebetweenlands.api.capability.IFoodSicknessCapability;
+import thebetweenlands.api.capability.IPortalCapability;
+import thebetweenlands.api.capability.IPuppetCapability;
+import thebetweenlands.api.capability.IPuppeteerCapability;
+import thebetweenlands.api.capability.ISummoningCapability;
+import thebetweenlands.common.capability.CustomStepSoundCapability;
+import thebetweenlands.common.capability.base.EntityCapabilityHandler;
+import thebetweenlands.common.capability.circlegem.CircleGemEntityCapability;
+import thebetweenlands.common.capability.decay.DecayEntityCapability;
+import thebetweenlands.common.capability.equipment.EquipmentEntityCapability;
+import thebetweenlands.common.capability.flight.FlightEntityCapability;
+import thebetweenlands.common.capability.foodsickness.FoodSicknessEntityCapability;
+import thebetweenlands.common.capability.portal.PortalEntityCapability;
+import thebetweenlands.common.capability.recruitment.EntityPuppetCapability;
+import thebetweenlands.common.capability.recruitment.EntityPuppeteerCapability;
+import thebetweenlands.common.capability.summoning.EntitySummoningCapability;
+
+public class CapabilityRegistry {
+	private CapabilityRegistry() { }
+
+	@CapabilityInject(IDecayCapability.class)
+	public static final Capability<IDecayCapability> CAPABILITY_DECAY = null;
+
+	@CapabilityInject(IEntityCircleGemCapability.class)
+	public static final Capability<ICircleGemCapability> CAPABILITY_ENTITY_CIRCLE_GEM = null;
+
+	@CapabilityInject(IEquipmentCapability.class)
+	public static final Capability<IEquipmentCapability> CAPABILITY_EQUIPMENT = null;
+
+	@CapabilityInject(IFlightCapability.class)
+	public static final Capability<IFlightCapability> CAPABILITY_FLIGHT = null;
+
+	@CapabilityInject(IPuppetCapability.class)
+	public static final Capability<IPuppetCapability> CAPABILITY_PUPPET = null;
+
+	@CapabilityInject(IPuppeteerCapability.class)
+	public static final Capability<IPuppeteerCapability> CAPABILITY_PUPPETEER = null;
+
+	@CapabilityInject(ISummoningCapability.class)
+	public static final Capability<ISummoningCapability> CAPABILITY_SUMMON = null;
+
+	@CapabilityInject(IPortalCapability.class)
+	public static final Capability<IPortalCapability> CAPABILITY_PORTAL = null;
+
+	@CapabilityInject(IFoodSicknessCapability.class)
+	public static final Capability<IFoodSicknessCapability> CAPABILITY_FOOD_SICKNESS = null;
+
+	@CapabilityInject(ICustomStepSoundCapability.class)
+	public static final Capability<ICustomStepSoundCapability> CAPABILITY_CUSTOM_STEP_SOUND = null;
+	
+	public static void preInit() {
+		EntityCapabilityHandler.registerEntityCapability(new DecayEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new CircleGemEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new EquipmentEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new FlightEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new EntityPuppetCapability());
+		EntityCapabilityHandler.registerEntityCapability(new EntityPuppeteerCapability());
+		EntityCapabilityHandler.registerEntityCapability(new EntitySummoningCapability());
+		EntityCapabilityHandler.registerEntityCapability(new PortalEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new FoodSicknessEntityCapability());
+		EntityCapabilityHandler.registerEntityCapability(new CustomStepSoundCapability());
+		
+		EntityCapabilityHandler.registerCapabilities();
+		//ItemCapabilityHandler.registerCapabilities();
+	}
+}

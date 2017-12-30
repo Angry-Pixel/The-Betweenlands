@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:silt_glass"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:silt_glass_pane",
+    "count": 16
+  }
+}

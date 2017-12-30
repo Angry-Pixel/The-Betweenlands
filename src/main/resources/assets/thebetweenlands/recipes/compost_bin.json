@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "bxb",
+    "x x",
+    "x x"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:weedwood_planks"
+    },
+    "b": {
+      "item": "thebetweenlands:items_misc",
+      "data": 11
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:compost_bin"
+  }
+}

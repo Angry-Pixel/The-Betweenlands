@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:cragrock",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:cragrock_slab",
+    "count": 6
+  }
+}

@@ -1,0 +1,12 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"normal": {
+			"model": "thebetweenlands:internal/winter_event",
+			"custom": {
+				"model_base": "thebetweenlands:block/nettle_flowered",
+				"model_active": "thebetweenlands:block/nettle_flowered_frosty"
+			}
+		}
+	}
+}

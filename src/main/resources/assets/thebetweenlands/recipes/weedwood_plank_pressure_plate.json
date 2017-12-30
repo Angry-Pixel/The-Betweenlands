@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_plank_pressure_plate"
+  }
+}

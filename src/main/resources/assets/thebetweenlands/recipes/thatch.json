@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xx",
+    "xx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 6
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:thatch",
+    "count": 4
+  }
+}

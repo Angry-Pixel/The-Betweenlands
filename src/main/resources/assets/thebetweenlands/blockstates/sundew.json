@@ -1,0 +1,57 @@
+{
+    "forge_marker": 1,
+    "variants": {
+        "half=lower": [
+            { "model": "thebetweenlands:internal/sundew" },
+            { "model": "thebetweenlands:internal/sundew", "y": 90 },
+            { "model": "thebetweenlands:internal/sundew", "y": 180 },
+            { "model": "thebetweenlands:internal/sundew", "y": 270 }
+        ],
+        "half=upper": { 
+            "model": "thebetweenlands:internal/blank",
+            "custom": { 
+                "particle_texture": "thebetweenlands:blocks/sundew" 
+            } 
+        },
+        "inventory": { 
+            "model": "thebetweenlands:internal/sundew",
+            "transform": {
+                "gui": {
+                    "rotation": [{"x": 30}, {"y": 225}, {"z": 0}],
+                    "translation": [0, -0.15, 0],
+                    "scale":[0.425, 0.425, 0.425]
+                },
+                "ground": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, -0.15, 0],
+                    "scale":[0.2, 0.2, 0.2]
+                },
+                "fixed": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale":[0.5, 0.5, 0.5]
+                },
+                "thirdperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.15, 0.15],
+                    "scale": [0.375, 0.375, 0.375]
+                },
+                "thirdperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": 0}, {"z": 0}],
+                    "translation": [0, 0.15, 0.15],
+                    "scale": [0.375, 0.375, 0.375]
+                },
+                "firstperson_righthand": {
+                    "rotation": [{"x": 0}, {"y": 45}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale": [0.34, 0.34, 0.34]
+                },
+                "firstperson_lefthand": {
+                    "rotation": [{"x": 0}, {"y": -315}, {"z": 0}],
+                    "translation": [0, 0, 0],
+                    "scale": [0.34, 0.34, 0.34]
+                }
+            }
+        }
+    }
+}

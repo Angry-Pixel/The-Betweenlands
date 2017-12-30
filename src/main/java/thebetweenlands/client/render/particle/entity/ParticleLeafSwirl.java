@@ -1,0 +1,71 @@
+package thebetweenlands.client.render.particle.entity;
+
+import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
+import thebetweenlands.client.handler.TextureStitchHandler.Frame;
+import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
+import thebetweenlands.client.render.sprite.TextureAnimation;
+
+public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteReceiver {
+	protected TextureAnimation animation;
+	protected Entity target;
+
+	public ParticleLeafSwirl(World world, double x, double y, double z, int maxAge, float scale, float progress, Entity target) {
+		super(world, x, y, z, maxAge, scale, progress);
+
+		this.animation = new TextureAnimation().setRandomStart(this.rand);
+
+		this.target = target;
+
+		this.setOffset(0, -1.6D, 0);
+		this.setTargetMotion(this.target.motionX, this.target.motionY, this.target.motionZ);
+		this.setTarget(this.target.posX, this.target.posY + this.target.getEyeHeight() / 2.0D, this.target.posZ);
+	}
+
+	@Override
+	public void onUpdate() {
+		super.onUpdate();
+
+		if(!this.target.isEntityAlive()) {
+			this.setExpired();
+		}
+
+		this.setTargetMotion(this.target.motionX, this.target.motionY, this.target.motionZ);
+		this.setTarget(this.target.posX, this.target.posY + this.target.getEyeHeight() / 2.0D, this.target.posZ);
+
+		this.animation.update();
+		this.setParticleTexture(this.animation.getCurrentSprite());
+	}
+
+	@Override
+	public int getFXLayer() {
+		return 1;
+	}
+
+	@Override
+	public void setStitchedSprites(Frame[][] frames) {
+		this.animation.setFrames(frames[0]);
+		if(this.particleTexture == null) {
+			this.setParticleTexture(frames[0][0].getSprite());
+		}
+	}
+
+	public static final class Factory extends ParticleFactory<Factory, ParticleLeafSwirl> {
+		public Factory() {
+			super(ParticleLeafSwirl.class, ParticleTextureStitcher.create(ParticleLeafSwirl.class, new ResourceLocation("thebetweenlands:particle/leaf")).setSplitAnimations(true));
+		}
+
+		@Override
+		public ParticleLeafSwirl createParticle(ImmutableParticleArgs args) {
+			return new ParticleLeafSwirl(args.world, args.x, args.y, args.z, args.data.getInt(0), args.scale, args.data.getFloat(1), args.data.getObject(Entity.class, 2));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(400, 0.0F, null);
+		}
+	}
+}

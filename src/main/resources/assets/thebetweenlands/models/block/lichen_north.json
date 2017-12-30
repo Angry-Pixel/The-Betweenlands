@@ -1,0 +1,7 @@
+{
+    "parent": "thebetweenlands:block/moss_north",
+    "textures": {
+        "particle": "thebetweenlands:blocks/lichen",
+        "moss": "thebetweenlands:blocks/lichen"
+    }
+}

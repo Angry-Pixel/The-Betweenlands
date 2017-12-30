@@ -1,0 +1,30 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "thebetweenlands:internal/winter_event",
+		"custom": {
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/sludgy_dirt",
+				"model_active": "thebetweenlands:block/sludgy_dirt_spook"
+			},
+			"model_active": "thebetweenlands:block/sludgy_dirt_frosty"
+		}
+	},
+	"variants": {
+		"normal": [
+			{
+				
+			},
+			{
+				"y": 90
+			},
+			{
+				"y": 180
+			},
+			{
+				"y": 270
+			}
+		]
+	}
+}

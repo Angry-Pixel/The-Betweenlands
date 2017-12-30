@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    "xxx",
+    "X X"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 7
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_ladder",
+    "count": 3
+  }
+}

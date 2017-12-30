@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:weedwood_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:weedwood_plank_stairs",
+    "count": 4
+  }
+}

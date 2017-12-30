@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:mossy_betweenstone_bricks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mossy_betweenstone_brick_stairs",
+    "count": 4
+  }
+}

@@ -1,0 +1,23 @@
+{
+    "ambientocclusion": true,
+    "textures": {
+        "particle": "thebetweenlands:blocks/log_rubber_stump",
+        "bark": "thebetweenlands:blocks/log_rubber_stump",
+        "top": "thebetweenlands:blocks/log_rubber_top"
+    },
+    "elements": [
+        {   
+            "from": [ 4, 12, 4 ],
+            "to": [ 12, 16, 12 ],
+            "shade": false,
+            "faces": {
+                "up": { "uv": [ 4, 4, 12, 12 ], "texture": "#top" },
+                "down": { "uv": [ 4, 4, 12, 12 ], "texture": "#top" },
+                "east": { "uv": [ 4, 12, 12, 16 ], "texture": "#bark" },
+                "west": { "uv": [ 4, 12, 12, 16 ], "texture": "#bark" },
+                "north": { "uv": [ 4, 12, 12, 16 ], "texture": "#bark" },
+                "south": { "uv": [ 4, 12, 12, 16 ], "texture": "#bark" }
+            }
+        }
+    ]
+}

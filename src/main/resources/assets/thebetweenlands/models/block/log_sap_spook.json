@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "thebetweenlands:blocks/log_sap_spook",
+		"end": "thebetweenlands:blocks/log_sap_top_spook"
+	}
+}

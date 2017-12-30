@@ -1,0 +1,146 @@
+{
+	"pools": [
+		{
+			"name": "peat_mummy",
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_boss_mummy": "false"
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 8
+				},
+				{
+					"type": "item",
+					"entryName": "shimmer_stone_single",
+					"name": "thebetweenlands:shimmer_stone",
+					"functions": [],
+					"weight": 6
+				},
+				{
+					"type": "item",
+					"entryName": "shimmer_stone_multi",
+					"name": "thebetweenlands:shimmer_stone",
+					"functions": [
+						{
+							"function": "set_count",
+							"count": {
+								"min": 2,
+								"max": 5
+							}
+						}
+					],
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "carried_shimmerstone",
+			"rolls": 1,
+			"conditions": [
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:has_shimmerstone": "true"
+					}
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_boss_mummy": "false"
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "empty",
+					"name": "nothing",
+					"functions": [],
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:shimmer_stone",
+					"functions": [],
+					"weight": 9
+				}
+			]
+		},
+		{
+			"name": "spook_candy",
+			"rolls": 3,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:spook",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_blue",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_red",
+					"weight": 1
+				},
+				{
+					"type": "item",
+					"name": "thebetweenlands:candy_yellow",
+					"weight": 1
+				}
+			]
+		},
+		{
+			"name": "winter_mince_pie",
+			"rolls": 3,
+			"conditions": [
+				{
+					"condition": "killed_by_player"
+				},
+				{
+					"condition": "entity_properties",
+					"entity": "this",
+					"properties": {
+						"thebetweenlands:is_event_active": {
+							"event": "thebetweenlands:winter",
+							"active": "true"
+						}
+					}
+				}
+			],
+			"entries": [
+				{
+					"type": "item",
+					"name": "thebetweenlands:mince_pie",
+					"weight": 1
+				}
+			]
+		}
+	]
+}

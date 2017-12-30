@@ -1,0 +1,26 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:base_pillar",
+    "textures": {
+      "side": "thebetweenlands:blocks/betweenstone_pillar",
+      "end": "thebetweenlands:blocks/betweenstone_pillar_top"
+    }
+  },
+  "variants": {
+    "axis": {
+      "none": { },
+      "y": { },
+      "z": {
+        "x": 90
+      },
+      "x": {
+        "y": 90,
+        "x": 90
+      }
+    },
+    "inventory": {
+      "model": "thebetweenlands:base_pillar"
+    }
+  }
+}

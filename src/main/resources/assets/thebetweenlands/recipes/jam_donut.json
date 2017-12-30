@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:reed_donut"
+    },
+    {
+      "item": "thebetweenlands:middle_fruit"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:jam_donut"
+  }
+}

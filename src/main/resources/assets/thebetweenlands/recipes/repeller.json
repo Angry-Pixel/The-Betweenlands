@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "wv",
+    "w ",
+    "c "
+  ],
+  "key": {
+    "w": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "v": {
+      "item": "thebetweenlands:dentrothyst_vial",
+      "data": 0
+    },
+    "c": {
+      "item": "thebetweenlands:cragrock",
+      "data": 0
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:repeller"
+  }
+}

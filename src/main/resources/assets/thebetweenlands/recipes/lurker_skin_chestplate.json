@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "X X",
+    "XXX",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "thebetweenlands:items_misc",
+      "data": 4
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:lurker_skin_chestplate"
+  }
+}

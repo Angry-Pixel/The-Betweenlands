@@ -1,0 +1,271 @@
+{
+  "pools": [
+    {
+      "name": "dark_druid",
+      "rolls": {
+        "min": 0,
+        "max": 1
+      },
+      "conditions": [],
+      "entries": [
+        {
+          "type": "item",
+          "name": "thebetweenlands:swamp_talisman",
+          "entryName": "talisman_piece_1",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 1
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 1
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:swamp_talisman",
+          "entryName": "talisman_piece_2",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 2
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 2
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:swamp_talisman",
+          "entryName": "talisman_piece_3",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 3
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 3
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:swamp_talisman",
+          "entryName": "talisman_piece_4",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": 4
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "thebetweenlands:or",
+              "conditions": [
+                {
+                  "condition": "killed_by_player",
+                  "inverse": true
+                },
+                {
+                  "condition": "entity_properties",
+                  "entity": "killer",
+                  "properties": {
+                    "thebetweenlands:has_item": {
+                      "has_item": false,
+                      "item": {
+                        "id": "thebetweenlands:swamp_talisman",
+                        "meta": 4
+                      },
+                      "combine_stacks": true,
+                      "inventories": ["held", "main"],
+                      "size_operator": ">="
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          "weight": 1
+        },
+        {
+          "type": "item",
+          "name": "thebetweenlands:swamp_talisman",
+          "entryName": "talisman_piece_random",
+          "functions": [
+            {
+              "function": "set_count",
+              "count": 1
+            },
+            {
+              "function": "set_data",
+              "data": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          ],
+          "conditions": [
+            {
+              "condition": "entity_properties",
+              "entity": "killer",
+              "properties": {
+                "thebetweenlands:has_item": {
+                  "has_item": true,
+                  "item": {
+                    "id": "thebetweenlands:swamp_talisman",
+                    "meta": 1
+                  },
+                  "combine_stacks": true,
+                  "inventories": ["held", "main"],
+                  "size_operator": ">="
+                }
+              }
+            },
+            {
+              "condition": "entity_properties",
+              "entity": "killer",
+              "properties": {
+                "thebetweenlands:has_item": {
+                  "has_item": true,
+                  "item": {
+                    "id": "thebetweenlands:swamp_talisman",
+                    "meta": 2
+                  },
+                  "combine_stacks": true,
+                  "inventories": ["held", "main"],
+                  "size_operator": ">="
+                }
+              }
+            },
+            {
+              "condition": "entity_properties",
+              "entity": "killer",
+              "properties": {
+                "thebetweenlands:has_item": {
+                  "has_item": true,
+                  "item": {
+                    "id": "thebetweenlands:swamp_talisman",
+                    "meta": 3
+                  },
+                  "combine_stacks": true,
+                  "inventories": ["held", "main"],
+                  "size_operator": ">="
+                }
+              }
+            },
+            {
+              "condition": "entity_properties",
+              "entity": "killer",
+              "properties": {
+                "thebetweenlands:has_item": {
+                  "has_item": true,
+                  "item": {
+                    "id": "thebetweenlands:swamp_talisman",
+                    "meta": 4
+                  },
+                  "combine_stacks": true,
+                  "inventories": ["held", "main"],
+                  "size_operator": ">="
+                }
+              }
+            }
+          ],
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

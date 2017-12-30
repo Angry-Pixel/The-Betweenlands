@@ -1,0 +1,14 @@
+[{
+    "modid": "thebetweenlands",
+	"name": "The Betweenlands",
+	"description": "Introducing The Betweenlands... a dark and hostile environment. This large and expansive mod adds a whole new dimension to the game.",
+	"version": "${version}",
+	"mcversion": "${mcversion}",
+	"url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/mods-discussion/1441135",
+	"updateUrl": "",
+	"authorList": [ "Angry Pixel" ],
+	"credits": "Angry Pixel",
+	"logoFile": "assets/thebetweenlands/logo.png",
+	"screenshots": [],
+	"dependencies": []
+}]
