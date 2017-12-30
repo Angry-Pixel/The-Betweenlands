@@ -3,6 +3,7 @@ package thebetweenlands.common.recipe.misc;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.item.ItemStack;
@@ -68,8 +69,7 @@ public class AnimatorRecipe implements IAnimatorRecipe {
 	public Entity getRenderEntity(ItemStack stack) {
 		if(this.renderEntity != null && this.renderEntity.toString().length() > 0) {
 			if(this.renderEntityInstance == null) {
-				Entity entity = EntityList.createEntityByIDFromName(this.renderEntity, (World)null);
-				this.renderEntityInstance = entity;
+				this.renderEntityInstance = EntityList.createEntityByIDFromName(this.renderEntity, Minecraft.getMinecraft().world);
 			}
 			return this.renderEntityInstance;
 		}

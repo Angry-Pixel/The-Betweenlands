@@ -21,7 +21,7 @@ public class AnimatorRecipeMaker {
         return recipes;
     }
 
-    @Nonnull
+    /*@Nonnull
     public static List<AnimatorRecipeJEI> getRecipesRuntime(World world) {
         ArrayList<AnimatorRecipeJEI> recipes = new ArrayList<AnimatorRecipeJEI>();
         for (IAnimatorRecipe recipe : AnimatorRecipe.getRecipes()) {
@@ -30,5 +30,5 @@ public class AnimatorRecipeMaker {
                     recipes.add(new AnimatorRecipeJEI((AnimatorRecipe) recipe, world));
         }
         return recipes;
-    }
+    }*/
 }

@@ -10,6 +10,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.EntityEntry;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import thebetweenlands.api.recipes.IAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
@@ -36,7 +38,15 @@ public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
 		AnimatorRecipe recipe;
 
 		if(outputEntity.isPresent()) {
-			recipe = new AnimatorRecipe(input, fuel, life, output) {
+			Class<? extends Entity> clazz = null;
+			if (renderedEntity.isPresent()) {
+				EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(renderedEntity.get().create()));
+				if (entry != null)
+					clazz = entry.getEntityClass();
+				else
+					this.throwException("The render entity doesn't exist");
+			}
+			recipe = new AnimatorRecipe(input, fuel, life, output, clazz) {
 				@Override
 				public boolean onRetrieved(World world, BlockPos pos, ItemStack stack) {
 					TileEntity te = world.getTileEntity(pos);
@@ -53,7 +63,7 @@ public class CustomAnimatorRecipes extends CustomRecipes<IAnimatorRecipe> {
 					}
 					return true;
 				}
-			}.setCloseOnFinish(true);
+			};
 			if(renderedEntity.isPresent()) {
 				recipe.setRenderEntity(new ResourceLocation(renderedEntity.get().create()));
 			}
