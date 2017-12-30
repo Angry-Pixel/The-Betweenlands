@@ -451,7 +451,7 @@ item.thebetweenlands.middle_fruit.name=White Pear
 item.thebetweenlands.middle_fruit_jello.name=White Pear Jello
 item.thebetweenlands.milkweed_item.name=Milkweed Flower
 item.thebetweenlands.mince_pie.name=Mince Pie
-item.thebetweenlands.mire_coral_item.name=Mira Coral
+item.thebetweenlands.mire_coral_item.name=Mire Coral
 item.thebetweenlands.mire_snail_shell.name=Ochre Snail Shell
 item.thebetweenlands.moss_item.name=Moss
 item.thebetweenlands.mud_brick.name=Mud Brick
@@ -624,6 +624,7 @@ item.thebetweenlands.christmas_pudding.name=Christmas Pudding
 item.thebetweenlands.candy_cane.name=Candy Cane
 item.thebetweenlands.manual_hl.name=Herblore Book
 item.thebetweenlands.mire_snail_egg.name=Mire Snail Egg
+item.thebetweenlands.mire_snail_egg_cooked.name=Cooked Mire Snail Egg
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial

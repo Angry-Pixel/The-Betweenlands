@@ -202,6 +202,7 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.LIMESTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_LIMESTONE_BRICKS), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_RUBBER), EnumItemMisc.RUBBER_BALL.create(1), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SYRMORITE_BUCKET_RUBBER), new ItemStack(ItemRegistry.SYRMORITE_BUCKET_SOLID_RUBBER), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.MIRE_SNAIL_EGG), new ItemStack(ItemRegistry.MIRE_SNAIL_EGG_COOKED), 0.4F);
 	}
 
 	private static void registerDruidAltarRecipes() {

@@ -16,7 +16,7 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class ItemMireSnailEgg extends ItemBLFood {
 	public ItemMireSnailEgg() {
-		super(2, 1, false);
+		super(2, 0.2f, false);
 		this.maxStackSize = 1;
 	}
 
