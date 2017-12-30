@@ -18,7 +18,7 @@ import com.google.common.collect.Multimap;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning"};
+	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning", "Debug"};
 
 	//////// Values ///////
 	public static int dimensionId;
@@ -43,6 +43,8 @@ public class ConfigHandler {
 	
 	public static boolean cavingRopeIndicator;
 
+	public static boolean fullbrightBlocks;
+	
 	public Configuration config;
 	public static String path = "";
 
@@ -55,17 +57,18 @@ public class ConfigHandler {
 
 	private void syncConfigs() {
 		dimensionId = config.get(CATEGORIES[0], "The Betweenlands Dimension ID", 20).getInt(20);
-		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles. Higher numbers de-crease rate.", 80).getInt(80);
+		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles", 80, "Higher numbers decrease rate").getInt(80);
 		dimensionBrightness = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
 		enableSeasonalEvents = config.getBoolean("Enable Seasonal Events", CATEGORIES[0], true, "If true seasonal events will occur during special periods during a year");
 
 		wispQuality = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 50).setMinValue(0).setMaxValue(100).getInt(100);
-		useShader = config.getBoolean("Use shaders for rendering (this forces FBOs to be enabled)", CATEGORIES[1], true, "");
-		skyResolution = config.get(CATEGORIES[1], "Sky texture resolution (only when shaders are enabled)", 1024).getInt(1024);
-
+		useShader = config.getBoolean("Use shaders for rendering", CATEGORIES[1], true, "Some features in the Betweenlands use shaders for special effects. If you don't have a dedicated graphics card or want to use other mods with shaders you should set this to false. May have an impact on performance depending on your computer. Forces FBOs to be enabled");
+		skyResolution = config.get(CATEGORIES[1], "Sky texture resolution", 1024, "Only works when shaders are enabled. Determines the resolution of the shader sky texture. Bigger resolutions may have a bad impact on performance").getInt(1024);
+		fullbrightBlocks = config.getBoolean("Full brightness blocks", CATEGORIES[1], true, "Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false");
+		
 		// Replaced with false by gradle for release version
-		debug = config.getBoolean("Debug mode", CATEGORIES[2], /*!*/true/*!*/, "");
-		debugModelLoader = config.getBoolean("Model loader debug", CATEGORIES[2], false, "");
+		debug = config.getBoolean("Debug mode", CATEGORIES[4], /*!*/true/*!*/, "If ture, enables debug mode with additional features for testing or development");
+		debugModelLoader = config.getBoolean("Model loader debug", CATEGORIES[4], false, "If true, enables the model loader debug logger");
 
 		blMainMenu = config.getBoolean("Betweenlands Main Menu", CATEGORIES[2], true, "If true, the main menu will be replaced by the Betweenlands main menu");
 		rowboatView = config.getBoolean("Rowboat view", CATEGORIES[2], true, "If true, the camera perspective will be switch to rowboat when you enter a rowboat, otherwise first-person");
@@ -74,8 +77,8 @@ public class ConfigHandler {
 		parseFoodWhitelist(rottenFoodWhitelistUnparsed);
 		cavingRopeIndicator = config.getBoolean("Caving Rope Indicator", CATEGORIES[2], true, "Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left");
 		
-		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases per player)").setMinValue(0).getInt(100);
-		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities per world").setMinValue(0).getInt(600);
+		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases this means per player)").setMinValue(0).getInt(100);
+		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities in the Betweenlands per world").setMinValue(0).getInt(600);
 		
 		save();
 	}

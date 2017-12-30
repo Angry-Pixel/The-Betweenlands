@@ -26,6 +26,7 @@ import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeC
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class ModelLifeCrystalStalactite implements IModel {
 	public static final ResourceLocation TEXTURE_DEFAULT = new ResourceLocation(ModInfo.ID, "blocks/pitstone");
@@ -146,7 +147,7 @@ public class ModelLifeCrystalStalactite implements IModel {
 								builder.setSprite(this.textureOre);
 						}
 
-						if(i == 1) {
+						if(i == 1 && ConfigHandler.fullbrightBlocks) {
 							builder.setLightmap(15, 15);
 						}
 						
