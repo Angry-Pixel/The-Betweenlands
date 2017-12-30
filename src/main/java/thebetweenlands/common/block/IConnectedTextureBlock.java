@@ -1,5 +1,8 @@
 package thebetweenlands.common.block;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.Predicate;
 
 import net.minecraft.block.properties.IProperty;
@@ -147,39 +150,55 @@ public interface IConnectedTextureBlock {
 	 * @return
 	 */
 	public default ExtendedBlockState getConnectedTextureBlockStateContainer(ExtendedBlockState container) {
-		return BlockStateContainerHelper.extendBlockstateContainer(container, new IProperty[0], new IUnlistedProperty[]{
-				TOP_NORTH_WEST_INDEX,
-				TOP_NORTH_EAST_INDEX,
-				TOP_SOUTH_WEST_INDEX,
-				TOP_SOUTH_EAST_INDEX,
-
-				BOTTOM_NORTH_WEST_INDEX,
-				BOTTOM_NORTH_EAST_INDEX,
-				BOTTOM_SOUTH_WEST_INDEX,
-				BOTTOM_SOUTH_EAST_INDEX,
-
-				NORTH_UP_WEST_INDEX,
-				NORTH_UP_EAST_INDEX,
-				NORTH_DOWN_WEST_INDEX,
-				NORTH_DOWN_EAST_INDEX,
-
-				SOUTH_UP_WEST_INDEX,
-				SOUTH_UP_EAST_INDEX,
-				SOUTH_DOWN_WEST_INDEX,
-				SOUTH_DOWN_EAST_INDEX,
-
-				WEST_UP_SOUTH_INDEX,
-				WEST_UP_NORTH_INDEX,
-				WEST_DOWN_SOUTH_INDEX,
-				WEST_DOWN_NORTH_INDEX,
-
-				EAST_UP_SOUTH_INDEX,
-				EAST_UP_NORTH_INDEX,
-				EAST_DOWN_SOUTH_INDEX,
-				EAST_DOWN_NORTH_INDEX
-		});
+		List<IUnlistedProperty> props = new ArrayList<>();
+		if(this.isFaceConnectedTexture(EnumFacing.UP)) {
+			props.add(TOP_NORTH_WEST_INDEX);
+			props.add(TOP_NORTH_EAST_INDEX);
+			props.add(TOP_SOUTH_WEST_INDEX);
+			props.add(TOP_SOUTH_EAST_INDEX);
+		}
+		if(this.isFaceConnectedTexture(EnumFacing.DOWN)) {
+			props.add(BOTTOM_NORTH_WEST_INDEX);
+			props.add(BOTTOM_NORTH_EAST_INDEX);
+			props.add(BOTTOM_SOUTH_WEST_INDEX);
+			props.add(BOTTOM_SOUTH_EAST_INDEX);
+		}
+		if(this.isFaceConnectedTexture(EnumFacing.NORTH)) {
+			props.add(NORTH_UP_WEST_INDEX);
+			props.add(NORTH_UP_EAST_INDEX);
+			props.add(NORTH_DOWN_WEST_INDEX);
+			props.add(NORTH_DOWN_EAST_INDEX);
+		}
+		if(this.isFaceConnectedTexture(EnumFacing.SOUTH)) {
+			props.add(SOUTH_UP_WEST_INDEX);
+			props.add(SOUTH_UP_EAST_INDEX);
+			props.add(SOUTH_DOWN_WEST_INDEX);
+			props.add(SOUTH_DOWN_EAST_INDEX);
+		}
+		if(this.isFaceConnectedTexture(EnumFacing.WEST)) {
+			props.add(WEST_UP_SOUTH_INDEX);
+			props.add(WEST_UP_NORTH_INDEX);
+			props.add(WEST_DOWN_SOUTH_INDEX);
+			props.add(WEST_DOWN_NORTH_INDEX);
+		}
+		if(this.isFaceConnectedTexture(EnumFacing.EAST)) {
+			props.add(EAST_UP_SOUTH_INDEX);
+			props.add(EAST_UP_NORTH_INDEX);
+			props.add(EAST_DOWN_SOUTH_INDEX);
+			props.add(EAST_DOWN_NORTH_INDEX);
+		}
+		return BlockStateContainerHelper.extendBlockstateContainer(container, new IProperty[0], props.toArray(new IUnlistedProperty[0]));
 	}
 
+	/**
+	 * Returns whether the specified face has a connected texture
+	 * @param face
+	 * @return
+	 */
+	public default boolean isFaceConnectedTexture(EnumFacing face) {
+		return true;
+	}
+	
 	/**
 	 * Updates and sets the state of the connected texture properties
 	 * @param state
@@ -222,41 +241,53 @@ public interface IConnectedTextureBlock {
 	 * @return
 	 */
 	public default IBlockState getExtendedConnectedTextureState(IExtendedBlockState state, IBlockAccess world, BlockPos pos, IConnectionState connectionState) {
-		int[] quadrantIndicesUp = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.UP, connectionState), false);
-		state = state.withProperty(TOP_NORTH_WEST_INDEX, quadrantIndicesUp[0]);
-		state = state.withProperty(TOP_NORTH_EAST_INDEX, quadrantIndicesUp[1]);
-		state = state.withProperty(TOP_SOUTH_WEST_INDEX, quadrantIndicesUp[2]);
-		state = state.withProperty(TOP_SOUTH_EAST_INDEX, quadrantIndicesUp[3]);
+		if(this.isFaceConnectedTexture(EnumFacing.UP)) {
+			int[] quadrantIndicesUp = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.UP, connectionState), false);
+			state = state.withProperty(TOP_NORTH_WEST_INDEX, quadrantIndicesUp[0]);
+			state = state.withProperty(TOP_NORTH_EAST_INDEX, quadrantIndicesUp[1]);
+			state = state.withProperty(TOP_SOUTH_WEST_INDEX, quadrantIndicesUp[2]);
+			state = state.withProperty(TOP_SOUTH_EAST_INDEX, quadrantIndicesUp[3]);
+		}
 
-		int[] quadrantIndicesDown = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.DOWN, connectionState), true);
-		state = state.withProperty(BOTTOM_NORTH_EAST_INDEX, quadrantIndicesDown[0]);
-		state = state.withProperty(BOTTOM_NORTH_WEST_INDEX, quadrantIndicesDown[1]);
-		state = state.withProperty(BOTTOM_SOUTH_EAST_INDEX, quadrantIndicesDown[2]);
-		state = state.withProperty(BOTTOM_SOUTH_WEST_INDEX, quadrantIndicesDown[3]);
+		if(this.isFaceConnectedTexture(EnumFacing.DOWN)) {
+			int[] quadrantIndicesDown = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.DOWN, connectionState), true);
+			state = state.withProperty(BOTTOM_NORTH_EAST_INDEX, quadrantIndicesDown[0]);
+			state = state.withProperty(BOTTOM_NORTH_WEST_INDEX, quadrantIndicesDown[1]);
+			state = state.withProperty(BOTTOM_SOUTH_EAST_INDEX, quadrantIndicesDown[2]);
+			state = state.withProperty(BOTTOM_SOUTH_WEST_INDEX, quadrantIndicesDown[3]);
+		}
 
-		int[] quadrantIndicesNorth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.NORTH, connectionState), false);
-		state = state.withProperty(NORTH_UP_WEST_INDEX, quadrantIndicesNorth[0]);
-		state = state.withProperty(NORTH_UP_EAST_INDEX, quadrantIndicesNorth[1]);
-		state = state.withProperty(NORTH_DOWN_WEST_INDEX, quadrantIndicesNorth[2]);
-		state = state.withProperty(NORTH_DOWN_EAST_INDEX, quadrantIndicesNorth[3]);
+		if(this.isFaceConnectedTexture(EnumFacing.NORTH)) {
+			int[] quadrantIndicesNorth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.NORTH, connectionState), false);
+			state = state.withProperty(NORTH_UP_WEST_INDEX, quadrantIndicesNorth[0]);
+			state = state.withProperty(NORTH_UP_EAST_INDEX, quadrantIndicesNorth[1]);
+			state = state.withProperty(NORTH_DOWN_WEST_INDEX, quadrantIndicesNorth[2]);
+			state = state.withProperty(NORTH_DOWN_EAST_INDEX, quadrantIndicesNorth[3]);
+		}
 
-		int[] quadrantIndicesSouth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.SOUTH, connectionState), false);
-		state = state.withProperty(SOUTH_DOWN_WEST_INDEX, quadrantIndicesSouth[0]);
-		state = state.withProperty(SOUTH_DOWN_EAST_INDEX, quadrantIndicesSouth[1]);
-		state = state.withProperty(SOUTH_UP_WEST_INDEX, quadrantIndicesSouth[2]);
-		state = state.withProperty(SOUTH_UP_EAST_INDEX, quadrantIndicesSouth[3]);
+		if(this.isFaceConnectedTexture(EnumFacing.SOUTH)) {
+			int[] quadrantIndicesSouth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.SOUTH, connectionState), false);
+			state = state.withProperty(SOUTH_DOWN_WEST_INDEX, quadrantIndicesSouth[0]);
+			state = state.withProperty(SOUTH_DOWN_EAST_INDEX, quadrantIndicesSouth[1]);
+			state = state.withProperty(SOUTH_UP_WEST_INDEX, quadrantIndicesSouth[2]);
+			state = state.withProperty(SOUTH_UP_EAST_INDEX, quadrantIndicesSouth[3]);
+		}
 
-		int[] quadrantIndicesWest = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.WEST, connectionState), false);
-		state = state.withProperty(WEST_DOWN_NORTH_INDEX, quadrantIndicesWest[0]);
-		state = state.withProperty(WEST_DOWN_SOUTH_INDEX, quadrantIndicesWest[1]);
-		state = state.withProperty(WEST_UP_NORTH_INDEX, quadrantIndicesWest[2]);
-		state = state.withProperty(WEST_UP_SOUTH_INDEX, quadrantIndicesWest[3]);
+		if(this.isFaceConnectedTexture(EnumFacing.WEST)) {
+			int[] quadrantIndicesWest = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.WEST, connectionState), false);
+			state = state.withProperty(WEST_DOWN_NORTH_INDEX, quadrantIndicesWest[0]);
+			state = state.withProperty(WEST_DOWN_SOUTH_INDEX, quadrantIndicesWest[1]);
+			state = state.withProperty(WEST_UP_NORTH_INDEX, quadrantIndicesWest[2]);
+			state = state.withProperty(WEST_UP_SOUTH_INDEX, quadrantIndicesWest[3]);
+		}
 
-		int[] quadrantIndicesEast = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.EAST, connectionState), false);
-		state = state.withProperty(EAST_DOWN_SOUTH_INDEX, quadrantIndicesEast[0]);
-		state = state.withProperty(EAST_DOWN_NORTH_INDEX, quadrantIndicesEast[1]);
-		state = state.withProperty(EAST_UP_SOUTH_INDEX, quadrantIndicesEast[2]);
-		state = state.withProperty(EAST_UP_NORTH_INDEX, quadrantIndicesEast[3]);
+		if(this.isFaceConnectedTexture(EnumFacing.EAST)) {
+			int[] quadrantIndicesEast = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.EAST, connectionState), false);
+			state = state.withProperty(EAST_DOWN_SOUTH_INDEX, quadrantIndicesEast[0]);
+			state = state.withProperty(EAST_DOWN_NORTH_INDEX, quadrantIndicesEast[1]);
+			state = state.withProperty(EAST_UP_SOUTH_INDEX, quadrantIndicesEast[2]);
+			state = state.withProperty(EAST_UP_NORTH_INDEX, quadrantIndicesEast[3]);
+		}
 
 		return state;
 	}
