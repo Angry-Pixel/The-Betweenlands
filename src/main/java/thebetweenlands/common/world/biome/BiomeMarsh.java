@@ -49,7 +49,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.03125D * 5.5D, 0.03125D * 5.5D, BlockRegistry.MUD.getDefaultState()))
 		.addFeature(new PatchFeature(0.03125D * 8.5D, 0.03125D * 8.5D, BlockRegistry.MUD.getDefaultState()))
 		.setDecorator(new BiomeDecoratorMarsh(this));
-		this.setFoliageColors(0x627017, 0x627017);
+		this.setFoliageColors(0x627017, 0x63B581);
 	}
 
 	@Override

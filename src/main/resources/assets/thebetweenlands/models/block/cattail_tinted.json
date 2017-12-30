@@ -1,6 +1,6 @@
 {
 	"parent": "block/tinted_cross",
 	"textures": {
-		"cross": "thebetweenlands:blocks/swamp_tallgrass"
+		"cross": "thebetweenlands:blocks/cattail_tinted"
 	}
 }

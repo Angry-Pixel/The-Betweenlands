@@ -6,7 +6,11 @@
 			"custom": {
 				"model_base": "thebetweenlands:block/internal/spook_event",
 				"model_base_data": {
-					"model_base": "thebetweenlands:block/hanger_seeded",
+					"model_base": "thebetweenlands:block/internal/model_combined",
+					"model_base_data": {
+						"model_base": "thebetweenlands:block/hanger_seeded_untinted",
+						"model_additional": "thebetweenlands:block/hanger_seeded_tinted"
+					},
 					"model_active": "thebetweenlands:block/hanger_seeded_spook"				
 				},
 				"model_active": "thebetweenlands:block/hanger_seeded_frosty"

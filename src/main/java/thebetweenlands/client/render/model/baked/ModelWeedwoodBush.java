@@ -42,7 +42,7 @@ public class ModelWeedwoodBush implements IModel {
 	private final ResourceLocation sticksTexture;
 
 	public ModelWeedwoodBush() {
-		this.leavesTexture = new ResourceLocation(ModInfo.ID, "blocks/leaves_weedwood_tree");
+		this.leavesTexture = new ResourceLocation(ModInfo.ID, "blocks/leaves_weedwood_bush");
 		this.sticksTexture = new ResourceLocation(ModInfo.ID, "items/weedwood_stick");
 	}
 

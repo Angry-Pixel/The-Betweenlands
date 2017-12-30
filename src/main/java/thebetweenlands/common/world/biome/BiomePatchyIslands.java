@@ -45,7 +45,7 @@ public class BiomePatchyIslands extends BiomeBetweenlands {
 		this.getBiomeGenerator().setDecorator(new BiomeDecoratorPatchyIslands(this))
 		.addFeature(new SiltBeachFeature())
 		.addFeature(new AlgaeFeature());
-		this.setFoliageColors(0x1FC66D, 0x1FC66D);
+		this.setFoliageColors(0x1FC66D, 0x00AD7C);
 	}
 
 	@Override

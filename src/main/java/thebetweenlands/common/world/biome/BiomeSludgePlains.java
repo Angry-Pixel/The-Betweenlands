@@ -42,7 +42,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		.addFeature(new PatchFeature(0.74D, 0.74D, BlockRegistry.SWAMP_DIRT.getDefaultState()))
 		.addFeature(new PatchFeature(0.65D, 0.65D, BlockRegistry.MUD.getDefaultState(), 1.0D / 1.35D, 1.72D))
 		.addFeature(new MiddleGemFeature());
-		this.setFoliageColors(0x5B3522, 0x5B3522);
+		this.setFoliageColors(0x5B3522, 0xD36423);
 	}
 
 	@Override

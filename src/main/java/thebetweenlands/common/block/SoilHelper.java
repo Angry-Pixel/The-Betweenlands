@@ -7,7 +7,7 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class SoilHelper {
 	public static boolean canSustainPlant(IBlockState state) {
-		return SurfaceType.GRASS.matches(state) || SurfaceType.DIRT.matches(state) || state.getBlock() instanceof BlockGenericDugSoil;
+		return SurfaceType.GRASS.matches(state) || SurfaceType.DIRT.matches(state) || state.getBlock() instanceof BlockGenericDugSoil || state.getBlock() == BlockRegistry.MUD_BRICKS;
 	}
 
 	public static boolean canSustainUnderwaterPlant(IBlockState state) {

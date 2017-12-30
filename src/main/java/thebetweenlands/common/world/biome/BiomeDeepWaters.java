@@ -38,6 +38,7 @@ public class BiomeDeepWaters extends BiomeBetweenlands {
 		.addFeature(new DeepWatersFeature())
 		.addFeature(new AlgaeFeature())
 		.addFeature(new CragSpiresFeature());
+		this.setFoliageColors(0, 0xE5F745);
 	}
 
 	@Override
