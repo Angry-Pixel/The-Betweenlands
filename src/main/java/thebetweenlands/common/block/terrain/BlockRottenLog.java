@@ -1,6 +1,9 @@
 package thebetweenlands.common.block.terrain;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
@@ -21,5 +24,10 @@ public class BlockRottenLog extends BlockLogBetweenlands {
 				world.spawnEntity(entity);
 			}
 		}
+	}
+	
+	@Override
+	public void getSubBlocks(CreativeTabs item, NonNullList<ItemStack> items) {
+		items.add(new ItemStack(this, 1, 0));
 	}
 }
