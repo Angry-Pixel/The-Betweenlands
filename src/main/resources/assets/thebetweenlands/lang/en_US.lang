@@ -990,6 +990,7 @@ command.aspect.reset.confirm=Confirm with '/resetAspects confirm'
 command.aspect.reset.success=The aspects have been reset
 
 command.blreloadrecipes.success=Reloaded custom recipes
+command.blreloadrecipes.failed=Failed to reloaded custom recipes
 
 # Keybinds
 key.categories.betweenlands=The Betweenlands

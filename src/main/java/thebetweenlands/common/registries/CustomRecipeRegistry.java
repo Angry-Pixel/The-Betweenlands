@@ -16,6 +16,7 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRepairableRecipes;
 import thebetweenlands.common.recipe.custom.CustomCompostBinRecipes;
@@ -47,7 +48,7 @@ public class CustomRecipeRegistry {
 		RECIPE_TYPES.add(pestleAndMortarRecipes = new CustomPestleAndMortarRecipes());
 	}
 
-	public static void loadCustomRecipes() {
+	public static boolean loadCustomRecipes() {
 		unregisterCustomRecipes();
 
 		for(CustomRecipes<?> recipe : RECIPE_TYPES) {
@@ -56,6 +57,7 @@ public class CustomRecipeRegistry {
 
 		File cfgFile = new File(ConfigHandler.path);
 		File customRecipesFile = new File(cfgFile.getParentFile(), "thebetweenlands" + File.separator + "recipes.json");
+		boolean noError = true;
 		if(customRecipesFile.exists()) {
 			try(JsonReader jsonReader = new JsonReader(new FileReader(customRecipesFile))) {
 				JsonObject jsonObj = new JsonParser().parse(jsonReader).getAsJsonObject();
@@ -65,7 +67,8 @@ public class CustomRecipeRegistry {
 							JsonArray arr = jsonObj.get(recipes.getName()).getAsJsonArray();
 							recipes.parse(arr);
 						} catch(InvalidRecipeException ex) {
-							ex.printStackTrace();
+							TheBetweenlands.logger.throwing(ex);
+							noError = false;
 						}
 					}
 				}
@@ -76,6 +79,7 @@ public class CustomRecipeRegistry {
 		}
 
 		registerCustomRecipes();
+		return noError;
 	}
 
 	public static void registerCustomRecipes() {
