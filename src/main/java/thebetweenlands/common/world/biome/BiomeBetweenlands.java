@@ -27,11 +27,11 @@ import thebetweenlands.util.IWeightProvider;
 
 public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	protected final List<BLSpawnEntry> blSpawnEntries = new ArrayList<BLSpawnEntry>();
-	private int grassColor, foliageColor;
+	private int grassColor = -1, foliageColor = -1, secondaryGrassColor = -1, secondaryFoliageColor = -1;
 	private short biomeWeight;
 	private BiomeGenerator biomeGenerator;
 	private int[] fogColorRGB = new int[]{(int) 255, (int) 255, (int) 255};
-
+	
 	public BiomeBetweenlands(ResourceLocation registryName, BiomeProperties properties) {
 		super(properties);
 		
@@ -127,6 +127,19 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.foliageColor = foliageColor;
 		return this;
 	}
+	
+	/**
+	 * Sets the secondary grass and foliage color. Will be applied to patches
+	 * using noise
+	 * @param grassColor
+	 * @param foliageColor
+	 * @return
+	 */
+	public final BiomeBetweenlands setSecondaryFoliageColors(int grassColor, int foliageColor) {
+		this.secondaryGrassColor = grassColor;
+		this.secondaryFoliageColor = foliageColor;
+		return this;
+	}
 
 	/**
 	 * Sets the biome fog color
@@ -145,17 +158,47 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getGrassColorAtPos(BlockPos pos) {
-		if(this.grassColor == 0)
-			return super.getGrassColorAtPos(pos);
-		return this.grassColor;
+		if(this.secondaryGrassColor < 0) {
+			if(this.grassColor < 0) {
+				return super.getGrassColorAtPos(pos);
+			}
+			return this.grassColor;
+		}
+		double noise = GRASS_COLOR_NOISE.getValue((double)pos.getX() * 0.0225D, (double)pos.getZ() * 0.0225D);
+		if(noise < -0.1) {
+			if(this.grassColor < 0) {
+				return super.getGrassColorAtPos(pos);
+			}
+			return this.grassColor;
+		} else {
+			if(this.secondaryGrassColor < 0) {
+				return super.getGrassColorAtPos(pos);
+			}
+			return this.secondaryGrassColor;
+		}
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public int getFoliageColorAtPos(BlockPos pos) {
-		if(this.foliageColor == 0)
-			return super.getFoliageColorAtPos(pos);
-		return this.foliageColor;
+		if(this.secondaryFoliageColor < 0) {
+			if(this.foliageColor < 0) {
+				return super.getGrassColorAtPos(pos);
+			}
+			return this.foliageColor;
+		}
+		double noise = GRASS_COLOR_NOISE.getValue((double)pos.getX() * 0.0225D, (double)pos.getZ() * 0.0225D);
+		if(noise < -0.1) {
+			if(this.foliageColor < 0) {
+				return super.getGrassColorAtPos(pos);
+			}
+			return this.foliageColor;
+		} else {
+			if(this.secondaryFoliageColor < 0) {
+				return super.getGrassColorAtPos(pos);
+			}
+			return this.secondaryFoliageColor;
+		}
 	}
 
 	/**

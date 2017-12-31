@@ -55,6 +55,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 		.addFeature(new SiltBeachFeature(0.98F))
 		.setDecorator(new BiomeDecoratorSwamplands(this));
 		this.setFoliageColors(0x2AFF00, 0x52AF5A);
+		this.setSecondaryFoliageColors(0x50a040, 0x85af51);
 	}
 
 	@Override
