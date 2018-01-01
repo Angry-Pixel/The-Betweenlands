@@ -2,12 +2,14 @@ package thebetweenlands.common.block;
 
 import net.minecraft.block.state.IBlockState;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
 public class SoilHelper {
 	public static boolean canSustainPlant(IBlockState state) {
-		return SurfaceType.GRASS.matches(state) || SurfaceType.DIRT.matches(state) || state.getBlock() instanceof BlockGenericDugSoil || state.getBlock() == BlockRegistry.MUD_BRICKS || state.getBlock() == BlockRegistry.GIANT_ROOT_BLOCK;
+		return SurfaceType.GRASS.matches(state) || SurfaceType.DIRT.matches(state) || state.getBlock() instanceof BlockGenericDugSoil || state.getBlock() == BlockRegistry.MUD_BRICKS || state.getBlock() == BlockRegistry.GIANT_ROOT_BLOCK ||
+				(state.getBlock() == BlockRegistry.CRAGROCK && state.getValue(BlockCragrock.VARIANT) != BlockCragrock.EnumCragrockType.DEFAULT);
 	}
 
 	public static boolean canSustainUnderwaterPlant(IBlockState state) {

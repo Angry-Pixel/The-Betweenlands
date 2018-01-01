@@ -1,8 +1,6 @@
 package thebetweenlands.common.world.gen.feature;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -10,6 +8,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -59,8 +58,6 @@ public class WorldGenGiantRoot extends WorldGenerator {
 	public boolean generate(IBlockStateAccessOnly worldIn, int chunkX, int chunkZ, boolean checkChunk, Random rand, BlockPos position) {
 		boolean generated = true;
 
-		//System.out.println("START TEST");
-
 		Vec3d up = new Vec3d(0, 1, 0);
 		Vec3d diff = new Vec3d(this.end.subtract(this.start));
 		Vec3d dir = diff.normalize();
@@ -85,17 +82,13 @@ public class WorldGenGiantRoot extends WorldGenerator {
 		pts.add(new Vec3d(this.end));
 		pts.add(controlPtEnd);
 
-		//long time = System.nanoTime();
-		//System.out.println("REPARAM");
-
-		ISpline spline = /*new ReparameterizedSpline(*/new CatmullRomSpline(pts.toArray(new Vec3d[0]))/*).init(MathHelper.ceil(diff.lengthVector() / 8.0D) + 2, 8)*/;
-
-		//System.out.println("REPARAM DONE: " + ((System.nanoTime() - time) / 1000000.0F));
+		ISpline spline = new CatmullRomSpline(pts.toArray(new Vec3d[0]));
 
 		IBlockState bark = BlockRegistry.GIANT_ROOT_BLOCK.getDefaultState();
 		IBlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 		IBlockState root = BlockRegistry.ROOT.getDefaultState();
 		IBlockState hanger = BlockRegistry.HANGER.getDefaultState();
+		IBlockState fungus = BlockRegistry.SHELF_FUNGUS.getDefaultState();
 
 		int steps = 20 + (int)(this.start.getDistance(this.end.getX(), this.end.getY(), this.end.getZ()) * 4);//MathHelper.ceil(spline.getArcLength()) * 4;
 
@@ -106,8 +99,6 @@ public class WorldGenGiantRoot extends WorldGenerator {
 			if(pos.equals(prevPos)) {
 				continue;
 			}
-
-			//System.out.println("TEST");
 
 			if(this.genLeafyBranches && rand.nextInt(20) == 0) {
 				WorldGenGiantRoot smallRoot = new WorldGenGiantRoot(pos, pos.add(offsetDir.x * (rand.nextDouble() - 0.5D) * 16, rand.nextDouble() * 8, offsetDir.z * (rand.nextDouble() - 0.5D) * 16), 0.5D, 0.5D, 3, 3, 0, false, true, false, false, this.genBounds);
@@ -122,11 +113,11 @@ public class WorldGenGiantRoot extends WorldGenerator {
 			double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
 			int radius = (int)((rand.nextDouble() * (this.maxWidth - this.minWidth) * widthMul) + this.minWidth);
-			
+
 			if(checkChunk && !this.shouldCheckAtPos(pos, chunkX, chunkZ, radius)) {
 				continue;
 			}
-			
+
 			for(int xo = -radius; xo <= radius; xo++) {
 				for(int yo = -radius; yo <= radius; yo++) {
 					for(int zo = -radius; zo <= radius; zo++) {
@@ -153,11 +144,11 @@ public class WorldGenGiantRoot extends WorldGenerator {
 				double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
 				int radius = 1 + (int)((rand.nextDouble() * (this.maxWidth - this.minWidth) * widthMul) + this.minWidth);
-				
+
 				if(checkChunk && !this.shouldCheckAtPos(pos, chunkX, chunkZ, radius)) {
 					continue;
 				}
-				
+
 				for(int xo = -radius; xo <= radius; xo++) {
 					for(int yo = -radius; yo <= radius; yo++) {
 						for(int zo = -radius; zo <= radius; zo++) {
@@ -173,38 +164,38 @@ public class WorldGenGiantRoot extends WorldGenerator {
 			}
 		}
 
-		/*List<Fungus> fungi = new ArrayList<>();
+		if(this.genFungi) {
+			prevPos = BlockPos.ORIGIN;
+			for(int i = 0; i < steps; i++) {
+				BlockPos pos = new BlockPos(spline.interpolate(i / (float)steps));
 
-		prevPos = BlockPos.ORIGIN;
-		for(int i = 0; i < steps; i++) {
-			BlockPos pos = new BlockPos(spline.interpolate(i / (float)steps));
+				if(pos.equals(prevPos)) {
+					continue;
+				}
 
-			if(checkChunk && !this.shouldCheckAtPos(pos, chunkX, chunkZ)) {
-				continue;
-			}
+				double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
-			if(pos.equals(prevPos)) {
-				continue;
-			}
+				int radius = (int)((rand.nextDouble() * (this.maxWidth - this.minWidth) * widthMul) + this.minWidth) - 1;
 
-			double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
+				if(checkChunk && !this.shouldCheckAtPos(pos, chunkX, chunkZ, radius + 4 + radius / 5)) {
+					continue;
+				}
 
-			int radius = 1 + (int)((rand.nextDouble() * (this.maxWidth - this.minWidth) * widthMul) + this.minWidth);
-			for(int xo = -radius; xo <= radius; xo++) {
-				for(int yo = -radius; yo <= radius; yo++) {
-					for(int zo = -radius; zo <= radius; zo++) {
-						BlockPos genPos = pos.add(xo, yo, zo);
-						if(this.genFungi) {
-							if(rand.nextInt(80) == 0 && Math.sqrt(xo*xo+yo*yo+zo*zo) >= radius) {
-								if(worldIn.isAirBlock(genPos)) {
-									for(EnumFacing offset : EnumFacing.HORIZONTALS) {
-										if(worldIn.getBlockState(genPos.offset(offset)) == bark && worldIn.getBlockState(genPos.offset(offset).down()) == bark && worldIn.getBlockState(genPos.offset(offset).up()) == bark) {
-											float distance = MathHelper.sqrt(xo * xo + zo * zo);
-											int fungusX = (int) (-xo / distance * 2);
-											int fungusZ = (int) (-zo / distance * 2);
-											int fungusRadius = rand.nextInt(2) + radius / 5 + 2;
-											fungi.add(new Fungus(genPos.add(fungusX, 0, fungusZ), fungusRadius));
-											break;
+				for(int xo = -radius; xo <= radius; xo++) {
+					for(int yo = -radius+1; yo <= radius-1; yo++) {
+						for(int zo = -radius; zo <= radius; zo++) {
+							BlockPos genPos = pos.add(xo, yo, zo);
+							if(Math.sqrt(xo*xo+yo*yo+zo*zo) >= radius) {
+								Random fungiRand = new Random();
+								fungiRand.setSeed(MathHelper.getCoordinateRandom(genPos.getX(), genPos.getY(), genPos.getZ()));
+								if(fungiRand.nextInt(200) == 0) {
+									int fungiRadius = fungiRand.nextInt(2) + radius / 5 + 2;
+									for(int fx = -fungiRadius; fx <= fungiRadius; fx++) {
+										for(int fz = -fungiRadius; fz <= fungiRadius; fz++) {
+											BlockPos fungiPos = genPos.add(fx, 0, fz);
+											if(Math.sqrt((fx+0.5D)*(fx+0.5D) + (fz+0.5D)*(fz+0.5D)) <= fungiRadius && this.isInBounds(fungiPos)) {
+												worldIn.setBlockState(fungiPos, fungus);
+											}
 										}
 									}
 								}
@@ -215,24 +206,25 @@ public class WorldGenGiantRoot extends WorldGenerator {
 			}
 		}
 
-		for (Fungus fungus : fungi) {
-			fungus.generate(worldIn, rand);
-		}*/
+		Random foliageRand = new Random(); //Use a seperate rand foliage so that it doesn't mess with the main rand when skipped!
+		foliageRand.setSeed(rand.nextLong());
 
+		prevPos = BlockPos.ORIGIN;
 		for(int i = 0; i < steps; i++) {
 			BlockPos pos = new BlockPos(spline.interpolate(i / (float)steps));
+
+			if(pos.equals(prevPos)) {
+				continue;
+			}
 
 			double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
 			int radius = 1 + (int)((rand.nextDouble() * (this.maxWidth - this.minWidth) * widthMul) + this.minWidth);
-			
-			Random foliageRand = new Random(); //Use a seperate rand foliage so that it doesn't mess with the main rand when skipped!
-			foliageRand.setSeed(rand.nextLong());
-			
+
 			if(checkChunk && !this.shouldCheckAtPos(pos, chunkX, chunkZ, radius)) {
 				continue;
 			}
-			
+
 			for(int xo = -radius; xo <= radius; xo++) {
 				for(int yo = -radius; yo <= radius; yo++) {
 					for(int zo = -radius; zo <= radius; zo++) {
@@ -262,12 +254,12 @@ public class WorldGenGiantRoot extends WorldGenerator {
 									}
 								}
 							}
-							
+
 							//Moss is just one block so it needn't care about other chunks either, if it gets replaced so be it
 							if(this.isInBounds(genPos) && foliageRand.nextInt(15) == 0 && Math.sqrt(xo*xo+yo*yo+zo*zo) > radius - 1 && Math.sqrt(xo*xo+yo*yo+zo*zo) <= radius - 0.5D && worldIn.isAirBlock(genPos)) {
 								EnumFacing facing = EnumFacing.getFacingFromVector(xo, yo, zo);
 								worldIn.setBlockState(genPos, BlockRegistry.MOSS.getDefaultState().withProperty(BlockMoss.FACING, facing), 2);
-								
+
 								/*List<EnumFacing> dirs = Arrays.asList(Arrays.copyOf(EnumFacing.VALUES, EnumFacing.VALUES.length));
 								Collections.shuffle(dirs, rand);
 								for(EnumFacing facing : dirs) {

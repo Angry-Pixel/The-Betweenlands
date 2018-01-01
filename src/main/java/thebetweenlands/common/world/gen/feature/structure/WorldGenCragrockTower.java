@@ -7,6 +7,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
@@ -119,7 +120,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			for (int yy = y; yy < y + height; yy++)
 				for (int xx = x; xx < x + width; xx++)
 					for (int zz = z; zz < z + depth; zz++) {
-						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.WEEDWOOD_BUSH || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() instanceof BlockBush || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
 							return false;
 					}
 			break;
@@ -127,7 +128,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			for (int yy = y; yy < y + height; yy++)
 				for (int zz = z + depth - 1; zz > z + depth - width - 1; zz--)
 					for (int xx = x; xx < x + depth; xx++) {
-						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.WEEDWOOD_BUSH || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() instanceof BlockBush || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
 							return false;
 
 					}
@@ -136,7 +137,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 			for (int yy = y; yy < y + height; yy++)
 				for (int xx = x + width - 1; xx > x + width - width - 1; xx--)
 					for (int zz = z + depth - 1; zz > z + depth - depth - 1; zz--) {
-						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
+						if (!(world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.BETWEENSTONE || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.CRAGROCK || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_DIRT || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.SWAMP_GRASS || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() == BlockRegistry.WEEDWOOD_BUSH || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock() instanceof BlockBush || world.getBlockState(this.getCheckPos(xx, yy, zz)).getBlock().isReplaceable(world, this.getCheckPos(xx, yy, zz))))
 							return false;
 
 					}

@@ -20,8 +20,6 @@ import thebetweenlands.common.world.gen.biome.feature.CoarseIslandsFeature;
 public class MapGenGiantRoots extends MapGenBase {
 	protected CoarseIslandsFeature coarseIslandsFeature = new CoarseIslandsFeature();
 
-	//protected List<BlockPos> giantRootPosCanditates = new ArrayList<>();
-
 	protected List<WorldGenGiantRoot> giantRootGens = new ArrayList<>();
 
 	public MapGenGiantRoots(long worldSeed) {
@@ -31,14 +29,11 @@ public class MapGenGiantRoots extends MapGenBase {
 
 	@Override
 	public void generate(World worldIn, int x, int z, ChunkPrimer primer) {
-		//this.giantRootPosCanditates.clear();
 		this.giantRootGens.clear();
 
 		super.generate(worldIn, x, z, primer);
 
 		for(WorldGenGiantRoot root : this.giantRootGens) {
-			System.out.println("gen: " + root.start);
-			
 			root.setGenBounds(new AxisAlignedBB(x * 16, 0, z * 16, x * 16 + 15, 256, z * 16 + 15));
 			Random rootRand = new Random();
 			rootRand.setSeed(root.start.getX() ^ root.start.getY() ^ root.start.getZ() ^ worldIn.getSeed());
@@ -55,8 +50,6 @@ public class MapGenGiantRoots extends MapGenBase {
 
 		List<BlockPos> startCandidates = new ArrayList<>();
 
-		//System.out.println(chunkX + " " + chunkZ);
-		
 		int inChunkX = 0;
 		int inChunkZ = 0;
 		for(int xs = 0; xs < subDivs; xs++) {

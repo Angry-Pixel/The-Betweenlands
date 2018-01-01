@@ -492,7 +492,10 @@ public class BlockRegistry {
     public static final Block HOLLOW_LOG = new BlockHollowLog();
     public static final Block CAVE_MOSS = new BlockCaveMoss();
     public static final Block MOSS = new BlockMoss().setSickleDrop(EnumItemPlantDrop.MOSS_ITEM.create(1)).setReplaceable(true);
-    public static final Block LICHEN = new BlockMoss().setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
+    public static final Block LICHEN = new BlockMoss(){
+    	@Override
+    	public int getColorMultiplier(IBlockState state, net.minecraft.world.IBlockAccess worldIn, net.minecraft.util.math.BlockPos pos, int tintIndex) { return 0xFFFFFF; }
+    }.setSickleDrop(EnumItemPlantDrop.LICHEN_ITEM.create(1)).setReplaceable(true);
     public static final Block HANGER = new BlockHanger();
     public static final Block MIDDLE_FRUIT_BUSH = new BlockMiddleFruitBush();
     public static final Block FUNGUS_CROP = new BlockFungusCrop();
