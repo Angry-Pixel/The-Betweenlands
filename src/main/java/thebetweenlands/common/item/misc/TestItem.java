@@ -88,8 +88,12 @@ public class TestItem extends Item {
 				nbt.setInteger("y1", pos.getY());
 				nbt.setInteger("z1", pos.getZ());
 			} else {
-				WorldGenGiantRoot root = new WorldGenGiantRoot(new BlockPos(nbt.getInteger("x1"), nbt.getInteger("y1"), nbt.getInteger("z1")), pos);
+				long time = System.nanoTime();
+				
+				WorldGenGiantRoot root = new WorldGenGiantRoot(new BlockPos(nbt.getInteger("x1"), nbt.getInteger("y1"), nbt.getInteger("z1")), pos, 14);
 				root.generate(worldIn, itemRand, pos);
+				
+				System.out.println("ms: " + (System.nanoTime() - time) / 1000000.0F);
 				
 				nbt.removeTag("x1");
 			}

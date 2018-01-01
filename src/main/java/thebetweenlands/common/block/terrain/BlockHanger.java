@@ -52,7 +52,7 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	public BlockHanger() {
 		super(Material.PLANTS);
 		this.setSoundType(SoundType.PLANT);
-		this.setHardness(0.5F);
+		this.setHardness(0.1F);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 		this.setTickRandomly(true);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(CAN_GROW, true).withProperty(SEEDED, false));

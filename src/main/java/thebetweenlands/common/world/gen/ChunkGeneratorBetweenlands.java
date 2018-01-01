@@ -45,6 +45,7 @@ import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlan
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.gen.feature.MapGenCavesBetweenlands;
+import thebetweenlands.common.world.gen.feature.MapGenGiantRoots;
 import thebetweenlands.common.world.gen.feature.MapGenRavineBetweenlands;
 
 public class ChunkGeneratorBetweenlands implements IChunkGenerator {
@@ -90,6 +91,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 	private MapGenCavesBetweenlands caveGenerator;
 	private MapGenBase ravineGenerator;
+	private MapGenBase giantRootGenerator;
 
 	private NoiseGeneratorSimplex treeNoise;
 	private NoiseGeneratorSimplex speleothemDensityNoise;
@@ -132,6 +134,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		world.setSeaLevel(layerHeight);
 		this.caveGenerator = new MapGenCavesBetweenlands(seed);
 		this.ravineGenerator = new MapGenRavineBetweenlands();
+		this.giantRootGenerator = new MapGenGiantRoots(seed);
 	}
 
 
@@ -191,6 +194,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				}
 			}
 		}
+		
+		//Generate giant roots
+		this.giantRootGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
 
 		Chunk chunk = new Chunk(this.worldObj, chunkprimer, chunkX, chunkZ);
 		byte[] biomeArray = chunk.getBiomeArray();

@@ -14,10 +14,6 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("giantTree");
 		this.generate(0.1F, DecorationHelper::generateGiantTree);
 		this.endProfilerSection();
-
-		this.startProfilerSection("giantRoots");
-		this.generate(600, DecorationHelper::generateGiantRoots);
-		this.endProfilerSection();
 		
 		this.startProfilerSection("weedwoodTree");
 		this.generate(25, DecorationHelper::generateWeedwoodTree);

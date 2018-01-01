@@ -54,6 +54,9 @@ public enum SurfaceType implements Predicate<IBlockState> {
 			BlockMatcher.forBlock(BlockRegistry.VALONITE_ORE)
 			)),
 	GRASS_AND_DIRT(GRASS, DIRT),
+	PLANT_DECORATION_SOIL(ImmutableList.of(
+			BlockMatcher.forBlock(BlockRegistry.GIANT_ROOT_BLOCK)),
+			GRASS_AND_DIRT),
 	MIXED_GROUND_AND_UNDERGROUND(MIXED_GROUND, UNDERGROUND),
 	MIXED_GROUND_OR_REPLACEABLE(ImmutableList.of(state -> state.getMaterial().isReplaceable()), MIXED_GROUND);
 
