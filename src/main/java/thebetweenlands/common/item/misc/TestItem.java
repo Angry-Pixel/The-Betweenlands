@@ -2,11 +2,14 @@ package thebetweenlands.common.item.misc;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.world.gen.feature.WorldGenGiantRoot;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 
 //MINE!!
@@ -71,12 +74,25 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		
+		/*
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		
+		*/
+			ItemStack stack = player.getHeldItem(hand);
+			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");
+			
+			if(!nbt.hasKey("x1")) {
+				nbt.setInteger("x1", pos.getX());
+				nbt.setInteger("y1", pos.getY());
+				nbt.setInteger("z1", pos.getZ());
+			} else {
+				WorldGenGiantRoot root = new WorldGenGiantRoot(new BlockPos(nbt.getInteger("x1"), nbt.getInteger("y1"), nbt.getInteger("z1")), pos);
+				root.generate(worldIn, itemRand, pos);
+				
+				nbt.removeTag("x1");
+			}
 		}
 
 		return EnumActionResult.SUCCESS;

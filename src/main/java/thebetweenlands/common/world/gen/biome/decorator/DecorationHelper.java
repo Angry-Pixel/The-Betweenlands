@@ -23,6 +23,7 @@ import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
 import thebetweenlands.common.world.gen.feature.WorldGenRottenWeedwoodTree;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
+import thebetweenlands.common.world.gen.feature.WorldGenGiantRoot;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
@@ -772,6 +773,17 @@ public class DecorationHelper {
 		return generated;
 	}
 
+	public static boolean generateGiantRoots(DecoratorPositionProvider decorator) {
+		BlockPos pos1 = decorator.getRandomPos(2);
+		BlockPos pos2 = decorator.getRandomPos(2);
+		
+		if(pos1.distanceSq(pos2) >= 20*20 && decorator.getWorld().isAirBlock(pos1.up()) && SurfaceType.GRASS.apply(decorator.getWorld().getBlockState(pos1)) && decorator.getWorld().isAirBlock(pos2.up()) && SurfaceType.GRASS.apply(decorator.getWorld().getBlockState(pos2))) {
+			WorldGenGiantRoot gen = new WorldGenGiantRoot(pos1, pos2);
+			return gen.generate(decorator.getWorld(), decorator.getRand(), pos1);
+		}
+		return false;
+	}
+	
 	public static boolean generateWisp(DecoratorPositionProvider decorator) {
 		BlockPos pos = decorator.getRandomPos();
 		if(decorator.getWorld().isAirBlock(pos) && SurfaceType.WATER.matches(decorator.getWorld(), pos.down())) {

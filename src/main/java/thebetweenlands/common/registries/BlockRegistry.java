@@ -126,6 +126,7 @@ import thebetweenlands.common.block.terrain.BlockGenericCollapsing;
 import thebetweenlands.common.block.terrain.BlockGenericMirage;
 import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
+import thebetweenlands.common.block.terrain.BlockGiantRoot;
 import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
@@ -449,6 +450,7 @@ public class BlockRegistry {
     public static final Block ALGAE = new BlockAlgae().setSickleDrop(EnumItemPlantDrop.ALGAE_ITEM.create(1));
     public static final Block POISON_IVY = new BlockPoisonIvy();
     public static final Block ROOT = new BlockRoot();
+    public static final Block GIANT_ROOT_BLOCK = new BlockGiantRoot();
     public static final Block ROOT_UNDERWATER = new BlockRootUnderwater();
     public static final Block ARROW_ARUM = new BlockPlant().setSickleDrop(EnumItemPlantDrop.ARROW_ARUM_LEAF.create(1));
     public static final Block BLUE_EYED_GRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.BLUE_EYED_GRASS_FLOWERS.create(1));
