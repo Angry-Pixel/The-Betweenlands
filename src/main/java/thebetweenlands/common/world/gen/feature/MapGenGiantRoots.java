@@ -54,7 +54,7 @@ public class MapGenGiantRoots extends MapGenBase {
 		int inChunkZ = 0;
 		for(int xs = 0; xs < subDivs; xs++) {
 			for(int zs = 0; zs < subDivs; zs++) {
-				if(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ)) == BiomeRegistry.COARSE_ISLANDS && this.rand.nextInt(30) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
+				if(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ)) == BiomeRegistry.COARSE_ISLANDS && this.rand.nextInt(28) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
 					BlockPos candidate = new BlockPos(chunkX * 16 + inChunkX, WorldProviderBetweenlands.LAYER_HEIGHT - 6, chunkZ * 16 + inChunkZ);
 					startCandidates.add(candidate);
 				}

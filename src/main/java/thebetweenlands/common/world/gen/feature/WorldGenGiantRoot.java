@@ -118,13 +118,14 @@ public class WorldGenGiantRoot extends WorldGenerator {
 			if(pos.equals(prevPos)) {
 				continue;
 			}
+			prevPos = pos;
 
-			if(this.genLeafyBranches && smallerRootRand.nextInt(20) == 0) {
+			if(this.genLeafyBranches && smallerRootRand.nextInt(12) == 0) {
 				WorldGenGiantRoot smallRoot = new WorldGenGiantRoot(pos, pos.add(offsetDir.x * (smallerRootRand.nextDouble() - 0.5D) * 16, smallerRootRand.nextDouble() * 8, offsetDir.z * (smallerRootRand.nextDouble() - 0.5D) * 16), 0.5D, 0.5D, 3, 3, 0, false, true, false, false, this.genBounds);
 				smallRoot.generate(worldIn, chunkX, chunkZ, checkChunk, smallerRootRand, pos);
 			}
 
-			if(this.genSmallerRoots && smallerRootRand.nextInt(20) == 0) {
+			if(this.genSmallerRoots && smallerRootRand.nextInt(12) == 0) {
 				WorldGenGiantRoot smallRoot = new WorldGenGiantRoot(pos, pos.add(offsetDir.x * (smallerRootRand.nextDouble() - 0.5D) * 16, -smallerRootRand.nextDouble() * 8, offsetDir.z * (smallerRootRand.nextDouble() - 0.5D) * 16), 0.5D, 0.5D, 3, 3, 0, false, false, false, false, this.genBounds);
 				smallRoot.generate(worldIn, chunkX, chunkZ, checkChunk, smallerRootRand, pos);
 			}
@@ -160,6 +161,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 				if(pos.equals(prevPos)) {
 					continue;
 				}
+				prevPos = pos;
 
 				double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
@@ -193,6 +195,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 				if(pos.equals(prevPos)) {
 					continue;
 				}
+				prevPos = pos;
 
 				double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
@@ -209,7 +212,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 							if(xo*xo+yo*yo+zo*zo >= radius*radius) {
 								Random fungiRand = new Random();
 								fungiRand.setSeed(MathHelper.getCoordinateRandom(genPos.getX(), genPos.getY(), genPos.getZ()));
-								if(fungiRand.nextInt(200) == 0) {
+								if(fungiRand.nextInt(160) == 0) {
 									int fungiRadius = fungiRand.nextInt(2) + radius / 5 + 2;
 									for(int fx = -fungiRadius; fx <= fungiRadius; fx++) {
 										for(int fz = -fungiRadius; fz <= fungiRadius; fz++) {
@@ -238,6 +241,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 			if(pos.equals(prevPos)) {
 				continue;
 			}
+			prevPos = pos;
 
 			double widthMul = 1 - ((i > steps / 2) ? ((steps - i) / (float)steps * 2) : (i / (float)steps * 2));
 
@@ -254,7 +258,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 
 						if(!this.genLeaves) {
 							//Roots and hangers are just +-Y offsets, doesn't care about surrounding chunks
-							if(this.isInBounds(genPos) && foliageRand.nextInt(100) == 0 && yo >= radius - 2 && xo*xo+yo*yo+zo*zo <= (radius-1)*(radius-1) && !worldIn.isAirBlock(genPos) && worldIn.isAirBlock(genPos.up()) && worldIn.isAirBlock(genPos.up(2))) {
+							if(this.isInBounds(genPos) && foliageRand.nextInt(60) == 0 && yo >= radius - 2 && xo*xo+yo*yo+zo*zo <= (radius-1)*(radius-1) && !worldIn.isAirBlock(genPos) && worldIn.isAirBlock(genPos.up()) && worldIn.isAirBlock(genPos.up(2))) {
 								int maxRootHeight = 2 + foliageRand.nextInt(3);
 								for(int r = 0; r < maxRootHeight; r++) {
 									BlockPos rootPos = genPos.add(0, 1 + r, 0);
@@ -265,7 +269,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 									}
 								}
 							}
-							if(this.isInBounds(genPos) && foliageRand.nextInt(15) == 0 && yo <= radius - 2 && xo*xo+yo*yo+zo*zo <= (radius-1)*(radius-1) && !worldIn.isAirBlock(genPos) && worldIn.isAirBlock(genPos.down()) && worldIn.isAirBlock(genPos.down(2))) {
+							if(this.isInBounds(genPos) && foliageRand.nextInt(10) == 0 && yo <= radius - 2 && xo*xo+yo*yo+zo*zo <= (radius-1)*(radius-1) && !worldIn.isAirBlock(genPos) && worldIn.isAirBlock(genPos.down()) && worldIn.isAirBlock(genPos.down(2))) {
 								int maxHangersHeight = 3 + foliageRand.nextInt(16);
 								for(int r = 0; r < maxHangersHeight; r++) {
 									BlockPos hangerPos = genPos.add(0, -1 - r, 0);
@@ -278,7 +282,7 @@ public class WorldGenGiantRoot extends WorldGenerator {
 							}
 
 							//Moss is just one block so it needn't care about other chunks either, if it gets replaced so be it
-							if(this.isInBounds(genPos) && foliageRand.nextInt(15) == 0 && xo*xo+yo*yo+zo*zo > (radius-1)*(radius-1) && worldIn.isAirBlock(genPos)) {
+							if(this.isInBounds(genPos) && foliageRand.nextInt(10) == 0 && xo*xo+yo*yo+zo*zo > (radius-1)*(radius-1) && worldIn.isAirBlock(genPos)) {
 								List<EnumFacing> dirs = Arrays.asList(Arrays.copyOf(EnumFacing.VALUES, EnumFacing.VALUES.length));
 								Collections.shuffle(dirs, foliageRand);
 								for(EnumFacing facing : dirs) {
