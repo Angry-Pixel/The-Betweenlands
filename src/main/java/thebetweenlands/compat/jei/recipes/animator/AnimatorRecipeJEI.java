@@ -25,6 +25,8 @@ import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 import thebetweenlands.util.TranslationHelper;
 
 import javax.annotation.Nullable;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,6 +41,12 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
     private ITickTimer tickTimer;
     private ResourceLocation lootTableName = null;
     private IGuiIngredient<ItemStack> guiIngredient;
+
+    public static final DecimalFormat LIFE_CRYSTAL_PERCENTAGE = new DecimalFormat("##%");
+
+    static {
+        LIFE_CRYSTAL_PERCENTAGE.setRoundingMode(RoundingMode.CEILING);
+    }
 
     public AnimatorRecipeJEI(IAnimatorRecipe animatorRecipe) {
         this.animatorRecipe = animatorRecipe;
@@ -192,7 +200,8 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
     public List<String> getTooltipStrings(int mouseX, int mouseY) {
         ArrayList<String> processTooltip = new ArrayList<>();
         if (mouseX >= 18 && mouseX <= 51 && mouseY >= 42 && mouseY <= 66) {
-            processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.life", guiIngredient != null ? animatorRecipe.getRequiredLife(guiIngredient.getDisplayedIngredient()): requiredLife));
+            float lifeAmount = guiIngredient != null ? animatorRecipe.getRequiredLife(guiIngredient.getDisplayedIngredient()): requiredLife;
+            processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.life", LIFE_CRYSTAL_PERCENTAGE.format((lifeAmount / 128F))));
         }
         if (mouseX >= 57 && mouseX <= 90 && mouseY >= 42 && mouseY <= 66) {
             processTooltip.add(TranslationHelper.translateToLocal("jei.thebetweenlands.animator.fuel", guiIngredient != null ? animatorRecipe.getRequiredFuel(guiIngredient.getDisplayedIngredient()): requiredFuel));
