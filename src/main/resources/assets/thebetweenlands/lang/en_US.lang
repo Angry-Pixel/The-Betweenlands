@@ -313,7 +313,13 @@ tile.thebetweenlands.repeller.name=Repeller
 tile.thebetweenlands.black_ice.name=Black Ice
 tile.thebetweenlands.snow.name=Snow
 tile.thebetweenlands.present.name=Present
-tile.thebetweenlands.giant_root_block.name=Giant Root Block
+tile.thebetweenlands.giant_root.name=Giant Root
+tile.thebetweenlands.giant_root_planks.name=Giant Root Planks
+tile.thebetweenlands.giant_root_plank_trapdoor.name=Giant Root Plank Trapdoor
+tile.thebetweenlands.giant_root_plank_stairs.name=Giant Root Plank Stairs
+tile.thebetweenlands.giant_root_plank_slab.name=Giant Root Plank Slab
+tile.thebetweenlands.giant_root_plank_fence.name=Giant Root Plank Fence
+tile.thebetweenlands.giant_root_plank_fence_gate.name=Giant Root Plank Fence Gate
 
 # Items
 
@@ -553,6 +559,7 @@ item.thebetweenlands.yellow_dotted_fungus.name=Yellow Dotted Fungus
 item.thebetweenlands.weedwood_door_item.name=Weedwood Door
 item.thebetweenlands.syrmorite_door_item.name=Syrmorite Door
 item.thebetweenlands.rubber_tree_plank_door_item.name=Rubber Tree Plank Door
+item.thebetweenlands.giant_root_plank_door_item.name=Giant Root Plank Door
 item.thebetweenlands.moss_bed_item.name=Moss Bed
 item.thebetweenlands.lore_scrap.them.name=Lurking Shadows
 item.thebetweenlands.lore_scrap.mutants.name=Mutants of Terror

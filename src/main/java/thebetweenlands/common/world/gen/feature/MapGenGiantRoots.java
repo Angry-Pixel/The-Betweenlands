@@ -54,7 +54,7 @@ public class MapGenGiantRoots extends MapGenBase {
 		int inChunkZ = 0;
 		for(int xs = 0; xs < subDivs; xs++) {
 			for(int zs = 0; zs < subDivs; zs++) {
-				if(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ)) == BiomeRegistry.COARSE_ISLANDS && this.rand.nextInt(25) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
+				if(worldIn.getBiomeProvider().getBiome(new BlockPos(chunkX * 16 + inChunkX, 64, chunkZ * 16 + inChunkZ)) == BiomeRegistry.COARSE_ISLANDS && this.rand.nextInt(30) == 0 /*&& this.coarseIslandsFeature.isIslandAt(inChunkX, inChunkZ, 1) && !this.coarseIslandsFeature.isIslandCragrockAt(inChunkX, inChunkZ)*/) {
 					BlockPos candidate = new BlockPos(chunkX * 16 + inChunkX, WorldProviderBetweenlands.LAYER_HEIGHT - 6, chunkZ * 16 + inChunkZ);
 					startCandidates.add(candidate);
 				}
@@ -70,7 +70,11 @@ public class MapGenGiantRoots extends MapGenBase {
 			BlockPos endCandidate = this.findEndpoint(startCandidate.getX() >> 4, startCandidate.getZ() >> 4, startCandidate, 2);
 
 			if(endCandidate != null) {
-				this.giantRootGens.add(new WorldGenGiantRoot(startCandidate, endCandidate, this.rand.nextInt(10) == 0 ? 35 : 14));
+				WorldGenGiantRoot gen = new WorldGenGiantRoot(startCandidate, endCandidate, this.rand.nextInt(11) == 0 ? 35 : 14);
+				if(gen.start.distanceSq(gen.end) >= 60*60 && this.rand.nextInt(15) == 0) {
+					gen.setMaxWidth(4).setMinWidth(4);
+				}
+				this.giantRootGens.add(gen);
 			}
 		}
 	}
