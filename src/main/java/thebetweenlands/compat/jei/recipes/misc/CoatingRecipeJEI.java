@@ -4,7 +4,6 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IStackHelper;
@@ -12,10 +11,13 @@ import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -30,12 +32,18 @@ public class CoatingRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafting
         craftingGridHelper = guiHelper.createCraftingGridHelper(1, 0);
     }
 
-    public static void setCoatableItems(IIngredientRegistry registry) {
+    public static void setCoatableItems() {
         coatableItems.clear();
-        for (ItemStack stack: registry.getAllIngredients(ItemStack.class)) {
+        for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(ItemStack.class)) {
             if (!stack.isEmpty() && stack.getItem() instanceof ICorrodible)
                 coatableItems.add(stack);
         }
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getRegistryName() {
+        return RecipeRegistry.COATING;
     }
 
     @Override
@@ -83,5 +91,6 @@ public class CoatingRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafting
 
         craftingGridHelper.setInputs(guiItemStacks, inputs);
         guiItemStacks.set(0, outputs.get(0));
+        BetweenlandsJEIPlugin.addRecipeName(getRegistryName(), guiItemStacks, 0);
     }
 }

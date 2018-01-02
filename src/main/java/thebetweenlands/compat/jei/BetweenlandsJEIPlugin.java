@@ -1,15 +1,23 @@
 package thebetweenlands.compat.jei;
 
 import mezz.jei.api.*;
+import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.ingredients.IIngredientBlacklist;
+import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import mezz.jei.api.recipe.VanillaRecipeCategoryUid;
 import mezz.jei.api.recipe.transfer.IRecipeTransferRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
@@ -20,6 +28,7 @@ import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.compat.jei.recipes.animator.AnimatorRecipeCategory;
 import thebetweenlands.compat.jei.recipes.animator.AnimatorRecipeMaker;
 import thebetweenlands.compat.jei.recipes.compost.CompostRecipeCategory;
@@ -40,9 +49,11 @@ import java.util.List;
 public class BetweenlandsJEIPlugin implements IModPlugin{
     public static IJeiHelpers jeiHelper;
     public static IJeiRuntime jeiRuntime;
+    public static IIngredientRegistry ingredientRegistry;
 
     @Override
     public void register(IModRegistry registry) {
+        ingredientRegistry = registry.getIngredientRegistry();
     	MinecraftForge.EVENT_BUS.register(DynamicJEIRecipeHandler.class);
 
         registry.addRecipeCatalyst(new ItemStack(BlockRegistry.COMPOST_BIN), ModInfo.ID + ":compost");
@@ -98,16 +109,24 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
     private void addDynamicRecipes(IModRegistry registry) {
         List<IRecipe> recipes = new ArrayList<>();
 
+        //Change active container to prevent warnings
+        Loader loader = Loader.instance();
+        ModContainer activeModContainer = loader.activeModContainer();
+        ModContainer modContainer = loader.getIndexedModList().get(ModInfo.ID);
+        if (modContainer != null) {
+            loader.setActiveModContainer(modContainer);
+        }
+
         //MummyBait
         registry.handleRecipes(RecipeMummyBait.class, recipe -> new MummyBaitRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
 
         //Vials
-        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)));
-        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 1)));
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 0), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 0)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getResourcePath() + "_green"));
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 1)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getResourcePath() + "_orange"));
 
         //Plant Tonic
-        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.WEEDWOOD_BUCKET_PLANT_TONIC, ItemRegistry.WEEDWOOD_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL));
-        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.SYRMORITE_BUCKET_PLANT_TONIC, ItemRegistry.SYRMORITE_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL));
+        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.WEEDWOOD_BUCKET_PLANT_TONIC, ItemRegistry.WEEDWOOD_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_weedwood"));
+        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.SYRMORITE_BUCKET_PLANT_TONIC, ItemRegistry.SYRMORITE_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_syrmorite"));
 
         //Lurker skin
         ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);
@@ -116,8 +135,11 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         for (int i = 0; i < 3; i++) {
             input.setItemDamage(i);
             output.setItemDamage(i+1);
-            recipes.add(new ShapedOreRecipe(null, output.copy(), "LLL", "LPL", "LLL", 'L', skin, 'P', input.copy()));
+            recipes.add(new ShapedOreRecipe(null, output.copy(), "LLL", "LPL", "LLL", 'L', skin, 'P', input.copy()).setRegistryName(ModInfo.ID, RecipeRegistry.LURKER_POUCH.getResourcePath() + "_" + i));
         }
+
+        //Reset the active container
+        loader.setActiveModContainer(activeModContainer);
 
         //MarshRunnerBoots
         registry.handleRecipes(RecipeMarshRunnerBoots.class, recipe -> new MarshRunnerBootsRecipeJEI(), VanillaRecipeCategoryUid.CRAFTING);
@@ -126,11 +148,11 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         registry.handleRecipes(RecipesLifeCrystal.class, recipe -> new LifeCrystalRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
         //Coating
-        CoatingRecipeJEI.setCoatableItems(registry.getIngredientRegistry());
+        CoatingRecipeJEI.setCoatableItems();
         registry.handleRecipes(RecipesCoating.class, recipe -> new CoatingRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
         //CircleGems
-        CircleGemsRecipeJEI.setApplicableItems(registry.getIngredientRegistry());
+        CircleGemsRecipeJEI.updateApplicableItems();
         registry.handleRecipes(RecipesCircleGems.class, recipe -> new CircleGemsRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
         //Book merging
@@ -161,6 +183,17 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
 	public void registerCategories(IRecipeCategoryRegistration registry) {
         jeiHelper = registry.getJeiHelpers();
         registry.addRecipeCategories(new CompostRecipeCategory(), new AnimatorRecipeCategory(), new DruidAltarRecipeCategory(), new PestleAndMortarCategory(), new PurifierRecipeCategory());
+    }
+
+    public static void addRecipeName(ResourceLocation registryName, IGuiItemStackGroup guiItemStacks, int ouputIndex) {
+        guiItemStacks.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+            if (slotIndex == ouputIndex) {
+                boolean showAdvanced = Minecraft.getMinecraft().gameSettings.advancedItemTooltips || GuiScreen.isShiftKeyDown();
+                if (showAdvanced) {
+                    tooltip.add(TextFormatting.GRAY + registryName.getResourcePath());
+                }
+            }
+        });
     }
 
 }

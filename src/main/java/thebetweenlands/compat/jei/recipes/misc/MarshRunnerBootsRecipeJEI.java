@@ -4,14 +4,23 @@ import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MarshRunnerBootsRecipeJEI implements ICraftingRecipeWrapper {
+
+    @Nullable
+    @Override
+    public ResourceLocation getRegistryName() {
+        return RecipeRegistry.RUNNER_BOOTS;
+    }
 
     @Override
     public void getIngredients(IIngredients ingredients) {

@@ -39,6 +39,17 @@ import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class RecipeRegistry {
+
+	public static ResourceLocation CIRCLE_GEMS = new ResourceLocation(ModInfo.ID, "recipe_circle_gems");
+	public static ResourceLocation COATING = new ResourceLocation(ModInfo.ID, "recipe_coating");
+	public static ResourceLocation LIFE_CRYSTAL = new ResourceLocation(ModInfo.ID, "recipe_life_crystal");
+	public static ResourceLocation PLANT_TONIC = new ResourceLocation(ModInfo.ID, "recipe_plant_tonic");
+	public static ResourceLocation LURKER_POUCH = new ResourceLocation(ModInfo.ID, "recipe_lurker_skin_pouch_upgrade");
+	public static ResourceLocation MUMMY_BAIT = new ResourceLocation(ModInfo.ID, "recipe_mummy_bait");
+	public static ResourceLocation ASPECT_VIAL = new ResourceLocation(ModInfo.ID, "recipe_aspect_vial");
+	public static ResourceLocation RUNNER_BOOTS = new ResourceLocation(ModInfo.ID, "recipe_marsh_runner_boots");
+	public static ResourceLocation BOOK_MERGE = new ResourceLocation(ModInfo.ID, "recipe_book_merge");
+
 	private RecipeRegistry() { }
 
 	public static void init() {
@@ -167,15 +178,15 @@ public class RecipeRegistry {
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
 
-		registry.register(new RecipesCircleGems().setRegistryName(ModInfo.ID + "recipes_circle_gems"));
-		registry.register(new RecipesCoating().setRegistryName(ModInfo.ID + "recipes_coating"));
-		registry.register(new RecipesLifeCrystal().setRegistryName(ModInfo.ID + "recipes_life_rystal"));
-		registry.register(new RecipesPlantTonic().setRegistryName(ModInfo.ID + "recipes_plant_tonic"));
-		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName(ModInfo.ID + "recipes_lurker_skin_pouch_upgrade"));
-		registry.register(new RecipeMummyBait().setRegistryName(ModInfo.ID + "recipes_mummy_bait"));
-		registry.register(new RecipesAspectVials().setRegistryName(ModInfo.ID + "recipes_aspect_vial"));
-		registry.register(new RecipeMarshRunnerBoots().setRegistryName(ModInfo.ID + "marsh_runner_boots"));
-		registry.register(new BookMergeRecipe().setRegistryName(ModInfo.ID + "book_merge"));
+		registry.register(new RecipesCircleGems().setRegistryName(CIRCLE_GEMS));
+		registry.register(new RecipesCoating().setRegistryName(COATING));
+		registry.register(new RecipesLifeCrystal().setRegistryName(LIFE_CRYSTAL));
+		registry.register(new RecipesPlantTonic().setRegistryName(PLANT_TONIC));
+		registry.register(new RecipeLurkerSkinPouchUpgrades().setRegistryName(LURKER_POUCH));
+		registry.register(new RecipeMummyBait().setRegistryName(MUMMY_BAIT));
+		registry.register(new RecipesAspectVials().setRegistryName(ASPECT_VIAL));
+		registry.register(new RecipeMarshRunnerBoots().setRegistryName(RUNNER_BOOTS));
+		registry.register(new BookMergeRecipe().setRegistryName(BOOK_MERGE));
 	}
 
 	private static void registerSmelting() {
