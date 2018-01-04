@@ -78,9 +78,9 @@ public class WorldRenderHandler {
 
 		ITextureObject texture = MC.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		texture.setBlurMipmap(true, false);
-
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
+		texture.setBlurMipmap(true, false);
 
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexBuffer = tessellator.getBuffer();
