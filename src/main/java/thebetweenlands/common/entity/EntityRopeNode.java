@@ -174,8 +174,8 @@ public class EntityRopeNode extends Entity {
 					}
 				}
 				if(nextNode.getDistance(this) > ROPE_LENGTH_MAX) {
-					if(nextNode instanceof ICommandSender) {
-						((ICommandSender) nextNode).sendMessage(new TextComponentTranslation("chat.rope.disconnected"));
+					if(nextNode instanceof EntityPlayer) {
+						((EntityPlayer) nextNode).sendStatusMessage(new TextComponentTranslation("chat.rope.disconnected"), true);
 					}
 					this.setNextNode(null);
 				}
@@ -303,7 +303,7 @@ public class EntityRopeNode extends Entity {
 						}
 					}
 					if(connectedRopeNode != null) {
-						player.sendMessage(new TextComponentTranslation("chat.rope.already_connected"));
+						player.sendStatusMessage(new TextComponentTranslation("chat.rope.already_connected"), true);
 						return false;
 					}
 

@@ -119,7 +119,7 @@ public class BlockRepeller extends BlockContainer {
 						}
 					} else {
 						if(!world.isRemote) {
-							player.sendMessage(new TextComponentTranslation("chat.repeller.shimmerstone_missing"));
+							player.sendStatusMessage(new TextComponentTranslation("chat.repeller.shimmerstone_missing"), true);
 						}
 					}
 				} else if(held.getItem() == ItemRegistry.DENTROTHYST_VIAL && tile.getFuel() > 0) {

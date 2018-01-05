@@ -108,11 +108,11 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 							break;
 						case -1:
 						default:
-							player.sendMessage(new TextComponentTranslation("chat.compost.full"));
+							player.sendStatusMessage(new TextComponentTranslation("chat.compost.full"), true);
 							break;
 						}
 					} else {
-						player.sendMessage(new TextComponentTranslation("chat.compost.not.compostable"));
+						player.sendStatusMessage(new TextComponentTranslation("chat.compost.not.compostable"), true);
 					}
 				} else if(tile.getCompostedAmount() > 0 && open) {
 					if (tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {

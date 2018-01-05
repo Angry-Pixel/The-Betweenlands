@@ -65,7 +65,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 							worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 							playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
 						} else {
-							playerIn.sendMessage(new TextComponentTranslation("chat.talisman.noplace"));
+							playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.noplace"), true);
 						}
 					}
 					stack.damageItem(1, playerIn);

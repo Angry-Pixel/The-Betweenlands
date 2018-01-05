@@ -65,11 +65,11 @@ public class ItemAmuletSlot extends Item {
 					}
 				}
 
-				player.sendMessage(new TextComponentTranslation("chat.amulet.slot.added"));
+				player.sendStatusMessage(new TextComponentTranslation("chat.amulet.slot.added"), true);
 
 				return true;
 			} else {
-				player.sendMessage(new TextComponentTranslation("chat.amulet.slot.full"));
+				player.sendStatusMessage(new TextComponentTranslation("chat.amulet.slot.full"), true);
 			}
 		}
 		return false;

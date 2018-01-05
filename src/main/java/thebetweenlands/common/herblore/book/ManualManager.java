@@ -145,7 +145,7 @@ public class ManualManager {
     public static void playerDiscoverPage(EntityPlayer player, String name, Item itemManual) {
         if (!ManualManager.hasFoundPage(player, name, itemManual) && player != null && player.inventory.hasItemStack(new ItemStack(itemManual)) && !player.world.isRemote) {
             if (ManualManager.findPage(player, name, itemManual))
-                player.sendMessage(new TextComponentTranslation("chat.manual.discover_page", new TextComponentTranslation("manual." + name + ".title")));
+                player.sendStatusMessage(new TextComponentTranslation("chat.manual.discover_page", new TextComponentTranslation("manual." + name + ".title")), true);
         }
     }
 

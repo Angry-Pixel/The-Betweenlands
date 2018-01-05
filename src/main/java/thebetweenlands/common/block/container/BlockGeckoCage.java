@@ -138,26 +138,26 @@ public class BlockGeckoCage extends BlockContainer {
 									case LAST:
 										DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 										tile.setAspectType(discovery.discovered.type, 600);
-										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()));
+										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), true);
 										if(discovery.result == EnumDiscoveryResult.LAST) {
-                                            player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.last"));
+                                            player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.last"), true);
                                         } else {
-                                            player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.more"));
+                                            player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.more"), true);
                                         }
 										if(!player.capabilities.isCreativeMode)
                                             heldItemStack.shrink(1);
 										return true;
 									case END:
 										//already all discovered
-										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.end"));
+										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.end"), true);
 										return false;
 									default:
 										//no aspects
-										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
+										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.none"), true);
 										return false;
 									}
 								} else {
-									player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.none"));
+									player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.none"), true);
 									return true;
 								}
 							} else {
@@ -167,19 +167,19 @@ public class BlockGeckoCage extends BlockContainer {
 						} else {
 							//no herblore book
 							if(!world.isRemote) 
-								player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.book.none"));
+								player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.book.none"), true);
 							return false;
 						}
 					} else {
 						//no gecko
 						if(!world.isRemote) 
-							player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.none"));
+							player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.none"), true);
 						return false;
 					}
 				} else {
 					//recovering
 					if(!world.isRemote) 
-						player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.recovering"));
+						player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.gecko.recovering"), true);
 					return false;
 				}
 			}

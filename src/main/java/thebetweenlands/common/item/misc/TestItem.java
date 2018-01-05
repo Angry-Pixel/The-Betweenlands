@@ -10,6 +10,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.world.gen.feature.WorldGenGiantRoot;
+import thebetweenlands.common.world.gen.feature.WorldGenMangroveTree;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
 
 //MINE!!
@@ -80,6 +81,7 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");
 			
@@ -97,6 +99,10 @@ public class TestItem extends Item {
 				
 				nbt.removeTag("x1");
 			}
+		*/
+			
+			WorldGenMangroveTree tree = new WorldGenMangroveTree();
+			tree.generate(worldIn, itemRand, pos.add(0, 10, 0));
 		}
 
 		return EnumActionResult.SUCCESS;
