@@ -49,6 +49,16 @@ public abstract class EnvironmentEvent {
 	}
 
 	/**
+	 * Resets the active state. Can be used by seasonal events to
+	 * reset to the correct and expected state
+	 */
+	public void resetActiveState() {
+		if(this.isActive()) {
+			this.setActive(false, true);
+		}
+	}
+	
+	/**
 	 * Marks this event as dirty, indicating that something has changed. Forces the server to send a packet to the client
 	 * and save the data when the world is saved.
 	 */

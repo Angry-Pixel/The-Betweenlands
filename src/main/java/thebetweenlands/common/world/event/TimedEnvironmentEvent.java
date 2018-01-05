@@ -16,7 +16,9 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 
 	@Override
 	public void update(World world) {
-		if(!this.getRegistry().isDisabled()) {
+		super.update(world);
+		
+		if(!this.getRegistry().isDisabled() && this.remoteResetTicks <= 0) {
 			this.ticks--;
 
 			if(!world.isRemote && this.ticks % 20 == 0) {

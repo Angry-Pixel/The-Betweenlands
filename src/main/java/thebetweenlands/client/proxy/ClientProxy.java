@@ -1,5 +1,6 @@
 package thebetweenlands.client.proxy;
 
+import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -627,5 +628,10 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
         WeedwoodRowboatHandler.INSTANCE.onPilotExitWeedwoodRowboat(rowboat, pilot);
+    }
+    
+    @Override
+    public Proxy getNetProxy() {
+    	return Minecraft.getMinecraft().getProxy();
     }
 }

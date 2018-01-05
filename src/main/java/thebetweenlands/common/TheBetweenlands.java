@@ -36,6 +36,7 @@ import thebetweenlands.common.handler.BlockBreakHandler;
 import thebetweenlands.common.handler.ElixirCommonHandler;
 import thebetweenlands.common.handler.EntitySpawnHandler;
 import thebetweenlands.common.handler.EnvironmentEventHandler;
+import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
 import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.handler.ItemEquipmentHandler;
 import thebetweenlands.common.handler.LocationHandler;
@@ -205,5 +206,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ElixirCommonHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(BlockWeedwoodBush.class);
 		MinecraftForge.EVENT_BUS.register(ItemDentrothystShield.class);
+		MinecraftForge.EVENT_BUS.register(EnvironmentEventOverridesHandler.class);
 	}
 }

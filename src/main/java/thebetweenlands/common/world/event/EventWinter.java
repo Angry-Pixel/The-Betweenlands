@@ -25,7 +25,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
@@ -40,9 +39,9 @@ import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class EventWinter extends EnvironmentEvent {
+public class EventWinter extends BLEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
-	
+
 	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 1, 0, 0).getTime().getTime();
 
 	private World world;
@@ -163,6 +162,22 @@ public class EventWinter extends EnvironmentEvent {
 					}
 				}
 			}
+		}
+	}
+
+	@Override
+	public void resetActiveState() {
+		long dayDiff = this.getDayDiff();
+		if (dayDiff >= 0 && dayDiff <= 31 && ConfigHandler.enableSeasonalEvents) {
+			if (!this.isActive()) {
+				this.setActive(true, true);
+			}
+			this.wasSet = true;
+		} else {
+			if(this.isActive()) {
+				this.setActive(false, true);
+			}
+			this.wasSet = false;
 		}
 	}
 

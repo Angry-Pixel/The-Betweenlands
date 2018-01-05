@@ -1,7 +1,10 @@
 package thebetweenlands.common.proxy;
 
+import java.net.Proxy;
 import java.util.Collections;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
@@ -188,5 +191,10 @@ public class CommonProxy implements IGuiHandler {
 
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
+    }
+    
+    @Nullable
+    public Proxy getNetProxy() {
+    	return null;
     }
 }

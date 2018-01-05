@@ -14,16 +14,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.util.config.ConfigHandler;
 
-public class EventSpoopy extends EnvironmentEvent {
+public class EventSpoopy extends BLEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "spook");
-	
+
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
 
 	private World world;
@@ -76,7 +75,7 @@ public class EventSpoopy extends EnvironmentEvent {
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
 			updateModelActiveState(active);
-			
+
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			int px = MathHelper.floor(player.posX) - 256;
 			int py = MathHelper.floor(player.posY) - 256;
@@ -123,6 +122,22 @@ public class EventSpoopy extends EnvironmentEvent {
 	}
 
 	@Override
+	public void resetActiveState() {
+		long dayDiff = this.getDayDiff();
+		if (dayDiff >= 0 && dayDiff <= 8 && ConfigHandler.enableSeasonalEvents) {
+			if (!this.isActive()) {
+				this.setActive(true, true);
+			}
+			this.wasSet = true;
+		} else {
+			if(this.isActive()) {
+				this.setActive(false, true);
+			}
+			this.wasSet = false;
+		}
+	}
+
+	@Override
 	public void saveEventData() { 
 		super.saveEventData();
 		this.getData().setBoolean("wasSet", this.wasSet);
@@ -144,7 +159,7 @@ public class EventSpoopy extends EnvironmentEvent {
 			updateModelActiveState(false);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static void updateModelActiveState(boolean active) {
 		ModelRegistry.SPOOK_EVENT.setActive(active);

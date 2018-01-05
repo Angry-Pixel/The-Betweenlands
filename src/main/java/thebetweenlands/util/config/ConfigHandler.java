@@ -45,6 +45,8 @@ public class ConfigHandler {
 
 	public static boolean fullbrightBlocks;
 	
+	public static boolean onlineEnvironmentEventOverrides;
+	
 	public Configuration config;
 	public static String path = "";
 
@@ -60,7 +62,8 @@ public class ConfigHandler {
 		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles", 80, "Higher numbers decrease rate").getInt(80);
 		dimensionBrightness = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
 		enableSeasonalEvents = config.getBoolean("Enable Seasonal Events", CATEGORIES[0], true, "If true seasonal events will occur during special periods during a year");
-
+		onlineEnvironmentEventOverrides = config.getBoolean("Enable Online Environment Event Overrides", CATEGORIES[0], true, "If true this allows the developers to remotely enable certain environment events (such as the seasonal events for example) over a file hosted on our repository (https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/environment_event_overrides/overrides.json). If you do not wish to use this feature it can be fully disabled by setting this to false");
+		
 		wispQuality = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 50).setMinValue(0).setMaxValue(100).getInt(100);
 		useShader = config.getBoolean("Use shaders for rendering", CATEGORIES[1], true, "Some features in the Betweenlands use shaders for special effects. If you don't have a dedicated graphics card or want to use other mods with shaders you should set this to false. May have an impact on performance depending on your computer. Forces FBOs to be enabled");
 		skyResolution = config.get(CATEGORIES[1], "Sky texture resolution", 1024, "Only works when shaders are enabled. Determines the resolution of the shader sky texture. Bigger resolutions may have a bad impact on performance").getInt(1024);
