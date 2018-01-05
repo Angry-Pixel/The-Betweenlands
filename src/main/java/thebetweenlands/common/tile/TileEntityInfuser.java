@@ -332,7 +332,6 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		}
 		if (getWaterAmount() == 0) {
 			if (hasInfusion) {
-
 				for (int i = 0; i <= TileEntityInfuser.MAX_INGREDIENTS; i++) {
 					ItemStack stack = getStackInSlot(i);
 					if (!stack.isEmpty() && stack.getItem() == ItemRegistry.ASPECT_VIAL) {
@@ -365,6 +364,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			}
 			hasInfusion = false;
 			temp = 0;
+			waterTank.setFluid(new FluidStack(FluidRegistry.SWAMP_WATER, 0));
 		}
 		evaporation = 0;
 		this.markForUpdate();

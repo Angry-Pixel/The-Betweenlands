@@ -23,6 +23,7 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemMisc;
+import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -125,8 +126,8 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.DENTROTHYST_VIAL, 1, 2), new ItemStack(ItemRegistry.ASPECT_VIAL,  1, 1)).setRegistryName(ModInfo.ID, RecipeRegistry.ASPECT_VIAL.getResourcePath() + "_orange"));
 
         //Plant Tonic
-        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.WEEDWOOD_BUCKET_PLANT_TONIC, ItemRegistry.WEEDWOOD_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_weedwood"));
-        recipes.add(new ShapelessOreRecipe(null, ItemRegistry.SYRMORITE_BUCKET_PLANT_TONIC, ItemRegistry.SYRMORITE_BUCKET_FILLED.getFilledBucket(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME)), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_syrmorite"));
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.BL_BUCKET_PLANT_TONIC, 1, 0), ItemRegistry.BL_BUCKET.withFluid(0, FluidRegistry.SWAMP_WATER), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_weedwood"));
+        recipes.add(new ShapelessOreRecipe(null, new ItemStack(ItemRegistry.BL_BUCKET_PLANT_TONIC, 1, 1), ItemRegistry.BL_BUCKET.withFluid(1, FluidRegistry.SWAMP_WATER), ItemRegistry.SAP_BALL).setRegistryName(ModInfo.ID, RecipeRegistry.PLANT_TONIC.getResourcePath() + "_syrmorite"));
 
         //Lurker skin
         ItemStack output = new ItemStack(ItemRegistry.LURKER_SKIN_POUCH);

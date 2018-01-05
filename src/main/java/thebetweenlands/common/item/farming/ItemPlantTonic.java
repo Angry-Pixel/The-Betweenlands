@@ -1,31 +1,61 @@
 package thebetweenlands.common.item.farming;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 
-public class ItemPlantTonic extends Item {
-	protected final ItemStack empty;
+import javax.annotation.Nullable;
+import java.util.HashMap;
+import java.util.Map;
 
-	public ItemPlantTonic(ItemStack empty) {
-		this.empty = empty;
+public class ItemPlantTonic extends Item implements ItemRegistry.IMultipleItemModelDefinition {
+
+	public ItemPlantTonic() {
 		this.setCreativeTab(BLCreativeTabs.GEARS);
 		this.setMaxStackSize(1);
-		this.setMaxDamage(3);
+		this.setHasSubtypes(true);
+		this.setMaxDamage(0);
+	}
+
+	@Override
+	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
+		if (this.isInCreativeTab(tab)) {
+			items.add(new ItemStack(this, 1, 0));
+			items.add(new ItemStack(this, 1, 1));
+		}
+	}
+
+	@Override
+	public double getDurabilityForDisplay(ItemStack stack) {
+		return getUsages(stack) / 3F;
+	}
+
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return getUsages(stack) > 0;
+	}
+
+	@Nullable
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable NBTTagCompound nbt) {
+		if (!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+		return super.initCapabilities(stack, nbt);
 	}
 
 	@Override
@@ -63,9 +93,9 @@ public class ItemPlantTonic extends Item {
 
 			if(cured) {
 				if(!world.isRemote && !player.isCreative()) {
-					stack.setItemDamage(stack.getItemDamage() + 1);
-					if(stack.getItemDamage() >= stack.getMaxDamage()) {
-						player.setHeldItem(hand, !this.empty.isEmpty() ? this.empty.copy() : ItemStack.EMPTY);
+					setUsages(stack, getUsages(stack) + 1);
+					if(getUsages(stack) >= 3) {
+						player.setHeldItem(hand, new ItemStack(ItemRegistry.BL_BUCKET, 1, getMetadata(stack)));
 					}
 				}
 
@@ -76,5 +106,38 @@ public class ItemPlantTonic extends Item {
 		}
 
 		return EnumActionResult.PASS;
+	}
+
+	private NBTTagCompound getNBT(ItemStack stack) {
+		NBTTagCompound compound = stack.getTagCompound();
+		if (compound == null) {
+			compound = new NBTTagCompound();
+			compound.setInteger("usages", 0);
+			stack.setTagCompound(compound);
+		}
+		return compound;
+	}
+
+	private void setUsages(ItemStack stack, int usage) {
+		getNBT(stack).setInteger("usages", Math.max(usage, 0));
+	}
+
+	private int getUsages(ItemStack stack) {
+		return getNBT(stack).getInteger("usages");
+	}
+
+	@Override
+	public String getUnlocalizedName(ItemStack stack) {
+		if (stack.getMetadata() >= 2)
+			return getUnlocalizedName() + ".unknown";
+		return getUnlocalizedName() + (stack.getMetadata() == 0 ? "_weedwood": "_syrmorite");
+	}
+
+	@Override
+	public Map<Integer, ResourceLocation> getModels() {
+		Map<Integer, ResourceLocation> models = new HashMap<>();
+		models.put(0, new ResourceLocation(getRegistryName().toString() + "_weedwood"));
+		models.put(1, new ResourceLocation(getRegistryName().toString() + "_syrmorite"));
+		return models;
 	}
 }

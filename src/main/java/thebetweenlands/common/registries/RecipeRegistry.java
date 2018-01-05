@@ -31,6 +31,7 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
+import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.*;
@@ -211,8 +212,8 @@ public class RecipeRegistry {
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_TILES), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_TILES), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.BETWEENSTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_BETWEENSTONE_BRICKS), 0.1F);
 		GameRegistry.addSmelting(new ItemStack(BlockRegistry.LIMESTONE_BRICKS), new ItemStack(BlockRegistry.CRACKED_LIMESTONE_BRICKS), 0.1F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_RUBBER), EnumItemMisc.RUBBER_BALL.create(1), 0.5F);
-		GameRegistry.addSmelting(new ItemStack(ItemRegistry.SYRMORITE_BUCKET_RUBBER), new ItemStack(ItemRegistry.SYRMORITE_BUCKET_SOLID_RUBBER), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BL_BUCKET_RUBBER, 1, 0), EnumItemMisc.RUBBER_BALL.create(1), 0.5F);
+		GameRegistry.addSmelting(new ItemStack(ItemRegistry.BL_BUCKET_RUBBER, 1, 1), new ItemStack(ItemRegistry.SYRMORITE_BUCKET_SOLID_RUBBER), 0.5F);
 		GameRegistry.addSmelting(new ItemStack(ItemRegistry.MIRE_SNAIL_EGG), new ItemStack(ItemRegistry.MIRE_SNAIL_EGG_COOKED), 0.4F);
 	}
 

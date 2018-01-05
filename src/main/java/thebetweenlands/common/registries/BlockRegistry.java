@@ -527,8 +527,18 @@ public class BlockRegistry {
     public static final Block SULFUR_FURNACE_DUAL = new BlockBLDualFurnace(false);
     public static final Block SULFUR_FURNACE_DUAL_ACTIVE = new BlockBLDualFurnace(true).setLightLevel(0.875F);
     public static final Block WEEDWOOD_CHEST = new BlockChestBetweenlands(BlockChestBetweenlands.WEEDWOOD_CHEST);
-    public static final Block WEEDWOOD_RUBBER_TAP = new BlockWeedwoodRubberTap();
-    public static final Block SYRMORITE_RUBBER_TAP = new BlockSyrmoriteRubberTap();
+    public static final Block WEEDWOOD_RUBBER_TAP = new BlockRubberTap(BlockRegistry.WEEDWOOD_PLANKS.getDefaultState(), 540) {
+        @Override
+        protected ItemStack getBucket(boolean withRubber) {
+            return new ItemStack(withRubber ? ItemRegistry.BL_BUCKET_RUBBER: ItemRegistry.BL_BUCKET, 1, 0);
+        }
+    };
+    public static final Block SYRMORITE_RUBBER_TAP = new BlockRubberTap(BlockRegistry.SYRMORITE_BLOCK.getDefaultState(), 260) {
+        @Override
+        protected ItemStack getBucket(boolean withRubber) {
+            return new ItemStack(withRubber ? ItemRegistry.BL_BUCKET_RUBBER: ItemRegistry.BL_BUCKET, 1, 1);
+        }
+    };
     public static final BlockSludge SLUDGE = new BlockSludge();
     public static final Block FALLEN_LEAVES = new BlockFallenLeaves("fallenLeaves");
     public static final Block ENERGY_BARRIER = new BlockEnergyBarrier();

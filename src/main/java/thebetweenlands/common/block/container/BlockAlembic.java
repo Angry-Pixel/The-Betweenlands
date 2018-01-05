@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAlembic;
 
@@ -60,11 +61,11 @@ public class BlockAlembic extends BlockContainer {
 
                 if (!player.getHeldItem(hand).isEmpty()) {
                     ItemStack heldStack = player.getHeldItem(hand);
-                    if (heldStack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_INFUSION) {
+                    if (heldStack.getItem() == ItemRegistry.BL_BUCKET_INFUSION) {
                         if (!tile.isFull()) {
                             tile.addInfusion(heldStack);
                             if (!player.capabilities.isCreativeMode)
-                                player.setHeldItem(hand, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET, 1));
+                                player.setHeldItem(hand, ItemBucketInfusion.getEmptyBucket(heldStack));
                         }
                     } else if (heldStack.getItem() == ItemRegistry.DENTROTHYST_VIAL && (heldStack.getItemDamage() == 0 || heldStack.getItemDamage() == 2)) {
                         if (tile.hasFinished()) {

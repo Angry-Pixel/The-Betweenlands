@@ -15,6 +15,7 @@
     }
   },
   "result": {
-    "item": "thebetweenlands:weedwood_bucket"
+    "item": "thebetweenlands:bl_bucket",
+    "data": 0
   }
 }

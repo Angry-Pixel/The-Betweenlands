@@ -40,13 +40,11 @@ import thebetweenlands.util.TranslationHelper;
 
 public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
     public ItemAspectVial() {
-        this.setUnlocalizedName("item.thebetweenlands.aspectVial");
-
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
 
-        setCreativeTab(BLCreativeTabs.HERBLORE);
+        this.setCreativeTab(BLCreativeTabs.HERBLORE);
         this.setContainerItem(ItemRegistry.DENTROTHYST_VIAL);
         addPropertyOverride(new ResourceLocation("aspect"), (stack, worldIn, entityIn) -> {
             List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();

@@ -1,11 +1,14 @@
 package thebetweenlands.common.item.tools;
 
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
@@ -21,18 +24,18 @@ import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.herblore.elixir.ElixirRecipes;
 import thebetweenlands.common.item.ITintedItem;
+import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class ItemWeedwoodBucketInfusion extends Item implements ITintedItem {
+public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
 
-    public ItemWeedwoodBucketInfusion() {
+    public ItemBucketInfusion() {
         this.setMaxStackSize(1);
+        this.setHasSubtypes(true);
+        this.setMaxDamage(0);
     }
 
     @Override
@@ -162,5 +165,31 @@ public class ItemWeedwoodBucketInfusion extends Item implements ITintedItem {
 
     private int getColorFromRGBA(float r, float g, float b, float a) {
         return ((int) (a * 255.0F) << 24) | ((int) (r * 255.0F) << 16) | ((int) (g * 255.0F) << 8) | ((int) (b * 255.0F));
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack stack) {
+        try {
+            switch (stack.getItemDamage()) {
+                case 0:
+                    return "item.thebetweenlands.bl_bucket_infusion.weedwood";
+                case 1:
+                    return "item.thebetweenlands.bl_bucket_infusion.syrmorite";
+            }
+        } catch (Exception e) {
+        }
+        return "item.thebetweenlands.unknown";
+    }
+
+    @Override
+    public Map<Integer, ResourceLocation> getModels() {
+        Map<Integer, ResourceLocation> models = new HashMap<>();
+        models.put(0, new ResourceLocation(getRegistryName().toString() + "_weedwood"));
+        models.put(1, new ResourceLocation(getRegistryName().toString() + "_syrmorite"));
+        return models;
+    }
+
+    public static ItemStack getEmptyBucket(ItemStack stack) {
+        return new ItemStack(ItemRegistry.BL_BUCKET, 1, stack.getMetadata());
     }
 }
