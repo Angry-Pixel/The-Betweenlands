@@ -102,7 +102,7 @@ public class TileEntityBLDualFurnace extends TileEntityBasicInventory implements
 
 	@Override
 	public String getName() {
-		return hasCustomName() ? customName : "container.dualFurnaceBL";
+		return hasCustomName() ? customName : "container.dual_furnace_bl";
 	}
 
 	@Override

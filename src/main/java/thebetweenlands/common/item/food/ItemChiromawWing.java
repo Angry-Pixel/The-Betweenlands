@@ -47,9 +47,9 @@ public class ItemChiromawWing extends ItemBLFood {
         if (player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
             IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
             if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
-                tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromawWing.eat"));
+                tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromaw_wing.eat"));
             } else {
-                tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromawWing.dontEat"));
+                tooltip.add(TranslationHelper.translateToLocal("tooltip.chiromaw_wing.dont_eat"));
             }
         }
     }

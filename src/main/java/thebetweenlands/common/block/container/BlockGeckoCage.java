@@ -138,7 +138,7 @@ public class BlockGeckoCage extends BlockContainer {
 									case LAST:
 										DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 										tile.setAspectType(discovery.discovered.type, 600);
-										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName()));
+										player.sendMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()));
 										if(discovery.result == EnumDiscoveryResult.LAST) {
                                             player.sendMessage(new TextComponentTranslation("chat.aspect.discovery.last"));
                                         } else {

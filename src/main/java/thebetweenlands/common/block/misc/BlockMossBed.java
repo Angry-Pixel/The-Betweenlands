@@ -82,7 +82,7 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 		if(playerIn.dimension == ConfigHandler.dimensionId) {
 			if(!worldIn.isRemote) {
 				playerIn.setSpawnPoint(pos, false);
-				playerIn.sendMessage(new TextComponentTranslation("chat.bedSpawnSet"));
+				playerIn.sendMessage(new TextComponentTranslation("chat.bed_spawn_set"));
 			}
 			return true;
 		} else {

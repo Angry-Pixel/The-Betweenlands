@@ -658,10 +658,10 @@ itemGroup.thebetweenlands.herblore=The Betweenlands Herblore
 
 
 # Container
-container.furnaceBL=Sulfur Furnace
-container.dualFurnaceBL=Dual Sulfur Furnace
-container.lurkerSkinPouch=Lurker Skin Pouch
-container.lurkerSkinPouch.naming.save=Save
+container.furnace_bl=Sulfur Furnace
+container.dual_furnace_bl=Dual Sulfur Furnace
+container.lurker_skin_pouch=Lurker Skin Pouch
+container.lurker_skin_pouch.naming.save=Save
 
 
 # Locations
@@ -682,8 +682,8 @@ location.underground_ruins.name=80:Underground Ruins
 # Tooltips
 tooltip.arrow.octine=Use with caution!
 tooltip.arrow.basilisk=Causes paralysis
-tooltip.chiromawWing.eat=Anything will taste better after eating this...
-tooltip.chiromawWing.dontEat=I probably shouldn't eat this anymore...
+tooltip.chiromaw_wing.eat=Anything will taste better after eating this...
+tooltip.chiromaw_wing.dont_eat=I probably shouldn't eat this anymore...
 tooltip.corrosion.0=Good as new!
 tooltip.corrosion.1=Slightly corroded
 tooltip.corrosion.2=Moderately corroded
@@ -706,19 +706,19 @@ tooltip.ring.flight=Equip using the radial \nmenu [press '%s'], \ndouble tap '%s
 tooltip.ring.power=Equip using the radial \nmenu [press '%s']
 tooltip.ring.recruitment=Equip using the radial \nmenu [press '%s'], \nhold '%s' \non mobs to take control\nover them
 tooltip.press.shift=Hold 'shift' to view more
-tooltip.lifeCrystal.remaining=%d remaining
-tooltip.shockwaveSword.usage=Right-click on the ground\nto create a shockwave
-tooltip.shockwaveSword.broken=The Shockwave Sword is\nbroken and needs to be\nrepaired in an Animator
+tooltip.life_crystal.remaining=%d remaining
+tooltip.shockwave_sword.usage=Right-click on the ground\nto create a shockwave
+tooltip.shockwave_sword.broken=The Shockwave Sword is\nbroken and needs to be\nrepaired in an Animator
 tooltip.compost.compostable=Compostable
-tooltip.foodSickness.state.fine=Tastes good
-tooltip.foodSickness.state.half=Tastes plain
-tooltip.foodSickness.state.sick=Can't eat this anymore
+tooltip.food_sickness.state.fine=Tastes good
+tooltip.food_sickness.state.half=Tastes plain
+tooltip.food_sickness.state.sick=Can't eat this anymore
 tooltip.circlegem.green=§aGreen Gem§r
 tooltip.circlegem.crimson=§cCrimson Gem§r
 tooltip.circlegem.aqua=§9Aqua Gem§r
-tooltip.lurkerSkinPouch.size=%d inventory slots
-tooltip.lurkerSkinPouch.upgrade=Craft surrounded with Lurker Skin to upgrade
-tooltip.lurkerSkinPouch.usage=Press '%s' to open the Pouch
+tooltip.lurker_skin_pouch.size=%d inventory slots
+tooltip.lurker_skin_pouch.upgrade=Craft surrounded with Lurker Skin to upgrade
+tooltip.lurker_skin_pouch.usage=Press '%s' to open the Pouch
 tooltip.octine.fire=Hot enough to set moss on fire
 tooltip.fig=Looks tempting...
 tooltip.pestle=Place Pestle in Mortar
@@ -798,29 +798,29 @@ chat.aspect.discovery.none=This item doesn't seem to have any aspects
 chat.aspect.discovery.more=This item still seems to have some more undiscovered aspects
 chat.aspect.discovery.end=You've already discovered all aspects on this item
 chat.aspect.discovery.last=This seems to be the last undiscovered aspect on this item
-chat.aspect.discovery.Ordaniis=The gecko's scales seem to be glowing slightly
-chat.aspect.discovery.Celawynn=You can hear its belly rumbling and it seems to burp a lot
-chat.aspect.discovery.Yeowynn=You've never seen a healthier gecko, it's bursting with energy
-chat.aspect.discovery.Azuwynn=You can see its muscles twitching uncontrollably
-chat.aspect.discovery.Freiwynn=Its eyes are pulsating
-chat.aspect.discovery.Dayuniis=The gecko is walking around like a drunkard and looks around in a schizophrenic manner
-chat.aspect.discovery.Fergalaz=The gecko's scales seem to become rock hard, it can barely move
-chat.aspect.discovery.Yunugaz=The gecko seems light, and its breath sounds like a hollow wind
-chat.aspect.discovery.Firnalaz=Its scales have a red glow and it breathes a hot breath
-chat.aspect.discovery.Byrginaz=It's drooling, sweating and peeing around its cage
-chat.aspect.discovery.Armaniis=It seems very calm and looks at you with loving eyes
-chat.aspect.discovery.Geoliirgaz=The gecko has an empty look in its eyes and doesn't seem to respond to anything
-chat.aspect.discovery.Yihinren=Its scales became puffy and its head looks... different
-chat.aspect.discovery.Byariis=The gecko is chewing furiously on its tail and looks around as if possessed
+chat.aspect.discovery.ordaniis=The gecko's scales seem to be glowing slightly
+chat.aspect.discovery.celawynn=You can hear its belly rumbling and it seems to burp a lot
+chat.aspect.discovery.yeowynn=You've never seen a healthier gecko, it's bursting with energy
+chat.aspect.discovery.azuwynn=You can see its muscles twitching uncontrollably
+chat.aspect.discovery.freiwynn=Its eyes are pulsating
+chat.aspect.discovery.dayuniis=The gecko is walking around like a drunkard and looks around in a schizophrenic manner
+chat.aspect.discovery.fergalaz=The gecko's scales seem to become rock hard, it can barely move
+chat.aspect.discovery.yunugaz=The gecko seems light, and its breath sounds like a hollow wind
+chat.aspect.discovery.firnalaz=Its scales have a red glow and it breathes a hot breath
+chat.aspect.discovery.byrginaz=It's drooling, sweating and peeing around its cage
+chat.aspect.discovery.armaniis=It seems very calm and looks at you with loving eyes
+chat.aspect.discovery.geoliirgaz=The gecko has an empty look in its eyes and doesn't seem to respond to anything
+chat.aspect.discovery.yihinren=Its scales became puffy and its head looks... different
+chat.aspect.discovery.byariis=The gecko is chewing furiously on its tail and looks around as if possessed
 
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
 
-chat.rope.alreadyConnected=Already connected to another climbing rope
+chat.rope.already_connected=Already connected to another climbing rope
 chat.rope.disconnected=You were disconnected from the climbing rope
-chat.rope.tooFar=You're too far away from the last anchor point
+chat.rope.too_far=You're too far away from the last anchor point
 
-chat.bedSpawnSet=Your Spawn has been set to this Moss Bed
+chat.bed_spawn_set=Your Spawn has been set to this Moss Bed
 
 chat.talisman.noplace=The space is not large enough
 

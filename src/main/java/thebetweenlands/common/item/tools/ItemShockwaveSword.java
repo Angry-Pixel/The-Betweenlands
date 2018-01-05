@@ -58,9 +58,9 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if(stack.getItemDamage() == stack.getMaxDamage()) {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwaveSword.broken"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwave_sword.broken"), 0));
 		} else {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwaveSword.usage"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwave_sword.usage"), 0));
 		}
 	}
 

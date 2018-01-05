@@ -139,7 +139,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
 
     @Override
     public String getName() {
-        return hasCustomName() ? customName : "container.furnaceBL";
+        return hasCustomName() ? customName : "container.furnace_bl";
     }
 
     @Override
