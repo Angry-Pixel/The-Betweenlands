@@ -1,31 +1,11 @@
 [
   {
     "versions": [
-      "3.2.1-alpha-snapshot",
-      "3.3.0-alpha-snapshot"
+      "3.2.1-alpha-snapshot"
     ],
     "overrides": [
       {
-        "id": "thebetweenlands:blood_sky",
-        "value": true
-      },
-      {
-        "id": "thebetweenlands:winter",
-        "value": true
-      },
-      {
-        "id": "thebetweenlands:dense_fog",
-        "value": false
-      }
-    ]
-  },
-  {
-    "versions": [
-      "2.0.0"
-    ],
-    "overrides": [
-      {
-        "id": "thebetweenlands:heavy_rain",
+        "id": "thebetweenlands:spook",
         "value": true
       }
     ]
