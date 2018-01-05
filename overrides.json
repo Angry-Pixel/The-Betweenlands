@@ -1,13 +1,1 @@
-[
-  {
-    "versions": [
-      "3.2.1-alpha-snapshot"
-    ],
-    "overrides": [
-      {
-        "id": "thebetweenlands:spook",
-        "value": true
-      }
-    ]
-  }
-]
+
