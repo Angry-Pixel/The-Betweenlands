@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -81,6 +82,8 @@ public class EnvironmentEventHandler {
 			if(storage != null) {
 				for(EnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
 					TheBetweenlands.networkWrapper.sendTo(new MessageSyncEnvironmentEvent(eevent), (EntityPlayerMP)event.getEntity());
+					if (eevent.isActive())
+						AdvancementCriterionRegistry.EVENT.trigger((EntityPlayerMP) event.getEntity(), eevent.getEventName());
 				}
 			}
 		}

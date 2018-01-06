@@ -12,6 +12,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.world.gen.feature.WorldGenGiantRoot;
 import thebetweenlands.common.world.gen.feature.WorldGenMangroveTree;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -100,8 +101,11 @@ public class TestItem extends Item {
 				nbt.removeTag("x1");
 			}
 		*/
-			
+			/*
 			WorldGenMangroveTree tree = new WorldGenMangroveTree();
+			tree.generate(worldIn, itemRand, pos.add(0, 10, 0));
+			*/
+			WorldGenGiantTree tree = new WorldGenGiantTree();
 			tree.generate(worldIn, itemRand, pos.add(0, 10, 0));
 		}
 

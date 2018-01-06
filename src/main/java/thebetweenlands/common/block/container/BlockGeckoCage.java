@@ -13,6 +13,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -32,6 +33,7 @@ import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery.EnumDiscove
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityGeckoCage;
 import thebetweenlands.util.TranslationHelper;
@@ -88,10 +90,12 @@ public class BlockGeckoCage extends BlockContainer {
 					EntityGecko gecko = new EntityGecko(world);
 					gecko.setHealth(tile.getGeckoUsages());
 					gecko.setLocationAndAngles(pos.getX() + 0.5F, pos.getY(), pos.getZ() + 0.5F, 0.0F, 0.0F);
-					if (!tile.getGeckoName().isEmpty())
+					if (tile.getGeckoName() != null && !tile.getGeckoName().isEmpty())
 						gecko.setCustomNameTag(tile.getGeckoName());
 					world.spawnEntity(gecko);
 					gecko.playLivingSound();
+					if (player instanceof EntityPlayerMP)
+						AdvancementCriterionRegistry.GECKO_TRIGGER.trigger((EntityPlayerMP) player, false, true);
 				}
 			}
 		}
@@ -138,6 +142,8 @@ public class BlockGeckoCage extends BlockContainer {
 									case LAST:
 										DiscoveryContainer.addDiscoveryToContainers(player, aspectItem, discovery.discovered.type);
 										tile.setAspectType(discovery.discovered.type, 600);
+										if (player instanceof EntityPlayerMP)
+											AdvancementCriterionRegistry.GECKO_TRIGGER.trigger((EntityPlayerMP) player, true, false);
 										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), true);
 										if(discovery.result == EnumDiscoveryResult.LAST) {
                                             player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.last"), true);

@@ -10,6 +10,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
@@ -23,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpawnData {
 	private static final DataParameter<String> OWNER_DW = EntityDataManager.<String>createKey(EntitySwordEnergy.class, DataSerializers.STRING);
@@ -129,6 +132,9 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 							entity.motionX = dir.x * knockback;
 							entity.motionY = 0.5D;
 							entity.motionZ = dir.z * knockback;
+							if (entity.getHealth() <= 0) {
+								AdvancementCriterionRegistry.SHOCKWAVE_KILL.trigger((EntityPlayerMP) owner);
+							}
 						}
 					}
 				}

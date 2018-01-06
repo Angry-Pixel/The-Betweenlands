@@ -88,6 +88,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		super.writeToNBT(nbt);
 		nbt.setInteger("RecoverTicks", this.recoverTicks);
 		nbt.setInteger("GeckoUsages", this.geckoUsages);
+		nbt.setString("GeckoName", this.geckoName);
 		nbt.setString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
 		nbt.setInteger("Ticks", this.ticks);
 		return nbt;
@@ -98,6 +99,7 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		super.readFromNBT(nbt);
 		this.recoverTicks = nbt.getInteger("RecoverTicks");
 		this.geckoUsages = nbt.getInteger("GeckoUsages");
+		this.geckoName = nbt.getString("GeckoName");
 		this.aspectType = AspectRegistry.getAspectTypeFromName(nbt.getString("AspectType"));
 		this.ticks = nbt.getInteger("Ticks");
 	}

@@ -18,6 +18,7 @@ public class Registries {
 		StorageRegistry.preInit();
 		Serializers.register();
 		CustomRecipeRegistry.preInit();
+		AdvancementCriterionRegistry.preInit();
 
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ModelRegistry.preInit();

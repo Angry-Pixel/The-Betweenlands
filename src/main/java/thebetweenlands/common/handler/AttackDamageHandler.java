@@ -6,6 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -28,6 +29,13 @@ import thebetweenlands.common.registries.ItemRegistry;
 
 public class AttackDamageHandler {
 	public static final float DAMAGE_REDUCTION = 0.3F;
+
+	@SubscribeEvent
+	public static void onEntityKilled(LivingDeathEvent event) {
+		if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+
+		}
+	}
 
 	@SubscribeEvent
 	public static void onEntityAttacked(LivingHurtEvent event) {

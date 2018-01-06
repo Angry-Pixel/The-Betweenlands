@@ -156,7 +156,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 			return location.isInside(this.pos);
 		});
 		for(LocationGuarded location : locations) {
-			if("druidAltar".equals(location.getName())) {
+			if("druid_altar".equals(location.getName())) {
 				worldStorage.getLocalStorageHandler().removeLocalStorage(location);
 			}
 		}

@@ -1,8 +1,11 @@
 package thebetweenlands.api.environment;
 
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.util.config.ConfigHandler;
 
 public abstract class EnvironmentEvent {
 	private final IEnvironmentEventRegistry registry;
@@ -89,6 +92,9 @@ public abstract class EnvironmentEvent {
 	public void setActive(boolean active, boolean markDirty) {
 		this.active = active;
 		if(markDirty) this.markDirty();
+		if (active)
+			for (EntityPlayerMP player: getWorld().getPlayers(EntityPlayerMP.class, player -> player.dimension == ConfigHandler.dimensionId))
+				AdvancementCriterionRegistry.EVENT.trigger(player, getEventName());
 	}
 
 	/**
