@@ -202,7 +202,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             case EAST:
             case SOUTH:
             case WEST:
-                return new int[]{1, 3};
+                return new int[]{0, 1, 3};
         }
         return new int[]{};
     }
