@@ -255,7 +255,12 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 	}
     
     @Override
-    public boolean isFullBlock(IBlockState state) {
+    public boolean isFullBlock(IBlockState state)    {
     	return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
     }
 }

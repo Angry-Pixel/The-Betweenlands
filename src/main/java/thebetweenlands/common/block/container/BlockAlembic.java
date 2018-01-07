@@ -88,14 +88,14 @@ public class BlockAlembic extends BlockContainer {
             TileEntityAlembic alembic = (TileEntityAlembic) world.getTileEntity(pos);
             if (alembic.isRunning()) {
                 float xx = (float) pos.getX() + 0.5F;
-                float yy = (float) (pos.getY() + 0.35F + rand.nextFloat() * 0.5F);
+                float yy = (float) (pos.getY() + 0.25F + rand.nextFloat() * 0.5F);
                 float zz = (float) pos.getZ() + 0.5F;
                 float fixedOffset = 0.25F;
                 float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy + 0.75D, (double) (zz + randomOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) yy + 0.75D, (double) (zz + randomOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.75D, (double) (zz - fixedOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.75D, (double) (zz + fixedOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy + 0.50D, (double) (zz + randomOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) yy + 0.50D, (double) (zz + randomOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.50D, (double) (zz - fixedOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.50D, (double) (zz + fixedOffset));
                 EnumFacing facing = (EnumFacing) stateIn.getProperties().get(FACING);
                 switch (facing) {
                     case NORTH:
@@ -133,6 +133,11 @@ public class BlockAlembic extends BlockContainer {
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
     }
 
     @Override
