@@ -10,7 +10,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.loot.*;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
@@ -126,24 +125,13 @@ public class LootTableRegistry {
                 if (entries != null && entries.size() > 0) {
                     for (LootEntry entry: entries) {
                         if (entry instanceof LootEntryItem) {
-                            LootFunction[] functions = null;
-                            try {
-                                functions = ReflectionHelper.getPrivateValue(LootEntryItem.class, (LootEntryItem) entry, "functions", "field_186369_b");
-                            } catch (ReflectionHelper.UnableToAccessFieldException e) {
-                                e.printStackTrace();
-                            }
+                            LootFunction[] functions = ((LootEntryItem) entry).functions;
                             ArrayList<ItemStack> tmpItems = new ArrayList<>();
                             entry.addLoot(tmpItems, new Random(), lootContext);
                             if (getCountSpan && functions != null && functions.length > 0) {
                                 for (LootFunction function: functions) {
                                     if (function instanceof SetCount) {
-                                        RandomValueRange valueRange = null;
-
-                                        try {
-                                            valueRange = ReflectionHelper.getPrivateValue(SetCount.class, (SetCount) function, "countRange", "field_186568_a");
-                                        } catch (ReflectionHelper.UnableToAccessFieldException e) {
-                                            e.printStackTrace();
-                                        }
+                                        RandomValueRange valueRange = ((SetCount) function).countRange;
                                         if (valueRange == null)
                                             continue;
 
@@ -160,12 +148,7 @@ public class LootTableRegistry {
                             }
                             items.addAll(tmpItems);
                         } else if (entry instanceof LootEntryTable) {
-                            ResourceLocation location = null;
-                            try {
-                                location = ReflectionHelper.getPrivateValue(LootEntryTable.class, (LootEntryTable) entry, "table", "field_186371_a");
-                            } catch (ReflectionHelper.UnableToAccessFieldException e) {
-                                e.printStackTrace();
-                            }
+                            ResourceLocation location = ((LootEntryTable) entry).table;
                             if (location != null)
                                 items.addAll(getItemsFromTable(location, world, getCountSpan));
                         }

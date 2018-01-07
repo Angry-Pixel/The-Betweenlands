@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.lang.reflect.Method;
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.ARBTextureFloat;
@@ -8,7 +7,6 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -19,16 +17,12 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
-
-	private final Method methodRenderHand = ReflectionHelper.findMethod(EntityRenderer.class,  "renderHand", "func_78476_b", float.class, int.class);
-	private final Method methodSetupCameraTransform = ReflectionHelper.findMethod(EntityRenderer.class, "setupCameraTransform","func_78479_a", float.class, int.class);
 
 	private boolean cancelOverlays = false;
 
@@ -74,12 +68,8 @@ public class ShaderHandler {
 			GlStateManager.colorMask(false, false, false, false);
 			//Don't render water overlays so they don't write to the depth buffer
 			this.cancelOverlays = true;
-			try {
-				this.methodRenderHand.invoke(Minecraft.getMinecraft().entityRenderer, event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-				this.methodSetupCameraTransform.invoke(Minecraft.getMinecraft().entityRenderer, event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
-			}
+			Minecraft.getMinecraft().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
+			Minecraft.getMinecraft().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
 			this.cancelOverlays = false;
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.popMatrix();

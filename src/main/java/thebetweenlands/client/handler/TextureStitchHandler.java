@@ -25,20 +25,15 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
-import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TextureStitchHandler {
 	public static final TextureStitchHandler INSTANCE = new TextureStitchHandler();
-
-	private static final Field f_mapRegisteredSprites = ReflectionHelper.findField(TextureMap.class, "mapRegisteredSprites", "field_110574_e", "j");
 
 	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
 
@@ -66,7 +61,7 @@ public class TextureStitchHandler {
 		this.stitchedCorrosionSprites.clear();
 		Map<String, TextureAtlasSprite> mapRegisteredSprites;
 		try {
-			mapRegisteredSprites = (Map<String, TextureAtlasSprite>) f_mapRegisteredSprites.get(e.getMap());
+			mapRegisteredSprites = e.getMap().mapRegisteredSprites;
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to load underlying sprite map", ex);
 		}

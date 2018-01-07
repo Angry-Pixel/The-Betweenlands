@@ -11,14 +11,12 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class ElixirClientHandler {
@@ -87,9 +85,6 @@ public class ElixirClientHandler {
                 return 0;
         }
     };
-
-    private final Method f_swingHand = ReflectionHelper.findMethod(Minecraft.class, "clickMouse", "func_147116_af");
-    private final Method f_damageBlock = ReflectionHelper.findMethod(Minecraft.class, "sendClickBlockToController", "func_147115_a", boolean.class);
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -165,10 +160,10 @@ public class ElixirClientHandler {
                         try {
                             RayTraceResult target = Minecraft.getMinecraft().objectMouseOver;
                             if(target == null || target.entityHit != null || target.typeOfHit == RayTraceResult.Type.MISS) {
-                                f_swingHand.invoke(Minecraft.getMinecraft());
+                                Minecraft.getMinecraft().clickMouse();
                             } else if(target != null) {
                                 if(!player.isSwingInProgress) {
-                                    f_damageBlock.invoke(Minecraft.getMinecraft(), true);
+                                    Minecraft.getMinecraft().sendClickBlockToController(true);
                                 }
                             }
                         } catch (Exception e) {

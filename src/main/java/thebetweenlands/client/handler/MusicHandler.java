@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,10 +25,8 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.client.audio.EntityMusicSound;
-import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
 import thebetweenlands.util.config.ConfigHandler;
@@ -38,8 +35,6 @@ public class MusicHandler {
 	public static final MusicHandler INSTANCE = new MusicHandler();
 
 	private MusicHandler() { }
-
-	private static final Field f_accessorList = ReflectionHelper.findField(SoundEventAccessor.class, "accessorList", "a", "field_188716_a");
 
 	private static final int MIN_WAIT = 3000;
 	private static final int MAX_WAIT = 6000;
@@ -180,10 +175,13 @@ public class MusicHandler {
 		if(this.musicMenuTrackAccessors == null) {
 			try {
 				this.musicMenuTrackAccessors = new ArrayList<>();
-				List<ISoundEventAccessor<Sound>> soundAccessors = (List<ISoundEventAccessor<Sound>>) f_accessorList.get(this.mc.getSoundHandler().getAccessor(SoundRegistry.BL_MUSIC_MENU.getSoundName()));
-				for(ISoundEventAccessor<Sound> accessor : soundAccessors) {
-					if(accessor instanceof Sound) {
-						this.musicMenuTrackAccessors.add((Sound) accessor);
+				SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(SoundRegistry.BL_MUSIC_DIMENSION.getSoundName());
+				if (soundEventAccessor != null) {
+					List<ISoundEventAccessor<Sound>> soundAccessors = soundEventAccessor.accessorList;
+					for (ISoundEventAccessor<Sound> accessor : soundAccessors) {
+						if (accessor instanceof Sound) {
+							this.musicMenuTrackAccessors.add((Sound) accessor);
+						}
 					}
 				}
 			} catch (Exception ex) {
@@ -202,10 +200,13 @@ public class MusicHandler {
 		if(this.musicDimTrackAccessors == null) {
 			try {
 				this.musicDimTrackAccessors = new ArrayList<>();
-				List<ISoundEventAccessor<Sound>> soundAccessors = (List<ISoundEventAccessor<Sound>>) f_accessorList.get(this.mc.getSoundHandler().getAccessor(SoundRegistry.BL_MUSIC_DIMENSION.getSoundName()));
-				for(ISoundEventAccessor<Sound> accessor : soundAccessors) {
-					if(accessor instanceof Sound) {
-						this.musicDimTrackAccessors.add((Sound) accessor);
+				SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(SoundRegistry.BL_MUSIC_DIMENSION.getSoundName());
+				if (soundEventAccessor != null) {
+					List<ISoundEventAccessor<Sound>> soundAccessors = soundEventAccessor.accessorList;
+					for (ISoundEventAccessor<Sound> accessor : soundAccessors) {
+						if (accessor instanceof Sound) {
+							this.musicDimTrackAccessors.add((Sound) accessor);
+						}
 					}
 				}
 			} catch (Exception ex) {

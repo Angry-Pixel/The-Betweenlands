@@ -1,19 +1,9 @@
 package thebetweenlands.client.handler;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 import java.util.ArrayDeque;
 import java.util.concurrent.FutureTask;
 
-import com.mojang.authlib.GameProfile;
-import net.minecraft.network.play.client.CPacketClientSettings;
-import net.minecraft.stats.StatBase;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.WorldServer;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -35,7 +25,6 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.util.MathUtils;
@@ -58,10 +47,7 @@ public final class WeedwoodRowboatHandler {
 
     public void init() {
         try {
-            Field mods = ReflectionHelper.findField(Field.class, "modifiers");
-            Field scheduledTasks = ReflectionHelper.findField(Minecraft.class, "field_152351_aB", "scheduledTasks");
-            mods.set(scheduledTasks, scheduledTasks.getModifiers() & ~Modifier.FINAL);
-            scheduledTasks.set(MC, new ArrayDeque<FutureTask<?>>() {
+            MC.scheduledTasks = new ArrayDeque<FutureTask<?>>() {
                 @Override
                 public boolean isEmpty() {
                     if (super.isEmpty()) {
@@ -70,7 +56,7 @@ public final class WeedwoodRowboatHandler {
                     }
                     return false;
                 }
-            });
+            };
         } catch (Exception e) {
             throw new RuntimeException("Any problem can be solved with a little ingenuity, he said...", e);
         }
@@ -151,7 +137,7 @@ public final class WeedwoodRowboatHandler {
     @SubscribeEvent
     public void onTickAfterKeyboard(InputEvent.KeyInputEvent event) {
         if (isPlayerInRowboat && Keyboard.getEventKeyState()) {
-            int press = ObfuscationReflectionHelper.getPrivateValue(KeyBinding.class, MC.gameSettings.keyBindTogglePerspective,"pressTime", "field_151474_i", "j");
+            int press = MC.gameSettings.keyBindTogglePerspective.pressTime;
             if (press > 0) {
                 if (view == View.FIRST_PERSON) {
                     enterRowboatPerspective();

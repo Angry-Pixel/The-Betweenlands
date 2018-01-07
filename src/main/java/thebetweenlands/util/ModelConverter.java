@@ -11,14 +11,10 @@ import net.minecraft.client.model.ModelBox;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.model.TexturedQuad;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class ModelConverter {
 	//Holds the rotation matrix
 	private static final RotationMatrix ROTATION_MATRIX = new RotationMatrix();
-
-	//The field of ModelBox#quadList
-	private static Field f_mbQuadList = null;
 
 	public static final class Quad {
 		private Vec3UV[] vertices = new Vec3UV[4];
@@ -340,7 +336,7 @@ public class ModelConverter {
 	 * @param rotationX				Rotation around X axis (degrees)
 	 * @param rotationY				Rotation around Y axis (degrees)
 	 * @param rotationZ				Rotation around Z axis (degrees)
-	 * @param rotaitonCenter		Center of the rotation
+	 * @param rotationCenter		Center of the rotation
 	 */
 	public ModelConverter(ModelBase model, double scale, boolean renderDoubleFace, float rotationX, float rotationY, float rotationZ, Vec3UV rotationCenter) {
 		this.constructModel(model, scale, renderDoubleFace);
@@ -462,13 +458,9 @@ public class ModelConverter {
 				Vec3UV oxz = this.getBoxCorner(true, false, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
 				Vec3UV oxyz = this.getBoxCorner(true, true, true, modelBox, modelRenderer, modelScale, ROTATION_MATRIX);
 
-				//ModelBox quad list
-				if(f_mbQuadList == null) {
-					f_mbQuadList = ReflectionHelper.findField(ModelBox.class, "quadList", "field_78254_i", "i");
-				}
 				TexturedQuad[] mbQuadList = null;
 				try {
-					mbQuadList = (TexturedQuad[]) f_mbQuadList.get(modelBox);
+					mbQuadList = modelBox.quadList;
 				} catch(Exception ex) {
 					ex.printStackTrace();
 				}
