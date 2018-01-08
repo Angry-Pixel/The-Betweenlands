@@ -300,7 +300,6 @@ tile.thebetweenlands.hanger.name=Hanger
 tile.thebetweenlands.hanger_seeded.name=Seeded Hanger
 tile.thebetweenlands.damp_torch.name=Damp Torch
 tile.thebetweenlands.sludge.name=Sludge
-tile.thebetweenlands.animator.name=Animator
 tile.thebetweenlands.alembic.name=Alembic
 tile.thebetweenlands.mortar.name=Mortar
 tile.thebetweenlands.item_shelf.name=Item Shelf
@@ -943,7 +942,6 @@ item.thebetweenlands.record.dj_wights_mixtape.desc=Voog2 - Rave In A Cave
 item.thebetweenlands.record.stuck_in_the_mud.desc=Voog2 - Stuck In The Mud
 item.thebetweenlands.record.waterlogged.desc=Voog2 - Waterlogged
 item.thebetweenlands.record.wandering_wisps.desc=Voog2 - Wandering Wisps
-item.thebetweenlands.record.lonely_fire.desc=Voog2 - Lonely Fire
 item.thebetweenlands.record.ancient.desc=Voog2 - Ancient
 
 
@@ -1035,7 +1033,7 @@ manual.yihinren.description=The aspect that affects both physical and psychologi
 
 #ground items
 manual.item.thebetweenlands.ground_algae.description=Large patches of algae can be found quite commonly in any biome on the surface of the water.
-manual.item.thebetweenlands.ground_arrow_arum.description=Arrow Arum is a leafy plane that grows in the wet Marshes of The Betweenlands.
+manual.item.thebetweenlands.ground_arrow_arum.description=Arrow Arum is a leafy plant that grows in the wet Marshes of The Betweenlands.
 manual.item.thebetweenlands.ground_blackhat_mushroom.description=Black Hat Mushrooms can be found scattered about everywhere in Swamplands biomes.
 manual.item.thebetweenlands.ground_bog_bean.description=Found in the Patchy Islands biome, Bog Bean grows on mud in shallow water.
 manual.item.thebetweenlands.ground_boneset.description=Boneset is a flower that grows in the Patchy Islands biome.
@@ -1052,7 +1050,7 @@ manual.item.thebetweenlands.ground_hanger.description=Hangers are vine-like plan
 manual.item.thebetweenlands.ground_lichen.description=Lichen is a plant can be found growing on Cragrock Spires in the Deep Waters biome, and also sometimes underground or on stone based structures.
 manual.item.thebetweenlands.ground_marsh_hibiscus.description=The Marsh Hibiscus is a pretty looking flower that grows in the Marsh biome.
 manual.item.thebetweenlands.ground_marsh_mallow.description=Marshmallows are small pink and white flowers that can be found in Marsh biomes. Quite contrary to their name, they don't taste particularly nice.
-manual.item.thebetweenlands.ground_milkweed.description=Milkweed is a bright pink flower than growns in the Patchy Islands biome.
+manual.item.thebetweenlands.ground_milkweed.description=Milkweed is a bright pink flower that grows in the Patchy Islands biome.
 manual.item.thebetweenlands.ground_moss.description=Moss is a plant that grows and spreads around almost anywhere.
 manual.item.thebetweenlands.ground_nettle.description=Nettles can be found in Coarse Islands, Marshes and Swamplands biomes. They will sting you if you touch them, so be careful.
 manual.item.thebetweenlands.ground_phragmites.description=Phragmites are tall plants that grow everywhere in Marsh biomes.
@@ -1086,8 +1084,8 @@ manual.item.thebetweenlands.ground_venus_fly_trap.description=Venus Fly Traps ar
 manual.item.thebetweenlands.ground_green_middle_gem.description=Green Middle Gems are one of three Middle Gem types that can be found stuck in the mud.
 manual.item.thebetweenlands.ground_crimson_middle_gem.description=Crimson Middle Gems are one of three Middle Gem types that can be found stuck in the mud.
 manual.item.thebetweenlands.ground_aqua_middle_gem.description=Aqua Middle Gems are one of three Middle Gem types that can be found stuck in the mud.
-manual.item.thebetweenlands.ground_water_flower.description=Bladderworts are tall underwater plants that grow in the Deep Waters biome.
-manual.item.thebetweenlands.ground_water_flower_stalk.description=The stalk of the Bladderwort plant that grows in the Deep Waters biome.
+manual.item.thebetweenlands.ground_bladderwort_flower.description=Bladderworts are tall underwater plants that grow in the Deep Waters biome.
+manual.item.thebetweenlands.ground_bladderwort_stalk.description=The stalk of the Bladderwort plant that grows in the Deep Waters biome.
 
 manual.item.thebetweenlands.bl.elixir.foggedMind.description=<scale:0.75>This draught causes one's mind to become clouded with thought and worries, creating the illusion of a thick mist. <nl>To achieve such an effect, one will need to work with the aspects Dayuniis, Freiwynn, Geoliirgaz, Ordaniis, Yunugaz and Byariis. To get a more clouded mind one will need to improve the strength of the effect by adding more Geoliirgaz. To achieve a longer duration it requires more Dayuniis. <nl>When one leaves Byariis out of the recipe, one will end up with the Draught of the Unclouded, which seems to clear any fog on one's path.</scale>
 manual.item.thebetweenlands.bl.elixir.heavyweight.description=<scale:0.75>This draught affects the cells of one's body, resulting in increased bodyweight. <nl>To make this draught one would need to use the aspects Azuwynn, Byrginaz, Yunugaz, Yihinren, Geoliirgaz and Byariis. <nl>To improve the strength of the effect, more Yunugaz needs to be added. To increase the duration Geoliirgaz is required.</scale>
