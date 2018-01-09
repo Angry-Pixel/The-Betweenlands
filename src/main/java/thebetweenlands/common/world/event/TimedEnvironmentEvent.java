@@ -4,7 +4,7 @@ import java.util.Random;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 
 public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	public TimedEnvironmentEvent(BLEnvironmentEventRegistry registry) {
@@ -18,7 +18,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 		
-		if(!this.getRegistry().isDisabled() && this.remoteResetTicks <= 0) {
+		if(!this.getRegistry().isDisabled() && !this.isCurrentStateFromRemote()) {
 			this.ticks--;
 
 			if(!world.isRemote && this.ticks % 20 == 0) {

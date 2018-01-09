@@ -9,14 +9,14 @@ import java.util.Map;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IEnvironmentEventRegistry;
 import thebetweenlands.api.event.InitializeEnvironmentEventsEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public final EventDenseFog denseFog;
-	public final EnvironmentEvent heavyRain;
+	public final IEnvironmentEvent heavyRain;
 	public final EventAuroras auroras;
 	public final EventBloodSky bloodSky;
 	public final EventSpoopy spoopy;
@@ -57,12 +57,12 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));
 	}
 
-	private final Map<ResourceLocation, EnvironmentEvent> registeredEvents = new HashMap<>();
+	private final Map<ResourceLocation, IEnvironmentEvent> registeredEvents = new HashMap<>();
 
 	private boolean disabled = false;
 
 	@Override
-	public void register(EnvironmentEvent event) {
+	public void register(IEnvironmentEvent event) {
 		if(registeredEvents.containsKey(event.getEventName())) {
 			throw new RuntimeException("Duplicate environment event name: " + event.getEventName());
 		}
@@ -73,27 +73,27 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	}
 
 	@Override
-	public EnvironmentEvent unregister(EnvironmentEvent event) {
+	public IEnvironmentEvent unregister(IEnvironmentEvent event) {
 		return registeredEvents.remove(event.getEventName());
 	}
 
 	@Override
-	public Map<ResourceLocation, EnvironmentEvent> getEvents() {
+	public Map<ResourceLocation, IEnvironmentEvent> getEvents() {
 		return Collections.unmodifiableMap(registeredEvents);
 	}
 
-	public EnvironmentEvent forName(ResourceLocation eventName) {
+	public IEnvironmentEvent forName(ResourceLocation eventName) {
 		return registeredEvents.get(eventName);
 	}
 
-	public List<EnvironmentEvent> getActiveEvents() {
+	public List<IEnvironmentEvent> getActiveEvents() {
 		return getEventsOfState(true);
 	}
 
 	@Override
-	public List<EnvironmentEvent> getEventsOfState(boolean isActive) {
-		List<EnvironmentEvent> list = new ArrayList<EnvironmentEvent>();
-		for (EnvironmentEvent event : registeredEvents.values()) {
+	public List<IEnvironmentEvent> getEventsOfState(boolean isActive) {
+		List<IEnvironmentEvent> list = new ArrayList<IEnvironmentEvent>();
+		for (IEnvironmentEvent event : registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				list.add(event);
 			}
@@ -102,9 +102,9 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	}
 
 	@Override
-	public List<EnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
-		List<EnvironmentEvent> list = new ArrayList<EnvironmentEvent>();
-		for (EnvironmentEvent event : this.getEvents().values()) {
+	public List<IEnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active) {
+		List<IEnvironmentEvent> list = new ArrayList<IEnvironmentEvent>();
+		for (IEnvironmentEvent event : this.getEvents().values()) {
 			if (event.isActiveAt(x, y, z) == active) {
 				list.add(event);
 			}
@@ -114,7 +114,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	public List<ResourceLocation> getEventNames() {
 		List<ResourceLocation> eventNames = new ArrayList<>();
-		for (EnvironmentEvent event : registeredEvents.values()) {
+		for (IEnvironmentEvent event : registeredEvents.values()) {
 			eventNames.add(event.getEventName());
 		}
 		return eventNames;
@@ -122,7 +122,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	public List<ResourceLocation> getEventNamesOfState(boolean isActive) {
 		List<ResourceLocation> eventNames = new ArrayList<>();
-		for (EnvironmentEvent event : registeredEvents.values()) {
+		for (IEnvironmentEvent event : registeredEvents.values()) {
 			if (event.isActive() == isActive) {
 				eventNames.add(event.getEventName());
 			}
@@ -132,7 +132,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 
 	public String getGrammaticalActiveEventNameList() {
 		StringBuilder list = new StringBuilder();
-		EnvironmentEvent[] events = registeredEvents.values().toArray(new EnvironmentEvent[0]);
+		IEnvironmentEvent[] events = registeredEvents.values().toArray(new IEnvironmentEvent[0]);
 		for (int i = 0; i < events.length; i++) {
 			ResourceLocation eventName = events[i].getEventName();
 			if (i > 0) {
@@ -173,19 +173,19 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	}
 
 	@Override
-	public EnvironmentEvent getEvent(ResourceLocation eventId) {
+	public IEnvironmentEvent getEvent(ResourceLocation eventId) {
 		return this.registeredEvents.get(eventId);
 	}
 
 	@Override
 	public boolean isEventActive(ResourceLocation eventId) {
-		EnvironmentEvent event = this.getEvent(eventId);
+		IEnvironmentEvent event = this.getEvent(eventId);
 		return event != null && event.isActive();
 	}
 
 	@Override
 	public boolean isEventActiveAt(double x, double y, double z, ResourceLocation eventId) {
-		EnvironmentEvent event = this.getEvent(eventId);
+		IEnvironmentEvent event = this.getEvent(eventId);
 		return event != null && event.isActiveAt(x, y, z);
 	}
 }

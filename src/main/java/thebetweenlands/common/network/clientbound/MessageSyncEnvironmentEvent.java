@@ -11,20 +11,20 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class MessageSyncEnvironmentEvent extends MessageBase {
-	private EnvironmentEvent event;
+	private IEnvironmentEvent event;
 	private ResourceLocation eventName;
 	private boolean active;
 	private NBTTagCompound nbt;
 
 	public MessageSyncEnvironmentEvent() {}
 
-	public MessageSyncEnvironmentEvent(EnvironmentEvent eevent) {
+	public MessageSyncEnvironmentEvent(IEnvironmentEvent eevent) {
 		this.event = eevent;
 		this.eventName = eevent.getEventName();
 		this.active = eevent.isActive();
@@ -65,7 +65,7 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 			if(storage != null) {
 				BLEnvironmentEventRegistry eeRegistry = storage.getEnvironmentEventRegistry();
-				EnvironmentEvent eevent = eeRegistry.forName(this.eventName);
+				IEnvironmentEvent eevent = eeRegistry.forName(this.eventName);
 				if(eevent != null) {
 					eevent.loadEventPacket(this.nbt);
 					eevent.setActive(this.active, false);

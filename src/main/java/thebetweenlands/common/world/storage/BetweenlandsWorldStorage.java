@@ -8,7 +8,7 @@ import gnu.trove.map.hash.TIntLongHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -46,7 +46,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		this.environmentEventRegistry.init();
 
 		if(!this.getWorld().isRemote) {
-			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.setDefaults();
 				event.setLoaded();
 			}
@@ -57,7 +57,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		if(!this.getWorld().isRemote) {
-			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.readFromNBT(nbt);
 			}
 			this.environmentEventRegistry.setDisabled(nbt.getBoolean("eventsDisabled"));
@@ -86,7 +86,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		if(!this.getWorld().isRemote) {
-			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.writeToNBT(nbt);
 			}
 			nbt.setBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());

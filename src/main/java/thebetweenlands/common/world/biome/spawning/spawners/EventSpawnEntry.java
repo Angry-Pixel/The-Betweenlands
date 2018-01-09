@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 
@@ -34,7 +34,7 @@ public class EventSpawnEntry extends BLSpawnEntry {
 		this.setWeight((short) 0);
 		if(world.provider instanceof WorldProviderBetweenlands) {
 			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEvent event = provider.getEnvironmentEventRegistry().forName(this.eventName);
+			IEnvironmentEvent event = provider.getEnvironmentEventRegistry().forName(this.eventName);
 			if(event != null && event.isActive()) {
 				this.setWeight(this.getBaseWeight());
 			}

@@ -11,7 +11,6 @@ import com.google.common.base.Predicate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
-import thebetweenlands.common.world.storage.BetweenlandsLocalStorage;
 
 public interface ILocalStorageHandler {
 	/**
@@ -50,8 +49,8 @@ public interface ILocalStorageHandler {
 	 * @param z
 	 * @return
 	 */
-	public <T extends BetweenlandsLocalStorage> List<T> getLocalStorages(Class<T> type, double x, double z, @Nullable Predicate<T> filter);
-	
+	public <T extends ILocalStorage> List<T> getLocalStorages(Class<T> type, double x, double z, @Nullable Predicate<T> filter);
+
 	/**
 	 * Returns a list of all local storages of the specified type that intersect with the specified AABB
 	 * @param aabb
@@ -59,7 +58,7 @@ public interface ILocalStorageHandler {
 	 * @return
 	 */
 	public <T extends ILocalStorage> List<T> getLocalStorages(Class<T> type, AxisAlignedBB aabb, @Nullable Predicate<T> filter);
-	
+
 	/**
 	 * Deletes the file (or entry if in a region) of
 	 * the specified local storage
@@ -121,7 +120,7 @@ public interface ILocalStorageHandler {
 	 * @return
 	 */
 	public NBTTagCompound getLocalStorageDataNBT(NBTTagCompound nbt);
-	
+
 	/**
 	 * Saves a local storage instance to NBT
 	 * @param nbt

@@ -132,7 +132,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends BetweenlandsLocalStorage> List<T> getLocalStorages(Class<T> type, double x, double z, @Nullable Predicate<T> filter) {
+	public <T extends ILocalStorage> List<T> getLocalStorages(Class<T> type, double x, double z, @Nullable Predicate<T> filter) {
 		List<T> storages = new ArrayList<>();
 		int cx = MathHelper.floor(x) >> 4;
 		int cz = MathHelper.floor(z) >> 4;

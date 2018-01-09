@@ -13,14 +13,14 @@ public interface IEnvironmentEventRegistry {
 	 * Registers an environment event
 	 * @param event
 	 */
-	public void register(EnvironmentEvent event);
+	public void register(IEnvironmentEvent event);
 
 	/**
 	 * Unregisters an environment event
 	 * @param event
 	 * @return
 	 */
-	public EnvironmentEvent unregister(EnvironmentEvent event);
+	public IEnvironmentEvent unregister(IEnvironmentEvent event);
 
 	/**
 	 * Returns the world this environment event registry belongs to
@@ -32,7 +32,7 @@ public interface IEnvironmentEventRegistry {
 	 * Returns an unmodifiable map of all registered environment events
 	 * @return
 	 */
-	public Map<ResourceLocation, EnvironmentEvent> getEvents();
+	public Map<ResourceLocation, IEnvironmentEvent> getEvents();
 
 	/**
 	 * Returns the event with the specified ID or null if that event is not registered
@@ -40,17 +40,17 @@ public interface IEnvironmentEventRegistry {
 	 * @return
 	 */
 	@Nullable
-	public EnvironmentEvent getEvent(ResourceLocation eventId);
+	public IEnvironmentEvent getEvent(ResourceLocation eventId);
 
 	/**
-	 * Returns whether the specified event is registered and {@link EnvironmentEvent#isActive()} == true
+	 * Returns whether the specified event is registered and {@link IEnvironmentEvent#isActive()} == true
 	 * @param eventId
 	 * @return
 	 */
 	public boolean isEventActive(ResourceLocation eventId);
 
 	/**
-	 * Returns whether the specified event is registered and {@link EnvironmentEvent#isActiveAt(double, double, double)} == true
+	 * Returns whether the specified event is registered and {@link IEnvironmentEvent#isActiveAt(double, double, double)} == true
 	 * @param x
 	 * @param y
 	 * @param z
@@ -60,21 +60,21 @@ public interface IEnvironmentEventRegistry {
 	public boolean isEventActiveAt(double x, double y, double z, ResourceLocation eventId);
 
 	/**
-	 * Returns a list of all registered events whose {@link EnvironmentEvent#isActive()} == active
+	 * Returns a list of all registered events whose {@link IEnvironmentEvent#isActive()} == active
 	 * @param active
 	 * @return
 	 */
-	public List<EnvironmentEvent> getEventsOfState(boolean active);
+	public List<IEnvironmentEvent> getEventsOfState(boolean active);
 
 	/**
-	 * Returns a list of all registered events whose {@link EnvironmentEvent#isActiveAt(double, double, double)} == active
+	 * Returns a list of all registered events whose {@link IEnvironmentEvent#isActiveAt(double, double, double)} == active
 	 * @param x
 	 * @param y
 	 * @param z
 	 * @param active
 	 * @return
 	 */
-	public List<EnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active);
+	public List<IEnvironmentEvent> getEventsOfStateAt(double x, double y, double z, boolean active);
 
 	/**
 	 * Sets whether the registry is enabled. Environment events are only updated

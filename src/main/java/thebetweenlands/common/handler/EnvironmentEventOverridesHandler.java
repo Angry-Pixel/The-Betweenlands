@@ -7,9 +7,9 @@ import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.Proxy;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.gson.Gson;
@@ -22,15 +22,13 @@ import com.google.gson.reflect.TypeToken;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.BLEnvironmentEvent;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.config.ConfigHandler;
@@ -38,33 +36,41 @@ import thebetweenlands.util.config.ConfigHandler;
 public class EnvironmentEventOverridesHandler {
 	private static final AtomicInteger OVERRIDES_DOWNLOADER_THREAD_ID = new AtomicInteger(0);
 
-	public static final int CHECK_INTERVAL_TICKS = 6000;
-	public static final int DEFAULT_REMOTE_RESET_TICKS = 9600;
+	public static final int CHECK_INTERVAL_TICKS = 6000; //5 min.
+	public static final int FAILED_RECHECK_INTERVAL_TICKS = 1200; //1 min.
+	public static final int DEFAULT_REMOTE_RESET_TICKS = 3600; //3 min.
+
+	private static int remoteDataRecheckTicks = 0;
+
+	private static volatile int failedDownloadAttempts = 0;
 
 	@SubscribeEvent
-	public static void onWorldLoad(WorldEvent.Load event) {
-		if(ConfigHandler.onlineEnvironmentEventOverrides && !event.getWorld().isRemote && event.getWorld() instanceof WorldServer && event.getWorld().provider instanceof WorldProviderBetweenlands) {
-			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.getWorld());
-			if(storage != null) {
-				BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
-				if(registry.isEnabled()) {
-					downloadAndCheckStates(new WeakReference<>((WorldServer)event.getWorld()));
+	public static void onWorldTick(WorldTickEvent event) {
+		if(ConfigHandler.onlineEnvironmentEventOverrides && event.phase == Phase.END && !event.world.isRemote && event.world instanceof WorldServer && event.world.provider.getDimension() == ConfigHandler.dimensionId) {
+			if(failedDownloadAttempts > 0 && failedDownloadAttempts <= 2 && remoteDataRecheckTicks > FAILED_RECHECK_INTERVAL_TICKS) {
+				remoteDataRecheckTicks = FAILED_RECHECK_INTERVAL_TICKS;
+			}
+			remoteDataRecheckTicks--;
+			if(remoteDataRecheckTicks <= 0) {
+				remoteDataRecheckTicks = CHECK_INTERVAL_TICKS;
+				BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.world);
+				if(storage != null) {
+					BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
+					if(registry.isEnabled()) {
+						downloadAndCheckStates(new WeakReference<>((WorldServer)event.world));
+					}
 				}
 			}
 		}
 	}
 
-	@SubscribeEvent
-	public static void onWorldTick(WorldTickEvent event) {
-		if(ConfigHandler.onlineEnvironmentEventOverrides && event.phase == Phase.END && !event.world.isRemote && event.world instanceof WorldServer && event.world.provider instanceof WorldProviderBetweenlands && event.world.getWorldInfo().getWorldTotalTime() % CHECK_INTERVAL_TICKS == 0) {
-			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.world);
-			if(storage != null) {
-				BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
-				if(registry.isEnabled()) {
-					downloadAndCheckStates(new WeakReference<>((WorldServer)event.world));
-				}
-			}
-		}
+	/**
+	 * Returns whether the remote data is available. If this returns false
+	 * the remote reset ticks should start counting down
+	 * @return
+	 */
+	public static boolean isRemoteDataAvailable() {
+		return failedDownloadAttempts <= 2;
 	}
 
 	public static void downloadAndCheckStates(WeakReference<WorldServer> server) {
@@ -91,6 +97,7 @@ public class EnvironmentEventOverridesHandler {
 								if(content instanceof InputStream) {
 									JsonParser parser = new JsonParser();
 									JsonElement jsonElement = parser.parse(new InputStreamReader((InputStream) content));
+									failedDownloadAttempts = 0;
 									if(jsonElement.isJsonArray()) {
 										JsonArray jsonArray = jsonElement.getAsJsonArray();
 										final WorldServer world = server.get();
@@ -108,7 +115,8 @@ public class EnvironmentEventOverridesHandler {
 							}
 						}
 					} catch(Exception ex) {
-						if(ConfigHandler.debug) TheBetweenlands.logger.catching(ex);
+						failedDownloadAttempts++;
+						if(ConfigHandler.debug) TheBetweenlands.logger.info("Failed downloading remote environment event overrides", ex);
 					}
 				}
 			}.start();
@@ -116,75 +124,72 @@ public class EnvironmentEventOverridesHandler {
 	}
 
 	public static void checkStates(World world, JsonArray json) {
-		try {
-			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
-			if(storage != null) {
-				BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
-				if(registry.isEnabled()) {
-					Gson gson = new Gson();
-					Type stringArrayType = new TypeToken<String[]>() {}.getType();
-					for(int i = 0; i < json.size(); i++) {
-						try {
-							JsonObject element = json.get(i).getAsJsonObject();
-							boolean isVersionValid;
-							if(element.has("versions")) {
-								isVersionValid = false;
-								String[] versions = gson.fromJson(element.get("versions"), stringArrayType);
-								for(String version : versions) {
-									if(ModInfo.VERSION.equals(version)) {
-										isVersionValid = true;
-										break;
-									}
+
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
+		if(storage != null) {
+			BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
+			if(registry.isEnabled()) {
+				Set<ResourceLocation> updatedEvents = new HashSet<>();
+
+				Gson gson = new Gson();
+				Type stringArrayType = new TypeToken<String[]>() {}.getType();
+				for(int i = 0; i < json.size(); i++) {
+					try {
+						JsonObject element = json.get(i).getAsJsonObject();
+						boolean isVersionValid;
+						if(element.has("versions")) {
+							isVersionValid = false;
+							String[] versions = gson.fromJson(element.get("versions"), stringArrayType);
+							for(String version : versions) {
+								if(ModInfo.VERSION.equals(version)) {
+									isVersionValid = true;
+									break;
 								}
-							} else {
-								isVersionValid = true;
 							}
-							if(isVersionValid) {
-								class Override {
-									boolean value;
-									int remoteResetTicks;
-
-									Override(boolean value, int remoteResetTicks) {
-										this.value = value;
-										this.remoteResetTicks = remoteResetTicks;
-									}
+						} else {
+							isVersionValid = true;
+						}
+						if(isVersionValid) {
+							JsonArray overrides = element.get("overrides").getAsJsonArray();
+							for(int j = 0; j < overrides.size(); j++) {
+								JsonObject override = overrides.get(j).getAsJsonObject();
+								ResourceLocation id = new ResourceLocation(override.get("id").getAsString());
+								boolean value = override.get("value").getAsBoolean();
+								int remoteResetTicks = DEFAULT_REMOTE_RESET_TICKS;
+								if(override.has("remote_reset_ticks")) {
+									remoteResetTicks = override.get("remote_reset_ticks").getAsInt();
 								}
-
-								Map<ResourceLocation, Override> map = new HashMap<>();
-
-								JsonArray overrides = element.get("overrides").getAsJsonArray();
-								for(int j = 0; j < overrides.size(); j++) {
-									JsonObject override = overrides.get(j).getAsJsonObject();
-									String id = override.get("id").getAsString();
-									boolean value = override.get("value").getAsBoolean();
-									int remoteDeactivationTicks = DEFAULT_REMOTE_RESET_TICKS;
-									if(override.has("remote_reset_ticks")) {
-										remoteDeactivationTicks = Math.max(override.get("remote_reset_ticks").getAsInt(), CHECK_INTERVAL_TICKS + 1200 /*give at least an extra minute time*/);
-									}
-									map.put(new ResourceLocation(id), new Override(value, remoteDeactivationTicks));
-								}
-
-								for(Entry<ResourceLocation, Override> entry : map.entrySet()) {
-									ResourceLocation id = entry.getKey();
-									Override override = entry.getValue();
-
-									EnvironmentEvent event = registry.getEvent(id);
-									if(event instanceof BLEnvironmentEvent) {
-										((BLEnvironmentEvent)event).setActiveRemotely(override.value, override.remoteResetTicks);
+								IEnvironmentEvent event = registry.getEvent(id);
+								if(event instanceof IRemotelyControllableEnvironmentEvent) {
+									IRemotelyControllableEnvironmentEvent controllable = (IRemotelyControllableEnvironmentEvent) event;
+									if(controllable.isRemotelyControllable()) {
+										controllable.updateStateFromRemote(value, remoteResetTicks, override);
+										updatedEvents.add(id);
 									}
 								}
 							}
-						} catch(Exception ex) {
-							if(ConfigHandler.debug) {
-								TheBetweenlands.logger.error("Failed parsing environment event override entry: " + i);
-								TheBetweenlands.logger.catching(ex);
+						}
+					} catch(Exception ex) {
+						if(ConfigHandler.debug) {
+							TheBetweenlands.logger.error("Failed parsing environment event override entry: " + i, ex);
+						}
+					}
+				}
+
+				for(Entry<ResourceLocation, IEnvironmentEvent> entry : registry.getEvents().entrySet()) {
+					IEnvironmentEvent event = entry.getValue();
+					if(event instanceof IRemotelyControllableEnvironmentEvent) {
+						IRemotelyControllableEnvironmentEvent controllable = (IRemotelyControllableEnvironmentEvent) event;
+						if(controllable.isRemotelyControllable() && !updatedEvents.contains(entry.getKey())) {
+							boolean wasStateFromRemote = controllable.isCurrentStateFromRemote();
+							controllable.updateNoStateFromRemote();
+							if(wasStateFromRemote) {
+								controllable.resetStateFromRemote();
 							}
 						}
 					}
 				}
 			}
-		} catch(Exception ex) {
-			if(ConfigHandler.debug) TheBetweenlands.logger.catching(ex);
 		}
 	}
 }

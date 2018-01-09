@@ -1,31 +1,62 @@
 package thebetweenlands.common.world.event;
 
+import com.google.gson.JsonObject;
+
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
+import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.util.config.ConfigHandler;
 
-public abstract class BLEnvironmentEvent extends EnvironmentEvent {
-	protected final BLEnvironmentEventRegistry blRegistry;
+public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotelyControllableEnvironmentEvent {
+	private final BLEnvironmentEventRegistry registry;
+	private final World world;
+	private NBTTagCompound nbtt = new NBTTagCompound();
+	private boolean active = false;
+	private boolean dirty = false;
+	private boolean loaded = false;
 
+	protected boolean hasNoRemoteState = false;
+	protected boolean isStateFromRemoteOverridden = false;
+	protected boolean isStateFromRemote = false;
 	protected int remoteResetTicks = -1;
 
 	public BLEnvironmentEvent(BLEnvironmentEventRegistry registry) {
-		super(registry);
-		this.blRegistry = registry;
+		this.registry = registry;
+		this.world = registry.getWorld();
 	}
 
 	@Override
 	public BLEnvironmentEventRegistry getRegistry() {
-		return this.blRegistry;
+		return this.registry;
+	}
+
+	@Override
+	public void setActive(boolean active, boolean markDirty) {
+		if(this.isStateFromRemote && active != this.isActive()) {
+			//State was overridden and is no longer from remote
+			this.isStateFromRemote = false;
+			this.isStateFromRemoteOverridden = true;
+		}
+
+		this.active = active;
+		if(markDirty) this.markDirty();
+		if (active)
+			for (EntityPlayerMP player: getWorld().getPlayers(EntityPlayerMP.class, player -> player.dimension == ConfigHandler.dimensionId))
+				AdvancementCriterionRegistry.EVENT.trigger(player, getEventName());
 	}
 
 	@Override
 	public void update(World world) {
-		super.update(world);
-
-		if(!world.isRemote && this.remoteResetTicks > 0) {
-			this.remoteResetTicks--;
+		if(!world.isRemote && !this.isStateFromRemoteOverridden && (!EnvironmentEventOverridesHandler.isRemoteDataAvailable() || this.hasNoRemoteState)) {
+			if(this.remoteResetTicks > 0) {
+				this.remoteResetTicks--;
+			}
 			if(this.remoteResetTicks == 0) {
+				this.updateNoStateFromRemote();
 				this.resetActiveState();
 				this.remoteResetTicks = -1;
 			}
@@ -34,28 +65,131 @@ public abstract class BLEnvironmentEvent extends EnvironmentEvent {
 
 	@Override
 	public void saveEventData() {
-		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
 		nbt.setInteger("remoteResetTicks", this.remoteResetTicks);
+		nbt.setBoolean("isStateFromRemote", this.isStateFromRemote);
+		nbt.setBoolean("isStateFromRemoteOverridden", this.isStateFromRemoteOverridden);
+		nbt.setBoolean("hasNoRemoteState", this.hasNoRemoteState);
 	}
 
 	@Override
 	public void loadEventData() {
-		super.loadEventData();
 		NBTTagCompound nbt = this.getData();
 		this.remoteResetTicks = nbt.getInteger("remoteResetTicks");
+		this.isStateFromRemote = nbt.getBoolean("isStateFromRemote");
+		this.isStateFromRemoteOverridden = nbt.getBoolean("isStateFromRemoteOverridden");
+		this.hasNoRemoteState = nbt.getBoolean("hasNoRemoteState");
 	}
 
-	/**
-	 * Sets the event state if the event is no longer of the specified state and the remote reset ticks have run out.
-	 * So this will not change the state of an event if it changed its own state or was changed by command
-	 * @param value The state the event should be set to
-	 * @param remoteResetTicks Remote reset cooldown. For <= 0 No automatic reset
-	 */
-	public void setActiveRemotely(boolean value, int remoteResetTicks) {
-		if(this.isActive() != value && this.remoteResetTicks <= 0) {
-			this.setActive(value, true);
+	@Override
+	public void resetStateFromRemote() {
+		this.resetActiveState();
+	}
+
+	@Override
+	public boolean isCurrentStateFromRemote() {
+		return this.isStateFromRemote;
+	}
+
+	@Override
+	public void updateStateFromRemote(boolean value, int remoteResetTicks, JsonObject data) {
+		//Only update state if it wasn't overridden by a player or command
+		if(!this.isStateFromRemoteOverridden) {
+			if(this.isActive() != value && !this.isStateFromRemote) {
+				this.setActive(value, true);
+			}
+			this.remoteResetTicks = remoteResetTicks;
+			this.isStateFromRemote = true;
 		}
-		this.remoteResetTicks = remoteResetTicks;
+		this.hasNoRemoteState = false;
+	}
+
+	@Override
+	public void updateNoStateFromRemote() {
+		this.hasNoRemoteState = true;
+		this.isStateFromRemoteOverridden = false;
+		this.isStateFromRemote = false;
+		this.remoteResetTicks = -1;
+	}
+
+	@Override
+	public World getWorld() {
+		return this.world;
+	}
+
+	@Override
+	public boolean isActive() {
+		return this.active;
+	}
+
+	@Override
+	public boolean isActiveAt(double x, double y, double z) {
+		return this.active;
+	}
+
+	@Override
+	public void resetActiveState() {
+		if(this.isActive()) {
+			this.setActive(false, true);
+		}
+	}
+
+	@Override
+	public void markDirty() {
+		this.dirty = true;
+	}
+
+	@Override
+	public void setDirty(boolean dirty) {
+		this.dirty = dirty;
+	}
+
+	@Override
+	public boolean isDirty() {
+		return this.dirty;
+	}
+
+	@Override
+	public void setLoaded() {
+		this.loaded = true;
+	}
+
+	@Override
+	public NBTTagCompound getData() {
+		return this.nbtt;
+	}
+
+	@Override
+	public final void writeToNBT(NBTTagCompound compound) {
+		this.nbtt.setBoolean("active", this.active);
+		this.saveEventData();
+		compound.setTag("environmentEvent:" + this.getEventName(), this.nbtt);
+	}
+
+	@Override
+	public final void readFromNBT(NBTTagCompound compound) {
+		this.nbtt = compound.getCompoundTag("environmentEvent:" + this.getEventName());
+		this.active = this.nbtt.getBoolean("active");
+		this.loadEventData();
+		this.loaded = true;
+	}
+
+	@Override
+	public void setDefaults() { }
+
+	@Override
+	public void loadEventPacket(NBTTagCompound nbt) { }
+
+	@Override
+	public void sendEventPacket(NBTTagCompound nbt) { }
+
+	@Override
+	public boolean isLoaded() {
+		return this.loaded;
+	}
+
+	@Override
+	public String getLocalizationEventName() {
+		return "event." + getEventName().getResourceDomain() + "." + getEventName().getResourcePath() + ".name";
 	}
 }

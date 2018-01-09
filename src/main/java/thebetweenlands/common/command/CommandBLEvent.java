@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -48,7 +48,7 @@ public class CommandBLEvent extends CommandBase {
 	private void processToggle(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
 		checkArg(args, 2, "toggle");
 		ResourceLocation eventName = new ResourceLocation(getChatComponentFromNthArg(sender, args, 1).getUnformattedText());
-		EnvironmentEvent event = getEnvironentEvent(sender, eventName);
+		IEnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		boolean isActive = event.isActive();
 		event.setActive(!isActive, true);
 		notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "off" : "on"), eventName);
@@ -62,7 +62,7 @@ public class CommandBLEvent extends CommandBase {
 	private void processOff(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
 		if (args.length < 2) {
 			BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
-			for (EnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
+			for (IEnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
 				event.setActive(false, true);
 			}
 			notifyCommandListener(sender, this, "command.blevent.success.alloff");
@@ -86,7 +86,7 @@ public class CommandBLEvent extends CommandBase {
 			throw new CommandException("command.blevent.failure.alreadydisabled");
 		}
 		environmentEventRegistry.disable();
-		for (EnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
+		for (IEnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
 			event.setActive(false, true);
 		}
 		notifyCommandListener(sender, this, "command.blevent.success.disable");
@@ -98,7 +98,7 @@ public class CommandBLEvent extends CommandBase {
 	}
 
 	private void processEventState(ICommandSender sender, ResourceLocation eventName, boolean isActive) throws CommandException {
-		EnvironmentEvent event = getEnvironentEvent(sender, eventName);
+		IEnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		if (event.isActive() == isActive) {
 			throw new CommandException("command.blevent.failure.already" + (isActive ? "on" : "off"), eventName);
 		} else {
@@ -150,9 +150,9 @@ public class CommandBLEvent extends CommandBase {
 		}
 	}
 
-	private EnvironmentEvent getEnvironentEvent(ICommandSender sender, ResourceLocation eventName) throws CommandException {
+	private IEnvironmentEvent getEnvironentEvent(ICommandSender sender, ResourceLocation eventName) throws CommandException {
 		BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
-		EnvironmentEvent event = environmentEventRegistry.forName(eventName);
+		IEnvironmentEvent event = environmentEventRegistry.forName(eventName);
 		if (event == null) {
 			throw new CommandException("command.blevent.failure.unknown", eventName);
 		}

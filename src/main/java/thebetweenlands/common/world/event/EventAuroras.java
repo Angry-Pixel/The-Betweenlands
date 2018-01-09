@@ -5,7 +5,7 @@ import java.util.Random;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 
 public class EventAuroras extends TimedEnvironmentEvent {
@@ -80,7 +80,7 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	}
 	
 	protected boolean canBeActive() {
-		for(EnvironmentEvent event : this.getRegistry().getEventsOfState(true)) {
+		for(IEnvironmentEvent event : this.getRegistry().getEventsOfState(true)) {
 			if(event != this && event.getClass() != EventWinter.class && event.getClass() != EventSnowfall.class) {
 				return false;
 			}

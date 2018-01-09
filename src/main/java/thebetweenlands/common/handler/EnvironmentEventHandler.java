@@ -10,7 +10,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
@@ -29,7 +29,7 @@ public class EnvironmentEventHandler {
 			if(storage != null) {
 				BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
 
-				for(EnvironmentEvent eevent : reg.getEvents().values()) {
+				for(IEnvironmentEvent eevent : reg.getEvents().values()) {
 					if(!eevent.isLoaded()) continue;
 					if (reg.isDisabled()) {
 						eevent.setActive(false, eevent.isActive());
@@ -46,7 +46,7 @@ public class EnvironmentEventHandler {
 				storage.setEnvironmentEventSyncTicks(storage.getEnvironmentEventSyncTicks() + 1);
 				if(storage.getEnvironmentEventSyncTicks() >= 80) {
 					storage.setEnvironmentEventSyncTicks(0);
-					for(EnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
+					for(IEnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
 						TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEvent(eevent), event.world.provider.getDimension());
 					}
 				}
@@ -64,7 +64,7 @@ public class EnvironmentEventHandler {
 				BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 				if(storage != null) {
 					BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
-					for(EnvironmentEvent eevent : reg.getEvents().values()) {
+					for(IEnvironmentEvent eevent : reg.getEvents().values()) {
 						if(!eevent.isLoaded()) 
 							continue;
 						eevent.update(world);
@@ -80,7 +80,7 @@ public class EnvironmentEventHandler {
 		if (!event.getWorld().isRemote && event.getEntity() instanceof EntityPlayerMP) {
 			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.getWorld());
 			if(storage != null) {
-				for(EnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
+				for(IEnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
 					TheBetweenlands.networkWrapper.sendTo(new MessageSyncEnvironmentEvent(eevent), (EntityPlayerMP)event.getEntity());
 					if (eevent.isActive())
 						AdvancementCriterionRegistry.EVENT.trigger((EntityPlayerMP) event.getEntity(), eevent.getEventName());
