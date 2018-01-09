@@ -93,7 +93,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 			Block blockAboveOrHere = (Block)(isUpperHalf ? this : worldIn.getBlockState(posAboveOrHere).getBlock());
 			Block blockBelowOrHere = (Block)(isUpperHalf ? worldIn.getBlockState(posBelowOrHere).getBlock() : this);
 
-			if (!isUpperHalf) 
+			if (!isUpperHalf && blockAboveOrHere == this) 
 				this.dropBlockAsItem(worldIn, pos, state, 0); //Forge move above the setting to air.
 
 			if (blockAboveOrHere == this) {
@@ -146,7 +146,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
 				if (!player.capabilities.isCreativeMode) {
 					//Stupid workarounds...
-					this.harvestBlock(worldIn, player, pos.down(), state, worldIn.getTileEntity(pos), player.getHeldItemMainhand());
+					this.harvestBlock(worldIn, player, pos.down(), worldIn.getBlockState(pos.down()), worldIn.getTileEntity(pos.down()), player.getHeldItemMainhand());
 				}
 				worldIn.setBlockToAir(pos.down());
 			}
