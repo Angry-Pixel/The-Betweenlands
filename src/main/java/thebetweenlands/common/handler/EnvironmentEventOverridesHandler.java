@@ -96,16 +96,13 @@ public class EnvironmentEventOverridesHandler {
 								Object content = request.getContent();
 								if(content instanceof InputStream) {
 									JsonParser parser = new JsonParser();
-									JsonElement jsonElement = parser.parse(new InputStreamReader((InputStream) content));
+									final JsonElement jsonElement = parser.parse(new InputStreamReader((InputStream) content));
 									failedDownloadAttempts = 0;
-									if(jsonElement.isJsonArray()) {
-										JsonArray jsonArray = jsonElement.getAsJsonArray();
-										final WorldServer world = server.get();
-										if(world != null) {
-											world.addScheduledTask(() -> {
-												checkStates(world, jsonArray);
-											});
-										}
+									final WorldServer world = server.get();
+									if(world != null) {
+										world.addScheduledTask(() -> {
+											checkStates(world, jsonElement);
+										});
 									}
 								}
 							}
@@ -123,55 +120,57 @@ public class EnvironmentEventOverridesHandler {
 		}
 	}
 
-	public static void checkStates(World world, JsonArray json) {
-
+	public static void checkStates(World world, JsonElement json) {
 		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 		if(storage != null) {
 			BLEnvironmentEventRegistry registry = storage.getEnvironmentEventRegistry();
 			if(registry.isEnabled()) {
 				Set<ResourceLocation> updatedEvents = new HashSet<>();
 
-				Gson gson = new Gson();
-				Type stringArrayType = new TypeToken<String[]>() {}.getType();
-				for(int i = 0; i < json.size(); i++) {
-					try {
-						JsonObject element = json.get(i).getAsJsonObject();
-						boolean isVersionValid;
-						if(element.has("versions")) {
-							isVersionValid = false;
-							String[] versions = gson.fromJson(element.get("versions"), stringArrayType);
-							for(String version : versions) {
-								if(ModInfo.VERSION.equals(version)) {
-									isVersionValid = true;
-									break;
+				if(json.isJsonArray()) {
+					JsonArray jsonArr = json.getAsJsonArray();
+					Gson gson = new Gson();
+					Type stringArrayType = new TypeToken<String[]>() {}.getType();
+					for(int i = 0; i < jsonArr.size(); i++) {
+						try {
+							JsonObject element = jsonArr.get(i).getAsJsonObject();
+							boolean isVersionValid;
+							if(element.has("versions")) {
+								isVersionValid = false;
+								String[] versions = gson.fromJson(element.get("versions"), stringArrayType);
+								for(String version : versions) {
+									if(ModInfo.VERSION.equals(version)) {
+										isVersionValid = true;
+										break;
+									}
 								}
+							} else {
+								isVersionValid = true;
 							}
-						} else {
-							isVersionValid = true;
-						}
-						if(isVersionValid) {
-							JsonArray overrides = element.get("overrides").getAsJsonArray();
-							for(int j = 0; j < overrides.size(); j++) {
-								JsonObject override = overrides.get(j).getAsJsonObject();
-								ResourceLocation id = new ResourceLocation(override.get("id").getAsString());
-								boolean value = override.get("value").getAsBoolean();
-								int remoteResetTicks = DEFAULT_REMOTE_RESET_TICKS;
-								if(override.has("remote_reset_ticks")) {
-									remoteResetTicks = override.get("remote_reset_ticks").getAsInt();
-								}
-								IEnvironmentEvent event = registry.getEvent(id);
-								if(event instanceof IRemotelyControllableEnvironmentEvent) {
-									IRemotelyControllableEnvironmentEvent controllable = (IRemotelyControllableEnvironmentEvent) event;
-									if(controllable.isRemotelyControllable()) {
-										controllable.updateStateFromRemote(value, remoteResetTicks, override);
-										updatedEvents.add(id);
+							if(isVersionValid) {
+								JsonArray overrides = element.get("overrides").getAsJsonArray();
+								for(int j = 0; j < overrides.size(); j++) {
+									JsonObject override = overrides.get(j).getAsJsonObject();
+									ResourceLocation id = new ResourceLocation(override.get("id").getAsString());
+									boolean value = override.get("value").getAsBoolean();
+									int remoteResetTicks = DEFAULT_REMOTE_RESET_TICKS;
+									if(override.has("remote_reset_ticks")) {
+										remoteResetTicks = override.get("remote_reset_ticks").getAsInt();
+									}
+									IEnvironmentEvent event = registry.getEvent(id);
+									if(event instanceof IRemotelyControllableEnvironmentEvent) {
+										IRemotelyControllableEnvironmentEvent controllable = (IRemotelyControllableEnvironmentEvent) event;
+										if(controllable.isRemotelyControllable()) {
+											controllable.updateStateFromRemote(value, remoteResetTicks, override);
+											updatedEvents.add(id);
+										}
 									}
 								}
 							}
-						}
-					} catch(Exception ex) {
-						if(ConfigHandler.debug) {
-							TheBetweenlands.logger.error("Failed parsing environment event override entry: " + i, ex);
+						} catch(Exception ex) {
+							if(ConfigHandler.debug) {
+								TheBetweenlands.logger.error("Failed updating environment event override entry: " + i, ex);
+							}
 						}
 					}
 				}
