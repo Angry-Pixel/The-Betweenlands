@@ -13,7 +13,9 @@
       {
         "id": "<event id>",
         "value": <true|false>,
-        "remote_reset_ticks": <int> (Optional field)
+        "remote_reset_ticks": <int> (Optional field),
+        "<additional data key>": <additional data>,
+        ...
       },
       ...
     ]
@@ -26,9 +28,9 @@
 * ```overrides```: Specifies the environment event overrides
 * ```id```: The environment event ID (ResourceLocation)
 * ```value```: The active state of the event
-* ```remote_reset_ticks```: Optional active state reset timeout ticks. If the client/server doesn't pull the data and after  
-the timeout ticks run out the event resets its state to its default value. Default timeout ticks value is 9600 (8 min.). Should  
-be longer than the check interval of 6000 ticks (5 min.)
+* ```remote_reset_ticks```: Optional active state reset timeout ticks. If the client/server fails to pull the data more than two  
+times the reset timeout ticks will start to count down. Once it runs out the events reset their state to their default values. Default timeout ticks value is 3600 (3 min.).
+* Additional data can be specified in the overrides that the specified event can read.
 
 All arrays can have any number of entries.
 
@@ -49,7 +51,10 @@ All arrays can have any number of entries.
       },
       {
         "id": "thebetweenlands:winter",
-        "value": true
+        "value": true,
+        "some_additional_data": {
+          "some_additional_value": "hello"
+        }
       }
     ]
   },
