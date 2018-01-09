@@ -92,10 +92,10 @@ public class BlockAlembic extends BlockContainer {
                 float zz = (float) pos.getZ() + 0.5F;
                 float fixedOffset = 0.25F;
                 float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy + 0.50D, (double) (zz + randomOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) yy + 0.50D, (double) (zz + randomOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.50D, (double) (zz - fixedOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.50D, (double) (zz + fixedOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy + 0.250D, (double) (zz + randomOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) yy + 0.250D, (double) (zz + randomOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.250D, (double) (zz - fixedOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.250D, (double) (zz + fixedOffset));
                 EnumFacing facing = (EnumFacing) stateIn.getProperties().get(FACING);
                 switch (facing) {
                     case NORTH:

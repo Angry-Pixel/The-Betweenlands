@@ -1,12 +1,25 @@
 package thebetweenlands.client.render.particle.entity;
 
-import net.minecraft.client.particle.Particle;
+import net.minecraft.client.particle.ParticleBubble;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher;
+import thebetweenlands.client.render.particle.ParticleTextureStitcher.IParticleSpriteReceiver;
 
-public class ParticleBubbleBL extends Particle {
+public class ParticleBubbleBL extends ParticleBubble implements IParticleSpriteReceiver {
 	protected ParticleBubbleBL(World world, double x, double y, double z, double vecX, double vecY, double vecZ, float scale) {
 		super(world, x, y, z, vecX, vecY, vecZ);
+		this.particleScale = scale;
+		this.motionX = vecX + (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
+		this.motionY = vecY + (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
+		this.motionZ = vecZ + (Math.random() * 2.0D - 1.0D) * 0.4000000059604645D;
+		float f = (float)(Math.random() + Math.random() + 1.0D) * 0.15F;
+		float f1 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
+		this.motionX = this.motionX / (double)f1 * (double)f * 0.3D;
+		this.motionY = this.motionY / (double)f1 * (double)f * 0.4D + 0.3D;
+		this.motionZ = this.motionZ / (double)f1 * (double)f * 0.3D;
 		this.particleScale = scale;
 	}
 
@@ -25,9 +38,19 @@ public class ParticleBubbleBL extends Particle {
 			setExpired();
 	}
 
+	@Override
+	public int getFXLayer() {
+		return 1;
+	}
+	
+	@Override
+	public void setParticleTextureIndex(int particleTextureIndex) {
+		//nope.avi
+    }
+	
 	public static final class Factory extends ParticleFactory<Factory, ParticleBubbleBL> {
 		public Factory() {
-			super(ParticleBubbleBL.class);
+			super(ParticleBubbleBL.class, ParticleTextureStitcher.create(ParticleBubbleBL.class, new ResourceLocation("thebetweenlands:particle/bubble_infuser")));
 		}
 
 		@Override

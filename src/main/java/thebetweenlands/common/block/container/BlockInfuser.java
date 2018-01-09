@@ -20,7 +20,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -34,10 +36,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.item.tools.ItemBLBucket;
-import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
@@ -235,7 +238,8 @@ public class BlockInfuser extends BlockContainer {
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 				if(rand.nextInt((101 - infuser.getTemperature()))/4 == 0) {
-					BLParticles.BUBBLE_INFUSION.spawn(world, xx, yy, zz);
+					float colors[] = infuser.currentInfusionColor;
+					BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(colors[0], colors[1], colors[2], 1));
 					if (rand.nextInt(10) == 0 && infuser.getTemperature() > 70)
 						world.playSound(xx, yy, zz, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 1.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}

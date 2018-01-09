@@ -175,7 +175,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
         ItemStack stack = player.getHeldItem(hand);
         List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
         if(player.isSneaking() && itemAspects.size() == 1 && facing == EnumFacing.UP) {
-            if(world.isAirBlock(pos.up())) {
+            if(world.isAirBlock(pos.up()) && BlockRegistry.ASPECT_VIAL_BLOCK.canPlaceBlockAt(world, pos.up())) {
                 if(!world.isRemote) {
                     ItemAspectVial.placeAspectVial(world, pos.up(), stack.getItemDamage(), itemAspects.get(0));
                     stack.shrink(1);

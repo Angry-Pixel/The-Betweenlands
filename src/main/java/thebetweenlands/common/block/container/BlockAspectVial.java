@@ -37,7 +37,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
     public static PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
 
-    public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.1F, 0.0F, 0.1F, 0.9F, 0.8F, 0.9F);
+    public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.95F, 0.45F, 0.95F);
 
     public BlockAspectVial() {
         super(Material.GLASS);
@@ -48,7 +48,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BOUNDING_BOX;
+        return new AxisAlignedBB(0.15F, 0.0F, 0.15F, 0.85F, 0.45F, 0.85F);
     }
 
     @Override
@@ -240,6 +240,11 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
     
     @Override
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    	return false;
+    }
+    
+    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
@@ -262,5 +267,10 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
+    }
+    
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    	return super.canPlaceBlockAt(worldIn, pos) && worldIn.isSideSolid(pos.down(), EnumFacing.UP);
     }
 }

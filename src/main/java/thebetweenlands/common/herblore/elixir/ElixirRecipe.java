@@ -1,5 +1,7 @@
 package thebetweenlands.common.herblore.elixir;
 
+import javax.annotation.Nullable;
+
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.elixir.effects.ElixirEffect;
 
@@ -57,7 +59,7 @@ public class ElixirRecipe {
 		return new float[] {r, g, b, a};
 	}
 
-	public static float[] getInfusionColor(ElixirRecipe recipe, int infusionTime) {
+	public static float[] getInfusionColor(@Nullable ElixirRecipe recipe, int infusionTime) {
 		if(recipe != null) {
 			if(infusionTime > recipe.idealInfusionTime + recipe.infusionTimeVariation) {
 				return recipe.getRGBA(recipe.infusionFailedColor);

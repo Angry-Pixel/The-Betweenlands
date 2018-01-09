@@ -89,7 +89,7 @@ public class ItemDentrothystVial extends Item implements ItemRegistry.IBlockStat
     public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
         ItemStack stack = player.getHeldItem(hand);
         if(player.isSneaking() && facing == EnumFacing.UP && stack.getItemDamage() != 1) {
-            if(world.isAirBlock(pos.up())) {
+            if(world.isAirBlock(pos.up()) && BlockRegistry.ASPECT_VIAL_BLOCK.canPlaceBlockAt(world, pos.up())) {
                 if(!world.isRemote) {
                     ItemAspectVial.placeAspectVial(world, pos.up(), stack.getItemDamage() == 2 ? 1 : 0, null);
                     stack.shrink(1);
