@@ -1,1 +1,16 @@
-
+[
+  {
+    "versions": [
+      "3.2.1-alpha-snapshot"
+    ],
+    "overrides": [
+      {
+        "id": "thebetweenlands:blood_sky",
+        "value": true,
+        "some_additional_data": {
+          "some_additional_value": "hello"
+        }
+      }
+    ]
+  }
+]
