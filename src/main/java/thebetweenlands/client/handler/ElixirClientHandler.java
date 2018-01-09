@@ -132,14 +132,14 @@ public class ElixirClientHandler {
                                         double tpxi = tpx + (tpx2 - tpx) / (double)subSegments * s;
                                         double tpyi = tpy + (tpy2 - tpy) / (double)subSegments * s;
                                         double tpzi = tpz + (tpz2 - tpz) / (double)subSegments * s;
-                                        BLParticles.BUBBLE_PURIFIER.spawn(world, tpxi, tpyi, tpzi, ParticleFactory.ParticleArgs.get().withScale(0));
+                                        BLParticles.PORTAL.spawn(world, tpxi, tpyi, tpzi, ParticleFactory.ParticleArgs.get().withScale(0.3F));
                                     }
                                 }
                             } else {
                                 double tpx = pos.x + 0.5F;
                                 double tpy = pos.y + 0.05F;
                                 double tpz = pos.z + 0.5F;
-                                BLParticles.BUBBLE_PURIFIER.spawn(world, tpx, tpy, tpz, ParticleFactory.ParticleArgs.get().withScale(0));
+                                BLParticles.PORTAL.spawn(world, tpx, tpy, tpz, ParticleFactory.ParticleArgs.get().withScale(0.3F));
                             }
                         }
                     }
