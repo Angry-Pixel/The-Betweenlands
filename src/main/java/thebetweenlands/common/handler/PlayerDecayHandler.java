@@ -11,6 +11,7 @@ import net.minecraft.network.play.server.SPacketEntityProperties;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -20,6 +21,7 @@ import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class PlayerDecayHandler {
 	@SubscribeEvent
@@ -59,7 +61,7 @@ public class PlayerDecayHandler {
 
 				if(capability.isDecayEnabled()) {
 					int decay = stats.getDecayLevel();
-	
+
 					if (decay >= 16) {
 						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 2, true, false));
 						player.jumpMovementFactor = 0.001F;
@@ -69,31 +71,27 @@ public class PlayerDecayHandler {
 					} else if (decay >= 10) {
 						player.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 40, 0, true, false));
 					}
-	
+
 					if(!event.player.isRiding()) {
 						EnumDifficulty difficulty = player.world.getDifficulty();
-	
-						float decaySpeed = 0.0F;
-	
-						switch(difficulty) {
-						case PEACEFUL:
-							decaySpeed = 0.0F;
-							break;
-						case EASY:
-							decaySpeed = 0.0025F;
-							break;
-						case NORMAL:
-							decaySpeed = 0.0033F;
-							break;
-						case HARD:
-							decaySpeed = 0.005F;
-							break;
+
+						float decayBaseSpeed = getDecayBaseSpeed(difficulty);
+
+						float decaySpeed = 0;
+
+						if(player.distanceWalkedModified - player.prevDistanceWalkedModified > 0) {
+							decaySpeed += (player.distanceWalkedModified - player.prevDistanceWalkedModified) * 4 * decayBaseSpeed;
 						}
-	
+
+						BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(player.world);
+						if(storage.getEnvironmentEventRegistry().heavyRain.isActive() && player.world.canSeeSky(player.getPosition())) {
+							decaySpeed += decayBaseSpeed;
+						}
+
 						if(player.isInWater()) {
-							decaySpeed *= 2.75F;
+							decaySpeed += decayBaseSpeed * 2.75F;
 						}
-	
+
 						if(decaySpeed > 0.0F) {
 							stats.addDecayAcceleration(decaySpeed);
 						}
@@ -104,6 +102,38 @@ public class PlayerDecayHandler {
 					capability.getDecayStats().onUpdate(player);
 				}
 			}
+		}
+	}
+
+	@SubscribeEvent
+	public static void onEntityAttacked(LivingHurtEvent event) {
+		if(!event.getEntityLiving().world.isRemote && event.getEntityLiving() instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+
+			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+				float decayBaseSpeed = getDecayBaseSpeed(player.world.getDifficulty());
+				capability.getDecayStats().addDecayAcceleration(decayBaseSpeed * 60);
+			}
+		}
+	}
+
+	/**
+	 * Returns the base decay speed per tick
+	 * @param difficulty
+	 * @return
+	 */
+	public static float getDecayBaseSpeed(EnumDifficulty difficulty) {
+		switch(difficulty) {
+		case PEACEFUL:
+			return 0.0F;
+		case EASY:
+			return 0.0025F;
+		default:
+		case NORMAL:
+			return 0.0033F;
+		case HARD:
+			return 0.005F;
 		}
 	}
 
