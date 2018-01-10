@@ -349,7 +349,7 @@ public class ItemRegistry {
     public static final Item ANGRY_PEBBLE = new ItemAngryPebble();
     public static final Item LORE_SCRAP = new ItemLoreScrap();
     public static final ItemTaintedPotion TAINTED_POTION = new ItemTaintedPotion();
-    public static final Item OCTINE_INGOT = new ItemOctineIngot();
+    public static final ItemOctineIngot OCTINE_INGOT = new ItemOctineIngot();
     public static final Item MUMMY_BAIT = new ItemMummyBait();
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();

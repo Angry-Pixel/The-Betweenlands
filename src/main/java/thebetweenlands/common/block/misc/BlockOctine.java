@@ -15,6 +15,7 @@ import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.plant.BlockMoss;
 import thebetweenlands.common.block.plant.BlockThorns;
 import thebetweenlands.common.item.misc.ItemOctineIngot;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockOctine extends BasicBlock {
 
@@ -28,7 +29,7 @@ public class BlockOctine extends BasicBlock {
 
     @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (ItemOctineIngot.isTinder(worldIn.getBlockState(fromPos), ItemStack.EMPTY)) {
+        if (ItemRegistry.OCTINE_INGOT.isTinder(ItemStack.EMPTY, ItemStack.EMPTY, worldIn.getBlockState(fromPos))) {
             boolean isTouching = true;
             int x = pos.getX() - fromPos.getX();
             int y = pos.getY() - fromPos.getY();

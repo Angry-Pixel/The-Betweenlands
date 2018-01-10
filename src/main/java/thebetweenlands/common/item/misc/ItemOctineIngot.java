@@ -1,5 +1,9 @@
 package thebetweenlands.common.item.misc;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -7,13 +11,18 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.*;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -24,10 +33,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemCrushed.EnumItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemOctineIngot extends Item {
 	public ItemOctineIngot() {
@@ -49,11 +56,11 @@ public class ItemOctineIngot extends Item {
 			boolean hasTinder = false;
 			boolean isBlockTinder = false;
 			IBlockState blockState = worldIn.getBlockState(result.getBlockPos());
-			if(isTinder(blockState, ItemStack.EMPTY)) {
+			if(((ItemOctineIngot)itemStackIn.getItem()).isTinder(itemStackIn, ItemStack.EMPTY, blockState)) {
 				hasTinder = true;
 				isBlockTinder = true;
 			} else {
-				List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> !entity.getItem().isEmpty() && this.isTinder(null, entity.getItem()));
+				List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> !entity.getItem().isEmpty() && ((ItemOctineIngot)itemStackIn.getItem()).isTinder(itemStackIn, entity.getItem(), null));
 				if(!tinder.isEmpty()) {
 					hasTinder = true;
 				}
@@ -77,11 +84,11 @@ public class ItemOctineIngot extends Item {
 				boolean hasTinder = false;
 				boolean isBlockTinder = false;
 				IBlockState blockState = worldIn.getBlockState(pos);
-				if(isTinder(blockState, ItemStack.EMPTY)) {
+				if(((ItemOctineIngot)stack.getItem()).isTinder(stack, ItemStack.EMPTY, blockState)) {
 					hasTinder = true;
 					isBlockTinder = true;
 				} else {
-					List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> !entity.getItem().isEmpty() && this.isTinder(null, entity.getItem()));
+					List<EntityItem> tinder = worldIn.getEntitiesWithinAABB(EntityItem.class, new AxisAlignedBB(offsetPos), entity -> !entity.getItem().isEmpty() && ((ItemOctineIngot)stack.getItem()).isTinder(stack, entity.getItem(), null));
 					if(!tinder.isEmpty()) {
 						hasTinder = true;
 					}
@@ -99,6 +106,14 @@ public class ItemOctineIngot extends Item {
 					}
 					if(!worldIn.isRemote) {
 						if(count <= 1) {
+							if(playerIn instanceof EntityPlayerMP) {
+								AdvancementCriterionRegistry.OCTINE_INGOT_FIRE.trigger((EntityPlayerMP)playerIn);
+								
+								if(worldIn.getBlockState(isBlockTinder ? pos.down() : offsetPos.down()).getBlock() == BlockRegistry.PEAT) {
+									AdvancementCriterionRegistry.PEAT_FIRE.trigger((EntityPlayerMP)playerIn);
+								}
+							}
+							
 							if(isBlockTinder) {
 								worldIn.setBlockState(pos, Blocks.FIRE.getDefaultState());
 							} else {
@@ -114,7 +129,7 @@ public class ItemOctineIngot extends Item {
 		}
 	}
 
-	public static boolean isTinder(IBlockState blockState, ItemStack stack) {
+	public boolean isTinder(ItemStack ingot, ItemStack stack, @Nullable IBlockState blockState) {
 		if(blockState != null) {
 			Block block = blockState.getBlock();
 			return block == BlockRegistry.CAVE_MOSS || 
@@ -125,7 +140,7 @@ public class ItemOctineIngot extends Item {
 		if(!stack.isEmpty()) {
 			if(stack.getItem() instanceof ItemBlock) {
 				ItemBlock itemBlock = (ItemBlock) stack.getItem();
-				return isTinder(itemBlock.getBlock().getDefaultState(), ItemStack.EMPTY);
+				return isTinder(ingot, ItemStack.EMPTY, itemBlock.getBlock().getDefaultState());
 			}
 			return EnumItemPlantDrop.CAVE_MOSS_ITEM.isItemOf(stack) ||
 					EnumItemPlantDrop.MOSS_ITEM.isItemOf(stack) ||
