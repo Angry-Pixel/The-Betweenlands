@@ -2,5 +2,13 @@
   "parent": "item/generated",
   "textures": {
     "layer0": "thebetweenlands:items/angry_pebble"
-  }
+  },
+  "overrides": [
+      {
+          "predicate": {
+              "charging": 1
+          },
+          "model": "thebetweenlands:item/angry_pebble_charging"
+      }
+  ]
 }
