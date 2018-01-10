@@ -149,10 +149,12 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public boolean canDoRainSnowIce(Chunk chunk) {
 		return false;
 	}
-
+	
 	@Override
 	public void updateWeather() {
 		BLEnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
+		this.world.getWorldInfo().setRainTime(2000); //stop random raining
+		this.world.getWorldInfo().setThunderTime(2000);
 		this.world.getWorldInfo().setRaining(eeRegistry.heavyRain.isActive());
 		this.world.getWorldInfo().setThundering(false);
 		this.world.prevRainingStrength = this.world.rainingStrength;
@@ -226,16 +228,6 @@ public class WorldProviderBetweenlands extends WorldProvider {
 			return BLSnowRenderer.INSTANCE;
 		}
 		return null;
-	}
-
-	//Fix for buggy rain (?)
-	@Override
-	public void calculateInitialWeather() {
-		//TODO Doesn't work anymore since this is called before capabilities are attached. Is this even necessary anymore?
-		//EnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
-		//this.world.getWorldInfo().setRaining(eeRegistry.HEAVY_RAIN.isActive());
-		//this.world.getWorldInfo().setThundering(false);
-		super.calculateInitialWeather();
 	}
 
 	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
