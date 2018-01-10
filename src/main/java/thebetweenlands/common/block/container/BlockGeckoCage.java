@@ -144,7 +144,7 @@ public class BlockGeckoCage extends BlockContainer {
 										tile.setAspectType(discovery.discovered.type, 600);
 										if (player instanceof EntityPlayerMP)
 											AdvancementCriterionRegistry.GECKO_TRIGGER.trigger((EntityPlayerMP) player, true, false);
-										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), true);
+										player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery." + discovery.discovered.type.getName().toLowerCase()), false);
 										if(discovery.result == EnumDiscoveryResult.LAST) {
                                             player.sendStatusMessage(new TextComponentTranslation("chat.aspect.discovery.last"), true);
                                         } else {
