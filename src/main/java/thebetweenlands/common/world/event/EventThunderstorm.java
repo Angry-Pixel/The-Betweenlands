@@ -85,11 +85,11 @@ public class EventThunderstorm extends TimedEnvironmentEvent {
 
 	@Override
 	public int getOffTime(Random rnd) {
-		return 2500 + rnd.nextInt(4000);
+		return 5000 + rnd.nextInt(4000);
 	}
 
 	@Override
 	public int getOnTime(Random rnd) {
-		return 4000 + rnd.nextInt(8000);
+		return 4000 + rnd.nextInt(4000);
 	}
 }
