@@ -10,9 +10,11 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
+import thebetweenlands.common.entity.ai.EntityAISeekRainShelter;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
 
@@ -39,8 +41,14 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	}
 
 	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return this.world.isRainingAt(pos) ? -1.0F : 0.0F;
+	}
+	
+	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAIFlyingWander(this, 0.5D));
+		this.tasks.addTask(0, new EntityAISeekRainShelter(this, 0.8D));
+		this.tasks.addTask(1, new EntityAIFlyingWander(this, 0.5D));
 	}
 
 	@Override

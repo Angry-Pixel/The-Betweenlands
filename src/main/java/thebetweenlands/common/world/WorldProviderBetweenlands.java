@@ -156,7 +156,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		this.world.getWorldInfo().setRainTime(2000); //stop random raining
 		this.world.getWorldInfo().setThunderTime(2000);
 		this.world.getWorldInfo().setRaining(eeRegistry.heavyRain.isActive());
-		this.world.getWorldInfo().setThundering(false);
+		this.world.getWorldInfo().setThundering(eeRegistry.thunderstorm.isActive());
+		this.world.setThunderStrength(eeRegistry.thunderstorm.isActive() ? 1 : 0);
 		this.world.prevRainingStrength = this.world.rainingStrength;
 		if(!this.world.isRemote) {
 			float rainingStrength = this.world.rainingStrength;

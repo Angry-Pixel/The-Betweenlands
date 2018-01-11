@@ -22,6 +22,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 	public final EventSpoopy spoopy;
 	public final EventWinter winter;
 	public final EventSnowfall snowfall;
+	public final EventThunderstorm thunderstorm;
 
 	private World world;
 
@@ -35,6 +36,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 		spoopy = new EventSpoopy(this);
 		winter = new EventWinter(this);
 		snowfall = new EventSnowfall(this);
+		thunderstorm = new EventThunderstorm(this);
 	}
 
 	@Override
@@ -52,6 +54,7 @@ public class BLEnvironmentEventRegistry implements IEnvironmentEventRegistry {
 			register(spoopy);
 			register(winter);
 			register(snowfall);
+			register(thunderstorm);
 		}
 
 		MinecraftForge.EVENT_BUS.post(new InitializeEnvironmentEventsEvent(this));

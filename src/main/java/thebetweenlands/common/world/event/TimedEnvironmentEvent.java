@@ -19,7 +19,9 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 		super.update(world);
 		
 		if(!this.getRegistry().isDisabled() && !this.isCurrentStateFromRemote()) {
-			this.ticks--;
+			if(this.isActive() || this.canActivate()) {
+				this.ticks--;
+			}
 
 			if(!world.isRemote && this.ticks % 20 == 0) {
 				this.setDirty(true);
@@ -72,15 +74,17 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
-		super.setActive(active, false);
-		if(!this.getWorld().isRemote) {
-			if(!this.isActive()) {
-				this.startTicks = this.ticks = this.getOffTime(this.getWorld().rand);
-			} else {
-				this.startTicks = this.ticks = this.getOnTime(this.getWorld().rand);
-			}
-			if(markDirty) {
-				this.markDirty();
+		if(!active || this.canActivate()) {
+			super.setActive(active, false);
+			if(!this.getWorld().isRemote) {
+				if(!this.isActive()) {
+					this.startTicks = this.ticks = this.getOffTime(this.getWorld().rand);
+				} else {
+					this.startTicks = this.ticks = this.getOnTime(this.getWorld().rand);
+				}
+				if(markDirty) {
+					this.markDirty();
+				}
 			}
 		}
 	}

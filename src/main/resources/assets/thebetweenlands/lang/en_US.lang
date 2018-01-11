@@ -986,6 +986,8 @@ command.blevent.failure.alreadyon=The event '%s' is already on
 command.blevent.failure.alreadyoff=The event '%s' is already off
 command.blevent.failure.alreadyenabled=Events are already enabled
 command.blevent.failure.alreadydisabled=Events are already disabled
+command.blevent.failure.on=The event '%s' could not be turned on
+command.blevent.failure.off=The event '%s' could not be turned off
 
 command.aspectdiscovery.book.none=There's no Herblore Book to write to
 command.aspectdiscovery.held.null=Held item must not be null

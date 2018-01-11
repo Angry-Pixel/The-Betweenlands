@@ -51,7 +51,11 @@ public class CommandBLEvent extends CommandBase {
 		IEnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		boolean isActive = event.isActive();
 		event.setActive(!isActive, true);
-		notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "off" : "on"), eventName);
+		if(event.isActive() == !isActive) {
+			notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "off" : "on"), eventName);
+		} else {
+			throw new CommandException("command.blevent.failure." + (isActive ? "off" : "on"), eventName);
+		}
 	}
 
 	private void processOn(ICommandSender sender, String[] args) throws PlayerNotFoundException, CommandException {
@@ -103,7 +107,11 @@ public class CommandBLEvent extends CommandBase {
 			throw new CommandException("command.blevent.failure.already" + (isActive ? "on" : "off"), eventName);
 		} else {
 			event.setActive(isActive, true);
-			notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "on" : "off"), eventName);
+			if(event.isActive() == isActive) {
+				notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "on" : "off"), eventName);
+			} else {
+				throw new CommandException("command.blevent.failure." + (isActive ? "on" : "off"), eventName);
+			}
 		}
 	}
 

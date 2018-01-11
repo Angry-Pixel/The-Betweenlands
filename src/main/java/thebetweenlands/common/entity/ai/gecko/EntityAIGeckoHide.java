@@ -1,4 +1,4 @@
-package thebetweenlands.common.entity.ai;
+package thebetweenlands.common.entity.ai.gecko;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -7,87 +7,68 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.base.Predicate;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.Path;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.pathfinding.PathPoint;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.common.entity.mobs.EntityGecko;
 import thebetweenlands.common.registries.BlockRegistry;
 
-public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
-	public final Predicate<Entity> viableSelector = new Predicate<Entity>() {
-		@Override
-		public boolean apply(Entity entity) {
-			return entity.isEntityAlive() && gecko.getEntitySenses().canSee(entity);
-		}
-	};
-
+public abstract class EntityAIGeckoHide extends EntityAIBase {
 	private final Comparator<BlockPos> closest = (a, b) -> {
 		double aLength = a.getDistance(0, 0, 0);
 		double bLength = b.getDistance(0, 0, 0);
 		return aLength < bLength ? -1 : aLength > bLength ? 1 : 0;
 	};
 
-	private EntityGecko gecko;
+	protected final EntityGecko gecko;
 
 	private double farSpeed;
 
 	private double nearSpeed;
 
-	private Entity closestLivingEntity;
-
-	private float distance;
-
 	private Path path;
 
 	private PathNavigate navigator;
-
-	private Class<? extends Entity> avoidingEntityClass;
 
 	private boolean bushBound;
 
 	private BlockPos target;
 
-	public EntityAIBLAvoidEntityGecko(EntityGecko gecko, Class<? extends Entity> avoidingEntityClass, float distance, double farSpeed, double nearSpeed) {
+	public EntityAIGeckoHide(EntityGecko gecko, double farSpeed, double nearSpeed) {
 		this.gecko = gecko;
-		this.avoidingEntityClass = avoidingEntityClass;
-		this.distance = distance;
 		this.farSpeed = farSpeed;
 		this.nearSpeed = nearSpeed;
 		navigator = gecko.getNavigator();
 		setMutexBits(1);
 	}
 
+	@Nullable
+	protected abstract Vec3d getFleeingCausePosition();
+
+	protected abstract boolean shouldFlee();
+
 	@Override
 	public boolean shouldExecute() {
 		if (gecko.isHiding()) {
 			return false;
 		}
-		if (avoidingEntityClass == EntityPlayer.class) {
-			closestLivingEntity = gecko.world.getNearestPlayerNotCreative(gecko, distance);
-			if (closestLivingEntity == null) {
-				return false;
-			}
-		} else {
-			List<Entity> list = gecko.world.getEntitiesWithinAABB(avoidingEntityClass, gecko.getEntityBoundingBox().grow(distance, 3.0D, distance), viableSelector);
-			if (list.isEmpty()) {
-				return false;
-			}
-			closestLivingEntity = list.get(0);
+		if(!shouldFlee()) {
+			return false;
 		}
+		Vec3d fleeingCausePos = this.getFleeingCausePosition();
 		target = findNearBush();
 		if (target == null) {
-			Vec3d target = RandomPositionGenerator.findRandomTargetBlockAwayFrom(gecko, 16, 7, new Vec3d(closestLivingEntity.posX, closestLivingEntity.posY, closestLivingEntity.posZ));
+			Vec3d target = fleeingCausePos != null ? RandomPositionGenerator.findRandomTargetBlockAwayFrom(gecko, 16, 7, fleeingCausePos) : RandomPositionGenerator.findRandomTargetBlockAwayFrom(gecko, 16, 7, gecko.getPositionVector());
 			if (target != null) {
 				this.target = new BlockPos(target);
 			}
@@ -96,7 +77,7 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 		}
 		if (target == null) {
 			return false;
-		} else if (!bushBound && closestLivingEntity.getDistanceSq(target) < closestLivingEntity.getDistanceSq(gecko)) {
+		} else if (!bushBound && fleeingCausePos != null && fleeingCausePos.squareDistanceTo(target.getX(), target.getY(), target.getZ()) < fleeingCausePos.squareDistanceTo(gecko.getPositionVector())) {
 			return false;
 		} else {
 			path = navigator.getPathToPos(target);
@@ -145,7 +126,8 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 				for (int dz = -radius; dz <= radius; dz++) {
 					pos.setPos(center.getX() + dx, center.getY() + dy, center.getZ() + dz);
 					IBlockState state = gecko.world.getBlockState(pos);
-					if (state.getBlock() == BlockRegistry.WEEDWOOD_BUSH && gecko.world.isBlockNormalCube(pos.down(), false)) {
+					if (state.getBlock() == BlockRegistry.WEEDWOOD_BUSH && gecko.world.isBlockNormalCube(pos.down(), false) && 
+							gecko.world.getEntitiesWithinAABB(EntityGecko.class, new AxisAlignedBB(pos), e -> e != gecko).isEmpty()) {
 						bushes.add(pos.subtract(center));
 					}
 				}
@@ -168,6 +150,9 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 
 	@Override
 	public boolean shouldContinueExecuting() {
+		if(target != null && !gecko.world.getEntitiesWithinAABB(EntityGecko.class, new AxisAlignedBB(target), e -> e != gecko).isEmpty()) {
+			return false;
+		}
 		return !navigator.noPath();
 	}
 
@@ -183,13 +168,13 @@ public class EntityAIBLAvoidEntityGecko extends EntityAIBase {
 			gecko.startHiding();
 
 		}
-		closestLivingEntity = null;
 		bushBound = false;
 	}
 
 	@Override
 	public void updateTask() {
-		if (gecko.getDistanceSq(closestLivingEntity) < 49) {
+		Vec3d fleeingCausePos = this.getFleeingCausePosition();
+		if (fleeingCausePos != null && gecko.getPositionVector().squareDistanceTo(fleeingCausePos) < 49) {
 			gecko.getNavigator().setSpeed(nearSpeed);
 		} else {
 			gecko.getNavigator().setSpeed(farSpeed);
