@@ -47,6 +47,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		this.getNavigator().getNodeProcessor().setCanSwim(true);
 		setSize(0.7F, 0.5F);
 		this.stepHeight = 1.0F;
+		this.experienceValue = 3;
 	}
 
 	@Override

@@ -60,6 +60,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(1.6F, 1.5F);
 		this.stepHeight = 1.0F;
+		this.experienceValue = 8;
 	}
 
 	@Override

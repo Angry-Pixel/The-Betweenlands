@@ -50,6 +50,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		this.moveHelper = new EntitySludge.SludgeMoveHelper(this);
 		this.isImmuneToFire = true;
 		this.setSize(1.1F, 1.2F);
+		this.experienceValue = 4;
 	}
 
 	@Override

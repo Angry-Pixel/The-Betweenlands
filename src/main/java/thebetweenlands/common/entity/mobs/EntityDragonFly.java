@@ -31,6 +31,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	public EntityDragonFly(World world) {
 		super(world);
 		setSize(0.9F, 0.5F);
+		this.experienceValue = 3;
 	}
 
 	@Override
