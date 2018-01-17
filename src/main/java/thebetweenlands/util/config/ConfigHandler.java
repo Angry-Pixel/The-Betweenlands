@@ -18,17 +18,19 @@ import com.google.common.collect.Multimap;
 
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning", "Debug"};
+	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning", "Debug", "Compat"};
 
 	//////// Values ///////
 	public static int dimensionId;
 	public static int druidCircleFrequency;
 	public static int dimensionBrightness;
 	public static boolean enableSeasonalEvents;
+	public static boolean onlineEnvironmentEventOverrides;
 
 	public static int wispQuality;
 	public static boolean useShader;
 	public static int skyResolution;
+	public static boolean fullbrightBlocks;
 
 	public static boolean debug;
 	public static boolean debugModelLoader;
@@ -37,16 +39,13 @@ public class ConfigHandler {
 	public static boolean blMainMenu;
 	public static boolean useFoodSickness;
 	private static Multimap<String, String> rottenFoodWhitelist;
+	public static boolean cavingRopeIndicator;
 	public static boolean showNonBLFuids;
 
 	public static int maxEntitiesPerLoadedArea;
 	public static int hardEntityLimit;
-	
-	public static boolean cavingRopeIndicator;
 
-	public static boolean fullbrightBlocks;
-	
-	public static boolean onlineEnvironmentEventOverrides;
+	public static boolean jeiGemRecipesNonBL;
 	
 	public Configuration config;
 	public static String path = "";
@@ -84,7 +83,9 @@ public class ConfigHandler {
 
 		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases this means per player)").setMinValue(0).getInt(100);
 		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities in the Betweenlands per world").setMinValue(0).getInt(600);
-		
+
+		jeiGemRecipesNonBL = config.getBoolean("JEI - Show Non BL Gem Recipes", CATEGORIES[5], true, "If true, non BL items will show in the JEI recipe for middle gems");
+
 		save();
 	}
 
