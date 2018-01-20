@@ -1,4 +1,4 @@
-package thebetweenlands.client.gui;
+package thebetweenlands.client.gui.menu;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiDownloadTerrain;

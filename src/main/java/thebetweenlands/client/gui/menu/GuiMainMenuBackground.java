@@ -1,4 +1,4 @@
-package thebetweenlands.client.gui;
+package thebetweenlands.client.gui.menu;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.client.gui.GuiFirefly;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.Starfield;
 
@@ -39,9 +40,9 @@ public class GuiMainMenuBackground extends GuiScreen {
 	@Override
 	public void initGui() {
 		if(this.fireFlies == null) {
-			this.fireFlies = new ArrayList<List<GuiFirefly>>();
+			this.fireFlies = new ArrayList<>();
 			for(int i = 0; i < 3; i++) {
-				this.fireFlies.add(new ArrayList<GuiFirefly>());
+				this.fireFlies.add(new ArrayList<>());
 			}
 		}
 
@@ -49,7 +50,7 @@ public class GuiMainMenuBackground extends GuiScreen {
 
 		if (ShaderHelper.INSTANCE.canUseShaders()) {
 			this.starfieldTextureFBO = new Framebuffer(this.width, this.height, false);
-			this.starfieldEffect = (Starfield) new Starfield(false).init();
+			this.starfieldEffect = new Starfield(false).init();
 			this.starfieldEffect.setTimeScale(0.00000000005F).setZoom(4.8F);
 		}
 	}
