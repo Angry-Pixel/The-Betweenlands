@@ -175,7 +175,7 @@ public class MusicHandler {
 		if(this.musicMenuTrackAccessors == null) {
 			try {
 				this.musicMenuTrackAccessors = new ArrayList<>();
-				SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(SoundRegistry.BL_MUSIC_DIMENSION.getSoundName());
+				SoundEventAccessor soundEventAccessor = this.mc.getSoundHandler().getAccessor(SoundRegistry.BL_MUSIC_MENU.getSoundName());
 				if (soundEventAccessor != null) {
 					List<ISoundEventAccessor<Sound>> soundAccessors = soundEventAccessor.accessorList;
 					for (ISoundEventAccessor<Sound> accessor : soundAccessors) {
