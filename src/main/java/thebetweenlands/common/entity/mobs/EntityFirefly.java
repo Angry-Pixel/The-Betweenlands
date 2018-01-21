@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.nbt.NBTTagCompound;
@@ -25,8 +26,6 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 
 	private static final DataParameter<Float> GLOW_STRENGTH = EntityDataManager.<Float>createKey(EntityFirefly.class, DataSerializers.FLOAT);
 
-	protected double aboveLayer = 6.0D;
-
 	protected int glowTicks = 0;
 	protected int prevGlowTicks = 0;
 
@@ -48,7 +47,8 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	@Override
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISeekRainShelter(this, 0.8D));
-		this.tasks.addTask(1, new EntityAIFlyingWander(this, 0.5D));
+		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
 	}
 
 	@Override
@@ -80,10 +80,6 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-
-		if (this.isInWater()) {
-			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 1.0D);
-		}
 
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
 			getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);

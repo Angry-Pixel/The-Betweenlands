@@ -36,7 +36,7 @@ public class FlyingNodeProcessorBL extends NodeProcessor {
 		BlockPos blockpos1 = new BlockPos(this.entity);
 		PathNodeType startNodeType = this.isFree(blockpos1.getX(), startY, blockpos1.getZ());
 
-		if (startNodeType == PathNodeType.BLOCKED) {
+		if (this.entity.getPathPriority(startNodeType) < 0.0F) {
 			Set<BlockPos> set = Sets.<BlockPos>newHashSet();
 			set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, startY, this.entity.getEntityBoundingBox().minZ));
 			set.add(new BlockPos(this.entity.getEntityBoundingBox().minX, startY, this.entity.getEntityBoundingBox().maxZ));
