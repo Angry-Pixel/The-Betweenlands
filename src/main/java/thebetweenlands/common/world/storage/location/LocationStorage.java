@@ -231,6 +231,7 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	 * Returns the localized name of this location
 	 * @return
 	 */
+	@SideOnly(Side.CLIENT)
 	public String getLocalizedName() {
 		String locationName = this.name;
 		boolean translate = locationName.startsWith("translate:");

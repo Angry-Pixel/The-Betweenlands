@@ -1,25 +1,20 @@
 package thebetweenlands.client.handler;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.gui.BossInfoClient;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -35,6 +30,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -47,9 +43,6 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.entity.IBLBoss;
-import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.shader.postprocessing.PostProcessingEffect;
-import thebetweenlands.client.render.shader.postprocessing.Starfield;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.entity.EntityRopeNode;
@@ -65,7 +58,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
-import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ScreenRenderHandler extends Gui {
@@ -92,12 +84,6 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
 	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
 	
-	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
-
-	static {
-		ASPECT_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
-	}
-
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
 		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity));
@@ -522,7 +508,7 @@ public class ScreenRenderHandler extends Gui {
 				RenderHelper.disableStandardItemLighting();
 				if(aspects != null && aspects.size() > 0) {
 					for(Aspect aspect : aspects) {
-						String aspectText = aspect.type.getName() + " (" + ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
+						String aspectText = aspect.type.getName() + " (" + aspect.getRoundedDisplayAmount() + ")";
 						String aspectTypeText = aspect.type.getType();
 						GlStateManager.color(1, 1, 1, 1);
 						fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);

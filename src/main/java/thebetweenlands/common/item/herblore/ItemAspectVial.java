@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,7 +27,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
-import thebetweenlands.client.handler.ScreenRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.container.BlockAspectVial;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
@@ -61,7 +61,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
 
         if (itemAspects.size() >= 1) {
             Aspect aspect = itemAspects.get(0);
-            return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
+            return I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".filled.name", aspect.type.getName(), aspect.getRoundedDisplayAmount()).trim();
         }
         return super.getItemStackDisplayName(stack);
     }

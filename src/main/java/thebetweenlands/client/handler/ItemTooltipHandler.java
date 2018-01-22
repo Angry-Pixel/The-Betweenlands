@@ -1,5 +1,7 @@
 package thebetweenlands.client.handler;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +26,12 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemTooltipHandler {
+public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.##");
+	
+	static {
+		COMPOST_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
+	}
+	
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event) {
 		ItemStack stack = event.getItemStack();
@@ -33,7 +41,7 @@ public class ItemTooltipHandler {
 		if(recipe != null) {
 			String debug = "";
 			if(event.getFlags().isAdvanced()) {
-				debug = " (T: " + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(recipe.getCompostingTime(stack) / 20.0F) + "s A: " + recipe.getCompostAmount(stack) + ")";
+				debug = " (T: " + COMPOST_AMOUNT_FORMAT.format(recipe.getCompostingTime(stack) / 20.0F) + "s A: " + recipe.getCompostAmount(stack) + ")";
 			}
 			toolTip.add(I18n.format("tooltip.compost.compostable") + debug);
 		}

@@ -4,13 +4,13 @@ import java.util.List;
 
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
@@ -55,7 +55,7 @@ public class ItemAspectrusSeeds extends ItemPlantableSeeds {
 		List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
 		if(!itemAspects.isEmpty()) {
 			Aspect aspect = itemAspects.get(0);
-			return I18n.format(this.getUnlocalizedNameInefficiently(stack) + ".filled.name", aspect.type.getName(), ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount())).trim();
+			return I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".filled.name", aspect.type.getName(), aspect.getRoundedDisplayAmount()).trim();
 		}
 		return super.getItemStackDisplayName(stack);
 	}
