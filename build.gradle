@@ -113,6 +113,7 @@ jar {
     exclude("pack.mcmeta")
     exclude("pack.png")
     exclude("thebetweenlands/core/**")
+    exclude("unused/**")
     
     from(coreJar.archivePath.absolutePath) {
         include '*'
@@ -188,6 +189,7 @@ task assetsZip(type: Zip) {
 		exclude("assets/" + modid + "/loot_tables/**")
 		exclude("assets/" + modid + "/recipes/**")
 		exclude("META-INF/**")
+		exclude("unused/**")
 		
 	}
 }
