@@ -102,6 +102,7 @@ import thebetweenlands.common.block.structure.BlockFenceBetweenlands;
 import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
 import thebetweenlands.common.block.structure.BlockItemCage;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
+import thebetweenlands.common.block.structure.BlockMudBrickRoof;
 import thebetweenlands.common.block.structure.BlockMudBricks;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
@@ -587,6 +588,7 @@ public class BlockRegistry {
     public static final Block WALKWAY = new BlockWalkway();
     public static final Block WOOD_CHIP_PATH = new BlockChipPath();
     public static final Block THATCH_ROOF = new BlockThatchRoof();
+    public static final Block MUD_BRICK_ROOF = new BlockMudBrickRoof();
     public static final Block REPELLER = new BlockRepeller();
     
     public static final Set<Block> BLOCKS = new LinkedHashSet<>();
