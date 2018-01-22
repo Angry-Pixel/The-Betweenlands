@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
@@ -170,13 +171,17 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
-		return super.canPlaceBlockAt(worldIn, pos) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && 
-				(soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) || this.canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
+		IBlockState state = worldIn.getBlockState(pos);
+		if(state.getBlock() instanceof IFluidBlock && ((IFluidBlock)state.getBlock()).getFluid() == this.getFluid()) {
+			return super.canPlaceBlockAt(worldIn, pos) && 
+					(soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) || this.canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
+		}
+		return false;
 	}
 
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
-		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockPlantUnderwater && ((BlockPlantUnderwater)plantable).canSustainPlant(state));
+		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockPlantUnderwater && ((BlockPlantUnderwater)plantable).canSustainPlant(state)) || SoilHelper.canSustainUnderwaterPlant(state);
 	}
 
 	@Override
@@ -215,7 +220,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
 	}
-	
+
 	@Override
 	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
 		if(tintIndex == 1) {

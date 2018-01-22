@@ -23,6 +23,7 @@ public class BlockMarshMarigoldStalk extends BlockStackablePlantUnderwater {
 	public BlockMarshMarigoldStalk() {
 		this.harvestAll = true;
 		this.setMaxHeight(1);
+		this.setCreativeTab(null);
 	}
 
 	@Override
@@ -38,8 +39,7 @@ public class BlockMarshMarigoldStalk extends BlockStackablePlantUnderwater {
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		IBlockState soil = worldIn.getBlockState(pos.down());
-		return worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && SoilHelper.canSustainUnderwaterPlant(soil);
+		return worldIn.isAirBlock(pos.up()) && super.canPlaceBlockAt(worldIn, pos);
 	}
 
 	@Override
