@@ -73,8 +73,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
     private int leapRiseTime;
     private int leapFallTime;
 
-    private PathNavigate pathNavigateWater;
-    private PathNavigate pathNavigateLand;
     private EntityMoveHelper moveHelperWater;
     private EntityMoveHelper moveHelperLand;
 
@@ -92,16 +90,9 @@ public class EntityLurker extends EntityMob implements IEntityBL {
             this.moveHelper = this.moveHelperLand;
         }
 
-        this.pathNavigateWater = this.getNavigator();
-        this.pathNavigateLand = new PathNavigateGround(this, world);
+        ((PathNavigateGround)this.getNavigator()).setCanSwim(true);
 
-        if (this.isInWater()) {
-            this.navigator = this.pathNavigateWater;
-        } else {
-            this.navigator = this.pathNavigateLand;
-        }
-
-        setSize(1.6F, 0.9F);
+        setSize(1.9F, 0.9F);
     }
 
     @Override
@@ -113,8 +104,8 @@ public class EntityLurker extends EntityMob implements IEntityBL {
         tasks.addTask(4, new EntityAILookIdle(this));
 
         targetTasks.addTask(0, new EntityAIHurtByTarget(this, false));
-        targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityDragonFly.class, true));
-        targetTasks.addTask(1, new EntityAINearestAttackableTarget(this, EntityAngler.class, true));
+        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityDragonFly.class, true));
+        targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityAngler.class, true));
     }
 
     @Override
@@ -258,12 +249,6 @@ public class EntityLurker extends EntityMob implements IEntityBL {
             this.moveHelper = this.moveHelperWater;
         } else {
             this.moveHelper = this.moveHelperLand;
-        }
-
-        if (this.isInWater()) {
-            this.navigator = this.pathNavigateWater;
-        } else {
-            this.navigator = this.pathNavigateLand;
         }
 
         if (!this.getEntityWorld().isRemote) {
