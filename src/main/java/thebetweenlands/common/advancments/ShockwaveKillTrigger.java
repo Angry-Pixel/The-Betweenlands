@@ -1,27 +1,16 @@
 package thebetweenlands.common.advancments;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-public class ShockwaveKillTrigger implements ICriterionTrigger<ShockwaveKillTrigger.Instance> {
+public class ShockwaveKillTrigger extends BLTrigger<ShockwaveKillTrigger.Instance, ShockwaveKillTrigger.Listener> {
 
     public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "shockwave_kill");
-
-    private final Map<PlayerAdvancements, ShockwaveKillTrigger.Listeners> listeners = Maps.newHashMap();
 
     @Override
     public ResourceLocation getId() {
@@ -29,40 +18,20 @@ public class ShockwaveKillTrigger implements ICriterionTrigger<ShockwaveKillTrig
     }
 
     @Override
-    public void addListener(PlayerAdvancements playerAdvancements, Listener<Instance> listener) {
-        ShockwaveKillTrigger.Listeners listeners = this.listeners.computeIfAbsent(playerAdvancements, Listeners::new);
-
-        listeners.add(listener);
+    public Listener createListener(PlayerAdvancements playerAdvancements) {
+        return new ShockwaveKillTrigger.Listener(playerAdvancements);
     }
 
     @Override
-    public void removeListener(PlayerAdvancements playerAdvancements, Listener<Instance> listener) {
-        ShockwaveKillTrigger.Listeners listeners = this.listeners.get(playerAdvancements);
-
-        if (listeners != null) {
-            listeners.remove(listener);
-
-            if (listeners.isEmpty()) {
-                this.listeners.remove(playerAdvancements);
-            }
-        }
-    }
-
-    @Override
-    public void removeAllListeners(PlayerAdvancements playerAdvancementsIn) {
-        this.listeners.remove(playerAdvancementsIn);
-    }
-
-    @Override
-    public Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
+    public ShockwaveKillTrigger.Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
         return new ShockwaveKillTrigger.Instance();
     }
 
     public void trigger(EntityPlayerMP player) {
-        ShockwaveKillTrigger.Listeners listeners = this.listeners.get(player.getAdvancements());
+        Listener listener = this.listeners.get(player.getAdvancements());
 
-        if (listeners != null) {
-            listeners.trigger();
+        if (listener != null) {
+            listener.trigger();
         }
     }
 
@@ -73,25 +42,10 @@ public class ShockwaveKillTrigger implements ICriterionTrigger<ShockwaveKillTrig
         }
     }
 
-    static class Listeners {
-        private final PlayerAdvancements playerAdvancements;
-        private final Set<Listener<ShockwaveKillTrigger.Instance>> listeners = Sets.newHashSet();
+    static class Listener extends BLTrigger.Listener<ShockwaveKillTrigger.Instance> {
 
-        public Listeners(PlayerAdvancements playerAdvancementsIn) {
-            this.playerAdvancements = playerAdvancementsIn;
-        }
-
-        public boolean isEmpty()
-        {
-            return this.listeners.isEmpty();
-        }
-
-        public void add(Listener<ShockwaveKillTrigger.Instance> listener) {
-            this.listeners.add(listener);
-        }
-
-        public void remove(Listener<ShockwaveKillTrigger.Instance> listener) {
-            this.listeners.remove(listener);
+        public Listener(PlayerAdvancements playerAdvancementsIn) {
+            super(playerAdvancementsIn);
         }
 
         public void trigger() {
