@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 22
+    },
+    {
+      "item": "thebetweenlands:weeping_blue_petal"
+    },
+    {
+      "item": "thebetweenlands:weeping_blue_petal"
+    },
+    {
+      "item": "thebetweenlands:weeping_blue_petal"
+    },
+    {
+      "item": "thebetweenlands:weeping_blue_petal"
+    },
+    {
+      "item": "thebetweenlands:weeping_blue_petal"
+    },
+    {
+      "item": "thebetweenlands:weeping_blue_petal"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:weeping_blue_petal_salad"
+  }
+}

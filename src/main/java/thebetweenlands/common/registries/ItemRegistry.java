@@ -56,25 +56,7 @@ import thebetweenlands.common.item.farming.ItemPlantTonic;
 import thebetweenlands.common.item.farming.ItemSpores;
 import thebetweenlands.common.item.farming.ItemSwampKelp;
 import thebetweenlands.common.item.farming.ItemSwampReed;
-import thebetweenlands.common.item.food.ItemAspectrusFruit;
-import thebetweenlands.common.item.food.ItemBLFood;
-import thebetweenlands.common.item.food.ItemBlackHatMushroom;
-import thebetweenlands.common.item.food.ItemBulbCappedMushroom;
-import thebetweenlands.common.item.food.ItemChiromawWing;
-import thebetweenlands.common.item.food.ItemFlatHeadMushroom;
-import thebetweenlands.common.item.food.ItemForbiddenFig;
-import thebetweenlands.common.item.food.ItemGertsDonut;
-import thebetweenlands.common.item.food.ItemMarshmallow;
-import thebetweenlands.common.item.food.ItemMarshmallowPink;
-import thebetweenlands.common.item.food.ItemMireSnailEgg;
-import thebetweenlands.common.item.food.ItemNettleSoup;
-import thebetweenlands.common.item.food.ItemRottenFood;
-import thebetweenlands.common.item.food.ItemSapBall;
-import thebetweenlands.common.item.food.ItemSapJello;
-import thebetweenlands.common.item.food.ItemTaintedPotion;
-import thebetweenlands.common.item.food.ItemTangledRoot;
-import thebetweenlands.common.item.food.ItemWeepingBluePetal;
-import thebetweenlands.common.item.food.ItemWightHeart;
+import thebetweenlands.common.item.food.*;
 import thebetweenlands.common.item.herblore.ItemAspectVial;
 import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemDentrothystVial;
@@ -172,6 +154,9 @@ public class ItemRegistry {
     public static final Item CANDY_YELLOW = new ItemBLFood(4, 1.0F, false);
     public static final Item CHIROMAW_WING = new ItemChiromawWing();
     public static final Item TANGLED_ROOT = new ItemTangledRoot();
+    public static final Item MIRE_SCRAMBLE = new ItemMireScramble();
+    public static final Item WEEPING_BLUE_PETAL_SALAD = new ItemWeepingBluePetalSalad();
+
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);
     public static final Item BONE_CHESTPLATE = new ItemBoneArmor(EntityEquipmentSlot.CHEST);
