@@ -92,7 +92,7 @@ public class EntityLurker extends EntityMob implements IEntityBL {
 
         ((PathNavigateGround)this.getNavigator()).setCanSwim(true);
 
-        setSize(1.9F, 0.9F);
+        setSize(1.6F, 0.9F);
     }
 
     @Override
