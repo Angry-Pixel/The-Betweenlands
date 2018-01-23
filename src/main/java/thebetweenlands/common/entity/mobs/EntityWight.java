@@ -10,6 +10,8 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
@@ -193,7 +195,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
             if (this.getAttackTarget() != null) {
                 EntityLivingBase attackTarget = this.getAttackTarget();
 
-                if (this.getRidingEntity() == null && this.getDistance(attackTarget) < 1.75D) {
+                if (this.getRidingEntity() == null && this.getDistance(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
                     this.startRiding(attackTarget, true);
                     this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(attackTarget));
                 }
@@ -486,7 +488,17 @@ public class EntityWight extends EntityMob implements IEntityBL {
     }
 
     public boolean canPossess(EntityLivingBase entity) {
-        return entity instanceof EntitySwampHag || (entity instanceof EntityPlayer && (((EntityPlayer) entity).inventory.getStackInSlot(103) == null || ((EntityPlayer) entity).inventory.getStackInSlot(103).getItem() != ItemRegistry.SKULL_MASK));
+        if(entity instanceof EntitySwampHag) {
+        	return true;
+        }
+        if(entity instanceof EntityPlayer) {
+        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SKULL_MASK) {
+        		return false;
+        	}
+        	return true;
+        }
+        return false;
     }
 
     public void setCanTurnVolatile(boolean canTurnVolatile) {
