@@ -19,7 +19,7 @@ import thebetweenlands.common.block.container.BlockWeedwoodJukebox;
 
 public class ItemGertsDonut extends ItemBLFood {
     public ItemGertsDonut() {
-        super(6, 13.2F, false);
+        super(6, 0.6F, false);
     }
 
     @Override

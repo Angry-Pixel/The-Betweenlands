@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
     public ItemForbiddenFig() {
-        super(20, 5.0F, false);
+        super(20, 0.6F, false);
     }
 
     @Override
@@ -39,14 +39,12 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
 
-        if (player != null) {
-            if (world.isRemote) {
-                player.sendStatusMessage(new TextComponentTranslation("chat.item.forbiddenfig"), true);
-                world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.FIG, SoundCategory.AMBIENT, 0.7F, 0.8F);
-            } else {
-                player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200, 1));
-                player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 1200, 1));
-            }
+        if (world.isRemote) {
+            player.sendStatusMessage(new TextComponentTranslation("chat.item.forbiddenfig"), true);
+            world.playSound(player, player.posX, player.posY, player.posZ, SoundRegistry.FIG, SoundCategory.AMBIENT, 0.7F, 0.8F);
+        } else {
+            player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 1200, 1));
+            player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 1200, 1));
         }
     }
 }

@@ -8,15 +8,13 @@ import net.minecraft.world.World;
 
 public class ItemMarshmallow extends ItemBLFood {
     public ItemMarshmallow() {
-        super(4, 10F, false);
+        super(4, 0.3F, false);
     }
 
     @Override
     protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
         super.onFoodEaten(stack, world, player);
-        if (player != null) {
-            player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 400, 1));
-        }
+        player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 400, 1));
     }
 
 }
