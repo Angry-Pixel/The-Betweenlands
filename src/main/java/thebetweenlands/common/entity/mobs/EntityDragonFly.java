@@ -3,6 +3,7 @@ package thebetweenlands.common.entity.mobs;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EnumCreatureAttribute;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAISwimming;
@@ -12,12 +13,15 @@ import net.minecraft.entity.passive.EntityAmbientCreature;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
@@ -25,9 +29,10 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL {
-	public BlockPos currentFlightTarget;
-	public boolean entityFlying;
-
+	private BlockPos currentFlightTarget;
+	private boolean entityFlying;
+	private BlockPos spawnPos;
+	
 	public EntityDragonFly(World world) {
 		super(world);
 		setSize(0.9F, 0.5F);
@@ -98,6 +103,10 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 
 	@Override
 	public void onUpdate() {
+		if(this.spawnPos == null) {
+			this.spawnPos = new BlockPos(this.posX, this.posY, this.posZ);
+		}
+		
 		if (motionY < 0.0D) {
 			motionY *= 0.6D;
 		}
@@ -131,12 +140,18 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 
 	public void flyAbout() {
 		if (currentFlightTarget != null) {
-			if (!world.isAirBlock(currentFlightTarget) || currentFlightTarget.getY() < 1 || world.getBlockState(currentFlightTarget.up()).getBlock() == Blocks.WATER) {
+			if (!world.isAreaLoaded(currentFlightTarget.add(-6, -6, -6), currentFlightTarget.add(6, 6, 6)) || !world.isAirBlock(currentFlightTarget) || currentFlightTarget.getY() < 1 || world.getBlockState(currentFlightTarget.up()).getBlock() == Blocks.WATER) {
 				currentFlightTarget = null;
 			}
 		}
-		if (currentFlightTarget == null || rand.nextInt(30) == 0 || currentFlightTarget.getDistance((int) posX, (int) posY, (int) posZ) < 10F) {
-			currentFlightTarget = new BlockPos((int) posX + rand.nextInt(7) - rand.nextInt(7), (int) posY + rand.nextInt(6) - 1, (int) posZ + rand.nextInt(7) - rand.nextInt(7));
+		if (currentFlightTarget == null || rand.nextInt(30) == 0 || currentFlightTarget.getDistance((int) posX, (int) posY, (int) posZ) < 8F) {
+			BlockPos newTarget = new BlockPos((int) posX + rand.nextInt(7) - rand.nextInt(7), (int) posY + rand.nextInt(6) - 1, (int) posZ + rand.nextInt(7) - rand.nextInt(7));
+			if(this.spawnPos.distanceSq(newTarget) > 32*32) {
+				newTarget = this.spawnPos.add(rand.nextInt(16) - rand.nextInt(16), rand.nextInt(10) - 5, rand.nextInt(16) - rand.nextInt(16));
+			}
+			if(world.isAreaLoaded(newTarget.add(-6, -6, -6), newTarget.add(6, 6, 6))) {
+				currentFlightTarget = newTarget;
+			}
 		}
 		flyToTarget();
 	}
@@ -212,5 +227,30 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	@Override
 	protected boolean canBeRidden(Entity entityIn) {
 		return super.canBeRidden(entityIn);
+	}
+	
+	@Override
+	public boolean canBeLeashedTo(EntityPlayer player) {
+		return false;
+	}
+	
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		this.spawnPos = new BlockPos(this.posX, this.posY, this.posZ);
+		return super.onInitialSpawn(difficulty, livingdata);
+	}
+	
+	@Override
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		nbt.setLong("spawnPos", this.spawnPos.toLong());
+		return super.writeToNBT(nbt);
+	}
+	
+	@Override
+	public void readFromNBT(NBTTagCompound nbt) {
+		if(nbt.hasKey("spawnPos", Constants.NBT.TAG_LONG)) {
+			this.spawnPos = BlockPos.fromLong(nbt.getLong("spawnPos"));
+		}
+		super.readFromNBT(nbt);
 	}
 }
