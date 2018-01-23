@@ -1,6 +1,7 @@
 <!--
-Before you start writing an issue, please read up on the common issues on the main page and how to create a proper bug report.
-Once you have done that can use this template to write your bug report
+If you want to write a suggestion you can remove and ignore this template.
+Before you start writing a bug report, please read up on the common issues on the main page and how to create a proper bug report.
+Once you have done that can use this template to write your bug report.
 -->
 
 ## Versions
