@@ -1,11 +1,6 @@
 package thebetweenlands.common.block.structure;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
@@ -14,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -24,8 +20,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.item.ItemBlockSlab;
+import thebetweenlands.common.registries.BlockRegistry;
 
-public class BlockSlabBetweenlands extends BasicBlock {
+import javax.annotation.Nonnull;
+import java.util.Random;
+
+public class BlockSlabBetweenlands extends BasicBlock implements BlockRegistry.ICustomItemBlock {
 	public static final PropertyEnum<EnumBlockHalfBL> HALF = PropertyEnum.<EnumBlockHalfBL>create("half", EnumBlockHalfBL.class);
 	protected static final AxisAlignedBB AABB_BOTTOM_HALF = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
 	protected static final AxisAlignedBB AABB_TOP_HALF = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
@@ -33,10 +34,17 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	@SuppressWarnings("deprecation")
 	public BlockSlabBetweenlands(Block block) {
 		super(block.getMaterial(block.getDefaultState()));
-		setSoundType(block.getSoundType());
-		setDefaultState(blockState.getBaseState().withProperty(HALF, EnumBlockHalfBL.BOTTOM));
-		setHardness(2.0F);
-		setLightOpacity(0);
+		this.setSoundType(block.getSoundType());
+		this.setDefaultState(blockState.getBaseState().withProperty(HALF, EnumBlockHalfBL.BOTTOM));
+		this.setHardness(2.0F);
+		this.setResistance(10.0F);
+		this.useNeighborBrightness = true;
+	}
+
+	@Nonnull
+	@Override
+	public ItemBlock getItemBlock() {
+		return new ItemBlockSlab(this);
 	}
 
 	@Override
@@ -48,7 +56,6 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	public boolean isOpaqueCube(IBlockState state) {
 		return state.getValue(HALF).equals(EnumBlockHalfBL.FULL);
 	}
-
 
 	@Override
 	public boolean doesSideBlockRendering(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face) {
@@ -75,13 +82,18 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		EnumBlockHalfBL half = state.getValue(HALF);
 		switch (half) {
-		case TOP:
-			return AABB_TOP_HALF;
-		case BOTTOM:
-			return AABB_BOTTOM_HALF;
-		default:
-			return FULL_BLOCK_AABB;
+			case TOP:
+				return AABB_TOP_HALF;
+			case BOTTOM:
+				return AABB_BOTTOM_HALF;
+			default:
+				return FULL_BLOCK_AABB;
 		}
+	}
+
+	@Override
+	public boolean isTopSolid(IBlockState state) {
+		return state.getValue(HALF).equals(EnumBlockHalfBL.FULL) || state.getValue(HALF).equals(EnumBlockHalfBL.TOP);
 	}
 
 	@Override
@@ -98,12 +110,12 @@ public class BlockSlabBetweenlands extends BasicBlock {
 	@Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 	    ItemStack heldItem = playerIn.getHeldItem(hand);
-		if (!heldItem.isEmpty() && playerIn != null && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && facing.equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && facing.equals(EnumFacing.UP)))){
+		if (!heldItem.isEmpty() && ((state.getValue(HALF).equals(EnumBlockHalfBL.TOP) && facing.equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockHalfBL.BOTTOM) && facing.equals(EnumFacing.UP)))){
 			if (heldItem.getItem() == Item.getItemFromBlock(this)) {
 				worldIn.setBlockState(pos, state.withProperty(HALF, EnumBlockHalfBL.FULL));
 				if(!playerIn.capabilities.isCreativeMode)
 					heldItem.setCount(heldItem.getCount() - 1);
-				SoundType soundtype = this.getSoundType();
+				SoundType soundtype = this.getSoundType(state, worldIn, pos, playerIn);
 				worldIn.playSound(playerIn, pos, soundtype.getPlaceSound(), SoundCategory.BLOCKS, (soundtype.getVolume() + 1.0F) / 2.0F, soundtype.getPitch() * 0.8F);
 				return true;
 			}
