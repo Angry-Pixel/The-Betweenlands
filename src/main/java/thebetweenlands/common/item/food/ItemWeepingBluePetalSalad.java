@@ -21,7 +21,7 @@ public class ItemWeepingBluePetalSalad extends ItemBLFood {
 	@Override
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		if (!world.isRemote) {
-			player.addPotionEffect(new PotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.getPotionEffect(), 3600, 2));
+			player.addPotionEffect(new PotionEffect(ElixirEffectRegistry.EFFECT_RIPENING.getPotionEffect(), 4200, 2));
 		}
 
 		if (stack.getCount() != 0)
