@@ -56,7 +56,7 @@ public class QuadBuilder {
 
 	private int blockLight = -1, skyLight = -1;
 	private boolean hasLightmapElement;
-	
+
 	public QuadBuilder(VertexFormat format) {
 		this(50, format);
 	}
@@ -76,7 +76,7 @@ public class QuadBuilder {
 		this.tintIndex = index;
 		return this;
 	}
-	
+
 	/**
 	 * Sets the lightmap values
 	 * @param blockLight
@@ -92,7 +92,7 @@ public class QuadBuilder {
 		}
 		return this;
 	}
-	
+
 	/**
 	 * Removes the lightmap values and uses the default ones
 	 * @return
@@ -102,7 +102,7 @@ public class QuadBuilder {
 		this.skyLight = -1;
 		return this;
 	}
-	
+
 	/**
 	 * Sets the normal.
 	 * Set to null for cross product normal.
@@ -380,8 +380,23 @@ public class QuadBuilder {
 
 	private BakedQuad createQuad(VertexFormat format, Vertex vert1, Vertex vert2, Vertex vert3, Vertex vert4, @Nullable Consumer<UnpackedBakedQuad.Builder> quadConsumer) {
 		Vec3d quadNormal = null;
-		if(vert1.normal == null || vert2.normal == null || vert3.normal == null || vert4.normal == null)
-			quadNormal = vert1.pos.subtract(vert2.pos).crossProduct(vert3.pos.subtract(vert2.pos));
+		if(vert1.normal == null || vert2.normal == null || vert3.normal == null || vert4.normal == null) {
+			//Find 3 vertices that aren't at the exact same position to calculate the quad normal
+			Vec3d[] verts = new Vec3d[] {vert1.pos, vert2.pos, vert3.pos, vert4.pos};
+			for(int i = 0; i < 4; i++) {
+				Vec3d prev = verts[i];
+				Vec3d corner = verts[(i + 1) % 4];
+				Vec3d next = verts[(i + 2) % 4];
+				if(!corner.equals(next) && !corner.equals(prev)) {
+					quadNormal = prev.subtract(corner).crossProduct(next.subtract(corner)).normalize();
+					break;
+				}
+			}
+			if(quadNormal == null) {
+				//What a bizarre quad we have here
+				quadNormal = new Vec3d(0, 0, 0);
+			}
+		}
 		UnpackedBakedQuad.Builder builder = new UnpackedBakedQuad.Builder(format);
 		builder.setQuadTint(vert4.tintIndex);
 		builder.setTexture(vert1.sprite);

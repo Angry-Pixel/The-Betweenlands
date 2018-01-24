@@ -195,12 +195,108 @@ public class ModelSlant implements IModel {
 
 				//top face
 				builder.setSprite(this.textureSlant);
-				if((cornerNE || cornerSW) && (!cornerNW && !cornerSE) || (cornerNW == cornerSE)) {
+				if(cornerNW && cornerNE && cornerSE) {
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
 					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+				} else if(cornerNE && cornerSE && cornerSW) {
 					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
 					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
 					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+				} else if(cornerSE && cornerSW && cornerNW) {
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+				} else if(cornerSW && cornerNW && cornerNE) {
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+				} else if(cornerNW && !cornerNE && !cornerSE && !cornerSW) {
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+				} else if(!cornerNW && cornerNE && !cornerSE && !cornerSW) {
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+				} else if(!cornerNW && !cornerNE && cornerSE && !cornerSW) {
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+				} else if(!cornerNW && !cornerNE && !cornerSE && cornerSW) {
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+				} else if(cornerNW && cornerSE && !cornerNE && !cornerSW) {
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+				} else if(!cornerNW && !cornerSE && cornerNE && cornerSW) {
+					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+
+					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
+					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
+					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
 				} else {
+					//straight
 					builder.addVertex(0, cornerHeightNW, 0, slantTexU[0], slantTexV[0]);
 					builder.addVertex(0, cornerHeightSW, 1, slantTexU[1], slantTexV[1]);
 					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
@@ -248,16 +344,112 @@ public class ModelSlant implements IModel {
 
 				//bottom face
 				builder.setSprite(this.textureSlant);
-				if((cornerNE || cornerSW) && (!cornerNW && !cornerSE) || (cornerNW == cornerSE)) {
-					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[2], slantTexV[0]);
-					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[1], slantTexV[3]);
-					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[0], slantTexV[2]);
-					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[3], slantTexV[1]);
+				if(cornerNW && cornerNE && cornerSE) {
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+				} else if(cornerNE && cornerSE && cornerSW) {
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+				} else if(cornerSE && cornerSW && cornerNW) {
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+				} else if(cornerSW && cornerNW && cornerNE) {
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+				} else if(cornerNW && !cornerNE && !cornerSE && !cornerSW) {
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+				} else if(!cornerNW && cornerNE && !cornerSE && !cornerSW) {
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+				} else if(!cornerNW && !cornerNE && cornerSE && !cornerSW) {
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+				} else if(!cornerNW && !cornerNE && !cornerSE && cornerSW) {
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+				} else if(cornerNW && cornerSE && !cornerNE && !cornerSW) {
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+				} else if(!cornerNW && !cornerSE && cornerNE && cornerSW) {
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
 				} else {
-					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], slantTexV[2]);
-					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], slantTexV[1]);
-					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], slantTexV[0]);
-					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], slantTexV[3]);
+					//straight
+					builder.addVertex(1, 1-cornerHeightNE, 0, slantTexU[3], 16-slantTexV[3]);
+					builder.addVertex(1, 1-cornerHeightSE, 1, slantTexU[2], 16-slantTexV[2]);
+					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
+					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
 				}
 				this.nonCulledQuads.addAll(builder.build());
 
