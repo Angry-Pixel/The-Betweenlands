@@ -450,7 +450,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 					this.destroyBlockade(4);
 					this.getGuard().clear(world);
 				} else {
-					this.setDirty(true, world.getWorldTime() % 20 == 0 /*meh? dunno*/);
+					this.setDirty(true, world.getTotalWorldTime() % 20 == 0 /*meh? dunno*/);
 				}
 			}
 		}

@@ -145,7 +145,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
                 rotationYaw = rand.nextFloat() * 360.0F;
                 onGround = false;
                 isAirBorne = true;
-                if (world.getWorldTime() % 5 == 0)
+                if (world.getTotalWorldTime() % 5 == 0)
                     world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
                 this.damageEntity(DamageSource.DROWN, 0.5F);
             }

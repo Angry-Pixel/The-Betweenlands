@@ -103,7 +103,7 @@ public class GuiDruidAltar extends GuiContainer {
     @Override
     public void updateScreen() {
         super.updateScreen();
-        if (this.mc.world.getWorldTime() % 40 == 0) {
+        if (this.mc.world.getTotalWorldTime() % 40 == 0) {
             this.stack = new ItemStack(ghostIcon, 1, this.iconCountTool);
             this.iconCountTool++;
             if (this.iconCountTool > 4) {

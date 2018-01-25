@@ -160,7 +160,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if (world.isRemote && getSkin() == 4 && world.getWorldTime() % 10 == 0) {
+		if (world.isRemote && getSkin() == 4 && world.getTotalWorldTime() % 10 == 0) {
 			BLParticles.DIRT_DECAY.spawn(world, posX, posY + 0.5D, posZ);
 		}
 	}

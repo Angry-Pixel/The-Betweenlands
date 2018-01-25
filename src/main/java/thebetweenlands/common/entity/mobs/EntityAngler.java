@@ -162,7 +162,7 @@ public class EntityAngler extends EntityMob implements IEntityBL {
 				setIsLeaping(false);
 			onGround = false;
 			isAirBorne = true;
-			if(getEntityWorld().getWorldTime()%5==0)
+			if(getEntityWorld().getTotalWorldTime()%5==0)
 				getEntityWorld().playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
 				damageEntity(DamageSource.DROWN, 0.5F);
 		}
