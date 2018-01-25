@@ -121,22 +121,14 @@ public class ScreenRenderHandler extends Gui {
 					if(locations.isEmpty()) {
 						String location;
 						if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
-							String strippedName = I18n.format("location.wilderness.name");
-							if(strippedName.startsWith("translate:")) {
-								int startIndex = strippedName.indexOf("translate:");
-								strippedName = strippedName.substring(startIndex+1, strippedName.length());
-							}
-							if(this.currentLocation.equals(strippedName)) {
+							String wildernessName = I18n.format("location.wilderness.name");
+							if(this.currentLocation.equals(wildernessName)) {
 								prevLocation = "";
 							}
 							location = I18n.format("location.caverns.name");
 						} else {
-							String strippedName = I18n.format("location.caverns.name");
-							if(strippedName.startsWith("translate:")) {
-								int startIndex = strippedName.indexOf("translate:");
-								strippedName = strippedName.substring(startIndex+1, strippedName.length());
-							}
-							if(this.currentLocation.equals(strippedName)) {
+							String cavernsName = I18n.format("location.caverns.name");
+							if(this.currentLocation.equals(cavernsName)) {
 								prevLocation = "";
 							}
 							location = I18n.format("location.wilderness.name");
@@ -151,7 +143,11 @@ public class ScreenRenderHandler extends Gui {
 						int displayCooldown = 60*20; //1 minute cooldown for title
 						if(highestLocation.getTitleDisplayCooldown(player) == 0) {
 							highestLocation.setTitleDisplayCooldown(player, displayCooldown);
-							this.currentLocation = highestLocation.getLocalizedName();
+							if(highestLocation.hasLocalizedName()) {
+								this.currentLocation = highestLocation.getLocalizedName();
+							} else {
+								this.currentLocation = highestLocation.getName();
+							}
 						} else if(highestLocation.getTitleDisplayCooldown(player) > 0) {
 							highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
 						}

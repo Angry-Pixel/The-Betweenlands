@@ -540,7 +540,7 @@ public class WorldGenUndergroundRuins extends WorldGenHelper {
 			return false;
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "translate:underground_ruins", EnumLocationType.RUINS);
+		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "underground_ruins", EnumLocationType.RUINS);
 		
 		boolean generated = false;
 		

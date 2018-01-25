@@ -10,7 +10,6 @@ import javax.annotation.Nullable;
 
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -19,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
@@ -231,19 +231,22 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	 * Returns the localized name of this location
 	 * @return
 	 */
-	@SideOnly(Side.CLIENT)
 	public String getLocalizedName() {
-		String locationName = this.name;
-		boolean translate = locationName.startsWith("translate:");
-		if(translate)
-			locationName = I18n.format("location." + locationName.replaceFirst("translate:", "") + ".name");
-		return locationName;
+		return I18n.translateToLocal("location." + this.name + ".name");
 	}
-
+	
+	public boolean hasLocalizedName() {
+		return I18n.canTranslate("location." + this.name + ".name");
+	}
+	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.name = nbt.getString("name");
+		if(this.name.startsWith("translate:")) {
+			this.name = this.name.replaceFirst("translate:", "");
+			this.setDirty(true, false);
+		}
 		this.boundingBoxes.clear();
 		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < boundingBoxes.tagCount(); i++) {

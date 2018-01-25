@@ -103,7 +103,7 @@ public class DebugHandlerClient {
 
 						GlStateManager.scale(scale, scale, scale);
 
-						renderTag(Minecraft.getMinecraft().fontRenderer, location.getLocalizedName(), 0, 0, 0, 0,
+						renderTag(Minecraft.getMinecraft().fontRenderer, location.hasLocalizedName() ? location.getLocalizedName() : location.getName(), 0, 0, 0, 0,
 								Minecraft.getMinecraft().getRenderManager().playerViewY,
 								Minecraft.getMinecraft().getRenderManager().playerViewX,
 								Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);

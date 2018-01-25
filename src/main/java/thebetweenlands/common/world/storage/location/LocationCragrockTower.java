@@ -51,7 +51,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	private int crumblingTicks = 0;
 
 	public LocationCragrockTower(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
-		super(worldStorage, id, region, "translate:cragrock_tower", EnumLocationType.DUNGEON);
+		super(worldStorage, id, region, "cragrock_tower", EnumLocationType.DUNGEON);
 	}
 
 	/**

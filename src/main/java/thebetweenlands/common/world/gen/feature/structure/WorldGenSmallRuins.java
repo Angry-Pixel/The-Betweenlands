@@ -56,7 +56,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int z;
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "translate:ruins", EnumLocationType.RUINS);
+		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "ruins", EnumLocationType.RUINS);
 
 		List<RuinLocation> ruinLocations = new ArrayList<>();
 		int attempts = 40;

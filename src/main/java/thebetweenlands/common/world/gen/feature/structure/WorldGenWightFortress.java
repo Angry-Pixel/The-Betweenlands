@@ -188,7 +188,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 
 		LocalRegion region = LocalRegion.getFromBlockPos(pos);
 
-		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower", EnumLocationType.WIGHT_TOWER);
+		LocationGuarded fortressLocation = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower", EnumLocationType.WIGHT_TOWER);
 		this.guard = fortressLocation.getGuard();
 		fortressLocation.addBounds(new AxisAlignedBB(pos.getX() - 10, pos.getY() - 10, pos.getZ() - 10, pos.getX() + 42, pos.getY() + 80, pos.getZ() + 42));
 		fortressLocation.linkChunks();
@@ -197,21 +197,21 @@ public class WorldGenWightFortress extends WorldGenerator {
 		fortressLocation.setDirty(true);
 		fortressLocation.setSeed(locationSeed);
 
-		LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
+		LocationStorage puzzleLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_puzzle", EnumLocationType.WIGHT_TOWER);
 		puzzleLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 20, pos.getY() + 17, pos.getZ() - 10 + 20, pos.getX() + 42 - 20, pos.getY() + 17 + 6, pos.getZ() + 42 - 20));
 		puzzleLocation.linkChunks();
 		puzzleLocation.setLayer(1);
 		puzzleLocation.setDirty(true);
 		puzzleLocation.setSeed(locationSeed);
 
-		LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
+		LocationStorage teleporterLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_teleporter", EnumLocationType.WIGHT_TOWER);
 		teleporterLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 23, pos.getY() + 17 + 12, pos.getZ() - 10 + 23, pos.getX() + 42 - 23, pos.getY() + 17 + 6 + 11, pos.getZ() + 42 - 23));
 		teleporterLocation.linkChunks();
 		teleporterLocation.setLayer(2);
 		teleporterLocation.setDirty(true);
 		teleporterLocation.setSeed(locationSeed);
 
-		LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "translate:wight_tower_boss", EnumLocationType.WIGHT_TOWER);
+		LocationStorage bossLocation = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), region, "wight_tower_boss", EnumLocationType.WIGHT_TOWER);
 		bossLocation.addBounds(new AxisAlignedBB(pos.getX() - 10 + 17, pos.getY() + 17 + 19, pos.getZ() - 10 + 17, pos.getX() + 42 - 17, pos.getY() + 17 + 12 + 32, pos.getZ() + 42 - 17));
 		bossLocation.linkChunks();
 		bossLocation.setAmbience(new LocationAmbience(EnumLocationAmbience.WIGHT_TOWER).setFogRange(12.0F, 20.0F).setFogColorMultiplier(0.1F));
@@ -1140,7 +1140,7 @@ public class WorldGenWightFortress extends WorldGenerator {
 			//energy barrier
 			rotatedCubeVolume(world, rand, pos, 15, 29, 13, energyBarrier, 0, 2, 4, 1, direction);
 		}
-		System.out.println("FORTRESS GEN HERE!: " + pos);
+		//System.out.println("FORTRESS GEN HERE!: " + pos);
 		return true;
 	}
 

@@ -7,6 +7,7 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -35,6 +36,7 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationStorage;
@@ -55,9 +57,14 @@ public class LocationHandler {
 
 			if(player != null && !player.world.isRemote) {
 				List<LocationStorage> locations = getLocations(player);
+				if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+					AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
+				} else {
+					AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "wilderness");
+				}
 				for(LocationStorage loc : locations) {
 					if (player instanceof EntityPlayerMP) {
-						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, loc.getName().replaceAll("translate:", ""));
+						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, loc.getName());
 					}
 					if (loc instanceof LocationCragrockTower && !player.isCreative()) {
 						LocationCragrockTower location = (LocationCragrockTower) loc;
