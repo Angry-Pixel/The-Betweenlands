@@ -22,7 +22,7 @@ public class GuiPouch extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerForegroundLayer(int x, int y) {
-		this.fontRenderer.drawString(this.inventory.hasCustomName() ? this.inventory.getName() : I18n.format(this.inventory.getName()), 8, 6, 4210752);
+		this.fontRenderer.drawString(this.inventory.getName(), 8, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 
