@@ -1,14 +1,17 @@
 package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.common.inventory.slot.SlotOutput;
 import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
 
 public class ContainerPurifier extends Container {
@@ -38,6 +41,9 @@ public class ContainerPurifier extends Container {
 		if (slot != null && slot.getHasStack()) {
 			ItemStack slotStack = slot.getStack();
 			newStack = slotStack.copy();
+			if (slotIndex == 2 && slotStack.getItem() instanceof ICorrodible && player instanceof EntityPlayerMP) {
+				AdvancementCriterionRegistry.PURIFY_TOOL.trigger((EntityPlayerMP) player);
+			}
 			if (slotIndex > 2) {
 				if (EnumItemMisc.SULFUR.isItemOf(slotStack)) {
 					if (!mergeItemStack(slotStack, 0, 1, false)) {

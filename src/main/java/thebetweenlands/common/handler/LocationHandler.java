@@ -1,13 +1,9 @@
 package thebetweenlands.common.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -40,8 +36,10 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationStorage;
+import thebetweenlands.util.config.ConfigHandler;
 
-import javax.xml.stream.Location;
+import java.util.ArrayList;
+import java.util.List;
 
 public class LocationHandler {
 
@@ -56,7 +54,7 @@ public class LocationHandler {
 			EntityPlayer player = event.player;
 
 			if(player != null && !player.world.isRemote) {
-				if (player instanceof EntityPlayerMP) {
+				if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).world.provider.getDimension() == ConfigHandler.dimensionId) {
 					if (player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
 						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
 					} else {

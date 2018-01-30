@@ -13,9 +13,15 @@
   "parent": "thebetweenlands:miner/root",
   "criteria": {
     "caverns": {
-      "trigger": "thebetweenlands:location",
+      "trigger": "minecraft:location",
       "conditions": {
-        "name": "caverns"
+        "dimension": "Betweenlands",
+        "position": {
+          "y": {
+            "min": 0,
+            "max": 100
+          }
+        }
       }
     }
   }
