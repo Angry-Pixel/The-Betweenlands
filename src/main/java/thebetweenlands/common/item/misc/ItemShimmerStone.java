@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -72,6 +73,13 @@ public class ItemShimmerStone extends Item {
 				nbt.setInteger("shimmeringTicks", 0);
 			}
 		}
+	}
+
+	private static final ImmutableList<String> STACK_NBT_EXCLUSIONS = ImmutableList.of("shimmering", "shimmeringTicks");
+
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return !NBTHelper.areItemStackTagsEqual(oldStack, newStack, STACK_NBT_EXCLUSIONS);
 	}
 
 	@Override
