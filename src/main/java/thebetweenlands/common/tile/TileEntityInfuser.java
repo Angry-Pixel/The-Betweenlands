@@ -497,6 +497,23 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		return true;
 	}
 
+	@Override
+	public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
+		return !hasInfusion() && getStackInSlot(slot).isEmpty() && ((slot <= MAX_INGREDIENTS && ItemAspectContainer.fromItem(itemstack, AspectManager.get(world)).getAspects().size() > 0) || (slot == MAX_INGREDIENTS + 1 && itemstack.getItem() == ItemRegistry.LIFE_CRYSTAL));
+	}
+
+	@Override
+	public int getInventoryStackLimit() {
+		return 1;
+	}
+
+	@Override
+	public void markDirty() {
+		super.markDirty();
+		IBlockState state = world.getBlockState(pos);
+		this.world.notifyBlockUpdate(pos, state, state, 2);
+	}
+
 	public int getInfusionTime() {
 		return this.infusionTime;
 	}
