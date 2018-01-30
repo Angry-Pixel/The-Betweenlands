@@ -4,13 +4,13 @@
       "item": "thebetweenlands:loot_pot"
     },
     "title": {
-      "translate": "advancements.thebetweenlands.pothead.title"
+      "translate": "advancements.thebetweenlands.adventurer.pothead.title"
     },
     "description": {
-      "translate": "advancements.thebetweenlands.pothead.description"
+      "translate": "advancements.thebetweenlands.adventurer.pothead.description"
     }
   },
-  "parent": "thebetweenlands:root",
+  "parent": "thebetweenlands:adventurer/dank_world",
   "criteria": {
     "pot1": {
       "trigger": "thebetweenlands:break_block",

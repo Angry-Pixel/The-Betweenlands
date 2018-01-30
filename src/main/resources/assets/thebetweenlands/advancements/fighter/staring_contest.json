@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:amulet_slot"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.staring_contest.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.staring_contest.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:fighter/glorified_toothpick",
+  "criteria": {
+    "primordial_malevolence": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:fortress_boss"
+        }
+      }
+    }
+  }
+}

@@ -28,13 +28,13 @@ public class ContainerBLDualFurnace extends Container {
 		addSlotToContainer(new Slot(tile, 0, 56, 21));
 		addSlotToContainer(new SlotBLFurnaceFuel(tile, 1, 56, 57));
 		addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 2, 116, 39));
-		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, EnumItemMisc.LIMESTONE_FLUX.create(1), 64);
+		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, EnumItemMisc.LIMESTONE_FLUX.create(1), 64, this);
 		addSlotToContainer(fluxSlot1);
 
 		addSlotToContainer(new Slot(tile, 4, 56, 92));
 		addSlotToContainer(new SlotBLFurnaceFuel(tile, 5, 56, 128));
 		addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 6, 116, 110));
-		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, EnumItemMisc.LIMESTONE_FLUX.create(1), 64);
+		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, EnumItemMisc.LIMESTONE_FLUX.create(1), 64, this);
 		addSlotToContainer(fluxSlot2);
 
 		int i;

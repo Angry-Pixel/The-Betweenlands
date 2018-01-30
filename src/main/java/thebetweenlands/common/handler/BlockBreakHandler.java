@@ -24,9 +24,6 @@ public class BlockBreakHandler {
 			BlockPos pos = event.getPos();
 			IBlockState blockState = event.getState();
 
-			if (player instanceof EntityPlayerMP)
-				AdvancementCriterionRegistry.BREAK_BLOCK.trigger((EntityPlayerMP) player, pos, blockState);
-
 			if (!player.isCreative()) {
 				//Wake up nearby Pyrads
 				if (blockState.getBlock() == BlockRegistry.WEEDWOOD || blockState.getBlock() == BlockRegistry.LOG_WEEDWOOD) {

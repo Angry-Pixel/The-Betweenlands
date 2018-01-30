@@ -1,0 +1,140 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_plant_drop",
+      "data": 20
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.flower_power.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.flower_power.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "placed_flower": {
+      "trigger": "thebetweenlands:right_click_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:dug_swamp_dirt",
+            "state": {
+              "composted": "true"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_swamp_grass",
+            "state": {
+              "composted": "true"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_purified_swamp_dirt",
+            "state": {
+              "composted": "true"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_purified_swamp_grass",
+            "state": {
+              "composted": "true"
+            }
+          }
+        ],
+        "items": [
+          {
+            "item": "thebetweenlands:pitcher_plant"
+          },
+          {
+            "item": "thebetweenlands:weeping_blue"
+          },
+          {
+            "item": "thebetweenlands:sundew"
+          },
+          {
+            "item": "thebetweenlands:venus_fly_trap"
+          },
+          {
+            "item": "thebetweenlands:volarpad"
+          },
+          {
+            "item": "thebetweenlands:swamp_plant"
+          },
+          {
+            "item": "thebetweenlands:arrow_arum"
+          },
+          {
+            "item": "thebetweenlands:blue_eyed_grass"
+          },
+          {
+            "item": "thebetweenlands:blue_iris"
+          },
+          {
+            "item": "thebetweenlands:boneset"
+          },
+          {
+            "item": "thebetweenlands:bottle_brush_grass"
+          },
+          {
+            "item": "thebetweenlands:broomsedge"
+          },
+          {
+            "item": "thebetweenlands:button_bush"
+          },
+          {
+            "item": "thebetweenlands:cardinal_flower"
+          },
+          {
+            "item": "thebetweenlands:cattail"
+          },
+          {
+            "item": "thebetweenlands:cave_grass"
+          },
+          {
+            "item": "thebetweenlands:copper_iris"
+          },
+          {
+            "item": "thebetweenlands:marsh_hibiscus"
+          },
+          {
+            "item": "thebetweenlands:marsh_mallow"
+          },
+          {
+            "item": "thebetweenlands:swamp_double_tallgrass"
+          },
+          {
+            "item": "thebetweenlands:milkweed"
+          },
+          {
+            "item": "thebetweenlands:nettle"
+          },
+          {
+            "item": "thebetweenlands:nettle_flowered"
+          },
+          {
+            "item": "thebetweenlands:pickerel_weed"
+          },
+          {
+            "item": "thebetweenlands:phragmites"
+          },
+          {
+            "item": "thebetweenlands:shoots"
+          },
+          {
+            "item": "thebetweenlands:sludgecreep"
+          },
+          {
+            "item": "thebetweenlands:soft_rush"
+          },
+          {
+            "item": "thebetweenlands:tall_cattail"
+          },
+          {
+            "item": "thebetweenlands:swamp_tallgrass"
+          }
+        ]
+      }
+    }
+  }
+}

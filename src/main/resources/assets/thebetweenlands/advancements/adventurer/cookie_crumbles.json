@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:mob_spawner"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.cookie_crumbles.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.cookie_crumbles.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "thebetweenlands:adventurer/tall_tough",
+  "criteria": {
+    "ruin": {
+      "trigger": "thebetweenlands:cragrock_tower_top"
+    }
+  }
+}

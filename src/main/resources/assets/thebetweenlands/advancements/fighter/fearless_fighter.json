@@ -1,0 +1,56 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bone_helmet"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.fearless_fighter.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.fearless_fighter.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "swamp_hag": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:swamp_hag"
+        }
+      }
+    },
+    "wight": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:wight"
+        }
+      }
+    },
+    "tar_beast": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:tar_beast"
+        }
+      }
+    },
+    "sludge": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:sludge"
+        }
+      }
+    },
+    "peat_mummy": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:peat_mummy"
+        }
+      }
+    }
+  }
+}

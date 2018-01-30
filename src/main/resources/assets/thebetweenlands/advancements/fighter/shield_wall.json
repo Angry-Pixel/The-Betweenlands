@@ -1,0 +1,130 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bone_shield"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.shield_wall.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.shield_wall.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "octine_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:octine_shield"
+          }
+        ]
+      }
+    },
+    "bone_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:bone_shield"
+          }
+        ]
+      }
+    },
+    "weedwood_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:weedwood_shield"
+          }
+        ]
+      }
+    },
+    "valonite_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:valonite_shield"
+          }
+        ]
+      }
+    },
+    "syrmorite_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:syrmorite_shield"
+          }
+        ]
+      }
+    },
+    "lurker_skin_shield": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:lurker_skin_shield"
+          }
+        ]
+      }
+    },
+    "dentrothyst_shield_g": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:dentrothyst_shield_green"
+          }
+        ]
+      }
+    },
+    "dentrothyst_shield_g_p": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:dentrothyst_shield_green_polished"
+          }
+        ]
+      }
+    },
+    "dentrothyst_shield_o": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:dentrothyst_shield_orange"
+          }
+        ]
+      }
+    },
+    "dentrothyst_shield_o_p": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:dentrothyst_shield_orange_polished"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "octine_shield",
+      "bone_shield",
+      "weedwood_shield",
+      "valonite_shield",
+      "syrmorite_shield",
+      "lurker_skin_shield",
+      "dentrothyst_shield_g",
+      "dentrothyst_shield_g_p",
+      "dentrothyst_shield_o",
+      "dentrothyst_shield_o_p"
+    ]
+  ]
+}

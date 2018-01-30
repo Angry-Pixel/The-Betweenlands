@@ -1,0 +1,46 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:caving_rope"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.miner.spelunking.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.miner.spelunking.description"
+    }
+  },
+  "parent": "thebetweenlands:miner/root",
+  "criteria": {
+    "rope_1": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_2": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_3": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_4": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_5": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_6": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_7": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_8": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_9": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    },
+    "rope_10": {
+      "trigger": "thebetweenlands:cavingrope_placed"
+    }
+  }
+}

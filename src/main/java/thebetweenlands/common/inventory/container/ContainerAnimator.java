@@ -28,7 +28,7 @@ public class ContainerAnimator extends Container {
 
         addSlotToContainer(new SlotSizeRestriction(tile, 0, 79, 23, 1));
         addSlotToContainer(new SlotRestrictionNoMeta(tile, 1, 34, 57, new ItemStack(ItemRegistry.LIFE_CRYSTAL), 1));
-        addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()), 64));
+        addSlotToContainer(new SlotRestriction(tile, 2, 124, 57, new ItemStack(ItemRegistry.ITEMS_MISC, 1, ItemMisc.EnumItemMisc.SULFUR.getID()), 64, this));
 
         for (int j = 0; j < 3; j++)
             for (int k = 0; k < 9; k++)

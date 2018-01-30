@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:chiromaw_wing"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.hardcore_munchies.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.hardcore_munchies.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/you_are_what_you_eat",
+  "criteria": {
+    "have_sap": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "thebetweenlands:chiromaw_wing"
+        }
+      }
+    }
+  }
+}

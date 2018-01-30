@@ -1,0 +1,36 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:mire_snail_egg_cooked"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.baby_murderer.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.baby_murderer.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/now_kiss",
+  "criteria": {
+    "cooked_egg": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:mire_snail_egg_cooked"
+          }
+        ]
+      }
+    },
+    "mire_scramble": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:mire_scramble"
+          }
+        ]
+      }
+    }
+  }
+}

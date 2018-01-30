@@ -17,7 +17,7 @@ public class ContainerDruidAltar extends Container {
         int numRows = 2;
         int i = (numRows - 4) * 18;
 
-        addSlotToContainer(new SlotOutput(tile, 0, 81, 35));
+        addSlotToContainer(new SlotOutput(tile, 0, 81, 35, this));
         addSlotToContainer(new SlotDruidAltar(tile, 1, 53, 7));
         addSlotToContainer(new SlotDruidAltar(tile, 2, 109, 7));
         addSlotToContainer(new SlotDruidAltar(tile, 3, 53, 63));

@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityRopeNode extends Entity {
@@ -378,6 +380,8 @@ public class EntityRopeNode extends Entity {
 		ropeNode.setNextNode(entity);
 		this.setNextNode(ropeNode);
 		this.world.spawnEntity(ropeNode);
+		if (entity instanceof EntityPlayerMP)
+			AdvancementCriterionRegistry.CAVINGROPE_PLACED.trigger((EntityPlayerMP) entity);
 		return ropeNode;
 	}
 

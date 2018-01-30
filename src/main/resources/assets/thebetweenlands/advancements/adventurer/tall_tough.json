@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:glowing_smooth_cragrock"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.tall_tough.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.tall_tough.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "ruin": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "cragrock_tower"
+      }
+    }
+  }
+}

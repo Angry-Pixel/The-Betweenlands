@@ -1,0 +1,23 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:log_weedwood",
+      "data": 12
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.big_wood.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.big_wood.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "giant_tree": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "giant_tree"
+      }
+    }
+  }
+}

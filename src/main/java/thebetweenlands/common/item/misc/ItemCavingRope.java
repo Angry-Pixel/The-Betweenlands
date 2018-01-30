@@ -7,6 +7,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.entity.EntityRopeNode;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
 
 public class ItemCavingRope extends Item {
@@ -48,6 +50,8 @@ public class ItemCavingRope extends Item {
 				ropeNode.setLocationAndAngles(pos.getX() + hitX, pos.getY() + hitY, pos.getZ() + hitZ, 0, 0);
 				ropeNode.setNextNode(player);
 				world.spawnEntity(ropeNode);
+				if (player instanceof EntityPlayerMP)
+					AdvancementCriterionRegistry.CAVINGROPE_PLACED.trigger((EntityPlayerMP) player);
 				world.playSound((EntityPlayer)null, ropeNode.posX, ropeNode.posY, ropeNode.posZ, SoundEvents.BLOCK_METAL_STEP, SoundCategory.PLAYERS, 1, 1.5F);
 				stack.shrink(1);
 			} else {

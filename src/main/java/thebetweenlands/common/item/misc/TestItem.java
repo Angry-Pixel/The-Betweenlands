@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumActionResult;
@@ -7,6 +8,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.farming.BlockGenericDugSoil;
+import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 
 //MINE!!
@@ -18,6 +21,11 @@ public class TestItem extends Item {
 	@Override
 	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!worldIn.isRemote) {
+			IBlockState state = worldIn.getBlockState(pos);
+			if (state.getBlock() instanceof BlockGenericDugSoil) {
+				TileEntityDugSoil te = (TileEntityDugSoil) worldIn.getTileEntity(pos);
+				te.setDecay(20);
+			}
 		/*
 			WorldGenTarPoolDungeon gen = new WorldGenTarPoolDungeon();
 			gen.generate(worldIn, itemRand, pos.up());
@@ -34,10 +42,10 @@ public class TestItem extends Item {
             WorldGenSpawnerStructure smallRuins = new WorldGenSpawnerStructure();
             smallRuins.generate(worldIn, itemRand, pos.up());
 		*/
-		
+		/*
 			WorldGenWightFortress fortress = new WorldGenWightFortress();
 			fortress.generate(worldIn, itemRand, pos.up());
-		
+		*/
 		/*
 			if(player.isSneaking()) {
 				BetweenlandsWorldData worldStorage = BetweenlandsWorldData.forWorld(worldIn);

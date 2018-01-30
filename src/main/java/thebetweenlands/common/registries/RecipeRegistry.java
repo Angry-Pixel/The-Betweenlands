@@ -149,7 +149,7 @@ public class RecipeRegistry {
 
 		OreDictionary.registerOre("bone", EnumItemMisc.SLIMY_BONE.create(1));
 
-		OreDictionary.registerOre("cobblestone", new ItemStack(BlockRegistry.BETWEENSTONE));
+		//OreDictionary.registerOre("cobblestone", new ItemStack(BlockRegistry.BETWEENSTONE));
 		OreDictionary.registerOre("stone", new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
 
 		OreDictionary.registerOre("sand", new ItemStack(BlockRegistry.SILT));

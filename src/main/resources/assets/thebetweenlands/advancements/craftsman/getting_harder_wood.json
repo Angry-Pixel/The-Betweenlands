@@ -1,0 +1,76 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 13
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.getting_harder_wood.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.getting_harder_wood.description"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/root",
+  "criteria": {
+    "weedwood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:weedwood"
+          }
+        ]
+      }
+    },
+    "log_weedwood": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:log_weedwood"
+          }
+        ]
+      }
+    },
+    "log_rubber": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:log_rubber"
+          }
+        ]
+      }
+    },
+    "log_sap": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:log_sap"
+          }
+        ]
+      }
+    },
+    "giant_root": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:giant_root"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "weedwood",
+      "log_weedwood",
+      "log_rubber",
+      "log_sap",
+      "giant_root"
+    ]
+  ]
+}

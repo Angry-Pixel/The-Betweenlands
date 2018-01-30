@@ -9,6 +9,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
@@ -16,6 +17,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import thebetweenlands.api.aspect.DiscoveryContainer;
 import thebetweenlands.api.aspect.DiscoveryContainer.AspectDiscovery;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public class CommandAspectDiscovery extends CommandBase {
 	@Override
@@ -78,6 +80,8 @@ public class CommandAspectDiscovery extends CommandBase {
 				List<DiscoveryContainer<?>> discoveryContainers = DiscoveryContainer.getWritableDiscoveryContainers(player);
 				for(DiscoveryContainer<?> container : discoveryContainers)
 					container.discoverAll(manager);
+				if (sender instanceof EntityPlayerMP)
+					AdvancementCriterionRegistry.HERBLORE_FIND_ALL.trigger((EntityPlayerMP) player);
 				sender.sendMessage(new TextComponentTranslation("command.aspectdiscovery.discover.all"));
 				break;
 			default:

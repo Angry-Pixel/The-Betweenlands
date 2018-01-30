@@ -1,0 +1,69 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:basilisk_arrow"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.arrow_arsenal.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.arrow_arsenal.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "hurt_mob_default": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:bl_arrow",
+              "nbt": "{\"arrowType\":\"default\"}"
+            }
+          }
+        }
+      }
+    },
+    "hurt_mob_angler_poison": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:bl_arrow",
+              "nbt": "{\"arrowType\":\"angler_poison\"}"
+            }
+          }
+        }
+      }
+    },
+    "hurt_mob_octine": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:bl_arrow",
+              "nbt": "{\"arrowType\":\"octine\"}"
+            }
+          }
+        }
+      }
+    },
+    "hurt_mob_basilisk": {
+      "trigger": "minecraft:player_hurt_entity",
+      "conditions": {
+        "damage": {
+          "type": {
+            "direct_entity": {
+              "type": "thebetweenlands:bl_arrow",
+              "nbt": "{\"arrowType\":\"basilisk\"}"
+            }
+          }
+        }
+      }
+    }
+  }
+}

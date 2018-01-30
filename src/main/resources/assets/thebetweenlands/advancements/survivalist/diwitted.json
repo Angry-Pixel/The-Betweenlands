@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:damp_torch"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.diwitted.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.diwitted.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "place_torch": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "block": "minecraft:torch",
+        "location": {
+          "dimension": "Betweenlands"
+        }
+      }
+    }
+  }
+}

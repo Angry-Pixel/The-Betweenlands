@@ -6,6 +6,8 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.common.inventory.slot.SlotOutput;
+import thebetweenlands.common.inventory.slot.SlotRestriction;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.tile.TileEntityPurifier;
 
@@ -15,9 +17,9 @@ public class ContainerPurifier extends Container {
 	public ContainerPurifier(InventoryPlayer inventory, TileEntityPurifier tileentity) {
 		purifier = tileentity;
 
-		addSlotToContainer(new Slot(tileentity, 0, 61, 54));
+		addSlotToContainer(new SlotRestriction(tileentity, 0, 61, 54, EnumItemMisc.SULFUR.create(1), 64, this));
 		addSlotToContainer(new Slot(tileentity, 1, 61, 14));
-		addSlotToContainer(new Slot(tileentity, 2, 121, 34));
+		addSlotToContainer(new SlotOutput(tileentity, 2, 121, 34, this));
 
 		for (int i = 0; i < 3; ++i) {
 			for (int j = 0; j < 9; ++j) {

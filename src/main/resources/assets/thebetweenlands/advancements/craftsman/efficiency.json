@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 18
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.efficiency.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.efficiency.description"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/all_over_again",
+  "criteria": {
+    "dual_furnace": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:sulfur_furnace_dual"
+          }
+        ]
+      }
+    }
+  }
+}

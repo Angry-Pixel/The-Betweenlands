@@ -1,0 +1,29 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:hag_hacker"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.hag_hater.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.hag_hater.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "swamp_hag": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:swamp_hag"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:hag_hacker\"}}"
+          }
+        }
+      }
+    }
+  }
+}

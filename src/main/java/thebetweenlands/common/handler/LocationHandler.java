@@ -56,12 +56,15 @@ public class LocationHandler {
 			EntityPlayer player = event.player;
 
 			if(player != null && !player.world.isRemote) {
-				List<LocationStorage> locations = getLocations(player);
-				if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
-					AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
-				} else {
-					AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "wilderness");
+				if (player instanceof EntityPlayerMP) {
+					if (player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
+					} else {
+						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "wilderness");
+					}
 				}
+
+				List<LocationStorage> locations = getLocations(player);
 				for(LocationStorage loc : locations) {
 					if (player instanceof EntityPlayerMP) {
 						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, loc.getName());
@@ -77,6 +80,9 @@ public class LocationHandler {
 						if (location.getInnerBoundingBox().contains(player.getPositionVector()) && player.posY - structurePos.getY() >= 45) {
 							if (!location.isTopReached()) {
 								location.setTopReached(true);
+								if (player instanceof EntityPlayerMP) {
+									AdvancementCriterionRegistry.CRAGROCK_TOP.trigger((EntityPlayerMP) player);
+								}
 							}
 						} else if (!location.isTopReached() && !location.getInnerBoundingBox().grow(0.5D, 0.5D, 0.5D).contains(player.getPositionVector()) && player.posY - structurePos.getY() > 12) {
 							//Player trying to bypass tower, teleport to entrance

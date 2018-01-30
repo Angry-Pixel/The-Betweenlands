@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 27
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.freebies.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.freebies.description"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/efficiency",
+  "criteria": {
+    "dual_furnace": {
+      "trigger": "thebetweenlands:flux_added"
+    }
+  }
+}

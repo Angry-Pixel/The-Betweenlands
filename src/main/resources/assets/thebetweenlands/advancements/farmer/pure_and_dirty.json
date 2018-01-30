@@ -1,0 +1,41 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:purified_swamp_dirt"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.pure_and_dirty.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.pure_and_dirty.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "use_compost": {
+      "trigger": "thebetweenlands:right_click_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:dug_purified_swamp_dirt",
+            "state": {
+              "composted": "false"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_purified_swamp_grass",
+            "state": {
+              "composted": "false"
+            }
+          }
+        ],
+        "items": [
+          {
+            "item": "thebetweenlands:items_misc",
+            "data": 2
+          }
+        ]
+      }
+    }
+  }
+}

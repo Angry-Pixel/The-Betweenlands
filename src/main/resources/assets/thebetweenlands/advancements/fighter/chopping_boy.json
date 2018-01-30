@@ -1,0 +1,75 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:octine_sword"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.chopping_boy.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.chopping_boy.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "killed_a_mob_weedwood": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:weedwood_sword\"}}"
+          }
+        }
+      }
+    },
+    "killed_a_mob_bone": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:bone_sword\"}}"
+          }
+        }
+      }
+    },
+    "killed_a_mob_octine": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:octine_sword\"}}"
+          }
+        }
+      }
+    },
+    "killed_a_mob_valonite": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:valonite_sword\"}}"
+          }
+        }
+      }
+    },
+    "killed_a_mob_shockwave": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:shockwave_sword\"}}"
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "killed_a_mob_weedwood",
+      "killed_a_mob_bone",
+      "killed_a_mob_octine",
+      "killed_a_mob_valonite",
+      "killed_a_mob_shockwave"
+    ]
+  ]
+}

@@ -27,7 +27,7 @@ public class ContainerMortar  extends Container {
 
         addSlotToContainer(new Slot(tile, 0, 35, 36));
         addSlotToContainer(new SlotPestle(tile, 1, 79, 36));
-        addSlotToContainer(new SlotOutput(tile, 2, 123, 36));
+        addSlotToContainer(new SlotOutput(tile, 2, 123, 36, this));
         addSlotToContainer(new SlotRestrictionNoMeta(tile, 3, 79, 8, new ItemStack(ItemRegistry.LIFE_CRYSTAL), 1));
 
         for (int j = 0; j < 3; j++)

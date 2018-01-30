@@ -2,11 +2,17 @@ package thebetweenlands.common.advancments;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
+import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionInstance;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.lib.ModInfo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ShockwaveKillTrigger extends BLTrigger<ShockwaveKillTrigger.Instance, ShockwaveKillTrigger.Listener> {
 
@@ -24,21 +30,29 @@ public class ShockwaveKillTrigger extends BLTrigger<ShockwaveKillTrigger.Instanc
 
     @Override
     public ShockwaveKillTrigger.Instance deserializeInstance(JsonObject json, JsonDeserializationContext context) {
-        return new ShockwaveKillTrigger.Instance();
+        EntityPredicate entityPredicates = EntityPredicate.deserialize(json.get("entity"));
+        return new ShockwaveKillTrigger.Instance(entityPredicates);
     }
 
-    public void trigger(EntityPlayerMP player) {
+    public void trigger(EntityPlayerMP player, EntityLivingBase entity) {
         Listener listener = this.listeners.get(player.getAdvancements());
 
         if (listener != null) {
-            listener.trigger();
+            listener.trigger(player, entity);
         }
     }
 
     public static class Instance extends AbstractCriterionInstance {
 
-        public Instance() {
+        private final EntityPredicate entity;
+
+        public Instance(EntityPredicate entity) {
             super(ShockwaveKillTrigger.ID);
+            this.entity = entity;
+        }
+
+        public boolean test(EntityPlayerMP player, EntityLivingBase entity) {
+            return this.entity.test(player, entity);
         }
     }
 
@@ -48,8 +62,19 @@ public class ShockwaveKillTrigger extends BLTrigger<ShockwaveKillTrigger.Instanc
             super(playerAdvancementsIn);
         }
 
-        public void trigger() {
-            this.listeners.stream().findFirst().ifPresent(listener -> listener.grantCriterion(this.playerAdvancements));
+        public void trigger(EntityPlayerMP player, EntityLivingBase entity) {
+            List<ICriterionTrigger.Listener<ShockwaveKillTrigger.Instance>> list = new ArrayList<>();
+
+            for (ICriterionTrigger.Listener<ShockwaveKillTrigger.Instance> listener : this.listeners) {
+                if (listener.getCriterionInstance().test(player, entity)) {
+                    list.add(listener);
+                    break;
+                }
+            }
+
+            for (ICriterionTrigger.Listener<ShockwaveKillTrigger.Instance> listener : list) {
+                listener.grantCriterion(this.playerAdvancements);
+            }
         }
     }
 }

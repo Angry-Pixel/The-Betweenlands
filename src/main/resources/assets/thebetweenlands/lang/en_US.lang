@@ -1122,3 +1122,155 @@ manual.item.thebetweenlands.bl.elixir.ripening.description=<scale:0.75>This elix
 manual.item.thebetweenlands.bl.elixir.healing.description=<scale:0.75>This elixir is based on a potion we find in the Overworld. It heals one's wounds with incredible speed, unmatched by normal medicine or bandages. The Elixir of Healing is made by simply using the two aspects Yeowynn and Ordaniis. The combination of these two enhances the health of a being. The potion can be made stronger by using more Yeowynn, and the duration can be increased by using Ordaniis. <nl>By using the aspect Byariis, one corrupts the elixir. It will then turn into the Elixir of Draining, which drains ones health.</scale>
 manual.item.thebetweenlands.bl.elixir.nimblefeet.description=<scale:0.75>This potion resembles a potion we find in the Overworld. It makes nimble on your feet and thus increases your speed. The Nimblefeet Elixir is brewed by using the aspects Azuwynn, Ordaniis and, for the nimble and swift effect, Yunugaz. Yunugaz makes it so it does not simply enhance your muscles, but specifically their swiftness. This results in Yunugaz increasing the strength of the potion. While Ordaniis increases duration. <nl>When one corrupts the effect of this elixir with the aspect Byariis, it will turn into the Lumbering Elixir, which will slow down your target.</scale>
 manual.item.thebetweenlands.bl.elixir.strength.description=<scale:0.75>This potion is based on one of the brews we find in the Overworld. It lets you deal more damage to any entity you hit. <nl>The Elixir of Strength is made by using the aspects Azuwynn and Ordaniis, as it enhances the muscle. Besides, by adding more Azuwynn one can increase the strength of the elixir, and by using more Ordaniis one can increase the duration of its effect. <nl>When one corrupts this elixir by using the aspect Byariis, it will turn into the Elixir of Weakness, which reduces the damage dealth to any entity the affected creature hits.</scale>
+
+# Advancements
+
+# Adventures
+advancements.thebetweenlands.adventurer.root.title=Adventurer
+advancements.thebetweenlands.adventurer.root.description=The beginning of The Betweenlands Adventure
+advancements.thebetweenlands.adventurer.give_me_that.title=Give Me That
+advancements.thebetweenlands.adventurer.give_me_that.description=Obtain the Swamp Talisman
+advancements.thebetweenlands.adventurer.dank_world.title=Dank World
+advancements.thebetweenlands.adventurer.dank_world.description=Step through the Portal Tree
+advancements.thebetweenlands.adventurer.pothead.title=Pothead
+advancements.thebetweenlands.adventurer.pothead.description=Loot 10 Pots of Chance
+advancements.thebetweenlands.adventurer.enter_the_stronghold.title=Enter The Stronghold
+advancements.thebetweenlands.adventurer.enter_the_stronghold.description=Find a Wight Fortress
+advancements.thebetweenlands.adventurer.big_wood.title=That's Some Big Wood
+advancements.thebetweenlands.adventurer.big_wood.description=Find a Giant Weedwood
+advancements.thebetweenlands.adventurer.ruined_it.title=Ruined It
+advancements.thebetweenlands.adventurer.ruined_it.description=Discover some ruïns
+advancements.thebetweenlands.adventurer.idolised.title=Idolised
+advancements.thebetweenlands.adventurer.idolised.description=Discover an Idol Head
+advancements.thebetweenlands.adventurer.tall_tough.title=Tall 'n Tough
+advancements.thebetweenlands.adventurer.tall_tough.description=Find a Cragrock Tower
+advancements.thebetweenlands.adventurer.cookie_crumbles.title=How The Cookie Crumbles
+advancements.thebetweenlands.adventurer.cookie_crumbles.description=Beat a Cragrock Tower
+advancements.thebetweenlands.adventurer.environmentalist.title=Environmentalist
+advancements.thebetweenlands.adventurer.environmentalist.description=Get a Pyrad mad by hitting his tree
+advancements.thebetweenlands.adventurer.rule_them_all.title=None To Rule Them All
+advancements.thebetweenlands.adventurer.rule_them_all.description=Obtain all Rings
+
+# Fighter
+advancements.thebetweenlands.fighter.root.title=Fighter
+advancements.thebetweenlands.fighter.root.description=Fighting and defending yourself in the swamp
+advancements.thebetweenlands.fighter.serious_business.title=Serious Business
+advancements.thebetweenlands.fighter.serious_business.description=Obtain a Betweenlands sword
+advancements.thebetweenlands.fighter.shield_wall.title=Shield Wall
+advancements.thebetweenlands.fighter.shield_wall.description=Equip yourself with a Betweenlands shield
+advancements.thebetweenlands.fighter.chopping_boy.title=Chopping Boy
+advancements.thebetweenlands.fighter.chopping_boy.description=Slay an enemy with a sword
+advancements.thebetweenlands.fighter.arrow_arsenal.title=Arrow Arsenal
+advancements.thebetweenlands.fighter.arrow_arsenal.description=Use all arrow types
+advancements.thebetweenlands.fighter.fashionable_warrior.title=Fashionable Warrior
+advancements.thebetweenlands.fighter.fashionable_warrior.description=Upgrade a weapon or armourpiece with a gemstone
+advancements.thebetweenlands.fighter.crowd_control.title=Crowd Control
+advancements.thebetweenlands.fighter.crowd_control.description=Knock back three Swamp Hags in a row with a Syrmorite Shield
+advancements.thebetweenlands.fighter.cling_bling.title=Cling That Bling
+advancements.thebetweenlands.fighter.cling_bling.description=Wear an amulet
+advancements.thebetweenlands.fighter.fearless_fighter.title=Fearless Fighter
+advancements.thebetweenlands.fighter.fearless_fighter.description=Slay a Swamp Hag, a Wight, a Tar Beast, a Sludge, and a Peat Mummy
+advancements.thebetweenlands.fighter.beating_dead_meat.title=Beating Dead Meat
+advancements.thebetweenlands.fighter.beating_dead_meat.description=Slay a Dreadful Peatmummy
+advancements.thebetweenlands.fighter.hag_hater.title=Hag Hater
+advancements.thebetweenlands.fighter.hag_hater.description=Slay a Swamp Hag with a Hag Hacker
+advancements.thebetweenlands.fighter.critical_hit.title=Critical Hit
+advancements.thebetweenlands.fighter.critical_hit.description=Slay a critter with a Critter Cruncher
+advancements.thebetweenlands.fighter.whhyyy.title=Whhyyy?
+advancements.thebetweenlands.fighter.whhyyy.description=Slay a Wight with a Wight's Bane
+advancements.thebetweenlands.fighter.sticky_situation.title=Sticky Situation
+advancements.thebetweenlands.fighter.sticky_situation.description=Slay a Sludge with a Sludge Slicer
+advancements.thebetweenlands.fighter.glorified_toothpick.title=Glorified Toothpick
+advancements.thebetweenlands.fighter.glorified_toothpick.description=Obtain the Shockwave Sword
+advancements.thebetweenlands.fighter.do_the_wave.title=Do the Wave!
+advancements.thebetweenlands.fighter.do_the_wave.description=Slay three enemies using a shockwave
+advancements.thebetweenlands.fighter.staring_contest.title=Staring Contest
+advancements.thebetweenlands.fighter.staring_contest.description=Defeat the Primordial Malevolence
+
+# Farmer
+advancements.thebetweenlands.farmer.root.title=Farmer
+advancements.thebetweenlands.farmer.root.description=Surviving the hunger
+advancements.thebetweenlands.farmer.mr_compost.title=Mr. Compost
+advancements.thebetweenlands.farmer.mr_compost.description=Compost your soil
+advancements.thebetweenlands.farmer.now_kiss.title=Now Kiss
+advancements.thebetweenlands.farmer.now_kiss.description=Get some baby snails
+advancements.thebetweenlands.farmer.baby_murderer.title=Baby Murder
+advancements.thebetweenlands.farmer.baby_murderer.description=Cook an egg and scramble it
+advancements.thebetweenlands.farmer.necrofarmer.title=Necrofarmer
+advancements.thebetweenlands.farmer.necrofarmer.description=Feed your decayed crops some tonic
+advancements.thebetweenlands.farmer.sporadically_radical.title=Sporadically Radical
+advancements.thebetweenlands.farmer.sporadically_radical.description=Grow and harvest Yellow Dotted Fungi Spores
+advancements.thebetweenlands.farmer.lively_crops.title=Lively Crops
+advancements.thebetweenlands.farmer.lively_crops.description=Let a Sporeling hatch from your crops
+advancements.thebetweenlands.farmer.mushroom_master.title=Mushroom Master
+advancements.thebetweenlands.farmer.mushroom_master.description=Collect all the mushrooms
+advancements.thebetweenlands.farmer.a_vine_bush.title=A Vine Bush
+advancements.thebetweenlands.farmer.a_vine_bush.description=Collect and plant White Pear seeds
+advancements.thebetweenlands.farmer.flower_power.title=Flower Power
+advancements.thebetweenlands.farmer.flower_power.description=Grow some flowers on your farm
+advancements.thebetweenlands.farmer.pure_and_dirty.title=Pure And Dirty
+advancements.thebetweenlands.farmer.pure_and_dirty.description=Use purified dirt for your farm
+
+# Herbalist
+advancements.thebetweenlands.herbalist.root.title=Herbalist
+advancements.thebetweenlands.herbalist.root.description=Herbal testing
+advancements.thebetweenlands.herbalist.im_a_druid.title=I'm A Druid
+advancements.thebetweenlands.herbalist.im_a_druid.description=Harvest ingredients using your sickle
+advancements.thebetweenlands.herbalist.screw_peta.title=Screw PETA
+advancements.thebetweenlands.herbalist.screw_peta.description=Test an ingredient on a caged Gecko
+advancements.thebetweenlands.herbalist.a_kind_heart.title=A Kind Heart After All
+advancements.thebetweenlands.herbalist.a_kind_heart.description=Release a test-Gecko
+advancements.thebetweenlands.herbalist.bookworms.title=Bookworms
+advancements.thebetweenlands.herbalist.bookworms.description=Obtain a Herblore Book
+advancements.thebetweenlands.herbalist.fully_booked.title=Fully Booked
+advancements.thebetweenlands.herbalist.fully_booked.description=Completely fill in the Herblore Book
+
+# Survivalist
+advancements.thebetweenlands.survivalist.root.title=Survivalist
+advancements.thebetweenlands.survivalist.root.description=Living in a swamp
+advancements.thebetweenlands.survivalist.a_cure.title=A Cure
+advancements.thebetweenlands.survivalist.a_cure.description=Collect Sap Balls
+advancements.thebetweenlands.survivalist.say_nay_to_decay.title=Say 'Nay' To Decay
+advancements.thebetweenlands.survivalist.say_nay_to_decay.description=Collect Blue Petals
+advancements.thebetweenlands.survivalist.you_are_what_you_eat.title=You Are What You Eat
+advancements.thebetweenlands.survivalist.you_are_what_you_eat.description=Consume Rotten Food
+advancements.thebetweenlands.survivalist.hardcore_munchies.title=Hardcore Munchies
+advancements.thebetweenlands.survivalist.hardcore_munchies.description=Consume some Chiromaw Wings
+advancements.thebetweenlands.survivalist.diwitted.title=Dimwitted
+advancements.thebetweenlands.survivalist.diwitted.description=Use a normal torch in the Betweenlands
+advancements.thebetweenlands.survivalist.pyromaniac.title=Pyromaniac
+advancements.thebetweenlands.survivalist.pyromaniac.description=Set moss on fire with an Octine ingot
+advancements.thebetweenlands.survivalist.quest_for_fire.title=Quest For Fire
+advancements.thebetweenlands.survivalist.quest_for_fire.description=Set peat on fire
+advancements.thebetweenlands.survivalist.fetch.title=Fetch
+advancements.thebetweenlands.survivalist.fetch.description=Distract a Peatmummy with a Shimmerstone
+advancements.thebetweenlands.survivalist.hardware_laundry.title=Hardware Laundry
+advancements.thebetweenlands.survivalist.hardware_laundry.description=Purify your tools
+advancements.thebetweenlands.survivalist.onions_have_layers.title=Onions Have Layers, Tools Alike
+advancements.thebetweenlands.survivalist.onions_have_layers.description=Coat your tools against corrosion
+
+# Craftsman
+advancements.thebetweenlands.craftsman.root.title=Craftsman
+advancements.thebetweenlands.craftsman.root.description=Creating the world
+advancements.thebetweenlands.craftsman.getting_harder_wood.title=Getting Harder Wood
+advancements.thebetweenlands.craftsman.a_cure.getting_harder_wood=Collect wood in the Betweenlands
+advancements.thebetweenlands.craftsman.all_over_again.title=All Over Again
+advancements.thebetweenlands.craftsman.all_over_again.description=Create a Weedwood Crafting Table
+advancements.thebetweenlands.craftsman.efficiency.title=Efficiency
+advancements.thebetweenlands.craftsman.efficiency.description=Create a Dual Furnace
+advancements.thebetweenlands.craftsman.freebies.title=Freebies
+advancements.thebetweenlands.craftsman.freebies.description=Obtain extra ingots using Limestone Flux
+
+# Miner
+advancements.thebetweenlands.miner.root.title=Miner
+advancements.thebetweenlands.miner.root.description=Going deeper
+advancements.thebetweenlands.miner.advanced_darkness.title=Advanced Darkness
+advancements.thebetweenlands.miner.advanced_darkness.description=Enter a cave
+advancements.thebetweenlands.miner.new_shinies.title=New Shinies
+advancements.thebetweenlands.miner.new_shinies.description=Obtain a Syrmorite or Octine Ingot
+advancements.thebetweenlands.miner.spelunking.title=Spelunking
+advancements.thebetweenlands.miner.spelunking.description=Find your way back by using Caving Rope
+advancements.thebetweenlands.miner.rock_bottom.title=Rock Bottom
+advancements.thebetweenlands.miner.rock_bottom.description=Enter the Pitstone Caves
+advancements.thebetweenlands.miner.get_schwifty.title=Get Schwifty
+advancements.thebetweenlands.miner.get_schwifty.description=Obtain a Swift Pick

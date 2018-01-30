@@ -5,6 +5,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
@@ -12,6 +13,7 @@ import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.wrapper.InvWrapper;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class EquipmentHelper {
@@ -34,6 +36,10 @@ public class EquipmentHelper {
 					EnumEquipmentInventory type = equippable.getEquipmentCategory(stack);
 
 					stack = stack.copy();
+
+					if (target instanceof EntityPlayerMP) {
+						AdvancementCriterionRegistry.EQUIP.trigger((EntityPlayerMP) target, stack);
+					}
 
 					IInventory inv = cap.getInventory(type);
 					IItemHandler wrapper = new InvWrapper(inv);
@@ -80,6 +86,10 @@ public class EquipmentHelper {
 						IItemHandler wrapper = new InvWrapper(inv);
 
 						stack = stack.copy();
+
+						if (target instanceof EntityPlayerMP) {
+							AdvancementCriterionRegistry.EQUIP.trigger((EntityPlayerMP) target, stack);
+						}
 
 						ItemStack result = wrapper.insertItem(slot, stack, simulate);
 

@@ -1,0 +1,39 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:spores"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.sporadically_radical.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.sporadically_radical.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "plant_spores": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "block": "thebetweenlands:fungus_crop",
+        "item": {
+          "item": "thebetweenlands:spores"
+        }
+      }
+    },
+    "harvest_fungus": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:fungus_crop",
+            "state": {
+              "decayed": "false",
+              "age": 15
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:octine_block"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.idolised.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.idolised.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "ruin": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "idol_head"
+      }
+    }
+  }
+}

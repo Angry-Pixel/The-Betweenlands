@@ -1,0 +1,27 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 32
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.herbalist.bookworms.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.herbalist.bookworms.description"
+    }
+  },
+  "parent": "thebetweenlands:herbalist/im_a_druid",
+  "criteria": {
+    "get_book": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:manual_hl"
+          }
+        ]
+      }
+    }
+  }
+}

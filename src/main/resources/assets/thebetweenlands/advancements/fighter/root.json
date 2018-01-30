@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bone_sword"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.root.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.root.description"
+    },
+    "background": "thebetweenlands:textures/blocks/pitstone_bricks.png",
+    "announce_to_chat": false,
+    "show_toast": false
+  },
+  "criteria": {
+    "has_dank_world": {
+      "trigger": "thebetweenlands:has_advancement",
+      "conditions": {
+        "advancement": "thebetweenlands:adventurer/dank_world"
+      }
+    }
+  }
+}

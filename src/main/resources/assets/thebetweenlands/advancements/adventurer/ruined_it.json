@@ -1,0 +1,34 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:betweenstone_chiseled"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.ruined_it.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.ruined_it.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "ruin": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "ruins"
+      }
+    },
+    "shack": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "ruins"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "ruin",
+      "shack"
+    ]
+  ]
+}

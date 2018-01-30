@@ -1,0 +1,42 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 2
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.mr_compost.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.mr_compost.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "use_compost": {
+      "trigger": "thebetweenlands:right_click_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:dug_swamp_dirt",
+            "state": {
+              "composted": "false"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_swamp_grass",
+            "state": {
+              "composted": "false"
+            }
+          }
+        ],
+        "items": [
+          {
+            "item": "thebetweenlands:items_misc",
+            "data": 2
+          }
+        ]
+      }
+    }
+  }
+}

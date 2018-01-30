@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bl_bucket",
+      "nbt": "{\"Fluid\": {\"FluidName\": \"swamp_water\", \"Amount\":1000}}"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.hardware_laundry.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.hardware_laundry.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "set_fire": {
+      "trigger": "thebetweenlands:purify_tool"
+    }
+  }
+}
