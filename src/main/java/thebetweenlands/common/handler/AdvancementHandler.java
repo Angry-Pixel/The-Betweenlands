@@ -58,19 +58,6 @@ public class AdvancementHandler {
     }
 
     @SubscribeEvent
-    public static void onItemDrop(ItemTossEvent event) {
-        if (event.getPlayer() != null && !event.getPlayer().world.isRemote && event.getPlayer() instanceof EntityPlayerMP && event.getPlayer().world.provider.getDimension() == ConfigHandler.dimensionId) {
-            ItemStack stack = event.getEntityItem().getItem();
-            if (stack.getItem() instanceof ItemShimmerStone) {
-                BlockPos pos = event.getEntityItem().getPosition();
-                List<EntityPeatMummy> mummies = event.getPlayer().world.getEntitiesWithinAABB(EntityPeatMummy.class, new AxisAlignedBB(pos, pos).grow(20));
-                if (mummies.size() > 0)
-                    AdvancementCriterionRegistry.DROP_SHIMMERSTONE.trigger((EntityPlayerMP) event.getPlayer());
-            }
-        }
-    }
-
-    @SubscribeEvent
     public static void onItemCrafting(PlayerEvent.ItemCraftedEvent event) {
         if (event.player != null && !event.player.world.isRemote && event.craftMatrix instanceof InventoryCrafting) {
             if (CircleGemHelper.getGem(event.crafting) != CircleGemType.NONE) {
