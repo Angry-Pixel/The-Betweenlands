@@ -74,7 +74,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));
 
-		this.blSpawnEntries.add(new LocationSpawnEntry(3, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(26.0D).setSpawningInterval(500));
+		this.blSpawnEntries.add(new LocationSpawnEntry(3, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE).setHostile(true).setSpawnCheckRadius(50.0D).setSpawningInterval(5000));
 	}
 
 	/**
