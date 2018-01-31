@@ -187,6 +187,7 @@ task assetsZip(type: Zip) {
 		exclude("mcmod.info")
 		exclude("thebetweenlands/**")
 		exclude("assets/" + modid + "/loot_tables/**")
+		exclude("assets/" + modid + "/advancements/**")
 		exclude("assets/" + modid + "/recipes/**")
 		exclude("META-INF/**")
 		exclude("unused/**")
