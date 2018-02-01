@@ -11,6 +11,7 @@
     ],
     "overrides": [
       {
+        "dimensions": ["<dimension name>", ...] (Optional field),
         "id": "<event id>",
         "value": <true|false>,
         "remote_reset_ticks": <int> (Optional field),
@@ -26,6 +27,7 @@
 
 * ```versions```: Which mod versions should pull the states from that entry. Can be used for compatibility
 * ```overrides```: Specifies the environment event overrides
+* ```dimensions```: The dimensions in which this override is valid. If an empty array is specified the override is valid for any dimension. If no value is specified the override is only valid for the Betweenlands dimension
 * ```id```: The environment event ID (ResourceLocation)
 * ```value```: The active state of the event
 * ```remote_reset_ticks```: Optional active state reset timeout ticks. If the client/server fails to pull the data more than two  
