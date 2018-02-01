@@ -17,7 +17,7 @@
       "conditions": {
         "block": "minecraft:torch",
         "location": {
-          "dimension": "Betweenlands"
+          "dimension": "betweenlands"
         }
       }
     }

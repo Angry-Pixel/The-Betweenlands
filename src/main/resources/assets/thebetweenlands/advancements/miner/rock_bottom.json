@@ -17,7 +17,7 @@
     "octine": {
       "trigger": "minecraft:location",
       "conditions": {
-        "dimension": "Betweenlands",
+        "dimension": "betweenlands",
         "position": {
           "y": {
             "min": 0,

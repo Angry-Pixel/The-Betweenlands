@@ -1,31 +1,29 @@
 package thebetweenlands.util.config;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.oredict.OreDictionary;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.lib.ModInfo;
-
 import java.io.File;
 import java.util.Collection;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.lib.ModInfo;
+
 public class ConfigHandler {
 	public static final ConfigHandler INSTANCE = new ConfigHandler();
-	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning", "Debug", "Compat"};
+	public static final String[] CATEGORIES = {"World and Dimension", "Rendering", "General", "Mob Spawning", "Debug", "Compat", "Online Environment Event Overrides"};
 
 	//////// Values ///////
 	public static int dimensionId;
 	public static int druidCircleFrequency;
 	public static int dimensionBrightness;
 	public static boolean enableSeasonalEvents;
-	public static boolean onlineEnvironmentEventOverrides;
 
 	public static int wispQuality;
 	public static boolean useShader;
@@ -46,7 +44,13 @@ public class ConfigHandler {
 	public static int hardEntityLimit;
 
 	public static boolean jeiGemRecipesNonBL;
-	
+
+	public static boolean onlineEnvironmentEventOverrides;
+	public static int checkIntervalTicks;
+	public static int failedRecheckIntervalTicks;
+	public static int failedRecheckCount;
+	public static int defaultRemoteResetTicks;
+
 	public Configuration config;
 	public static String path = "";
 
@@ -62,13 +66,12 @@ public class ConfigHandler {
 		druidCircleFrequency = config.get(CATEGORIES[0], "Frequency of Druid Circles", 80, "Higher numbers decrease rate").getInt(80);
 		dimensionBrightness = config.get(CATEGORIES[0], "Dimension brightness (0-100)", 75).setMinValue(0).setMaxValue(100).getInt(75);
 		enableSeasonalEvents = config.getBoolean("Enable Seasonal Events", CATEGORIES[0], true, "If true seasonal events will occur during special periods during a year");
-		onlineEnvironmentEventOverrides = config.getBoolean("Enable Online Environment Event Overrides", CATEGORIES[0], true, "If true this allows the developers to remotely enable certain environment events (such as the seasonal events for example) over a file hosted on our repository (https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/environment_event_overrides/overrides.json). If you do not wish to use this feature it can be fully disabled by setting this to false");
-		
+
 		wispQuality = config.get(CATEGORIES[1], "Wisp Rendering Quality (0-100)", 50).setMinValue(0).setMaxValue(100).getInt(100);
 		useShader = config.getBoolean("Use shaders for rendering", CATEGORIES[1], true, "Some features in the Betweenlands use shaders for special effects. If you don't have a dedicated graphics card or want to use other mods with shaders you should set this to false. May have an impact on performance depending on your computer. Forces FBOs to be enabled");
 		skyResolution = config.get(CATEGORIES[1], "Sky texture resolution", 1024, "Only works when shaders are enabled. Determines the resolution of the shader sky texture. Bigger resolutions may have a bad impact on performance").getInt(1024);
 		fullbrightBlocks = config.getBoolean("Full brightness blocks", CATEGORIES[1], true, "Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false");
-		
+
 		// Replaced with false by gradle for release version
 		debug = config.getBoolean("Debug mode", CATEGORIES[4], /*!*/true/*!*/, "If ture, enables debug mode with additional features for testing or development");
 		debugModelLoader = config.getBoolean("Model loader debug", CATEGORIES[4], false, "If true, enables the model loader debug logger");
@@ -85,6 +88,12 @@ public class ConfigHandler {
 		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities in the Betweenlands per world").setMinValue(0).getInt(600);
 
 		jeiGemRecipesNonBL = config.getBoolean("JEI - Show Non BL Gem Recipes", CATEGORIES[5], true, "If true, non BL items will show in the JEI recipe for middle gems");
+
+		onlineEnvironmentEventOverrides = config.getBoolean("Enabled", CATEGORIES[6], true, "If true this allows the developers to remotely enable certain environment events (such as the seasonal events for example) over a file hosted on our repository (https://raw.githubusercontent.com/Angry-Pixel/The-Betweenlands/environment_event_overrides/overrides.json). If you do not wish to use this feature it can be fully disabled by setting this to false");
+		checkIntervalTicks = config.getInt("Check Interval", CATEGORIES[6], 600, 60, Integer.MAX_VALUE / 20, "Check interval in seconds") * 20;
+		failedRecheckIntervalTicks = config.getInt("Failed Recheck Interval", CATEGORIES[6], 60, 10, Integer.MAX_VALUE / 20, "Recheck interval in seconds if previous check has failed") * 20;
+		failedRecheckCount = config.getInt("Failed Recheck Count", CATEGORIES[6], 3, 0, Integer.MAX_VALUE, "How many times a connection can fail before the '(Default) Remote Reset Time' starts counting down and how many times 'Failed Recheck Interval' is used before falling back to 'Check Interval'");
+		defaultRemoteResetTicks = config.getInt("Default Remote Reset Time", CATEGORIES[6], 180, 0, Integer.MAX_VALUE / 20, "Default time in seconds before an event that no longer has an override resets its state") * 20;
 
 		save();
 	}
@@ -122,7 +131,7 @@ public class ConfigHandler {
 			}
 		}
 	}
-	
+
 	public static boolean isFoodConfigWhitelisted(ItemStack stack) {
 		if (stack.isEmpty())
 			return false;
@@ -137,7 +146,7 @@ public class ConfigHandler {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 

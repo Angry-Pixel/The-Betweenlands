@@ -636,4 +636,9 @@ public class ClientProxy extends CommonProxy {
     public Proxy getNetProxy() {
     	return Minecraft.getMinecraft().getProxy();
     }
+    
+    @Override
+    public boolean isSingleplayer() {
+    	return Minecraft.getMinecraft().isSingleplayer();
+    }
 }

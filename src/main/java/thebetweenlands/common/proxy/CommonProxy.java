@@ -196,6 +196,10 @@ public class CommonProxy implements IGuiHandler {
 
     }
     
+    public boolean isSingleplayer() {
+    	return false;
+    }
+    
     @Nullable
     public Proxy getNetProxy() {
     	return null;

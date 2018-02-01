@@ -1,5 +1,6 @@
 package thebetweenlands.common.world.event;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonObject;
 
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -92,7 +93,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	}
 
 	@Override
-	public void updateStateFromRemote(boolean value, int remoteResetTicks, JsonObject data) {
+	public void updateStateFromRemote(boolean value, int remoteResetTicks, ImmutableMap<String, String> data) {
 		//Only update state if it wasn't overridden by a player or command
 		if(!this.isStateFromRemoteOverridden) {
 			if(this.isActive() != value && !this.isStateFromRemote) {

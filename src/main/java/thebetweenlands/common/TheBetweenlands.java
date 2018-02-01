@@ -67,6 +67,8 @@ public class TheBetweenlands {
 
 	public static boolean isToughAsNailsModInstalled = false;
 
+	public static final String DIMENSION_NAME = "betweenlands";
+	
 	@EventHandler
 	public void onFingerprintViolation(FMLFingerprintViolationEvent event) {
 		Logger fpLogger = LogManager.getLogger("Betweenlands Fingerprint Violation");
@@ -86,7 +88,7 @@ public class TheBetweenlands {
 
 		BetweenlandsAPI.init();
 
-		dimensionType = DimensionType.register("Betweenlands", "", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
+		dimensionType = DimensionType.register(DIMENSION_NAME, "_betweenlands", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
 		DimensionManager.registerDimension(ConfigHandler.dimensionId, dimensionType);
 
 		REGISTRIES.preInit();
