@@ -32,16 +32,23 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply from: 'validateCoreJar.gradle'
 
+def isTravisEnv = System.getenv().TRAVIS && "true".equals(System.getenv().TRAVIS)
+
+if(isTravisEnv) println("Travis CI environment found")
+
 project.ext.buildnumber = ''
-if (System.getenv().BUILD_NUMBER) project.buildnumber = '-' + System.getenv().BUILD_NUMBER
+if (isTravisEnv) project.buildnumber = System.getenv().TRAVIS_BUILD_NUMBER
 
 def modid = getModIdFromJava()
-version = getVersionFromJava() + project.buildnumber
+version = getVersionFromJava()
+if(isTravisEnv) version = version + "-dev-" + project.buildnumber
 group = 'net.angrypixel'
 archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
 
 println(hasKeystore() ? "blKeyStore property found, jar files will be signed" : "No blKeyStore property found, jar files will not be signed")
+
+println("Building version " + version)
 
 minecraft {
     version = "1.12.2-14.23.1.2554"
