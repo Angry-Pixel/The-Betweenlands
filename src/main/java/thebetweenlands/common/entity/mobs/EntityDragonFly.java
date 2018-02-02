@@ -146,7 +146,7 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 		}
 		if (currentFlightTarget == null || rand.nextInt(30) == 0 || currentFlightTarget.getDistance((int) posX, (int) posY, (int) posZ) < 8F) {
 			BlockPos newTarget = new BlockPos((int) posX + rand.nextInt(7) - rand.nextInt(7), (int) posY + rand.nextInt(6) - 1, (int) posZ + rand.nextInt(7) - rand.nextInt(7));
-			if(this.spawnPos.distanceSq(newTarget) > 32*32) {
+			if(this.spawnPos != null && this.spawnPos.distanceSq(newTarget) > 32*32) {
 				newTarget = this.spawnPos.add(rand.nextInt(16) - rand.nextInt(16), rand.nextInt(10) - 5, rand.nextInt(16) - rand.nextInt(16));
 			}
 			if(world.isAreaLoaded(newTarget.add(-6, -6, -6), newTarget.add(6, 6, 6))) {
@@ -242,7 +242,9 @@ public class EntityDragonFly extends EntityAmbientCreature implements IEntityBL 
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		nbt.setLong("spawnPos", this.spawnPos.toLong());
+		if(this.spawnPos != null) {
+			nbt.setLong("spawnPos", this.spawnPos.toLong());
+		}
 		return super.writeToNBT(nbt);
 	}
 	

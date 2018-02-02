@@ -158,8 +158,8 @@ task serverJar(type: Jar, dependsOn: classes) {
 		exclude("**/assets/" + modid + "/sounds.json")
 		exclude("**/assets/" + modid + "/blockstates/**")
 		
-		//Remove and then regenerate and resign META-INF 
-		exclude("META-INF/**")
+		//Remove and then regenerate and resign META-INF (except AT and forge cache files)
+		exclude { e -> (e.path.contains("META-INF/") && !e.name.endsWith("_at.cfg") && !e.name.endsWith(".json"))}
 		
 	}
 	addMainManifestAttributes(manifest)

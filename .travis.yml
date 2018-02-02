@@ -1,6 +1,7 @@
 language: java
 jdk:
 - oraclejdk8
+if: tag =~ /release/ OR tag IS blank
 before_install:
 - openssl aes-256-cbc -k "$keyStoreEncryptionKey" -in keystore.jks.enc -out keystore.jks -d
 - echo "export blKeyStore=${TRAVIS_BUILD_DIR}/keystore.jks" > setKeystoreEnv.sh
