@@ -32,21 +32,25 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply from: 'validateCoreJar.gradle'
 
-def isTravisEnv = System.getenv().TRAVIS && "true".equals(System.getenv().TRAVIS)
+project.ext.buildnumber = ''
+
+project.ext.ENV = System.getenv()
+project.ext.isTravisEnv = ENV['TRAVIS'] != null && "true".equals(ENV['TRAVIS'])
+project.ext.isTravisRelease = isTravisEnv && ENV['TRAVIS_TAG'] != null && ENV['TRAVIS_TAG'].contains("release")
 
 if(isTravisEnv) println("Travis CI environment found")
+if(isTravisRelease) println("Travis CI is building a release")
 
-project.ext.buildnumber = ''
-if (isTravisEnv) project.buildnumber = System.getenv().TRAVIS_BUILD_NUMBER
+if (isTravisEnv) project.buildnumber = ENV['TRAVIS_BUILD_NUMBER']
 
-def modid = getModIdFromJava()
+project.ext.modid = getModIdFromJava()
 version = getVersionFromJava()
-if(isTravisEnv) version = version + "-dev-" + project.buildnumber
+if(isTravisEnv && !isTravisRelease) version = version + "-dev-" + project.buildnumber
 group = 'net.angrypixel'
 archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
 
-println(hasKeystore() ? "blKeyStore property found, jar files will be signed" : "No blKeyStore property found, jar files will not be signed")
+println(canJarBeSigned() ? "blKeyStore property found, jar files will be signed" : "No blKeyStore property found, jar files will not be signed")
 
 println("Building version " + version)
 
@@ -98,11 +102,11 @@ reobf {
 }
 reobfCoreJar.dependsOn validateCoreJar //Validate core jar before reobf
 task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
-	if(hasKeystore()) {
-	    keyStore = project.blKeyStore
-	    alias = project.blKeyStoreAlias
-	    storePass = project.blKeyStorePass
-	    keyPass = project.blKeyStoreKeyPass
+	if(canJarBeSigned()) {
+	    keyStore = getVariable("blKeyStore")
+	    alias = getVariable("blKeyStoreAlias")
+	    storePass = getVariable("blKeyStorePass")
+	    keyPass = getVariable("blKeyStoreKeyPass")
 	    inputFile = coreJar.archivePath
 	    outputFile = coreJar.archivePath
     }
@@ -111,7 +115,7 @@ task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
 //Builds the universal jar
 jar {
 	dependsOn reobfCoreJar
-	if(hasKeystore()) {
+	if(canJarBeSigned()) {
 		dependsOn signCoreJar //Sign core jar *before* including!
 	}
 	
@@ -129,11 +133,11 @@ jar {
     addMainManifestAttributes(manifest)
 }
 task signMainJar(type: SignJar, dependsOn: reobfJar) {
-	if(hasKeystore()) {
-	    keyStore = project.blKeyStore
-	    alias = project.blKeyStoreAlias
-	    storePass = project.blKeyStorePass
-	    keyPass = project.blKeyStoreKeyPass
+	if(canJarBeSigned()) {
+	    keyStore = getVariable("blKeyStore")
+	    alias = getVariable("blKeyStoreAlias")
+	    storePass = getVariable("blKeyStorePass")
+	    keyPass = getVariable("blKeyStoreKeyPass")
 	    inputFile = jar.archivePath
 	    outputFile = jar.archivePath
     }
@@ -161,11 +165,11 @@ task serverJar(type: Jar, dependsOn: classes) {
 	addMainManifestAttributes(manifest)
 }
 task signServerJar(type: SignJar, dependsOn: serverJar) {
-	if(hasKeystore()) {
-	    keyStore = project.blKeyStore
-	    alias = project.blKeyStoreAlias
-	    storePass = project.blKeyStorePass
-	    keyPass = project.blKeyStoreKeyPass
+	if(canJarBeSigned()) {
+	    keyStore = getVariable("blKeyStore")
+	    alias = getVariable("blKeyStoreAlias")
+	    storePass = getVariable("blKeyStorePass")
+	    keyPass = getVariable("blKeyStoreKeyPass")
 	    inputFile = serverJar.archivePath
 	    outputFile = serverJar.archivePath
     }
@@ -203,7 +207,7 @@ task assetsZip(type: Zip) {
 }
 
 build.finalizedBy serverJar
-if(hasKeystore()) {
+if(canJarBeSigned()) {
 	build.finalizedBy signServerJar
 	build.dependsOn signMainJar, signCoreJar
 }
@@ -212,15 +216,15 @@ artifacts {
     archives assetsZip/*, sourcesJar, devJar*/
 }
 
-//Returns whether the private keystore for signing is available
-boolean hasKeystore() {
-	return project.hasProperty("blKeyStore")
+//Returns whether the private keystore for signing is available and if the jar should be signed
+boolean canJarBeSigned() {
+	return getVariable("blKeyStore") != null && (!isTravisEnv || isTravisRelease)
 }
 
 //Returns the public fingerprint, may be empty ("")
 String getProjectFingerprint() {
-	if(hasKeystore()) {
-		return project.blKeyStoreFingerprint.replaceAll(":", "").toLowerCase()
+	if(canJarBeSigned()) {
+		return getVariable("blKeyStoreFingerprint").replaceAll(":", "").toLowerCase()
 	}
 	return ""
 }
@@ -272,6 +276,10 @@ def addCoreManifestAttributes(Manifest m) {
 	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
 }
 
+//Attempts to get a project variable and if none is found it tries to read from a system environment variable
+def getVariable(String key) {
+	return project.hasProperty(key) ? project.property(key) : ENV[key];
+}
 
 //JEI intergration
 repositories {
