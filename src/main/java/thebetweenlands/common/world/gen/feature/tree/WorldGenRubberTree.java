@@ -1,4 +1,4 @@
-package thebetweenlands.common.world.gen.feature;
+package thebetweenlands.common.world.gen.feature.tree;
 
 import java.util.Random;
 
@@ -7,6 +7,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -67,7 +68,7 @@ public class WorldGenRubberTree extends WorldGenerator {
 		int maxRadius = 4;
 
 		this.log = BlockRegistry.LOG_RUBBER.getDefaultState().withProperty(BlockRubberLog.NATURAL, true);
-		this.leaves = BlockRegistry.LEAVES_RUBBER_TREE.getDefaultState();
+		this.leaves = BlockRegistry.LEAVES_RUBBER_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 
 
 

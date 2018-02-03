@@ -48,6 +48,11 @@ public class BlockLeavesBetweenlands extends BlockLeaves implements IStateMapped
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return !Minecraft.getMinecraft().gameSettings.fancyGraphics && blockAccess.getBlockState(pos.offset(side)).getBlock() == this ? false : internalShouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
+	
+	@Override
+	public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
+		super.beginLeavesDecay(state, world, pos);
+	}
 
 	@SideOnly(Side.CLIENT)
 	private boolean internalShouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {

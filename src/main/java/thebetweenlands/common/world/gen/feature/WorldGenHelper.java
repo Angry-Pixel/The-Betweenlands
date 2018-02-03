@@ -2,6 +2,9 @@ package thebetweenlands.common.world.gen.feature;
 
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
@@ -87,9 +90,31 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	}
 
 	/**
+	 * @see #rotatedCubeVolume(World, int, int, int, int, int, int, IBlockState, int, int, int, int, Predicate, Consumer...)
+	 * @param world
+	 * @param x
+	 * @param y
+	 * @param z
+	 * @param offsetX
+	 * @param offsetY
+	 * @param offsetZ
+	 * @param blockState
+	 * @param sizeWidth
+	 * @param sizeHeight
+	 * @param sizeDepth
+	 * @param rotation
+	 * @param callbacks
+	 */
+	@SafeVarargs
+	public final void rotatedCubeVolume(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation, Consumer<BlockPos>... callbacks) {
+		this.rotatedCubeVolume(world, null, x, y, z, offsetX, offsetY, offsetZ, blockState, sizeWidth, sizeHeight, sizeDepth, rotation, callbacks);
+	}
+	
+	/**
 	 * Generates cube volumes and rotates them depending on the given rotation
 	 *
 	 * @param world      The world
+	 * @param predicate  The predicate decides whether a block should be placed or not
 	 * @param x          x to generate relative from
 	 * @param y          y to generate relative from
 	 * @param z          z to generate relative from
@@ -101,9 +126,10 @@ public abstract class WorldGenHelper extends WorldGenerator {
 	 * @param sizeHeight The height of the cube volume
 	 * @param sizeDepth  The depth of the cube volume
 	 * @param rotation   The rotation for the cube volume (0 to 3)
+	 * @param callbacks  All callbacks are called once a block is placed
 	 */
 	@SafeVarargs
-	public final void rotatedCubeVolume(World world, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation, Consumer<BlockPos>... callbacks) {
+	public final void rotatedCubeVolume(World world, @Nullable Predicate<BlockPos> pred, int x, int y, int z, int offsetX, int offsetY, int offsetZ, IBlockState blockState, int sizeWidth, int sizeHeight, int sizeDepth, int rotation, Consumer<BlockPos>... callbacks) {
 		x -= width / 2;
 		z -= depth / 2;
 		switch (rotation) {
@@ -112,9 +138,11 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + offsetX; xx < x + offsetX + sizeWidth; xx++)
 					for (int zz = z + offsetZ; zz < z + offsetZ + sizeDepth; zz++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
-						for(Consumer<BlockPos> callback : callbacks) {
-							callback.accept(pos);
+						if(pred == null || pred.test(pos)) {
+							this.setBlockAndNotifyAdequately(world, pos, blockState);
+							for(Consumer<BlockPos> callback : callbacks) {
+								callback.accept(pos);
+							}
 						}
 					}
 			break;
@@ -123,9 +151,11 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + depth - offsetX - 1; zz > z + depth - offsetX - sizeWidth - 1; zz--)
 					for (int xx = x + offsetZ; xx < x + offsetZ + sizeDepth; xx++) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
-						for(Consumer<BlockPos> callback : callbacks) {
-							callback.accept(pos);
+						if(pred == null || pred.test(pos)) {
+							this.setBlockAndNotifyAdequately(world, pos, blockState);
+							for(Consumer<BlockPos> callback : callbacks) {
+								callback.accept(pos);
+							}
 						}
 					}
 			break;
@@ -134,9 +164,11 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int xx = x + width - offsetX - 1; xx > x + width - offsetX - sizeWidth - 1; xx--)
 					for (int zz = z + depth - offsetZ - 1; zz > z + depth - offsetZ - sizeDepth - 1; zz--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
-						for(Consumer<BlockPos> callback : callbacks) {
-							callback.accept(pos);
+						if(pred == null || pred.test(pos)) {
+							this.setBlockAndNotifyAdequately(world, pos, blockState);
+							for(Consumer<BlockPos> callback : callbacks) {
+								callback.accept(pos);
+							}
 						}
 					}
 			break;
@@ -145,9 +177,11 @@ public abstract class WorldGenHelper extends WorldGenerator {
 				for (int zz = z + offsetX; zz < z + offsetX + sizeWidth; zz++)
 					for (int xx = x + width - offsetZ - 1; xx > x + width - offsetZ - sizeDepth - 1; xx--) {
 						BlockPos pos = new BlockPos(xx, yy, zz);
-						this.setBlockAndNotifyAdequately(world, pos, blockState);
-						for(Consumer<BlockPos> callback : callbacks) {
-							callback.accept(pos);
+						if(pred == null || pred.test(pos)) {
+							this.setBlockAndNotifyAdequately(world, pos, blockState);
+							for(Consumer<BlockPos> callback : callbacks) {
+								callback.accept(pos);
+							}
 						}
 					}
 			break;

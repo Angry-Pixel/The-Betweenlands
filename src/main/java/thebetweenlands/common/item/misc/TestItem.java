@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenWillowTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -84,6 +85,10 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+			WorldGenWillowTree tree = new WorldGenWillowTree();
+			if(tree.generate(worldIn, itemRand, pos.up(1))) {
+				//playerIn.setHeldItem(hand, null);
+			}
 		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");
