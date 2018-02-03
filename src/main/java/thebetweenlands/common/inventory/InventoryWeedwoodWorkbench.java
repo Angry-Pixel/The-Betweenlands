@@ -3,6 +3,7 @@ package thebetweenlands.common.inventory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
@@ -52,27 +53,13 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (!this.stackList.get(slot).isEmpty()) {
-			ItemStack stack;
+		ItemStack itemstack = ItemStackHelper.getAndSplit(this.stackList, slot, amount);
 
-			if (this.stackList.get(slot).getCount() <= amount) {
-				stack = this.stackList.get(slot);
-				this.stackList.set(slot, ItemStack.EMPTY);
-				this.container.onCraftMatrixChanged(this);
-				return stack;
-			} else {
-				stack = this.stackList.get(slot).splitStack(amount);
+        if (!itemstack.isEmpty()) {
+            this.eventHandler.onCraftMatrixChanged(this);
+        }
 
-				if (this.stackList.get(slot).getCount() == 0) {
-					this.stackList.set(slot, ItemStack.EMPTY);
-				}
-
-				this.container.onCraftMatrixChanged(this);
-				return stack;
-			}
-		} else {
-			return ItemStack.EMPTY;
-		}
+        return itemstack;
 	}
 
 	@Override
