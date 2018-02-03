@@ -10,8 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
-import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenWillowTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -85,7 +84,13 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+		/*
 			WorldGenWillowTree tree = new WorldGenWillowTree();
+			if(tree.generate(worldIn, itemRand, pos.up(1))) {
+				//playerIn.setHeldItem(hand, null);
+			}
+		*/
+			WorldGenHearthgroveTree tree = new WorldGenHearthgroveTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}

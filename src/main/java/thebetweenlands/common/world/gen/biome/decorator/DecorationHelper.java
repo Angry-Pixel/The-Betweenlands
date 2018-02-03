@@ -44,10 +44,11 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenUndergroundRui
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWightFortress;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeDead;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
-import thebetweenlands.common.world.gen.feature.tree.WorldGenWillowTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
@@ -106,7 +107,8 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_IDOL_HEAD = new WorldGenIdolHeads();
 	public static final WorldGenerator GEN_SMALL_RUINS = new WorldGenSmallRuins();
 	public static final WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();
-	public static final WorldGenerator GEN_WILLOW_TREE = new WorldGenWillowTree();
+	public static final WorldGenerator GEN_NIBBLETWIG_TREE = new WorldGenNibbletwigTree();
+	public static final WorldGenerator GEN_HEARTHGROVE_TREE = new WorldGenHearthgroveTree();
 	public static final WorldGenerator GEN_BULB_CAPPED_MUSHROOMS = new WorldGenPlantCluster(BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_SPAWNER = new WorldGenSpawner();
 	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
@@ -260,12 +262,23 @@ public class DecorationHelper {
 		return false;
 	}
 	
-	public static boolean generateWillowTree(DecoratorPositionProvider decorator) {
+	public static boolean generateNibbletwigTree(DecoratorPositionProvider decorator) {
 		if (canShortThingsGenerateHere(decorator)) {
 			BlockPos pos = decorator.getRandomPos(9);
 			World world = decorator.getWorld();
 			if (world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down()))
-				return GEN_WILLOW_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
+				return GEN_NIBBLETWIG_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
+		}
+		return false;
+	}
+	
+	public static boolean generateHearthgroveTree(DecoratorPositionProvider decorator) {
+		if (canShortThingsGenerateHere(decorator)) {
+			BlockPos pos = decorator.getRandomPos(10);
+			World world = decorator.getWorld();
+			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) ||
+					(SurfaceType.WATER.matches(world, pos) && SurfaceType.DIRT.matches(world, pos.down())))
+				return GEN_HEARTHGROVE_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
 		}
 		return false;
 	}

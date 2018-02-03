@@ -14,6 +14,10 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("weedwoodTree");
 		this.generate(50, DecorationHelper::generateWeedwoodTree);
 		this.endProfilerSection();
+		
+		this.startProfilerSection("hearthgroveTree");
+		this.generate(50, DecorationHelper::generateHearthgroveTree);
+		this.endProfilerSection();
 
 		this.startProfilerSection("sapTree");
 		this.generate(10, DecorationHelper::generateSapTree);

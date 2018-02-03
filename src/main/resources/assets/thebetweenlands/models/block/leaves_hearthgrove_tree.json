@@ -1,0 +1,6 @@
+{
+	"parent": "block/leaves",
+	"textures": {
+		"all": "thebetweenlands:blocks/leaves_hearthgrove_tree"
+	}
+}

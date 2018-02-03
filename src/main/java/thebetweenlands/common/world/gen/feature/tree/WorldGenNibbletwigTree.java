@@ -2,16 +2,18 @@ package thebetweenlands.common.world.gen.feature.tree;
 
 import java.util.Random;
 
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.common.block.plant.BlockPoisonIvy;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
+import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.feature.WorldGenHelper;
 
-public class WorldGenWillowTree extends WorldGenHelper {
+public class WorldGenNibbletwigTree extends WorldGenHelper {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
 		int x = pos.getX();
@@ -26,7 +28,7 @@ public class WorldGenWillowTree extends WorldGenHelper {
 
 			int canopy1 = rand.nextInt(2) + 4;
 
-			IBlockState log = BlockRegistry.GIANT_ROOT.getDefaultState();//.withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
+			IBlockState log = BlockRegistry.LOG_NIBBLETWIG.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
 			IBlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 			IBlockState ivy = BlockRegistry.POISON_IVY.getDefaultState();
 
@@ -42,14 +44,14 @@ public class WorldGenWillowTree extends WorldGenHelper {
 				}
 				xo[i] = bxo;
 				zo[i] = bzo;
-				world.setBlockState(pos.add(bxo, i, bzo), log, 2);
+				this.setBlockAndNotifyAdequately(world, pos.add(bxo, i, bzo), log);
 			}
 
 			this.rotatedCubeVolume(world, setPos -> world.isAirBlock(setPos), xo[canopy1] + x, y + canopy1, zo[canopy1] + z, -1, 0, -1, leaves, 3, 1, 3, 0);
 			for(EnumFacing offset : EnumFacing.HORIZONTALS) {
 				BlockPos offsetPos = pos.add(xo[canopy1] + offset.getFrontOffsetX(), canopy1 + 1, zo[canopy1] + offset.getFrontOffsetZ());
 				if(world.isAirBlock(offsetPos)) {
-					world.setBlockState(offsetPos, leaves);
+					this.setBlockAndNotifyAdequately(world, offsetPos, leaves);
 				}
 
 				BlockPos droopPos = pos.add(xo[canopy1] + offset.getFrontOffsetX()*2, canopy1, zo[canopy1] + offset.getFrontOffsetZ()*2);
@@ -57,7 +59,7 @@ public class WorldGenWillowTree extends WorldGenHelper {
 				for(int yo = 0; yo < droopLength; yo++) {
 					BlockPos droopPosY = droopPos.down(yo);
 					if(world.isAirBlock(droopPosY)) {
-						world.setBlockState(droopPosY, leaves);
+						this.setBlockAndNotifyAdequately(world, droopPosY, leaves);
 					}
 				}
 
@@ -67,7 +69,7 @@ public class WorldGenWillowTree extends WorldGenHelper {
 					for(int yo = 0; yo < ivyLength; yo++) {
 						BlockPos ivyPosY = ivyPos.down(yo);
 						if(world.isAirBlock(ivyPosY)) {
-							world.setBlockState(ivyPosY, ivy.withProperty(BlockPoisonIvy.getPropertyFor(offset.getOpposite()), true));
+							this.setBlockAndNotifyAdequately(world, ivyPosY, ivy.withProperty(BlockPoisonIvy.getPropertyFor(offset.getOpposite()), true));
 						}
 					}
 				}
@@ -107,7 +109,7 @@ public class WorldGenWillowTree extends WorldGenHelper {
 					for(int yo = 0; yo < droopLength; yo++) {
 						BlockPos droopPosY = droopPos.down(yo);
 						if(world.isAirBlock(droopPosY)) {
-							world.setBlockState(droopPosY, leaves);
+							this.setBlockAndNotifyAdequately(world, droopPosY, leaves);
 						}
 					}
 
@@ -117,7 +119,7 @@ public class WorldGenWillowTree extends WorldGenHelper {
 					for(int yo = 0; yo < ivyLength; yo++) {
 						BlockPos ivyPosY = ivyPos.down(yo);
 						if(world.isAirBlock(ivyPosY)) {
-							world.setBlockState(ivyPosY, ivy.withProperty(BlockPoisonIvy.getPropertyFor(ivyOffset.getOpposite()), true));
+							this.setBlockAndNotifyAdequately(world, ivyPosY, ivy.withProperty(BlockPoisonIvy.getPropertyFor(ivyOffset.getOpposite()), true));
 						}
 					}
 

@@ -129,6 +129,7 @@ import thebetweenlands.common.block.terrain.BlockGenericOre;
 import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockGiantRoot;
 import thebetweenlands.common.block.terrain.BlockHanger;
+import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
@@ -253,6 +254,8 @@ public class BlockRegistry {
     public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
     public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
     public static final Block LOG_RUBBER = new BlockRubberLog();
+    public static final Block LOG_HEARTHGROVE = new BlockHearthgroveLog();
+    public static final Block LOG_NIBBLETWIG = new BlockLogBetweenlands();
     public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
     public static final Block LOG_SAP = new BlockLogSap();
     public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
@@ -275,6 +278,12 @@ public class BlockRegistry {
         public Item getItemDropped(IBlockState state, Random rand, int fortune) {
             return Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER);
         }
+    };
+    public static final Block LEAVES_HEARTHGROVE_TREE = new BlockTintedLeaves() {
+    	@Override
+    	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD); //TODO Replace with own sapling
+    	}
     };
     //STRUCTURE
     public static final Block WEEDWOOD_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
