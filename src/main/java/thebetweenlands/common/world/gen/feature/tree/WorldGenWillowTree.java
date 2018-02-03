@@ -20,7 +20,7 @@ public class WorldGenWillowTree extends WorldGenHelper {
 
 		int height = rand.nextInt(6) + 11;
 
-		if(!this.rotatedCubeCantReplace(world, x, y + 2, z, -3, 0, -3, 5, height, 5, 0)) {
+		if(!this.rotatedCubeCantReplace(world, x, y + 2, z, -2, 0, -2, 5, height, 5, 0)) {
 			int bend1 = rand.nextInt(3) + 6;
 			int bend2 = rand.nextInt(2) == 0 ? rand.nextInt(3) + 10 : -1;
 

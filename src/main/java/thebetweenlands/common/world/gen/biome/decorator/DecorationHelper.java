@@ -262,7 +262,7 @@ public class DecorationHelper {
 	
 	public static boolean generateWillowTree(DecoratorPositionProvider decorator) {
 		if (canShortThingsGenerateHere(decorator)) {
-			BlockPos pos = decorator.getRandomPos(8);
+			BlockPos pos = decorator.getRandomPos(9);
 			World world = decorator.getWorld();
 			if (world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down()))
 				return GEN_WILLOW_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
