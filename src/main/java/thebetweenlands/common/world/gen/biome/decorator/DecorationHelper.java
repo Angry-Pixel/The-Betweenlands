@@ -21,13 +21,12 @@ import thebetweenlands.common.world.gen.feature.WorldGenCaveHangers;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveMoss;
 import thebetweenlands.common.world.gen.feature.WorldGenCavePots;
 import thebetweenlands.common.world.gen.feature.WorldGenCaveThorns;
-import thebetweenlands.common.world.gen.feature.WorldGenRottenWeedwoodTree;
 import thebetweenlands.common.world.gen.feature.WorldGenFluidPool;
-import thebetweenlands.common.world.gen.feature.WorldGenGiantRoot;
 import thebetweenlands.common.world.gen.feature.WorldGenMossCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenPlantCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRootsCluster;
 import thebetweenlands.common.world.gen.feature.WorldGenRottenLogs;
+import thebetweenlands.common.world.gen.feature.WorldGenRottenWeedwoodTree;
 import thebetweenlands.common.world.gen.feature.WorldGenSmallHollowLog;
 import thebetweenlands.common.world.gen.feature.WorldGenSpeleothem;
 import thebetweenlands.common.world.gen.feature.WorldGenSwampKelpCluster;
@@ -48,6 +47,7 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenGiantTreeDead;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenWillowTree;
 import thebetweenlands.util.CubicBezier;
 
 public class DecorationHelper {
@@ -106,6 +106,7 @@ public class DecorationHelper {
 	public static final WorldGenerator GEN_IDOL_HEAD = new WorldGenIdolHeads();
 	public static final WorldGenerator GEN_SMALL_RUINS = new WorldGenSmallRuins();
 	public static final WorldGenGiantTree GEN_GIANT_TREE = new WorldGenGiantTree();
+	public static final WorldGenerator GEN_WILLOW_TREE = new WorldGenWillowTree();
 	public static final WorldGenerator GEN_BULB_CAPPED_MUSHROOMS = new WorldGenPlantCluster(BlockRegistry.BULB_CAPPED_MUSHROOM.getDefaultState(), 5, 40);
 	public static final WorldGenerator GEN_SPAWNER = new WorldGenSpawner();
 	public static final WorldGenWightFortress GEN_WIGHT_FORTRESS = new WorldGenWightFortress();
@@ -255,6 +256,16 @@ public class DecorationHelper {
 			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) ||
 					(SurfaceType.WATER.matches(world, pos) && SurfaceType.DIRT.matches(world, pos.down())))
 				return GEN_WEEDWOOD_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
+		}
+		return false;
+	}
+	
+	public static boolean generateWillowTree(DecoratorPositionProvider decorator) {
+		if (canShortThingsGenerateHere(decorator)) {
+			BlockPos pos = decorator.getRandomPos(8);
+			World world = decorator.getWorld();
+			if (world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down()))
+				return GEN_WILLOW_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
 		}
 		return false;
 	}
