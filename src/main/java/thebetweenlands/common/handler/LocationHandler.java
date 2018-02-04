@@ -67,7 +67,7 @@ public class LocationHandler {
 					if (player instanceof EntityPlayerMP) {
 						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, loc.getName());
 					}
-					if (loc instanceof LocationCragrockTower && !player.isCreative()) {
+					if (loc instanceof LocationCragrockTower && !player.isCreative() && !player.isSpectator()) {
 						LocationCragrockTower location = (LocationCragrockTower) loc;
 						BlockPos structurePos = location.getStructurePos();
 
