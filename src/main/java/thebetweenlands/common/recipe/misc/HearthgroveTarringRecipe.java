@@ -21,14 +21,14 @@ public class HearthgroveTarringRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
 	@Override
 	public boolean matches(InventoryCrafting inv, World worldIn) {
 		boolean tar = false;
-		boolean hearthgroveLog = false;
+		int hearthgroveLogs = 0;
 		for(int i = 0; i < inv.getSizeInventory(); i++) {
 			ItemStack stack = inv.getStackInSlot(i);
 			if(!stack.isEmpty()) {
 				if(stack.getItem() == Item.getItemFromBlock(BlockRegistry.LOG_HEARTHGROVE)) {
 					IBlockState state = BlockRegistry.LOG_HEARTHGROVE.getStateFromMeta(stack.getMetadata());
 					if(!state.getValue(BlockHearthgroveLog.TARRED)) {
-						hearthgroveLog = true;
+						hearthgroveLogs++;
 					} else {
 						return false;
 					}
@@ -48,7 +48,7 @@ public class HearthgroveTarringRecipe extends IForgeRegistryEntry.Impl<IRecipe> 
 				}
 			}
 		}
-		return tar && hearthgroveLog;
+		return tar && hearthgroveLogs > 0 && hearthgroveLogs <= 8;
 	}
 
 	@Override

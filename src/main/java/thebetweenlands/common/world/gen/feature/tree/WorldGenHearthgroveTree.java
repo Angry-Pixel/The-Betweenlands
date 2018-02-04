@@ -30,7 +30,7 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 		final int z = pos.getZ();
 
 		int height = rand.nextInt(6) + 7;
-		int canopySize = height / 3 + 1 + rand.nextInt(height / 3 + 1);
+		int canopySize = (int)(((rand.nextDouble() * height) / 12.0D) * 4 + 4);
 
 		if(!this.rotatedCubeCantReplace(world, x, y + 2, z, 0, 0, 0, 1, height, 1, 0) && 
 				!this.rotatedCubeCantReplace(world, x, y + 2, z, -canopySize+2, 0, -canopySize+2, canopySize*2-2, height, canopySize*2-2, 0)) {
@@ -38,7 +38,8 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 			IBlockState log = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
 			IBlockState logY = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.Y);
 			IBlockState leaves = BlockRegistry.LEAVES_HEARTHGROVE_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
-
+			IBlockState hangers = BlockRegistry.HANGER.getDefaultState();
+			
 			int rootHeight = rand.nextInt(3) + 1;
 
 			for(int i = rootHeight; i <= height; i++) {
@@ -116,6 +117,18 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 				final int k = i;
 				this.generateCanopyLayer(world, pos.up(height - canopyStart + i), canopySize - i, leaves, p -> {
 					return world.isAirBlock(p) && ((k > canopyStart || p.getX() != x || p.getZ() != z) && (k > 2 || (canopySize - k) < 4 || Math.sqrt((p.getX()-x)*(p.getX()-x)+(p.getZ()-z)*(p.getZ()-z)) >= canopySize - k - 3));
+				}, p -> {
+					if(k == 0 && rand.nextInt(6) == 0) {
+						int hangerLength = rand.nextInt(5) + 1;
+						for(int yo = 0; yo < hangerLength; yo++) {
+							BlockPos hangerPos = p.down(1 + yo);
+							if(world.isAirBlock(hangerPos)) {
+								this.setBlockAndNotifyAdequately(world, hangerPos, hangers);
+							} else {
+								break;
+							}
+						}
+					}
 				});
 			}
 
@@ -173,7 +186,7 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 		return false;
 	}
 
-	protected void generateCanopyLayer(World world, BlockPos center, final int size, IBlockState leaves, final @Nullable Predicate<BlockPos> pred) {
+	protected void generateCanopyLayer(World world, BlockPos center, final int size, IBlockState leaves, final @Nullable Predicate<BlockPos> pred, @Nullable Consumer<BlockPos> postprocessor) {
 		int x = center.getX();
 		int y = center.getY();
 		int z = center.getZ();
@@ -203,6 +216,9 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 				if(!setStates[index]) {
 					setStates[index] = true;
 				}
+				if(postprocessor != null) {
+					postprocessor.accept(pos);
+				}
 			};
 
 			for(int i = 0; i <= span; i++) {
@@ -211,27 +227,27 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 			}
 			break;
 		case 4:
-			this.rotatedCubeVolume(world, pred, x, y, z, -2, 0, -2, leaves, 5, 1, 5, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, -3, 0, 0, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 3, 0, 0, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, -3, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 3, leaves, 1, 1, 1, 0);
+			this.rotatedCubeVolume(world, pred, x, y, z, -2, 0, -2, leaves, 5, 1, 5, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, -3, 0, 0, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 3, 0, 0, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, -3, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 3, leaves, 1, 1, 1, 0, postprocessor);
 			break;
 		case 3:
-			this.rotatedCubeVolume(world, pred, x, y, z, -1, 0, -1, leaves, 3, 1, 3, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, -2, 0, 0, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 2, 0, 0, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, -2, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 2, leaves, 1, 1, 1, 0);
+			this.rotatedCubeVolume(world, pred, x, y, z, -1, 0, -1, leaves, 3, 1, 3, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, -2, 0, 0, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 2, 0, 0, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, -2, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 2, leaves, 1, 1, 1, 0, postprocessor);
 			break;
 		case 2:
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 0, leaves, 2, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, -1, 0, 0, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 1, leaves, 1, 1, 1, 0);
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, -1, leaves, 1, 1, 1, 0);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 0, leaves, 2, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, -1, 0, 0, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 1, leaves, 1, 1, 1, 0, postprocessor);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, -1, leaves, 1, 1, 1, 0, postprocessor);
 			break;
 		case 1:
-			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 0, leaves, 1, 1, 1, 0);
+			this.rotatedCubeVolume(world, pred, x, y, z, 0, 0, 0, leaves, 1, 1, 1, 0, postprocessor);
 			break;
 		}
 	}

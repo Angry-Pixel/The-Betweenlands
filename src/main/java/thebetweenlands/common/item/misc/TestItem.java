@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -85,15 +86,17 @@ public class TestItem extends Item {
 			}
 		*/
 		/*
-			WorldGenWillowTree tree = new WorldGenWillowTree();
+			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+		
 			WorldGenHearthgroveTree tree = new WorldGenHearthgroveTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}
+		
 		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");

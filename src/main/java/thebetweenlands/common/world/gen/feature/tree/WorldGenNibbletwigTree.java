@@ -20,13 +20,14 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 		int y = pos.getY();
 		int z = pos.getZ();
 
-		int height = rand.nextInt(6) + 11;
+		double foldedNormalDist = (Math.abs(rand.nextGaussian()) + 0.2D) / 3.0D;
+		int height = (int)(Math.pow((1 - Math.min(foldedNormalDist, 1)), 1.5D) * 10) + 5;
 
 		if(!this.rotatedCubeCantReplace(world, x, y + 2, z, -2, 0, -2, 5, height, 5, 0)) {
 			int bend1 = rand.nextInt(3) + 6;
 			int bend2 = rand.nextInt(2) == 0 ? rand.nextInt(3) + 10 : -1;
 
-			int canopy1 = rand.nextInt(2) + 4;
+			int canopy1 = rand.nextInt(3) + 3;
 
 			IBlockState log = BlockRegistry.LOG_NIBBLETWIG.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
 			IBlockState leaves = BlockRegistry.LEAVES_NIBBLETWIG_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
@@ -70,6 +71,8 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 						BlockPos ivyPosY = ivyPos.down(yo);
 						if(world.isAirBlock(ivyPosY)) {
 							this.setBlockAndNotifyAdequately(world, ivyPosY, ivy.withProperty(BlockPoisonIvy.getPropertyFor(offset.getOpposite()), true));
+						} else {
+							break;
 						}
 					}
 				}
@@ -120,6 +123,8 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 						BlockPos ivyPosY = ivyPos.down(yo);
 						if(world.isAirBlock(ivyPosY)) {
 							this.setBlockAndNotifyAdequately(world, ivyPosY, ivy.withProperty(BlockPoisonIvy.getPropertyFor(ivyOffset.getOpposite()), true));
+						} else {
+							break;
 						}
 					}
 

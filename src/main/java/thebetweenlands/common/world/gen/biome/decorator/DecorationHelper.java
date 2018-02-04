@@ -264,7 +264,7 @@ public class DecorationHelper {
 	
 	public static boolean generateNibbletwigTree(DecoratorPositionProvider decorator) {
 		if (canShortThingsGenerateHere(decorator)) {
-			BlockPos pos = decorator.getRandomPos(9);
+			BlockPos pos = decorator.getRandomPos(10);
 			World world = decorator.getWorld();
 			if (world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down()))
 				return GEN_NIBBLETWIG_TREE.generate(decorator.getWorld(), decorator.getRand(), pos.down());
