@@ -40,15 +40,18 @@ import thebetweenlands.util.QuadBuilder;
 public class ModelWeedwoodBush implements IModel {
 	private final ResourceLocation leavesTexture;
 	private final ResourceLocation sticksTexture;
+	private final int leavesTintIndex;
 
 	public ModelWeedwoodBush() {
 		this.leavesTexture = new ResourceLocation(ModInfo.ID, "blocks/leaves_weedwood_bush");
 		this.sticksTexture = new ResourceLocation(ModInfo.ID, "items/weedwood_stick");
+		this.leavesTintIndex = 0;
 	}
 
-	public ModelWeedwoodBush(ResourceLocation leaves, ResourceLocation sticks) {
+	public ModelWeedwoodBush(ResourceLocation leaves, ResourceLocation sticks, int leavesTintIndex) {
 		this.leavesTexture = leaves;
 		this.sticksTexture = sticks;
+		this.leavesTintIndex = leavesTintIndex;
 	}
 
 	@Override
@@ -64,7 +67,7 @@ public class ModelWeedwoodBush implements IModel {
 	@Override
 	public IBakedModel bake(IModelState state, VertexFormat format, java.util.function.Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter) {
 		ImmutableMap<TransformType, TRSRTransformation> map = PerspectiveMapWrapper.getTransforms(state);
-		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, bakedTextureGetter.apply(this.leavesTexture), bakedTextureGetter.apply(this.sticksTexture));
+		return new ModelBakedWeedwoodBush(format, state.apply(Optional.empty()), map, bakedTextureGetter.apply(this.leavesTexture), bakedTextureGetter.apply(this.sticksTexture), this.leavesTintIndex);
 	}
 
 	@Override
@@ -96,7 +99,13 @@ public class ModelWeedwoodBush implements IModel {
 			sticks = TextureMap.LOCATION_MISSING_TEXTURE;
 		}	
 
-		return new ModelWeedwoodBush(leaves, sticks);
+		int leavesTintIndex = this.leavesTintIndex;
+
+		if(customData.containsKey("tint_index_leaves")) {
+			leavesTintIndex = JsonUtils.getInt(parser.parse(customData.get("tint_index_leaves")), "tint_index_leaves");
+		}
+
+		return new ModelWeedwoodBush(leaves, sticks, leavesTintIndex);
 	}
 
 	public static class ModelBakedWeedwoodBush implements IBakedModel {
@@ -105,13 +114,15 @@ public class ModelWeedwoodBush implements IModel {
 		private final VertexFormat format;
 		private final TextureAtlasSprite textureLeaves;
 		private final TextureAtlasSprite textureSticks;
+		private final int leavesTintIndex;
 
-		private ModelBakedWeedwoodBush(VertexFormat format, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, TextureAtlasSprite textureLeaves, TextureAtlasSprite textureSticks) {
+		private ModelBakedWeedwoodBush(VertexFormat format, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, TextureAtlasSprite textureLeaves, TextureAtlasSprite textureSticks, int leavesTintIndex) {
 			this.transformation = transformation.isPresent() ? transformation.get() : null;
 			this.transforms = transforms;
 			this.format = format;
 			this.textureLeaves = textureLeaves;
 			this.textureSticks = textureSticks;
+			this.leavesTintIndex = leavesTintIndex;
 		}
 
 		@Override
@@ -146,7 +157,7 @@ public class ModelWeedwoodBush implements IModel {
 
 				QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation);
 
-				builder.setTintIndex(0);
+				builder.setTintIndex(leavesTintIndex);
 				builder.setSprite(this.textureLeaves);
 
 				// Right Side
@@ -338,7 +349,7 @@ public class ModelWeedwoodBush implements IModel {
 					rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 
 					builder.setTintIndex(-1);
-					
+
 					for(int i = 0; i < cSticks; i++) {
 						double rotation = Math.PI * 2.0f / (float)cSticks * (float)i;
 						double xp1 = Math.sin(rotation) * 0.4f;
