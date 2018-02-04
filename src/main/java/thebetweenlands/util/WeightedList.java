@@ -3,6 +3,8 @@ package thebetweenlands.util;
 import java.util.ArrayList;
 import java.util.Random;
 
+import thebetweenlands.api.entity.spawning.IWeightProvider;
+
 public class WeightedList<T extends IWeightProvider> extends ArrayList<T> {
 
     private static final long serialVersionUID = 9036828805904893875L;

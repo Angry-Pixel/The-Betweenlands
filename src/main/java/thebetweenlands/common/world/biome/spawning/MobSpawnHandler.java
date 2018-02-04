@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -18,6 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.util.ClassInheritanceMultiMap;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -32,11 +32,13 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
-import thebetweenlands.util.IWeightProvider;
 import thebetweenlands.util.WeightedList;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -71,7 +73,7 @@ public class MobSpawnHandler {
 	/**
 	 * Default spawning weight is 100
 	 */
-	public static class BLSpawnEntry implements IWeightProvider {
+	public static class BLSpawnEntry implements ICustomSpawnEntry {
 		private final Class<? extends EntityLiving> entityType;
 		private final Constructor<? extends EntityLiving> entityCtor;
 		private final short baseWeight;
@@ -85,11 +87,11 @@ public class MobSpawnHandler {
 		private double spawnCheckRangeY = 6.0D;
 		private double groupSpawnRadius = 6.0D;
 		private int spawningInterval = 0;
-		
+
 		/**
 		 * The ID is used to save the spawn entry data such as last spawn time. A negative ID means that no data will be saved
 		 */
-		public final int id;
+		public final ResourceLocation id;
 
 		public BLSpawnEntry(Class<? extends EntityLiving> entityType) {
 			this(-1, entityType, (short) 100);
@@ -98,13 +100,13 @@ public class MobSpawnHandler {
 		public BLSpawnEntry(Class<? extends EntityLiving> entityType, short weight) {
 			this(-1, entityType, weight);
 		}
-		
+
 		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType) {
 			this(id, entityType, (short) 100);
 		}
 
 		public BLSpawnEntry(int id, Class<? extends EntityLiving> entityType, short weight) {
-			this.id = id;
+			this.id = new ResourceLocation(ModInfo.ID, String.valueOf(id));
 			this.entityType = entityType;
 			try {
 				this.entityCtor = this.entityType.getConstructor(World.class);
@@ -114,32 +116,23 @@ public class MobSpawnHandler {
 			this.weight = weight;
 			this.baseWeight = weight;
 		}
-		
-		/**
-		 * Returns whether the data of this spawn entry should be saved
-		 * @return
-		 */
-		public boolean isSaved() {
-			return this.id >= 0;
+
+		@Override
+		public ResourceLocation getID() {
+			return this.id;
 		}
-		
-		/**
-		 * Returns whether an entity can spawn based on the spawning position and the surface block below
-		 * @param world
-		 * @param pos
-		 * @param blockState The block where the entity will spawn
-		 * @param surfaceBlockState The block below where the entity will spawn
-		 */
+
+		@Override
+		public boolean isSaved() {
+			return !"-1".equals(this.id.getResourcePath());
+		}
+
+		@Override
 		public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
 			return surfaceBlockState.isNormalCube();
 		}
 
-		/**
-		 * Updates the spawning data based on the spawning position
-		 * @param world
-		 * @parampos
-		 * @return
-		 */
+		@Override
 		public void update(World world, BlockPos pos) { }
 
 		@Override
@@ -147,44 +140,29 @@ public class MobSpawnHandler {
 			return this.weight;
 		}
 
-		protected final BLSpawnEntry setWeight(short weight) {
+		@Override
+		public final BLSpawnEntry setWeight(short weight) {
 			this.weight = weight;
 			return this;
 		}
 
-		/**
-		 * Sets the spawning interval
-		 * @param interval
-		 * @return
-		 */
+		@Override
 		public final BLSpawnEntry setSpawningInterval(int interval) {
 			this.spawningInterval = interval;
 			return this;
 		}
 
-		/**
-		 * Returns the spawning interval
-		 * @return
-		 */
+		@Override
 		public final int getSpawningInterval() {
 			return this.spawningInterval;
 		}
 
-		/**
-		 * Returns the initial base weight
-		 * @return
-		 */
+		@Override
 		public final short getBaseWeight() {
 			return this.baseWeight;
 		}
 
-		/**
-		 * Sets the desired minimum and maximum group size. The minimum desired group size
-		 * may not always be achieved depending on the area around the initial spawn point.
-		 * @param min
-		 * @param max
-		 * @return
-		 */
+		@Override
 		public final BLSpawnEntry setGroupSize(int min, int max) {
 			if(max < min) {
 				throw new RuntimeException("Maximum group size cannot be smaller than minimum group size!");
@@ -194,91 +172,100 @@ public class MobSpawnHandler {
 			return this;
 		}
 
+		@Override
 		public final int getMaxGroupSize() {
 			return this.maxGroupSize;
 		}
 
+		@Override
 		public final int getMinGroupSize() {
 			return this.minGroupSize;
 		}
 
+		@Override
 		public final int getChunkLimit() {
 			return this.chunkLimit;
 		}
 
+		@Override
 		public final BLSpawnEntry setChunkLimit(int limit) {
 			this.chunkLimit = limit;
 			return this;
 		}
 
+		@Override
 		public final int getWorldLimit() {
 			return this.worldLimit;
 		}
 
+		@Override
 		public final BLSpawnEntry setWorldLimit(int limit) {
 			this.worldLimit = limit;
 			return this;
 		}
 
+		@Override
 		public final int getSubChunkLimit() {
 			return this.subChunkLimit;
 		}
 
+		@Override
 		public final BLSpawnEntry setSubChunkLimit(int limit) {
 			this.subChunkLimit = limit;
 			return this;
 		}
 
+		@Override
 		public final BLSpawnEntry setHostile(boolean hostile) {
 			this.hostile = hostile;
 			return this;
 		}
 
+		@Override
 		public final boolean isHostile() {
 			return this.hostile;
 		}
 
+		@Override
 		public final BLSpawnEntry setSpawnCheckRadius(double radius) {
 			this.spawnCheckRadius = radius;
 			return this;
 		}
 
+		@Override
 		public final double getSpawnCheckRadius() {
 			return this.spawnCheckRadius;
 		}
 
+		@Override
 		public final BLSpawnEntry setSpawnCheckRangeY(double y) {
 			this.spawnCheckRangeY = y;
 			return this;
 		}
 
+		@Override
 		public final double getSpawnCheckRangeY() {
 			return this.spawnCheckRangeY;
 		}
-		
+
+		@Override
 		public final BLSpawnEntry setGroupSpawnRadius(double radius) {
 			this.groupSpawnRadius = radius;
 			return this;
 		}
 
+		@Override
 		public final double getGroupSpawnRadius() {
 			return this.groupSpawnRadius;
 		}
 
-		/**
-		 * Returns whether already existing entity should be taken into account when spawning groups
-		 * @return
-		 */
-		protected boolean shouldCheckExistingGroups() {
+		@Override
+		public boolean shouldCheckExistingGroups() {
 			return true;
 		}
 
-		/**
-		 * Creates a new entity
-		 * @param world
-		 * @return
-		 */
-		protected EntityLiving createEntity(World world) {
+		@Override
+		public EntityLiving createEntity(World world) {
 			try {
 				return this.entityCtor.newInstance(world);
 			} catch(Exception ex) {
@@ -287,17 +274,13 @@ public class MobSpawnHandler {
 			return null;
 		}
 
+		@Override
 		public final Class<? extends EntityLiving> getEntityType() {
 			return this.entityType;
 		}
-		
-		/**
-		 * Called right after the entity is spawned in the world
-		 * @param entity
-		 */
-		protected void onSpawned(EntityLivingBase entity) {
-			
-		}
+
+		@Override
+		public void onSpawned(EntityLivingBase entity) { }
 	}
 
 	@SubscribeEvent
@@ -306,7 +289,7 @@ public class MobSpawnHandler {
 			WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
 			if(world == null || world.playerEntities.isEmpty())
 				return;
-			
+
 			if(world.getGameRules().getBoolean("doMobSpawning") && world.getTotalWorldTime() % 4 == 0) {
 				//long start = System.nanoTime();
 				this.populateWorld(world);
@@ -412,9 +395,9 @@ public class MobSpawnHandler {
 				int totalWeight = 0;
 
 				//Get possible spawn entries and update weights
-				List<BLSpawnEntry> biomeSpawns = ((BiomeBetweenlands)biome).getSpawnEntries();
-				List<BLSpawnEntry> possibleSpawns = new ArrayList<BLSpawnEntry>();
-				for(BLSpawnEntry spawnEntry : biomeSpawns) {
+				List<ICustomSpawnEntry> biomeSpawns = ((BiomeBetweenlands)biome).getSpawnEntries();
+				List<ICustomSpawnEntry> possibleSpawns = new ArrayList<>();
+				for(ICustomSpawnEntry spawnEntry : biomeSpawns) {
 					if(!((spawnEntry.isHostile() && !spawnHostiles) || (!spawnEntry.isHostile() && !spawnAnimals))) {
 						totalBaseWeight += spawnEntry.getBaseWeight();
 						possibleSpawns.add(spawnEntry);
@@ -426,11 +409,11 @@ public class MobSpawnHandler {
 				if(possibleSpawns.isEmpty())
 					continue;
 
-				WeightedList<BLSpawnEntry> weightedPossibleSpawns = new WeightedList<BLSpawnEntry>();
+				WeightedList<ICustomSpawnEntry> weightedPossibleSpawns = new WeightedList<>();
 				weightedPossibleSpawns.addAll(possibleSpawns);
 				weightedPossibleSpawns.recalculateWeight();
 
-				BLSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(world.rand);
+				ICustomSpawnEntry spawnEntry = weightedPossibleSpawns.getRandomItem(world.rand);
 				if(spawnEntry == null) {
 					continue;
 				}
@@ -438,7 +421,7 @@ public class MobSpawnHandler {
 				int dynamicLimitBase = (int)((double)entityLimit / (double)totalBaseWeight * spawnEntry.getBaseWeight());
 				int dynamicLimit = (int)((double)entityLimit / (double)totalWeight * spawnEntry.getWeight());
 
-				int spawnEntityCount = this.entityCounts.get(spawnEntry.entityType);
+				int spawnEntityCount = this.entityCounts.get(spawnEntry.getEntityType());
 
 				if(spawnEntityCount >= Math.max(dynamicLimit, dynamicLimitBase) || (spawnEntry.getWorldLimit() >= 0 && spawnEntityCount >= spawnEntry.getWorldLimit())) {
 					//Entity reached world spawning limit
@@ -446,7 +429,7 @@ public class MobSpawnHandler {
 				}
 
 				int desiredGroupSize = spawnEntry.getMinGroupSize() + world.rand.nextInt(spawnEntry.getMaxGroupSize() - spawnEntry.getMinGroupSize() + 1);
-				double groupCheckRadius = spawnEntry.spawnCheckRadius;
+				double groupCheckRadius = spawnEntry.getSpawnCheckRadius();
 				//Check whether chunks are loaded in the check radius, prevents entities from spawning somewhere even though the group limit was already reached in an unloaded chunk
 				int csx = MathHelper.floor(spawnPos.getX() - groupCheckRadius) >> 4;
 				int cex = MathHelper.floor(spawnPos.getX() + groupCheckRadius) >> 4;
@@ -459,16 +442,16 @@ public class MobSpawnHandler {
 						}
 					}
 				}
-				double groupSpawnRadius = spawnEntry.groupSpawnRadius;
-				Class<? extends Entity> entityType = spawnEntry.entityType;
+				double groupSpawnRadius = spawnEntry.getGroupSpawnRadius();
+				Class<? extends Entity> entityType = spawnEntry.getEntityType();
 				boolean checkExistingGroups = spawnEntry.shouldCheckExistingGroups();
 
 				if(checkExistingGroups) {
 					List<Entity> foundGroupEntities = world.getEntitiesWithinAABB(entityType, new AxisAlignedBB(
-							spawnPos.getX() - groupCheckRadius, spawnPos.getY() - spawnEntry.spawnCheckRangeY, spawnPos.getZ() - groupCheckRadius, 
-							spawnPos.getX() + groupCheckRadius, spawnPos.getY() + spawnEntry.spawnCheckRangeY, spawnPos.getZ() + groupCheckRadius));
+							spawnPos.getX() - groupCheckRadius, spawnPos.getY() - spawnEntry.getSpawnCheckRangeY(), spawnPos.getZ() - groupCheckRadius, 
+							spawnPos.getX() + groupCheckRadius, spawnPos.getY() + spawnEntry.getSpawnCheckRangeY(), spawnPos.getZ() + groupCheckRadius));
 					for(Entity foundGroupEntity : foundGroupEntities) {
-						if(foundGroupEntity.getDistance(spawnPos.getX(), foundGroupEntity.posY + (spawnPos.getY() - foundGroupEntity.posY) / spawnEntry.spawnCheckRangeY * groupCheckRadius, spawnPos.getZ()) <= groupCheckRadius) {
+						if(foundGroupEntity.getDistance(spawnPos.getX(), foundGroupEntity.posY + (spawnPos.getY() - foundGroupEntity.posY) / spawnEntry.getSpawnCheckRangeY() * groupCheckRadius, spawnPos.getZ()) <= groupCheckRadius) {
 							desiredGroupSize--;
 						}
 					}
@@ -483,16 +466,16 @@ public class MobSpawnHandler {
 					long lastSpawn = -1;
 					if(worldStorage != null) {
 						spawnEntriesData = worldStorage.getBiomeSpawnEntriesData((BiomeBetweenlands)biome);
-						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry.id);
+						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry);
 					}
-					
+
 					if(!ignoreRestrictions) {
 						if(spawnEntriesData != null && lastSpawn == -1) {
-							spawnEntriesData.setLastSpawn(spawnEntry.id, world.getTotalWorldTime());
+							spawnEntriesData.setLastSpawn(spawnEntry, world.getTotalWorldTime());
 							continue;
 						}
 						//Adjust intervals for MP when there are multiple players and the loaded area is bigger -> smaller intervals
-						int adjustedInterval = (int)(spawnEntry.spawningInterval / loadedAreas);
+						int adjustedInterval = (int)(spawnEntry.getSpawningInterval() / loadedAreas);
 						if(spawnEntriesData != null && world.getTotalWorldTime() - lastSpawn < adjustedInterval) {
 							//Too early, don't spawn yet
 							continue;
@@ -500,7 +483,7 @@ public class MobSpawnHandler {
 					}
 
 					IEntityLivingData groupData = null;
-					
+
 					while(groupSpawnAttempts++ < maxGroupSpawnAttempts && groupSpawnedEntities < desiredGroupSize) {
 						BlockPos entitySpawnPos = this.getRandomSpawnPosition(world, spawnPos, MathHelper.floor(groupSpawnRadius));
 
@@ -524,7 +507,7 @@ public class MobSpawnHandler {
 						for(int l = 0; l < entityLists.length; l++) {
 							int subChunkEntityCount = 0;
 							for(Entity entity : entityLists[l]) {
-								if(entity.getClass() == spawnEntry.entityType) {
+								if(entity.getClass() == spawnEntry.getEntityType()) {
 									subChunkEntityCount++;
 									chunkEntityCount++;
 								}
@@ -561,13 +544,13 @@ public class MobSpawnHandler {
 									entityNBT.setBoolean("naturallySpawned", true);
 
 									world.spawnEntity(newEntity);
-									
+
 									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz)) {
 										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
 									}
 
 									spawnEntry.onSpawned(newEntity);
-									
+
 									if (groupSpawnedEntities >= ForgeEventFactory.getMaxSpawnPackSize(newEntity))  {
 										break;
 									}
@@ -577,7 +560,7 @@ public class MobSpawnHandler {
 					}
 
 					if(spawnEntriesData != null && !ignoreRestrictions && groupSpawnedEntities > 0) {
-						spawnEntriesData.setLastSpawn(spawnEntry.id, world.getTotalWorldTime());
+						spawnEntriesData.setLastSpawn(spawnEntry, world.getTotalWorldTime());
 					}
 				}
 			}

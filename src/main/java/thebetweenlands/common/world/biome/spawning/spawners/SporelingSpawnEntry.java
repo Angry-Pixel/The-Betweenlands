@@ -11,7 +11,7 @@ public class SporelingSpawnEntry extends TreeSpawnEntry {
 	}
 
 	@Override
-	protected void onSpawned(EntityLivingBase entity) {
+	public void onSpawned(EntityLivingBase entity) {
 		if(entity.isEntityAlive() && entity.world.rand.nextInt(10) == 0) {
 			EntityGecko gecko = new EntityGecko(entity.world);
 			gecko.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.world.rand.nextFloat() * 360, 0);

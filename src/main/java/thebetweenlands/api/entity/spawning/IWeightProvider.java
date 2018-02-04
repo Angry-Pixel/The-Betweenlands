@@ -1,4 +1,4 @@
-package thebetweenlands.util;
+package thebetweenlands.api.entity.spawning;
 
 public interface IWeightProvider {
 	short getWeight();

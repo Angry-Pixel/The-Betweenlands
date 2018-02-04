@@ -4,10 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gnu.trove.map.TIntLongMap;
+import gnu.trove.map.TObjectLongMap;
 import gnu.trove.map.hash.TIntLongHashMap;
+import gnu.trove.map.hash.TObjectLongHashMap;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -23,7 +29,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
 	private int environmentEventSyncTicks;
-	
+
 	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
@@ -32,12 +38,17 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return this.aspectManager;
 	}
 
-	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(BiomeBetweenlands biome) {
-		BiomeSpawnEntriesData data = this.biomeSpawnEntriesData.get(biome);
-		if(data == null) {
-			this.biomeSpawnEntriesData.put(biome, data = new BiomeSpawnEntriesData(biome));
+	@Override
+	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome) {
+		if(biome instanceof BiomeBetweenlands) {
+			BiomeBetweenlands biomeBL = (BiomeBetweenlands) biome;
+			BiomeSpawnEntriesData data = this.biomeSpawnEntriesData.get(biomeBL);
+			if(data == null) {
+				this.biomeSpawnEntriesData.put(biomeBL, data = new BiomeSpawnEntriesData(biomeBL));
+			}
+			return data;
 		}
-		return data;
+		return null;
 	}
 
 	@Override
@@ -69,14 +80,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
 					if(biomesNbt.hasKey(biome.getRegistryName().toString(), Constants.NBT.TAG_COMPOUND)) {
 						NBTTagCompound biomeSpawnEntriesNbt = biomesNbt.getCompoundTag(biome.getRegistryName().toString());
-						for(BLSpawnEntry spawnEntry : biome.getSpawnEntries()) {
-							if(spawnEntry.isSaved()) {
-								if(biomeSpawnEntriesNbt.hasKey(String.valueOf(spawnEntry.id), Constants.NBT.TAG_COMPOUND)) {
-									NBTTagCompound spawnEntryNbt = biomeSpawnEntriesNbt.getCompoundTag(String.valueOf(spawnEntry.id));
-									this.getBiomeSpawnEntriesData(biome).readFromNbt(spawnEntryNbt);
-								}
-							}
-						}
+						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomeSpawnEntriesNbt);
 					}
 				}
 			}
@@ -97,13 +101,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			NBTTagCompound biomesNbt = new NBTTagCompound();
 			for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
 				NBTTagCompound biomeSpawnEntriesNbt = new NBTTagCompound();
-				for(BLSpawnEntry spawnEntry : biome.getSpawnEntries()) {
-					if(spawnEntry.isSaved()) {
-						NBTTagCompound spawnEntryNbt = new NBTTagCompound();
-						this.getBiomeSpawnEntriesData(biome).writeToNbt(spawnEntryNbt);
-						biomeSpawnEntriesNbt.setTag(String.valueOf(spawnEntry.id), spawnEntryNbt);
-					}
-				}
+				this.getBiomeSpawnEntriesData(biome).writeToNbt(biomeSpawnEntriesNbt);
 				biomesNbt.setTag(biome.getRegistryName().toString(), biomeSpawnEntriesNbt);
 			}
 			nbt.setTag("biomeData", biomesNbt);
@@ -120,36 +118,47 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return null;
 	}
 
-	public static class BiomeSpawnEntriesData {
+	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {
 		public final BiomeBetweenlands biome;
 
-		private final TIntLongMap lastSpawnMap = new TIntLongHashMap();
-
+		private final TObjectLongMap<ResourceLocation> lastSpawnMap = new TObjectLongHashMap<>();
+		
 		protected BiomeSpawnEntriesData(BiomeBetweenlands biome) {
 			this.biome = biome;
 		}
 
-		public long getLastSpawn(int id) {
-			return this.lastSpawnMap.containsKey(id) ? this.lastSpawnMap.get(id) : -1;
+		@Override
+		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
+			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.get(spawnEntry.getID()) : -1;
 		}
 
-		public void setLastSpawn(int id, long lastSpawn) {
-			this.lastSpawnMap.put(id, lastSpawn);
+		@Override
+		public void setLastSpawn(ICustomSpawnEntry spawnEntry, long lastSpawn) {
+			this.lastSpawnMap.put(spawnEntry.getID(), lastSpawn);
+		}
+
+		@Override
+		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
+			return this.lastSpawnMap.remove(spawnEntry.getID());
 		}
 
 		public void readFromNbt(NBTTagCompound nbt) {
 			this.lastSpawnMap.clear();
-			for(BLSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
-				if(nbt.hasKey(String.valueOf(spawnEntry.id), Constants.NBT.TAG_LONG)) {
-					this.lastSpawnMap.put(spawnEntry.id, nbt.getLong(String.valueOf(spawnEntry.id)));
+			for(ICustomSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
+				if(spawnEntry.isSaved()) {
+					if(nbt.hasKey(spawnEntry.getID().toString(), Constants.NBT.TAG_LONG)) {
+						this.lastSpawnMap.put(spawnEntry.getID(), nbt.getLong(spawnEntry.getID().toString()));
+					}
 				}
 			}
 		}
 
 		public void writeToNbt(NBTTagCompound nbt) {
-			for(BLSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
-				if(this.lastSpawnMap.containsKey(spawnEntry.id)) {
-					nbt.setLong(String.valueOf(spawnEntry.id), this.lastSpawnMap.get(spawnEntry.id));
+			for(ICustomSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
+				if(spawnEntry.isSaved()) {
+					if(this.lastSpawnMap.containsKey(spawnEntry.getID())) {
+						nbt.setLong(spawnEntry.getID().toString(), this.lastSpawnMap.get(spawnEntry.getID()));
+					}
 				}
 			}
 		}

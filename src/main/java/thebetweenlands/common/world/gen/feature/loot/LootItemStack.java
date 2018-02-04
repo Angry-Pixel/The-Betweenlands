@@ -3,7 +3,7 @@ package thebetweenlands.common.world.gen.feature.loot;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.util.IWeightProvider;
+import thebetweenlands.api.entity.spawning.IWeightProvider;
 
 import java.util.Random;
 

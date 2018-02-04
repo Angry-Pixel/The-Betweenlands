@@ -6,7 +6,9 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 
 public interface IWorldStorage {
 	/**
@@ -101,4 +103,12 @@ public interface IWorldStorage {
 	 * @return
 	 */
 	public int getEnvironmentEventSyncTicks();
+	
+	/**
+	 * Returns the persistent biome spawn entries data for the specified biome
+	 * @param biome
+	 * @return
+	 */
+	@Nullable
+	public IBiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome);
 }
