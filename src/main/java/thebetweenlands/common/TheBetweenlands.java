@@ -194,5 +194,6 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(ItemDentrothystShield.class);
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventOverridesHandler.class);
 		MinecraftForge.EVENT_BUS.register(AdvancementHandler.class);
+		MinecraftForge.EVENT_BUS.register(FuelHandler.class);
 	}
 }

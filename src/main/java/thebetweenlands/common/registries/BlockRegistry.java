@@ -58,7 +58,24 @@ import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
-import thebetweenlands.common.block.misc.*;
+import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
+import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
+import thebetweenlands.common.block.misc.BlockDampTorch;
+import thebetweenlands.common.block.misc.BlockDentrothystPane;
+import thebetweenlands.common.block.misc.BlockGlassBetweenlands;
+import thebetweenlands.common.block.misc.BlockLadderBetweenlands;
+import thebetweenlands.common.block.misc.BlockLeverBetweenlands;
+import thebetweenlands.common.block.misc.BlockMossBed;
+import thebetweenlands.common.block.misc.BlockMudFlowerPot;
+import thebetweenlands.common.block.misc.BlockOctine;
+import thebetweenlands.common.block.misc.BlockPaneBetweenlands;
+import thebetweenlands.common.block.misc.BlockPolishedDentrothyst;
+import thebetweenlands.common.block.misc.BlockPressurePlateBetweenlands;
+import thebetweenlands.common.block.misc.BlockRope;
+import thebetweenlands.common.block.misc.BlockRubberTap;
+import thebetweenlands.common.block.misc.BlockSludge;
+import thebetweenlands.common.block.misc.BlockSulfurTorch;
+import thebetweenlands.common.block.misc.BlockTrapDoorBetweenlands;
 import thebetweenlands.common.block.plant.BlockAlgae;
 import thebetweenlands.common.block.plant.BlockBlackHatMushroom;
 import thebetweenlands.common.block.plant.BlockBladderwortFlower;
@@ -130,7 +147,6 @@ import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockGiantRoot;
 import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
-import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
@@ -267,7 +283,7 @@ public class BlockRegistry {
     		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD);
     	}
     };
-    public static final Block LEAVES_SAP_TREE = new BlockLeavesBetweenlands() {
+    public static final Block LEAVES_SAP_TREE = new BlockTintedLeaves() {
         @Override
         public Item getItemDropped(IBlockState state, Random rand, int fortune) {
             return Item.getItemFromBlock(BlockRegistry.SAPLING_SAP);
@@ -280,6 +296,12 @@ public class BlockRegistry {
         }
     };
     public static final Block LEAVES_HEARTHGROVE_TREE = new BlockTintedLeaves() {
+    	@Override
+    	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+    		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD); //TODO Replace with own sapling
+    	}
+    };
+    public static final Block LEAVES_NIBBLETWIG_TREE = new BlockTintedLeaves() {
     	@Override
     	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
     		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD); //TODO Replace with own sapling

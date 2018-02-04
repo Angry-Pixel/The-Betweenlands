@@ -31,26 +31,39 @@ import thebetweenlands.common.item.herblore.ItemCrushed;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
-import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
-import thebetweenlands.common.recipe.misc.*;
+import thebetweenlands.common.recipe.misc.AnimatorRecipe;
+import thebetweenlands.common.recipe.misc.BookMergeRecipe;
+import thebetweenlands.common.recipe.misc.CompostRecipe;
+import thebetweenlands.common.recipe.misc.DruidAltarRecipe;
+import thebetweenlands.common.recipe.misc.HearthgroveTarringRecipe;
+import thebetweenlands.common.recipe.misc.PestleAndMortarRecipe;
+import thebetweenlands.common.recipe.misc.RecipeLurkerSkinPouchUpgrades;
+import thebetweenlands.common.recipe.misc.RecipeMarshRunnerBoots;
+import thebetweenlands.common.recipe.misc.RecipeMummyBait;
+import thebetweenlands.common.recipe.misc.RecipesAspectVials;
+import thebetweenlands.common.recipe.misc.RecipesCircleGems;
+import thebetweenlands.common.recipe.misc.RecipesCoating;
+import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
+import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
 import thebetweenlands.util.config.ConfigHandler;
 
 public class RecipeRegistry {
 
-	public static ResourceLocation CIRCLE_GEMS = new ResourceLocation(ModInfo.ID, "recipe_circle_gems");
-	public static ResourceLocation COATING = new ResourceLocation(ModInfo.ID, "recipe_coating");
-	public static ResourceLocation LIFE_CRYSTAL = new ResourceLocation(ModInfo.ID, "recipe_life_crystal");
-	public static ResourceLocation PLANT_TONIC = new ResourceLocation(ModInfo.ID, "recipe_plant_tonic");
-	public static ResourceLocation LURKER_POUCH = new ResourceLocation(ModInfo.ID, "recipe_lurker_skin_pouch_upgrade");
-	public static ResourceLocation MUMMY_BAIT = new ResourceLocation(ModInfo.ID, "recipe_mummy_bait");
-	public static ResourceLocation ASPECT_VIAL = new ResourceLocation(ModInfo.ID, "recipe_aspect_vial");
-	public static ResourceLocation RUNNER_BOOTS = new ResourceLocation(ModInfo.ID, "recipe_marsh_runner_boots");
-	public static ResourceLocation BOOK_MERGE = new ResourceLocation(ModInfo.ID, "recipe_book_merge");
-
+	public static final ResourceLocation CIRCLE_GEMS = new ResourceLocation(ModInfo.ID, "recipe_circle_gems");
+	public static final ResourceLocation COATING = new ResourceLocation(ModInfo.ID, "recipe_coating");
+	public static final ResourceLocation LIFE_CRYSTAL = new ResourceLocation(ModInfo.ID, "recipe_life_crystal");
+	public static final ResourceLocation PLANT_TONIC = new ResourceLocation(ModInfo.ID, "recipe_plant_tonic");
+	public static final ResourceLocation LURKER_POUCH = new ResourceLocation(ModInfo.ID, "recipe_lurker_skin_pouch_upgrade");
+	public static final ResourceLocation MUMMY_BAIT = new ResourceLocation(ModInfo.ID, "recipe_mummy_bait");
+	public static final ResourceLocation ASPECT_VIAL = new ResourceLocation(ModInfo.ID, "recipe_aspect_vial");
+	public static final ResourceLocation RUNNER_BOOTS = new ResourceLocation(ModInfo.ID, "recipe_marsh_runner_boots");
+	public static final ResourceLocation BOOK_MERGE = new ResourceLocation(ModInfo.ID, "recipe_book_merge");
+	public static final ResourceLocation HEARTHGROVE_LOG_TARRING = new ResourceLocation(ModInfo.ID, "hearthgrove_log_tarring");
+	
 	private RecipeRegistry() { }
 
 	public static void init() {
@@ -201,6 +214,7 @@ public class RecipeRegistry {
 		registry.register(new RecipesAspectVials().setRegistryName(ASPECT_VIAL));
 		registry.register(new RecipeMarshRunnerBoots().setRegistryName(RUNNER_BOOTS));
 		registry.register(new BookMergeRecipe().setRegistryName(BOOK_MERGE));
+		registry.register(new HearthgroveTarringRecipe().setRegistryName(HEARTHGROVE_LOG_TARRING));
 	}
 
 	private static void registerSmelting() {

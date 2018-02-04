@@ -94,6 +94,8 @@ tile.thebetweenlands.green_middle_gem_ore.name=Green Middle Gem Ore
 tile.thebetweenlands.leaves_rubber_tree.name=Rubber Tree Leaves
 tile.thebetweenlands.leaves_sap_tree.name=Sap Tree Leaves
 tile.thebetweenlands.leaves_weedwood_tree.name=Weedwood Leaves
+tile.thebetweenlands.leaves_hearthgrove_tree.name=Hearthgrove Leaves
+tile.thebetweenlands.leaves_nibbletwig_tree.name=Nibbletwig Leaves
 tile.thebetweenlands.life_crystal_stalactite.default.name=Life Crystal Stalactite
 tile.thebetweenlands.life_crystal_stalactite.ore.name=Life Crystal Ore
 tile.thebetweenlands.limestone.name=Limestone
@@ -111,6 +113,9 @@ tile.thebetweenlands.log_portal.name=Portal Frame
 tile.thebetweenlands.log_rubber.name=Rubber Tree Log
 tile.thebetweenlands.log_sap.name=Sap Tree Log
 tile.thebetweenlands.log_weedwood.name=Weedwood Log
+tile.thebetweenlands.log_hearthgrove.name=Hearthgrove Log
+tile.thebetweenlands.log_hearthgrove_tarred.name=Tarred Hearthgrove Log
+tile.thebetweenlands.log_nibbletwig.name=Nibbletwig Log
 tile.thebetweenlands.loot_pot.1.name=Pot of Chance
 tile.thebetweenlands.loot_pot.2.name=Pot of Chance
 tile.thebetweenlands.loot_pot.3.name=Pot of Chance
@@ -745,6 +750,7 @@ tooltip.syrmorite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '
 tooltip.valonite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '%1$s' to charge\nat enemies. Reflects projectiles
 tooltip.dentrothyst_shield=Blocks splash potion effects
 tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope
+tooltip.hearthgrove_log=This dense log works excellent as fuel
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing

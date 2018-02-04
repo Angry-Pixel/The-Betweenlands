@@ -1,6 +1,6 @@
 {
 	"parent": "block/cube_all",
 	"textures": {
-		"all": "thebetweenlands:blocks/log_nibbletwig"
+		"all": "thebetweenlands:blocks/log_nibbletwig_1"
 	}
 }

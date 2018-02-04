@@ -18,6 +18,15 @@
 			"none": {
 				"model": "thebetweenlands:log_hearthgrove_bark"
 			}
+		},
+		"tarred": {
+			"false": {},
+			"true": {
+				"textures": {
+					"side": "thebetweenlands:blocks/log_hearthgrove_tarred",
+					"all": "thebetweenlands:blocks/log_hearthgrove_tarred"
+				}
+			}
 		}
 	}
 }

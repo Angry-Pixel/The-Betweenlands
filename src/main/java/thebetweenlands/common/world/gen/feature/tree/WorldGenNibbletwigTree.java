@@ -29,7 +29,7 @@ public class WorldGenNibbletwigTree extends WorldGenHelper {
 			int canopy1 = rand.nextInt(2) + 4;
 
 			IBlockState log = BlockRegistry.LOG_NIBBLETWIG.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
-			IBlockState leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+			IBlockState leaves = BlockRegistry.LEAVES_NIBBLETWIG_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 			IBlockState ivy = BlockRegistry.POISON_IVY.getDefaultState();
 
 			int xo[] = new int[height+1];

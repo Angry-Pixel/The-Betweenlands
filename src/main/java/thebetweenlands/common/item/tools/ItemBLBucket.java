@@ -239,11 +239,16 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return world.getBlockState(pos).getBlock() instanceof BlockInfuser;
     }
-
+    
+    @Override
+    public boolean hasContainerItem(ItemStack stack) {
+    	return !getEmpty(stack).isEmpty();
+    }
+    
     @Nonnull
     @Override
     public ItemStack getContainerItem(@Nonnull ItemStack itemStack) {
-        if (!getEmpty(itemStack).isEmpty()) {
+    	if (!getEmpty(itemStack).isEmpty()) {
             return getEmpty(itemStack).copy();
         }
         return super.getContainerItem(itemStack);

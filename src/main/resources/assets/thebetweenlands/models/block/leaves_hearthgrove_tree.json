@@ -1,5 +1,5 @@
 {
-	"parent": "block/leaves",
+	"parent": "block/cube_all",
 	"textures": {
 		"all": "thebetweenlands:blocks/leaves_hearthgrove_tree"
 	}
