@@ -9,6 +9,7 @@ import net.minecraft.client.particle.ParticleRedstone;
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.client.particle.ParticleSplash;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
@@ -24,6 +25,7 @@ import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticleSimple;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
@@ -103,7 +105,10 @@ public enum BLParticles {
 	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
 	ANIMATOR(new ParticleAnimator.Factory()),
 	SPLASH(VanillaParticleFactory.create(ParticleSplash.class, new ParticleSplash.Factory())),
-	BLOCK_PROTECTION(new ParticleBlockProtection.Factory());
+	BLOCK_PROTECTION(new ParticleBlockProtection.Factory()),
+	EMBER_1(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_1"))),
+	EMBER_2(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_2"))),
+	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3")));
 
 
 

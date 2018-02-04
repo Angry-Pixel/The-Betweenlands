@@ -173,6 +173,11 @@ import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.AdvancedStateMap;
 import thebetweenlands.util.config.ConfigHandler;
 
@@ -274,9 +279,11 @@ public class BlockRegistry {
     public static final Block LOG_NIBBLETWIG = new BlockLogBetweenlands();
     public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
     public static final Block LOG_SAP = new BlockLogSap();
-    public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands("WEEDWOOD");
-    public static final Block SAPLING_SAP = new BlockSaplingBetweenlands("SAP");
-    public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands("RUBBER");
+    public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands(new WorldGenWeedwoodTree());
+    public static final Block SAPLING_SAP = new BlockSaplingBetweenlands(new WorldGenSapTree());
+    public static final Block SAPLING_RUBBER = new BlockSaplingBetweenlands(new WorldGenRubberTree());
+    public static final Block SAPLING_HEARTHGROVE = new BlockSaplingBetweenlands(new WorldGenHearthgroveTree());
+    public static final Block SAPLING_NIBBLETWIG = new BlockSaplingBetweenlands(new WorldGenNibbletwigTree());
     public static final Block LEAVES_WEEDWOOD_TREE = new BlockTintedLeaves() {
     	@Override
     	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
@@ -298,13 +305,13 @@ public class BlockRegistry {
     public static final Block LEAVES_HEARTHGROVE_TREE = new BlockTintedLeaves() {
     	@Override
     	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-    		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD); //TODO Replace with own sapling
+    		return Item.getItemFromBlock(BlockRegistry.SAPLING_HEARTHGROVE);
     	}
     };
     public static final Block LEAVES_NIBBLETWIG_TREE = new BlockTintedLeaves() {
     	@Override
     	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-    		return Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD); //TODO Replace with own sapling
+    		return Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG);
     	}
     };
     //STRUCTURE

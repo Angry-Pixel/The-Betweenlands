@@ -25,6 +25,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.block.BlockStateContainerHelper;
 
@@ -38,11 +39,12 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(I18n.format("tooltip.hearthgrove_log"));
+		tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.hearthgrove_log"), 0));
 	}
 
 	@Override
 	public void randomDisplayTick(IBlockState stateIn, World worldIn, BlockPos pos, Random rand) {
+		boolean hasWater = false;
 		for(EnumFacing offset : EnumFacing.VALUES) {
 			IBlockState offsetState = worldIn.getBlockState(pos.offset(offset));
 			IBlockState offsetStateDown = worldIn.getBlockState(pos.down().offset(offset));
@@ -67,6 +69,29 @@ public class BlockHearthgroveLog extends BlockLogBetweenlands {
 						float z = pos.getZ() + (offset.getFrontOffsetZ() > 0 ? 1.1F : offset.getFrontOffsetZ() == 0 ? rand.nextFloat() : -0.1F);
 
 						worldIn.spawnParticle(EnumParticleTypes.WATER_BUBBLE, x, y, z, 0, 0, 0);
+					}
+				}
+				hasWater = true;
+			}
+		}
+		if(!hasWater) {
+			for(EnumFacing offset : EnumFacing.VALUES) {
+				if(rand.nextFloat() < 0.02F) {
+					float x = pos.getX() + (offset.getFrontOffsetX() > 0 ? 1.05F : offset.getFrontOffsetX() == 0 ? rand.nextFloat() : -0.05F);
+					float y = pos.getY() + rand.nextFloat();
+					float z = pos.getZ() + (offset.getFrontOffsetZ() > 0 ? 1.05F : offset.getFrontOffsetZ() == 0 ? rand.nextFloat() : -0.05F);
+
+					switch(rand.nextInt(3)) {
+					default:
+					case 0:
+						BLParticles.EMBER_1.spawn(worldIn, x, y, z);
+						break;
+					case 1:
+						BLParticles.EMBER_2.spawn(worldIn, x, y, z);
+						break;
+					case 2:
+						BLParticles.EMBER_3.spawn(worldIn, x, y, z);
+						break;
 					}
 				}
 			}

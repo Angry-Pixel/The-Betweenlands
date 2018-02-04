@@ -55,6 +55,22 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 		super.onUpdate();
 	}
 
+	public static final class GenericFactory extends ParticleFactory<GenericFactory, ParticleAnimated> {
+		public GenericFactory(ResourceLocation texture) {
+			super(ParticleAnimated.class, ParticleTextureStitcher.create(ParticleAnimated.class, texture).setSplitAnimations(true));
+		}
+
+		@Override
+		public ParticleAnimated createParticle(ImmutableParticleArgs args) {
+			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, args.data.getBool(1));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(40, false);
+		}
+	}
+
 	public static final class PortalFactory extends ParticleFactory<PortalFactory, ParticleAnimated> {
 		public PortalFactory() {
 			super(ParticleAnimated.class, ParticleTextureStitcher.create(ParticleAnimated.class, new ResourceLocation("thebetweenlands:particle/portal")).setSplitAnimations(true));

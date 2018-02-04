@@ -25,12 +25,12 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.AdvancedStateMap;
 
 public class BlockSaplingBetweenlands extends BlockSapling implements IStateMappedBlock  {
-	private String TREE_TYPE;
+	public final WorldGenerator gen;
 
-	public BlockSaplingBetweenlands(String type) {
+	public BlockSaplingBetweenlands(WorldGenerator gen) {
 		setCreativeTab(BLCreativeTabs.PLANTS);
 		setSoundType(SoundType.PLANT);
-		this.TREE_TYPE = type;
+		this.gen = gen;
 	}
 
 	@Override
@@ -60,30 +60,10 @@ public class BlockSaplingBetweenlands extends BlockSapling implements IStateMapp
 		if (!TerrainGen.saplingGrowTree(world, rand, pos)) {
 			return;
 		}
-
-		WorldGenerator worldGen = null;
-
-		switch (TREE_TYPE) {
-		case "WEEDWOOD":
-			worldGen = new WorldGenWeedwoodTree();
-			break;
-		case "SAP":
-			worldGen = new WorldGenSapTree();
-			break;
-		case "RUBBER":
-			worldGen = new WorldGenRubberTree();
-			break; 
-		default:
-			break;
-		}
-
-		if (worldGen == null) {
-			return;
-		}
-
+		
 		world.setBlockToAir(pos);
 
-		if (!worldGen.generate(world, rand, pos)) {
+		if (!this.gen.generate(world, rand, pos)) {
 			world.setBlockState(pos, state);
 		}
 	}
