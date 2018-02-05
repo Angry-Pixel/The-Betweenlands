@@ -28,19 +28,19 @@ before_deploy:
 - git config --local user.email "<>"
 - git tag "$(date +'%d.%m.%Y')-dev-${TRAVIS_BUILD_NUMBER}"
 deploy:
-- provider: releases
-  prerelease: true
-  api_key:
-    secure: HWNAZS0vZVT2J9avTj8N0QqUW0J4qmT5XPtZyXrxNOMEzyCzHj957aMba9B/BLXvDsowUVWJnB1hBWcrZxXPuSh46tqddSmRfx4UL9n6C80sstOCe8w3Op0kdJwhKILOZqQyyGanMKba0dzpBREnzsrhO1mUUYEUnS+PE3Ilc/w=
-  name: Development Build $TRAVIS_BUILD_NUMBER
-  file_glob: true
-  file:
-  - build/libs/TheBetweenlands-*-${TRAVIS_BUILD_NUMBER}-server.jar
-  - build/libs/TheBetweenlands-*-${TRAVIS_BUILD_NUMBER}-universal.jar
-  skip_cleanup: true
-  on:
-    repo: Angry-Pixel/The-Betweenlands
-    branch: 1.12
+#- provider: releases
+#  prerelease: true
+#  api_key:
+#    secure: HWNAZS0vZVT2J9avTj8N0QqUW0J4qmT5XPtZyXrxNOMEzyCzHj957aMba9B/BLXvDsowUVWJnB1hBWcrZxXPuSh46tqddSmRfx4UL9n6C80sstOCe8w3Op0kdJwhKILOZqQyyGanMKba0dzpBREnzsrhO1mUUYEUnS+PE3Ilc/w=
+#  name: Development Build $TRAVIS_BUILD_NUMBER
+#  file_glob: true
+#  file:
+#  - build/libs/TheBetweenlands-*-${TRAVIS_BUILD_NUMBER}-server.jar
+#  - build/libs/TheBetweenlands-*-${TRAVIS_BUILD_NUMBER}-universal.jar
+#  skip_cleanup: true
+#  on:
+#    repo: Angry-Pixel/The-Betweenlands
+#    branch: 1.12
 - provider: releases
   api_key:
     secure: HWNAZS0vZVT2J9avTj8N0QqUW0J4qmT5XPtZyXrxNOMEzyCzHj957aMba9B/BLXvDsowUVWJnB1hBWcrZxXPuSh46tqddSmRfx4UL9n6C80sstOCe8w3Op0kdJwhKILOZqQyyGanMKba0dzpBREnzsrhO1mUUYEUnS+PE3Ilc/w=
