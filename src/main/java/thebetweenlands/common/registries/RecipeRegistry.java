@@ -113,10 +113,14 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_WEEDWOOD_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SAP_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_RUBBER_TREE));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
 
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_WEEDWOOD));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SAP));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_RUBBER));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_HEARTHGROVE));
+		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_NIBBLETWIG));
 
 		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM));
 		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM));
@@ -136,6 +140,8 @@ public class RecipeRegistry {
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG));
 
 		//Recipes that use and creates these conflicts with vanilla recipes because of ore dict
 //		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
@@ -312,9 +318,13 @@ public class RecipeRegistry {
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_RUBBER));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_SAP));
 		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_WEEDWOOD));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_HEARTHGROVE));
+		CompostRecipe.addRecipe(15, 11000, Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_RUBBER_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_SAP_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_WEEDWOOD_TREE));
+		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
+		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
 		CompostRecipe.addRecipe(4, 11000, Item.getItemFromBlock(BlockRegistry.FALLEN_LEAVES));
 		CompostRecipe.addRecipe(3, 5000, ItemRegistry.SWAMP_REED_ITEM);
 		CompostRecipe.addRecipe(3, 5000, EnumItemMisc.DRIED_SWAMP_REED.create(1));

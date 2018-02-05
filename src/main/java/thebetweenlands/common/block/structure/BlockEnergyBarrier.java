@@ -127,7 +127,7 @@ public class BlockEnergyBarrier extends Block {
 						}
 					}
 				}
-			} else if (!((EntityPlayer) entity).isSpectator()) {
+			} else if (!player.isSpectator()) {
 				entity.attackEntityFrom(DamageSource.MAGIC, 1);
 				double dx = (entity.posX - (pos.getX()))*2-1;
 				double dz = (entity.posZ - (pos.getZ()))*2-1;

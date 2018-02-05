@@ -160,6 +160,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         //Book merging
         registry.handleRecipes(BookMergeRecipe.class, recipe -> new BookMergeRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
 
+        //Tarring recipe
+        registry.handleRecipes(HearthgroveTarringRecipe.class, recipe -> new TarringRecipeJEI(jeiHelper.getGuiHelper()), VanillaRecipeCategoryUid.CRAFTING);
+
         registry.addRecipes(recipes, VanillaRecipeCategoryUid.CRAFTING);
     }
 
