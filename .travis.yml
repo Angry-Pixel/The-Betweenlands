@@ -1,12 +1,6 @@
 language: java
 jdk:
 - oraclejdk8
-if: tag =~ /release/ OR tag IS blank
-before_install:
-- openssl aes-256-cbc -k "$keyStoreEncryptionKey" -in keystore.jks.enc -out keystore.jks -d
-- echo "export blKeyStore=${TRAVIS_BUILD_DIR}/keystore.jks" > setKeystoreEnv.sh
-- source setKeystoreEnv.sh
-- echo $blKeyStore
 - chmod +x gradlew
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
@@ -23,41 +17,3 @@ addons:
   apt:
     packages:
     - oracle-java8-installer
-before_deploy:
-- git config --local user.name "TheCyberBrick"
-- git config --local user.email "<>"
-- git tag "$(date +'%d.%m.%Y')-dev-${TRAVIS_BUILD_NUMBER}"
-deploy:
-#- provider: releases
-#  prerelease: true
-#  api_key:
-#    secure: HWNAZS0vZVT2J9avTj8N0QqUW0J4qmT5XPtZyXrxNOMEzyCzHj957aMba9B/BLXvDsowUVWJnB1hBWcrZxXPuSh46tqddSmRfx4UL9n6C80sstOCe8w3Op0kdJwhKILOZqQyyGanMKba0dzpBREnzsrhO1mUUYEUnS+PE3Ilc/w=
-#  name: Development Build $TRAVIS_BUILD_NUMBER
-#  file_glob: true
-#  file:
-#  - build/libs/TheBetweenlands-*-${TRAVIS_BUILD_NUMBER}-server.jar
-#  - build/libs/TheBetweenlands-*-${TRAVIS_BUILD_NUMBER}-universal.jar
-#  skip_cleanup: true
-#  on:
-#    repo: Angry-Pixel/The-Betweenlands
-#    branch: 1.12
-- provider: releases
-  api_key:
-    secure: HWNAZS0vZVT2J9avTj8N0QqUW0J4qmT5XPtZyXrxNOMEzyCzHj957aMba9B/BLXvDsowUVWJnB1hBWcrZxXPuSh46tqddSmRfx4UL9n6C80sstOCe8w3Op0kdJwhKILOZqQyyGanMKba0dzpBREnzsrhO1mUUYEUnS+PE3Ilc/w=
-  name: Release Build $TRAVIS_BUILD_NUMBER
-  file_glob: true
-  file:
-  - build/libs/TheBetweenlands-*-server.jar
-  - build/libs/TheBetweenlands-*-universal.jar
-  skip_cleanup: true
-  on:
-    repo: Angry-Pixel/The-Betweenlands
-    tags: true
-    condition: $TRAVIS_TAG = *"release"*
-env:
-  global:
-  - blKeyStoreFingerprint=38:06:7D:68:78:81:1E:FB:38:B6:A0:45:52:1C:FD:80:B9:B6:0B:38
-  - blKeyStoreAlias=Angry-Pixel
-  - secure: ZpLu1VuFCfajiMkIfu4HquBRpj7pgEioTD1+jt4yOaRx6d5WxA6D2bUpvTdYvab9GzBHJxbR7XgjxB0axqud9sDh9N/5xiaebHhpCNhpEWsnQxHj2ZoUzfRQWZm6g/qiq0Kb2D/FFHmsRKJbgXZ97lQ5E4n9bxNzKJLNYrh+8AQ=
-  - secure: PCARYkTqV52yu4iigJtIpjkwBwu+FTj60+PuIst/F2eGjG64K1jaiweH50QT/fUF5K/AqUnpD5XLTjOUh8ZufyLim81NN0t7BRhVqIVrB34NsaVh1V/44tbg9bzuHzIt0ZQoqPkEL5mXpjVo7bX384EkUtw8CqbkrF8zjyakn3g=
-  - secure: a19u6BnQL68i6c/QRkrYgZ/TD68PiHX6n2UyUixUTv+QiXC/Adu/PXv1NZ8u0F0yz7/xZN1ggVoEXUVroGdB0FKmYNZbLZRNWn3ojmcgg9UGM3SnvSVBZ0IjXzajjWcKv7v2szAs0z/iLHvabOAda8W806BiyuPp7CXRDbxrJd4=

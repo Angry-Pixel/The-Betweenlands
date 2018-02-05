@@ -35,17 +35,17 @@ apply from: 'validateCoreJar.gradle'
 project.ext.buildnumber = ''
 
 project.ext.ENV = System.getenv()
-project.ext.isTravisEnv = ENV['TRAVIS'] != null && "true".equals(ENV['TRAVIS'])
-project.ext.isTravisRelease = isTravisEnv && ENV['TRAVIS_TAG'] != null && ENV['TRAVIS_TAG'].contains("release")
+project.ext.isDeploymentEnv = ENV['DEPLOY_ENV'] != null && "true".equals(ENV['DEPLOY_ENV'])
+project.ext.isDeploymentRelease = isDeploymentEnv && ENV['DEPLOY_BUILD_TYPE'] != null && "release".equals(ENV['DEPLOY_BUILD_TYPE'])
 
-if(isTravisEnv) println("Travis CI environment found")
-if(isTravisRelease) println("Travis CI is building a release")
+if(isDeploymentEnv) println("Deployment environment found")
+if(isDeploymentRelease) println("Deploying a release build")
 
-if (isTravisEnv) project.buildnumber = ENV['TRAVIS_BUILD_NUMBER']
+if (isDeploymentEnv) project.buildnumber = ENV['DEPLOY_BUILD_NUMBER']
 
 project.ext.modid = getModIdFromJava()
 version = getVersionFromJava()
-if(isTravisEnv && !isTravisRelease) version = version + "-dev-" + project.buildnumber
+if(isDeploymentEnv && !isDeploymentRelease) version = version + "-dev-" + project.buildnumber
 group = 'net.angrypixel'
 archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
@@ -218,7 +218,7 @@ artifacts {
 
 //Returns whether the private keystore for signing is available and if the jar should be signed
 boolean canJarBeSigned() {
-	return getVariable("blKeyStore") != null && (!isTravisEnv || isTravisRelease)
+	return getVariable("blKeyStore") != null && (!isDeploymentEnv || isDeploymentRelease)
 }
 
 //Returns the public fingerprint, may be empty ("")
