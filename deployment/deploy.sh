@@ -9,6 +9,9 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 	return 0
   fi
   
+  #Get commit message
+  releaseDescription=$(git log -1 --pretty=%B)
+  
   #Authenticate
   eval "$(ssh-agent -s)"
   chmod 600 deploy_key.pem
@@ -40,22 +43,19 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 	releaseTitle="Development Build ${TRAVIS_BUILD_NUMBER}"
   fi
   
-  releaseDescription=$TRAVIS_COMMIT_MESSAGE
-  releaseDescription=$(echo "$releaseDescription" | tr '"' "'")
-  
   cat <<EOT >> build
 [build number]:
-$(sed 's/\:/\\:/g' <<< ${TRAVIS_BUILD_NUMBER})
+$(sed 's/\:/\\:/g' <<< "${TRAVIS_BUILD_NUMBER}")
 [type]:
-$(sed 's/\:/\\:/g' <<< ${releaseType})
+$(sed 's/\:/\\:/g' <<< "${releaseType}")
 [title]:
-$(sed 's/\:/\\:/g' <<< ${releaseTitle})
+$(sed 's/\:/\\:/g' <<< "${releaseTitle}")
 [description]:
-$(sed 's/\:/\\:/g' <<< ${releaseDescription})
+$(sed 's/\:/\\:/g' <<< "${releaseDescription}")
 [branch]:
-$(sed 's/\:/\\:/g' <<< ${TRAVIS_BRANCH})
+$(sed 's/\:/\\:/g' <<< "${TRAVIS_BRANCH}")
 [commit]:
-$(sed 's/\:/\\:/g' <<< ${TRAVIS_COMMIT})
+$(sed 's/\:/\\:/g' <<< "${TRAVIS_COMMIT}")
 EOT
 
   git add build
