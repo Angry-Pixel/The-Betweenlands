@@ -20,7 +20,7 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   git remote add deployment $REPOSITORY_SSH_URI
   git remote -v
   
-  rm -f build.json
+  rm -f build
   
   if [[ "$TRAVIS_TAG" == *"release"* ]]; then
     releaseType="release"
@@ -33,18 +33,22 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   releaseDescription=$TRAVIS_COMMIT_MESSAGE
   releaseDescription=$(echo "$releaseDescription" | tr '"' "'")
   
-  cat <<EOT >> build.json
-{
-	"build_number": ${TRAVIS_BUILD_NUMBER},
-	"type": "${releaseType}",
-	"title": "${releaseTitle}",
-	"description": "${releaseDescription}",
-	"branch": "${TRAVIS_BRANCH}",
-	"commit": "${TRAVIS_COMMIT}"
-}
+  cat <<EOT >> build
+build number:
+${TRAVIS_BUILD_NUMBER}
+type:
+${releaseType}
+title:
+${releaseTitle}
+description:
+${releaseDescription}
+branch:
+${TRAVIS_BRANCH}
+commit:
+${TRAVIS_COMMIT}
 EOT
 
-  git add build.json
+  git add build
   git commit -m "${releaseTitle}"
   git push deployment master
   
