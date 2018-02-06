@@ -20,6 +20,7 @@ import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
+import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
@@ -63,6 +64,7 @@ public class MessageRegistry {
 		registerMessage(MessageSyncLocalStorage.class, Side.CLIENT);
 		registerMessage(MessageSyncLocalStorageReferences.class, Side.CLIENT);
 		registerMessage(MessageSummonPeatMummyParticles.class, Side.CLIENT);
+		registerMessage(MessageShowFoodSicknessLine.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

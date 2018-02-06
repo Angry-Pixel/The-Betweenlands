@@ -51,6 +51,8 @@ $(sed 's/\:/\\:/g' <<< "${releaseType}")
 [title]:
 $(sed 's/\:/\\:/g' <<< "${releaseTitle}")
 [description]:
+https://github.com/Angry-Pixel/The-Betweenlands/commit/${TRAVIS_COMMIT}
+
 $(sed 's/\:/\\:/g' <<< "${releaseDescription}")
 [branch]:
 $(sed 's/\:/\\:/g' <<< "${TRAVIS_BRANCH}")

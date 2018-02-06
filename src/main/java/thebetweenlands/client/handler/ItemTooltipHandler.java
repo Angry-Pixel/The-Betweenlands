@@ -51,19 +51,20 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 			toolTip.add(I18n.format("tooltip.circlegem." + circleGem.name));
 		}
 
-		if(ConfigHandler.useFoodSickness && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(stack)) {
-			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
-				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
-				FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
-				int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
-				((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.getFlags().isAdvanced(), toolTip);
-			}
-		}
-
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(stack.getItem() instanceof IEquippable && player != null && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
-			toolTip.add(I18n.format("tooltip.item.equippable"));
+		if(player != null) {
+			if(ConfigHandler.useFoodSickness && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(player, stack)) {
+				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
+					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
+					FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());
+					int hatred = cap.getFoodHatred((ItemFood)stack.getItem());
+					((IFoodSicknessItem)stack.getItem()).getSicknessTooltip(stack, sickness, hatred, event.getFlags().isAdvanced(), toolTip);
+				}
+			}
+	
+			if(stack.getItem() instanceof IEquippable && ((IEquippable)stack.getItem()).canEquip(stack, player, player)) {
+				toolTip.add(I18n.format("tooltip.item.equippable"));
+			}
 		}
 	}
 

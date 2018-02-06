@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "p",
+    "p"
+  ],
+  "key": {
+    "p": {
+      "item": "thebetweenlands:log_nibbletwig",
+      "data": 32767
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:nibblestick",
+    "count": 4
+  }
+}

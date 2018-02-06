@@ -30,6 +30,7 @@ import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
+import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
 
 public enum BLParticles {
 
@@ -108,7 +109,8 @@ public enum BLParticles {
 	BLOCK_PROTECTION(new ParticleBlockProtection.Factory()),
 	EMBER_1(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_1"))),
 	EMBER_2(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_2"))),
-	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3")));
+	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3"))),
+	XP_PIECES(new ParticleXPPieces.Factory());
 
 
 

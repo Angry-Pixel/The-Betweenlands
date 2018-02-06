@@ -2,18 +2,23 @@ package thebetweenlands.api.item;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.util.config.ConfigHandler;
 
 public interface IFoodSicknessItem {
 	/**
-	 * Returns whether the player can get sick of the specified item stack
+	 * Returns whether a player can get sick of the specified item stack
+	 * @param player
 	 * @param stack
 	 * @return
 	 */
-	default boolean canGetSickOf(ItemStack stack) {
-		return true;
+	default boolean canGetSickOf(@Nullable EntityPlayer player, ItemStack stack) {
+		return player != null ? player.dimension == ConfigHandler.dimensionId : false;
 	}
 
 	/**
