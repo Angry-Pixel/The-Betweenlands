@@ -274,7 +274,7 @@ public class DecorationHelper {
 	
 	public static boolean generateHearthgroveTree(DecoratorPositionProvider decorator) {
 		if (canShortThingsGenerateHere(decorator)) {
-			BlockPos pos = decorator.getRandomPos(10);
+			BlockPos pos = decorator.getRandomPos(12);
 			World world = decorator.getWorld();
 			if ((world.isAirBlock(pos) && SurfaceType.GRASS.matches(world, pos.down())) ||
 					(SurfaceType.WATER.matches(world, pos) && SurfaceType.DIRT.matches(world, pos.down())))

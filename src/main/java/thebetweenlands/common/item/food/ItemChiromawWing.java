@@ -33,7 +33,7 @@ public class ItemChiromawWing extends ItemBLFood {
         if (player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
             IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
             if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
-                cap.increaseFoodHatred(this, 64, 32);
+                cap.increaseFoodHatred(this, FoodSickness.SICK.maxHatred, FoodSickness.SICK.maxHatred);
             } else {
                 player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 2));
             }

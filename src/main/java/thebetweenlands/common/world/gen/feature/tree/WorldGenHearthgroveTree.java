@@ -8,6 +8,8 @@ import java.util.function.Predicate;
 
 import javax.annotation.Nullable;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
@@ -29,30 +31,37 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 		final int y = pos.getY();
 		final int z = pos.getZ();
 
-		int height = rand.nextInt(6) + 7;
-		int canopySize = (int)(((rand.nextDouble() * height) / 12.0D) * 4 + 4);
+		int height = rand.nextInt(4) + 9;
+		int canopySize = (int)(((rand.nextDouble() * height) / 12.0D) * 4 + 5);
 
 		if(!this.rotatedCubeCantReplace(world, x, y + 2, z, 0, 0, 0, 1, height, 1, 0) && 
-				!this.rotatedCubeCantReplace(world, x, y + 2, z, -canopySize+2, 0, -canopySize+2, canopySize*2-2, height, canopySize*2-2, 0)) {
+				!this.rotatedCubeCantReplace(world, x, y + 2, z, -canopySize+2, 0, -canopySize+2, canopySize*2-4, height, canopySize*2-4, 0)) {
 
 			IBlockState log = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.NONE);
 			IBlockState logY = BlockRegistry.LOG_HEARTHGROVE.getDefaultState().withProperty(BlockLogBetweenlands.LOG_AXIS, BlockLog.EnumAxis.Y);
 			IBlockState leaves = BlockRegistry.LEAVES_HEARTHGROVE_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 			IBlockState hangers = BlockRegistry.HANGER.getDefaultState();
-			
+
 			int rootHeight = rand.nextInt(3) + 1;
 
-			for(int i = rootHeight; i <= height; i++) {
+			int canopyStart = canopySize / 2 - 1;
+
+			for(int i = rootHeight; i <= height - canopyStart - 1; i++) {
 				this.setBlockAndNotifyAdequately(world, pos.up(i), logY);
 			}
 
-			int canopyStart = canopySize / 2 - 1;
+			List<BlockPos> blobs = new ArrayList<>();
+			for(int i = 0; i < 4; i++) {
+				blobs.add(new BlockPos(x + rand.nextInt(canopySize*2) - canopySize, y + height - canopyStart / 2, z + rand.nextInt(canopySize*2) - canopySize));
+			}
 
 			double circumference = Math.PI * (canopySize - 1);
 
 			int branches = (int)(circumference / 4.0D) + 1;
 
 			double angleStep = Math.PI * 2 / (branches-1);
+
+			List<Pair<BlockPos, Float>> leavesSupportPoints = new ArrayList<>();
 
 			List<BlockPos> subbranchEndpoints = new ArrayList<>();
 
@@ -90,7 +99,9 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 								int supportXO = 0;
 								int supportZO = 0;
 
-								for(int k = 0; k < height - (branchPos.getY() - y) + (canopySize <= 6 ? -1 : 0); k++) {
+								int supportHeight = height - (branchPos.getY() - y) + (canopySize <= 6 ? -1 : 0);
+
+								for(int k = 0; k < supportHeight; k++) {
 									this.setBlockAndNotifyAdequately(world, branchPos.add(supportXO, 1 + supportYO, supportZO), logY);
 
 									if((k+1) % 3 == 0) {
@@ -101,22 +112,44 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 									supportYO++;
 								}
 
+								leavesSupportPoints.add(Pair.of(branchPos.add(supportXO, 1 + supportYO, supportZO), 6.0F));
+
 								support = true;
 							}
 						}
 						setBranchPos = branchPos;
 					}
-
-					if(canopySize >= 5 && setBranchPos != null) {
-						subbranchEndpoints.add(setBranchPos);
+					if(setBranchPos != null) {
+						leavesSupportPoints.add(Pair.of(setBranchPos, 10.0F));
+						if(canopySize >= 5) {
+							subbranchEndpoints.add(setBranchPos);
+						}
 					}
 				}
 			}
 
+			float centerSquashX = 0.8F + rand.nextFloat() * 0.4F;
+			float centerSquashZ = 0.8F + rand.nextFloat() * 0.4F;
 			for(int i = 0; i < canopyStart + 2; i++) {
 				final int k = i;
 				this.generateCanopyLayer(world, pos.up(height - canopyStart + i), canopySize - i, leaves, p -> {
-					return world.isAirBlock(p) && ((k > canopyStart || p.getX() != x || p.getZ() != z) && (k > 2 || (canopySize - k) < 4 || Math.sqrt((p.getX()-x)*(p.getX()-x)+(p.getZ()-z)*(p.getZ()-z)) >= canopySize - k - 3));
+					boolean nearSupport = false;
+					Random supportRand = new Random();
+					for(Pair<BlockPos, Float> support : leavesSupportPoints) {
+						BlockPos supportPos = support.getKey();
+						supportRand.setSeed(MathHelper.getPositionRandom(supportPos));
+						float squashX = 0.6F + supportRand.nextFloat() * 1.2F;
+						float squashY = 0.6F + supportRand.nextFloat() * 1.2F;
+						float squashZ = 0.6F + supportRand.nextFloat() * 1.2F;
+						if((supportPos.getX()-p.getX())*(supportPos.getX()-p.getX())*squashX +
+								(supportPos.getY()-p.getY())*(supportPos.getY()-p.getY())*squashY + 
+								(supportPos.getZ()-p.getZ())*(supportPos.getZ()-p.getZ())*squashZ <= support.getValue() + rand.nextFloat() * 0.8F) {
+							nearSupport = true;
+							break;
+						}
+					}
+					if(!nearSupport) return false;
+					return world.isAirBlock(p) && (k > 1 || (canopySize - k) < 4 || Math.sqrt((p.getX()-x)*(p.getX()-x)*centerSquashX+(p.getZ()-z)*(p.getZ()-z)*centerSquashZ) >= canopySize - k - 3 - rand.nextFloat() * 0.8F);
 				}, p -> {
 					if(k == 0 && rand.nextInt(6) == 0) {
 						int hangerLength = rand.nextInt(5) + 1;

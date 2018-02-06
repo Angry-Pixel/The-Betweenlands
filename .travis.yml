@@ -19,7 +19,7 @@ install: echo "Skip assemble"
 script: "./gradlew build --continue --stacktrace"
 after_success:
 - cd deployment/
-- "./deploy.sh"
+- source deploy.sh
 addons:
   apt:
     packages:

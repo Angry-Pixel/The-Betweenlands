@@ -3,7 +3,12 @@
 REPOSITORY_SSH_URI=git@github.com:Angry-Pixel/The-Betweenlands-Development-Builds.git
 
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-
+  
+  if [ ! -f deploy_key.pem ]; then
+    echo "Deployment SSH key not found"
+	return 0
+  fi
+  
   #Authenticate
   eval "$(ssh-agent -s)"
   chmod 600 deploy_key.pem
@@ -13,7 +18,12 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   
   git clone --depth 1 $REPOSITORY_SSH_URI repo
   
-  cd repo || return
+  if [ ! $? -eq 0 ]; then
+    echo "Failed cloning deploy repository ${REPOSITORY_SSH_URI}"
+    return 0
+  fi
+  
+  cd repo || return 0
   
   git config --local user.name "Travis Build Wizard"
   git config --local user.email "<>"
