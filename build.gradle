@@ -29,6 +29,8 @@ minecraft {
     replace '${version}', project.version
     replace '${mcversion}', project.minecraft.version
     replace '/*!*/true/*!*/', 'false'
+    clientJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
+    serverJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
 	
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.

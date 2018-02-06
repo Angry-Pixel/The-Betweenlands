@@ -45,10 +45,7 @@
     "facing=east,half=bottom,shape=outer_left": {
       "model": "thebetweenlands:base_outer_stairs",
       "y": 270,
-      "uvlock": true,
-      "textures": {
-        "all": "thebetweenlands:blocks/betweenstone_bricks"
-      }
+      "uvlock": true
     },
     "facing=west,half=bottom,shape=outer_left": {
       "model": "thebetweenlands:base_outer_stairs",
