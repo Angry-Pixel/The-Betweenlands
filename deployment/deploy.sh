@@ -34,18 +34,18 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   releaseDescription=$(echo "$releaseDescription" | tr '"' "'")
   
   cat <<EOT >> build
-build number:
-${TRAVIS_BUILD_NUMBER}
-type:
-${releaseType}
-title:
-${releaseTitle}
-description:
-${releaseDescription}
-branch:
-${TRAVIS_BRANCH}
-commit:
-${TRAVIS_COMMIT}
+[build number]:
+$(sed 's/\:/\\:/g' <<< ${TRAVIS_BUILD_NUMBER})
+[type]:
+$(sed 's/\:/\\:/g' <<< ${releaseType})
+[title]:
+$(sed 's/\:/\\:/g' <<< ${releaseTitle})
+[description]:
+$(sed 's/\:/\\:/g' <<< ${releaseDescription})
+[branch]:
+$(sed 's/\:/\\:/g' <<< ${TRAVIS_BRANCH})
+[commit]:
+$(sed 's/\:/\\:/g' <<< ${TRAVIS_COMMIT})
 EOT
 
   git add build
