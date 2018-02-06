@@ -43,6 +43,8 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 	releaseTitle="Development Build ${TRAVIS_BUILD_NUMBER}"
   fi
   
+  #$(sed 's/\:/\\:/g' <<< "${releaseDescription}")
+  
   cat <<EOT >> build
 [build number]:
 $(sed 's/\:/\\:/g' <<< "${TRAVIS_BUILD_NUMBER}")
@@ -52,8 +54,6 @@ $(sed 's/\:/\\:/g' <<< "${releaseType}")
 $(sed 's/\:/\\:/g' <<< "${releaseTitle}")
 [description]:
 https://github.com/Angry-Pixel/The-Betweenlands/commit/${TRAVIS_COMMIT}
-
-$(sed 's/\:/\\:/g' <<< "${releaseDescription}")
 [branch]:
 $(sed 's/\:/\\:/g' <<< "${TRAVIS_BRANCH}")
 [commit]:
