@@ -1,6 +1,6 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
+import java.util.AbstractList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -12,6 +12,9 @@ import javax.vecmath.Matrix4f;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableMap;
 import com.google.gson.JsonParser;
 
@@ -115,50 +118,41 @@ public class ModelWeedwoodBush implements IModel {
 		private final TextureAtlasSprite textureLeaves;
 		private final TextureAtlasSprite textureSticks;
 		private final int leavesTintIndex;
+		private final List<BakedQuad> baseQuads;
+		private final List<BakedQuad> fancyQuads;
+
+		private final LoadingCache<Long, ModelBakedWeedwoodBush> modelCache = CacheBuilder.newBuilder().maximumSize(128).build(new CacheLoader<Long, ModelBakedWeedwoodBush>() {
+			@Override
+			public ModelBakedWeedwoodBush load(Long key) throws Exception {
+				return new ModelBakedWeedwoodBush(format, Optional.ofNullable(transformation), transforms, textureLeaves, textureSticks, leavesTintIndex, key);
+			}
+		});
 
 		private ModelBakedWeedwoodBush(VertexFormat format, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, TextureAtlasSprite textureLeaves, TextureAtlasSprite textureSticks, int leavesTintIndex) {
+			this(format, transformation, transforms, textureLeaves, textureSticks, leavesTintIndex, -1);
+		}
+
+		private ModelBakedWeedwoodBush(VertexFormat format, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, TextureAtlasSprite textureLeaves, TextureAtlasSprite textureSticks, int leavesTintIndex,
+				long index) {
 			this.transformation = transformation.isPresent() ? transformation.get() : null;
 			this.transforms = transforms;
 			this.format = format;
 			this.textureLeaves = textureLeaves;
 			this.textureSticks = textureSticks;
 			this.leavesTintIndex = leavesTintIndex;
-		}
 
-		@Override
-		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
-			IExtendedBlockState state = (IExtendedBlockState) stateOld;
-
-			List<BakedQuad> quads = new ArrayList<>();
-
-			if(side == null) {
-				float mini = 0F, minj = 0F, mink = 0F, maxi = 0.0F, maxj = 0.0F, maxk = 0.0F;
-				int posX = 0, posY = 0, posZ = 0;
-
-				try {
-					if (state.getValue(BlockWeedwoodBush.WEST))
-						mini = -0.25F;
-					if (state.getValue(BlockWeedwoodBush.EAST))
-						maxi = 0.25F;
-					if (state.getValue(BlockWeedwoodBush.DOWN))
-						minj = -0.25F;
-					if (state.getValue(BlockWeedwoodBush.UP))
-						maxj = 0.25F;
-					if (state.getValue(BlockWeedwoodBush.NORTH))
-						mink = -0.25F;
-					if (state.getValue(BlockWeedwoodBush.SOUTH))
-						maxk = 0.25F;
-					posX = state.getValue(BlockWeedwoodBush.POS_X);
-					posY = state.getValue(BlockWeedwoodBush.POS_Y);
-					posZ = state.getValue(BlockWeedwoodBush.POS_Z);
-				} catch(Exception ex) {
-					//how should this handle item rendering gracefully? :(
-				}
-
+			if(index != -1) {
 				QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation);
 
 				builder.setTintIndex(leavesTintIndex);
 				builder.setSprite(this.textureLeaves);
+
+				float mini = (index & 1) != 0 ? -0.25F : 0.0F;
+				float maxi = (index & (1 << 1)) != 0 ? 0.25F : 0.0F;
+				float minj = (index & (1 << 2)) != 0 ? -0.25F : 0.0F;
+				float maxj = (index & (1 << 3)) != 0 ? 0.25F : 0.0F;
+				float mink = (index & (1 << 4)) != 0 ? -0.25F : 0.0F;
+				float maxk = (index & (1 << 5)) != 0 ? 0.25F : 0.0F;
 
 				// Right Side
 				builder.addVertex(0, 0.25 + minj, 0.75 + maxk, 0.0F, 0.0F);
@@ -309,38 +303,79 @@ public class ModelWeedwoodBush implements IModel {
 				builder.addVertex(0.0, 0.75, 0.25, 16.0F, 16.0F);
 				builder.addVertex(0.0, 0.75, 0.25, 16.0F, 0.0F);
 
+				this.baseQuads = builder.build();
+
+				builder.addVertex(0.1, 0.5, -0.1, 0.0F, 0.0F);
+				builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
+				builder.addVertex(0.9, 0.5, 1.1, 16.0F, 16.0F);
+				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
+
+				builder.addVertex(0.9, 0.5, 1.1, 0.0F, 0.0F);
+				builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
+				builder.addVertex(0.1, 0.5, -0.1, 16.0F, 16.0F);
+				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
+
+				builder.addVertex(0.1, 0.5, 0.7, 0.0F, 0.0F);
+				builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
+				builder.addVertex(0.9, 0.5, 0.3, 16.0F, 16.0F);
+				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
+
+				builder.addVertex(0.9, 0.5, 0.3, 0.0F, 0.0F);
+				builder.addVertex(0.3, 1.1, 0.5, 16.0F, 0.0F);
+				builder.addVertex(0.1, 0.5, 0.7, 16.0F, 16.0F);
+				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
+
+				builder.addVertex(0.3, 0.5, 1.1, 0.0F, 0.0F);
+				builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
+				builder.addVertex(0.9, 0.5, -0.1, 16.0F, 16.0F);
+				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
+
+				builder.addVertex(0.9, 0.5, -0.1, 0.0F, 0.0F);
+				builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
+				builder.addVertex(0.3, 0.5, 1.1, 16.0F, 16.0F);
+				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
+
+				this.fancyQuads = builder.build();
+			} else {
+				this.baseQuads = this.fancyQuads = Collections.emptyList();
+			}
+		}
+
+		@Override
+		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
+			IExtendedBlockState state = (IExtendedBlockState) stateOld;
+
+			if(side == null) {
+				int posX = 0, posY = 0, posZ = 0;
+
+				long index = 0;
+
+				try {
+					if (state.getValue(BlockWeedwoodBush.WEST))
+						index |= 1;
+					if (state.getValue(BlockWeedwoodBush.EAST))
+						index |= 1 << 1;
+					if (state.getValue(BlockWeedwoodBush.DOWN))
+						index |= 1 << 2;
+					if (state.getValue(BlockWeedwoodBush.UP))
+						index |= 1 << 3;
+					if (state.getValue(BlockWeedwoodBush.NORTH))
+						index |= 1 << 4;
+					if (state.getValue(BlockWeedwoodBush.SOUTH))
+						index |= 1 << 5;
+					posX = state.getValue(BlockWeedwoodBush.POS_X);
+					posY = state.getValue(BlockWeedwoodBush.POS_Y);
+					posZ = state.getValue(BlockWeedwoodBush.POS_Z);
+				} catch(Exception ex) {
+					//how should this handle item rendering gracefully? :(
+				}
+
+				ModelBakedWeedwoodBush model = this.modelCache.getUnchecked(index);
+
+				List<BakedQuad> quads = model.baseQuads;
+
 				if (Minecraft.isFancyGraphicsEnabled()) {
-					builder.addVertex(0.1, 0.5, -0.1, 0.0F, 0.0F);
-					builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
-					builder.addVertex(0.9, 0.5, 1.1, 16.0F, 16.0F);
-					builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
-
-					builder.addVertex(0.9, 0.5, 1.1, 0.0F, 0.0F);
-					builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
-					builder.addVertex(0.1, 0.5, -0.1, 16.0F, 16.0F);
-					builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
-
-					builder.addVertex(0.1, 0.5, 0.7, 0.0F, 0.0F);
-					builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
-					builder.addVertex(0.9, 0.5, 0.3, 16.0F, 16.0F);
-					builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
-
-					builder.addVertex(0.9, 0.5, 0.3, 0.0F, 0.0F);
-					builder.addVertex(0.3, 1.1, 0.5, 16.0F, 0.0F);
-					builder.addVertex(0.1, 0.5, 0.7, 16.0F, 16.0F);
-					builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
-
-					builder.addVertex(0.3, 0.5, 1.1, 0.0F, 0.0F);
-					builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
-					builder.addVertex(0.9, 0.5, -0.1, 16.0F, 16.0F);
-					builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
-
-					builder.addVertex(0.9, 0.5, -0.1, 0.0F, 0.0F);
-					builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
-					builder.addVertex(0.3, 0.5, 1.1, 16.0F, 16.0F);
-					builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
-
-					builder.setSprite(this.textureSticks);
+					quads = new CompositeList<>(quads, model.fancyQuads);
 
 					int cSticks = 5;
 
@@ -348,6 +383,8 @@ public class ModelWeedwoodBush implements IModel {
 					long seed = posX * 0x2FC20FL ^ posY * 0x6EBFFF5L ^ posZ;
 					rnd.setSeed(seed * seed * 0x285B825L + seed * 11L);
 
+					QuadBuilder builder = new QuadBuilder(this.format).setTransformation(this.transformation);
+					builder.setSprite(this.textureSticks);
 					builder.setTintIndex(-1);
 
 					for(int i = 0; i < cSticks; i++) {
@@ -374,11 +411,14 @@ public class ModelWeedwoodBush implements IModel {
 						builder.addVertex(xp3+xOff, 0.2+yOff, zp3+zOff, 16.0F, 16.0F);
 						builder.addVertex(xp2+xOff, 0.8+yOff, zp2+zOff, 16.0F, 0.0F);
 					}
+
+					quads = new CompositeList<>(quads, builder.build());
 				}
-				quads = builder.build();
+
+				return quads;
 			}
 
-			return quads;
+			return Collections.emptyList();
 		}
 
 		@Override
@@ -414,6 +454,29 @@ public class ModelWeedwoodBush implements IModel {
 		@Override
 		public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType type) {
 			return PerspectiveMapWrapper.handlePerspective(this, this.transforms, type);
+		}
+	}
+
+	private static class CompositeList<E> extends AbstractList<E> {
+		private final List<E> list1;
+		private final List<E> list2;
+
+		public CompositeList(List<E> list1, List<E> list2) {
+			this.list1 = list1;
+			this.list2 = list2;
+		}
+
+		@Override
+		public E get(int index) {
+			if (index < this.list1.size()) {
+				return this.list1.get(index);
+			}
+			return this.list2.get(index - this.list1.size());
+		}
+
+		@Override
+		public int size() {
+			return this.list1.size() + this.list2.size();
 		}
 	}
 }

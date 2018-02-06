@@ -32,11 +32,10 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
-import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
 import thebetweenlands.util.WeightedList;
@@ -383,7 +382,7 @@ public class MobSpawnHandler {
 				BlockPos spawnPos = this.getRandomSpawnPosition(world, chunkPos);
 				Biome biome = world.getBiome(spawnPos);
 
-				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof BiomeBetweenlands == false) 
+				if(world.rand.nextFloat() > biome.getSpawningChance() || biome instanceof ICustomSpawnEntriesProvider == false) 
 					continue;
 
 				IBlockState centerSpawnBlockState = world.getBlockState(spawnPos);
@@ -395,7 +394,7 @@ public class MobSpawnHandler {
 				int totalWeight = 0;
 
 				//Get possible spawn entries and update weights
-				List<ICustomSpawnEntry> biomeSpawns = ((BiomeBetweenlands)biome).getSpawnEntries();
+				List<ICustomSpawnEntry> biomeSpawns = ((ICustomSpawnEntriesProvider)biome).getCustomSpawnEntries();
 				List<ICustomSpawnEntry> possibleSpawns = new ArrayList<>();
 				for(ICustomSpawnEntry spawnEntry : biomeSpawns) {
 					if(!((spawnEntry.isHostile() && !spawnHostiles) || (!spawnEntry.isHostile() && !spawnAnimals))) {
@@ -465,7 +464,7 @@ public class MobSpawnHandler {
 					BiomeSpawnEntriesData spawnEntriesData = null;
 					long lastSpawn = -1;
 					if(worldStorage != null) {
-						spawnEntriesData = worldStorage.getBiomeSpawnEntriesData((BiomeBetweenlands)biome);
+						spawnEntriesData = worldStorage.getBiomeSpawnEntriesData(biome);
 						lastSpawn = spawnEntriesData.getLastSpawn(spawnEntry);
 					}
 

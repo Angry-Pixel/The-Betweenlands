@@ -144,7 +144,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 		public void readFromNbt(NBTTagCompound nbt) {
 			this.lastSpawnMap.clear();
-			for(ICustomSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
+			for(ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
 				if(spawnEntry.isSaved()) {
 					if(nbt.hasKey(spawnEntry.getID().toString(), Constants.NBT.TAG_LONG)) {
 						this.lastSpawnMap.put(spawnEntry.getID(), nbt.getLong(spawnEntry.getID().toString()));
@@ -154,7 +154,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 
 		public void writeToNbt(NBTTagCompound nbt) {
-			for(ICustomSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
+			for(ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
 				if(spawnEntry.isSaved()) {
 					if(this.lastSpawnMap.containsKey(spawnEntry.getID())) {
 						nbt.setLong(spawnEntry.getID().toString(), this.lastSpawnMap.get(spawnEntry.getID()));

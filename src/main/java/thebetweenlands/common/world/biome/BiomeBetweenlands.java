@@ -1,6 +1,7 @@
 package thebetweenlands.common.world.biome;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
@@ -11,17 +12,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.entity.spawning.IWeightProvider;
+import thebetweenlands.api.event.InitializeBetweenlandsBiomeEvent;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.entity.mobs.EntityPyrad;
 import thebetweenlands.common.entity.mobs.EntitySwampHag;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.EventSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.LocationSpawnEntry;
 import thebetweenlands.common.world.biome.spawning.spawners.SurfaceSpawnEntry;
@@ -29,8 +32,8 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 
-public class BiomeBetweenlands extends Biome implements IWeightProvider {
-	protected final List<ICustomSpawnEntry> blSpawnEntries = new ArrayList<>();
+public class BiomeBetweenlands extends Biome implements IWeightProvider, ICustomSpawnEntriesProvider {
+	private final List<ICustomSpawnEntry> blSpawnEntries = new ArrayList<>();
 	private int grassColor = -1, foliageColor = -1, secondaryGrassColor = -1, secondaryFoliageColor = -1;
 	private short biomeWeight;
 	private BiomeGenerator biomeGenerator;
@@ -51,15 +54,21 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		this.biomeGenerator = new BiomeGenerator(this);
 
 		this.setFogColor(10, 30, 22);
-		this.addSpawnEntries();
+		
+		List<ICustomSpawnEntry> spawnEntries = new ArrayList<>();
+		this.addSpawnEntries(spawnEntries);
+		
+		MinecraftForge.EVENT_BUS.post(new InitializeBetweenlandsBiomeEvent(this, spawnEntries));
+		
+		this.blSpawnEntries.addAll(spawnEntries);
 	}
 
 	/**
 	 * Adds the entity spawn entries
 	 */
-	protected void addSpawnEntries() {
-		this.blSpawnEntries.add(new EventSpawnEntry(800, new SurfaceSpawnEntry(-1, EntityFirefly.class, (short) 280), new ResourceLocation(ModInfo.ID, "blood_sky")).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
-		this.blSpawnEntries.add(new EventSpawnEntry(801, new SurfaceSpawnEntry(-1, EntitySwampHag.class, (short) 250), new ResourceLocation(ModInfo.ID, "blood_sky")) {
+	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
+		entries.add(new EventSpawnEntry(800, new SurfaceSpawnEntry(-1, EntityFirefly.class, (short) 280), new ResourceLocation(ModInfo.ID, "blood_sky")).setSpawnCheckRadius(16.0D).setGroupSize(1, 4));
+		entries.add(new EventSpawnEntry(801, new SurfaceSpawnEntry(-1, EntitySwampHag.class, (short) 250), new ResourceLocation(ModInfo.ID, "blood_sky")) {
 			@Override
 			public EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -68,7 +77,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 				return entity;
 			}
 		}.setHostile(true));
-		this.blSpawnEntries.add(new EventSpawnEntry(802, new SurfaceSpawnEntry(-1, EntityPeatMummy.class, (short) 65), new ResourceLocation(ModInfo.ID, "blood_sky")) {
+		entries.add(new EventSpawnEntry(802, new SurfaceSpawnEntry(-1, EntityPeatMummy.class, (short) 65), new ResourceLocation(ModInfo.ID, "blood_sky")) {
 			@Override
 			public EntityLiving createEntity(World world) {
 				EntityLiving entity = super.createEntity(world);
@@ -78,7 +87,7 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 			}
 		}.setHostile(true).setSpawnCheckRadius(20.0D));
 
-		this.blSpawnEntries.add(new LocationSpawnEntry(803, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE) {
+		entries.add(new LocationSpawnEntry(803, EntityPyrad.class, (short) 120, EnumLocationType.GIANT_TREE) {
 			@Override
 			public boolean canSpawn(World world, Chunk chunk, BlockPos pos, IBlockState blockState, IBlockState surfaceBlockState) {
 				return SurfaceType.MIXED_GROUND.matches(surfaceBlockState);
@@ -107,12 +116,9 @@ public class BiomeBetweenlands extends Biome implements IWeightProvider {
 		return this.biomeGenerator;
 	}
 
-	/**
-	 * Returns the BL spawn entries
-	 * @return
-	 */
-	public final List<ICustomSpawnEntry> getSpawnEntries() {
-		return this.blSpawnEntries;
+	@Override
+	public final List<ICustomSpawnEntry> getCustomSpawnEntries() {
+		return Collections.unmodifiableList(this.blSpawnEntries);
 	}
 
 	/**
