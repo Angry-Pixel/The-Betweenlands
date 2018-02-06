@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:candy_cane"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.winter_is_coming.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.winter_is_coming.description"
+    },
+    "hidden": true,
+    "announce_to_chat": false
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:event",
+      "conditions": {
+        "name": "thebetweenlands:winter"
+      }
+    }
+  }
+}

@@ -1158,6 +1158,12 @@ advancements.thebetweenlands.adventurer.environmentalist.title=Environmentalist
 advancements.thebetweenlands.adventurer.environmentalist.description=Get a Pyrad angry by hitting its tree
 advancements.thebetweenlands.adventurer.rule_them_all.title=None To Rule Them All
 advancements.thebetweenlands.adventurer.rule_them_all.description=Obtain all Rings
+advancements.thebetweenlands.adventurer.3spoopy5me.title=3spoopy5me
+advancements.thebetweenlands.adventurer.3spoopy5me.description=Experience the Spook event
+advancements.thebetweenlands.adventurer.winter_is_coming.title=Winter Is Coming
+advancements.thebetweenlands.adventurer.winter_is_coming.description=Experience the Winter event
+advancements.thebetweenlands.adventurer.santa_wight.title=Santa Wight
+advancements.thebetweenlands.adventurer.santa_wight.description=Break a present
 
 # Fighter
 advancements.thebetweenlands.fighter.root.title=Fighter
