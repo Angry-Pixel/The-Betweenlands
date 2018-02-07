@@ -1,10 +1,11 @@
 package thebetweenlands.common.registries;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -107,7 +108,7 @@ public class RecipeRegistry {
 				}
 			}
 
-			Map<IRecipe, ResourceLocation> conflictingRecipes = new HashMap<>();
+			Multimap<IRecipe, ResourceLocation> conflictingRecipes = HashMultimap.create();
 
 			for(IRecipe otherRecipe : otherRecipes) {
 				if("minecraft".equals(otherRecipe.getRegistryName().getResourceDomain()) && !otherRecipe.isDynamic()) {
@@ -147,7 +148,7 @@ public class RecipeRegistry {
 
 			TheBetweenlands.logger.info("Replacing conflicting recipes:");
 
-			for(Entry<IRecipe, ResourceLocation> entry : conflictingRecipes.entrySet()) {
+			for(Entry<IRecipe, ResourceLocation> entry : conflictingRecipes.entries()) {
 				IRecipe blRecipe = entry.getKey();
 				IRecipe otherRecipe = registry.getValue(entry.getValue());
 
@@ -156,7 +157,7 @@ public class RecipeRegistry {
 
 				registry.register(overrideDummy);
 
-				TheBetweenlands.logger.info(otherRecipe.getRegistryName() + (registry.getValue(entry.getValue()) != overrideDummy ? " FAILED" : ""));
+				TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName() + (registry.getValue(entry.getValue()) != overrideDummy ? " FAILED" : ""));
 			}
 		}
 	}
