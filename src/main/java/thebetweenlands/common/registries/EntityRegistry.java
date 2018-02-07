@@ -104,7 +104,7 @@ public class EntityRegistry {
 		registerEntity(EntityElixir.class, "bl_elexir", 64, 20, true);
 		registerEntity(EntityDreadfulMummy.class, "dreadful_mummy", 0x000000, 0x591E08, 64, 1, true);
 		registerEntity(EntitySludgeBall.class, "sludge_ball", 64, 20, true);
-		registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
+		//registerEntity(EntityDarkLight.class, "dark_light", 0xFFB300, 0xFFD000);
 	}
 
 	private static int id = 0;
