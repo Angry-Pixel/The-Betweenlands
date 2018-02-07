@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -16,7 +17,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.util.TranslationHelper;
 
@@ -32,11 +35,13 @@ public class ItemChiromawWing extends ItemBLFood {
 	protected void onFoodEaten(ItemStack stack, World world, EntityPlayer player) {
 		super.onFoodEaten(stack, world, player);
 
-		if (player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
+		if (!world.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 			if (FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
 				cap.increaseFoodHatred(this, FoodSickness.SICK.maxHatred, FoodSickness.SICK.maxHatred);
-				player.sendStatusMessage(new TextComponentString(String.format(FoodSickness.SICK.getRandomLine(player.getRNG()), stack.getDisplayName())), true);
+				if(player instanceof EntityPlayerMP) {
+					TheBetweenlands.networkWrapper.sendTo(new MessageShowFoodSicknessLine(stack, FoodSickness.SICK), (EntityPlayerMP) player);
+				}
 			} else {
 				player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 2));
 			}
