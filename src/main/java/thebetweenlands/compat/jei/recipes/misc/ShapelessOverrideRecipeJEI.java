@@ -8,33 +8,19 @@ import mezz.jei.api.recipe.wrapper.IShapedCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.recipe.OverrideDummyRecipe;
+import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class OverrideRecipeJEI implements ICraftingRecipeWrapper, IShapedCraftingRecipeWrapper {
+public class ShapelessOverrideRecipeJEI implements ICraftingRecipeWrapper {
 
     private final IJeiHelpers jeiHelpers;
-    protected final OverrideDummyRecipe recipe;
-    private int width;
-    private int height;
+    protected final ShapelessOverrideDummyRecipe recipe;
 
-    public OverrideRecipeJEI(IJeiHelpers jeiHelpers, OverrideDummyRecipe recipe) {
+    public ShapelessOverrideRecipeJEI(IJeiHelpers jeiHelpers, ShapelessOverrideDummyRecipe recipe) {
         this.jeiHelpers = jeiHelpers;
         this.recipe = recipe;
-        for(int i = 1; i <= 3; i++) {
-            width = height = i;
-            if (recipe.canFit(i, i))
-                break;
-            else if (recipe.canFit(i, i + 1)) {
-                height = i + 1;
-                break;
-            } else if (recipe.canFit(i + 1, i)) {
-                height = i;
-                break;
-            }
-        }
     }
 
     @Override
@@ -47,7 +33,7 @@ public class OverrideRecipeJEI implements ICraftingRecipeWrapper, IShapedCraftin
             ingredients.setInputLists(ItemStack.class, inputLists);
             ingredients.setOutput(ItemStack.class, recipeOutput);
         } catch (RuntimeException e) {
-            TheBetweenlands.logger.error("Problem showing recipe in JEI for: " + recipe.getIngredients());
+            TheBetweenlands.logger.error("Problem showing recipe in JEI for: " + recipe.getIngredients(), e);
         }
     }
 
@@ -55,15 +41,5 @@ public class OverrideRecipeJEI implements ICraftingRecipeWrapper, IShapedCraftin
     @Override
     public ResourceLocation getRegistryName() {
         return recipe.getRegistryName();
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
     }
 }

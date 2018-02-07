@@ -55,7 +55,7 @@ println(canJarBeSigned() ? "blKeyStore property found, jar files will be signed"
 println("Building version " + version)
 
 minecraft {
-    version = "1.12.2-14.23.1.2554"
+    version = "1.12.2-14.23.2.2611"
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '${mcversion}', project.minecraft.version
@@ -283,9 +283,16 @@ def getVariable(String key) {
 
 //JEI intergration
 repositories {
-    maven { url "http://dvs1.progwml6.com/files/maven" }
+    maven {
+        name = "Progwml6 maven"
+        url = "http://dvs1.progwml6.com/files/maven"
+    }
+    maven {
+        name = "ModMaven"
+        url = "modmaven.k-4u.nl"
+    }
 }
-
 dependencies {
-    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.134:api"
+    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.147:api"
+    runtime "mezz.jei:jei_1.12.2:4.8.5.147"
 }

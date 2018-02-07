@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
@@ -39,7 +40,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.recipe.OverrideDummyRecipe;
+import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
@@ -73,7 +74,7 @@ public class RecipeRegistry {
 	public static final ResourceLocation HEARTHGROVE_LOG_TARRING = new ResourceLocation(ModInfo.ID, "hearthgrove_log_tarring");
 
 	private RecipeRegistry() { }
-	
+
 	@SubscribeEvent
 	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
 		IForgeRegistry<IRecipe> registry = event.getRegistry();
@@ -89,14 +90,14 @@ public class RecipeRegistry {
 		ElixirRecipes.init();
 
 		CustomRecipeRegistry.loadCustomRecipes();
-		
+
 		overrideConflictingRecipes(registry);
 	}
 
 	private static void overrideConflictingRecipes(IForgeRegistry<IRecipe> registry) {
 		if(ConfigHandler.overrideConflictingRecipes) {
 			TheBetweenlands.logger.info("Searching recipe conflicts:");
-			
+
 			List<IRecipe> blRecipes = new ArrayList<>();
 			List<IRecipe> otherRecipes = new ArrayList<>();
 
@@ -117,28 +118,35 @@ public class RecipeRegistry {
 						if(!blRecipe.isDynamic()) {
 							NonNullList<Ingredient> blIngredients = blRecipe.getIngredients();
 							if(blIngredients.size() == otherIngredients.size()) {
-								boolean hasConflict = true;
-								for(int i = 0; i < blIngredients.size(); i++) {
-									Ingredient blIngredient = blIngredients.get(i);
-									Ingredient otherIngredient = otherIngredients.get(i);
-									if(blIngredient.getMatchingStacks().length == 0 && otherIngredient.getMatchingStacks().length == 0) {
-										continue;
-									}
-									boolean hasSlotMatch = false;
-									for(ItemStack stack : blIngredient.getMatchingStacks()) {
-										if(otherIngredient.apply(stack)) {
-											hasSlotMatch = true;
+								IShapedRecipe blRecipeShaped = blRecipe instanceof IShapedRecipe ? (IShapedRecipe) blRecipe : null;
+								IShapedRecipe otherRecipeShaped = otherRecipe instanceof IShapedRecipe ? (IShapedRecipe) otherRecipe : null;
+								boolean canBlRecipeFit = blRecipeShaped == null || otherRecipeShaped == null || /*shape does not matter, so only compare the ingredients*/
+										(blRecipeShaped.getRecipeWidth() >= otherRecipeShaped.getRecipeWidth() && blIngredients.size() <= otherRecipeShaped.getRecipeWidth()) /*BL recipe fits in one row*/ ||
+										(blRecipeShaped.getRecipeWidth() == otherRecipeShaped.getRecipeWidth() && blRecipeShaped.getRecipeHeight() <= otherRecipeShaped.getRecipeHeight()) /*BL recipe fits shape*/;
+								if(canBlRecipeFit) {
+									boolean hasConflict = true;
+									for(int i = 0; i < blIngredients.size(); i++) {
+										Ingredient blIngredient = blIngredients.get(i);
+										Ingredient otherIngredient = otherIngredients.get(i);
+										if(blIngredient.getMatchingStacks().length == 0 && otherIngredient.getMatchingStacks().length == 0) {
+											continue;
+										}
+										boolean hasSlotMatch = false;
+										for(ItemStack stack : blIngredient.getMatchingStacks()) {
+											if(otherIngredient.apply(stack)) {
+												hasSlotMatch = true;
+												break;
+											}
+										}
+										if(!hasSlotMatch) {
+											hasConflict = false;
 											break;
 										}
 									}
-									if(!hasSlotMatch) {
-										hasConflict = false;
-										break;
+									if(hasConflict) {
+										TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName());
+										conflictingRecipes.put(blRecipe, otherRecipe.getRegistryName());
 									}
-								}
-								if(hasConflict) {
-									TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName());
-									conflictingRecipes.put(blRecipe, otherRecipe.getRegistryName());
 								}
 							}
 						}
@@ -152,7 +160,12 @@ public class RecipeRegistry {
 				IRecipe blRecipe = entry.getKey();
 				IRecipe otherRecipe = registry.getValue(entry.getValue());
 
-				IRecipe overrideDummy = new OverrideDummyRecipe(blRecipe, otherRecipe);
+				IRecipe overrideDummy;
+				if(otherRecipe instanceof IShapedRecipe) {
+					overrideDummy = new ShapelessOverrideDummyRecipe.ShapedOverrideDummyRecipe(blRecipe, (IShapedRecipe) otherRecipe);
+				} else {
+					overrideDummy = new ShapelessOverrideDummyRecipe(blRecipe, otherRecipe);
+				}
 				overrideDummy.setRegistryName(otherRecipe.getRegistryName());
 
 				registry.register(overrideDummy);

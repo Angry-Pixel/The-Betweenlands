@@ -5,8 +5,10 @@ import mezz.jei.api.gui.ITickTimer;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
@@ -123,7 +125,9 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
             int posX = (k1 - mouseX);
 
             doGlScissor(minecraft, posX + 42, posY + 12, 24, 24);
-
+            
+            GlStateManager.enableDepth();
+            GlStateManager.depthMask(true);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             GlStateManager.pushMatrix();
             GlStateManager.translate(54, 34 + getOffset(entity), 200);
@@ -143,8 +147,12 @@ public class AnimatorRecipeJEI implements IRecipeWrapper {
 
             GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
+            RenderHelper.enableGUIStandardItemLighting();
+            OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
+            
             int fontX = 54 - (minecraft.fontRenderer.getStringWidth(entityName) / 2);
-            minecraft.fontRenderer.drawStringWithShadow(entityName, fontX, -5, 0xCCCCCC);
+            Gui.drawRect(fontX - 1, -6, fontX + minecraft.fontRenderer.getStringWidth(entityName) + 1, 10 - 6, 0xAA000000);
+            minecraft.fontRenderer.drawStringWithShadow(entityName, fontX, -5, 0xFFFFFF);
         }
     }
 

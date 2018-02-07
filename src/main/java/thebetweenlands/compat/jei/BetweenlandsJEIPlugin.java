@@ -22,7 +22,8 @@ import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.recipe.OverrideDummyRecipe;
+import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe;
+import thebetweenlands.common.recipe.ShapelessOverrideDummyRecipe.ShapedOverrideDummyRecipe;
 import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -68,8 +69,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes(), ModInfo.ID + ":pestle_and_mortar");
         registry.addRecipes(PurifierRecipeMaker.getRecipes(), ModInfo.ID + ":purifier");
 
-        registry.handleRecipes(OverrideDummyRecipe.class, recipe -> new OverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
-
+        registry.handleRecipes(ShapelessOverrideDummyRecipe.class, recipe -> new ShapelessOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
+        registry.handleRecipes(ShapedOverrideDummyRecipe.class, recipe -> new ShapedOverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
+        
         addDynamicRecipes(registry);
 
         registry.addRecipeClickArea(GuiWeedwoodWorkbench.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
