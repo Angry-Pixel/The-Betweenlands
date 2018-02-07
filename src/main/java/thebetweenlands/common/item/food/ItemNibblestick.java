@@ -17,7 +17,6 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 public class ItemNibblestick extends ItemBLFood {
 	public ItemNibblestick() {
 		super(1, 0.1F, false);
-		this.setAlwaysEdible();
 	}
 
 	@Override
@@ -30,7 +29,7 @@ public class ItemNibblestick extends ItemBLFood {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 			IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 			if(FoodSickness.getSicknessForHatred(cap.getFoodHatred(this)) != FoodSickness.SICK) {
-				int xp = worldIn.rand.nextInt(5);
+				int xp = worldIn.rand.nextInt(4);
 				if(xp > 0) {
 					if(!worldIn.isRemote) {
 						cap.increaseFoodHatred(this, 4, 0); //Increased food sickness speed
