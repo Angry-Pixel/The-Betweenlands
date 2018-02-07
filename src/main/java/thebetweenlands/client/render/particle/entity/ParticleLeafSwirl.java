@@ -21,7 +21,7 @@ public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteR
 		this.target = target;
 
 		this.setOffset(0, -1.6D, 0);
-		this.setTargetMotion(this.target.motionX, this.target.motionY, this.target.motionZ);
+		this.setTargetMotion(this.target.posX - this.target.lastTickPosX, this.target.posY - this.target.lastTickPosY, this.target.posZ - this.target.lastTickPosZ);
 		this.setTarget(this.target.posX, this.target.posY + this.target.getEyeHeight() / 2.0D, this.target.posZ);
 	}
 
@@ -33,7 +33,7 @@ public class ParticleLeafSwirl extends ParticleSwirl implements IParticleSpriteR
 			this.setExpired();
 		}
 
-		this.setTargetMotion(this.target.motionX, this.target.motionY, this.target.motionZ);
+		this.setTargetMotion(this.target.posX - this.target.lastTickPosX, this.target.posY - this.target.lastTickPosY, this.target.posZ - this.target.lastTickPosZ);
 		this.setTarget(this.target.posX, this.target.posY + this.target.getEyeHeight() / 2.0D, this.target.posZ);
 
 		this.animation.update();
