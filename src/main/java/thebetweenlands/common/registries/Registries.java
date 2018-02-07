@@ -12,7 +12,6 @@ public class Registries {
 		BlockRegistry.preInit();
 		ItemRegistry.preInit();
 		EntityRegistry.preInit();
-//		BiomeRegistry.preInit();
 		SoundRegistry.preInit();
 		CapabilityRegistry.preInit();
 		StorageRegistry.preInit();
@@ -28,8 +27,6 @@ public class Registries {
 
 	public void init() {
 		//this.blockRegistry.init();
-		ItemRegistry.init();
-		RecipeRegistry.init();
 		TileEntityRegistry.init();
 		AspectRegistry.init();
 		FluidRegistry.init();

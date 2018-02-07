@@ -51,6 +51,8 @@ public class ConfigHandler {
 	public static int failedRecheckCount;
 	public static int defaultRemoteResetTicks;
 
+	public static boolean overrideConflictingRecipes;
+	
 	public Configuration config;
 	public static String path = "";
 
@@ -83,6 +85,7 @@ public class ConfigHandler {
 		parseFoodWhitelist(rottenFoodWhitelistUnparsed);
 		cavingRopeIndicator = config.getBoolean("Caving Rope Indicator", CATEGORIES[2], true, "Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left");
 		showNonBLFuids = config.getBoolean("Show Non BL Buckets", CATEGORIES[2], true, "If fluids from other mods should show in BL buckets in the creative tab");
+		overrideConflictingRecipes = config.getBoolean("Override Conflicting Recipes", CATEGORIES[2], true, "If true, Betweenlands recipes that conflict with oredict'd vanilla recipes will take priority over the vanilla recipes (should be true unless you intend to fix the recipes yourself with another mod)");
 
 		maxEntitiesPerLoadedArea = config.get(CATEGORIES[3], "Max. entities per loaded area", 250, "The maximum amount of naturally spawned entities per loaded area (in most cases this means per player)").setMinValue(0).getInt(100);
 		hardEntityLimit = config.get(CATEGORIES[3], "Max. entities per world", 600, "The maximum amount of naturally spawned entities in the Betweenlands per world").setMinValue(0).getInt(600);

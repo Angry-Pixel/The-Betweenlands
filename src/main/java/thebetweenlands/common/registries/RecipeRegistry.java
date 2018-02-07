@@ -1,14 +1,20 @@
 package thebetweenlands.common.registries;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -18,10 +24,10 @@ import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
@@ -32,6 +38,7 @@ import thebetweenlands.common.item.herblore.ItemPlantDrop;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.item.misc.ItemSwampTalisman.EnumTalisman;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.recipe.OverrideDummyRecipe;
 import thebetweenlands.common.recipe.animator.ToolRepairAnimatorRecipe;
 import thebetweenlands.common.recipe.misc.AnimatorRecipe;
 import thebetweenlands.common.recipe.misc.BookMergeRecipe;
@@ -63,150 +70,98 @@ public class RecipeRegistry {
 	public static final ResourceLocation RUNNER_BOOTS = new ResourceLocation(ModInfo.ID, "recipe_marsh_runner_boots");
 	public static final ResourceLocation BOOK_MERGE = new ResourceLocation(ModInfo.ID, "recipe_book_merge");
 	public static final ResourceLocation HEARTHGROVE_LOG_TARRING = new ResourceLocation(ModInfo.ID, "hearthgrove_log_tarring");
-	
-	private RecipeRegistry() { }
 
-	public static void init() {
-		registerOreDictionary();
-//		registerRecipes();
+	private RecipeRegistry() { }
+	
+	@SubscribeEvent
+	public static void registerRecipes(RegistryEvent.Register<IRecipe> event) {
+		IForgeRegistry<IRecipe> registry = event.getRegistry();
+
 		registerSmelting();
+		registerDynamicRecipes(registry);
 		registerPurifierRecipes();
 		registerPestleAndMortarRecipes();
 		registerCompostRecipes();
 		registerDruidAltarRecipes();
 		registerAnimatorRecipes();
+
 		ElixirRecipes.init();
-		
+
 		CustomRecipeRegistry.loadCustomRecipes();
-	}
-
-	private static void registerOreDictionary() {
-		OreDictionary.registerOre("oreSulfur", new ItemStack(BlockRegistry.SULFUR_ORE));
-		OreDictionary.registerOre("oreSyrmorite", new ItemStack(BlockRegistry.SYRMORITE_ORE));
-		OreDictionary.registerOre("oreBone", new ItemStack(BlockRegistry.SLIMY_BONE_ORE));
-		OreDictionary.registerOre("oreOctine", new ItemStack(BlockRegistry.OCTINE_ORE));
-		OreDictionary.registerOre("oreValonite", new ItemStack(BlockRegistry.VALONITE_ORE));
-		OreDictionary.registerOre("oreAquaMiddleGem", new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_ORE));
-		OreDictionary.registerOre("oreGreenMiddleGem", new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_ORE));
-		OreDictionary.registerOre("oreCrimsonMiddleGem", new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_ORE));
-		OreDictionary.registerOre("oreLifeCrystal", new ItemStack(BlockRegistry.LIFE_CRYSTAL_STALACTITE));
-
-		OreDictionary.registerOre("blockSulfur", new ItemStack(BlockRegistry.SULFUR_BLOCK));
-		OreDictionary.registerOre("blockSyrmorite", new ItemStack(BlockRegistry.SYRMORITE_BLOCK));
-		OreDictionary.registerOre("blockBone", new ItemStack(BlockRegistry.SLIMY_BONE_BLOCK));
-		OreDictionary.registerOre("blockOctine", new ItemStack(BlockRegistry.OCTINE_BLOCK));
-		OreDictionary.registerOre("blockValonite", new ItemStack(BlockRegistry.VALONITE_BLOCK));
-		OreDictionary.registerOre("blockAquaMiddleGem", new ItemStack(BlockRegistry.AQUA_MIDDLE_GEM_BLOCK));
-		OreDictionary.registerOre("blockGreenMiddleGem", new ItemStack(BlockRegistry.GREEN_MIDDLE_GEM_BLOCK));
-		OreDictionary.registerOre("blockCrimsonMiddleGem", new ItemStack(BlockRegistry.CRIMSON_MIDDLE_GEM_BLOCK));
-
-		OreDictionary.registerOre("blockGlass", new ItemStack(BlockRegistry.SILT_GLASS));
-		OreDictionary.registerOre("blockGlassColorless", new ItemStack(BlockRegistry.SILT_GLASS));
-		OreDictionary.registerOre("paneGlass", new ItemStack(BlockRegistry.SILT_GLASS_PANE));
-		OreDictionary.registerOre("paneGlassColorless", new ItemStack(BlockRegistry.SILT_GLASS_PANE));
-
-		OreDictionary.registerOre("dirt", new ItemStack(BlockRegistry.SWAMP_DIRT));
-		OreDictionary.registerOre("dirt", new ItemStack(BlockRegistry.COARSE_SWAMP_DIRT));
-
-		OreDictionary.registerOre("grass", new ItemStack(BlockRegistry.SWAMP_GRASS));
-
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_WEEDWOOD_TREE));
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SAP_TREE));
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_RUBBER_TREE));
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
-		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
-
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_WEEDWOOD));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SAP));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_RUBBER));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_HEARTHGROVE));
-		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_NIBBLETWIG));
-
-		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.BULB_CAPPED_MUSHROOM_ITEM));
-		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.BLACK_HAT_MUSHROOM_ITEM));
-		OreDictionary.registerOre("foodMushroom", new ItemStack(ItemRegistry.FLAT_HEAD_MUSHROOM_ITEM));
-
-		OreDictionary.registerOre("ingotSyrmorite", EnumItemMisc.SYRMORITE_INGOT.create(1));
-		OreDictionary.registerOre("ingotOctine", new ItemStack(ItemRegistry.OCTINE_INGOT));
-
-		OreDictionary.registerOre("gemValonite", EnumItemMisc.VALONITE_SHARD.create(1));
-		OreDictionary.registerOre("gemAquaMiddleGem", new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM));
-		OreDictionary.registerOre("gemCrimsonMiddleGem", new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM));
-		OreDictionary.registerOre("gemGreenMiddleGem", new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
-		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL));
-
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG));
-
-		//Recipes that use and creates these conflicts with vanilla recipes because of ore dict
-//		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
-//		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
-
-		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANKS));
-		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANKS));
-
-		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_SLAB));
-		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_SLAB));
-		OreDictionary.registerOre("slabWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_SLAB));
-
-		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE));
-		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE));
-		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE));
-		OreDictionary.registerOre("fenceWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_FENCE));
-
-		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANK_FENCE_GATE));
-		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.WEEDWOOD_LOG_FENCE_GATE));
-		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.RUBBER_TREE_PLANK_FENCE_GATE));
-		OreDictionary.registerOre("fenceGateWood", new ItemStack(BlockRegistry.GIANT_ROOT_PLANK_FENCE_GATE));
-
-		OreDictionary.registerOre("torch", new ItemStack(BlockRegistry.SULFUR_TORCH));
-
-		OreDictionary.registerOre("bone", EnumItemMisc.SLIMY_BONE.create(1));
-
-		//OreDictionary.registerOre("cobblestone", new ItemStack(BlockRegistry.BETWEENSTONE));
-		OreDictionary.registerOre("stone", new ItemStack(BlockRegistry.SMOOTH_BETWEENSTONE));
-
-		OreDictionary.registerOre("sand", new ItemStack(BlockRegistry.SILT));
-
-		OreDictionary.registerOre("workbench", new ItemStack(BlockRegistry.WEEDWOOD_WORKBENCH));
-
-		OreDictionary.registerOre("chest", new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
-		OreDictionary.registerOre("chestWood", new ItemStack(BlockRegistry.WEEDWOOD_CHEST));
-
-		OreDictionary.registerOre("vine", new ItemStack(BlockRegistry.POISON_IVY));
-		OreDictionary.registerOre("vine", new ItemStack(BlockRegistry.THORNS));
-
-		OreDictionary.registerOre("sugarcane", new ItemStack(ItemRegistry.SWAMP_REED_ITEM));
 		
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ASTATOS));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.BETWEEN_YOU_AND_ME));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.CHRISTMAS_ON_THE_MARSH));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.THE_EXPLORER));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.HAG_DANCE));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.LONELY_FIRE));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.MYSTERIOUS_RECORD));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ANCIENT));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.BENEATH_A_GREEN_SKY));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.DJ_WIGHTS_MIXTAPE));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.ONWARDS));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.STUCK_IN_THE_MUD));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WANDERING_WISPS));
-		OreDictionary.registerOre("record", new ItemStack(ItemRegistry.WATERLOGGED));
+		overrideConflictingRecipes(registry);
 	}
 
-	@SubscribeEvent
-	public static void registerRecipes(RegistryEvent.Register<IRecipe> register) {
-		IForgeRegistry<IRecipe> registry = register.getRegistry();
+	private static void overrideConflictingRecipes(IForgeRegistry<IRecipe> registry) {
+		if(ConfigHandler.overrideConflictingRecipes) {
+			TheBetweenlands.logger.info("Searching recipe conflicts:");
+			
+			List<IRecipe> blRecipes = new ArrayList<>();
+			List<IRecipe> otherRecipes = new ArrayList<>();
 
-		//TODO Recipe
-//		RecipeSorter.register("thebetweenlands:recipesAspectrusSeeds", RecipesAspectrusSeeds.class, SHAPELESS, "after:minecraft:shapeless");
-//		RecipeHelper.addRecipe(new RecipesAspectrusSeeds());
+			for(IRecipe recipe : registry) {
+				if(ModInfo.ID.equals(recipe.getRegistryName().getResourceDomain())) {
+					blRecipes.add(recipe);
+				} else {
+					otherRecipes.add(recipe);
+				}
+			}
 
+			Map<IRecipe, ResourceLocation> conflictingRecipes = new HashMap<>();
+
+			for(IRecipe otherRecipe : otherRecipes) {
+				if("minecraft".equals(otherRecipe.getRegistryName().getResourceDomain()) && !otherRecipe.isDynamic()) {
+					NonNullList<Ingredient> otherIngredients = otherRecipe.getIngredients();
+					for(IRecipe blRecipe : blRecipes) {
+						if(!blRecipe.isDynamic()) {
+							NonNullList<Ingredient> blIngredients = blRecipe.getIngredients();
+							if(blIngredients.size() == otherIngredients.size()) {
+								boolean hasConflict = true;
+								for(int i = 0; i < blIngredients.size(); i++) {
+									Ingredient blIngredient = blIngredients.get(i);
+									Ingredient otherIngredient = otherIngredients.get(i);
+									if(blIngredient.getMatchingStacks().length == 0 && otherIngredient.getMatchingStacks().length == 0) {
+										continue;
+									}
+									boolean hasSlotMatch = false;
+									for(ItemStack stack : blIngredient.getMatchingStacks()) {
+										if(otherIngredient.apply(stack)) {
+											hasSlotMatch = true;
+											break;
+										}
+									}
+									if(!hasSlotMatch) {
+										hasConflict = false;
+										break;
+									}
+								}
+								if(hasConflict) {
+									TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName());
+									conflictingRecipes.put(blRecipe, otherRecipe.getRegistryName());
+								}
+							}
+						}
+					}
+				}
+			}
+
+			TheBetweenlands.logger.info("Replacing conflicting recipes:");
+
+			for(Entry<IRecipe, ResourceLocation> entry : conflictingRecipes.entrySet()) {
+				IRecipe blRecipe = entry.getKey();
+				IRecipe otherRecipe = registry.getValue(entry.getValue());
+
+				IRecipe overrideDummy = new OverrideDummyRecipe(blRecipe, otherRecipe);
+				overrideDummy.setRegistryName(otherRecipe.getRegistryName());
+
+				registry.register(overrideDummy);
+
+				TheBetweenlands.logger.info(otherRecipe.getRegistryName() + (registry.getValue(entry.getValue()) != overrideDummy ? " FAILED" : ""));
+			}
+		}
+	}
+
+	private static void registerDynamicRecipes(IForgeRegistry<IRecipe> registry) {
 		//TODO: Volarkite
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', ItemGenericPlantDrop.createStack(EnumItemPlantDrop.VOLARPAD));
 		//RecipeHelper.addRecipe(new ItemStack(ItemRegistry.volarkite), "VVV", "RxR", " x ", 'x',  EnumItemMisc.WEEDWOOD_STICK), 'R', ItemGeneric.createStack(EnumItemGeneric.SWAMP_REED_ROPE), 'V', new ItemStack(BlockRegistry.volarpad));
@@ -440,7 +395,7 @@ public class RecipeRegistry {
 			});
 		}
 		AnimatorRecipe.addRecipe(new AnimatorRecipe(new ItemStack(ItemRegistry.SPORES), 8, 4, EntitySporeling.class).setRenderEntity(new ResourceLocation("thebetweenlands:sporeling")));
-	
+
 		for(Item item : ItemRegistry.ITEMS) {
 			if(item instanceof IAnimatorRepairable) {
 				AnimatorRecipe.addRecipe(new ToolRepairAnimatorRecipe((IAnimatorRepairable)item));
