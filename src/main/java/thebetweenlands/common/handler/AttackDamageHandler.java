@@ -45,12 +45,15 @@ public class AttackDamageHandler {
 
 		if(attackedEntity instanceof IEntityBL) {
 			if (source.getTrueSource() instanceof EntityPlayer) {
-				//Cap damage of overly OP weapons
-				damage = Math.min(damage, 40.0F);
-
 				//BL mobs overworld item resistance
 				EntityPlayer entityPlayer = (EntityPlayer) source.getTrueSource();
 				ItemStack heldItem = entityPlayer.getHeldItem(entityPlayer.getActiveHand());
+				
+				if (heldItem.isEmpty() || OverworldItemHandler.isToolWeakened(heldItem)) {
+					//Cap damage of overly OP weapons
+					damage = Math.min(damage, 40.0F);
+				}
+				
 				if (!heldItem.isEmpty()) {
 					if (OverworldItemHandler.isToolWeakened(heldItem)) {
 						damage = damage * DAMAGE_REDUCTION;

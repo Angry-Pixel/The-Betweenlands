@@ -26,7 +26,10 @@ public class ItemLootSword extends ItemBLSword {
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase attacked, EntityLivingBase attacker) {
         if (!this.instantKills.isEmpty() && this.instantKills.contains(attacked.getClass())) {
-            attacked.attackEntityFrom(DamageSource.causeIndirectMagicDamage(attacker, attacker), attacked.getMaxHealth());
+        	int maxCorrosion = this.getMaxCorrosion(stack);
+        	int corrosion = this.getCorrosion(stack);
+        	float corrosionMultiplier = 1.0F - (corrosion > maxCorrosion / 2.0F ? ((corrosion - maxCorrosion / 2.0F) / (float)(maxCorrosion / 2.0F)) : 0);
+            attacked.attackEntityFrom(DamageSource.causeIndirectMagicDamage(attacker, attacker), attacked.getMaxHealth() * corrosionMultiplier);
         }
         return super.hitEntity(stack, attacked, attacker);
     }
