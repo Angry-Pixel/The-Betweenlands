@@ -80,8 +80,8 @@ public class BlockItemShelf extends BlockContainer {
 
 	@Override
 	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
-		if(!world.isRemote && (player.swingProgressInt > 0 || player.getHeldItemMainhand().getCount() != 1
-				/*Ugly check so that it doesn't give 2 items when clicking with empty hand*/)) {
+		if(!world.isRemote && (!player.isSwingInProgress || player.prevSwingProgress != player.swingProgress)
+				/*Ugly check so that it doesn't give 2 items when clicking with empty hand*/) {
 			TileEntity te = world.getTileEntity(pos);
 
 			if(te instanceof TileEntityItemShelf) {
@@ -149,8 +149,8 @@ public class BlockItemShelf extends BlockContainer {
 
 		cx = dir.getX() * hitX + dir.getZ() * hitZ;
 		cy = hitY;
-
-		if(cx < 0) {
+		
+		if(cx <= 0.0D) {
 			cx = cx + 1;
 		}
 
