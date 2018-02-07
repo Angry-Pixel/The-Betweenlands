@@ -137,7 +137,7 @@ public class WorldGenHearthgroveTree extends WorldGenHelper {
 					Random supportRand = new Random();
 					for(Pair<BlockPos, Float> support : leavesSupportPoints) {
 						BlockPos supportPos = support.getKey();
-						supportRand.setSeed(MathHelper.getPositionRandom(supportPos));
+						supportRand.setSeed(MathHelper.getCoordinateRandom(supportPos.getX(), supportPos.getY(), supportPos.getZ()));
 						float squashX = 0.6F + supportRand.nextFloat() * 1.2F;
 						float squashY = 0.6F + supportRand.nextFloat() * 1.2F;
 						float squashZ = 0.6F + supportRand.nextFloat() * 1.2F;
