@@ -14,8 +14,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
@@ -23,8 +21,8 @@ import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemMisc;
-import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.recipe.OverrideDummyRecipe;
 import thebetweenlands.common.recipe.misc.*;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.FluidRegistry;
@@ -69,6 +67,9 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         registry.addRecipes(DruidAltarRecipeMaker.getRecipes(), ModInfo.ID + ":druid_altar");
         registry.addRecipes(PestleAndMortarRecipeMaker.getRecipes(), ModInfo.ID + ":pestle_and_mortar");
         registry.addRecipes(PurifierRecipeMaker.getRecipes(), ModInfo.ID + ":purifier");
+
+        registry.handleRecipes(OverrideDummyRecipe.class, recipe -> new OverrideRecipeJEI(jeiHelper, recipe), VanillaRecipeCategoryUid.CRAFTING);
+
         addDynamicRecipes(registry);
 
         registry.addRecipeClickArea(GuiWeedwoodWorkbench.class, 88, 32, 28, 23, VanillaRecipeCategoryUid.CRAFTING);
