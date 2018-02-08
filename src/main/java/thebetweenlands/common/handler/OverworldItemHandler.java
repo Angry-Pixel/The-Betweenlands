@@ -24,6 +24,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -209,6 +210,14 @@ public class OverworldItemHandler {
 				event.setCanceled(true);
 			}
 		}
+	}
+	
+	@SubscribeEvent
+    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+        ItemStack tool = event.getEntityPlayer().getHeldItemMainhand();
+        if(!tool.isEmpty() && isToolWeakened(tool)) {
+        	event.setNewSpeed(event.getNewSpeed() * 0.3F);
+        }
 	}
 
 	@SubscribeEvent
