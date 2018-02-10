@@ -1,1 +1,13 @@
-
+[
+  {
+    "versions": [
+      "3.3.0"
+    ],
+    "overrides": [
+      {
+        "id": "thebetweenlands:blood_sky",
+        "value": true
+      }
+    ]
+  }
+]
