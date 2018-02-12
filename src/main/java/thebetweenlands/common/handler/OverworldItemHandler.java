@@ -214,10 +214,12 @@ public class OverworldItemHandler {
 	
 	@SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-        ItemStack tool = event.getEntityPlayer().getHeldItemMainhand();
-        if(!tool.isEmpty() && isToolWeakened(tool)) {
-        	event.setNewSpeed(event.getNewSpeed() * 0.3F);
-        }
+		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
+			ItemStack tool = event.getEntityPlayer().getHeldItemMainhand();
+			if (!tool.isEmpty() && isToolWeakened(tool)) {
+				event.setNewSpeed(event.getNewSpeed() * 0.3F);
+			}
+		}
 	}
 
 	@SubscribeEvent
