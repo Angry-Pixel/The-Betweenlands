@@ -173,15 +173,26 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
-		byte duration = 0;
 		if (getSkin() == 4) {
 			if (!world.isRemote && !player.capabilities.isCreativeMode && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
-				if (world.getDifficulty() == EnumDifficulty.NORMAL)
-					duration = 5;
-				else if (world.getDifficulty() == EnumDifficulty.HARD)
+				int duration = 0;
+				switch(world.getDifficulty()) {
+				default:
+					duration = 0;
+					break;
+				case EASY:
+					duration = 4;
+					break;
+				case NORMAL:
+					duration = 7;
+					break;
+				case HARD:
 					duration = 10;
-				if (duration > 0)
+					break;
+				}
+				if (duration > 0) {
 					player.addPotionEffect(new PotionEffect(MobEffects.POISON, duration * 20, 0));
+				}
 			}
 		}
 	}
