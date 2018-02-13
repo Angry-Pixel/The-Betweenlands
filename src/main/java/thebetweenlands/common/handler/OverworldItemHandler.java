@@ -129,7 +129,9 @@ public class OverworldItemHandler {
 
 		BONEMEAL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() == Items.DYE);
 
-		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() instanceof ItemBLSword == false && 
+		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> 
+				(stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemSword) &&
+				stack.getItem() instanceof ItemBLSword == false && 
 				stack.getItem() instanceof ItemBLAxe == false && 
 				stack.getItem() instanceof ItemBLPickaxe == false && 
 				stack.getItem() instanceof ItemBLShovel == false &&
@@ -222,7 +224,7 @@ public class OverworldItemHandler {
 	public static void onArmSwingSpeed(ArmSwingSpeedEvent event) {
 		if(event.getEntityLiving().dimension == ConfigHandler.dimensionId) {
 			ItemStack tool = event.getEntityLiving().getHeldItemMainhand();
-			if (!tool.isEmpty() && (tool.getItem() instanceof ItemTool || tool.getItem() instanceof ItemSword) && isToolWeakened(tool)) {
+			if (!tool.isEmpty() && isToolWeakened(tool)) {
 				event.setSpeed(event.getSpeed() * 0.3F);
 			}
 		}

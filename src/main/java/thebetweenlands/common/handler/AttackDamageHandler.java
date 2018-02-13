@@ -50,7 +50,7 @@ public class AttackDamageHandler {
 			EntityLivingBase entityLiving = (EntityLivingBase) attacker;
 			ItemStack heldItem = entityLiving.getHeldItem(entityLiving.getActiveHand());
 
-			if (!heldItem.isEmpty() && (heldItem.getItem() instanceof ItemTool || heldItem.getItem() instanceof ItemSword) && OverworldItemHandler.isToolWeakened(heldItem)) {
+			if (!heldItem.isEmpty() && OverworldItemHandler.isToolWeakened(heldItem)) {
 				event.setStrength(event.getStrength() * 0.3F);
 			}
 		}
@@ -76,20 +76,18 @@ public class AttackDamageHandler {
 				if (OverworldItemHandler.isToolWeakened(heldItem)) {
 					damage = damage * DAMAGE_REDUCTION;
 
-					if(heldItem.getItem() instanceof ItemTool || heldItem.getItem() instanceof ItemSword) {
-						RayTraceResult result = attackedEntity.getEntityBoundingBox().calculateIntercept(entityLiving.getPositionEyes(1), entityLiving.getPositionEyes(1).add(entityLiving.getLookVec().scale(10)));
-						if(result != null) {
-							Vec3d center = attackedEntity.getPositionVector().addVector(0, attackedEntity.height / 2.0F, 0);
-							Vec3d hitOffset = result.hitVec.subtract(center);
-							Vec3d offsetDirXZ = new Vec3d(hitOffset.x, 0, hitOffset.z).normalize();
-							Vec3d offset = offsetDirXZ.scale(attackedEntity.width).addVector(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
+					RayTraceResult result = attackedEntity.getEntityBoundingBox().calculateIntercept(entityLiving.getPositionEyes(1), entityLiving.getPositionEyes(1).add(entityLiving.getLookVec().scale(10)));
+					if(result != null) {
+						Vec3d center = attackedEntity.getPositionVector().addVector(0, attackedEntity.height / 2.0F, 0);
+						Vec3d hitOffset = result.hitVec.subtract(center);
+						Vec3d offsetDirXZ = new Vec3d(hitOffset.x, 0, hitOffset.z).normalize();
+						Vec3d offset = offsetDirXZ.scale(attackedEntity.width).addVector(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
 
-							attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 2, 2);
-							attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 2, 1);
-							attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, SoundCategory.PLAYERS, 2, 1);
+						attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 2, 2);
+						attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 2, 1);
+						attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, SoundCategory.PLAYERS, 2, 1);
 
-							TheBetweenlands.networkWrapper.sendToAllAround(new MessageDamageReductionParticle(attackedEntity, offset, offsetDirXZ.scale(attackedEntity.width + 0.2F).normalize()), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
-						}
+						TheBetweenlands.networkWrapper.sendToAllAround(new MessageDamageReductionParticle(attackedEntity, offset, offsetDirXZ.scale(attackedEntity.width + 0.2F).normalize()), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
 					}
 				}
 			}
