@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -39,8 +38,6 @@ public class TextureStitchHandler {
 
 	private final List<TextureStitcher> stitchers = new ArrayList<TextureStitcher>();
 
-	private final Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<ResourceLocation, Frame[]>();
-
 	/**
 	 * Registers a texture stitcher
 	 * @param splitter
@@ -49,7 +46,6 @@ public class TextureStitchHandler {
 		this.stitchers.add(splitter);
 	}
 
-	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
 		if(e.getMap() != Minecraft.getMinecraft().getTextureMapBlocks()) {
@@ -109,7 +105,7 @@ public class TextureStitchHandler {
 		}
 
 		//Stitch textures and split animations if necessary
-		this.animationFramesCache.clear();
+		Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<>();
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		for(TextureStitcher stitcher : this.stitchers) {
 			ResourceLocation[] textures = stitcher.getTextures();
@@ -122,7 +118,7 @@ public class TextureStitchHandler {
 					try {
 						ResourceLocation resourceLocation = this.getResourceLocation(e.getMap().getBasePath(), sprite);
 
-						Frame[] cachedFrames = this.animationFramesCache.get(resourceLocation);
+						Frame[] cachedFrames = animationFramesCache.get(resourceLocation);
 						if(cachedFrames != null) {
 							//Use cached frames
 							frames[i] = cachedFrames;
@@ -161,7 +157,7 @@ public class TextureStitchHandler {
 								}
 							}
 
-							this.animationFramesCache.put(resourceLocation, frames[i]);
+							animationFramesCache.put(resourceLocation, frames[i]);
 						}
 					} catch(Exception ex) {
 						throw new RuntimeException("Failed splitting texture animation", ex);
@@ -195,6 +191,7 @@ public class TextureStitchHandler {
 			if(parentSprite != null)
 				corrosionSprite.setParentSprite(parentSprite);
 		}
+		this.stitchedCorrosionSprites.clear();
 
 		//Frame splitters
 		for(TextureStitcher splitter : this.stitchers) {

@@ -754,6 +754,7 @@ tooltip.valonite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '%
 tooltip.dentrothyst_shield=Blocks splash potion effects
 tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope
 tooltip.hearthgrove_log=This dense log is excellent as fuel.\nCan be tarred
+tooltip.decay_food=Heals decay
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing

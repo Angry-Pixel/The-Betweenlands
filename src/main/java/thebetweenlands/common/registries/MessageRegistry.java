@@ -13,6 +13,7 @@ import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardSectionChange;
 import thebetweenlands.common.network.clientbound.MessageClearBlockGuard;
+import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle;
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
@@ -65,6 +66,7 @@ public class MessageRegistry {
 		registerMessage(MessageSyncLocalStorageReferences.class, Side.CLIENT);
 		registerMessage(MessageSummonPeatMummyParticles.class, Side.CLIENT);
 		registerMessage(MessageShowFoodSicknessLine.class, Side.CLIENT);
+		registerMessage(MessageDamageReductionParticle.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);

@@ -24,7 +24,9 @@ public class ItemMarshRunnerBoots extends ItemRubberBoots {
 
 	@Override
 	public void onCreated(ItemStack itemStack, World world, EntityPlayer player) {
-		itemStack.setTagCompound(new NBTTagCompound());
+		if(itemStack.getTagCompound() == null) {
+			itemStack.setTagCompound(new NBTTagCompound());
+		}
 	}
 
 	@Override

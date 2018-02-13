@@ -15,6 +15,8 @@ import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -30,6 +32,9 @@ import net.minecraftforge.event.world.BlockEvent.PlaceEvent;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
@@ -208,6 +213,17 @@ public class OverworldItemHandler {
 			if(!stack.isEmpty() && isBonemealBlocked(stack)) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
+			}
+		}
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@SubscribeEvent
+	public static void onArmSwingSpeed(ArmSwingSpeedEvent event) {
+		if(event.getEntityLiving().dimension == ConfigHandler.dimensionId) {
+			ItemStack tool = event.getEntityLiving().getHeldItemMainhand();
+			if (!tool.isEmpty() && (tool.getItem() instanceof ItemTool || tool.getItem() instanceof ItemSword) && isToolWeakened(tool)) {
+				event.setSpeed(event.getSpeed() * 0.3F);
 			}
 		}
 	}

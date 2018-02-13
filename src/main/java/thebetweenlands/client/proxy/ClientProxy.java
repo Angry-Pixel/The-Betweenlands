@@ -44,6 +44,7 @@ import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.handler.AmbienceSoundPlayHandler;
+import thebetweenlands.client.handler.ArmSwingSpeedHandler;
 import thebetweenlands.client.handler.BrightnessHandler;
 import thebetweenlands.client.handler.CameraPositionHandler;
 import thebetweenlands.client.handler.DebugHandlerClient;
@@ -600,6 +601,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ItemSwatShield.class);
         MinecraftForge.EVENT_BUS.register(EventWinter.class);
         MinecraftForge.EVENT_BUS.register(EventSpoopy.class);
+        MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
 	}
 
 	@Override

@@ -530,7 +530,7 @@ public class BlockRegistry {
     public static final Block SWAMP_REED_UNDERWATER = new BlockSwampReedUnderwater();
     public static final Block THORNS = new BlockThorns();
     public static final BlockDoublePlantBL TALL_CATTAIL = new BlockDoublePlantBL().setSickleDrop(EnumItemPlantDrop.CATTAIL_HEAD.create(1));
-    public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.GENERIC_LEAF.create(1)).setReplaceable(true);
+    public static final Block SWAMP_TALLGRASS = new BlockPlant().setSickleDrop(EnumItemPlantDrop.SWAMP_TALL_GRASS_BLADES.create(1)).setReplaceable(true);
     public static final Block DEAD_WEEDWOOD_BUSH = new BlockPlant().setSickleDrop(EnumItemMisc.WEEDWOOD_STICK.create(1));
     public static final Block WEEDWOOD_BUSH = new BlockWeedwoodBush();
     public static final Block HOLLOW_LOG = new BlockHollowLog();
