@@ -3,11 +3,8 @@ package thebetweenlands.common.handler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.ItemSword;
-import net.minecraft.item.ItemTool;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.RayTraceResult;
@@ -30,6 +27,7 @@ import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class AttackDamageHandler {
 	public static final float DAMAGE_REDUCTION = 0.3F;
@@ -64,8 +62,8 @@ public class AttackDamageHandler {
 
 		if(attackedEntity instanceof IEntityBL && source.getTrueSource() instanceof EntityLivingBase) {
 			//BL mobs overworld item resistance
-			EntityLivingBase entityLiving = (EntityLivingBase) source.getTrueSource();
-			ItemStack heldItem = entityLiving.getHeldItem(entityLiving.getActiveHand());
+			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
+			ItemStack heldItem = attacker.getHeldItem(attacker.getActiveHand());
 
 			if (heldItem.isEmpty() || OverworldItemHandler.isToolWeakened(heldItem)) {
 				//Cap damage of overly OP weapons
@@ -76,18 +74,30 @@ public class AttackDamageHandler {
 				if (OverworldItemHandler.isToolWeakened(heldItem)) {
 					damage = damage * DAMAGE_REDUCTION;
 
-					RayTraceResult result = attackedEntity.getEntityBoundingBox().calculateIntercept(entityLiving.getPositionEyes(1), entityLiving.getPositionEyes(1).add(entityLiving.getLookVec().scale(10)));
-					if(result != null) {
+					if(!attackedEntity.world.isRemote) {
 						Vec3d center = attackedEntity.getPositionVector().addVector(0, attackedEntity.height / 2.0F, 0);
-						Vec3d hitOffset = result.hitVec.subtract(center);
-						Vec3d offsetDirXZ = new Vec3d(hitOffset.x, 0, hitOffset.z).normalize();
-						Vec3d offset = offsetDirXZ.scale(attackedEntity.width).addVector(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
 
-						attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 2, 2);
-						attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_WEAK, SoundCategory.PLAYERS, 2, 1);
-						attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundEvents.ENTITY_PLAYER_ATTACK_NODAMAGE, SoundCategory.PLAYERS, 2, 1);
+						Vec3d hitOffset = null;
 
-						TheBetweenlands.networkWrapper.sendToAllAround(new MessageDamageReductionParticle(attackedEntity, offset, offsetDirXZ.scale(attackedEntity.width + 0.2F).normalize()), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
+						Entity immediateAttacker = source.getImmediateSource();
+
+						if(immediateAttacker == null || attacker == immediateAttacker) {
+							RayTraceResult result = attackedEntity.getEntityBoundingBox().calculateIntercept(attacker.getPositionEyes(1), attacker.getPositionEyes(1).add(attacker.getLookVec().scale(10)));
+							if(result != null) {
+								hitOffset = result.hitVec.subtract(center);
+							}
+						}
+						if(immediateAttacker != null && hitOffset == null) {
+							hitOffset = immediateAttacker.getPositionVector().addVector(0, immediateAttacker.height / 2.0F, 0).subtract(center);
+						}
+						if(hitOffset != null) {
+							Vec3d offsetDirXZ = new Vec3d(hitOffset.x, 0, hitOffset.z).normalize();
+							Vec3d offset = offsetDirXZ.scale(attackedEntity.width).addVector(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
+
+							attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.PLAYERS, 0.7F, 0.75F + attackedEntity.world.rand.nextFloat() * 0.3F);
+
+							TheBetweenlands.networkWrapper.sendToAllAround(new MessageDamageReductionParticle(attackedEntity, offset, offsetDirXZ.scale(attackedEntity.width + 0.2F).normalize()), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
+						}
 					}
 				}
 			}
@@ -123,7 +133,7 @@ public class AttackDamageHandler {
 
 	@SideOnly(Side.CLIENT)
 	public static void spawnDamageReductionParticle(Entity entity, Vec3d offset, Vec3d dir) {
-		BLParticles.DAMAGE_REDUCTION.spawn(entity.world, 0, 0, 0, ParticleArgs.get().withScale(1.5F).withData(entity, offset, dir));
+		BLParticles.DAMAGE_REDUCTION.spawn(entity.world, 0, 0, 0, ParticleArgs.get().withScale(2F).withData(entity, offset, dir));
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemFlintAndSteel;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemPotion;
@@ -130,7 +131,7 @@ public class OverworldItemHandler {
 		BONEMEAL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() == Items.DYE);
 
 		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> 
-				(stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemSword) &&
+				(stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemBow) &&
 				stack.getItem() instanceof ItemBLSword == false && 
 				stack.getItem() instanceof ItemBLAxe == false && 
 				stack.getItem() instanceof ItemBLPickaxe == false && 

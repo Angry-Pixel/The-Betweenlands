@@ -910,5 +910,10 @@
     "sounds": [
       "thebetweenlands:ignite"
     ]
+  },
+  "damage_reduction": {
+    "sounds": [
+      "thebetweenlands:damage_reduction"
+    ]
   }
 }

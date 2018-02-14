@@ -51,6 +51,7 @@ public class SoundRegistry {
     public static final BLSoundEvent SHOCKWAVE_SWORD = reg("shockwave_sword");
     public static final BLSoundEvent SQUISH = reg("squish");
     public static final BLSoundEvent IGNITE = reg("ignite");
+    public static final BLSoundEvent DAMAGE_REDUCTION = reg("damage_reduction");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");

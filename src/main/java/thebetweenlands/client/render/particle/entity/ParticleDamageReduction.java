@@ -42,7 +42,7 @@ public class ParticleDamageReduction extends ParticleAnimated implements IPartic
 
 	@Override
 	public boolean shouldDisableDepth() {
-		return true;
+		return false;
 	}
 
 	@Override
