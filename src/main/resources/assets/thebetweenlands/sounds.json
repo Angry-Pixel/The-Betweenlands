@@ -579,6 +579,13 @@
       }
     ]
   },
+  "ambient_cave_spook": {
+    "sounds": [
+      "thebetweenlands:ambience/ambient_cave_spook_1",
+      "thebetweenlands:ambience/ambient_cave_spook_2",
+      "thebetweenlands:ambience/ambient_cave_spook_3"
+    ]
+  },
   "portal": {
     "sounds": [
       "thebetweenlands:portal"

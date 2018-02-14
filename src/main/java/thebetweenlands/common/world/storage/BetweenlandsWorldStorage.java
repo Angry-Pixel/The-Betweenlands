@@ -1,26 +1,40 @@
 package thebetweenlands.common.world.storage;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
-import gnu.trove.map.TIntLongMap;
 import gnu.trove.map.TObjectLongMap;
-import gnu.trove.map.hash.TIntLongHashMap;
 import gnu.trove.map.hash.TObjectLongHashMap;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.util.config.ConfigHandler;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private BLEnvironmentEventRegistry environmentEventRegistry;
@@ -29,6 +43,10 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
 	private int environmentEventSyncTicks;
+
+	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
+	protected int ambienceTicks;
+	protected int updateLCG = (new Random()).nextInt();
 
 	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
@@ -63,6 +81,8 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			}
 			this.aspectManager.loadAndPopulateStaticAspects(null, AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 		}
+
+		this.ambienceTicks = this.getWorld().rand.nextInt(7000);
 	}
 
 	@Override
@@ -108,6 +128,92 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		}
 	}
 
+	@Override
+	public void tick() {
+		super.tick();
+
+		if(this.getWorld().isRemote && this.getWorld().provider.getDimension() == ConfigHandler.dimensionId) {
+			this.updateAmbientCaveSounds();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void updateAmbientCaveSounds() {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+
+		if(player != null) {
+			Set<ChunkPos> closeChunks = new HashSet<>();
+
+			int cx = MathHelper.floor(player.posX / 16.0D);
+			int cz = MathHelper.floor(player.posZ / 16.0D);
+
+			int chunkRadius = 3;
+
+			for(int ox = -chunkRadius; ox <= chunkRadius; ++ox) {
+				for(int oz = -chunkRadius; oz <= chunkRadius; ++oz) {
+					closeChunks.add(new ChunkPos(ox + cx, oz + cz));
+				}
+			}
+
+			if(this.ambienceTicks > 0) {
+				--this.ambienceTicks;
+			} else {
+				this.previousCheckedAmbientChunks.retainAll(closeChunks);
+
+				if(this.previousCheckedAmbientChunks.size() >= closeChunks.size()) {
+					this.previousCheckedAmbientChunks.clear();
+				}
+
+				int checkedChunks = 0;
+
+				for(ChunkPos chunkpos : closeChunks) {
+					if(!this.previousCheckedAmbientChunks.contains(chunkpos)) {
+						int bx = chunkpos.x * 16;
+						int bz = chunkpos.z * 16;
+
+						Chunk chunk = this.getWorld().getChunkFromChunkCoords(chunkpos.x, chunkpos.z);
+
+						if(this.playAmbientCaveSounds(player, bx, bz, chunk)) {
+							break;
+						}
+
+						this.previousCheckedAmbientChunks.add(chunkpos);
+						++checkedChunks;
+
+						if (checkedChunks >= 6) {
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected boolean playAmbientCaveSounds(EntityPlayer player, int x, int z, Chunk chunk) {
+		World world = this.getWorld();
+
+		this.updateLCG = this.updateLCG * 3 + 1013904223;
+		int rnd = this.updateLCG >> 2;
+		int xo = rnd & 15;
+		int zo = rnd >> 8 & 15;
+		int y = rnd >> 16 & 255;
+		BlockPos pos = new BlockPos(xo + x, y, zo + z);
+		IBlockState state = chunk.getBlockState(pos);
+
+		if(state.getMaterial() == Material.AIR && world.getLight(pos) <= world.rand.nextInt(8) && world.getLightFor(EnumSkyBlock.SKY, pos) <= 0) {
+			double dst = player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D);
+
+			if(dst > 4.0D && dst < 256.0D) {
+				world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundRegistry.AMBIENT_CAVE_SPOOK, SoundCategory.AMBIENT, 0.85F, 0.8F + world.rand.nextFloat() * 0.2F, false);
+				this.ambienceTicks = world.rand.nextInt(7000) + 3000;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static BetweenlandsWorldStorage forWorld(World world) {
 		if(world.hasCapability(CAPABILITY_INSTANCE, null)) {
 			IWorldStorage storage = world.getCapability(CAPABILITY_INSTANCE, null);
@@ -122,7 +228,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		public final BiomeBetweenlands biome;
 
 		private final TObjectLongMap<ResourceLocation> lastSpawnMap = new TObjectLongHashMap<>();
-		
+
 		protected BiomeSpawnEntriesData(BiomeBetweenlands biome) {
 			this.biome = biome;
 		}
