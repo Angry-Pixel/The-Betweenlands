@@ -1,5 +1,7 @@
 package thebetweenlands.common.world;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -42,9 +44,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	private boolean allowHostiles, allowAnimals;
 	private BetweenlandsWorldStorage worldData;
 
-	public WorldProviderBetweenlands() {
-
-	}
+	@SideOnly(Side.CLIENT)
+	private static BLSkyRenderer skyRenderer;
 
 
 	/**
@@ -141,7 +142,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return spawnPos;
 	}
 
-	public BetweenlandsWorldStorage getWorldData() {
+	protected BetweenlandsWorldStorage getWorldData() {
 		return BetweenlandsWorldStorage.forWorld(this.world);
 	}
 
@@ -219,7 +220,15 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getSkyRenderer() {
-		return BLSkyRenderer.INSTANCE;
+		return getBLSkyRenderer();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public static BLSkyRenderer getBLSkyRenderer() {
+		if(skyRenderer == null) {
+			skyRenderer = new BLSkyRenderer();
+		}
+		return skyRenderer;
 	}
 	
 	@SideOnly(Side.CLIENT)

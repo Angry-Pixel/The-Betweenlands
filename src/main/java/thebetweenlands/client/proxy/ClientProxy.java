@@ -115,6 +115,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderAspectVial;
@@ -602,6 +603,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(EventWinter.class);
         MinecraftForge.EVENT_BUS.register(EventSpoopy.class);
         MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
+        MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
 	}
 
 	@Override

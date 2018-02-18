@@ -48,15 +48,10 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 	}
 
 	public static boolean canSee(World world, BlockPos pos) {
-		if(world.provider instanceof WorldProviderBetweenlands) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			BLEnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			if(eeRegistry.auroras.isActive()) {
-				return true;
-			}
-		}
-
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		if(worldStorage.getEnvironmentEventRegistry().auroras.isActive()) {
+			return true;
+		}
 		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
 			return true;
 		}

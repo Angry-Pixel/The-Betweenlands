@@ -34,6 +34,7 @@ import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.FogGenerator;
@@ -86,16 +87,9 @@ public class FogHandler {
 	 * Returns whether the "Dense Fog" event is active
 	 * @return
 	 */
-	public static boolean hasDenseFog() {
-		World world = Minecraft.getMinecraft().world;
-		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			BLEnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			if(eeRegistry.denseFog.isActive()) {
-				return true;
-			}
-		}
-		return false;
+	public static boolean hasDenseFog(World world) {
+		BLEnvironmentEventRegistry eeRegistry = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry();
+		return eeRegistry.denseFog.isActive() && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -227,7 +221,7 @@ public class FogHandler {
 			fog.setEnd((fog.getEnd() / additionalFogStrength));
 		}
 
-		if(hasDenseFog()) {
+		if(hasDenseFog(world)) {
 			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
 				fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
 			}

@@ -28,7 +28,7 @@ public class ThemHandler {
 		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
 			World world = TheBetweenlands.proxy.getClientWorld();
 			Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
-			if(world != null && viewer != null && viewer.dimension == ConfigHandler.dimensionId && FogHandler.hasDenseFog() && (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 < 65.0F) {
+			if(world != null && viewer != null && viewer.dimension == ConfigHandler.dimensionId && FogHandler.hasDenseFog(world) && (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 < 65.0F) {
 				Iterator<Particle> it = activeParticles.iterator();
 				while(it.hasNext()) {
 					Particle particle = it.next();

@@ -37,10 +37,10 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   
   if [[ "$TRAVIS_TAG" == *"release"* ]]; then
     releaseType="release"
-	releaseTitle="Release Build ${TRAVIS_BUILD_NUMBER}"
+	releaseTitle="Release Build ${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}"
   else
     releaseType="development"
-	releaseTitle="Development Build ${TRAVIS_BUILD_NUMBER}"
+	releaseTitle="Development Build ${TRAVIS_BRANCH}-${TRAVIS_BUILD_NUMBER}"
   fi
   
   #$(sed 's/\:/\\:/g' <<< "${releaseDescription}")

@@ -1,21 +1,42 @@
 package thebetweenlands.client.render.shader;
 
+import java.io.IOException;
+
+import javax.annotation.Nullable;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.AbstractTexture;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.util.ResourceLocation;
 
-public class GeometryBuffer {
+public class GeometryBuffer extends AbstractTexture {
 	private Framebuffer geometryBuffer;
 	private DepthBuffer geometryDepthBuffer;
 	private boolean depthBuffer = false;
 
+	protected final TextureManager textureManager;
+	protected final ResourceLocation nameDiffuse, nameDepth;
+
 	/**
 	 * Creates a new geometry buffer
+	 * @param textureManager The texture manager
+	 * @param name The diffuse texture's resource name
+	 * @param name The depth texture's resource name
 	 * @param depthBuffer Whether this geometry buffer should have a depth buffer
 	 */
-	public GeometryBuffer(boolean depthBuffer) {
+	public GeometryBuffer(TextureManager textureManager, @Nullable ResourceLocation nameDiffuse, @Nullable ResourceLocation nameDepth, boolean depthBuffer) {
+		this.textureManager = textureManager;
 		this.depthBuffer = depthBuffer;
+		this.nameDiffuse = nameDiffuse;
+		this.nameDepth = nameDepth;
+
+		if(this.textureManager != null && this.nameDiffuse != null) {
+			this.textureManager.loadTexture(this.nameDiffuse, this);
+		}
 	}
 
 	/**
@@ -51,11 +72,12 @@ public class GeometryBuffer {
 		boolean changed = false;
 		if(this.depthBuffer && this.geometryBuffer != null) {
 			if(this.geometryDepthBuffer == null) {
-				this.geometryDepthBuffer = new DepthBuffer();
+				this.geometryDepthBuffer = new DepthBuffer(this.textureManager, this.nameDepth);
 				changed = true;
 			}
-			if(this.geometryDepthBuffer.blitDepthBuffer(this.geometryBuffer))
+			if(this.geometryDepthBuffer.blitDepthBuffer(this.geometryBuffer)) {
 				changed = true;
+			}
 		}
 		return changed;
 	}
@@ -76,7 +98,7 @@ public class GeometryBuffer {
 	 */
 	public int getDepthTexture() {
 		if(this.depthBuffer && this.geometryDepthBuffer != null) {
-			return this.geometryDepthBuffer.getTexture();
+			return this.geometryDepthBuffer.getGlTextureId();
 		}
 		return -1;
 	}
@@ -98,7 +120,7 @@ public class GeometryBuffer {
 	public boolean isInitialized() {
 		return this.geometryBuffer != null;
 	}
-	
+
 	/**
 	 * Clears the buffer
 	 * <p><b>Note:</b> Binds the FBO
@@ -143,5 +165,21 @@ public class GeometryBuffer {
 	 */
 	public boolean hasDepthBuffer() {
 		return this.depthBuffer;
+	}
+
+	@Override
+	public void loadTexture(IResourceManager resourceManager) throws IOException { }
+
+	@Override
+	public int getGlTextureId() {
+		if(this.geometryBuffer != null) {
+			return this.geometryBuffer.framebufferTexture;
+		}
+		return -1;
+	}
+
+	@Override
+	public void deleteGlTexture() {
+		this.deleteBuffers();
 	}
 }

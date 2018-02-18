@@ -14,6 +14,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
@@ -27,7 +28,10 @@ import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
@@ -37,6 +41,14 @@ import thebetweenlands.util.config.ConfigHandler;
  * TODO: Make lighting and other spacial effects use "correct" deferred rendering
  */
 public class WorldShader extends PostProcessingEffect<WorldShader> {
+	public static final ResourceLocation WORLD_DEPTH_TEXTURE = new ResourceLocation(ModInfo.ID, "world_depth");
+	public static final ResourceLocation REPELLER_DIFFUSE_TEXTURE = new ResourceLocation(ModInfo.ID, "repeller_diffuse");
+	public static final ResourceLocation REPELLER_DEPTH_TEXTURE = new ResourceLocation(ModInfo.ID, "repeller_depth");
+	public static final ResourceLocation GAS_PARTICLES_DIFFUSE_TEXTURE = new ResourceLocation(ModInfo.ID, "gas_particles_diffuse");
+	public static final ResourceLocation GAS_PARTICLES_DEPTH_TEXTURE = new ResourceLocation(ModInfo.ID, "gas_particles_depth");
+	public static final ResourceLocation CLIP_PLANE_DIFFUSE_TEXTURE = new ResourceLocation(ModInfo.ID, "clip_plane_diffuse");
+	public static final ResourceLocation CLIP_PLANE_DEPTH_TEXTURE = new ResourceLocation(ModInfo.ID, "clip_plane_depth");
+	
 	private DepthBuffer depthBuffer;
 	private ResizableFramebuffer blitBuffer;
 	private ResizableFramebuffer occlusionBuffer;
@@ -158,12 +170,14 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		this.lightSourceAmountUniformID = this.getUniform("u_lightSourcesAmount");
 
+		TextureManager textureManager = Minecraft.getMinecraft().getTextureManager();
+		
 		//Initialize framebuffers
-		this.depthBuffer = new DepthBuffer();
+		this.depthBuffer = new DepthBuffer(textureManager, WORLD_DEPTH_TEXTURE);
 		this.blitBuffer = new ResizableFramebuffer(false);
 		this.occlusionBuffer = new ResizableFramebuffer(false);
-		this.repellerShieldBuffer = new GeometryBuffer(true);
-		this.gasParticlesBuffer = new GeometryBuffer(true);
+		this.repellerShieldBuffer = new GeometryBuffer(textureManager, REPELLER_DIFFUSE_TEXTURE, REPELLER_DEPTH_TEXTURE, true);
+		this.gasParticlesBuffer = new GeometryBuffer(textureManager, GAS_PARTICLES_DIFFUSE_TEXTURE, GAS_PARTICLES_DEPTH_TEXTURE, true);
 
 		//Initialize gas textures and effect
 		this.gasTextureFramebuffer = new Framebuffer(64, 64, false);
@@ -206,7 +220,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 	@Override
 	protected void uploadUniforms(float partialTicks) {
-		this.uploadSampler(this.depthUniformID, this.depthBuffer.getTexture(), 1);
+		this.uploadSampler(this.depthUniformID, this.depthBuffer.getGlTextureId(), 1);
 		this.uploadSampler(this.repellerDiffuseUniformID, this.repellerShieldBuffer.getDiffuseTexture(), 2);
 		this.uploadSampler(this.repellerDepthUniformID, this.repellerShieldBuffer.getDepthTexture(), 3);
 		this.uploadSampler(this.gasParticlesDiffuseUniformID, this.gasParticlesBuffer.getDiffuseTexture(), 4);
@@ -446,14 +460,12 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 
 		World world = Minecraft.getMinecraft().world;
 		if (world != null) {
-			if (world.provider instanceof WorldProviderBetweenlands) {
-				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) world.provider;
-				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().bloodSky.getSkyTransparency(partialTicks);
-				if (skyTransparency > 0.01F) {
-					hasBeat = true;
-				}
-				skyTransparency += provider.getWorldData().getEnvironmentEventRegistry().spoopy.getSkyTransparency(partialTicks);
+			BLEnvironmentEventRegistry eeRegistry = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry();
+			skyTransparency += eeRegistry.bloodSky.getSkyTransparency(partialTicks);
+			if (skyTransparency > 0.01F) {
+				hasBeat = true;
 			}
+			skyTransparency += eeRegistry.spoopy.getSkyTransparency(partialTicks);
 		}
 
 		if (skyTransparency <= 0.01F) {
@@ -505,8 +517,8 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 			weight *= mult;
 		}
 
-		int depthTexture = this.depthBuffer.getTexture();
-		int clipPlaneBuffer = BLSkyRenderer.INSTANCE.clipPlaneBuffer.getDepthTexture();
+		int depthTexture = this.depthBuffer.getGlTextureId();
+		int clipPlaneBuffer = WorldProviderBetweenlands.getBLSkyRenderer().clipPlaneBuffer.getDepthTexture();
 
 		if (depthTexture < 0 || clipPlaneBuffer < 0) return; //FBOs not yet ready
 

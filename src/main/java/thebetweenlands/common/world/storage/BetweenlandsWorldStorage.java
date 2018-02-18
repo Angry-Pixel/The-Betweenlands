@@ -221,7 +221,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				return (BetweenlandsWorldStorage) storage;
 			}
 		}
-		return null;
+		throw new RuntimeException(String.format("World %s (%s) does not have BetweenlandsWorldStorage capability", world.getWorldInfo().getWorldName(), world.provider.getClass().getName()));
 	}
 
 	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {
