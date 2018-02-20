@@ -34,12 +34,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntriesProvider;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage.BiomeSpawnEntriesData;
 import thebetweenlands.util.WeightedList;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class MobSpawnHandler {
 	public static final MobSpawnHandler INSTANCE = new MobSpawnHandler();
@@ -59,14 +59,14 @@ public class MobSpawnHandler {
 	private static final int MAX_SPAWNS_PER_CHUNK = 6;
 
 	//World entity limit
-	private static final int HARD_ENTITY_LIMIT = ConfigHandler.hardEntityLimit;
+	private static final int HARD_ENTITY_LIMIT = BetweenlandsConfig.MOB_SPAWNING.hardEntityLimit;
 
 	/**
 	 * Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
 	 * @return
 	 */
 	public static final float getMaxEntitiesPerChunkMultiplier() {
-		return (float)ConfigHandler.maxEntitiesPerLoadedArea / (SPAWN_CHUNK_RANGE * 2 * SPAWN_CHUNK_RANGE * 2 - 25);
+		return (float)BetweenlandsConfig.MOB_SPAWNING.maxEntitiesPerLoadedArea / (SPAWN_CHUNK_RANGE * 2 * SPAWN_CHUNK_RANGE * 2 - 25);
 	}
 
 	/**
@@ -285,7 +285,7 @@ public class MobSpawnHandler {
 	@SubscribeEvent
 	public void onServerTick(ServerTickEvent event) {
 		if(event.phase == Phase.END) {
-			WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
+			WorldServer world = DimensionManager.getWorld(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 			if(world == null || world.playerEntities.isEmpty())
 				return;
 
@@ -298,7 +298,7 @@ public class MobSpawnHandler {
 	}
 
 	public void populateChunk(WorldServer world, int chunkX, int chunkZ) {
-		if(world == null || world.provider.getDimension() != ConfigHandler.dimensionId)
+		if(world == null || world.provider.getDimension() != BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)
 			return;
 
 		if(world.getGameRules().getBoolean("doMobSpawning")) {

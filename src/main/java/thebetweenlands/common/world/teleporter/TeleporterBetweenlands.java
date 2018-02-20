@@ -19,14 +19,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedwoodPortalTree;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
-import thebetweenlands.util.config.ConfigHandler;
 
 public final class TeleporterBetweenlands extends Teleporter {
 	private final World targetWorld;
@@ -274,14 +273,14 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 
 		EntityPlayerMP player = (EntityPlayerMP) entity;
-		BlockPos coords = player.getBedLocation(ConfigHandler.dimensionId);
+		BlockPos coords = player.getBedLocation(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 
 		if (coords == null) {
 			coords = player.getPosition();
 			int spawnFuzz = 64;
 			int spawnFuzzHalf = spawnFuzz / 2;
 			BlockPos spawnPlace = this.targetWorld.getTopSolidOrLiquidBlock(coords.add(this.targetWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, this.targetWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
-			player.setSpawnChunk(spawnPlace, true, ConfigHandler.dimensionId);
+			player.setSpawnChunk(spawnPlace, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 	}
 

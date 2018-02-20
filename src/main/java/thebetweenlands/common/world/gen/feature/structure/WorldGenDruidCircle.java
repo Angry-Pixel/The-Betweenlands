@@ -21,6 +21,7 @@ import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.structure.BlockDruidStone;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
@@ -29,7 +30,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
 	private static final IBlockState[] RUNE_STONES = {
@@ -78,7 +78,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 			}
 		}
 
-		if(genPos != null && random.nextInt(ConfigHandler.druidCircleFrequency) == 0) {
+		if(genPos != null && random.nextInt(BetweenlandsConfig.WORLD_AND_DIMENSION.druidCircleFrequency) == 0) {
 			generateStructure(world, random, genPos);
 		}
 	}

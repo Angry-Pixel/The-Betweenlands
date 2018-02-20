@@ -34,8 +34,9 @@ import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.lwjgl.opengl.GLContext;
+
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class GuiBLMainMenu extends GuiMainMenu {
 	public static final ResourceLocation LOGO_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/gui/main/logo.png");
@@ -73,7 +74,7 @@ public class GuiBLMainMenu extends GuiMainMenu {
 
 	@SubscribeEvent
 	public static void onGuiOpened(GuiOpenEvent event) {
-		if (ConfigHandler.blMainMenu && event.getGui() instanceof GuiMainMenu
+		if (BetweenlandsConfig.GENERAL.blMainMenu && event.getGui() instanceof GuiMainMenu
 				&& !(event.getGui() instanceof GuiBLMainMenu)) {
 			event.setGui(new GuiBLMainMenu());
 		}

@@ -17,12 +17,12 @@ import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.api.item.IFoodSicknessItem;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemTooltipHandler {
 public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.##");
@@ -56,7 +56,7 @@ public static final DecimalFormat COMPOST_AMOUNT_FORMAT = new DecimalFormat("#.#
 		}
 		
 		if(player != null) {
-			if(ConfigHandler.useFoodSickness && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(player, stack)) {
+			if(BetweenlandsConfig.GENERAL.useFoodSickness && stack.getItem() instanceof ItemFood && stack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)stack.getItem()).canGetSickOf(player, stack)) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 					FoodSickness sickness = cap.getSickness((ItemFood)stack.getItem());

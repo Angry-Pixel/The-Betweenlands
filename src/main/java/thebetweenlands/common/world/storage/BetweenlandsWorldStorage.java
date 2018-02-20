@@ -29,12 +29,12 @@ import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	private BLEnvironmentEventRegistry environmentEventRegistry;
@@ -132,7 +132,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	public void tick() {
 		super.tick();
 
-		if(this.getWorld().isRemote && this.getWorld().provider.getDimension() == ConfigHandler.dimensionId) {
+		if(this.getWorld().isRemote && this.getWorld().provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			this.updateAmbientCaveSounds();
 		}
 	}

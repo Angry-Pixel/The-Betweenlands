@@ -37,11 +37,11 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class EnvironmentEventOverridesHandler {
 	private static final ExecutorService DOWNLOADER = Executors.newFixedThreadPool(1, new ThreadFactory() {
@@ -87,13 +87,13 @@ public class EnvironmentEventOverridesHandler {
 		if(event.phase == Phase.END) {
 			MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 
-			if(ConfigHandler.onlineEnvironmentEventOverrides) {
-				if(failedDownloadAttempts > 0 && failedDownloadAttempts <= ConfigHandler.failedRecheckCount && remoteDataRecheckTicks > ConfigHandler.failedRecheckIntervalTicks) {
-					remoteDataRecheckTicks = ConfigHandler.failedRecheckIntervalTicks;
+			if(BetweenlandsConfig.EVENT_OVERRIDES.onlineEnvironmentEventOverrides) {
+				if(failedDownloadAttempts > 0 && failedDownloadAttempts <= BetweenlandsConfig.EVENT_OVERRIDES.failedRecheckCount && remoteDataRecheckTicks > BetweenlandsConfig.EVENT_OVERRIDES.failedRecheckInterval * 20) {
+					remoteDataRecheckTicks = BetweenlandsConfig.EVENT_OVERRIDES.failedRecheckInterval * 20;
 				}
 				remoteDataRecheckTicks--;
 				if(remoteDataRecheckTicks <= 0) {
-					remoteDataRecheckTicks = ConfigHandler.checkIntervalTicks;
+					remoteDataRecheckTicks = BetweenlandsConfig.EVENT_OVERRIDES.checkInterval * 20;
 
 					List<WeakReference<World>> worldRefs = new ArrayList<>();
 					for(World world : server.worlds) {
@@ -126,11 +126,11 @@ public class EnvironmentEventOverridesHandler {
 	 * @return
 	 */
 	public static boolean isRemoteDataAvailable() {
-		return failedDownloadAttempts <= ConfigHandler.failedRecheckCount;
+		return failedDownloadAttempts <= BetweenlandsConfig.EVENT_OVERRIDES.failedRecheckCount;
 	}
 
 	public static void downloadAndCheckStates(final WeakReference<IThreadListener> schedulerRef, final List<WeakReference<World>> worldRefs) {
-		if(ConfigHandler.onlineEnvironmentEventOverrides) {
+		if(BetweenlandsConfig.EVENT_OVERRIDES.onlineEnvironmentEventOverrides) {
 			final Proxy proxy = TheBetweenlands.proxy.getNetProxy();
 			DOWNLOADER.submit(new Runnable() {
 				@Override
@@ -177,7 +177,7 @@ public class EnvironmentEventOverridesHandler {
 						}
 					} catch(Exception ex) {
 						failedDownloadAttempts++;
-						if(ConfigHandler.debug) TheBetweenlands.logger.info("Failed downloading remote environment event overrides", ex);
+						if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.info("Failed downloading remote environment event overrides", ex);
 					}
 				}
 			});
@@ -217,7 +217,7 @@ public class EnvironmentEventOverridesHandler {
 								JsonObject override = overrides.get(j).getAsJsonObject();
 								ResourceLocation id = new ResourceLocation(override.get("id").getAsString());
 								boolean value = override.get("value").getAsBoolean();
-								int remoteResetTicks = ConfigHandler.defaultRemoteResetTicks;
+								int remoteResetTicks = BetweenlandsConfig.EVENT_OVERRIDES.defaultRemoteResetTime * 20;
 								if(override.has("remote_reset_ticks")) {
 									remoteResetTicks = override.get("remote_reset_ticks").getAsInt();
 								}
@@ -239,14 +239,14 @@ public class EnvironmentEventOverridesHandler {
 								}
 								states.add(new OverrideState(dimensions.isEmpty() ? Optional.empty() : Optional.of(dimensions), id, remoteResetTicks, value, data.build()));
 							} catch(Exception ex) {
-								if(ConfigHandler.debug) {
+								if(BetweenlandsConfig.DEBUG.debug) {
 									TheBetweenlands.logger.error("Failed parsing override entry: " + j, ex);
 								}
 							}
 						}
 					}
 				} catch(Exception ex) {
-					if(ConfigHandler.debug) {
+					if(BetweenlandsConfig.DEBUG.debug) {
 						TheBetweenlands.logger.error("Failed parsing version entry: " + i, ex);
 					}
 				}

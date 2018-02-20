@@ -14,10 +14,10 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessEntityCapability, IFoodSicknessCapability, EntityPlayer> implements IFoodSicknessCapability, ISerializableCapability {
 	@Override
@@ -88,7 +88,7 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 
 	@Override
 	public void increaseFoodHatred(Item food, int amount, int decreaseForOthers) {
-		if (!ConfigHandler.useFoodSickness)
+		if (!BetweenlandsConfig.GENERAL.useFoodSickness)
 			return;
 		int finalMaxHatred = FoodSickness.VALUES[Math.max(FoodSickness.VALUES.length - 1, 0)].maxHatred;
 		if (this.hatredMap.containsKey(food)) {

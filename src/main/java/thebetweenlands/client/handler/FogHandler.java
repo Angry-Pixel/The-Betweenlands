@@ -28,6 +28,7 @@ import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 import thebetweenlands.api.misc.Fog.MutableFog;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
@@ -38,7 +39,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.FogGenerator;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class FogHandler {
 	private FogHandler() { }
@@ -97,7 +97,7 @@ public class FogHandler {
 	public static void onFogRenderEvent(RenderFogEvent event) {
 		farPlaneDistance = event.getFarPlaneDistance();
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
-		if(renderView != null && renderView.dimension == ConfigHandler.dimensionId) {
+		if(renderView != null && renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			float partialTicks = (float) event.getRenderPartialTicks();
 			Fog fog = state.getFog(partialTicks);
 			Fog currentFog = state.getFog(1.0F);
@@ -136,7 +136,7 @@ public class FogHandler {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
 		if(world != null && player != null) {
-			if(farPlaneDistance != 0.0F && player.dimension == ConfigHandler.dimensionId) {
+			if(farPlaneDistance != 0.0F && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				state.update(world, player.getPositionVector().addVector(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
 
@@ -159,7 +159,7 @@ public class FogHandler {
 			if(blockState.getBlock() instanceof BlockSwampWater) {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
 				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.world, pos, 0);
-				if(renderView.dimension == ConfigHandler.dimensionId) {
+				if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					double waterFogColorMultiplier = fogColorMultiplier / 2.0F;
 					event.setRed((float)(colorMultiplier >> 16 & 255) / 255.0F * (float)waterFogColorMultiplier);
 					event.setGreen((float)(colorMultiplier >> 8 & 255) / 255.0F * (float)waterFogColorMultiplier);
@@ -169,7 +169,7 @@ public class FogHandler {
 					event.setGreen((float)(colorMultiplier >> 8 & 255) / 255.0F);
 					event.setBlue((float)(colorMultiplier & 255) / 255.0F);
 				}
-			} else if(renderView.dimension == ConfigHandler.dimensionId) {
+			} else if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) renderView.getEntityWorld().provider;
 				Vec3d fogColor = provider.getFogColor(renderView.getEntityWorld().getCelestialAngle((float)event.getRenderPartialTicks()), (float)event.getRenderPartialTicks());
 				event.setRed((float)fogColor.x);

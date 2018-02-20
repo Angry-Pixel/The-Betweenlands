@@ -2,6 +2,7 @@ package thebetweenlands.common.world;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -19,13 +20,13 @@ import thebetweenlands.api.misc.Fog;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.util.config.ConfigHandler;
 
 /**
  *
@@ -83,7 +84,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float configBrightness = ConfigHandler.dimensionBrightness / 100.0F;
+		float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
 		for(int i = 0; i <= 15; i++) {
 			float f1 = 1F - (float)Math.pow(i / 15F, 1.1F + 0.35F * (1.0F - configBrightness));
 			this.lightBrightnessTable[i] = Math.max((1.0F - f1) / (f1 * f1 * (0.75F + configBrightness * 0.6F) + 1.0F) * (0.4F + configBrightness * 0.5F) - 0.1F, 0.0F);
@@ -92,7 +93,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public void init() {
-		this.setDimension(ConfigHandler.dimensionId);
+		this.setDimension(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		this.biomeProvider = new BiomeProviderBetweenlands(this, this.world.getWorldInfo());
 		this.hasSkyLight = true;
 	}
@@ -186,7 +187,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	 * @param player
 	 */
 	public void updateLightTable(EntityPlayer player) {
-		float configBrightness = ConfigHandler.dimensionBrightness / 100.0F;
+		float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
 
 		float[] surfaceTable = new float[16];
 		float[] undergroundTable = new float[16];
@@ -221,6 +222,18 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public IRenderHandler getSkyRenderer() {
 		return getBLSkyRenderer();
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
+		return new Vec3d(0.1F, 0.8F, 0.55F);
+	}
+	
+	@SideOnly(Side.CLIENT)
+	@Override
+	public boolean isSkyColored() {
+		return false;
 	}
 	
 	@SideOnly(Side.CLIENT)

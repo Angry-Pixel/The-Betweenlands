@@ -8,9 +8,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotelyControllableEnvironmentEvent {
 	private final BLEnvironmentEventRegistry registry;
@@ -46,7 +46,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 		this.active = active;
 		if(markDirty) this.markDirty();
 		if (active)
-			for (EntityPlayerMP player: getWorld().getPlayers(EntityPlayerMP.class, player -> player.dimension == ConfigHandler.dimensionId))
+			for (EntityPlayerMP player: getWorld().getPlayers(EntityPlayerMP.class, player -> player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId))
 				AdvancementCriterionRegistry.EVENT.trigger(player, getEventName());
 	}
 

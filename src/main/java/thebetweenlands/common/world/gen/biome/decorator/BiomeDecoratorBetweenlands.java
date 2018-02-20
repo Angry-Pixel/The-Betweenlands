@@ -6,11 +6,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
-import thebetweenlands.util.config.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -203,7 +203,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * @return
      */
     public boolean isProfilingEnabled() {
-        return ConfigHandler.debug;
+        return BetweenlandsConfig.DEBUG.debug;
     }
 
     /**

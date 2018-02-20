@@ -1290,3 +1290,43 @@ advancements.thebetweenlands.miner.rock_bottom.title=Rock Bottom
 advancements.thebetweenlands.miner.rock_bottom.description=Enter the Pitstone Caves
 advancements.thebetweenlands.miner.get_schwifty.title=Get Schwifty
 advancements.thebetweenlands.miner.get_schwifty.description=Obtain a Swift Pick
+
+# Config
+config.thebetweenlands.world_and_dimension=World And Dimension
+config.thebetweenlands.dimension_id=The Betweenlands Dimension ID
+config.thebetweenlands.druid_circle_frequency=Frequency of Druid Circles
+config.thebetweenlands.dimension_brightness=Dimension brightness
+config.thebetweenlands.enable_seasonal_events=Enable Seasonal Events
+
+config.thebetweenlands.rendering=Rendering
+config.thebetweenlands.wisp_quality=Wisp Rendering Quality
+config.thebetweenlands.use_shader=Use shaders for rendering
+config.thebetweenlands.sky_texture_resolution=Sky texture resolution
+config.thebetweenlands.fullbright_blocks=Full brightness blocks
+
+config.thebetweenlands.general=General
+config.thebetweenlands.bl_main_menu=Betweenlands Main Menu
+config.thebetweenlands.rowboat_view=Rowboat view
+config.thebetweenlands.use_food_sickness=Food Sickness
+config.thebetweenlands.rotten_food_whitelist=Rotten Food Whitelist
+config.thebetweenlands.caving_rope_indicator=Caving Rope Indicator
+config.thebetweenlands.override_conflicting_recipes=Override Conflicting Recipes
+
+config.thebetweenlands.mob_spawning=Mob Spawning
+config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area
+config.thebetweenlands.hard_entity_limit=Max. entities per world
+
+config.thebetweenlands.compatibility=Compatibility
+config.thebetweenlands.show_non_bl_fluids=Show Non BL Fluid Buckets
+config.thebetweenlands.show_non_bl_gem_recipes=JEI - Show Non BL Gem Recipes
+
+config.thebetweenlands.online_event_overrides=Online Environment Event Overrides
+config.thebetweenlands.online_event_overrides_enabled=Enabled
+config.thebetweenlands.check_interval=Check Interval
+config.thebetweenlands.failed_recheck_interval=Failed Recheck Interval
+config.thebetweenlands.failed_recheck_count=Failed Recheck Count
+config.thebetweenlands.default_remote_reset_time=Default Remote Reset Time
+
+config.thebetweenlands.debug=Debug
+config.thebetweenlands.debug_mode=Debug mode
+config.thebetweenlands.debug_model_loader=Model loader debug

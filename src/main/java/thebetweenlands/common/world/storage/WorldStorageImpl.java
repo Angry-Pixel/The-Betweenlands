@@ -27,9 +27,9 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.util.config.ConfigHandler;
 
 public abstract class WorldStorageImpl implements IWorldStorage {
 	////////////// Handler //////////////////
@@ -180,7 +180,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public void readAndLoadChunk(Chunk chunk, NBTTagCompound nbt) {
 		if(this.storageMap.containsKey(chunk.getPos())) {
-			if(ConfigHandler.debug) TheBetweenlands.logger.warn(String.format("Reading chunk storage at %s, but chunk storage is already loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
+			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.warn(String.format("Reading chunk storage at %s, but chunk storage is already loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
 		} else {
 			ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
 			storage.init();
@@ -196,7 +196,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public void unloadChunk(Chunk chunk) {
 		if(!this.storageMap.containsKey(chunk.getPos())) {
-			if(ConfigHandler.debug) TheBetweenlands.logger.warn(String.format("Unloading chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
+			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.warn(String.format("Unloading chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
 		} else {
 			ChunkStorageImpl storage = this.storageMap.remove(chunk.getPos());
 			if(storage instanceof ITickable) {
@@ -209,7 +209,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public NBTTagCompound saveChunk(Chunk chunk) {
 		if(!this.storageMap.containsKey(chunk.getPos())) {
-			if(ConfigHandler.debug) TheBetweenlands.logger.warn(String.format("Saving chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
+			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.warn(String.format("Saving chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
 			return null;
 		} else {
 			ChunkStorageImpl storage = this.storageMap.get(chunk.getPos());

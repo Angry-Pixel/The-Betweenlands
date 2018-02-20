@@ -15,9 +15,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
-import thebetweenlands.util.config.ConfigHandler;
 
 @SideOnly(Side.CLIENT)
 public class ThemHandler {
@@ -28,7 +28,7 @@ public class ThemHandler {
 		if(event.phase == Phase.END && !Minecraft.getMinecraft().isGamePaused()) {
 			World world = TheBetweenlands.proxy.getClientWorld();
 			Entity viewer = Minecraft.getMinecraft().getRenderViewEntity();
-			if(world != null && viewer != null && viewer.dimension == ConfigHandler.dimensionId && FogHandler.hasDenseFog(world) && (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 < 65.0F) {
+			if(world != null && viewer != null && viewer.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && FogHandler.hasDenseFog(world) && (FogHandler.getCurrentFogEnd() + FogHandler.getCurrentFogStart()) / 2 < 65.0F) {
 				Iterator<Particle> it = activeParticles.iterator();
 				while(it.hasNext()) {
 					Particle particle = it.next();

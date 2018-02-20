@@ -11,6 +11,8 @@ import javax.vecmath.Vector4f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
+import com.google.common.math.IntMath;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -26,6 +28,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.IRenderHandler;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -57,6 +60,8 @@ public class BLSkyRenderer extends IRenderHandler {
 	protected Mesh starMesh;
 
 	public final GeometryBuffer clipPlaneBuffer;
+
+	protected int ticks;
 
 	public BLSkyRenderer() {
 		this.clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
@@ -138,9 +143,51 @@ public class BLSkyRenderer extends IRenderHandler {
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		this.renderSky(partialTicks, world, mc);
 
+		this.renderCrack(partialTicks, world, mc);
+
+		this.renderFog(partialTicks, world, mc);
+
 		this.renderAuroras(partialTicks, world, mc);
 
 		this.resetRenderingStates();
+	}
+
+	protected void renderCrack(float partialTicks, WorldClient world, Minecraft mc) {
+		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
+
+		if(!fbo.isStencilEnabled()) {
+			fbo.enableStencil();
+		}
+
+		if(fbo.isStencilEnabled()) {
+			int bit = MinecraftForgeClient.reserveStencilBit();
+
+			if(bit != -1) {
+				int index = IntMath.pow(2, bit);
+
+				//Set our bits in buffer to 0
+				GL11.glStencilMask(index);
+				GL11.glClearStencil(0);
+				GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
+				GL11.glStencilMask(0xFF);
+
+				GL11.glEnable(GL11.GL_STENCIL_TEST);
+
+				GL11.glStencilFunc(GL11.GL_NEVER, index, index);
+				GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
+
+				//TODO Render Crack Mask
+
+				GL11.glStencilFunc(GL11.GL_EQUAL, index, index);
+				GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
+
+				//TODO Render Overworld Sky
+
+				GL11.glDisable(GL11.GL_STENCIL_TEST);
+
+				MinecraftForgeClient.releaseStencilBit(bit);
+			}
+		}
 	}
 
 	protected void renderSky(float partialTicks, WorldClient world, Minecraft mc) {
@@ -165,8 +212,7 @@ public class BLSkyRenderer extends IRenderHandler {
 		float invRainStrength = 1.0F - world.getRainStrength(partialTicks);
 
 		GlStateManager.pushMatrix();
-		GlStateManager.rotate(-90.0F, 0.0F, 1.0F, 0.0F);
-		GlStateManager.rotate(world.getCelestialAngle(partialTicks) * 360.0F, 1.0F, 0.0F, 0.0F);
+		GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
 
 		GlStateManager.disableTexture2D();
 		GlStateManager.enableBlend();
@@ -185,7 +231,6 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 			GlStateManager.pushMatrix();
-			GlStateManager.rotate(55, 1, 0, 0);
 			this.starMesh.render();
 			GlStateManager.popMatrix();
 			GL14.glBlendColor(1, 1, 1, 1);
@@ -198,13 +243,12 @@ public class BLSkyRenderer extends IRenderHandler {
 		GlStateManager.enableAlpha();
 
 		if (world.provider.isSkyColored()) {
-			GlStateManager.color(skyR * 0.2F + 0.04F, skyG * 0.2F + 0.04F, skyB * 0.6F + 0.1F);
+			GlStateManager.color(skyR * 0.2F + 0.04F, skyG * 0.2F + 0.04F, skyB * 0.6F + 0.1F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
 		} else {
-			GlStateManager.color(skyR, skyG, skyB);
+			GlStateManager.color(skyR, skyG, skyB, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
 		}
 
 		GlStateManager.enableTexture2D();
-		GlStateManager.color(0.1F, 0.8F, 0.55F, starBrightness / (!useShaderSky ? 1.5F : 1.0F));
 
 		if(useShaderSky) {
 			//Render shader sky dome
@@ -253,30 +297,6 @@ public class BLSkyRenderer extends IRenderHandler {
 				this.renderFlatSky(partialTicks, world, mc, false);
 			}
 		}
-
-		/*boolean useShaderSky = ShaderHelper.INSTANCE.isWorldShaderActive() && ShaderHelper.INSTANCE.getWorldShader() != null && ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture() >= 0;
-
-		if(useShaderSky) {
-			//Render shader sky dome
-			GlStateManager.bindTexture(ShaderHelper.INSTANCE.getWorldShader().getStarfieldTexture());
-			GlStateManager.disableAlpha();
-			GlStateManager.enableBlend();
-			GlStateManager.enableTexture2D();
-			RenderHelper.disableStandardItemLighting();
-			GlStateManager.depthMask(false);
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-			GlStateManager.callList(this.skyDomeDispList);
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-			GlStateManager.depthMask(true);
-			GlStateManager.disableBlend();
-			GlStateManager.enableAlpha();
-		}
-
-		//Render sky clip plane
-		this.renderFlatSky(partialTicks, world, mc, true);*/
 	}
 
 	protected void renderFlatSky(float partialTicks, WorldClient world, Minecraft mc, boolean renderClipPlane) {
@@ -338,6 +358,73 @@ public class BLSkyRenderer extends IRenderHandler {
 		}
 
 		GlStateManager.popMatrix();
+	}
+
+	protected void renderFog(float partialTicks, WorldClient world, Minecraft mc) {
+		//Render sky dome with fog texture for fog noise illusion
+		if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+			GlStateManager.pushMatrix();
+
+			float renderRadius = 80.0F;
+
+			GlStateManager.enableFog();
+			GlStateManager.setFogStart(renderRadius / 2F);
+			GlStateManager.setFogEnd(renderRadius * 2F);
+
+			GlStateManager.scale(
+					1.0F / 50.0F * renderRadius, 
+					1.0F / 50.0F * renderRadius, 
+					1.0F / 50.0F * renderRadius
+					);
+
+			GlStateManager.translate(0, 10, 0);
+
+			mc.renderEngine.bindTexture(FOG_TEXTURE);
+
+			GlStateManager.disableAlpha();
+			GlStateManager.enableBlend();
+			GlStateManager.enableTexture2D();
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.depthMask(false);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+
+			float renderTicks = this.ticks + partialTicks;
+
+			float domeRotation = renderTicks * 0.1F;
+
+			GlStateManager.scale(1F, 0.8F, 1F);
+
+			GlStateManager.color(0, 0, 0, 0.25F);
+			GlStateManager.callList(this.skyDomeDispList);
+
+			GlStateManager.color(0, 0, 0, 0.15F);
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate(domeRotation, 0, 1, 0);
+			GlStateManager.translate(0, Math.cos(renderTicks / 150.0F) * 6.0F + 4.0F, 0.0F);
+			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.popMatrix();
+
+			GlStateManager.pushMatrix();
+			GlStateManager.rotate(-domeRotation / 1.8F, 0, 1, 0);
+			GlStateManager.translate(0, -Math.sin(renderTicks / 170.0F) * 6.0F + 4.0F, 0.0F);
+			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.popMatrix();
+
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
+			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.depthMask(true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableAlpha();
+
+			GlStateManager.popMatrix();
+
+			GlStateManager.setFogStart(FogHandler.getCurrentFogStart());
+			GlStateManager.setFogEnd(FogHandler.getCurrentFogEnd());
+		}
 	}
 
 	protected void renderSkyDome() {
@@ -403,9 +490,9 @@ public class BLSkyRenderer extends IRenderHandler {
 
 		GlStateManager.setFogStart(FogHandler.getCurrentFogStart());
 		GlStateManager.setFogEnd(FogHandler.getCurrentFogEnd());
-		
+
 		GlStateManager.disableBlend();
-		
+
 		GlStateManager.enableDepth();
 		GlStateManager.depthMask(true);
 	}
@@ -428,6 +515,8 @@ public class BLSkyRenderer extends IRenderHandler {
 	}
 
 	public void update(WorldClient world, Minecraft mc) {
+		this.ticks++;
+
 		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 		if(storage != null) {
 			BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();

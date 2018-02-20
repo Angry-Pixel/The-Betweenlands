@@ -24,10 +24,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IDecayCapability;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.util.NBTHelper;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class CorrosionHelper {
 	/**
@@ -145,7 +145,7 @@ public class CorrosionHelper {
 		if (world.isRemote || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_CORROSION)) {
 			return;
 		}
-		if(!world.isRemote && holder.dimension == ConfigHandler.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
+		if(!world.isRemote && holder.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
 			if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();
 				int corrosion = corrodible.getCorrosion(stack);

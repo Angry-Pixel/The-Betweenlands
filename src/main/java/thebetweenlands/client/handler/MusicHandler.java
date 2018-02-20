@@ -27,9 +27,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.client.audio.EntityMusicSound;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class MusicHandler {
 	public static final MusicHandler INSTANCE = new MusicHandler();
@@ -56,9 +56,9 @@ public class MusicHandler {
 		if(event.phase == TickEvent.Phase.START) {
 			EntityPlayer player = getPlayer();
 
-			menu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && ConfigHandler.blMainMenu;
+			menu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && BetweenlandsConfig.GENERAL.blMainMenu;
 
-			if ((menu || (player != null && player.dimension == ConfigHandler.dimensionId)) && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
+			if ((menu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) && this.mc.gameSettings.getSoundLevel(SoundCategory.MUSIC) > 0.0F) {
 
 				Entity closestMusicEntity = null;
 				if(mc.world != null) {
@@ -136,7 +136,7 @@ public class MusicHandler {
 	public void onPlaySound(PlaySoundEvent event) {
 		EntityPlayer player = getPlayer();
 
-		if((menu || (player != null && player.dimension == ConfigHandler.dimensionId)) && event.getSound().getCategory() == SoundCategory.MUSIC && !this.isBetweenlandsMusic(event.getSound())) {
+		if((menu || (player != null && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) && event.getSound().getCategory() == SoundCategory.MUSIC && !this.isBetweenlandsMusic(event.getSound())) {
 			//Cancel non Betweenlands music
 			event.setResultSound(null);
 		}

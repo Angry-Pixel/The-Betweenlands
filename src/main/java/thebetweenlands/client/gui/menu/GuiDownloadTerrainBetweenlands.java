@@ -6,8 +6,8 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class GuiDownloadTerrainBetweenlands extends GuiDownloadTerrain {
 	private static int prevDimension;
@@ -19,7 +19,7 @@ public class GuiDownloadTerrainBetweenlands extends GuiDownloadTerrain {
 		if (event.getGui() instanceof GuiDownloadTerrain && 
 				!(event.getGui() instanceof GuiDownloadTerrainBetweenlands) &&
 				Minecraft.getMinecraft().player != null && 
-				(Minecraft.getMinecraft().player.dimension == ConfigHandler.dimensionId || prevDimension == ConfigHandler.dimensionId)) {
+				(Minecraft.getMinecraft().player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId || prevDimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId)) {
 			event.setGui(new GuiDownloadTerrainBetweenlands());
 			prevDimension = Minecraft.getMinecraft().player.dimension;
 		}

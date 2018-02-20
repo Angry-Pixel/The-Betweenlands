@@ -43,6 +43,7 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.entity.IBLBoss;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.entity.EntityRopeNode;
@@ -58,7 +59,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -106,7 +106,7 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			
 			if(player != null) {
-				if(ConfigHandler.cavingRopeIndicator) {
+				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
 					for(ItemStack stack : player.inventory.mainInventory) {
 						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
 							this.cavingRopeCount += stack.getCount();
@@ -114,7 +114,7 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 				
-				if(player.dimension == ConfigHandler.dimensionId) {
+				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					String prevLocation = this.currentLocation;
 	
 					List<LocationStorage> locations = getVisibleLocations(player);
@@ -196,7 +196,7 @@ public class ScreenRenderHandler extends Gui {
 		int height = event.getResolution().getScaledHeight();
 		
 		if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
-			if(ConfigHandler.cavingRopeIndicator && player != null) {
+			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;
 				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
 				for(EntityRopeNode rope : ropeNodes) {

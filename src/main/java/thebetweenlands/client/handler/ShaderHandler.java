@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.util.config.ConfigHandler;
+import thebetweenlands.common.BetweenlandsConfig;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
@@ -38,7 +38,7 @@ public class ShaderHandler {
 		if(event.phase == Phase.START) {
 			Minecraft mc = Minecraft.getMinecraft();
 
-			if(ShaderHelper.INSTANCE.isShaderSupported() && ConfigHandler.useShader) {
+			if(ShaderHelper.INSTANCE.isShaderSupported() && BetweenlandsConfig.RENDERING.useShader) {
 				Framebuffer framebuffer = mc.getFramebuffer();
 
 				if(!mc.gameSettings.fboEnable) {

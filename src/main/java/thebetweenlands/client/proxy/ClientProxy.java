@@ -352,13 +352,13 @@ public class ClientProxy extends CommonProxy {
                     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 4, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(1), "inventory"));
                 } else
                     for (int i = 0; i < models.size(); i++) {
-                        if (ConfigHandler.debug && createJSONFile)
+                        if (ConfigHandler.DEBUG.debug && createJSONFile)
                             JsonRenderGenerator.createJSONForBlock(block, models.get(i));
                         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
                     }
             } else {
                 String name = block.getRegistryName().toString().replace("thebetweenlands:", "");
-                if (ConfigHandler.debug && createJSONFile)
+                if (ConfigHandler.DEBUG.debug && createJSONFile)
                     JsonRenderGenerator.createJSONForBlock(block, name);
                 ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name, "inventory"));
             }

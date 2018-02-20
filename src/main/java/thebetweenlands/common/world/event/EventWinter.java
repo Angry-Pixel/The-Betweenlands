@@ -28,6 +28,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
@@ -37,7 +38,6 @@ import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class EventWinter extends BLEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
@@ -100,7 +100,7 @@ public class EventWinter extends BLEnvironmentEvent {
 		this.world = world;
 
 		if(!world.isRemote) {
-			if (ConfigHandler.enableSeasonalEvents) {
+			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 				long dayDiff = this.getDayDiff();
 				if (dayDiff >= 0 && dayDiff <= 31) {
 					if (!this.isActive() && !this.wasSet) {
@@ -168,7 +168,7 @@ public class EventWinter extends BLEnvironmentEvent {
 	@Override
 	public void resetActiveState() {
 		long dayDiff = this.getDayDiff();
-		if (dayDiff >= 0 && dayDiff <= 31 && ConfigHandler.enableSeasonalEvents) {
+		if (dayDiff >= 0 && dayDiff <= 31 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 			if (!this.isActive()) {
 				this.setActive(true, true);
 			}

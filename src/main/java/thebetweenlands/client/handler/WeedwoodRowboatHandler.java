@@ -25,11 +25,10 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.Matrix;
-import thebetweenlands.util.config.ConfigHandler;
 
 public final class WeedwoodRowboatHandler {
     public static final WeedwoodRowboatHandler INSTANCE = new WeedwoodRowboatHandler();
@@ -66,7 +65,7 @@ public final class WeedwoodRowboatHandler {
         if (pilot == MC.player) {
             if (MC.gameSettings.thirdPersonView > 0)
                 changedTo = View.ROWBOAT;
-            if ((changedTo != null && changedTo == View.ROWBOAT) || ConfigHandler.rowboatView)
+            if ((changedTo != null && changedTo == View.ROWBOAT) || BetweenlandsConfig.GENERAL.rowboatView)
                 enterRowboatPerspective();
             else
                 leaveRowboatPerspective();
@@ -142,11 +141,11 @@ public final class WeedwoodRowboatHandler {
                 if (view == View.FIRST_PERSON) {
                     enterRowboatPerspective();
                     view = View.ROWBOAT;
-                    ConfigHandler.rowboatView = true;
+                    BetweenlandsConfig.GENERAL.rowboatView = true;
                 } else {
                     leaveRowboatPerspective();
                     view = View.FIRST_PERSON;
-                    ConfigHandler.rowboatView = false;
+                    BetweenlandsConfig.GENERAL.rowboatView = false;
                 }
                 MC.gameSettings.thirdPersonView = 2;
                 changedTo = view;

@@ -27,12 +27,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -218,7 +218,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         for (int i = 0; i < 2; i++) {
             for (final Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
                 if (fluid != FluidRegistry.WATER && fluid != FluidRegistry.LAVA && !fluid.getName().equals("milk") && !ItemSpecificBucket.hasSpecificBucket(fluid)) {
-                    if (!ConfigHandler.showNonBLFuids && !thebetweenlands.common.registries.FluidRegistry.REGISTERED_FLUIDS.contains(fluid))
+                    if (!BetweenlandsConfig.COMPATIBILITY.showNonBLFluids && !thebetweenlands.common.registries.FluidRegistry.REGISTERED_FLUIDS.contains(fluid))
                         continue;
                     if (i == 0 && fluid.getTemperature() > 430)
                         continue;

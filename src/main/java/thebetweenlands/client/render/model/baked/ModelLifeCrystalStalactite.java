@@ -21,12 +21,12 @@ import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeCrystalType;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ModelLifeCrystalStalactite implements IModel {
 	public static final ResourceLocation TEXTURE_DEFAULT = new ResourceLocation(ModInfo.ID, "blocks/pitstone");
@@ -147,7 +147,7 @@ public class ModelLifeCrystalStalactite implements IModel {
 								builder.setSprite(this.textureOre);
 						}
 
-						if(i == 1 && ConfigHandler.fullbrightBlocks) {
+						if(i == 1 && BetweenlandsConfig.RENDERING.fullbrightBlocks) {
 							builder.setLightmap(15, 15);
 						}
 						

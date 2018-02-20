@@ -49,9 +49,8 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
-import thebetweenlands.util.config.ConfigHandler;
 
-@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, guiFactory = ModInfo.CONFIG_GUI, acceptedMinecraftVersions = ModInfo.MC_VERSIONS, certificateFingerprint = "${fingerprint}")
+@Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = ModInfo.MC_VERSIONS, certificateFingerprint = "${fingerprint}")
 public class TheBetweenlands {
 	@Instance(ModInfo.ID)
 	public static TheBetweenlands INSTANCE;
@@ -84,12 +83,12 @@ public class TheBetweenlands {
 		logger = event.getModLog();
 
 		//Configuration File
-		ConfigHandler.INSTANCE.loadConfig(event);
+		BetweenlandsConfig.path = event.getSuggestedConfigurationFile().getPath();
 
 		BetweenlandsAPI.init();
 
-		dimensionType = DimensionType.register(DIMENSION_NAME, "_betweenlands", ConfigHandler.dimensionId, WorldProviderBetweenlands.class, false);
-		DimensionManager.registerDimension(ConfigHandler.dimensionId, dimensionType);
+		dimensionType = DimensionType.register(DIMENSION_NAME, "_betweenlands", BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId, WorldProviderBetweenlands.class, false);
+		DimensionManager.registerDimension(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId, dimensionType);
 
 		REGISTRIES.preInit();
 
@@ -135,7 +134,7 @@ public class TheBetweenlands {
 
 		isToughAsNailsModInstalled = Loader.isModLoaded("toughasnails") || Loader.isModLoaded("ToughAsNails");
 
-		/*if (ConfigHandler.DEBUG) {
+		/*if (ConfigHandler.DEBUG.debug) {
 			System.out.println("==================================================");
 			for (String name : unlocalizedNames) {
 				System.out.println("needs translation: " + name);
@@ -151,7 +150,7 @@ public class TheBetweenlands {
 		//event.registerServerCommand(new CommandDecay());
 		//event.registerServerCommand(new CommandFindPage());
 		event.registerServerCommand(new CommandAspectDiscovery());
-		/*if (ConfigHandler.DEBUG) {
+		/*if (ConfigHandler.DEBUG.debug) {
 			event.registerServerCommand(new CommandTickSpeed());
 		}*/
 		GameruleRegistry.INSTANCE.onServerStarting(event);
@@ -166,7 +165,7 @@ public class TheBetweenlands {
 
 		WorldStorageImpl.register();
 		
-		MinecraftForge.EVENT_BUS.register(ConfigHandler.INSTANCE);
+		MinecraftForge.EVENT_BUS.register(BetweenlandsConfig.class);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkStorage.class);

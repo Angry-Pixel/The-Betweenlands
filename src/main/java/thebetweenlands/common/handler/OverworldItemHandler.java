@@ -36,6 +36,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.ArmSwingSpeedEvent;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.misc.BlockDampTorch;
 import thebetweenlands.common.item.tools.ItemBLAxe;
 import thebetweenlands.common.item.tools.ItemBLPickaxe;
@@ -45,7 +46,6 @@ import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class OverworldItemHandler {
 	private OverworldItemHandler() { }
@@ -113,7 +113,7 @@ public class OverworldItemHandler {
 	public static final Map<ResourceLocation, ITorchPlaceHandler> TORCH_PLACE_HANDLERS = new HashMap<>();
 
 	static {
-		ROTTING_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> ConfigHandler.isFoodConfigWhitelisted(stack));
+		ROTTING_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.isFoodConfigWhitelisted(stack));
 		ROTTING_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> {
 			if(stack.getItem() == Items.CAKE || Block.getBlockFromItem(stack.getItem()) == Blocks.CAKE) {
 				return true;
@@ -169,7 +169,7 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onPlayerTorchPlacement(PlaceEvent event) {
-		if (event.getPlayer().dimension == ConfigHandler.dimensionId) {
+		if (event.getPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			ItemStack held = event.getPlayer().getHeldItem(event.getHand());
 			if(!held.isEmpty()) {
 				for(ITorchPlaceHandler handler : TORCH_PLACE_HANDLERS.values()) {
@@ -198,7 +198,7 @@ public class OverworldItemHandler {
 	@SubscribeEvent
 	public static void onUseItem(PlayerInteractEvent.RightClickBlock event) {
 		ItemStack item = event.getItemStack();
-		if(!item.isEmpty() && event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
+		if(!item.isEmpty() && event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			if(isFlintAndSteelBlocked(item)) {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
@@ -211,7 +211,7 @@ public class OverworldItemHandler {
 
 	@SubscribeEvent
 	public static void onBonemeal(BonemealEvent event) {
-		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
+		if(event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
 			if(!stack.isEmpty() && isBonemealBlocked(stack)) {
 				event.setResult(Result.DENY);
@@ -223,7 +223,7 @@ public class OverworldItemHandler {
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onArmSwingSpeed(ArmSwingSpeedEvent event) {
-		if(event.getEntityLiving().dimension == ConfigHandler.dimensionId) {
+		if(event.getEntityLiving().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			ItemStack tool = event.getEntityLiving().getHeldItemMainhand();
 			if (!tool.isEmpty() && isToolWeakened(tool)) {
 				event.setSpeed(event.getSpeed() * 0.3F);
@@ -233,7 +233,7 @@ public class OverworldItemHandler {
 	
 	@SubscribeEvent
     public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
-		if(event.getEntityPlayer().dimension == ConfigHandler.dimensionId) {
+		if(event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			ItemStack tool = event.getEntityPlayer().getHeldItemMainhand();
 			if (!tool.isEmpty() && isToolWeakened(tool)) {
 				event.setNewSpeed(event.getNewSpeed() * 0.3F);
@@ -257,7 +257,7 @@ public class OverworldItemHandler {
 
 	private static void updatePlayerInventory(EntityPlayer player) {
 		int invCount = player.inventory.getSizeInventory();
-		if(player.dimension == ConfigHandler.dimensionId) {
+		if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			//Set to rotten food/tainted potion
 			for(int i = 0; i < invCount; i++) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
@@ -308,7 +308,7 @@ public class OverworldItemHandler {
 		if(player != null && !player.world.isRemote && !player.capabilities.isCreativeMode) {
 			ItemStack stack = event.getItem().getItem();
 			if(!stack.isEmpty()) {
-				if(player.dimension == ConfigHandler.dimensionId) {
+				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					if(isRotting(stack)) {
 						ItemStack rottenFoodStack = new ItemStack(ItemRegistry.ROTTEN_FOOD, stack.getCount());
 						ItemRegistry.ROTTEN_FOOD.setOriginalStack(rottenFoodStack, stack);

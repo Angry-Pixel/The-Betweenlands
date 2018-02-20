@@ -7,8 +7,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-
-import thebetweenlands.util.config.ConfigHandler;
+import thebetweenlands.common.BetweenlandsConfig;
 
 public final class TeleporterHandler {
 	private static final TeleporterHandler INSTANCE = new TeleporterHandler();
@@ -20,7 +19,7 @@ public final class TeleporterHandler {
 	}
 
 	public static void transferToBL(Entity entity) {
-		INSTANCE.transferEntity(entity, ConfigHandler.dimensionId);
+		INSTANCE.transferEntity(entity, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 	}
 
 	private void transferEntity(Entity entity, int dimensionId) {

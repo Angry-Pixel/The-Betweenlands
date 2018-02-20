@@ -23,12 +23,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
-import thebetweenlands.util.config.ConfigHandler;
 
 import javax.annotation.Nullable;
 import java.util.Random;
@@ -229,13 +229,13 @@ public class BlockTreePortal extends BasicBlock {
                 if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
                     IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
 
-                    if (worldIn.provider.getDimensionType() == DimensionType.OVERWORLD || entityIn.dimension == ConfigHandler.dimensionId) {
+                    if (worldIn.provider.getDimensionType() == DimensionType.OVERWORLD || entityIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
                         cap.setInPortal(true);
                     }
                 } else if (!worldIn.isRemote) {
                     if (worldIn.provider.getDimensionType() == DimensionType.OVERWORLD) {
                         TeleporterHandler.transferToBL(entityIn);
-                    } else if (entityIn.dimension == ConfigHandler.dimensionId) {
+                    } else if (entityIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
                         TeleporterHandler.transferToOverworld(entityIn);
                     }
                     entityIn.timeUntilPortal = entityIn.getPortalCooldown();

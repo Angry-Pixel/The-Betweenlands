@@ -14,11 +14,11 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class EventSpoopy extends BLEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "spook");
@@ -90,9 +90,9 @@ public class EventSpoopy extends BLEnvironmentEvent {
 		super.update(world);
 		this.world = world;
 		if(!world.isRemote) {
-			if (ConfigHandler.enableSeasonalEvents) {
+			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 				long dayDiff = this.getDayDiff();
-				if (dayDiff >= 0 && dayDiff <= 8 && ConfigHandler.enableSeasonalEvents) {
+				if (dayDiff >= 0 && dayDiff <= 8 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 					if (!this.isActive() && !this.wasSet) {
 						this.setActive(true, true);
 						this.wasSet = true;
@@ -124,7 +124,7 @@ public class EventSpoopy extends BLEnvironmentEvent {
 	@Override
 	public void resetActiveState() {
 		long dayDiff = this.getDayDiff();
-		if (dayDiff >= 0 && dayDiff <= 8 && ConfigHandler.enableSeasonalEvents) {
+		if (dayDiff >= 0 && dayDiff <= 8 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 			if (!this.isActive()) {
 				this.setActive(true, true);
 			}

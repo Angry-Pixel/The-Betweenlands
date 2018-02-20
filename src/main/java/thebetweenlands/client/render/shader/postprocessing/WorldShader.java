@@ -27,6 +27,7 @@ import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -35,7 +36,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
-import thebetweenlands.util.config.ConfigHandler;
 
 /**
  * TODO: Make lighting and other spacial effects use "correct" deferred rendering
@@ -185,7 +185,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.gasWarpEffect = new Warp().setTimeScale(0.00004F).setScale(40.0F).setMultiplier(3.55F).init();
 
 		//Initialize starfield texture and effect
-		this.starfieldTextureFramebuffer = new Framebuffer(ConfigHandler.skyResolution, ConfigHandler.skyResolution, false);
+		this.starfieldTextureFramebuffer = new Framebuffer(BetweenlandsConfig.RENDERING.skyResolution, BetweenlandsConfig.RENDERING.skyResolution, false);
 		this.starfieldEffect = new Starfield(true).init();
 
 		//Initialize occlusion extractor and god's ray effect
@@ -650,7 +650,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, 0);
 		this.starfieldEffect.create(this.starfieldTextureFramebuffer)
 		.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
-		.setRenderDimensions(ConfigHandler.skyResolution, ConfigHandler.skyResolution)
+		.setRenderDimensions(BetweenlandsConfig.RENDERING.skyResolution, BetweenlandsConfig.RENDERING.skyResolution)
 		.render(partialTicks);
 	}
 

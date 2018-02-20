@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.ModContainer;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import net.minecraftforge.oredict.ShapelessOreRecipe;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.lib.ModInfo;
@@ -40,7 +41,6 @@ import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarCategory;
 import thebetweenlands.compat.jei.recipes.pam.PestleAndMortarRecipeMaker;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeCategory;
 import thebetweenlands.compat.jei.recipes.purifier.PurifierRecipeMaker;
-import thebetweenlands.util.config.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -105,7 +105,7 @@ public class BetweenlandsJEIPlugin implements IModPlugin{
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TAINTED_POTION));
         blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.ROTTEN_FOOD));
 
-        if (!ConfigHandler.debug) {
+        if (!BetweenlandsConfig.DEBUG.debug) {
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.TEST_ITEM));
             blacklist.addIngredientToBlacklist(new ItemStack(ItemRegistry.LOCATION_DEBUG));
         }

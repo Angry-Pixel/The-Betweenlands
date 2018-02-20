@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.api.item.ICorrodible;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
@@ -26,7 +27,6 @@ import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemShimmerStone;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 import java.util.List;
 

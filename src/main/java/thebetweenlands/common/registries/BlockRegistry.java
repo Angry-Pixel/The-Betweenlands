@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.block.container.BlockAlembic;
@@ -179,7 +180,6 @@ import thebetweenlands.common.world.gen.feature.tree.WorldGenRubberTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSapTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenWeedwoodTree;
 import thebetweenlands.util.AdvancedStateMap;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class BlockRegistry {
     public static final Block SWAMP_WATER = new BlockSwampWater(FluidRegistry.SWAMP_WATER, Material.WATER);
@@ -644,7 +644,7 @@ public class BlockRegistry {
                     String name = field.getName().toLowerCase(Locale.ENGLISH);
                     registerBlock(name, block);
 
-                    if (ConfigHandler.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                    if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                         if (block.getCreativeTabToDisplayOn() == null)
                             System.out.println(String.format("Warning: Block %s doesn't have a creative tab", block.getUnlocalizedName()));
                     }

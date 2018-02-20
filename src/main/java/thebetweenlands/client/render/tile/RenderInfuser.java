@@ -22,12 +22,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelInfuser;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.util.TileEntityHelper;
-import thebetweenlands.util.config.ConfigHandler;
 
 @SideOnly(Side.CLIENT)
 public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> {
@@ -79,7 +79,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 
 		ElixirRecipe recipe = infuser.getInfusingRecipe();
 
-		if(ConfigHandler.debug) {
+		if(BetweenlandsConfig.DEBUG.debug) {
 			String elixirName = recipe != null ? recipe.name : " N/A";
 			renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
 		}

@@ -11,6 +11,7 @@ import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.item.misc.ItemGem;
@@ -18,7 +19,6 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.RecipeRegistry;
 import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
-import thebetweenlands.util.config.ConfigHandler;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -35,7 +35,7 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
     public static void updateApplicableItems() {
         applicableItems.clear();
         for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(ItemStack.class)) {
-            if (!stack.isEmpty() && CircleGemHelper.isApplicable(stack.getItem()) && (ConfigHandler.jeiGemRecipesNonBL || ModInfo.ID.equals(stack.getItem().getRegistryName().getResourceDomain())))
+            if (!stack.isEmpty() && CircleGemHelper.isApplicable(stack.getItem()) && (BetweenlandsConfig.COMPATIBILITY.showNonBLGemRecipes || ModInfo.ID.equals(stack.getItem().getRegistryName().getResourceDomain())))
                 applicableItems.add(stack);
         }
     }

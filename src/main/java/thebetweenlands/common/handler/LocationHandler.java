@@ -29,6 +29,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
@@ -36,7 +37,6 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationStorage;
-import thebetweenlands.util.config.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class LocationHandler {
 			EntityPlayer player = event.player;
 
 			if(player != null && !player.world.isRemote) {
-				if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).world.provider.getDimension() == ConfigHandler.dimensionId) {
+				if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					if (player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
 						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
 					} else {

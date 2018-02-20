@@ -26,10 +26,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityPeatMummy;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.util.NBTHelper;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemShimmerStone extends Item {
 	private static final int MAX_SHIMMER_TICKS = 8;
@@ -127,7 +127,7 @@ public class ItemShimmerStone extends Item {
 	}
 	
 	protected void triggerAdvancement(EntityPlayer player) {
-		if (player != null && !player.world.isRemote && player instanceof EntityPlayerMP && player.world.provider.getDimension() == ConfigHandler.dimensionId) {
+		if (player != null && !player.world.isRemote && player instanceof EntityPlayerMP && player.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
             BlockPos pos = player.getPosition();
             List<EntityPeatMummy> mummies = player.world.getEntitiesWithinAABB(EntityPeatMummy.class, new AxisAlignedBB(pos, pos).grow(20));
             if (mummies.size() > 0)

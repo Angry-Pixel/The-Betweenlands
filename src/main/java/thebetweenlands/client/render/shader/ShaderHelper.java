@@ -20,8 +20,8 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ShaderHelper implements IResourceManagerReloadListener {
 	private ShaderHelper() { }
@@ -56,10 +56,10 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 */
 	public boolean canUseShaders() {
 		if(this.isShaderSupported()) {
-			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && ConfigHandler.useShader;
+			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && BetweenlandsConfig.RENDERING.useShader;
 		} else {
 			//Shaders not supported, disable in config
-			ConfigHandler.useShader = false;
+			BetweenlandsConfig.RENDERING.useShader = false;
 			return false;
 		}
 	}
@@ -296,7 +296,7 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 		if(mc.player != null && mc.player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null) && mc.player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null).isInPortal()) {
 			return true;
 		}
-		return this.required || (mc.world != null && mc.world.provider.getDimension() == ConfigHandler.dimensionId);
+		return this.required || (mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 	}
 
 	@Override

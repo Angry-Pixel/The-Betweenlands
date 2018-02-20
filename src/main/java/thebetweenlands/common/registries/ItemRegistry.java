@@ -23,6 +23,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
@@ -135,7 +136,6 @@ import thebetweenlands.common.item.tools.bow.EnumArrowType;
 import thebetweenlands.common.item.tools.bow.ItemBLArrow;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ItemRegistry {
     public final static Set<Item> ITEMS = new LinkedHashSet<>();
@@ -389,7 +389,7 @@ public class ItemRegistry {
                     Item item = (Item) field.get(null);
                     registerItem(item, field.getName());
 
-                    if (ConfigHandler.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
+                    if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                         if (item.getCreativeTab() == null)
                             System.out.println(String.format("Warning: Item %s doesn't have a creative tab", item.getUnlocalizedName()));
                     }
