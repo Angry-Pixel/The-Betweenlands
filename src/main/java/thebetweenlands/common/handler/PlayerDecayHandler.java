@@ -3,6 +3,7 @@ package thebetweenlands.common.handler;
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -26,37 +27,41 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 public class PlayerDecayHandler {
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-		if(event.phase == Phase.START) {
-			EntityPlayer player = event.player;
+		EntityPlayer player = event.player;
 
-			if(!player.world.isRemote && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+		if(!player.world.isRemote && event.phase == Phase.START) {
+			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-
-				int currentMaxHealth = (int) player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).getAttributeValue();
 
 				DecayStats stats = capability.getDecayStats();
 
-				int decayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;
-				int prevDecayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
-				int healthDiff = decayMaxHealth - prevDecayMaxHealth;
+				IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
 
-				if(healthDiff != 0) {
-					//Don't go below 3 hearts
-					int newHealth = Math.max(currentMaxHealth + healthDiff, 6);
+				if(attr != null) {
+					int currentMaxHealth = (int) attr.getBaseValue();
 
-					healthDiff = newHealth - currentMaxHealth;
+					int decayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getDecayLevel()) / 2.0F) * 2;
+					int prevDecayMaxHealth = (int)(capability.getMaxPlayerHealth(stats.getPrevDecayLevel()) / 2.0F) * 2;
+					int healthDiff = decayMaxHealth - prevDecayMaxHealth;
 
-					//Don't give more health back than was removed
-					healthDiff = Math.min(healthDiff, capability.getRemovedHealth());
+					if(healthDiff != 0) {
+						//Don't go below 3 hearts
+						int newHealth = Math.max(currentMaxHealth + healthDiff, 6);
 
-					//Update health
-					player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(currentMaxHealth + healthDiff);
-					if(player.getHealth() > currentMaxHealth + healthDiff) {
-						player.setHealth(currentMaxHealth + healthDiff);
+						healthDiff = newHealth - currentMaxHealth;
+
+						//Don't give more health back than was removed
+						healthDiff = Math.min(healthDiff, capability.getRemovedHealth());
+
+						//Update health
+						attr.setBaseValue(currentMaxHealth + healthDiff);
+						if(player.getHealth() > currentMaxHealth + healthDiff) {
+							player.setHealth(currentMaxHealth + healthDiff);
+						}
+
+						//Keep track of how much was removed
+						capability.setRemovedHealth(capability.getRemovedHealth() - healthDiff);
 					}
-
-					//Keep track of how much was removed
-					capability.setRemovedHealth(capability.getRemovedHealth() - healthDiff);
 				}
 
 				if(capability.isDecayEnabled()) {
@@ -141,7 +146,7 @@ public class PlayerDecayHandler {
 	public static void onPlayerTick(PlayerRespawnEvent event) {
 		//Workaround for client not receiving the new MAX_HEALTH attribute after a respawn
 		EntityPlayer player = event.player;
-		if(!player.world.isRemote && player instanceof EntityPlayerMP) {
+		if(!player.world.isRemote && player instanceof EntityPlayerMP && player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH) != null) {
 			((EntityPlayerMP)player).connection.sendPacket(new SPacketEntityProperties(player.getEntityId(), ImmutableList.of(player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH))));
 		}
 	}
