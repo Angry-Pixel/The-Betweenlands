@@ -22,6 +22,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IWorldStorage;
@@ -565,5 +566,14 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	@Override
 	public AxisAlignedBB getBoundingBox() {
 		return this.enclosingBoundingBox;
+	}
+	
+	/**
+	 * Called when a block is broken inside the location
+	 * @param event
+	 * @return
+	 */
+	public void onBreakBlock(BreakEvent event) {
+		
 	}
 }

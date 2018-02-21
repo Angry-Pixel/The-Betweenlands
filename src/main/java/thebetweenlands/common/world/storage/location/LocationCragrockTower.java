@@ -13,10 +13,13 @@ import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,11 +28,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.block.structure.BlockSlabBetweenlands;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -41,11 +46,13 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	private boolean[] spawners = { true, true, true, true, true };
 	private boolean[] blockades = { true, true, true, true, true };
 	private BlockPos structurePos;
+	private boolean isTopConquered = false;
 	private boolean isTopReached = false;
 	private boolean wasEntered = false;
 	private int wispUpdateTicks = 0;
+	private int topSpawners = 2;
 
-	private final int[][] levelYBounds = { {-5, 9}, {10, 18}, {19, 27}, {28, 36}, {37, 45} };
+	private final int[][] levelYBounds = { {-5, 9}, {10, 18}, {19, 27}, {28, 36}, {37, 45}, {46, 56} };
 
 	private boolean crumbling = false;
 	private int crumblingTicks = 0;
@@ -80,19 +87,19 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	}
 
 	/**
-	 * Returns whether the top was reached
+	 * Returns whether the top was reached and all mobs and spawners are destroyed
 	 * @return
 	 */
-	public boolean isTopReached() {
-		return this.isTopReached;
+	public boolean isTopConquered() {
+		return this.isTopConquered;
 	}
 
 	/**
 	 * Sets whether the top was reached and changes all glowing cragrock blocks accordingly
 	 * @param reached
 	 */
-	public void setTopReached(boolean reached) {
-		this.isTopReached = reached;
+	public void setTopConquered(boolean reached) {
+		this.isTopConquered = reached;
 
 		World world = this.getWorldStorage().getWorld();
 		for(BlockPos pos : this.glowingCragrockBlocks) {
@@ -256,16 +263,10 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	 */
 	public int getLevel(int y) {
 		y -= this.structurePos.getY(); //Relative position to structure
-		if(y >= this.levelYBounds[0][0] && y <= this.levelYBounds[0][1]) {
-			return 0;
-		} else if(y >= this.levelYBounds[1][0] && y <= this.levelYBounds[1][1]) {
-			return 1;
-		} else if(y >= this.levelYBounds[2][0] && y <= this.levelYBounds[2][1]) {
-			return 2;
-		} else if(y >= this.levelYBounds[3][0] && y <= this.levelYBounds[3][1]) {
-			return 3;
-		} else if(y >= this.levelYBounds[4][0] && y <= this.levelYBounds[4][1]) {
-			return 4;
+		for(int i = 0; i < this.levelYBounds.length; i++) {
+			if(y >= this.levelYBounds[i][0] && y <= this.levelYBounds[i][1]) {
+				return i;
+			}
 		}
 		return -1;
 	}
@@ -370,6 +371,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.structurePos = BlockPos.fromLong(nbt.getLong("structurePos"));
+		this.isTopConquered = nbt.getBoolean("isTopConquered");
 		this.isTopReached = nbt.getBoolean("isTopReached");
 		this.wasEntered = nbt.getBoolean("wasEntered");
 		this.readBlockList(nbt, "glowingBlocks", this.glowingCragrockBlocks);
@@ -391,12 +393,14 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		}
 		this.crumbling = nbt.getBoolean("crumbling");
 		this.crumblingTicks = nbt.getInteger("crumblingTicks");
+		this.topSpawners = nbt.getInteger("topSpawners");
 	}
 
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setLong("structurePos", this.structurePos.toLong());
+		nbt.setBoolean("isTopConquered", this.isTopConquered);
 		nbt.setBoolean("isTopReached", this.isTopReached);
 		nbt.setBoolean("wasEntered", this.wasEntered);
 		this.saveBlockList(nbt, "glowingBlocks", this.glowingCragrockBlocks);
@@ -414,6 +418,7 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		}
 		nbt.setBoolean("crumbling", this.crumbling);
 		nbt.setInteger("crumblingTicks", this.crumblingTicks);
+		nbt.setInteger("topSpawners", this.topSpawners);
 		return nbt;
 	}
 
@@ -456,8 +461,47 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		}
 
 		if(!world.isRemote) {
-			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEnclosingBounds(), player -> this.isInside(player) && !player.isCreative());
+			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEnclosingBounds(), player -> this.isInside(player) && !player.isCreative() && !player.isSpectator());
+
 			if(!players.isEmpty()) {
+				if(this.isTopConquered() && !this.isCrumbling() && this.getCrumblingTicks() == 0) {
+					List<EntityPlayer> topPlayers = world.getEntitiesWithinAABB(EntityPlayer.class, this.getLevelBounds(5).grow(5, 3, 5), player -> !player.isCreative() && !player.isSpectator());
+					if (topPlayers.isEmpty()) {
+						this.setCrumbling(true);
+						this.restoreBlockade(4);
+					}
+				}
+
+				for(EntityPlayer player : players) {
+					BlockPos structurePos = this.getStructurePos();
+
+					if (!this.wasEntered()) {
+						this.setEntered(true);
+					}
+
+					if (this.getLevelBounds(5).contains(player.getPositionVector())) {
+						this.isTopReached = true;
+						this.setDirty(true);
+					}
+
+					if(this.isTopConquered() && player instanceof EntityPlayerMP && this.getLevel(MathHelper.floor(player.posY)) == 5) {
+						AdvancementCriterionRegistry.CRAGROCK_TOP.trigger((EntityPlayerMP) player);
+					} else if (!this.isTopReached && !this.getInnerBoundingBox().grow(0.5D, 0.5D, 0.5D).contains(player.getPositionVector()) && player.posY - structurePos.getY() > 12) {
+						//Player trying to bypass tower, teleport to entrance
+
+						player.dismountRidingEntity();
+						if (player instanceof EntityPlayerMP) {
+							EntityPlayerMP playerMP = (EntityPlayerMP) player;
+							playerMP.connection.setPlayerLocation(structurePos.getX() + 0.5D, structurePos.getY(), structurePos.getZ() + 0.5D, player.rotationYaw, player.rotationPitch);
+						} else {
+							player.setLocationAndAngles(structurePos.getX() + 0.5D, structurePos.getY(), structurePos.getZ() + 0.5D, player.rotationYaw, player.rotationPitch);
+						}
+						player.fallDistance = 0.0F;
+						player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 2));
+						player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.AMBIENT, 1, 1);
+					}
+				}
+
 				EntityPlayer closest = players.get(0);
 				for(EntityPlayer player : players) {
 					if(player.getDistanceSq(this.structurePos) < closest.getDistanceSq(this.structurePos)) {
@@ -469,12 +513,23 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 				this.updateWispBlocks(null);
 			}
 
-			if(!this.isTopReached()) {
+			if(!this.isTopConquered()) {
 				for(int i = 0; i < 5; i++) {
 					if(this.getBlockadeState(i) && !this.getSpawnerState(i)) {
 						List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getLevelBounds(i), entity -> entity instanceof EntityMob || entity instanceof IMob);
 						if(entities.isEmpty()) {
 							this.destroyBlockade(i);
+						}
+					}
+				}
+
+				if(this.topSpawners == 0) {
+					List<EntityLivingBase> entities = world.getEntitiesWithinAABB(EntityLivingBase.class, this.getLevelBounds(5).grow(3, 2, 3), entity -> entity instanceof EntityMob || entity instanceof IMob);
+					if(entities.isEmpty()) {
+						this.setTopConquered(true);
+
+						for(EntityPlayer player : players) {
+							player.addExperience(350);
 						}
 					}
 				}
@@ -517,5 +572,28 @@ public class LocationCragrockTower extends LocationGuarded implements ITickable 
 		World world = this.getWorldStorage().getWorld();
 
 		return new BlockPos(x + world.rand.nextInt(width + 1), y + world.rand.nextInt(height + 1), z + world.rand.nextInt(depth + 1));
+	}
+
+	@Override
+	public void onBreakBlock(BreakEvent event) {
+		if(!event.getWorld().isRemote) {
+			BlockPos pos = event.getPos();
+			IBlockState blockState = event.getState();
+
+			if(blockState.getBlock() == BlockRegistry.MOB_SPAWNER) {
+				int level = this.getLevel(pos.getY());
+
+				if(level != -1) {
+					if(level == 5) {
+						if(this.topSpawners > 0) {
+							this.topSpawners--;
+							this.setDirty(true);
+						}
+					} else {
+						this.setSpawnerState(level, false);
+					}
+				}
+			}
+		}
 	}
 }
