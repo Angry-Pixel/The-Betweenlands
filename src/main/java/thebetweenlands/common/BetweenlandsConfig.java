@@ -187,7 +187,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "default_remote_reset_time")
 		@Comment("Default time in seconds before an event that no longer has an override resets its state")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
-		public int defaultRemoteResetTime = 3600;
+		public int defaultRemoteResetTime = 180;
 	}
 
 	@Name("debug")
