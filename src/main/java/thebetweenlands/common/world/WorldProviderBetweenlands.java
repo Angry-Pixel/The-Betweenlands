@@ -48,7 +48,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	private static BLSkyRenderer skyRenderer;
 
-
+	private boolean showClouds = false;
+	
 	/**
 	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
 	 *
@@ -100,7 +101,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public boolean isSurfaceWorld() {
-		return false;
+		return this.showClouds;
 	}
 
 	@Override
@@ -260,5 +261,10 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public DimensionType getDimensionType() {
 		return TheBetweenlands.dimensionType;
+	}
+	
+	@SideOnly(Side.CLIENT)
+	public void setShowClouds(boolean show) {
+		this.showClouds = show;
 	}
 }

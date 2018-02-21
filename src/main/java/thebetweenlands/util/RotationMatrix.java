@@ -11,9 +11,9 @@ public class RotationMatrix {
 
 	/**
 	 * Sets the matrix rotations.
-	 * @param rotG		Rotation gamma (roll)
+	 * @param rotG		Rotation gamma (pitch)
 	 * @param rotB		Rotation beta (yaw)
-	 * @param rotA		Rotation alpha (pitch)
+	 * @param rotA		Rotation alpha (roll)
 	 */
 	public void setRotations(float rotG, float rotB, float rotA) {
 		if(this.rotA == rotA && this.rotB == rotB && this.rotG == rotG) {

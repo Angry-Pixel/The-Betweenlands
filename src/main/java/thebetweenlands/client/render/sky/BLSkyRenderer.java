@@ -23,6 +23,8 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
@@ -52,6 +54,8 @@ public class BLSkyRenderer extends IRenderHandler {
 	public static final ResourceLocation SKY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
 	public static final ResourceLocation SKY_SPOOPY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/spoopy.png");
 	public static final ResourceLocation FOG_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/fog_texture.png");
+	public static final ResourceLocation SKY_RIFT_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_overlay.png");
+	public static final ResourceLocation SKY_RIFT_MASK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask.png");
 
 	protected List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 
@@ -63,8 +67,12 @@ public class BLSkyRenderer extends IRenderHandler {
 
 	protected int ticks;
 
+	protected OverworldSkyRenderer overworldSkyRenderer;
+
 	public BLSkyRenderer() {
 		this.clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
+
+		this.overworldSkyRenderer = new OverworldSkyRenderer();
 
 		this.starMesh = this.createStarMesh();
 
@@ -143,7 +151,7 @@ public class BLSkyRenderer extends IRenderHandler {
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		this.renderSky(partialTicks, world, mc);
 
-		this.renderCrack(partialTicks, world, mc);
+		this.renderRift(partialTicks, world, mc);
 
 		this.renderFog(partialTicks, world, mc);
 
@@ -152,8 +160,8 @@ public class BLSkyRenderer extends IRenderHandler {
 		this.resetRenderingStates();
 	}
 
-	protected void renderCrack(float partialTicks, WorldClient world, Minecraft mc) {
-		Framebuffer fbo = Minecraft.getMinecraft().getFramebuffer();
+	protected void renderRift(float partialTicks, WorldClient world, Minecraft mc) {
+		Framebuffer fbo = mc.getFramebuffer();
 
 		if(!fbo.isStencilEnabled()) {
 			fbo.enableStencil();
@@ -163,6 +171,8 @@ public class BLSkyRenderer extends IRenderHandler {
 			int bit = MinecraftForgeClient.reserveStencilBit();
 
 			if(bit != -1) {
+				TextureManager textureManager = mc.getTextureManager();
+
 				int index = IntMath.pow(2, bit);
 
 				//Set our bits in buffer to 0
@@ -176,17 +186,78 @@ public class BLSkyRenderer extends IRenderHandler {
 				GL11.glStencilFunc(GL11.GL_NEVER, index, index);
 				GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
 
-				//TODO Render Crack Mask
+				//TODO Render Rift Mask
+				/*GlStateManager.pushMatrix();
+				GlStateManager.translate(30, 20, 0);
+				GlStateManager.scale(0.6, 0.6, 0.6);
+				this.renderSky(partialTicks, world, mc);
+				GlStateManager.popMatrix();*/
+
+				float yaw = 0;//30.0F;
+				float pitch = 0;//-45.0F;
+				float roll = 90.0F;
+
+				textureManager.bindTexture(SKY_RIFT_MASK_TEXTURE);
+
+				GlStateManager.pushMatrix();
+
+				GlStateManager.rotate(yaw, 0, 1, 0);
+				GlStateManager.rotate(pitch, 0, 0, 1);
+				GlStateManager.rotate(roll, 0, 1, 0);
+
+				GlStateManager.enableAlpha();
+				GlStateManager.enableBlend();
+				GlStateManager.enableTexture2D();
+				RenderHelper.disableStandardItemLighting();
+				GlStateManager.depthMask(false);
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+				GlStateManager.callList(this.skyDomeDispList);
+				GlStateManager.depthMask(true);
+				GlStateManager.disableBlend();
+
+				GlStateManager.popMatrix();
 
 				GL11.glStencilFunc(GL11.GL_EQUAL, index, index);
 				GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
 
 				//TODO Render Overworld Sky
+				this.overworldSkyRenderer.render(partialTicks, world, mc);
 
 				GL11.glDisable(GL11.GL_STENCIL_TEST);
 
-				MinecraftForgeClient.releaseStencilBit(bit);
+				//Reset fog to BL fog
+				mc.entityRenderer.setupFogColor(false);
+
+				//TODO Render overlay
+				textureManager.bindTexture(SKY_RIFT_OVERLAY_TEXTURE);
+				ITextureObject overlay = textureManager.getTexture(SKY_RIFT_OVERLAY_TEXTURE);
+				overlay.setBlurMipmap(true, false);
+
+				GlStateManager.pushMatrix();
+
+				GlStateManager.rotate(yaw, 0, 1, 0);
+				GlStateManager.rotate(pitch, 0, 0, 1);
+				GlStateManager.rotate(roll, 0, 1, 0);
+
+				GlStateManager.enableAlpha();
+				GlStateManager.enableBlend();
+				GlStateManager.enableTexture2D();
+				RenderHelper.disableStandardItemLighting();
+				GlStateManager.depthMask(false);
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+				GlStateManager.callList(this.skyDomeDispList);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+				GlStateManager.depthMask(true);
+				GlStateManager.disableBlend();
+
+				GlStateManager.popMatrix();
+
+				overlay.restoreLastBlurMipmap();
 			}
+
+			MinecraftForgeClient.releaseStencilBit(bit);
 		}
 	}
 
