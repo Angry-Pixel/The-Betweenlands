@@ -26,7 +26,7 @@ public class BetweenlandsConfig {
 	public static String path;
 
 	@Ignore
-	private static final String LANG_PREFIX = "" + ModInfo.ID + ".";
+	private static final String LANG_PREFIX = "config." + ModInfo.ID + ".";
 
 	@Name("world_and_dimension")
 	@LangKey(LANG_PREFIX + "world_and_dimension")
