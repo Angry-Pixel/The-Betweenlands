@@ -1330,3 +1330,4 @@ config.thebetweenlands.default_remote_reset_time=Default Remote Reset Time
 config.thebetweenlands.debug=Debug
 config.thebetweenlands.debug_mode=Debug mode
 config.thebetweenlands.debug_model_loader=Model loader debug
+config.thebetweenlands.debug_recipe_overrides=Recipe overrides debug

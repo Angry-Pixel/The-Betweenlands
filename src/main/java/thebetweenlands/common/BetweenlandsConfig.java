@@ -204,6 +204,11 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "debug_model_loader")
 		@Comment("If true, enables the model loader debug logger")
 		public boolean debugModelLoader = false;
+		
+		@Name("debug_recipe_overrides")
+		@LangKey(LANG_PREFIX + "debug_recipe_overrides")
+		@Comment("If true, enables the recipe overrides debug logger")
+		public boolean debugRecipeOverrides = false;
 	}
 
 	@SubscribeEvent

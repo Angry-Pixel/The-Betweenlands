@@ -96,7 +96,7 @@ public class RecipeRegistry {
 
 	private static void overrideConflictingRecipes(IForgeRegistry<IRecipe> registry) {
 		if(BetweenlandsConfig.GENERAL.overrideConflictingRecipes) {
-			TheBetweenlands.logger.info("Searching recipe conflicts:");
+			if(BetweenlandsConfig.DEBUG.debugRecipeOverrides) TheBetweenlands.logger.info("Searching recipe conflicts:");
 
 			List<IRecipe> blRecipes = new ArrayList<>();
 			List<IRecipe> otherRecipes = new ArrayList<>();
@@ -144,7 +144,7 @@ public class RecipeRegistry {
 										}
 									}
 									if(hasConflict) {
-										TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName());
+										if(BetweenlandsConfig.DEBUG.debugRecipeOverrides) TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName());
 										conflictingRecipes.put(blRecipe, otherRecipe.getRegistryName());
 									}
 								}
@@ -154,7 +154,7 @@ public class RecipeRegistry {
 				}
 			}
 
-			TheBetweenlands.logger.info("Replacing conflicting recipes:");
+			if(BetweenlandsConfig.DEBUG.debugRecipeOverrides) TheBetweenlands.logger.info("Replacing conflicting recipes:");
 
 			for(Entry<IRecipe, ResourceLocation> entry : conflictingRecipes.entries()) {
 				IRecipe blRecipe = entry.getKey();
@@ -170,7 +170,7 @@ public class RecipeRegistry {
 
 				registry.register(overrideDummy);
 
-				TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName() + (registry.getValue(entry.getValue()) != overrideDummy ? " FAILED" : ""));
+				if(BetweenlandsConfig.DEBUG.debugRecipeOverrides) TheBetweenlands.logger.info(blRecipe.getRegistryName() + " " + otherRecipe.getRegistryName() + (registry.getValue(entry.getValue()) != overrideDummy ? " FAILED" : ""));
 			}
 		}
 	}
