@@ -1,5 +1,6 @@
 package thebetweenlands.client.render.sky;
 
+import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -10,14 +11,14 @@ import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
-
-import com.google.common.math.IntMath;
+import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -30,7 +31,6 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -38,6 +38,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.shader.GeometryBuffer;
+import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -56,10 +57,13 @@ public class BLSkyRenderer extends IRenderHandler {
 	public static final ResourceLocation FOG_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/fog_texture.png");
 	public static final ResourceLocation SKY_RIFT_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_overlay.png");
 	public static final ResourceLocation SKY_RIFT_MASK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask.png");
+	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask_back.png");
 
 	protected List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 
 	protected int skyDomeDispList;
+
+	protected int projectionSphereDistList;
 
 	protected Mesh starMesh;
 
@@ -69,7 +73,34 @@ public class BLSkyRenderer extends IRenderHandler {
 
 	protected OverworldSkyRenderer overworldSkyRenderer;
 
+	public ResizableFramebuffer overworldSkyFbo;
+
+	private final FloatBuffer biasMatrix = GLAllocation.createDirectFloatBuffer(16);
+	private final FloatBuffer textureMatrix = GLAllocation.createDirectFloatBuffer(16);
+	private final FloatBuffer modelviewMatrix = GLAllocation.createDirectFloatBuffer(16);
+	private final FloatBuffer projectionMatrix = GLAllocation.createDirectFloatBuffer(16);
+	private final FloatBuffer buffer4f = GLAllocation.createDirectFloatBuffer(16);
+
+	private final Sphere projectionSphere;
+
 	public BLSkyRenderer() {
+		this.biasMatrix.clear();
+		this.biasMatrix
+		.put(0.5F).put(0.0F).put(0.0F).put(0.0F)
+		.put(0.0F).put(0.5F).put(0.0F).put(0.0F)
+		.put(0.0F).put(0.0F).put(0.5F).put(0.0F)
+		.put(0.5F).put(0.5F).put(0.5F).put(1.0F)
+		.flip();
+
+		this.projectionSphere = new Sphere();
+		this.projectionSphere.setTextureFlag(false);
+		this.projectionSphereDistList = GLAllocation.generateDisplayLists(1);
+		GlStateManager.glNewList(this.projectionSphereDistList, GL11.GL_COMPILE);
+		this.projectionSphere.draw(55, 8, 8);
+		GlStateManager.glEndList();
+
+		this.overworldSkyFbo = new ResizableFramebuffer(true);
+
 		this.clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
 
 		this.overworldSkyRenderer = new OverworldSkyRenderer();
@@ -80,6 +111,26 @@ public class BLSkyRenderer extends IRenderHandler {
 		GlStateManager.glNewList(this.skyDomeDispList, GL11.GL_COMPILE);
 		this.renderSkyDome();
 		GlStateManager.glEndList();
+	}
+
+	@Override
+	public void render(float partialTicks, WorldClient world, Minecraft mc) {
+		this.renderSky(partialTicks, world, mc);
+
+		this.renderRift(partialTicks, world, mc);
+
+		this.renderFog(partialTicks, world, mc);
+
+		this.renderAuroras(partialTicks, world, mc);
+
+		this.resetRenderingStates();
+	}
+
+	private FloatBuffer getBuffer4f(float v1, float v2, float v3, float v4) {
+		this.buffer4f.clear();
+		this.buffer4f.put(v1).put(v2).put(v3).put(v4);
+		this.buffer4f.flip();
+		return this.buffer4f;
 	}
 
 	protected Mesh createStarMesh() {
@@ -147,117 +198,160 @@ public class BLSkyRenderer extends IRenderHandler {
 		return new Vertex(farX + vertX, farY + rotVertX2, farZ + vertZ, new Vector3D(0, -1, 0), color);
 	}
 
-	@Override
-	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-		this.renderSky(partialTicks, world, mc);
-
-		this.renderRift(partialTicks, world, mc);
-
-		this.renderFog(partialTicks, world, mc);
-
-		this.renderAuroras(partialTicks, world, mc);
-
-		this.resetRenderingStates();
-	}
-
 	protected void renderRift(float partialTicks, WorldClient world, Minecraft mc) {
-		Framebuffer fbo = mc.getFramebuffer();
+		if(OpenGlHelper.isFramebufferEnabled()) {
+			TextureManager textureManager = mc.getTextureManager();
 
-		if(!fbo.isStencilEnabled()) {
-			fbo.enableStencil();
-		}
+			Framebuffer fbo = mc.getFramebuffer();
 
-		if(fbo.isStencilEnabled()) {
-			int bit = MinecraftForgeClient.reserveStencilBit();
+			Framebuffer skyFbo = this.overworldSkyFbo.getFramebuffer(fbo.framebufferWidth, fbo.framebufferHeight);
 
-			if(bit != -1) {
-				TextureManager textureManager = mc.getTextureManager();
+			skyFbo.setFramebufferColor(0, 0, 0, 0);
+			skyFbo.framebufferClear();
+			skyFbo.bindFramebuffer(false);
 
-				int index = IntMath.pow(2, bit);
+			//Render overworld sky
+			GlStateManager.pushMatrix();
+			this.overworldSkyRenderer.updateFogColor(partialTicks, mc);
+			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+			this.overworldSkyRenderer.render(partialTicks, world, mc);
+			GlStateManager.popMatrix();
 
-				//Set our bits in buffer to 0
-				GL11.glStencilMask(index);
-				GL11.glClearStencil(0);
-				GL11.glClear(GL11.GL_STENCIL_BUFFER_BIT);
-				GL11.glStencilMask(0xFF);
+			GlStateManager.enableAlpha();
+			GlStateManager.enableBlend();
+			GlStateManager.enableTexture2D();
+			RenderHelper.disableStandardItemLighting();
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+			GlStateManager.disableFog();
+			GlStateManager.depthMask(false);
 
-				GL11.glEnable(GL11.GL_STENCIL_TEST);
+			//Set all alpha to 1 for mask blending
+			GlStateManager.colorMask(false, false, false, true);
+			GlStateManager.clearColor(0, 0, 0, 1);
+			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+			GlStateManager.colorMask(true, true, true, true);
 
-				GL11.glStencilFunc(GL11.GL_NEVER, index, index);
-				GL11.glStencilOp(GL11.GL_REPLACE, GL11.GL_REPLACE, GL11.GL_REPLACE);
-
-				//TODO Render Rift Mask
-				/*GlStateManager.pushMatrix();
-				GlStateManager.translate(30, 20, 0);
-				GlStateManager.scale(0.6, 0.6, 0.6);
-				this.renderSky(partialTicks, world, mc);
-				GlStateManager.popMatrix();*/
-
-				float yaw = 0;//30.0F;
-				float pitch = 0;//-45.0F;
-				float roll = 90.0F;
-
-				textureManager.bindTexture(SKY_RIFT_MASK_TEXTURE);
-
-				GlStateManager.pushMatrix();
-
-				GlStateManager.rotate(yaw, 0, 1, 0);
-				GlStateManager.rotate(pitch, 0, 0, 1);
-				GlStateManager.rotate(roll, 0, 1, 0);
-
-				GlStateManager.enableAlpha();
-				GlStateManager.enableBlend();
-				GlStateManager.enableTexture2D();
-				RenderHelper.disableStandardItemLighting();
-				GlStateManager.depthMask(false);
-				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-				GlStateManager.callList(this.skyDomeDispList);
-				GlStateManager.depthMask(true);
-				GlStateManager.disableBlend();
-
-				GlStateManager.popMatrix();
-
-				GL11.glStencilFunc(GL11.GL_EQUAL, index, index);
-				GL11.glStencilOp(GL11.GL_KEEP, GL11.GL_KEEP, GL11.GL_KEEP);
-
-				//TODO Render Overworld Sky
-				this.overworldSkyRenderer.render(partialTicks, world, mc);
-
-				GL11.glDisable(GL11.GL_STENCIL_TEST);
-
-				//Reset fog to BL fog
-				mc.entityRenderer.setupFogColor(false);
-
-				//TODO Render overlay
-				textureManager.bindTexture(SKY_RIFT_OVERLAY_TEXTURE);
-				ITextureObject overlay = textureManager.getTexture(SKY_RIFT_OVERLAY_TEXTURE);
-				overlay.setBlurMipmap(true, false);
-
-				GlStateManager.pushMatrix();
-
-				GlStateManager.rotate(yaw, 0, 1, 0);
-				GlStateManager.rotate(pitch, 0, 0, 1);
-				GlStateManager.rotate(roll, 0, 1, 0);
-
-				GlStateManager.enableAlpha();
-				GlStateManager.enableBlend();
-				GlStateManager.enableTexture2D();
-				RenderHelper.disableStandardItemLighting();
-				GlStateManager.depthMask(false);
-				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-				GlStateManager.callList(this.skyDomeDispList);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-				GlStateManager.depthMask(true);
-				GlStateManager.disableBlend();
-
-				GlStateManager.popMatrix();
-
-				overlay.restoreLastBlurMipmap();
+			//Render mask
+			if(OpenGlHelper.openGL14) {
+				GlStateManager.tryBlendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
+			} else {
+				GlStateManager.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
 			}
 
-			MinecraftForgeClient.releaseStencilBit(bit);
+			float yaw = 0;//30.0F;
+			float pitch = -85;//-90;//-45.0F;
+			float roll = 0;//-90.0F;
+
+			//Render back mask
+			textureManager.bindTexture(SKY_RIFT_MASK_BACK_TEXTURE);
+			ITextureObject backMask = textureManager.getTexture(SKY_RIFT_MASK_BACK_TEXTURE);
+			backMask.setBlurMipmap(true, false);
+
+			GlStateManager.pushMatrix();
+			GlStateManager.scale(-1, -1, -1);
+			GlStateManager.translate(0, -1, 0);
+			GlStateManager.rotate(yaw, 0, 1, 0);
+			GlStateManager.rotate(pitch, 0, 0, 1);
+			GlStateManager.rotate(roll, 0, 1, 0);
+
+			GlStateManager.cullFace(CullFace.FRONT);
+			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.cullFace(CullFace.BACK);
+
+			GlStateManager.popMatrix();
+
+			backMask.restoreLastBlurMipmap();
+
+			//Render front mask
+			textureManager.bindTexture(SKY_RIFT_MASK_TEXTURE);
+			ITextureObject mask = textureManager.getTexture(SKY_RIFT_MASK_TEXTURE);
+			mask.setBlurMipmap(true, false);
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, -1, 0);
+			GlStateManager.rotate(yaw, 0, 1, 0);
+			GlStateManager.rotate(pitch, 0, 0, 1);
+			GlStateManager.rotate(roll, 0, 1, 0);
+
+			GlStateManager.callList(this.skyDomeDispList);
+
+			GlStateManager.popMatrix();
+
+			mask.restoreLastBlurMipmap();
+
+			GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+
+			fbo.bindFramebuffer(true);
+
+			//Reset fog to this world's fog
+			mc.entityRenderer.setupFogColor(false);
+
+			GlStateManager.bindTexture(skyFbo.framebufferTexture);
+
+			GlStateManager.color(1, 1, 1, 1);
+
+			//Project onto sphere
+			GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, this.modelviewMatrix);
+			GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX, this.projectionMatrix);
+
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+			GlStateManager.pushMatrix();
+			GlStateManager.loadIdentity();
+
+			GlStateManager.multMatrix(this.biasMatrix);
+			GlStateManager.multMatrix(this.projectionMatrix);
+			GlStateManager.multMatrix(this.modelviewMatrix);
+
+			GlStateManager.getFloat(GL11.GL_TEXTURE_MATRIX, this.textureMatrix);
+			GlStateManager.popMatrix();
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+			//Set up UV generator
+			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
+			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(0), this.textureMatrix.get(4), this.textureMatrix.get(8), this.textureMatrix.get(12)));
+			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(1), this.textureMatrix.get(5), this.textureMatrix.get(9), this.textureMatrix.get(13)));
+			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(2), this.textureMatrix.get(6), this.textureMatrix.get(10), this.textureMatrix.get(14)));
+			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(3), this.textureMatrix.get(7), this.textureMatrix.get(11), this.textureMatrix.get(15)));
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
+			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.Q);
+
+			GlStateManager.disableFog(); //TODO Fog?
+
+			//Render projection sphere
+			GlStateManager.cullFace(CullFace.FRONT);
+			GlStateManager.callList(this.projectionSphereDistList);
+			GlStateManager.cullFace(CullFace.BACK);
+
+			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
+			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
+			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
+			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.Q);
+
+			//Render overlay
+			textureManager.bindTexture(SKY_RIFT_OVERLAY_TEXTURE);
+			ITextureObject overlay = textureManager.getTexture(SKY_RIFT_OVERLAY_TEXTURE);
+			overlay.setBlurMipmap(true, false);
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(0, -1, 0);
+			GlStateManager.rotate(yaw, 0, 1, 0);
+			GlStateManager.rotate(pitch, 0, 0, 1);
+			GlStateManager.rotate(roll, 0, 1, 0);
+
+			GlStateManager.callList(this.skyDomeDispList);
+
+			GlStateManager.popMatrix();
+
+			overlay.restoreLastBlurMipmap();
+
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.disableBlend();
+			GlStateManager.enableDepth();
 		}
 	}
 
@@ -502,8 +596,8 @@ public class BLSkyRenderer extends IRenderHandler {
 		double tileSize = 5.0D;
 		Vec3d yOffset = new Vec3d(0, 2, 0);
 		Vec3d cp = new Vec3d(0, -20, 0);
-		double radius = 50.0D;
-		int tiles = 30;
+		double radius = 55.0D;
+		int tiles = 12;
 		GlStateManager.pushMatrix();
 		GlStateManager.glBegin(GL11.GL_TRIANGLES);
 		//Renders tiles and then normalizes their vertices to create a texture mapped dome

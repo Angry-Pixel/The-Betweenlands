@@ -64,7 +64,6 @@ public class OverworldSkyRenderer extends IRenderHandler {
 
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
-		this.updateFogColor(partialTicks, mc);
 		this.setupFog(-1, partialTicks, mc);
 
 		TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
@@ -487,7 +486,7 @@ public class OverworldSkyRenderer extends IRenderHandler {
 		}
 	}
 
-	private void updateFogColor(float partialTicks, Minecraft mc)
+	public void updateFogColor(float partialTicks, Minecraft mc)
 	{
 		Entity entity = mc.getRenderViewEntity();
 		float f = 0.25F + 0.75F * (float)mc.gameSettings.renderDistanceChunks / 32.0F;
@@ -554,6 +553,8 @@ public class OverworldSkyRenderer extends IRenderHandler {
 			this.fogColorGreen = f17;
 			this.fogColorBlue = f7;
 		}
+		
+		GlStateManager.clearColor(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 0.0F);
 	}
 
 	private void setupFog(int startCoords, float partialTicks, Minecraft mc)
@@ -623,7 +624,7 @@ public class OverworldSkyRenderer extends IRenderHandler {
 	}
 
 	protected float getStarBrightness(float partialTicks) {
-		return 1.0F; //TODO
+		return 0.0F; //TODO
 	}
 
 	protected int getMoonPhase() {
@@ -631,11 +632,11 @@ public class OverworldSkyRenderer extends IRenderHandler {
 	}
 
 	protected float getCelestialAngle(float partialTicks) {
-		return 0.0F; //TODO
+		return -0.25F; //TODO
 	}
 
 	protected float getCelestialAngleRadians(float partialTicks) {
-		return 0.0F; //TODO
+		return (float) Math.toRadians(this.getCelestialAngle(partialTicks) * 360); //TODO
 	}
 
 	protected float getRainStrength(float partialTicks) {
@@ -643,11 +644,11 @@ public class OverworldSkyRenderer extends IRenderHandler {
 	}
 
 	protected float[] calcSunriseSunsetColors(float celestialAngle, float partialTicks) {
-		return new float[] {0, 0, 0, 0}; //TODO
+		return new float[] {1, 0, 0, 1}; //TODO
 	}
 
 	protected Vec3d getSkyColor(Entity renderViewEntity, float partialTicks) {
-		return new Vec3d(0.2F, 0.2F, 0.2F); //TODO
+		return new Vec3d(0.2F, 0.2F, 0.4F); //TODO
 	}
 
 	protected Vec3d getFogColor(float partialTicks) {

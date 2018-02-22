@@ -21,6 +21,7 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -196,6 +197,37 @@ public class ScreenRenderHandler extends Gui {
 		int height = event.getResolution().getScaledHeight();
 		
 		if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
+			/*GlStateManager.pushMatrix();
+
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+			
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+			
+			GlStateManager.disableAlpha();
+			
+			GlStateManager.disableBlend();
+			
+			GlStateManager.enableTexture2D();
+			WorldProviderBetweenlands.getBLSkyRenderer().overworldSkyFbo.getFramebuffer(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight).bindFramebufferTexture();
+			
+			Tessellator t = Tessellator.getInstance();
+			BufferBuilder b = t.getBuffer();
+			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			
+			b.pos(0, 0, 0).tex(0, 1).endVertex();
+			b.pos(0, event.getResolution().getScaledHeight(), 0).tex(0, 0).endVertex();
+			b.pos(event.getResolution().getScaledWidth(), event.getResolution().getScaledHeight(), 0).tex(1, 0).endVertex();
+			b.pos(event.getResolution().getScaledWidth(), 0, 0).tex(1, 1).endVertex();
+			
+			t.draw();
+			
+			GlStateManager.enableBlend();
+			
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			
+			GlStateManager.popMatrix();*/
+			
 			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;
 				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
