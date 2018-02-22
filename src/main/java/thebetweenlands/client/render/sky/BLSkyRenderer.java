@@ -221,7 +221,7 @@ public class BLSkyRenderer extends IRenderHandler {
 
 			//Render overworld sky
 			GlStateManager.pushMatrix();
-			this.overworldSkyRenderer.updateFogColor(partialTicks, mc);
+			this.overworldSkyRenderer.updateFogColor(world, partialTicks, mc);
 			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			this.overworldSkyRenderer.render(partialTicks, world, mc);
 			GlStateManager.popMatrix();
