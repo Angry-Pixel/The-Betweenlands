@@ -210,10 +210,19 @@ public class BLSkyRenderer extends IRenderHandler {
 			skyFbo.framebufferClear();
 			skyFbo.bindFramebuffer(false);
 
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
+			GlStateManager.enableCull();
+			GlStateManager.enableDepth();
+			GlStateManager.depthMask(true);
+			GlStateManager.enableAlpha();
+			GlStateManager.enableBlend();
+			GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+			GlStateManager.disableTexture2D();
+
 			//Render overworld sky
 			GlStateManager.pushMatrix();
 			this.overworldSkyRenderer.updateFogColor(partialTicks, mc);
-			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 			this.overworldSkyRenderer.render(partialTicks, world, mc);
 			GlStateManager.popMatrix();
 

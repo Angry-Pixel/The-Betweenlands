@@ -1303,6 +1303,7 @@ config.thebetweenlands.wisp_quality=Wisp Rendering Quality
 config.thebetweenlands.use_shader=Use shaders for rendering
 config.thebetweenlands.sky_texture_resolution=Sky texture resolution
 config.thebetweenlands.fullbright_blocks=Full brightness blocks
+config.thebetweenlands.sky_rift_clouds=Sky rift clouds
 
 config.thebetweenlands.general=General
 config.thebetweenlands.bl_main_menu=Betweenlands Main Menu

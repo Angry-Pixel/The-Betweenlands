@@ -70,18 +70,23 @@ public class BetweenlandsConfig {
 		@Comment("Some features in the Betweenlands use shaders for special effects. If you don't have a dedicated graphics card or want to use other mods with shaders you should set this to false. May have an impact on performance depending on your computer. Forces FBOs to be enabled")
 		public boolean useShader = true;
 
+		@Name("fullbright_blocks")
+		@LangKey(LANG_PREFIX + "fullbright_blocks")
+		@Comment("Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false")
+		@RequiresWorldRestart
+		public boolean fullbrightBlocks = true;
+
 		@Name("sky_texture_resolution")
 		@LangKey(LANG_PREFIX + "sky_texture_resolution")
 		@Comment("Only works when shaders are enabled. Determines the resolution of the shader sky texture. Bigger resolutions may have a bad impact on performance")
 		@RangeInt(min = 16)
 		@RequiresMcRestart
 		public int skyResolution = 1024;
-
-		@Name("fullbright_blocks")
-		@LangKey(LANG_PREFIX + "fullbright_blocks")
-		@Comment("Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false")
-		@RequiresWorldRestart
-		public boolean fullbrightBlocks = true;
+		
+		@Name("sky_rift_clouds")
+		@LangKey(LANG_PREFIX + "sky_rift_clouds")
+		@Comment("Whether clouds should be rendered in sky rifts")
+		public boolean skyRiftClouds = true;
 	}
 
 	@Name("general")
@@ -204,7 +209,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "debug_model_loader")
 		@Comment("If true, enables the model loader debug logger")
 		public boolean debugModelLoader = false;
-		
+
 		@Name("debug_recipe_overrides")
 		@LangKey(LANG_PREFIX + "debug_recipe_overrides")
 		@Comment("If true, enables the recipe overrides debug logger")

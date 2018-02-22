@@ -204,10 +204,6 @@ public class ScreenRenderHandler extends Gui {
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.color(1, 1, 1, 1);
 			
-			GlStateManager.disableAlpha();
-			
-			GlStateManager.disableBlend();
-			
 			GlStateManager.enableTexture2D();
 			WorldProviderBetweenlands.getBLSkyRenderer().overworldSkyFbo.getFramebuffer(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight).bindFramebufferTexture();
 			

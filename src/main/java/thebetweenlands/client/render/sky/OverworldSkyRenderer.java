@@ -25,6 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 @SideOnly(Side.CLIENT)
@@ -66,7 +67,7 @@ public class OverworldSkyRenderer extends IRenderHandler {
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		this.setupFog(-1, partialTicks, mc);
 
-		TextureManager textureManager = Minecraft.getMinecraft().renderEngine;
+		TextureManager textureManager = mc.renderEngine;
 
 		GlStateManager.disableTexture2D();
 		Vec3d vec3d = this.getSkyColor(mc.getRenderViewEntity(), partialTicks);
@@ -272,41 +273,45 @@ public class OverworldSkyRenderer extends IRenderHandler {
 		GlStateManager.enableTexture2D();
 		GlStateManager.depthMask(true);
 
-		Entity entity = mc.getRenderViewEntity();
-
-		WorldProviderBetweenlands providerBl = world.provider instanceof WorldProviderBetweenlands ? (WorldProviderBetweenlands) world.provider : null;
-
-		if(providerBl != null) providerBl.setShowClouds(true);
-
-		double rx = entity.posX;
-		double prx = entity.prevPosX;
-		double lrx = entity.lastTickPosX;
-		double ry = entity.posY;
-		double pry = entity.prevPosY;
-		double lry = entity.lastTickPosY;
-		double rz = entity.posZ;
-		double prz = entity.prevPosZ;
-		double lrz = entity.lastTickPosZ;
-
-		entity.posX = entity.prevPosX = entity.lastTickPosX = 0;
-		entity.posY = entity.prevPosY = entity.lastTickPosY = 50;
-		entity.posZ = entity.prevPosZ = entity.lastTickPosZ = 0;
-
-		GlStateManager.pushMatrix();
-		mc.renderGlobal.renderClouds(partialTicks, 2, 0, 50, 0);
-		GlStateManager.popMatrix();
-		
-		entity.posX = rx;
-		entity.prevPosX = prx;
-		entity.lastTickPosX = lrx;
-		entity.posY = ry;
-		entity.prevPosY = pry;
-		entity.lastTickPosY = lry;
-		entity.posZ = rz;
-		entity.prevPosZ = prz;
-		entity.lastTickPosZ = lrz;
-
-		if(providerBl != null) providerBl.setShowClouds(false);
+		if(BetweenlandsConfig.RENDERING.skyRiftClouds) {
+			Entity entity = mc.getRenderViewEntity();
+	
+			WorldProviderBetweenlands providerBl = world.provider instanceof WorldProviderBetweenlands ? (WorldProviderBetweenlands) world.provider : null;
+	
+			if(providerBl != null) providerBl.setShowClouds(true);
+	
+			double rx = entity.posX;
+			double prx = entity.prevPosX;
+			double lrx = entity.lastTickPosX;
+			double ry = entity.posY;
+			double pry = entity.prevPosY;
+			double lry = entity.lastTickPosY;
+			double rz = entity.posZ;
+			double prz = entity.prevPosZ;
+			double lrz = entity.lastTickPosZ;
+	
+			entity.posX = entity.prevPosX = entity.lastTickPosX = 0;
+			entity.posY = entity.prevPosY = entity.lastTickPosY = 50;
+			entity.posZ = entity.prevPosZ = entity.lastTickPosZ = 0;
+	
+			this.setupFog(0, partialTicks, mc);
+	
+			GlStateManager.pushMatrix();
+			mc.renderGlobal.renderClouds(partialTicks, 2, 0, 50, 0);
+			GlStateManager.popMatrix();
+	
+			entity.posX = rx;
+			entity.prevPosX = prx;
+			entity.lastTickPosX = lrx;
+			entity.posY = ry;
+			entity.prevPosY = pry;
+			entity.lastTickPosY = lry;
+			entity.posZ = rz;
+			entity.prevPosZ = prz;
+			entity.lastTickPosZ = lrz;
+	
+			if(providerBl != null) providerBl.setShowClouds(false);
+		}
 	}
 
 	private void generateSky2()
@@ -553,7 +558,7 @@ public class OverworldSkyRenderer extends IRenderHandler {
 			this.fogColorGreen = f17;
 			this.fogColorBlue = f7;
 		}
-		
+
 		GlStateManager.clearColor(this.fogColorRed, this.fogColorGreen, this.fogColorBlue, 0.0F);
 	}
 
