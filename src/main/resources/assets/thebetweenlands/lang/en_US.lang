@@ -523,6 +523,7 @@ item.thebetweenlands.swamp_talisman_1.name=Swamp Talisman Piece
 item.thebetweenlands.swamp_talisman_2.name=Swamp Talisman Piece
 item.thebetweenlands.swamp_talisman_3.name=Swamp Talisman Piece
 item.thebetweenlands.swamp_talisman_4.name=Swamp Talisman Piece
+item.thebetweenlands.swamp_talisman_5.name=Linked Swamp Talisman
 item.thebetweenlands.swamp_tall_grass_blades.name=Swamp Tallgrass Blades
 item.thebetweenlands.syrmorite_boots.name=Syrmorite Boots
 item.thebetweenlands.syrmorite_chestplate.name=Syrmorite Chestplate
@@ -755,6 +756,7 @@ tooltip.dentrothyst_shield=Blocks splash potion effects
 tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope
 tooltip.hearthgrove_log=This dense log is excellent as fuel.\nCan be tarred
 tooltip.decay_food=Heals decay
+tooltip.swamp_talisman_linked=Linked to portal\nX: %s\nY: %s\nZ: %s
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -836,7 +838,11 @@ chat.rope.too_far=You're too far away from the last anchor point
 
 chat.bed_spawn_set=Your Spawn has been set to this Moss Bed
 
-chat.talisman.noplace=The space is not large enough
+chat.talisman.noplace=There is not enough space for the portal
+chat.talisman.linked=The Swamp Talisman is now linked to this portal
+chat.talisman.cant_link=These portals can't be linked together
+chat.talisman.too_far=This portal is too far away to be linked
+chat.talisman.portal_linked=The portals are now linked together
 
 chat.item.forbiddenfig=Cursed are those who eat the Forbidden Fig!
 
@@ -1297,6 +1303,8 @@ config.thebetweenlands.dimension_id=The Betweenlands Dimension ID
 config.thebetweenlands.druid_circle_frequency=Frequency of Druid Circles
 config.thebetweenlands.dimension_brightness=Dimension brightness
 config.thebetweenlands.enable_seasonal_events=Enable Seasonal Events
+config.thebetweenlands.portal_dimension_whitelist=Portal dimensions whitelist
+config.thebetweenlands.portal_default_return_dimension=Default portal return dimension
 
 config.thebetweenlands.rendering=Rendering
 config.thebetweenlands.wisp_quality=Wisp Rendering Quality

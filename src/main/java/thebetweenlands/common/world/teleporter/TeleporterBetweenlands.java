@@ -28,11 +28,15 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
 
 public final class TeleporterBetweenlands extends Teleporter {
-	private final World targetWorld;
+	private final WorldServer toWorld;
+	private final int fromDim;
+	private final AxisAlignedBB fromBounds;
 
-	public TeleporterBetweenlands(WorldServer worldServer) {
-		super(worldServer);
-		this.targetWorld = worldServer;
+	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld) {
+		super(toWorld);
+		this.fromBounds = fromBounds;
+		this.fromDim = fromDim;
+		this.toWorld = toWorld;
 	}
 
 	@Override
@@ -42,12 +46,12 @@ public final class TeleporterBetweenlands extends Teleporter {
 				//Portal failed to generate... fallback?
 
 				BlockPos pos = this.findSuitablePortalPos(entity.getPosition());
-				Chunk chunk = this.targetWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
+				Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
 				pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
 				for(int xo = -1; xo <= 1; xo++) {
 					for(int zo = -1; zo <= 1; zo++) {
 						for(int yo = 0; yo <= 2; yo++) {
-							this.targetWorld.setBlockToAir(pos.add(xo, yo, zo));
+							this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
 						}
 					}
 				}
@@ -60,7 +64,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public boolean placeInExistingPortal(Entity entity, float rotationYaw) {
-		BlockPos existingPortal = this.findExistingPortalPos(entity);
+		BlockPos existingPortal = this.findExistingPortalPos();
 
 		if(existingPortal != null) {
 			//Portal exists already
@@ -78,8 +82,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 * @return
 	 */
 	@Nullable
-	protected BlockPos findExistingPortalPos(Entity entity) {
-		LocationPortal portal = this.getPortalLocation(entity);
+	protected BlockPos findExistingPortalPos() {
+		LocationPortal portal = this.getPortalLocation();
 		if(portal != null) {
 			LocationPortal otherPortal = this.getOtherPortalLocation(portal.getOtherPortalPosition());
 			if(otherPortal != null) {
@@ -95,10 +99,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 * @return
 	 */
 	@Nullable
-	protected LocationPortal getPortalLocation(Entity entity) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
-		AxisAlignedBB aabb = entity.getEntityBoundingBox();
-		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, aabb, loc -> loc.intersects(aabb));
+	protected LocationPortal getPortalLocation() {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.toWorld.getMinecraftServer().getWorld(this.fromDim));
+		List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, this.fromBounds, loc -> loc.intersects(this.fromBounds));
 		this.validatePortals(portals);
 		if(!portals.isEmpty()) {
 			return portals.get(0);
@@ -113,7 +116,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 	@Nullable
 	protected LocationPortal getOtherPortalLocation(@Nullable BlockPos pos) {
 		if(pos != null) {
-			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.targetWorld);
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.toWorld);
 			List<LocationPortal> otherPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, pos.getX(), pos.getZ(), loc -> loc.getPortalPosition().equals(pos));
 			this.validatePortals(otherPortals);
 			if(!otherPortals.isEmpty()) {
@@ -140,7 +143,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 	}
 
 	/**
-	 * Verifies whether a portal still exists* @return
+	 * Verifies whether a portal still exists
+	 * @return
 	 */
 	protected boolean checkPortal(LocationPortal portal) {
 		World world = portal.getWorldStorage().getWorld();
@@ -171,7 +175,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		validBiomes.add(BiomeRegistry.SWAMPLANDS);
 		validBiomes.add(BiomeRegistry.PATCHY_ISLANDS);
 
-		BlockPos suitablePos = this.targetWorld.getBiomeProvider().findBiomePosition(start.getX(), start.getZ(), 256, validBiomes, this.targetWorld.rand);
+		BlockPos suitablePos = this.toWorld.getBiomeProvider().findBiomePosition(start.getX(), start.getZ(), 256, validBiomes, this.toWorld.rand);
 
 		BlockPos selectedPos;
 		if(suitablePos != null) {
@@ -180,7 +184,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			selectedPos = start;
 		}
 
-		Chunk chunk = this.targetWorld.getChunkFromBlockCoords(selectedPos); //Force chunk to generate
+		Chunk chunk = this.toWorld.getChunkFromBlockCoords(selectedPos); //Force chunk to generate
 		int height = chunk.getHeight(selectedPos);
 		return new BlockPos(selectedPos.getX(), height, selectedPos.getZ());
 	}
@@ -199,21 +203,21 @@ public final class TeleporterBetweenlands extends Teleporter {
 			if (-checkRadius < xo && xo <= checkRadius && -checkRadius < zo && zo <= checkRadius) {
 
 				checkPos.setPos(genPos.getX() + xo, 64, genPos.getZ() + zo);
-				Chunk chunk = this.targetWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
+				Chunk chunk = this.toWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
 				checkPos.setY(chunk.getHeight(checkPos) - 1);
 
-				if(SurfaceType.MIXED_GROUND.matches(this.targetWorld.getBlockState(checkPos)) && this.targetWorld.isAirBlock(checkPos.up()) && this.canGenerate(this.targetWorld, checkPos)) {
-					if(genTree.generate(this.targetWorld, this.targetWorld.rand, checkPos.toImmutable())) {
-						LocationPortal portal = this.getPortalLocation(entity);
+				if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerate(this.toWorld, checkPos)) {
+					if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
+						LocationPortal portal = this.getPortalLocation();
 
 						if(portal != null) {
-							BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.targetWorld);
+							BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.toWorld);
 							List<LocationPortal> newPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, checkPos.up().getX(), checkPos.up().getZ(), loc -> loc.isInside(checkPos.up()));
 							if(!newPortals.isEmpty()) {
 								//Link portals
 								LocationPortal newPortal = newPortals.get(0);
-								newPortal.setOtherPortalPosition(portal.getPortalPosition());
-								portal.setOtherPortalPosition(newPortal.getPortalPosition());
+								newPortal.setOtherPortalPosition(this.fromDim, portal.getPortalPosition());
+								portal.setOtherPortalPosition(this.toWorld.provider.getDimension(), newPortal.getPortalPosition());
 							}
 						}
 
@@ -279,7 +283,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			coords = player.getPosition();
 			int spawnFuzz = 64;
 			int spawnFuzzHalf = spawnFuzz / 2;
-			BlockPos spawnPlace = this.targetWorld.getTopSolidOrLiquidBlock(coords.add(this.targetWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, this.targetWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
+			BlockPos spawnPlace = this.toWorld.getTopSolidOrLiquidBlock(coords.add(this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
 			player.setSpawnChunk(spawnPlace, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 	}

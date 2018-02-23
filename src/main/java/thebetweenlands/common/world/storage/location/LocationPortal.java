@@ -8,10 +8,12 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.BetweenlandsConfig;
 
 public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;
 	private BlockPos otherPortalPos;
+	private int otherPortalDimension;
 
 	public LocationPortal(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region);
@@ -31,6 +33,17 @@ public class LocationPortal extends LocationStorage {
 		} else {
 			this.otherPortalPos = null;
 		}
+		if(nbt.hasKey("OtherPortalDimension", Constants.NBT.TAG_INT)) {
+			this.otherPortalDimension = nbt.getInteger("OtherPortalDimension");
+		} else {
+			//Legacy code for old portals that didn't support other dimensions
+			int currDim = this.getWorldStorage().getWorld().provider.getDimension();
+			if(currDim == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+				this.otherPortalDimension = 0;
+			} else {
+				this.otherPortalDimension = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+			}
+		}
 	}
 
 	@Override
@@ -40,6 +53,7 @@ public class LocationPortal extends LocationStorage {
 		if(this.otherPortalPos != null) {
 			nbt.setLong("OtherPortalPos", this.otherPortalPos.toLong());
 		}
+		nbt.setInteger("OtherPortalDimension", this.otherPortalDimension);
 		return nbt;
 	}
 
@@ -59,13 +73,22 @@ public class LocationPortal extends LocationStorage {
 	public BlockPos getOtherPortalPosition() {
 		return this.otherPortalPos;
 	}
+	
+	/**
+	 * Returns the dimension the other portal is in
+	 * @return
+	 */
+	public int getOtherPortalDimension() {
+		return this.otherPortalDimension;
+	}
 
 	/**
 	 * Sets the position of the portal on the other side
 	 * @param pos
 	 */
-	public void setOtherPortalPosition(@Nullable BlockPos pos) {
+	public void setOtherPortalPosition(int dim, @Nullable BlockPos pos) {
 		this.otherPortalPos = pos;
+		this.otherPortalDimension = dim;
 		this.setDirty(true);
 	}
 }

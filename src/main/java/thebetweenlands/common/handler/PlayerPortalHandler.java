@@ -1,5 +1,7 @@
 package thebetweenlands.common.handler;
 
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -8,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -16,10 +19,13 @@ import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.client.audio.PortalSound;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
+import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.LocationPortal;
 import thebetweenlands.common.world.teleporter.TeleporterHandler;
 
 public class PlayerPortalHandler {
@@ -50,15 +56,27 @@ public class PlayerPortalHandler {
 					if(inPortalBlock) {
 						if(!cap.wasTeleported()) {
 							if (cap.getTicksUntilTeleport() <= 0 || player.capabilities.isCreativeMode) {
-								if (player.dimension == 0) {
-									player.timeUntilPortal = 10;
-									cap.setWasTeleported(true);
-									TeleporterHandler.transferToBL(player);
-								} else {
-									player.timeUntilPortal = 10;
-									cap.setWasTeleported(true);
-									TeleporterHandler.transferToOverworld(player);
+								if(player.world instanceof WorldServer) {
+									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
+									AxisAlignedBB entityAabb = player.getEntityBoundingBox();
+									List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, entityAabb, loc -> loc.intersects(entityAabb));
+									LocationPortal portal = null;
+									if(!portals.isEmpty()) {
+										portal = portals.get(0);
+									}
+									int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+									if(portal != null && portal.getOtherPortalPosition() != null) {
+										//Portal already linked, teleport to linked dimension
+										targetDim = portal.getOtherPortalDimension();
+									} else if (player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+										targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;
+									}
+									WorldServer otherDim = ((WorldServer) player.world).getMinecraftServer().getWorld(targetDim);
+									if(otherDim != null) {
+										TeleporterHandler.transferToDim(player, otherDim);
+									}
 								}
+								player.timeUntilPortal = 10;
 								cap.setInPortal(false);
 								cap.setTicksUntilTeleport(MAX_PORTAL_TIME);
 							} else {

@@ -53,6 +53,16 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "enable_seasonal_events")
 		@Comment("If true seasonal events will occur during special periods during a year")
 		public boolean enableSeasonalEvents = true;
+
+		@Name("portal_dimension_whitelist")
+		@LangKey(LANG_PREFIX + "portal_dimension_whitelist")
+		@Comment("Betweenlands portals will only work in these dimensions")
+		public int[] portalDimensionWhitelist = {0, -1};
+
+		@Name("portal_default_return_dimension")
+		@LangKey(LANG_PREFIX + "portal_default_return_dimension")
+		@Comment("The return dimension that is used when creating a portal in the Betweenlands dimension and entering it for the first time")
+		public int portalDefaultReturnDimension = 0;
 	}
 
 	@Name("rendering")
@@ -82,7 +92,7 @@ public class BetweenlandsConfig {
 		@RangeInt(min = 16)
 		@RequiresMcRestart
 		public int skyResolution = 1024;
-		
+
 		@Name("sky_rift_clouds")
 		@LangKey(LANG_PREFIX + "sky_rift_clouds")
 		@Comment("Whether clouds should be rendered in sky rifts")
@@ -276,6 +286,18 @@ public class BetweenlandsConfig {
 			}
 		}
 
+		return false;
+	}
+
+	public static boolean isDimensionPortalWhitelisted(int dim) {
+		if(dim == WORLD_AND_DIMENSION.dimensionId) {
+			return true;
+		}
+		for(int whitelisted : WORLD_AND_DIMENSION.portalDimensionWhitelist) {
+			if(whitelisted == dim) {
+				return true;
+			}
+		}
 		return false;
 	}
 }
