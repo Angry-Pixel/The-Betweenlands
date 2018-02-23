@@ -6,7 +6,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
-import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
@@ -50,6 +49,11 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	private boolean showClouds = false;
 
+	public WorldProviderBetweenlands() {
+		this.allowHostiles = true;
+		this.allowAnimals = true;
+	}
+
 	/**
 	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
 	 *
@@ -79,6 +83,26 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return rift.getVisibility(partialTicks) * this.getOverworldSunBrightness(partialTicks) * 0.6F + rift.getVisibility(partialTicks) * 0.2F;
 	}
 
+	@Override
+	public float getSunBrightnessFactor(float partialTicks) {
+		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorldNullable(world); //Null if called by World#calculateinitialSkylight from constructor
+		if(storage != null) {
+			EventRift rift = storage.getEnvironmentEventRegistry().rift;
+			return rift.getVisibility(partialTicks) * this.getOverworldSunBrightnessFactor(partialTicks);
+		}
+		return 0.2F;
+	}
+
+	protected float getOverworldSunBrightnessFactor(float partialTicks) {
+		float f = this.getOverworldCelestialAngle(partialTicks);
+		float f1 = 1.0F - (MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.5F);
+		f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
+		f1 = 1.0F - f1;
+		//f1 = (float)((double)f1 * (1.0D - (double)(this.getRainStrength(partialTicks) * 5.0F) / 16.0D));
+		// f1 = (float)((double)f1 * (1.0D - (double)(this.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
+		return f1;
+	}
+
 	@SideOnly(Side.CLIENT)
 	protected float getOverworldSunBrightness(float partialTicks) {
 		float f = this.getOverworldCelestialAngle(partialTicks);
@@ -90,7 +114,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		return f1 * 0.8F + 0.2F;
 	}
 
-	protected float getOverworldCelestialAngle(float partialTicks) {
+	public float getOverworldCelestialAngle(float partialTicks) {
 		int i = (int)(this.world.getWorldTime() % 24000L);
 		float f = ((float)i + partialTicks) / 24000.0F - 0.25F;
 
@@ -116,10 +140,14 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	protected void generateLightBrightnessTable() {
-		float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
-		for(int i = 0; i <= 15; i++) {
-			float f1 = 1F - (float)Math.pow(i / 15F, 1.1F + 0.35F * (1.0F - configBrightness));
-			this.lightBrightnessTable[i] = Math.max((1.0F - f1) / (f1 * f1 * (0.75F + configBrightness * 0.6F) + 1.0F) * (0.4F + configBrightness * 0.5F) - 0.1F, 0.0F);
+		if(this.world.isRemote) {
+			float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
+			for(int i = 0; i <= 15; i++) {
+				float f1 = 1F - (float)Math.pow(i / 15F, 1.1F + 0.35F * (1.0F - configBrightness));
+				this.lightBrightnessTable[i] = Math.max((1.0F - f1) / (f1 * f1 * (0.75F + configBrightness * 0.6F) + 1.0F) * (0.4F + configBrightness * 0.5F) - 0.1F, 0.0F);
+			}
+		} else {
+			super.generateLightBrightnessTable();
 		}
 	}
 
@@ -144,19 +172,16 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	public void setAllowedSpawnTypes(boolean allowHostiles, boolean allowAnimals) {
 		super.setAllowedSpawnTypes(allowHostiles, allowAnimals);
-		//TODO: This only seems to work on the client side...
 		this.allowHostiles = allowHostiles;
 		this.allowAnimals = allowAnimals;
 	}
 
 	public boolean getCanSpawnHostiles() {
-		//TODO: See setAllowedSpawnTypes
-		return /*this.allowHostiles*/this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
+		return this.allowHostiles;
 	}
 
 	public boolean getCanSpawnAnimals() {
-		//TODO: See setAllowedSpawnTypes
-		return /*this.allowAnimals*/true;
+		return this.allowAnimals;
 	}
 
 	@Override
@@ -218,7 +243,8 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	 * Updates the brightness table relative to the specified player
 	 * @param player
 	 */
-	public void updateLightTable(EntityPlayer player) {
+	@SideOnly(Side.CLIENT)
+	public void updateClientLightTable(EntityPlayer player) {
 		float configBrightness = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionBrightness / 100.0F;
 
 		float[] surfaceTable = new float[16];

@@ -3,13 +3,11 @@ package thebetweenlands.client.render.sky;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -33,8 +31,6 @@ public class RiftRenderer implements IRiftRenderer {
 	private final FloatBuffer projectionMatrix = GLAllocation.createDirectFloatBuffer(16);
 	private final FloatBuffer buffer4f = GLAllocation.createDirectFloatBuffer(16);
 
-	private static int projectionSphereDistList = -1;
-
 	private IRiftMaskRenderer riftMaskRenderer;
 	private IRiftSkyRenderer riftSkyRenderer;
 
@@ -51,15 +47,6 @@ public class RiftRenderer implements IRiftRenderer {
 		.put(0.0F).put(0.0F).put(0.5F).put(0.0F)
 		.put(0.5F).put(0.5F).put(0.5F).put(1.0F)
 		.flip();
-
-		if(projectionSphereDistList == -1) {
-			Sphere projectionSphere = new Sphere();
-			projectionSphere.setTextureFlag(false);
-			projectionSphereDistList = GLAllocation.generateDisplayLists(1);
-			GlStateManager.glNewList(projectionSphereDistList, GL11.GL_COMPILE);
-			projectionSphere.draw(55, 8, 8);
-			GlStateManager.glEndList();
-		}
 
 		if(overworldSkyFbo == null) {
 			overworldSkyFbo = new ResizableFramebuffer(true);
@@ -138,17 +125,15 @@ public class RiftRenderer implements IRiftRenderer {
 
 				this.riftMaskRenderer.renderMask(partialTicks, world, mc);
 
-				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-
 				fbo.bindFramebuffer(true);
 
 				//Reset fog to this world's fog
 				mc.entityRenderer.setupFogColor(false);
 
-				GlStateManager.bindTexture(skyFbo.framebufferTexture);
-
+				GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 				GlStateManager.color(1, 1, 1, 1);
-				this.riftMaskRenderer.setRiftColor(partialTicks, world, mc);
+				GlStateManager.disableFog();
+				GlStateManager.bindTexture(skyFbo.framebufferTexture);
 
 				//Project onto sphere
 				GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, this.modelviewMatrix);
@@ -180,12 +165,8 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
 				GlStateManager.enableTexGenCoord(GlStateManager.TexGen.Q);
 
-				GlStateManager.disableFog(); //TODO Fog?
-
-				//Render projection sphere
-				GlStateManager.cullFace(CullFace.FRONT);
-				GlStateManager.callList(projectionSphereDistList);
-				GlStateManager.cullFace(CullFace.BACK);
+				//Render projection
+				this.riftMaskRenderer.renderRiftProjection(partialTicks, world, mc);
 
 				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
 				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);

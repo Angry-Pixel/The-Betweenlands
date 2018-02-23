@@ -70,7 +70,7 @@ public class BiomeSwamplands extends BiomeBetweenlands {
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
 		super.addSpawnEntries(entries);
 
-		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 95).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(1, EntityGecko.class, (short) 40).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
 		entries.add(new SurfaceSpawnEntry(2, EntityMireSnail.class, (short) 60).setGroupSize(1, 5).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));
 		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, (short) 26).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(1000));

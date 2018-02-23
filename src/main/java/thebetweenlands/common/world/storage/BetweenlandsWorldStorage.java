@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 
+import javax.annotation.Nullable;
+
 import gnu.trove.map.TObjectLongMap;
 import gnu.trove.map.hash.TObjectLongHashMap;
 import net.minecraft.block.material.Material;
@@ -215,13 +217,22 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	}
 
 	public static BetweenlandsWorldStorage forWorld(World world) {
+		BetweenlandsWorldStorage storage = forWorldNullable(world);
+		if(storage == null) {
+			throw new RuntimeException(String.format("World %s (%s) does not have BetweenlandsWorldStorage capability", world.getWorldInfo().getWorldName(), world.provider.getClass().getName()));
+		}
+		return storage;
+	}
+	
+	@Nullable
+	public static BetweenlandsWorldStorage forWorldNullable(World world) {
 		if(world.hasCapability(CAPABILITY_INSTANCE, null)) {
 			IWorldStorage storage = world.getCapability(CAPABILITY_INSTANCE, null);
 			if(storage instanceof BetweenlandsWorldStorage) {
 				return (BetweenlandsWorldStorage) storage;
 			}
 		}
-		throw new RuntimeException(String.format("World %s (%s) does not have BetweenlandsWorldStorage capability", world.getWorldInfo().getWorldName(), world.provider.getClass().getName()));
+		return null;
 	}
 
 	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {

@@ -534,7 +534,7 @@ public class MobSpawnHandler {
 							if(newEntity != null) {
 								newEntity.setLocationAndAngles(sx, sy, sz, yaw, 0.0F);
 
-								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz, false);
+								Result canSpawn = ForgeEventFactory.canEntitySpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null);
 								if (canSpawn == Result.ALLOW || (canSpawn == Result.DEFAULT && newEntity.getCanSpawnHere() && newEntity.isNotColliding())) {
 									groupSpawnedEntities++;
 									chunkSpawnedEntities++;
@@ -544,7 +544,7 @@ public class MobSpawnHandler {
 
 									world.spawnEntity(newEntity);
 
-									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz)) {
+									if (!ForgeEventFactory.doSpecialSpawn(newEntity, world, (float)sx, (float)sy, (float)sz, null)) {
 										groupData = newEntity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(sx, sy, sz)), groupData);
 									}
 

@@ -18,7 +18,7 @@ public class BrightnessHandler {
 			World world = Minecraft.getMinecraft().world;
 			if(player != null && world != null && world.isRemote && world.provider instanceof WorldProviderBetweenlands) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-				provider.updateLightTable(Minecraft.getMinecraft().player);
+				provider.updateClientLightTable(Minecraft.getMinecraft().player);
 			}
 		}
 	}

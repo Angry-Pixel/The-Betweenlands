@@ -55,7 +55,7 @@ public class BiomeCoarseIslands extends BiomeBetweenlands {
 		super.addSpawnEntries(entries);
 
 		entries.add(new SurfaceSpawnEntry(0, EntityDragonFly.class, (short) 36).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(64.0D).setSpawningInterval(400));
-		entries.add(new SurfaceSpawnEntry(1, EntityFirefly.class, (short) 25).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(1, EntityFirefly.class, (short) 60).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SurfaceSpawnEntry(2, EntityGecko.class, (short) 52).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(600));
 		entries.add(new SurfaceSpawnEntry(3, EntityFrog.class, (short) 30).setCanSpawnOnWater(true).setGroupSize(1, 3).setSpawnCheckRadius(32.0D).setSpawningInterval(100));
 		entries.add(new CaveSpawnEntry(4, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));

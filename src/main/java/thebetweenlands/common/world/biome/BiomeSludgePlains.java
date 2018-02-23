@@ -58,7 +58,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
 		super.addSpawnEntries(entries);
 
-		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 20).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 25).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(1, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5));
 
 		entries.add(new TarSpawnEntry(2, EntityTarBeast.class, (short) 120).setHostile(true).setGroupSize(1, 2).setSpawnCheckRadius(14.0D));

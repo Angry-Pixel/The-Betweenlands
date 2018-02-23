@@ -1,15 +1,18 @@
 package thebetweenlands.client.render.sky;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.sky.IRiftMaskRenderer;
+import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -20,8 +23,19 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 	protected final int skyDomeDispList;
 
+	private static int projectionSphereDistList = -1;
+
 	public RiftMaskRenderer(int skyDomeDispList) {
 		this.skyDomeDispList = skyDomeDispList;
+
+		if(projectionSphereDistList == -1) {
+			Sphere projectionSphere = new Sphere();
+			projectionSphere.setTextureFlag(false);
+			projectionSphereDistList = GLAllocation.generateDisplayLists(1);
+			GlStateManager.glNewList(projectionSphereDistList, GL11.GL_COMPILE);
+			projectionSphere.draw(55, 8, 8);
+			GlStateManager.glEndList();
+		}
 	}
 
 	@Override
@@ -100,9 +114,18 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 	}
 
 	@Override
-	public void setRiftColor(float partialTicks, WorldClient world, Minecraft mc) {
+	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc) {
 		float visibility = this.getRiftVisibility(partialTicks, world, mc);
-		GlStateManager.color(visibility, visibility, visibility, visibility);
+
+		GlStateManager.color(visibility*visibility*visibility, visibility*visibility*visibility, visibility*visibility*visibility, visibility);
+
+		GlStateManager.enableFog();
+		GlStateManager.setFogStart(FogHandler.getCurrentFogStart() / 2);
+		GlStateManager.setFogEnd(FogHandler.getCurrentFogEnd() / 2);
+
+		GlStateManager.cullFace(CullFace.FRONT);
+		GlStateManager.callList(projectionSphereDistList);
+		GlStateManager.cullFace(CullFace.BACK);
 	}
 
 	protected float getRiftVisibility(float partialTicks, WorldClient world, Minecraft mc) {

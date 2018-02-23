@@ -81,7 +81,8 @@ public class EventAuroras extends TimedEnvironmentEvent {
 	
 	protected boolean canBeActive() {
 		for(IEnvironmentEvent event : this.getRegistry().getEventsOfState(true)) {
-			if(event != this && event.getClass() != EventWinter.class && event.getClass() != EventSnowfall.class) {
+			if(event != this && event.getClass() != EventWinter.class && event.getClass() != EventSnowfall.class &&
+					event.getClass() != EventRift.class) {
 				return false;
 			}
 		}

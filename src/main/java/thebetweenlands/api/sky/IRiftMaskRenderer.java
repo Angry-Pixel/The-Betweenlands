@@ -25,11 +25,11 @@ public interface IRiftMaskRenderer {
 	public void renderOverlay(float partialTicks, WorldClient world, Minecraft mc);
 
 	/**
-	 * Sets the rift's color
+	 * Renders the rift projection mesh
 	 * @param partialTicks
 	 * @param world
 	 * @param mc
 	 */
 	@SideOnly(Side.CLIENT)
-	public void setRiftColor(float partialTicks, WorldClient world, Minecraft mc);
+	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc);
 }

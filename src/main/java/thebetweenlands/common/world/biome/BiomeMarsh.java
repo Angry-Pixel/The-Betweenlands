@@ -59,7 +59,7 @@ public class BiomeMarsh extends BiomeBetweenlands {
 	protected void addSpawnEntries(List<ICustomSpawnEntry> entries) {
 		super.addSpawnEntries(entries);
 
-		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 20).setSpawnCheckRadius(32.0D));
+		entries.add(new SurfaceSpawnEntry(0, EntityFirefly.class, (short) 65).setCanSpawnOnWater(true).setSpawnCheckRadius(32.0D));
 		entries.add(new SporelingSpawnEntry(1, EntitySporeling.class, (short) 80).setGroupSize(2, 5).setSpawnCheckRadius(32.0D));
 		entries.add(new CaveSpawnEntry(2, EntityBlindCaveFish.class, (short) 30).setCanSpawnInWater(true).setGroupSize(3, 5).setSpawnCheckRadius(32.0D));
 

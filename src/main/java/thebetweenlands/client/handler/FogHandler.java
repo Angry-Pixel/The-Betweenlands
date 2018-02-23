@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import net.minecraft.init.MobEffects;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.GlStateManager.FogMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -25,8 +25,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
-import thebetweenlands.api.misc.FogState;
 import thebetweenlands.api.misc.Fog.MutableFog;
+import thebetweenlands.api.misc.FogState;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
@@ -273,13 +273,16 @@ public class FogHandler {
 			}
 		}
 
-		if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().bloodSky.isActive()) {
+		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+		BLEnvironmentEventRegistry reg = provider.getEnvironmentEventRegistry();
+
+		if(reg.bloodSky.isActive()) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.74F).setGreen(0.18F).setBlue(0.08F);
 			} else {
 				fogBrightness = 0;
 			}
-		} else if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().spoopy.isActive()) {
+		} else if(reg.spoopy.isActive()) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.4F).setGreen(0.22F).setBlue(0.08F);
 			} else {

@@ -18,6 +18,7 @@ import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
 import thebetweenlands.common.entity.ai.EntityAISeekRainShelter;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	public static final IAttribute GLOW_STRENGTH_ATTRIB = (new RangedAttribute(null, "bl.fireflyGlowStrength", 1, 0, 8)).setDescription("Firefly glow strength").setShouldWatch(true);
@@ -109,6 +110,12 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	@Override
 	protected boolean canDespawn() {
 		return true;
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		float brightness = this.world.provider.getSunBrightnessFactor(1);
+		return (brightness <= 0.3F || BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry().bloodSky.isActive()) && super.getCanSpawnHere();
 	}
 
 	@Override
