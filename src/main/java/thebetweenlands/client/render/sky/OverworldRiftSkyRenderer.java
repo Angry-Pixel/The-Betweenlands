@@ -24,14 +24,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.client.IRenderHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 @SideOnly(Side.CLIENT)
-public class OverworldSkyRenderer extends IRenderHandler {
+public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 	private static final ResourceLocation MOON_PHASES_TEXTURES = new ResourceLocation("textures/environment/moon_phases.png");
 	private static final ResourceLocation SUN_TEXTURES = new ResourceLocation("textures/environment/sun.png");
 	private static final ResourceLocation CLOUDS_TEXTURES = new ResourceLocation("textures/environment/clouds.png");
@@ -57,7 +57,7 @@ public class OverworldSkyRenderer extends IRenderHandler {
 	private final float[] colorsSunriseSunset = new float[4];
 	private Object entityIn;
 
-	public OverworldSkyRenderer() {
+	public OverworldRiftSkyRenderer() {
 		this.vboEnabled = OpenGlHelper.useVbo();
 
 		this.vertexBufferFormat = new VertexFormat();
@@ -319,6 +319,11 @@ public class OverworldSkyRenderer extends IRenderHandler {
 
 			if(providerBl != null) providerBl.setShowClouds(false);
 		}
+	}
+
+	@Override
+	public void setClearColor(float partialTicks, WorldClient world, Minecraft mc) {
+		this.updateFogColor(world, partialTicks, mc);
 	}
 
 	private void generateSky2()
@@ -638,7 +643,10 @@ public class OverworldSkyRenderer extends IRenderHandler {
 	}
 
 	protected float getStarBrightness(World world, float partialTicks) {
-		return world.getStarBrightnessBody(partialTicks);
+		float f = this.getCelestialAngle(world.getWorldTime(), partialTicks);
+        float f1 = 1.0F - (MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.25F);
+        f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
+        return f1 * f1 * 0.5F;
 	}
 
 	protected int getMoonPhase(long worldTime) {

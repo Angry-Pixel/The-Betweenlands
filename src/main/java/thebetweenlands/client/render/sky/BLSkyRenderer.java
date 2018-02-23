@@ -1,6 +1,5 @@
 package thebetweenlands.client.render.sky;
 
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -11,21 +10,17 @@ import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
-import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.ITextureObject;
-import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
@@ -36,9 +31,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.sky.IBetweenlandsSky;
+import thebetweenlands.api.sky.IRiftRenderer;
 import thebetweenlands.client.handler.FogHandler;
 import thebetweenlands.client.render.shader.GeometryBuffer;
-import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -51,86 +47,59 @@ import thebetweenlands.util.Mesh.Triangle.Vertex;
 import thebetweenlands.util.Mesh.Triangle.Vertex.Vector3D;
 
 @SideOnly(Side.CLIENT)
-public class BLSkyRenderer extends IRenderHandler {
+public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 	public static final ResourceLocation SKY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_texture.png");
 	public static final ResourceLocation SKY_SPOOPY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/spoopy.png");
 	public static final ResourceLocation FOG_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/fog_texture.png");
-	public static final ResourceLocation SKY_RIFT_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_overlay.png");
-	public static final ResourceLocation SKY_RIFT_MASK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask.png");
-	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask_back.png");
 
 	protected List<AuroraRenderer> auroras = new ArrayList<AuroraRenderer>();
 
-	protected int skyDomeDispList;
+	private static int skyDomeDispList = -1;
 
-	protected int projectionSphereDistList;
+	private static Mesh starMesh;
 
-	protected Mesh starMesh;
-
-	public final GeometryBuffer clipPlaneBuffer;
+	public static GeometryBuffer clipPlaneBuffer;
 
 	protected int ticks;
 
-	protected OverworldSkyRenderer overworldSkyRenderer;
+	private IRiftRenderer riftRenderer;
 
-	public ResizableFramebuffer overworldSkyFbo;
-
-	private final FloatBuffer biasMatrix = GLAllocation.createDirectFloatBuffer(16);
-	private final FloatBuffer textureMatrix = GLAllocation.createDirectFloatBuffer(16);
-	private final FloatBuffer modelviewMatrix = GLAllocation.createDirectFloatBuffer(16);
-	private final FloatBuffer projectionMatrix = GLAllocation.createDirectFloatBuffer(16);
-	private final FloatBuffer buffer4f = GLAllocation.createDirectFloatBuffer(16);
-
-	private final Sphere projectionSphere;
+	private static RiftRenderer blRiftRenderer;
 
 	public BLSkyRenderer() {
-		this.biasMatrix.clear();
-		this.biasMatrix
-		.put(0.5F).put(0.0F).put(0.0F).put(0.0F)
-		.put(0.0F).put(0.5F).put(0.0F).put(0.0F)
-		.put(0.0F).put(0.0F).put(0.5F).put(0.0F)
-		.put(0.5F).put(0.5F).put(0.5F).put(1.0F)
-		.flip();
+		if(clipPlaneBuffer == null) {
+			clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
+		}
 
-		this.projectionSphere = new Sphere();
-		this.projectionSphere.setTextureFlag(false);
-		this.projectionSphereDistList = GLAllocation.generateDisplayLists(1);
-		GlStateManager.glNewList(this.projectionSphereDistList, GL11.GL_COMPILE);
-		this.projectionSphere.draw(55, 8, 8);
-		GlStateManager.glEndList();
+		if(starMesh == null) {
+			starMesh = this.createStarMesh();
+		}
 
-		this.overworldSkyFbo = new ResizableFramebuffer(true);
+		if(skyDomeDispList == -1) {
+			skyDomeDispList = GLAllocation.generateDisplayLists(1);
+			GlStateManager.glNewList(skyDomeDispList, GL11.GL_COMPILE);
+			this.renderSkyDome();
+			GlStateManager.glEndList();
+		}
 
-		this.clipPlaneBuffer = new GeometryBuffer(Minecraft.getMinecraft().getTextureManager(), WorldShader.CLIP_PLANE_DIFFUSE_TEXTURE, WorldShader.CLIP_PLANE_DEPTH_TEXTURE, true);
+		if(blRiftRenderer == null) {
+			blRiftRenderer = new RiftRenderer(skyDomeDispList);
+		}
 
-		this.overworldSkyRenderer = new OverworldSkyRenderer();
-
-		this.starMesh = this.createStarMesh();
-
-		this.skyDomeDispList = GLAllocation.generateDisplayLists(1);
-		GlStateManager.glNewList(this.skyDomeDispList, GL11.GL_COMPILE);
-		this.renderSkyDome();
-		GlStateManager.glEndList();
+		this.setRiftRenderer(blRiftRenderer);
 	}
 
 	@Override
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		this.renderSky(partialTicks, world, mc);
 
-		this.renderRift(partialTicks, world, mc);
+		this.riftRenderer.render(partialTicks, world, mc);
 
 		this.renderFog(partialTicks, world, mc);
 
 		this.renderAuroras(partialTicks, world, mc);
 
 		this.resetRenderingStates();
-	}
-
-	private FloatBuffer getBuffer4f(float v1, float v2, float v3, float v4) {
-		this.buffer4f.clear();
-		this.buffer4f.put(v1).put(v2).put(v3).put(v4);
-		this.buffer4f.flip();
-		return this.buffer4f;
 	}
 
 	protected Mesh createStarMesh() {
@@ -198,172 +167,6 @@ public class BLSkyRenderer extends IRenderHandler {
 		return new Vertex(farX + vertX, farY + rotVertX2, farZ + vertZ, new Vector3D(0, -1, 0), color);
 	}
 
-	protected void renderRift(float partialTicks, WorldClient world, Minecraft mc) {
-		if(OpenGlHelper.isFramebufferEnabled()) {
-			TextureManager textureManager = mc.getTextureManager();
-
-			Framebuffer fbo = mc.getFramebuffer();
-
-			Framebuffer skyFbo = this.overworldSkyFbo.getFramebuffer(fbo.framebufferWidth, fbo.framebufferHeight);
-
-			skyFbo.setFramebufferColor(0, 0, 0, 0);
-			skyFbo.framebufferClear();
-			skyFbo.bindFramebuffer(false);
-
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.5F);
-			GlStateManager.enableCull();
-			GlStateManager.enableDepth();
-			GlStateManager.depthMask(true);
-			GlStateManager.enableAlpha();
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-			GlStateManager.disableTexture2D();
-
-			//Render overworld sky
-			GlStateManager.pushMatrix();
-			this.overworldSkyRenderer.updateFogColor(world, partialTicks, mc);
-			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
-			this.overworldSkyRenderer.render(partialTicks, world, mc);
-			GlStateManager.popMatrix();
-
-			GlStateManager.enableAlpha();
-			GlStateManager.enableBlend();
-			GlStateManager.enableTexture2D();
-			RenderHelper.disableStandardItemLighting();
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-			GlStateManager.disableFog();
-			GlStateManager.depthMask(false);
-
-			//Set all alpha to 1 for mask blending
-			GlStateManager.colorMask(false, false, false, true);
-			GlStateManager.clearColor(0, 0, 0, 1);
-			GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
-			GlStateManager.colorMask(true, true, true, true);
-
-			//Render mask
-			if(OpenGlHelper.openGL14) {
-				GlStateManager.tryBlendFuncSeparate(SourceFactor.ZERO, DestFactor.ONE, SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA);
-			} else {
-				GlStateManager.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
-			}
-
-			float yaw = 0;//30.0F;
-			float pitch = -85;//-90;//-45.0F;
-			float roll = 0;//-90.0F;
-
-			//Render back mask
-			textureManager.bindTexture(SKY_RIFT_MASK_BACK_TEXTURE);
-			ITextureObject backMask = textureManager.getTexture(SKY_RIFT_MASK_BACK_TEXTURE);
-			backMask.setBlurMipmap(true, false);
-
-			GlStateManager.pushMatrix();
-			GlStateManager.scale(-1, -1, -1);
-			GlStateManager.translate(0, -1, 0);
-			GlStateManager.rotate(yaw, 0, 1, 0);
-			GlStateManager.rotate(pitch, 0, 0, 1);
-			GlStateManager.rotate(roll, 0, 1, 0);
-
-			GlStateManager.cullFace(CullFace.FRONT);
-			GlStateManager.callList(this.skyDomeDispList);
-			GlStateManager.cullFace(CullFace.BACK);
-
-			GlStateManager.popMatrix();
-
-			backMask.restoreLastBlurMipmap();
-
-			//Render front mask
-			textureManager.bindTexture(SKY_RIFT_MASK_TEXTURE);
-			ITextureObject mask = textureManager.getTexture(SKY_RIFT_MASK_TEXTURE);
-			mask.setBlurMipmap(true, false);
-
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(0, -1, 0);
-			GlStateManager.rotate(yaw, 0, 1, 0);
-			GlStateManager.rotate(pitch, 0, 0, 1);
-			GlStateManager.rotate(roll, 0, 1, 0);
-
-			GlStateManager.callList(this.skyDomeDispList);
-
-			GlStateManager.popMatrix();
-
-			mask.restoreLastBlurMipmap();
-
-			GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-
-			fbo.bindFramebuffer(true);
-
-			//Reset fog to this world's fog
-			mc.entityRenderer.setupFogColor(false);
-
-			GlStateManager.bindTexture(skyFbo.framebufferTexture);
-
-			GlStateManager.color(1, 1, 1, 1);
-
-			//Project onto sphere
-			GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, this.modelviewMatrix);
-			GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX, this.projectionMatrix);
-
-			GlStateManager.matrixMode(GL11.GL_TEXTURE);
-			GlStateManager.pushMatrix();
-			GlStateManager.loadIdentity();
-
-			GlStateManager.multMatrix(this.biasMatrix);
-			GlStateManager.multMatrix(this.projectionMatrix);
-			GlStateManager.multMatrix(this.modelviewMatrix);
-
-			GlStateManager.getFloat(GL11.GL_TEXTURE_MATRIX, this.textureMatrix);
-			GlStateManager.popMatrix();
-			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-
-			//Set up UV generator
-			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
-			GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(0), this.textureMatrix.get(4), this.textureMatrix.get(8), this.textureMatrix.get(12)));
-			GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(1), this.textureMatrix.get(5), this.textureMatrix.get(9), this.textureMatrix.get(13)));
-			GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(2), this.textureMatrix.get(6), this.textureMatrix.get(10), this.textureMatrix.get(14)));
-			GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(3), this.textureMatrix.get(7), this.textureMatrix.get(11), this.textureMatrix.get(15)));
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
-			GlStateManager.enableTexGenCoord(GlStateManager.TexGen.Q);
-
-			GlStateManager.disableFog(); //TODO Fog?
-
-			//Render projection sphere
-			GlStateManager.cullFace(CullFace.FRONT);
-			GlStateManager.callList(this.projectionSphereDistList);
-			GlStateManager.cullFace(CullFace.BACK);
-
-			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
-			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
-			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
-			GlStateManager.disableTexGenCoord(GlStateManager.TexGen.Q);
-
-			//Render overlay
-			textureManager.bindTexture(SKY_RIFT_OVERLAY_TEXTURE);
-			ITextureObject overlay = textureManager.getTexture(SKY_RIFT_OVERLAY_TEXTURE);
-			overlay.setBlurMipmap(true, false);
-
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(0, -1, 0);
-			GlStateManager.rotate(yaw, 0, 1, 0);
-			GlStateManager.rotate(pitch, 0, 0, 1);
-			GlStateManager.rotate(roll, 0, 1, 0);
-
-			GlStateManager.callList(this.skyDomeDispList);
-
-			GlStateManager.popMatrix();
-
-			overlay.restoreLastBlurMipmap();
-
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-			GlStateManager.disableBlend();
-			GlStateManager.enableDepth();
-		}
-	}
-
 	protected void renderSky(float partialTicks, WorldClient world, Minecraft mc) {
 		Vec3d skyColor = world.getSkyColor(mc.getRenderViewEntity(), partialTicks);
 		float skyR = (float)skyColor.x;
@@ -405,7 +208,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			GL14.glBlendColor(0, 0, 0, (starBrightness - 0.22F) * 3.5F);
 			GlStateManager.blendFunc(SourceFactor.CONSTANT_ALPHA, DestFactor.ONE_MINUS_CONSTANT_ALPHA);
 			GlStateManager.pushMatrix();
-			this.starMesh.render();
+			starMesh.render();
 			GlStateManager.popMatrix();
 			GL14.glBlendColor(1, 1, 1, 1);
 		}
@@ -436,7 +239,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.callList(skyDomeDispList);
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
@@ -459,7 +262,7 @@ public class BLSkyRenderer extends IRenderHandler {
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
-				GlStateManager.callList(this.skyDomeDispList);
+				GlStateManager.callList(skyDomeDispList);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
 				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
@@ -513,9 +316,9 @@ public class BLSkyRenderer extends IRenderHandler {
 			GlStateManager.color(1, 1, 1, 1);
 
 			Framebuffer parentFBO = mc.getFramebuffer();
-			this.clipPlaneBuffer.updateGeometryBuffer(parentFBO.framebufferWidth, parentFBO.framebufferHeight);
-			this.clipPlaneBuffer.bind();
-			this.clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
+			clipPlaneBuffer.updateGeometryBuffer(parentFBO.framebufferWidth, parentFBO.framebufferHeight);
+			clipPlaneBuffer.bind();
+			clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
 
 			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 			vertexBuffer.pos(-9000.0D, -90.0D, -9000.0D).color(255, 255, 255, 255).endVertex();
@@ -524,7 +327,7 @@ public class BLSkyRenderer extends IRenderHandler {
 			vertexBuffer.pos(9000.0D, -90.0D, -9000.0D).color(255, 255, 255, 255).endVertex();
 			tessellator.draw();
 
-			this.clipPlaneBuffer.updateDepthBuffer();
+			clipPlaneBuffer.updateDepthBuffer();
 			parentFBO.bindFramebuffer(true);
 
 			GlStateManager.color(1, 1, 1, 1);
@@ -572,19 +375,19 @@ public class BLSkyRenderer extends IRenderHandler {
 			GlStateManager.scale(1F, 0.8F, 1F);
 
 			GlStateManager.color(0, 0, 0, 0.25F);
-			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.callList(skyDomeDispList);
 
 			GlStateManager.color(0, 0, 0, 0.15F);
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(domeRotation, 0, 1, 0);
 			GlStateManager.translate(0, Math.cos(renderTicks / 150.0F) * 6.0F + 4.0F, 0.0F);
-			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.callList(skyDomeDispList);
 			GlStateManager.popMatrix();
 
 			GlStateManager.pushMatrix();
 			GlStateManager.rotate(-domeRotation / 1.8F, 0, 1, 0);
 			GlStateManager.translate(0, -Math.sin(renderTicks / 170.0F) * 6.0F + 4.0F, 0.0F);
-			GlStateManager.callList(this.skyDomeDispList);
+			GlStateManager.callList(skyDomeDispList);
 			GlStateManager.popMatrix();
 
 			GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
@@ -771,5 +574,15 @@ public class BLSkyRenderer extends IRenderHandler {
 				skyRenderer.update(world, Minecraft.getMinecraft());
 			}
 		}
+	}
+
+	@Override
+	public void setRiftRenderer(IRiftRenderer renderer) {
+		this.riftRenderer = renderer;
+	}
+
+	@Override
+	public IRiftRenderer getRiftRenderer() {
+		return this.riftRenderer;
 	}
 }

@@ -1,10 +1,9 @@
 package thebetweenlands.common.world;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.EnumDifficulty;
@@ -24,6 +23,7 @@ import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.biome.BiomeProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -49,7 +49,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	private static BLSkyRenderer skyRenderer;
 
 	private boolean showClouds = false;
-	
+
 	/**
 	 * Returns a WorldProviderBetweenlands instance if world is not null and world#provider is an instance of WorldProviderBetweenlands
 	 *
@@ -75,7 +75,38 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getSunBrightness(float partialTicks) {
-		return super.getSunBrightness(partialTicks);
+		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
+		return rift.getVisibility(partialTicks) * this.getOverworldSunBrightness(partialTicks) * 0.6F + rift.getVisibility(partialTicks) * 0.2F;
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected float getOverworldSunBrightness(float partialTicks) {
+		float f = this.getOverworldCelestialAngle(partialTicks);
+		float f1 = 1.0F - (MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.2F);
+		f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
+		f1 = 1.0F - f1;
+		//f1 = (float)((double)f1 * (1.0D - (double)(this.getRainStrength(partialTicks) * 5.0F) / 16.0D));
+		//f1 = (float)((double)f1 * (1.0D - (double)(this.getThunderStrength(partialTicks) * 5.0F) / 16.0D));
+		return f1 * 0.8F + 0.2F;
+	}
+
+	protected float getOverworldCelestialAngle(float partialTicks) {
+		int i = (int)(this.world.getWorldTime() % 24000L);
+		float f = ((float)i + partialTicks) / 24000.0F - 0.25F;
+
+		if (f < 0.0F)
+		{
+			++f;
+		}
+
+		if (f > 1.0F)
+		{
+			--f;
+		}
+
+		float f1 = 1.0F - (float)((Math.cos((double)f * Math.PI) + 1.0D) / 2.0D);
+		f = f + (f1 - f) / 3.0F;
+		return f;
 	}
 
 	@Override
@@ -152,7 +183,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public boolean canDoRainSnowIce(Chunk chunk) {
 		return false;
 	}
-	
+
 	@Override
 	public void updateWeather() {
 		BLEnvironmentEventRegistry eeRegistry = this.getWorldData().getEnvironmentEventRegistry();
@@ -182,7 +213,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 			this.world.rainingStrength = rainingStrength;
 		}
 	}
-	
+
 	/**
 	 * Updates the brightness table relative to the specified player
 	 * @param player
@@ -224,19 +255,19 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public IRenderHandler getSkyRenderer() {
 		return getBLSkyRenderer();
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public Vec3d getSkyColor(Entity cameraEntity, float partialTicks) {
 		return new Vec3d(0.1F, 0.8F, 0.55F);
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public boolean isSkyColored() {
 		return false;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public static BLSkyRenderer getBLSkyRenderer() {
 		if(skyRenderer == null) {
@@ -244,7 +275,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 		}
 		return skyRenderer;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@Override
 	public IRenderHandler getWeatherRenderer() {
@@ -262,7 +293,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 	public DimensionType getDimensionType() {
 		return TheBetweenlands.dimensionType;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void setShowClouds(boolean show) {
 		this.showClouds = show;
