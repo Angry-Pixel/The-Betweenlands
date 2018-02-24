@@ -2,6 +2,8 @@ package thebetweenlands.common.block.plant;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -71,30 +73,50 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 				BlockPos offsetPos = pos.up(offset);
 				IBlockState blockState = world.getBlockState(offsetPos);
 				boolean canHarvest = player.isCreative() ? false : blockState.getBlock().canHarvestBlock(world, offsetPos, player);
-				boolean removed = this.removeBlock(world, offsetPos, player, canHarvest);
+				boolean removed = this.removeOtherBlockAsPlayer(world, offsetPos, player, canHarvest);
 				if(removed && canHarvest) {
 					ItemStack stack = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().copy();
 					blockState.getBlock().harvestBlock(world, player, offsetPos, blockState, world.getTileEntity(offsetPos), stack);
 				}
 			} else {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
+				this.removeCrop(world, pos, null, false);
 			}
 		}
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		super.removedByPlayer(state, world, pos, player, willHarvest);
-		return true;
+	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if (!this.canBlockStay(worldIn, pos, state)) {
+			this.dropBlockAsItem(worldIn, pos, state, 0);
+			this.removeCrop(worldIn, pos, null, false);
+		}
 	}
 
-	protected boolean removeBlock(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		this.onBlockHarvested(world, pos, state, player);
+		return this.removeCrop(world, pos, player, willHarvest);
+	}
+
+	protected boolean removeOtherBlockAsPlayer(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
 		IBlockState blockState = world.getBlockState(pos);
 		boolean removed = blockState.getBlock().removedByPlayer(blockState, world, pos, player, canHarvest);
 		if (removed) {
 			blockState.getBlock().onBlockDestroyedByPlayer(world, pos, blockState);
 		}
 		return removed;
+	}
+
+	/**
+	 * Removes the crop. Usually sets the block to air
+	 * @param world
+	 * @param pos
+	 * @param player
+	 * @param canHarvest
+	 * @return
+	 */
+	protected boolean removeCrop(World world, BlockPos pos, @Nullable EntityPlayer player, boolean canHarvest) {
+		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
 	}
 
 	/**

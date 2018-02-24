@@ -110,8 +110,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		this.onBlockHarvested(world, pos, state, player);
+	protected boolean removeCrop(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
 		return world.setBlockState(pos, BlockRegistry.RUBBER_TREE_PLANK_FENCE.getDefaultState(), world.isRemote ? 11 : 3);
 	}
 
