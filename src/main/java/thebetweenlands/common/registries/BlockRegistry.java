@@ -20,7 +20,10 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
@@ -553,7 +556,12 @@ public class BlockRegistry {
     public static final Block SNOW = new BlockSnowBetweenlands();
     
     //Misc
-    public static final Block LOG_PORTAL = new BlockLogBetweenlands();
+    public static final Block LOG_PORTAL = new BlockLogBetweenlands() {
+    	@Override
+    	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+    		return 0;
+        }
+    };
     public static final Block TREE_PORTAL = new BlockTreePortal();
     public static final Block PORTAL_FRAME = new BlockPortalFrame();
     public static final Block DRUID_ALTAR = new BlockDruidAltar();

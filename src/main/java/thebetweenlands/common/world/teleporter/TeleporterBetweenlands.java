@@ -3,6 +3,7 @@ package thebetweenlands.common.world.teleporter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
@@ -10,6 +11,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -22,7 +24,9 @@ import net.minecraft.world.chunk.Chunk;
 import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenWeedwoodPortalTree;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationPortal;
@@ -45,7 +49,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			if(!this.makePortal(entity)) {
 				//Portal failed to generate... fallback?
 
-				BlockPos pos = this.findSuitablePortalPos(entity.getPosition());
+				BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
 				Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
 				pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
 				for(int xo = -1; xo <= 1; xo++) {
@@ -56,7 +60,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 					}
 				}
 
-				entity.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
+				this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
 				this.setDefaultPlayerSpawnLocation(entity);
 			}
 		}
@@ -68,7 +72,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 		if(existingPortal != null) {
 			//Portal exists already
-			entity.setLocationAndAngles(existingPortal.getX() + 0.5D, existingPortal.getY() + 3.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
+			this.setEntityLocation(entity, existingPortal.getX() + 0.5D, existingPortal.getY() + 2.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
 			this.setDefaultPlayerSpawnLocation(entity);
 			return true;
 		}
@@ -169,7 +173,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 * @param start
 	 * @return
 	 */
-	protected BlockPos findSuitablePortalPos(BlockPos start) {
+	protected BlockPos findSuitableBetweenlandsPortalPos(BlockPos start) {
 		List<Biome> validBiomes = new ArrayList<Biome>();
 
 		validBiomes.add(BiomeRegistry.SWAMPLANDS);
@@ -189,42 +193,192 @@ public final class TeleporterBetweenlands extends Teleporter {
 		return new BlockPos(selectedPos.getX(), height, selectedPos.getZ());
 	}
 
+	/**
+	 * Finds a suitable position for a portal to generate nearby
+	 * @param start
+	 * @return
+	 */
+	protected BlockPos findSuitableNonBLPortalPos(BlockPos start) {
+		int bestYSpace = -1;
+		BlockPos bestSuitablePos = null;
+		MutableBlockPos checkPos = new MutableBlockPos();
+		for(int xo = -16; xo <= -16; xo++) {
+			for(int zo = -16; zo <= -16; zo++) {
+				checkPos.setPos(start.getX() + xo, start.getY(), start.getZ() + zo);
+				Chunk chunk = this.toWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
+				int height = chunk.getHeight(checkPos);
+				if(height > 8 && height < this.toWorld.getActualHeight() - 16) {
+					return new BlockPos(checkPos.getX(), height, checkPos.getZ());
+				}
+				int ySpace = -1;
+				boolean isUnsuitable = true;
+				for(int y = this.toWorld.getActualHeight() - 16 + 1; y > 8; y--) {
+					checkPos.setY(y);
+					IBlockState state = chunk.getBlockState(checkPos);
+					boolean isNextLiquid = state.getMaterial().isLiquid();
+					boolean isNextUnsuitable = state.isNormalCube() || isNextLiquid;
+					if(!isUnsuitable) {
+						if(isNextUnsuitable) {
+							if(ySpace >= bestYSpace && !isNextLiquid) {
+								bestYSpace = ySpace;
+								bestSuitablePos = new BlockPos(checkPos.getX(), y, checkPos.getZ());
+
+								if(bestYSpace >= 20) {
+									return bestSuitablePos;
+								}
+							}
+							ySpace = 0;
+						} else {
+							ySpace++;
+						}
+					}
+					isUnsuitable = isNextUnsuitable;
+				}
+			}
+		}
+		if(bestSuitablePos != null) {
+			return bestSuitablePos;
+		}
+		int randY = 8 + this.toWorld.rand.nextInt(this.toWorld.getActualHeight() - 16 - 8);
+		while(randY < this.toWorld.getActualHeight() - 28) {
+			for(int xo = -3; xo <= 3; xo++) {
+				for(int zo = -3; zo <= 3; zo++) {
+					checkPos.setPos(start.getX() + xo, randY, start.getZ() + zo);
+					if(this.toWorld.getBlockState(checkPos).getMaterial().isLiquid()) {
+						randY++;
+						continue;
+					}
+				}
+			}
+			randY += 12;
+			break;
+		}
+		return new BlockPos(start.getX(), randY, start.getZ());
+	}
+
 	@Override
 	public boolean makePortal(Entity entity) {
-		BlockPos genPos = this.findSuitablePortalPos(entity.getPosition());
-		int checkRadius = 64;
-		MutableBlockPos checkPos = new MutableBlockPos();
+		boolean isToBL = this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+		BlockPos center;
+		if(isToBL) {
+			center = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+		} else {
+			center = this.findSuitableNonBLPortalPos(entity.getPosition());
+		}
+		if(isToBL && this.generateBetweenlandsTreePortal(entity, center)) {
+			return true;
+		} else if(!isToBL && this.generateTreePortal(entity, center)) {
+			return true;
+		}
+		return this.generateSmallPortal(entity, center);
+	}
+
+	protected boolean generateBetweenlandsTreePortal(Entity entity, BlockPos center) {
 		WorldGenWeedwoodPortalTree genTree = new WorldGenWeedwoodPortalTree();
+
+		return this.spiralGenerate(center, 64, 0, checkPos -> {
+			Chunk chunk = this.toWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
+			checkPos.setY(chunk.getHeight(checkPos) - 1);
+
+			if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
+				if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
+					this.lonkPortalsTogetherAndTeleport(entity, checkPos, 0.5D, 2.0D, 0.5D);
+					return true;
+				}
+			}
+
+			return false;
+		});
+	}
+
+	protected boolean generateTreePortal(Entity entity, BlockPos center) {
+		WorldGenWeedwoodPortalTree genTree = new WorldGenWeedwoodPortalTree();
+
+		return this.spiralGenerate(center, 32, 8, checkPos -> {
+			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
+				if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
+					this.lonkPortalsTogetherAndTeleport(entity, checkPos, 0.5D, 2.0D, 0.5D);
+					return true;
+				}
+			}
+
+			return false;
+		});
+	}
+
+	protected boolean generateSmallPortal(Entity entity, BlockPos center) {
+		WorldGenSmallPortal genPortal = new WorldGenSmallPortal(EnumFacing.NORTH);
+
+		if(this.spiralGenerate(center, 32, 8, checkPos -> {
+			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerateSmallPortal(this.toWorld, checkPos)) {
+				if(genPortal.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable().up())) {
+					this.lonkPortalsTogetherAndTeleport(entity, checkPos.up(), 0.5D, 1.0D, -0.5D);
+					return true;
+				}
+			}
+
+			return false;
+		})) {
+			return true;
+		}
+
+		if(this.spiralGenerate(center, 32, 8, checkPos -> {
+			if(this.toWorld.getBlockState(checkPos).isNormalCube() && !this.toWorld.getBlockState(checkPos.up()).getMaterial().isLiquid() && !this.isSmallPortalObstructedByOthers(this.toWorld, checkPos)) {
+				if(genPortal.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable().up())) {
+					this.lonkPortalsTogetherAndTeleport(entity, checkPos.up(), 0.5D, 1.0D, -0.5D);
+					return true;
+				}
+			}
+
+			return false;
+		})) {
+			return true;
+		}
+
+		if(genPortal.generate(this.toWorld, this.toWorld.rand, center.toImmutable())) {
+			this.lonkPortalsTogetherAndTeleport(entity, center, 0.5D, 1.0D, -0.5D);
+			return true;
+		}
+
+		return false;
+	}
+
+	protected void lonkPortalsTogetherAndTeleport(Entity entity, BlockPos newPortalPos, double playerOffsetX, double playerOffsetY, double playerOffsetZ) {
+		LocationPortal portal = this.getPortalLocation();
+
+		if(portal != null) {
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.toWorld);
+			List<LocationPortal> newPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, newPortalPos.up().getX(), newPortalPos.up().getZ(), loc -> loc.isInside(newPortalPos.up()));
+			if(!newPortals.isEmpty()) {
+				//Link portals
+				LocationPortal newPortal = newPortals.get(0);
+				newPortal.setOtherPortalPosition(this.fromDim, portal.getPortalPosition());
+				portal.setOtherPortalPosition(this.toWorld.provider.getDimension(), newPortal.getPortalPosition());
+			}
+		}
+
+		this.setEntityLocation(entity, newPortalPos.getX() + playerOffsetX, newPortalPos.getY() + playerOffsetY, newPortalPos.getZ() + playerOffsetZ, entity.rotationYaw, 0);
+		this.setDefaultPlayerSpawnLocation(entity);
+	}
+
+	protected boolean spiralGenerate(BlockPos center, int radius, int yRadius, Function<MutableBlockPos, Boolean> gen) {
+		MutableBlockPos checkPos = new MutableBlockPos();
 
 		//Spiral from center outwards to stay as close to the preferred position as possible
 		int xo = 0, zo = 0;
 		int[] dir = new int[]{0, -1};
-		for (int i = (int) Math.pow(checkRadius * 2, 2); i > 0; i--) {
-			if (-checkRadius < xo && xo <= checkRadius && -checkRadius < zo && zo <= checkRadius) {
-
-				checkPos.setPos(genPos.getX() + xo, 64, genPos.getZ() + zo);
-				Chunk chunk = this.toWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
-				checkPos.setY(chunk.getHeight(checkPos) - 1);
-
-				if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerate(this.toWorld, checkPos)) {
-					if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
-						LocationPortal portal = this.getPortalLocation();
-
-						if(portal != null) {
-							BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.toWorld);
-							List<LocationPortal> newPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, checkPos.up().getX(), checkPos.up().getZ(), loc -> loc.isInside(checkPos.up()));
-							if(!newPortals.isEmpty()) {
-								//Link portals
-								LocationPortal newPortal = newPortals.get(0);
-								newPortal.setOtherPortalPosition(this.fromDim, portal.getPortalPosition());
-								portal.setOtherPortalPosition(this.toWorld.provider.getDimension(), newPortal.getPortalPosition());
-							}
-						}
-
-						entity.setLocationAndAngles(checkPos.getX() + 0.5D, checkPos.getY() + 4.0D, checkPos.getZ() + 0.5D, entity.rotationYaw, 0);
-						this.setDefaultPlayerSpawnLocation(entity);
-
+		for (int i = (int) Math.pow(radius * 2, 2); i > 0; i--) {
+			if (-radius < xo && xo <= radius && -radius < zo && zo <= radius) {
+				for(int yo = 0; yo <= yRadius; yo++) {
+					checkPos.setPos(center.getX() + xo, center.getY() + yo, center.getZ() + zo);
+					if(gen.apply(checkPos)) {
 						return true;
+					}
+					if(yo != 0) {
+						checkPos.setPos(center.getX() + xo, center.getY() - yo, center.getZ() + zo);
+						if(gen.apply(checkPos)) {
+							return true;
+						}
 					}
 				}
 
@@ -249,22 +403,59 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 * @param pos
 	 * @return
 	 */
-	protected boolean canGenerate(World world, BlockPos pos){
-		int height = 16;
+	protected boolean canGeneratePortalTree(World world, BlockPos pos){
+		int height = 10;
 		int maxRadius = 8;
 		MutableBlockPos checkPos = new MutableBlockPos();
 		for (int xo = -maxRadius; xo <= maxRadius; xo++) {
 			for (int zo = -maxRadius; zo <= maxRadius; zo++) {
-				for (int yo = 2; yo < height; yo++) {
-					checkPos.setPos(pos.getX() + xo, pos.getY() + yo, pos.getZ() + zo);
-					IBlockState blockState = world.getBlockState(checkPos);
-					if (blockState.getMaterial().isLiquid() || blockState.isNormalCube() || blockState.getBlock() instanceof BlockLeaves) {
-						return false;
+				if(Math.sqrt(xo*xo + zo*zo) <= maxRadius) {
+					for (int yo = 2; yo < height; yo++) {
+						checkPos.setPos(pos.getX() + xo, pos.getY() + yo, pos.getZ() + zo);
+						IBlockState blockState = world.getBlockState(checkPos);
+						if (blockState.getMaterial().isLiquid() || blockState.isNormalCube() || blockState.getBlock() instanceof BlockLeaves) {
+							return false;
+						}
 					}
 				}
 			}
 		}
 		return true;
+	}
+	
+	/**
+	 * Returns whether a small portal can generate at the specified position
+	 * @param world
+	 * @param pos
+	 * @return
+	 */
+	protected boolean canGenerateSmallPortal(World world, BlockPos pos){
+		for(MutableBlockPos p : BlockPos.getAllInBoxMutable(pos.getX() - 3, pos.getY(), pos.getZ() - 2, pos.getX() + 3, pos.getY() + 7, pos.getZ() + 3)) {
+			IBlockState blockState = world.getBlockState(p);
+			boolean isOutside = Math.abs(pos.getX() - p.getX()) >= 2 || Math.abs(pos.getZ() - p.getZ()) >= 2 || p.getY() - pos.getY() >= 5;
+			if (!isOutside && (blockState.getMaterial().isLiquid() || blockState.isNormalCube() || blockState.getBlock() instanceof BlockLeaves)) {
+				return false;
+			} else if(isOutside && blockState.getBlock() == BlockRegistry.TREE_PORTAL) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	/**
+	 * Returns whether the specified position is obstructed by another small portal
+	 * @param world
+	 * @param pos
+	 * @return
+	 */
+	protected boolean isSmallPortalObstructedByOthers(World world, BlockPos pos) {
+		for(MutableBlockPos p : BlockPos.getAllInBoxMutable(pos.getX() - 3, pos.getY(), pos.getZ() - 3, pos.getX() + 3, pos.getY() + 7, pos.getZ() + 3)) {
+			IBlockState blockState = world.getBlockState(p);
+			if (blockState.getBlock() == BlockRegistry.TREE_PORTAL) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -286,6 +477,15 @@ public final class TeleporterBetweenlands extends Teleporter {
 			BlockPos spawnPlace = this.toWorld.getTopSolidOrLiquidBlock(coords.add(this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
 			player.setSpawnChunk(spawnPlace, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
+	}
+
+	protected void setEntityLocation(Entity entity, double x, double y, double z, float yaw, float pitch) {
+		if (entity instanceof EntityPlayerMP) {
+			((EntityPlayerMP)entity).connection.setPlayerLocation(x, y, z, yaw, pitch);
+		} else {
+			entity.setLocationAndAngles(x, y, z, yaw, pitch);
+		}
+		entity.hurtResistantTime = 20; //don't hurt pls, thxs
 	}
 
 	@Override

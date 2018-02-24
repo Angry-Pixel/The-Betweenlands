@@ -89,6 +89,11 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 			worldIn.setBlockState(pos, state.withProperty(X_AXIS, true));
 	}
 
+	@Override
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return 0;
+    }
+	
 	public enum EnumPortalFrame implements IStringSerializable {
 		CORNER_TOP_LEFT,
 		TOP,

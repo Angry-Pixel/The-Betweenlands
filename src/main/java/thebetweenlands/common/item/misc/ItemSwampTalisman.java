@@ -28,6 +28,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.BetweenlandsConfig;
@@ -91,7 +92,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 					}
 				}
 				return EnumActionResult.SUCCESS;
-			} else if(EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack)) {
+			} else if(EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) && playerIn instanceof FakePlayer == false) {
 				LocationPortal portal = this.getPortalAt(worldIn, pos);
 				if(portal != null) {
 					if(!worldIn.isRemote) {
@@ -108,7 +109,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 					}
 					return EnumActionResult.SUCCESS;
 				}
-			} else if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack)) {
+			} else if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack) && playerIn instanceof FakePlayer == false) {
 				if(!worldIn.isRemote) {
 					stack = stack.copy();
 					stack.setItemDamage(EnumTalisman.SWAMP_TALISMAN_0.getID());

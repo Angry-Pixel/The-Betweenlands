@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import thebetweenlands.common.block.farming.BlockGenericDugSoil;
 import thebetweenlands.common.tile.TileEntityDugSoil;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenCragrockTower;
+import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 
@@ -80,12 +81,12 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		
+		/*
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		
+		*/
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
@@ -123,6 +124,11 @@ public class TestItem extends Item {
 			*/
 			/*WorldGenGiantTree tree = new WorldGenGiantTree();
 			tree.generate(worldIn, itemRand, pos.add(0, 10, 0));*/
+			
+			WorldGenSmallPortal portal = new WorldGenSmallPortal(player.getHorizontalFacing());
+			if(portal.generate(worldIn, itemRand, pos.up())) {
+				//playerIn.setHeldItem(hand, null);
+			}
 		}
 
 		return EnumActionResult.SUCCESS;
