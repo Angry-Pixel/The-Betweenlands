@@ -196,7 +196,9 @@ public class EntityPyrad extends EntityFlyingMob implements IEntityBL {
 		}
 
 		if(!this.world.isRemote) {
-			if(this.isEntityAlive() && (this.getEntityAttribute(AGRESSIVE).getAttributeValue() == 1 || this.isInWater()) && !this.isActive()) {
+			boolean day = this.world.provider.getSunBrightnessFactor(1) >= 0.5F;
+			
+			if(this.isEntityAlive() && (this.getEntityAttribute(AGRESSIVE).getAttributeValue() == 1 || !day || this.isInWater()) && !this.isActive()) {
 				this.setActive(true);
 			}
 
