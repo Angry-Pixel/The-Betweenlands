@@ -645,7 +645,7 @@ item.thebetweenlands.manual_hl.name=Herblore Book
 item.thebetweenlands.mire_snail_egg.name=Mire Snail Egg
 item.thebetweenlands.mire_snail_egg_cooked.name=Cooked Mire Snail Egg
 item.thebetweenlands.nibblestick.name=Nibblestick
-item.thebetweenlands.bl.elixir.name=§5%s
+item.thebetweenlands.bl.elixir.name=%s
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -937,6 +937,9 @@ bl.elixir.potency.2=II
 bl.elixir.potency.3=III
 bl.elixir.potency.4=IV
 bl.elixir.potency.5=V
+bl.elixir.potency.6=VI
+bl.elixir.potency.7=VII
+bl.elixir.potency.8=VIII
 bl.elixir.potency.n=%s
 
 bl.elixir.duration.1=I
@@ -944,6 +947,9 @@ bl.elixir.duration.2=II
 bl.elixir.duration.3=III
 bl.elixir.duration.4=IV
 bl.elixir.duration.5=V
+bl.elixir.duration.6=VI
+bl.elixir.duration.7=VII
+bl.elixir.duration.8=VIII
 bl.elixir.duration.n=%s
 
 # Entities

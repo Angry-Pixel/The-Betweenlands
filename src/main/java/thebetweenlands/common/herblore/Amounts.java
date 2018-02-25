@@ -11,6 +11,6 @@ public class Amounts {
 	public static final int HIGH = 3000;
 	public static final int VERY_HIGH = 3500;
 
-	public static final int VIAL = VERY_HIGH;
+	public static final int VIAL = 5000;
 	public static final int MAX_ASPECT_AMOUNT = VIAL * TileEntityInfuser.MAX_INGREDIENTS;
 }

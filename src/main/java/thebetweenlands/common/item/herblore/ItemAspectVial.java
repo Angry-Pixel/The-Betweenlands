@@ -76,11 +76,11 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
             for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
                 ItemStack stackGreen = new ItemStack(this, 1, 0);
                 ItemAspectContainer greenAspectContainer = ItemAspectContainer.fromItem(stackGreen);
-                greenAspectContainer.add(aspect, 400);
+                greenAspectContainer.add(aspect, 2000);
                 list.add(stackGreen);
                 ItemStack stackOrange = new ItemStack(this, 1, 1);
                 ItemAspectContainer orangeAspectContainer = ItemAspectContainer.fromItem(stackOrange);
-                orangeAspectContainer.add(aspect, 400);
+                orangeAspectContainer.add(aspect, 2000);
                 list.add(stackOrange);
             }
         }

@@ -230,11 +230,11 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
         float relStrengthAmount = strengthAspectAmount / (float)Amounts.MAX_ASPECT_AMOUNT;
         float relDurationAmount = durationAspectAmount / (float)Amounts.MAX_ASPECT_AMOUNT;
-        this.producableStrength = MathHelper.floor(relStrengthAmount * 4.0F);
+        this.producableStrength = MathHelper.floor(relStrengthAmount * ElixirEffect.VIAL_INFUSION_MAX_POTENCY);
         if (isPositive) {
-            this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount * 2.0F);
+            this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount);
         } else {
-            this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount * 2.0F);
+            this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount);
         }
     }
 

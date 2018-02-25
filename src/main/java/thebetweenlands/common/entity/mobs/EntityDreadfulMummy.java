@@ -414,6 +414,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.getTrueSource() == currentEatPrey) 
 			return false;
+		if(getSpawningProgress() < 1.0F)
+			return false;
 		return super.attackEntityFrom(source, damage);
 	}
 

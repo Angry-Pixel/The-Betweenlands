@@ -112,7 +112,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     } else {
                         if(tile.getAspect() != null && tile.getAspect().type == itemAspect.type) {
                             if(!world.isRemote) {
-                                int toRemove = (int) Math.min(100, Amounts.MAX_ASPECT_AMOUNT - itemAspect.amount);
+                                int toRemove = (int) Math.min(100, Amounts.VIAL - itemAspect.amount);
                                 if(toRemove > 0) {
                                     int removedAmount = tile.removeAmount(toRemove);
                                     container.set(itemAspect.type, itemAspect.amount + removedAmount);

@@ -88,8 +88,15 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
 		if (this.isInCreativeTab(tab)) {
 			for (ElixirEffect effect : this.effects) {
-				items.add(new ItemStack(this, 1, effect.getID() * 2));
-				items.add(new ItemStack(this, 1, effect.getID() * 2 + 1));
+				ElixirRecipe recipe = ElixirRecipes.getFromEffect(effect);
+				if(recipe != null) {
+					int baseDuration = effect.isAntiInfusion() ? recipe.negativeBaseDuration : recipe.baseDuration;
+					int durationModifier = effect.isAntiInfusion() ? recipe.negativeDurationModifier : recipe.durationModifier;
+					items.add(this.getElixirItem(effect, baseDuration, ElixirEffect.VIAL_INFUSION_MAX_POTENCY - 1, 0));
+					items.add(this.getElixirItem(effect, baseDuration + MathHelper.floor(durationModifier / 6.0F * 5.0F), 0, 0));
+					items.add(this.getElixirItem(effect, baseDuration, ElixirEffect.VIAL_INFUSION_MAX_POTENCY - 1, 1));
+					items.add(this.getElixirItem(effect, baseDuration + MathHelper.floor(durationModifier / 6.0F * 5.0F), 0, 1));
+				}
 			}
 		}
 	}
@@ -244,6 +251,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		ElixirEffect elixirEffect = this.getElixirFromItem(stack);
 		PotionEffect effect = this.createPotionEffect(stack, 1.0D);
 
 		String potencyStr;
@@ -254,7 +262,13 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		}
 		tooltip.add(I18n.format("tooltip.bl.elixir.potency", potencyStr));
 
-		int durationLevel = MathHelper.floor(effect.getDuration() / 3600.0F);
+		int durationLevel;
+		ElixirRecipe recipe = ElixirRecipes.getFromEffect(elixirEffect);
+		if(recipe != null) {
+			durationLevel = MathHelper.floor(effect.getDuration() / (float)(elixirEffect.isAntiInfusion() ? (recipe.negativeBaseDuration + recipe.negativeDurationModifier) : (recipe.baseDuration + recipe.durationModifier)) * ElixirEffect.VIAL_INFUSION_MAX_POTENCY);
+		} else {
+			durationLevel = MathHelper.floor(effect.getDuration() / 3600.0F);
+		}
 		String durationLevelStr;
 		if(I18n.hasKey("bl.elixir.duration." + (durationLevel + 1))) {
 			durationLevelStr = I18n.format("bl.elixir.duration." + (durationLevel + 1));
@@ -273,11 +287,11 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 				modifiers.add(new Tuple<>(((IAttribute)entry.getKey()).getName(), modifier));
 			}
 		}
-		
-		ElixirEffect elixirEffect = this.getElixirFromItem(stack);
-		
+
+
+
 		boolean hasEffectDescription = I18n.hasKey("tooltip." + elixirEffect.getEffectName() + ".effect");
-		
+
 		if (!modifiers.isEmpty() || hasEffectDescription) {
 			tooltip.add("");
 			tooltip.add(TextFormatting.DARK_PURPLE + I18n.format("tooltip.bl.elixir.when_applied"));
@@ -300,7 +314,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 					tooltip.add(TextFormatting.RED + I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(adjustedAmount), I18n.format("attribute.name." + (String)tuple.getFirst())));
 				}
 			}
-			
+
 			if(hasEffectDescription) {
 				tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip." + elixirEffect.getEffectName() + ".effect"), 0));
 			}
