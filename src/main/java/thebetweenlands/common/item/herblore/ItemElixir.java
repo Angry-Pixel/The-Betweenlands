@@ -247,17 +247,17 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		PotionEffect effect = this.createPotionEffect(stack, 1.0D);
 
 		String potencyStr;
-		if(I18n.hasKey("bl.elixir.potency." + effect.getAmplifier())) {
-			potencyStr = I18n.format("bl.elixir.potency." + effect.getAmplifier());
+		if(I18n.hasKey("bl.elixir.potency." + (effect.getAmplifier() + 1))) {
+			potencyStr = I18n.format("bl.elixir.potency." + (effect.getAmplifier() + 1));
 		} else {
-			potencyStr = I18n.format("bl.elixir.potency.n", effect.getAmplifier());
+			potencyStr = I18n.format("bl.elixir.potency.n", (effect.getAmplifier() + 1));
 		}
 		tooltip.add(I18n.format("tooltip.bl.elixir.potency", potencyStr));
 
 		int durationLevel = MathHelper.floor(effect.getDuration() / 3600.0F);
 		String durationLevelStr;
-		if(I18n.hasKey("bl.elixir.duration." + durationLevel)) {
-			durationLevelStr = I18n.format("bl.elixir.duration." + durationLevel);
+		if(I18n.hasKey("bl.elixir.duration." + (durationLevel + 1))) {
+			durationLevelStr = I18n.format("bl.elixir.duration." + (durationLevel + 1));
 		} else {
 			durationLevelStr = I18n.format("bl.elixir.duration.n", (durationLevel + 1));
 		}

@@ -932,18 +932,18 @@ bl.elixir.deformed=Shapeshifter's draught of the Deformed
 bl.elixir.limbless=Shapeshifter's draught of the Limbless
 bl.elixir.isolatedSenses=Masterbrew of Isolated Senses
 
-bl.elixir.potency.0=I
-bl.elixir.potency.1=II
-bl.elixir.potency.2=III
-bl.elixir.potency.3=IV
-bl.elixir.potency.4=V
+bl.elixir.potency.1=I
+bl.elixir.potency.2=II
+bl.elixir.potency.3=III
+bl.elixir.potency.4=IV
+bl.elixir.potency.5=V
 bl.elixir.potency.n=%s
 
-bl.elixir.duration.0=I
-bl.elixir.duration.1=II
-bl.elixir.duration.2=III
-bl.elixir.duration.3=IV
-bl.elixir.duration.4=V
+bl.elixir.duration.1=I
+bl.elixir.duration.2=II
+bl.elixir.duration.3=III
+bl.elixir.duration.4=IV
+bl.elixir.duration.5=V
 bl.elixir.duration.n=%s
 
 # Entities
