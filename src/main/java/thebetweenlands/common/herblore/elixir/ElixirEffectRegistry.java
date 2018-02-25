@@ -23,7 +23,7 @@ import thebetweenlands.common.lib.ModInfo;
 
 public class ElixirEffectRegistry {
 	//Elixirs
-	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE, "241751b1-7e4c-409a-bc66-70ce1330b6f6", 3.0D, 2);
+	public static final ElixirEffect EFFECT_STRENGTH = new ElixirEffect(0, "bl.elixir.strength", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE, "241751b1-7e4c-409a-bc66-70ce1330b6f6", 3.5D, 0);
 	public static final ElixirEffect EFFECT_NIMBLEFEET = new ElixirEffect(1, "bl.elixir.nimblefeet", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "645a98a2-7bfd-11e5-8bcf-feff819cdc9f", 0.2D, 2);
 	public static final ElixirEffect EFFECT_HEALING = new ElixirHealing(2, "bl.elixir.healing", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
 	public static final ElixirEffect EFFECT_RIPENING = new ElixirRipening(3, "bl.elixir.ripening", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
@@ -41,7 +41,7 @@ public class ElixirEffectRegistry {
 	public static final ElixirEffect EFFECT_WINGS = new ElixirEffect(15, "bl.elixir.wings", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
 	public static final ElixirEffect EFFECT_HUNTERSSENSEMASTER = new ElixirEffect(16, "bl.elixir.huntersSenseMaster", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png"));
 	//Anti Elixirs
-	public static final ElixirEffect EFFECT_WEAKNESS = new ElixirEffect(17, "bl.elixir.weakness", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE, "886d753c-fcf2-4370-99b3-eb8e4fbaabcf", -3.0D, 2).setAntiInfusion();
+	public static final ElixirEffect EFFECT_WEAKNESS = new ElixirEffect(17, "bl.elixir.weakness", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.ATTACK_DAMAGE, "886d753c-fcf2-4370-99b3-eb8e4fbaabcf", -2.0D, 0).setAntiInfusion();
 	public static final ElixirEffect EFFECT_LUMBERING = new ElixirEffect(18, "bl.elixir.lumbering", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).addAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, "2c06470c-b549-47e9-893c-0d9950c77716", -0.2D, 2).setAntiInfusion();
 	public static final ElixirEffect EFFECT_DRAINING = new ElixirDraining(19, "bl.elixir.draining", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).setAntiInfusion();
 	public static final ElixirEffect EFFECT_DECAY = new ElixirDecay(20, "bl.elixir.decay", new ResourceLocation("thebetweenlands:textures/items/strictly_herblore/misc/vial_green.png")).setAntiInfusion();

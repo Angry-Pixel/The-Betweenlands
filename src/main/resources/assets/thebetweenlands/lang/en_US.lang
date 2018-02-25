@@ -645,6 +645,7 @@ item.thebetweenlands.manual_hl.name=Herblore Book
 item.thebetweenlands.mire_snail_egg.name=Mire Snail Egg
 item.thebetweenlands.mire_snail_egg_cooked.name=Cooked Mire Snail Egg
 item.thebetweenlands.nibblestick.name=Nibblestick
+item.thebetweenlands.bl.elixir.name=§5%s
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -757,6 +758,41 @@ tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving
 tooltip.hearthgrove_log=This dense log is excellent as fuel.\nCan be tarred
 tooltip.decay_food=Heals decay
 tooltip.swamp_talisman_linked=Linked to portal\nX: %s\nY: %s\nZ: %s
+tooltip.infusion.time=§aInfusion time:§r %s
+tooltip.infusion.ingredients=§aIngredients:
+tooltip.infusion.empty=Empty
+
+tooltip.bl.elixir.potency=§9Potency: %s
+tooltip.bl.elixir.duration=§9Duration: %s (%s)
+tooltip.bl.elixir.when_applied=§5When applied:
+tooltip.bl.elixir.foggedMind.effect=Clouds the mind with worrisome\nthoughts, causing one to see the illusion\nof a thick fog surrounding them.
+tooltip.bl.elixir.heavyweight.effect=Gives a strange sense of\nheaviness, causing one to be unable\nto swim and causing them to sink\nin Mud despite whatever they may be\nwearing to protect them from it.
+tooltip.bl.elixir.basilisk.effect=Petrifies the motor cortex of the\nbrain, causing one to be frozen in place.
+tooltip.bl.elixir.weakbow.effect=Reduces archery skill, greatly\nlimiting one's bow shooting range.
+tooltip.bl.elixir.blindman.effect=The Blindman's Brew severely limits\nthe functions of the eye, causing one to\nonly be able to see a small distance in\nfront of them and be unable to sprint.
+tooltip.bl.elixir.slugarm.effect=Makes the arms feel numb, decreasing\none's arm swinging speed and thus causing\nthem to mine slower and strike foes less easily.
+tooltip.bl.elixir.stenching.effect=Causes the emission of a very potent\nodor that is desired by monsters, making\nit easier for one to be detected by predators.
+tooltip.bl.elixir.drunkard.effect=Causes one to experience a heavy\nbout of nausea.
+tooltip.bl.elixir.starvation.effect=Makes the stomach digest food faster\nand less efficiently, causing one to\ngo hungry more quickly.
+tooltip.bl.elixir.poisonsting.effect=Contains the wrath of the sinister\nplants found in the Betweenlands, poisoning\none instantly.
+tooltip.bl.elixir.decay.effect=Increases vulnerability to the decaying\naura of the Betweenlands, causing one to\nexperience a quicker decline in physical\nand psychological health.
+tooltip.bl.elixir.draining.effect=Drains one's health over time.
+tooltip.bl.elixir.lumbering.effect=Makes the muscles lethargic, reducing\none's movement speed.
+tooltip.bl.elixir.unclouded.effect=Clears a foggy mind, allowing one to\nsee through dense fog as if it evaporated\nin front of their eyes.
+tooltip.bl.elixir.lightweight.effect=Causes a strange sensation of\nweightlessness, allowing one to walk slowly\nover water as if it were solid ground.
+tooltip.bl.elixir.spiderbreed.effect=Changes the workings of the skin and\nmuscle, allowing one to climb up and down\nany obstacle as if they were an insect.
+tooltip.bl.elixir.sagittarius.effect=Contains the power of Sagittarius, allowing\none to see exactly what path their arrow will\ntake when fired from a bow.
+tooltip.bl.elixir.catsEyes.effect=Makes the eyes extremely sensitive to\nlight, allowing one to see very well in\nthe dark.
+tooltip.bl.elixir.swiftarm.effect=Enables arm muscles to work to their\nfullest, increasing one's arm swinging speed\nand thus allowing them to mine faster, pull\nback bows more rapidly, and strike foes\nmore easily.
+tooltip.bl.elixir.masking.effect=Masks natural odors like a perfume, making\nit harder for one to be detected by predators.
+tooltip.bl.elixir.huntersSense.effect=Enhances the senses, allowing one to\nsee and smell the scent trails of creatures in\norder to track them down.
+tooltip.bl.elixir.feasting.effect=Gives the stomach something tough\nto feed on, satisfying one's hunger over time.
+tooltip.bl.elixir.toughskin.effect=Increases skin toughness, protecting one\nfrom harmful plants found throughout the\nBetweenlands.
+tooltip.bl.elixir.ripening.effect=Reverses the effects of the decaying aura\nof the Betweenlands, restoring one's physical\nand psychological health over time.
+tooltip.bl.elixir.healing.effect=Accelerates natural regeneration, healing one's\nwounds over time.
+tooltip.bl.elixir.nimblefeet.effect=Enhances muscle swiftness and nimbleness,\nincreasing one's movement speed.
+tooltip.bl.elixir.weakness.effect=Weakens the muscles, reducing one's\ndamage output when they attack.
+tooltip.bl.elixir.strength.effect=Increases raw physical strength, causing\none to deal more damage when they attack.
 
 # Chat
 chat.foodSickness.fine.0=Ah, that was refreshing
@@ -896,6 +932,19 @@ bl.elixir.deformed=Shapeshifter's draught of the Deformed
 bl.elixir.limbless=Shapeshifter's draught of the Limbless
 bl.elixir.isolatedSenses=Masterbrew of Isolated Senses
 
+bl.elixir.potency.0=I
+bl.elixir.potency.1=II
+bl.elixir.potency.2=III
+bl.elixir.potency.3=IV
+bl.elixir.potency.4=V
+bl.elixir.potency.n=%s
+
+bl.elixir.duration.0=I
+bl.elixir.duration.1=II
+bl.elixir.duration.2=III
+bl.elixir.duration.3=IV
+bl.elixir.duration.4=V
+bl.elixir.duration.n=%s
 
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid

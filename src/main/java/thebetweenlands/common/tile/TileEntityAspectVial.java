@@ -11,7 +11,7 @@ import thebetweenlands.common.herblore.Amounts;
 import javax.annotation.Nullable;
 
 public class TileEntityAspectVial extends TileEntity {
-    public static final float MAX_AMOUNT = Amounts.MAX_ASPECT_AMOUNT;
+    public static final float MAX_AMOUNT = Amounts.VIAL;
 
     private Aspect aspect = null;
 

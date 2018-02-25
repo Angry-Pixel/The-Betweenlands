@@ -113,7 +113,8 @@ public class RiftRenderer implements IRiftRenderer {
 				//Set all alpha to 1 for mask blending
 				GlStateManager.colorMask(false, false, false, true);
 				GlStateManager.clearColor(0, 0, 0, 1);
-				GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT);
+				GlStateManager.clearDepth(1.0D);
+				GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 				GlStateManager.colorMask(true, true, true, true);
 
 				//Render mask

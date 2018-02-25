@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -24,6 +25,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.StringUtils;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -55,9 +57,8 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 		if (hasTag(stack)) {
 			if (stack.getTagCompound() != null && stack.getTagCompound().hasKey("infused") && stack.getTagCompound().hasKey("ingredients") && stack.getTagCompound().hasKey("infusionTime")) {
 				int infusionTime = stack.getTagCompound().getInteger("infusionTime");
-				String infusionTimeSeconds = BigDecimal.valueOf(infusionTime / 20.0F).setScale(1, BigDecimal.ROUND_HALF_UP).toPlainString();
-				list.add(TextFormatting.GREEN + "Infusion time: " + TextFormatting.RESET + infusionTimeSeconds);
-				list.add(TextFormatting.GREEN + "Ingredients:");
+				list.add(I18n.format("tooltip.infusion.time", StringUtils.ticksToElapsedTime(infusionTime), infusionTime));
+				list.add(I18n.format("tooltip.infusion.ingredients"));
 				// The properties will be retrieved in the Alembic's TE logic
 				NBTTagList nbtList = (NBTTagList) stack.getTagCompound().getTag("ingredients");
 				Map<ItemStack, Integer> stackMap = new LinkedHashMap<ItemStack, Integer>();
@@ -90,7 +91,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 					}
 				}
 			} else {
-				list.add("This Infusion Contains Nothing");
+				list.add(I18n.format("tooltip.infusion.empty"));
 			}
 		}
 	}

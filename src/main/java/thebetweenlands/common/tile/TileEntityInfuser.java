@@ -293,7 +293,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 			this.markForUpdate();
 		}
 		if (isValidCrystalInstalled()) {
-			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion) {
+			if (temp >= 100 && evaporation >= 400 && stirProgress >= 90 && hasInfusion && this.infusingRecipe != null && this.infusionTime < this.infusingRecipe.idealInfusionTime + this.infusingRecipe.infusionTimeVariation) {
 				inventory.get(MAX_INGREDIENTS + 1).setItemDamage(inventory.get(MAX_INGREDIENTS + 1).getItemDamage() + 1);
 				stirProgress = 0;
 			}

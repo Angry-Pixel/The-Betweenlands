@@ -88,7 +88,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                             if(!world.isRemote) {
                                 if(tile.getAspect() == null)
                                     tile.setAspect(new Aspect(itemAspect.type, 0));
-                                int added = tile.addAmount(Math.min(itemAspect.amount, 25));
+                                int added = tile.addAmount(Math.min(itemAspect.amount, 100));
                                 if(added > 0) {
                                     int leftAmount = itemAspect.amount - added;
                                     container.set(itemAspect.type, itemAspect.amount - added);
@@ -112,7 +112,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     } else {
                         if(tile.getAspect() != null && tile.getAspect().type == itemAspect.type) {
                             if(!world.isRemote) {
-                                int toRemove = (int) Math.min(25, Amounts.MAX_ASPECT_AMOUNT - itemAspect.amount);
+                                int toRemove = (int) Math.min(100, Amounts.MAX_ASPECT_AMOUNT - itemAspect.amount);
                                 if(toRemove > 0) {
                                     int removedAmount = tile.removeAmount(toRemove);
                                     container.set(itemAspect.type, itemAspect.amount + removedAmount);
@@ -125,7 +125,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                 } else if(heldItem.getItem() == ItemRegistry.DENTROTHYST_VIAL && player.isSneaking() && tile.getAspect() != null && heldItem.getItemDamage() != 1) {
                     if(!world.isRemote) {
                         Aspect aspect = tile.getAspect();
-                        int removedAmount = tile.removeAmount(25);
+                        int removedAmount = tile.removeAmount(100);
                         if(removedAmount > 0) {
                             ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
                             switch(heldItem.getItemDamage()) {
