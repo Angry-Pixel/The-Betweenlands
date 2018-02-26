@@ -129,12 +129,6 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase entityLiving, int timeLeft) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("throwing") && stack.getTagCompound().getBoolean("throwing")) {
-			if (!((EntityPlayer)entityLiving).capabilities.isCreativeMode) {
-				stack.shrink(1);
-				if(stack.isEmpty()) {
-					((EntityPlayer) entityLiving).inventory.deleteStack(stack);
-				}
-			}
 			world.playSound((EntityPlayer)entityLiving, entityLiving.getPosition(), SoundEvents.ENTITY_ARROW_SHOOT, SoundCategory.PLAYERS,0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 			if (!world.isRemote) {
 				int useCount = this.getMaxItemUseDuration(stack) - timeLeft;
@@ -142,6 +136,13 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 				float strength = Math.min(0.2F + useCount / 20.0F, 1.0F);
 				elixir.shoot(entityLiving, ((EntityPlayer)entityLiving).rotationPitch, ((EntityPlayer)entityLiving).rotationYaw, -20.0F, strength, 1.0F);
 				world.spawnEntity(elixir);
+				
+				if (!((EntityPlayer)entityLiving).capabilities.isCreativeMode) {
+					stack.shrink(1);
+					if(stack.isEmpty()) {
+						((EntityPlayer) entityLiving).inventory.deleteStack(stack);
+					}
+				}
 			}
 		}
 	}

@@ -24,12 +24,10 @@ import thebetweenlands.api.event.SplashPotionEvent;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityElixir extends EntityThrowable {
-
-    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntityPotion.class, DataSerializers.ITEM_STACK);
+    private static final DataParameter<ItemStack> ITEM = EntityDataManager.createKey(EntityElixir.class, DataSerializers.ITEM_STACK);
 
     public EntityElixir(World world) {
         super(world);
-        this.setItem(new ItemStack(ItemRegistry.ELIXIR));
     }
 
     public EntityElixir(World world, EntityLivingBase thrower, ItemStack elixir) {
@@ -38,8 +36,7 @@ public class EntityElixir extends EntityThrowable {
     }
 
     @Override
-	protected void entityInit()
-    {
+	protected void entityInit() {
         this.getDataManager().register(ITEM, ItemStack.EMPTY);
     }
 
@@ -56,7 +53,7 @@ public class EntityElixir extends EntityThrowable {
     protected float getGravityVelocity() {
         return 0.05F;
     }
-
+    
     @Override
     protected void onImpact(RayTraceResult result) {
         if (!this.world.isRemote) {
@@ -89,7 +86,7 @@ public class EntityElixir extends EntityThrowable {
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
-        ItemStack itemstack = new ItemStack(nbt.getCompoundTag("elixir"));
+    	ItemStack itemstack = new ItemStack(nbt.getCompoundTag("elixir"));
 
         if (itemstack.isEmpty()) {
             this.setDead();
