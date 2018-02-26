@@ -67,9 +67,17 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 		this.isReplaceable = replaceable;
 		return this;
 	}
-
-	protected IBlockState getReplacementBlock(IBlockAccess world, BlockPos pos, IBlockState state) {
-		return BlockRegistry.SWAMP_WATER.getDefaultState();
+	
+	/**
+	 * Removes the plant. Usually sets the block to water
+	 * @param world
+	 * @param pos
+	 * @param player
+	 * @param canHarvest
+	 * @return
+	 */
+	protected boolean removePlant(World world, BlockPos pos, @Nullable EntityPlayer player, boolean canHarvest) {
+		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
 	}
 
 	@Override
@@ -144,7 +152,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, this.getReplacementBlock(worldIn, pos, state), 3);
+			this.removePlant(worldIn, pos, null, false);
 		}
 	}
 
@@ -165,7 +173,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		this.onBlockHarvested(world, pos, state, player);
-		return world.setBlockState(pos, this.getReplacementBlock(world, pos, state), world.isRemote ? 11 : 3);
+		return this.removePlant(world, pos, player, willHarvest);
 	}
 
 	@Override

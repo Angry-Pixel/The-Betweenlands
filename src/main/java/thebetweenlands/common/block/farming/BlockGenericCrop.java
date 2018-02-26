@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockStackablePlant;
@@ -129,14 +128,19 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 				this.dropBlockAsItem(worldIn, pos, state, i);
 				this.harvesters.set(null);
 			}
-
-			//Remove 10 compost after harvesting fully grown crop
-			if(state.getValue(AGE) >= 15) {
-				this.consumeCompost(worldIn, pos, 10);
-			}
 		}
 
 		super.onBlockHarvested(worldIn, pos, state, player);
+	}
+	
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		boolean removed = super.removedByPlayer(state, world, pos, player, willHarvest);
+		if(removed && state.getValue(AGE) >= 15) {
+			//Remove 10 compost after harvesting fully grown crop
+			this.consumeCompost(world, pos, 10);
+		}
+		return removed;
 	}
 
 	/**
@@ -175,14 +179,16 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		ItemStack cropDrop = this.getCropDrop(world, pos, rand);
 
 		if(!seedDrop.isEmpty()) {
-			for(int i = 0; i < this.getSeedDrops(world, pos, rand, fortune); i++) {
-				ret.add(seedDrop);
+			int  drops = this.getSeedDrops(world, pos, rand, fortune);
+			for(int i = 0; i < drops; i++) {
+				ret.add(seedDrop.copy());
 			}
 		}
 
 		if(!cropDrop.isEmpty()) {
-			for(int i = 0; i < this.getCropDrops(world, pos, rand, fortune); i++) {
-				ret.add(cropDrop);
+			int drops = this.getCropDrops(world, pos, rand, fortune);
+			for(int i = 0; i < drops; i++) {
+				ret.add(cropDrop.copy());
 			}
 		}
 
