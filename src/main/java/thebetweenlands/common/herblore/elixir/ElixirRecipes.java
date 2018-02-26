@@ -172,7 +172,7 @@ public class ElixirRecipes {
 		registerRecipe(new ElixirRecipe("Lightweight Draught", 0xFF0000FF, 0xFF6528da, 0xFF332902, 
 				2000, 200, 
 				1200, 9600,
-				100, 340,
+				200, 1200,
 				ElixirEffectRegistry.EFFECT_LIGHTWEIGHT, ElixirEffectRegistry.EFFECT_HEAVYWEIGHT,
 				AspectRegistry.YUNUGAZ, AspectRegistry.YIHINREN,
 				new IAspectType[]{AspectRegistry.AZUWYNN, AspectRegistry.BYRGINAZ, AspectRegistry.YUNUGAZ, AspectRegistry.GEOLIIRGAZ}));

@@ -218,9 +218,9 @@ public class ModelSwampHag extends MowzieModelBase {
         head1.rotateAngleY = rotationYaw / (180F / (float) Math.PI) - 0.045553093477052F;
         head1.rotateAngleX = rotationPitch / (180F / (float) Math.PI) - 0.8196066167365371F;
         head1.rotateAngleZ = rotationPitch / (180F / (float) Math.PI) + 0.045553093477052F;
-        if (hag.getAttackTarget() != null) { // TODO make this work after some zzzzzzzzzzzz
-            armright.rotateAngleX += -((float) Math.PI / 2.5F);
-        }
+//        if (hag.getAttackTarget() != null) { // TODO make this work after some zzzzzzzzzzzz
+//            armright.rotateAngleX += -((float) Math.PI / 2.5F);
+//        }
 //		else {
 //			armright.rotateAngleX = MathHelper.cos(limbSwing * 0.6662F + (float)Math.PI) * 2.0F * limbSwingAngle;
 //			armright.rotateAngleZ = hag.breatheFloat* 0.5F;

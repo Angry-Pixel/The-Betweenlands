@@ -266,7 +266,9 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		int durationLevel;
 		ElixirRecipe recipe = ElixirRecipes.getFromEffect(elixirEffect);
 		if(recipe != null) {
-			durationLevel = MathHelper.floor(effect.getDuration() / (float)(elixirEffect.isAntiInfusion() ? (recipe.negativeBaseDuration + recipe.negativeDurationModifier) : (recipe.baseDuration + recipe.durationModifier)) * ElixirEffect.VIAL_INFUSION_MAX_POTENCY);
+			int baseDuration = elixirEffect.isAntiInfusion() ? recipe.negativeBaseDuration : recipe.baseDuration;
+			int durationModifier = elixirEffect.isAntiInfusion() ? recipe.negativeDurationModifier : recipe.durationModifier;
+			durationLevel = Math.max(0, MathHelper.floor((effect.getDuration() - baseDuration) / (float)durationModifier * ElixirEffect.VIAL_INFUSION_MAX_POTENCY));
 		} else {
 			durationLevel = MathHelper.floor(effect.getDuration() / 3600.0F);
 		}
