@@ -5,6 +5,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.common.herblore.Amounts;
 
@@ -101,5 +103,10 @@ public class TileEntityAspectVial extends TileEntity {
     public void handleUpdateTag(NBTTagCompound tag) {
         super.handleUpdateTag(tag);
         readFromNBT(tag);
+    }
+    
+    @Override
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
+    	return oldState.getBlock() != newSate.getBlock();
     }
 }

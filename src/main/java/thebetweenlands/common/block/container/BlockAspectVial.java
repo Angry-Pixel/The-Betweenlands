@@ -4,6 +4,7 @@ package thebetweenlands.common.block.container;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
@@ -34,16 +35,16 @@ import thebetweenlands.common.tile.TileEntityAspectVial;
 import javax.annotation.Nullable;
 
 public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICustomItemBlock {
-
-    public static PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
-
+    public static final PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
+    public static final PropertyBool RANDOM_POSITION = PropertyBool.create("random_position");
+    
     public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.95F, 0.45F, 0.95F);
 
     public BlockAspectVial() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
         setHardness(0.4F);
-        setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockDentrothyst.EnumDentrothyst.GREEN));
+        setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockDentrothyst.EnumDentrothyst.GREEN).withProperty(RANDOM_POSITION, false));
     }
 
     @Override
@@ -53,17 +54,39 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(TYPE, meta == 0 ? BlockDentrothyst.EnumDentrothyst.GREEN : BlockDentrothyst.EnumDentrothyst.ORANGE);
+    	BlockDentrothyst.EnumDentrothyst type;
+    	switch(meta & 0x1) {
+    	default:
+    	case 0:
+    		type = BlockDentrothyst.EnumDentrothyst.GREEN;
+    		break;
+    	case 1:
+    		type = BlockDentrothyst.EnumDentrothyst.ORANGE;
+    		break;
+    	}
+        return this.getDefaultState().withProperty(TYPE, type).withProperty(RANDOM_POSITION, (meta & 0x2) == 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(TYPE).getMeta();
+    	int meta = 0;
+        switch(state.getValue(TYPE)) {
+        default:
+        case GREEN:
+        	break;
+        case ORANGE:
+        	meta |= 0x1;
+        	break;
+        }
+        if(!state.getValue(RANDOM_POSITION)) {
+        	meta |= 0x2;
+        }
+        return meta;
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, TYPE);
+        return new BlockStateContainer(this, TYPE, RANDOM_POSITION);
     }
 
     @Nullable
@@ -152,6 +175,12 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     player.swingArm(hand);
                     return true;
                 }
+            } else if(player.isSneaking()) {
+            	if(!world.isRemote) {
+            		world.setBlockState(pos, state.withProperty(RANDOM_POSITION, !state.getValue(RANDOM_POSITION)));
+            	}
+            	player.swingArm(hand);
+                return true;
             }
         }
         return false;

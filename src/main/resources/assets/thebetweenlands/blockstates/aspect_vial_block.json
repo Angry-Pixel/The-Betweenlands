@@ -15,6 +15,10 @@
           "particle_texture": "thebetweenlands:blocks/dentrothyst_orange"
         }
       }
+    },
+    "random_position": {
+      "false": { },
+      "true": { }
     }
   }
 }

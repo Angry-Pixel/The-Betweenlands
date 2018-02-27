@@ -39,13 +39,19 @@ public class RenderAspectVial extends TileEntitySpecialRenderer<TileEntityAspect
 			break;
 		}
 
-		long posRand = (long)(te.getPos().getY() * 224856) ^ (te.getPos().getX() * 3129871) ^ (long)te.getPos().getZ() * 116129781L;
-		posRand = posRand * posRand * 42317861L + posRand * 11L;
-		float randX = (((float)(posRand >> 16 & 15L) / 15.0F) - 0.5F) * 0.45F;
-		float randZ = (((float)(posRand >> 24 & 15L) / 15.0F) - 0.5F) * 0.45F;
+		float randX = 0;
+		float randZ = 0;
+		
+		if(TileEntityHelper.getStatePropertySafely(te, BlockAspectVial.class, BlockAspectVial.RANDOM_POSITION, true)) {
+			long posRand = (long)(te.getPos().getY() * 224856) ^ (te.getPos().getX() * 3129871) ^ (long)te.getPos().getZ() * 116129781L;
+			posRand = posRand * posRand * 42317861L + posRand * 11L;
+			randX = (((float)(posRand >> 16 & 15L) / 15.0F) - 0.5F) * 0.45F;
+			randZ = (((float)(posRand >> 24 & 15L) / 15.0F) - 0.5F) * 0.45F;
+		}
 		
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
 		GlStateManager.translate(-0.3F + randX, -0.001F, 0.25F + randZ);

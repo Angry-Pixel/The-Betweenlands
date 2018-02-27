@@ -57,6 +57,7 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 					1.0F, 0.8F, 0.0F, 0.0F,
 					1.0F, 0.8F, 0.0F, 1.0F);
 			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.popMatrix();
 		}
 
