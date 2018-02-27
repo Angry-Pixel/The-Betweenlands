@@ -125,12 +125,21 @@ public class ItemRingOfFlight extends ItemRing {
 						cap.setFlying(false);
 						nbt.setBoolean("ringActive", false);
 					}
-				} else if(cap.isFlying() && !player.onGround && player.world.isRemote) {
-					if(cap.getFlightTime() > 40) {
-						BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
-					} else {
-						for(int i = 0; i < 5; i++) {
-							BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
+				} else {
+					if(!player.world.isRemote) {
+						NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+						nbt.setBoolean("ringActive", false);
+						if(cap.isFlying()) {
+							cap.setFlying(false);
+						}
+					}
+					if(cap.isFlying() && !player.onGround && player.world.isRemote) {
+						if(cap.getFlightTime() > 40) {
+							BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
+						} else {
+							for(int i = 0; i < 5; i++) {
+								BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
+							}
 						}
 					}
 				}
@@ -147,7 +156,7 @@ public class ItemRingOfFlight extends ItemRing {
 	}
 
 	private boolean canFly(EntityPlayer player, ItemStack stack) {
-		return player.capabilities.isCreativeMode || player.experienceTotal > 0;
+		return player.capabilities.isCreativeMode || (player.experienceTotal > 0 && !player.isRiding());
 	}
 
 	@SubscribeEvent
@@ -162,7 +171,7 @@ public class ItemRingOfFlight extends ItemRing {
 						cap.setFlightTime(cap.getFlightTime() + 1);
 					}
 
-					boolean canPlayerFly = false;
+					ItemStack flightRing = ItemStack.EMPTY;
 
 					if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 						IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
@@ -170,21 +179,28 @@ public class ItemRingOfFlight extends ItemRing {
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							ItemStack stack = inv.getStackInSlot(i);
 							if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
-								canPlayerFly = true;
+								flightRing = stack;
 								break;
 							}
 						}
 					}
 
-					if(canPlayerFly && player.world.isRemote) {
-						if(event.phase == Phase.START) {
-							player.capabilities.isFlying = false;
-						} else {
-							if(player.capabilities.isFlying) {
-								cap.setFlying(!cap.isFlying());
-								if(player == TheBetweenlands.proxy.getClientPlayer()) {
-									TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+					if(!flightRing.isEmpty() && player.world.isRemote) {
+						if(((ItemRingOfFlight)flightRing.getItem()).canFly(player, flightRing)) {
+							if(event.phase == Phase.START) {
+								player.capabilities.isFlying = false;
+							} else {
+								if(player.capabilities.isFlying) {
+									cap.setFlying(!cap.isFlying());
+									if(player == TheBetweenlands.proxy.getClientPlayer()) {
+										TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+									}
 								}
+							}
+						} else if(cap.isFlying()) {
+							cap.setFlying(false);
+							if(player == TheBetweenlands.proxy.getClientPlayer()) {
+								TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
 							}
 						}
 					}
@@ -192,7 +208,7 @@ public class ItemRingOfFlight extends ItemRing {
 						TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
 					}
 					if(event.phase == Phase.END) {
-						if(!canPlayerFly || !cap.isFlying()) {
+						if(flightRing.isEmpty() || !cap.isFlying()) {
 							if(cap.getFlightRing()) {
 								if(!player.capabilities.isCreativeMode) {
 									player.capabilities.isFlying = false;
