@@ -260,7 +260,7 @@ public class BlockRepeller extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int facing = (meta >> 1) & 4;
+		int facing = (meta >> 1) & 0b11;
 		boolean isUpper = (meta & 1) == 1;
 		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM).withProperty(FACING, EnumFacing.getHorizontal(facing));
 	}

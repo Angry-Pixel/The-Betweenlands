@@ -60,6 +60,9 @@ public abstract class MobSpawnerLogicBetweenlands {
      */
     public MobSpawnerLogicBetweenlands setNextEntityName(String name) {
         this.randomEntity.getNbt().setString("id", name);
+        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
+            this.cachedEntity = null;
+        }
         return this;
     }
 
@@ -69,7 +72,10 @@ public abstract class MobSpawnerLogicBetweenlands {
      * @param entity
      */
     public MobSpawnerLogicBetweenlands setNextEntity(WeightedSpawnerEntity entity) {
-         this.randomEntity = entity;
+        this.randomEntity = entity;
+        if (this.getSpawnerWorld() != null && this.getSpawnerWorld().isRemote) {
+            this.cachedEntity = null;
+        }
         return this;
     }
 

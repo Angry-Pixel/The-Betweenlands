@@ -64,19 +64,11 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-	//TODO probably does not work
 	@SafeVarargs
 	public static MobSpawnerLogicBetweenlands setMob(World world, BlockPos pos, String mobName, Consumer<MobSpawnerLogicBetweenlands>... consumers) {
 		MobSpawnerLogicBetweenlands spawnerLogic = getLogic(world, pos);
 		if(spawnerLogic != null) {
-			String prevMob = spawnerLogic.getEntityId().toString();
 			spawnerLogic.setNextEntityName(mobName);
-			//resets the rendered entity
-			if (world.isRemote && !Objects.equals(prevMob, mobName)) {
-				NBTTagCompound nbt = new NBTTagCompound();
-				spawnerLogic.writeToNBT(nbt);
-				spawnerLogic.readFromNBT(nbt);
-			}
 			for(Consumer<MobSpawnerLogicBetweenlands> c : consumers) {
 				c.accept(spawnerLogic);
 			}
@@ -109,8 +101,10 @@ public class BlockMobSpawnerBetweenlands extends BlockMobSpawner {
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		super.onBlockPlacedBy(worldIn, pos, state, placer, stack);
-		Random random = new Random();
-		setRandomMob(worldIn, pos, random);
+		if(!worldIn.isRemote) {
+			Random random = new Random();
+			setRandomMob(worldIn, pos, random);
+		}
 	}
 
 	@Override

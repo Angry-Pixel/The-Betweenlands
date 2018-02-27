@@ -155,6 +155,10 @@ public class BlockAnimator extends BlockContainer {
 		return state.getValue(FACING).getHorizontalIndex();
 	}
 
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
+	}
 
 	@Override
 	public boolean hasComparatorInputOverride(IBlockState state) {

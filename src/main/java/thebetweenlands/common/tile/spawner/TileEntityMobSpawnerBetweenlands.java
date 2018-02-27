@@ -1,12 +1,16 @@
 package thebetweenlands.common.tile.spawner;
 
+import java.util.List;
+
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.WeightedSpawnerEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -61,6 +65,42 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 						.withColor(1.0F, MathHelper.clamp(4 + (float) Math.sin(counter) * 3, 0, 1), MathHelper.clamp((float) Math.sin(counter) * 2, 0, 1), 0.65F));
 			}
 		}
+		
+		@Override
+		public MobSpawnerLogicBetweenlands setNextEntityName(String name) {
+			super.setNextEntityName(name);
+			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
+			IBlockState blockState = te.world.getBlockState(te.pos);
+			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			return this;
+		}
+		
+		@Override
+		public MobSpawnerLogicBetweenlands setNextEntity(String name) {
+			super.setNextEntity(name);
+			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
+			IBlockState blockState = te.world.getBlockState(te.pos);
+			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			return this;
+		}
+		
+		@Override
+		public MobSpawnerLogicBetweenlands setNextEntity(WeightedSpawnerEntity entity) {
+			super.setNextEntity(entity);
+			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
+			IBlockState blockState = te.world.getBlockState(te.pos);
+			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			return this;
+		}
+		
+		@Override
+		public MobSpawnerLogicBetweenlands setEntitySpawnList(List<WeightedSpawnerEntity> entitySpawnList) {
+			super.setEntitySpawnList(entitySpawnList);
+			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
+			IBlockState blockState = te.world.getBlockState(te.pos);
+			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			return this;
+		}
 	};
 
 	@Override
@@ -83,7 +123,6 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 		this.counter += 0.0085F;
 	}
 
-	//TODO this probably does not work
 	@Nullable
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
