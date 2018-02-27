@@ -70,8 +70,10 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 		public MobSpawnerLogicBetweenlands setNextEntityName(String name) {
 			super.setNextEntityName(name);
 			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
-			IBlockState blockState = te.world.getBlockState(te.pos);
-			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			if(te != null && te.world != null) {
+				IBlockState blockState = te.world.getBlockState(te.pos);
+				te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			}
 			return this;
 		}
 		
@@ -79,8 +81,10 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 		public MobSpawnerLogicBetweenlands setNextEntity(String name) {
 			super.setNextEntity(name);
 			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
-			IBlockState blockState = te.world.getBlockState(te.pos);
-			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			if(te != null && te.world != null) {
+				IBlockState blockState = te.world.getBlockState(te.pos);
+				te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			}
 			return this;
 		}
 		
@@ -88,8 +92,10 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 		public MobSpawnerLogicBetweenlands setNextEntity(WeightedSpawnerEntity entity) {
 			super.setNextEntity(entity);
 			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
-			IBlockState blockState = te.world.getBlockState(te.pos);
-			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			if(te != null && te.world != null) {
+				IBlockState blockState = te.world.getBlockState(te.pos);
+				te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			}
 			return this;
 		}
 		
@@ -97,8 +103,10 @@ public class TileEntityMobSpawnerBetweenlands extends TileEntity implements ITic
 		public MobSpawnerLogicBetweenlands setEntitySpawnList(List<WeightedSpawnerEntity> entitySpawnList) {
 			super.setEntitySpawnList(entitySpawnList);
 			TileEntityMobSpawnerBetweenlands te = TileEntityMobSpawnerBetweenlands.this;
-			IBlockState blockState = te.world.getBlockState(te.pos);
-			te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			if(te != null && te.world != null) {
+				IBlockState blockState = te.world.getBlockState(te.pos);
+				te.world.notifyBlockUpdate(te.pos, blockState, blockState, 3);
+			}
 			return this;
 		}
 	};
