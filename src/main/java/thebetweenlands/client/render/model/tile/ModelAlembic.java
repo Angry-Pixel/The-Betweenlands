@@ -118,19 +118,23 @@ public class ModelAlembic extends ModelBase {
         GlStateManager.color(r, g, b, 0.8F);
 
         if(1.0F - progress > 0.0F) {
+        	GlStateManager.enableNormalize();
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, -(20.5F * 0.0625F) * (1.0F - progress) + (20.5F * 0.0625F), 0);
             GlStateManager.scale(1, 1.0F - progress, 1);
             alembic_liquid.render(0.0625F);
             GlStateManager.popMatrix();
+            GlStateManager.disableNormalize();
         }
 
         if(progress != 0.0F) {
+        	GlStateManager.enableNormalize();
             GlStateManager.pushMatrix();
             GlStateManager.translate(0, -(23.5F * 0.0625F) * progress + (23.5F * 0.0625F), 0);
             GlStateManager.scale(1, progress, 1);
             jar_liquid.render(0.0625F);
             GlStateManager.popMatrix();
+            GlStateManager.disableNormalize();
         }
 
         GlStateManager.enableTexture2D();

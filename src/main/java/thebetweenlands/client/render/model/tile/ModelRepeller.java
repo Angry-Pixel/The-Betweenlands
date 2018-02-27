@@ -2,12 +2,21 @@ package thebetweenlands.client.render.model.tile;
 
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import thebetweenlands.common.registries.AspectRegistry;
+import thebetweenlands.common.tile.TileEntityAspectVial;
+import thebetweenlands.util.ColorUtils;
+import thebetweenlands.util.LightingUtil;
 
 /**
  * BLRepeller - TripleHeadedSheep
  * Created using Tabula 4.1.1
  */
 public class ModelRepeller extends ModelBase {
+	public ModelRenderer liquid;
 	public ModelRenderer jarbase;
 	public ModelRenderer base;
 	public ModelRenderer jar_midpiece;
@@ -72,11 +81,52 @@ public class ModelRepeller extends ModelBase {
 		this.pole1.addChild(this.pole2);
 		this.rope1.addChild(this.rope2);
 		this.pole3.addChild(this.pole4);
+
+		this.liquid = new ModelRenderer(this, 0, 0);
+		this.liquid.setRotationPoint(0.0F, 0.0F, 0.0F);
+		this.liquid.addBox(0, 0, 0, 3, 3, 3, 0.0F);
 	}
 
-	public void render() { 
+	public void render(float liquid) { 
 		this.base.render(0.0625F);
+
+		GlStateManager.depthMask(false);
 		this.jarbase.render(0.0625F);
+		GlStateManager.depthMask(true);
+
+		if(liquid > 0.0F) {
+			GlStateManager.blendFunc(SourceFactor.ONE, DestFactor.ONE);
+			GlStateManager.color(0, 0, 0, 1);
+			GlStateManager.disableTexture2D();
+	
+			float[] aspectRGBA = ColorUtils.getRGBA(AspectRegistry.BYARIIS.getColor());
+			GlStateManager.color(aspectRGBA[0] * 2, aspectRGBA[1] * 2, aspectRGBA[2] * 2, 0.98F);
+	
+			GlStateManager.enableNormalize();
+			GlStateManager.pushMatrix();
+			float px = 0.0625F;
+			GlStateManager.translate(-1.65F * px, 5.5F * px, -3.5F * px);
+			GlStateManager.rotate(3, 0, 1, 0);
+			GlStateManager.rotate(6, 0, 0, 1);
+			GlStateManager.rotate(26, 1, 0, 0);
+			GlStateManager.translate(0, 3 * px - 3 * px * liquid, 0);
+			GlStateManager.scale(1, liquid, 1);
+			this.liquid.render(0.0625F);
+			GlStateManager.popMatrix();
+			GlStateManager.disableNormalize();
+	
+			GlStateManager.enableTexture2D();
+			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		}
+		
+		GlStateManager.colorMask(false, false, false, false);
+		this.jarbase.render(0.0625F);
+		GlStateManager.colorMask(true, true, true, true);
+
+		GlStateManager.cullFace(CullFace.FRONT);
+		this.jarbase.render(0.0625F);
+		GlStateManager.cullFace(CullFace.BACK);
 	}
 
 	/**

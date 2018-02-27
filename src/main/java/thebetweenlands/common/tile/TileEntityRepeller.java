@@ -79,15 +79,31 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 	}
 
 	public int addFuel(int amount) {
-		int canAdd = this.getMaxFuel() - this.fuel;
-		if(canAdd > 0) {
-			int added = Math.min(canAdd, amount);
-			this.fuel += added;
-			return added;
+		if(amount != 0) {
+			int canAdd = this.getMaxFuel() - this.fuel;
+			if(canAdd > 0) {
+				int added = Math.min(canAdd, amount);
+				this.fuel += added;
+				IBlockState blockState = this.world.getBlockState(this.pos);
+				this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+				this.markDirty();
+				return added;
+			}
 		}
 		return 0;
 	}
 
+	public int removeFuel(int amount) {
+		int removed = Math.min(this.fuel, amount);
+		if(amount != 0) {
+			this.fuel -= amount;
+			IBlockState blockState = this.world.getBlockState(this.pos);
+			this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+			this.markDirty();
+		}
+		return removed;
+	}
+	
 	public int getFuel() {
 		return this.fuel;
 	}
@@ -110,6 +126,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 			if(this.fuel > 0) {
 				if(this.fuel <= 0) {
 					this.fuel = 0;
+					this.markDirty();
 				}
 			}
 			if(this.fuel > 0 && this.hasShimmerstone) {
@@ -117,16 +134,21 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 					this.running = true;
 					IBlockState blockState = this.world.getBlockState(this.pos);
 					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+					this.markDirty();
 				}
 			} else if(this.fuel <= 0 || !this.hasShimmerstone) {
 				if(this.running) {
 					this.running = false;
 					IBlockState blockState = this.world.getBlockState(this.pos);
 					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+					this.markDirty();
 				}
 			}
-			if(this.fuel <= 0) {
+			if(this.fuel < 0) {
 				this.fuel = 0;
+				IBlockState blockState = this.world.getBlockState(this.pos);
+				this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+				this.markDirty();
 			} else {
 				float fuelCost = 0;
 				double centerX = this.pos.getX() + 0.5F;
@@ -175,12 +197,22 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 					}
 				}
 
+				boolean fuelConsumed = false;
+				
 				//Limit fuel cost per tick
 				this.accumulatedCost += Math.min(fuelCost, 0.00125F) * 1000;
 				while(this.accumulatedCost > 1.0F) {
 					this.accumulatedCost -= 1.0F;
 					this.fuel--;
+					fuelConsumed = true;
 				}
+
+				if(fuelConsumed) {
+					IBlockState blockState = this.world.getBlockState(this.pos);
+					this.world.notifyBlockUpdate(this.pos, blockState, blockState, 3);
+				}
+				
+				this.markDirty();
 			}
 		} else {
 			this.renderTicks++;
@@ -188,6 +220,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 
 		if(this.prevRunning != this.running) {
 			this.deployTicks = 0;
+			this.markDirty();
 		}
 		this.prevRunning = this.running;
 
@@ -199,6 +232,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 			if(this.radius > desiredRadius) {
 				this.radius = desiredRadius;
 			}
+			this.markDirty();
 		} else if((!this.running && this.radius > 0.0F) || this.radius > desiredRadius) {
 			this.deployTicks++;
 			this.radius = (float) this.easeInOut(this.deployTicks, !this.running ? desiredRadius : this.radius, -desiredRadius, DEPLOY_TIME);
@@ -207,6 +241,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 			} else if(this.running && this.radius < desiredRadius) {
 				this.radius = desiredRadius;
 			}
+			this.markDirty();
 		}
 	}
 
@@ -253,6 +288,7 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 		this.running = nbt.getBoolean("running");
 		this.prevRunning = this.running;
 		this.radiusState = nbt.getInteger("radiusState");
+		this.accumulatedCost = nbt.getFloat("accumulatedCost");
 	}
 
 	@Override
@@ -264,37 +300,38 @@ public class TileEntityRepeller extends TileEntity implements ITickable {
 		nbt.setFloat("radius", this.radius);
 		nbt.setBoolean("running", this.running);
 		nbt.setInteger("radiusState", this.radiusState);
+		nbt.setFloat("accumulatedCost", this.accumulatedCost);
 		return nbt;
 	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
 		NBTTagCompound nbt = new NBTTagCompound();
+		nbt.setInteger("fuel", this.fuel);
 		nbt.setBoolean("hasShimmerstone", this.hasShimmerstone);
 		nbt.setBoolean("running", this.running);
 		nbt.setInteger("deployTicks", this.deployTicks);
 		nbt.setFloat("radius", this.radius);
 		nbt.setInteger("radiusState", this.radiusState);
-		nbt.setFloat("accumulatedCost", this.accumulatedCost);
 		return new SPacketUpdateTileEntity(this.getPos(), 1, nbt);
 	}
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
+		this.fuel = nbt.getInteger("fuel");
 		this.hasShimmerstone = nbt.getBoolean("hasShimmerstone");
 		this.deployTicks = nbt.getInteger("deployTicks");
 		this.radius = nbt.getFloat("radius");
 		this.running = nbt.getBoolean("running");
 		this.prevRunning = this.running;
 		this.radiusState = nbt.getInteger("radiusState");
-		this.accumulatedCost = nbt.getFloat("accumulatedCost");
-		this.world.markBlockRangeForRenderUpdate(this.pos, this.pos);
 	}
 
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setInteger("fuel", this.fuel);
 		nbt.setBoolean("hasShimmerstone", this.hasShimmerstone);
 		nbt.setBoolean("running", this.running);
 		nbt.setInteger("deployTicks", this.deployTicks);

@@ -34,6 +34,7 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -100,22 +101,25 @@ public class BlockRepeller extends BlockContainer {
 					return true;
 				} else if(held.getItem() == ItemRegistry.ASPECT_VIAL) {
 					if(tile.hasShimmerstone()) {
-						ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(held);
-						int amount = aspectContainer.get(AspectRegistry.BYARIIS);
-						if(amount > 0) {
-							if(!world.isRemote) {
-								int added = tile.addFuel(amount);
-								if(!player.capabilities.isCreativeMode) {
-									int leftAmount = amount - added;
-									if(leftAmount > 0) {
-										aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
-									} else {
-										player.setHeldItem(hand, held.getItem().getContainerItem(held));
+						if(tile.getFuel() < tile.getMaxFuel()) {
+							ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(held);
+							int amount = aspectContainer.get(AspectRegistry.BYARIIS);
+							int loss = 10; //Loss when adding
+							if(amount >= loss) {
+								if(!world.isRemote) {
+									int added = tile.addFuel(amount - loss);
+									if(!player.capabilities.isCreativeMode) {
+										int leftAmount = amount - added - loss;
+										if(leftAmount > 0) {
+											aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
+										} else {
+											player.setHeldItem(hand, held.getItem().getContainerItem(held));
+										}
 									}
 								}
+								player.swingArm(hand);
+								return true;
 							}
-							player.swingArm(hand);
-							return true;
 						}
 					} else {
 						if(!world.isRemote) {
@@ -127,8 +131,7 @@ public class BlockRepeller extends BlockContainer {
 						ItemStack newStack = new ItemStack(ItemRegistry.ASPECT_VIAL, 1, held.getItemDamage() == 0 ? 0 : 1);
 						if(!world.isRemote) {
 							ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(newStack);
-							aspectContainer.set(AspectRegistry.BYARIIS, tile.getFuel());
-							tile.emptyFuel();
+							aspectContainer.set(AspectRegistry.BYARIIS, tile.removeFuel(Amounts.VIAL));
 						}
 						held.shrink(1);
 						if(held.getCount() <= 0) {

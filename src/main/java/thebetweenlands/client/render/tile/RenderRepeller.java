@@ -43,12 +43,10 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
 		GlStateManager.rotate(facing.getHorizontalAngle() + 180.0F, 0, 1, 0);
-		GlStateManager.disableCull();
 
 		this.bindTexture(TEXTURE);
-		MODEL.render();
+		MODEL.render(tile != null ? tile.getFuel() / (float)tile.getMaxFuel() : 0.0F);
 
-		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 
 		if(tile != null && tile.hasShimmerstone()) {
