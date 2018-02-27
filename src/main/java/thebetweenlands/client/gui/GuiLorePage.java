@@ -45,10 +45,7 @@ public class GuiLorePage extends GuiScreen {
 		if (this.pageTexture != null) {
 			GlStateManager.color(1F, 1F, 1F, 1F);
 			this.mc.renderEngine.bindTexture(this.pageTexture);
-			ITextureObject texture = this.mc.renderEngine.getTexture(this.pageTexture);
-			texture.setBlurMipmap(true, false);
 			drawTexture(xStart, yStart, (int) WIDTH, (int) HEIGHT, WIDTH, HEIGHT, 0.0D, WIDTH, 0.0D, HEIGHT);
-			texture.restoreLastBlurMipmap();
 		}
 	}
 

@@ -160,10 +160,6 @@ public class AuroraRenderer {
 		Vector2d prevDirection = this.currDirection;
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(AURORA_TEXTURE);
-		
-		ITextureObject texture = Minecraft.getMinecraft().renderEngine.getTexture(AURORA_TEXTURE);
-
-		texture.setBlurMipmap(true, false);
 
 		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 
@@ -252,8 +248,6 @@ public class AuroraRenderer {
 		tessellator.draw();
 
 		//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-
-		texture.restoreLastBlurMipmap();
 		
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableBlend();

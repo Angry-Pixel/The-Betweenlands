@@ -23,7 +23,7 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 	}
 
 	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/wight_face.png");
-	protected static final ResourceLocation TEXTURE_TRAIL = new ResourceLocation("thebetweenlands:textures/particle/wisp.png");
+	protected static final ResourceLocation TEXTURE_TRAIL = new ResourceLocation("thebetweenlands:textures/entity/volatile_soul_trail.png");
 
 	@Override
 	public void doRender(EntityVolatileSoul entity, double x, double y, double z, float yaw, float partialTicks) {
@@ -62,8 +62,6 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		tessellator.draw();
 
 		this.bindTexture(TEXTURE_TRAIL);
-		ITextureObject tex = Minecraft.getMinecraft().getTextureManager().getTexture(TEXTURE_TRAIL);
-		tex.setBlurMipmap(true, false);
 
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
@@ -99,7 +97,6 @@ public class RenderVolatileSoul extends Render<EntityVolatileSoul> {
 		}
 
 		tessellator.draw();
-		tex.restoreLastBlurMipmap();
 
 		GlStateManager.depthMask(true);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

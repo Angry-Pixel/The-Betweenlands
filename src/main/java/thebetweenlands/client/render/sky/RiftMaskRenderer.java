@@ -46,9 +46,6 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 		//Render back mask
 		textureManager.bindTexture(SKY_RIFT_MASK_BACK_TEXTURE);
-		ITextureObject backMask = textureManager.getTexture(SKY_RIFT_MASK_BACK_TEXTURE);
-		backMask.setBlurMipmap(true, false);
-
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(-1, -1, -1);
 		GlStateManager.translate(0, -1, 0);
@@ -62,13 +59,8 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 		GlStateManager.popMatrix();
 
-		backMask.restoreLastBlurMipmap();
-
 		//Render front mask
 		textureManager.bindTexture(SKY_RIFT_MASK_TEXTURE);
-		ITextureObject mask = textureManager.getTexture(SKY_RIFT_MASK_TEXTURE);
-		mask.setBlurMipmap(true, false);
-
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, -1, 0);
 		GlStateManager.rotate(riftAngles[0], 0, 1, 0);
@@ -78,8 +70,6 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.callList(this.skyDomeDispList);
 
 		GlStateManager.popMatrix();
-
-		mask.restoreLastBlurMipmap();
 	}
 
 	@Override
@@ -93,8 +83,6 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.color(1, 1, 1, visibility);
 
 		textureManager.bindTexture(SKY_RIFT_OVERLAY_TEXTURE);
-		ITextureObject overlay = textureManager.getTexture(SKY_RIFT_OVERLAY_TEXTURE);
-		overlay.setBlurMipmap(true, false);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, -1, 0);
@@ -105,8 +93,6 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.callList(this.skyDomeDispList);
 
 		GlStateManager.popMatrix();
-
-		overlay.restoreLastBlurMipmap();
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.disableBlend();
