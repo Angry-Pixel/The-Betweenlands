@@ -6,15 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
-import thebetweenlands.common.entity.mobs.EntityAngler;
-import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
-import thebetweenlands.common.entity.mobs.EntityChiromaw;
-import thebetweenlands.common.entity.mobs.EntityFirefly;
-import thebetweenlands.common.entity.mobs.EntityLeech;
-import thebetweenlands.common.entity.mobs.EntityPeatMummy;
-import thebetweenlands.common.entity.mobs.EntitySludge;
-import thebetweenlands.common.entity.mobs.EntityTarBeast;
-import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -63,7 +55,7 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 
 		entries.add(new TarSpawnEntry(2, EntityTarBeast.class, (short) 120).setHostile(true).setGroupSize(1, 2).setSpawnCheckRadius(14.0D));
 		entries.add(new SurfaceSpawnEntry(3, EntityLeech.class, (short) 50).setHostile(true).setSpawnCheckRadius(18.0D).setSpawningInterval(800));
-		entries.add(new SurfaceSpawnEntry(4, EntitySludge.class, (short) 64).setHostile(true).setGroupSize(1, 3).setGroupSpawnRadius(4.0D));
+		entries.add(new SurfaceSpawnEntry(4, EntitySludge.class, (short) 48).setHostile(true).setGroupSize(1, 3).setGroupSpawnRadius(4.0D));
 		entries.add(new SurfaceSpawnEntry(5, EntityPeatMummy.class, (short) 26).setHostile(true).setSpawnCheckRadius(64.0D));
 		entries.add(new SwampHagCaveSpawnEntry(6, (short) 140).setHostile(true).setSpawnCheckRadius(24.0D).setGroupSize(1, 3));
 		entries.add(new SurfaceSpawnEntry(7, EntityWight.class, (short) 15).setHostile(true).setSpawnCheckRadius(64.0D));
@@ -71,5 +63,6 @@ public class BiomeSludgePlains extends BiomeBetweenlands {
 		entries.add(new SurfaceSpawnEntry(9, EntityChiromaw.class, (short) 30).setHostile(true).setSpawnCheckRadius(30.0D));
 		entries.add(new CaveSpawnEntry(10, EntityChiromaw.class, (short) 60).setHostile(true).setSpawnCheckRadius(20.0D).setGroupSize(1, 3));
 		entries.add(new CaveSpawnEntry(11, EntityAngler.class, (short) 45).setCanSpawnInWater(true).setHostile(true).setGroupSize(1, 3));
+		entries.add(new SurfaceSpawnEntry(12, EntitySmollSludge.class, (short) 48).setHostile(true).setGroupSize(1, 3).setGroupSpawnRadius(4.0D));
 	}
 }
