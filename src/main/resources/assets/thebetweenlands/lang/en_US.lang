@@ -956,6 +956,7 @@ bl.elixir.duration.n=%s
 entity.thebetweenlands.dark_druid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler
 entity.thebetweenlands.sludge.name=Sludge
+entity.thebetweenlands.smoll_sludge.name=Smol Sludge
 entity.thebetweenlands.swamp_hag.name=Swamp Hag
 entity.thebetweenlands.tar_beast.name=Tar Beast
 entity.thebetweenlands.wight.name=Wight

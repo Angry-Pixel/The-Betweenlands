@@ -130,9 +130,9 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		super.onUpdate();
 
 		if(this.isActive()) {
-			this.setSize(1.1F, 1.2F);
+			this.setNormalSize();
 		} else {
-			this.setSize(0.5F, 0.6F);
+			this.setSmallSize();
 		}
 
 		if (this.onGround && !this.wasOnGround) {
@@ -156,6 +156,14 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 	}
 
+	protected void setSmallSize() {
+		this.setSize(0.5F, 0.6F);
+	}
+	
+	protected void setNormalSize() {
+		this.setSize(1.1F, 1.2F);
+	}
+	
 	public float getSquishFactor(float partialTicks) {
 		return this.prevSquishFactor + (this.squishFactor - this.prevSquishFactor) * partialTicks;
 	}
