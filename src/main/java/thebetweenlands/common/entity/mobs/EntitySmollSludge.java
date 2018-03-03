@@ -1,9 +1,10 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySmollSludge extends EntitySludge{
+public class EntitySmollSludge extends EntitySludge {
     public EntitySmollSludge(World worldIn) {
         super(worldIn);
         this.setSize(0.7F, 0.7F);
@@ -13,6 +14,7 @@ public class EntitySmollSludge extends EntitySludge{
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
+		this.getAttributeMap().getAttributeInstance(SLUDGE_TRAIL).setBaseValue(0);
     }
     
     @Override

@@ -10,6 +10,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
 import net.minecraft.entity.ai.EntityMoveHelper;
+import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -30,12 +31,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.model.ControlledAnimation;
+import thebetweenlands.common.entity.attributes.BooleanAttribute;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 
 public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	public static final DataParameter<Boolean> IS_ACTIVE = EntityDataManager.createKey(EntitySludge.class, DataSerializers.BOOLEAN);
 
+	public static final IAttribute SLUDGE_TRAIL = (new BooleanAttribute(null, "bl.sludgeTrail", false)).setDescription("Whether this Sludge should leave a Sludge trail");
+	
 	private static final AxisAlignedBB ZERO_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);
 
 	private float squishAmount;
@@ -72,6 +76,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getAttributeMap().registerAttribute(SLUDGE_TRAIL).setBaseValue(1);
 		this.getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.6D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
@@ -110,9 +115,11 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 			}
 
 			if(this.isActive()) {
-				BlockPos position = new BlockPos(this.posX, this.posY, this.posZ);;
-				if (this.world.isAirBlock(position) && BlockRegistry.SLUDGE.canPlaceBlockAt(this.world, position)) {
-					BlockRegistry.SLUDGE.generateBlockTemporary(this.world, position);
+				if(this.getEntityAttribute(SLUDGE_TRAIL).getAttributeValue() == 1) {
+					BlockPos position = new BlockPos(this.posX, this.posY, this.posZ);;
+					if (this.world.isAirBlock(position)) {
+						this.createTrail(position);
+					}
 				}
 
 				if (this.getAttackTarget() == null && this.onGround && this.world.rand.nextInt(350) == 0 && !this.isInWater()) {
@@ -156,6 +163,12 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 		}
 	}
 
+	protected void createTrail(BlockPos pos) {
+		if(BlockRegistry.SLUDGE.canPlaceBlockAt(this.world, pos)) {
+			BlockRegistry.SLUDGE.generateBlockTemporary(this.world, pos);
+		}
+	}
+	
 	protected void setSmallSize() {
 		this.setSize(0.5F, 0.6F);
 	}

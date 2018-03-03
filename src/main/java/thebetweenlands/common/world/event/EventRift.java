@@ -1,11 +1,13 @@
 package thebetweenlands.common.world.event;
 
+import java.util.Random;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.common.lib.ModInfo;
 
-public class EventRift extends BLEnvironmentEvent {
+public class EventRift extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "rift");
 
 	protected int lastTicks;
@@ -17,6 +19,16 @@ public class EventRift extends BLEnvironmentEvent {
 		super(registry);
 	}
 
+	@Override
+	public int getOffTime(Random rnd) {
+		return 12000 + rnd.nextInt(6000);
+	}
+
+	@Override
+	public int getOnTime(Random rnd) {
+		return 28800 + rnd.nextInt(7200);
+	}
+	
 	@Override
 	public ResourceLocation getEventName() {
 		return ID;
@@ -37,7 +49,7 @@ public class EventRift extends BLEnvironmentEvent {
 	@Override
 	public void update(World world) {
 		super.update(world);
-
+		
 		this.lastTicks = this.ticks;
 
 		if(this.isActive()) {
@@ -59,7 +71,7 @@ public class EventRift extends BLEnvironmentEvent {
 	public void saveEventData() { 
 		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
-		nbt.setInteger("ticks", this.ticks);
+		nbt.setInteger("riftTicks", this.ticks);
 		nbt.setFloat("yaw", this.yaw);
 		nbt.setFloat("pitch", this.pitch);
 		nbt.setFloat("roll", this.roll);
@@ -69,7 +81,7 @@ public class EventRift extends BLEnvironmentEvent {
 	public void loadEventData() { 
 		super.loadEventData();
 		NBTTagCompound nbt = this.getData();
-		this.ticks = nbt.getInteger("ticks");
+		this.ticks = nbt.getInteger("riftTicks");
 		this.yaw = nbt.getFloat("yaw");
 		this.pitch = nbt.getFloat("pitch");
 		this.roll = nbt.getFloat("pitch");
@@ -78,7 +90,7 @@ public class EventRift extends BLEnvironmentEvent {
 	@Override
 	public void sendEventPacket(NBTTagCompound nbt) {
 		super.sendEventPacket(nbt);
-		nbt.setInteger("ticks", this.ticks);
+		nbt.setInteger("riftTicks", this.ticks);
 		nbt.setFloat("yaw", this.yaw);
 		nbt.setFloat("pitch", this.pitch);
 		nbt.setFloat("roll", this.roll);
@@ -87,7 +99,7 @@ public class EventRift extends BLEnvironmentEvent {
 	@Override
 	public void loadEventPacket(NBTTagCompound nbt) {
 		super.loadEventPacket(nbt);
-		this.ticks = nbt.getInteger("ticks");
+		this.ticks = nbt.getInteger("riftTicks");
 		this.yaw = nbt.getFloat("yaw");
 		this.pitch = nbt.getFloat("pitch");
 		this.roll = nbt.getFloat("pitch");
