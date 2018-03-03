@@ -129,11 +129,17 @@ public class BetweenlandsConfig {
 		@Comment("Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left")
 		public boolean cavingRopeIndicator = true;
 
-		@Name("override_conflicting_recipes")
-		@LangKey(LANG_PREFIX + "override_conflicting_recipes")
+		@Name("override_conflicting_vanilla_recipes")
+		@LangKey(LANG_PREFIX + "override_conflicting_vanilla_recipes")
 		@Comment("If true, Betweenlands recipes that conflict with oredict'd vanilla recipes will take priority over the vanilla recipes (should be true unless you intend to fix the recipes yourself with another mod)")
 		@RequiresMcRestart
-		public boolean overrideConflictingRecipes = true;
+		public boolean overrideConflictingVanillaRecipes = true;
+		
+		@Name("override_any_conflicting_recipes")
+		@LangKey(LANG_PREFIX + "override_any_conflicting_recipes")
+		@Comment("If true, Betweenlands recipes that conflict with any oredict'd recipes will take priority over the oredict'd recipes (should be true unless you intend to fix the recipes yourself with another mod)")
+		@RequiresMcRestart
+		public boolean overrideAnyConflictingRecipes = true;
 	}
 
 	@Name("mob_spawning")

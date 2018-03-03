@@ -24,6 +24,7 @@ import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.common.crafting.IShapedRecipe;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
@@ -90,12 +91,17 @@ public class RecipeRegistry {
 		ElixirRecipes.init();
 
 		CustomRecipeRegistry.loadCustomRecipes();
-
-		overrideConflictingRecipes(registry);
 	}
 
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void registerRecipesLast(RegistryEvent.Register<IRecipe> event) {
+		overrideConflictingRecipes(event.getRegistry());
+	}
+	
 	private static void overrideConflictingRecipes(IForgeRegistry<IRecipe> registry) {
-		if(BetweenlandsConfig.GENERAL.overrideConflictingRecipes) {
+		boolean vanilla = BetweenlandsConfig.GENERAL.overrideConflictingVanillaRecipes;
+		boolean any = BetweenlandsConfig.GENERAL.overrideAnyConflictingRecipes;
+		if(vanilla || any) {
 			if(BetweenlandsConfig.DEBUG.debugRecipeOverrides) TheBetweenlands.logger.info("Searching recipe conflicts:");
 
 			List<IRecipe> blRecipes = new ArrayList<>();
@@ -112,7 +118,7 @@ public class RecipeRegistry {
 			Multimap<IRecipe, ResourceLocation> conflictingRecipes = HashMultimap.create();
 
 			for(IRecipe otherRecipe : otherRecipes) {
-				if("minecraft".equals(otherRecipe.getRegistryName().getResourceDomain()) && !otherRecipe.isDynamic()) {
+				if(!otherRecipe.isDynamic() && (any || (vanilla && "minecraft".equals(otherRecipe.getRegistryName().getResourceDomain())))) {
 					NonNullList<Ingredient> otherIngredients = otherRecipe.getIngredients();
 					for(IRecipe blRecipe : blRecipes) {
 						if(!blRecipe.isDynamic()) {
