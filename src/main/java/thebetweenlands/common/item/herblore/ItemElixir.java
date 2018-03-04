@@ -9,7 +9,6 @@ import java.util.Map.Entry;
 import com.google.common.collect.Lists;
 
 import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
@@ -34,6 +33,7 @@ import net.minecraft.util.StringUtils;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -112,10 +112,10 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
-		if(I18n.hasKey(stack.getUnlocalizedName() + ".name")) {
-			return I18n.format(stack.getUnlocalizedName() + ".name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
+		if(I18n.canTranslate(stack.getUnlocalizedName() + ".name")) {
+			return I18n.translateToLocalFormatted(stack.getUnlocalizedName() + ".name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
 		}
-		return I18n.format("item.thebetweenlands.bl.elixir.name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
+		return I18n.translateToLocalFormatted("item.thebetweenlands.bl.elixir.name", TranslationHelper.translateToLocal(this.getElixirFromItem(stack).getEffectName()));
 	}
 
 	@Override
@@ -256,12 +256,12 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		PotionEffect effect = this.createPotionEffect(stack, 1.0D);
 
 		String potencyStr;
-		if(I18n.hasKey("bl.elixir.potency." + (effect.getAmplifier() + 1))) {
-			potencyStr = I18n.format("bl.elixir.potency." + (effect.getAmplifier() + 1));
+		if(I18n.canTranslate("bl.elixir.potency." + (effect.getAmplifier() + 1))) {
+			potencyStr = I18n.translateToLocalFormatted("bl.elixir.potency." + (effect.getAmplifier() + 1));
 		} else {
-			potencyStr = I18n.format("bl.elixir.potency.n", (effect.getAmplifier() + 1));
+			potencyStr = I18n.translateToLocalFormatted("bl.elixir.potency.n", (effect.getAmplifier() + 1));
 		}
-		tooltip.add(I18n.format("tooltip.bl.elixir.potency", potencyStr));
+		tooltip.add(I18n.translateToLocalFormatted("tooltip.bl.elixir.potency", potencyStr));
 
 		int durationLevel;
 		ElixirRecipe recipe = ElixirRecipes.getFromEffect(elixirEffect);
@@ -273,12 +273,12 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 			durationLevel = MathHelper.floor(effect.getDuration() / 3600.0F);
 		}
 		String durationLevelStr;
-		if(I18n.hasKey("bl.elixir.duration." + (durationLevel + 1))) {
-			durationLevelStr = I18n.format("bl.elixir.duration." + (durationLevel + 1));
+		if(I18n.canTranslate("bl.elixir.duration." + (durationLevel + 1))) {
+			durationLevelStr = I18n.translateToLocalFormatted("bl.elixir.duration." + (durationLevel + 1));
 		} else {
-			durationLevelStr = I18n.format("bl.elixir.duration.n", (durationLevel + 1));
+			durationLevelStr = I18n.translateToLocalFormatted("bl.elixir.duration.n", (durationLevel + 1));
 		}
-		tooltip.add(I18n.format("tooltip.bl.elixir.duration", durationLevelStr, StringUtils.ticksToElapsedTime(effect.getDuration()), effect.getDuration()));
+		tooltip.add(I18n.translateToLocalFormatted("tooltip.bl.elixir.duration", durationLevelStr, StringUtils.ticksToElapsedTime(effect.getDuration()), effect.getDuration()));
 
 		Potion potion = effect.getPotion();
 		List<Tuple<String, AttributeModifier>> modifiers = Lists.<Tuple<String, AttributeModifier>>newArrayList();
@@ -293,11 +293,11 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 
 
 
-		boolean hasEffectDescription = I18n.hasKey("tooltip." + elixirEffect.getEffectName() + ".effect");
+		boolean hasEffectDescription = I18n.canTranslate("tooltip." + elixirEffect.getEffectName() + ".effect");
 
 		if (!modifiers.isEmpty() || hasEffectDescription) {
 			tooltip.add("");
-			tooltip.add(TextFormatting.DARK_PURPLE + I18n.format("tooltip.bl.elixir.when_applied"));
+			tooltip.add(TextFormatting.DARK_PURPLE + I18n.translateToLocalFormatted("tooltip.bl.elixir.when_applied"));
 
 			for (Tuple<String, AttributeModifier> tuple : modifiers) {
 				AttributeModifier modifier = tuple.getSecond();
@@ -311,15 +311,15 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 				}
 
 				if (amount > 0.0D) {
-					tooltip.add(TextFormatting.BLUE + I18n.format("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(adjustedAmount), I18n.format("attribute.name." + (String)tuple.getFirst())));
+					tooltip.add(TextFormatting.BLUE + I18n.translateToLocalFormatted("attribute.modifier.plus." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(adjustedAmount), I18n.translateToLocalFormatted("attribute.name." + (String)tuple.getFirst())));
 				} else if (amount < 0.0D) {
 					adjustedAmount = adjustedAmount * -1.0D;
-					tooltip.add(TextFormatting.RED + I18n.format("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(adjustedAmount), I18n.format("attribute.name." + (String)tuple.getFirst())));
+					tooltip.add(TextFormatting.RED + I18n.translateToLocalFormatted("attribute.modifier.take." + modifier.getOperation(), ItemStack.DECIMALFORMAT.format(adjustedAmount), I18n.translateToLocalFormatted("attribute.name." + (String)tuple.getFirst())));
 				}
 			}
 
 			if(hasEffectDescription) {
-				tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip." + elixirEffect.getEffectName() + ".effect"), 0));
+				tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip." + elixirEffect.getEffectName() + ".effect"), 0));
 			}
 		}
 	}

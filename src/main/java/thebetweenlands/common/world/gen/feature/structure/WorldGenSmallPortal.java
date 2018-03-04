@@ -39,7 +39,7 @@ public class WorldGenSmallPortal extends WorldGenerator {
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos.offset(this.dir).down());
-		location.addBounds(new AxisAlignedBB(pos).grow(2, 1, 2).expand(0, -2, 0).offset(0, 3, 0));
+		location.addBounds(new AxisAlignedBB(pos).grow(2, 1, 2).expand(0, -2, 0).offset(0, 3, 0).expand(0, -1, 0));
 		location.setSeed(rand.nextLong());
 		location.setDirty(true);
 		location.setVisible(false);

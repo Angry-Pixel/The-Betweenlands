@@ -29,6 +29,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.FakePlayer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -66,6 +68,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 		}
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		if(EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack) && stack.hasTagCompound() && stack.getTagCompound().hasKey("link", Constants.NBT.TAG_LONG)) {

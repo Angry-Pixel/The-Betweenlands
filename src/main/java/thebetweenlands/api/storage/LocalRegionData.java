@@ -1,12 +1,16 @@
 package thebetweenlands.api.storage;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.annotation.Nullable;
+
+import org.apache.commons.io.FileUtils;
 
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.TheBetweenlands;
 
 public class LocalRegionData {
 	private String id;
@@ -100,13 +104,24 @@ public class LocalRegionData {
 	 */
 	public static LocalRegionData getOrCreateRegion(File dir, LocalRegion region) {
 		NBTTagCompound regionNbt = null;
-		try {
-			File file = new File(dir, region.getFileName() + ".dat");
-			if(file.exists()) {
+		File file = new File(dir, region.getFileName() + ".dat");
+		if(file.exists()) {
+			try {
 				regionNbt = CompressedStreamTools.read(file);
+			} catch(Exception ex) {
+				TheBetweenlands.logger.error("Failed loading local region cache", ex);
+				File backup = new File(file.getAbsolutePath() + ".backup");
+				try {
+					FileUtils.copyFile(file, backup);
+					TheBetweenlands.logger.info(String.format("Created a backup of local region cache at %s", backup.getAbsolutePath()));
+				} catch (IOException e) {
+					TheBetweenlands.logger.error("Failed creating backup of local region cache", e);
+				}
+				try {
+					file.delete();
+				} catch(Exception e) {}
+				regionNbt = null;
 			}
-		} catch(Exception ex) {
-			throw new RuntimeException(ex);
 		}
 		if(regionNbt == null) {
 			regionNbt = new NBTTagCompound();
