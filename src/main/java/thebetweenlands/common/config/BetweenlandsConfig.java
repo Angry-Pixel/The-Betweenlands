@@ -84,6 +84,17 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "portal_default_return_dimension")
 		@Comment("The return dimension that is used when creating a portal in the Betweenlands dimension and entering it for the first time")
 		public int portalDefaultReturnDimension = 0;
+
+		@Name("activate_rift_on_first_join")
+		@LangKey(LANG_PREFIX + "activate_rift_on_first_join")
+		@Comment("If true, the Rift will appear whenever a player joins the dimension for the first time")
+		public boolean activateRiftOnFirstJoin = true;
+
+		@Name("activate_rift_on_first_join_duration")
+		@LangKey(LANG_PREFIX + "activate_rift_on_first_join_duration")
+		@Comment("Minimum duration in seconds the rift should stay active when a player joins the dimension for the first time. See 'Activate Rift On First Join'")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
+		public int minRiftOnFirstJoinDuration = 1800;
 	}
 
 	@Name("rendering")

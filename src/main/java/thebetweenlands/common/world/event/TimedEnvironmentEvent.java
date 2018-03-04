@@ -49,6 +49,18 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	}
 
 	/**
+	 * Sets how many ticks this event stays on/off
+	 * @param ticks
+	 * @return
+	 */
+	public void setTicks(int ticks) {
+		int diff = ticks - this.ticks;
+		this.ticks += diff;
+		this.startTicks = Math.max(this.startTicks + diff, 0);
+		this.markDirty();
+	}
+	
+	/**
 	 * Returns the time in ticks this event stays on/off
 	 * @return
 	 */
