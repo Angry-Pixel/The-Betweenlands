@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
@@ -18,6 +19,7 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -119,11 +121,11 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 			if(owner != null) {
 				damageSource = new EntityDamageSourceIndirect("player", this, owner);
 			} else {
-				damageSource = DamageSource.GENERIC;
+				damageSource = new EntityDamageSource("bl.shockwave", this);
 			}
 			List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, getEntityBoundingBox().grow(0.1D, 0.1D, 0.1D));
-			for(EntityLivingBase entity : entities) {
-				if (entity != null) {
+			for(EntityLivingBase entity : entities) {      
+				if (entity != null) {                      
 					if (entity instanceof EntityLivingBase) {
 						if(entity.attackEntityFrom(damageSource, 10F)) {
 							float knockback = 1.5F;

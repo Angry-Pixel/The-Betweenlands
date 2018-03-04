@@ -348,6 +348,9 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 				}
 			}
 		}
+		if(DamageSource.OUT_OF_WORLD.getDamageType().equals(source.getDamageType())) {
+			return super.attackEntityFrom(source, damage);
+		}
 		return false;
 	}
 

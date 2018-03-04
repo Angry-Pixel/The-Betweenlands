@@ -1354,8 +1354,6 @@ advancements.thebetweenlands.miner.get_schwifty.title=Get Schwifty
 advancements.thebetweenlands.miner.get_schwifty.description=Obtain a Swift Pick
 
 # Config
-config.thebetweenlands.config_version=Config Version
-
 config.thebetweenlands.world_and_dimension=World And Dimension
 config.thebetweenlands.dimension_id=The Betweenlands Dimension ID
 config.thebetweenlands.druid_circle_frequency=Frequency of Druid Circles
@@ -1399,3 +1397,6 @@ config.thebetweenlands.debug=Debug
 config.thebetweenlands.debug_mode=Debug mode
 config.thebetweenlands.debug_model_loader=Model loader debug
 config.thebetweenlands.debug_recipe_overrides=Recipe overrides debug
+
+# Damage sources
+death.attack.bl.shockwave=%1$s was killed by a shockwave

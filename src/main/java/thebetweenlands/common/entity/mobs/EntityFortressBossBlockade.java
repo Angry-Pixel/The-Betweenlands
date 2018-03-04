@@ -25,6 +25,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
+import thebetweenlands.common.entity.EntityShockwaveBlock;
 
 public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	protected static final DataParameter<Optional<UUID>> OWNER = EntityDataManager.<Optional<UUID>>createKey(EntityFortressBossBlockade.class, DataSerializers.OPTIONAL_UNIQUE_ID);
@@ -307,7 +308,7 @@ public class EntityFortressBossBlockade extends EntityMob implements IEntityBL {
 	
 	@Override
 	public boolean isEntityInvulnerable(DamageSource source) {
-        return source != DamageSource.OUT_OF_WORLD;
+        return !DamageSource.OUT_OF_WORLD.getDamageType().equals(source.getDamageType()) && source.getImmediateSource() instanceof EntityShockwaveBlock == false;
     }
 
 	@Override
