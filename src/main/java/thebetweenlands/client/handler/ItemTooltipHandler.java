@@ -17,10 +17,10 @@ import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IEquippable;
 import thebetweenlands.api.item.IFoodSicknessItem;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.recipe.misc.CompostRecipe;
 import thebetweenlands.common.registries.CapabilityRegistry;
 

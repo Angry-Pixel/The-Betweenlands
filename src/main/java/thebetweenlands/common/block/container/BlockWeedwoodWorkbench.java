@@ -32,7 +32,7 @@ public class BlockWeedwoodWorkbench extends BlockContainer {
     @Override
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
         if (!world.isRemote) {
-            player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_WEEDWOOD_CRAFT, world, pos.getX(), pos.getY(), pos.getZ());
+            player.openGui(TheBetweenlands.instance, CommonProxy.GUI_WEEDWOOD_CRAFT, world, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

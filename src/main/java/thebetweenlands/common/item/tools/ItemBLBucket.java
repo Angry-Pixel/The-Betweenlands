@@ -27,10 +27,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.container.BlockInfuser;
 import thebetweenlands.common.block.misc.BlockRubberTap;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 

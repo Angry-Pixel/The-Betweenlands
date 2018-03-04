@@ -17,10 +17,10 @@ import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.item.IDecayFood;
 import thebetweenlands.api.item.IFoodSicknessItem;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.decay.DecayStats;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.registries.CapabilityRegistry;
 

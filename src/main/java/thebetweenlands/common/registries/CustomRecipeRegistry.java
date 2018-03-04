@@ -16,8 +16,8 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRepairableRecipes;
 import thebetweenlands.common.recipe.custom.CustomCompostBinRecipes;
@@ -55,8 +55,7 @@ public class CustomRecipeRegistry {
 			recipe.clear();
 		}
 
-		File cfgFile = new File(BetweenlandsConfig.path);
-		File customRecipesFile = new File(cfgFile.getParentFile(), "thebetweenlands" + File.separator + "recipes.json");
+		File customRecipesFile = new File(BetweenlandsConfig.configDir, "recipes.json");
 		boolean noError = true;
 		if(customRecipesFile.exists()) {
 			try(JsonReader jsonReader = new JsonReader(new FileReader(customRecipesFile))) {

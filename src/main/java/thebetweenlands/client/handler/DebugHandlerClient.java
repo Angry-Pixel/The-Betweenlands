@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.ILocalStorage;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;

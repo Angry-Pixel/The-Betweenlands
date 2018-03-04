@@ -25,7 +25,7 @@ import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.util.MathUtils;
 import thebetweenlands.util.Matrix;

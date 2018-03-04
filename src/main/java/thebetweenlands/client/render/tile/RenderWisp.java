@@ -15,8 +15,8 @@ import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.block.terrain.BlockWisp;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.util.TileEntityHelper;
 

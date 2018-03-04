@@ -8,7 +8,7 @@ import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.util.FakePlayer;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public final class TeleporterHandler {
 	private static final TeleporterHandler INSTANCE = new TeleporterHandler();

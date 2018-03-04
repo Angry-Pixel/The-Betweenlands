@@ -32,8 +32,8 @@ import thebetweenlands.client.render.model.loader.extension.LoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.LoaderExtensionException;
 import thebetweenlands.client.render.model.loader.extension.ModelProcessorLoaderExtension;
 import thebetweenlands.client.render.model.loader.extension.SimpleItemLoaderExtension;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public final class CustomModelLoader implements ICustomModelLoader {
 	private static enum LoaderType {

@@ -1354,6 +1354,8 @@ advancements.thebetweenlands.miner.get_schwifty.title=Get Schwifty
 advancements.thebetweenlands.miner.get_schwifty.description=Obtain a Swift Pick
 
 # Config
+config.thebetweenlands.config_version=Config Version
+
 config.thebetweenlands.world_and_dimension=World And Dimension
 config.thebetweenlands.dimension_id=The Betweenlands Dimension ID
 config.thebetweenlands.druid_circle_frequency=Frequency of Druid Circles

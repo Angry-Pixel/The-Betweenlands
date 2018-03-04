@@ -8,7 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 

@@ -82,7 +82,7 @@ public class BlockMortar extends BlockContainer {
             }
 
             if (tile != null && playerIn.isSneaking())
-                playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_PESTLE_AND_MORTAR, worldIn, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(TheBetweenlands.instance, CommonProxy.GUI_PESTLE_AND_MORTAR, worldIn, pos.getX(), pos.getY(), pos.getZ());
         }
         return true;
     }

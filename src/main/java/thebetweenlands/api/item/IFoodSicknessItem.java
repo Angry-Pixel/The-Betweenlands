@@ -7,8 +7,8 @@ import javax.annotation.Nullable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public interface IFoodSicknessItem {
 	/**

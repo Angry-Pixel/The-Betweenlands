@@ -8,7 +8,7 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;

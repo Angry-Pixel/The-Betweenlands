@@ -8,8 +8,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
-import thebetweenlands.common.BetweenlandsConfig;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 

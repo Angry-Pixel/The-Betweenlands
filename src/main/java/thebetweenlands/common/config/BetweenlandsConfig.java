@@ -1,6 +1,16 @@
-package thebetweenlands.common;
+package thebetweenlands.common.config;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Field;
+import java.nio.charset.Charset;
 import java.util.Collection;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -16,14 +26,25 @@ import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import net.minecraftforge.common.config.Config.RequiresWorldRestart;
 import net.minecraftforge.common.config.ConfigManager;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.remapper.ConfigRemapper;
+import thebetweenlands.common.config.remapper.Remapper1;
 import thebetweenlands.common.lib.ModInfo;
 
 @Config(modid = ModInfo.ID, category = "", name = ModInfo.ID + "/config")
 public class BetweenlandsConfig {
+	/**
+	 * Config loaded before any default values are generated
+	 */
+	@Nullable
 	@Ignore
-	public static String path;
+	public static Configuration loadedConfig;
+
+	@Ignore
+	public static File configDir;
 
 	@Ignore
 	private static final String LANG_PREFIX = "config." + ModInfo.ID + ".";
@@ -134,7 +155,7 @@ public class BetweenlandsConfig {
 		@Comment("If true, Betweenlands recipes that conflict with oredict'd vanilla recipes will take priority over the vanilla recipes (should be true unless you intend to fix the recipes yourself with another mod)")
 		@RequiresMcRestart
 		public boolean overrideConflictingVanillaRecipes = true;
-		
+
 		@Name("override_any_conflicting_recipes")
 		@LangKey(LANG_PREFIX + "override_any_conflicting_recipes")
 		@Comment("If true, Betweenlands recipes that conflict with any oredict'd recipes will take priority over the oredict'd recipes (should be true unless you intend to fix the recipes yourself with another mod)")
@@ -238,6 +259,69 @@ public class BetweenlandsConfig {
 			ConfigManager.sync(ModInfo.ID, Config.Type.INSTANCE);
 
 			parseFoodWhitelist(GENERAL.rottenFoodWhitelistUnparsed);
+		}
+	}
+
+	public static void init() {
+		final File versionFile = new File(configDir, "config_version");
+
+		Configuration newConfig = new Configuration(new File(BetweenlandsConfig.configDir, "config.cfg"));
+		newConfig.load();
+
+		Configuration oldConfig;
+		String configVersion = null;
+
+		if(loadedConfig == null) {
+			configVersion = ModInfo.CONFIG_VERSION;
+			oldConfig = new Configuration(new File(BetweenlandsConfig.configDir, "config.cfg"));
+			oldConfig.load();
+		} else {
+			if(versionFile.exists()) {
+				try {
+					configVersion = FileUtils.readFileToString(versionFile, (Charset) null);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			oldConfig = loadedConfig;
+		}
+
+		ConfigRemapper.register(new Remapper1());
+
+		Pair<Configuration, String> remap = ConfigRemapper.remap(oldConfig, newConfig, configVersion);
+		if(remap != null) {
+			//Create backup of old config values
+			final File backupFile = new File(oldConfig.getConfigFile().getParentFile(), "config (" + (configVersion == null ? "no version" : configVersion) + ").cfg.backup");
+			Configuration backup = ConfigRemapper.clear(new Configuration(backupFile, oldConfig.getDefinedConfigVersion()));
+			ConfigRemapper.copy(oldConfig, backup);
+			backup.save();
+
+			remap.getKey().save();
+			reloadConfig();
+		}
+
+		try {
+			FileUtils.writeStringToFile(versionFile, ModInfo.CONFIG_VERSION, (Charset) null, false);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void reloadConfig() {
+		try {
+			Field configCacheField = ConfigManager.class.getDeclaredField("CONFIGS");
+			configCacheField.setAccessible(true);
+
+			@SuppressWarnings("unchecked")
+			Map<String, Configuration> configCache = (Map<String, Configuration>) configCacheField.get(null);
+
+			configCache.put(new File(BetweenlandsConfig.configDir, "config.cfg").getAbsolutePath(), null);
+
+			ConfigManager.sync(ModInfo.ID, Config.Type.INSTANCE);
+
+			parseFoodWhitelist(GENERAL.rottenFoodWhitelistUnparsed);
+		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
+			throw new RuntimeException(ex);
 		}
 	}
 

@@ -31,7 +31,7 @@ import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
 import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.SoundRegistry;

@@ -20,7 +20,7 @@ import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.math.MathHelper;
 import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ShaderHelper implements IResourceManagerReloadListener {

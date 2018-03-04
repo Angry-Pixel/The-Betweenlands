@@ -95,7 +95,7 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
 				}
 			}
 			if (tile != null) {
-				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_PURIFIER, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_PURIFIER, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 		}
 		return true;

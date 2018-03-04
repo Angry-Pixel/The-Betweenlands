@@ -103,9 +103,9 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
         if (!world.isRemote) {
             if (!player.isSneaking()) {
                 int meta = stack.getItemDamage();
-                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH, world, meta, 0, 0);
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, meta, 0, 0);
             } else {
-                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
             }
         }
 

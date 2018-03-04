@@ -14,4 +14,5 @@ public class ModInfo {
 	public static final String MC_VERSIONS = "[1.12.2]";
 	public static final String VERSION = "3.3.1";
 	public static final String API_VERSION = "1.9.2";
+	public static final String CONFIG_VERSION = "1.0.0";
 }

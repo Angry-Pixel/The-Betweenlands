@@ -19,7 +19,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.api.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();

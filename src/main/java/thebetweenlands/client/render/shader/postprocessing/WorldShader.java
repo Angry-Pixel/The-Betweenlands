@@ -27,7 +27,7 @@ import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
-import thebetweenlands.common.BetweenlandsConfig;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
