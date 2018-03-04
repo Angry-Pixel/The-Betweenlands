@@ -1,6 +1,8 @@
 package thebetweenlands.common.block.container;
 
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -11,11 +13,14 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,8 +36,6 @@ import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
-
-import javax.annotation.Nullable;
 
 public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICustomItemBlock {
     public static final PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
@@ -215,32 +218,39 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
-        int metadata = getMetaFromState(state);
-        if(tile != null) {
-            if(tile.getAspect() != null) {
-                if(tile.getAspect().amount > 0) {
-                    ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
-                    vial.setItemDamage(metadata);
-                    ItemAspectContainer.fromItem(vial).add(tile.getAspect().type, tile.getAspect().amount);
-                    drops.add(vial);
-                }
-            } else {
-                ItemStack vial = new ItemStack(ItemRegistry.DENTROTHYST_VIAL);
-                switch(metadata) {
-                    default:
-                    case 0:
-                        vial.setItemDamage(0);
-                        break;
-                    case 1:
-                        vial.setItemDamage(2);
-                        break;
-                }
-                drops.add(vial);
-            }
-        }
-    }
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
+		if(tile != null) {
+			if(tile.getAspect() != null) {
+				if(tile.getAspect().amount > 0) {
+					ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
+					switch(state.getValue(TYPE)) {
+					case ORANGE:
+						vial.setItemDamage(1);
+						break;
+					default:
+					case GREEN:
+						vial.setItemDamage(0);
+						break;
+					}
+					ItemAspectContainer.fromItem(vial).add(tile.getAspect().type, tile.getAspect().amount);
+					drops.add(vial);
+				}
+			} else {
+				ItemStack vial = new ItemStack(ItemRegistry.DENTROTHYST_VIAL);
+				switch(state.getValue(TYPE)) {
+				case ORANGE:
+					vial.setItemDamage(2);
+					break;
+				default:
+				case GREEN:
+					vial.setItemDamage(0);
+					break;
+				}
+				drops.add(vial);
+			}
+		}
+	}
 
     @Override
     public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
