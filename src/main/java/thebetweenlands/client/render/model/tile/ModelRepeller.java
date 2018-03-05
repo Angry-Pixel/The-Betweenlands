@@ -102,6 +102,7 @@ public class ModelRepeller extends ModelBase {
 			float[] aspectRGBA = ColorUtils.getRGBA(AspectRegistry.BYARIIS.getColor());
 			GlStateManager.color(aspectRGBA[0] * 2, aspectRGBA[1] * 2, aspectRGBA[2] * 2, 0.98F);
 	
+			LightingUtil.INSTANCE.setLighting(255);
 			GlStateManager.enableNormalize();
 			GlStateManager.pushMatrix();
 			float px = 0.0625F;
@@ -114,7 +115,8 @@ public class ModelRepeller extends ModelBase {
 			this.liquid.render(0.0625F);
 			GlStateManager.popMatrix();
 			GlStateManager.disableNormalize();
-	
+			LightingUtil.INSTANCE.revert();
+			
 			GlStateManager.enableTexture2D();
 			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
