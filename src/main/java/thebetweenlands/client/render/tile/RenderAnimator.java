@@ -5,6 +5,7 @@ import java.util.SplittableRandom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -84,7 +85,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 0.27D, z + 0.5D);
 				GlStateManager.rotate(180, 1, 0, 0);
-				int items = te.getStackInSlot(2).getCount();
+				int items = te.getStackInSlot(2).getCount() / 4 + 1;
 				for (int i = 0; i < items; i++) {
 					GlStateManager.pushMatrix();
 					GlStateManager.translate(rand.nextDouble() / 3.0D - 1.0D / 6.0D, 0.0D, rand.nextDouble() / 3.0D - 1.0D / 6.0D);
@@ -94,10 +95,7 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 					GlStateManager.rotate(90, 1, 0, 0);
 					GlStateManager.rotate((float)rand.nextDouble() * 360.0F, 0, 0, 1);
 					ItemStack stack = ItemMisc.EnumItemMisc.SULFUR.create(1);
-					Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-					renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
-					Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+					this.renderItem.renderItem(stack, TransformType.FIXED);
 					GlStateManager.popMatrix();
 				}
 				GlStateManager.popMatrix();
@@ -108,12 +106,9 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x + 0.5D, y + 0.43D, z + 0.5D);
 				GlStateManager.scale(0.18D, 0.18D, 0.18D);
-				GlStateManager.rotate((float) viewRot, 0, 1, 0);
+				GlStateManager.rotate((float) viewRot + 180, 0, 1, 0);
 				ItemStack stack = new ItemStack(ItemRegistry.LIFE_CRYSTAL);
-				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-				Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-				renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
-				Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+				this.renderItem.renderItem(stack, TransformType.FIXED);
 				GlStateManager.popMatrix();
 			}
 
@@ -128,12 +123,9 @@ public class RenderAnimator extends TileEntitySpecialRenderer<TileEntityAnimator
 				if(recipe != null) {
 					if (!(input.getItem() instanceof ItemMonsterPlacer) && (recipe == null || recipe.getRenderEntity(input) == null)) {
 						GlStateManager.scale(0.3D, 0.3D, 0.3D);
-						GlStateManager.rotate((float) viewRot, 0, 1, 0);
+						GlStateManager.rotate((float) viewRot + 180, 0, 1, 0);
 						ItemStack stack = te.getStackInSlot(0);
-						Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-						Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-						renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
-						Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+						this.renderItem.renderItem(stack, TransformType.FIXED);
 					} else {
 						GlStateManager.enableBlend();
 						GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);

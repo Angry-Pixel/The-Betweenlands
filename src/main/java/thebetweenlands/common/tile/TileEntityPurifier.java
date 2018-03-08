@@ -67,7 +67,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 
     public TileEntityPurifier() {
         super(3, "container.purifier");
-        this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 16);
+        this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 4);
         this.waterTank.setTileEntity(this);
     }
 
@@ -187,7 +187,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
                                 inventory.set(i, ItemStack.EMPTY);
                             else
                                 inventory.get(i).shrink(1);
-                    extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+                    extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME / 4));
                     if (inventory.get(2).isEmpty()) {
                         inventory.set(2, output.copy());
                     } else if (inventory.get(2).isItemEqual(output)) {

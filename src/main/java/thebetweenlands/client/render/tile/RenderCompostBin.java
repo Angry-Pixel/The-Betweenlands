@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureMap;
@@ -94,11 +95,7 @@ public class RenderCompostBin extends TileEntitySpecialRenderer<TileEntityCompos
 					GlStateManager.rotate(new Random(i * 12315).nextFloat() * 360f, 0, 1, 0);
 					GlStateManager.rotate(90.0f, 1, 0, 0);
 
-					Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					ITextureObject texture = Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					texture.setBlurMipmap(false, false);
-					this.renderItem.renderItem(stack, this.renderItem.getItemModelMesher().getItemModel(stack));
-					texture.restoreLastBlurMipmap();
+					this.renderItem.renderItem(stack, TransformType.FIXED);
 
 					GlStateManager.popMatrix();
 				}
