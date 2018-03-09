@@ -61,7 +61,7 @@ public class ItemRingOfFlight extends ItemRing {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
 				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
 				cap.setFlightRing(true);
-				if(!player.capabilities.isCreativeMode && this.canFly(player, stack)) {
+				if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, stack)) {
 					double flightHeight = 3.5D;
 					if(player.world.isRemote || cap.isFlying())
 						player.capabilities.allowFlying = true;
@@ -69,9 +69,7 @@ public class ItemRingOfFlight extends ItemRing {
 					NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 					if(!entity.onGround) {
 						if(isFlying) {
-							if(!entity.world.isRemote && entity.ticksExisted % 20 == 0) {
-								this.removeXp((EntityPlayer)entity, 2);
-							}
+							cap.onFlightTick(player, stack);
 
 							nbt.setBoolean("ringActive", true);
 
@@ -155,10 +153,6 @@ public class ItemRingOfFlight extends ItemRing {
 		return -512.0D;
 	}
 
-	private boolean canFly(EntityPlayer player, ItemStack stack) {
-		return player.capabilities.isCreativeMode || (player.experienceTotal > 0 && !player.isRiding());
-	}
-
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
 		if(event.player != null) {
@@ -186,7 +180,7 @@ public class ItemRingOfFlight extends ItemRing {
 					}
 
 					if(!flightRing.isEmpty() && player.world.isRemote) {
-						if(((ItemRingOfFlight)flightRing.getItem()).canFly(player, flightRing)) {
+						if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, flightRing)) {
 							if(event.phase == Phase.START) {
 								player.capabilities.isFlying = false;
 							} else {
@@ -210,7 +204,7 @@ public class ItemRingOfFlight extends ItemRing {
 					if(event.phase == Phase.END) {
 						if(flightRing.isEmpty() || !cap.isFlying()) {
 							if(cap.getFlightRing()) {
-								if(!player.capabilities.isCreativeMode) {
+								if(!cap.canFlyWithoutRing(player)) {
 									player.capabilities.isFlying = false;
 									player.capabilities.allowFlying = false;
 									if(player.world.isRemote) {

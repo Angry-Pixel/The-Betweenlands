@@ -47,7 +47,7 @@ public class ItemRing extends Item implements IEquippable {
 					float conversion = this.getXPConversionRate(stack, player);
 					float requiredRepair = Math.min(repairPerClick, stack.getItemDamage() / conversion);
 					stack.setItemDamage(Math.max(0, stack.getItemDamage() - MathHelper.ceil(Math.min(repairPerClick, player.experienceTotal) * conversion)));
-					this.removeXp(player, MathHelper.ceil(Math.min(requiredRepair, player.experienceTotal)));
+					removeXp(player, MathHelper.ceil(Math.min(requiredRepair, player.experienceTotal)));
 				}
 
 				return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
@@ -57,7 +57,7 @@ public class ItemRing extends Item implements IEquippable {
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 
-	protected void removeXp(EntityPlayer player, int amount) {
+	public static void removeXp(EntityPlayer player, int amount) {
 		int newXP = Math.max(player.experienceTotal - amount, 0);
 		player.experienceTotal = 0;
 		player.experienceLevel = 0;

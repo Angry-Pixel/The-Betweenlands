@@ -12,7 +12,7 @@ public class ModInfo {
 
 	public static final String DEPENDENCIES = "required-after:forge@[14.23.1.2602,)";
 	public static final String MC_VERSIONS = "[1.12.2]";
-	public static final String VERSION = "3.3.1";
-	public static final String API_VERSION = "1.9.2";
+	public static final String VERSION = "3.3.2";
+	public static final String API_VERSION = "1.9.3";
 	public static final String CONFIG_VERSION = "1.0.0";
 }
