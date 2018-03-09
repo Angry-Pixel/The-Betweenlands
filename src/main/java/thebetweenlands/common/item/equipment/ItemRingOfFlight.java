@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -63,13 +64,14 @@ public class ItemRingOfFlight extends ItemRing {
 				cap.setFlightRing(true);
 				if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, stack)) {
 					double flightHeight = 3.5D;
-					if(player.world.isRemote || cap.isFlying())
+					if(player.world.isRemote || cap.isFlying()) {
 						player.capabilities.allowFlying = true;
+					}
 					boolean isFlying = cap.isFlying();
 					NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 					if(!entity.onGround) {
 						if(isFlying) {
-							cap.onFlightTick(player, stack);
+							cap.onFlightTick(player, stack, !nbt.getBoolean("ringActive"));
 
 							nbt.setBoolean("ringActive", true);
 

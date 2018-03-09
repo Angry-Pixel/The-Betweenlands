@@ -66,8 +66,8 @@ public interface IFlightCapability {
 	 * @param player
 	 * @param ring
 	 */
-	public default void onFlightTick(EntityPlayer player, ItemStack ring) {
-		if(!player.world.isRemote && player.ticksExisted % 20 == 0) {
+	public default void onFlightTick(EntityPlayer player, ItemStack ring, boolean firstTick) {
+		if(!player.world.isRemote && (firstTick || player.ticksExisted % 20 == 0)) {
 			ItemRing.removeXp(player, 2);
 		}
 	}

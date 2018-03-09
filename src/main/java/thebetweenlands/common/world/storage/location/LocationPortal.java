@@ -3,12 +3,16 @@ package thebetweenlands.common.world.storage.location;
 import javax.annotation.Nullable;
 
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.BlockRegistry;
 
 public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;
@@ -90,5 +94,20 @@ public class LocationPortal extends LocationStorage {
 		this.otherPortalPos = pos;
 		this.otherPortalDimension = dim;
 		this.setDirty(true);
+	}
+	
+	/**
+	 * Checks whether the portal is still valid and if not, removes the location 
+	 * @return True if the portal was invalid and removed
+	 */
+	public boolean validateAndRemove() {
+		World world = this.getWorldStorage().getWorld();
+		AxisAlignedBB bounds = this.getBoundingBox();
+		for(MutableBlockPos checkPos : MutableBlockPos.getAllInBoxMutable(new BlockPos(bounds.minX, bounds.minY, bounds.minZ), new BlockPos(bounds.maxX, bounds.maxY, bounds.maxZ))) {
+			if(world.getBlockState(checkPos).getBlock() == BlockRegistry.TREE_PORTAL) {
+				return false;
+			}
+		}
+		return this.getWorldStorage().getLocalStorageHandler().removeLocalStorage(this);
 	}
 }
