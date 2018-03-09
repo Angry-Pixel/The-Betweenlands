@@ -80,7 +80,7 @@ public class ShapelessOverrideDummyRecipe implements IRecipe {
 			this.ingredients = NonNullList.withSize(originalIngredients.size(), Ingredient.EMPTY);
 			for(int i = 0; i < originalIngredients.size(); i++) {
 				Ingredient originalIngredient = originalIngredients.get(i);
-				if(i < overrideIngredients.size()) {
+				if(i < overrideIngredients.size() && originalIngredient != Ingredient.EMPTY) {
 					Ingredient overrideIngredient = overrideIngredients.get(i);
 					this.ingredients.set(i, new OverrideIngredient(this, overrideIngredient, originalIngredient));
 				} else {
@@ -128,8 +128,12 @@ public class ShapelessOverrideDummyRecipe implements IRecipe {
 
 		private ItemStack[] stacks = null;
 		private IntList itemIds = null;
+		
+		private int originalMatchingStacksLength = -1;
+		private int originalValidItemStacksPackedSize = -1;
 
 		public OverrideIngredient(ShapelessOverrideDummyRecipe recipe, Ingredient removed, Ingredient original) {
+			super(0);
 			this.recipe = recipe;
 			this.removed = removed;
 			this.original = original;
@@ -138,8 +142,8 @@ public class ShapelessOverrideDummyRecipe implements IRecipe {
 		@Override
 		public ItemStack[] getMatchingStacks() {
 			//TODO: Check if original and removed Ingredient were invalidated
-			if(this.stacks == null) {
-				ItemStack[] originalStacks = this.original.getMatchingStacks();
+			ItemStack[] originalStacks = this.original.getMatchingStacks();
+			if(this.stacks == null || originalStacks.length != this.originalMatchingStacksLength) {
 				List<ItemStack> matchingStacks = new ArrayList<ItemStack>(originalStacks.length);
 				for(ItemStack stack : originalStacks) {
 					if(!this.removed.apply(stack)) {
@@ -147,6 +151,7 @@ public class ShapelessOverrideDummyRecipe implements IRecipe {
 					}
 				}
 				this.stacks = matchingStacks.toArray(new ItemStack[0]);
+				this.originalMatchingStacksLength = originalStacks.length;
 			}
 			return this.stacks;
 		}
@@ -162,10 +167,11 @@ public class ShapelessOverrideDummyRecipe implements IRecipe {
 		@Override
 		public IntList getValidItemStacksPacked() {
 			//TODO: Check if original and removed Ingredient were invalidated
-			if(this.itemIds == null) {
-				IntList original = this.original.getValidItemStacksPacked();
+			IntList original = this.original.getValidItemStacksPacked();
+			if(this.itemIds == null || this.originalValidItemStacksPackedSize != original.size()) {
 				this.itemIds = new IntArrayList(original);
 				this.itemIds.removeAll(this.removed.getValidItemStacksPacked());
+				this.originalValidItemStacksPackedSize = original.size();
 			}
 			return this.itemIds;
 		}
