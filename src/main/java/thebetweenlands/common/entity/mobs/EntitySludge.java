@@ -2,10 +2,13 @@ package thebetweenlands.common.entity.mobs;
 
 import java.util.List;
 
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIFindEntityNearestPlayer;
@@ -25,6 +28,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -70,9 +74,15 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	@Override
 	protected void entityInit() {
 		super.entityInit();
-		this.getDataManager().register(IS_ACTIVE, this.world.rand.nextInt(5) == 0);
+		this.getDataManager().register(IS_ACTIVE, true);
 	}
 
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, IEntityLivingData livingdata) {
+		this.setActive(this.world.rand.nextInt(5) == 0 || !this.canHideIn(this.world.getBlockState(this.getPosition().down())));
+		return super.onInitialSpawn(difficulty, livingdata);
+	}
+	
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
@@ -122,7 +132,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 					}
 				}
 
-				if (this.getAttackTarget() == null && this.onGround && this.world.rand.nextInt(350) == 0 && !this.isInWater()) {
+				if (this.getAttackTarget() == null && this.onGround && this.world.rand.nextInt(350) == 0 && !this.isInWater() && this.canHideIn(this.world.getBlockState(this.getPosition().down()))) {
 					this.setActive(false);
 				}
 			} else if(this.isInWater() || !this.onGround) {
@@ -161,6 +171,11 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 				this.scale.decreaseTimer();
 			}
 		}
+	}
+	
+	protected boolean canHideIn(IBlockState state) {
+		Material ground = state.getMaterial();
+		return ground == Material.GROUND || ground == Material.SAND || ground == Material.GRASS;
 	}
 
 	protected void createTrail(BlockPos pos) {
@@ -246,7 +261,7 @@ public class EntitySludge extends EntityLiving implements IMob, IEntityBL {
 	protected boolean getIsPlayerNearby(double distanceX, double distanceY, double distanceZ, double radius) {
 		List<Entity> entities = this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox().grow(distanceX, distanceY, distanceZ));
 		for (Entity entityNeighbor : entities) {
-			if (entityNeighbor instanceof EntityPlayer && this.getDistance(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.disableDamage && this.getEntitySenses().canSee(entityNeighbor)))
+			if (entityNeighbor instanceof EntityPlayer && this.getDistance(entityNeighbor) <= radius && (!((EntityPlayer) entityNeighbor).capabilities.isCreativeMode && !((EntityPlayer) entityNeighbor).isSpectator() && this.getEntitySenses().canSee(entityNeighbor)))
 				return true;
 		}
 		return false;

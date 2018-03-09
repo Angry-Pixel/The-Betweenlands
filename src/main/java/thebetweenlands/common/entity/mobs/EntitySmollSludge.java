@@ -13,6 +13,7 @@ public class EntitySmollSludge extends EntitySludge {
     @Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
+		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(14.0D);
 		this.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 		this.getAttributeMap().getAttributeInstance(SLUDGE_TRAIL).setBaseValue(0);
     }
