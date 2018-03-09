@@ -117,14 +117,17 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 							if(frameAxis == EnumFacing.Axis.X && BlockTreePortal.isPatternValidX(worldIn, portalPos.up())
 									|| frameAxis == EnumFacing.Axis.Z && BlockTreePortal.isPatternValidZ(worldIn, portalPos.up())) {
 
-								BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
-								LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), portalPos.offset(closestDir).down());
-								location.addBounds(new AxisAlignedBB(portalPos.up()).grow(1, 2, 1).expand(0, -0.5D, 0));
-								location.setSeed(worldIn.rand.nextLong());
-								location.setDirty(true);
-								location.setVisible(false);
-								location.linkChunks();
-								worldStorage.getLocalStorageHandler().addLocalStorage(location);
+								//Only create new location is none exists
+								if(this.getPortalAt(worldIn, portalPos.up()) == null) {
+									BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
+									LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), portalPos.offset(closestDir).down());
+									location.addBounds(new AxisAlignedBB(portalPos.up()).grow(1, 2, 1).expand(0, -0.5D, 0));
+									location.setSeed(worldIn.rand.nextLong());
+									location.setDirty(true);
+									location.setVisible(false);
+									location.linkChunks();
+									worldStorage.getLocalStorageHandler().addLocalStorage(location);
+								}
 
 								worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 							}
