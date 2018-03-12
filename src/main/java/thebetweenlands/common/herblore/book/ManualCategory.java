@@ -114,6 +114,7 @@ public class ManualCategory {
                     visiblePages.add(page);
             if (!visiblePages.isEmpty()) {
                 currentPageLeft = this.visiblePages.get(0);
+                currentPageLeft.setPageToLeft();
                 if (this.visiblePages.size() > 1)
                     currentPageRight = this.visiblePages.get(1);
                 else
@@ -188,6 +189,7 @@ public class ManualCategory {
                 currentPage = pageNumber;
             }
             currentPageLeft.init(manual);
+            currentPageLeft.setPageToLeft();
             currentPageRight.init(manual);
             currentPageRight.setPageToRight();
 

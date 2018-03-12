@@ -3,9 +3,12 @@ package thebetweenlands.common.herblore.book;
 import java.util.ArrayList;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.oredict.OreDictionary;
 import thebetweenlands.api.aspect.AspectItem;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -161,7 +164,7 @@ public class PageCreators {
         ItemStack itemStack = item.getOriginal();
         ArrayList<ManualWidgetBase> widgets = new ArrayList<>();
         widgets.add(new ItemWidget(18, 12, itemStack, 1f));
-        widgets.add(new ItemWidget(118, 12, PestleAndMortarRecipe.getInput(itemStack), 1f));
+        widgets.add(new ItemWidget(118, 12, getStacks(PestleAndMortarRecipe.getInput(itemStack)), 1f));
         widgets.add((new TextWidget(38, 16, itemStack.getDisplayName(), true)).setWidth(70));
         height += 28;
         widgets.add(new TextWidget(18, 12 + height, "manual." + itemStack.getUnlocalizedName() + ".description"));
@@ -175,6 +178,17 @@ public class PageCreators {
         return newPages;
     }
 
+    private static ArrayList<ItemStack> getStacks(ItemStack input) {
+        ArrayList<ItemStack> stacks = new ArrayList<>();
+        if (input != null && !input.isEmpty() && input.getMetadata() == OreDictionary.WILDCARD_VALUE) {
+            NonNullList<ItemStack> list = NonNullList.create();
+            input.getItem().getSubItems(CreativeTabs.SEARCH, list);
+            stacks.addAll(list);
+        } else {
+            stacks.add(input);
+        }
+        return stacks;
+    }
 
     public static ArrayList<Page> elixirPages(ItemStack item, Item manualType, ElixirEffect effect) {
         ArrayList<Page> newPages = new ArrayList<>();

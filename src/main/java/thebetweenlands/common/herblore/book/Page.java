@@ -150,6 +150,14 @@ public class Page {
     }
 
     /**
+     * Sets the page to the left side, default is left but to be sure with reusing them
+     */
+    public void setPageToLeft() {
+        for (ManualWidgetBase widget : widgets)
+            widget.setPageToLeft();
+    }
+
+    /**
      * Sets the page to the right side
      */
     public void setPageToRight() {

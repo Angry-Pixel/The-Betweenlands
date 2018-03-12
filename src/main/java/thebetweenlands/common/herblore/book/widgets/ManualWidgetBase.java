@@ -155,6 +155,11 @@ public class ManualWidgetBase {
     }
 
     @SideOnly(Side.CLIENT)
+    public void setPageToLeft() {
+        this.isPageRight = false;
+    }
+
+    @SideOnly(Side.CLIENT)
     public void setPageToRight() {
         this.isPageRight = true;
     }
