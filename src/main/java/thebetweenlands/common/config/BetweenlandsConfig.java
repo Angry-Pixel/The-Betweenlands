@@ -199,7 +199,7 @@ public class BetweenlandsConfig {
 	public static class Compatibility {
 		@Name("show_non_bl_fluids")
 		@LangKey(LANG_PREFIX + "show_non_bl_fluids")
-		@Comment("If fluids from other mods should show in BL buckets in the creative tab")
+		@Comment("If fluids from other mods should show in BL buckets in the creative tab or in JEI")
 		public boolean showNonBLFluids = true;
 
 		@Name("show_non_bl_gem_recipes")

@@ -22,6 +22,10 @@ public final class TeleporterHandler {
 	private void transferEntity(Entity entity, int dimensionId) {
 		World world = entity.world;
 		if (!world.isRemote && !entity.isDead && !(entity instanceof FakePlayer) && world instanceof WorldServer) {
+			if (!net.minecraftforge.common.ForgeHooks.onTravelToDimension(entity, dimensionId)) {
+				return;
+			}
+			
 			MinecraftServer server = world.getMinecraftServer();
 			WorldServer toWorld = server.getWorld(dimensionId);
 			AxisAlignedBB aabb = entity.getEntityBoundingBox();
@@ -29,6 +33,7 @@ public final class TeleporterHandler {
 			if (entity instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) entity;
 				player.mcServer.getPlayerList().transferPlayerToDimension(player, dimensionId, new TeleporterBetweenlands(world.provider.getDimension(), aabb, toWorld));
+				player.invulnerableDimensionChange = true;
 				player.timeUntilPortal = 0;
 			} else {
 				entity.setDropItemsWhenDead(false);

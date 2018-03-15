@@ -490,7 +490,6 @@ public final class TeleporterBetweenlands extends Teleporter {
 		} else {
 			entity.setLocationAndAngles(x, y, z, yaw, pitch);
 		}
-		entity.hurtResistantTime = 20; //don't hurt pls, thxs
 	}
 
 	@Override

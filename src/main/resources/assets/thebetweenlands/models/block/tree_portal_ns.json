@@ -4,7 +4,16 @@
         "portal": "thebetweenlands:blocks/portal"
     },
     "elements": [
-        {   "from": [ 0, 0, 6 ],
+        {   
+            "from": [ 0, 0, 6 ],
+            "to": [ 16, 16, 6 ],
+            "faces": {
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#portal" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#portal" }
+            }
+        },
+        {   
+            "from": [ 0, 0, 10 ],
             "to": [ 16, 16, 10 ],
             "faces": {
                 "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#portal" },
