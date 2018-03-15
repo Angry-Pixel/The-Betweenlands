@@ -1,11 +1,19 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.*;
+import net.minecraft.entity.ai.EntityAIHurtByTarget;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.entity.monster.EntityMob;
@@ -18,7 +26,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.network.play.server.SPacketSetPassengers;
 import net.minecraft.pathfinding.PathNodeType;
-import net.minecraft.util.*;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -39,8 +52,6 @@ import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
-
-import java.util.List;
 
 public class EntityWight extends EntityMob implements IEntityBL {
 
@@ -168,84 +179,91 @@ public class EntityWight extends EntityMob implements IEntityBL {
         }
 
         if (this.isVolatile()) {
-            if (this.volatileTicks < this.getEntityAttribute(VOLATILE_LENGTH_ATTRIB).getAttributeValue()) {
-                this.volatileTicks++;
-
-                if (this.volatileTicks >= 20)
-                    this.noClip = true;
-            } else {
-                if (!this.world.isRemote) {
-                    this.motionY -= 0.075D;
-
-                    this.fallDistance = 0;
-
-                    if (this.didTurnVolatileOnPlayer && this.onGround) {
-                        this.setVolatile(false);
-                        this.didTurnVolatileOnPlayer = false;
-                    }
-                }
-
-                this.noClip = false;
-            }
-
-            if (this.volatileTicks < 20) {
-                this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.15D);
-            }
-
-            if (this.getAttackTarget() != null) {
-                EntityLivingBase attackTarget = this.getAttackTarget();
-
-                if (this.getRidingEntity() == null && this.getDistance(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
-                    this.startRiding(attackTarget, true);
-                    this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(attackTarget));
-                }
-
-                if (this.getRidingEntity() == null) {
-                    double dx = attackTarget.posX - this.posX;
-                    double dz = attackTarget.posZ - this.posZ;
-                    double dy;
-                    if (attackTarget instanceof EntityLivingBase) {
-                        EntityLivingBase entitylivingbase = attackTarget;
-                        dy = entitylivingbase.posY + (double) entitylivingbase.getEyeHeight() - (this.posY + (double) this.getEyeHeight());
-                    } else {
-                        dy = (attackTarget.getEntityBoundingBox().minY + attackTarget.getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
-                    }
-                    double dist = (double) MathHelper.sqrt(dx * dx + dz * dz);
-                    float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
-                    float pitch = (float) (-(Math.atan2(dy, dist) * 180.0D / Math.PI));
-                    this.setRotation(yaw, pitch);
-                    this.setRotationYawHead(yaw);
-                } else {
-                    this.setRotation(0, 0);
-                    this.setRotationYawHead(0);
-
-                    if (this.ticksExisted % 5 == 0) {
-                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
-                        if (existingSouls.size() < 16) {
-                            EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
-                            float mx = this.world.rand.nextFloat() - 0.5F;
-                            float my = this.world.rand.nextFloat() / 2.0F;
-                            float mz = this.world.rand.nextFloat() - 0.5F;
-                            Vec3d dir = new Vec3d(mx, my, mz).normalize();
-                            soul.setOwner(this.getUniqueID());
-                            soul.setLocationAndAngles(this.posX + dir.x * 0.5D, this.posY + dir.y * 1.5D, this.posZ + dir.z * 0.5D, 0, 0);
-                            soul.shoot(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
-                            this.world.spawnEntity(soul);
-                        }
-                    }
-                }
-            }
+        	if(!this.world.isRemote) {
+	        	if (this.volatileTicks < this.getEntityAttribute(VOLATILE_LENGTH_ATTRIB).getAttributeValue()) {
+	            	this.volatileTicks++;
+	
+	                if (this.volatileTicks >= 20) {
+	                    this.noClip = true;
+	                }
+	            } else {
+	                if (!this.world.isRemote) {
+	                    this.motionY -= 0.075D;
+	
+	                    this.fallDistance = 0;
+	
+	                    if (this.didTurnVolatileOnPlayer && this.onGround) {
+	                        this.setVolatile(false);
+	                        this.didTurnVolatileOnPlayer = false;
+	                    }
+	                }
+	
+	                this.noClip = false;
+	            }
+	
+	            if (this.volatileTicks < 20) {
+	                this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 0.15D);
+	            }
+	
+	            if (this.getAttackTarget() != null) {
+	                EntityLivingBase attackTarget = this.getAttackTarget();
+	
+	                if (this.getRidingEntity() == null && this.getDistance(attackTarget) < 1.75D && this.canPossess(attackTarget)) {
+	                    this.startRiding(attackTarget, true);
+	                    this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(attackTarget));
+	                }
+	
+	                if (this.getRidingEntity() == null) {
+	                    double dx = attackTarget.posX - this.posX;
+	                    double dz = attackTarget.posZ - this.posZ;
+	                    double dy;
+	                    if (attackTarget instanceof EntityLivingBase) {
+	                        EntityLivingBase entitylivingbase = attackTarget;
+	                        dy = entitylivingbase.posY + (double) entitylivingbase.getEyeHeight() - (this.posY + (double) this.getEyeHeight());
+	                    } else {
+	                        dy = (attackTarget.getEntityBoundingBox().minY + attackTarget.getEntityBoundingBox().maxY) / 2.0D - (this.posY + (double) this.getEyeHeight());
+	                    }
+	                    double dist = (double) MathHelper.sqrt(dx * dx + dz * dz);
+	                    float yaw = (float) (Math.atan2(dz, dx) * 180.0D / Math.PI) - 90.0F;
+	                    float pitch = (float) (-(Math.atan2(dy, dist) * 180.0D / Math.PI));
+	                    this.setRotation(yaw, pitch);
+	                    this.setRotationYawHead(yaw);
+	                } else {
+	                    this.setRotation(0, 0);
+	                    this.setRotationYawHead(0);
+	
+	                    if (this.ticksExisted % 5 == 0) {
+	                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
+	                        if (existingSouls.size() < 16) {
+	                            EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
+	                            float mx = this.world.rand.nextFloat() - 0.5F;
+	                            float my = this.world.rand.nextFloat() / 2.0F;
+	                            float mz = this.world.rand.nextFloat() - 0.5F;
+	                            Vec3d dir = new Vec3d(mx, my, mz).normalize();
+	                            soul.setOwner(this.getUniqueID());
+	                            soul.setLocationAndAngles(this.posX + dir.x * 0.5D, this.posY + dir.y * 1.5D, this.posZ + dir.z * 0.5D, 0, 0);
+	                            soul.shoot(mx * 2.0D, my * 2.0D, mz * 2.0D, 1.0F, 1.0F);
+	                            this.world.spawnEntity(soul);
+	                        }
+	                    }
+	                }
+	            }
+	            
+	            this.moveHelper = this.flightMoveHelper;
+        	}
 
             if (this.world.isRemote && (this.getRidingEntity() == null || this.ticksExisted % 4 == 0)) {
                 this.spawnVolatileParticles();
             }
 
             this.setSize(0.7F, 0.7F);
-            this.moveHelper = this.flightMoveHelper;
         } else {
+        	if(!this.world.isRemote) {
+	            this.noClip = false;
+	            this.moveHelper = this.groundMoveHelper;
+        	}
+            
             this.setSize(0.7F, 2.2F);
-            this.noClip = false;
-            this.moveHelper = this.groundMoveHelper;
         }
 
         this.lastHidingAnimationTicks = this.hidingAnimationTicks;
@@ -478,7 +496,9 @@ public class EntityWight extends EntityMob implements IEntityBL {
             Entity ridingEntity = this.getRidingEntity();
             if (ridingEntity != null) {
                 this.dismountRidingEntity();
-                this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(ridingEntity));
+                if(!this.world.isRemote) {
+                	this.getServer().getPlayerList().sendPacketToAllPlayers(new SPacketSetPassengers(ridingEntity));
+                }
             }
         }
     }
