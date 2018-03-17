@@ -1,17 +1,26 @@
-package thebetweenlands.api.storage;
+package thebetweenlands.common.world.storage;
 
 import java.io.File;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import thebetweenlands.api.storage.LocalRegion;
+
 public class LocalRegionCache {
 	private final Map<LocalRegion, LocalRegionData> regionData = new HashMap<LocalRegion, LocalRegionData>();
 
 	private final File dir;
 
-	public LocalRegionCache(File dir) {
+	private final LocalStorageHandlerImpl handler;
+	
+	public LocalRegionCache(LocalStorageHandlerImpl handler, File dir) {
 		this.dir = dir;
+		this.handler = handler;
+	}
+	
+	public LocalStorageHandlerImpl getLocalStorageHandler() {
+		return this.handler;
 	}
 
 	/**
@@ -31,7 +40,7 @@ public class LocalRegionCache {
 	public LocalRegionData getOrCreateRegion(LocalRegion region) {
 		LocalRegionData data = this.regionData.get(region);
 		if(data == null) {
-			this.regionData.put(region, data = LocalRegionData.getOrCreateRegion(this.dir, region));
+			this.regionData.put(region, data = LocalRegionData.getOrCreateRegion(this, this.dir, region));
 		}
 		return data;
 	}

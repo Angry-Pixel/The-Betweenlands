@@ -100,19 +100,7 @@ public final class WorldEventHandler {
 	public static void onWorldSave(WorldEvent.Save event) {
 		IWorldStorage worldStorage = WorldStorageImpl.getCapability(event.getWorld());
 		
-		//Save loaded storages
-		List<ILocalStorage> localStorages = new ArrayList<>();
-		localStorages.addAll(worldStorage.getLocalStorageHandler().getLoadedStorages());
-		for(ILocalStorage localStorage : localStorages) {
-			//Only save if dirty
-			if(localStorage.isDirty()) {
-				worldStorage.getLocalStorageHandler().saveLocalStorageFile(localStorage);
-				localStorage.setDirty(false);
-			}
-		}
-		
-		//Save regional cache
-		worldStorage.getLocalStorageHandler().getLocalRegionCache().saveAllRegions();
+		worldStorage.getLocalStorageHandler().saveAll();
 	}
 
 	@SubscribeEvent

@@ -647,11 +647,13 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	private void updateStarfieldTexture(float partialTicks) {
 		float offX = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosX / 8000.0D);
 		float offY = (float) (Minecraft.getMinecraft().getRenderManager().viewerPosZ / 8000.0D);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 		this.starfieldEffect.setTimeScale(0.00000025F).setZoom(0.8F).setOffset(offX, offY, 0);
 		this.starfieldEffect.create(this.starfieldTextureFramebuffer)
 		.setPreviousFramebuffer(Minecraft.getMinecraft().getFramebuffer())
 		.setRenderDimensions(BetweenlandsConfig.RENDERING.skyResolution, BetweenlandsConfig.RENDERING.skyResolution)
 		.render(partialTicks);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 	}
 
 	@Override

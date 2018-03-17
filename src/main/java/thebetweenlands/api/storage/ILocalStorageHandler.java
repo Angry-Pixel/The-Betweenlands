@@ -131,8 +131,7 @@ public interface ILocalStorageHandler {
 	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage, boolean packet);
 
 	/**
-	 * Returns the local region cache
-	 * @return
+	 * Saves all local storages and regions
 	 */
-	public LocalRegionCache getLocalRegionCache();
+	public void saveAll();
 }

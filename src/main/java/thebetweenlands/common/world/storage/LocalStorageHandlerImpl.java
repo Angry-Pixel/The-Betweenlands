@@ -15,7 +15,6 @@ import javax.annotation.Nullable;
 import com.google.common.base.Predicate;
 
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.ResourceLocation;
@@ -29,10 +28,9 @@ import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
-import thebetweenlands.api.storage.LocalRegionCache;
-import thebetweenlands.api.storage.LocalRegionData;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.registries.StorageRegistry;
 
 public class LocalStorageHandlerImpl implements ILocalStorageHandler {
@@ -45,12 +43,14 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	private final LocalRegionCache regionCache;
 
+	private final LocalStorageSaveHandler saveHandler = new LocalStorageSaveHandler();
+
 	public LocalStorageHandlerImpl(IWorldStorage worldStorage) {
 		this.worldStorage = worldStorage;
 		this.world = worldStorage.getWorld();
 		String dimFolder = this.world.provider.getSaveFolder();
 		this.localStorageDir = new File(this.world.getSaveHandler().getWorldDirectory(), (dimFolder != null && dimFolder.length() > 0 ? dimFolder + File.separator : "") + "data" + File.separator + "local_storage" + File.separator);
-		this.regionCache = new LocalRegionCache(new File(this.localStorageDir, "region"));
+		this.regionCache = new LocalRegionCache(this, new File(this.localStorageDir, "region"));
 	}
 
 	@Override
@@ -184,9 +184,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	public void deleteLocalStorageFile(ILocalStorage storage) {
 		if(storage.getRegion() == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
-			if(file.exists()) {
-				file.delete();
-			}
+			this.saveHandler.queueLocalStorage(file, null);
 		} else {
 			LocalRegionData regionData = this.regionCache.getOrCreateRegion(storage.getRegion());
 			if(regionData != null) {
@@ -199,14 +197,8 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	public void saveLocalStorageFile(ILocalStorage storage) {
 		NBTTagCompound nbt = this.saveLocalStorageToNBT(new NBTTagCompound(), storage, false);
 		if(storage.getRegion() == null) {
-			try {
-				File savePath = this.getLocalStorageDirectory();
-				savePath.mkdirs();
-				File file = new File(savePath, storage.getID().getStringID() + ".dat");
-				CompressedStreamTools.safeWrite(nbt, file);
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
-			}
+			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
+			this.saveHandler.queueLocalStorage(file, nbt);
 		} else {
 			LocalRegionData region = this.regionCache.getOrCreateRegion(storage.getRegion());
 			region.setLocalStorageNBT(storage.getID(), nbt);
@@ -239,13 +231,13 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	private ILocalStorage createLocalStorageFromFile(LocalStorageReference reference) {
 		if(!reference.hasRegion()) {
 			File file = new File(this.getLocalStorageDirectory(), reference.getID().getStringID() + ".dat");
-			if(file.exists()) {
-				try {
-					NBTTagCompound nbt = CompressedStreamTools.read(file);
+			try {
+				NBTTagCompound nbt = this.saveHandler.loadFileNbt(file);;
+				if(nbt != null) {
 					return this.createLocalStorageFromNBT(nbt, null, false);
-				} catch(Exception ex) {
-					throw new RuntimeException(ex);
 				}
+			} catch(Exception ex) {
+				TheBetweenlands.logger.error(String.format("Failed reading local storage %s from file: %s", reference.getID().getStringID(), file.getAbsolutePath()), ex);
 			}
 		} else {
 			LocalRegionData region = this.regionCache.getOrCreateRegion(reference.getRegion());
@@ -360,8 +352,22 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 		return nbt;
 	}
 
+	public LocalStorageSaveHandler getSaveHandler() {
+		return this.saveHandler;
+	}
+
 	@Override
-	public LocalRegionCache getLocalRegionCache() {
-		return this.regionCache;
+	public void saveAll() {
+		//Save loaded storages
+		for(ILocalStorage localStorage : this.getLoadedStorages()) {
+			//Only save if dirty
+			if(localStorage.isDirty()) {
+				this.saveLocalStorageFile(localStorage);
+				localStorage.setDirty(false);
+			}
+		}
+
+		//Save regional cache
+		this.regionCache.saveAllRegions();
 	}
 }
