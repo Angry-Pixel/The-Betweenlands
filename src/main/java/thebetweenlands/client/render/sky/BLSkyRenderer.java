@@ -9,7 +9,11 @@ import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4f;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL14;
+import org.lwjgl.opengl.GL15;
+import org.lwjgl.opengl.GL21;
+import org.lwjgl.opengl.GL30;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -42,6 +46,7 @@ import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.event.EventAuroras;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.Mesh;
+import thebetweenlands.util.RenderUtils;
 import thebetweenlands.util.Mesh.Triangle;
 import thebetweenlands.util.Mesh.Triangle.Vertex;
 import thebetweenlands.util.Mesh.Triangle.Vertex.Vector3D;
@@ -315,8 +320,10 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			GlStateManager.disableFog();
 			GlStateManager.color(1, 1, 1, 1);
 
-			Framebuffer parentFBO = mc.getFramebuffer();
-			clipPlaneBuffer.updateGeometryBuffer(parentFBO.framebufferWidth, parentFBO.framebufferHeight);
+			int parentFboId = RenderUtils.getBoundFramebuffer();
+			
+			Framebuffer mcFbo = mc.getFramebuffer();
+			clipPlaneBuffer.updateGeometryBuffer(mcFbo.framebufferWidth, mcFbo.framebufferHeight);
 			clipPlaneBuffer.bind();
 			clipPlaneBuffer.clear(0.0F, 0.0F, 0.0F, 0.0F);
 
@@ -328,7 +335,12 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			tessellator.draw();
 
 			clipPlaneBuffer.updateDepthBuffer();
-			parentFBO.bindFramebuffer(true);
+			
+			if(parentFboId != -1) {
+				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
+			} else {
+				mcFbo.bindFramebuffer(true);
+			}
 
 			GlStateManager.color(1, 1, 1, 1);
 			GlStateManager.enableTexture2D();

@@ -19,6 +19,7 @@ import thebetweenlands.api.sky.IRiftSkyRenderer;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
 import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.util.RenderUtils;
 
 public class RiftRenderer implements IRiftRenderer {
 	protected final int skyDomeDispList;
@@ -77,9 +78,10 @@ public class RiftRenderer implements IRiftRenderer {
 			EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
 
 			if(rift.getActiveTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
-				Framebuffer fbo = mc.getFramebuffer();
-
-				Framebuffer skyFbo = overworldSkyFbo.getFramebuffer(fbo.framebufferWidth, fbo.framebufferHeight);
+				int parentFboId = RenderUtils.getBoundFramebuffer();
+				
+				Framebuffer mcFbo = mc.getFramebuffer();
+				Framebuffer skyFbo = overworldSkyFbo.getFramebuffer(mcFbo.framebufferWidth, mcFbo.framebufferHeight);
 
 				skyFbo.setFramebufferColor(0, 0, 0, 0);
 				skyFbo.framebufferClear();
@@ -126,7 +128,11 @@ public class RiftRenderer implements IRiftRenderer {
 
 				this.riftMaskRenderer.renderMask(partialTicks, world, mc);
 
-				fbo.bindFramebuffer(true);
+				if(parentFboId != -1) {
+					OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
+				} else {
+					mcFbo.bindFramebuffer(true);
+				}
 
 				//Reset fog to this world's fog
 				mc.entityRenderer.setupFogColor(false);

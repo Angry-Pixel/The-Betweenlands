@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -27,6 +28,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
@@ -35,9 +37,11 @@ import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.client.render.tile.RenderWisp;
 import thebetweenlands.common.block.terrain.BlockWisp;
 import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.TileEntityWisp;
 import thebetweenlands.util.MathUtils;
+import thebetweenlands.util.RenderUtils;
 
 
 public class WorldRenderHandler {
@@ -45,6 +49,7 @@ public class WorldRenderHandler {
 
 	public static final List<Pair<Pair<RenderWisp, TileEntityWisp>, Vec3d>> WISP_TILE_LIST = new ArrayList<>();
 	public static final List<Pair<Pair<RenderFirefly, EntityFirefly>, Vec3d>> FIREFLIES = new ArrayList<>();
+	public static final List<Pair<Pair<RenderGasCloud, EntityGasCloud>, Vec3d>> GAS_CLOUDS = new ArrayList<>();
 	public static final List<Pair<Vec3d, Float>> REPELLER_SHIELDS = new ArrayList<>();
 
 	private static float partialTicks;
@@ -68,6 +73,14 @@ public class WorldRenderHandler {
 		double renderViewY = MC.getRenderManager().viewerPosY;
 		double renderViewZ = MC.getRenderManager().viewerPosZ;
 
+		int parentFboId = -1;
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			parentFboId = RenderUtils.getBoundFramebuffer();
+		}
+		if(parentFboId == -1) {
+			parentFboId = MC.getFramebuffer().framebufferObject;
+		}
+		
 		///// Wisps /////
 		GlStateManager.pushMatrix();
 
@@ -128,7 +141,6 @@ public class WorldRenderHandler {
 		tessellator.draw();
 
 		//Fireflies
-
 		GlStateManager.pushMatrix();
 		for (Pair<Pair<RenderFirefly, EntityFirefly>, Vec3d> e : FIREFLIES) {
 			Vec3d pos = e.getValue();
@@ -139,6 +151,39 @@ public class WorldRenderHandler {
 		GlStateManager.popMatrix();
 		FIREFLIES.clear();
 
+		//Gas clouds
+		if(ShaderHelper.INSTANCE.isWorldShaderActive() && !GAS_CLOUDS.isEmpty()) {
+			GeometryBuffer fbo = ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer();
+			if(fbo != null && fbo.isInitialized()) {
+				GlStateManager.enableBlend();
+				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
+				GlStateManager.depthMask(true);
+				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+				
+				//Render particles to gas fbo
+				fbo.bind();
+	
+				MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
+				
+				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+	
+				for (Pair<Pair<RenderGasCloud, EntityGasCloud>, Vec3d> e : GAS_CLOUDS) {
+					RenderGasCloud renderer = e.getKey().getKey();
+					EntityGasCloud entity = e.getKey().getValue();
+					
+					renderer.renderGasParticles(vertexBuffer, entity, partialTicks);
+				}
+				
+				tessellator.draw();
+	
+				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
+				
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			}
+		}
+		GAS_CLOUDS.clear();
+		
 		MC.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		texture.restoreLastBlurMipmap();
@@ -195,7 +240,7 @@ public class WorldRenderHandler {
 
 					gBuffer.updateDepthBuffer();
 
-					mainFramebuffer.bindFramebuffer(false);
+					OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
 				}
 			}
 		} else if(sphereDispList >= 0 && !REPELLER_SHIELDS.isEmpty()) {
