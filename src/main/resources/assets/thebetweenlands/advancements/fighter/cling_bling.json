@@ -16,7 +16,7 @@
       "trigger": "thebetweenlands:equip_item",
       "conditions": {
         "item": {
-          "id": "thebetweenlands:amulet"
+          "item": "thebetweenlands:amulet"
         }
       }
     }

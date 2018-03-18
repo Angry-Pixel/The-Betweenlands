@@ -5,11 +5,15 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotPouch;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
+import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ContainerPouch extends Container {
 	@Nullable
@@ -59,11 +63,30 @@ public class ContainerPouch extends Container {
 		if(this.inventory == null) {
 			return true; //Renaming pouch
 		}
+		
+		if(this.getItemInventory().getInventoryItemStack().isEmpty()) {
+			return false;
+		}
+		
+		//Check if pouch is in equipment
+		if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+            IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+            IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
+
+            for (int i = 0; i < inv.getSizeInventory(); i++) {
+                if (inv.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
+                    return true;
+                }
+            }
+        }
+		
+		//Check if pouch is in main inventory
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			if(player.inventory.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
 				return true;
 			}
 		}
+		
 		return false;
 	}
 
