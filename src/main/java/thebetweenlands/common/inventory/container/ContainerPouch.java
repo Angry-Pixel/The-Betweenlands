@@ -1,22 +1,29 @@
 package thebetweenlands.common.inventory.container;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.slot.SlotPouch;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 
 public class ContainerPouch extends Container {
+	@Nullable
 	private final InventoryItem inventory;
+	
 	private int numRows = 3;
 
-	public ContainerPouch(EntityPlayer player, InventoryPlayer playerInventory, InventoryItem itemInventory) {
+	/**
+	 * Creates a new lurker skin pouch container
+	 * @param player The player that opened the inventory
+	 * @param playerInventory The player's inventory
+	 * @param itemInventory The item inventory, null if the renaming GUI was opened
+	 */
+	public ContainerPouch(EntityPlayer player, InventoryPlayer playerInventory, @Nullable InventoryItem itemInventory) {
 		this.inventory = itemInventory;
 
 		if(this.inventory == null || this.inventory.isEmpty()) {
@@ -49,6 +56,9 @@ public class ContainerPouch extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
+		if(this.inventory == null) {
+			return true; //Renaming pouch
+		}
 		for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 			if(player.inventory.getStackInSlot(i) == this.inventory.getInventoryItemStack()) {
 				return true;
