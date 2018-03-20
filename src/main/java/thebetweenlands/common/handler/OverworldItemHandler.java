@@ -280,7 +280,7 @@ public class OverworldItemHandler {
 			for(int i = 0; i < invCount; i++) {
 				ItemStack stack = player.inventory.getStackInSlot(i);
 				if(!stack.isEmpty()) {
-					if(stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
+					if(BetweenlandsConfig.GENERAL.reverseRottenFood && stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
 						ItemStack originalStack = ItemRegistry.ROTTEN_FOOD.getOriginalStack(stack);
 						if(!originalStack.isEmpty()) {
 							originalStack.setCount(stack.getCount());
@@ -318,7 +318,7 @@ public class OverworldItemHandler {
 						ItemRegistry.TAINTED_POTION.setOriginalStack(taintedPotionStack, stack);
 						event.getItem().setItem(taintedPotionStack);
 					}
-				} else if(stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
+				} else if(BetweenlandsConfig.GENERAL.reverseRottenFood && stack.getItem() == ItemRegistry.ROTTEN_FOOD) {
 					ItemStack originalStack = ItemRegistry.ROTTEN_FOOD.getOriginalStack(stack);
 					if(!originalStack.isEmpty()) {
 						event.getItem().setItem(originalStack);
@@ -340,6 +340,9 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isRotting(ItemStack stack) {
+		if(!BetweenlandsConfig.GENERAL.useRottenFood) {
+			return false;
+		}
 		for(Predicate<ItemStack> whitelistPredicate : ROTTING_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
