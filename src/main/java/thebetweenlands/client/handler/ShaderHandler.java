@@ -79,10 +79,10 @@ public class ShaderHandler {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
-		if(this.cancelOverlays && event.getOverlayType() == OverlayType.WATER) {
-			event.setCanceled(this.cancelOverlays);
+		if(this.cancelOverlays) {
+			event.setCanceled(true);
 		}
 	}
 
