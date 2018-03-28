@@ -206,7 +206,7 @@ public class WorldProviderBetweenlands extends WorldProvider {
 
 	@Override
 	public boolean canDoRainSnowIce(Chunk chunk) {
-		return false;
+		return true;
 	}
 
 	@Override
