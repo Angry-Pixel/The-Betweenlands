@@ -44,7 +44,7 @@ public class AttackDamageHandler {
 		EntityLivingBase attackedEntity = event.getEntityLiving();
 		Entity attacker = event.getAttacker();
 
-		if(attackedEntity instanceof IEntityBL && attacker instanceof EntityLivingBase) {
+		if(attackedEntity instanceof IEntityBL && attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getActiveHand() != null) {
 			EntityLivingBase entityLiving = (EntityLivingBase) attacker;
 			ItemStack heldItem = entityLiving.getHeldItem(entityLiving.getActiveHand());
 
@@ -60,7 +60,7 @@ public class AttackDamageHandler {
 		DamageSource source = event.getSource();
 		float damage = event.getAmount();
 
-		if(attackedEntity instanceof IEntityBL && source.getTrueSource() instanceof EntityLivingBase) {
+		if(attackedEntity instanceof IEntityBL && source.getTrueSource() instanceof EntityLivingBase && ((EntityLivingBase) source.getTrueSource()).getActiveHand() != null) {
 			//BL mobs overworld item resistance
 			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
 			ItemStack heldItem = attacker.getHeldItem(attacker.getActiveHand());
