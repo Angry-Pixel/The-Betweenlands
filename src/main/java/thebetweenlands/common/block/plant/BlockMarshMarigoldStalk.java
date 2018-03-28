@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.plant;
 
 import java.util.List;
+import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 
@@ -52,5 +53,29 @@ public class BlockMarshMarigoldStalk extends BlockStackablePlantUnderwater {
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
 		return ImmutableList.of(new ItemStack(Item.getItemFromBlock(BlockRegistry.MARSH_MARIGOLD_FLOWER)));
+	}
+	
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+	
+	@Override
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		return super.canSpreadTo(world, pos, state, targetPos, rand) && world.isAirBlock(targetPos.up());
+	}
+	
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		super.spreadTo(world, pos, state, targetPos, rand);
+		world.setBlockState(targetPos.up(), BlockRegistry.MARSH_MARIGOLD_FLOWER.getDefaultState());
+	}
+	
+	@Override
+	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
+		super.decayPlant(world, pos, state, rand);
+		if(world.getBlockState(pos.up()).getBlock() == BlockRegistry.MARSH_MARIGOLD_FLOWER) {
+			world.setBlockToAir(pos.up());
+		}
 	}
 }

@@ -240,4 +240,9 @@ public class BlockStackablePlantUnderwater extends BlockPlantUnderwater {
 			builder.ignore(IS_TOP, IS_BOTTOM);
 		}
 	}
+	
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return false; //Stackable plants usually already grow vertically
+	}
 }
