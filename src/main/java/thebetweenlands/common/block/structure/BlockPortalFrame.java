@@ -42,7 +42,7 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 		setHardness(2.0F);
 		setSoundType(SoundType.WOOD);
 		setCreativeTab(BLCreativeTabs.BLOCKS);
-		setDefaultState(this.blockState.getBaseState().withProperty(FRAME_POSITION, EnumPortalFrame.CORNER_TOP_LEFT));
+		setDefaultState(this.blockState.getBaseState().withProperty(FRAME_POSITION, EnumPortalFrame.CORNER_TOP_LEFT).withProperty(X_AXIS, false));
 	}
 
 	@Override
@@ -81,6 +81,11 @@ public class BlockPortalFrame extends BasicBlock implements ICustomItemBlock, IS
 		return type.ordinal() + (state.getValue(X_AXIS) ? 8 : 0);
 	}
 
+	@Override
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
+		return super.getSilkTouchDrop(this.getDefaultState().withProperty(FRAME_POSITION, state.getValue(FRAME_POSITION))); //Remove facing
+	}
+	
 	@Override
 	public ItemBlock getItemBlock() {
 		return ItemBlockEnum.create(this, EnumPortalFrame.class);

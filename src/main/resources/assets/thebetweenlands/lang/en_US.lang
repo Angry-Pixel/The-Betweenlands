@@ -330,6 +330,7 @@ tile.thebetweenlands.giant_root_plank_fence_gate.name=Giant Root Plank Fence Gat
 
 # Items
 
+item.thebetweenlands.enum.unknown.name=Something went wrong :(
 item.thebetweenlands.algae_item.name=Algae Clump
 item.thebetweenlands.amulet_socket.name=Amulet Socket
 item.thebetweenlands.ancient.name=Temple Disc

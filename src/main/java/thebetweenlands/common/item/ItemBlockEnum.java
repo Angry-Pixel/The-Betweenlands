@@ -55,6 +55,9 @@ public class ItemBlockEnum<T extends Enum<T> & IStringSerializable> extends Item
 					break;
 				}
 		if (match == null) {
+			if(stack.getMetadata() >= this.values.length) {
+				return "item.thebetweenlands.enum.unknown";
+			}
 			match = this.values[stack.getMetadata()];
 		}
 		return this.getUnlocalizedName(match);
