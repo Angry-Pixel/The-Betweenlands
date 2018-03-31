@@ -10,6 +10,8 @@ import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class PlayerJoinDimensionHandler {
+	public static final String NOT_FIRST_JOIN_NBT = "thebetweenlands.not_first_join";
+	
 	@SubscribeEvent
 	public static void onEntityJoin(EntityJoinWorldEvent event) {
 		if(BetweenlandsConfig.WORLD_AND_DIMENSION.activateRiftOnFirstJoin) {
@@ -19,7 +21,7 @@ public class PlayerJoinDimensionHandler {
 				NBTTagCompound dataNbt = player.getEntityData();
 				NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
 
-				boolean isFirstTime = !(persistentNbt.hasKey("thebetweenlands.not_first_join", Constants.NBT.TAG_BYTE) && persistentNbt.getBoolean("thebetweenlands.not_first_join"));
+				boolean isFirstTime = !(persistentNbt.hasKey(NOT_FIRST_JOIN_NBT, Constants.NBT.TAG_BYTE) && persistentNbt.getBoolean(NOT_FIRST_JOIN_NBT));
 
 				if(isFirstTime) {
 					int minActiveTicks = BetweenlandsConfig.WORLD_AND_DIMENSION.minRiftOnFirstJoinDuration * 20;
@@ -32,7 +34,7 @@ public class PlayerJoinDimensionHandler {
 						rift.setTicks(minActiveTicks);
 					}
 
-					persistentNbt.setBoolean("thebetweenlands.not_first_join", true);
+					persistentNbt.setBoolean(NOT_FIRST_JOIN_NBT, true);
 					dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
 				}
 			}

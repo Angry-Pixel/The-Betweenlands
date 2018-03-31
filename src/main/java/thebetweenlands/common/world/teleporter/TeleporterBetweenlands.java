@@ -10,7 +10,9 @@ import javax.annotation.Nullable;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -21,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BiomeRegistry;
@@ -36,6 +39,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 	private final int fromDim;
 	private final AxisAlignedBB fromBounds;
 
+	public static final String LAST_PORTAL_POS_NBT = "thebetweenlands.last_portal_location";
+	
 	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld) {
 		super(toWorld);
 		this.fromBounds = fromBounds;
@@ -61,7 +66,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 				}
 
 				this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
-				this.setDefaultPlayerSpawnLocation(entity);
+				this.setDefaultPlayerSpawnLocation(pos, entity);
 			}
 		}
 	}
@@ -73,7 +78,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		if(existingPortal != null) {
 			//Portal exists already
 			this.setEntityLocation(entity, existingPortal.getX() + 0.5D, existingPortal.getY() + 2.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
-			this.setDefaultPlayerSpawnLocation(entity);
+			this.setDefaultPlayerSpawnLocation(existingPortal, entity);
 			return true;
 		}
 
@@ -360,7 +365,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 
 		this.setEntityLocation(entity, newPortalPos.getX() + playerOffsetX, newPortalPos.getY() + playerOffsetY, newPortalPos.getZ() + playerOffsetZ, entity.rotationYaw, 0);
-		this.setDefaultPlayerSpawnLocation(entity);
+		this.setDefaultPlayerSpawnLocation(newPortalPos, entity);
 	}
 
 	protected boolean spiralGenerate(BlockPos center, int radius, int yDown, int yUp, Function<MutableBlockPos, Boolean> gen) {
@@ -467,7 +472,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 * Sets the entities spawn location if necessary
 	 * @param entity
 	 */
-	public void setDefaultPlayerSpawnLocation(Entity entity) {
+	public void setDefaultPlayerSpawnLocation(BlockPos portalPos, Entity entity) {
 		if (entity instanceof EntityPlayerMP == false) {
 			return;
 		}
@@ -481,6 +486,16 @@ public final class TeleporterBetweenlands extends Teleporter {
 			int spawnFuzzHalf = spawnFuzz / 2;
 			BlockPos spawnPlace = this.toWorld.getTopSolidOrLiquidBlock(coords.add(this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
 			player.setSpawnChunk(spawnPlace, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+		}
+
+		if(this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+			NBTTagCompound dataNbt = player.getEntityData();
+			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
+
+			if(!persistentNbt.hasKey(LAST_PORTAL_POS_NBT, Constants.NBT.TAG_LONG)) {
+				persistentNbt.setLong(LAST_PORTAL_POS_NBT, portalPos.toLong());
+				dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
+			}
 		}
 	}
 
