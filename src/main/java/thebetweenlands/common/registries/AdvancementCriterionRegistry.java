@@ -30,6 +30,7 @@ public class AdvancementCriterionRegistry {
     public static final NoCriteriaTrigger COAT_TOOL = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "coat_tool")));
     public static final NoCriteriaTrigger DROP_SHIMMERSTONE = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "drop_shimmerstone")));
     public static final NoCriteriaTrigger FLUX_ADDED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "flux_added")));
+    public static final NoCriteriaTrigger DAMP_TORCH_PLACED = CriteriaTriggers.register(new NoCriteriaTrigger(new ResourceLocation(ModInfo.ID, "damp_torch_placed")));
 
     public static void preInit() { }
 }

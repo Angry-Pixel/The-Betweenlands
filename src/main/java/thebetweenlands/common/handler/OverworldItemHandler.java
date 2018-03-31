@@ -4,10 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 
+import com.mojang.realmsclient.dto.PlayerInfo;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
@@ -44,6 +47,7 @@ import thebetweenlands.common.item.tools.ItemBLShovel;
 import thebetweenlands.common.item.tools.ItemBLSword;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -69,26 +73,32 @@ public class OverworldItemHandler {
 		 * @param world
 		 * @param pos
 		 * @param stack
+		 * @param player
 		 * @return Return true if the placing was handled
 		 */
-		public default boolean onTorchItemPlaced(World world, BlockPos pos, ItemStack stack) {
+		public default boolean onTorchItemPlaced(World world, BlockPos pos, ItemStack stack, EntityPlayer player) {
 			return false;
 		}
 
 		/**
 		 * Returns whether the specified block is a torch block that should be destroyed or replaced
-		 * @param block
+		 * @param world
+		 * @param pos
+		 * @param state
+		 * @param stack
+		 * @param player
 		 * @return
 		 */
-		public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack);
+		public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player);
 
 		/**
 		 * Called when a torch is placed, by default replaces the block with a damp torch
 		 * @param world
 		 * @param pos
 		 * @param block
+		 * @param player
 		 */
-		public default void onTorchBlockPlaced(World world, BlockPos pos, IBlockState state, ItemStack stack) {
+		public default void onTorchBlockPlaced(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player) {
 
 		}
 	}
@@ -152,16 +162,19 @@ public class OverworldItemHandler {
 			}
 
 			@Override
-			public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack) {
+			public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player) {
 				return state.getBlock() instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(state.getBlock());
 			}
 
 			@Override
-			public void onTorchBlockPlaced(World world, BlockPos pos, IBlockState state, ItemStack stack) {
+			public void onTorchBlockPlaced(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player) {
 				EnumFacing facing = state.getValue(BlockTorch.FACING);
 				IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
 				world.setBlockState(pos, dampTorch);
-				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);;
+				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
+				if(player instanceof EntityPlayerMP) {
+					AdvancementCriterionRegistry.DAMP_TORCH_PLACED.trigger((EntityPlayerMP) player);
+				}
 			}
 		};
 		TORCH_PLACE_HANDLERS.put(vanillaTorchPlaceHandler.getID(), vanillaTorchPlaceHandler);
@@ -174,14 +187,14 @@ public class OverworldItemHandler {
 			if(!held.isEmpty()) {
 				for(ITorchPlaceHandler handler : TORCH_PLACE_HANDLERS.values()) {
 					if(handler.isTorchItem(held)) {
-						if(!handler.onTorchItemPlaced(event.getWorld(), event.getPos(), held)) {
+						if(!handler.onTorchItemPlaced(event.getWorld(), event.getPos(), held, event.getPlayer())) {
 							for(int x = -2; x <= 2; x++) {
 								for(int y = -2; y <= 2; y++) {
 									for(int z = -2; z <= 2; z++) {
 										BlockPos offset = event.getPos().add(x, y, z);
 										IBlockState state = event.getWorld().getBlockState(offset);
-										if(handler.isTorchBlock(event.getWorld(), offset, state, held)) {
-											handler.onTorchBlockPlaced(event.getWorld(), offset, state, held);
+										if(handler.isTorchBlock(event.getWorld(), offset, state, held, event.getPlayer())) {
+											handler.onTorchBlockPlaced(event.getWorld(), offset, state, held, event.getPlayer());
 										}
 									}
 								}

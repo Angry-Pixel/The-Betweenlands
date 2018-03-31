@@ -13,13 +13,7 @@
   "parent": "thebetweenlands:survivalist/root",
   "criteria": {
     "place_torch": {
-      "trigger": "minecraft:placed_block",
-      "conditions": {
-        "block": "minecraft:torch",
-        "location": {
-          "dimension": "betweenlands"
-        }
-      }
+      "trigger": "thebetweenlands:damp_torch_placed"
     }
   }
 }
