@@ -2,10 +2,10 @@ language: java
 jdk:
 - oraclejdk8
 before_install:
-- openssl aes-256-cbc -k "$deployKeyEncryptionKey" -in deployment/deploy_key.pem.enc
-  -out deployment/deploy_key.pem -d
 - chmod +x gradlew
 - chmod +x deployment/deploy.sh
+- chmod +x deployment/decrypt_deploy_key.sh
+- source deployment/decrypt_deploy_key.sh
 before_cache:
 - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
 - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
