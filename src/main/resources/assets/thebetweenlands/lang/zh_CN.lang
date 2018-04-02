@@ -338,7 +338,7 @@ item.thebetweenlands.angler_meat_raw.name=生鮟鱇鱼肉
 item.thebetweenlands.angler_tooth.name=鮟鱇牙齿
 item.thebetweenlands.arrow_arum_leaf.name=茯苓叶
 item.thebetweenlands.aspectrus_fruit.name=要素果实
-item.thebetweenlands.aspectrus_fruit.filled.name=要素果实 - %s （%s）
+item.thebetweenlands.aspectrus_fruit.filled.name=要素果实 - %s（%s）
 item.thebetweenlands.astatos.name=传说唱片
 item.thebetweenlands.beneath_a_green_sky.name=绿色星空唱片
 item.thebetweenlands.between_you_and_me.name=部落勇士唱片
@@ -632,7 +632,7 @@ item.thebetweenlands.spores.name=孢子
 item.thebetweenlands.bl_bucket_plant_tonic_syrmorite.name=铜桶装植物营养剂
 item.thebetweenlands.bl_bucket_plant_tonic_weedwood.name=木桶装植物营养剂
 item.thebetweenlands.syrmorite_bucket_solid_rubber.name=固态橡胶桶
-item.thebetweenlands.aspectrus_seeds.filled.name=要素植物种子 - %s （%s）
+item.thebetweenlands.aspectrus_seeds.filled.name=要素植物种子 - %s（%s）
 item.thebetweenlands.aspectrus_seeds.name=要素植物种子
 item.thebetweenlands.dentrothyst_shield_green.name=绿色木晶盾
 item.thebetweenlands.dentrothyst_shield_orange.name=橙色木晶盾
@@ -653,8 +653,8 @@ item.thebetweenlands.elixir.dentrothyst_vial.orange.name=橙色木晶药瓶
 item.thebetweenlands.elixir.dentrothyst_vial.dirty.name=变脏的木晶药瓶
 item.thebetweenlands.aspect_vial.green.name=绿色木晶要素瓶
 item.thebetweenlands.aspect_vial.orange.name=橙色木晶要素瓶
-item.thebetweenlands.aspect_vial.green.filled.name=%s （%s）
-item.thebetweenlands.aspect_vial.orange.filled.name=%s （%s）
+item.thebetweenlands.aspect_vial.green.filled.name=%s（%s）
+item.thebetweenlands.aspect_vial.orange.filled.name=%s（%s）
 
 # Fluids
 fluid.swamp_water=沼泽水
@@ -763,7 +763,7 @@ tooltip.infusion.ingredients=§a原料：
 tooltip.infusion.empty=空
 
 tooltip.bl.elixir.potency=§9效果：%s
-tooltip.bl.elixir.duration=§9时长：%s （%s）
+tooltip.bl.elixir.duration=§9时长：%s（%s）
 tooltip.bl.elixir.when_applied=§5生效时：
 tooltip.bl.elixir.foggedMind.effect=忧愁扰乱了清晰的思维，\n迷雾遮挡了明亮的眼睛
 tooltip.bl.elixir.heavyweight.effect=魔法成了行动的镣铐，\n无法挣脱水和污泥，\n其他魔力也无济于事
