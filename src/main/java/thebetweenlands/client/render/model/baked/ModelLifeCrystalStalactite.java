@@ -147,7 +147,7 @@ public class ModelLifeCrystalStalactite implements IModel {
 								builder.setSprite(this.textureOre);
 						}
 
-						if(i == 1 && BetweenlandsConfig.RENDERING.fullbrightBlocks) {
+						if(i == 1) {
 							builder.setLightmap(15, 15);
 						}
 						
