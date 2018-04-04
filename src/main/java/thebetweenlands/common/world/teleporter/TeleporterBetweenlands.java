@@ -23,9 +23,9 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraftforge.common.util.Constants;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.handler.PlayerRespawnHandler;
 import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
@@ -481,21 +481,16 @@ public final class TeleporterBetweenlands extends Teleporter {
 		BlockPos coords = player.getBedLocation(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 
 		if (coords == null) {
-			coords = player.getPosition();
-			int spawnFuzz = 64;
-			int spawnFuzzHalf = spawnFuzz / 2;
-			BlockPos spawnPlace = this.toWorld.getTopSolidOrLiquidBlock(coords.add(this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf, 0, this.toWorld.rand.nextInt(spawnFuzz) - spawnFuzzHalf));
-			player.setSpawnChunk(spawnPlace, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+			coords = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, portalPos);
+			player.setSpawnChunk(coords, true, BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 
 		if(this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			NBTTagCompound dataNbt = player.getEntityData();
 			NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
 
-			if(!persistentNbt.hasKey(LAST_PORTAL_POS_NBT, Constants.NBT.TAG_LONG)) {
-				persistentNbt.setLong(LAST_PORTAL_POS_NBT, portalPos.toLong());
-				dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
-			}
+			persistentNbt.setLong(LAST_PORTAL_POS_NBT, portalPos.toLong());
+			dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
 		}
 	}
 
