@@ -1,5 +1,7 @@
 package thebetweenlands.common.block.container;
 
+import java.util.Random;
+
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockHorizontal;
@@ -27,6 +29,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.recipes.ICompostBinRecipe;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.BasicBlock;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
@@ -82,6 +85,18 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 	}
 
 	@Override
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer playerIn) {
+		if(!world.isRemote) {
+			if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
+				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
+				tile.setOpen(!tile.isOpen());
+				world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+				tile.markDirty();
+			}
+		}
+	}
+	
+	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,  EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
 
@@ -90,37 +105,42 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
 				TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
 				boolean open = tile.isOpen();
 
-				if(heldItem.isEmpty() && player.isSneaking()) {
-					tile.setOpen(!open);
-					world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
-					tile.markDirty();
-				} else if(open && !heldItem.isEmpty()) {
-					ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(heldItem);
-					if (compostRecipe != null) {
-						int amount = compostRecipe.getCompostAmount(heldItem);
-						int time = compostRecipe.getCompostingTime(heldItem);
-						switch (tile.addItemToBin(heldItem, amount, time, true)) {
-						case 1:
-							tile.addItemToBin(heldItem, amount, time, false);
-							if (!player.capabilities.isCreativeMode) {
-								player.getHeldItem(hand).shrink(1);
-							}
-							break;
-						case -1:
-						default:
-							player.sendStatusMessage(new TextComponentTranslation("chat.compost.full"), true);
-							break;
+				boolean interacted = false;
+				
+				if(open) {
+					if(tile.getCompostedAmount() > 0) {
+						if (tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {
+							world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, EnumItemMisc.COMPOST.create(1)));
+							interacted = true;
 						}
-					} else {
-						player.sendStatusMessage(new TextComponentTranslation("chat.compost.not.compostable"), true);
 					}
-				} else if(tile.getCompostedAmount() > 0 && open) {
-					if (tile.removeCompost(TileEntityCompostBin.COMPOST_PER_ITEM)) {
-						world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, EnumItemMisc.COMPOST.create(1)));
+					
+					if(!interacted && !heldItem.isEmpty()) {
+						ICompostBinRecipe compostRecipe = CompostRecipe.getCompostRecipe(heldItem);
+						if (compostRecipe != null) {
+							int amount = compostRecipe.getCompostAmount(heldItem);
+							int time = compostRecipe.getCompostingTime(heldItem);
+							switch (tile.addItemToBin(heldItem, amount, time, true)) {
+							case 1:
+								tile.addItemToBin(heldItem, amount, time, false);
+								if (!player.capabilities.isCreativeMode) {
+									player.getHeldItem(hand).shrink(1);
+								}
+								break;
+							case -1:
+							default:
+								player.sendStatusMessage(new TextComponentTranslation("chat.compost.full"), true);
+								break;
+							}
+						} else {
+							player.sendStatusMessage(new TextComponentTranslation("chat.compost.not.compostable"), true);
+						}
+						interacted = true;
 					}
 				}
 			}
 		}
+		
 		return true;
 	}
 
@@ -161,4 +181,14 @@ public class BlockCompostBin extends BasicBlock implements ITileEntityProvider {
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public void randomDisplayTick(IBlockState stateIn, World world, BlockPos pos, Random rand) {
+		if (world.getTileEntity(pos) instanceof TileEntityCompostBin) {
+			TileEntityCompostBin tile = (TileEntityCompostBin) world.getTileEntity(pos);
+			if(!tile.isOpen() && !tile.isEmpty()) {
+				BLParticles.DIRT_DECAY.spawn(world, pos.getX() + 0.2F + rand.nextFloat() * 0.62F, pos.getY() + rand.nextFloat() * 0.75F, pos.getZ() + 0.2F + rand.nextFloat() * 0.6F);
+			}
+		}
+	}
 }

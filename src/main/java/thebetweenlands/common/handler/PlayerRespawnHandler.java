@@ -24,9 +24,8 @@ public class PlayerRespawnHandler {
 	public static void onRespawn(PlayerRespawnEvent event) {
 		if(!event.player.world.isRemote && event.player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			BlockPos spawnPos = event.player.getBedLocation(event.player.dimension);
-			boolean forced = event.player.isSpawnForced(event.player.dimension);
 
-			BlockPos adjustedSpawnPos = EntityPlayer.getBedSpawnLocation(event.player.world, spawnPos, forced);
+			BlockPos adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(event.player.world, spawnPos, event.player.isSpawnForced(event.player.dimension));
 
 			if(adjustedSpawnPos == null) {
 				NBTTagCompound dataNbt = event.player.getEntityData();

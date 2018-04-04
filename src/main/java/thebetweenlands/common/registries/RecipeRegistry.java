@@ -322,8 +322,8 @@ public class RecipeRegistry {
 	}
 
 	private static void registerPestleAndMortarRecipes() {
-		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(1)), new ItemStack(BlockRegistry.LIMESTONE));
-		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(1)), new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
+		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(3)), new ItemStack(BlockRegistry.LIMESTONE));
+		PestleAndMortarRecipe.addRecipe((EnumItemMisc.LIMESTONE_FLUX.create(3)), new ItemStack(BlockRegistry.POLISHED_LIMESTONE));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_ALGAE.create(1)), (ItemPlantDrop.EnumItemPlantDrop.ALGAE_ITEM.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_ANGLER_TOOTH.create(1)), (EnumItemMisc.ANGLER_TOOTH.create(1)));
 		PestleAndMortarRecipe.addRecipe((ItemCrushed.EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1)), new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM, 1));
