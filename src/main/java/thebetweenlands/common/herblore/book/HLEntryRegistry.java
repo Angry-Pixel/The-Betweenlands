@@ -101,8 +101,9 @@ public class HLEntryRegistry {
         }
         tempItems.add(0, new Page("ingredient_info", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 600, 271, 1024.0D, 1024.0D)).setPageNumber(tempNum));
         entryPages.add(new Page("ingredient_list", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 308, 271, 1024.0D, 1024.0D)));
-        entryPages.addAll(PageCreators.pageCreatorButtons(tempItems, manualType));
-        indexPages += PageCreators.pageCreatorButtons(tempItems, manualType).size();
+        ArrayList<Page> buttons = PageCreators.pageCreatorButtons(tempItems, manualType);
+        indexPages += buttons.size();
+        entryPages.addAll(buttons);
         entryPages.addAll(temp);
         entryPages.addAll(tempItems);
         entryPages.add(0, new Page("intro_1", false, manualType, new PictureWidget(16, 12, "thebetweenlands:textures/gui/manual/manual_hl.png", 122, 150, 16, 271, 1024.0D, 1024.0D), new ButtonWidget(31, 49, 87, 9, 6, false), new ButtonWidget(31, 68, 55, 9, 1, true), new ButtonWidget(31, 86, 73, 9, tempNum, true)));

@@ -71,21 +71,23 @@ public class MessageBlockGuardSectionChange extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(this.id));
-		if(storage != null && storage instanceof LocationGuarded) {
-			LocationGuarded location = (LocationGuarded) storage;
-			if(location.getGuard() != null) {
-				GuardChunkSection section = location.getGuard().getSection(this.pos);
-				if(this.data != null) {
-					//Make sure chunk and section are loaded and not null
-					location.getGuard().setGuarded(world, this.pos, true);
-					section = location.getGuard().getSection(this.pos);
-					if(section != null) {
-						section.loadData(this.data);
+		if(world != null) {
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+			ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(this.id));
+			if(storage != null && storage instanceof LocationGuarded) {
+				LocationGuarded location = (LocationGuarded) storage;
+				if(location.getGuard() != null) {
+					GuardChunkSection section = location.getGuard().getSection(this.pos);
+					if(this.data != null) {
+						//Make sure chunk and section are loaded and not null
+						location.getGuard().setGuarded(world, this.pos, true);
+						section = location.getGuard().getSection(this.pos);
+						if(section != null) {
+							section.loadData(this.data);
+						}
+					} else if(section != null) {
+						section.clear();
 					}
-				} else if(section != null) {
-					section.clear();
 				}
 			}
 		}

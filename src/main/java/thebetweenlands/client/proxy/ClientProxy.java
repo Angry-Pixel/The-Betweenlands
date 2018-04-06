@@ -180,7 +180,12 @@ public class ClientProxy extends CommonProxy {
 			break;
 
 		case GUI_HL:
-			return new GuiManualHerblore(player);
+			EnumHand hand = x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+			ItemStack manual = player.getHeldItem(hand);
+			if(!manual.isEmpty() && manual.getItem() == ItemRegistry.MANUAL_HL) {
+				return new GuiManualHerblore(player, manual, hand);
+			}
+			break;
 
 		case GUI_BL_FURNACE:
 			if (tile instanceof TileEntityBLFurnace) {

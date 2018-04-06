@@ -22,6 +22,7 @@ import thebetweenlands.client.render.shader.postprocessing.Tonemapper;
 import thebetweenlands.client.render.shader.postprocessing.WorldShader;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.util.RenderUtils;
 
 public class ShaderHelper implements IResourceManagerReloadListener {
 	private ShaderHelper() { }
@@ -169,6 +170,13 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	public void renderShaders(float partialTicks) {
 		if(this.shadersUpdated && this.worldShader != null && this.isRequired() && this.canUseShaders()) {
 			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+			int parentFboId = -1;
+			if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+				parentFboId = RenderUtils.getBoundFramebuffer();
+			}
+			if(parentFboId == -1) {
+				parentFboId = mainFramebuffer.framebufferObject;
+			}
 			Framebuffer blitFramebuffer = this.blitBuffer.getFramebuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);;
 			Framebuffer targetFramebuffer1 = mainFramebuffer;
 			Framebuffer targetFramebuffer2 = blitFramebuffer;
@@ -204,8 +212,8 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 
 			//Render last pass to the main framebuffer if necessary
 			if(targetFramebuffer1 != mainFramebuffer) {
-				mainFramebuffer.bindFramebuffer(false);
-
+				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
+				
 				float renderWidth = (float)targetFramebuffer1.framebufferTextureWidth;
 				float renderHeight = (float)targetFramebuffer1.framebufferTextureHeight;
 

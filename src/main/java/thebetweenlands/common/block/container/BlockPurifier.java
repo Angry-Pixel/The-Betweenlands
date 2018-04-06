@@ -36,6 +36,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.BasicBlock;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityPurifier;
@@ -220,4 +221,15 @@ public class BlockPurifier extends BasicBlock implements ITileEntityProvider {
         TileEntity tileentity = worldIn.getTileEntity(pos);
         return tileentity == null ? false : tileentity.receiveClientEvent(id, param);
     }
+	
+	@Override
+	public void fillWithRain(World world, BlockPos pos) {
+		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityPurifier) {
+			TileEntityPurifier tile = (TileEntityPurifier) world.getTileEntity(pos);
+			
+			if(tile != null) {
+				tile.fill(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME / 2), true);
+			}
+		}
+	}
 }

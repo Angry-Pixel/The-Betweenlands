@@ -174,7 +174,7 @@ public class PageCreators {
         widgets.add(new TextWidget(18, 12 + height, "manual.has.aspects"));
         height += 18;
         widgets.add(new AspectSlideShowWidget(18, 12 + height, itemStack));
-        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).addItem(PestleAndMortarRecipe.getInput(itemStack)).setLocalizedPageName(itemStack.getDisplayName()));
+        newPages.add(new Page(itemStack.getDisplayName().toLowerCase().replace(" ", ""), widgets, true, manualType).setParent().addItem(itemStack).addItems(getStacks(PestleAndMortarRecipe.getInput(itemStack))).setLocalizedPageName(itemStack.getDisplayName()));
         return newPages;
     }
 

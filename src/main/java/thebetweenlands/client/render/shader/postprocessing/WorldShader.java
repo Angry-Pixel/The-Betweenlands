@@ -14,6 +14,9 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.entity.Entity;
@@ -26,6 +29,7 @@ import thebetweenlands.client.render.shader.DepthBuffer;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.LightSource;
 import thebetweenlands.client.render.shader.ResizableFramebuffer;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.mobs.EntityGasCloud;
@@ -36,6 +40,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.GLUProjection;
 import thebetweenlands.util.GLUProjection.ClampMode;
 import thebetweenlands.util.GLUProjection.Projection;
+import thebetweenlands.util.RenderUtils;
 
 /**
  * TODO: Make lighting and other spacial effects use "correct" deferred rendering
@@ -442,12 +447,12 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	 */
 	public void renderPostEffects(float partialTicks) {
 		ScaledResolution scaledResolution = new ScaledResolution(Minecraft.getMinecraft());
-		GL11.glMatrixMode(GL11.GL_PROJECTION);
-		GL11.glLoadIdentity();
-		GL11.glOrtho(0.0D, scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
-		GL11.glMatrixMode(GL11.GL_MODELVIEW);
-		GL11.glLoadIdentity();
-		GL11.glTranslatef(0.0F, 0.0F, -2000.0F);
+		GlStateManager.matrixMode(GL11.GL_PROJECTION);
+		GlStateManager.loadIdentity();
+		GlStateManager.ortho(0.0D, scaledResolution.getScaledWidth(), scaledResolution.getScaledHeight(), 0.0D, 1000.0D, 3000.0D);
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+		GlStateManager.loadIdentity();
+		GlStateManager.translate(0.0F, 0.0F, -2000.0F);
 
 		this.applyBloodSky(partialTicks);
 		this.applySwirl(partialTicks);
@@ -518,7 +523,7 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		}
 
 		int depthTexture = this.depthBuffer.getGlTextureId();
-		int clipPlaneBuffer = WorldProviderBetweenlands.getBLSkyRenderer().clipPlaneBuffer.getDepthTexture();
+		int clipPlaneBuffer = BLSkyRenderer.clipPlaneBuffer.getDepthTexture();
 
 		if (depthTexture < 0 || clipPlaneBuffer < 0) return; //FBOs not yet ready
 
@@ -547,29 +552,29 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 		.setSource(mainFramebuffer.framebufferTexture)
 		.setPreviousFramebuffer(mainFramebuffer)
 		.render(partialTicks);
-
+		
 		//Render blitFramebuffer to main framebuffer
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glColor4f(0.7F, 0.1F, 0.0F, skyTransparency / 2.5F);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, blitFramebuffer.framebufferTexture);
-		GL11.glBegin(GL11.GL_TRIANGLES);
-		GL11.glTexCoord2d(0.0D, 1.0D);
-		GL11.glVertex2d(0, 0);
-		GL11.glTexCoord2d(0.0D, 0.0D);
-		GL11.glVertex2d(0, renderHeight);
-		GL11.glTexCoord2d(1.0D, 0.0D);
-		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2d(1.0D, 0.0D);
-		GL11.glVertex2d(renderWidth, renderHeight);
-		GL11.glTexCoord2d(1.0D, 1.0D);
-		GL11.glVertex2d(renderWidth, 0);
-		GL11.glTexCoord2d(0.0D, 1.0D);
-		GL11.glVertex2d(0, 0);
-		GL11.glEnd();
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.enableBlend();
+		GlStateManager.enableTexture2D();
+		GlStateManager.color(0.7F, 0.1F, 0.0F, skyTransparency / 2.5F);
+		GlStateManager.bindTexture(blitFramebuffer.framebufferTexture);
+		GlStateManager.glBegin(GL11.GL_TRIANGLES);
+		GlStateManager.glTexCoord2f(0.0F, 1.0F);
+		GlStateManager.glVertex3f(0, 0, 0);
+		GlStateManager.glTexCoord2f(0.0F, 0.0F);
+		GlStateManager.glVertex3f(0, (float)renderHeight, 0);
+		GlStateManager.glTexCoord2f(1.0F, 0.0F);
+		GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+		GlStateManager.glTexCoord2f(1.0F, 0.0F);
+		GlStateManager.glVertex3f((float)renderWidth, (float)renderHeight, 0);
+		GlStateManager.glTexCoord2f(1.0F, 1.0F);
+		GlStateManager.glVertex3f((float)renderWidth, 0, 0);
+		GlStateManager.glTexCoord2f(0.0F, 1.0F);
+		GlStateManager.glVertex3f(0, 0, 0);
+		GlStateManager.glEnd();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 	}
 
 	/**
@@ -660,8 +665,15 @@ public class WorldShader extends PostProcessingEffect<WorldShader> {
 	public void postRender(float partialTicks) {
 		//Clear gas particles buffer after rendering the shader for the next frame
 		Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
+		int parentFboId = -1;
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			parentFboId = RenderUtils.getBoundFramebuffer();
+		}
+		if(parentFboId == -1) {
+			parentFboId = mainFramebuffer.framebufferObject;
+		}
 		this.gasParticlesBuffer.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
 		this.gasParticlesBuffer.clear(0, 0, 0, 0, 1);
-		mainFramebuffer.bindFramebuffer(false);
+		OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
 	}
 }

@@ -156,6 +156,16 @@ public class BetweenlandsConfig {
 		@Comment("A list of items that should be whitelisted from rotting in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
 		public String[] rottenFoodWhitelistUnparsed = {};
 
+		@Name("reverse_rotten_food")
+		@LangKey(LANG_PREFIX + "reverse_rotten_food")
+		@Comment("Whether rotten food should turn back into normal food when leaving the dimension")
+		public boolean reverseRottenFood = true;
+		
+		@Name("use_rotten_food")
+		@LangKey(LANG_PREFIX + "use_rotten_food")
+		@Comment("Whether food from the overworld should rot when going into the dimension")
+		public boolean useRottenFood = true;
+		
 		@Name("caving_rope_indicator")
 		@LangKey(LANG_PREFIX + "caving_rope_indicator")
 		@Comment("Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left")

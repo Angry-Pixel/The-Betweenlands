@@ -56,12 +56,14 @@ public class MessageSyncLocalStorageReferences extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		Chunk chunk = world.getChunkFromChunkCoords(this.pos.x, this.pos.z);
-		if(chunk != null) {
-			IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
-			IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
-			if(chunkStorage != null) {
-				chunkStorage.readLocalStorageReferences(this.nbt);
+		if(world != null) {
+			Chunk chunk = world.getChunkFromChunkCoords(this.pos.x, this.pos.z);
+			if(chunk != null) {
+				IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
+				IChunkStorage chunkStorage = worldStorage.getChunkStorage(chunk);
+				if(chunkStorage != null) {
+					chunkStorage.readLocalStorageReferences(this.nbt);
+				}
 			}
 		}
 	}

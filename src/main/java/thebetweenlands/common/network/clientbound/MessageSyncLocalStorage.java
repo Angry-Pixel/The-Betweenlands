@@ -51,24 +51,26 @@ public class MessageSyncLocalStorage extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
-		ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
-		ILocalStorage localStorage = storageHandler.createLocalStorageFromNBT(this.nbt, null, true);
-		ILocalStorage loadedStorage = storageHandler.getLocalStorage(localStorage.getID());
-		
-		if(loadedStorage != null && localStorage.getLinkedChunks().isEmpty()) {
-			//Remove storage if all chunks have been unlinked
-			storageHandler.removeLocalStorage(loadedStorage);
-		} else {
-			if(loadedStorage != null && localStorage.getClass() == loadedStorage.getClass()) {
-				//Storage already loaded, update NBT only
-				loadedStorage.readFromPacketNBT(storageHandler.getLocalStorageDataNBT(this.nbt));
+		if(world != null) {
+			IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
+			ILocalStorageHandler storageHandler = worldStorage.getLocalStorageHandler();
+			ILocalStorage localStorage = storageHandler.createLocalStorageFromNBT(this.nbt, null, true);
+			ILocalStorage loadedStorage = storageHandler.getLocalStorage(localStorage.getID());
+			
+			if(loadedStorage != null && localStorage.getLinkedChunks().isEmpty()) {
+				//Remove storage if all chunks have been unlinked
+				storageHandler.removeLocalStorage(loadedStorage);
 			} else {
-				//Remove storage if the class is not matching
-				if(loadedStorage != null) {
-					storageHandler.removeLocalStorage(loadedStorage);
+				if(loadedStorage != null && localStorage.getClass() == loadedStorage.getClass()) {
+					//Storage already loaded, update NBT only
+					loadedStorage.readFromPacketNBT(storageHandler.getLocalStorageDataNBT(this.nbt));
+				} else {
+					//Remove storage if the class is not matching
+					if(loadedStorage != null) {
+						storageHandler.removeLocalStorage(loadedStorage);
+					}
+					storageHandler.addLocalStorage(localStorage);
 				}
-				storageHandler.addLocalStorage(localStorage);
 			}
 		}
 	}

@@ -78,6 +78,7 @@ public class ArrowPredictionRenderer {
 
     public static void render(float quality) {
         EntityPlayer player = Minecraft.getMinecraft().player;
+        if(player.getActiveHand() == null) return;
         ItemStack stack = player.getHeldItem(player.getActiveHand());
         if(stack.isEmpty() || !(stack.getItem() instanceof ItemBow)) {
             randomYawPitchSet = false;

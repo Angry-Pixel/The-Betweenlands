@@ -301,7 +301,12 @@ public class TileEntityCompostBin extends TileEntity implements ITickable, ISide
 
     @Override
     public boolean isEmpty() {
-        return inventory.size() <= 0;
+        for(ItemStack stack : this.inventory) {
+        	if(!stack.isEmpty()) {
+        		return false;
+        	}
+        }
+        return true;
     }
 
     @MethodsReturnNonnullByDefault

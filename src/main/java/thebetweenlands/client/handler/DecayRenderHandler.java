@@ -29,7 +29,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.RenderHelper;
+import thebetweenlands.util.RenderUtils;
 
 public class DecayRenderHandler {
 	public static final ResourceLocation PLAYER_DECAY_TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/player_decay.png");
@@ -103,7 +103,7 @@ public class DecayRenderHandler {
 		if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 			IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 			if(capability.isDecayEnabled() && capability.getDecayStats().getDecayLevel() > 0) {
-				if(!RenderHelper.doesRendererHaveLayer(event.getRenderer(), LayerDecay.class, false)) {
+				if(!RenderUtils.doesRendererHaveLayer(event.getRenderer(), LayerDecay.class, false)) {
 					event.getRenderer().addLayer(new LayerDecay(event.getRenderer()));
 				}
 			}

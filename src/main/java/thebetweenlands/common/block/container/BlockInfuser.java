@@ -38,8 +38,8 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.aspect.AspectManager;
-import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -272,4 +272,15 @@ public class BlockInfuser extends BlockContainer {
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public void fillWithRain(World world, BlockPos pos) {
+		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityInfuser) {
+			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
+			
+			if(tile != null) {
+				tile.fill(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME), true);
+			}
+		}
+	}
 }

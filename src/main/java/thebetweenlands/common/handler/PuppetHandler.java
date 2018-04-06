@@ -48,7 +48,7 @@ import thebetweenlands.common.entity.ai.puppet.EntityAIPuppet;
 import thebetweenlands.common.entity.ai.puppet.EntityAIStay;
 import thebetweenlands.common.item.equipment.ItemRingOfRecruitment;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.RenderHelper;
+import thebetweenlands.util.RenderUtils;
 
 public class PuppetHandler {
 	private PuppetHandler() { }
@@ -305,7 +305,7 @@ public class PuppetHandler {
 		if(living.hasCapability(CapabilityRegistry.CAPABILITY_PUPPET, null)) {
 			IPuppetCapability cap = living.getCapability(CapabilityRegistry.CAPABILITY_PUPPET, null);
 			if(cap.hasPuppeteer()) {
-				if(!RenderHelper.doesRendererHaveLayer(event.getRenderer(), LayerPuppetOverlay.class, false)) {
+				if(!RenderUtils.doesRendererHaveLayer(event.getRenderer(), LayerPuppetOverlay.class, false)) {
 					event.getRenderer().addLayer(new LayerPuppetOverlay(event.getRenderer()));
 				}
 			}

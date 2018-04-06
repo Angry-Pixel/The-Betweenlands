@@ -62,14 +62,16 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 	private void handleMessage() {
 		if(this.nbt != null) {
 			World world = Minecraft.getMinecraft().world;
-			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
-			if(storage != null) {
-				BLEnvironmentEventRegistry eeRegistry = storage.getEnvironmentEventRegistry();
-				IEnvironmentEvent eevent = eeRegistry.forName(this.eventName);
-				if(eevent != null) {
-					eevent.loadEventPacket(this.nbt);
-					eevent.setActive(this.active, false);
-					eevent.setLoaded();
+			if(world != null) {
+				BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
+				if(storage != null) {
+					BLEnvironmentEventRegistry eeRegistry = storage.getEnvironmentEventRegistry();
+					IEnvironmentEvent eevent = eeRegistry.forName(this.eventName);
+					if(eevent != null) {
+						eevent.loadEventPacket(this.nbt);
+						eevent.setActive(this.active, false);
+						eevent.setLoaded();
+					}
 				}
 			}
 		}

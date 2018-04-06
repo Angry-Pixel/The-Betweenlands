@@ -51,11 +51,13 @@ public class MessageRemoveLocalStorage extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
-		ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
-		ILocalStorage loadedStorage = localStorageHandler.getLocalStorage(this.id);
-		if(loadedStorage != null) {
-			localStorageHandler.removeLocalStorage(loadedStorage);
+		if(world != null) {
+			IWorldStorage worldStorage = WorldStorageImpl.getCapability(world);
+			ILocalStorageHandler localStorageHandler = worldStorage.getLocalStorageHandler();
+			ILocalStorage loadedStorage = localStorageHandler.getLocalStorage(this.id);
+			if(loadedStorage != null) {
+				localStorageHandler.removeLocalStorage(loadedStorage);
+			}
 		}
 	}
 }

@@ -36,7 +36,7 @@ public class PlayerDecayHandler {
 				DecayStats stats = capability.getDecayStats();
 
 				IAttributeInstance attr = player.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH);
-
+				
 				if(attr != null) {
 					int currentMaxHealth = (int) attr.getBaseValue();
 
@@ -55,8 +55,8 @@ public class PlayerDecayHandler {
 
 						//Update health
 						attr.setBaseValue(currentMaxHealth + healthDiff);
-						if(player.getHealth() > currentMaxHealth + healthDiff) {
-							player.setHealth(currentMaxHealth + healthDiff);
+						if(player.getHealth() > attr.getAttributeValue()) {
+							player.setHealth((float)attr.getAttributeValue());
 						}
 
 						//Keep track of how much was removed

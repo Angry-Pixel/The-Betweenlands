@@ -59,27 +59,29 @@ public class MessageDruidAltarProgress extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	public void handle() {
 		World world = FMLClientHandler.instance().getWorldClient();
-		TileEntity te = world.getTileEntity(this.pos);
-		if (te instanceof TileEntityDruidAltar) {
-			TileEntityDruidAltar altar = (TileEntityDruidAltar) te;
-			if (this.progress >= 0) {
-				altar.craftingProgress = this.progress;
-			} else if(this.progress == -1) {
-				for (int x = -8; x <= 8; x++) {
-					for (int y = -8; y <= 8; y++) {
-						for (int z = -8; z <= 8; z++) {
-							BlockPos pos = te.getPos().add(x, y, z);
-							Block block = world.getBlockState(pos).getBlock();
-							if (block == BlockRegistry.DRUID_STONE_1 || block == BlockRegistry.DRUID_STONE_2 || 
-									block == BlockRegistry.DRUID_STONE_3 || block == BlockRegistry.DRUID_STONE_4 || 
-									block == BlockRegistry.DRUID_STONE_5) {
-								BLParticles.ALTAR_CRAFTING.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ParticleArgs.get().withScale(0.25F + te.getWorld().rand.nextFloat() * 0.2F).withData(te));
+		if(world != null) {
+			TileEntity te = world.getTileEntity(this.pos);
+			if (te instanceof TileEntityDruidAltar) {
+				TileEntityDruidAltar altar = (TileEntityDruidAltar) te;
+				if (this.progress >= 0) {
+					altar.craftingProgress = this.progress;
+				} else if(this.progress == -1) {
+					for (int x = -8; x <= 8; x++) {
+						for (int y = -8; y <= 8; y++) {
+							for (int z = -8; z <= 8; z++) {
+								BlockPos pos = te.getPos().add(x, y, z);
+								Block block = world.getBlockState(pos).getBlock();
+								if (block == BlockRegistry.DRUID_STONE_1 || block == BlockRegistry.DRUID_STONE_2 || 
+										block == BlockRegistry.DRUID_STONE_3 || block == BlockRegistry.DRUID_STONE_4 || 
+										block == BlockRegistry.DRUID_STONE_5) {
+									BLParticles.ALTAR_CRAFTING.spawn(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, ParticleArgs.get().withScale(0.25F + te.getWorld().rand.nextFloat() * 0.2F).withData(te));
+								}
 							}
 						}
 					}
+	
+					Minecraft.getMinecraft().getSoundHandler().playSound(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
 				}
-
-				Minecraft.getMinecraft().getSoundHandler().playSound(new DruidAltarSound(SoundRegistry.DRUID_CHANT, SoundCategory.BLOCKS, altar));
 			}
 		}
 	}

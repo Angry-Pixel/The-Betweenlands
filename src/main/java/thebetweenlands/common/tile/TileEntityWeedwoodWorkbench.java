@@ -1,5 +1,8 @@
 package thebetweenlands.common.tile;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -8,11 +11,32 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.common.util.Constants;
+import thebetweenlands.common.inventory.InventoryWeedwoodWorkbench;
 
 public class TileEntityWeedwoodWorkbench extends TileEntity {
 	public NonNullList<ItemStack> craftingSlots = NonNullList.withSize(9, ItemStack.EMPTY);
 	public ItemStack craftResult;
 	public byte rotation = 0;
+
+	private Set<InventoryWeedwoodWorkbench> openInventories = new HashSet<>();
+
+	public void openInventory(InventoryWeedwoodWorkbench inv) {
+		System.out.println(this.openInventories.size());
+		this.openInventories.add(inv);
+	}
+
+	public void closeInventory(InventoryWeedwoodWorkbench inv) {
+		this.openInventories.remove(inv);
+	}
+
+	/**
+	 * Notifies *all* open inventories of the changes, fixes dupe bug as in #532
+	 */
+	public void onCraftMatrixChanged() {
+		for(InventoryWeedwoodWorkbench inv : this.openInventories) {
+			inv.eventHandler.onCraftMatrixChanged(inv);
+		}
+	}
 
 	@Override
 	public SPacketUpdateTileEntity getUpdatePacket() {
@@ -38,6 +62,8 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 			NBTTagCompound nbtItem = items.getCompoundTagAt(i);
 			this.craftingSlots.set(nbtItem.getByte("Slot"), new ItemStack(nbtItem));
 		}
+
+		this.onCraftMatrixChanged();
 
 		this.rotation = nbt.getByte("Rotation");
 

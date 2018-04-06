@@ -62,6 +62,8 @@ public class ButtonWidget extends ManualWidgetBase {
     @Override
     public void init(GuiManualHerblore manual) {
         super.init(manual);
+        if (page != null)
+            this.pageNumber = page.pageNumber;
         if (isHidden)
             this.isHidden = !ManualManager.hasFoundPage(manual.player, page.unlocalizedPageName, manual.manualType);
     }
@@ -108,6 +110,8 @@ public class ButtonWidget extends ManualWidgetBase {
             }
             if (isHidden) {
                 color = 0x666666;
+            } else {
+                color = 0x808080;
             }
 
             TextContainer.TextPage page = this.textContainer.getPages().get(0);

@@ -53,6 +53,10 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         super(Fluid.BUCKET_VOLUME, ItemStack.EMPTY, true);
         this.emptyWeedwood = new ItemStack(bucket != null ? bucket: this, 1, 0);
         this.emptySyrmorite = new ItemStack(bucket != null ? bucket: this, 1, 1);
+        NBTTagCompound nbt = new NBTTagCompound();
+        nbt.setTag(FluidHandlerItemStackSimple.FLUID_NBT_KEY, new NBTTagCompound());
+        this.emptyWeedwood.setTagCompound(nbt);
+        this.emptySyrmorite.setTagCompound(nbt.copy());
         this.setHasSubtypes(true);
         this.setMaxStackSize(16);
         this.setMaxDamage(0);
@@ -239,7 +243,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
         return world.getBlockState(pos).getBlock() instanceof BlockInfuser;
     }
-    
+
     @Override
     public boolean hasContainerItem(ItemStack stack) {
     	return !getEmpty(stack).isEmpty();
@@ -270,7 +274,7 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
         final FluidStack fluidStack = getFluid(stack);
         if (fluidStack == null)
-            tooltip.addAll(ItemTooltipHandler.splitTooltip(net.minecraft.client.resources.I18n.format("tooltip.bl_bucket"), 0));
+            tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.translateToLocalFormatted("tooltip.bl_bucket"), 0));
     }
 
     public ItemStack getEmpty(ItemStack stack) {

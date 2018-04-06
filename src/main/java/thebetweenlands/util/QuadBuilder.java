@@ -15,6 +15,8 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.pipeline.UnpackedBakedQuad;
 import net.minecraftforge.common.model.TRSRTransformation;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class QuadBuilder {
 	static class Vertex {
@@ -84,11 +86,15 @@ public class QuadBuilder {
 	 * @return
 	 */
 	public QuadBuilder setLightmap(int blockLight, int skyLight) {
-		this.blockLight = blockLight;
-		this.skyLight = skyLight;
-		if(!this.hasLightmapElement) {
-			this.format.addElement(DefaultVertexFormats.TEX_2S);
-			this.hasLightmapElement = true;
+		if(BetweenlandsConfig.RENDERING.fullbrightBlocks && !FMLClientHandler.instance().hasOptifine()) {
+			this.blockLight = blockLight;
+			this.skyLight = skyLight;
+			if(!this.hasLightmapElement) {
+				this.format.addElement(DefaultVertexFormats.TEX_2S);
+				this.hasLightmapElement = true;
+			}
+		} else {
+			this.removeLightmap();
 		}
 		return this;
 	}

@@ -57,22 +57,33 @@ public class ItemRing extends Item implements IEquippable {
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, stack);
 	}
 
-	public static void removeXp(EntityPlayer player, int amount) {
-		int newXP = Math.max(player.experienceTotal - amount, 0);
-		player.experienceTotal = 0;
-		player.experienceLevel = 0;
-		player.experience = 0;
-		if(newXP > 0) {
-			int xpCap = Integer.MAX_VALUE - player.experienceTotal;
-			if (newXP > xpCap) {
-				newXP = xpCap;
+	public static int removeXp(EntityPlayer player, int amount) {
+		int startAmount = amount;
+		while(amount > 0) {
+			int barCap = player.xpBarCap();
+			int barXp = (int) (barCap * player.experience);
+			int removeXp = Math.min(barXp, amount);
+			int newBarXp = barXp - removeXp;
+			amount -= removeXp;
+			player.experienceTotal -= removeXp;
+			if(player.experienceTotal < 0) {
+				player.experienceTotal = 0;
 			}
-			player.experience += (float)newXP / (float)player.xpBarCap();
-			for (player.experienceTotal += newXP; player.experience >= 1.0F; player.experience /= (float)player.xpBarCap()) {
-				player.experience = (player.experience - 1.0F) * (float)player.xpBarCap();
-				player.experienceLevel += 1;
+			if(newBarXp == 0 && amount > 0) {
+				player.experienceLevel--;
+				if(player.experienceLevel < 0) {
+					player.experienceLevel = 0;
+					player.experienceTotal = 0;
+					player.experience = 0;
+					break;
+				} else {
+					player.experience = 1.0F;
+				}
+			} else {
+				player.experience = newBarXp / (float) barCap;
 			}
 		}
+		return startAmount - amount;
 	}
 
 	@Override

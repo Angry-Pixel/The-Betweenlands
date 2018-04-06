@@ -3,8 +3,11 @@ package thebetweenlands.common.world.biome.spawning;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import gnu.trove.map.hash.TObjectIntHashMap;
@@ -47,8 +50,12 @@ public class MobSpawnHandler {
 	//How many times a chunk should be populated with mobs when it generates
 	private static final int CHUNK_GEN_SPAWN_RUNS = 128;
 
-	//Distance from the player where mobs spawn
-	private static final byte SPAWN_CHUNK_RANGE = 8;
+	//Maximum distance from the player where mobs spawn
+	private static final int SPAWN_CHUNK_MAX_RANGE = 8;
+	//Minimum chunk distance from player where mobs spawn (exclusive)
+	private static final int SPAWN_CHUNK_MIN_RANGE = 1;
+	//Number of spawn chunks in one fully loaded area
+	private static final int MAX_SPAWN_CHUNKS_PER_AREA = (SPAWN_CHUNK_MAX_RANGE * 2 + 1)*(SPAWN_CHUNK_MAX_RANGE * 2 + 1) - (SPAWN_CHUNK_MIN_RANGE * 2 + 1) * (SPAWN_CHUNK_MIN_RANGE * 2 + 1);
 
 	//How many attempts per spawning run
 	private static final int SPAWNING_ATTEMPTS_PER_CHUNK = 8;
@@ -62,11 +69,11 @@ public class MobSpawnHandler {
 	private static final int HARD_ENTITY_LIMIT = BetweenlandsConfig.MOB_SPAWNING.hardEntityLimit;
 
 	/**
-	 * Maximum entities per chunk multiplier (MAX_ENTITIES_PER_CHUNK * eligibleChunks)
+	 * Maximum entities per chunk multiplier
 	 * @return
 	 */
-	public static final float getMaxEntitiesPerChunkMultiplier() {
-		return (float)BetweenlandsConfig.MOB_SPAWNING.maxEntitiesPerLoadedArea / (SPAWN_CHUNK_RANGE * 2 * SPAWN_CHUNK_RANGE * 2 - 25);
+	public static final float getMaxEntitiesPerSpawnChunkMultiplier() {
+		return (float)BetweenlandsConfig.MOB_SPAWNING.maxEntitiesPerLoadedArea / (float)MAX_SPAWN_CHUNKS_PER_AREA;
 	}
 
 	/**
@@ -353,7 +360,7 @@ public class MobSpawnHandler {
 			totalEligibleEntityCount += count;
 		}
 
-		int maxEntitiesForLoadedArea = Math.min(HARD_ENTITY_LIMIT, (int) (spawnerChunks.size() * getMaxEntitiesPerChunkMultiplier()));
+		int maxEntitiesForLoadedArea = Math.min(HARD_ENTITY_LIMIT, (int) (spawnerChunks.size() * getMaxEntitiesPerSpawnChunkMultiplier()));
 
 		if(totalEligibleEntityCount >= maxEntitiesForLoadedArea) {
 			//Too many entities, don't spawn any more entities
@@ -366,7 +373,7 @@ public class MobSpawnHandler {
 		boolean spawnAnimals = ((WorldProviderBetweenlands)world.provider).getCanSpawnAnimals();
 
 		//The approximate number of loaded areas (one area is the area loaded by one player)
-		float loadedAreas = (float)spawnerChunks.size() / (float)(SPAWN_CHUNK_RANGE * 2 * SPAWN_CHUNK_RANGE * 2 - 25);
+		float loadedAreas = (float)spawnerChunks.size() / (float)MAX_SPAWN_CHUNKS_PER_AREA;
 
 		for(ChunkPos chunkPos : spawnerChunks) {
 			this.populateChunk(world, chunkPos, spawnHostiles, spawnAnimals, true, false, 
@@ -588,47 +595,41 @@ public class MobSpawnHandler {
 	 * @param world
 	 */
 	private void updateSpawnerChunks(WorldServer world) {
-		/*for(EntityPlayer player : (List<EntityPlayer>) world.playerEntities) {
-			int pcx = player.chunkCoordX;
-			int pcz = player.chunkCoordZ;
-			for(int cox = -SPAWN_CHUNK_DISTANCE; cox <= SPAWN_CHUNK_DISTANCE; cox++) {
-				for(int coz = -SPAWN_CHUNK_DISTANCE; coz <= SPAWN_CHUNK_DISTANCE; coz++) {
-					int cx = pcx + cox;
-					int cz = pcz + coz;
-					ChunkPos chunkPos = new ChunkPos(cx, cz);
-					boolean isOuterChunk = (Math.abs(cox - SPAWN_CHUNK_DISTANCE) < SPAWN_CHUNK_RIM) || (Math.abs(coz - SPAWN_CHUNK_DISTANCE) < SPAWN_CHUNK_RIM);
-					if(isOuterChunk) {
-						if(!this.eligibleChunksForSpawning.containsKey(chunkPos))
-							this.eligibleChunksForSpawning.put(chunkPos, true);
-					} else {
-						this.eligibleChunksForSpawning.put(chunkPos, false);
-					}
-				}
-			}
-		}*/
 		this.eligibleChunksForSpawning.clear();
+
+		Map<ChunkPos, Boolean> eligibleChunks = new HashMap<>();
 
 		for (EntityPlayer entityplayer : world.playerEntities) {
 			if (!entityplayer.isSpectator()) {
 				int cx = MathHelper.floor(entityplayer.posX / 16.0D);
 				int cz = MathHelper.floor(entityplayer.posZ / 16.0D);
 
-				for (int xo = -SPAWN_CHUNK_RANGE; xo <= SPAWN_CHUNK_RANGE; ++xo) {
-					for (int zo = -SPAWN_CHUNK_RANGE; zo <= SPAWN_CHUNK_RANGE; ++zo) {
-						boolean isBorder = xo == -SPAWN_CHUNK_RANGE || xo == SPAWN_CHUNK_RANGE || zo == -SPAWN_CHUNK_RANGE || zo == SPAWN_CHUNK_RANGE;
+				for (int xo = -SPAWN_CHUNK_MAX_RANGE; xo <= SPAWN_CHUNK_MAX_RANGE; ++xo) {
+					for (int zo = -SPAWN_CHUNK_MAX_RANGE; zo <= SPAWN_CHUNK_MAX_RANGE; ++zo) {
+						boolean isBorder = Math.abs(xo) > SPAWN_CHUNK_MIN_RANGE || Math.abs(zo) > SPAWN_CHUNK_MIN_RANGE;
 						ChunkPos chunkpos = new ChunkPos(xo + cx, zo + cz);
 
-						if (!this.eligibleChunksForSpawning.contains(chunkpos)) {
-							if (!isBorder && world.getWorldBorder().contains(chunkpos)) {
-								PlayerChunkMapEntry playerchunkmapentry = world.getPlayerChunkMap().getEntry(chunkpos.x, chunkpos.z);
+						if (world.getWorldBorder().contains(chunkpos)) {
+							PlayerChunkMapEntry playerchunkmapentry = world.getPlayerChunkMap().getEntry(chunkpos.x, chunkpos.z);
 
-								if (playerchunkmapentry != null && playerchunkmapentry.isSentToPlayers()) {
-									this.eligibleChunksForSpawning.add(chunkpos);
+							if (playerchunkmapentry != null && playerchunkmapentry.isSentToPlayers()) {
+								if(!isBorder) {
+									eligibleChunks.put(chunkpos, false);
+								} else {
+									if(!eligibleChunks.containsKey(chunkpos)) {
+										eligibleChunks.put(chunkpos, true);
+									}
 								}
 							}
 						}
 					}
 				}
+			}
+		}
+
+		for(Entry<ChunkPos, Boolean> entry : eligibleChunks.entrySet()) {
+			if(entry.getValue()) {
+				this.eligibleChunksForSpawning.add(entry.getKey());
 			}
 		}
 	}

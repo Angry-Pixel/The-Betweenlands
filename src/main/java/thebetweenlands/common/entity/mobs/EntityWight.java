@@ -232,7 +232,7 @@ public class EntityWight extends EntityMob implements IEntityBL {
 	                    this.setRotation(0, 0);
 	                    this.setRotationYawHead(0);
 	
-	                    if (this.ticksExisted % 5 == 0) {
+	                    if (this.ticksExisted % 5 == 0 && this.canEntityBeSeen(this.getAttackTarget()) && !this.isWearingSkullMask(this.getAttackTarget())) {
 	                        List<EntityVolatileSoul> existingSouls = this.world.getEntitiesWithinAABB(EntityVolatileSoul.class, this.getEntityBoundingBox().grow(16.0D, 16.0D, 16.0D));
 	                        if (existingSouls.size() < 16) {
 	                            EntityVolatileSoul soul = new EntityVolatileSoul(this.world);
@@ -512,13 +512,19 @@ public class EntityWight extends EntityMob implements IEntityBL {
         	return true;
         }
         if(entity instanceof EntityPlayer) {
-        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
-        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SKULL_MASK) {
-        		return false;
-        	}
-        	return true;
+        	return !this.isWearingSkullMask(entity);
         }
         return false;
+    }
+    
+    public boolean isWearingSkullMask(EntityLivingBase entity) {
+    	if(entity instanceof EntityPlayer) {
+        	ItemStack helmet = ((EntityPlayer)entity).getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+        	if(!helmet.isEmpty() && helmet.getItem() == ItemRegistry.SKULL_MASK) {
+        		return true;
+        	}
+        }
+    	return false;
     }
 
     public void setCanTurnVolatile(boolean canTurnVolatile) {

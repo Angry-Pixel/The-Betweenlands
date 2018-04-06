@@ -27,6 +27,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.SoilHelper;
@@ -37,7 +38,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
+public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable, IFarmablePlant {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
 
 	protected ItemStack sickleHarvestableDrop;
@@ -235,5 +236,36 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 			return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : -1;
 		}
 		return super.getColorMultiplier(state, worldIn, pos, tintIndex);
+	}
+
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		if(rand.nextFloat() <= 0.25F) {
+			Block block = world.getBlockState(targetPos).getBlock();
+			if(block instanceof BlockSwampWater && ((BlockSwampWater)block).isSourceBlock(world, targetPos)) {
+				return this.canPlaceBlockAt(world, targetPos);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 4;
+	}
+
+	@Override
+	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
+		world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState());
+	}
+
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		world.setBlockState(targetPos, this.getDefaultState());
 	}
 }

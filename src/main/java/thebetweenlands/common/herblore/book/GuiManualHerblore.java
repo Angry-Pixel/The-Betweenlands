@@ -10,6 +10,7 @@ import net.minecraft.client.settings.GameSettings;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -34,9 +35,13 @@ public class GuiManualHerblore extends GuiScreen {
 
     public Item manualType;
 
+    private ItemStack manual;
+    private EnumHand hand;
 
-    public GuiManualHerblore(EntityPlayer player) {
+    public GuiManualHerblore(EntityPlayer player, ItemStack manual, EnumHand hand) {
         this.player = player;
+        this.manual = manual;
+        this.hand = hand;
     }
 
 
@@ -48,7 +53,9 @@ public class GuiManualHerblore extends GuiScreen {
         yStart = (height - HEIGHT) / 2;
         untilUpdate = 0;
         HLEntryRegistry.CATEGORIES.forEach(manualCategory -> manualCategory.init(this, true));
-        changeCategory(ManualManager.getCurrentCategory(manualType, player), ManualManager.getCurrentPageNumber(manualType, player));
+        ManualCategory currCategory = ManualManager.getCurrentCategory(this.manual);
+        int currPage = ManualManager.getCurrentPageNumber(this.manual);
+        changeCategory(currCategory == null ? HLEntryRegistry.aspectCategory : currCategory, currPage == -1 ? 1 : currPage);
     }
 
     @Override
@@ -59,7 +66,7 @@ public class GuiManualHerblore extends GuiScreen {
     @Override
     public void onGuiClosed() {
         super.onGuiClosed();
-        ManualManager.setCurrentPage(currentCategory.getName(), currentCategory.getCurrentPage(), manualType, player);
+        ManualManager.setCurrentPage(currentCategory.getName(), currentCategory.getCurrentPage(), manualType, player, this.hand);
     }
 
     @Override

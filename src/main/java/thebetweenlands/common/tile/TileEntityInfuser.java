@@ -110,6 +110,9 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
+		if(this.hasInfusion) {
+			return 0; //Don't allow refill when infusing has already started
+		}
 		int filled = this.waterTank.fill(resource, false);
 		if (filled == resource.amount && doFill) {
 			this.waterTank.fill(resource, true);

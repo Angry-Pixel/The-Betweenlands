@@ -45,6 +45,8 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	private int despawnTicks = 0;
 
+	protected boolean dropContentsWhenDead = true;
+	
 	public EntityTarminion(World world) {
 		super(world);
 		this.setSize(0.3F, 0.5F);
@@ -132,7 +134,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	@Override
 	public void setDead() {
-		if(!this.isDead) {
+		if(!this.isDead && this.dropContentsWhenDead) {
 			if(this.getAttackTarget() != null) {
 				if(this.world.isRemote) {
 					for(int i = 0; i < 200; i++) {
@@ -176,6 +178,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				}
 			}
 		}
+		
 		super.setDead();
 	}
 
@@ -247,5 +250,15 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	public boolean isAIDisabled() {
 		return false;
 	}
+	
+	@Override
+	public void setDropItemsWhenDead(boolean dropWhenDead) {
+		this.dropContentsWhenDead = dropWhenDead;
+	}
 
+	@Override
+	public Entity changeDimension(int dimensionIn) {
+		this.dropContentsWhenDead = false;
+		return super.changeDimension(dimensionIn);
+	}
 }
