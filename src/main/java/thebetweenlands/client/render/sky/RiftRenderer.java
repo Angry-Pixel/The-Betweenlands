@@ -26,7 +26,6 @@ public class RiftRenderer implements IRiftRenderer {
 
 	private static ResizableFramebuffer overworldSkyFbo;
 
-	private final FloatBuffer biasMatrix = GLAllocation.createDirectFloatBuffer(16);
 	private final FloatBuffer textureMatrix = GLAllocation.createDirectFloatBuffer(16);
 	private final FloatBuffer modelviewMatrix = GLAllocation.createDirectFloatBuffer(16);
 	private final FloatBuffer projectionMatrix = GLAllocation.createDirectFloatBuffer(16);
@@ -40,14 +39,6 @@ public class RiftRenderer implements IRiftRenderer {
 
 	public RiftRenderer(int skyDomeDispList) {
 		this.skyDomeDispList = skyDomeDispList;
-
-		this.biasMatrix.clear();
-		this.biasMatrix
-		.put(0.5F).put(0.0F).put(0.0F).put(0.0F)
-		.put(0.0F).put(0.5F).put(0.0F).put(0.0F)
-		.put(0.0F).put(0.0F).put(0.5F).put(0.0F)
-		.put(0.5F).put(0.5F).put(0.5F).put(1.0F)
-		.flip();
 
 		if(overworldSkyFbo == null) {
 			overworldSkyFbo = new ResizableFramebuffer(true);
@@ -79,7 +70,7 @@ public class RiftRenderer implements IRiftRenderer {
 
 			if(rift.getActiveTicks() > 0 && rift.getVisibility(partialTicks) > 0) {
 				int parentFboId = RenderUtils.getBoundFramebuffer();
-				
+
 				Framebuffer mcFbo = mc.getFramebuffer();
 				Framebuffer skyFbo = overworldSkyFbo.getFramebuffer(mcFbo.framebufferWidth, mcFbo.framebufferHeight);
 
@@ -146,39 +137,35 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.getFloat(GL11.GL_MODELVIEW_MATRIX, this.modelviewMatrix);
 				GlStateManager.getFloat(GL11.GL_PROJECTION_MATRIX, this.projectionMatrix);
 
-				GlStateManager.matrixMode(GL11.GL_TEXTURE);
-				GlStateManager.pushMatrix();
-				GlStateManager.loadIdentity();
-
-				GlStateManager.multMatrix(this.biasMatrix);
-				GlStateManager.multMatrix(this.projectionMatrix);
-				GlStateManager.multMatrix(this.modelviewMatrix);
-
-				GlStateManager.getFloat(GL11.GL_TEXTURE_MATRIX, this.textureMatrix);
-				GlStateManager.popMatrix();
-				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-
 				//Set up UV generator
 				GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_LINEAR);
 				GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_LINEAR);
 				GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_LINEAR);
-				GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_LINEAR);
-				GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(0), this.textureMatrix.get(4), this.textureMatrix.get(8), this.textureMatrix.get(12)));
-				GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(1), this.textureMatrix.get(5), this.textureMatrix.get(9), this.textureMatrix.get(13)));
-				GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(2), this.textureMatrix.get(6), this.textureMatrix.get(10), this.textureMatrix.get(14)));
-				GlStateManager.texGen(GlStateManager.TexGen.Q, GL11.GL_EYE_PLANE, this.getBuffer4f(this.textureMatrix.get(3), this.textureMatrix.get(7), this.textureMatrix.get(11), this.textureMatrix.get(15)));
+				GlStateManager.texGen(GlStateManager.TexGen.S, GL11.GL_EYE_PLANE, this.getBuffer4f(1.0F, 0.0F, 0.0F, 0.0F));
+				GlStateManager.texGen(GlStateManager.TexGen.T, GL11.GL_EYE_PLANE, this.getBuffer4f(0.0F, 1.0F, 0.0F, 0.0F));
+				GlStateManager.texGen(GlStateManager.TexGen.R, GL11.GL_EYE_PLANE, this.getBuffer4f(0.0F, 0.0F, 1.0F, 0.0F));
 				GlStateManager.enableTexGenCoord(GlStateManager.TexGen.S);
 				GlStateManager.enableTexGenCoord(GlStateManager.TexGen.T);
 				GlStateManager.enableTexGenCoord(GlStateManager.TexGen.R);
-				GlStateManager.enableTexGenCoord(GlStateManager.TexGen.Q);
+
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.loadIdentity();
+				GlStateManager.translate(0.5F, 0.5F, 0.0F);
+				GlStateManager.scale(0.5F, 0.5F, 1.0F);
+				GlStateManager.multMatrix(this.projectionMatrix);
+				GlStateManager.multMatrix(this.modelviewMatrix);
 
 				//Render projection
 				this.riftMaskRenderer.renderRiftProjection(partialTicks, world, mc);
 
+				GlStateManager.matrixMode(GL11.GL_TEXTURE); //Make sure texture matrix is popped
+				GlStateManager.popMatrix();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
 				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.S);
 				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.T);
 				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
-				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.Q);
 
 				//Render overlay
 				this.riftMaskRenderer.renderOverlay(partialTicks, world, mc);
