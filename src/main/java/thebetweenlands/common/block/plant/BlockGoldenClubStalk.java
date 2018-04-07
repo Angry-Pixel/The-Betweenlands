@@ -33,6 +33,11 @@ public class BlockGoldenClubStalk extends BlockStackablePlantUnderwater {
 	}
 
 	@Override
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+		return super.canBlockStay(worldIn, pos, state) && worldIn.getBlockState(pos.up()).getBlock() == BlockRegistry.GOLDEN_CLUB_FLOWER;
+	}
+	
+	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, BlockRegistry.GOLDEN_CLUB_STALK.getDefaultState());
 		worldIn.setBlockState(pos.up(), BlockRegistry.GOLDEN_CLUB_FLOWER.getDefaultState());

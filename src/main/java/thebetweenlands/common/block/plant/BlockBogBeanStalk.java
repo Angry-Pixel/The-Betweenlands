@@ -31,6 +31,11 @@ public class BlockBogBeanStalk extends BlockStackablePlantUnderwater {
 	protected boolean isSamePlant(IBlockState blockState) {
 		return super.isSamePlant(blockState) || blockState.getBlock() == BlockRegistry.BOG_BEAN_FLOWER;
 	}
+	
+	@Override
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+		return super.canBlockStay(worldIn, pos, state) && worldIn.getBlockState(pos.up()).getBlock() == BlockRegistry.BOG_BEAN_FLOWER;
+	}
 
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {

@@ -33,6 +33,11 @@ public class BlockMarshMarigoldStalk extends BlockStackablePlantUnderwater {
 	}
 
 	@Override
+	public boolean canBlockStay(World worldIn, BlockPos pos, IBlockState state) {
+		return super.canBlockStay(worldIn, pos, state) && worldIn.getBlockState(pos.up()).getBlock() == BlockRegistry.MARSH_MARIGOLD_FLOWER;
+	}
+	
+	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, BlockRegistry.MARSH_MARIGOLD_STALK.getDefaultState());
 		worldIn.setBlockState(pos.up(), BlockRegistry.MARSH_MARIGOLD_FLOWER.getDefaultState());

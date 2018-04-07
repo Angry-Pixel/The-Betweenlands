@@ -30,8 +30,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -44,6 +44,7 @@ import net.minecraftforge.event.entity.living.LivingEvent.LivingUpdateEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.api.capability.ICustomStepSoundCapability;
 import thebetweenlands.client.render.particle.BLParticles;
@@ -58,7 +59,7 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarvestable, ITintedBlock {
+public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarvestable, ITintedBlock, IFarmablePlant {
 	public static final PropertyBool NORTH = PropertyBool.create("north");
 	public static final PropertyBool EAST = PropertyBool.create("east");
 	public static final PropertyBool SOUTH = PropertyBool.create("south");
@@ -254,5 +255,30 @@ public class BlockWeedwoodBush extends Block implements IShearable, ISickleHarve
 			float mag = 0.01F + world.rand.nextFloat() * 0.07F;
 			BLParticles.WEEDWOOD_LEAF.spawn(world, x, y, z, ParticleArgs.get().withMotion(dx * mag, dy * mag, dz * mag));
 		}
+	}
+
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		return rand.nextFloat() <= 0.35F && world.isAirBlock(targetPos) && this.canPlaceBlockAt(world, targetPos);
+	}
+
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		world.setBlockState(targetPos, this.getDefaultState());
+	}
+
+	@Override
+	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
+		world.setBlockToAir(pos);
+	}
+
+	@Override
+	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 2;
 	}
 }
