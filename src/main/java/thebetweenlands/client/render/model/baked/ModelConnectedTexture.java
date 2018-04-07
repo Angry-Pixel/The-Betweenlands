@@ -1,5 +1,17 @@
 package thebetweenlands.client.render.model.baked;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.Optional;
+import java.util.function.Function;
+
+import javax.vecmath.Matrix4f;
+
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -7,6 +19,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -25,13 +38,7 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import net.minecraftforge.common.property.IUnlistedProperty;
-import org.apache.commons.lang3.tuple.Pair;
 import thebetweenlands.util.QuadBuilder;
-
-import javax.vecmath.Matrix4f;
-import java.util.*;
-import java.util.Map.Entry;
-import java.util.function.Function;
 
 public class ModelConnectedTexture implements IModel {
 	protected static class ConnectedTextureQuad {
@@ -114,7 +121,7 @@ public class ModelConnectedTexture implements IModel {
 				builder.addVertex(p3, umax, vmax);
 				builder.addVertex(p4, umax, vmin);
 			}
-			return builder.build(b -> b.setQuadTint(this.tintIndex)).toArray(new BakedQuad[0]);
+			return builder.build(b -> b.setQuadTint(this.tintIndex)).nonCulledQuads.toArray(new BakedQuad[0]);
 		}
 	}
 
@@ -203,7 +210,7 @@ public class ModelConnectedTexture implements IModel {
 			ConnectedTextureQuad[] connectedTextures = this.connectedTextures[faceIndex];
 
 			if(connectedTextures.length > 0) {
-				List<BakedQuad> quads = new ArrayList<>(connectedTextures.length * 4);
+				ImmutableList.Builder<BakedQuad> builder = ImmutableList.builder();
 
 				for(ConnectedTextureQuad tex : connectedTextures) {
 					int[] indices = new int[4];
@@ -223,11 +230,11 @@ public class ModelConnectedTexture implements IModel {
 					}
 
 					for(int i = 0; i < 4; i++) {
-						quads.add(tex.quads[i][indices[i]]);
+						builder.add(tex.quads[i][indices[i]]);
 					}
 				}
 
-				return quads;
+				return builder.build();
 			}
 
 			return ImmutableList.of();

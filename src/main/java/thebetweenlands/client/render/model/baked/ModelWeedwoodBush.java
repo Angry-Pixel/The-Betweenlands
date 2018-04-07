@@ -303,7 +303,7 @@ public class ModelWeedwoodBush implements IModel {
 				builder.addVertex(0.0, 0.75, 0.25, 16.0F, 16.0F);
 				builder.addVertex(0.0, 0.75, 0.25, 16.0F, 0.0F);
 
-				this.baseQuads = builder.build();
+				this.baseQuads = builder.build().nonCulledQuads;
 
 				builder.addVertex(0.1, 0.5, -0.1, 0.0F, 0.0F);
 				builder.addVertex(0.5, 1.1, 0.5, 16.0F, 0.0F);
@@ -335,7 +335,7 @@ public class ModelWeedwoodBush implements IModel {
 				builder.addVertex(0.3, 0.5, 1.1, 16.0F, 16.0F);
 				builder.addVertex(0.5, -0.1, 0.5, 0.0F, 16.0F);
 
-				this.fancyQuads = builder.build();
+				this.fancyQuads = builder.build().nonCulledQuads;
 			} else {
 				this.baseQuads = this.fancyQuads = Collections.emptyList();
 			}
@@ -412,7 +412,7 @@ public class ModelWeedwoodBush implements IModel {
 						builder.addVertex(xp2+xOff, 0.8+yOff, zp2+zOff, 16.0F, 0.0F);
 					}
 
-					quads = new CompositeList<>(quads, builder.build());
+					quads = new CompositeList<>(quads, builder.build().nonCulledQuads);
 				}
 
 				return quads;

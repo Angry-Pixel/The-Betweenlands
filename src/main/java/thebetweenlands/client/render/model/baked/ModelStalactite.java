@@ -176,7 +176,7 @@ public class ModelStalactite implements IModel {
 						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
 					}
 
-					quads = builder.build();
+					quads = builder.build().nonCulledQuads;
 				} catch(Exception ex) {
 					//throws inexplicable NPE when damaging block :(
 				}

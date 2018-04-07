@@ -1,10 +1,9 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.vecmath.Matrix4f;
@@ -16,7 +15,6 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.state.IBlockState;
@@ -37,6 +35,7 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.structure.BlockSlanted;
 import thebetweenlands.util.QuadBuilder;
+import thebetweenlands.util.QuadBuilder.Quads;
 
 public class ModelSlant implements IModel {
 	public final ResourceLocation textureSlant;
@@ -101,8 +100,8 @@ public class ModelSlant implements IModel {
 		private final TextureAtlasSprite textureSide;
 		private final TextureAtlasSprite textureBase;
 		private float slopeEdge = 1.0F / 16.0F * 3.0F;
-		private final EnumMap<EnumFacing, List<BakedQuad>> faceQuads;
-		private final List<BakedQuad> nonCulledQuads = new ArrayList<>();
+		private Map<EnumFacing, ImmutableList<BakedQuad>> faceQuads;
+		private List<BakedQuad> nonCulledQuads;
 		protected final TRSRTransformation transformation;
 		protected final ImmutableMap<TransformType, TRSRTransformation> transforms;
 
@@ -114,11 +113,6 @@ public class ModelSlant implements IModel {
 			this.textureSlant = textureSlant;
 			this.textureSide = textureSide;
 			this.textureBase = textureBase;
-
-			this.faceQuads = Maps.newEnumMap(EnumFacing.class);
-			for(EnumFacing side : EnumFacing.values()) {
-				this.faceQuads.put(side, ImmutableList.<BakedQuad>of());
-			}
 		}
 
 		private ModelBakedSlant(Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, 
@@ -166,34 +160,35 @@ public class ModelSlant implements IModel {
 				builder.setSprite(this.textureSide);
 
 				//z- face
+				builder.setCullFace(EnumFacing.NORTH);
 				builder.addVertex(0, 0, 0.0001f, 16, 16);
 				builder.addVertex(0, cornerHeightNW, 0.0001f, 16, 16-cornerHeightNW*16.0F);
 				builder.addVertex(1, cornerHeightNE, 0.0001f, 0, 16-cornerHeightNE*16.0F);
 				builder.addVertex(1, 0, 0.0001f, 0, 16);
-				this.faceQuads.put(EnumFacing.NORTH, builder.build());
 
 				//z+ face
+				builder.setCullFace(EnumFacing.SOUTH);
 				builder.addVertex(0, 0, 1, 0, 16);
 				builder.addVertex(1, 0, 1, 16, 16);
 				builder.addVertex(1, cornerHeightSE, 1, 16, 16-cornerHeightSE*16.0F);
 				builder.addVertex(0, cornerHeightSW, 1, 0, 16-cornerHeightSW*16.0F);
-				this.faceQuads.put(EnumFacing.SOUTH, builder.build());
 
 				//x+ face
+				builder.setCullFace(EnumFacing.EAST);
 				builder.addVertex(1, 0, 0, 16, 16);
 				builder.addVertex(1, cornerHeightNE, 0, 16, 16-cornerHeightNE*16.0F);
 				builder.addVertex(1, cornerHeightSE, 1, 0, 16-cornerHeightSE*16.0F);
 				builder.addVertex(1, 0, 1, 0, 16);
-				this.faceQuads.put(EnumFacing.EAST, builder.build());
 
 				//x- face
+				builder.setCullFace(EnumFacing.WEST);
 				builder.addVertex(0.0001f, 0, 0, 0, 16);
 				builder.addVertex(0.0001f, 0, 1, 16, 16);
 				builder.addVertex(0.0001f, cornerHeightSW, 1, 16, 16-cornerHeightSW*16.0F);
 				builder.addVertex(0.0001f, cornerHeightNW, 0, 0, 16-cornerHeightNW*16.0F);
-				this.faceQuads.put(EnumFacing.WEST, builder.build());
 
 				//top face
+				builder.setCullFace(null);
 				builder.setSprite(this.textureSlant);
 				if(cornerNW && cornerNE && cornerSE) {
 					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
@@ -302,47 +297,47 @@ public class ModelSlant implements IModel {
 					builder.addVertex(1, cornerHeightSE, 1, slantTexU[2], slantTexV[2]);
 					builder.addVertex(1, cornerHeightNE, 0, slantTexU[3], slantTexV[3]);
 				}
-				this.nonCulledQuads.addAll(builder.build());
 
 				//bottom face
+				builder.setCullFace(EnumFacing.DOWN);
 				builder.setSprite(this.textureBase);
 				builder.addVertex(0, 0, 0, 0, 0);
 				builder.addVertex(1, 0, 0, 0, 16);
 				builder.addVertex(1, 0, 1, 16, 16);
 				builder.addVertex(0, 0, 1, 16, 0);
-				this.faceQuads.put(EnumFacing.DOWN, builder.build());
 			} else {
 				builder.setSprite(this.textureSide);
 
 				//z- face
+				builder.setCullFace(EnumFacing.NORTH);
 				builder.addVertex(0, 1, 0.0001f, 16, 0);
 				builder.addVertex(1, 1, 0.0001f, 0, 0);
 				builder.addVertex(1, 1-cornerHeightNE, 0.0001f, 0, cornerHeightNE*16.0F);
 				builder.addVertex(0, 1-cornerHeightNW, 0.0001f, 16, cornerHeightNW*16.0F);
-				this.faceQuads.put(EnumFacing.NORTH, builder.build());
 
 				//z+ face
+				builder.setCullFace(EnumFacing.SOUTH);
 				builder.addVertex(0, 1, 1, 0, 0);
 				builder.addVertex(0, 1-cornerHeightSW, 1, 0, cornerHeightSW*16.0F);
 				builder.addVertex(1, 1-cornerHeightSE, 1, 16, cornerHeightSE*16.0F);
 				builder.addVertex(1, 1, 1, 16, 0);
-				this.faceQuads.put(EnumFacing.SOUTH, builder.build());
 
 				//x+ face
+				builder.setCullFace(EnumFacing.EAST);
 				builder.addVertex(1, 1, 0, 16, 0);
 				builder.addVertex(1, 1, 1, 0, 0);
 				builder.addVertex(1, 1-cornerHeightSE, 1, 0, cornerHeightSE*16.0F);
 				builder.addVertex(1, 1-cornerHeightNE, 0, 16, cornerHeightNE*16.0F);
-				this.faceQuads.put(EnumFacing.EAST, builder.build());
 
 				//x- face
+				builder.setCullFace(EnumFacing.WEST);
 				builder.addVertex(0.0001f, 1, 0, 0, 0);
 				builder.addVertex(0.0001f, 1-cornerHeightNW, 0, 0, cornerHeightNW*16.0F);
 				builder.addVertex(0.0001f, 1-cornerHeightSW, 1, 16, cornerHeightSW*16.0F);
 				builder.addVertex(0.0001f, 1, 1, 16, 0);
-				this.faceQuads.put(EnumFacing.WEST, builder.build());
 
 				//bottom face
+				builder.setCullFace(null);
 				builder.setSprite(this.textureSlant);
 				if(cornerNW && cornerNE && cornerSE) {
 					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
@@ -451,16 +446,19 @@ public class ModelSlant implements IModel {
 					builder.addVertex(0, 1-cornerHeightSW, 1, slantTexU[1], 16-slantTexV[1]);
 					builder.addVertex(0, 1-cornerHeightNW, 0, slantTexU[0], 16-slantTexV[0]);
 				}
-				this.nonCulledQuads.addAll(builder.build());
 
 				//top face
+				builder.setCullFace(EnumFacing.UP);
 				builder.setSprite(this.textureBase);
 				builder.addVertex(0, 1, 0, 0, 0);
 				builder.addVertex(0, 1, 1, 16, 0);
 				builder.addVertex(1, 1, 1, 16, 16);
 				builder.addVertex(1, 1, 0, 0, 16);
-				this.faceQuads.put(EnumFacing.UP, builder.build());
 			}
+			
+			Quads result = builder.build();
+			this.faceQuads = result.culledQuads;
+			this.nonCulledQuads = result.nonCulledQuads;
 		}
 
 		private final LoadingCache<Integer, ModelBakedSlant> modelCache = CacheBuilder.newBuilder().maximumSize(256).build(new CacheLoader<Integer, ModelBakedSlant>() {

@@ -1,12 +1,11 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -22,7 +21,6 @@ import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.terrain.BlockRoot;
-import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 
@@ -74,7 +72,7 @@ public class ModelRoot implements IModel {
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
 			IExtendedBlockState state = (IExtendedBlockState) stateOld;
 
-			List<BakedQuad> quads = new ArrayList<>();
+			List<BakedQuad> quads = ImmutableList.of();
 
 			if(side == null) {
 				try {
@@ -178,7 +176,7 @@ public class ModelRoot implements IModel {
 						builder.addVertex(core.bX + halfSize, 0, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
 					}
 
-					quads = builder.build();
+					quads = builder.build().nonCulledQuads;
 				} catch(Exception ex) {
 					//throws inexplicable NPE when damaging block :(
 				}

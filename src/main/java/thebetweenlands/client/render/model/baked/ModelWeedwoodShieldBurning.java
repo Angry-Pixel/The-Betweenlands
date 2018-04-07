@@ -1,13 +1,14 @@
 package thebetweenlands.client.render.model.baked;
 
 import java.util.Collection;
-
-import com.google.common.base.Function;
 import java.util.Optional;
+
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 import net.minecraft.client.model.ModelBase;
+import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -15,7 +16,6 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
-import net.minecraftforge.common.model.IModelPart;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
@@ -59,7 +59,10 @@ public class ModelWeedwoodShieldBurning extends ModelFromModelBase {
 				builder.addVertexInferUV(new Vec3d(-0.5D, 0 - 0.5D + i / 4.0D, 0.1D - i / 16.0D));
 				builder.addVertexInferUV(new Vec3d(-0.5D, 1 - 0.5D + i / 4.0D, 0.3D - i / 16.0D));
 			}
-			this.quads.addAll(builder.build());
+			ImmutableList.Builder<BakedQuad> combinedQuads = ImmutableList.builder();
+			combinedQuads.addAll(this.quads);
+			combinedQuads.addAll(builder.build().nonCulledQuads);
+			this.quads = combinedQuads.build();
 		}
 	}
 }

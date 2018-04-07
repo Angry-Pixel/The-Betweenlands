@@ -115,7 +115,7 @@ public class BetweenlandsConfig {
 		@Name("fullbright_blocks")
 		@LangKey(LANG_PREFIX + "fullbright_blocks")
 		@Comment("Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false")
-		@RequiresWorldRestart
+		@RequiresMcRestart
 		public boolean fullbrightBlocks = true;
 
 		@Name("sky_texture_resolution")

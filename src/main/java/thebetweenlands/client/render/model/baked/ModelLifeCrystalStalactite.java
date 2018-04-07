@@ -1,12 +1,11 @@
 package thebetweenlands.client.render.model.baked;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import com.google.common.base.Function;
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -23,7 +22,6 @@ import net.minecraftforge.common.model.TRSRTransformation;
 import net.minecraftforge.common.property.IExtendedBlockState;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite.EnumLifeCrystalType;
-import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
@@ -70,8 +68,8 @@ public class ModelLifeCrystalStalactite implements IModel {
 		public List<BakedQuad> getQuads(IBlockState stateOld, EnumFacing side, long rand) {
 			IExtendedBlockState state = (IExtendedBlockState) stateOld;
 
-			List<BakedQuad> quads = new ArrayList<>();
-
+			List<BakedQuad> quads = ImmutableList.of();
+			
 			if(side == null) {
 				try {
 					EnumLifeCrystalType type = state.getValue(BlockLifeCrystalStalactite.VARIANT);
@@ -189,7 +187,7 @@ public class ModelLifeCrystalStalactite implements IModel {
 						}
 					}
 
-					quads = builder.build();
+					quads = builder.build().nonCulledQuads;
 				} catch(Exception ex) {
 					//throws inexplicable NPE when damaging block :(
 				}
