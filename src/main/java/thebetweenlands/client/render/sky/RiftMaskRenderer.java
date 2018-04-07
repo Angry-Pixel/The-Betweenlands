@@ -5,10 +5,8 @@ import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.CullFace;
-import net.minecraft.client.renderer.texture.ITextureObject;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.api.sky.IRiftMaskRenderer;
@@ -20,22 +18,15 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 	public static final ResourceLocation SKY_RIFT_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_overlay.png");
 	public static final ResourceLocation SKY_RIFT_MASK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask.png");
 	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask_back.png");
-
+	
 	protected final int skyDomeDispList;
 
-	private static int projectionSphereDistList = -1;
-
+	private Sphere projectionSphere = new Sphere();
+	
 	public RiftMaskRenderer(int skyDomeDispList) {
 		this.skyDomeDispList = skyDomeDispList;
 
-		if(projectionSphereDistList == -1) {
-			Sphere projectionSphere = new Sphere();
-			projectionSphere.setTextureFlag(false);
-			projectionSphereDistList = GLAllocation.generateDisplayLists(1);
-			GlStateManager.glNewList(projectionSphereDistList, GL11.GL_COMPILE);
-			projectionSphere.draw(55, 8, 8);
-			GlStateManager.glEndList();
-		}
+		this.projectionSphere.setTextureFlag(false);
 	}
 
 	@Override
@@ -110,7 +101,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.setFogEnd(FogHandler.getCurrentFogEnd() / 2);
 
 		GlStateManager.cullFace(CullFace.FRONT);
-		GlStateManager.callList(projectionSphereDistList);
+		this.projectionSphere.draw(55, 8, 8);
 		GlStateManager.cullFace(CullFace.BACK);
 	}
 
