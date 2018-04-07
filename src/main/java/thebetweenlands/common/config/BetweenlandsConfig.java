@@ -1,22 +1,7 @@
 package thebetweenlands.common.config;
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Field;
-import java.nio.charset.Charset;
-import java.util.Collection;
-import java.util.Map;
 
-import javax.annotation.Nullable;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.tuple.Pair;
-
-import com.google.common.collect.HashMultimap;
-import com.google.common.collect.Multimap;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.Comment;
 import net.minecraftforge.common.config.Config.Ignore;
@@ -24,25 +9,13 @@ import net.minecraftforge.common.config.Config.LangKey;
 import net.minecraftforge.common.config.Config.Name;
 import net.minecraftforge.common.config.Config.RangeInt;
 import net.minecraftforge.common.config.Config.RequiresMcRestart;
-import net.minecraftforge.common.config.Config.RequiresWorldRestart;
-import net.minecraftforge.common.config.ConfigManager;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.config.remapper.ConfigRemapper;
-import thebetweenlands.common.config.remapper.Remapper1;
+import thebetweenlands.common.config.properties.IntSetProperty;
+import thebetweenlands.common.config.properties.ItemListProperty;
+import thebetweenlands.common.config.properties.PortalDimensionWhitelist;
 import thebetweenlands.common.lib.ModInfo;
 
 @Config(modid = ModInfo.ID, category = "", name = ModInfo.ID + "/config")
 public class BetweenlandsConfig {
-	/**
-	 * Config loaded before any default values are generated
-	 */
-	@Nullable
-	@Ignore
-	public static Configuration loadedConfig;
-
 	@Ignore
 	public static File configDir;
 
@@ -79,6 +52,8 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "portal_dimension_whitelist")
 		@Comment("Betweenlands portals will only work in these dimensions")
 		public int[] portalDimensionWhitelist = {0, -1};
+		@Ignore
+		public final IntSetProperty portalDimensionWhitelistSet = new PortalDimensionWhitelist();
 
 		@Name("portal_default_return_dimension")
 		@LangKey(LANG_PREFIX + "portal_default_return_dimension")
@@ -151,21 +126,16 @@ public class BetweenlandsConfig {
 		@Comment("If true the food sickness system will be enabled")
 		public boolean useFoodSickness = true;
 
-		@Name("rotten_food_whitelist")
-		@LangKey(LANG_PREFIX + "rotten_food_whitelist")
-		@Comment("A list of items that should be whitelisted from rotting in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
-		public String[] rottenFoodWhitelistUnparsed = {};
-
 		@Name("reverse_rotten_food")
 		@LangKey(LANG_PREFIX + "reverse_rotten_food")
 		@Comment("Whether rotten food should turn back into normal food when leaving the dimension")
 		public boolean reverseRottenFood = true;
-		
+
 		@Name("use_rotten_food")
 		@LangKey(LANG_PREFIX + "use_rotten_food")
 		@Comment("Whether food from the overworld should rot when going into the dimension")
 		public boolean useRottenFood = true;
-		
+
 		@Name("caving_rope_indicator")
 		@LangKey(LANG_PREFIX + "caving_rope_indicator")
 		@Comment("Adds an indicator next to the crosshair that shows whether the player is connected to the caving rope and how much rope is left")
@@ -182,6 +152,90 @@ public class BetweenlandsConfig {
 		@Comment("If true, Betweenlands recipes that conflict with any oredict'd recipes will take priority over the oredict'd recipes (should be true unless you intend to fix the recipes yourself with another mod)")
 		@RequiresMcRestart
 		public boolean overrideAnyConflictingRecipes = true;
+
+		@Name("rotten_food_whitelist")
+		@LangKey(LANG_PREFIX + "rotten_food_whitelist")
+		@Comment("A list of items that should be whitelisted from rotting in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] rottenFoodWhitelistUnparsed = {};
+		@Ignore
+		public final ItemListProperty rottenFoodWhitelist = new ItemListProperty(() -> GENERAL.rottenFoodWhitelistUnparsed);
+
+		@Name("rotten_food_blacklist")
+		@LangKey(LANG_PREFIX + "rotten_food_blacklist")
+		@Comment("A list of items that should turn into Rotten Food in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] rottenFoodBlacklistUnparsed = {};
+		@Ignore
+		public final ItemListProperty rottenFoodBlacklist = new ItemListProperty(() -> GENERAL.rottenFoodBlacklistUnparsed);
+
+		@Name("tainting_whitelist")
+		@LangKey(LANG_PREFIX + "tainting_whitelist")
+		@Comment("A list of items that should be whitelisted from turning into Tainted Potions in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] taintingWhitelistUnparsed = {};
+		@Ignore
+		public final ItemListProperty taintingWhitelist = new ItemListProperty(() -> GENERAL.taintingWhitelistUnparsed);
+
+		@Name("tainting_blacklist")
+		@LangKey(LANG_PREFIX + "tainting_blacklist")
+		@Comment("A list of items that should turn into Tainted Potions in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] taintingBlacklistUnparsed = {};
+		@Ignore
+		public final ItemListProperty taintingBlacklist = new ItemListProperty(() -> GENERAL.taintingBlacklistUnparsed);
+
+		@Name("fire_tool_whitelist")
+		@LangKey(LANG_PREFIX + "fire_tool_whitelist")
+		@Comment("A list of items that should be allowed to create fire in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] fireToolWhitelistUnparsed = {};
+		@Ignore
+		public final ItemListProperty fireToolWhitelist = new ItemListProperty(() -> GENERAL.fireToolWhitelistUnparsed);
+
+		@Name("fire_tool_blacklist")
+		@LangKey(LANG_PREFIX + "fire_tool_blacklist")
+		@Comment("A list of items that should not be able to create fire in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] fireToolBlacklistUnparsed = {};
+		@Ignore
+		public final ItemListProperty fireToolBlacklist = new ItemListProperty(() -> GENERAL.fireToolBlacklistUnparsed);
+
+		@Name("fertilizer_whitelist")
+		@LangKey(LANG_PREFIX + "fertilizer_whitelist")
+		@Comment("A list of items that should be allowed to fertilize plants in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] fertilizerWhitelistUnparsed = {};
+		@Ignore
+		public final ItemListProperty fertilizerWhitelist = new ItemListProperty(() -> GENERAL.fertilizerWhitelistUnparsed);
+
+		@Name("fertilizer_blacklist")
+		@LangKey(LANG_PREFIX + "fertilizer_blacklist")
+		@Comment("A list of items that should not be able to fertilize plants in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] fertilizerBlacklistUnparsed = {};
+		@Ignore
+		public final ItemListProperty fertilizerBlacklist = new ItemListProperty(() -> GENERAL.fertilizerBlacklistUnparsed);
+
+		@Name("tool_weakness_whitelist")
+		@LangKey(LANG_PREFIX + "tool_weakness_whitelist")
+		@Comment("A list of items that should not be weakened in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] toolWeaknessWhitelistUnparsed = {};
+		@Ignore
+		public final ItemListProperty toolWeaknessWhitelist = new ItemListProperty(() -> GENERAL.toolWeaknessWhitelistUnparsed);
+
+		@Name("tool_weakness_blacklist")
+		@LangKey(LANG_PREFIX + "tool_weakness_blacklist")
+		@Comment("A list of items that should be weakened in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] toolWeaknessBlacklistUnparsed = {};
+		@Ignore
+		public final ItemListProperty toolWeaknessBlacklist = new ItemListProperty(() -> GENERAL.toolWeaknessBlacklistUnparsed);
+
+		@Name("torch_whitelist")
+		@LangKey(LANG_PREFIX + "torch_whitelist")
+		@Comment("A list of items that should turn into damp torches when placed in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] torchWhitelistUnparsed = {};
+		@Ignore
+		public final ItemListProperty torchWhitelist = new ItemListProperty(() -> GENERAL.torchWhitelistUnparsed);
+
+		@Name("torch_blacklist")
+		@LangKey(LANG_PREFIX + "torch_blacklist")
+		@Comment("A list of items that should not turn into damp torches when placed in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] torchBlacklistUnparsed = {};
+		@Ignore
+		public final ItemListProperty torchBlacklist = new ItemListProperty(() -> GENERAL.torchBlacklistUnparsed);
 	}
 
 	@Name("mob_spawning")
@@ -272,143 +326,5 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "debug_recipe_overrides")
 		@Comment("If true, enables the recipe overrides debug logger")
 		public boolean debugRecipeOverrides = false;
-	}
-
-	@SubscribeEvent
-	public static void onConfigChanged(OnConfigChangedEvent event) {
-		if (ModInfo.ID.equals(event.getModID())) {
-			ConfigManager.sync(ModInfo.ID, Config.Type.INSTANCE);
-
-			parseFoodWhitelist(GENERAL.rottenFoodWhitelistUnparsed);
-		}
-	}
-
-	public static void init() {
-		final File versionFile = new File(configDir, "config_version");
-
-		Configuration newConfig = new Configuration(new File(BetweenlandsConfig.configDir, "config.cfg"));
-		newConfig.load();
-
-		Configuration oldConfig;
-		String configVersion = null;
-
-		if(loadedConfig == null) {
-			configVersion = ModInfo.CONFIG_VERSION;
-			oldConfig = new Configuration(new File(BetweenlandsConfig.configDir, "config.cfg"));
-			oldConfig.load();
-		} else {
-			if(versionFile.exists()) {
-				try {
-					configVersion = FileUtils.readFileToString(versionFile, (Charset) null);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			oldConfig = loadedConfig;
-		}
-
-		ConfigRemapper.register(new Remapper1());
-
-		Pair<Configuration, String> remap = ConfigRemapper.remap(oldConfig, newConfig, configVersion);
-		if(remap != null) {
-			//Create backup of old config values
-			final File backupFile = new File(oldConfig.getConfigFile().getParentFile(), "config (" + (configVersion == null ? "no version" : configVersion) + ").cfg.backup");
-			Configuration backup = ConfigRemapper.clear(new Configuration(backupFile, oldConfig.getDefinedConfigVersion()));
-			ConfigRemapper.copy(oldConfig, backup);
-			backup.save();
-
-			remap.getKey().save();
-			reloadConfig();
-		}
-
-		try {
-			FileUtils.writeStringToFile(versionFile, ModInfo.CONFIG_VERSION, (Charset) null, false);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static void reloadConfig() {
-		try {
-			Field configCacheField = ConfigManager.class.getDeclaredField("CONFIGS");
-			configCacheField.setAccessible(true);
-
-			@SuppressWarnings("unchecked")
-			Map<String, Configuration> configCache = (Map<String, Configuration>) configCacheField.get(null);
-
-			configCache.put(new File(BetweenlandsConfig.configDir, "config.cfg").getAbsolutePath(), null);
-
-			ConfigManager.sync(ModInfo.ID, Config.Type.INSTANCE);
-
-			parseFoodWhitelist(GENERAL.rottenFoodWhitelistUnparsed);
-		} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException ex) {
-			throw new RuntimeException(ex);
-		}
-	}
-
-	@Ignore
-	private static Multimap<String, String> rottenFoodWhitelist;
-
-	private static void parseFoodWhitelist(String[] rottenFoodWhitelistUnparsed) {
-		rottenFoodWhitelist = HashMultimap.<String, String>create();
-		for(String whitelisted : rottenFoodWhitelistUnparsed) {
-			try {
-				String[] data = whitelisted.split(":");
-				String item = data[0] + ":" + data[1];
-				String meta = null;
-				if(data.length <= 2) {
-					meta = "0";
-				} else {
-					try {
-						meta = String.valueOf(Integer.parseInt(data[2]));
-					} catch(NumberFormatException ex) {}
-					if("*".equals(data[2])) {
-						meta = data[2];
-					}
-				}
-				if(meta == null) {
-					TheBetweenlands.logger.error("Failed to parse food whitelist item: " + whitelisted + ". Invalid metadata: " + data[2]);
-				} else {
-					rottenFoodWhitelist.put(item, meta);
-				}
-			} catch (Exception e) {
-				TheBetweenlands.logger.error("Failed to parse food whitelist item: " + whitelisted);
-			}
-		}
-	}
-
-	public static boolean isFoodConfigWhitelisted(ItemStack stack) {
-		if(rottenFoodWhitelist == null) {
-			parseFoodWhitelist(GENERAL.rottenFoodWhitelistUnparsed);
-		}
-
-		if (stack.isEmpty()) {
-			return false;
-		}
-
-		String stackMeta = String.valueOf(stack.getMetadata());
-		ResourceLocation name = stack.getItem().getRegistryName();
-		Collection<String> metas = rottenFoodWhitelist.get(name.toString());
-		for(String meta : metas) {
-			if("*".equals(meta)) {
-				return true;
-			} else if(meta.equals(stackMeta)) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	public static boolean isDimensionPortalWhitelisted(int dim) {
-		if(dim == WORLD_AND_DIMENSION.dimensionId) {
-			return true;
-		}
-		for(int whitelisted : WORLD_AND_DIMENSION.portalDimensionWhitelist) {
-			if(whitelisted == dim) {
-				return true;
-			}
-		}
-		return false;
 	}
 }

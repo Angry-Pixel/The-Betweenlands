@@ -32,6 +32,7 @@ import thebetweenlands.common.command.CommandBLEvent;
 import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.config.ConfigHelper;
 import thebetweenlands.common.handler.AdvancementHandler;
 import thebetweenlands.common.handler.AnvilEventHandler;
 import thebetweenlands.common.handler.ArmorHandler;
@@ -107,7 +108,7 @@ public class TheBetweenlands {
 		logger = event.getModLog();
 
 		//Configuration File
-		BetweenlandsConfig.init();
+		ConfigHelper.init();
 
 		BetweenlandsAPI.init();
 
@@ -140,13 +141,7 @@ public class TheBetweenlands {
 		TheBetweenlandsPreconditions.check();
 
 		//Load config before it is changed
-		BetweenlandsConfig.loadedConfig = null;
-		BetweenlandsConfig.configDir = new File(Loader.instance().getConfigDir(), ModInfo.ID);
-		File configFile = new File(BetweenlandsConfig.configDir, "config.cfg");
-		if(configFile.exists()) {
-			BetweenlandsConfig.loadedConfig = new Configuration(configFile);
-			BetweenlandsConfig.loadedConfig.load();
-		}
+		ConfigHelper.loadExistingConfig();
 
 		return new TheBetweenlands();
 	}
@@ -199,7 +194,7 @@ public class TheBetweenlands {
 
 		WorldStorageImpl.register();
 
-		MinecraftForge.EVENT_BUS.register(BetweenlandsConfig.class);
+		MinecraftForge.EVENT_BUS.register(ConfigHelper.class);
 		MinecraftForge.EVENT_BUS.register(ItemBLShield.EventHandler.INSTANCE);
 		MinecraftForge.EVENT_BUS.register(WorldEventHandler.class);
 		MinecraftForge.EVENT_BUS.register(BetweenlandsChunkStorage.class);

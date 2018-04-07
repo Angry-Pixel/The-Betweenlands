@@ -79,17 +79,6 @@ public class OverworldItemHandler {
 		}
 
 		/**
-		 * Returns whether the specified block is a torch block that should be destroyed or replaced
-		 * @param world
-		 * @param pos
-		 * @param state
-		 * @param stack
-		 * @param player
-		 * @return
-		 */
-		public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player);
-
-		/**
 		 * Called when a torch is placed, by default replaces the block with a damp torch
 		 * @param world
 		 * @param pos
@@ -109,19 +98,22 @@ public class OverworldItemHandler {
 	public static final Map<ResourceLocation, Predicate<ItemStack>> TAINTING_WHITELIST = new HashMap<>();
 	public static final Map<ResourceLocation, Predicate<ItemStack>> TAINTING_BLACKLIST = new HashMap<>();
 
-	public static final Map<ResourceLocation, Predicate<ItemStack>> FLINT_AND_STEEL_WHITELIST = new HashMap<>();
-	public static final Map<ResourceLocation, Predicate<ItemStack>> FLINT_AND_STEEL_BLACKLIST = new HashMap<>();
+	public static final Map<ResourceLocation, Predicate<ItemStack>> FIRE_TOOL_WHITELIST = new HashMap<>();
+	public static final Map<ResourceLocation, Predicate<ItemStack>> FIRE_TOOL_BLACKLIST = new HashMap<>();
 
-	public static final Map<ResourceLocation, Predicate<ItemStack>> BONEMEAL_WHITELIST = new HashMap<>();
-	public static final Map<ResourceLocation, Predicate<ItemStack>> BONEMEAL_BLACKLIST = new HashMap<>();
+	public static final Map<ResourceLocation, Predicate<ItemStack>> FERTILIZER_WHITELIST = new HashMap<>();
+	public static final Map<ResourceLocation, Predicate<ItemStack>> FERTILIZER_BLACKLIST = new HashMap<>();
 
 	public static final Map<ResourceLocation, Predicate<ItemStack>> TOOL_WHITELIST = new HashMap<>();
 	public static final Map<ResourceLocation, Predicate<ItemStack>> TOOL_BLACKLIST = new HashMap<>();
 
+	public static final Map<ResourceLocation, Predicate<ItemStack>> TORCH_WHITELIST = new HashMap<>();
+	public static final Map<ResourceLocation, Predicate<ItemStack>> TORCH_BLACKLIST = new HashMap<>();
 	public static final Map<ResourceLocation, ITorchPlaceHandler> TORCH_PLACE_HANDLERS = new HashMap<>();
 
 	static {
-		ROTTING_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.isFoodConfigWhitelisted(stack));
+		ROTTING_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.GENERAL.rottenFoodWhitelist.isListed(stack));
+		ROTTING_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "config_blacklist"), stack -> BetweenlandsConfig.GENERAL.rottenFoodBlacklist.isListed(stack));
 		ROTTING_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> {
 			if(stack.getItem() == Items.CAKE || Block.getBlockFromItem(stack.getItem()) == Blocks.CAKE) {
 				return true;
@@ -132,20 +124,36 @@ public class OverworldItemHandler {
 			return false;
 		});
 
+		TAINTING_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.GENERAL.taintingWhitelist.isListed(stack));
+		TAINTING_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "config_blacklist"), stack -> BetweenlandsConfig.GENERAL.taintingBlacklist.isListed(stack));
 		TAINTING_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() instanceof ItemPotion);
 
-		FLINT_AND_STEEL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() instanceof ItemFlintAndSteel);
+		FIRE_TOOL_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.GENERAL.fireToolWhitelist.isListed(stack));
+		FIRE_TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "config_blacklist"), stack -> BetweenlandsConfig.GENERAL.fireToolBlacklist.isListed(stack));
+		FIRE_TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() instanceof ItemFlintAndSteel);
 
-		BONEMEAL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() == Items.DYE);
+		FERTILIZER_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.GENERAL.fertilizerWhitelist.isListed(stack));
+		FERTILIZER_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "config_blacklist"), stack -> BetweenlandsConfig.GENERAL.fertilizerBlacklist.isListed(stack));
+		FERTILIZER_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> stack.getItem() == Items.DYE);
 
-		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> 
-				(stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemBow) &&
-				stack.getItem() instanceof ItemBLSword == false && 
-				stack.getItem() instanceof ItemBLAxe == false && 
-				stack.getItem() instanceof ItemBLPickaxe == false && 
-				stack.getItem() instanceof ItemBLShovel == false &&
-				stack.getItem() instanceof ItemBLBow == false &&
-				!ItemRegistry.ITEMS.contains(stack.getItem()));
+		TOOL_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.GENERAL.toolWeaknessWhitelist.isListed(stack));
+		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "config_blacklist"), stack -> BetweenlandsConfig.GENERAL.toolWeaknessBlacklist.isListed(stack));
+		TOOL_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> {
+			return (stack.getItem() instanceof ItemTool || stack.getItem() instanceof ItemSword || stack.getItem() instanceof ItemBow) &&
+					stack.getItem() instanceof ItemBLSword == false && 
+					stack.getItem() instanceof ItemBLAxe == false && 
+					stack.getItem() instanceof ItemBLPickaxe == false && 
+					stack.getItem() instanceof ItemBLShovel == false &&
+					stack.getItem() instanceof ItemBLBow == false &&
+					!ItemRegistry.ITEMS.contains(stack.getItem());
+		});
+
+		TORCH_WHITELIST.put(new ResourceLocation(ModInfo.ID, "config_whitelist"), stack -> BetweenlandsConfig.GENERAL.torchWhitelist.isListed(stack));
+		TORCH_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "config_blacklist"), stack -> BetweenlandsConfig.GENERAL.torchBlacklist.isListed(stack));
+		TORCH_BLACKLIST.put(new ResourceLocation(ModInfo.ID, "default_blacklist"), stack -> {
+			Block block = Block.getBlockFromItem(stack.getItem());
+			return block instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(block);
+		});
 
 		ITorchPlaceHandler vanillaTorchPlaceHandler = new ITorchPlaceHandler() {
 			@Override
@@ -155,13 +163,7 @@ public class OverworldItemHandler {
 
 			@Override
 			public boolean isTorchItem(ItemStack stack) {
-				Block block = Block.getBlockFromItem(stack.getItem());
-				return block instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(block);
-			}
-
-			@Override
-			public boolean isTorchBlock(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player) {
-				return state.getBlock() instanceof BlockTorch && !BlockRegistry.BLOCKS.contains(state.getBlock());
+				return isTorchTurningDamp(stack);
 			}
 
 			@Override
@@ -186,17 +188,7 @@ public class OverworldItemHandler {
 				for(ITorchPlaceHandler handler : TORCH_PLACE_HANDLERS.values()) {
 					if(handler.isTorchItem(held)) {
 						if(!handler.onTorchItemPlaced(event.getWorld(), event.getPos(), held, event.getPlayer())) {
-							for(int x = -2; x <= 2; x++) {
-								for(int y = -2; y <= 2; y++) {
-									for(int z = -2; z <= 2; z++) {
-										BlockPos offset = event.getPos().add(x, y, z);
-										IBlockState state = event.getWorld().getBlockState(offset);
-										if(handler.isTorchBlock(event.getWorld(), offset, state, held, event.getPlayer())) {
-											handler.onTorchBlockPlaced(event.getWorld(), offset, state, held, event.getPlayer());
-										}
-									}
-								}
-							}
+							handler.onTorchBlockPlaced(event.getWorld(), event.getPos(), event.getState(), held, event.getPlayer());
 						} else {
 							break;
 						}
@@ -210,7 +202,7 @@ public class OverworldItemHandler {
 	public static void onUseItem(PlayerInteractEvent.RightClickBlock event) {
 		ItemStack item = event.getItemStack();
 		if(!item.isEmpty() && event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-			if(isFlintAndSteelBlocked(item)) {
+			if(isFireToolBlocked(item)) {
 				event.setUseItem(Result.DENY);
 				event.setCanceled(true);
 				if(event.getWorld().isRemote) {
@@ -224,13 +216,13 @@ public class OverworldItemHandler {
 	public static void onBonemeal(BonemealEvent event) {
 		if(event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			ItemStack stack = event.getEntityPlayer().getHeldItem(event.getHand());
-			if(!stack.isEmpty() && isBonemealBlocked(stack)) {
+			if(!stack.isEmpty() && isFertilizerBlocked(stack)) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
 			}
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onArmSwingSpeed(ArmSwingSpeedEvent event) {
@@ -241,9 +233,9 @@ public class OverworldItemHandler {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
-    public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
+	public static void onBreakSpeed(PlayerEvent.BreakSpeed event) {
 		if(event.getEntityPlayer().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			ItemStack tool = event.getEntityPlayer().getHeldItemMainhand();
 			if (!tool.isEmpty() && isToolWeakened(tool)) {
@@ -381,13 +373,13 @@ public class OverworldItemHandler {
 		return false;
 	}
 
-	public static boolean isFlintAndSteelBlocked(ItemStack stack) {
-		for(Predicate<ItemStack> whitelistPredicate : FLINT_AND_STEEL_WHITELIST.values()) {
+	public static boolean isFireToolBlocked(ItemStack stack) {
+		for(Predicate<ItemStack> whitelistPredicate : FIRE_TOOL_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
 			}
 		}
-		for(Predicate<ItemStack> blacklistPredicate : FLINT_AND_STEEL_BLACKLIST.values()) {
+		for(Predicate<ItemStack> blacklistPredicate : FIRE_TOOL_BLACKLIST.values()) {
 			if(blacklistPredicate.test(stack)) {
 				return true;
 			}
@@ -395,13 +387,13 @@ public class OverworldItemHandler {
 		return false;
 	}
 
-	public static boolean isBonemealBlocked(ItemStack stack) {
-		for(Predicate<ItemStack> whitelistPredicate : BONEMEAL_WHITELIST.values()) {
+	public static boolean isFertilizerBlocked(ItemStack stack) {
+		for(Predicate<ItemStack> whitelistPredicate : FERTILIZER_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
 			}
 		}
-		for(Predicate<ItemStack> blacklistPredicate : BONEMEAL_BLACKLIST.values()) {
+		for(Predicate<ItemStack> blacklistPredicate : FERTILIZER_BLACKLIST.values()) {
 			if(blacklistPredicate.test(stack)) {
 				return true;
 			}
@@ -416,6 +408,20 @@ public class OverworldItemHandler {
 			}
 		}
 		for(Predicate<ItemStack> blacklistPredicate : TOOL_BLACKLIST.values()) {
+			if(blacklistPredicate.test(stack)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean isTorchTurningDamp(ItemStack stack) {
+		for(Predicate<ItemStack> whitelistPredicate : TORCH_WHITELIST.values()) {
+			if(whitelistPredicate.test(stack)) {
+				return false;
+			}
+		}
+		for(Predicate<ItemStack> blacklistPredicate : TORCH_BLACKLIST.values()) {
 			if(blacklistPredicate.test(stack)) {
 				return true;
 			}
