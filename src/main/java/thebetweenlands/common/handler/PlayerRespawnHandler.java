@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -27,7 +28,18 @@ public class PlayerRespawnHandler {
 
 			BlockPos adjustedSpawnPos = spawnPos == null ? null : EntityPlayer.getBedSpawnLocation(event.player.world, spawnPos, event.player.isSpawnForced(event.player.dimension));
 
+			boolean newRespawn = false;
 			if(adjustedSpawnPos == null) {
+				newRespawn = true;
+			} else {
+				IBlockState stateDown = event.player.world.getBlockState(adjustedSpawnPos.down());
+				boolean isValidSpawnBlock = stateDown.getMaterial().blocksMovement() && !stateDown.getBlock().isLeaves(stateDown, event.player.world, adjustedSpawnPos.down()) && !stateDown.getBlock().isFoliage(event.player.world, adjustedSpawnPos.down());
+				if(!isValidSpawnBlock) {
+					newRespawn = true;
+				}
+			}
+			
+			if(newRespawn) {
 				NBTTagCompound dataNbt = event.player.getEntityData();
 				NBTTagCompound persistentNbt = dataNbt.getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
 
@@ -88,10 +100,13 @@ public class PlayerRespawnHandler {
 				Chunk chunk = world.getChunkFromBlockCoords(newPos);
 				newPos = new BlockPos(newPos.getX(), chunk.getHeight(newPos), newPos.getZ());
 				if(Math.abs(newPos.getY() - pos.getY()) <= 16 && EntityPlayer.getBedSpawnLocation(world, newPos, true) != null) {
-					WeightedPos p = new WeightedPos(newPos);
-					p.weight = (short) Math.abs(newPos.getY() - pos.getY());
-					maxWeight = (short)Math.max(maxWeight, p.weight);
-					spawnCandidates.add(p);
+					IBlockState stateDown = chunk.getBlockState(newPos.down());
+					if(stateDown.getMaterial().blocksMovement() && !stateDown.getBlock().isLeaves(stateDown, world, newPos.down()) && !stateDown.getBlock().isFoliage(world, newPos.down())) {
+						WeightedPos p = new WeightedPos(newPos);
+						p.weight = (short) Math.abs(newPos.getY() - pos.getY());
+						maxWeight = (short)Math.max(maxWeight, p.weight);
+						spawnCandidates.add(p);
+					}
 				}
 			}
 		}
