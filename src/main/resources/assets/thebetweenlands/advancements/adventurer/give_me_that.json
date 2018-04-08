@@ -17,7 +17,8 @@
       "conditions": {
         "items": [
           {
-            "item": "thebetweenlands:swamp_talisman"
+            "item": "thebetweenlands:swamp_talisman",
+            "data": 0
           }
         ]
       }
