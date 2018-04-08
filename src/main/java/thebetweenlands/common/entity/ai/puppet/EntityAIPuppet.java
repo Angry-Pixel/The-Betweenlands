@@ -54,9 +54,14 @@ public class EntityAIPuppet extends EntityAIBase {
 	}
 
 	@Override
+	public boolean shouldContinueExecuting() {
+		return true;
+	}
+
+	@Override
 	public boolean isInterruptible() {
 		//Prevent other target AIs from taking over
-		return false;
+		return this.getMutexBits() == 0;
 	}
 
 	@Override
@@ -75,21 +80,33 @@ public class EntityAIPuppet extends EntityAIBase {
 			}
 		}
 
+		this.setMutexBits(0);
+
 		if(this.tasks != null) {
+			int mutexBits = 0;
+
 			this.tasks.onUpdateTasks();
+
+			for(EntityAITasks.EntityAITaskEntry task : this.tasks.taskEntries) {
+				if(task.using) {
+					mutexBits |= task.action.getMutexBits();
+				}
+			}
+
+			this.setMutexBits(mutexBits);
 		}
 	}
 
 	/**
 	 * Adds a puppet AI to an entity
 	 * @param entity
-	 * @param targetTasks
+	 * @param tasks
 	 */
-	public static void addPuppetAI(Supplier<Entity> puppeteer, EntityLivingBase entity, EntityAITasks creatureTasks, @Nullable List<EntityAIBase> targetTasks) {
+	public static void addPuppetAI(Supplier<Entity> puppeteer, EntityLivingBase entity, EntityAITasks creatureTasks, @Nullable List<EntityAIBase> tasks) {
 		interruptAI(creatureTasks);
 
 		if(getPuppetAI(creatureTasks) == null) {
-			creatureTasks.addTask(Integer.MAX_VALUE, new EntityAIPuppet(entity, puppeteer, targetTasks));
+			creatureTasks.addTask(Integer.MAX_VALUE, new EntityAIPuppet(entity, puppeteer, tasks));
 		}
 	}
 
@@ -98,9 +115,8 @@ public class EntityAIPuppet extends EntityAIBase {
 	 * @param creatureTasks
 	 */
 	public static void removePuppetAI(EntityAITasks creatureTasks) {
-		EntityAIPuppet puppetAI = getPuppetAI(creatureTasks);
-
-		if(puppetAI != null) {
+		EntityAIPuppet puppetAI;
+		while((puppetAI = getPuppetAI(creatureTasks)) != null) {
 			creatureTasks.removeTask(puppetAI);
 		}
 	}
