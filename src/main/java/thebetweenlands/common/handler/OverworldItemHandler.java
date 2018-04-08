@@ -1,12 +1,16 @@
 package thebetweenlands.common.handler;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockTorch;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
@@ -168,9 +172,31 @@ public class OverworldItemHandler {
 
 			@Override
 			public void onTorchBlockPlaced(World world, BlockPos pos, IBlockState state, ItemStack stack, EntityPlayer player) {
-				EnumFacing facing = state.getValue(BlockTorch.FACING);
-				IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
-				world.setBlockState(pos, dampTorch);
+				EnumFacing facing = null;
+				try {
+					facing = state.getValue(BlockTorch.FACING);
+				} catch(Exception ex) {}
+				if(facing == null) {
+					List<EnumFacing> dirs = new ArrayList<>();
+					Collections.addAll(dirs, EnumFacing.VALUES);
+					Collections.shuffle(dirs, world.rand);
+					for(EnumFacing dir : dirs) {
+						if(dir != EnumFacing.DOWN) {
+							IBlockState offsetState = world.getBlockState(pos.offset(dir.getOpposite()));
+							if((dir == EnumFacing.UP && offsetState.getBlock().canPlaceTorchOnTop(offsetState, world, pos.offset(dir.getOpposite()))) || world.isSideSolid(pos.offset(dir.getOpposite()), dir)) {
+								facing = dir;
+								break;
+							}
+						}
+					}
+				}
+				if(facing != null) {
+					IBlockState dampTorch = BlockRegistry.DAMP_TORCH.getDefaultState().withProperty(BlockDampTorch.FACING, facing);
+					world.setBlockState(pos, dampTorch);
+				} else {
+					world.setBlockToAir(pos);
+					world.spawnEntity(new EntityItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(BlockRegistry.DAMP_TORCH)));
+				}
 				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.2F, 1.0F);
 				if(player instanceof EntityPlayerMP) {
 					AdvancementCriterionRegistry.DAMP_TORCH_PLACED.trigger((EntityPlayerMP) player);
@@ -189,9 +215,8 @@ public class OverworldItemHandler {
 					if(handler.isTorchItem(held)) {
 						if(!handler.onTorchItemPlaced(event.getWorld(), event.getPos(), held, event.getPlayer())) {
 							handler.onTorchBlockPlaced(event.getWorld(), event.getPos(), event.getState(), held, event.getPlayer());
-						} else {
-							break;
 						}
+						break;
 					}
 				}
 			}

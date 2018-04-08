@@ -8,6 +8,7 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Tuple;
 import thebetweenlands.common.lib.ModInfo;
 
 import java.util.ArrayList;
@@ -86,17 +87,22 @@ public class SwatShieldTrigger extends BLTrigger<SwatShieldTrigger.Instance, Swa
         }
 
         public void revert() {
+        	List<Tuple<Advancement, String>> criterions = new ArrayList<>();
             for (ICriterionTrigger.Listener<SwatShieldTrigger.Instance> listener : this.listeners) {
                 AdvancementProgress progress = playerAdvancements.getProgress(listener.advancement);
                 if (!progress.isDone() && progress.hasProgress()) {
                     for (Map.Entry<String, Criterion> entry: listener.advancement.getCriteria().entrySet()) {
                         if (entry.getValue().getCriterionInstance() instanceof SwatShieldTrigger.Instance) {
                             CriterionProgress criterionProgress = progress.getCriterionProgress(entry.getKey());
-                            if (criterionProgress != null && criterionProgress.isObtained())
-                                playerAdvancements.revokeCriterion(listener.advancement, entry.getKey());
+                            if (criterionProgress != null && criterionProgress.isObtained()) {
+                            	criterions.add(new Tuple<>(listener.advancement, entry.getKey()));
+                            }
                         }
                     }
                 }
+            }
+            for(Tuple<Advancement, String> criterion : criterions) {
+            	this.playerAdvancements.revokeCriterion(criterion.getFirst(), criterion.getSecond());
             }
         }
     }
