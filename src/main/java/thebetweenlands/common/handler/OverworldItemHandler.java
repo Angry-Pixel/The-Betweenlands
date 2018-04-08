@@ -219,6 +219,9 @@ public class OverworldItemHandler {
 			if(!stack.isEmpty() && isFertilizerBlocked(stack)) {
 				event.setResult(Result.DENY);
 				event.setCanceled(true);
+				if(event.getWorld().isRemote) {
+					event.getEntityPlayer().sendStatusMessage(new TextComponentTranslation("chat.fertilizer", new TextComponentTranslation(stack.getUnlocalizedName() + ".name")), true);
+				}
 			}
 		}
 	}
