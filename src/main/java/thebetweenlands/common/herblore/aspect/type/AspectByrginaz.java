@@ -1,6 +1,7 @@
 package thebetweenlands.common.herblore.aspect.type;
 
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.translation.I18n;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -12,7 +13,7 @@ public class AspectByrginaz implements IAspectType {
 
 	@Override
 	public String getType() {
-		return "Water";
+		return I18n.translateToLocal("manual.water");
 	}
 
 	@Override

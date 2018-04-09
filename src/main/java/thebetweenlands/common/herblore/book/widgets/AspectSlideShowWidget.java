@@ -7,6 +7,7 @@ import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
@@ -52,7 +53,7 @@ public class AspectSlideShowWidget extends ManualWidgetBase {
                 List<String> tooltipData = new ArrayList<>();
                 tooltipData.add(aspect.getName());
                 tooltipData.add(TextFormatting.GRAY + aspect.getType());
-                tooltipData.add(TextFormatting.GRAY + "Open guide book entry");
+                tooltipData.add(TextFormatting.GRAY + (I18n.canTranslate("manual.open_entry") ? I18n.translateToLocal("manual.open_entry"): I18n.translateToFallback("manual.open_entry")));
                 renderTooltip(mouseX, mouseY, tooltipData, 0xffffff, 0xf0100010);
             }
             width += 18;

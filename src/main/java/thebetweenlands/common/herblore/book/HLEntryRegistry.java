@@ -33,6 +33,7 @@ public class HLEntryRegistry {
      */
     @SideOnly(Side.CLIENT)
     public static void init() {
+        CATEGORIES.clear();
         initAspectEntries();
         initElixirEntries();
     }

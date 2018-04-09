@@ -1096,6 +1096,23 @@ manual.aspect.used.in=This aspect is used in:
 manual.has.aspects=This item has the following aspects:
 manual.aspect_info.title=Aspect Info
 manual.ingredient_info.title=Ingredient Info
+manual.open_entry=Open guide book entry
+
+manual.desire=Desire
+manual.corruption=Corruption
+manual.muscle=Muscle
+manual.water=Water
+manual.stomach=Stomach
+manual.mind=Mind
+manual.earth=Earth
+manual.fire=Fire
+manual.vision=Vision
+manual.void=Void
+manual.enhance=Enhance
+manual.health=Health
+manual.form=Form
+manual.wind=Wind
+
 
 manual.azuwynn.description=The aspect that has effect on the muscles.<nl> Tier I aspect.
 manual.armaniis.description=The aspect that influences the desire of a being or a thought.<nl> Tier II aspect.

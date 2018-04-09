@@ -367,6 +367,9 @@ public class ClientProxy extends CommonProxy {
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
+		resourceManager.registerReloadListener(r -> {
+			if (HLEntryRegistry.CATEGORIES.size() > 0) HLEntryRegistry.init();
+		});
 
 		//Register particle stitchers
 		BLParticles[] particles = BLParticles.values();

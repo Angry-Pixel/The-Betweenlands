@@ -270,7 +270,7 @@ public class ManualWidgetBase {
                 List<String> parsedTooltip = new ArrayList<>();
                 boolean first = true;
                 if (addPageLink && shouldShowTooltip)
-                    tooltipData.add("Open guide book entry");
+                    tooltipData.add(I18n.canTranslate("manual.open_entry") ? I18n.translateToLocal("manual.open_entry"): I18n.translateToFallback("manual.open_entry"));
                 for (String s : tooltipData) {
                     String s_ = s;
                     if (!first)

@@ -60,7 +60,7 @@ public class PictureWidget extends ManualWidgetBase {
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(1F, 1F, 1F, 1F);
-        manual.drawTexture(xStart, yStart, width, height, textureWidth, textureHeight, xIndex, xIndex + width, yIndex, yIndex + height);
+            manual.drawTexture(xStart, yStart, width, height, textureWidth, textureHeight, xIndex, xIndex + width, yIndex, yIndex + height);
         GlStateManager.disableBlend();
 
         if (toolTips.size() > 0 && mouseX >= xStart && mouseX <= xStart + width && mouseY >= yStart && mouseY <= yStart + height) {
