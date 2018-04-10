@@ -14,6 +14,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -144,6 +145,9 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 					if(new WorldGenWeedwoodPortalTree().generate(worldIn, itemRand, pos)) {
 						worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 						playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
+						if(playerIn instanceof EntityPlayerMP) {
+							((EntityPlayerMP)playerIn).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
+						}
 					} else {
 						playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.noplace"), true);
 					}
@@ -186,7 +190,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 								WorldServer otherWorld = ((WorldServer) worldIn).getMinecraftServer().getWorld(linkDim);
 								if(otherWorld != null) {
 									double moveFactor = otherWorld.provider.getMovementFactor() / worldIn.provider.getMovementFactor();
-									if(new Vec3d(portal.getPortalPosition()).distanceTo(new Vec3d(otherPortalPos.getX() * moveFactor, portal.getPortalPosition().getY(), otherPortalPos.getZ() * moveFactor)) <= 500) {
+									if(new Vec3d(portal.getPortalPosition()).distanceTo(new Vec3d(otherPortalPos.getX() * moveFactor, portal.getPortalPosition().getY(), otherPortalPos.getZ() * moveFactor)) <= 1500) {
 										LocationPortal linkPortal = this.getLinkPortal(otherWorld, otherPortalPos);
 										if(linkPortal != null) {
 											linkPortal.setOtherPortalPosition(worldIn.provider.getDimension(), portal.getPortalPosition());

@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,23 +29,32 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
+		if(pos.getY() > world.getActualHeight() - 20) {
+			return false;
+		}
+		
 		int radius = 4;
 		int height = 16;
 		int maxRadius = 9;
 
-		int checkRadius = 4;
-		int checkHeight = 6;
+		int checkHeight = 20;
 
 		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.WEEDWOOD.getDefaultState();
 		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 
-		for (int xx = -checkRadius; xx <= checkRadius; xx++) {
-			for (int zz = -checkRadius; zz <= checkRadius; zz++) {
-				if(xx*xx + zz*zz <= checkRadius*checkRadius) {
-					for (int yy = 2; yy < 2 + checkHeight; yy++) {
+		for (int yy = 1; yy < 1 + checkHeight; yy++) {
+			int checkRadius = 6;
+			if(yy > 11) {
+				checkRadius = 10;
+			}
+			for (int xx = -checkRadius; xx <= checkRadius; xx++) {
+				for (int zz = -checkRadius; zz <= checkRadius; zz++) {
+					if(xx*xx + zz*zz <= checkRadius*checkRadius) {
 						IBlockState blockState = world.getBlockState(pos.add(xx, yy, zz));
-						if (blockState.getBlock() != Blocks.AIR && !blockState.isNormalCube() && !blockState.getBlock().isReplaceable(world, pos.add(xx, yy, zz))) {
+						boolean isReplaceable = blockState.getBlock() == Blocks.AIR || blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || 
+								blockState.getMaterial() == Material.VINE || blockState.getBlock().isReplaceable(world, pos.add(xx, yy, zz));
+						if (!isReplaceable) {
 							return false;
 						}
 					}
@@ -65,6 +75,8 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 						this.setBlockAndNotifyAdequately(world, pos.add(i, yy, j), wood);
 					if (Math.round(Math.sqrt(dSq)) == radius && yy == 0 || Math.round(Math.sqrt(dSq)) == radius && yy <= height - 1)
 						this.setBlockAndNotifyAdequately(world, pos.add(i, yy, j), bark);
+					if (Math.round(Math.sqrt(dSq)) < radius && yy <= height - 1 && yy > 1 && yy <= 10)
+						this.setBlockAndNotifyAdequately(world, pos.add(i, yy, j), Blocks.AIR.getDefaultState());
 				}
 
 			if(yy == 4) {
