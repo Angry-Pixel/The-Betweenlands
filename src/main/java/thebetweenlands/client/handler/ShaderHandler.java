@@ -38,7 +38,12 @@ public class ShaderHandler {
 		if(event.phase == Phase.START) {
 			Minecraft mc = Minecraft.getMinecraft();
 
-			if(ShaderHelper.INSTANCE.isShaderSupported() && BetweenlandsConfig.RENDERING.useShader) {
+			boolean canUseInWorld = true;
+			if(BetweenlandsConfig.RENDERING.dimensionShaderOnly) {
+				canUseInWorld = mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+			}
+			
+			if(ShaderHelper.INSTANCE.isShaderSupported() && BetweenlandsConfig.RENDERING.useShader && canUseInWorld) {
 				Framebuffer framebuffer = mc.getFramebuffer();
 
 				if(!mc.gameSettings.fboEnable) {

@@ -1388,6 +1388,7 @@ config.thebetweenlands.activate_rift_on_first_join_duration=Activate Rift on fir
 config.thebetweenlands.rendering=Rendering
 config.thebetweenlands.wisp_quality=Wisp Rendering Quality
 config.thebetweenlands.use_shader=Use shaders for rendering
+config.thebetweenlands.dimension_shader_only=Shaders in dimension only
 config.thebetweenlands.sky_texture_resolution=Sky texture resolution
 config.thebetweenlands.fullbright_blocks=Full brightness blocks
 config.thebetweenlands.sky_rift_clouds=Sky rift clouds

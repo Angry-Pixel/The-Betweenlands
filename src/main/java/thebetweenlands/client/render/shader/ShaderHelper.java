@@ -57,7 +57,11 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	 */
 	public boolean canUseShaders() {
 		if(this.isShaderSupported()) {
-			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && BetweenlandsConfig.RENDERING.useShader;
+			boolean canUseInWorld = true;
+			if(BetweenlandsConfig.RENDERING.dimensionShaderOnly) {
+				canUseInWorld = Minecraft.getMinecraft().world != null && Minecraft.getMinecraft().world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+			}
+			return this.shaderError == null && OpenGlHelper.isFramebufferEnabled() && BetweenlandsConfig.RENDERING.useShader && canUseInWorld;
 		} else {
 			//Shaders not supported, disable in config
 			BetweenlandsConfig.RENDERING.useShader = false;

@@ -87,6 +87,11 @@ public class BetweenlandsConfig {
 		@Comment("Some features in the Betweenlands use shaders for special effects. If you don't have a dedicated graphics card or want to use other mods with shaders you should set this to false. May have an impact on performance depending on your computer. Forces FBOs to be enabled")
 		public boolean useShader = true;
 
+		@Name("dimension_shader_only")
+		@LangKey(LANG_PREFIX + "dimension_shader_only")
+		@Comment("Whether the shaders should only be active in the Betweenlands dimension (if they are enabled)")
+		public boolean dimensionShaderOnly = false;
+		
 		@Name("fullbright_blocks")
 		@LangKey(LANG_PREFIX + "fullbright_blocks")
 		@Comment("Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false")
