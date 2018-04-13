@@ -41,8 +41,7 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 					GlStateManager.translate(row * 0.75F, 0.0D, column * 0.75F);
 					GlStateManager.translate(0.75F, 0.52F, 0.25F);
 					GlStateManager.scale(0.5F, 0.5F, 0.5F);
-					GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-					GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+					GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					RenderHelper.disableStandardItemLighting();
 					this.renderItem.renderItem(stack, this.renderItem.getItemModelMesher().getItemModel(stack));
 					GlStateManager.popMatrix();
