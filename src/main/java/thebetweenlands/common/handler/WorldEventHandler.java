@@ -82,17 +82,17 @@ public final class WorldEventHandler {
 
 	@SubscribeEvent
 	public static void onWatchChunk(ChunkWatchEvent.Watch event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getPlayer().getEntityWorld());
+		IWorldStorage cap = WorldStorageImpl.getCapability(event.getChunkInstance().getWorld());
 		if(cap != null) {
-			cap.watchChunk(event.getChunk(), event.getPlayer());
+			cap.watchChunk(event.getChunkInstance().getPos(), event.getPlayer());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onUnwatchChunk(ChunkWatchEvent.UnWatch event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getPlayer().getEntityWorld());
+		IWorldStorage cap = WorldStorageImpl.getCapability(event.getChunkInstance().getWorld());
 		if(cap != null) {
-			cap.unwatchChunk(event.getChunk(), event.getPlayer());
+			cap.unwatchChunk(event.getChunkInstance().getPos(), event.getPlayer());
 		}
 	}
 
