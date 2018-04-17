@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.minecraft.block.Block;
+import thebetweenlands.client.gui.menu.GuiBLMainMenu;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -314,7 +315,22 @@ public class ClientProxy extends CommonProxy {
 	}
 
 	@Override
-	public void preInit() {
+	public void preInit() 
+	{
+		try
+		{
+			if(Loader.isModLoaded("evilnotchlib"))
+			{
+				System.out.println("Menu Lib Detected Adding Support:");
+				Class menuclazz = Class.forName("com.EvilNotch.lib.minecraft.content.client.gui.MenuRegistry");
+				Method methodreg = menuclazz.getMethod("registerGuiMenu", Class.class,ResourceLocation.class);
+				methodreg.invoke(null,GuiBLMainMenu.class,new ResourceLocation("thebetweenlands:mainmenu"));
+			}
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+		}
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, RenderAngler::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, RenderBlindCaveFish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, RenderMireSnail::new);
@@ -357,11 +373,11 @@ public class ClientProxy extends CommonProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossProjectile.class, RenderFortressBossProjectile::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTurret.class, RenderFortressBossTurret::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityFortressBossTeleporter.class, RenderFortressBossTeleporter::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, RenderWeedwoodRowboat::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityElixir.class, RenderElixir::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, RenderDreadfulMummy::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntitySludgeBall.class, RenderSludgeBall::new);
-        RenderingRegistry.registerEntityRenderingHandler(EntityDarkLight.class, RenderDarkLight::new);
+        	RenderingRegistry.registerEntityRenderingHandler(EntityWeedwoodRowboat.class, RenderWeedwoodRowboat::new);
+        	RenderingRegistry.registerEntityRenderingHandler(EntityElixir.class, RenderElixir::new);
+        	RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, RenderDreadfulMummy::new);
+       		RenderingRegistry.registerEntityRenderingHandler(EntitySludgeBall.class, RenderSludgeBall::new);
+        	RenderingRegistry.registerEntityRenderingHandler(EntityDarkLight.class, RenderDarkLight::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmollSludge.class, RenderSmollSludge::new);
  
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
