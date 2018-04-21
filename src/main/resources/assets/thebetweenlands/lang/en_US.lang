@@ -871,8 +871,8 @@ chat.aspect.discovery.byariis=The gecko is chewing furiously on its tail and loo
 chat.compost.full=The compost bin is full
 chat.compost.not.compostable=This item is not compostable
 
-chat.rope.already_connected=Already connected to another climbing rope
-chat.rope.disconnected=You were disconnected from the climbing rope
+chat.rope.already_connected=Already connected to another caving rope
+chat.rope.disconnected=You were disconnected from the caving rope
 chat.rope.too_far=You're too far away from the last anchor point
 
 chat.bed_spawn_set=Your Spawn has been set to this Moss Bed

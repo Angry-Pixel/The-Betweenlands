@@ -49,7 +49,7 @@ import thebetweenlands.common.handler.ItemEquipmentHandler;
 import thebetweenlands.common.handler.LocationHandler;
 import thebetweenlands.common.handler.OverworldItemHandler;
 import thebetweenlands.common.handler.PlayerDecayHandler;
-import thebetweenlands.common.handler.PlayerJoinDimensionHandler;
+import thebetweenlands.common.handler.PlayerJoinWorldHandler;
 import thebetweenlands.common.handler.PlayerPortalHandler;
 import thebetweenlands.common.handler.PlayerRespawnHandler;
 import thebetweenlands.common.handler.PuppetHandler;
@@ -223,7 +223,7 @@ public class TheBetweenlands {
 		MinecraftForge.EVENT_BUS.register(EnvironmentEventOverridesHandler.class);
 		MinecraftForge.EVENT_BUS.register(AdvancementHandler.class);
 		MinecraftForge.EVENT_BUS.register(FuelHandler.class);
-		MinecraftForge.EVENT_BUS.register(PlayerJoinDimensionHandler.class);
+		MinecraftForge.EVENT_BUS.register(PlayerJoinWorldHandler.class);
 		MinecraftForge.EVENT_BUS.register(PlayerRespawnHandler.class);
 	}
 }

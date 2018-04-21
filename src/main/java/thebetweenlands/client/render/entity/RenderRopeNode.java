@@ -57,11 +57,16 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 		}
 		
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			ShaderHelper.INSTANCE.require();
-        	double rx = ropeNode.lastTickPosX + (ropeNode.posX - ropeNode.lastTickPosX) * partialTicks;
-			double ry = ropeNode.lastTickPosY + (ropeNode.posY - ropeNode.lastTickPosY) * partialTicks;
-			double rz = ropeNode.lastTickPosZ + (ropeNode.posZ - ropeNode.lastTickPosZ) * partialTicks;
-			ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz, 1.25F, 1.5F, 2.0F, 4.0F));
+			double dstSq = x*x + y*y + z*z;
+			
+			if(dstSq <= 256.0D) {
+				ShaderHelper.INSTANCE.require();
+	        	double rx = ropeNode.lastTickPosX + (ropeNode.posX - ropeNode.lastTickPosX) * partialTicks;
+				double ry = ropeNode.lastTickPosY + (ropeNode.posY - ropeNode.lastTickPosY) * partialTicks;
+				double rz = ropeNode.lastTickPosZ + (ropeNode.posZ - ropeNode.lastTickPosZ) * partialTicks;
+				float brightness = 1.0F - (float)Math.sqrt(dstSq) / 16.0F;
+				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz, 1.25F, 1.5F * brightness, 2.0F * brightness, 4.0F * brightness));
+			}
 		}
 		
 		GlStateManager.pushMatrix();
