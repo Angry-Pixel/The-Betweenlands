@@ -29,6 +29,7 @@ import thebetweenlands.common.capability.base.EntityCapabilityHandler;
 import thebetweenlands.common.capability.base.ItemCapabilityHandler;
 import thebetweenlands.common.command.CommandAspectDiscovery;
 import thebetweenlands.common.command.CommandBLEvent;
+import thebetweenlands.common.command.CommandDecay;
 import thebetweenlands.common.command.CommandReloadRecipes;
 import thebetweenlands.common.command.CommandResetAspects;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -176,7 +177,7 @@ public class TheBetweenlands {
 	public void serverLoad(FMLServerStartingEvent event) {
 		event.registerServerCommand(new CommandBLEvent());
 		event.registerServerCommand(new CommandResetAspects());
-		//event.registerServerCommand(new CommandDecay());
+		event.registerServerCommand(new CommandDecay());
 		//event.registerServerCommand(new CommandFindPage());
 		event.registerServerCommand(new CommandAspectDiscovery());
 		/*if (ConfigHandler.DEBUG.debug) {

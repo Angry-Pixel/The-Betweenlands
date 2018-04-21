@@ -1056,10 +1056,10 @@ command.blevent.success.alloff=All events are no longer taking place
 command.blevent.success.enable=Events are enabled
 command.blevent.success.disable=Events are disabled
 
-command.blevent.usage=/blevent <toggle|on|off|list|enable|disable>
-command.blevent.usage.toggle=/blevent toggle <event name>
-command.blevent.usage.on=/blevent on <event name>
-command.blevent.usage.off=/blevent off [event name]
+command.blevent.usage=Usage: /blevent <toggle|on|off|list|enable|disable>
+command.blevent.usage.toggle=Usage: /blevent toggle <event name>
+command.blevent.usage.on=Usage: /blevent on <event name>
+command.blevent.usage.off=Usage: /blevent off [event name]
 
 command.blevent.failure.unknown=Unknown event '%s'
 command.blevent.failure.wrongdimension=You must be in a Betweenlands world to toggle events
@@ -1070,6 +1070,7 @@ command.blevent.failure.alreadydisabled=Events are already disabled
 command.blevent.failure.on=The event '%s' could not be turned on
 command.blevent.failure.off=The event '%s' could not be turned off
 
+command.aspectdiscovery.usage=Usage: /aspectDiscovery <player> <reset|discover> <held|all>
 command.aspectdiscovery.book.none=There's no Herblore Book to write to
 command.aspectdiscovery.held.null=Held item must not be null
 command.aspectdiscovery.discover.held=Result: %s Aspect: %d
@@ -1077,11 +1078,17 @@ command.aspectdiscovery.discover.all=Discovered all aspects of all items
 command.aspectdiscovery.reset.held=Removed discovered aspects
 command.aspectdiscovery.reset.all=Removed discovered aspects from all items
 
+command.aspect.reset.usage=Usage: /resetAspects
 command.aspect.reset.confirm=Confirm with '/resetAspects confirm'
 command.aspect.reset.success=The aspects have been reset
 
+command.blreloadrecipes.usage=Usage: /blReloadRecipes
 command.blreloadrecipes.success=Reloaded custom recipes
 command.blreloadrecipes.failed=Failed to reloaded custom recipes
+
+command.set_decay.usage=Usage: /setDecay <player> <decay> [saturation]
+command.decay.noint=Decay must be an integer
+command.decay_saturation.noint=Decay saturation must be an integer
 
 # Keybinds
 key.categories.betweenlands=The Betweenlands

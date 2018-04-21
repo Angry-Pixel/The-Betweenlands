@@ -13,6 +13,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraftforge.event.entity.living.LivingEntityUseItemEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -151,14 +152,17 @@ public class PlayerDecayHandler {
 		}
 	}
 
-	@SubscribeEvent
-	public static void onUseItem(LivingEntityUseItemEvent.Finish event) {
-		if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
-			EntityPlayer player = (EntityPlayer) event.getEntityLiving();
-			if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
-				IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
-				IDecayFood food = (IDecayFood) event.getItem().getItem();
-				capability.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onUseItemTick(LivingEntityUseItemEvent.Tick event) {
+		//Check if item will be consumed this tick
+		if(!event.getEntityLiving().getEntityWorld().isRemote && event.getDuration() <= 1) {
+			if (!event.getItem().isEmpty() && event.getItem().getItem() instanceof IDecayFood && event.getEntityLiving() instanceof EntityPlayer) {
+				EntityPlayer player = (EntityPlayer) event.getEntityLiving();
+				if(player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
+					IDecayFood food = (IDecayFood) event.getItem().getItem();
+					capability.getDecayStats().addStats(-food.getDecayHealAmount(event.getItem()), food.getDecayHealSaturation(event.getItem()));
+				}
 			}
 		}
 	}

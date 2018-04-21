@@ -24,7 +24,7 @@ public class CommandResetAspects extends CommandBase {
 
     @Override
     public String getUsage(ICommandSender sender) {
-        return "/resetAspects";
+        return "command.aspect.reset.usage";
     }
 
     @Override

@@ -19,7 +19,7 @@ public class CommandReloadRecipes extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/blReloadRecipes";
+		return "command.blreloadrecipes.usage";
 	}
 
 	@Override
