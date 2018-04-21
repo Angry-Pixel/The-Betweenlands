@@ -38,35 +38,48 @@ public final class TeleporterBetweenlands extends Teleporter {
 	private final WorldServer toWorld;
 	private final int fromDim;
 	private final AxisAlignedBB fromBounds;
+	private final boolean makePortal;
 
 	public static final String LAST_PORTAL_POS_NBT = "thebetweenlands.last_portal_location";
 	
-	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld) {
+	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld, boolean makePortal) {
 		super(toWorld);
 		this.fromBounds = fromBounds;
 		this.fromDim = fromDim;
 		this.toWorld = toWorld;
+		this.makePortal = makePortal;
 	}
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
 		if (!this.placeInExistingPortal(entity, rotationYaw)) {
 			if(!this.makePortal(entity)) {
-				//Portal failed to generate... fallback?
-
-				BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-				Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
-				pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
-				for(int xo = -1; xo <= 1; xo++) {
-					for(int zo = -1; zo <= 1; zo++) {
-						for(int yo = 0; yo <= 2; yo++) {
-							this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+				if(!this.makePortal) {
+					//No portal should be generated
+					
+					//Get and set a suitable position for (re-)spawning
+					BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+					pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
+					pos = this.setDefaultPlayerSpawnLocation(pos, entity);
+					
+					this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+				} else {
+					//Portal failed to generate... fallback?
+	
+					BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+					Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
+					pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
+					for(int xo = -1; xo <= 1; xo++) {
+						for(int zo = -1; zo <= 1; zo++) {
+							for(int yo = 0; yo <= 2; yo++) {
+								this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+							}
 						}
 					}
+	
+					this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
+					this.setDefaultPlayerSpawnLocation(pos, entity);
 				}
-
-				this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
-				this.setDefaultPlayerSpawnLocation(pos, entity);
 			}
 		}
 	}
@@ -265,19 +278,22 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public boolean makePortal(Entity entity) {
-		boolean isToBL = this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
-		BlockPos center;
-		if(isToBL) {
-			center = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-		} else {
-			center = this.findSuitableNonBLPortalPos(entity.getPosition());
+		if(this.makePortal) {
+			boolean isToBL = this.toWorld.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+			BlockPos center;
+			if(isToBL) {
+				center = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+			} else {
+				center = this.findSuitableNonBLPortalPos(entity.getPosition());
+			}
+			if(isToBL && this.generateBetweenlandsTreePortal(entity, center)) {
+				return true;
+			} else if(!isToBL && this.generateTreePortal(entity, center)) {
+				return true;
+			}
+			return this.generateSmallPortal(entity, center);
 		}
-		if(isToBL && this.generateBetweenlandsTreePortal(entity, center)) {
-			return true;
-		} else if(!isToBL && this.generateTreePortal(entity, center)) {
-			return true;
-		}
-		return this.generateSmallPortal(entity, center);
+		return false;
 	}
 
 	protected boolean generateBetweenlandsTreePortal(Entity entity, BlockPos center) {
@@ -469,12 +485,13 @@ public final class TeleporterBetweenlands extends Teleporter {
 	}
 
 	/**
-	 * Sets the entities spawn location if necessary
-	 * @param entity
+	 * Sets the entities spawn point to near the specified position, if necessary
+	 * @param entity The entity to set the spawn point for
+	 * @return The new spawn position
 	 */
-	public void setDefaultPlayerSpawnLocation(BlockPos portalPos, Entity entity) {
+	public BlockPos setDefaultPlayerSpawnLocation(BlockPos portalPos, Entity entity) {
 		if (entity instanceof EntityPlayerMP == false) {
-			return;
+			return portalPos;
 		}
 
 		EntityPlayerMP player = (EntityPlayerMP) entity;
@@ -492,6 +509,8 @@ public final class TeleporterBetweenlands extends Teleporter {
 			persistentNbt.setLong(LAST_PORTAL_POS_NBT, portalPos.toLong());
 			dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
 		}
+		
+		return coords;
 	}
 
 	protected void setEntityLocation(Entity entity, double x, double y, double z, float yaw, float pitch) {

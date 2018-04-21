@@ -21,7 +21,6 @@ public class TileEntityWeedwoodWorkbench extends TileEntity {
 	private Set<InventoryWeedwoodWorkbench> openInventories = new HashSet<>();
 
 	public void openInventory(InventoryWeedwoodWorkbench inv) {
-		System.out.println(this.openInventories.size());
 		this.openInventories.add(inv);
 	}
 

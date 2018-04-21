@@ -43,8 +43,12 @@ public class WeightedList<T extends IWeightProvider> extends ArrayList<T> {
     }
 
     public T getRandomItem(Random rand) {
-        if (totalWeight == 0)
+        if (isEmpty())
             return null;
+        
+        if(totalWeight == 0)
+        	return this.get(0);
+        
         int i = rand.nextInt(totalWeight);
 
         for (T obj : this) {
@@ -56,9 +60,12 @@ public class WeightedList<T extends IWeightProvider> extends ArrayList<T> {
     }
 
     public T getRandomItem(int weight) {
-        if (totalWeight == 0)
+        if (isEmpty())
             return null;
 
+        if(totalWeight == 0)
+        	return this.get(0);
+        
         for (T obj : this) {
             weight -= obj.getWeight();
             if (weight < 0)

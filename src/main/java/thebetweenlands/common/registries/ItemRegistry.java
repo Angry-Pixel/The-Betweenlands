@@ -392,7 +392,7 @@ public class ItemRegistry {
 
                     if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                         if (item.getCreativeTab() == null)
-                            System.out.println(String.format("Warning: Item %s doesn't have a creative tab", item.getUnlocalizedName()));
+                        	TheBetweenlands.logger.warn(String.format("Item %s doesn't have a creative tab", item.getUnlocalizedName()));
                     }
                 }
             }

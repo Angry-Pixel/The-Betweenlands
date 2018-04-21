@@ -38,6 +38,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 import net.minecraftforge.event.ForgeEventFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
@@ -713,7 +714,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
     				g.setColor(new Color(color));
     				g.fillRect(px + half + i % half, pz + i / half, 1, 1);
     				if (printed.add(p.cause[i])) {
-    				    System.out.printf("#%s:%n%s%n", Integer.toHexString(color | 0xFF000000).substring(2), p.cause[i]);
+    					TheBetweenlands.logger.debug("#%s:%n%s%n", Integer.toHexString(color | 0xFF000000).substring(2), p.cause[i]);
     				}
     			}
     		}
@@ -723,7 +724,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		for (String cause : sortedCauses) {
 		    int c = byCause.get(cause).size();
 		    if (c > 2) {
-	            System.out.printf("%d caused by:%n%s%n", c, cause);   
+		    	TheBetweenlands.logger.debug("%d caused by:%n%s%n", c, cause);   
 		    }
 		}
 		g.dispose();

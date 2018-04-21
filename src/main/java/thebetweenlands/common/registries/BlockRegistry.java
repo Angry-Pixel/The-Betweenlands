@@ -654,7 +654,7 @@ public class BlockRegistry {
 
                     if (BetweenlandsConfig.DEBUG.debug && FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
                         if (block.getCreativeTabToDisplayOn() == null)
-                            System.out.println(String.format("Warning: Block %s doesn't have a creative tab", block.getUnlocalizedName()));
+                            TheBetweenlands.logger.warn(String.format("Block %s doesn't have a creative tab", block.getUnlocalizedName()));
                     }
                 }
             }

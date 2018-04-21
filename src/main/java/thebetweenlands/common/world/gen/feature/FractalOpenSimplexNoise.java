@@ -26,13 +26,8 @@ public class FractalOpenSimplexNoise {
 
     public double eval(double x, double y, double z) {
         double eval = 0; 
-        try {
-	        for (int o = 0; o < octaves.length; o++)
-	            eval += octaves[o].eval(x * (1 << o) * scale, y * (1 << o) * scale, z * (1 << o) * scale) * Math.pow(0.5, o);
-        } catch(java.lang.Error ex) {
-        	System.out.println("Position: " + x + " " + y + " " + z);
-        	ex.printStackTrace();
-        }
+        for (int o = 0; o < octaves.length; o++)
+            eval += octaves[o].eval(x * (1 << o) * scale, y * (1 << o) * scale, z * (1 << o) * scale) * Math.pow(0.5, o);
         return Math.max(-1, Math.min(eval, 1));
     }
 

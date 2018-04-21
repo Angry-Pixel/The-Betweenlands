@@ -70,6 +70,16 @@ public class BetweenlandsConfig {
 		@Comment("Minimum duration in seconds the rift should stay active when a player joins the dimension for the first time. See 'Activate Rift On First Join'")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
 		public int minRiftOnFirstJoinDuration = 1800;
+		
+		@Name("start_in_betweenlands")
+		@LangKey(LANG_PREFIX + "start_in_betweenlands")
+		@Comment("If true, the players will directly start out in the Betweenlands instead of the Overworld")
+		public boolean startInBetweenlands = false;
+		
+		@Name("start_in_portal")
+		@LangKey(LANG_PREFIX + "start_in_portal")
+		@Comment("If \"Start in Betweenlands\" is enabled: whether a portal should be generated at the spawn and the players should spawn in it")
+		public boolean startInPortal = false;
 	}
 
 	@Name("rendering")

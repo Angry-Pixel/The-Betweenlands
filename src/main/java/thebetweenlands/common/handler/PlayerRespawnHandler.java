@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -52,21 +53,23 @@ public class PlayerRespawnHandler {
 		}
 	}
 	
-	public static void respawnNearPos(EntityPlayer player, BlockPos pos) {
-		BlockPos newSpawn = getRespawnPointNearPos(player.world, pos);
+	public static void respawnNearPos(Entity entity, BlockPos pos) {
+		BlockPos newSpawn = getRespawnPointNearPos(entity.world, pos);
 
-		player.setLocationAndAngles(newSpawn.getX() + 0.5D, newSpawn.getY(), newSpawn.getZ() + 0.5D, player.rotationYaw, player.rotationPitch);
+		entity.setLocationAndAngles(newSpawn.getX() + 0.5D, newSpawn.getY(), newSpawn.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 
-		while (!player.world.getCollisionBoxes(player, player.getEntityBoundingBox()).isEmpty() && player.posY < 256.0D) {
-			player.setPosition(player.posX, player.posY + 1.0D, player.posZ);
+		while (!entity.world.getCollisionBoxes(entity, entity.getEntityBoundingBox()).isEmpty() && entity.posY < 256.0D) {
+			entity.setPosition(entity.posX, entity.posY + 1.0D, entity.posZ);
 		}
 
-		newSpawn = new BlockPos(player);
+		newSpawn = new BlockPos(entity);
 
-		player.setSpawnPoint(newSpawn, true);
+		if(entity instanceof EntityPlayer) {
+			((EntityPlayer)entity).setSpawnPoint(newSpawn, true);
+		}
 
-		if(player instanceof EntityPlayerMP) {
-			EntityPlayerMP playerMP = (EntityPlayerMP) player;
+		if(entity instanceof EntityPlayerMP) {
+			EntityPlayerMP playerMP = (EntityPlayerMP) entity;
 
 			playerMP.connection.setPlayerLocation(playerMP.posX, playerMP.posY, playerMP.posZ, playerMP.rotationYaw, playerMP.rotationPitch);
 			playerMP.connection.sendPacket(new SPacketSpawnPosition(newSpawn));
@@ -94,6 +97,7 @@ public class PlayerRespawnHandler {
 		short maxWeight = 0;
 		
 		WeightedList<WeightedPos> spawnCandidates = new WeightedList<>();
+		
 		for(int xo = -spawnFuzzHalf; xo <= spawnFuzzHalf; xo += 1 + world.rand.nextInt(3)) {
 			for(int zo = -spawnFuzzHalf; zo <= spawnFuzzHalf; zo += 1 + world.rand.nextInt(3)) {
 				BlockPos newPos = pos.add(xo, 0, zo);
