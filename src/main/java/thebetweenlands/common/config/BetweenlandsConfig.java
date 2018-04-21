@@ -255,6 +255,7 @@ public class BetweenlandsConfig {
 		@Name("caving_rope_despawn_time")
 		@LangKey(LANG_PREFIX + "caving_rope_despawn_time")
 		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
+		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
 		public int cavingRopeDespawnTime = 1200;
 	}
 
