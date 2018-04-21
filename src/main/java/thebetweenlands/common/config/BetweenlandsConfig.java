@@ -251,6 +251,11 @@ public class BetweenlandsConfig {
 		public String[] torchBlacklistUnparsed = {};
 		@Ignore
 		public final ItemListProperty torchBlacklist = new ItemListProperty(() -> GENERAL.torchBlacklistUnparsed);
+		
+		@Name("caving_rope_despawn_time")
+		@LangKey(LANG_PREFIX + "caving_rope_despawn_time")
+		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
+		public int cavingRopeDespawnTime = 1200;
 	}
 
 	@Name("mob_spawning")

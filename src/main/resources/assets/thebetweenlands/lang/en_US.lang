@@ -757,7 +757,7 @@ tooltip.octine_shield=Sets enemies on fire
 tooltip.syrmorite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '%1$s' to charge\nat enemies
 tooltip.valonite_shield=Hold '%1$s' + '%2$s' to charge\nup and then let go of '%1$s' to charge\nat enemies. Reflects projectiles
 tooltip.dentrothyst_shield=Blocks splash potion effects
-tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope
+tooltip.caving_rope=Press '%s' to connect or disconnect\nto/from a nearby caving rope.\n§6The caving rope will despawn after\n§6%s minutes if not connected to\n§6a player.
 tooltip.hearthgrove_log=This dense log is excellent as fuel.\nCan be tarred
 tooltip.decay_food=Heals decay
 tooltip.swamp_talisman_linked=Linked to portal\nX: %s\nY: %s\nZ: %s
@@ -1416,6 +1416,7 @@ config.thebetweenlands.tool_weakness_whitelist=Tool Weakness Whitelist
 config.thebetweenlands.tool_weakness_blacklist=Tool Weakness Blacklist
 config.thebetweenlands.torch_whitelist=Torch Whitelist
 config.thebetweenlands.torch_blacklist=Torch Blacklist
+config.thebetweenlands.caving_rope_despawn_time=Caving Rope Despawn Time
 
 config.thebetweenlands.mob_spawning=Mob Spawning
 config.thebetweenlands.max_entities_per_loaded_area=Max. entities per loaded area

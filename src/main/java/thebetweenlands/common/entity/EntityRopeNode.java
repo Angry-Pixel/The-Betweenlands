@@ -27,6 +27,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -270,7 +271,7 @@ public class EntityRopeNode extends Entity {
 					this.onKillCommand();
 				} else {
 					this.despawnTimer++;
-					if(this.despawnTimer >= 12000) {
+					if(this.despawnTimer >= BetweenlandsConfig.GENERAL.cavingRopeDespawnTime * 20) {
 						if(prevNode != null && prevNode instanceof EntityRopeNode) {
 							EntityRopeNode prevRopeNode = (EntityRopeNode) prevNode;
 							prevRopeNode.setNextNode(null);
@@ -366,7 +367,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public void despawn() {
-		this.despawnTimer = 12000;
+		this.despawnTimer = BetweenlandsConfig.GENERAL.cavingRopeDespawnTime * 20;
 	}
 
 	public boolean isAttached() {
