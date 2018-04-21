@@ -10,11 +10,11 @@
       "item": "thebetweenlands:rope_item"
     },
     "o": {
-      "item": "thebetweenlands:octine_ingot"
+      "item": "thebetweenlands:bulb_capped_mushroom_item"
     }
   },
   "result": {
     "item": "thebetweenlands:caving_rope",
-    "count": 8
+    "count": 16
   }
 }
