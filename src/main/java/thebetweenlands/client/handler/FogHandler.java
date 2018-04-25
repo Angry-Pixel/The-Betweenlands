@@ -136,7 +136,7 @@ public class FogHandler {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
 		if(world != null && player != null) {
-			if(farPlaneDistance != 0.0F && player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+			if(farPlaneDistance != 0.0F && world.provider instanceof WorldProviderBetweenlands) {
 				state.update(world, player.getPositionVector().addVector(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
 

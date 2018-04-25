@@ -60,6 +60,11 @@ public class BetweenlandsConfig {
 		@Comment("The return dimension that is used when creating a portal in the Betweenlands dimension and entering it for the first time")
 		public int portalDefaultReturnDimension = 0;
 
+		@Name("portal_max_link_dist")
+		@LangKey(LANG_PREFIX + "portal_max_link_dist")
+		@Comment("The maximum link distance in blocks between two portals")
+		public int portalMaxLinkDist = 1500;
+		
 		@Name("activate_rift_on_first_join")
 		@LangKey(LANG_PREFIX + "activate_rift_on_first_join")
 		@Comment("If true, the Rift will appear whenever a player joins the dimension for the first time")

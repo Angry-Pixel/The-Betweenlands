@@ -1389,6 +1389,7 @@ config.thebetweenlands.dimension_brightness=Dimension brightness
 config.thebetweenlands.enable_seasonal_events=Enable Seasonal Events
 config.thebetweenlands.portal_dimension_whitelist=Portal dimensions whitelist
 config.thebetweenlands.portal_default_return_dimension=Default portal return dimension
+config.thebetweenlands.portal_max_link_dist=Maximum portal link distance
 config.thebetweenlands.activate_rift_on_first_join=Activate Rift on first join
 config.thebetweenlands.activate_rift_on_first_join_duration=Activate Rift on first join duration
 config.thebetweenlands.start_in_betweenlands=Start in Betweenlands

@@ -29,6 +29,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
@@ -190,7 +191,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 								WorldServer otherWorld = ((WorldServer) worldIn).getMinecraftServer().getWorld(linkDim);
 								if(otherWorld != null) {
 									double moveFactor = otherWorld.provider.getMovementFactor() / worldIn.provider.getMovementFactor();
-									if(new Vec3d(portal.getPortalPosition()).distanceTo(new Vec3d(otherPortalPos.getX() * moveFactor, portal.getPortalPosition().getY(), otherPortalPos.getZ() * moveFactor)) <= 1500) {
+									if(new Vec3d(portal.getPortalPosition()).distanceTo(new Vec3d(otherPortalPos.getX() * moveFactor, portal.getPortalPosition().getY(), otherPortalPos.getZ() * moveFactor)) <= BetweenlandsConfig.WORLD_AND_DIMENSION.portalMaxLinkDist) {
 										LocationPortal linkPortal = this.getLinkPortal(otherWorld, otherPortalPos);
 										if(linkPortal != null) {
 											linkPortal.setOtherPortalPosition(worldIn.provider.getDimension(), portal.getPortalPosition());
@@ -200,7 +201,7 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 											playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.cant_link"), true);
 										}
 									} else {
-										playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.too_far"), true);
+										playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.too_far", new TextComponentString(String.valueOf(BetweenlandsConfig.WORLD_AND_DIMENSION.portalMaxLinkDist))), true);
 									}
 								}
 							} else {
