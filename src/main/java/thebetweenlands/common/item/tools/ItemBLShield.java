@@ -195,6 +195,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 			if(this.ignoreEvent) {
 				return;
 			}
+			this.ignoreEvent = true;
 			EntityLivingBase attacked = event.getEntityLiving();
 			DamageSource source = event.getSource();
 			for(EnumHand hand : EnumHand.values()) {
@@ -216,7 +217,6 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 								double prevMotionX = attacked.motionX;
 								double prevMotionY = attacked.motionY;
 								double prevMotionZ = attacked.motionZ;
-								this.ignoreEvent = true;
 								DamageSource newSource;
 								//getDamageLocation() == null so that vanilla shield blocking does not happen
 								if(source instanceof EntityDamageSourceIndirect) {
@@ -263,7 +263,6 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 									newSource.setProjectile();
 								}
 								attacked.attackEntityFrom(newSource, newDamage);
-								this.ignoreEvent = false;
 								attacked.motionX = prevMotionX;
 								attacked.motionY = prevMotionY;
 								attacked.motionZ = prevMotionZ;
@@ -321,6 +320,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 					}
 				}
 			}
+			this.ignoreEvent = false;
 		}
 	}
 	
