@@ -18,6 +18,7 @@ public class Registries {
 		Serializers.register();
 		CustomRecipeRegistry.preInit();
 		AdvancementCriterionRegistry.preInit();
+		LootTableRegistry.preInit();
 
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ModelRegistry.preInit();

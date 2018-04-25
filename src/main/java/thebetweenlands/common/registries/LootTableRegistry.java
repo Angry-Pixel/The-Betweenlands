@@ -6,12 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.ISaveHandler;
-import net.minecraft.world.storage.loot.*;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootEntry;
+import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootEntryTable;
+import net.minecraft.world.storage.loot.LootPool;
+import net.minecraft.world.storage.loot.LootTable;
+import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
 import net.minecraft.world.storage.loot.functions.LootFunction;
@@ -19,6 +29,8 @@ import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.loot.EntityPropertyEventActive;
 import thebetweenlands.common.loot.EntityPropertyFrogType;
@@ -29,8 +41,6 @@ import thebetweenlands.common.loot.EntityPropertyPyradCharging;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionOr;
 import thebetweenlands.util.FakeClientWorld;
-
-import javax.annotation.Nullable;
 
 public class LootTableRegistry {
 
@@ -86,6 +96,12 @@ public class LootTableRegistry {
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());
     
+    public static void preInit() {
+    	if(BetweenlandsConfig.DEBUG.debug) {
+    		TheBetweenlands.logger.info("Loaded loot tables");
+    	}
+    }
+    
     private static ResourceLocation register(String id) {
         return LootTableList.register(new ResourceLocation(ModInfo.ID, id));
     }
@@ -100,7 +116,8 @@ public class LootTableRegistry {
         return serializer.getLootTableLocation();
     }
 
-    public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world, boolean getCountSpan) {
+    @SuppressWarnings("unchecked")
+	public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world, boolean getCountSpan) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
         LootTableManager manager = getManager(world);
