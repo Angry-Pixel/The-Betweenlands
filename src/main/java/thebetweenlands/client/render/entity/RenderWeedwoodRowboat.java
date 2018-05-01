@@ -23,7 +23,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import thebetweenlands.client.render.model.entity.rowboat.ModelWeedwoodRowboat;
@@ -233,7 +232,6 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
             AbstractClientPlayer player = (AbstractClientPlayer) e;
             RenderPlayerRower render = "slim".equals(player.getSkinType()) ? rowerSlimRender : rowerDefaultRender;
             render.renderPilot(player, arms.get(ShipSide.STARBOARD), arms.get(ShipSide.PORT), bodyRotateAngleX, bodyRotateAngleY, event.getX(), event.getY(), event.getZ(), delta);
-            MinecraftForge.EVENT_BUS.post(new RenderPlayerEvent.Post(e, event.getRenderer(), event.getPartialRenderTick(), event.getX(), event.getY(), event.getZ()));
         }
     }
 
