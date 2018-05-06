@@ -15,18 +15,18 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.config.ConfigProperty;
 
 public class PortalTargetList extends ConfigProperty {
-	private Map<String, TIntIntMap> itemList;
+	private Map<String, TIntIntMap> customPortalBlockMap;
 
 	@Override
 	protected void init() {
-		this.itemList = new HashMap<>();
+		this.customPortalBlockMap = new HashMap<>();
 
 		String[] unparsed = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargets;
 		for(String listed : unparsed) {
 			try {
 				String[] data = listed.split(":");
 				String block = data[0] + ":" + data[1];
-				if(this.itemList.get(block) == null || !this.itemList.get(block).containsKey(OreDictionary.WILDCARD_VALUE)) {
+				if(this.customPortalBlockMap.get(block) == null || !this.customPortalBlockMap.get(block).containsKey(OreDictionary.WILDCARD_VALUE)) {
 					int meta = 0;
 					if(data.length > 2) {
 						String metaStr = data[2].split("/")[0];
@@ -34,36 +34,36 @@ public class PortalTargetList extends ConfigProperty {
 							try {
 								meta = Integer.parseInt(metaStr);
 							} catch(NumberFormatException ex) {
-								TheBetweenlands.logger.error("Failed to parse item: " + listed + ". Invalid metadata: " + metaStr);
+								TheBetweenlands.logger.error("Failed to parse custom portal entry block: " + listed + ". Invalid metadata: " + metaStr);
 								continue;
 							}
 						} else {
 							meta = OreDictionary.WILDCARD_VALUE;
 						}
 					}
-					TIntIntMap metaMap = this.itemList.get(block);
+					TIntIntMap metaMap = this.customPortalBlockMap.get(block);
 					if(metaMap == null) {
-						this.itemList.put(block, metaMap = new TIntIntHashMap());
+						this.customPortalBlockMap.put(block, metaMap = new TIntIntHashMap());
 					}
 					if(meta == OreDictionary.WILDCARD_VALUE) {
 						metaMap.clear();
 					}
 					String[] dimData = listed.split("/");
 					if(dimData.length < 2) {
-						TheBetweenlands.logger.error("Failed to parse item, missing dimension: " + listed);
+						TheBetweenlands.logger.error("Failed to parse custom portal entry, missing dimension: " + listed);
 						continue;
 					}
 					int dim;
 					try {
 						dim = Integer.parseInt(dimData[1]);
 					} catch(NumberFormatException ex) {
-						TheBetweenlands.logger.error("Failed to parse item: " + listed + ". Invalid dimension: " + dimData[1]);
+						TheBetweenlands.logger.error("Failed to parse custom portal entry: " + listed + ". Invalid dimension: " + dimData[1]);
 						continue;
 					}
 					metaMap.put(meta, dim);
 				}
 			} catch (Exception e) {
-				TheBetweenlands.logger.error("Failed to parse item: " + listed);
+				TheBetweenlands.logger.error("Failed to parse custom portal entry: " + listed);
 			}
 		}
 	}
@@ -76,7 +76,7 @@ public class PortalTargetList extends ConfigProperty {
 	public boolean isListed(IBlockState state) {
 		ResourceLocation name = state.getBlock().getRegistryName();
 
-		TIntIntMap metaMap = this.itemList.get(name.toString());
+		TIntIntMap metaMap = this.customPortalBlockMap.get(name.toString());
 
 		if(metaMap == null) {
 			return false;
@@ -100,7 +100,7 @@ public class PortalTargetList extends ConfigProperty {
 	public int getDimension(IBlockState state) {
 		ResourceLocation name = state.getBlock().getRegistryName();
 
-		TIntIntMap metaMap = this.itemList.get(name.toString());
+		TIntIntMap metaMap = this.customPortalBlockMap.get(name.toString());
 
 		if(metaMap == null) {
 			return BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;

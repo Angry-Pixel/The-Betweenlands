@@ -37,6 +37,7 @@ public class ItemListProperty extends ConfigProperty {
 								meta = Integer.parseInt(data[2]);
 							} catch(NumberFormatException ex) {
 								TheBetweenlands.logger.error("Failed to parse item: " + listed + ". Invalid metadata: " + data[2]);
+								continue;
 							}
 						} else {
 							meta = OreDictionary.WILDCARD_VALUE;
