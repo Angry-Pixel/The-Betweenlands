@@ -42,15 +42,17 @@ public final class TeleporterBetweenlands extends Teleporter {
 	private final int fromDim;
 	private final AxisAlignedBB fromBounds;
 	private final boolean makePortal;
-
+	private final boolean setSpawn;
+	
 	public static final String LAST_PORTAL_POS_NBT = "thebetweenlands.last_portal_location";
 	
-	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld, boolean makePortal) {
+	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld, boolean makePortal, boolean setSpawn) {
 		super(toWorld);
 		this.fromBounds = fromBounds;
 		this.fromDim = fromDim;
 		this.toWorld = toWorld;
 		this.makePortal = makePortal;
+		this.setSpawn = setSpawn;
 	}
 
 	@Override
@@ -58,31 +60,33 @@ public final class TeleporterBetweenlands extends Teleporter {
 		if (this.world.provider.getDimensionType().getId() != 1) {
 			if (!this.placeInExistingPortal(entity, rotationYaw)) {
 				if(!this.makePortal(entity)) {
-					if(!this.makePortal) {
-						//No portal should be generated
-						
-						//Get and set a suitable position for (re-)spawning
-						BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-						pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
-						pos = this.setDefaultPlayerSpawnLocation(pos, entity);
-						
-						this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-					} else {
-						//Portal failed to generate... fallback?
-		
-						BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-						Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
-						pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
-						for(int xo = -1; xo <= 1; xo++) {
-							for(int zo = -1; zo <= 1; zo++) {
-								for(int yo = 0; yo <= 2; yo++) {
-									this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+					if(this.setSpawn) {
+						if(!this.makePortal) {
+							//No portal should be generated
+							
+							//Get and set a suitable position for (re-)spawning
+							BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+							pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
+							pos = this.setDefaultPlayerSpawnLocation(pos, entity);
+							
+							this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+						} else {
+							//Portal failed to generate... fallback?
+			
+							BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+							Chunk chunk = this.getDecoratedChunk(this.toWorld, pos); //Force chunk to generate
+							pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
+							for(int xo = -1; xo <= 1; xo++) {
+								for(int zo = -1; zo <= 1; zo++) {
+									for(int yo = 0; yo <= 2; yo++) {
+										this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+									}
 								}
 							}
+			
+							this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
+							this.setDefaultPlayerSpawnLocation(pos, entity);
 						}
-		
-						this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
-						this.setDefaultPlayerSpawnLocation(pos, entity);
 					}
 				}
 			}
@@ -114,13 +118,15 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public boolean placeInExistingPortal(Entity entity, float rotationYaw) {
-		BlockPos existingPortal = this.findExistingPortalPos();
-
-		if(existingPortal != null) {
-			//Portal exists already
-			this.setEntityLocation(entity, existingPortal.getX() + 0.5D, existingPortal.getY() + 2.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
-			this.setDefaultPlayerSpawnLocation(existingPortal, entity);
-			return true;
+		if(this.setSpawn) {
+			BlockPos existingPortal = this.findExistingPortalPos();
+	
+			if(existingPortal != null) {
+				//Portal exists already
+				this.setEntityLocation(entity, existingPortal.getX() + 0.5D, existingPortal.getY() + 2.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
+				this.setDefaultPlayerSpawnLocation(existingPortal, entity);
+				return true;
+			}
 		}
 
 		return false;
@@ -234,7 +240,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			selectedPos = start;
 		}
 
-		Chunk chunk = this.toWorld.getChunkFromBlockCoords(selectedPos); //Force chunk to generate
+		Chunk chunk = this.getDecoratedChunk(this.toWorld, selectedPos); //Force chunk to generate
 		int height = chunk.getHeight(selectedPos);
 		return new BlockPos(selectedPos.getX(), height, selectedPos.getZ());
 	}
@@ -299,7 +305,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		for(int xo = -16; xo <= -16; xo++) {
 			for(int zo = -16; zo <= -16; zo++) {
 				checkPos.setPos(start.getX() + xo, start.getY(), start.getZ() + zo);
-				Chunk chunk = this.toWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
+				Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
 				int height = chunk.getHeight(checkPos);
 				if(height > 0 && height < this.toWorld.getActualHeight() - 16) {
 					return new BlockPos(checkPos.getX(), height, checkPos.getZ());
@@ -376,7 +382,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		WorldGenWeedwoodPortalTree genTree = new WorldGenWeedwoodPortalTree();
 
 		return this.spiralGenerate(center, 64, 0, 0, checkPos -> {
-			Chunk chunk = this.toWorld.getChunkFromBlockCoords(checkPos); //Force chunk to generate
+			Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
 			checkPos.setY(chunk.getHeight(checkPos) - 1);
 
 			if(SurfaceType.MIXED_GROUND.matches(this.toWorld.getBlockState(checkPos)) && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
@@ -456,8 +462,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 			}
 		}
 
-		this.setEntityLocation(entity, newPortalPos.getX() + playerOffsetX, newPortalPos.getY() + playerOffsetY, newPortalPos.getZ() + playerOffsetZ, entity.rotationYaw, 0);
-		this.setDefaultPlayerSpawnLocation(newPortalPos, entity);
+		if(this.setSpawn) {
+			this.setEntityLocation(entity, newPortalPos.getX() + playerOffsetX, newPortalPos.getY() + playerOffsetY, newPortalPos.getZ() + playerOffsetZ, entity.rotationYaw, 0);
+			this.setDefaultPlayerSpawnLocation(newPortalPos, entity);
+		}
 	}
 
 	protected boolean spiralGenerate(BlockPos center, int radius, int yDown, int yUp, Function<MutableBlockPos, Boolean> gen) {
@@ -597,6 +605,17 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 	}
 
+	protected Chunk getDecoratedChunk(World world, BlockPos pos) {
+		int cx = pos.getX() >> 4;
+		int cz = pos.getZ() >> 4;
+		for(int xo = -1; xo <= 1; xo++) {
+			for(int zo = -1; zo <= 1; zo++) {
+				world.getChunkFromChunkCoords(cx + xo, cz + zo);
+			}
+		}
+		return world.getChunkFromBlockCoords(pos);
+	}
+	
 	@Override
 	public void removeStalePortalLocations(long timer) {
 		//Not needed
