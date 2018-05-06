@@ -3,6 +3,7 @@ package thebetweenlands.common.world.teleporter;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Function;
 
 import javax.annotation.Nullable;
@@ -24,6 +25,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.layer.IntCache;
 import thebetweenlands.common.block.structure.BlockTreePortal;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.PlayerRespawnHandler;
@@ -223,7 +225,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 		validBiomes.add(BiomeRegistry.SWAMPLANDS);
 		validBiomes.add(BiomeRegistry.PATCHY_ISLANDS);
 
-		BlockPos suitablePos = this.toWorld.getBiomeProvider().findBiomePosition(start.getX(), start.getZ(), 256, validBiomes, this.toWorld.rand);
+		BlockPos suitablePos = this.toWorld.getBiomeProvider().findBiomePosition(start.getX(), start.getZ(), BetweenlandsConfig.WORLD_AND_DIMENSION.portalBiomeSearchRange, validBiomes, this.toWorld.rand);
 
 		BlockPos selectedPos;
 		if(suitablePos != null) {
@@ -238,11 +240,59 @@ public final class TeleporterBetweenlands extends Teleporter {
 	}
 
 	/**
+	 * Tries to find a suitable position in a safe biome in another dimension
+	 * @param start
+	 * @return
+	 */
+	@Nullable
+	protected BlockPos findSuitableNonBLStartPos(BlockPos start) {
+		Set<String> unsafeBiomes = BetweenlandsConfig.WORLD_AND_DIMENSION.portalUnsafeBiomesSet;
+		
+		if(unsafeBiomes.isEmpty()) {
+			return start;
+		}
+		
+		int range = BetweenlandsConfig.WORLD_AND_DIMENSION.portalBiomeSearchRange;
+		
+		IntCache.resetIntCache();
+        int searchStartX = start.getX() - range >> 2;
+        int searchStartZ = start.getZ() - range >> 2;
+        int searchEndX = start.getX() + range >> 2;
+        int searchEndZ = start.getZ() + range >> 2;
+        int searchWidth = searchEndX - searchStartX + 1;
+        int searchDepth = searchEndZ - searchStartZ + 1;
+        
+        Biome[] biomes = this.toWorld.getBiomeProvider().getBiomesForGeneration(new Biome[0], searchStartX, searchStartZ, searchWidth, searchDepth);
+        
+        BlockPos suitablePos = null;
+        
+        int counter = 0;
+
+        for (int i = 0; i < searchWidth * searchDepth; ++i) {
+            int bx = searchStartX + i % searchWidth << 2;
+            int by = searchStartZ + i / searchWidth << 2;
+            
+            Biome biome = biomes[i];
+
+            if (!unsafeBiomes.contains(biome.getRegistryName().toString()) && (suitablePos == null || this.toWorld.rand.nextInt(counter + 1) == 0)) {
+                suitablePos = new BlockPos(bx, 0, by);
+                ++counter;
+            }
+        }
+
+        return suitablePos;
+	}
+	
+	/**
 	 * Finds a suitable position for a portal to generate nearby
 	 * @param start
 	 * @return
 	 */
 	protected BlockPos findSuitableNonBLPortalPos(BlockPos start) {
+		BlockPos suitableStartPos = this.findSuitableNonBLStartPos(start);
+		if(suitableStartPos != null) {
+			start = suitableStartPos;
+		}
 		int bestYSpace = -1;
 		BlockPos bestSuitablePos = null;
 		MutableBlockPos checkPos = new MutableBlockPos();

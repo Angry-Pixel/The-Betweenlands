@@ -1395,6 +1395,8 @@ config.thebetweenlands.activate_rift_on_first_join_duration=Activate Rift on fir
 config.thebetweenlands.start_in_betweenlands=Start in Betweenlands
 config.thebetweenlands.start_in_portal=Start in Portal
 config.thebetweenlands.portal_dimension_targets=Custom Portals
+config.thebetweenlands.portal_unsafe_biomes=Portal Unsafe Biomes
+config.thebetweenlands.portal_biome_search_range=Portal Biome Search Range
 
 config.thebetweenlands.rendering=Rendering
 config.thebetweenlands.wisp_quality=Wisp Rendering Quality

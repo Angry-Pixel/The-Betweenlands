@@ -13,6 +13,7 @@ import thebetweenlands.common.config.properties.IntSetProperty;
 import thebetweenlands.common.config.properties.ItemListProperty;
 import thebetweenlands.common.config.properties.PortalDimensionWhitelist;
 import thebetweenlands.common.config.properties.PortalTargetList;
+import thebetweenlands.common.config.properties.StringSetProperty;
 import thebetweenlands.common.lib.ModInfo;
 
 @Config(modid = ModInfo.ID, category = "", name = ModInfo.ID + "/config")
@@ -65,7 +66,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "portal_max_link_dist")
 		@Comment("The maximum link distance in blocks between two portals")
 		public int portalMaxLinkDist = 1500;
-		
+
 		@Name("activate_rift_on_first_join")
 		@LangKey(LANG_PREFIX + "activate_rift_on_first_join")
 		@Comment("If true, the Rift will appear whenever a player joins the dimension for the first time")
@@ -76,23 +77,40 @@ public class BetweenlandsConfig {
 		@Comment("Minimum duration in seconds the rift should stay active when a player joins the dimension for the first time. See 'Activate Rift On First Join'")
 		@RangeInt(min = 0, max = Integer.MAX_VALUE / 20)
 		public int minRiftOnFirstJoinDuration = 1800;
-		
+
 		@Name("start_in_betweenlands")
 		@LangKey(LANG_PREFIX + "start_in_betweenlands")
 		@Comment("If true, the players will directly start out in the Betweenlands instead of the Overworld")
 		public boolean startInBetweenlands = false;
-		
+
 		@Name("start_in_portal")
 		@LangKey(LANG_PREFIX + "start_in_portal")
 		@Comment("If \"Start in Betweenlands\" is enabled: whether a portal should be generated at the spawn and the players should spawn in it")
 		public boolean startInPortal = false;
-		
+
 		@Name("portal_dimension_targets")
 		@LangKey(LANG_PREFIX + "portal_dimension_targets")
 		@Comment("Custom saplings or blocks can be specified here to work with the Swamp Talisman. Syntax is \"modid:blockname:meta/dim\", meta can be * for wildcard, if no meta is provided 0 is used. The dimension (\"dim\") specifies to which dimension the portal will lead to")
 		public String[] portalDimensionTargets = {};
 		@Ignore
 		public final PortalTargetList portalDimensionTargetsList = new PortalTargetList();
+
+		@Name("portal_unsafe_biomes")
+		@LangKey(LANG_PREFIX + "portal_unsafe_biomes")
+		@Comment("A list of unsafe biomes for the portal to try avoid generating in")
+		public String[] portalUnsafeBiomes = {
+				"minecraft:ocean", "minecraft:river", "minecraft:frozen_ocean", "minecraft:frozen_river",
+				"minecraft:mushroom_island_shore", "minecraft:beaches", "minecraft:deep_ocean",
+				"minecraft:stone_beach", "minecraft:cold_beach"
+		};
+		@Ignore
+		public final StringSetProperty portalUnsafeBiomesSet = new StringSetProperty(() -> this.portalUnsafeBiomes);
+		
+		@Name("portal_biome_search_range")
+		@LangKey(LANG_PREFIX + "portal_biome_search_range")
+		@Comment("The biome search range used to find a suitable biome when a portal is generated. If you find that a suitable biome isn't found reliably enough this can be increased at the cost of taking more time to generate portals")
+		@RangeInt(min = 16, max = Integer.MAX_VALUE)
+		public int portalBiomeSearchRange = 256;
 	}
 
 	@Name("rendering")
@@ -114,7 +132,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "dimension_shader_only")
 		@Comment("Whether the shaders should only be active in the Betweenlands dimension (if they are enabled)")
 		public boolean dimensionShaderOnly = false;
-		
+
 		@Name("fullbright_blocks")
 		@LangKey(LANG_PREFIX + "fullbright_blocks")
 		@Comment("Some blocks glow in the dark (eg Life Crystal Ore) which doesn't work in some cases. If you run into problems like broken textures for such blocks then set this to false")
@@ -264,7 +282,7 @@ public class BetweenlandsConfig {
 		public String[] torchBlacklistUnparsed = {};
 		@Ignore
 		public final ItemListProperty torchBlacklist = new ItemListProperty(() -> GENERAL.torchBlacklistUnparsed);
-		
+
 		@Name("caving_rope_despawn_time")
 		@LangKey(LANG_PREFIX + "caving_rope_despawn_time")
 		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
