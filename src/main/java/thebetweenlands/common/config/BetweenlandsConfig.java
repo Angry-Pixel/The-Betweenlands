@@ -12,6 +12,7 @@ import net.minecraftforge.common.config.Config.RequiresMcRestart;
 import thebetweenlands.common.config.properties.IntSetProperty;
 import thebetweenlands.common.config.properties.ItemListProperty;
 import thebetweenlands.common.config.properties.PortalDimensionWhitelist;
+import thebetweenlands.common.config.properties.PortalTargetList;
 import thebetweenlands.common.lib.ModInfo;
 
 @Config(modid = ModInfo.ID, category = "", name = ModInfo.ID + "/config")
@@ -85,6 +86,13 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "start_in_portal")
 		@Comment("If \"Start in Betweenlands\" is enabled: whether a portal should be generated at the spawn and the players should spawn in it")
 		public boolean startInPortal = false;
+		
+		@Name("portal_dimension_targets")
+		@LangKey(LANG_PREFIX + "portal_dimension_targets")
+		@Comment("Custom saplings or blocks can be specified here to work with the Swamp Talisman. Syntax is \"modid:blockname:meta/dim\", meta can be * for wildcard, if no meta is provided 0 is used. The dimension (\"dim\") specifies to which dimension the portal will lead to")
+		public String[] portalDimensionTargets = {};
+		@Ignore
+		public final PortalTargetList portalDimensionTargetsList = new PortalTargetList();
 	}
 
 	@Name("rendering")

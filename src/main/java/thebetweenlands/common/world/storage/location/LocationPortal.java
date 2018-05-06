@@ -18,6 +18,7 @@ public class LocationPortal extends LocationStorage {
 	private BlockPos portalPos;
 	private BlockPos otherPortalPos;
 	private int otherPortalDimension;
+	private boolean targetDimensionSet;
 
 	public LocationPortal(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region);
@@ -48,6 +49,7 @@ public class LocationPortal extends LocationStorage {
 				this.otherPortalDimension = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
 			}
 		}
+		this.targetDimensionSet = nbt.getBoolean("TargetDimSet");
 	}
 
 	@Override
@@ -58,6 +60,7 @@ public class LocationPortal extends LocationStorage {
 			nbt.setLong("OtherPortalPos", this.otherPortalPos.toLong());
 		}
 		nbt.setInteger("OtherPortalDimension", this.otherPortalDimension);
+		nbt.setBoolean("TargetDimSet", this.targetDimensionSet);
 		return nbt;
 	}
 
@@ -94,6 +97,28 @@ public class LocationPortal extends LocationStorage {
 		this.otherPortalPos = pos;
 		this.otherPortalDimension = dim;
 		this.setDirty(true);
+	}
+	
+	/**
+	 * Sets the target dimension of this portal. A new portal
+	 * will be generated on the other side when first entering the portal.
+	 * The target dimension will be set in {@link #getOtherPortalDimension()},
+	 * the link of this portal will be overwritten
+	 * @param dim The target dimension
+	 */
+	public void setTargetDimension(int dim) {
+		this.otherPortalPos = null;
+		this.otherPortalDimension = dim;
+		this.targetDimensionSet = true;
+		this.setDirty(true);
+	}
+	
+	/**
+	 * Returns whether a target dimension was set. See {@link #setTargetDimension(int)}
+	 * @return
+	 */
+	public boolean hasTargetDimension() {
+		return this.targetDimensionSet;
 	}
 	
 	/**

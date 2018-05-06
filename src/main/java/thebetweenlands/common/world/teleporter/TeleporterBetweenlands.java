@@ -12,6 +12,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -52,36 +53,61 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
-		if (!this.placeInExistingPortal(entity, rotationYaw)) {
-			if(!this.makePortal(entity)) {
-				if(!this.makePortal) {
-					//No portal should be generated
-					
-					//Get and set a suitable position for (re-)spawning
-					BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-					pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
-					pos = this.setDefaultPlayerSpawnLocation(pos, entity);
-					
-					this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
-				} else {
-					//Portal failed to generate... fallback?
-	
-					BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
-					Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
-					pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
-					for(int xo = -1; xo <= 1; xo++) {
-						for(int zo = -1; zo <= 1; zo++) {
-							for(int yo = 0; yo <= 2; yo++) {
-								this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+		if (this.world.provider.getDimensionType().getId() != 1) {
+			if (!this.placeInExistingPortal(entity, rotationYaw)) {
+				if(!this.makePortal(entity)) {
+					if(!this.makePortal) {
+						//No portal should be generated
+						
+						//Get and set a suitable position for (re-)spawning
+						BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+						pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
+						pos = this.setDefaultPlayerSpawnLocation(pos, entity);
+						
+						this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
+					} else {
+						//Portal failed to generate... fallback?
+		
+						BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
+						Chunk chunk = this.toWorld.getChunkFromBlockCoords(pos); //Force chunk to generate
+						pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
+						for(int xo = -1; xo <= 1; xo++) {
+							for(int zo = -1; zo <= 1; zo++) {
+								for(int yo = 0; yo <= 2; yo++) {
+									this.toWorld.setBlockToAir(pos.add(xo, yo, zo));
+								}
 							}
 						}
+		
+						this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
+						this.setDefaultPlayerSpawnLocation(pos, entity);
 					}
-	
-					this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
-					this.setDefaultPlayerSpawnLocation(pos, entity);
 				}
 			}
-		}
+        } else {
+        	// Stupid end special cases D:<
+        	
+            int x = MathHelper.floor(entity.posX);
+            int y = MathHelper.floor(entity.posY) - 1;
+            int z = MathHelper.floor(entity.posZ);
+
+            for (int zo = -2; zo <= 2; ++zo) {
+                for (int xo = -2; xo <= 2; ++xo) {
+                    for (int yo = -1; yo < 3; ++yo) {
+                        int bx = x + xo;
+                        int by = y + yo;
+                        int bz = z + zo;
+                        boolean air = yo < 0;
+                        this.world.setBlockState(new BlockPos(bx, by, bz), air ? Blocks.OBSIDIAN.getDefaultState() : Blocks.AIR.getDefaultState());
+                    }
+                }
+            }
+
+            entity.setLocationAndAngles((double)x, (double)y, (double)z, entity.rotationYaw, 0.0F);
+            entity.motionX = 0.0D;
+            entity.motionY = 0.0D;
+            entity.motionZ = 0.0D;
+        }
 	}
 
 	@Override

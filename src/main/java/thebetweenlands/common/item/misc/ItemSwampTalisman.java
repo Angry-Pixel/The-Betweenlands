@@ -140,10 +140,17 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 			}
 
 			Block block = state.getBlock();
+			boolean isCustomListed = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.isListed(state);
 			boolean sapling = this.isBlockSapling(block);
-			if (sapling && (EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) || EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack))) {
+			if ((sapling || isCustomListed) && (EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) || EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack))) {
 				if (!worldIn.isRemote) {
-					if(new WorldGenWeedwoodPortalTree().generate(worldIn, itemRand, pos)) {
+					WorldGenWeedwoodPortalTree gen;
+					if(isCustomListed) {
+						gen = new WorldGenWeedwoodPortalTree(BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state));
+					} else {
+						gen = new WorldGenWeedwoodPortalTree();
+					}
+					if(gen.generate(worldIn, itemRand, pos)) {
 						worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
 						playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
 						if(playerIn instanceof EntityPlayerMP) {

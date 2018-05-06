@@ -241,7 +241,7 @@ public class BlockTreePortal extends BasicBlock {
 						portal = portals.get(0);
 					}
 					int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
-					if(portal != null && portal.getOtherPortalPosition() != null) {
+					if(portal != null && (portal.getOtherPortalPosition() != null || portal.hasTargetDimension())) {
 						//Portal already linked, teleport to linked dimension
 						targetDim = portal.getOtherPortalDimension();
 					} else if (entityIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {

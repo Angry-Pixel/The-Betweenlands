@@ -23,8 +23,16 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 	private IBlockState wood;
 	private IBlockState leaves;
 
+	private boolean targetDimSet = false;
+	private int targetDim;
+	
 	public WorldGenWeedwoodPortalTree() {
 		super(true);
+	}
+	
+	public WorldGenWeedwoodPortalTree(int targetDim) {
+		this.targetDimSet = true;
+		this.targetDim = targetDim;
 	}
 
 	@Override
@@ -139,6 +147,9 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 		LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
 		location.addBounds(new AxisAlignedBB(pos).grow(8, 10, 8).offset(0, 8, 0));
 		location.setSeed(rand.nextLong());
+		if(this.targetDimSet) {
+			location.setTargetDimension(this.targetDim);
+		}
 		location.setDirty(true);
 		location.setVisible(false);
 		location.linkChunks();
