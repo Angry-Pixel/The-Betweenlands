@@ -1,5 +1,6 @@
 package thebetweenlands.client.proxy;
 
+import java.lang.reflect.Method;
 import java.net.Proxy;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -31,6 +32,7 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.common.Loader;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
 import thebetweenlands.client.gui.menu.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.gui.GuiLorePage;
@@ -315,6 +317,20 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public void preInit() {
+		try
+		{
+			if(Loader.isModLoaded("evilnotchlib"))
+			{
+				System.out.println("Menu Lib Detected Adding Support:");
+				Class menuclazz = Class.forName("com.EvilNotch.lib.minecraft.content.client.gui.MenuRegistry");
+				Method methodreg = menuclazz.getMethod("registerGuiMenu", Class.class,ResourceLocation.class);
+				methodreg.invoke(null,GuiBLMainMenu.class,new ResourceLocation("thebetweenlands:mainmenu"));
+			}
+		}
+		catch(Throwable t)
+		{
+			t.printStackTrace();
+		}
 		RenderingRegistry.registerEntityRenderingHandler(EntityAngler.class, RenderAngler::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityBlindCaveFish.class, RenderBlindCaveFish::new);
 		RenderingRegistry.registerEntityRenderingHandler(EntityMireSnail.class, RenderMireSnail::new);
