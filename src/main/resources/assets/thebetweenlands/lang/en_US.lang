@@ -1427,6 +1427,7 @@ config.thebetweenlands.tool_weakness_whitelist=Tool Weakness Whitelist
 config.thebetweenlands.tool_weakness_blacklist=Tool Weakness Blacklist
 config.thebetweenlands.torch_whitelist=Torch Whitelist
 config.thebetweenlands.torch_blacklist=Torch Blacklist
+config.thebetweenlands.pouch_blacklist=Lurker Skin Pouch Blacklist
 config.thebetweenlands.caving_rope_despawn_time=Caving Rope Despawn Time
 
 config.thebetweenlands.mob_spawning=Mob Spawning

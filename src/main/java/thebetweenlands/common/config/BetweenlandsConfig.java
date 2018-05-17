@@ -283,6 +283,13 @@ public class BetweenlandsConfig {
 		@Ignore
 		public final ItemListProperty torchBlacklist = new ItemListProperty(() -> GENERAL.torchBlacklistUnparsed);
 
+		@Name("pouch_blacklist")
+		@LangKey(LANG_PREFIX + "pouch_blacklist")
+		@Comment("A list of items that should not be allowed in the lurker skin pouch. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		public String[] pouchBlackListUnparsed = {};
+		@Ignore
+		public final ItemListProperty pouchBlacklist = new ItemListProperty(() -> GENERAL.pouchBlackListUnparsed);
+
 		@Name("caving_rope_despawn_time")
 		@LangKey(LANG_PREFIX + "caving_rope_despawn_time")
 		@Comment("After how many seconds caving rope should despawn after the player is no longer connected")
