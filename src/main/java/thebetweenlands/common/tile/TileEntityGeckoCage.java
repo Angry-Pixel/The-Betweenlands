@@ -64,6 +64,8 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		this.recoverTicks = recoverTime;
 		IBlockState state = this.world.getBlockState(this.pos);
 		this.world.notifyBlockUpdate(this.pos, state, state, 3);
+		if (!hasGecko())
+			this.recoverTicks = 0;
 	}
 
 	public boolean hasGecko() {
