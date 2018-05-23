@@ -74,6 +74,7 @@ import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenDruidCircle;
 import thebetweenlands.common.world.storage.BetweenlandsChunkStorage;
 import thebetweenlands.common.world.storage.WorldStorageImpl;
+import thebetweenlands.compat.tmg.TMGEquipmentInventory;
 import thebetweenlands.core.TheBetweenlandsPreconditions;
 
 @Mod(modid = ModInfo.ID, name = ModInfo.NAME, version = ModInfo.VERSION, acceptedMinecraftVersions = ModInfo.MC_VERSIONS, certificateFingerprint = "${fingerprint}", dependencies = ModInfo.DEPENDENCIES)
@@ -156,6 +157,10 @@ public class TheBetweenlands {
 		this.registerEventHandlers();
 
 		GameRegistry.registerWorldGenerator(new WorldGenDruidCircle(), 0);
+
+		if (Loader.isModLoaded("tombmanygraves2api")) {
+			new TMGEquipmentInventory();
+		}
 	}
 
 	@EventHandler

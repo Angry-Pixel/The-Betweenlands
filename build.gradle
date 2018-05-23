@@ -55,7 +55,7 @@ println(canJarBeSigned() ? "blKeyStore property found, jar files will be signed"
 println("Building version " + version)
 
 minecraft {
-    version = "1.12.2-14.23.2.2643"
+    version = "1.12.2-14.23.3.2655"
     runDir = 'minecraft'
     replace '${version}', project.version
     replace '${mcversion}', project.minecraft.version
