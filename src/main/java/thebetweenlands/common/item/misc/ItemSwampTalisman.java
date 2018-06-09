@@ -28,6 +28,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -139,9 +140,8 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 				}
 			}
 
-			Block block = state.getBlock();
 			boolean isCustomListed = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.isListed(state);
-			boolean sapling = this.isBlockSapling(block);
+			boolean sapling = this.isBlockSapling(worldIn, playerIn, state, pos, facing, hitX, hitY, hitZ);
 			if ((sapling || isCustomListed) && (EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) || EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack))) {
 				if (!worldIn.isRemote) {
 					WorldGenWeedwoodPortalTree gen;
@@ -241,7 +241,8 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 		return null;
 	}
 
-	protected boolean isBlockSapling(Block block) {
+	protected boolean isBlockSapling(World worldIn, EntityPlayer playerIn, IBlockState state, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		Block block = state.getBlock();
 		if(block instanceof BlockSapling) {
 			return true;
 		}
@@ -251,6 +252,15 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 				return true;
 			}
 		}
+		RayTraceResult result = new RayTraceResult(new Vec3d(hitX, hitY, hitZ), facing, pos);
+		ItemStack stack = block.getPickBlock(state, result, worldIn, pos, playerIn);
+		int[] ids = OreDictionary.getOreIDs(stack);
+		for (int id: ids) {
+			if ("treeSapling".equals(OreDictionary.getOreName(id))) {
+				return true;
+			}
+		}
+
 		return false;
 	}
 
