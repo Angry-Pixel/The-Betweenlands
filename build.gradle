@@ -15,7 +15,6 @@
 * 4. Run 'gradle build'
 */
 
-// For those who want the bleeding edge
 buildscript {
     repositories {
         jcenter()
@@ -281,8 +280,12 @@ def getVariable(String key) {
 	return project.hasProperty(key) ? project.property(key) : ENV[key];
 }
 
-//JEI intergration
+//Add dependencies
 repositories {
+    maven {
+        name = "CurseForge"
+        url = "https://minecraft.curseforge.com/api/maven/"
+    }
     maven {
         name = "Progwml6 maven"
         url = "http://dvs1.progwml6.com/files/maven"
@@ -293,6 +296,8 @@ repositories {
     }
 }
 dependencies {
+	deobfCompile 'tombmanygraves-2-api:tombmanygraves2api:1.12.2:1.0.0'
+	
     deobfCompile "mezz.jei:jei_1.12.2:4.8.5.147:api"
     runtime "mezz.jei:jei_1.12.2:4.8.5.147"
 }
