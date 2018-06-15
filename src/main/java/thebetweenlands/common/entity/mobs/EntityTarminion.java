@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -190,6 +191,9 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source == DamageSource.DROWN && this.world.getBlockState(new BlockPos(this.posX, this.posY + this.height, this.posZ)).getBlock() == BlockRegistry.TAR) {
+			return false;
+		}
 		if(source.getTrueSource() instanceof EntityCreature) {
 			this.attack(source.getTrueSource());
 		}
