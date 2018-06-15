@@ -76,16 +76,18 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 				if (recipe == null || !this.inventory.get(0).isEmpty()) {
 					stopCraftingProcess();
 				}
-				if (this.craftingProgress >= CRAFTING_TIME && recipe != null) {
-					ItemStack stack = recipe.getOutput(new ItemStack[]{this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)});
-					stack.setCount(1);
-					setInventorySlotContents(1, ItemStack.EMPTY);
-					setInventorySlotContents(2, ItemStack.EMPTY);
-					setInventorySlotContents(3, ItemStack.EMPTY);
-					setInventorySlotContents(4, ItemStack.EMPTY);
-					setInventorySlotContents(0, stack);
-					stopCraftingProcess();
-					removeSpawner();
+				if (recipe != null) {
+					recipe.onCrafting(this.world, this.pos, new ItemStack[]{this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)});
+					if(this.craftingProgress >= CRAFTING_TIME) {
+						ItemStack stack = recipe.getOutput(new ItemStack[]{this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)}).copy();
+						setInventorySlotContents(1, ItemStack.EMPTY);
+						setInventorySlotContents(2, ItemStack.EMPTY);
+						setInventorySlotContents(3, ItemStack.EMPTY);
+						setInventorySlotContents(4, ItemStack.EMPTY);
+						setInventorySlotContents(0, stack);
+						stopCraftingProcess();
+						recipe.onCrafted(this.world, this.pos, new ItemStack[]{this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)}, stack);
+					}
 				}
 			}
 		}
@@ -96,12 +98,6 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		return 1;
 	}
 
-	private void removeSpawner() {
-		if (this.world.getBlockState(this.pos.down()).getBlock() == BlockRegistry.MOB_SPAWNER) {
-			this.world.setBlockState(this.pos.down(), this.world.getBiome(this.pos).topBlock);
-		}
-	}
-
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		this.inventory.set(slot, stack);
@@ -110,6 +106,7 @@ public class TileEntityDruidAltar extends TileEntityBasicInventory implements IT
 		}
 		IDruidAltarRecipe recipe = DruidAltarRecipe.getDruidAltarRecipe(this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4));
 		if (!this.world.isRemote && recipe != null && !stack.isEmpty() && this.inventory.get(0).isEmpty() && this.craftingProgress == 0) {
+			recipe.onStartCrafting(world, pos, new ItemStack[] {this.inventory.get(1), this.inventory.get(2), this.inventory.get(3), this.inventory.get(4)});
 			startCraftingProcess();
 		}
 	}

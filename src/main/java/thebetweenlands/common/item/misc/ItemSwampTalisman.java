@@ -254,13 +254,14 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 		}
 		RayTraceResult result = new RayTraceResult(new Vec3d(hitX, hitY, hitZ), facing, pos);
 		ItemStack stack = block.getPickBlock(state, result, worldIn, pos, playerIn);
-		int[] ids = OreDictionary.getOreIDs(stack);
-		for (int id: ids) {
-			if ("treeSapling".equals(OreDictionary.getOreName(id))) {
-				return true;
+		if(!stack.isEmpty()) {
+			int[] ids = OreDictionary.getOreIDs(stack);
+			for (int id: ids) {
+				if ("treeSapling".equals(OreDictionary.getOreName(id))) {
+					return true;
+				}
 			}
 		}
-
 		return false;
 	}
 

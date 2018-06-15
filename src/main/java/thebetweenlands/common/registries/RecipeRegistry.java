@@ -7,7 +7,9 @@ import java.util.Map.Entry;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -17,6 +19,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -30,6 +33,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.api.item.IAnimatorRepairable;
+import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockCragrock;
@@ -61,6 +65,8 @@ import thebetweenlands.common.recipe.misc.RecipesLifeCrystal;
 import thebetweenlands.common.recipe.misc.RecipesPlantTonic;
 import thebetweenlands.common.recipe.purifier.PurifierRecipe;
 import thebetweenlands.common.tile.TileEntityAnimator;
+import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
+import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
 
 public class RecipeRegistry {
 
@@ -228,6 +234,57 @@ public class RecipeRegistry {
 
 	private static void registerDruidAltarRecipes() {
 		DruidAltarRecipe.addRecipe(EnumTalisman.SWAMP_TALISMAN_1.create(1), EnumTalisman.SWAMP_TALISMAN_2.create(1), EnumTalisman.SWAMP_TALISMAN_3.create(1), EnumTalisman.SWAMP_TALISMAN_4.create(1), EnumTalisman.SWAMP_TALISMAN_0.create(1));
+		
+		// Add reactivation recipe
+		DruidAltarRecipe.addRecipe(new IDruidAltarRecipe() {
+			@Override
+			public boolean containsInputItem(ItemStack input) {
+				if(input.isEmpty()) {
+					return false;
+				}
+				int[] ids = OreDictionary.getOreIDs(input);
+				for (int id: ids) {
+					if ("treeSapling".equals(OreDictionary.getOreName(id))) {
+						return true;
+					}
+				}
+				return false;
+			}
+
+			@Override
+			public boolean matchesInput(ItemStack[] input) {
+				for(ItemStack stack : input) {
+					if(!this.containsInputItem(stack)) {
+						return false;
+					}
+				}
+				return true;
+			}
+
+			@Override
+			public ItemStack getOutput(ItemStack[] input) {
+				return ItemStack.EMPTY;
+			}
+			
+			@Override
+			public void onCrafted(World world, BlockPos pos, ItemStack[] input, ItemStack output) {
+				BlockPos spawnerPos = pos.down();
+				if (world.getBlockState(spawnerPos).getBlockHardness(world, spawnerPos) >= 0.0F) {
+					world.setBlockState(spawnerPos, BlockRegistry.MOB_SPAWNER.getDefaultState());
+					TileEntity te = world.getTileEntity(spawnerPos);
+					if(te instanceof TileEntityMobSpawnerBetweenlands) {
+						MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
+						logic.setNextEntityName("thebetweenlands:dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
+					}
+					
+					world.playSound(null, spawnerPos, SoundRegistry.DRUID_TELEPORT, SoundCategory.BLOCKS, 1, 1);
+					
+					// Block break effect, see RenderGlobal#playEvent(EntityPlayer player, int type, BlockPos blockPosIn, int data)
+					world.playEvent(2001, spawnerPos.up(4), Block.getStateId(Blocks.SAPLING.getDefaultState()));
+					world.playEvent(2003, spawnerPos.up(4), 0);
+				}
+			}
+		});
 	}
 
 	private static void registerCompostRecipes() {
