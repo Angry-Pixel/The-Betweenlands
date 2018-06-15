@@ -171,7 +171,7 @@ public class WorldGenCragrockTower extends WorldGenHelper {
 		y = highestPoint.getY();
 		z = highestPoint.getZ();
 
-		if (!canGenerate(world, x, y, z, direction, 17, 19))
+		if (!canGenerate(world, x, y, z, direction, 21, 21))
 			return false;
 
 		if (!rotatedCubeMatches(world, x, y, z, 1, -1, 7, 2, 1, 1, direction, SurfaceType.MIXED_GROUND_OR_REPLACEABLE)

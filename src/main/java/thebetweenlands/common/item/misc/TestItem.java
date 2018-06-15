@@ -81,12 +81,12 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		/*
+		
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		*/
+		
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
@@ -124,11 +124,12 @@ public class TestItem extends Item {
 			*/
 			/*WorldGenGiantTree tree = new WorldGenGiantTree();
 			tree.generate(worldIn, itemRand, pos.add(0, 10, 0));*/
-			
+		/*
 			WorldGenSmallPortal portal = new WorldGenSmallPortal(player.getHorizontalFacing());
 			if(portal.generate(worldIn, itemRand, pos.up())) {
 				//playerIn.setHeldItem(hand, null);
 			}
+		*/
 		}
 
 		return EnumActionResult.SUCCESS;
