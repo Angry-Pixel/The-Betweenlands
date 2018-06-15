@@ -12,6 +12,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -558,7 +559,7 @@ public class ScreenRenderHandler extends Gui {
 	@SubscribeEvent
 	public void onRenderScreen(DrawScreenEvent.Post event) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mc.currentScreen instanceof GuiContainer && mc.player != null) {
+		if(GuiScreen.isShiftKeyDown() && mc.currentScreen instanceof GuiContainer && mc.player != null) {
 			GuiContainer container = (GuiContainer) mc.currentScreen;
 
 			//Render aspects tooltip

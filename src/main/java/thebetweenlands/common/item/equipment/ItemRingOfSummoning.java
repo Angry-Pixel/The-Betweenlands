@@ -6,6 +6,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -46,7 +47,7 @@ public class ItemRingOfSummoning extends ItemRing {
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.ring.summoning.bonus"), 0));
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+		if (GuiScreen.isShiftKeyDown()) {
 			String toolTip = I18n.format("tooltip.ring.summoning", KeyBindRegistry.RADIAL_MENU.getDisplayName(), KeyBindRegistry.USE_RING.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {

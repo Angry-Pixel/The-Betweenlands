@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -48,7 +49,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
         this.setContainerItem(ItemRegistry.DENTROTHYST_VIAL);
         addPropertyOverride(new ResourceLocation("aspect"), (stack, worldIn, entityIn) -> {
             List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
-            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && itemAspects.size() >= 1) {
+            if (GuiScreen.isShiftKeyDown() && itemAspects.size() >= 1) {
                 return AspectRegistry.ASPECT_TYPES.indexOf(itemAspects.get(0).type) + 1;
             }
             return 0;

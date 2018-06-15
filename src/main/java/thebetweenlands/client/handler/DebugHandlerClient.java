@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -49,7 +50,7 @@ public class DebugHandlerClient {
 					LocationStorage location = (LocationStorage) sharedStorage;
 
 					GlStateManager.pushMatrix();
-					if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+					if (GuiScreen.isCtrlKeyDown()) {
 						GlStateManager.disableDepth();
 					}
 					GlStateManager.disableTexture2D();

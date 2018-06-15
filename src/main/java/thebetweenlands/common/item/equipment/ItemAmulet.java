@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -277,7 +278,7 @@ public class ItemAmulet extends Item implements IEquippable {
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet." + CircleGemHelper.getGem(stack).name), 0));
 		if(CircleGemHelper.getGem(stack) != CircleGemType.NONE) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+			if (GuiScreen.isShiftKeyDown()) {
 				list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.amulet.usage", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName()), 1));
 			} else {
 				list.add(I18n.format("tooltip.press.shift"));

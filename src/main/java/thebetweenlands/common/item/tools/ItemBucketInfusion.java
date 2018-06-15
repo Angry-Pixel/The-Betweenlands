@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -82,7 +83,7 @@ public class ItemBucketInfusion extends Item implements ITintedItem, ItemRegistr
 						list.add((count > 1 ? (count + "x ") : "") + ingredient.getDisplayName());
 						List<Aspect> ingredientAspects = AspectManager.get(TheBetweenlands.proxy.getClientWorld()).getDiscoveredAspects(AspectManager.getAspectItem(ingredient), DiscoveryContainer.getMergedDiscoveryContainer(FMLClientHandler.instance().getClientPlayerEntity()));
 						if (ingredientAspects.size() >= 1) {
-							if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+							if (GuiScreen.isShiftKeyDown()) {
 								for (Aspect aspect : ingredientAspects) {
 									list.add("  - " + aspect.type.getName() + " (" + aspect.getDisplayAmount() * count + ")");
 								}
