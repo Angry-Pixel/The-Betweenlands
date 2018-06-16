@@ -271,14 +271,14 @@ public class BetweenlandsConfig {
 
 		@Name("torch_whitelist")
 		@LangKey(LANG_PREFIX + "torch_whitelist")
-		@Comment("A list of items that should turn into damp torches when placed in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		@Comment("A list of items that should not turn into damp torches when placed in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
 		public String[] torchWhitelistUnparsed = {};
 		@Ignore
 		public final ItemListProperty torchWhitelist = new ItemListProperty(() -> GENERAL.torchWhitelistUnparsed);
 
 		@Name("torch_blacklist")
 		@LangKey(LANG_PREFIX + "torch_blacklist")
-		@Comment("A list of items that should not turn into damp torches when placed in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
+		@Comment("A list of items that should turn into damp torches when placed in the dimension. Syntax is \"modid:itemname:meta\", meta can be * for wildcard, if no meta is provided 0 is used")
 		public String[] torchBlacklistUnparsed = {};
 		@Ignore
 		public final ItemListProperty torchBlacklist = new ItemListProperty(() -> GENERAL.torchBlacklistUnparsed);
