@@ -345,7 +345,7 @@ public class BetweenlandsConfig {
 		@LangKey(LANG_PREFIX + "check_interval")
 		@Comment("Check interval in seconds")
 		@RangeInt(min = 60, max = Integer.MAX_VALUE / 20)
-		public int checkInterval = 600;
+		public int checkInterval = 1800;
 
 		@Name("failed_recheck_interval")
 		@LangKey(LANG_PREFIX + "failed_recheck_interval")
