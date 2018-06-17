@@ -2,6 +2,7 @@ package thebetweenlands.common.proxy;
 
 import java.net.Proxy;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
@@ -18,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
@@ -202,5 +204,9 @@ public class CommonProxy implements IGuiHandler {
     @Nullable
     public Proxy getNetProxy() {
     	return null;
+    }
+    
+    public List<RiftVariant> getRiftVariants() {
+    	return Collections.emptyList();
     }
 }

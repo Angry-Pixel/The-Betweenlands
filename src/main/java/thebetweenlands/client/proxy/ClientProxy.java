@@ -1,10 +1,18 @@
 package thebetweenlands.client.proxy;
 
+import java.io.InputStreamReader;
 import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -15,6 +23,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -23,6 +34,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -31,8 +43,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import thebetweenlands.client.gui.menu.GuiBLMainMenu;
-import thebetweenlands.client.gui.menu.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiPouchNaming;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
@@ -43,6 +53,8 @@ import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.gui.menu.GuiBLMainMenu;
+import thebetweenlands.client.gui.menu.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.handler.AmbienceSoundPlayHandler;
 import thebetweenlands.client.handler.ArmSwingSpeedHandler;
 import thebetweenlands.client.handler.BrightnessHandler;
@@ -63,13 +75,61 @@ import thebetweenlands.client.handler.ThemHandler;
 import thebetweenlands.client.handler.WeedwoodRowboatHandler;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
-import thebetweenlands.client.render.entity.*;
+import thebetweenlands.client.render.entity.RenderAngler;
+import thebetweenlands.client.render.entity.RenderAngryPebble;
+import thebetweenlands.client.render.entity.RenderBLArrow;
+import thebetweenlands.client.render.entity.RenderBlindCaveFish;
+import thebetweenlands.client.render.entity.RenderBloodSnail;
+import thebetweenlands.client.render.entity.RenderChiromaw;
+import thebetweenlands.client.render.entity.RenderDarkDruid;
+import thebetweenlands.client.render.entity.RenderDarkLight;
+import thebetweenlands.client.render.entity.RenderDragonFly;
+import thebetweenlands.client.render.entity.RenderDreadfulMummy;
+import thebetweenlands.client.render.entity.RenderElixir;
+import thebetweenlands.client.render.entity.RenderFirefly;
+import thebetweenlands.client.render.entity.RenderFortressBoss;
+import thebetweenlands.client.render.entity.RenderFortressBossBlockade;
+import thebetweenlands.client.render.entity.RenderFortressBossProjectile;
+import thebetweenlands.client.render.entity.RenderFortressBossSpawner;
+import thebetweenlands.client.render.entity.RenderFortressBossTeleporter;
+import thebetweenlands.client.render.entity.RenderFortressBossTurret;
+import thebetweenlands.client.render.entity.RenderFrog;
+import thebetweenlands.client.render.entity.RenderGasCloud;
+import thebetweenlands.client.render.entity.RenderGecko;
+import thebetweenlands.client.render.entity.RenderGiantToad;
+import thebetweenlands.client.render.entity.RenderLeech;
+import thebetweenlands.client.render.entity.RenderLurker;
+import thebetweenlands.client.render.entity.RenderMireSnail;
+import thebetweenlands.client.render.entity.RenderMireSnailEgg;
+import thebetweenlands.client.render.entity.RenderMummyArm;
+import thebetweenlands.client.render.entity.RenderPeatMummy;
+import thebetweenlands.client.render.entity.RenderPyrad;
+import thebetweenlands.client.render.entity.RenderPyradFlame;
+import thebetweenlands.client.render.entity.RenderRopeNode;
+import thebetweenlands.client.render.entity.RenderShockwaveBlock;
+import thebetweenlands.client.render.entity.RenderShockwaveSwordItem;
+import thebetweenlands.client.render.entity.RenderSiltCrab;
+import thebetweenlands.client.render.entity.RenderSludge;
+import thebetweenlands.client.render.entity.RenderSludgeBall;
+import thebetweenlands.client.render.entity.RenderSmollSludge;
+import thebetweenlands.client.render.entity.RenderSnailPoisonJet;
+import thebetweenlands.client.render.entity.RenderSporeling;
+import thebetweenlands.client.render.entity.RenderSwampHag;
+import thebetweenlands.client.render.entity.RenderSwordEnergy;
+import thebetweenlands.client.render.entity.RenderTarBeast;
+import thebetweenlands.client.render.entity.RenderTarminion;
+import thebetweenlands.client.render.entity.RenderTermite;
+import thebetweenlands.client.render.entity.RenderThrownTarminion;
+import thebetweenlands.client.render.entity.RenderVolatileSoul;
+import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
+import thebetweenlands.client.render.entity.RenderWight;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderAspectVial;
@@ -95,6 +155,7 @@ import thebetweenlands.client.render.tile.RenderTarLootPot3;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -103,7 +164,43 @@ import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
-import thebetweenlands.common.entity.mobs.*;
+import thebetweenlands.common.entity.mobs.EntityAngler;
+import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
+import thebetweenlands.common.entity.mobs.EntityBloodSnail;
+import thebetweenlands.common.entity.mobs.EntityChiromaw;
+import thebetweenlands.common.entity.mobs.EntityDarkDruid;
+import thebetweenlands.common.entity.mobs.EntityDarkLight;
+import thebetweenlands.common.entity.mobs.EntityDragonFly;
+import thebetweenlands.common.entity.mobs.EntityDreadfulMummy;
+import thebetweenlands.common.entity.mobs.EntityFirefly;
+import thebetweenlands.common.entity.mobs.EntityFortressBoss;
+import thebetweenlands.common.entity.mobs.EntityFortressBossBlockade;
+import thebetweenlands.common.entity.mobs.EntityFortressBossProjectile;
+import thebetweenlands.common.entity.mobs.EntityFortressBossSpawner;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTeleporter;
+import thebetweenlands.common.entity.mobs.EntityFortressBossTurret;
+import thebetweenlands.common.entity.mobs.EntityFrog;
+import thebetweenlands.common.entity.mobs.EntityGasCloud;
+import thebetweenlands.common.entity.mobs.EntityGecko;
+import thebetweenlands.common.entity.mobs.EntityGiantToad;
+import thebetweenlands.common.entity.mobs.EntityLeech;
+import thebetweenlands.common.entity.mobs.EntityLurker;
+import thebetweenlands.common.entity.mobs.EntityMireSnail;
+import thebetweenlands.common.entity.mobs.EntityMireSnailEgg;
+import thebetweenlands.common.entity.mobs.EntityMummyArm;
+import thebetweenlands.common.entity.mobs.EntityPeatMummy;
+import thebetweenlands.common.entity.mobs.EntityPyrad;
+import thebetweenlands.common.entity.mobs.EntityPyradFlame;
+import thebetweenlands.common.entity.mobs.EntitySiltCrab;
+import thebetweenlands.common.entity.mobs.EntitySludge;
+import thebetweenlands.common.entity.mobs.EntitySmollSludge;
+import thebetweenlands.common.entity.mobs.EntitySporeling;
+import thebetweenlands.common.entity.mobs.EntitySwampHag;
+import thebetweenlands.common.entity.mobs.EntityTarBeast;
+import thebetweenlands.common.entity.mobs.EntityTarminion;
+import thebetweenlands.common.entity.mobs.EntityTermite;
+import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
+import thebetweenlands.common.entity.mobs.EntityWight;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
@@ -119,6 +216,7 @@ import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -154,9 +252,11 @@ import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
 
+	private final List<RiftVariant> riftVariants = new ArrayList<>();
+	
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -370,6 +470,7 @@ public class ClientProxy extends CommonProxy {
 		resourceManager.registerReloadListener(r -> {
 			if (HLEntryRegistry.CATEGORIES.size() > 0) HLEntryRegistry.init();
 		});
+		resourceManager.registerReloadListener(this);
 
 		//Register particle stitchers
 		BLParticles[] particles = BLParticles.values();
@@ -476,6 +577,9 @@ public class ClientProxy extends CommonProxy {
 		HLEntryRegistry.init();
 
 		WeedwoodRowboatHandler.INSTANCE.init();
+		
+		this.loadRiftVariants();
+		
 		//Turn dirt background in menus into temple bricks
 		//Disabled for now as it was test, could be used if it's suitable
 		/*
@@ -573,4 +677,50 @@ public class ClientProxy extends CommonProxy {
     public boolean isSingleplayer() {
     	return Minecraft.getMinecraft().isSingleplayer();
     }
+
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		this.loadRiftVariants();
+	}
+	
+	private void loadRiftVariants() {
+		this.riftVariants.clear();
+		
+		try {
+			IResource riftsFile = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(ModInfo.ID, "textures/sky/rifts/rifts.json"));
+			JsonParser parser = new JsonParser();
+			try(InputStreamReader reader = new InputStreamReader(riftsFile.getInputStream())) {
+				JsonArray array = parser.parse(reader).getAsJsonArray();
+				for(int i = 0; i < array.size(); i++) {
+					JsonObject jsonObj = array.get(i).getAsJsonObject();
+					
+					ResourceLocation textureMask = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_mask"));
+					textureMask = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureMask.getResourcePath());
+					
+					ResourceLocation textureOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_overlay"));
+					textureOverlay = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureOverlay.getResourcePath());
+					
+					JsonObject yawJson = JsonUtils.getJsonObject(jsonObj, "yaw");
+					JsonObject pitchJson = JsonUtils.getJsonObject(jsonObj, "pitch");
+					JsonObject rollJson = JsonUtils.getJsonObject(jsonObj, "roll");
+					JsonObject scaleJson = JsonUtils.getJsonObject(jsonObj, "scale");
+					JsonObject mirrorJson = JsonUtils.getJsonObject(jsonObj, "mirror");
+					
+					this.riftVariants.add(new RiftVariant(textureMask, textureOverlay, 
+							JsonUtils.getFloat(yawJson, "min"), JsonUtils.getFloat(yawJson, "max"),
+							JsonUtils.getFloat(pitchJson, "min"), JsonUtils.getFloat(pitchJson, "max"),
+							JsonUtils.getFloat(rollJson, "min"), JsonUtils.getFloat(rollJson, "max"),
+							JsonUtils.getFloat(scaleJson, "min"), JsonUtils.getFloat(scaleJson, "max"),
+							JsonUtils.getBoolean(mirrorJson, "u"), JsonUtils.getBoolean(mirrorJson, "v")));
+				}
+			}
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error("Failed loading sky rift variants", ex);
+		}
+	}
+	
+	@Override
+	public List<RiftVariant> getRiftVariants() {
+		return Collections.unmodifiableList(this.riftVariants);
+	}
 }

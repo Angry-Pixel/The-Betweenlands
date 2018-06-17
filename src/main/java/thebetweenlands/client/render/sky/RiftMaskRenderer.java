@@ -1,6 +1,7 @@
 package thebetweenlands.client.render.sky;
 
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.glu.Sphere;
 
 import net.minecraft.client.Minecraft;
@@ -15,14 +16,12 @@ import thebetweenlands.common.world.event.EventRift;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class RiftMaskRenderer implements IRiftMaskRenderer {
-	public static final ResourceLocation SKY_RIFT_OVERLAY_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_overlay.png");
-	public static final ResourceLocation SKY_RIFT_MASK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask.png");
-	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/sky_rift_mask_back.png");
-	
+	public static final ResourceLocation SKY_RIFT_MASK_BACK_TEXTURE = new ResourceLocation("thebetweenlands:textures/sky/rifts/sky_rift_mask_back.png");
+
 	protected final int skyDomeDispList;
 
 	private Sphere projectionSphere = new Sphere();
-	
+
 	public RiftMaskRenderer(int skyDomeDispList) {
 		this.skyDomeDispList = skyDomeDispList;
 
@@ -33,7 +32,10 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 	public void renderMask(float partialTicks, WorldClient world, Minecraft mc) {
 		TextureManager textureManager = mc.getTextureManager();
 
-		float[] riftAngles = this.getRiftAngles(partialTicks, world, mc);
+		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
+		float[] riftAngles = rift.getRiftAngles(partialTicks);
+		float scale = rift.getRiftScale(partialTicks);
+		RiftVariant variant = rift.getVariant();
 
 		//Render back mask
 		textureManager.bindTexture(SKY_RIFT_MASK_BACK_TEXTURE);
@@ -51,7 +53,20 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.popMatrix();
 
 		//Render front mask
-		textureManager.bindTexture(SKY_RIFT_MASK_TEXTURE);
+		textureManager.bindTexture(variant.getMaskTexture());
+
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.pushMatrix();
+		int mirrorU = (rift.getRiftMirrorU() ? -1 : 1);
+		int mirrorV = (rift.getRiftMirrorV() ? -1 : 1);
+		GlStateManager.translate(mirrorU * -0.5f / scale, mirrorV * -0.5f / scale, 0);
+		GlStateManager.scale(mirrorU / scale, mirrorV / scale, 1);
+		GlStateManager.translate(mirrorU * 0.5f * scale, mirrorV * 0.5f * scale, 0);
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, -1, 0);
 		GlStateManager.rotate(riftAngles[0], 0, 1, 0);
@@ -61,19 +76,40 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.callList(this.skyDomeDispList);
 
 		GlStateManager.popMatrix();
+
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.popMatrix();
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 	}
 
 	@Override
 	public void renderOverlay(float partialTicks, WorldClient world, Minecraft mc) {
 		TextureManager textureManager = mc.getTextureManager();
 
-		float[] riftAngles = this.getRiftAngles(partialTicks, world, mc);
-
-		float visibility = this.getRiftVisibility(partialTicks, world, mc);
+		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
+		float[] riftAngles = rift.getRiftAngles(partialTicks);
+		float visibility = rift.getVisibility(partialTicks);
+		float scale = rift.getRiftScale(partialTicks);
+		RiftVariant variant = rift.getVariant();
 
 		GlStateManager.color(1, 1, 1, visibility);
 
-		textureManager.bindTexture(SKY_RIFT_OVERLAY_TEXTURE);
+		textureManager.bindTexture(variant.getOverlayTexture());
+
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.pushMatrix();
+		int mirrorU = (rift.getRiftMirrorU() ? -1 : 1);
+		int mirrorV = (rift.getRiftMirrorV() ? -1 : 1);
+		GlStateManager.translate(mirrorU * -0.5f / scale, mirrorV * -0.5f / scale, 0);
+		GlStateManager.scale(mirrorU / scale, mirrorV / scale, 1);
+		GlStateManager.translate(mirrorU * 0.5f * scale, mirrorV * 0.5f * scale, 0);
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 
 		GlStateManager.pushMatrix();
 		GlStateManager.translate(0, -1, 0);
@@ -85,14 +121,22 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 
 		GlStateManager.popMatrix();
 
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.popMatrix();
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.disableBlend();
 		GlStateManager.enableDepth();
+
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
 	}
 
 	@Override
 	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc) {
-		float visibility = this.getRiftVisibility(partialTicks, world, mc);
+		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
+		float visibility = rift.getVisibility(partialTicks);
 
 		GlStateManager.color(visibility*visibility*visibility, visibility*visibility*visibility, visibility*visibility*visibility, visibility);
 
@@ -103,15 +147,5 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.cullFace(CullFace.FRONT);
 		this.projectionSphere.draw(55, 8, 8);
 		GlStateManager.cullFace(CullFace.BACK);
-	}
-
-	protected float getRiftVisibility(float partialTicks, WorldClient world, Minecraft mc) {
-		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
-		return rift.getVisibility(partialTicks);
-	}
-
-	protected float[] getRiftAngles(float partialTicks, WorldClient world, Minecraft mc) {
-		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
-		return rift.getRiftAngles(partialTicks);
 	}
 }
