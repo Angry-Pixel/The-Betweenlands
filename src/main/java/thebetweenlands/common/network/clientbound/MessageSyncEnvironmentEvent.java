@@ -70,7 +70,9 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 					if(eevent != null) {
 						eevent.loadEventPacket(this.nbt);
 						eevent.setActive(this.active, false);
-						eevent.setLoaded();
+						if(!eevent.isLoaded()) {
+							eevent.setLoaded();
+						}
 					}
 				}
 			}

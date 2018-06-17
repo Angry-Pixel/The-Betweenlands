@@ -676,6 +676,11 @@
       "thebetweenlands:shockwave_sword"
     ]
   },
+  "rift_open": {
+    "sounds": [
+      "thebetweenlands:rift_open"
+    ]
+  },
   "fortress_boss_loop": {
     "sounds": [
       {

@@ -23,10 +23,6 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 				this.ticks--;
 			}
 
-			if(!world.isRemote && this.ticks % 20 == 0) {
-				this.setDirty(true);
-			}
-
 			if(!world.isRemote && this.ticks <= 0) {
 				if(this.isActive()) {
 					this.startTicks = this.ticks = this.getOffTime(world.rand);

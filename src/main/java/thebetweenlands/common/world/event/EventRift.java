@@ -10,10 +10,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.clientbound.MessageRiftOpenSound;
 
 public class EventRift extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "rift");
+
+	private static final int MAX_ACTIVATION_TICKS = 350;
 
 	protected int lastTicks;
 	protected int ticks;
@@ -51,7 +55,10 @@ public class EventRift extends TimedEnvironmentEvent {
 			this.riftSeed = this.getWorld().rand.nextInt(Integer.MAX_VALUE);
 			this.mirrorU = this.getWorld().rand.nextBoolean();
 			this.mirrorV = this.getWorld().rand.nextBoolean();
+
 			this.markDirty();
+
+			TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftOpenSound(), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 
 		super.setActive(active, markDirty);
@@ -64,20 +71,21 @@ public class EventRift extends TimedEnvironmentEvent {
 		this.lastTicks = this.ticks;
 
 		if(this.isActive()) {
-			/*if(this.ticks < 200) {
+			if(this.ticks < MAX_ACTIVATION_TICKS) {
+				if(this.ticks == 108) {
+					this.ticks += 180;
+				}
 				this.ticks++;
-			} else if(this.ticks != 200) {
-				this.ticks = 200;
-			}*/
-			this.ticks = 200;
+			} else if(this.ticks != MAX_ACTIVATION_TICKS) {
+				this.ticks = MAX_ACTIVATION_TICKS;
+			}
 		} else {
-			/*if(this.ticks > 0) {
-				this.ticks--;
-			} else if(this.ticks != 0) {
+			if(this.ticks > 0) {
+				this.ticks -= 4;
+			}
+			if(this.ticks < 0) {
 				this.ticks = 0;
-			}*/
-			this.ticks = 0;
-			//TODO
+			}
 		}
 	}
 
@@ -141,7 +149,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * @return
 	 */
 	public float getVisibility(float partialTicks) {
-		return (this.lastTicks + (this.ticks - this.lastTicks) * partialTicks) / 200.0F;
+		return (this.lastTicks + (this.ticks - this.lastTicks) * partialTicks) / (float)MAX_ACTIVATION_TICKS;
 	}
 
 	/**
@@ -176,7 +184,7 @@ public class EventRift extends TimedEnvironmentEvent {
 		RiftVariant variant = this.getVariant();
 		return variant.getMinScale() + this.scaleComponent * (variant.getMaxScale() - variant.getMinScale());
 	}
-	
+
 	/**
 	 * Returns whether the U coordinates of the rift are mirrored
 	 * @return
@@ -185,7 +193,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	public boolean getRiftMirrorU() {
 		return this.mirrorU && this.getVariant().getMirrorU();
 	}
-	
+
 	/**
 	 * Returns whether the V coordinates of the rift are mirrored
 	 * @return
@@ -194,7 +202,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	public boolean getRiftMirrorV() {
 		return this.mirrorV && this.getVariant().getMirrorV();
 	}
-	
+
 	/**
 	 * Returns the angles of the rift: [yaw, pitch, roll]
 	 * @param partialTicks
