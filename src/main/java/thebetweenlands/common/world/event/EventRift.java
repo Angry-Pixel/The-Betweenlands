@@ -55,7 +55,6 @@ public class EventRift extends TimedEnvironmentEvent {
 			this.riftSeed = this.getWorld().rand.nextInt(Integer.MAX_VALUE);
 			this.mirrorU = this.getWorld().rand.nextBoolean();
 			this.mirrorV = this.getWorld().rand.nextBoolean();
-
 			this.markDirty();
 
 			TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftOpenSound(), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
