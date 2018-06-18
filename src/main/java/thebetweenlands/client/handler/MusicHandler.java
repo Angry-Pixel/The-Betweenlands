@@ -14,6 +14,7 @@ import net.minecraft.client.audio.Sound;
 import net.minecraft.client.audio.SoundEventAccessor;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.ISound.AttenuationType;
+import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiWinGame;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +22,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
@@ -53,6 +56,13 @@ public class MusicHandler {
 
 	private boolean hasBlMainMenu = false;
 	private boolean isInBlMainMenu = false;
+	
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onGuiOpen(GuiOpenEvent event) {
+		if(event.getGui() != null && event.getGui().getClass() == GuiMainMenu.class) {
+			hasBlMainMenu = false;
+		}
+	}
 	
 	@SubscribeEvent
 	public void onTick(ClientTickEvent event) {
