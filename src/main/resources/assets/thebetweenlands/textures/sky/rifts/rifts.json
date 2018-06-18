@@ -2,6 +2,7 @@
   {
     "texture_mask": "thebetweenlands:sky/rifts/sky_rift_mask_1.png",
     "texture_overlay": "thebetweenlands:sky/rifts/sky_rift_overlay_1.png",
+    "texture_alt_overlay": "thebetweenlands:sky/rifts/sky_rift_alt_overlay_1.png",
     "yaw": {
       "min": 0,
       "max": 360
