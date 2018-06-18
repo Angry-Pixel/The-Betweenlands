@@ -29,7 +29,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 	}
 
 	@Override
-	public void renderMask(float partialTicks, WorldClient world, Minecraft mc) {
+	public void renderMask(float partialTicks, WorldClient world, Minecraft mc, float skyBrightness) {
 		TextureManager textureManager = mc.getTextureManager();
 
 		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
@@ -86,7 +86,7 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 	}
 
 	@Override
-	public void renderOverlay(float partialTicks, WorldClient world, Minecraft mc) {
+	public void renderOverlay(float partialTicks, WorldClient world, Minecraft mc, float skyBrightness) {
 		TextureManager textureManager = mc.getTextureManager();
 
 		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
@@ -94,13 +94,6 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		float visibility = rift.getVisibility(partialTicks);
 		float scale = rift.getRiftScale(partialTicks);
 		RiftVariant variant = rift.getVariant();
-
-		GlStateManager.color(1, 1, 1, visibility);
-
-		textureManager.bindTexture(variant.getOverlayTexture());
-
-		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
-		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
 		GlStateManager.pushMatrix();
@@ -117,8 +110,30 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.rotate(riftAngles[1], 0, 0, 1);
 		GlStateManager.rotate(riftAngles[2], 0, 1, 0);
 
+		if(variant.getAltOverlayTexture() != null) {
+			GlStateManager.color(1, 1, 1, visibility * skyBrightness);
+		} else {
+			GlStateManager.color(1, 1, 1, visibility);
+		}
+
+		textureManager.bindTexture(variant.getOverlayTexture());
+
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+		
 		GlStateManager.callList(this.skyDomeDispList);
 
+		if(variant.getAltOverlayTexture() != null) {
+			GlStateManager.color(1, 1, 1, visibility * (1 - skyBrightness));
+	
+			textureManager.bindTexture(variant.getAltOverlayTexture());
+	
+			GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
+			GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
+			
+			GlStateManager.callList(this.skyDomeDispList);
+		}
+		
 		GlStateManager.popMatrix();
 
 		GlStateManager.matrixMode(GL11.GL_TEXTURE);
@@ -129,16 +144,26 @@ public class RiftMaskRenderer implements IRiftMaskRenderer {
 		GlStateManager.disableBlend();
 		GlStateManager.enableDepth();
 
+		textureManager.bindTexture(variant.getOverlayTexture());
+		
 		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 		GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+		
+		if(variant.getAltOverlayTexture() != null) {
+			textureManager.bindTexture(variant.getAltOverlayTexture());
+			
+			GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+			GlStateManager.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+		}
 	}
 
 	@Override
-	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc) {
+	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc, float skyBrightness) {
 		EventRift rift = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().rift;
 		float visibility = rift.getVisibility(partialTicks);
-
-		GlStateManager.color(visibility*visibility*visibility, visibility*visibility*visibility, visibility*visibility*visibility, visibility);
+		float visibilitySq = visibility * visibility;
+		
+		GlStateManager.color(visibilitySq, visibilitySq, visibilitySq, visibility);
 
 		GlStateManager.enableFog();
 		GlStateManager.setFogStart(FogHandler.getCurrentFogStart() / 2);

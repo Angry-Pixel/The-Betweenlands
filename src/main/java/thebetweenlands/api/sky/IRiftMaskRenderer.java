@@ -11,25 +11,28 @@ public interface IRiftMaskRenderer {
 	 * @param partialTicks
 	 * @param world
 	 * @param mc
+	 * @param skyBrightness
 	 */
 	@SideOnly(Side.CLIENT)
-	public void renderMask(float partialTicks, WorldClient world, Minecraft mc);
+	public void renderMask(float partialTicks, WorldClient world, Minecraft mc, float skyBrightness);
 
 	/**
 	 * Renders the rift overlay
 	 * @param partialTicks
 	 * @param world
 	 * @param mc
+	 * @param skyBrightness
 	 */
 	@SideOnly(Side.CLIENT)
-	public void renderOverlay(float partialTicks, WorldClient world, Minecraft mc);
+	public void renderOverlay(float partialTicks, WorldClient world, Minecraft mc, float skyBrightness);
 
 	/**
 	 * Renders the rift projection mesh
 	 * @param partialTicks
 	 * @param world
 	 * @param mc
+	 * @param skyBrightness
 	 */
 	@SideOnly(Side.CLIENT)
-	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc);
+	public void renderRiftProjection(float partialTicks, WorldClient world, Minecraft mc, float skyBrightness);
 }

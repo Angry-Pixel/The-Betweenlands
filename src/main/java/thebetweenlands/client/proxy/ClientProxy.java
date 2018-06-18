@@ -700,13 +700,19 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 					ResourceLocation textureOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_overlay"));
 					textureOverlay = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureOverlay.getResourcePath());
 					
+					ResourceLocation textureAltOverlay = null;
+					if(jsonObj.has("texture_alt_overlay")) {
+						textureAltOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_alt_overlay"));
+						textureAltOverlay = new ResourceLocation(textureAltOverlay.getResourceDomain(), "textures/" + textureAltOverlay.getResourcePath());
+					}
+					
 					JsonObject yawJson = JsonUtils.getJsonObject(jsonObj, "yaw");
 					JsonObject pitchJson = JsonUtils.getJsonObject(jsonObj, "pitch");
 					JsonObject rollJson = JsonUtils.getJsonObject(jsonObj, "roll");
 					JsonObject scaleJson = JsonUtils.getJsonObject(jsonObj, "scale");
 					JsonObject mirrorJson = JsonUtils.getJsonObject(jsonObj, "mirror");
 					
-					this.riftVariants.add(new RiftVariant(textureMask, textureOverlay, 
+					this.riftVariants.add(new RiftVariant(textureMask, textureOverlay, textureAltOverlay,
 							JsonUtils.getFloat(yawJson, "min"), JsonUtils.getFloat(yawJson, "max"),
 							JsonUtils.getFloat(pitchJson, "min"), JsonUtils.getFloat(pitchJson, "max"),
 							JsonUtils.getFloat(rollJson, "min"), JsonUtils.getFloat(rollJson, "max"),

@@ -93,6 +93,8 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.clear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
 				this.riftSkyRenderer.render(partialTicks, world, mc);
 				GlStateManager.popMatrix();
+				
+				float skyBrightness = this.riftSkyRenderer.getSkyBrightness(partialTicks, world, mc);
 
 				GlStateManager.enableAlpha();
 				GlStateManager.enableBlend();
@@ -117,7 +119,7 @@ public class RiftRenderer implements IRiftRenderer {
 					GlStateManager.blendFunc(SourceFactor.ZERO, DestFactor.ONE_MINUS_SRC_ALPHA); //Still decent looking fallback
 				}
 
-				this.riftMaskRenderer.renderMask(partialTicks, world, mc);
+				this.riftMaskRenderer.renderMask(partialTicks, world, mc, skyBrightness);
 
 				if(parentFboId != -1) {
 					OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
@@ -157,7 +159,7 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.multMatrix(this.modelviewMatrix);
 
 				//Render projection
-				this.riftMaskRenderer.renderRiftProjection(partialTicks, world, mc);
+				this.riftMaskRenderer.renderRiftProjection(partialTicks, world, mc, skyBrightness);
 
 				GlStateManager.matrixMode(GL11.GL_TEXTURE); //Make sure texture matrix is popped
 				GlStateManager.popMatrix();
@@ -168,7 +170,7 @@ public class RiftRenderer implements IRiftRenderer {
 				GlStateManager.disableTexGenCoord(GlStateManager.TexGen.R);
 
 				//Render overlay
-				this.riftMaskRenderer.renderOverlay(partialTicks, world, mc);
+				this.riftMaskRenderer.renderOverlay(partialTicks, world, mc, skyBrightness);
 
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);

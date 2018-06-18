@@ -23,4 +23,14 @@ public interface IRiftSkyRenderer {
 	 */
 	@SideOnly(Side.CLIENT)
 	public void render(float partialTicks, WorldClient world, Minecraft mc);
+	
+	/**
+	 * Returns the sky's relative brightness between 0 and 1
+	 * @param partialTicks
+	 * @param world
+	 * @param mc
+	 * @return
+	 */
+	@SideOnly(Side.CLIENT)
+	public float getSkyBrightness(float partialTicks, WorldClient world, Minecraft mc);
 }

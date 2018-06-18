@@ -730,4 +730,12 @@ public class OverworldRiftSkyRenderer implements IRiftSkyRenderer {
 		f3 = f3 * (f * 0.91F + 0.09F);
 		return new Vec3d((double)f1, (double)f2, (double)f3);
 	}
+
+	@Override
+	public float getSkyBrightness(float partialTicks, WorldClient world, Minecraft mc) {
+		float f = this.getCelestialAngle(world.getWorldTime(), partialTicks);
+		float f1 = MathHelper.cos(f * ((float)Math.PI * 2F)) * 2.0F + 0.5F;
+		f1 = MathHelper.clamp(f1, 0.0F, 1.0F);
+		return f1;
+	}
 }
