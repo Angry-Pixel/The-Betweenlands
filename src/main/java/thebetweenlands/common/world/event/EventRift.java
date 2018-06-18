@@ -12,7 +12,8 @@ import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
-import thebetweenlands.common.network.clientbound.MessageRiftOpenSound;
+import thebetweenlands.common.network.clientbound.MessageRiftSound;
+import thebetweenlands.common.network.clientbound.MessageRiftSound.RiftSoundType;
 
 public class EventRift extends TimedEnvironmentEvent {
 	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "rift");
@@ -22,6 +23,8 @@ public class EventRift extends TimedEnvironmentEvent {
 	protected int lastTicks;
 	protected int ticks;
 
+	protected int soundTicks;
+	
 	protected int riftSeed;
 	protected float yawComponent, pitchComponent, rollComponent, scaleComponent;
 	protected boolean mirrorU, mirrorV;
@@ -57,7 +60,7 @@ public class EventRift extends TimedEnvironmentEvent {
 			this.mirrorV = this.getWorld().rand.nextBoolean();
 			this.markDirty();
 
-			TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftOpenSound(), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+			TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftSound(RiftSoundType.OPEN), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 		}
 
 		super.setActive(active, markDirty);
@@ -84,6 +87,16 @@ public class EventRift extends TimedEnvironmentEvent {
 			}
 			if(this.ticks < 0) {
 				this.ticks = 0;
+			}
+		}
+		
+		if(!this.getWorld().isRemote) {
+			int remainingTicks = this.getTicks();
+			if((!this.isActive() && remainingTicks < 1800 && remainingTicks > 80) || (this.isActive() && remainingTicks < 1800 && remainingTicks > 80)) {
+				if(this.soundTicks-- <= 0) {
+					TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftSound(RiftSoundType.CREAK), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+					this.soundTicks = this.getWorld().rand.nextInt(150) + 100;
+				}
 			}
 		}
 	}

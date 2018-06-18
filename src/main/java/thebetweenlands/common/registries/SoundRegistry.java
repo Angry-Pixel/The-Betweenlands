@@ -54,6 +54,7 @@ public class SoundRegistry {
     public static final BLSoundEvent IGNITE = reg("ignite");
     public static final BLSoundEvent DAMAGE_REDUCTION = reg("damage_reduction");
     public static final BLSoundEvent RIFT_OPEN = reg("rift_open");
+    public static final BLSoundEvent RIFT_CREAK = reg("rift_creak");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");

@@ -681,6 +681,13 @@
       "thebetweenlands:rift_open"
     ]
   },
+  "rift_creak": {
+    "sounds": [
+      "thebetweenlands:rift_creak_1",
+      "thebetweenlands:rift_creak_2",
+      "thebetweenlands:rift_creak_3"
+    ]
+  },
   "fortress_boss_loop": {
     "sounds": [
       {
