@@ -33,6 +33,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
@@ -289,12 +290,19 @@ public class ScreenRenderHandler extends Gui {
 				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
+					EnumHandSide offhand = player.getPrimaryHand().opposite();
+					
 					int yOffset = 0;
 
 					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
 						IInventory inv = capability.getInventory(type);
 
-						int posX = width / 2 + 93;
+						int posX;
+						if(offhand == EnumHandSide.LEFT) {
+							posX = width / 2 + 93;
+						} else {
+							posX = width / 2 - 93 - 16;
+						}
 						int posY = height + yOffset - 19;
 
 						boolean hadItem = false;
@@ -325,7 +333,11 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.color(1, 1, 1, 1);
 								GlStateManager.popMatrix();
 
-								posX += 8;
+								if(offhand == EnumHandSide.LEFT) {
+									posX += 8;
+								} else {
+									posX -= 8;
+								}
 
 								hadItem = true;
 							}
