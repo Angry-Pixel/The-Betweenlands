@@ -114,6 +114,10 @@ public class ItemAmulet extends Item implements IEquippable {
 
 	@SideOnly(Side.CLIENT)
 	private static void renderAmulet(EntityLivingBase entity, double x, double y, double z, float partialTicks) {
+		if(entity instanceof EntityPlayer && ((EntityPlayer) entity).isSpectator()) {
+			return;
+		}
+		
 		if (entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.AMULET);

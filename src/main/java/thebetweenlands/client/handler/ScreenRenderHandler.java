@@ -285,7 +285,7 @@ public class ScreenRenderHandler extends Gui {
 				}
 			}
 		} else if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
-			if(player != null) {
+			if(player != null && !player.isSpectator()) {
 				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
