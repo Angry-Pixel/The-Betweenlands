@@ -92,6 +92,19 @@ public class ItemBLBucket extends UniversalBucket implements ItemRegistry.IMulti
         protected void setContainerToEmpty() {
             container = ((ItemBLBucket) container.getItem()).getEmpty(container).copy();
         }
+        
+        @Override
+        protected void setFluid(FluidStack fluid) {
+        	// Replace bucket with specific bucket if available, fix for #648
+        	if(!container.isEmpty() && container.isItemEqualIgnoreDurability(((ItemBLBucket) container.getItem()).getEmpty(container))) {
+        		ItemSpecificBucket specificBucket = ItemSpecificBucket.getSpecificBucket(fluid.getFluid());
+        		if(specificBucket != null) {
+	        		container = new ItemStack(specificBucket, 1, container.getMetadata());
+	        	}
+        	}
+        	
+        	super.setFluid(fluid);
+        }
     }
 
     @Override

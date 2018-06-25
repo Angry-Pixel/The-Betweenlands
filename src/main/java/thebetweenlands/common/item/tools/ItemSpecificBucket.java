@@ -1,7 +1,12 @@
 package thebetweenlands.common.item.tools;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
@@ -18,19 +23,12 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.common.registries.ItemRegistry;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * A bucket that can only contain the specified fluid. When a fluid is picked up
  * with the empty bucket it is automatically converted to this item.
  */
 public class ItemSpecificBucket extends ItemBLBucket {
-    private static final List<Fluid> BUCKETS = new ArrayList<>();
+    private static final Map<Fluid, ItemSpecificBucket> BUCKETS = new HashMap<>();
     protected final FluidStack fluidStack;
 
     public ItemSpecificBucket(Fluid fluid) {
@@ -38,11 +36,16 @@ public class ItemSpecificBucket extends ItemBLBucket {
         this.setMaxStackSize(1);
         this.fluidStack = new FluidStack(fluid, Fluid.BUCKET_VOLUME);
         MinecraftForge.EVENT_BUS.register(this);
-        BUCKETS.add(fluid);
+        BUCKETS.put(fluid, this);
     }
 
     public static boolean hasSpecificBucket(Fluid fluid) {
-        return BUCKETS.contains(fluid);
+        return BUCKETS.containsKey(fluid);
+    }
+    
+    @Nullable
+    public static ItemSpecificBucket getSpecificBucket(Fluid fluid) {
+    	return BUCKETS.get(fluid);
     }
 
     @Override
