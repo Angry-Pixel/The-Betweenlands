@@ -208,22 +208,55 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 				this.infusionColorGradientTicks = 0;
 				updateBlock = true;
 			}
-			if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
-				if (this.world.isRemote && this.currentInfusionState == 2) {
+			if (this.world.isRemote && this.infusionColorGradientTicks > 0 && this.currentInfusionState == 2) {
+				for (int i = 0; i < 10; i++) {
+					double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+					double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
+					BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
+				}
+			}
+		} else {
+			if (this.currentInfusionState != 0)
+				updateBlock = true;
+			
+			this.infusionTime = 0;
+			
+			if(this.hasIngredients() && this.temp >= 100) {
+				if (this.infusionColorGradientTicks > 0) {
+					this.infusionColorGradientTicks++;
+				}
+				
+				if (!this.world.isRemote && this.infusionColorGradientTicks == 0 && this.currentInfusionState == 0 && this.stirProgress == 89) {
+					//start gradient animation
+					this.infusionColorGradientTicks = 1;
+					this.currentInfusionState = 1;
+					this.world.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.INFUSER_FINISHED, SoundCategory.BLOCKS, 1, 1);
+					updateBlock = true;
+				}
+				
+				if (!this.world.isRemote && this.infusionColorGradientTicks > 30) {
+					this.infusionColorGradientTicks = 0;
+					this.currentInfusionState = 2;
+					updateBlock = true;
+				}
+				
+				if(this.world.isRemote && (this.infusionColorGradientTicks > 0 || this.currentInfusionState == 2)) {
+					this.prevInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
+					this.currentInfusionColor = new float[]{0.8F, 0.0F, 0.8F, 1.0F};
+				}
+				
+				if (this.world.isRemote && this.infusionColorGradientTicks > 0) {
 					for (int i = 0; i < 10; i++) {
 						double x = pos.getX() + 0.25F + this.world.rand.nextFloat() * 0.5F;
 						double z = pos.getZ() + 0.25F + this.world.rand.nextFloat() * 0.5F;
 						BLParticles.STEAM_PURIFIER.spawn(this.world, x, pos.getY() + 1.0D - this.world.rand.nextFloat() * 0.2F, z);
 					}
 				}
+			} else {
+				this.currentInfusionState = 0;
+				this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
+				this.prevInfusionColor = this.currentInfusionColor;
 			}
-		} else {
-			if (this.currentInfusionState != 0)
-				updateBlock = true;
-			this.currentInfusionState = 0;
-			this.infusionTime = 0;
-			this.currentInfusionColor = new float[]{0.2F, 0.6F, 0.4F, 1.0F};
-			this.prevInfusionColor = this.currentInfusionColor;
 		}
 		if (!this.world.isRemote && updateBlock) {
 			this.markForUpdate();

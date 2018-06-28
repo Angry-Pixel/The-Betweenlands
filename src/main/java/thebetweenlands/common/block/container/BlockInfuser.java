@@ -107,6 +107,11 @@ public class BlockInfuser extends BlockContainer {
 								if (!player.capabilities.isCreativeMode) 
 									heldItem.shrink(1);
 								world.notifyBlockUpdate(pos, state, state, 2);
+								if(tile.getWaterAmount() > 0) {
+									world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+								} else {
+									world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+								}
 								return true;
 							}
 						}
