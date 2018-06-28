@@ -432,6 +432,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		NBTTagCompound nbt = pkt.getNbtCompound();
+		this.readInventoryNBT(nbt);
 		waterTank.readFromNBT(nbt.getCompoundTag("waterTank"));
 		stirProgress = nbt.getInteger("stirProgress");
 		evaporation = nbt.getInteger("evaporation");
@@ -439,13 +440,6 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		infusionTime = nbt.getInteger("infusionTime");
 		hasInfusion = nbt.getBoolean("hasInfusion");
 		hasCrystal = nbt.getBoolean("hasCrystal");
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound itemStackCompound = nbt.getCompoundTag("slotItem" + i);
-			if (itemStackCompound != null && !itemStackCompound.getString("id").isEmpty())
-				inventory.set(i, new ItemStack(itemStackCompound));
-			else
-				inventory.set(i, ItemStack.EMPTY);
-		}
 		currentInfusionState = nbt.getInteger("infusionState");
 		infusionColorGradientTicks = nbt.getInteger("infusionColorGradientTicks");
 		this.updateInfusingRecipe();
@@ -454,6 +448,7 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 	@Override
 	public NBTTagCompound getUpdateTag() {
 		NBTTagCompound nbt = super.getUpdateTag();
+		this.writeInventoryNBT(nbt);
 		nbt.setTag("waterTank", waterTank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("stirProgress", stirProgress);
 		nbt.setInteger("evaporation", evaporation);
@@ -461,13 +456,6 @@ public class TileEntityInfuser extends TileEntityBasicInventory implements IFlui
 		nbt.setInteger("infusionTime", infusionTime);
 		nbt.setBoolean("hasInfusion", hasInfusion);
 		nbt.setBoolean("hasCrystal", hasCrystal);
-		for (int i = 0; i < getSizeInventory(); i++) {
-			NBTTagCompound itemStackCompound = new NBTTagCompound();
-			if (!inventory.get(i).isEmpty()) {
-				inventory.get(i).writeToNBT(itemStackCompound);
-			}
-			nbt.setTag("slotItem" + i, itemStackCompound);
-		}
 		nbt.setInteger("infusionState", this.currentInfusionState);
 		nbt.setInteger("infusionColorGradientTicks", this.infusionColorGradientTicks);
 		return nbt;

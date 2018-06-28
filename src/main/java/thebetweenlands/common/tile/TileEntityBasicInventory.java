@@ -31,7 +31,10 @@ public class TileEntityBasicInventory extends TileEntity implements ISidedInvent
 
 			@Override
 			protected void onContentsChanged(int slot) {
-				TileEntityBasicInventory.this.markDirty();
+				// Don't mark dirty while loading chunk!
+				if(TileEntityBasicInventory.this.hasWorld()) {
+					TileEntityBasicInventory.this.markDirty();
+				}
 			}
 		};
 		this.name = name;
