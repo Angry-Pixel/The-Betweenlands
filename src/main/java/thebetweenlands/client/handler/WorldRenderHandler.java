@@ -73,12 +73,14 @@ public class WorldRenderHandler {
 		double renderViewY = MC.getRenderManager().viewerPosY;
 		double renderViewZ = MC.getRenderManager().viewerPosZ;
 
+		Framebuffer mainFramebuffer = MC.getFramebuffer();
+		
 		int parentFboId = -1;
 		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			parentFboId = RenderUtils.getBoundFramebuffer();
 		}
 		if(parentFboId == -1) {
-			parentFboId = MC.getFramebuffer().framebufferObject;
+			parentFboId = mainFramebuffer.framebufferObject;
 		}
 		
 		///// Wisps /////
@@ -152,34 +154,41 @@ public class WorldRenderHandler {
 		FIREFLIES.clear();
 
 		//Gas clouds
-		if(ShaderHelper.INSTANCE.isWorldShaderActive() && !GAS_CLOUDS.isEmpty()) {
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
 			GeometryBuffer fbo = ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer();
-			if(fbo != null && fbo.isInitialized()) {
-				GlStateManager.enableBlend();
-				GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
-				GlStateManager.depthMask(true);
-				GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+			if(fbo != null) {
+				fbo.updateGeometryBuffer(mainFramebuffer.framebufferWidth, mainFramebuffer.framebufferHeight);
+				fbo.clear(0, 0, 0, 0, 1);
 				
-				//Render particles to gas fbo
-				fbo.bind();
-	
-				MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
-				
-				vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-	
-				for (Pair<Pair<RenderGasCloud, EntityGasCloud>, Vec3d> e : GAS_CLOUDS) {
-					RenderGasCloud renderer = e.getKey().getKey();
-					EntityGasCloud entity = e.getKey().getValue();
+				if(!GAS_CLOUDS.isEmpty()) {
+					System.out.println("TEST");
 					
-					renderer.renderGasParticles(vertexBuffer, entity, partialTicks);
+					GlStateManager.enableBlend();
+					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
+					GlStateManager.depthMask(true);
+					GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+					
+					MC.getTextureManager().bindTexture(RenderGasCloud.TEXTURE);
+					
+					vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
+		
+					for (Pair<Pair<RenderGasCloud, EntityGasCloud>, Vec3d> e : GAS_CLOUDS) {
+						RenderGasCloud renderer = e.getKey().getKey();
+						EntityGasCloud entity = e.getKey().getValue();
+						
+						renderer.renderGasParticles(vertexBuffer, entity, partialTicks);
+					}
+					
+					tessellator.draw();
+		
+					OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
+					
+					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 				}
 				
-				tessellator.draw();
-	
-				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, parentFboId);
-				
-				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+				//Update gas particles depth buffer
+				fbo.updateDepthBuffer();
 			}
 		}
 		GAS_CLOUDS.clear();
@@ -204,8 +213,6 @@ public class WorldRenderHandler {
 			GL11.glEndList();
 		}
 		if(ShaderHelper.INSTANCE.isWorldShaderActive() && sphereDispList >= 0) {
-			Framebuffer mainFramebuffer = Minecraft.getMinecraft().getFramebuffer();
-
 			WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
 			if(shader != null) {
 				GeometryBuffer gBuffer = shader.getRepellerShieldBuffer();

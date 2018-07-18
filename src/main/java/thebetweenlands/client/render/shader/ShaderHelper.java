@@ -139,9 +139,9 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 	}
 
 	/**
-	 * Updates and initializes the main shader if necessary
+	 * initializes the main shader if necessary
 	 */
-	public void updateShaders(float partialTicks) {
+	public void initShaders() {
 		if(this.canUseShaders()) {
 			try {
 				if(this.worldShader == null) {
@@ -153,7 +153,19 @@ public class ShaderHelper implements IResourceManagerReloadListener {
 				if(this.toneMappingShader == null && this.isHDRActive()) {
 					this.toneMappingShader = new Tonemapper().init();
 				}
-
+			} catch(Exception ex) {
+				this.shaderError = ex;
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * Updates the main shader
+	 */
+	public void updateShaders(float partialTicks) {
+		if(this.canUseShaders()) {
+			try {
 				if(this.isRequired()) {
 					this.worldShader.updateDepthBuffer();
 					this.worldShader.updateMatrices();

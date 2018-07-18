@@ -13,6 +13,7 @@ import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -44,6 +45,8 @@ public class ShaderHandler {
 			}
 			
 			if(ShaderHelper.INSTANCE.isShaderSupported() && BetweenlandsConfig.RENDERING.useShader && canUseInWorld) {
+				ShaderHelper.INSTANCE.initShaders();
+				
 				Framebuffer framebuffer = mc.getFramebuffer();
 
 				if(!mc.gameSettings.fboEnable) {
