@@ -40,16 +40,16 @@ project.ext.isDeploymentRelease = isDeploymentEnv && ENV['DEPLOY_BUILD_TYPE'] !=
 if(isDeploymentEnv) println("Deployment environment found")
 if(isDeploymentRelease) println("Deploying a release build")
 
-if (isDeploymentEnv) project.buildnumber = ENV['DEPLOY_BUILD_NUMBER']
+if(isDeploymentEnv) project.buildnumber = ENV['DEPLOY_BUILD_NUMBER']
 
 project.ext.modid = getModIdFromJava()
 version = getVersionFromJava()
-if(isDeploymentEnv && !isDeploymentRelease) version = version + "-dev-" + project.buildnumber
-group = 'net.angrypixel'
+if(!isDeploymentRelease) version = version + (!isDeploymentRelease ? ((isDeploymentEnv ? ('-' + project.buildnumber) : '') + '-SNAPSHOT') : '') 
+group = 'angrypixel'
 archivesBaseName = 'TheBetweenlands'
 sourceCompatibility = targetCompatibility = '1.8'
 
-println(canJarBeSigned() ? "blKeyStore property found, jar files will be signed" : "No blKeyStore property found, jar files will not be signed")
+println(canJarBeSigned() ? "Keystore properties found, jar files will be signed" : "No keystore properties found, jar files will not be signed")
 
 println("Building version " + version)
 
@@ -129,7 +129,7 @@ jar {
         include '*'
     }
     
-    addMainManifestAttributes(manifest)
+    addUniversalManifestAttributes(manifest)
 }
 task signMainJar(type: SignJar, dependsOn: reobfJar) {
 	if(canJarBeSigned()) {
@@ -161,7 +161,7 @@ task serverJar(type: Jar, dependsOn: classes) {
 		exclude { e -> (e.path.contains("META-INF/") && !e.name.endsWith("_at.cfg") && !e.name.endsWith(".json"))}
 		
 	}
-	addMainManifestAttributes(manifest)
+	addServerManifestAttributes(manifest)
 }
 task signServerJar(type: SignJar, dependsOn: serverJar) {
 	if(canJarBeSigned()) {
@@ -265,14 +265,33 @@ String getModIdFromJava() {
     return "$id";
 }
 
-//Adds the main jar manifest attributes to the specified Manifest
-def addMainManifestAttributes(Manifest m) {
-    m.attributes ('FMLAT': 'thebetweenlands_at.cfg')
-    m.attributes ('ContainedDeps': coreJar.archivePath.name)
+//Adds the maven artifact attribute to the specified Manifest
+def addMavenArtifactAttribute(Manifest m, String classifier) {
+    m.attributes ([
+        'Maven-Artifact': group + ':' + archivesBaseName + ':' + project.version + ':' + classifier,
+        'Timestamp': new java.util.Date().getTime()
+    ])
+}
+//Adds the universal jar manifest attributes to the specified Manifest
+def addUniversalManifestAttributes(Manifest m) {
+    m.attributes ([
+        'FMLAT': 'thebetweenlands_at.cfg',
+        'ContainedDeps': coreJar.archivePath.name
+    ])
+    addMavenArtifactAttribute(m, 'universal')
+}
+//Adds the server jar manifest attributes to the specified Manifest
+def addServerManifestAttributes(Manifest m) {
+    m.attributes ([
+        'FMLAT': 'thebetweenlands_at.cfg',
+        'ContainedDeps': coreJar.archivePath.name
+    ])
+    addMavenArtifactAttribute(m, 'server')
 }
 //Adds the coremod manifest attributes to the specified Manifest
 def addCoreManifestAttributes(Manifest m) {
 	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
+	addMavenArtifactAttribute(m, 'core')
 }
 
 //Attempts to get a project variable and if none is found it tries to read from a system environment variable
