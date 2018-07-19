@@ -374,7 +374,7 @@ public class BetweenlandsConfig {
 		@Name("debug_mode")
 		@LangKey(LANG_PREFIX + "debug_mode")
 		@Comment("If true, enables debug mode with additional features for testing or development")
-		public boolean debug = /*!*/true/*!*/;
+		public boolean debug = ModInfo.IDE;
 
 		@Name("debug_model_loader")
 		@LangKey(LANG_PREFIX + "debug_model_loader")

@@ -2,16 +2,14 @@
 //core mod package and throws an exception if so
 
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
+	repositories {
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+	}
+	dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT' }
 }
 
 apply plugin: 'net.minecraftforge.gradle.forge'
@@ -43,43 +41,41 @@ class ClassValidator extends Remapper {
 
 class CoreModImportsValidationTask extends DefaultTask {
 	@TaskAction
-    def validate() {
-    	def coreJarFiles = project.fileTree(project.sourceSets.main.output.classesDir.path).matching {
-    		include 'thebetweenlands/core/**'
-		}
+	def validate() {
+		def coreJarFiles = project.fileTree(project.sourceSets.main.output.classesDir.path).matching { include 'thebetweenlands/core/**' }
 		coreJarFiles.visit { FileVisitDetails details ->
 			if(details.file.isFile() && details.file.name.endsWith(".class")) {
 				validateClassFile(details.file)
 			}
 		}
-    }
-    
-    def validateClassFile(File file) {
-    	file.withInputStream { is ->
-    		ClassReader classReader = new ClassReader(is);
+	}
+
+	def validateClassFile(File file) {
+		file.withInputStream { is ->
+			ClassReader classReader = new ClassReader(is);
 			final ClassValidator validator = new ClassValidator();
 			ClassVisitor visitor = new ClassVisitor(Opcodes.ASM5) {
-				@Override
-				public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
-					if(validator.cls == null) {
-						validator.cls = name;
-					}
-					super.visit(version, access, name, signature, superName, interfaces);
-				}
-			
-				@Override
-				public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-					return new MethodVisitor(Opcodes.ASM5) { };
-				}
-				
-				@Override
-				public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-					return new FieldVisitor(Opcodes.ASM5) { };
-				}
-			};
+						@Override
+						public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+							if(validator.cls == null) {
+								validator.cls = name;
+							}
+							super.visit(version, access, name, signature, superName, interfaces);
+						}
+
+						@Override
+						public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+							return new MethodVisitor(Opcodes.ASM5) { };
+						}
+
+						@Override
+						public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+							return new FieldVisitor(Opcodes.ASM5) { };
+						}
+					};
 			classReader.accept(new ClassRemapper(visitor, validator), 0);
-    	}
-    }
+		}
+	}
 }
 
 task validateCoreJar(type: CoreModImportsValidationTask) { }

@@ -15,4 +15,9 @@ public class ModInfo {
 	public static final String VERSION = "3.3.10";
 	public static final String API_VERSION = "1.10.1";
 	public static final String CONFIG_VERSION = "1.0.0"; //Increment and add updater if properties are moved/renamed or removed
+	
+	//Values are replaced by build script
+	public static final boolean IDE = /*!ide*/true/*ide!*/;
+	public static final boolean SERVER_ONLY = /*!server_only*/false/*server_only!*/;
+	
 }

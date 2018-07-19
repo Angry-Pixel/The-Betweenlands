@@ -1,322 +1,168 @@
-/*
-* See https://gist.github.com/matthewprenger/9b2da059b89433a01c1c for JAR signing.
-* TLDR:
-* 0. Requires properly set up JDK
-* 1. Generate keystore with
-*		keytool -genkey -alias <alias here> -keyalg RSA -keysize 2048 -keystore keystore.jks
-* 2. Get fingerprint <fingerprint> with 
-*		keytool -list -alias <alias here> -keystore keystore.jks
-* 3. Add following to your gradle.properties
-*		blKeyStore=/path/to/keystore.jks
-*		blKeyStoreAlias=<alias here>
-*		blKeyStorePass=<password>
-*		blKeyStoreKeyPass=<password>
-*		blKeyStoreFingerprint=<fingerprint>
-* 4. Run 'gradle build'
-*/
-
 buildscript {
-    repositories {
-        jcenter()
-        maven {
-            name = "forge"
-            url = "http://files.minecraftforge.net/maven"
-        }
-    }
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-    }
-}
-
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply from: 'validateCoreJar.gradle'
-
-project.ext.buildnumber = ''
-
-project.ext.ENV = System.getenv()
-project.ext.isDeploymentEnv = ENV['DEPLOY_ENV'] != null && "true".equals(ENV['DEPLOY_ENV'])
-project.ext.isDeploymentRelease = isDeploymentEnv && ENV['DEPLOY_BUILD_TYPE'] != null && "release".equals(ENV['DEPLOY_BUILD_TYPE'])
-
-if(isDeploymentEnv) println("Deployment environment found")
-if(isDeploymentRelease) println("Deploying a release build")
-
-if(isDeploymentEnv) project.buildnumber = ENV['DEPLOY_BUILD_NUMBER']
-
-project.ext.modid = getModIdFromJava()
-version = getVersionFromJava()
-if(!isDeploymentRelease) version = version + (!isDeploymentRelease ? ((isDeploymentEnv ? ('-' + project.buildnumber) : '') + '-SNAPSHOT') : '') 
-group = 'angrypixel'
-archivesBaseName = 'TheBetweenlands'
-sourceCompatibility = targetCompatibility = '1.8'
-
-println(canJarBeSigned() ? "Keystore properties found, jar files will be signed" : "No keystore properties found, jar files will not be signed")
-
-println("Building version " + version)
-
-minecraft {
-    version = "1.12.2-14.23.4.2705"
-    runDir = 'minecraft'
-    replace '${version}', project.version
-    replace '${mcversion}', project.minecraft.version
-    replace '/*!*/true/*!*/', 'false'
-    replace '${fingerprint}', getProjectFingerprint()
-    clientJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
-    serverJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
-	
-    // the mappings can be changed at any time, and must be in the following format.
-    // snapshot_YYYYMMDD   snapshot are built nightly.
-    // stable_#            stables are built at the discretion of the MCP team.
-    // Use non-default mappings at your own risk. they may not allways work.
-    // simply re-run your setup task after changing the mappings to update your workspace.
-    mappings = "snapshot_20171003"
-    makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-}
-
-//Processes the resources of sourceSets.main
-processResources {
-    inputs.property 'version', project.version
-    inputs.property 'mcversion', project.minecraft.version
-
-    from (sourceSets.main.resources.srcDirs) {
-        include 'mcmod.info'
-        expand 'version':project.version, 'mcversion':project.minecraft.version
-    }
-
-    from (sourceSets.main.resources.srcDirs) {
-        exclude 'mcmod.info'
-    }
-    rename '(.+_at.cfg)', 'META-INF/$1'
-}
-
-//Builds the coremod jar
-task coreJar(type: Jar) {
-    from(sourceSets.main.output) {
-        include 'thebetweenlands/core/**'
-    }
-    addCoreManifestAttributes(manifest)
-    classifier 'core'
-}
-reobf {
-    coreJar { mappingType = 'SEARGE' }
-}
-reobfCoreJar.dependsOn validateCoreJar //Validate core jar before reobf
-task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
-	if(canJarBeSigned()) {
-	    keyStore = getVariable("blKeyStore")
-	    alias = getVariable("blKeyStoreAlias")
-	    storePass = getVariable("blKeyStorePass")
-	    keyPass = getVariable("blKeyStoreKeyPass")
-	    inputFile = coreJar.archivePath
-	    outputFile = coreJar.archivePath
-    }
-}
-
-//Builds the universal jar
-jar {
-	dependsOn reobfCoreJar
-	if(canJarBeSigned()) {
-		dependsOn signCoreJar //Sign core jar *before* including!
+	repositories {
+		jcenter()
+		maven {
+			name = 'forge'
+			url = 'http://files.minecraftforge.net/maven'
+		}
 	}
-	
-    classifier = 'universal'
-    
-    exclude("pack.mcmeta")
-    exclude("pack.png")
-    exclude("thebetweenlands/core/**")
-    exclude("unused/**")
-    
-    from(coreJar.archivePath.absolutePath) {
-        include '*'
-    }
-    
-    addUniversalManifestAttributes(manifest)
-}
-task signMainJar(type: SignJar, dependsOn: reobfJar) {
-	if(canJarBeSigned()) {
-	    keyStore = getVariable("blKeyStore")
-	    alias = getVariable("blKeyStoreAlias")
-	    storePass = getVariable("blKeyStorePass")
-	    keyPass = getVariable("blKeyStoreKeyPass")
-	    inputFile = jar.archivePath
-	    outputFile = jar.archivePath
-    }
-}
-
-//Builds the server jar
-task serverJar(type: Jar, dependsOn: classes) {
-	dependsOn jar
-	classifier = 'server'
-	//sourceSets.main.output.classesDir does not work here because it contains the deobfuscated classes which we can't use
-	from (zipTree(jar.archivePath)) {
-	
-		//A list of files or folders to be excluded from the server build
-		exclude("**/assets/" + modid + "/models/**")
-		exclude("**/assets/" + modid + "/shaders/**")
-		exclude("**/assets/" + modid + "/sounds/**")
-		exclude("**/assets/" + modid + "/textures/**")
-		exclude("**/assets/" + modid + "/sounds.json")
-		exclude("**/assets/" + modid + "/blockstates/**")
-		
-		//Remove and then regenerate and resign META-INF (except AT and forge cache files)
-		exclude { e -> (e.path.contains("META-INF/") && !e.name.endsWith("_at.cfg") && !e.name.endsWith(".json"))}
-		
-	}
-	addServerManifestAttributes(manifest)
-}
-task signServerJar(type: SignJar, dependsOn: serverJar) {
-	if(canJarBeSigned()) {
-	    keyStore = getVariable("blKeyStore")
-	    alias = getVariable("blKeyStoreAlias")
-	    storePass = getVariable("blKeyStorePass")
-	    keyPass = getVariable("blKeyStoreKeyPass")
-	    inputFile = serverJar.archivePath
-	    outputFile = serverJar.archivePath
-    }
-}
-
-//Builds the source jar with all the source files of sourceSets.main
-task sourcesJar(type: Jar, dependsOn: classes) << {
-    classifier = 'src'
-    from sourceSets.main.allSource
-}
-
-//Builds the dev jar with all the output files of sourceSets.main
-task devJar(type: Jar) << {
-    classifier = 'dev'
-    from sourceSets.main.output
-}
-
-//Builds a zip file with all client side assets
-task assetsZip(type: Zip) {
-	dependsOn jar
-	classifier = 'assets'
-	destinationDir = file("$rootDir/build/libs")	
-	
-	from (sourceSets.main.output) {
-		
-		exclude("mcmod.info")
-		exclude("thebetweenlands/**")
-		exclude("assets/" + modid + "/loot_tables/**")
-		exclude("assets/" + modid + "/advancements/**")
-		exclude("assets/" + modid + "/recipes/**")
-		exclude("META-INF/**")
-		exclude("unused/**")
-		
-	}
-}
-
-build.finalizedBy serverJar
-if(canJarBeSigned()) {
-	build.finalizedBy signServerJar
-	build.dependsOn signMainJar, signCoreJar
-}
-
-artifacts {
-    archives assetsZip/*, sourcesJar, devJar*/
+	dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT' }
 }
 
 //Returns whether the private keystore for signing is available and if the jar should be signed
-boolean canJarBeSigned() {
-	return getVariable("blKeyStore") != null && (!isDeploymentEnv || isDeploymentRelease)
+project.ext.canJarBeSigned = {
+	return getVariable('blKeyStore') != null && (!isDeploymentEnv || isDeploymentRelease)
 }
 
 //Returns the public fingerprint, may be empty ("")
-String getProjectFingerprint() {
+project.ext.getProjectFingerprint = {
 	if(canJarBeSigned()) {
-		return getVariable("blKeyStoreFingerprint").replaceAll(":", "").toLowerCase()
+		return getVariable('blKeyStoreFingerprint').replaceAll(':', '').toLowerCase()
 	}
-	return ""
+	return ''
 }
 
 //Returns the current version by reading directly from the ModInfo.java file
-String getVersionFromJava() {
-    String major = "0";
-    String revision = "0";
-    String patch = "0";
-    String prefix = "public static final String VERSION = \"";
-    File file = file("src/main/java/thebetweenlands/common/lib/ModInfo.java")
-    file.eachLine { String s ->
-        s = s.trim();
-        if (s.startsWith(prefix)) {
-            s = s.substring(prefix.length(), s.length() - 2);
-            String[] pts = s.split("\\.");
+project.ext.getVersionFromJava = {
+	String major = '0';
+	String revision = '0';
+	String patch = '0';
+	String prefix = 'public static final String VERSION = "';
+	File file = file('src/main/java/thebetweenlands/common/lib/ModInfo.java')
+	file.eachLine { String s ->
+		s = s.trim();
+		if (s.startsWith(prefix)) {
+			s = s.substring(prefix.length(), s.length() - 2);
+			String[] pts = s.split('\\.');
 
-            major = pts[0];
-            revision = pts[1];
-            patch = pts[2];
-        }
-    }
+			major = pts[0];
+			revision = pts[1];
+			patch = pts[2];
+		}
+	}
 
-    return "$major.$revision.$patch";
+	return "$major.$revision.$patch";
 }
 
 //Returns the mod ID by reading directly from the ModInfo.java file
-String getModIdFromJava() {
-    String id = "N/A";
-    String prefix = "public static final String ID = \"";
-    File file = file("src/main/java/thebetweenlands/common/lib/ModInfo.java")
-    file.eachLine { String s ->
-        s = s.trim();
-        if (s.startsWith(prefix)) {
-            id = s.substring(prefix.length(), s.length() - 2);
-        }
-    }
+project.ext.getModIdFromJava = {
+	String id = 'N/A';
+	String prefix = 'public static final String ID = "';
+	File file = file('src/main/java/thebetweenlands/common/lib/ModInfo.java')
+	file.eachLine { String s ->
+		s = s.trim();
+		if (s.startsWith(prefix)) {
+			id = s.substring(prefix.length(), s.length() - 2);
+		}
+	}
 
-    return "$id";
-}
-
-//Adds the maven artifact attribute to the specified Manifest
-def addMavenArtifactAttribute(Manifest m, String classifier) {
-    m.attributes ([
-        'Maven-Artifact': group + ':' + archivesBaseName + ':' + project.version + ':' + classifier,
-        'Timestamp': new java.util.Date().getTime()
-    ])
-}
-//Adds the universal jar manifest attributes to the specified Manifest
-def addUniversalManifestAttributes(Manifest m) {
-    m.attributes ([
-        'FMLAT': 'thebetweenlands_at.cfg',
-        'ContainedDeps': coreJar.archivePath.name
-    ])
-    addMavenArtifactAttribute(m, 'universal')
-}
-//Adds the server jar manifest attributes to the specified Manifest
-def addServerManifestAttributes(Manifest m) {
-    m.attributes ([
-        'FMLAT': 'thebetweenlands_at.cfg',
-        'ContainedDeps': coreJar.archivePath.name
-    ])
-    addMavenArtifactAttribute(m, 'server')
-}
-//Adds the coremod manifest attributes to the specified Manifest
-def addCoreManifestAttributes(Manifest m) {
-	m.attributes ('FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin')
-	addMavenArtifactAttribute(m, 'core')
+	return "$id";
 }
 
 //Attempts to get a project variable and if none is found it tries to read from a system environment variable
-def getVariable(String key) {
+project.ext.getVariable = { key ->
 	return project.hasProperty(key) ? project.property(key) : ENV[key];
 }
 
-//Add dependencies
-repositories {
-    maven {
-        name = "CurseForge"
-        url = "https://minecraft.curseforge.com/api/maven/"
-    }
-    maven {
-        name = "Progwml6 maven"
-        url = "http://dvs1.progwml6.com/files/maven"
-    }
-    maven {
-        name = "ModMaven"
-        url = "modmaven.k-4u.nl"
-    }
-}
-dependencies {
-	deobfCompile 'tombmanygraves-2-api:tombmanygraves2api:1.12.2:1.0.0'
+project.ext.ENV = System.getenv()
+project.ext.isDeploymentEnv = ENV['DEPLOY_ENV'] != null && 'true'.equals(ENV['DEPLOY_ENV'])
+project.ext.isDeploymentRelease = project.isDeploymentEnv && ENV['DEPLOY_BUILD_TYPE'] != null && 'release'.equals(ENV['DEPLOY_BUILD_TYPE'])
+project.ext.buildnumber = project.isDeploymentEnv ? ENV['DEPLOY_BUILD_NUMBER'] : ''
+
+project.ext.modid = project.getModIdFromJava()
+
+allprojects {
+	version = project.getVersionFromJava()
+	if(!isDeploymentRelease) version = version + (!project.isDeploymentRelease ? ((project.isDeploymentEnv ? ('-' + project.buildnumber) : '') + '-SNAPSHOT') : '')
+
+	apply plugin: 'net.minecraftforge.gradle.forge'
 	
-    deobfCompile "mezz.jei:jei_1.12.2:4.8.5.147:api"
-    runtime "mezz.jei:jei_1.12.2:4.8.5.147"
+	minecraft {
+		version = "1.12.2-14.23.4.2705"
+		runDir = 'minecraft'
+		replace '${version}', project.version
+		replace '${mcversion}', project.minecraft.version
+		replace '/*!ide*/true/*ide!*/', 'false'
+		replace '${fingerprint}', getProjectFingerprint()
+		clientJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
+		serverJvmArgs = ['-Dfml.coreMods.load=thebetweenlands.core.TheBetweenlandsLoadingPlugin']
+
+		// the mappings can be changed at any time, and must be in the following format.
+		// snapshot_YYYYMMDD   snapshot are built nightly.
+		// stable_#            stables are built at the discretion of the MCP team.
+		// Use non-default mappings at your own risk. they may not allways work.
+		// simply re-run your setup task after changing the mappings to update your workspace.
+		mappings = "snapshot_20171003"
+		makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+	}
 }
+
+//Don't build jar for root project
+tasks.remove(tasks.build)
+
+subprojects {
+	//Don't set up dev env for subprojects
+	tasks.remove(tasks.setupCiWorkspace)
+	tasks.remove(tasks.setupDevWorkspace)
+	tasks.remove(tasks.setupDecompWorkspace)
+	tasks.remove(tasks.eclipse)
+	tasks.remove(tasks.idea)
+
+	apply from: new File(rootProject.projectDir, 'dependencies.gradle')
+
+	archivesBaseName = 'TheBetweenlands'
+	sourceCompatibility = targetCompatibility = '1.8'
+
+	group = 'angrypixel'
+
+	//Move build dir into root's build folder
+	buildDir = new File(rootProject.projectDir, 'build/' + project.name + '/build/')
+
+	//Set sourceSets.main to root's sourceSets.main
+	sourceSets {
+		main {
+			java {
+				srcDir new File(rootProject.projectDir, 'src/main/java')
+			}
+			resources {
+				srcDir new File(rootProject.projectDir, 'src/main/resources')
+			}
+		}
+	}
+
+	//Processes the resources of sourceSets.main
+	processResources {
+		inputs.property 'version', project.version
+		inputs.property 'mcversion', project.minecraft.version
+
+		from (sourceSets.main.resources.srcDirs) {
+			include 'mcmod.info'
+			expand 'version':project.version, 'mcversion':project.minecraft.version
+		}
+
+		from (sourceSets.main.resources.srcDirs) { exclude 'mcmod.info' }
+		rename '(.+_at.cfg)', 'META-INF/$1'
+	}
+
+	//Set destination dir of all subprojects to build/libs/
+	jar {
+		destinationDir = new File(rootProject.projectDir, 'build/libs/')
+	}
+
+	//Adds the maven artifact attribute to the specified Manifest
+	project.ext.addMavenArtifactAttribute = { m, classifier ->
+		m.attributes ([
+			'Maven-Artifact': group + ':' + archivesBaseName + ':' + project.version + ':' + classifier,
+			'Timestamp': new java.util.Date().getTime()
+		])
+	}
+}
+
+if(isDeploymentEnv) println('Deployment environment found')
+if(isDeploymentRelease) println('Deploying a release build')
+
+println(canJarBeSigned() ? 'Keystore properties found, jar files will be signed' : 'No keystore properties found, jar files will not be signed')
+
+println('Building version ' + version)
+
+apply from: 'projects.gradle'

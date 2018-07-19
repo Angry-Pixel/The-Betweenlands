@@ -1,0 +1,190 @@
+project(':universal') {
+	apply from: new File(rootProject.projectDir, 'validateCoreJar.gradle')
+
+	//Adds the universal jar manifest attributes to the specified Manifest
+	project.ext.addUniversalManifestAttributes = { m ->
+		m.attributes ([
+			'FMLAT': 'thebetweenlands_at.cfg',
+			'ContainedDeps': coreJar.archivePath.name,
+			'ModSide': 'BOTH'
+		])
+		addMavenArtifactAttribute(m, 'universal')
+	}
+
+	//Adds the universal coremod manifest attributes to the specified Manifest
+	project.ext.addUniversalCoreManifestAttributes = { m ->
+		m.attributes ([
+			'FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin',
+			'ModSide': 'BOTH'
+		])
+		addMavenArtifactAttribute(m, 'core')
+	}
+
+	//Builds the universal coremod jar
+	task coreJar(type: Jar) {
+		classifier 'core'
+		from(sourceSets.main.output) { include 'thebetweenlands/core/**' }
+		project.addUniversalCoreManifestAttributes(manifest)
+	}
+
+	reobf { coreJar { mappingType = 'SEARGE' } }
+	reobfCoreJar.dependsOn validateCoreJar //Validate core jar before reobf
+
+	task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
+		if(canJarBeSigned()) {
+			keyStore = getVariable('blKeyStore')
+			alias = getVariable('blKeyStoreAlias')
+			storePass = getVariable('blKeyStorePass')
+			keyPass = getVariable('blKeyStoreKeyPass')
+			inputFile = coreJar.archivePath
+			outputFile = coreJar.archivePath
+		}
+	}
+
+	//Builds the universal jar
+	jar {
+		dependsOn reobfCoreJar
+		if(canJarBeSigned()) dependsOn signCoreJar //Sign core jar *before* including!
+
+		classifier 'universal'
+
+		exclude('pack.mcmeta')
+		exclude('pack.png')
+		exclude('thebetweenlands/core/**')
+		exclude('unused/**')
+
+		from(coreJar.archivePath.absolutePath) { include '*' }
+
+		project.addUniversalManifestAttributes(manifest)
+	}
+
+	task signMainJar(type: SignJar, dependsOn: reobfJar) {
+		if(canJarBeSigned()) {
+			keyStore = getVariable('blKeyStore')
+			alias = getVariable('blKeyStoreAlias')
+			storePass = getVariable('blKeyStorePass')
+			keyPass = getVariable('blKeyStoreKeyPass')
+			inputFile = jar.archivePath
+			outputFile = jar.archivePath
+		}
+	}
+
+	if(canJarBeSigned()) build.finalizedBy signMainJar
+
+	//Builds the source jar with all the source files of sourceSets.main
+	task sourcesJar(type: Jar, dependsOn: classes) << {
+		classifier = 'src'
+		from sourceSets.main.allSource
+	}
+
+	//Builds the dev jar with all the output files of sourceSets.main
+	task devJar(type: Jar) << {
+		classifier = 'dev'
+		from sourceSets.main.output
+	}
+
+	//Builds a zip file with all client side assets
+	task assetsZip(type: Zip) {
+		dependsOn jar
+		classifier = 'assets'
+		destinationDir = new File(rootProject.projectDir, 'build/libs/')
+
+		from (sourceSets.main.output) {
+
+			exclude('mcmod.info')
+			exclude('thebetweenlands/**')
+			exclude("assets/${modid}/loot_tables/**")
+			exclude("assets/${modid}/advancements/**")
+			exclude("assets/${modid}/recipes/**")
+			exclude('META-INF/**')
+			exclude('unused/**')
+
+		}
+	}
+
+	artifacts { archives assetsZip/*, sourcesJar, devJar*/ }
+}
+
+project(':server') {
+	apply from: new File(rootProject.projectDir, 'validateCoreJar.gradle')
+
+	minecraft { replace '/*!server_only*/false/*server_only!*/', 'true' }
+
+	//Adds the server jar manifest attributes to the specified Manifest
+	project.ext.addServerManifestAttributes = { m ->
+		m.attributes ([
+			'FMLAT': 'thebetweenlands_at.cfg',
+			'ContainedDeps': coreJar.archivePath.name,
+			'ModSide': 'SERVER'
+		])
+		addMavenArtifactAttribute(m, 'server')
+	}
+	
+	//Adds the server coremod manifest attributes to the specified Manifest
+	project.ext.addServerCoreManifestAttributes = { m ->
+		m.attributes ([
+			'FMLCorePlugin': 'thebetweenlands.core.TheBetweenlandsLoadingPlugin',
+			'ModSide': 'SERVER'
+		])
+		addMavenArtifactAttribute(m, 'core')
+	}
+
+	//Builds the server coremod jar
+	task coreJar(type: Jar) {
+		classifier 'core'
+		from(sourceSets.main.output) { include 'thebetweenlands/core/**' }
+		project.addServerCoreManifestAttributes(manifest)
+	}
+
+	reobf { coreJar { mappingType = 'SEARGE' } }
+	reobfCoreJar.dependsOn validateCoreJar //Validate core jar before reobf
+
+	task signCoreJar(type: SignJar, dependsOn: reobfCoreJar) {
+		if(canJarBeSigned()) {
+			keyStore = getVariable('blKeyStore')
+			alias = getVariable('blKeyStoreAlias')
+			storePass = getVariable('blKeyStorePass')
+			keyPass = getVariable('blKeyStoreKeyPass')
+			inputFile = coreJar.archivePath
+			outputFile = coreJar.archivePath
+		}
+	}
+
+	//Builds the server jar
+	jar {
+		dependsOn reobfCoreJar
+		if(canJarBeSigned()) dependsOn signCoreJar //Sign core jar *before* including!
+
+		classifier 'server'
+
+		exclude('pack.mcmeta')
+		exclude('pack.png')
+		exclude('thebetweenlands/core/**')
+		exclude('unused/**')
+
+		//A list of files or folders to be excluded from the server build
+		exclude("assets/${modid}/models/**")
+		exclude("assets/${modid}/shaders/**")
+		exclude("assets/${modid}/sounds/**")
+		exclude("assets/${modid}/textures/**")
+		exclude("assets/${modid}/sounds.json")
+		exclude("assets/${modid}/blockstates/**")
+
+		from(coreJar.archivePath.absolutePath) { include '*' }
+
+		project.addServerManifestAttributes(manifest)
+	}
+
+	task signMainJar(type: SignJar, dependsOn: reobfJar) {
+		if(canJarBeSigned()) {
+			keyStore = getVariable('blKeyStore')
+			alias = getVariable('blKeyStoreAlias')
+			storePass = getVariable('blKeyStorePass')
+			keyPass = getVariable('blKeyStoreKeyPass')
+			inputFile = jar.archivePath
+			outputFile = jar.archivePath
+		}
+	}
+
+	if(canJarBeSigned()) build.finalizedBy signMainJar
+}

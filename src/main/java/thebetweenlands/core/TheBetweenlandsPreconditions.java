@@ -1,8 +1,9 @@
 package thebetweenlands.core;
 
+import thebetweenlands.common.lib.ModInfo;
+
 public final class TheBetweenlandsPreconditions {
-	@SuppressWarnings("unused")
-	private static final String MCT_MSG = /*!*/true/*!*/ ?
+	private static final String MCT_MSG = ModInfo.IDE ?
 			"\nHey there modder! It appears you're missing something rather important.\n" + 
 			"Could it perhaps be TheBetweenlandsLoadingPlugin? Of course it is! All you\n" +
 			"have to do is add this VM arg:\n" +
