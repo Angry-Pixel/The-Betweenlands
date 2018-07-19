@@ -95,6 +95,8 @@ allprojects {
 		mappings = "snapshot_20171003"
 		makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 	}
+	
+	apply from: new File(rootProject.projectDir, 'dependencies.gradle')
 }
 
 //Don't build jar for root project
@@ -107,8 +109,6 @@ subprojects {
 	tasks.remove(tasks.setupDecompWorkspace)
 	tasks.remove(tasks.eclipse)
 	tasks.remove(tasks.idea)
-
-	apply from: new File(rootProject.projectDir, 'dependencies.gradle')
 
 	archivesBaseName = 'TheBetweenlands'
 	sourceCompatibility = targetCompatibility = '1.8'
