@@ -14,10 +14,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
@@ -29,6 +31,7 @@ import thebetweenlands.common.inventory.container.ContainerDruidAltar;
 import thebetweenlands.common.inventory.container.ContainerMortar;
 import thebetweenlands.common.inventory.container.ContainerPouch;
 import thebetweenlands.common.inventory.container.ContainerPurifier;
+import thebetweenlands.common.inventory.container.ContainerRuneChainAltar;
 import thebetweenlands.common.inventory.container.ContainerWeedwoodWorkbench;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.tile.TileEntityAnimator;
@@ -37,6 +40,7 @@ import thebetweenlands.common.tile.TileEntityBLFurnace;
 import thebetweenlands.common.tile.TileEntityDruidAltar;
 import thebetweenlands.common.tile.TileEntityMortar;
 import thebetweenlands.common.tile.TileEntityPurifier;
+import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 import thebetweenlands.common.tile.TileEntityWisp;
 
@@ -54,7 +58,8 @@ public class CommonProxy implements IGuiHandler {
 	public static final int GUI_LURKER_POUCH = 11;
 	public static final int GUI_LURKER_POUCH_NAMING = 13;
 	public static final int GUI_LURKER_POUCH_KEYBIND = 14;
-
+	public static final int GUI_RUNE_CHAIN_ALTAR = 15;
+	
 	@Override
 	public Object getServerGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -124,6 +129,12 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_LURKER_POUCH_NAMING:
 			return new ContainerPouch(player, player.inventory, null);
 
+		case GUI_RUNE_CHAIN_ALTAR:
+			if (tile instanceof TileEntityRuneChainAltar) {
+				return new ContainerRuneChainAltar(player.inventory, (TileEntityRuneChainAltar) tile);
+			}
+			break;
+			
 		}
 		return null;
 	}
@@ -203,6 +214,10 @@ public class CommonProxy implements IGuiHandler {
     
     @Nullable
     public Proxy getNetProxy() {
+    	MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
+    	if(server != null) {
+    		return server.getServerProxy();
+    	}
     	return null;
     }
     

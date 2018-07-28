@@ -52,6 +52,7 @@ import thebetweenlands.client.gui.inventory.GuiDruidAltar;
 import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
+import thebetweenlands.client.gui.inventory.GuiRuneChainAltar;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
 import thebetweenlands.client.gui.menu.GuiBLMainMenu;
 import thebetweenlands.client.gui.menu.GuiDownloadTerrainBetweenlands;
@@ -240,6 +241,7 @@ import thebetweenlands.common.tile.TileEntityMudFlowerPot;
 import thebetweenlands.common.tile.TileEntityPossessedBlock;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
+import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -339,8 +341,14 @@ public class ClientProxy extends CommonProxy implements IResourceManagerReloadLi
 
 		case GUI_LORE:
 			return new GuiLorePage(player.getHeldItem(x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND));
+		
+		case GUI_RUNE_CHAIN_ALTAR:
+			if (tile instanceof TileEntityRuneChainAltar) {
+				return new GuiRuneChainAltar(player, (TileEntityRuneChainAltar) tile);
+			}
+			break;
 		}
-
+		
 		return null;
 	}
 

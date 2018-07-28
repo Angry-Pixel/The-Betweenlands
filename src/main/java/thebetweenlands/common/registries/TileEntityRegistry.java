@@ -26,6 +26,7 @@ import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.tile.TileEntityPurifier;
 import thebetweenlands.common.tile.TileEntityRepeller;
 import thebetweenlands.common.tile.TileEntityRubberTap;
+import thebetweenlands.common.tile.TileEntityRuneChainAltar;
 import thebetweenlands.common.tile.TileEntitySpikeTrap;
 import thebetweenlands.common.tile.TileEntityTarLootPot1;
 import thebetweenlands.common.tile.TileEntityTarLootPot2;
@@ -73,6 +74,7 @@ public class TileEntityRegistry {
 		registerTileEntity(TileEntityAspectrusCrop.class, "aspectrus_crop");
 		registerTileEntity(TileEntityRepeller.class, "repeller");
 		registerTileEntity(TileEntityPresent.class, "present");
+		registerTileEntity(TileEntityRuneChainAltar.class, "rune_chain_altar");
 	}
 
 	private static void registerTileEntity(Class<? extends TileEntity> cls, String baseName) {

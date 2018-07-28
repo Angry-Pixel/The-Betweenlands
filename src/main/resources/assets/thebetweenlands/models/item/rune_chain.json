@@ -1,0 +1,6 @@
+{
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "thebetweenlands:items/strictly_herblore/runes/rune_chain"
+	}
+}

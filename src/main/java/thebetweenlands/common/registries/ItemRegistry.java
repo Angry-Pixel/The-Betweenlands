@@ -37,6 +37,10 @@ import thebetweenlands.common.entity.mobs.EntitySmollSludge;
 import thebetweenlands.common.entity.mobs.EntitySporeling;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityWight;
+import thebetweenlands.common.herblore.rune.RuneDestroyBlock;
+import thebetweenlands.common.herblore.rune.RuneDestroyBlocks;
+import thebetweenlands.common.herblore.rune.RuneMarkArea;
+import thebetweenlands.common.herblore.rune.RuneSelectGrass;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.item.armor.ItemBoneArmor;
 import thebetweenlands.common.item.armor.ItemExplorersHat;
@@ -86,6 +90,8 @@ import thebetweenlands.common.item.herblore.ItemDentrothystVial;
 import thebetweenlands.common.item.herblore.ItemElixir;
 import thebetweenlands.common.item.herblore.ItemManualHL;
 import thebetweenlands.common.item.herblore.ItemPlantDrop;
+import thebetweenlands.common.item.herblore.ItemRune;
+import thebetweenlands.common.item.herblore.ItemRuneChain;
 import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemAngryPebble;
 import thebetweenlands.common.item.misc.ItemBLRecord;
@@ -379,6 +385,12 @@ public class ItemRegistry {
     private static final List<ItemStack> ORES = new ArrayList<ItemStack>();
     private static final List<ItemStack> INGOTS = new ArrayList<ItemStack>();
 
+    public static final Item RUNE_CHAIN = new ItemRuneChain();
+    public static final Item TEST_RUNE_DESTROY_BLOCK = new ItemRune(new RuneDestroyBlock.Blueprint());
+    public static final Item TEST_RUNE_DESTROY_BLOCKS = new ItemRune(new RuneDestroyBlocks.Blueprint());
+    public static final Item TEST_RUNE_MARK_AREA = new ItemRune(new RuneMarkArea.Blueprint());
+    public static final Item TEST_RUNE_SELECT_GRASS = new ItemRune(new RuneSelectGrass.Blueprint());
+    
     private ItemRegistry() {
 
     }

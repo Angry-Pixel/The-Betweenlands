@@ -38,6 +38,8 @@ import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
 import thebetweenlands.common.network.serverbound.MessagePouchNaming;
 import thebetweenlands.common.network.serverbound.MessageRow;
+import thebetweenlands.common.network.serverbound.MessageSetRuneChainAltarPage;
+import thebetweenlands.common.network.serverbound.MessageShiftRuneChainAltarSlot;
 import thebetweenlands.common.network.serverbound.MessageUpdatePuppeteerState;
 import thebetweenlands.common.network.serverbound.MessageUpdateSummoningState;
 
@@ -78,6 +80,8 @@ public class MessageRegistry {
 		registerMessage(MessageUpdateSummoningState.class, Side.SERVER);
 		registerMessage(MessageRow.class, Side.SERVER);
 		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
+		registerMessage(MessageSetRuneChainAltarPage.class, Side.SERVER);
+		registerMessage(MessageShiftRuneChainAltarSlot.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {
