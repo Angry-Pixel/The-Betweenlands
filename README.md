@@ -99,7 +99,19 @@ If you do not follow these rules your issues will be closed and ignored.
   <img src="http://i.imgur.com/5AgEXax.png">
 </p>
 
-<p align="center"><b>Features include</b></p>
+<p align="center"><b>For Developers</b></p>
+<ul>
+  <li>Creating a release build: Tag the last commit on the Minecraft version's main branch to include in the build with <code>v&lt;version&gt;-release</code> (replace <code>&lt;version&gt;</code> with the version to build).</li>
+  <li>Currently unused assets can be found here: https://drive.google.com/drive/folders/1iQpbcuUen6Xa7a06Zor6wYVYuY4mnp4Q.</li>
+</ul>
+
+<br>
+
+<p align="center">
+  <img src="http://i.imgur.com/5AgEXax.png">
+</p>
+
+<p align="center"><b>Features Include</b></p>
 <ul>
   <li>A complete independent survival experience with hours of gameplay</li>
   <li>A whole new dimension to survive in</li>
