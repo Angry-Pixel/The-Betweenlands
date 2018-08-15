@@ -477,13 +477,13 @@ public class ItemRegistry {
 		OreDictionary.registerOre("gemGreenMiddleGem", new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
 		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL));
 
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG, 1, OreDictionary.WILDCARD_VALUE));
 
 		//Recipes that use and creates these conflicts with vanilla recipes because of ore dict
 		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
