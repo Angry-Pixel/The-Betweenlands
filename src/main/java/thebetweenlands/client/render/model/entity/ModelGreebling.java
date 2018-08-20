@@ -2,6 +2,7 @@ package thebetweenlands.client.render.model.entity;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import org.lwjgl.opengl.GL11;
 import thebetweenlands.client.render.model.MowzieModelBase;
 import thebetweenlands.client.render.model.MowzieModelRenderer;
 import thebetweenlands.common.entity.mobs.EntityChiromaw;
@@ -186,8 +187,14 @@ public class ModelGreebling extends MowzieModelBase{
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        EntityGreebling greebling = (EntityGreebling) entity;
         this.cup.render(f5);
+        float disappearFrame = greebling.disappearTimer > 0 ? (float)Math.pow(greebling.disappearTimer/8f, 4) : 0;
+        float scaleXZ = 1 - disappearFrame;
+        float scaleY = 1 + 0.1f * disappearFrame;
+        GL11.glScalef(scaleXZ, scaleY, scaleXZ);
         this.root.render(f5);
+        GL11.glScalef(1/scaleXZ, 1/scaleY, 1/scaleXZ);
     }
 
     /**
@@ -212,5 +219,10 @@ public class ModelGreebling extends MowzieModelBase{
         flap(legright1, swaySpeed, 0.15f, true, 0, 0, frame, 1f);
         chest.rotationPointY += Math.sin((frame - 3) * swaySpeed * 2) * 0.25;
         flap(head1, swaySpeed * 4, 0.075f, false, 0, 0, frame, 1f);
+
+        float disappearFrame = greebling.disappearTimer > 0 ? greebling.disappearTimer + partialRenderTicks : 0;
+
+        body_base.rotationPointY -= 16 * Math.pow(disappearFrame/8f, 1.5);
+        body_base.rotateAngleY += Math.pow(5* disappearFrame/8f, 1.4);
     }
 }
