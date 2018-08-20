@@ -12,7 +12,8 @@ import thebetweenlands.common.entity.mobs.EntityGreebling;
 
 @SideOnly(Side.CLIENT)
 public class RenderGreebling extends RenderLiving<EntityGreebling> {
-	public static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/entity/greebling_1.png");
+	public static final ResourceLocation TEXTURE_0 = new ResourceLocation("thebetweenlands:textures/entity/greebling_0.png");
+	public static final ResourceLocation TEXTURE_1 = new ResourceLocation("thebetweenlands:textures/entity/greebling_1.png");
 
 	public RenderGreebling(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelGreebling(), 0.2F);
@@ -20,6 +21,11 @@ public class RenderGreebling extends RenderLiving<EntityGreebling> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityGreebling entity) {
-		return TEXTURE;
+		if (entity.getType() == 0) {
+			return TEXTURE_0;
+		}
+		else {
+			return TEXTURE_1;
+		}
 	}
 }
