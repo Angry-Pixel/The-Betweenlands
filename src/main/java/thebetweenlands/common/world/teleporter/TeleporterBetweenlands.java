@@ -606,13 +606,19 @@ public final class TeleporterBetweenlands extends Teleporter {
 	}
 
 	protected Chunk getDecoratedChunk(World world, BlockPos pos) {
-		int cx = pos.getX() >> 4;
-		int cz = pos.getZ() >> 4;
-		for(int xo = -1; xo <= 1; xo++) {
-			for(int zo = -1; zo <= 1; zo++) {
-				world.getChunkFromChunkCoords(cx + xo, cz + zo);
+		BlockPos.PooledMutableBlockPos mutableBlockPos = BlockPos.PooledMutableBlockPos.retain();
+		int bx = pos.getX();
+		int by = pos.getY();
+		int bz = pos.getZ();
+		for (int xo = -16; xo <= 16; xo += 16) {
+			for (int yo = -16; yo <= 16; yo += 16) {
+				for (int zo = -16; zo <= 16; zo += 16) {
+					mutableBlockPos.setPos(bx + xo, by + yo, bz + zo);
+					world.getBlockState(mutableBlockPos);
+				}
 			}
 		}
+		mutableBlockPos.release();
 		return world.getChunkFromBlockCoords(pos);
 	}
 	
