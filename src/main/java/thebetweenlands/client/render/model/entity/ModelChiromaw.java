@@ -3,6 +3,7 @@ package thebetweenlands.client.render.model.entity;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.CullFace;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.math.MathHelper;
@@ -240,8 +241,22 @@ public class ModelChiromaw extends MowzieModelBase {
             GlStateManager.rotate(40, 1F, 0F, 0.0F);
             GlStateManager.translate(0.0F, 0F, -0.8F);
         }
+        
+        GlStateManager.enableCull();
+        GlStateManager.cullFace(CullFace.FRONT);
+        wing_left1.showModel = false;
+        wing_left2.showModel = false;
+        wing_right1.showModel = false;
+        wing_right2.showModel = false;
         body_base.render(unitPixel);
-
+        wing_left1.showModel = true;
+        wing_left2.showModel = true;
+        wing_right1.showModel = true;
+        wing_right2.showModel = true;
+        GlStateManager.cullFace(CullFace.BACK);
+        body_base.render(unitPixel);
+        GlStateManager.disableCull();
+        
         GlStateManager.popMatrix();
     }
 
