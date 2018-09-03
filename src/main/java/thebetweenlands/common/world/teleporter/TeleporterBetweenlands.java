@@ -93,6 +93,12 @@ public final class TeleporterBetweenlands extends Teleporter {
         } else {
         	// Stupid end special cases D:<
         	
+        	BlockPos spawn = this.toWorld.getSpawnCoordinate();
+        	
+        	if(spawn != null) {
+        		entity.moveToBlockPosAndAngles(spawn, entity.rotationYaw, entity.rotationPitch);
+        	}
+        	
             int x = MathHelper.floor(entity.posX);
             int y = MathHelper.floor(entity.posY) - 1;
             int z = MathHelper.floor(entity.posZ);
