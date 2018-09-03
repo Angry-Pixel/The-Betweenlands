@@ -25,7 +25,7 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
 
-	private boolean cancelOverlays = false;
+	private boolean cancelTransparentOverlays = false;
 
 	@SubscribeEvent
 	public void onPreRenderShaders(PreRenderShadersEvent event) {
@@ -75,10 +75,10 @@ public class ShaderHandler {
 			GlStateManager.pushMatrix();
 			GlStateManager.colorMask(false, false, false, false);
 			//Don't render water overlays so they don't write to the depth buffer
-			this.cancelOverlays = true;
+			this.cancelTransparentOverlays = true;
 			Minecraft.getMinecraft().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
 			Minecraft.getMinecraft().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-			this.cancelOverlays = false;
+			this.cancelTransparentOverlays = false;
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.popMatrix();
 
@@ -89,7 +89,7 @@ public class ShaderHandler {
 
 	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
-		if(this.cancelOverlays) {
+		if(this.cancelTransparentOverlays && event.getOverlayType() == OverlayType.WATER) {
 			event.setCanceled(true);
 		}
 	}
