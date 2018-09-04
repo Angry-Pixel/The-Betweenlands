@@ -39,7 +39,7 @@ public class BiomeDecoratorMarsh extends BiomeDecoratorBetweenlands {
 		this.endProfilerSection();
 
 		this.startProfilerSection("smallRuinsCluster");
-		this.generate(2.5F, DecorationHelper::generateSmallRuinsCluster);
+		this.generate(2.2F, DecorationHelper::generateSmallRuinsCluster);
 		this.endProfilerSection();
 
 		this.startProfilerSection("phragmites");
