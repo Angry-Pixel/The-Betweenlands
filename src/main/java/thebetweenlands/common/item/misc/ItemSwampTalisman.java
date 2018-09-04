@@ -144,25 +144,29 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 			boolean sapling = this.isBlockSapling(worldIn, playerIn, state, pos, facing, hitX, hitY, hitZ);
 			if ((sapling || isCustomListed) && (EnumTalisman.SWAMP_TALISMAN_0.isItemOf(stack) || EnumTalisman.SWAMP_TALISMAN_5.isItemOf(stack))) {
 				if (!worldIn.isRemote) {
-					WorldGenWeedwoodPortalTree gen;
-					if(isCustomListed) {
-						int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state);
-						if(targetDim == playerIn.world.provider.getDimension()) {
-							gen = new WorldGenWeedwoodPortalTree();
+					if(!BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(playerIn.world.provider.getDimension())) {
+						playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.wrongdimension"), true);
+					} else {
+						WorldGenWeedwoodPortalTree gen;
+						if(isCustomListed) {
+							int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state);
+							if(targetDim == playerIn.world.provider.getDimension()) {
+								gen = new WorldGenWeedwoodPortalTree();
+							} else {
+								gen = new WorldGenWeedwoodPortalTree(BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state));
+							}
 						} else {
-							gen = new WorldGenWeedwoodPortalTree(BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state));
+							gen = new WorldGenWeedwoodPortalTree();
 						}
-					} else {
-						gen = new WorldGenWeedwoodPortalTree();
-					}
-					if(gen.generate(worldIn, itemRand, pos)) {
-						worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
-						playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
-						if(playerIn instanceof EntityPlayerMP) {
-							((EntityPlayerMP)playerIn).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
+						if(gen.generate(worldIn, itemRand, pos)) {
+							worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundRegistry.PORTAL_ACTIVATE, SoundCategory.PLAYERS, 0.5F, itemRand.nextFloat() * 0.4F + 0.8F);
+							playerIn.setLocationAndAngles(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
+							if(playerIn instanceof EntityPlayerMP) {
+								((EntityPlayerMP)playerIn).connection.setPlayerLocation(pos.getX() + 0.5D, pos.getY() + 2D, pos.getZ() + 0.5D, playerIn.rotationYaw, playerIn.rotationPitch);
+							}
+						} else {
+							playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.noplace"), true);
 						}
-					} else {
-						playerIn.sendStatusMessage(new TextComponentTranslation("chat.talisman.noplace"), true);
 					}
 				}
 				return EnumActionResult.SUCCESS;

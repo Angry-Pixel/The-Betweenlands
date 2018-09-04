@@ -878,6 +878,7 @@ chat.rope.too_far=You're too far away from the last anchor point
 chat.bed_spawn_set=Your Spawn has been set to this Moss Bed
 
 chat.talisman.noplace=There is not enough space for the portal
+chat.talisman.wrongdimension=You cannot create a portal in this dimension
 chat.talisman.linked=The Swamp Talisman is now linked to this portal
 chat.talisman.cant_link=These portals can't be linked together
 chat.talisman.too_far=This portal is too far away to be linked
