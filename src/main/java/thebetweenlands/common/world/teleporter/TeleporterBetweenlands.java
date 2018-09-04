@@ -9,6 +9,7 @@ import java.util.function.Function;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,9 +44,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 	private final AxisAlignedBB fromBounds;
 	private final boolean makePortal;
 	private final boolean setSpawn;
-	
+	private final boolean isToEnd;
+
 	public static final String LAST_PORTAL_POS_NBT = "thebetweenlands.last_portal_location";
-	
+
 	public TeleporterBetweenlands(int fromDim, AxisAlignedBB fromBounds, WorldServer toWorld, boolean makePortal, boolean setSpawn) {
 		super(toWorld);
 		this.fromBounds = fromBounds;
@@ -53,26 +55,32 @@ public final class TeleporterBetweenlands extends Teleporter {
 		this.toWorld = toWorld;
 		this.makePortal = makePortal;
 		this.setSpawn = setSpawn;
+		this.isToEnd = this.toWorld.provider.getDimensionType().getId() == 1;
 	}
 
 	@Override
 	public void placeInPortal(Entity entity, float rotationYaw) {
-		if (this.world.provider.getDimensionType().getId() != 1) {
+		if (!this.isToEnd || BetweenlandsConfig.WORLD_AND_DIMENSION.generatePortalInEnd) {
 			if (!this.placeInExistingPortal(entity, rotationYaw)) {
+				if(this.isToEnd) {
+					this.moveToWorldSpawn(entity);
+					entity.setLocationAndAngles(entity.posX + this.world.rand.nextInt(32) - 16, entity.posY, entity.posZ + this.world.rand.nextInt(32) - 16, entity.rotationYaw, entity.rotationPitch);
+				}
+
 				if(!this.makePortal(entity)) {
 					if(this.setSpawn) {
 						if(!this.makePortal) {
 							//No portal should be generated
-							
+
 							//Get and set a suitable position for (re-)spawning
 							BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
 							pos = PlayerRespawnHandler.getRespawnPointNearPos(this.toWorld, pos);
 							pos = this.setDefaultPlayerSpawnLocation(pos, entity);
-							
+
 							this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, entity.rotationYaw, entity.rotationPitch);
 						} else {
 							//Portal failed to generate... fallback?
-			
+
 							BlockPos pos = this.findSuitableBetweenlandsPortalPos(entity.getPosition());
 							Chunk chunk = this.getDecoratedChunk(this.toWorld, pos); //Force chunk to generate
 							pos = new BlockPos(pos.getX(), chunk.getHeight(pos), pos.getZ());
@@ -83,50 +91,64 @@ public final class TeleporterBetweenlands extends Teleporter {
 									}
 								}
 							}
-			
+							for(int xo = -1; xo <= 1; xo++) {
+								for(int zo = -1; zo <= 1; zo++) {
+									this.toWorld.setBlockState(pos.add(xo, -1, zo), BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE));
+								}
+							}
+
 							this.setEntityLocation(entity, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, rotationYaw, 0);
 							this.setDefaultPlayerSpawnLocation(pos, entity);
 						}
 					}
 				}
 			}
-        } else {
-        	// Stupid end special cases D:<
-        	
-        	BlockPos spawn = this.toWorld.getSpawnCoordinate();
-        	
-        	if(spawn != null) {
-        		entity.moveToBlockPosAndAngles(spawn, entity.rotationYaw, entity.rotationPitch);
-        	}
-        	
-            int x = MathHelper.floor(entity.posX);
-            int y = MathHelper.floor(entity.posY) - 1;
-            int z = MathHelper.floor(entity.posZ);
+		} else {
+			// Stupid end special cases D:<
 
-            for (int zo = -2; zo <= 2; ++zo) {
-                for (int xo = -2; xo <= 2; ++xo) {
-                    for (int yo = -1; yo < 3; ++yo) {
-                        int bx = x + xo;
-                        int by = y + yo;
-                        int bz = z + zo;
-                        boolean air = yo < 0;
-                        this.world.setBlockState(new BlockPos(bx, by, bz), air ? Blocks.OBSIDIAN.getDefaultState() : Blocks.AIR.getDefaultState());
-                    }
-                }
-            }
+			this.moveToWorldSpawn(entity);
 
-            entity.setLocationAndAngles((double)x, (double)y, (double)z, entity.rotationYaw, 0.0F);
-            entity.motionX = 0.0D;
-            entity.motionY = 0.0D;
-            entity.motionZ = 0.0D;
-        }
+			int x = MathHelper.floor(entity.posX);
+			int y = MathHelper.floor(entity.posY) - 1;
+			int z = MathHelper.floor(entity.posZ);
+
+			this.generateEndPlatform(x, y, z, true);
+
+			entity.setLocationAndAngles((double)x, (double)y, (double)z, entity.rotationYaw, 0.0F);
+			entity.motionX = 0.0D;
+			entity.motionY = 0.0D;
+			entity.motionZ = 0.0D;
+		}
+	}
+
+	private boolean moveToWorldSpawn(Entity entity) {
+		BlockPos spawn = this.toWorld.getSpawnCoordinate();
+		if(spawn != null) {
+			entity.moveToBlockPosAndAngles(spawn, entity.rotationYaw, entity.rotationPitch);
+			return true;
+		}
+		return false;
+	}
+
+	private void generateEndPlatform(int x, int y, int z, boolean setAir) {
+		for (int zo = -2; zo <= 2; ++zo) {
+			for (int xo = -2; xo <= 2; ++xo) {
+				for (int yo = -1; yo < (setAir ? 3 : 0); ++yo) {
+					int bx = x + xo;
+					int by = y + yo;
+					int bz = z + zo;
+					boolean air = yo < 0;
+					this.world.setBlockState(new BlockPos(bx, by, bz), air ? Blocks.OBSIDIAN.getDefaultState() : Blocks.AIR.getDefaultState());
+				}
+			}
+		}
 	}
 
 	@Override
 	public boolean placeInExistingPortal(Entity entity, float rotationYaw) {
 		if(this.setSpawn) {
 			BlockPos existingPortal = this.findExistingPortalPos();
-	
+
 			if(existingPortal != null) {
 				//Portal exists already
 				this.setEntityLocation(entity, existingPortal.getX() + 0.5D, existingPortal.getY() + 2.0D, existingPortal.getZ() + 0.5D, rotationYaw, 0);
@@ -259,42 +281,47 @@ public final class TeleporterBetweenlands extends Teleporter {
 	@Nullable
 	protected BlockPos findSuitableNonBLStartPos(BlockPos start) {
 		Set<String> unsafeBiomes = BetweenlandsConfig.WORLD_AND_DIMENSION.portalUnsafeBiomesSet;
-		
+
 		if(unsafeBiomes.isEmpty()) {
 			return start;
 		}
-		
+
+		if(!unsafeBiomes.contains(this.toWorld.getBiome(start).getRegistryName().toString())) {
+			//Start position is already in a safe biome
+			return start;
+		}
+
 		int range = BetweenlandsConfig.WORLD_AND_DIMENSION.portalBiomeSearchRange;
-		
+
 		IntCache.resetIntCache();
-        int searchStartX = start.getX() - range >> 2;
-        int searchStartZ = start.getZ() - range >> 2;
-        int searchEndX = start.getX() + range >> 2;
-        int searchEndZ = start.getZ() + range >> 2;
-        int searchWidth = searchEndX - searchStartX + 1;
-        int searchDepth = searchEndZ - searchStartZ + 1;
-        
-        Biome[] biomes = this.toWorld.getBiomeProvider().getBiomesForGeneration(new Biome[0], searchStartX, searchStartZ, searchWidth, searchDepth);
-        
-        BlockPos suitablePos = null;
-        
-        int counter = 0;
+		int searchStartX = start.getX() - range >> 2;
+				int searchStartZ = start.getZ() - range >> 2;
+		int searchEndX = start.getX() + range >> 2;
+		int searchEndZ = start.getZ() + range >> 2;
+							int searchWidth = searchEndX - searchStartX + 1;
+							int searchDepth = searchEndZ - searchStartZ + 1;
 
-        for (int i = 0; i < searchWidth * searchDepth; ++i) {
-            int bx = searchStartX + i % searchWidth << 2;
-            int by = searchStartZ + i / searchWidth << 2;
-            
-            Biome biome = biomes[i];
+							Biome[] biomes = this.toWorld.getBiomeProvider().getBiomesForGeneration(new Biome[0], searchStartX, searchStartZ, searchWidth, searchDepth);
 
-            if (!unsafeBiomes.contains(biome.getRegistryName().toString()) && (suitablePos == null || this.toWorld.rand.nextInt(counter + 1) == 0)) {
-                suitablePos = new BlockPos(bx, 0, by);
-                ++counter;
-            }
-        }
+							BlockPos suitablePos = null;
 
-        return suitablePos;
+							int counter = 0;
+
+							for (int i = 0; i < searchWidth * searchDepth; ++i) {
+								int bx = searchStartX + i % searchWidth << 2;
+								int by = searchStartZ + i / searchWidth << 2;
+
+								Biome biome = biomes[i];
+
+								if (!unsafeBiomes.contains(biome.getRegistryName().toString()) && (suitablePos == null || this.toWorld.rand.nextInt(counter + 1) == 0)) {
+									suitablePos = new BlockPos(bx, 0, by);
+									++counter;
+								}
+							}
+
+							return suitablePos;
 	}
-	
+
 	/**
 	 * Finds a suitable position for a portal to generate nearby
 	 * @param start
@@ -344,6 +371,9 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 		if(bestSuitablePos != null) {
 			return bestSuitablePos;
+		}
+		if(this.isToEnd) {
+			return start;
 		}
 		int randY = 8 + this.toWorld.rand.nextInt(this.toWorld.getActualHeight() - 16 - 8);
 		skip: while(randY < this.toWorld.getActualHeight() - 28) {
@@ -405,10 +435,14 @@ public final class TeleporterBetweenlands extends Teleporter {
 	protected boolean generateTreePortal(Entity entity, BlockPos center) {
 		WorldGenWeedwoodPortalTree genTree = new WorldGenWeedwoodPortalTree();
 
-		return this.spiralGenerate(center, 32, Math.min(center.getY() - 2, 8), 8, checkPos -> {
+		return this.spiralGenerate(center, 64, Math.min(center.getY() - 2, 8), 8, checkPos -> {
 			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGeneratePortalTree(this.toWorld, checkPos)) {
-				if(genTree.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable())) {
-					this.lonkPortalsTogetherAndTeleport(entity, checkPos, 0.5D, 2.0D, 0.5D);
+				BlockPos pos = checkPos.toImmutable();
+				if(genTree.generate(this.toWorld, this.toWorld.rand, pos)) {
+					this.lonkPortalsTogetherAndTeleport(entity, pos, 0.5D, 2.0D, 0.5D);
+					if(this.isToEnd) {
+						this.generateEndPlatform(pos.getX(), pos.getY() + 1, pos.getZ(), false);
+					}
 					return true;
 				}
 			}
@@ -420,10 +454,14 @@ public final class TeleporterBetweenlands extends Teleporter {
 	protected boolean generateSmallPortal(Entity entity, BlockPos center) {
 		WorldGenSmallPortal genPortal = new WorldGenSmallPortal(EnumFacing.NORTH);
 
-		if(this.spiralGenerate(center, 32, Math.min(center.getY() - 2, 8), 8, checkPos -> {
-			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerateSmallPortalInOpen(this.toWorld, checkPos)) {
-				if(genPortal.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable().up())) {
-					this.lonkPortalsTogetherAndTeleport(entity, checkPos.up(), 0.5D, 1.0D, -0.5D);
+		if(this.spiralGenerate(center, 64, Math.min(center.getY() - 2, 8), 8, checkPos -> {
+			if(this.toWorld.getBlockState(checkPos).isNormalCube() && this.toWorld.isAirBlock(checkPos.up()) && this.canGenerateSmallPortalInOpen(this.toWorld, checkPos.up())) {
+				BlockPos pos = checkPos.toImmutable().up();
+				if(genPortal.generate(this.toWorld, this.toWorld.rand, pos)) {
+					this.lonkPortalsTogetherAndTeleport(entity, pos, 0.5D, 1.0D, -0.5D);
+					if(this.isToEnd) {
+						this.generateEndPlatform(pos.getX(), pos.getY() + 1, pos.getZ(), false);
+					}
 					return true;
 				}
 			}
@@ -435,8 +473,12 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 		if(this.spiralGenerate(center, 32, Math.min(center.getY() - 2, 8), 8, checkPos -> {
 			if(this.toWorld.getBlockState(checkPos).isNormalCube() && !this.isSmallPortalObstructedByOthersOrLiquid(this.toWorld, checkPos)) {
-				if(genPortal.generate(this.toWorld, this.toWorld.rand, checkPos.toImmutable().up())) {
-					this.lonkPortalsTogetherAndTeleport(entity, checkPos.up(), 0.5D, 1.0D, -0.5D);
+				BlockPos pos = checkPos.toImmutable().up();
+				if(genPortal.generate(this.toWorld, this.toWorld.rand, pos)) {
+					this.lonkPortalsTogetherAndTeleport(entity, pos, 0.5D, 1.0D, -0.5D);
+					if(this.isToEnd) {
+						this.generateEndPlatform(pos.getX(), pos.getY() + 1, pos.getZ(), false);
+					}
 					return true;
 				}
 			}
@@ -447,7 +489,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 		}
 
 		if(genPortal.generate(this.toWorld, this.toWorld.rand, center.toImmutable())) {
-			this.lonkPortalsTogetherAndTeleport(entity, center, 0.5D, 1.0D, -0.5D);
+			this.lonkPortalsTogetherAndTeleport(entity, center.toImmutable(), 0.5D, 1.0D, -0.5D);
+			if(this.isToEnd) {
+				this.generateEndPlatform(center.getX(), center.getY() + 1, center.getZ(), false);
+			}
 			return true;
 		}
 
@@ -459,7 +504,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 
 		if(portal != null) {
 			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(this.toWorld);
-			List<LocationPortal> newPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, newPortalPos.up().getX(), newPortalPos.up().getZ(), loc -> loc.isInside(newPortalPos.up()));
+			List<LocationPortal> newPortals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, newPortalPos.getX(), newPortalPos.getZ(), loc -> loc.isInside(newPortalPos.up(2)));
 			if(!newPortals.isEmpty()) {
 				//Link portals
 				LocationPortal newPortal = newPortals.get(0);
@@ -486,16 +531,33 @@ public final class TeleporterBetweenlands extends Teleporter {
 				if(gen.apply(checkPos)) {
 					return true;
 				}
-				for(int yo = 1; yo <= yUp; yo++) {
-					checkPos.setPos(center.getX() + xo, center.getY() + yo, center.getZ() + zo);
-					if(gen.apply(checkPos)) {
-						return true;
+
+				if(yDown != 0 || yUp != 0) {
+					Chunk chunk = this.getDecoratedChunk(this.toWorld, checkPos); //Force chunk to generate
+					int height = chunk.getHeight(checkPos) - 1;
+					for(int yo = 1; yo <= yUp; yo++) {
+						checkPos.setPos(center.getX() + xo, height + yo, center.getZ() + zo);
+						if(gen.apply(checkPos)) {
+							return true;
+						}
 					}
-				}
-				for(int yo = 1; yo <= yDown; yo++) {
-					checkPos.setPos(center.getX() + xo, center.getY() - yo, center.getZ() + zo);
-					if(gen.apply(checkPos)) {
-						return true;
+					for(int yo = 1; yo <= yDown; yo++) {
+						checkPos.setPos(center.getX() + xo, height - yo, center.getZ() + zo);
+						if(gen.apply(checkPos)) {
+							return true;
+						}
+					}
+					for(int yo = 1; yo <= yUp; yo++) {
+						checkPos.setPos(center.getX() + xo, center.getY() + yo, center.getZ() + zo);
+						if(gen.apply(checkPos)) {
+							return true;
+						}
+					}
+					for(int yo = 1; yo <= yDown; yo++) {
+						checkPos.setPos(center.getX() + xo, center.getY() - yo, center.getZ() + zo);
+						if(gen.apply(checkPos)) {
+							return true;
+						}
 					}
 				}
 			}
@@ -526,10 +588,10 @@ public final class TeleporterBetweenlands extends Teleporter {
 		for (int xo = -maxRadius; xo <= maxRadius; xo++) {
 			for (int zo = -maxRadius; zo <= maxRadius; zo++) {
 				if(Math.sqrt(xo*xo + zo*zo) <= maxRadius) {
-					for (int yo = 2; yo < height; yo++) {
+					for (int yo = -3; yo < height; yo++) {
 						checkPos.setPos(pos.getX() + xo, pos.getY() + yo, pos.getZ() + zo);
 						IBlockState blockState = world.getBlockState(checkPos);
-						if (blockState.getMaterial().isLiquid() || blockState.isNormalCube() || blockState.getBlock() instanceof BlockLeaves) {
+						if ((yo >= 2 && (blockState.getMaterial().isLiquid() || blockState.isNormalCube())) || blockState.getBlock() instanceof BlockLeaves) {
 							return false;
 						}
 					}
@@ -546,7 +608,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 	 * @return
 	 */
 	protected boolean canGenerateSmallPortalInOpen(World world, BlockPos pos){
-		for(MutableBlockPos p : BlockPos.getAllInBoxMutable(pos.getX() - 3, pos.getY(), pos.getZ() - 2, pos.getX() + 3, pos.getY() + 7, pos.getZ() + 3)) {
+		for(MutableBlockPos p : BlockPos.getAllInBoxMutable(pos.getX() - 3, pos.getY(), pos.getZ() - 3, pos.getX() + 3, pos.getY() + 7, pos.getZ() + 3)) {
 			IBlockState blockState = world.getBlockState(p);
 			boolean isOutside = Math.abs(pos.getX() - p.getX()) >= 2 || Math.abs(pos.getZ() - p.getZ()) >= 2 || p.getY() - pos.getY() >= 5;
 			if (!isOutside && (blockState.getMaterial().isLiquid() || blockState.isNormalCube() || blockState.getBlock() instanceof BlockLeaves)) {
@@ -599,7 +661,7 @@ public final class TeleporterBetweenlands extends Teleporter {
 			persistentNbt.setLong(LAST_PORTAL_POS_NBT, portalPos.toLong());
 			dataNbt.setTag(EntityPlayer.PERSISTED_NBT_TAG, persistentNbt);
 		}
-		
+
 		return coords;
 	}
 
@@ -620,14 +682,14 @@ public final class TeleporterBetweenlands extends Teleporter {
 			for (int yo = -16; yo <= 16; yo += 16) {
 				for (int zo = -16; zo <= 16; zo += 16) {
 					mutableBlockPos.setPos(bx + xo, by + yo, bz + zo);
-					world.getBlockState(mutableBlockPos);
+					world.getBlockState(mutableBlockPos); //Get block for compat with cubic chunks mod
 				}
 			}
 		}
 		mutableBlockPos.release();
 		return world.getChunkFromBlockCoords(pos);
 	}
-	
+
 	@Override
 	public void removeStalePortalLocations(long timer) {
 		//Not needed

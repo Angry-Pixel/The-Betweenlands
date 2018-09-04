@@ -146,7 +146,12 @@ public class ItemSwampTalisman extends Item implements ItemRegistry.IBlockStateI
 				if (!worldIn.isRemote) {
 					WorldGenWeedwoodPortalTree gen;
 					if(isCustomListed) {
-						gen = new WorldGenWeedwoodPortalTree(BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state));
+						int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state);
+						if(targetDim == playerIn.world.provider.getDimension()) {
+							gen = new WorldGenWeedwoodPortalTree();
+						} else {
+							gen = new WorldGenWeedwoodPortalTree(BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionTargetsList.getDimension(state));
+						}
 					} else {
 						gen = new WorldGenWeedwoodPortalTree();
 					}
