@@ -66,6 +66,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 	public static GeometryBuffer clipPlaneBuffer;
 
 	protected int ticks;
+	protected boolean spoopy;
 
 	private IRiftRenderer riftRenderer;
 
@@ -253,7 +254,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 			GlStateManager.enableAlpha();
 
 			//Render sky clip plane
-			this.renderFlatSky(partialTicks, world, mc, true);
+			this.renderFlatSky(partialTicks, world, mc, true, false);
 		} else {
 			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
 				//Render fancy non-shader sky dome
@@ -276,12 +277,65 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 				GlStateManager.enableAlpha();
 			} else {
 				//Render flat sky
-				this.renderFlatSky(partialTicks, world, mc, false);
+				this.renderFlatSky(partialTicks, world, mc, false, false);
+			}
+		}
+		
+		if(this.spoopy) {
+			if(Minecraft.getMinecraft().gameSettings.fancyGraphics) {
+				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
+				
+				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+				
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(-0.5D, -0.5D, 1);
+				GlStateManager.scale(2.0D, 2.0D, 0.0D);
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				
+				GlStateManager.disableAlpha();
+				GlStateManager.enableBlend();
+				GlStateManager.enableTexture2D();
+				RenderHelper.disableStandardItemLighting();
+				GlStateManager.depthMask(false);
+				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+				GlStateManager.callList(skyDomeDispList);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+				GlStateManager.depthMask(true);
+				GlStateManager.disableBlend();
+				GlStateManager.enableAlpha();
+				
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.popMatrix();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			} else {
+				GlStateManager.pushMatrix();
+				
+				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
+				
+				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_CLAMP);
+				GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_CLAMP);
+				
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(-0.5D, -0.5D, 1);
+				GlStateManager.scale(2.0D, 2.0D, 0.0D);
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				
+				this.renderFlatSky(partialTicks, world, mc, false, true);
+				
+				GlStateManager.matrixMode(GL11.GL_TEXTURE);
+				GlStateManager.popMatrix();
+				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+				
+				GlStateManager.popMatrix();
 			}
 		}
 	}
 
-	protected void renderFlatSky(float partialTicks, WorldClient world, Minecraft mc, boolean renderClipPlane) {
+	protected void renderFlatSky(float partialTicks, WorldClient world, Minecraft mc, boolean renderClipPlane, boolean spoopy) {
 		GlStateManager.disableAlpha();
 		GlStateManager.enableBlend();
 		OpenGlHelper.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
@@ -294,24 +348,28 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		GlStateManager.rotate(180.0F, 1.0F, 0.0F, 0.0F);
 
 		if(!renderClipPlane) {
-			boolean shaderTexture = false;
-			if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
-				WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
-				if(shader != null && shader.getStarfieldTexture() >= 0) {
-					GlStateManager.bindTexture(shader.getStarfieldTexture());
-					shaderTexture = true;
+			if(spoopy) {
+				mc.renderEngine.bindTexture(SKY_SPOOPY_TEXTURE);
+			} else {
+				boolean shaderTexture = false;
+				if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+					WorldShader shader = ShaderHelper.INSTANCE.getWorldShader();
+					if(shader != null && shader.getStarfieldTexture() >= 0) {
+						GlStateManager.bindTexture(shader.getStarfieldTexture());
+						shaderTexture = true;
+					}
+				}
+	
+				if(!shaderTexture) {
+					mc.renderEngine.bindTexture(SKY_TEXTURE);
 				}
 			}
 
-			if(!shaderTexture) {
-				mc.renderEngine.bindTexture(SKY_TEXTURE);
-			}
-
 			vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-			vertexBuffer.pos(-90.0D, -40.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
-			vertexBuffer.pos(-90.0D, -40.0D, 90.0D).tex(0.0D, 1.0D).endVertex();
-			vertexBuffer.pos(90.0D, -40.0D, 90.0D).tex(1.0D, 1.0D).endVertex();
-			vertexBuffer.pos(90.0D, -40.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
+			vertexBuffer.pos(-90.0D, -50.0D, -90.0D).tex(0.0D, 0.0D).endVertex();
+			vertexBuffer.pos(-90.0D, -50.0D, 90.0D).tex(0.0D, 1.0D).endVertex();
+			vertexBuffer.pos(90.0D, -50.0D, 90.0D).tex(1.0D, 1.0D).endVertex();
+			vertexBuffer.pos(90.0D, -50.0D, -90.0D).tex(1.0D, 0.0D).endVertex();
 			tessellator.draw();
 		} else {
 			//Render clip plane (for god rays)
@@ -509,10 +567,10 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 		BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
 		if(storage != null) {
 			BLEnvironmentEventRegistry reg = storage.getEnvironmentEventRegistry();
-			EventAuroras event = reg.auroras;
 
-			if(event.isActive()) {
-
+			this.spoopy = reg.spoopy.isActive();
+			
+			if(reg.auroras.isActive()) {
 				Random rand = world.rand;
 				double newAuroraPosX = mc.player.posX + rand.nextInt(160) - 80;
 				double newAuroraPosZ = mc.player.posZ + rand.nextInt(160) - 80;
@@ -531,7 +589,7 @@ public class BLSkyRenderer extends IRenderHandler implements IBetweenlandsSky {
 
 				if(minDist > 150 || this.auroras.isEmpty()) {
 					List<Vector4f> gradients = new ArrayList<Vector4f>();
-					switch(event.getAuroraType()) {
+					switch(reg.auroras.getAuroraType()) {
 					default:
 					case 0:
 						gradients.add(new Vector4f(0, 1, 0, 0.01F));
