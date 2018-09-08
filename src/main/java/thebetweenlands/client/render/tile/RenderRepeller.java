@@ -30,6 +30,11 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/repeller.png");
 
 	@Override
+	public boolean isGlobalRenderer(TileEntityRepeller te) {
+		return true;
+	}
+	
+	@Override
 	public void render(TileEntityRepeller tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumFacing facing = TileEntityHelper.getStatePropertySafely(tile, BlockRepeller.class, BlockRepeller.FACING, EnumFacing.NORTH);
 
