@@ -1,6 +1,8 @@
 package thebetweenlands.common.network.datamanager;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -9,8 +11,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -26,11 +26,12 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ReportedException;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
-public class GenericDataManager<F extends DataManagedObject> {
-	private static final Logger LOGGER = LogManager.getLogger();
-	private static final Map<Class<? extends DataManagedObject>, Integer> NEXT_ID_MAP = Maps.<Class<?  extends DataManagedObject>, Integer>newHashMap();
-	private final Map<Integer, GenericDataManager.DataEntry<?>> entries = Maps.<Integer, GenericDataManager.DataEntry<?>>newHashMap();
+public class GenericDataManager<F extends IDataManagedObject> {
+	private static final Map<Class<? extends IDataManagedObject>, Integer> NEXT_ID_MAP = Maps.<Class<?  extends IDataManagedObject>, Integer>newHashMap();
+	private final List<GenericDataManager.DataEntry<?>> trackedEntries = new ArrayList<>();
+	private final Map<Integer, GenericDataManager.DataEntry<?>> entries = new HashMap<>();
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 	private boolean empty = true;
 	private boolean dirty;
@@ -40,13 +41,13 @@ public class GenericDataManager<F extends DataManagedObject> {
 		this.owner = owner;
 	}
 
-	public static <T> DataParameter<T> createKey(Class<? extends DataManagedObject> clazz, DataSerializer<T> serializer) {
-		if (LOGGER.isDebugEnabled()) {
+	public static <T> DataParameter<T> createKey(Class<? extends IDataManagedObject> clazz, DataSerializer<T> serializer) {
+		if (BetweenlandsConfig.DEBUG.debug) {
 			try {
-				Class<?> oclass = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
+				Class<?> callerClass = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
 
-				if (!oclass.equals(clazz)) {
-					LOGGER.debug("createKey called for: {} from {}", clazz, oclass, new RuntimeException());
+				if (!callerClass.equals(clazz)) {
+					throw new RuntimeException("GenericDataManager#createKey called for: " + clazz + " from " + callerClass);
 				}
 			} catch (ClassNotFoundException ex) { }
 		}
@@ -59,10 +60,10 @@ public class GenericDataManager<F extends DataManagedObject> {
 			int nextId = 0;
 			Class<?> hierarchyCls = clazz;
 
-			while (DataManagedObject.class.isAssignableFrom(hierarchyCls)) {
+			while (IDataManagedObject.class.isAssignableFrom(hierarchyCls)) {
 				hierarchyCls = hierarchyCls.getSuperclass();
 
-				if(hierarchyCls == null || !DataManagedObject.class.isAssignableFrom(hierarchyCls)) {
+				if(hierarchyCls == null || !IDataManagedObject.class.isAssignableFrom(hierarchyCls)) {
 					break;
 				}
 
@@ -83,7 +84,7 @@ public class GenericDataManager<F extends DataManagedObject> {
 		}
 	}
 
-	public <T> void register(DataParameter<T> key, T value) {
+	public <T> DataParameter<T> register(DataParameter<T> key, T value) {
 		int id = key.getId();
 
 		if (id > 254) {
@@ -95,10 +96,36 @@ public class GenericDataManager<F extends DataManagedObject> {
 		} else {
 			this.setEntry(key, value);
 		}
+
+		return key;
+	}
+
+	public <T> DataParameter<T> register(DataParameter<T> key, int trackingTime, T value) {
+		this.register(key, value);
+		this.setTrackingTime(key, trackingTime);
+		return key;
+	}
+
+	public void setTrackingTime(DataParameter<?> key, int time) {
+		DataEntry<?> entry = this.getEntry(key);
+
+		if(entry == null) {
+			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
+		}
+
+		entry.trackingTime = time;
+
+		if(time >= 0) {
+			if(!this.trackedEntries.contains(entry)) {
+				this.trackedEntries.add(entry);
+			}
+		} else {
+			this.trackedEntries.remove(entry);
+		}
 	}
 
 	private <T> void setEntry(DataParameter<T> key, T value) {
-		GenericDataManager.DataEntry<T> dataentry = new GenericDataManager.DataEntry<T>(key, value);
+		GenericDataManager.DataEntry<T> dataentry = new GenericDataManager.DataEntry<T>(this, key, value);
 		this.lock.writeLock().lock();
 		this.entries.put(Integer.valueOf(key.getId()), dataentry);
 		this.empty = false;
@@ -127,22 +154,23 @@ public class GenericDataManager<F extends DataManagedObject> {
 		return (T) this.getEntry(key).getValue();
 	}
 
-	public <T> void set(DataParameter<T> key, T value) {
-		GenericDataManager.DataEntry<T> dataentry = this.<T>getEntry(key);
+	public <T> EntryAccess<T> set(DataParameter<T> key, T value) {
+		GenericDataManager.DataEntry<T> entry = this.<T>getEntry(key);
 
-		if (ObjectUtils.notEqual(value, dataentry.getValue())) {
-			dataentry.setValue(value);
-			if(this.owner instanceof DataManagedObject) {
-				((DataManagedObject) this.owner).notifyDataManagerChange(key);
+		if (ObjectUtils.notEqual(value, entry.getValue())) {
+			if(!this.owner.onParameterChange(key, value, false)) {
+				entry.setValue(value);
 			}
-			dataentry.setDirty(true);
-			this.dirty = true;
+			entry.setDirty(true);
 		}
+
+		return entry.access;
 	}
 
-	public <T> void setDirty(DataParameter<T> key) {
-		this.getEntry(key).dirty = true;
-		this.dirty = true;
+	public <T> EntryAccess<T> setDirty(DataParameter<T> key) {
+		DataEntry<T> entry = this.getEntry(key);
+		entry.setDirty(true);
+		return entry.access;
 	}
 
 	public boolean isDirty() {
@@ -247,23 +275,22 @@ public class GenericDataManager<F extends DataManagedObject> {
 				throw new DecoderException("Unknown serializer type " + j);
 			}
 
-			list.add(new GenericDataManager.DataEntry(dataserializer.createKey(i), dataserializer.read(buf)));
+			list.add(new GenericDataManager.DataEntry(null, dataserializer.createKey(i), dataserializer.read(buf)));
 		}
 
 		return list;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void setEntryValues(List<GenericDataManager.DataEntry<?>> entriesIn) {
+	public void setEntryValuesFromPacket(List<GenericDataManager.DataEntry<?>> newEntries) {
 		this.lock.writeLock().lock();
 
-		for (GenericDataManager.DataEntry<?> dataentry : entriesIn) {
-			GenericDataManager.DataEntry<?> dataentry1 = this.entries.get(Integer.valueOf(dataentry.getKey().getId()));
+		for (GenericDataManager.DataEntry<?> newEntry : newEntries) {
+			GenericDataManager.DataEntry<?> entry = this.entries.get(Integer.valueOf(newEntry.getKey().getId()));
 
-			if (dataentry1 != null) {
-				this.setEntryValue(dataentry1, dataentry);
-				if(this.owner instanceof DataManagedObject) {
-					((DataManagedObject) this.owner).notifyDataManagerChange(dataentry.getKey());
+			if (entry != null) {
+				if(!this.owner.onParameterChange(entry.getKey(), newEntry.getValue(), true)) {
+					this.setEntryValue(entry, newEntry);
 				}
 			}
 		}
@@ -293,15 +320,83 @@ public class GenericDataManager<F extends DataManagedObject> {
 		this.lock.readLock().unlock();
 	}
 
+	public void update() {
+		if(!this.trackedEntries.isEmpty()) {
+			for (GenericDataManager.DataEntry<?> entry : this.trackedEntries) {
+				if(entry.trackingTime >= 0) {
+					if(entry.trackingTimer >= 0) {
+						entry.trackingTimer--;
+					}
+					if(entry.queuedDirty && entry.trackingTimer < 0) {
+						entry.trackingTimer = entry.trackingTime;
+						entry.dirty = true;
+						this.dirty = true;
+						entry.queuedDirty = false;
+					}
+				}
+			}
+		}
+	}
+
+	public static class EntryAccess<T> {
+		private DataEntry<T> entry;
+
+		private EntryAccess(DataEntry<T> entry) {
+			this.entry = entry;
+		}
+
+		/**
+		 * Returns the value of the data parameter
+		 * @return
+		 */
+		public T getValue() {
+			return this.entry.value;
+		}
+
+		public EntryAccess<T> setDirty() {
+			this.entry.setDirty(true);
+			return this;
+		}
+
+		/**
+		 * Causes the data parameter to sync immediately if it is currently dirty
+		 * @return this
+		 */
+		public EntryAccess<T> syncImmediately() {
+			if(this.entry.queuedDirty) {
+				this.entry.dirty = true;
+				this.entry.dataManager.dirty = true;
+				this.entry.queuedDirty = false;
+			}
+			return this;
+		}
+	}
+
 	public static class DataEntry<T> {
+		private final GenericDataManager<?> dataManager;
 		private final DataParameter<T> key;
 		private T value;
+		private boolean queuedDirty;
 		private boolean dirty;
+		private int trackingTime = -1;
+		private int trackingTimer;
+		private EntryAccess<T> access;
 
-		public DataEntry(DataParameter<T> keyIn, T valueIn) {
+		public DataEntry(GenericDataManager<?> dataManager, DataParameter<T> keyIn, T valueIn) {
+			this.dataManager = dataManager;
 			this.key = keyIn;
 			this.value = valueIn;
 			this.dirty = true;
+			this.access = new EntryAccess<>(this);
+		}
+
+		private DataEntry(GenericDataManager<?> dataManager, DataParameter<T> keyIn, T valueIn, int trackingTime) {
+			this.dataManager = dataManager;
+			this.key = keyIn;
+			this.value = valueIn;
+			this.dirty = true;
+			this.trackingTime = trackingTime;
+			this.access = new EntryAccess<>(this);
 		}
 
 		public DataParameter<T> getKey() {
@@ -321,11 +416,19 @@ public class GenericDataManager<F extends DataManagedObject> {
 		}
 
 		public void setDirty(boolean dirtyIn) {
-			this.dirty = dirtyIn;
+			if(this.trackingTime >= 0 && dirtyIn) {
+				this.queuedDirty = true;
+			} else {
+				this.queuedDirty = false;
+				this.dirty = dirtyIn;
+				if(dirtyIn) {
+					this.dataManager.dirty = true;
+				}
+			}
 		}
 
 		public GenericDataManager.DataEntry<T> copy() {
-			return new GenericDataManager.DataEntry<T>(this.key, this.key.getSerializer().copyValue(this.value));
+			return new GenericDataManager.DataEntry<T>(this.dataManager, this.key, this.key.getSerializer().copyValue(this.value), this.trackingTime);
 		}
 	}
 }

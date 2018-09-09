@@ -26,7 +26,7 @@ import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
-import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
+import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
 import thebetweenlands.common.network.clientbound.MessageSyncLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferences;
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
@@ -48,7 +48,7 @@ public class MessageRegistry {
 
 	public static void preInit() {
 		registerMessage(MessageDruidAltarProgress.class, Side.CLIENT);
-		registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
+		registerMessage(MessageSyncEnvironmentEventData.class, Side.CLIENT);
 		registerMessage(MessageWeedwoodBushRustle.class, Side.CLIENT);
 		registerMessage(MessageSyncEntityCapabilities.class, Side.CLIENT);
 		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);

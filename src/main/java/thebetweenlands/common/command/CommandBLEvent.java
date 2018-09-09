@@ -50,7 +50,7 @@ public class CommandBLEvent extends CommandBase {
 		ResourceLocation eventName = new ResourceLocation(getChatComponentFromNthArg(sender, args, 1).getUnformattedText());
 		IEnvironmentEvent event = getEnvironentEvent(sender, eventName);
 		boolean isActive = event.isActive();
-		event.setActive(!isActive, true);
+		event.setActive(!isActive);
 		if(event.isActive() == !isActive) {
 			notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "off" : "on"), eventName);
 		} else {
@@ -67,7 +67,7 @@ public class CommandBLEvent extends CommandBase {
 		if (args.length < 2) {
 			BLEnvironmentEventRegistry environmentEventRegistry = getEnvironmentEventRegistry(sender);
 			for (IEnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
-				event.setActive(false, true);
+				event.setActive(false);
 			}
 			notifyCommandListener(sender, this, "command.blevent.success.alloff");
 		} else {
@@ -91,7 +91,7 @@ public class CommandBLEvent extends CommandBase {
 		}
 		environmentEventRegistry.disable();
 		for (IEnvironmentEvent event : environmentEventRegistry.getActiveEvents()) {
-			event.setActive(false, true);
+			event.setActive(false);
 		}
 		notifyCommandListener(sender, this, "command.blevent.success.disable");
 	}
@@ -106,7 +106,7 @@ public class CommandBLEvent extends CommandBase {
 		if (event.isActive() == isActive) {
 			throw new CommandException("command.blevent.failure.already" + (isActive ? "on" : "off"), eventName);
 		} else {
-			event.setActive(isActive, true);
+			event.setActive(isActive);
 			if(event.isActive() == isActive) {
 				notifyCommandListener(sender, this, "command.blevent.success." + (isActive ? "on" : "off"), eventName);
 			} else {

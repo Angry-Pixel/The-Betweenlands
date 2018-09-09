@@ -38,7 +38,7 @@ public class PlayerJoinWorldHandler {
 
 				EventRift rift = BetweenlandsWorldStorage.forWorld(event.getWorld()).getEnvironmentEventRegistry().rift;
 				if(!rift.isActive()) {
-					rift.setActive(true, true);
+					rift.setActive(true);
 				}
 				if(rift.getTicks() < minActiveTicks) {
 					rift.setTicks(minActiveTicks);

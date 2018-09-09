@@ -38,7 +38,7 @@ import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.api.entity.IEntityMusic;
 import thebetweenlands.client.audio.EntitySound;
 import thebetweenlands.client.audio.FortressBossIdleSound;
-import thebetweenlands.common.entity.serializer.Serializers;
+import thebetweenlands.common.network.datamanager.CustomDataSerializers;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.sound.BLSoundEvent;
@@ -54,7 +54,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 	protected static final DataParameter<Float> SHIELD_ROTATION = EntityDataManager.<Float>createKey(EntityFortressBoss.class, DataSerializers.FLOAT);
 	protected static final DataParameter<Boolean> FLOATING_STATE = EntityDataManager.<Boolean>createKey(EntityFortressBoss.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Boolean> GROUND_ATTACK_STATE = EntityDataManager.<Boolean>createKey(EntityFortressBoss.class, DataSerializers.BOOLEAN);
-	protected static final DataParameter<Vec3d> ANCHOR = EntityDataManager.<Vec3d>createKey(EntityFortressBoss.class, Serializers.VEC3D);
+	protected static final DataParameter<Vec3d> ANCHOR = EntityDataManager.<Vec3d>createKey(EntityFortressBoss.class, CustomDataSerializers.VEC3D);
 	protected static final DataParameter<Float> ANCHOR_RADIUS = EntityDataManager.<Float>createKey(EntityFortressBoss.class, DataSerializers.FLOAT);
 	private static final DataParameter<Optional<UUID>> BOSSINFO_ID = EntityDataManager.createKey(EntityFortressBoss.class, DataSerializers.OPTIONAL_UNIQUE_ID);
 

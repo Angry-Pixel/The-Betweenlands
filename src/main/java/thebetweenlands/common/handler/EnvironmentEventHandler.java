@@ -12,8 +12,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
+import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEvent;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
@@ -32,22 +34,19 @@ public class EnvironmentEventHandler {
 				for(IEnvironmentEvent eevent : reg.getEvents().values()) {
 					if(!eevent.isLoaded()) continue;
 					if (reg.isDisabled()) {
-						eevent.setActive(false, eevent.isActive());
-						eevent.setDefaults();
+						if(eevent.isActive()) {
+							eevent.setActive(false);
+							eevent.setDefaults();
+						}
 					} else {
 						eevent.update(event.world);
 					}
-					if(eevent.isDirty()) {
-						eevent.setDirty(false);
-						TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEvent(eevent), event.world.provider.getDimension());
-					}
-				}
-
-				storage.setEnvironmentEventSyncTicks(storage.getEnvironmentEventSyncTicks() + 1);
-				if(storage.getEnvironmentEventSyncTicks() >= 80) {
-					storage.setEnvironmentEventSyncTicks(0);
-					for(IEnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
-						TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEvent(eevent), event.world.provider.getDimension());
+					if(eevent instanceof BLEnvironmentEvent) {
+						GenericDataManager<BLEnvironmentEvent> dataManager = ((BLEnvironmentEvent) eevent).getDataManager();
+						dataManager.update();
+						if(dataManager.isDirty()) {
+							TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEventData((BLEnvironmentEvent) eevent, false), event.world.provider.getDimension());
+						}
 					}
 				}
 			}
@@ -81,7 +80,9 @@ public class EnvironmentEventHandler {
 			BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(event.getWorld());
 			if(storage != null) {
 				for(IEnvironmentEvent eevent : storage.getEnvironmentEventRegistry().getEvents().values()) {
-					TheBetweenlands.networkWrapper.sendTo(new MessageSyncEnvironmentEvent(eevent), (EntityPlayerMP)event.getEntity());
+					if(eevent instanceof BLEnvironmentEvent) {
+						TheBetweenlands.networkWrapper.sendTo(new MessageSyncEnvironmentEventData((BLEnvironmentEvent)eevent, true), (EntityPlayerMP)event.getEntity());
+					}
 					if (eevent.isActive())
 						AdvancementCriterionRegistry.EVENT.trigger((EntityPlayerMP) event.getEntity(), eevent.getEventName());
 				}

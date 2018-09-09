@@ -35,9 +35,9 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if((active && !this.getRegistry().winter.isActive()) || !active) {
-			super.setActive(active, markDirty);
+			super.setActive(active);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class EventHeavyRain extends TimedEnvironmentEvent {
 		super.update(world);
 
 		if(!world.isRemote && this.getRegistry().winter.isActive()) {
-			this.setActive(false, true);
+			this.setActive(false);
 		}
 
 		if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world.rand.nextInt(20) == 0) {

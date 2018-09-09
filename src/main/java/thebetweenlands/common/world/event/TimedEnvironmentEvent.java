@@ -2,40 +2,52 @@ package thebetweenlands.common.world.event;
 
 import java.util.Random;
 
-import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
-import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 
 public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	public TimedEnvironmentEvent(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
-	protected int ticks = 0;
-	protected int startTicks = 0;
+	protected static final DataParameter<Integer> TICKS = GenericDataManager.createKey(TimedEnvironmentEvent.class, DataSerializers.VARINT);
+	protected static final DataParameter<Integer> START_TICKS = GenericDataManager.createKey(TimedEnvironmentEvent.class, DataSerializers.VARINT);
+
+	@Override
+	protected void initDataParameters() {
+		super.initDataParameters();
+		this.dataManager.register(TICKS, 20, 0);
+		this.dataManager.register(START_TICKS, 0);
+	}
 
 	@Override
 	public void update(World world) {
 		super.update(world);
-		
+
 		if(!this.getRegistry().isDisabled() && !this.isCurrentStateFromRemote()) {
 			if(this.isActive() || this.canActivate()) {
-				this.ticks--;
+				this.dataManager.set(TICKS, this.getTicks() - 1);
 			}
 
-			if(!world.isRemote && this.ticks <= 0) {
+			if(!world.isRemote && this.getTicks() <= 0) {
 				if(this.isActive()) {
-					this.startTicks = this.ticks = this.getOffTime(world.rand);
+					int offTime = this.getOffTime(world.rand);
+					this.dataManager.set(TICKS, offTime).syncImmediately();
+					this.dataManager.set(START_TICKS, offTime);
 				} else {
-					this.startTicks = this.ticks = this.getOnTime(world.rand);
+					int onTime = this.getOnTime(world.rand);
+					this.dataManager.set(TICKS, onTime).syncImmediately();
+					this.dataManager.set(START_TICKS, onTime);
 				}
 				if(this.isActive() || this.canActivate()) {
-					this.setActive(!this.isActive(), true);
+					this.setActive(!this.isActive());
 				}
 			}
 		}
 	}
-	
+
 	/**
 	 * Returns whether the event can activate right now
 	 * @return
@@ -50,18 +62,18 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	 * @return
 	 */
 	public void setTicks(int ticks) {
-		int diff = ticks - this.ticks;
-		this.ticks += diff;
-		this.startTicks = Math.max(this.startTicks + diff, 0);
-		this.markDirty();
+		int currTicks = this.getTicks();
+		int diff = ticks - currTicks;
+		this.dataManager.set(TICKS, currTicks + diff);
+		this.dataManager.set(START_TICKS, Math.max(this.getStartTicks() + diff, 0));
 	}
-	
+
 	/**
 	 * Returns the time in ticks this event stays on/off
 	 * @return
 	 */
 	public int getTicks() {
-		return this.ticks;
+		return this.dataManager.get(TICKS);
 	}
 
 	/**
@@ -69,7 +81,7 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	 * @return
 	 */
 	public int getStartTicks() {
-		return this.startTicks;
+		return this.dataManager.get(START_TICKS);
 	}
 
 	/**
@@ -77,21 +89,22 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	 * @return
 	 */
 	public int getTicksElapsed() {
-		return this.startTicks - this.ticks;
+		return this.getStartTicks() - this.getTicks();
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if(!active || this.canActivate()) {
-			super.setActive(active, false);
+			super.setActive(active);
 			if(!this.getWorld().isRemote) {
 				if(!this.isActive()) {
-					this.startTicks = this.ticks = this.getOffTime(this.getWorld().rand);
+					int offTime = this.getOffTime(this.getWorld().rand);
+					this.dataManager.set(TICKS, offTime).syncImmediately();
+					this.dataManager.set(START_TICKS, offTime);
 				} else {
-					this.startTicks = this.ticks = this.getOnTime(this.getWorld().rand);
-				}
-				if(markDirty) {
-					this.markDirty();
+					int onTime = this.getOnTime(this.getWorld().rand);
+					this.dataManager.set(TICKS, onTime).syncImmediately();
+					this.dataManager.set(START_TICKS, onTime);
 				}
 			}
 		}
@@ -100,34 +113,20 @@ public abstract class TimedEnvironmentEvent extends BLEnvironmentEvent {
 	@Override
 	public void saveEventData() {
 		super.saveEventData();
-		this.getData().setInteger("ticks", this.ticks);
-		this.getData().setInteger("startTicks", this.startTicks);
+		this.getData().setInteger("ticks", this.getTicks());
+		this.getData().setInteger("startTicks", this.getStartTicks());
 	}
 
 	@Override
 	public void loadEventData() {
 		super.loadEventData();
-		this.ticks = this.getData().getInteger("ticks");
-		this.startTicks = this.getData().getInteger("startTicks");
-	}
-
-	@Override
-	public void loadEventPacket(NBTTagCompound nbt) {
-		super.loadEventPacket(nbt);
-		this.ticks = nbt.getInteger("ticks");
-		this.startTicks = nbt.getInteger("startTicks");
-	}
-
-	@Override
-	public void sendEventPacket(NBTTagCompound nbt) {
-		super.sendEventPacket(nbt);
-		nbt.setInteger("ticks", this.ticks);
-		nbt.setInteger("startTicks", this.startTicks);
+		this.dataManager.set(TICKS, this.getData().getInteger("ticks")).syncImmediately();
+		this.dataManager.set(START_TICKS, this.getData().getInteger("startTicks"));
 	}
 
 	@Override
 	public void setDefaults() {
-		this.ticks = this.getOffTime(new Random());
+		this.dataManager.set(TICKS, this.getOffTime(new Random()));
 	}
 
 	/**

@@ -1,33 +1,44 @@
 package thebetweenlands.common.world.event;
 
 import com.google.common.collect.ImmutableMap;
-import com.google.gson.JsonObject;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
+import thebetweenlands.common.network.datamanager.IDataManagedObject;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
-public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotelyControllableEnvironmentEvent {
+public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotelyControllableEnvironmentEvent, IDataManagedObject {
 	private final BLEnvironmentEventRegistry registry;
 	private final World world;
 	private NBTTagCompound nbtt = new NBTTagCompound();
-	private boolean active = false;
-	private boolean dirty = false;
 	private boolean loaded = false;
+
+	protected static final DataParameter<Boolean> ACTIVE = GenericDataManager.createKey(BLEnvironmentEvent.class, DataSerializers.BOOLEAN);
 
 	protected boolean hasNoRemoteState = false;
 	protected boolean isStateFromRemoteOverridden = false;
 	protected boolean isStateFromRemote = false;
 	protected int remoteResetTicks = -1;
 
+	protected final GenericDataManager<BLEnvironmentEvent> dataManager;
+
 	public BLEnvironmentEvent(BLEnvironmentEventRegistry registry) {
 		this.registry = registry;
 		this.world = registry.getWorld();
+		this.dataManager = new GenericDataManager<>(this);
+		this.initDataParameters();
+	}
+
+	protected void initDataParameters() {
+		this.dataManager.register(ACTIVE, false);
 	}
 
 	@Override
@@ -36,15 +47,15 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if(this.isStateFromRemote && active != this.isActive()) {
 			//State was overridden and is no longer from remote
 			this.isStateFromRemote = false;
 			this.isStateFromRemoteOverridden = true;
 		}
 
-		this.active = active;
-		if(markDirty) this.markDirty();
+		this.dataManager.set(ACTIVE, active);
+
 		if (active)
 			for (EntityPlayerMP player: getWorld().getPlayers(EntityPlayerMP.class, player -> player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId))
 				AdvancementCriterionRegistry.EVENT.trigger(player, getEventName());
@@ -97,7 +108,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 		//Only update state if it wasn't overridden by a player or command
 		if(!this.isStateFromRemoteOverridden) {
 			if(this.isActive() != value && !this.isStateFromRemote) {
-				this.setActive(value, true);
+				this.setActive(value);
 			}
 			this.remoteResetTicks = remoteResetTicks;
 			this.isStateFromRemote = true;
@@ -120,34 +131,19 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 
 	@Override
 	public boolean isActive() {
-		return this.active;
+		return this.dataManager.get(ACTIVE);
 	}
 
 	@Override
 	public boolean isActiveAt(double x, double y, double z) {
-		return this.active;
+		return this.isActive();
 	}
 
 	@Override
 	public void resetActiveState() {
 		if(this.isActive()) {
-			this.setActive(false, true);
+			this.setActive(false);
 		}
-	}
-
-	@Override
-	public void markDirty() {
-		this.dirty = true;
-	}
-
-	@Override
-	public void setDirty(boolean dirty) {
-		this.dirty = dirty;
-	}
-
-	@Override
-	public boolean isDirty() {
-		return this.dirty;
 	}
 
 	@Override
@@ -162,7 +158,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 
 	@Override
 	public final void writeToNBT(NBTTagCompound compound) {
-		this.nbtt.setBoolean("active", this.active);
+		this.nbtt.setBoolean("active", this.dataManager.get(ACTIVE));
 		this.saveEventData();
 		compound.setTag("environmentEvent:" + this.getEventName(), this.nbtt);
 	}
@@ -170,19 +166,13 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	@Override
 	public final void readFromNBT(NBTTagCompound compound) {
 		this.nbtt = compound.getCompoundTag("environmentEvent:" + this.getEventName());
-		this.active = this.nbtt.getBoolean("active");
+		this.dataManager.set(ACTIVE, this.nbtt.getBoolean("active"));
 		this.loadEventData();
 		this.loaded = true;
 	}
 
 	@Override
 	public void setDefaults() { }
-
-	@Override
-	public void loadEventPacket(NBTTagCompound nbt) { }
-
-	@Override
-	public void sendEventPacket(NBTTagCompound nbt) { }
 
 	@Override
 	public boolean isLoaded() {
@@ -192,5 +182,18 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	@Override
 	public String getLocalizationEventName() {
 		return "event." + getEventName().getResourceDomain() + "." + getEventName().getResourcePath() + ".name";
+	}
+
+	public GenericDataManager<BLEnvironmentEvent> getDataManager() {
+		return this.dataManager;
+	}
+
+	@Override
+	public boolean onParameterChange(DataParameter<?> key, Object value, boolean fromPacket) {
+		if(fromPacket && key == ACTIVE) {
+			this.setActive((boolean) value);
+			return true;
+		}
+		return false;
 	}
 }
