@@ -20,8 +20,8 @@ public class EventRift extends TimedEnvironmentEvent {
 
 	private static final int MAX_ACTIVATION_TICKS = 350;
 
-	protected int lastTicks;
-	protected int ticks;
+	protected int lastActivationTicks;
+	protected int activationTicks;
 
 	protected int soundTicks;
 	
@@ -29,10 +29,26 @@ public class EventRift extends TimedEnvironmentEvent {
 	protected float yawComponent, pitchComponent, rollComponent, scaleComponent;
 	protected boolean mirrorU, mirrorV;
 
+	protected boolean playRiftOpenSound = true;
+	
 	public EventRift(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
+	@Override
+	public void setDefaults() {
+		super.setDefaults();
+		if(this.getRegistry().isDisabled()) {
+			this.activationTicks = this.lastActivationTicks = 0;
+		} else {
+			this.playRiftOpenSound = false;
+			this.activationTicks = this.lastActivationTicks = 0;
+			this.setActive(true, true);
+			this.playRiftOpenSound = true;
+			this.activationTicks = this.lastActivationTicks = MAX_ACTIVATION_TICKS;
+		}
+	}
+	
 	@Override
 	public int getOffTime(Random rnd) {
 		return 12000 + rnd.nextInt(6000);
@@ -50,7 +66,7 @@ public class EventRift extends TimedEnvironmentEvent {
 
 	@Override
 	public void setActive(boolean active, boolean markDirty) {
-		if(!this.getWorld().isRemote && active && !this.isActive() && this.ticks == 0) {
+		if(!this.getWorld().isRemote && active && !this.isActive() && this.activationTicks == 0) {
 			this.yawComponent = this.getWorld().rand.nextFloat();
 			this.pitchComponent = this.getWorld().rand.nextFloat();
 			this.rollComponent = this.getWorld().rand.nextFloat();
@@ -58,9 +74,10 @@ public class EventRift extends TimedEnvironmentEvent {
 			this.riftSeed = this.getWorld().rand.nextInt(Integer.MAX_VALUE);
 			this.mirrorU = this.getWorld().rand.nextBoolean();
 			this.mirrorV = this.getWorld().rand.nextBoolean();
-			this.markDirty();
 
-			TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftSound(RiftSoundType.OPEN), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+			if(this.playRiftOpenSound) {
+				TheBetweenlands.networkWrapper.sendToDimension(new MessageRiftSound(RiftSoundType.OPEN), BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
+			}
 		}
 
 		super.setActive(active, markDirty);
@@ -70,23 +87,23 @@ public class EventRift extends TimedEnvironmentEvent {
 	public void update(World world) {
 		super.update(world);
 
-		this.lastTicks = this.ticks;
+		this.lastActivationTicks = this.activationTicks;
 
 		if(this.isActive()) {
-			if(this.ticks < MAX_ACTIVATION_TICKS) {
-				if(this.ticks == 108) {
-					this.ticks += 180;
+			if(this.activationTicks < MAX_ACTIVATION_TICKS) {
+				if(this.activationTicks == 108) {
+					this.activationTicks += 180;
 				}
-				this.ticks++;
-			} else if(this.ticks != MAX_ACTIVATION_TICKS) {
-				this.ticks = MAX_ACTIVATION_TICKS;
+				this.activationTicks++;
+			} else if(this.activationTicks != MAX_ACTIVATION_TICKS) {
+				this.activationTicks = MAX_ACTIVATION_TICKS;
 			}
 		} else {
-			if(this.ticks > 0) {
-				this.ticks -= 4;
+			if(this.activationTicks > 0) {
+				this.activationTicks -= 4;
 			}
-			if(this.ticks < 0) {
-				this.ticks = 0;
+			if(this.activationTicks < 0) {
+				this.activationTicks = 0;
 			}
 		}
 		
@@ -105,7 +122,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	public void saveEventData() { 
 		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
-		nbt.setInteger("riftTicks", this.ticks);
+		nbt.setInteger("riftTicks", this.activationTicks);
 		nbt.setFloat("yaw", this.yawComponent);
 		nbt.setFloat("pitch", this.pitchComponent);
 		nbt.setFloat("roll", this.rollComponent);
@@ -119,7 +136,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	public void loadEventData() { 
 		super.loadEventData();
 		NBTTagCompound nbt = this.getData();
-		this.ticks = nbt.getInteger("riftTicks");
+		this.activationTicks = nbt.getInteger("riftTicks");
 		this.yawComponent = nbt.getFloat("yaw");
 		this.pitchComponent = nbt.getFloat("pitch");
 		this.rollComponent = nbt.getFloat("roll");
@@ -132,7 +149,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	@Override
 	public void sendEventPacket(NBTTagCompound nbt) {
 		super.sendEventPacket(nbt);
-		nbt.setInteger("riftTicks", this.ticks);
+		nbt.setInteger("riftTicks", this.activationTicks);
 		nbt.setFloat("yaw", this.yawComponent);
 		nbt.setFloat("pitch", this.pitchComponent);
 		nbt.setFloat("roll", this.rollComponent);
@@ -145,7 +162,7 @@ public class EventRift extends TimedEnvironmentEvent {
 	@Override
 	public void loadEventPacket(NBTTagCompound nbt) {
 		super.loadEventPacket(nbt);
-		this.ticks = nbt.getInteger("riftTicks");
+		this.activationTicks = nbt.getInteger("riftTicks");
 		this.yawComponent = nbt.getFloat("yaw");
 		this.pitchComponent = nbt.getFloat("pitch");
 		this.rollComponent = nbt.getFloat("roll");
@@ -161,15 +178,15 @@ public class EventRift extends TimedEnvironmentEvent {
 	 * @return
 	 */
 	public float getVisibility(float partialTicks) {
-		return (this.lastTicks + (this.ticks - this.lastTicks) * partialTicks) / (float)MAX_ACTIVATION_TICKS;
+		return (this.lastActivationTicks + (this.activationTicks - this.lastActivationTicks) * partialTicks) / (float)MAX_ACTIVATION_TICKS;
 	}
 
 	/**
 	 * Returns the current active ticks
 	 * @return
 	 */
-	public int getActiveTicks() {
-		return this.ticks;
+	public int getActivationTicks() {
+		return this.activationTicks;
 	}
 
 	/**
