@@ -45,7 +45,7 @@ public class TileEntityRuneChainAltar extends TileEntity implements ISidedInvent
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				if (stack.isEmpty() || !TileEntityRuneChainAltar.this.isItemValidForSlot(slot, stack)) {
-					return ItemStack.EMPTY;
+					return stack;
 				}
 
 				return super.insertItem(slot, stack, simulate);
