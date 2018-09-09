@@ -115,7 +115,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 
 		entry.trackingTime = time;
 
-		if(time >= 0) {
+		if(time > 0) {
 			if(!this.trackedEntries.contains(entry)) {
 				this.trackedEntries.add(entry);
 			}
@@ -323,16 +323,14 @@ public class GenericDataManager<F extends IDataManagedObject> {
 	public void update() {
 		if(!this.trackedEntries.isEmpty()) {
 			for (GenericDataManager.DataEntry<?> entry : this.trackedEntries) {
-				if(entry.trackingTime >= 0) {
-					if(entry.trackingTimer >= 0) {
-						entry.trackingTimer--;
-					}
-					if(entry.queuedDirty && entry.trackingTimer < 0) {
-						entry.trackingTimer = entry.trackingTime;
-						entry.dirty = true;
-						this.dirty = true;
-						entry.queuedDirty = false;
-					}
+				if(entry.trackingTimer >= 0) {
+					entry.trackingTimer--;
+				}
+				if(entry.queuedDirty && entry.trackingTimer < 0) {
+					entry.trackingTimer = entry.trackingTime;
+					entry.dirty = true;
+					this.dirty = true;
+					entry.queuedDirty = false;
 				}
 			}
 		}
@@ -378,7 +376,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		private T value;
 		private boolean queuedDirty;
 		private boolean dirty;
-		private int trackingTime = -1;
+		private int trackingTime;
 		private int trackingTimer;
 		private EntryAccess<T> access;
 
@@ -416,7 +414,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		}
 
 		public void setDirty(boolean dirtyIn) {
-			if(this.trackingTime >= 0 && dirtyIn) {
+			if(this.trackingTime > 0 && dirtyIn) {
 				this.queuedDirty = true;
 			} else {
 				this.queuedDirty = false;
