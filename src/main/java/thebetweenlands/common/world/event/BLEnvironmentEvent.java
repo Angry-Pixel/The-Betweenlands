@@ -9,10 +9,10 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.world.World;
 import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.environment.IRemotelyControllableEnvironmentEvent;
+import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.handler.EnvironmentEventOverridesHandler;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
-import thebetweenlands.common.network.datamanager.IDataManagedObject;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotelyControllableEnvironmentEvent, IDataManagedObject {
@@ -184,6 +184,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 		return "event." + getEventName().getResourceDomain() + "." + getEventName().getResourcePath() + ".name";
 	}
 
+	@Override
 	public GenericDataManager<BLEnvironmentEvent> getDataManager() {
 		return this.dataManager;
 	}

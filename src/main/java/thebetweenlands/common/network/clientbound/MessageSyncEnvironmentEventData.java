@@ -12,21 +12,21 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.common.network.MessageBase;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
-import thebetweenlands.common.world.event.BLEnvironmentEvent;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class MessageSyncEnvironmentEventData extends MessageBase {
 	private ResourceLocation eventName;
-	private List<GenericDataManager.DataEntry<?>> dataManagerEntries;
+	private List<IGenericDataManagerAccess.IDataEntry<?>> dataManagerEntries;
 
 	public MessageSyncEnvironmentEventData() {}
 
-	public MessageSyncEnvironmentEventData(BLEnvironmentEvent eevent, boolean sendAll) {
+	public MessageSyncEnvironmentEventData(IEnvironmentEvent eevent, boolean sendAll) {
 		this.eventName = eevent.getEventName();
-		GenericDataManager<BLEnvironmentEvent> dataManager = eevent.getDataManager();
+		IGenericDataManagerAccess dataManager = eevent.getDataManager();
 		if (sendAll) {
 			this.dataManagerEntries = dataManager.getAll();
 			dataManager.setClean();
@@ -64,9 +64,11 @@ public class MessageSyncEnvironmentEventData extends MessageBase {
 				if(storage != null) {
 					BLEnvironmentEventRegistry eeRegistry = storage.getEnvironmentEventRegistry();
 					IEnvironmentEvent eevent = eeRegistry.forName(this.eventName);
-					if(eevent instanceof BLEnvironmentEvent) {
-						BLEnvironmentEvent blEvent = (BLEnvironmentEvent) eevent;
-						blEvent.getDataManager().setEntryValuesFromPacket(this.dataManagerEntries);
+					if(eevent != null) {
+						IGenericDataManagerAccess dataManager = eevent.getDataManager();
+						if(dataManager != null) {
+							dataManager.setValuesFromPacket(this.dataManagerEntries);
+						}
 						if(!eevent.isLoaded()) {
 							eevent.setLoaded();
 						}

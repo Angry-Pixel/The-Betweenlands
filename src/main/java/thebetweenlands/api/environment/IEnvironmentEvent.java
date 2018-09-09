@@ -1,8 +1,11 @@
 package thebetweenlands.api.environment;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 
 public interface IEnvironmentEvent {
 	/**
@@ -109,4 +112,11 @@ public interface IEnvironmentEvent {
 	 * @return
 	 */
 	public IEnvironmentEventRegistry getRegistry();
+	
+	/**
+	 * Returns the data manager used to sync data
+	 * @return
+	 */
+	@Nullable
+	public IGenericDataManagerAccess getDataManager();
 }

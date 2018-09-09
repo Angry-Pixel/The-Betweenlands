@@ -99,8 +99,6 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 
 	private int teleportTicks = -1;
 
-	private List<EntityLivingBase> trackedEntities = new ArrayList<EntityLivingBase>();
-
 	private int blockadeSpawnTicks = -1;
 
 	private int deathTicks = 0;
@@ -541,36 +539,19 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 					this.setPosition(this.anchor.x, this.anchor.y, this.anchor.z);
 				}
 
-				//Teleport entities back
-				List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getEntityBoundingBox().grow(this.anchorRadius*2, 512, this.anchorRadius*2));
-				Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
-				while(it.hasNext()) {
-					EntityLivingBase living = it.next();
-					if(living.getDistance(this.anchor.x, living.posY, this.anchor.z) > this.anchorRadius || Math.abs(living.posY - this.anchor.y) > this.anchorRadius)
-						it.remove();
-				}
-				if(!this.trackedEntities.isEmpty()) {
-					int tpy = this.world.getHeight(new BlockPos(this.anchor.x, 64, this.anchor.z)).getY();
-					if(Math.abs(this.anchor.y - tpy) < this.anchorRadius) {
-						for(EntityLivingBase living : this.trackedEntities) {
-							if(living != null && living.isEntityAlive() && !currentlyTrackedEntities.contains(living) && (living instanceof EntityPlayer == false || !((EntityPlayer)living).capabilities.isCreativeMode)) {
-								if(living instanceof EntityPlayerMP) {
-									EntityPlayerMP player = (EntityPlayerMP) living;
-									player.dismountRidingEntity();
-									player.connection.setPlayerLocation(this.anchor.x, tpy, this.anchor.z, player.rotationYaw, player.rotationPitch);
-								} else {
-									living.dismountRidingEntity();
-									living.setLocationAndAngles(this.anchor.x, tpy, this.anchor.z, living.rotationYaw, living.rotationPitch);
-								}
-								living.fallDistance = 0.0F;
-								living.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 2));
-								currentlyTrackedEntities.add(living);
-							}
-						}
+				//Heal when no player is nearby
+				if(this.ticksExisted % 12 == 0 && this.getHealth() < this.getMaxHealth()) {
+					List<EntityLivingBase> currentlyTrackedEntities = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(this.anchorRadius*2, this.anchorRadius*2, this.anchorRadius*2));
+					Iterator<EntityLivingBase> it = currentlyTrackedEntities.iterator();
+					while(it.hasNext()) {
+						EntityLivingBase living = it.next();
+						if(living.getDistance(this.anchor.x, living.posY, this.anchor.z) > this.anchorRadius + 4 || Math.abs(living.posY - this.anchor.y) > this.anchorRadius)
+							it.remove();
+					}
+					if(currentlyTrackedEntities.isEmpty()) {
+						this.heal(1);
 					}
 				}
-				this.trackedEntities.clear();
-				this.trackedEntities.addAll(currentlyTrackedEntities);
 			}
 
 			AxisAlignedBB checkArea = this.getEntityBoundingBox().grow(32, 16, 32);

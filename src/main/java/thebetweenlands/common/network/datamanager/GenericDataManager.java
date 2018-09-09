@@ -12,7 +12,6 @@ import javax.annotation.Nullable;
 
 import org.apache.commons.lang3.ObjectUtils;
 
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import io.netty.handler.codec.DecoderException;
@@ -26,9 +25,11 @@ import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.ReportedException;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
+import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
-public class GenericDataManager<F extends IDataManagedObject> {
+public class GenericDataManager<F extends IDataManagedObject> implements IGenericDataManagerAccess {
 	private static final Map<Class<? extends IDataManagedObject>, Integer> NEXT_ID_MAP = Maps.<Class<?  extends IDataManagedObject>, Integer>newHashMap();
 	private final List<GenericDataManager.DataEntry<?>> trackedEntries = new ArrayList<>();
 	private final Map<Integer, GenericDataManager.DataEntry<?>> entries = new HashMap<>();
@@ -150,6 +151,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		return entry;
 	}
 
+	@Override
 	public <T> T get(DataParameter<T> key) {
 		return (T) this.getEntry(key).getValue();
 	}
@@ -173,11 +175,12 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		return entry.access;
 	}
 
+	@Override
 	public boolean isDirty() {
 		return this.dirty;
 	}
 
-	public static void writeEntries(List<GenericDataManager.DataEntry<?>> entriesIn, PacketBuffer buf) throws IOException {
+	public static void writeEntries(List<? extends IDataEntry<?>> entriesIn, PacketBuffer buf) throws IOException {
 		if (entriesIn != null) {
 			int i = 0;
 
@@ -190,9 +193,10 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		buf.writeByte(255);
 	}
 
+	@Override
 	@Nullable
-	public List<GenericDataManager.DataEntry<?>> getDirty() {
-		List<GenericDataManager.DataEntry<?>> list = null;
+	public List<IDataEntry<?>> getDirty() {
+		List<IDataEntry<?>> list = null;
 
 		if (this.dirty) {
 			this.lock.readLock().lock();
@@ -202,7 +206,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 					dataentry.setDirty(false);
 
 					if (list == null) {
-						list = Lists.<GenericDataManager.DataEntry<?>>newArrayList();
+						list = new ArrayList<>();
 					}
 
 					list.add(dataentry.copy());
@@ -227,14 +231,15 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		buf.writeByte(255);
 	}
 
+	@Override
 	@Nullable
-	public List<GenericDataManager.DataEntry<?>> getAll() {
-		List<GenericDataManager.DataEntry<?>> list = null;
+	public List<IDataEntry<?>> getAll() {
+		List<IDataEntry<?>> list = null;
 		this.lock.readLock().lock();
 
 		for (GenericDataManager.DataEntry<?> dataentry : this.entries.values()) {
 			if (list == null) {
-				list = Lists.<GenericDataManager.DataEntry<?>>newArrayList();
+				list = new ArrayList<>();
 			}
 
 			list.add(dataentry.copy());
@@ -259,13 +264,13 @@ public class GenericDataManager<F extends IDataManagedObject> {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Nullable
-	public static List<GenericDataManager.DataEntry<?>> readEntries(PacketBuffer buf) throws IOException {
-		List<GenericDataManager.DataEntry<?>> list = null;
+	public static List<IDataEntry<?>> readEntries(PacketBuffer buf) throws IOException {
+		List<IDataEntry<?>> list = null;
 		int i;
 
 		while ((i = buf.readUnsignedByte()) != 255) {
 			if (list == null) {
-				list = Lists.<GenericDataManager.DataEntry<?>>newArrayList();
+				list = new ArrayList<>();
 			}
 
 			int j = buf.readVarInt();
@@ -281,11 +286,12 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		return list;
 	}
 
+	@Override
 	@SideOnly(Side.CLIENT)
-	public void setEntryValuesFromPacket(List<GenericDataManager.DataEntry<?>> newEntries) {
+	public void setValuesFromPacket(List<? extends IDataEntry<?>> newEntries) {
 		this.lock.writeLock().lock();
 
-		for (GenericDataManager.DataEntry<?> newEntry : newEntries) {
+		for (IDataEntry<?> newEntry : newEntries) {
 			GenericDataManager.DataEntry<?> entry = this.entries.get(Integer.valueOf(newEntry.getKey().getId()));
 
 			if (entry != null) {
@@ -301,14 +307,16 @@ public class GenericDataManager<F extends IDataManagedObject> {
 
 	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
-	protected <T> void setEntryValue(GenericDataManager.DataEntry<T> target, GenericDataManager.DataEntry<?> source) {
+	protected <T> void setEntryValue(GenericDataManager.DataEntry<T> target, IDataEntry<?> source) {
 		target.setValue((T) source.getValue());
 	}
 
+	@Override
 	public boolean isEmpty() {
 		return this.empty;
 	}
 
+	@Override
 	public void setClean() {
 		this.dirty = false;
 		this.lock.readLock().lock();
@@ -320,6 +328,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		this.lock.readLock().unlock();
 	}
 
+	@Override
 	public void update() {
 		if(!this.trackedEntries.isEmpty()) {
 			for (GenericDataManager.DataEntry<?> entry : this.trackedEntries) {
@@ -370,7 +379,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 		}
 	}
 
-	public static class DataEntry<T> {
+	public static class DataEntry<T> implements IDataEntry<T> {
 		private final GenericDataManager<?> dataManager;
 		private final DataParameter<T> key;
 		private T value;
@@ -397,22 +406,27 @@ public class GenericDataManager<F extends IDataManagedObject> {
 			this.access = new EntryAccess<>(this);
 		}
 
+		@Override
 		public DataParameter<T> getKey() {
 			return this.key;
 		}
 
+		@Override
 		public void setValue(T valueIn) {
 			this.value = valueIn;
 		}
 
+		@Override
 		public T getValue() {
 			return this.value;
 		}
 
+		@Override
 		public boolean isDirty() {
 			return this.dirty;
 		}
 
+		@Override
 		public void setDirty(boolean dirtyIn) {
 			if(this.trackingTime > 0 && dirtyIn) {
 				this.queuedDirty = true;
@@ -425,6 +439,7 @@ public class GenericDataManager<F extends IDataManagedObject> {
 			}
 		}
 
+		@Override
 		public GenericDataManager.DataEntry<T> copy() {
 			return new GenericDataManager.DataEntry<T>(this.dataManager, this.key, this.key.getSerializer().copyValue(this.value), this.trackingTime);
 		}

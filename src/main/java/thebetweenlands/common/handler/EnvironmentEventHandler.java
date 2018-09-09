@@ -11,9 +11,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
-import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.world.event.BLEnvironmentEvent;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
@@ -41,11 +41,11 @@ public class EnvironmentEventHandler {
 					} else {
 						eevent.update(event.world);
 					}
-					if(eevent instanceof BLEnvironmentEvent) {
-						GenericDataManager<BLEnvironmentEvent> dataManager = ((BLEnvironmentEvent) eevent).getDataManager();
+					IGenericDataManagerAccess dataManager = eevent.getDataManager();
+					if(dataManager != null) {
 						dataManager.update();
 						if(dataManager.isDirty()) {
-							TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEventData((BLEnvironmentEvent) eevent, false), event.world.provider.getDimension());
+							TheBetweenlands.networkWrapper.sendToDimension(new MessageSyncEnvironmentEventData(eevent, false), event.world.provider.getDimension());
 						}
 					}
 				}
