@@ -4,6 +4,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import thebetweenlands.common.world.event.EventRift.RiftConfiguration;
 
@@ -29,6 +30,33 @@ public class CustomDataSerializers {
 		@Override
 		public Vec3d copyValue(Vec3d value) {
 			return new Vec3d(value.x, value.y, value.z);
+		}
+	};
+
+	public static final DataSerializer<AxisAlignedBB> AABB = new DataSerializer<AxisAlignedBB>() {
+		@Override
+		public void write(PacketBuffer buf, AxisAlignedBB value) {
+			buf.writeDouble(value.minX);
+			buf.writeDouble(value.minY);
+			buf.writeDouble(value.minZ);
+			buf.writeDouble(value.maxX);
+			buf.writeDouble(value.maxY);
+			buf.writeDouble(value.maxZ);
+		}
+
+		@Override
+		public AxisAlignedBB read(PacketBuffer buf) {
+			return new AxisAlignedBB(buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble(), buf.readDouble());
+		}
+
+		@Override
+		public DataParameter<AxisAlignedBB> createKey(int id) {
+			return new DataParameter<AxisAlignedBB>(id, this);
+		}
+
+		@Override
+		public AxisAlignedBB copyValue(AxisAlignedBB value) {
+			return value;
 		}
 	};
 
@@ -80,5 +108,6 @@ public class CustomDataSerializers {
 		DataSerializers.registerSerializer(VEC3D);
 		DataSerializers.registerSerializer(SHORT);
 		DataSerializers.registerSerializer(RIFT_CONFIGURATION);
+		DataSerializers.registerSerializer(AABB);
 	}
 }

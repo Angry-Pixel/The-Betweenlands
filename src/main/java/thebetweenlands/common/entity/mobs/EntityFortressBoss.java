@@ -832,7 +832,7 @@ public class EntityFortressBoss extends EntityMob implements IEntityBL, IBLBoss,
 					if(location.getType() == EnumLocationType.WIGHT_TOWER) {
 						if(location.getGuard() != null) {
 							location.getGuard().clear(this.world);
-							location.setDirty(true, true);
+							location.setDirty(true);
 						}
 					}
 				}

@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.storage;
 
 import java.io.File;
-import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +22,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.api.storage.ILocalStorageHandler;
@@ -31,6 +31,7 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageData;
 import thebetweenlands.common.registries.StorageRegistry;
 
 public class LocalStorageHandlerImpl implements ILocalStorageHandler {
@@ -195,7 +196,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 
 	@Override
 	public void saveLocalStorageFile(ILocalStorage storage) {
-		NBTTagCompound nbt = this.saveLocalStorageToNBT(new NBTTagCompound(), storage, false);
+		NBTTagCompound nbt = this.saveLocalStorageToNBT(new NBTTagCompound(), storage);
 		if(storage.getRegion() == null) {
 			File file = new File(this.getLocalStorageDirectory(), storage.getID().getStringID() + ".dat");
 			this.saveHandler.queueLocalStorage(file, nbt);
@@ -234,7 +235,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			try {
 				NBTTagCompound nbt = this.saveHandler.loadFileNbt(file);;
 				if(nbt != null) {
-					return this.createLocalStorageFromNBT(nbt, null, false);
+					return this.createLocalStorageFromNBT(nbt, null);
 				}
 			} catch(Exception ex) {
 				TheBetweenlands.logger.error(String.format("Failed reading local storage %s from file: %s", reference.getID().getStringID(), file.getAbsolutePath()), ex);
@@ -243,7 +244,7 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 			LocalRegionData region = this.regionCache.getOrCreateRegion(reference.getRegion());
 			NBTTagCompound nbt = region.getLocalStorageNBT(reference.getID());
 			if(nbt != null) {
-				return this.createLocalStorageFromNBT(nbt, reference.getRegion(), false);
+				return this.createLocalStorageFromNBT(nbt, reference.getRegion());
 			}
 		}
 		return null;
@@ -299,56 +300,51 @@ public class LocalStorageHandlerImpl implements ILocalStorageHandler {
 	}
 
 	@Override
-	public void tick() {
+	public void update() {
 		for(int i = 0; i < this.tickableLocalStorage.size(); i++) {
 			ILocalStorage localStorage = this.tickableLocalStorage.get(i);
 			((ITickable)localStorage).update();
-		}
-	}
 
-	@Override
-	public ILocalStorage createLocalStorageFromNBT(NBTTagCompound nbt, @Nullable LocalRegion region, boolean packet) {
-		try {
-			try {
-				ResourceLocation type = new ResourceLocation(nbt.getString("type"));
-				Class<? extends BetweenlandsLocalStorage> storageClass = StorageRegistry.getStorageType(type);
-				if (storageClass == null) {
-					throw new Exception("Local storage type not mapped: " + type);
+			IGenericDataManagerAccess dataManager = localStorage.getDataManager();
+			if(dataManager != null) {
+				dataManager.update();
+				if(dataManager.isDirty()) {
+					MessageSyncLocalStorageData message = new MessageSyncLocalStorageData(localStorage, false);
+					for (EntityPlayerMP watcher : localStorage.getWatchers()) {
+						TheBetweenlands.networkWrapper.sendTo(message, watcher);
+					}
 				}
-				Constructor<? extends BetweenlandsLocalStorage> ctor = storageClass.getConstructor(IWorldStorage.class, StorageID.class, LocalRegion.class);
-				ILocalStorage storage = ctor.newInstance(this.worldStorage, StorageID.readFromNBT(nbt), region);
-				if(packet) {
-					storage.readFromPacketNBT(nbt.getCompoundTag("data"));
-				} else {
-					storage.readFromNBT(nbt.getCompoundTag("data"));
-				}
-				return storage;
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
 			}
-		} catch(Exception ex) {
-			throw new RuntimeException(ex);
 		}
 	}
 
 	@Override
-	public NBTTagCompound getLocalStorageDataNBT(NBTTagCompound nbt) {
-		return nbt.getCompoundTag("data");
+	public ILocalStorage createLocalStorageFromNBT(NBTTagCompound nbt, @Nullable LocalRegion region) {
+		ResourceLocation type = new ResourceLocation(nbt.getString("type"));
+		StorageID id = StorageID.readFromNBT(nbt);
+		ILocalStorage storage = this.createLocalStorage(type, id, region);
+		storage.readFromNBT(nbt.getCompoundTag("data"));
+		return storage;
 	}
 
 	@Override
-	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage, boolean packet) {
+	public ILocalStorage createLocalStorage(ResourceLocation type, StorageID id, @Nullable LocalRegion region) {
+		StorageRegistry.Factory<? extends ILocalStorage> factory = StorageRegistry.getStorageFactory(type);
+		if (factory == null) {
+			throw new RuntimeException("Local storage type not mapped: " + type);
+		}
+		return factory.create(this.worldStorage, id, region);
+	}
+
+	@Override
+	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage) {
 		ResourceLocation type = StorageRegistry.getStorageId(storage.getClass());
 		if (type == null) {
 			throw new RuntimeException("Local storage type not mapped: " + storage);
 		}
 		nbt.setString("type", type.toString());
 		storage.getID().writeToNBT(nbt);
-		if(packet) {
-			nbt.setTag("data", storage.writeToPacketNBT(new NBTTagCompound()));
-		} else {
-			nbt.setTag("data", storage.writeToNBT(new NBTTagCompound()));
-		}
+		nbt.setTag("data", storage.writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}
 

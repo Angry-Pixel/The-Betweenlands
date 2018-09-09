@@ -2,7 +2,6 @@ package thebetweenlands.common.network.datamanager;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -14,6 +13,10 @@ import org.apache.commons.lang3.ObjectUtils;
 
 import com.google.common.collect.Maps;
 
+import gnu.trove.map.TIntObjectMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.DecoderException;
 import io.netty.handler.codec.EncoderException;
 import net.minecraft.crash.CrashReport;
@@ -30,9 +33,47 @@ import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class GenericDataManager<F extends IDataManagedObject> implements IGenericDataManagerAccess {
+	public static interface Serializer<T> {
+		public void serialize(PacketBuffer buf, T value) throws IOException;
+	}
+
+	public static interface Deserializer<T> {
+		public T deserialize(PacketBuffer buf) throws IOException;
+	}
+
+	private static final class DummySerializer<T> implements DataSerializer<Object> {
+		private final Serializer<T> serializer;
+		private final Deserializer<T> deserializer;
+
+		private DummySerializer(Serializer<T> serializer, Deserializer<T> deserializer) {
+			this.serializer = serializer;
+			this.deserializer = deserializer;
+		}
+
+		@Override
+		public void write(PacketBuffer buf, Object value) {
+
+		}
+
+		@Override
+		public Object read(PacketBuffer buf) throws IOException {
+			return null;
+		}
+
+		@Override
+		public DataParameter<Object> createKey(int id) {
+			return new DataParameter<>(id, this);
+		}
+
+		@Override
+		public Object copyValue(Object value) {
+			return new DummySerializer<T>(this.serializer, this.deserializer);
+		}
+	};
+
 	private static final Map<Class<? extends IDataManagedObject>, Integer> NEXT_ID_MAP = Maps.<Class<?  extends IDataManagedObject>, Integer>newHashMap();
 	private final List<GenericDataManager.DataEntry<?>> trackedEntries = new ArrayList<>();
-	private final Map<Integer, GenericDataManager.DataEntry<?>> entries = new HashMap<>();
+	private final TIntObjectMap<GenericDataManager.DataEntry<?>> entries = new TIntObjectHashMap<>();
 	private final ReadWriteLock lock = new ReentrantReadWriteLock();
 	private boolean empty = true;
 	private boolean dirty;
@@ -40,6 +81,20 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 
 	public GenericDataManager(F owner) {
 		this.owner = owner;
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T> DataParameter<T> createKey(Class<? extends IDataManagedObject> clazz, Serializer<T> serializer, Deserializer<T> deserializer) {
+		if (BetweenlandsConfig.DEBUG.debug) {
+			try {
+				Class<?> callerClass = Class.forName(Thread.currentThread().getStackTrace()[2].getClassName());
+
+				if (!callerClass.equals(clazz)) {
+					throw new RuntimeException("GenericDataManager#createKey called for: " + clazz + " from " + callerClass);
+				}
+			} catch (ClassNotFoundException ex) { }
+		}
+		return (DataParameter<T>) new DummySerializer<>(serializer, deserializer).createKey(createFreeId(clazz));
 	}
 
 	public static <T> DataParameter<T> createKey(Class<? extends IDataManagedObject> clazz, DataSerializer<T> serializer) {
@@ -52,7 +107,10 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 				}
 			} catch (ClassNotFoundException ex) { }
 		}
+		return serializer.createKey(createFreeId(clazz));
+	}
 
+	private static int createFreeId(Class<? extends IDataManagedObject> clazz) {
 		int freeId;
 
 		if (NEXT_ID_MAP.containsKey(clazz)) {
@@ -81,7 +139,7 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 			throw new IllegalArgumentException("Data value id is too big with " + freeId + "! (Max is " + 254 + ")");
 		} else {
 			NEXT_ID_MAP.put(clazz, Integer.valueOf(freeId));
-			return serializer.createKey(freeId);
+			return freeId;
 		}
 	}
 
@@ -92,7 +150,7 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 			throw new IllegalArgumentException("Data value id is too big with " + id + "! (Max is " + 254 + ")");
 		} else if (this.entries.containsKey(Integer.valueOf(id))) {
 			throw new IllegalArgumentException("Duplicate id value for " + id + "!");
-		} else if (DataSerializers.getSerializerId(key.getSerializer()) < 0) {
+		} else if (key.getSerializer() instanceof DummySerializer == false && DataSerializers.getSerializerId(key.getSerializer()) < 0) {
 			throw new IllegalArgumentException("Unregistered serializer " + key.getSerializer() + " for " + id + "!");
 		} else {
 			this.setEntry(key, value);
@@ -107,7 +165,7 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		return key;
 	}
 
-	public void setTrackingTime(DataParameter<?> key, int time) {
+	public <T> DataParameter<T> setTrackingTime(DataParameter<T> key, int time) {
 		DataEntry<?> entry = this.getEntry(key);
 
 		if(entry == null) {
@@ -123,12 +181,22 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		} else {
 			this.trackedEntries.remove(entry);
 		}
+
+		return key;
 	}
 
+	@SuppressWarnings("unchecked")
 	private <T> void setEntry(DataParameter<T> key, T value) {
-		GenericDataManager.DataEntry<T> dataentry = new GenericDataManager.DataEntry<T>(this, key, value);
+		GenericDataManager.DataEntry<T> entry = new GenericDataManager.DataEntry<T>(this, key, value);
+
+		DataSerializer<T> serializer = entry.getKey().getSerializer();
+		if(serializer instanceof DummySerializer) {
+			entry.serializer = ((DummySerializer<T>) serializer).serializer;
+			entry.deserializer = ((DummySerializer<T>) serializer).deserializer;
+		}
+
 		this.lock.writeLock().lock();
-		this.entries.put(Integer.valueOf(key.getId()), dataentry);
+		this.entries.put(Integer.valueOf(key.getId()), entry);
 		this.empty = false;
 		this.lock.writeLock().unlock();
 	}
@@ -153,11 +221,21 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 
 	@Override
 	public <T> T get(DataParameter<T> key) {
-		return (T) this.getEntry(key).getValue();
+		GenericDataManager.DataEntry<T> entry = this.<T>getEntry(key);
+
+		if(entry == null) {
+			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
+		}
+
+		return entry.getValue();
 	}
 
 	public <T> EntryAccess<T> set(DataParameter<T> key, T value) {
 		GenericDataManager.DataEntry<T> entry = this.<T>getEntry(key);
+
+		if(entry == null) {
+			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
+		}
 
 		if (ObjectUtils.notEqual(value, entry.getValue())) {
 			if(!this.owner.onParameterChange(key, value, false)) {
@@ -171,7 +249,13 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 
 	public <T> EntryAccess<T> setDirty(DataParameter<T> key) {
 		DataEntry<T> entry = this.getEntry(key);
+
+		if(entry == null) {
+			throw new IllegalArgumentException("Data parameter " + key + " is not registered!");
+		}
+
 		entry.setDirty(true);
+
 		return entry.access;
 	}
 
@@ -193,6 +277,16 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		buf.writeByte(255);
 	}
 
+	private <T> void serializeEntry(GenericDataManager.DataEntry<T> entry, GenericDataManager.DataEntry<?> copy) {
+		PacketBuffer buf = new PacketBuffer(Unpooled.buffer());
+		try {
+			entry.serializer.serialize(buf, (T) entry.value);
+		} catch(IOException ex) {
+			throw new RuntimeException(ex);
+		}
+		copy.serializedData = buf;
+	}
+
 	@Override
 	@Nullable
 	public List<IDataEntry<?>> getDirty() {
@@ -201,15 +295,21 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		if (this.dirty) {
 			this.lock.readLock().lock();
 
-			for (GenericDataManager.DataEntry<?> dataentry : this.entries.values()) {
-				if (dataentry.isDirty()) {
-					dataentry.setDirty(false);
+			for (GenericDataManager.DataEntry<?> entry : this.entries.valueCollection()) {
+				if (entry.isDirty()) {
+					entry.setDirty(false);
 
 					if (list == null) {
 						list = new ArrayList<>();
 					}
 
-					list.add(dataentry.copy());
+					DataEntry<?> copy = entry.copy();
+
+					list.add(copy);
+
+					if(entry.serializer != null) {
+						this.serializeEntry(entry, copy);
+					}
 				}
 			}
 
@@ -223,7 +323,7 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 	public void writeEntries(PacketBuffer buf) throws IOException {
 		this.lock.readLock().lock();
 
-		for (GenericDataManager.DataEntry<?> dataentry : this.entries.values()) {
+		for (GenericDataManager.DataEntry<?> dataentry : this.entries.valueCollection()) {
 			writeEntry(buf, dataentry);
 		}
 
@@ -237,12 +337,18 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		List<IDataEntry<?>> list = null;
 		this.lock.readLock().lock();
 
-		for (GenericDataManager.DataEntry<?> dataentry : this.entries.values()) {
+		for (GenericDataManager.DataEntry<?> entry : this.entries.valueCollection()) {
 			if (list == null) {
 				list = new ArrayList<>();
 			}
 
-			list.add(dataentry.copy());
+			DataEntry<?> copy = entry.copy();
+
+			list.add(copy);
+
+			if(entry.serializer != null) {
+				this.serializeEntry(entry, copy);
+			}
 		}
 
 		this.lock.readLock().unlock();
@@ -250,15 +356,27 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 	}
 
 	private static <T> void writeEntry(PacketBuffer buf, GenericDataManager.DataEntry<T> entry) throws IOException {
-		DataParameter<T> dataparameter = entry.getKey();
-		int i = DataSerializers.getSerializerId(dataparameter.getSerializer());
+		DataParameter<T> parameter = entry.getKey();
 
-		if (i < 0) {
-			throw new EncoderException("Unknown serializer type " + dataparameter.getSerializer());
+		buf.writeByte(parameter.getId());
+
+		if(entry.serializedData != null) {
+			buf.writeBoolean(true);
+			buf.writeVarInt(entry.serializedData.readableBytes());
+
+			synchronized(entry.serializedData) {
+				entry.serializedData.markReaderIndex();
+				buf.writeBytes(entry.serializedData);
+				entry.serializedData.resetReaderIndex();
+			}
 		} else {
-			buf.writeByte(dataparameter.getId());
+			buf.writeBoolean(false);
+			int i = DataSerializers.getSerializerId(parameter.getSerializer());
+			if (i < 0) {
+				throw new EncoderException("Unknown serializer type " + parameter.getSerializer());
+			}
 			buf.writeVarInt(i);
-			dataparameter.getSerializer().write(buf, entry.getValue());
+			parameter.getSerializer().write(buf, entry.getValue());
 		}
 	}
 
@@ -266,21 +384,34 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 	@Nullable
 	public static List<IDataEntry<?>> readEntries(PacketBuffer buf) throws IOException {
 		List<IDataEntry<?>> list = null;
-		int i;
+		int key;
 
-		while ((i = buf.readUnsignedByte()) != 255) {
+		while ((key = buf.readUnsignedByte()) != 255) {
 			if (list == null) {
 				list = new ArrayList<>();
 			}
 
-			int j = buf.readVarInt();
-			DataSerializer<?> dataserializer = DataSerializers.getSerializer(j);
+			DataSerializer<?> serializer;
+			Object value = null;
+			ByteBuf serializedData = null;
 
-			if (dataserializer == null) {
-				throw new DecoderException("Unknown serializer type " + j);
+			if(buf.readBoolean()) {
+				serializedData = new PacketBuffer(buf.readBytes(buf.readVarInt()));
+				serializer = new DummySerializer(null, null);
+			} else {
+				int serializerId = buf.readVarInt();
+				serializer = DataSerializers.getSerializer(serializerId);
+				if (serializer == null) {
+					throw new DecoderException("Unknown serializer type " + serializerId);
+				}
+				value = serializer.read(buf);
 			}
 
-			list.add(new GenericDataManager.DataEntry(null, dataserializer.createKey(i), dataserializer.read(buf)));
+			GenericDataManager.DataEntry<?> entry = new GenericDataManager.DataEntry(null, serializer.createKey(key), value);
+
+			entry.serializedData = serializedData;
+
+			list.add(entry);
 		}
 
 		return list;
@@ -295,8 +426,23 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 			GenericDataManager.DataEntry<?> entry = this.entries.get(Integer.valueOf(newEntry.getKey().getId()));
 
 			if (entry != null) {
-				if(!this.owner.onParameterChange(entry.getKey(), newEntry.getValue(), true)) {
-					this.setEntryValue(entry, newEntry);
+				Object newValue;
+				if(entry instanceof GenericDataManager.DataEntry<?>) {
+					GenericDataManager.DataEntry<?> newGenericEntry = (GenericDataManager.DataEntry<?>) newEntry;
+					if(entry.deserializer != null) {
+						try {
+							newValue = entry.deserializer.deserialize(new PacketBuffer(newGenericEntry.serializedData));
+						} catch(IOException ex) {
+							throw new RuntimeException(ex);
+						}
+					} else {
+						newValue = newEntry.getValue();
+					}
+				} else {
+					newValue = newEntry.getValue();
+				}
+				if(!this.owner.onParameterChange(entry.getKey(), newValue, true)) {
+					this.setEntryValue(entry, newValue);
 				}
 			}
 		}
@@ -307,8 +453,8 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 
 	@SuppressWarnings("unchecked")
 	@SideOnly(Side.CLIENT)
-	protected <T> void setEntryValue(GenericDataManager.DataEntry<T> target, IDataEntry<?> source) {
-		target.setValue((T) source.getValue());
+	protected <T> void setEntryValue(GenericDataManager.DataEntry<T> target, Object value) {
+		target.setValue((T) value);
 	}
 
 	@Override
@@ -321,7 +467,7 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		this.dirty = false;
 		this.lock.readLock().lock();
 
-		for (GenericDataManager.DataEntry<?> dataentry : this.entries.values()) {
+		for (GenericDataManager.DataEntry<?> dataentry : this.entries.valueCollection()) {
 			dataentry.setDirty(false);
 		}
 
@@ -388,6 +534,10 @@ public class GenericDataManager<F extends IDataManagedObject> implements IGeneri
 		private int trackingTime;
 		private int trackingTimer;
 		private EntryAccess<T> access;
+
+		private ByteBuf serializedData;
+		private Serializer<T> serializer;
+		private Deserializer<T> deserializer;
 
 		public DataEntry(GenericDataManager<?> dataManager, DataParameter<T> keyIn, T valueIn) {
 			this.dataManager = dataManager;

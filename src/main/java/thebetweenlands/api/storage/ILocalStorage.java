@@ -7,10 +7,14 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 
 public interface ILocalStorage extends ICapabilityProvider {
 	/**
@@ -25,13 +29,13 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 */
 	@Nullable
 	public AxisAlignedBB getBoundingBox();
-	
+
 	/**
 	 * Returns whether the local storage is loaded
 	 * @return
 	 */
 	public boolean isLoaded();
-	
+
 	/**
 	 * Returns the storage ID
 	 * @return
@@ -61,19 +65,17 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt);
 	
 	/**
-	 * Reads the local storage data from packet NBT.
-	 * {@link #getID()} and {@link #getRegion()} are already read automatically
+	 * Reads the initial data that is sent the first time
 	 * @param nbt
 	 */
-	public void readFromPacketNBT(NBTTagCompound nbt);
-
+	public void readInitialPacket(NBTTagCompound nbt);
+	
 	/**
-	 * Writes the local storage data to packet NBT.
-	 * {@link #getID()} and {@link #getRegion()} are already written automatically
+	 * Writes the initial data that is sent the first time
 	 * @param nbt
 	 * @return
 	 */
-	public NBTTagCompound writeToPacketNBT(NBTTagCompound nbt);
+	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt);
 
 	/**
 	 * Marks the local storage as dirty
@@ -99,6 +101,13 @@ public interface ILocalStorage extends ICapabilityProvider {
 	public List<ChunkPos> getLinkedChunks();
 
 	/**
+	 * Sets the linked chunks. Only for use on client side for syncing
+	 * @param linkedChunks New linked chunks
+	 */
+	@SideOnly(Side.CLIENT)
+	public void setLinkedChunks(List<ChunkPos> linkedChunks);
+
+	/**
 	 * Called when the local storage is loaded
 	 */
 	public void onLoaded();
@@ -107,12 +116,12 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * Called when the local storage is unloaded
 	 */
 	public void onUnloaded();
-	
+
 	/**
 	 * Called when the local storage is removed
 	 */
 	public void onRemoved();
-	
+
 	/**
 	 * Returns a list of all currently loaded references
 	 * @return
@@ -132,7 +141,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return True if the reference was loaded
 	 */
 	public boolean unloadReference(LocalStorageReference reference);
-	
+
 	/**
 	 * Adds a watcher of the specified chunk storage.
 	 * May be called multiple times with the same player but from
@@ -158,7 +167,7 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return
 	 */
 	public Collection<EntityPlayerMP> getWatchers();
-	
+
 	/**
 	 * Unlinks all chunks from this local storage.
 	 * Do not use this to remove local storage since the
@@ -167,14 +176,14 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return True if all chunks were successfully unlinked
 	 */
 	public boolean unlinkAllChunks();
-	
+
 	/**
 	 * Links the specified chunk to this local storage
 	 * @param chunk
 	 * @return True if the chunk was linked successfully
 	 */
 	public boolean linkChunk(Chunk chunk);
-	
+
 	/**
 	 * Unlinks the specified chunk from this local storage
 	 * Do not use this to remove local storage since the
@@ -184,4 +193,12 @@ public interface ILocalStorage extends ICapabilityProvider {
 	 * @return True if the chunk was unlinked successfully
 	 */
 	public boolean unlinkChunk(Chunk chunk);
+
+	/**
+	 * Returns the data manager used to sync data. <p><b>Only storages that implement {@link ITickable}
+	 * will automatically update the data manager!</b>
+	 * @return
+	 */
+	@Nullable
+	public IGenericDataManagerAccess getDataManager();
 }
