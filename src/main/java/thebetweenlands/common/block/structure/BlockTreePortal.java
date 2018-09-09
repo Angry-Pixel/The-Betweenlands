@@ -229,29 +229,32 @@ public class BlockTreePortal extends BasicBlock {
 		if (!entityIn.isRiding() && !entityIn.isBeingRidden() && entityIn.timeUntilPortal <= 0 && BetweenlandsConfig.WORLD_AND_DIMENSION.portalDimensionWhitelistSet.isListed(entityIn.dimension)) {
 			AxisAlignedBB aabb = state.getBoundingBox(worldIn, pos);
 			if (aabb != null && aabb.offset(pos).intersects(entityIn.getEntityBoundingBox())) {
-				if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
-					IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
-					cap.setInPortal(true);
-				} else if (!worldIn.isRemote && worldIn instanceof WorldServer) {
-					BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
-					AxisAlignedBB entityAabb = entityIn.getEntityBoundingBox();
-					List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, entityAabb, loc -> loc.intersects(entityAabb));
-					LocationPortal portal = null;
-					if(!portals.isEmpty()) {
-						portal = portals.get(0);
+				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(worldIn);
+				AxisAlignedBB entityAabb = entityIn.getEntityBoundingBox();
+				List<LocationPortal> portals = worldStorage.getLocalStorageHandler().getLocalStorages(LocationPortal.class, entityAabb, loc -> loc.intersects(entityAabb));
+				LocationPortal portal = null;
+				if(!portals.isEmpty()) {
+					portal = portals.get(0);
+				}
+				int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+				if(portal != null && (portal.getOtherPortalPosition() != null || portal.hasTargetDimension())) {
+					//Portal already linked, teleport to linked dimension
+					targetDim = portal.getOtherPortalDimension();
+				} else if (entityIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+					targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;
+				}
+				if(targetDim != entityIn.dimension) {
+					if (entityIn.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
+						IPortalCapability cap = entityIn.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+						cap.setInPortal(true);
+					} else if (!worldIn.isRemote && worldIn instanceof WorldServer) {
+
+						WorldServer otherDim = ((WorldServer) worldIn).getMinecraftServer().getWorld(targetDim);
+						if(otherDim != null) {
+							TeleporterHandler.transferToDim(entityIn, otherDim);
+						}
+						entityIn.timeUntilPortal = entityIn.getPortalCooldown();
 					}
-					int targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
-					if(portal != null && (portal.getOtherPortalPosition() != null || portal.hasTargetDimension())) {
-						//Portal already linked, teleport to linked dimension
-						targetDim = portal.getOtherPortalDimension();
-					} else if (entityIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
-						targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;
-					}
-					WorldServer otherDim = ((WorldServer) worldIn).getMinecraftServer().getWorld(targetDim);
-					if(otherDim != null) {
-						TeleporterHandler.transferToDim(entityIn, otherDim);
-					}
-					entityIn.timeUntilPortal = entityIn.getPortalCooldown();
 				}
 			}
 		}

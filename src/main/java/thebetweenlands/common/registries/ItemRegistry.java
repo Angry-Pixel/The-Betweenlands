@@ -131,6 +131,10 @@ import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.item.tools.ItemHagHacker;
 import thebetweenlands.common.item.tools.ItemLootSword;
 import thebetweenlands.common.item.tools.ItemNet;
+import thebetweenlands.common.item.tools.ItemOctineAxe;
+import thebetweenlands.common.item.tools.ItemOctinePickaxe;
+import thebetweenlands.common.item.tools.ItemOctineShovel;
+import thebetweenlands.common.item.tools.ItemOctineSword;
 import thebetweenlands.common.item.tools.ItemPestle;
 import thebetweenlands.common.item.tools.ItemShockwaveSword;
 import thebetweenlands.common.item.tools.ItemSickle;
@@ -233,46 +237,10 @@ public class ItemRegistry {
     public static final Item BONE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item BONE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item BONE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_BONE).setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item OCTINE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_OCTINE) {
-        @Override
-        public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-            super.hitEntity(stack, target, attacker);
-            if (attacker.isHandActive() && attacker.world.rand.nextInt(CircleGemHelper.getGem(attacker.getHeldItem(attacker.getActiveHand())) == CircleGemType.CRIMSON ? 2 : 4) == 0) {
-                target.setFire(10);
-            }
-            return false;
-        }
-    }.setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item OCTINE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_OCTINE) {
-        @Override
-        public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-            super.hitEntity(stack, target, attacker);
-            if (attacker.world.rand.nextInt(4) == 0) {
-                target.setFire(10);
-            }
-            return false;
-        }
-    }.setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item OCTINE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_OCTINE) {
-        @Override
-        public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-            super.hitEntity(stack, target, attacker);
-            if (attacker.world.rand.nextInt(4) == 0) {
-                target.setFire(10);
-            }
-            return false;
-        }
-    }.setCreativeTab(BLCreativeTabs.GEARS);
-    public static final Item OCTINE_PICKAXE = new ItemBLPickaxe(BLMaterialRegistry.TOOL_OCTINE) {
-        @Override
-        public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
-            super.hitEntity(stack, target, attacker);
-            if (attacker.world.rand.nextInt(4) == 0) {
-                target.setFire(10);
-            }
-            return false;
-        }
-    }.setCreativeTab(BLCreativeTabs.GEARS);
+    public static final Item OCTINE_SWORD = new ItemOctineSword();
+    public static final Item OCTINE_SHOVEL = new ItemOctineShovel();
+    public static final Item OCTINE_AXE = new ItemOctineAxe();
+    public static final Item OCTINE_PICKAXE = new ItemOctinePickaxe();
     public static final Item VALONITE_SWORD = new ItemBLSword(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item VALONITE_SHOVEL = new ItemBLShovel(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
     public static final Item VALONITE_AXE = new ItemBLAxe(BLMaterialRegistry.TOOL_VALONITE).setCreativeTab(BLCreativeTabs.GEARS);
@@ -489,13 +457,13 @@ public class ItemRegistry {
 		OreDictionary.registerOre("gemGreenMiddleGem", new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM));
 		OreDictionary.registerOre("gemLifeCrystal", new ItemStack(ItemRegistry.LIFE_CRYSTAL));
 
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE));
-		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
+        OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_WEEDWOOD, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SAP, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_RUBBER, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE, 1, OreDictionary.WILDCARD_VALUE));
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG, 1, OreDictionary.WILDCARD_VALUE));
 
 		//Recipes that use and creates these conflicts with vanilla recipes because of ore dict
 		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));

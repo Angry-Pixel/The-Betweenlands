@@ -59,6 +59,8 @@ public final class WorldEventHandler {
 				//Unload immediately on client side
 				cap.unloadChunk(event.getChunk());
 			} else {
+				//Queue chunk to be unloaded later because there's no way to know
+				//whether chunk will be saved to disk or not
 				UNLOAD_QUEUE.put(event.getChunk(), cap);
 			}
 		}
@@ -106,14 +108,14 @@ public final class WorldEventHandler {
 	@SubscribeEvent
 	public static void onServerTick(ServerTickEvent event) {
 		if(event.phase == Phase.END) {
-			Iterator<Entry<Chunk, IWorldStorage>> entryIT = UNLOAD_QUEUE.entrySet().iterator();
-			while(entryIT.hasNext()) {
-				Entry<Chunk, IWorldStorage> entry = entryIT.next();
+			//Unload queued chunks that weren't saved to disk
+			for(Entry<Chunk, IWorldStorage> entry : UNLOAD_QUEUE.entrySet()) {
 				Chunk chunk = entry.getKey();
 				if(!chunk.isLoaded()) {
 					entry.getValue().unloadChunk(chunk);
 				}
 			}
+			UNLOAD_QUEUE.clear();
 		}
 	}
 

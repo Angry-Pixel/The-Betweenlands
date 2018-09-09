@@ -111,6 +111,11 @@ public class BetweenlandsConfig {
 		@Comment("The biome search range used to find a suitable biome when a portal is generated. If you find that a suitable biome isn't found reliably enough this can be increased at the cost of taking more time to generate portals")
 		@RangeInt(min = 16, max = Integer.MAX_VALUE)
 		public int portalBiomeSearchRange = 256;
+		
+		@Name("generate_portal_in_end")
+		@LangKey(LANG_PREFIX + "generate_portal_in_end")
+		@Comment("Whether custom portals that teleport to the End should create a Portal Tree in the End")
+		public boolean generatePortalInEnd = false;
 	}
 
 	@Name("rendering")

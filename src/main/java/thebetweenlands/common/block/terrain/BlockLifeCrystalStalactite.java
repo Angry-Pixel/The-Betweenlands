@@ -235,4 +235,9 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return (int)((state.getValue(VARIANT) == EnumLifeCrystalType.ORE ? 0.4F : 0.0F) * 15.0F);
+	}
 }

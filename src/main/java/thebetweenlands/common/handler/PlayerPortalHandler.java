@@ -74,9 +74,11 @@ public class PlayerPortalHandler {
 									} else if (player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 										targetDim = BetweenlandsConfig.WORLD_AND_DIMENSION.portalDefaultReturnDimension;
 									}
-									WorldServer otherDim = ((WorldServer) player.world).getMinecraftServer().getWorld(targetDim);
-									if(otherDim != null) {
-										TeleporterHandler.transferToDim(player, otherDim);
+									if(targetDim != player.dimension) {
+										WorldServer otherDim = ((WorldServer) player.world).getMinecraftServer().getWorld(targetDim);
+										if(otherDim != null) {
+											TeleporterHandler.transferToDim(player, otherDim);
+										}
 									}
 								}
 								player.timeUntilPortal = 10;

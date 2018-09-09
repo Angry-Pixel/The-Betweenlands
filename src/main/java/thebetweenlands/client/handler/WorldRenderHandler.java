@@ -161,8 +161,6 @@ public class WorldRenderHandler {
 				fbo.clear(0, 0, 0, 0, 1);
 				
 				if(!GAS_CLOUDS.isEmpty()) {
-					System.out.println("TEST");
-					
 					GlStateManager.enableBlend();
 					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 					GlStateManager.alphaFunc(GL11.GL_GREATER, 0.004F);
