@@ -10,6 +10,7 @@ import com.google.common.base.Predicate;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public interface ILocalStorageHandler {
@@ -95,9 +96,9 @@ public interface ILocalStorageHandler {
 	public Collection<ILocalStorage> getLoadedStorages();
 
 	/**
-	 * Ticks all local storages that implement {@link ITickable}
+	 * Updates all local storages that implement {@link ITickable}
 	 */
-	public void tick();
+	public void update();
 
 	/**
 	 * Returns the directory where the data of all local storages are saved
@@ -106,20 +107,22 @@ public interface ILocalStorageHandler {
 	public File getLocalStorageDirectory();
 
 	/**
-	 * Creates a local storage instance from the specified NBT
+	 * Creates a local storage instance from the specified NBT, saved by {@link #saveLocalStorageToNBT(NBTTagCompound, ILocalStorage)}
 	 * @param nbt
 	 * @param region
 	 * @param packet
 	 * @return
 	 */
-	public ILocalStorage createLocalStorageFromNBT(NBTTagCompound nbt, LocalRegion region, boolean packet);
+	public ILocalStorage createLocalStorageFromNBT(NBTTagCompound nbt, LocalRegion region);
 
 	/**
-	 * Returns the data NBT of the specified full local storage NBT
-	 * @param nbt
+	 * Creates a new local storage
+	 * @param type
+	 * @param id
+	 * @param region
 	 * @return
 	 */
-	public NBTTagCompound getLocalStorageDataNBT(NBTTagCompound nbt);
+	public ILocalStorage createLocalStorage(ResourceLocation type, StorageID id, @Nullable LocalRegion region);
 
 	/**
 	 * Saves a local storage instance to NBT
@@ -128,7 +131,7 @@ public interface ILocalStorageHandler {
 	 * @param packet
 	 * @return
 	 */
-	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage, boolean packet);
+	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage);
 
 	/**
 	 * Saves all local storages and regions

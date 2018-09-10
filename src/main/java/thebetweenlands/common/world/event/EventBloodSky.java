@@ -68,8 +68,8 @@ public class EventBloodSky extends TimedEnvironmentEvent {
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
-		super.setActive(active, markDirty);
+	public void setActive(boolean active) {
+		super.setActive(active);
 		if(active) {
 			World world = TheBetweenlands.proxy.getClientWorld();
 			if(world != null && world.isRemote && !this.soundPlayed) {

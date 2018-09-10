@@ -44,8 +44,6 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 
 	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
-	private int environmentEventSyncTicks;
-
 	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
 	protected int ambienceTicks;
 	protected int updateLCG = (new Random()).nextInt();
@@ -279,15 +277,5 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void setEnvironmentEventSyncTicks(int ticks) {
-		this.environmentEventSyncTicks = ticks;
-	}
-
-	@Override
-	public int getEnvironmentEventSyncTicks() {
-		return this.environmentEventSyncTicks;
 	}
 }

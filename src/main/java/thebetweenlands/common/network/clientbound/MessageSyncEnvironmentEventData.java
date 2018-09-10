@@ -1,9 +1,9 @@
 package thebetweenlands.common.network.clientbound;
 
 import java.io.IOException;
+import java.util.List;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -12,42 +12,39 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.environment.IEnvironmentEvent;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
-public class MessageSyncEnvironmentEvent extends MessageBase {
-	private IEnvironmentEvent event;
+public class MessageSyncEnvironmentEventData extends MessageBase {
 	private ResourceLocation eventName;
-	private boolean active;
-	private NBTTagCompound nbt;
+	private List<IGenericDataManagerAccess.IDataEntry<?>> dataManagerEntries;
 
-	public MessageSyncEnvironmentEvent() {}
+	public MessageSyncEnvironmentEventData() {}
 
-	public MessageSyncEnvironmentEvent(IEnvironmentEvent eevent) {
-		this.event = eevent;
+	public MessageSyncEnvironmentEventData(IEnvironmentEvent eevent, boolean sendAll) {
 		this.eventName = eevent.getEventName();
-		this.active = eevent.isActive();
-		this.nbt = new NBTTagCompound();
-		eevent.sendEventPacket(this.nbt);
-	}
-
-	@Override
-	public void serialize(PacketBuffer buffer) {
-		buffer.writeString(this.eventName.toString());
-		buffer.writeBoolean(this.active);
-		buffer.writeCompoundTag(this.nbt);
-	}
-
-	@Override
-	public void deserialize(PacketBuffer buffer) {
-		this.eventName = new ResourceLocation(buffer.readString(128));
-		this.active = buffer.readBoolean();
-		try {
-			this.nbt = buffer.readCompoundTag();
-		} catch (IOException e) {
-			throw new RuntimeException(e);
+		IGenericDataManagerAccess dataManager = eevent.getDataManager();
+		if (sendAll) {
+			this.dataManagerEntries = dataManager.getAll();
+			dataManager.setClean();
+		} else {
+			this.dataManagerEntries = dataManager.getDirty();
 		}
+	}
+
+	@Override
+	public void serialize(PacketBuffer buffer) throws IOException {
+		buffer.writeString(this.eventName.toString());
+		GenericDataManager.writeEntries(this.dataManagerEntries, buffer);
+	}
+
+	@Override
+	public void deserialize(PacketBuffer buffer) throws IOException {
+		this.eventName = new ResourceLocation(buffer.readString(128));
+		this.dataManagerEntries = GenericDataManager.readEntries(buffer);
 	}
 
 	@Override
@@ -60,7 +57,7 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 
 	@SideOnly(Side.CLIENT)
 	private void handleMessage() {
-		if(this.nbt != null) {
+		if(this.eventName != null && this.dataManagerEntries != null) {
 			World world = Minecraft.getMinecraft().world;
 			if(world != null) {
 				BetweenlandsWorldStorage storage = BetweenlandsWorldStorage.forWorld(world);
@@ -68,8 +65,10 @@ public class MessageSyncEnvironmentEvent extends MessageBase {
 					BLEnvironmentEventRegistry eeRegistry = storage.getEnvironmentEventRegistry();
 					IEnvironmentEvent eevent = eeRegistry.forName(this.eventName);
 					if(eevent != null) {
-						eevent.loadEventPacket(this.nbt);
-						eevent.setActive(this.active, false);
+						IGenericDataManagerAccess dataManager = eevent.getDataManager();
+						if(dataManager != null) {
+							dataManager.setValuesFromPacket(this.dataManagerEntries);
+						}
 						if(!eevent.isLoaded()) {
 							eevent.setLoaded();
 						}

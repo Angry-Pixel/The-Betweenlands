@@ -10,6 +10,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardSectionChange;
 import thebetweenlands.common.network.clientbound.MessageClearBlockGuard;
@@ -26,8 +27,8 @@ import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
-import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
-import thebetweenlands.common.network.clientbound.MessageSyncLocalStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
+import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageData;
 import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferences;
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
@@ -50,7 +51,7 @@ public class MessageRegistry {
 
 	public static void preInit() {
 		registerMessage(MessageDruidAltarProgress.class, Side.CLIENT);
-		registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
+		registerMessage(MessageSyncEnvironmentEventData.class, Side.CLIENT);
 		registerMessage(MessageWeedwoodBushRustle.class, Side.CLIENT);
 		registerMessage(MessageSyncEntityCapabilities.class, Side.CLIENT);
 		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);
@@ -64,8 +65,9 @@ public class MessageRegistry {
 		registerMessage(MessagePlayEntityIdle.class, Side.CLIENT);
 		registerMessage(MessagePowerRingParticles.class, Side.CLIENT);
 		registerMessage(MessageRemoveLocalStorage.class, Side.CLIENT);
+		registerMessage(MessageAddLocalStorage.class, Side.CLIENT);
+		registerMessage(MessageSyncLocalStorageData.class, Side.CLIENT);
 		registerMessage(MessageSyncChunkStorage.class, Side.CLIENT);
-		registerMessage(MessageSyncLocalStorage.class, Side.CLIENT);
 		registerMessage(MessageSyncLocalStorageReferences.class, Side.CLIENT);
 		registerMessage(MessageSummonPeatMummyParticles.class, Side.CLIENT);
 		registerMessage(MessageShowFoodSicknessLine.class, Side.CLIENT);

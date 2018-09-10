@@ -60,7 +60,7 @@ public class LocationDebugItem extends Item {
 						boolean guarded = location.getGuard().isGuarded(world, playerIn, pos);
 						location.getGuard().setGuarded(world, pos, !guarded);
 						playerIn.sendMessage(new TextComponentString(String.format("Set block guard to %s at %s for location %s", !guarded, "X=" + pos.getX() + " Y=" + pos.getY() + " Z=" + pos.getZ(), location.getName())));
-						location.setDirty(true, true);
+						location.setDirty(true);
 						guard = true;
 					}
 				}
@@ -68,7 +68,7 @@ public class LocationDebugItem extends Item {
 					for(LocationStorage location : locations) {
 						location.unlinkAllChunks();
 						location.linkChunks();
-						location.setDirty(true, true);
+						location.setDirty(true);
 						for(EntityPlayerMP watcher : location.getWatchers()) {
 							if(!watchers.contains(watcher)) {
 								watchers.add(watcher);

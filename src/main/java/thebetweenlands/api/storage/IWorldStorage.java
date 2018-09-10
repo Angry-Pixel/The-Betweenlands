@@ -92,19 +92,6 @@ public interface IWorldStorage {
 	public void tick();
 	
 	/**
-	 * Sets the environment event sync ticks
-	 * @param ticks
-	 * @return
-	 */
-	public void setEnvironmentEventSyncTicks(int ticks);
-	
-	/**
-	 * Returns the environment event sync ticks
-	 * @return
-	 */
-	public int getEnvironmentEventSyncTicks();
-	
-	/**
 	 * Returns the persistent biome spawn entries data for the specified biome
 	 * @param biome
 	 * @return

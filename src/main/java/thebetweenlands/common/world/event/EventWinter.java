@@ -74,7 +74,7 @@ public class EventWinter extends BLEnvironmentEvent {
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
@@ -90,7 +90,7 @@ public class EventWinter extends BLEnvironmentEvent {
 			int pz = MathHelper.floor(player.posZ) - 256;
 			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
-		super.setActive(active, markDirty);
+		super.setActive(active);
 	}
 
 	@Override
@@ -104,12 +104,12 @@ public class EventWinter extends BLEnvironmentEvent {
 				long dayDiff = this.getDayDiff();
 				if (dayDiff >= 0 && dayDiff <= 31) {
 					if (!this.isActive() && !this.wasSet) {
-						this.setActive(true, true);
+						this.setActive(true);
 						this.wasSet = true;
 					}
 				} else if (this.wasSet) {
 					this.wasSet = false;
-					this.setActive(false, true);
+					this.setActive(false);
 				}
 			}
 
@@ -170,12 +170,12 @@ public class EventWinter extends BLEnvironmentEvent {
 		long dayDiff = this.getDayDiff();
 		if (dayDiff >= 0 && dayDiff <= 31 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 			if (!this.isActive()) {
-				this.setActive(true, true);
+				this.setActive(true);
 			}
 			this.wasSet = true;
 		} else {
 			if(this.isActive()) {
-				this.setActive(false, true);
+				this.setActive(false);
 			}
 			this.wasSet = false;
 		}

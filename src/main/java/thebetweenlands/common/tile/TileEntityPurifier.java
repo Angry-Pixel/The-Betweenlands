@@ -177,7 +177,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
             if (!output.isEmpty() && getWaterAmount() > 0 && inventory.get(2).isEmpty() || !output.isEmpty() && getWaterAmount() > 0 && !inventory.get(2).isEmpty() && inventory.get(2).isItemEqual(output)) {
                 time++;
                 if (time % 108 == 0)
-                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.5F, 1.0F);
                 if (!lightOn)
                     setIlluminated(true);
                 if (time >= MAX_TIME) {

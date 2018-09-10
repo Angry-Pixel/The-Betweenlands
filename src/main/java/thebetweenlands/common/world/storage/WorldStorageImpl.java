@@ -259,7 +259,7 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	@Override
 	public void tick() {
-		this.localStorageHandler.tick();
+		this.localStorageHandler.update();
 
 		for(int i = 0; i < this.tickableStorages.size(); i++) {
 			ITickable tickable = this.tickableStorages.get(i);

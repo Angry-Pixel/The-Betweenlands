@@ -2,7 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.common.entity.serializer.Serializers;
+import thebetweenlands.common.network.datamanager.CustomDataSerializers;
 
 public class Registries {
 	public static final Registries INSTANCE = new Registries();
@@ -15,7 +15,7 @@ public class Registries {
 		SoundRegistry.preInit();
 		CapabilityRegistry.preInit();
 		StorageRegistry.preInit();
-		Serializers.register();
+		CustomDataSerializers.register();
 		CustomRecipeRegistry.preInit();
 		AdvancementCriterionRegistry.preInit();
 		LootTableRegistry.preInit();
