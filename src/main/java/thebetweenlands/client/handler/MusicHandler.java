@@ -71,9 +71,7 @@ public class MusicHandler {
 
 			boolean isInMainMenu = (!(mc.currentScreen instanceof GuiWinGame) && mc.player == null) && BetweenlandsConfig.GENERAL.blMainMenu;
 
-			if(mc.currentScreen instanceof GuiBLMainMenu) {
-				hasBlMainMenu = true;
-			}
+			hasBlMainMenu = mc.currentScreen instanceof GuiBLMainMenu;//fix for when main menus switch a more live boolean
 			
 			isInBlMainMenu = isInMainMenu && hasBlMainMenu;
 			
