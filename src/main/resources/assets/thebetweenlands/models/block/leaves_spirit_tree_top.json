@@ -1,0 +1,41 @@
+{
+    "ambientocclusion": false,
+    "textures": {
+        "all": "thebetweenlands:blocks/leaves_spirit_tree_top",
+        "particle": "thebetweenlands:blocks/leaves_spirit_tree_top"
+    },
+    "elements": [
+        {   
+            "from": [ 0.8, 0, 8 ],
+            "to": [ 15.2, 16, 8 ],
+            "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
+            "shade": false,
+            "faces": {
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" }
+            }
+        },
+        {   
+            "from": [ 8, 0, 0.8 ],
+            "to": [ 8, 16, 15.2 ],
+            "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
+            "shade": false,
+            "faces": {
+                "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" },
+                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" }
+            }
+        },
+        {   
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 16 ],
+            "shade": false,
+            "faces": {
+                "up":    { "texture": "#all", "cullface": "up" },
+                "north": { "texture": "#all", "cullface": "north" },
+                "south": { "texture": "#all", "cullface": "south" },
+                "west":  { "texture": "#all", "cullface": "west" },
+                "east":  { "texture": "#all", "cullface": "east" }
+            }
+        }
+    ]
+}

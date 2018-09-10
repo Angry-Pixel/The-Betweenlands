@@ -1,0 +1,8 @@
+{
+	"variants": {
+			"axis=y":    { "model": "thebetweenlands:log_spirit_tree" },
+        	"axis=z":    { "model": "thebetweenlands:log_spirit_tree", "x": 90 },
+        	"axis=x":    { "model": "thebetweenlands:log_spirit_tree", "x": 90, "y": 90 },
+        	"axis=none": { "model": "thebetweenlands:log_spirit_tree" }
+	}
+}

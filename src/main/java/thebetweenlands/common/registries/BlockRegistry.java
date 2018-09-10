@@ -150,6 +150,7 @@ import thebetweenlands.common.block.terrain.BlockGenericStone;
 import thebetweenlands.common.block.terrain.BlockGiantRoot;
 import thebetweenlands.common.block.terrain.BlockHanger;
 import thebetweenlands.common.block.terrain.BlockHearthgroveLog;
+import thebetweenlands.common.block.terrain.BlockLeavesSpiritTree;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
 import thebetweenlands.common.block.terrain.BlockLogBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLogSap;
@@ -280,6 +281,7 @@ public class BlockRegistry {
     public static final Block LOG_RUBBER = new BlockRubberLog();
     public static final Block LOG_HEARTHGROVE = new BlockHearthgroveLog();
     public static final Block LOG_NIBBLETWIG = new BlockLogBetweenlands();
+    public static final Block LOG_SPIRIT_TREE = new BlockLogBetweenlands();
     public static final Block WEEDWOOD = new BasicBlock(Material.WOOD).setHarvestLevel2("axe", 0).setSoundType2(SoundType.WOOD).setHardness(2.0F);
     public static final Block LOG_SAP = new BlockLogSap();
     public static final Block SAPLING_WEEDWOOD = new BlockSaplingBetweenlands(new WorldGenWeedwoodTree());
@@ -317,6 +319,9 @@ public class BlockRegistry {
     		return Item.getItemFromBlock(BlockRegistry.SAPLING_NIBBLETWIG);
     	}
     };
+    public static final Block LEAVES_SPIRIT_TREE_TOP = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.TOP);
+    public static final Block LEAVES_SPIRIT_TREE_MIDDLE = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.MIDDLE);
+    public static final Block LEAVES_SPIRIT_TREE_BOTTOM = new BlockLeavesSpiritTree(BlockLeavesSpiritTree.Type.BOTTOM);
     //STRUCTURE
     public static final Block WEEDWOOD_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
     public static final Block RUBBER_TREE_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);

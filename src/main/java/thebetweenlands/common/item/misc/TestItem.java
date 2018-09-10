@@ -15,6 +15,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallPortal;
 import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTree;
 
 //MINE!!
 public class TestItem extends Item {
@@ -86,12 +87,12 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
-		
+		/*
 			WorldGenCragrockTower tower = new WorldGenCragrockTower();
 			if(tower.generate(worldIn, itemRand, pos.up(8).add(8, 0, 0))) {
 				//playerIn.setHeldItem(hand, null);
 			}
-		
+		*/
 		/*
 			WorldGenNibbletwigTree tree = new WorldGenNibbletwigTree();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
@@ -104,6 +105,12 @@ public class TestItem extends Item {
 				//playerIn.setHeldItem(hand, null);
 			}
 		*/
+			
+			WorldGenSpiritTree tree = new WorldGenSpiritTree();
+			if(tree.generate(worldIn, itemRand, pos.up(1))) {
+				//playerIn.setHeldItem(hand, null);
+			}
+		
 		/*
 			ItemStack stack = player.getHeldItem(hand);
 			NBTTagCompound nbt = stack.getOrCreateSubCompound("pos");
