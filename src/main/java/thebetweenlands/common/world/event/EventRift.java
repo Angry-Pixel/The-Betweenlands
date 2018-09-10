@@ -17,7 +17,6 @@ import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.network.clientbound.MessageRiftSound;
 import thebetweenlands.common.network.clientbound.MessageRiftSound.RiftSoundType;
-import thebetweenlands.common.network.datamanager.CustomDataSerializers;
 import thebetweenlands.common.network.datamanager.GenericDataManager;
 
 public class EventRift extends TimedEnvironmentEvent {
@@ -56,17 +55,7 @@ public class EventRift extends TimedEnvironmentEvent {
 			this.scaleComponent = nbt.getFloat("scale");
 		}
 
-		public void write(PacketBuffer buf) {
-			buf.writeInt(this.riftSeed);
-			buf.writeFloat(this.yawComponent);
-			buf.writeFloat(this.pitchComponent);
-			buf.writeFloat(this.rollComponent);
-			buf.writeFloat(this.scaleComponent);
-			buf.writeBoolean(this.mirrorU);
-			buf.writeBoolean(this.mirrorV);
-		}
-
-		public void write(NBTTagCompound nbt) {
+		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 			nbt.setFloat("yaw", this.yawComponent);
 			nbt.setFloat("pitch", this.pitchComponent);
 			nbt.setFloat("roll", this.rollComponent);
@@ -74,6 +63,17 @@ public class EventRift extends TimedEnvironmentEvent {
 			nbt.setBoolean("mirrorU", this.mirrorU);
 			nbt.setBoolean("mirrorV", this.mirrorV);
 			nbt.setFloat("scale", this.scaleComponent);
+			return nbt;
+		}
+
+		public static void write(PacketBuffer buf, RiftConfiguration configuration) {
+			buf.writeInt(configuration.riftSeed);
+			buf.writeFloat(configuration.yawComponent);
+			buf.writeFloat(configuration.pitchComponent);
+			buf.writeFloat(configuration.rollComponent);
+			buf.writeFloat(configuration.scaleComponent);
+			buf.writeBoolean(configuration.mirrorU);
+			buf.writeBoolean(configuration.mirrorV);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class EventRift extends TimedEnvironmentEvent {
 
 	private static final int MAX_ACTIVATION_TICKS = 350;
 
-	protected static final DataParameter<RiftConfiguration> RIFT_CONFIGURATION = GenericDataManager.createKey(EventRift.class, CustomDataSerializers.RIFT_CONFIGURATION);
+	protected static final DataParameter<RiftConfiguration> RIFT_CONFIGURATION = GenericDataManager.createKey(EventRift.class, RiftConfiguration::write, RiftConfiguration::new);
 
 	protected static final DataParameter<Integer> ACTIVATION_TICKS = GenericDataManager.createKey(EventRift.class, DataSerializers.VARINT);
 	protected int lastActivationTicks;
@@ -191,7 +191,7 @@ public class EventRift extends TimedEnvironmentEvent {
 		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
 		nbt.setInteger("riftTicks", this.getActivationTicks());
-		this.getRiftConfiguration().write(nbt);
+		this.getRiftConfiguration().writeToNBT(nbt);
 	}
 
 	@Override

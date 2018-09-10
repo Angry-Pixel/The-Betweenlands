@@ -38,7 +38,6 @@ public class MessageAddLocalStorage extends MessageBase {
 		IGenericDataManagerAccess dataManager = localStorage.getDataManager();
 		if(dataManager != null) {
 			this.dataManagerEntries = dataManager.getAll();
-			dataManager.setClean();
 		}
 
 		localStorage.writeInitialPacket(this.nbt = new NBTTagCompound());

@@ -6,7 +6,6 @@ import net.minecraft.network.datasync.DataSerializer;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
-import thebetweenlands.common.world.event.EventRift.RiftConfiguration;
 
 public class CustomDataSerializers {
 	public static final DataSerializer<Vec3d> VEC3D = new DataSerializer<Vec3d>() {
@@ -82,32 +81,9 @@ public class CustomDataSerializers {
 		}
 	};
 
-	public static final DataSerializer<RiftConfiguration> RIFT_CONFIGURATION = new DataSerializer<RiftConfiguration>() {
-		@Override
-		public void write(PacketBuffer buf, RiftConfiguration value) {
-			value.write(buf);
-		}
-
-		@Override
-		public RiftConfiguration read(PacketBuffer buf) {
-			return new RiftConfiguration(buf);
-		}
-
-		@Override
-		public DataParameter<RiftConfiguration> createKey(int id) {
-			return new DataParameter<RiftConfiguration>(id, this);
-		}
-
-		@Override
-		public RiftConfiguration copyValue(RiftConfiguration value) {
-			return new RiftConfiguration(value.riftSeed, value.yawComponent, value.pitchComponent, value.rollComponent, value.scaleComponent, value.mirrorU, value.mirrorV);
-		}
-	};
-
 	public static void register() {
 		DataSerializers.registerSerializer(VEC3D);
 		DataSerializers.registerSerializer(SHORT);
-		DataSerializers.registerSerializer(RIFT_CONFIGURATION);
 		DataSerializers.registerSerializer(AABB);
 	}
 }

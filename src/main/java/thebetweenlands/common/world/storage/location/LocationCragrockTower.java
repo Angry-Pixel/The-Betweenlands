@@ -31,7 +31,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import thebetweenlands.api.network.IGenericDataManagerAccess;
-import thebetweenlands.api.network.IGenericDataManagerAccess.IDataManagedObject;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -42,7 +41,7 @@ import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
-public class LocationCragrockTower extends LocationGuarded implements IDataManagedObject {
+public class LocationCragrockTower extends LocationGuarded {
 	private List<BlockPos> glowingCragrockBlocks = new ArrayList<BlockPos>();
 	private List<BlockPos> wisps = new ArrayList<BlockPos>();
 	private List<BlockPos> inactiveWisps = new ArrayList<BlockPos>();
@@ -61,11 +60,11 @@ public class LocationCragrockTower extends LocationGuarded implements IDataManag
 	protected static final DataParameter<Boolean> CRUMBLING = GenericDataManager.createKey(LocationCragrockTower.class, DataSerializers.BOOLEAN);
 	protected static final DataParameter<Integer> CRUMBLING_TICKS = GenericDataManager.createKey(LocationCragrockTower.class, DataSerializers.VARINT);
 
-	protected GenericDataManager<LocationCragrockTower> dataManager;
+	protected GenericDataManager dataManager;
 
 	public LocationCragrockTower(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
 		super(worldStorage, id, region, "cragrock_tower", EnumLocationType.DUNGEON);
-		this.dataManager = new GenericDataManager<>(this);
+		this.dataManager = new GenericDataManager(this);
 		this.dataManager.register(CRUMBLING, false);
 		this.dataManager.register(CRUMBLING_TICKS, 20, 0);
 	}
@@ -74,7 +73,7 @@ public class LocationCragrockTower extends LocationGuarded implements IDataManag
 	public IGenericDataManagerAccess getDataManager() {
 		return this.dataManager;
 	}
-	
+
 	/**
 	 * Sets the structure entrance
 	 * @param pos

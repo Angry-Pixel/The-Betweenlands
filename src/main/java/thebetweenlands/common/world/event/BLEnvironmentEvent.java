@@ -28,12 +28,12 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	protected boolean isStateFromRemote = false;
 	protected int remoteResetTicks = -1;
 
-	protected final GenericDataManager<BLEnvironmentEvent> dataManager;
+	protected final GenericDataManager dataManager;
 
 	public BLEnvironmentEvent(BLEnvironmentEventRegistry registry) {
 		this.registry = registry;
 		this.world = registry.getWorld();
-		this.dataManager = new GenericDataManager<>(this);
+		this.dataManager = new GenericDataManager(this);
 		this.initDataParameters();
 	}
 
@@ -185,7 +185,7 @@ public abstract class BLEnvironmentEvent implements IEnvironmentEvent, IRemotely
 	}
 
 	@Override
-	public GenericDataManager<BLEnvironmentEvent> getDataManager() {
+	public GenericDataManager getDataManager() {
 		return this.dataManager;
 	}
 
