@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
@@ -47,4 +48,9 @@ public class ItemForbiddenFig extends ItemBLFood implements IDecayFood {
             player.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 1200, 1));
         }
     }
+    
+    @Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
+	}
 }

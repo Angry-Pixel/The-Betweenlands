@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import com.google.common.base.CaseFormat;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
@@ -47,6 +48,17 @@ public class ItemMisc extends Item implements ItemRegistry.IMultipleItemModelDef
 			models.put(type.getID(), new ResourceLocation(ModInfo.ID, type.getModelName()));
 		}
 		return models;
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		if(EnumItemMisc.SCROLL.isItemOf(stack) || EnumItemMisc.TAR_BEAST_HEART.isItemOf(stack) || EnumItemMisc.TAR_BEAST_HEART_ANIMATED.isItemOf(stack)
+				|| EnumItemMisc.INANIMATE_TARMINION.isItemOf(stack)) {
+			return EnumRarity.UNCOMMON;
+		} else if(EnumItemMisc.AMULET_SOCKET.isItemOf(stack)) {
+			return EnumRarity.RARE;
+		}
+		return super.getRarity(stack);
 	}
 
 	public enum EnumItemMisc implements IGenericItem {

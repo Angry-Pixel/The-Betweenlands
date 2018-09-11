@@ -3,6 +3,7 @@ package thebetweenlands.common.item.equipment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -122,5 +123,10 @@ public class ItemRing extends Item implements IEquippable {
 		if(entity.ticksExisted % 20 == 0) {
 			this.drainPower(stack, entity);
 		}
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.EPIC;
 	}
 }
