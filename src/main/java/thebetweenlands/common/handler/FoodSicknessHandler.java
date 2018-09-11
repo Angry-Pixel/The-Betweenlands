@@ -24,6 +24,7 @@ import thebetweenlands.common.capability.foodsickness.FoodSickness;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.registries.CapabilityRegistry;
+import thebetweenlands.common.registries.GameruleRegistry;
 
 public class FoodSicknessHandler {
 	private FoodSicknessHandler() { }
@@ -32,6 +33,10 @@ public class FoodSicknessHandler {
 	private static ItemStack lastUsedItem = ItemStack.EMPTY;
 	private static FoodSickness lastSickness = null;
 
+	public static boolean isFoodSicknessEnabled() {
+		return BetweenlandsConfig.GENERAL.useFoodSickness && GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_FOOD_SICKNESS);
+	}
+	
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
 	public static void onClientTick(ClientTickEvent event) {
@@ -58,7 +63,7 @@ public class FoodSicknessHandler {
 		EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 		ItemStack itemStack = event.getItem();
 
-		if (player != null && !itemStack.isEmpty() && BetweenlandsConfig.GENERAL.useFoodSickness && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
+		if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 				IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 				Item item = itemStack.getItem();
@@ -78,7 +83,7 @@ public class FoodSicknessHandler {
 			EntityPlayer player = event.getEntity() instanceof EntityPlayer ? (EntityPlayer) event.getEntity() : null;
 			ItemStack itemStack = event.getItem();
 
-			if (player != null && !itemStack.isEmpty() && BetweenlandsConfig.GENERAL.useFoodSickness && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
+			if (player != null && !itemStack.isEmpty() && FoodSicknessHandler.isFoodSicknessEnabled() && itemStack.getItem() instanceof IFoodSicknessItem && ((IFoodSicknessItem)itemStack.getItem()).canGetSickOf(player, itemStack)) {
 				if(player.hasCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null)) {
 					IFoodSicknessCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FOOD_SICKNESS, null);
 

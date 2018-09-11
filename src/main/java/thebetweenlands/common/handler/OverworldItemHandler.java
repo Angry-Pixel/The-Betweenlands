@@ -51,6 +51,7 @@ import thebetweenlands.common.item.tools.bow.ItemBLBow;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.GameruleRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class OverworldItemHandler {
@@ -371,7 +372,7 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isRotting(ItemStack stack) {
-		if(!BetweenlandsConfig.GENERAL.useRottenFood) {
+		if(!BetweenlandsConfig.GENERAL.useRottenFood || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_ROTTEN_FOOD)) {
 			return false;
 		}
 		for(Predicate<ItemStack> whitelistPredicate : ROTTING_WHITELIST.values()) {
@@ -388,6 +389,9 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isTainting(ItemStack stack) {
+		if(!BetweenlandsConfig.GENERAL.usePotionBlacklist || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_POTION_BLACKLIST)) {
+			return false;
+		}
 		for(Predicate<ItemStack> whitelistPredicate : TAINTING_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
@@ -402,6 +406,9 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isFireToolBlocked(ItemStack stack) {
+		if(!BetweenlandsConfig.GENERAL.useFireToolBlacklist || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_FIRE_TOOL_BLACKLIST)) {
+			return false;
+		}
 		for(Predicate<ItemStack> whitelistPredicate : FIRE_TOOL_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
@@ -416,6 +423,9 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isFertilizerBlocked(ItemStack stack) {
+		if(!BetweenlandsConfig.GENERAL.useFertilizerBlacklist || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_FERTILIZER_BLACKLIST)) {
+			return false;
+		}
 		for(Predicate<ItemStack> whitelistPredicate : FERTILIZER_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
@@ -430,6 +440,9 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isToolWeakened(ItemStack stack) {
+		if(!BetweenlandsConfig.GENERAL.useToolWeakness || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_TOOL_WEAKNESS)) {
+			return false;
+		}
 		for(Predicate<ItemStack> whitelistPredicate : TOOL_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;
@@ -444,6 +457,9 @@ public class OverworldItemHandler {
 	}
 
 	public static boolean isTorchTurningDamp(ItemStack stack) {
+		if(!BetweenlandsConfig.GENERAL.useTorchBlacklist || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_TORCH_BLACKLIST)) {
+			return false;
+		}
 		for(Predicate<ItemStack> whitelistPredicate : TORCH_WHITELIST.values()) {
 			if(whitelistPredicate.test(stack)) {
 				return false;

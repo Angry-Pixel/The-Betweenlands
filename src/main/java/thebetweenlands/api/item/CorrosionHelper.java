@@ -134,6 +134,14 @@ public class CorrosionHelper {
 	}
 
 	/**
+	 * Returns whether corrosion is enabled
+	 * @return
+	 */
+	public static boolean isCorrosionEnabled() {
+		return GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_CORROSION) && BetweenlandsConfig.GENERAL.useCorrosion;
+	}
+	
+	/**
 	 * Updates the corrosion on the specified item
 	 * @param stack
 	 * @param world
@@ -142,14 +150,18 @@ public class CorrosionHelper {
 	 * @param isHeldItem
 	 */
 	public static void updateCorrosion(ItemStack stack, World world, Entity holder, int slot, boolean isHeldItem) {
-		if (world.isRemote || !GameruleRegistry.getGameRuleBooleanValue(GameruleRegistry.BL_CORROSION)) {
+		if (world.isRemote) {
 			return;
 		}
 		if(!world.isRemote && holder.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && !(holder instanceof EntityPlayer && ((EntityPlayer)holder).isCreative())) {
 			if(!stack.isEmpty() && stack.getItem() instanceof ICorrodible) {
 				ICorrodible corrodible = (ICorrodible) stack.getItem();
 				int corrosion = corrodible.getCorrosion(stack);
-				if (corrosion < corrodible.getMaxCorrosion(stack)) {
+				if(!isCorrosionEnabled()) {
+					if(corrosion != 0) {
+						corrodible.setCorrosion(stack, 0);
+					}
+				} else if (corrosion < corrodible.getMaxCorrosion(stack)) {
 					float probability = holder.isInWater() ? 0.0014F : 0.0007F;
 					if (holder instanceof EntityPlayer) {
 						EntityPlayer player = (EntityPlayer) holder;
@@ -184,15 +196,18 @@ public class CorrosionHelper {
 			ICorrodible corrodible = (ICorrodible) stack.getItem();
 			int corrosion = corrodible.getCorrosion(stack);
 			int coating = corrodible.getCoating(stack);
-			StringBuilder corrosionInfo = new StringBuilder("tooltip.corrosion.");
-			corrosionInfo.append(getCorrosionStage(corrosion));
-			corrosionInfo.replace(0, corrosionInfo.length(), I18n.format(corrosionInfo.toString()));
-			if (advancedItemTooltips) {
-				corrosionInfo.append(" (");
-				corrosionInfo.append(corrosion);
-				corrosionInfo.append("/" + corrodible.getMaxCorrosion(stack) + ")");
+			
+			if(isCorrosionEnabled()) {
+				StringBuilder corrosionInfo = new StringBuilder("tooltip.corrosion.");
+				corrosionInfo.append(getCorrosionStage(corrosion));
+				corrosionInfo.replace(0, corrosionInfo.length(), I18n.format(corrosionInfo.toString()));
+				if (advancedItemTooltips) {
+					corrosionInfo.append(" (");
+					corrosionInfo.append(corrosion);
+					corrosionInfo.append("/" + corrodible.getMaxCorrosion(stack) + ")");
+				}
+				lines.add(corrosionInfo.toString());
 			}
-			lines.add(corrosionInfo.toString());
 
 			StringBuilder coatingInfo = new StringBuilder("tooltip.coated.");
 			coatingInfo.append(coating / 120);

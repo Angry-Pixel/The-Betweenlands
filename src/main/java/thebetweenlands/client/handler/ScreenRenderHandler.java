@@ -54,6 +54,7 @@ import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
 import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityRopeNode;
+import thebetweenlands.common.handler.PlayerDecayHandler;
 import thebetweenlands.common.handler.PlayerPortalHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
@@ -349,7 +350,7 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 
-				if (player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				if (PlayerDecayHandler.isDecayEnabled() && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 					if(capability.isDecayEnabled()) {
