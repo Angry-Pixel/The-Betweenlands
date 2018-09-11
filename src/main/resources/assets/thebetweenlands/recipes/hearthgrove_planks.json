@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "#"
+  ],
+  "key": {
+    "#": [
+      {
+        "item": "thebetweenlands:log_hearthgrove",
+        "data": 32767
+      }
+    ]
+  },
+  "result": {
+    "item": "thebetweenlands:hearthgrove_planks",
+    "count": 4
+  }
+}

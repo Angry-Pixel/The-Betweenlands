@@ -331,6 +331,16 @@ tile.thebetweenlands.giant_root_plank_stairs.name=Giant Root Plank Stairs
 tile.thebetweenlands.giant_root_plank_slab.name=Giant Root Plank Slab
 tile.thebetweenlands.giant_root_plank_fence.name=Giant Root Plank Fence
 tile.thebetweenlands.giant_root_plank_fence_gate.name=Giant Root Plank Fence Gate
+tile.thebetweenlands.hearthgrove_planks.name=Hearthgrove Planks
+tile.thebetweenlands.hearthgrove_plank_stairs.name=Hearthgrove Plank Stairs
+tile.thebetweenlands.hearthgrove_plank_slab.name=Hearthgrove Plank Slab
+tile.thebetweenlands.hearthgrove_plank_fence.name=Hearthgrove Plank Fence
+tile.thebetweenlands.hearthgrove_plank_fence_gate.name=Hearthgrove Plank Fence Gate
+tile.thebetweenlands.nibbletwig_planks.name=Nibbletwig Planks
+tile.thebetweenlands.nibbletwig_plank_stairs.name=Nibbletwig Plank Stairs
+tile.thebetweenlands.nibbletwig_plank_slab.name=Nibbletwig Plank Slab
+tile.thebetweenlands.nibbletwig_plank_fence.name=Nibbletwig Plank Fence
+tile.thebetweenlands.nibbletwig_plank_fence_gate.name=Nibbletwig Plank Fence Gate
 
 # Items
 
