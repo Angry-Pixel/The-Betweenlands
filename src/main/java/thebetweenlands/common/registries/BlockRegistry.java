@@ -321,6 +321,8 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(2.0F).setResistance(5.0F);
     public static final Block RUBBER_TREE_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block GIANT_ROOT_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block HEARTHGROVE_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
+    public static final Block NIBBLETWIG_PLANKS = new BasicBlock(Material.WOOD).setSoundType2(SoundType.WOOD).setHardness(1.75F).setResistance(5.0F);
     public static final Block ANGRY_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F).setLightLevel(0.8F);
     public static final Block BETWEENSTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block BETWEENSTONE_BRICKS_MIRAGE = new BlockGenericMirage(Material.CIRCUITS).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
@@ -402,6 +404,8 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_PLANK_STAIRS = new BlockStairsBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
     public static final Block RUBBER_TREE_PLANK_STAIRS = new BlockStairsBetweenlands(RUBBER_TREE_PLANKS.getDefaultState());
     public static final Block GIANT_ROOT_PLANK_STAIRS = new BlockStairsBetweenlands(GIANT_ROOT_PLANKS.getDefaultState());
+    public static final Block HEARTHGROVE_PLANK_STAIRS = new BlockStairsBetweenlands(HEARTHGROVE_PLANKS.getDefaultState());
+    public static final Block NIBBLETWIG_PLANK_STAIRS = new BlockStairsBetweenlands(NIBBLETWIG_PLANKS.getDefaultState());
     public static final Block POSSESSED_BLOCK = new BlockPossessedBlock();
     public static final Block ITEM_CAGE = new BlockItemCage();
     public static final Block ITEM_SHELF = new BlockItemShelf();
@@ -427,6 +431,8 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_PLANK_SLAB = new BlockSlabBetweenlands(WEEDWOOD_PLANKS);
     public static final Block RUBBER_TREE_PLANK_SLAB = new BlockSlabBetweenlands(RUBBER_TREE_PLANKS);
     public static final Block GIANT_ROOT_PLANK_SLAB = new BlockSlabBetweenlands(GIANT_ROOT_PLANKS);
+    public static final Block HEARTHGROVE_PLANK_SLAB = new BlockSlabBetweenlands(HEARTHGROVE_PLANKS);
+    public static final Block NIBBLETWIG_PLANK_SLAB = new BlockSlabBetweenlands(NIBBLETWIG_PLANKS);
     public static final Block THATCH_SLAB = new BlockSlabBetweenlands(THATCH).setHardness(0.5F);
     public static final Block PITSTONE_WALL = new BlockWallBetweenlands(PITSTONE.getDefaultState());
     public static final Block BETWEENSTONE_WALL = new BlockWallBetweenlands(BETWEENSTONE.getDefaultState());
@@ -450,10 +456,14 @@ public class BlockRegistry {
     public static final Block WEEDWOOD_LOG_FENCE = new BlockFenceBetweenlands(WEEDWOOD.getDefaultState());
     public static final Block RUBBER_TREE_PLANK_FENCE = new BlockFenceBetweenlands(RUBBER_TREE_PLANKS.getDefaultState());
     public static final Block GIANT_ROOT_PLANK_FENCE = new BlockFenceBetweenlands(GIANT_ROOT_PLANKS.getDefaultState());
+    public static final Block HEARTHGROVE_PLANK_FENCE = new BlockFenceBetweenlands(HEARTHGROVE_PLANKS.getDefaultState());
+    public static final Block NIBBLETWIG_PLANK_FENCE = new BlockFenceBetweenlands(NIBBLETWIG_PLANKS.getDefaultState());
     public static final Block WEEDWOOD_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(WEEDWOOD_PLANKS.getDefaultState());
     public static final Block WEEDWOOD_LOG_FENCE_GATE = new BlockFenceGateBetweenlands(WEEDWOOD.getDefaultState());
     public static final Block RUBBER_TREE_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(RUBBER_TREE_PLANKS.getDefaultState());
     public static final Block GIANT_ROOT_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(GIANT_ROOT_PLANKS.getDefaultState());
+    public static final Block HEARTHGROVE_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(HEARTHGROVE_PLANKS.getDefaultState());
+    public static final Block NIBBLETWIG_PLANK_FENCE_GATE = new BlockFenceGateBetweenlands(NIBBLETWIG_PLANKS.getDefaultState());
     public static final Block WEEDWOOD_PLANK_PRESSURE_PLATE = new BlockPressurePlateBetweenlands(Material.WOOD, BlockPressurePlateBetweenlands.PressurePlateSensitivity.EVERYTHING)
             .setSoundType(SoundType.WOOD)
             .setHardness(2.0F)
