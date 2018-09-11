@@ -75,6 +75,7 @@ import thebetweenlands.common.item.food.ItemNibblestick;
 import thebetweenlands.common.item.food.ItemRottenFood;
 import thebetweenlands.common.item.food.ItemSapBall;
 import thebetweenlands.common.item.food.ItemSapJello;
+import thebetweenlands.common.item.food.ItemSpiritFruit;
 import thebetweenlands.common.item.food.ItemTaintedPotion;
 import thebetweenlands.common.item.food.ItemTangledRoot;
 import thebetweenlands.common.item.food.ItemWeepingBluePetal;
@@ -200,6 +201,7 @@ public class ItemRegistry {
     public static final Item MIRE_SCRAMBLE = new ItemMireScramble();
     public static final Item WEEPING_BLUE_PETAL_SALAD = new ItemWeepingBluePetalSalad();
     public static final Item NIBBLESTICK = new ItemNibblestick();
+    public static final Item SPIRIT_FRUIT = new ItemSpiritFruit();
     
     //armor
     public static final Item BONE_HELMET = new ItemBoneArmor(EntityEquipmentSlot.HEAD);

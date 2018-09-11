@@ -19,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.ItemRegistry;
 
 public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.3D, 0.3D, 0.3D, 0.7D, 0.7D, 0.7D);
@@ -111,8 +112,8 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Random rand = world instanceof World ? ((World)world).rand : new Random();
-		if(rand.nextInt(100) == 0) {
-			//TODO Drop spirit fruit
+		if(rand.nextInt(90) == 0) {
+			drops.add(new ItemStack(ItemRegistry.SPIRIT_FRUIT));
 		}
 	}
 
