@@ -429,7 +429,10 @@ public class ItemRegistry {
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_RUBBER_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_HEARTHGROVE_TREE));
 		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_NIBBLETWIG_TREE));
-
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_TOP));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE));
+		OreDictionary.registerOre("treeLeaves", new ItemStack(BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM));
+		
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_WEEDWOOD));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_SAP));
 		OreDictionary.registerOre("treeSapling", new ItemStack(BlockRegistry.SAPLING_RUBBER));
@@ -457,7 +460,8 @@ public class ItemRegistry {
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.GIANT_ROOT, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_HEARTHGROVE, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_NIBBLETWIG, 1, OreDictionary.WILDCARD_VALUE));
-
+		OreDictionary.registerOre("logWood", new ItemStack(BlockRegistry.LOG_SPIRIT_TREE, 1, OreDictionary.WILDCARD_VALUE));
+		
 		//Recipes that use and creates these conflicts with vanilla recipes because of ore dict
 		OreDictionary.registerOre("stickWood", EnumItemMisc.WEEDWOOD_STICK.create(1));
 		OreDictionary.registerOre("plankWood", new ItemStack(BlockRegistry.WEEDWOOD_PLANKS));
