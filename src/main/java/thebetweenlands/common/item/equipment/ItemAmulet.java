@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -288,5 +289,10 @@ public class ItemAmulet extends Item implements IEquippable {
 				list.add(I18n.format("tooltip.press.shift"));
 			}
 		}
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 }

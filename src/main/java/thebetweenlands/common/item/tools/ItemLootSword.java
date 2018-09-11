@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.tools;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -38,4 +39,9 @@ public class ItemLootSword extends ItemBLSword {
     public boolean isRepairableByAnimator(ItemStack stack) {
     	return false;
     }
+    
+    @Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
+	}
 }

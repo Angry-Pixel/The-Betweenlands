@@ -4,6 +4,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -46,5 +47,10 @@ public class ItemExplorersHat extends ItemBLArmor {
 			model = new ModelExplorersHat();
 		}
 		return model;
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 }

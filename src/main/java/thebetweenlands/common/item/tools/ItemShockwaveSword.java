@@ -19,6 +19,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -195,5 +196,10 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	@Override
 	public int getFullRepairLifeCost(ItemStack stack) {
 		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_LEGEND);
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.EPIC;
 	}
 }

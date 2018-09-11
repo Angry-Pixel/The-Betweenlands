@@ -11,6 +11,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -44,6 +45,11 @@ public class ItemShimmerStone extends Item {
 			}
 		});
 		this.setMaxStackSize(1);
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -21,6 +22,11 @@ public class ItemAmuletSlot extends Item {
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.EPIC;
+	}
+	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 		ItemStack stack = player.getHeldItem(hand);
