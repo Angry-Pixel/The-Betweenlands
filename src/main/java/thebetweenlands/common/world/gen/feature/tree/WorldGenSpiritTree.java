@@ -1,75 +1,123 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.function.BiFunction;
+
+import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WorldGenSpiritTree extends WorldGenerator {
+	private static final ImmutableList<EnumFacing> LEAVES_OFFSETS;
+
+	static {
+		ImmutableList.Builder<EnumFacing> builder = ImmutableList.builder();
+		builder.add(EnumFacing.HORIZONTALS);
+		builder.add(EnumFacing.UP);
+		LEAVES_OFFSETS = builder.build();
+	}
+
+	private IBlockState log;
+	private IBlockState leavesTop;
+	private IBlockState leavesMiddle;
+	private IBlockState leavesBottom;
+
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
-		int x = position.getX();
-		int y = position.getY();
-		int z = position.getZ();
+		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		this.leavesTop = BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.leavesMiddle = BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
+		this.leavesBottom = BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 
-		IBlockState log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
+		int trunkX = position.getX();
+		int trunkY = position.getY();
+		int trunkZ = position.getZ();
 
-		int trunkX = x;
-		int trunkY = y;
-		int trunkZ = z;
+		int height = 8 + rand.nextInt(4);
 
-		int dirX = 0;
-		int dirZ = 0;
-
-		for(int yo = 0; yo < 25; yo++) {
-			if(yo >= 4) {
-				if((yo - 4) % 3 == 0) {
-					dirX = rand.nextInt(3) - 1;
-					dirZ = rand.nextInt(3) - 1;
-				}
-				if(yo % 2 == 0) {
-					trunkX += dirX;
-				} else {
-					trunkZ += dirZ;
-				}
-				this.generateTrunkCrossSection(world, trunkX, trunkY + yo - 1, trunkZ, log);
-			}
-			this.generateTrunkCrossSection(world, trunkX, trunkY + yo, trunkZ, log);
-
-			if(yo >= 6) {
-				for(int i = 0; i < 2; i++) {
-					Vec3d branchDir = new Vec3d((rand.nextDouble() - 0.5D), (rand.nextDouble() * 0.3D + 0.5D) * 2, (rand.nextDouble() - 0.5D));
-
-					int branchStartX = (int)(trunkX + 1.5D + branchDir.normalize().x);
-					int branchStartZ = (int)(trunkZ + 1.5D + branchDir.normalize().z);
-
-					this.generateBranch(world, branchStartX, trunkY + yo, branchStartZ, branchDir, log);
-				}
-			}
+		for(int yo = 0; yo < height; yo++) {
+			this.generateTrunkCrossSection(world, rand, trunkX, trunkY + yo, trunkZ, this.log);
 		}
-		for(int yo = 0; yo < 2; yo++) {
-			this.generateThinCrossSection(world, trunkX + 1, trunkY + yo + 25, trunkZ + 1, log);
+
+		Map<List<BlockPos>, BlockPos> branches = new HashMap<>();
+
+		BlockPos sideBranch;
+
+		//Generate 4 main branches in the cardinal directions
+
+		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY + height - 3, trunkZ);
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 0), sideBranch);
+
+		sideBranch = new BlockPos(trunkX, trunkY + height - 3, trunkZ + rand.nextInt(2));
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 2), sideBranch);
+
+		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY + height - 3, trunkZ + 1);
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 4), sideBranch);
+
+		sideBranch = new BlockPos(trunkX + 1, trunkY + height - 3, trunkZ + rand.nextInt(2));
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 6), sideBranch);
+
+		//Generate 1-3 diagonal branches
+		List<Integer> diagonals = new ArrayList<>(Arrays.asList(1, 3, 5, 7));
+		int numDiagonals = 1 + rand.nextInt(3);
+		for(int i = 0; i < numDiagonals; i++) {
+			int dir = diagonals.remove(rand.nextInt(diagonals.size()));
+			int[] offset = this.getDirOffset(dir);
+			int bx = trunkX + (offset[0] > 0 ? offset[0] * 2 : offset[0]);
+			int bz = trunkZ + (offset[1] > 0 ? offset[1] * 2 : offset[1]);
+			sideBranch = new BlockPos(bx, trunkY + height, bz);
+			branches.put(this.generateSideBranch(world, rand, sideBranch, dir), sideBranch);
 		}
+
+		//Generate two tall branches at top of trunk
+		if(rand.nextBoolean()) {
+			sideBranch = new BlockPos(trunkX, trunkY + height, trunkZ);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 1), sideBranch);
+
+			sideBranch = new BlockPos(trunkX + 1, trunkY + height, trunkZ + 1);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 5), sideBranch);
+		} else {
+			sideBranch = new BlockPos(trunkX, trunkY + height, trunkZ + 1);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 3), sideBranch);
+
+			sideBranch = new BlockPos(trunkX + 1, trunkY + height, trunkZ);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 7), sideBranch);
+		}
+
+		for(Entry<List<BlockPos>, BlockPos> branch : branches.entrySet()) {
+			this.generateBranchLeaves(world, rand, branch.getValue(), branch.getKey());
+		}
+
+		//Generate roots
+		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY, trunkZ);
+		this.generateRoot(world, rand, sideBranch, 0);
+
+		sideBranch = new BlockPos(trunkX, trunkY, trunkZ + rand.nextInt(2));
+		this.generateRoot(world, rand, sideBranch, 2);
+
+		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY, trunkZ + 1);
+		this.generateRoot(world, rand, sideBranch, 4);
+
+		sideBranch = new BlockPos(trunkX + 1, trunkY, trunkZ + rand.nextInt(2));
+		this.generateRoot(world, rand, sideBranch, 6);
 
 		return true;
 	}
 
-	private void generateTrunkCrossSection(World world, int x, int y, int z, IBlockState log) {
-		for(int xo = 0; xo < 4; xo++) {
-			for(int zo = 0; zo < 4; zo++) {
-				if(xo != 0 && xo != 3 || zo != 0 && zo != 3) {
-					this.setBlockAndNotifyAdequately(world, new BlockPos(x + xo, y, z + zo), log);
-				}
-			}
-		}
-	}
-
-	private void generateThinCrossSection(World world, int x, int y, int z, IBlockState log) {
+	private void generateTrunkCrossSection(World world, Random rand, int x, int y, int z, IBlockState log) {
 		for(int xo = 0; xo < 2; xo++) {
 			for(int zo = 0; zo < 2; zo++) {
 				this.setBlockAndNotifyAdequately(world, new BlockPos(x + xo, y, z + zo), log);
@@ -77,51 +125,223 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		}
 	}
 
-	private void generateBranch(World world, int x, int y, int z, Vec3d dir, IBlockState log) {
-		double branchX = x;
-		double branchY = y;
-		double branchZ = z;
-		BlockPos lastBranchPos = null;
-		for(int i = 0; i < 24; i++) {
-			BlockPos branchPos = new BlockPos(branchX, branchY, branchZ);
-			if(lastBranchPos == null || !branchPos.equals(lastBranchPos)) {
-				this.setBlockAndNotifyAdequately(world, branchPos, log);
-				this.setBlockAndNotifyAdequately(world, branchPos.up(), log);
+	private int[] getDirOffset(int dir) {
+		int[] offset = new int[2];
+		switch(dir) {
+		case 0: //N
+			offset[1] = -1;
+			break;
+		case 1: //NW
+			offset[0] = -1;
+			offset[1] = -1;
+			break;
+		case 2: //W
+			offset[0] = -1;
+			break;
+		case 3: //SW
+			offset[0] = -1;
+			offset[1] = 1;
+			break;
+		case 4: //S
+			offset[1] = 1;
+			break;
+		case 5: //SE
+			offset[0] = 1;
+			offset[1] = 1;
+			break;
+		case 6: //E
+			offset[0] = 1;
+			break;
+		case 7: //NE
+			offset[0] = 1;
+			offset[1] = -1;
+			break;
+		}
+		return offset;
+	}
 
-				for(int yo = -2; yo <= 2; yo++) {
-					for(int xo = -2; xo <= 2; xo++) {
-						for(int zo = -2; zo <= 2; zo++) {
-							if(Math.sqrt(xo*xo + yo*yo + zo*zo) <= 2) {
-								BlockPos leafPos = branchPos.add(xo, yo, zo);
-								if(world.isAirBlock(leafPos))
-									//this.setBlockAndNotifyAdequately(world, leafPos, BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState());
-									this.generateLeaves(world, leafPos);
-							}
-						}
-					}
-				}
+	/*private List<BlockPos> generateSideBranch(World world, Random rand, BlockPos start, int dir) {
+		List<BlockPos> branchBlocks = new ArrayList<>();
+		branchBlocks.addAll(this.generateBranch(world, rand, start, dir, 8 + rand.nextInt(3), 0.3D, 0.6D, (i, length) -> i < length / 2 ? 1 : (i >= length - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true));
+		BlockPos end = branchBlocks.get(branchBlocks.size() - 1);
+		switch(dir) {
+		case 0:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 1));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 7));
+			break;
+		case 1:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 0));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 2));
+			break;
+		case 2:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 1));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 3));
+			break;
+		case 3:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 2));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 4));
+			break;
+		case 4:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 3));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 5));
+			break;
+		case 5:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 4));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 6));
+			break;
+		case 6:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 5));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 7));
+			break;
+		case 7:
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 6));
+			branchBlocks.addAll(this.generateSideBranch2(world, rand, end, 1));
+			break;
+		}
+		return branchBlocks;
+	}
 
-				lastBranchPos = branchPos;
-			}
+	private List<BlockPos> generateSideBranch2(World world, Random rand, BlockPos start, int dir) {
+		return this.generateBranch(world, rand, start, dir, 4 + rand.nextInt(3), 0.3D, 0.6D, (i, length) -> i < length / 2 ? 1 : (i >= length - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
+	}*/
 
-			Vec3d normal = dir.normalize();
-			branchX += normal.x * 0.8D;
-			branchY += normal.y * 0.8D;
-			branchZ += normal.z * 0.8D;
-			dir = new Vec3d(dir.x * 0.9D, dir.y - 0.1, dir.z * 0.9D);
+	private void generateRoot(World world, Random rand, BlockPos start, int dir) {
+		List<BlockPos> root = this.generateBranchPositions(rand, start, dir, 3 + rand.nextInt(2), 0.5D, 1, (i, remainingBlocks) -> i < 2 ? 0 : rand.nextInt((i - 2) * 2 + 2) == 0 ? 0 : -1, (i, length) -> true);
+		BlockPos end = root.get(root.size() - 1);
+		switch(dir) {
+		case 0:
+			this.generateSubRoot(world, rand, end, 1);
+			this.generateSubRoot(world, rand, end, 7);
+			break;
+		case 1:
+			this.generateSubRoot(world, rand, end, 0);
+			this.generateSubRoot(world, rand, end, 2);
+			break;
+		case 2:
+			this.generateSubRoot(world, rand, end, 1);
+			this.generateSubRoot(world, rand, end, 3);
+			break;
+		case 3:
+			this.generateSubRoot(world, rand, end, 2);
+			this.generateSubRoot(world, rand, end, 4);
+			break;
+		case 4:
+			this.generateSubRoot(world, rand, end, 3);
+			this.generateSubRoot(world, rand, end, 5);
+			break;
+		case 5:
+			this.generateSubRoot(world, rand, end, 4);
+			this.generateSubRoot(world, rand, end, 6);
+			break;
+		case 6:
+			this.generateSubRoot(world, rand, end, 5);
+			this.generateSubRoot(world, rand, end, 7);
+			break;
+		case 7:
+			this.generateSubRoot(world, rand, end, 6);
+			this.generateSubRoot(world, rand, end, 1);
+			break;
+		}
+		for(BlockPos pos : root) {
+			this.setBlockAndNotifyAdequately(world, pos, this.log);
 		}
 	}
 
-	private void generateLeaves(World world, BlockPos pos) {
-		if(world.isAirBlock(pos))
-			this.setBlockAndNotifyAdequately(world, pos, BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState());
-		else return;
-		pos = pos.down();
-		if(world.isAirBlock(pos))
-			this.setBlockAndNotifyAdequately(world, pos, BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE.getDefaultState());
-		else return;
-		pos = pos.down();
-		if(world.isAirBlock(pos))
-			this.setBlockAndNotifyAdequately(world, pos, BlockRegistry.LEAVES_SPIRIT_TREE_BOTTOM.getDefaultState());
+	private void generateSubRoot(World world, Random rand, BlockPos start, int dir) {
+		List<BlockPos> root = this.generateBranchPositions(rand, start, dir, 1 + rand.nextInt(4), 0.5D, 1, (i, remainingBlocks) -> rand.nextInt(i * 2 + 1) == 0 ? 0 : -1, (i, length) -> true);
+		for(BlockPos pos : root) {
+			this.setBlockAndNotifyAdequately(world, pos, this.log);
+		}
+	}
+
+	private List<BlockPos> generateSideBranch(World world, Random rand, BlockPos start, int dir) {
+		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 3 + rand.nextInt(3), 0.3D, 0.6D, (i, remainingBlocks) -> i < remainingBlocks / 2 ? 1 : (i >= remainingBlocks - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
+		for(BlockPos pos : branch) {
+			this.setBlockAndNotifyAdequately(world, pos, this.log);
+		}
+		return branch;
+	}
+
+	private List<BlockPos> generateTopBranch(World world, Random rand, BlockPos start, int dir) {
+		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 4 + rand.nextInt(3), 0.1D, 0.2D, (i, remainingBlocks) -> i < remainingBlocks - 1 ? 1 : 0, (i, length) -> i >= length - 1);
+		for(BlockPos pos : branch) {
+			this.setBlockAndNotifyAdequately(world, pos, this.log);
+		}
+		return branch;
+	}
+
+	private List<BlockPos> generateBranchPositions(Random rand, BlockPos start, int dir, int length, double defaultCurveWeight, double directedCurveWeight,
+			BiFunction<Integer, Double, Integer> heightFunction, BiFunction<Integer, Double, Boolean> forceMoveFunction) {
+		double remainingBlocks = length;
+
+		List<BlockPos> branchBlocks = new ArrayList<>(length);
+
+		BlockPos branch = start;
+
+		double rx = rand.nextDouble() * defaultCurveWeight * 2 - defaultCurveWeight;
+		double rz = rand.nextDouble() * defaultCurveWeight * 2 - defaultCurveWeight;
+
+		int[] offset = this.getDirOffset(dir);
+
+		if(offset[0] != 0) {
+			rx = offset[0] * directedCurveWeight;
+		}
+
+		if(offset[1] != 0) {
+			rz = offset[1] * directedCurveWeight;
+		}
+
+		branchBlocks.add(branch);
+
+		for(int i = 0; i < remainingBlocks; i++) {
+			int xo = rand.nextDouble() < Math.abs(rx) ? (int)Math.signum(rx) : 0;
+			int zo = rand.nextDouble() < Math.abs(rz) ? (int)Math.signum(rz) : 0;
+			if(zo == 0 && xo == 0 && forceMoveFunction.apply(i, remainingBlocks)) {
+				if(rand.nextDouble() * Math.abs(rx) > rand.nextDouble() * Math.abs(rz)) {
+					xo = (int)Math.signum(rx);
+				} else {
+					zo = (int)Math.signum(rz);
+				}
+			}
+			if(Math.abs(xo) == Math.abs(zo) && xo != 0) {
+				remainingBlocks -= Math.sqrt(2) - 1;
+			}
+			branch = branch.add(xo, heightFunction.apply(i, remainingBlocks), zo);
+
+			branchBlocks.add(branch);
+		}
+
+		return branchBlocks;
+	}
+
+	private void generateBranchLeaves(World world, Random rand, BlockPos start, List<BlockPos> branchBlocks) {
+		for(BlockPos branchBlock : branchBlocks) {
+			int dist = (int) branchBlock.getDistance(start.getX(), start.getY(), start.getZ());
+			if(dist >= 2) {
+				for(EnumFacing side : LEAVES_OFFSETS) {
+					int leavesLength = 3 + (rand.nextInt(5) == 0 ? rand.nextInt(dist + 1) : rand.nextInt(dist / 2 + 1));
+					for(int yo = 0; yo > -leavesLength; yo--) {
+						BlockPos leafPos = branchBlock.offset(side).add(0, yo, 0);
+						IBlockState state;
+						if(yo == 0) {
+							state = this.leavesTop;
+						} else {
+							state = this.leavesMiddle;
+						}
+						if(world.isAirBlock(leafPos)) {
+							if(yo == -leavesLength + 1 || (yo < -1 && !world.isAirBlock(leafPos.down()))) {
+								state = this.leavesBottom;
+								this.setBlockAndNotifyAdequately(world, leafPos, state);
+								break;
+							} else {
+								this.setBlockAndNotifyAdequately(world, leafPos, state);
+							}
+						} else {
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 }

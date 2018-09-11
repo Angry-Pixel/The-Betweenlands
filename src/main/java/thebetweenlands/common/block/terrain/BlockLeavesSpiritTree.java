@@ -7,12 +7,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -21,6 +21,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
+	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.3D, 0.3D, 0.3D, 0.7D, 0.7D, 0.7D);
+
 	public static enum Type {
 		TOP, MIDDLE, BOTTOM
 	}
@@ -46,11 +48,6 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
-	}
-
-	@Override
-	public NonNullList<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return NonNullList.withSize(1, new ItemStack(this));
 	}
 
 	@Override
@@ -105,17 +102,27 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 		}
 		this.checkAndDropBlock(worldIn, pos, state);
 	}
-	
+
 	@Override
 	public int quantityDropped(Random random) {
 		return 0;
 	}
-	
+
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Random rand = world instanceof World ? ((World)world).rand : new Random();
 		if(rand.nextInt(100) == 0) {
 			//TODO Drop spirit fruit
 		}
+	}
+
+	@Override
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+		return new AxisAlignedBB(0.4D, 0.4D, 0.4D, 0.6D, 0.6D, 0.6D);
+	}
+
+	@Override
+	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
+		return true;
 	}
 }
