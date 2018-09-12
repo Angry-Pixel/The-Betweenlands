@@ -48,7 +48,7 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
-		return BlockRenderLayer.CUTOUT_MIPPED;
+		return BlockRenderLayer.CUTOUT;
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
 		Random rand = world instanceof World ? ((World)world).rand : new Random();
-		if(rand.nextInt(90) == 0) {
+		if(rand.nextInt(75) == 0) {
 			drops.add(new ItemStack(ItemRegistry.SPIRIT_FRUIT));
 		}
 	}

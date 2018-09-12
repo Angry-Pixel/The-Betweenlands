@@ -27,6 +27,7 @@ import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.Fog.MutableFog;
 import thebetweenlands.api.misc.FogState;
+import thebetweenlands.api.storage.ILocalStorage;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
@@ -36,6 +37,7 @@ import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.FogGenerator;
@@ -246,6 +248,26 @@ public class FogHandler {
 			}
 		}
 
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		double closestSpiritTree = -1;
+		for(ILocalStorage storage : worldStorage.getLocalStorageHandler().getLoadedStorages()) {
+			if(storage instanceof LocationStorage && ((LocationStorage)storage).getType() == EnumLocationType.SPIRIT_TREE) {
+				double dist = position.distanceTo(storage.getBoundingBox().getCenter());
+				if(dist < 75) {
+					if(closestSpiritTree < 0 || dist < closestSpiritTree) {
+						closestSpiritTree = dist;
+					}
+				}
+			}
+		}
+		if(closestSpiritTree >= 0) {
+			float strength = 1.0F - (float)Math.max(0, (closestSpiritTree - 16) / (75.0F - 16));
+			fog.setStart(fog.getStart() * (1 - strength));
+			fog.setEnd(fog.getEnd() + (40 - fog.getEnd()) * strength);
+			fog.setRed(fog.getRed() + (0.58F - fog.getRed()) * strength).setGreen(fog.getGreen() + (0.58F - fog.getGreen()) * strength).setBlue(fog.getBlue() + (0.58F - fog.getBlue()) * strength);
+			fog.setDistanceIncrementMultiplier(4.0F);
+		}
+		
 		LocationAmbience ambience = LocationStorage.getAmbience(world, position);
 
 		if(ambience != null) {

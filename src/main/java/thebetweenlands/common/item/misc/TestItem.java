@@ -16,6 +16,7 @@ import thebetweenlands.common.world.gen.feature.structure.WorldGenSmallRuins;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenHearthgroveTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenNibbletwigTree;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTree;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
 //MINE!!
 public class TestItem extends Item {
@@ -106,7 +107,7 @@ public class TestItem extends Item {
 			}
 		*/
 			
-			WorldGenSpiritTree tree = new WorldGenSpiritTree();
+			WorldGenSpiritTreeStructure tree = new WorldGenSpiritTreeStructure();
 			if(tree.generate(worldIn, itemRand, pos.up(1))) {
 				//playerIn.setHeldItem(hand, null);
 			}
