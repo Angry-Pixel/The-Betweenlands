@@ -4,11 +4,22 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
@@ -67,6 +78,62 @@ public class LocationSpiritTree extends LocationGuarded {
 		for(int i = 0; i < blockList.tagCount(); i++) {
 			NBTTagLong posNbt = (NBTTagLong) blockList.get(i);
 			blocks.add(BlockPos.fromLong(posNbt.getLong()));
+		}
+	}
+
+	@Override
+	public void update() {
+		super.update();
+
+		if(this.getWorldStorage().getWorld().isRemote) {
+			this.updateAmbientParticles();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private void updateAmbientParticles() {
+		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
+
+		if(view != null && view.world.rand.nextInt(20) == 0 && this.isInside(view)) {
+			World world = view.world;
+
+			MutableBlockPos checkPos = new MutableBlockPos();
+
+			int x = MathHelper.floor(view.posX);
+			int y = MathHelper.floor(view.posY);
+			int z = MathHelper.floor(view.posZ);
+
+			for(int xo = -8; xo <= 8; xo++) {
+				for(int zo = -8; zo <= 8; zo++) {
+					if(xo*xo + zo+zo <= 64) {
+						boolean hadAir = false;
+
+						for(int yo = 2; yo >= -2; yo--) {
+							checkPos.setPos(x + xo, y + yo, z + zo);
+
+							IBlockState state = world.getBlockState(checkPos);
+
+							if(!state.getBlock().isAir(state, world, checkPos)) {
+								if(hadAir) {
+									if(!state.isSideSolid(world, checkPos, EnumFacing.UP)) {
+										break;
+									}
+									AxisAlignedBB aabb = world.getBlockState(checkPos).getBoundingBox(world, checkPos);
+									if(aabb != null) {
+										double px = checkPos.getX() + aabb.minX + world.rand.nextDouble() * (aabb.maxX - aabb.minX);
+										double py = checkPos.getY() + aabb.maxY;
+										double pz = checkPos.getZ() + aabb.minZ + world.rand.nextDouble() * (aabb.maxZ - aabb.minZ);
+										world.spawnParticle(EnumParticleTypes.SUSPENDED_DEPTH, px, py, pz, 0, 0, 0);
+									}
+								}
+								break;
+							} else {
+								hadAir = true;
+							}
+						}
+					}
+				}
+			}
 		}
 	}
 }
