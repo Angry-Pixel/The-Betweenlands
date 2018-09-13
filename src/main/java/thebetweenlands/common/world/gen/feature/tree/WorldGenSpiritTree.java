@@ -266,6 +266,13 @@ public class WorldGenSpiritTree extends WorldGenerator {
 
 	private List<BlockPos> generateRoot(World world, Random rand, BlockPos start, int dir) {
 		List<BlockPos> root = this.generateBranchPositions(rand, start, dir, 2 + rand.nextInt(2), 0.9D, 0.8D, (i, remainingBlocks) -> i < 2 ? 0 : rand.nextInt((i - 2) * 2 + 2) == 0 ? 0 : -1, (i, length) -> true);
+		for(BlockPos pos : root) {
+			BlockPos rel = pos.subtract(start);
+			if(Math.abs(rel.getX()) + Math.abs(rel.getY()) + Math.abs(rel.getZ()) >= 1) {
+				root.add(root.indexOf(pos), pos.up());
+				break;
+			}
+		}
 		BlockPos end = root.get(root.size() - 1);
 		switch(dir) {
 		case 0:
@@ -312,15 +319,56 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	}
 
 	private List<BlockPos> generateSideBranch(World world, Random rand, BlockPos start, int dir) {
-		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 3 + rand.nextInt(3), 0.3D, 0.6D, (i, remainingBlocks) -> i < remainingBlocks / 2 ? 1 : (i >= remainingBlocks - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
+		List<BlockPos> branch = this.generateSideBranchPositions(rand, start, dir);
+		if(branch.size() > 3) {
+			BlockPos end = branch.get(3);
+			switch(dir) {
+			case 0:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 1));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 7));
+				break;
+			case 1:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 0));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 2));
+				break;
+			case 2:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 1));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 3));
+				break;
+			case 3:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 2));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 4));
+				break;
+			case 4:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 3));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 5));
+				break;
+			case 5:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 4));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 6));
+				break;
+			case 6:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 5));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 7));
+				break;
+			case 7:
+				branch.addAll(this.generateSideBranchPositions(rand, end, 6));
+				branch.addAll(this.generateSideBranchPositions(rand, end, 1));
+				break;
+			}
+		}
 		for(BlockPos pos : branch) {
 			this.setBlockAndNotifyAdequately(world, pos, this.log);
 		}
 		return branch;
 	}
+	
+	private List<BlockPos> generateSideBranchPositions(Random rand, BlockPos start, int dir) {
+		return this.generateBranchPositions(rand, start, dir, 6 + rand.nextInt(5), 0.3D, 0.6D, (i, remainingBlocks) -> i < remainingBlocks / 2 ? 1 : (i >= remainingBlocks - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
+	}
 
 	private List<BlockPos> generateTopBranch(World world, Random rand, BlockPos start, int dir) {
-		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 4 + rand.nextInt(3), 0.1D, 0.2D, (i, remainingBlocks) -> i < remainingBlocks - 1 ? 1 : 0, (i, length) -> i >= length - 1);
+		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 5 + rand.nextInt(5), 0.1D, 0.2D, (i, remainingBlocks) -> i < remainingBlocks - 1 ? 1 : 0, (i, length) -> i >= length - 1);
 		for(BlockPos pos : branch) {
 			this.setBlockAndNotifyAdequately(world, pos, this.log);
 		}

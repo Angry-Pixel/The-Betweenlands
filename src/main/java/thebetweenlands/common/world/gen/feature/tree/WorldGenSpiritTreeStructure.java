@@ -31,7 +31,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 				double bz = dz * 16 + dz * rand.nextDouble() * 16;
 				BlockPos root = position.add(bx, 0, bz);
 				root = this.findGroundPosition(world, root);
-				if(root != null && world.isAirBlock(root.up())) {
+				if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
 					this.generateRoot(world, rand, root);
 				}
 			}
@@ -66,7 +66,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 			}
 			BlockPos pos = circle.get(i);
 			pos = this.findGroundPosition(world, pos);
-			if(pos != null && !world.getBlockState(pos).getMaterial().isLiquid()) {
+			if(pos != null && world.isAirBlock(pos)) {
 				int height = minHeight + rand.nextInt(heightVar + 1);
 				for(int yo = 0; yo < height; yo++) {
 					world.setBlockState(pos.up(yo), BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState());
