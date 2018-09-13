@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.IPlantable;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
@@ -22,7 +23,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	public boolean generate(World world, Random rand, BlockPos position) {
 		if(GEN_SPIRIT_TREE.generate(world, rand, position)) {
 			LocationSpiritTree location = GEN_SPIRIT_TREE.getGeneratedLocation();
-			
+
 			this.generateWispCircle(world, rand, position, 6, 1, 2, location);
 			this.generateWispCircle(world, rand, position, 14, 1, 1, location);
 
@@ -36,6 +37,22 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 				root = this.findGroundPosition(world, root);
 				if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
 					this.generateRoot(world, rand, root);
+				}
+			}
+
+			for(int i = 0; i < 120; i++) {
+				double dir = rand.nextDouble() * Math.PI * 2;
+				double dx = Math.cos(dir);
+				double dz = Math.sin(dir);
+				double bx = dx * 16 + dx * rand.nextDouble() * 16;
+				double bz = dz * 16 + dz * rand.nextDouble() * 16;
+				BlockPos root = position.add(bx, 0, bz);
+				root = this.findGroundPosition(world, root);
+				if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
+					int height = 2 + rand.nextInt(4);
+					for(int yo = 0; yo < height; yo++) {
+						this.setBlockAndNotifyAdequately(world, root.up(yo), BlockRegistry.ROOT.getDefaultState());
+					}
 				}
 			}
 
@@ -69,7 +86,8 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 			}
 			BlockPos pos = circle.get(i);
 			pos = this.findGroundPosition(world, pos);
-			if(pos != null && world.isAirBlock(pos)) {
+			if(pos != null && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() instanceof IPlantable)) {
+				world.setBlockState(pos.down(), BlockRegistry.MOSSY_BETWEENSTONE_BRICKS.getDefaultState());
 				int height = minHeight + rand.nextInt(heightVar + 1);
 				for(int yo = 0; yo < height; yo++) {
 					world.setBlockState(pos.up(yo), BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState());
