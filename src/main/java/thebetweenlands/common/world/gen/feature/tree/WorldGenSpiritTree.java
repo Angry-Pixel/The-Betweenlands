@@ -10,6 +10,8 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.function.BiFunction;
 
+import javax.annotation.Nullable;
+
 import com.google.common.collect.ImmutableList;
 
 import net.minecraft.block.BlockLog;
@@ -25,10 +27,7 @@ import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.EnumLocationType;
-import thebetweenlands.common.world.storage.location.LocationAmbience;
-import thebetweenlands.common.world.storage.location.LocationAmbience.EnumLocationAmbience;
-import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenSpiritTree extends WorldGenerator {
@@ -50,28 +49,33 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	private final boolean genLocation;
 
 	private ILocationGuard guard;
+	private LocationSpiritTree location;
 
 	public WorldGenSpiritTree(boolean genLocation) {
 		this.genLocation = genLocation;
 	}
 
+	@Nullable
+	public LocationSpiritTree getGeneratedLocation() {
+		return this.location;
+	}
+	
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
 		//TODO Placement check
 
 		BetweenlandsWorldStorage worldStorage = null;
-		LocationGuarded location = null;
 
 		if(this.genLocation) {
 			worldStorage = BetweenlandsWorldStorage.forWorld(world);
-			location = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "spirit_tree", EnumLocationType.SPIRIT_TREE);
+			this.location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
 			this.guard = location.getGuard();
-			location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14, 9, 14).offset(0, 8, 0));
-			location.linkChunks();
-			location.setLayer(0);
-			location.setSeed(rand.nextLong());
-			location.setVisible(true);
-			location.setDirty(true);
+			this.location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14, 9, 14).offset(0, 8, 0));
+			this.location.linkChunks();
+			this.location.setLayer(0);
+			this.location.setSeed(rand.nextLong());
+			this.location.setVisible(true);
+			this.location.setDirty(true);
 		}
 
 		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
@@ -170,7 +174,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		}
 
 		if(this.genLocation) {
-			worldStorage.getLocalStorageHandler().addLocalStorage(location);
+			worldStorage.getLocalStorageHandler().addLocalStorage(this.location);
 		}
 
 		return true;
@@ -362,7 +366,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		}
 		return branch;
 	}
-	
+
 	private List<BlockPos> generateSideBranchPositions(Random rand, BlockPos start, int dir) {
 		return this.generateBranchPositions(rand, start, dir, 6 + rand.nextInt(5), 0.3D, 0.6D, (i, remainingBlocks) -> i < remainingBlocks / 2 ? 1 : (i >= remainingBlocks - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
 	}

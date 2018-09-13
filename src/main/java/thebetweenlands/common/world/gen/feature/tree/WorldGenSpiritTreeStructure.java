@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 
 public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	private static final WorldGenSpiritTree GEN_SPIRIT_TREE = new WorldGenSpiritTree(true);
@@ -20,8 +21,10 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
 		if(GEN_SPIRIT_TREE.generate(world, rand, position)) {
-			this.generateWispCircle(world, rand, position, 6, 1, 2);
-			this.generateWispCircle(world, rand, position, 14, 1, 1);
+			LocationSpiritTree location = GEN_SPIRIT_TREE.getGeneratedLocation();
+			
+			this.generateWispCircle(world, rand, position, 6, 1, 2, location);
+			this.generateWispCircle(world, rand, position, 14, 1, 1, location);
 
 			for(int i = 0; i < 20; i++) {
 				double dir = rand.nextDouble() * Math.PI * 2;
@@ -58,7 +61,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 		return null;
 	}
 
-	private void generateWispCircle(World world, Random rand, BlockPos center, int radius, int minHeight, int heightVar) {
+	private void generateWispCircle(World world, Random rand, BlockPos center, int radius, int minHeight, int heightVar, LocationSpiritTree location) {
 		List<BlockPos> circle = this.generateCircle(world, center, radius);
 		for(int i = 0; i < circle.size(); i += 2 + rand.nextInt(2)) {
 			if(i == circle.size() - 1) {
@@ -72,7 +75,9 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 					world.setBlockState(pos.up(yo), BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState());
 				}
 				if(rand.nextInt(3) == 0) {
-					world.setBlockState(pos.up(height), BlockRegistry.WISP.getDefaultState());
+					BlockPos wisp = pos.up(height);
+					world.setBlockState(wisp, BlockRegistry.WISP.getDefaultState());
+					location.addWisp(wisp);
 				}
 			}
 		}
