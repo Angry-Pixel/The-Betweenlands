@@ -27,7 +27,8 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 			this.generateWispCircle(world, rand, position, 6, 1, 2, location);
 			this.generateWispCircle(world, rand, position, 14, 1, 1, location);
 
-			for(int i = 0; i < 20; i++) {
+			int rootsGenerated = 0;
+			for(int i = 0; i < 80; i++) {
 				double dir = rand.nextDouble() * Math.PI * 2;
 				double dx = Math.cos(dir);
 				double dz = Math.sin(dir);
@@ -37,6 +38,9 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 				root = this.findGroundPosition(world, root);
 				if(root != null && world.isAirBlock(root) && world.isAirBlock(root.up())) {
 					this.generateRoot(world, rand, root);
+					if(rootsGenerated++ > 12) {
+						break;
+					}
 				}
 			}
 

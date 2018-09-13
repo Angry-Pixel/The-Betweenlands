@@ -1,7 +1,8 @@
 {
     "parent": "block/block",
     "textures": {
-        "all": "thebetweenlands:blocks/leaves_spirit_tree_top",
+        "sides": "thebetweenlands:blocks/leaves_spirit_tree_top",
+        "top": "thebetweenlands:blocks/leaves_spirit_tree_top_top",
         "particle": "thebetweenlands:blocks/leaves_spirit_tree_top"
     },
     "elements": [
@@ -10,8 +11,8 @@
             "to": [ 15.2, 16, 8 ],
             "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
             "faces": {
-                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" },
-                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" }
+                "north": { "uv": [ 0, 0, 16, 16 ], "texture": "#sides" },
+                "south": { "uv": [ 0, 0, 16, 16 ], "texture": "#sides" }
             }
         },
         {   
@@ -19,48 +20,48 @@
             "to": [ 8, 16, 15.2 ],
             "rotation": { "origin": [ 8, 8, 8 ], "axis": "y", "angle": 45, "rescale": true },
             "faces": {
-                "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" },
-                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#all" }
+                "west": { "uv": [ 0, 0, 16, 16 ], "texture": "#sides" },
+                "east": { "uv": [ 0, 0, 16, 16 ], "texture": "#sides" }
             }
         },
         {   
-            "from": [ 0, 0, 0.2 ],
-            "to": [ 16, 15.8, 0.2 ],
+            "from": [ 0, 0, 0 ],
+            "to": [ 16, 16, 0 ],
             "faces": {
-                "north": { "texture": "#all", "cullface": "north" },
-                "south": { "texture": "#all" }
+                "north": { "texture": "#sides", "cullface": "north" },
+                "south": { "texture": "#sides", "cullface": "north" }
             }
         },
         {   
-            "from": [ 0, 0, 15.8 ],
-            "to": [ 16, 15.8, 15.8 ],
+            "from": [ 0, 0, 16 ],
+            "to": [ 16, 16, 16 ],
             "faces": {
-                "north": { "texture": "#all" },
-                "south": { "texture": "#all", "cullface": "south" }
+                "north": { "texture": "#sides", "cullface": "south" },
+                "south": { "texture": "#sides", "cullface": "south" }
             }
         },
         {   
-            "from": [ 0.2, 0, 0 ],
-            "to": [ 0.2, 15.8, 16 ],
+            "from": [ 0, 0, 0 ],
+            "to": [ 0, 16, 16 ],
             "faces": {
-                "west":  { "texture": "#all", "cullface": "west" },
-                "east":  { "texture": "#all" }
+                "west":  { "texture": "#sides", "cullface": "west" },
+                "east":  { "texture": "#sides", "cullface": "west" }
             }
         },
         {   
-            "from": [ 15.8, 0, 0 ],
-            "to": [ 15.8, 15.8, 16 ],
+            "from": [ 16, 0, 0 ],
+            "to": [ 16, 16, 16 ],
             "faces": {
-                "west":  { "texture": "#all" },
-                "east":  { "texture": "#all", "cullface": "east" }
+                "west":  { "texture": "#sides", "cullface": "east" },
+                "east":  { "texture": "#sides", "cullface": "east" }
             }
         },
         {   
-            "from": [ 0.2, 15.8, 0.2 ],
-            "to": [ 15.8, 15.8, 15.8 ],
+            "from": [ 0, 16, 0 ],
+            "to": [ 16, 16, 16 ],
             "faces": {
-                "up":  { "texture": "#all", "cullface": "up" },
-                "down":  { "texture": "#all" }
+                "up":  { "texture": "#top", "cullface": "up" },
+                "down":  { "texture": "#sides", "cullface": "up" }
             }
         }
     ]
