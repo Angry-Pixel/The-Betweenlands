@@ -108,7 +108,7 @@ public class CommonProxy implements IGuiHandler {
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), name));
+				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
 		}
@@ -117,7 +117,7 @@ public class CommonProxy implements IGuiHandler {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(item != null) {
 				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), name));
+				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 		}
 

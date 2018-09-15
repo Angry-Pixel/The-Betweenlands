@@ -102,7 +102,7 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_SOFT_RUSH.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_SWAMP_KELP.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_SWAMP_GRASS_TALL.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
-		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_TANGLED_ROOTS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
+		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_ROOTS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_WEEDWOOD_BARK.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_WATER_WEEDS.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 			AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 3);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_VOLARPAD.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.COMMON, AspectGroup.HERB, 0.425F, 0.35F, 2);
