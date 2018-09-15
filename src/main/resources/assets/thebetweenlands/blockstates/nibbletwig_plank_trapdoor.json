@@ -2,8 +2,8 @@
   "forge_marker": 1,
   "defaults": {
     "textures": {
-      "top": "thebetweenlands:blocks/weedwood_trapdoor",
-      "side": "thebetweenlands:blocks/weedwood_trapdoor_side"
+      "top": "thebetweenlands:blocks/nibbletwig_plank_trapdoor",
+      "side": "thebetweenlands:blocks/nibbletwig_planks"
     }
   },
   "variants": {
@@ -26,8 +26,8 @@
     "inventory": {
       "model": "thebetweenlands:trapdoor_bottom",
       "textures": {
-        "top": "thebetweenlands:blocks/weedwood_trapdoor",
-        "side": "thebetweenlands:blocks/weedwood_trapdoor_side"
+        "top": "thebetweenlands:blocks/nibbletwig_plank_trapdoor",
+        "side": "thebetweenlands:blocks/nibbletwig_planks"
       }
     }
   }
