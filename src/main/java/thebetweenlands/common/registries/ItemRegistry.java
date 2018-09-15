@@ -25,6 +25,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockLifeCrystalStalactite;
+import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
 import thebetweenlands.common.config.BetweenlandsConfig;
@@ -91,6 +92,7 @@ import thebetweenlands.common.item.misc.ItemAmuletSlot;
 import thebetweenlands.common.item.misc.ItemAngryPebble;
 import thebetweenlands.common.item.misc.ItemBLRecord;
 import thebetweenlands.common.item.misc.ItemCavingRope;
+import thebetweenlands.common.item.misc.ItemDentrothystShard;
 import thebetweenlands.common.item.misc.ItemDoorBetweenlands;
 import thebetweenlands.common.item.misc.ItemGem;
 import thebetweenlands.common.item.misc.ItemGlue;
@@ -151,6 +153,8 @@ public class ItemRegistry {
     public static final Item ITEMS_PLANT_DROP = new ItemPlantDrop().setCreativeTab(BLCreativeTabs.HERBLORE);
     public static final Item SWAMP_TALISMAN = new ItemSwampTalisman().setCreativeTab(BLCreativeTabs.ITEMS);
     public static final Item WEEDWOOD_ROWBOAT = new ItemWeedwoodRowboat();
+    public static final Item DENTROTHYST_SHARD_ORANGE = new ItemDentrothystShard(EnumDentrothyst.ORANGE);
+    public static final Item DENTROTHYST_SHARD_GREEN = new ItemDentrothystShard(EnumDentrothyst.GREEN);
     //food
     public static final Item SAP_BALL = new ItemSapBall();
     public static final ItemRottenFood ROTTEN_FOOD = (ItemRottenFood) new ItemRottenFood().setAlwaysEdible();
