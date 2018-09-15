@@ -315,6 +315,12 @@ public class ItemRegistry {
             return BlockRegistry.GIANT_ROOT_PLANK_DOOR;
         }
     };
+    public static final Item HEARTHGROVE_PLANK_DOOR_ITEM = new ItemDoorBetweenlands() {
+        @Override
+        public Block getDoorBlock() {
+            return BlockRegistry.HEARTHGROVE_PLANK_DOOR;
+        }
+    };
     public static final Item WEEDWOOD_SIGN_ITEM = new ItemWeedwoodSign();
     public static final Item CRIMSON_MIDDLE_GEM = new ItemGem(CircleGemType.CRIMSON);
     public static final Item AQUA_MIDDLE_GEM = new ItemGem(CircleGemType.AQUA);
