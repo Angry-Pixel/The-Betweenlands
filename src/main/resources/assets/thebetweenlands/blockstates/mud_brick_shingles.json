@@ -1,0 +1,7 @@
+{ 
+  "variants": { 
+    "normal": {
+      "model": "thebetweenlands:mud_brick_shingles"
+    } 
+  } 
+}

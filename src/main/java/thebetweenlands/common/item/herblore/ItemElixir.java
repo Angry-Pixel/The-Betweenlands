@@ -37,6 +37,7 @@ import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import thebetweenlands.client.handler.ItemTooltipHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
@@ -166,6 +167,10 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		return elixirStack;
 	}
 
+	public EnumDentrothyst getDentrothystType(ItemStack stack) {
+		return stack.getMetadata() % 2 == 0 ? EnumDentrothyst.GREEN : EnumDentrothyst.ORANGE;
+	}
+	
 	@Override
 	public int getMaxItemUseDuration(ItemStack stack) {
 		if(stack.getTagCompound() != null && stack.getTagCompound().hasKey("throwing") && stack.getTagCompound().getBoolean("throwing")) {
@@ -250,6 +255,7 @@ public class ItemElixir extends Item implements ITintedItem, ItemRegistry.IBlock
 		return 0;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		ElixirEffect elixirEffect = this.getElixirFromItem(stack);

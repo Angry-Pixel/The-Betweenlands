@@ -123,6 +123,7 @@ import thebetweenlands.common.block.structure.BlockFenceGateBetweenlands;
 import thebetweenlands.common.block.structure.BlockItemCage;
 import thebetweenlands.common.block.structure.BlockMobSpawnerBetweenlands;
 import thebetweenlands.common.block.structure.BlockMudBrickRoof;
+import thebetweenlands.common.block.structure.BlockMudBrickShingleSlab;
 import thebetweenlands.common.block.structure.BlockMudBricks;
 import thebetweenlands.common.block.structure.BlockPortalFrame;
 import thebetweenlands.common.block.structure.BlockPossessedBlock;
@@ -351,6 +352,7 @@ public class BlockRegistry {
     public static final Block MOSSY_LIMESTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block MOSSY_SMOOTH_BETWEENSTONE = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
     public static final Block MUD_BRICKS = new BlockMudBricks();
+    public static final Block MUD_BRICK_SHINGLES = new BlockMudBricks();
     public static final Block OCTINE_BLOCK = new BlockOctine();
     public static final Block RUBBER_BLOCK = new BlockBouncyBetweenlands(0.8f).setSoundType2(SoundType.SLIME).setHardness(1.0f);
     public static final Block PITSTONE_BRICKS = new BasicBlock(Material.ROCK).setSoundType2(SoundType.STONE).setHardness(1.5F).setResistance(10.0F);
@@ -438,6 +440,7 @@ public class BlockRegistry {
     public static final Block GIANT_ROOT_PLANK_SLAB = new BlockSlabBetweenlands(GIANT_ROOT_PLANKS);
     public static final Block HEARTHGROVE_PLANK_SLAB = new BlockSlabBetweenlands(HEARTHGROVE_PLANKS);
     public static final Block NIBBLETWIG_PLANK_SLAB = new BlockSlabBetweenlands(NIBBLETWIG_PLANKS);
+    public static final Block MUD_BRICK_SHINGLE_SLAB = new BlockMudBrickShingleSlab();
     public static final Block THATCH_SLAB = new BlockSlabBetweenlands(THATCH).setHardness(0.5F);
     public static final Block PITSTONE_WALL = new BlockWallBetweenlands(PITSTONE.getDefaultState());
     public static final Block BETWEENSTONE_WALL = new BlockWallBetweenlands(BETWEENSTONE.getDefaultState());
