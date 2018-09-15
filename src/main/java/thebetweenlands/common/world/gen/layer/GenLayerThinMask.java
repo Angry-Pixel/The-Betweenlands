@@ -49,7 +49,7 @@ public class GenLayerThinMask extends GenLayerBetweenlands {
 		GenLayer genlayer = layer;
 
 		for (int i = 0; i < num; ++i) {
-			genlayer = new GenLayerThinMask(seed, genlayer, id, range, removeChance);
+			genlayer = new GenLayerThinMask(seed + i, genlayer, id, range, removeChance);
 		}
 
 		return genlayer;

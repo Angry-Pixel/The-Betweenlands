@@ -11,6 +11,10 @@ public class BiomeDecoratorSwamplandsClearing extends BiomeDecoratorBetweenlands
 	public void decorate() {
 		super.decorate();
 
+		this.startProfilerSection("swamplandsClearingSpiritTree");
+		this.generate(1, DecorationHelper::generateSwamplandsClearingSpiritTree);
+		this.endProfilerSection();
+
 		this.startProfilerSection("venusFlyTrapCluster");
 		this.generate(3, DecorationHelper::generateVenusFlyTrapCluster);
 		this.endProfilerSection();

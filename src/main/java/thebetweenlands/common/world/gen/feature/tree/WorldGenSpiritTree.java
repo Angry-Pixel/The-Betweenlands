@@ -49,8 +49,18 @@ public class WorldGenSpiritTree extends WorldGenerator {
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
-		//TODO Placement check
+		int checkRadius = 9;
 
+		for (int xx = -checkRadius; xx <= checkRadius; xx++) {
+			for (int zz = -checkRadius; zz <= checkRadius; zz++) {
+				for (int yy = 3; yy < 16; yy++) {
+					if (!world.isAirBlock(position.add(xx, yy, zz)) && world.getBlockState(position.add(xx, yy, zz)).isNormalCube()) {
+						return false;
+					}
+				}
+			}
+		}
+		
 		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.leavesTop = BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 		this.leavesMiddle = BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
