@@ -26,24 +26,34 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class LocationSpiritTree extends LocationGuarded {
-	private List<BlockPos> wisps = new ArrayList<BlockPos>();
+	private List<BlockPos> wispPosts = new ArrayList<BlockPos>();
+	private List<BlockPos> generatedWisps = new ArrayList<BlockPos>();
 
 	public LocationSpiritTree(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
 		super(worldStorage, id, region, "spirit_tree", EnumLocationType.SPIRIT_TREE);
 	}
 
-	public void addWisp(BlockPos pos) {
-		this.wisps.add(pos);
+	public void addGeneratedWisp(BlockPos pos) {
+		this.generatedWisps.add(pos);
 		this.setDirty(true);
 	}
 
-	public List<BlockPos> getWisps() {
-		return Collections.unmodifiableList(this.wisps);
+	public List<BlockPos> getGeneratedWisps() {
+		return Collections.unmodifiableList(this.generatedWisps);
+	}
+	
+	public void addWispPost(BlockPos pos) {
+		this.wispPosts.add(pos);
+		this.setDirty(true);
+	}
+
+	public List<BlockPos> getWispPosts() {
+		return Collections.unmodifiableList(this.wispPosts);
 	}
 
 	public int getActiveWisps() {
 		int i = 0;
-		for(BlockPos pos : this.wisps) {
+		for(BlockPos pos : this.wispPosts) {
 			if(this.getWorldStorage().getWorld().getBlockState(pos).getBlock() == BlockRegistry.WISP) {
 				i++;
 			}
@@ -54,14 +64,16 @@ public class LocationSpiritTree extends LocationGuarded {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
-		this.saveBlockList(nbt, "wisps", this.wisps);
+		this.saveBlockList(nbt, "generatedWisps", this.generatedWisps);
+		this.saveBlockList(nbt, "wispPosts", this.wispPosts);
 		return nbt;
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.readBlockList(nbt, "wisps", this.wisps);
+		this.readBlockList(nbt, "generatedWisps", this.generatedWisps);
+		this.readBlockList(nbt, "wispPosts", this.wispPosts);
 	}
 
 	protected void saveBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {

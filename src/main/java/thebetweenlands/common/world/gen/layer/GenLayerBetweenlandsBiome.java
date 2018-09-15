@@ -14,7 +14,9 @@ public class GenLayerBetweenlandsBiome extends GenLayerBetweenlands {
 	public GenLayerBetweenlandsBiome(long seed, GenLayer parentGenLayer) {
 		super(seed);
 		for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
-			this.biomesToGenerate.add(biome);
+			if(biome.getWeight() > 0) {
+				this.biomesToGenerate.add(biome);
+			}
 		}
 		this.totalWeight = this.biomesToGenerate.getTotalWeight();
 		this.parent = parentGenLayer;

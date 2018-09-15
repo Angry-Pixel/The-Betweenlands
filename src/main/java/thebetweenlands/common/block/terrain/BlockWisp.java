@@ -54,13 +54,10 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 		if(worldStorage.getEnvironmentEventRegistry().auroras.isActive()) {
 			return true;
 		}
-		List<LocationStorage> storages = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
-		for(LocationStorage storage : storages) {
-			if(storage instanceof LocationCragrockTower || storage.getType() == EnumLocationType.SPIRIT_TREE) {
-				return true;
-			}
+		List<LocationCragrockTower> storages = worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
+		if(!storages.isEmpty()) {
+			return true;
 		}
-
 		return false;
 	}
 

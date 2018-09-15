@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
-import java.util.UUID;
 import java.util.function.BiFunction;
 
 import javax.annotation.Nullable;
@@ -17,17 +16,12 @@ import com.google.common.collect.ImmutableList;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
-import thebetweenlands.api.storage.LocalRegion;
-import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenSpiritTree extends WorldGenerator {
@@ -46,37 +40,16 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	private IBlockState leavesBottom;
 	private IBlockState roots;
 
-	private final boolean genLocation;
-
-	private ILocationGuard guard;
-	private LocationSpiritTree location;
-
-	public WorldGenSpiritTree(boolean genLocation) {
-		this.genLocation = genLocation;
-	}
-
 	@Nullable
-	public LocationSpiritTree getGeneratedLocation() {
-		return this.location;
+	private ILocationGuard guard;
+
+	public WorldGenSpiritTree(@Nullable ILocationGuard guard) {
+		this.guard = guard;
 	}
-	
+
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
 		//TODO Placement check
-
-		BetweenlandsWorldStorage worldStorage = null;
-
-		if(this.genLocation) {
-			worldStorage = BetweenlandsWorldStorage.forWorld(world);
-			this.location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
-			this.guard = location.getGuard();
-			this.location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14, 9, 14).offset(0, 8, 0));
-			this.location.linkChunks();
-			this.location.setLayer(0);
-			this.location.setSeed(rand.nextLong());
-			this.location.setVisible(true);
-			this.location.setDirty(true);
-		}
 
 		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.leavesTop = BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
@@ -171,10 +144,6 @@ public class WorldGenSpiritTree extends WorldGenerator {
 					}
 				}
 			}
-		}
-
-		if(this.genLocation) {
-			worldStorage.getLocalStorageHandler().addLocalStorage(this.location);
 		}
 
 		return true;
@@ -457,7 +426,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	@Override
 	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
-		if(this.genLocation) {
+		if(this.guard != null) {
 			this.guard.setGuarded(worldIn, pos, true);
 		}
 	}

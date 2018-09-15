@@ -4,26 +4,44 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.IPlantable;
+import thebetweenlands.api.storage.LocalRegion;
+import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
+import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenSpiritTreeStructure extends WorldGenerator {
-	private static final WorldGenSpiritTree GEN_SPIRIT_TREE = new WorldGenSpiritTree(true);
+	private WorldGenSpiritTree genSpiritTree;
+	private ILocationGuard guard;
 
+	public WorldGenSpiritTreeStructure() {
+		super(true);
+	}
+	
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
-		if(GEN_SPIRIT_TREE.generate(world, rand, position)) {
-			LocationSpiritTree location = GEN_SPIRIT_TREE.getGeneratedLocation();
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+		LocationSpiritTree location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
+		this.guard = location.getGuard();
+		location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14 + 18, 16, 14 + 18).offset(0, 6, 0));
+		location.setLayer(0);
+		location.setSeed(rand.nextLong());
+		location.setVisible(true);
 
+		this.genSpiritTree = new WorldGenSpiritTree(this.guard);
+		if(this.genSpiritTree.generate(world, rand, position)) {
 			this.generateWispCircle(world, rand, position, 6, 1, 2, location);
 			this.generateWispCircle(world, rand, position, 14, 1, 1, location);
 
@@ -60,6 +78,10 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 				}
 			}
 
+			location.linkChunks();
+			location.setDirty(true);
+			worldStorage.getLocalStorageHandler().addLocalStorage(location);
+
 			return true;
 		}
 
@@ -91,22 +113,25 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 			BlockPos pos = circle.get(i);
 			pos = this.findGroundPosition(world, pos);
 			if(pos != null && (world.isAirBlock(pos) || world.getBlockState(pos).getBlock() instanceof IPlantable)) {
-				world.setBlockState(pos.down(), BlockRegistry.MOSSY_BETWEENSTONE_BRICKS.getDefaultState());
+				BlockPos wall = pos.down();
+				this.setBlockAndNotifyAdequately(world, wall, BlockRegistry.MOSSY_BETWEENSTONE_BRICKS.getDefaultState());
 				int height = minHeight + rand.nextInt(heightVar + 1);
 				for(int yo = 0; yo < height; yo++) {
-					world.setBlockState(pos.up(yo), BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState());
+					wall = pos.up(yo);
+					this.setBlockAndNotifyAdequately(world, wall, BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState());
 				}
+				BlockPos wisp = pos.up(height);
+				location.addWispPost(wisp);
 				if(rand.nextInt(3) == 0) {
-					BlockPos wisp = pos.up(height);
-					world.setBlockState(wisp, BlockRegistry.WISP.getDefaultState());
-					location.addWisp(wisp);
+					this.setBlockAndNotifyAdequately(world, wisp, BlockRegistry.WISP.getDefaultState());
+					location.addGeneratedWisp(wisp);
 				}
 			}
 		}
 	}
 
 	private void generateRoot(World world, Random rand, BlockPos pos) {
-		List<BlockPos> potentialBlocks = GEN_SPIRIT_TREE.generateBranchPositions(rand, pos, rand.nextInt(7), 32, 0.4D, 0.3D, (i, remainingBlocks) -> i < 2 ? 1 : (i > 4 ? -1 : 0), (i, length) -> true);
+		List<BlockPos> potentialBlocks = this.genSpiritTree.generateBranchPositions(rand, pos, rand.nextInt(7), 32, 0.4D, 0.3D, (i, remainingBlocks) -> i < 2 ? 1 : (i > 4 ? -1 : 0), (i, length) -> true);
 		int length = 0;
 		for(int i = 0; i < potentialBlocks.size(); i++) {
 			BlockPos block = potentialBlocks.get(i);
@@ -197,5 +222,14 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 		}
 
 		return s1;
+	}
+
+	@Override
+	protected void setBlockAndNotifyAdequately(World world, BlockPos pos, IBlockState state) {
+		super.setBlockAndNotifyAdequately(world, pos, state);
+
+		if(state.getBlock() != BlockRegistry.WISP) {
+			this.guard.setGuarded(world, pos, true);
+		}
 	}
 }
