@@ -27,6 +27,7 @@ import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
 import thebetweenlands.client.render.particle.entity.ParticleSimple;
+import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
 import thebetweenlands.client.render.particle.entity.ParticleThem;
 import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
@@ -68,6 +69,7 @@ public enum BLParticles {
 	FLY(new ParticleBug.FlyFactory()),
 	MOTH(new ParticleMoth.Factory()),
 	MOSQUITO(new ParticleBug.MosquitoFactory()),
+	SPIRIT_BUTTERFLY(new ParticleSpiritButterfly.Factory()),
 	WATER_BUG(new ParticleBug.WaterBugFactory()),
 	FISH(new ParticleFish.Factory()),
 	WISP(new ParticleWisp.Factory()),

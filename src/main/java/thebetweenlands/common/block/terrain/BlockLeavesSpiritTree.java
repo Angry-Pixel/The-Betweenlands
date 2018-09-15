@@ -18,6 +18,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
@@ -54,12 +55,6 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(DECAYABLE, false);
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
-
 	}
 
 	@Override
@@ -125,5 +120,16 @@ public class BlockLeavesSpiritTree extends BlockLeavesBetweenlands {
 	@Override
 	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
 		return true;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
+		if(rand.nextInt(100) == 0) {
+			double px = (double)pos.getX() + rand.nextDouble() * 0.5D;
+			double py = (double)pos.getY() + rand.nextDouble() * 0.5D;
+			double pz = (double)pos.getZ() + rand.nextDouble() * 0.5D;
+			BLParticles.SPIRIT_BUTTERFLY.spawn(world, px, py, pz);
+		}
 	}
 }
