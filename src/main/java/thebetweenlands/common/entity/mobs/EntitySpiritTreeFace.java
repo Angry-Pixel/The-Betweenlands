@@ -8,6 +8,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityLookHelper;
 import net.minecraft.entity.ai.EntityMoveHelper;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -42,7 +43,7 @@ public class EntitySpiritTreeFace extends EntityCreature implements IMob {
 	private static final DataParameter<EnumFacing> MOVE_FACING_UP = EntityDataManager.createKey(EntitySpiritTreeFace.class, DataSerializers.FACING);
 	private static final DataParameter<BlockPos> MOVE_ANCHOR = EntityDataManager.createKey(EntitySpiritTreeFace.class, DataSerializers.BLOCK_POS);
 
-	private final LookHelper lookHelper;
+	protected final EntityLookHelper lookHelper;
 
 	private static final int MAX_MOVE_TICKS = 40;
 	private int moveTicks = 0;
@@ -176,6 +177,24 @@ public class EntitySpiritTreeFace extends EntityCreature implements IMob {
 		} else {
 			return 0;
 		}
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+
+		nbt.setInteger("facing", this.getFacing().getIndex());
+		nbt.setInteger("facingUp", this.getFacing().getIndex());
+		nbt.setLong("anchor", this.getAnchor().toLong());
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+
+		this.dataManager.set(FACING, EnumFacing.getFront(nbt.getInteger("facing")));
+		this.dataManager.set(FACING_UP, EnumFacing.getFront(nbt.getInteger("facingUp")));
+		this.dataManager.set(ANCHOR, BlockPos.fromLong(nbt.getLong("anchor")));
 	}
 
 	@Override
@@ -362,19 +381,7 @@ public class EntitySpiritTreeFace extends EntityCreature implements IMob {
 	}
 
 	protected void fixUnsuitablePosition() {
-		if(this.ticksExisted % 10 == 0) {
-			for(int i = 0; i < 160; i++) {
-				float rx = this.world.rand.nextFloat() * 2 - 1;
-				float ry = this.world.rand.nextFloat() * 2 - 1;
-				float rz = this.world.rand.nextFloat() * 2 - 1;
-				EnumFacing rndDir = EnumFacing.getFacingFromVector(rx, ry, rz);
-				BlockPos rndPos = new BlockPos(this.posX + this.world.rand.nextInt(8) - 4, this.posY + this.height / 2 + this.world.rand.nextInt(8) - 4, this.posZ + this.world.rand.nextInt(8) - 4);
-				if(this.canAnchorAt(rndPos, rndDir, EnumFacing.UP)) {
-					this.lookHelper.setLookPosition(this.posX + rx, this.posY + this.getEyeHeight() + ry, this.posZ + rz, 0, 0);
-					this.moveHelper.setMoveTo(rndPos.getX(), rndPos.getY(), rndPos.getZ(), 1);
-				}
-			}
-		}
+
 	}
 
 	private static final class LookHelper extends EntityLookHelper {
