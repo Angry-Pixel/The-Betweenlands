@@ -138,23 +138,26 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		boolean removed = super.removedByPlayer(state, world, pos, player, willHarvest);
 		if(removed && state.getValue(AGE) >= 15) {
 			//Remove 10 compost after harvesting fully grown crop
-			this.consumeCompost(world, pos, 10);
+			this.harvestAndUpdateSoil(world, pos, 10);
 		}
 		return removed;
 	}
 
 	/**
-	 * Tries to consume compost if the block below is dug soil
+	 * Called when the crop is harvested. Updates the soil and e.g. consumes compost if the block below is dug soil
 	 * @param world
 	 * @param pos
 	 * @param compost
 	 */
-	protected void consumeCompost(World world, BlockPos pos, int compost) {
+	protected void harvestAndUpdateSoil(World world, BlockPos pos, int compost) {
 		IBlockState stateDown = world.getBlockState(pos.down());
 		if(stateDown.getBlock() instanceof BlockGenericDugSoil) {
 			TileEntityDugSoil te = BlockGenericDugSoil.getTile(world, pos.down());
 			if(te != null && te.isComposted()) {
 				te.setCompost(Math.max(te.getCompost() - compost, 0));
+				if(((BlockGenericDugSoil)stateDown.getBlock()).isPurified(world, pos.down(), stateDown)) {
+					te.setPurifiedHarvests(te.getPurifiedHarvests() + 1);
+				}
 			}
 		}
 	}

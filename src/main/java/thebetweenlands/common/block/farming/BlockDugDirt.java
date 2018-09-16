@@ -22,12 +22,17 @@ public class BlockDugDirt extends BlockGenericDugSoil {
 			TileEntityDugSoil te = getTile(world, pos);
 
 			if(te != null && !te.isComposted() && rand.nextInt(20) == 0) {
-				if(this.purified) {
+				if(this.isPurified(world, pos, state)) {
 					world.setBlockState(pos, BlockRegistry.PURIFIED_SWAMP_DIRT.getDefaultState());
 				} else {
 					world.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
 				}
 			}
 		}
+	}
+
+	@Override
+	public IBlockState getUnpurifiedDugSoil(World world, BlockPos pos, IBlockState state) {
+		return BlockRegistry.DUG_SWAMP_DIRT.getDefaultState().withProperty(COMPOSTED, state.getValue(COMPOSTED)).withProperty(DECAYED, state.getValue(DECAYED));
 	}
 }

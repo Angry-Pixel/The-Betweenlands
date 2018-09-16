@@ -56,7 +56,7 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     public static final PropertyBool COMPOSTED = PropertyBool.create("composted");
     public static final PropertyBool DECAYED = PropertyBool.create("decayed");
 
-    public final boolean purified;
+    private final boolean purified;
 
     public BlockGenericDugSoil(Material material) {
         this(material, false);
@@ -78,6 +78,15 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
             return (TileEntityDugSoil) te;
         }
         return null;
+    }
+    
+    public static boolean copy(World world, BlockPos pos, TileEntityDugSoil from) {
+    	TileEntity te = world.getTileEntity(pos);
+        if (te instanceof TileEntityDugSoil) {
+            ((TileEntityDugSoil) te).copy(from);
+            return true;
+        }
+        return false;
     }
 
     @SubscribeEvent
@@ -446,4 +455,37 @@ public abstract class BlockGenericDugSoil extends BasicBlock implements ITileEnt
     public boolean isFertile(World world, BlockPos pos) {
         return true;
     }
+    
+    /**
+     * Returns whether the soil is purified
+     * @param world
+     * @param pos
+     * @param state
+     * @return
+     */
+    public boolean isPurified(World world, BlockPos pos, IBlockState state) {
+    	return this.purified;
+    }
+    
+    /**
+     * Returns how often crops can be harvested before the purified soil turns into unpurified soil
+     * @param world
+     * @param pos
+     * @param state
+     * @return
+     */
+    public int getPurifiedHarvests(World world, BlockPos pos, IBlockState state) {
+    	return 3;
+    }
+    
+    /**
+     * Returns the unpurified variant of this soil.
+     * This should also copy the {@link #COMPOSTED} and {@link #DECAYED}
+     * properties.
+     * @param world
+     * @param pos
+     * @param state
+     * @return
+     */
+    public abstract IBlockState getUnpurifiedDugSoil(World world, BlockPos pos, IBlockState state);
 }
