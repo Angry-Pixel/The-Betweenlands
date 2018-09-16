@@ -37,26 +37,30 @@ public class BlockDugGrass extends BlockGenericDugSoil implements ITintedBlock {
 
 			if(te != null) {
 				if(!te.isComposted() && rand.nextInt(20) == 0) {
-					if(this.purified) {
+					if(this.isPurified(world, pos, state)) {
 						world.setBlockState(pos, BlockRegistry.DUG_PURIFIED_SWAMP_GRASS.getDefaultState());
 					} else {
 						world.setBlockState(pos, BlockRegistry.SWAMP_GRASS.getDefaultState());
 					}
 				} else {
 					if(world.getBlockState(pos.up()).getLightOpacity(world, pos.up()) > 2) {
-						int prevCompost = te.getCompost();
-						int prevDecay = te.getDecay();
 						world.setBlockState(pos, BlockRegistry.DUG_SWAMP_DIRT.getDefaultState());
-						TileEntityDugSoil newTe = getTile(world, pos);
-						if(newTe != null) {
-							newTe.setCompost(prevCompost);
-							newTe.setDecay(prevDecay);
-						}
+						BlockGenericDugSoil.copy(world, pos, te);
 					}
 				}
 			}
 
 			BlockSwampGrass.updateGrass(world, pos, rand);
 		}
+	}
+
+	@Override
+	public IBlockState getUnpurifiedDugSoil(World world, BlockPos pos, IBlockState state) {
+		return BlockRegistry.DUG_SWAMP_GRASS.getDefaultState().withProperty(COMPOSTED, state.getValue(COMPOSTED)).withProperty(DECAYED, state.getValue(DECAYED));
+	}
+	
+	@Override
+	public int getPurifiedHarvests(World world, BlockPos pos, IBlockState state) {
+		return 6;
 	}
 }

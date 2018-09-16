@@ -91,7 +91,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 			for(int i = 0; i < MAX_HEIGHT; i++) {
 				IBlockState offsetState = worldIn.getBlockState(checkPos);
 				if(offsetState.getBlock() instanceof BlockGenericDugSoil) {
-					if(!((BlockGenericDugSoil)offsetState.getBlock()).purified) {
+					if(!((BlockGenericDugSoil)offsetState.getBlock()).isPurified(worldIn, checkPos, offsetState)) {
 						TileEntityDugSoil te = BlockGenericDugSoil.getTile(worldIn, checkPos);
 						if(te != null && !te.isFullyDecayed()) {
 							te.setDecay(te.getDecay() + 5);

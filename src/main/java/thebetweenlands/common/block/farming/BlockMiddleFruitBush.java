@@ -33,7 +33,7 @@ public class BlockMiddleFruitBush extends BlockGenericCrop implements ICustomIte
 			if(!world.isRemote) {
 				this.dropBlockAsItem(world, pos, state, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, playerIn.getHeldItem(hand)));
 				world.setBlockState(pos, state.withProperty(AGE, 8));
-				this.consumeCompost(world, pos, 10);
+				this.harvestAndUpdateSoil(world, pos, 10);
 			}
 			return true;
 		}
