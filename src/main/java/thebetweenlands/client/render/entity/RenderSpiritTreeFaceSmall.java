@@ -6,6 +6,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall1;
+import thebetweenlands.client.render.model.entity.ModelSpiritTreeFaceSmall2;
 import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -13,7 +14,8 @@ import thebetweenlands.common.lib.ModInfo;
 public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFaceSmall> {
 	private static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/entity/spirit_tree_face_small.png");
 
-	private final ModelSpiritTreeFaceSmall1 model = new ModelSpiritTreeFaceSmall1();
+	private final ModelSpiritTreeFaceSmall1 model1 = new ModelSpiritTreeFaceSmall1();
+	private final ModelSpiritTreeFaceSmall2 model2 = new ModelSpiritTreeFaceSmall2();
 
 	public RenderSpiritTreeFaceSmall(RenderManager renderManager) {
 		super(renderManager, new ModelSpiritTreeFaceSmall1(), 0);
@@ -26,7 +28,14 @@ public class RenderSpiritTreeFaceSmall extends RenderWallFace<EntitySpiritTreeFa
 		float scale = 0.8F + entity.getHalfMovementProgress(partialTicks) * entity.getHalfMovementProgress(partialTicks) * 0.2F;
 		GlStateManager.scale(scale, scale, scale);
 
-		GlStateManager.translate(0, 1, -0.25D);
+		int variant = entity.getVariant();
+		if(variant == 0) {
+			this.mainModel = this.model1;
+			GlStateManager.translate(0, 1, -0.25D);
+		} else {
+			this.mainModel = this.model2;
+			GlStateManager.translate(0, 0, -0.74D);
+		}
 	}
 
 	@Override

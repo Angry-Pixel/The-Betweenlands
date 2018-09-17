@@ -9,6 +9,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntitySapSpit extends EntityThrowable {
@@ -41,7 +42,7 @@ public class EntitySapSpit extends EntityThrowable {
 
 	@Override
 	protected void onImpact(RayTraceResult result) {
-		if(result.entityHit != this.thrower) {
+		if(result.entityHit instanceof EntitySpiritTreeFace == false) {
 			if(result.entityHit != null) {
 				result.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, this.getThrower()), 3.0F);
 			}
