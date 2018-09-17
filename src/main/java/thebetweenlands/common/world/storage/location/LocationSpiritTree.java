@@ -15,13 +15,34 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class LocationSpiritTree extends LocationGuarded {
-	private List<BlockPos> wispPosts = new ArrayList<BlockPos>();
-	private List<BlockPos> generatedWisps = new ArrayList<BlockPos>();
+	private List<BlockPos> wispPosts = new ArrayList<>();
+	private List<BlockPos> generatedWisps = new ArrayList<>();
 
+	private List<BlockPos> largeFacePositions = new ArrayList<>();
+	private List<BlockPos> smallFacePositions = new ArrayList<>();
+	
 	public LocationSpiritTree(IWorldStorage worldStorage, StorageID id, LocalRegion region) {
 		super(worldStorage, id, region, "spirit_tree", EnumLocationType.SPIRIT_TREE);
 	}
 
+	public void addLargeFacePosition(BlockPos pos) {
+		this.largeFacePositions.add(pos);
+		this.setDirty(true);
+	}
+	
+	public void addSmallFacePosition(BlockPos pos) {
+		this.smallFacePositions.add(pos);
+		this.setDirty(true);
+	}
+	
+	public List<BlockPos> getLargeFacePositions() {
+		return Collections.unmodifiableList(this.largeFacePositions);
+	}
+	
+	public List<BlockPos> getSmallFacePositions() {
+		return Collections.unmodifiableList(this.smallFacePositions);
+	}
+	
 	public void addGeneratedWisp(BlockPos pos) {
 		this.generatedWisps.add(pos);
 		this.setDirty(true);
@@ -55,6 +76,8 @@ public class LocationSpiritTree extends LocationGuarded {
 		nbt = super.writeToNBT(nbt);
 		this.saveBlockList(nbt, "generatedWisps", this.generatedWisps);
 		this.saveBlockList(nbt, "wispPosts", this.wispPosts);
+		this.saveBlockList(nbt, "largeFacePositions", this.largeFacePositions);
+		this.saveBlockList(nbt, "smallFacePositions", this.smallFacePositions);
 		return nbt;
 	}
 
@@ -63,6 +86,8 @@ public class LocationSpiritTree extends LocationGuarded {
 		super.readFromNBT(nbt);
 		this.readBlockList(nbt, "generatedWisps", this.generatedWisps);
 		this.readBlockList(nbt, "wispPosts", this.wispPosts);
+		this.readBlockList(nbt, "largeFacePositions", this.largeFacePositions);
+		this.readBlockList(nbt, "smallFacePositions", this.smallFacePositions);
 	}
 
 	protected void saveBlockList(NBTTagCompound nbt, String name, List<BlockPos> blocks) {

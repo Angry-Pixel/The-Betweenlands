@@ -25,25 +25,26 @@ import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	private WorldGenSpiritTree genSpiritTree;
 	private ILocationGuard guard;
+	private LocationSpiritTree location;
 
 	public WorldGenSpiritTreeStructure() {
 		super(true);
 	}
-	
+
 	@Override
 	public boolean generate(World world, Random rand, BlockPos position) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationSpiritTree location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
+		this.location = new LocationSpiritTree(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position));
 		this.guard = location.getGuard();
 		location.addBounds(new AxisAlignedBB(new BlockPos(position)).grow(14 + 18, 16, 14 + 18).offset(0, 6, 0));
 		location.setLayer(0);
 		location.setSeed(rand.nextLong());
 		location.setVisible(true);
 
-		this.genSpiritTree = new WorldGenSpiritTree(this.guard);
+		this.genSpiritTree = new WorldGenSpiritTree(this.guard, this.location);
 		if(this.genSpiritTree.generate(world, rand, position)) {
-			this.generateWispCircle(world, rand, position, 6, 1, 2, location);
-			this.generateWispCircle(world, rand, position, 14, 1, 1, location);
+			this.generateWispCircle(world, rand, position, 6, 1, 2);
+			this.generateWispCircle(world, rand, position, 14, 1, 1);
 
 			int rootsGenerated = 0;
 			for(int i = 0; i < 80; i++) {
@@ -104,7 +105,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 		return null;
 	}
 
-	private void generateWispCircle(World world, Random rand, BlockPos center, int radius, int minHeight, int heightVar, LocationSpiritTree location) {
+	private void generateWispCircle(World world, Random rand, BlockPos center, int radius, int minHeight, int heightVar) {
 		List<BlockPos> circle = this.generateCircle(world, center, radius);
 		for(int i = 0; i < circle.size(); i += 2 + rand.nextInt(2)) {
 			if(i == circle.size() - 1) {
@@ -121,10 +122,10 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 					this.setBlockAndNotifyAdequately(world, wall, BlockRegistry.MOSSY_BETWEENSTONE_BRICK_WALL.getDefaultState());
 				}
 				BlockPos wisp = pos.up(height);
-				location.addWispPost(wisp);
+				this.location.addWispPost(wisp);
 				if(rand.nextInt(3) == 0) {
 					this.setBlockAndNotifyAdequately(world, wisp, BlockRegistry.WISP.getDefaultState());
-					location.addGeneratedWisp(wisp);
+					this.location.addGeneratedWisp(wisp);
 				}
 			}
 		}
@@ -230,6 +231,9 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 
 		if(state.getBlock() != BlockRegistry.WISP) {
 			this.guard.setGuarded(world, pos, true);
+		}
+		if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE) {
+			this.location.addSmallFacePosition(pos);
 		}
 	}
 }

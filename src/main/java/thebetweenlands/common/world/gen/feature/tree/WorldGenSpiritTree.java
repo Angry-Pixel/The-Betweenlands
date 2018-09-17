@@ -22,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
 public class WorldGenSpiritTree extends WorldGenerator {
@@ -43,8 +44,14 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	@Nullable
 	private ILocationGuard guard;
 
-	public WorldGenSpiritTree(@Nullable ILocationGuard guard) {
+	@Nullable
+	private LocationSpiritTree location;
+
+	private boolean registerSmallFacePositions = true;
+
+	public WorldGenSpiritTree(@Nullable ILocationGuard guard, @Nullable LocationSpiritTree location) {
 		this.guard = guard;
+		this.location = location;
 	}
 
 	@Override
@@ -60,7 +67,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 				}
 			}
 		}
-		
+
 		this.log = BlockRegistry.LOG_SPIRIT_TREE.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.leavesTop = BlockRegistry.LEAVES_SPIRIT_TREE_TOP.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 		this.leavesMiddle = BlockRegistry.LEAVES_SPIRIT_TREE_MIDDLE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
@@ -73,9 +80,14 @@ public class WorldGenSpiritTree extends WorldGenerator {
 
 		int height = 8 + rand.nextInt(4);
 
+		this.registerSmallFacePositions = false;
 		for(int yo = 0; yo < height; yo++) {
 			this.generateTrunkCrossSection(world, rand, trunkX, trunkY + yo, trunkZ, this.log);
+			if(this.location != null) {
+				this.location.addLargeFacePosition(new BlockPos(trunkX, trunkY + yo, trunkZ));
+			}
 		}
+		this.registerSmallFacePositions = true;
 
 		Map<List<BlockPos>, BlockPos> branches = new HashMap<>();
 
@@ -438,6 +450,9 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		super.setBlockAndNotifyAdequately(worldIn, pos, state);
 		if(this.guard != null) {
 			this.guard.setGuarded(worldIn, pos, true);
+		}
+		if(this.registerSmallFacePositions && this.location != null && state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE) {
+			this.location.addSmallFacePosition(pos);
 		}
 	}
 }

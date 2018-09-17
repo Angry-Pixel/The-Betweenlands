@@ -167,8 +167,8 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 					EnumFacing facing = EnumFacing.getFacingFromVector((float)(lookPos.x - center.x), (float)(lookPos.y - center.y), (float)(lookPos.z - center.z));
 
-					if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(new Vec3d(pos), lookPos)) {
-						this.entity.moveHelper.setMoveTo(pos.getX(), pos.getY(), pos.getZ(), 1);
+					if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookPos)) {
+						this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
 						this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
 						break;
 					}
