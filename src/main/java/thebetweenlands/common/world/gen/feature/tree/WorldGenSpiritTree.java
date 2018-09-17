@@ -47,8 +47,6 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	@Nullable
 	private LocationSpiritTree location;
 
-	private boolean registerSmallFacePositions = true;
-
 	public WorldGenSpiritTree(@Nullable ILocationGuard guard, @Nullable LocationSpiritTree location) {
 		this.guard = guard;
 		this.location = location;
@@ -80,14 +78,12 @@ public class WorldGenSpiritTree extends WorldGenerator {
 
 		int height = 8 + rand.nextInt(4);
 
-		this.registerSmallFacePositions = false;
 		for(int yo = 0; yo < height; yo++) {
 			this.generateTrunkCrossSection(world, rand, trunkX, trunkY + yo, trunkZ, this.log);
 			if(this.location != null) {
 				this.location.addLargeFacePosition(new BlockPos(trunkX, trunkY + yo, trunkZ));
 			}
 		}
-		this.registerSmallFacePositions = true;
 
 		Map<List<BlockPos>, BlockPos> branches = new HashMap<>();
 
@@ -160,7 +156,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 				for(int yo = 0; yo < rootHeight; yo++) {
 					BlockPos pos = rootBlock.up(1 + yo);
 					if(world.isAirBlock(pos)) {
-						this.setBlockAndNotifyAdequately(world, pos, this.roots);
+						this.setBlock(world, pos, this.roots, true);
 					} else {
 						break;
 					}
@@ -174,7 +170,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	private void generateTrunkCrossSection(World world, Random rand, int x, int y, int z, IBlockState log) {
 		for(int xo = 0; xo < 2; xo++) {
 			for(int zo = 0; zo < 2; zo++) {
-				this.setBlockAndNotifyAdequately(world, new BlockPos(x + xo, y, z + zo), log);
+				this.setBlock(world, new BlockPos(x + xo, y, z + zo), log, false);
 			}
 		}
 	}
@@ -304,7 +300,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 			break;
 		}
 		for(BlockPos pos : root) {
-			this.setBlockAndNotifyAdequately(world, pos, this.log);
+			this.setBlock(world, pos, this.log, true);
 		}
 		return root;
 	}
@@ -353,7 +349,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 			}
 		}
 		for(BlockPos pos : branch) {
-			this.setBlockAndNotifyAdequately(world, pos, this.log);
+			this.setBlock(world, pos, this.log, true);
 		}
 		return branch;
 	}
@@ -365,7 +361,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 	private List<BlockPos> generateTopBranch(World world, Random rand, BlockPos start, int dir) {
 		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 5 + rand.nextInt(5), 0.1D, 0.2D, (i, remainingBlocks) -> i < remainingBlocks - 1 ? 1 : 0, (i, length) -> i >= length - 1);
 		for(BlockPos pos : branch) {
-			this.setBlockAndNotifyAdequately(world, pos, this.log);
+			this.setBlock(world, pos, this.log, true);
 		}
 		return branch;
 	}
@@ -431,10 +427,10 @@ public class WorldGenSpiritTree extends WorldGenerator {
 						if(world.isAirBlock(leafPos)) {
 							if(yo == -leavesLength + 1 || (yo < -1 && !world.isAirBlock(leafPos.down()))) {
 								state = this.leavesBottom;
-								this.setBlockAndNotifyAdequately(world, leafPos, state);
+								this.setBlock(world, leafPos, state, true);
 								break;
 							} else {
-								this.setBlockAndNotifyAdequately(world, leafPos, state);
+								this.setBlock(world, leafPos, state, true);
 							}
 						} else {
 							break;
@@ -445,13 +441,14 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		}
 	}
 
-	@Override
-	protected void setBlockAndNotifyAdequately(World worldIn, BlockPos pos, IBlockState state) {
-		super.setBlockAndNotifyAdequately(worldIn, pos, state);
+	protected void setBlock(World world, BlockPos pos, IBlockState state, boolean registerSmallFacePositions) {
+		this.setBlockAndNotifyAdequately(world, pos, state);
+
 		if(this.guard != null) {
-			this.guard.setGuarded(worldIn, pos, true);
+			this.guard.setGuarded(world, pos, true);
 		}
-		if(this.registerSmallFacePositions && this.location != null && state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE) {
+
+		if(registerSmallFacePositions && this.location != null && state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE) {
 			this.location.addSmallFacePosition(pos);
 		}
 	}
