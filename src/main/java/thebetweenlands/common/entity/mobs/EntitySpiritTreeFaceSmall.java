@@ -1,5 +1,6 @@
 package thebetweenlands.common.entity.mobs;
 
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -15,6 +16,12 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace {
 		super.initEntityAI();
 
 		//this.tasks.addTask(0, new EntityAILookIdle(this));
+	}
+	
+	@Override
+	protected void applyEntityAttributes() {
+		super.applyEntityAttributes();
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(2.0D);
 	}
 
 	@Override

@@ -44,9 +44,8 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 
 	protected final EntityLookHelper lookHelper;
 
-	private static final int MAX_MOVE_TICKS = 40;
-	private int lastMoveTicks = 0;
-	private int moveTicks = 0;
+	private float lastMoveTicks = 0;
+	private float moveTicks = 0;
 
 	protected float peek = 0.25F;
 
@@ -285,11 +284,11 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 					this.setPositionAndUpdate(this.posX, this.posY, this.posZ);
 				}
 			}
-			if(this.moveTicks >= (int)(MAX_MOVE_TICKS / 2.0F / (this.getAIMoveSpeed() + 0.05F))) {
+			if(this.moveTicks >= 1.0F) {
 				this.dataManager.set(MOVING, false);
 				this.lastMoveTicks = this.moveTicks = 0;
 			} else {
-				this.moveTicks++;
+				this.moveTicks += 0.05F * (this.getAIMoveSpeed() + 0.05F);
 			}
 		} else {
 			this.moveTicks = this.lastMoveTicks = 0;
@@ -308,7 +307,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 	}
 
 	public float getMovementProgress(float partialTicks) {
-		return MathHelper.clamp((this.lastMoveTicks + (this.moveTicks - this.lastMoveTicks) * partialTicks) / (MAX_MOVE_TICKS / 2.0F / (this.getAIMoveSpeed() + 0.05F)), 0, 1);
+		return MathHelper.clamp(this.lastMoveTicks + (this.moveTicks - this.lastMoveTicks) * partialTicks, 0, 1);
 	}
 
 	public Vec3d getOffset(float movementProgress) {
