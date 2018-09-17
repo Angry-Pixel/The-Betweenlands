@@ -12,6 +12,7 @@ import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
+import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
 import thebetweenlands.common.entity.projectiles.EntitySnailPoisonJet;
 import thebetweenlands.common.entity.projectiles.EntityThrownTarminion;
@@ -74,6 +75,7 @@ public class EntityRegistry {
 		//registerEntity(EntityGreebling.class, "greebling", 0xD9D7A7, 0xD99830);
 		registerEntity(EntitySpiritTreeFaceSmall.class, "spirit_tree_face_small", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large", 0x3A2F0B, 0x5F4C0B);
+		registerEntity(EntitySapSpit.class, "sap_spit", 64, 20, true);
 	}
 
 	private static int id = 0;
