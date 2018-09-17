@@ -79,7 +79,9 @@ public class LootTableRegistry {
     public static final ResourceLocation TERMITE = register("entities/termite");
     public static final ResourceLocation TOAD = register("entities/toad");
     public static final ResourceLocation WIGHT = register("entities/wight");
-
+    public static final ResourceLocation SPIRIT_TREE_FACE_SMALL = register("entities/spirit_tree_face_small");
+    public static final ResourceLocation SPIRIT_TREE_FACE_LARGE = register("entities/spirit_tree_face_large");
+    
     //BOSSES
     public static final ResourceLocation FORTRESS_BOSS = register("entities/fortress_boss");
     public static final ResourceLocation DREADFUL_PEAT_MUMMY = register("entities/dreadful_peat_mummy");

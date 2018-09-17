@@ -1,0 +1,10 @@
+{
+  "pools": [
+    {
+      "name": "spirit_tree_face_large",
+      "rolls": 0,
+      "conditions": [],
+      "entries": []
+    }
+  ]
+}

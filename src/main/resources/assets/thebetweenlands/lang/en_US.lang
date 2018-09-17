@@ -672,6 +672,7 @@ item.thebetweenlands.mire_snail_egg_cooked.name=Cooked Mire Snail Egg
 item.thebetweenlands.nibblestick.name=Nibblestick
 item.thebetweenlands.bl.elixir.name=%s
 item.thebetweenlands.spirit_fruit.name=Spirit Fruit
+item.thebetweenlands.sap_spit.name=Sap Spit
 
 # Herblore
 item.thebetweenlands.elixir.dentrothyst_vial.green.name=Green Dentrothyst Vial
@@ -1026,6 +1027,11 @@ entity.thebetweenlands.frog.name=Frog
 entity.thebetweenlands.gas_cloud.name=Shallowbreath
 entity.thebetweenlands.weedwood_rowboat.name=Weedwood Rowboat
 entity.thebetweenlands.bl_arrow.name=Arrow
+entity.thebetweenlands.sludge_ball.name=Sludge Ball
+entity.thebetweenlands.smoll_sludge.name=Smoll Sludge
+entity.thebetweenlands.spirit_tree_face_small.name=Small Spirit Tree Face
+entity.thebetweenlands.spirit_tree_face_large.name=Large Spirit Tree Face
+entity.thebetweenlands.sap_spit.name=Sap Spit
 
 
 # Equipment
