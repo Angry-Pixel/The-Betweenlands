@@ -5,9 +5,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace {
-	public EntitySpiritTreeFaceSmall(World world) {
+public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
+	public EntitySpiritTreeFaceLarge(World world) {
 		super(world);
+		this.setSize(1.8F, 1.8F);
 	}
 
 	@Override
