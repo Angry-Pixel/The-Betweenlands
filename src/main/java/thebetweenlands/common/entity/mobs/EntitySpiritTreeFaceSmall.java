@@ -38,8 +38,8 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace {
 				EnumFacing rndDir = EnumFacing.getFacingFromVector(rx, ry, rz);
 				BlockPos rndPos = new BlockPos(this.posX + this.world.rand.nextInt(8) - 4, this.posY + this.height / 2 + this.world.rand.nextInt(8) - 4, this.posZ + this.world.rand.nextInt(8) - 4);
 				if(this.canAnchorAt(rndPos, rndDir, EnumFacing.UP)) {
-					this.lookHelper.setLookPosition(this.posX + rx, this.posY + this.getEyeHeight() + ry, this.posZ + rz, 0, 0);
-					this.moveHelper.setMoveTo(rndPos.getX(), rndPos.getY(), rndPos.getZ(), 1);
+					this.lookHelper.setLookPosition(this.posX + rx, this.posY + this.getBlockHeight() / 2.0D + ry, this.posZ + rz, 0, 0);
+					this.moveHelper.setMoveTo(rndPos.getX() + this.getBlockWidth() / 2.0D, rndPos.getY() + this.getBlockHeight() / 2.0D, rndPos.getZ() + this.getBlockWidth() / 2.0D, 1);
 				}
 			}
 		}

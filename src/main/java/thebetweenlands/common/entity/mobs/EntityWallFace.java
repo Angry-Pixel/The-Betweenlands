@@ -48,8 +48,6 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 	private int lastMoveTicks = 0;
 	private int moveTicks = 0;
 
-	private int blockWidth, blockHeight;
-
 	protected float peek = 0.25F;
 
 	public EntityWallFace(World world) {
@@ -136,8 +134,6 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 	@Override
 	protected void setSize(float width, float height) {
 		super.setSize(width, height);
-		this.blockWidth = MathHelper.ceil(width);
-		this.blockHeight = MathHelper.ceil(height);
 	}
 
 	@Override
@@ -264,7 +260,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 			}
 
 			Vec3d offset = this.getOffset(1);
-			this.setPosition(this.getAnchor().getX() + this.blockWidth / 2.0D + offset.x, this.getAnchor().getY() + this.blockHeight / 2.0D - this.height / 2.0D + offset.y, this.getAnchor().getZ() + this.blockWidth / 2.0D + offset.z);
+			this.setPosition(this.getAnchor().getX() + this.getBlockWidth() / 2.0D + offset.x, this.getAnchor().getY() + this.getBlockHeight() / 2.0D - this.height / 2.0D + offset.y, this.getAnchor().getZ() + this.getBlockWidth() / 2.0D + offset.z);
 		}
 	}
 
@@ -275,7 +271,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 			float movementProgress = this.getMovementProgress(1);
 			if(movementProgress < 0.5F) {
 				Vec3d offset = this.getOffset(movementProgress);
-				this.setPosition(this.getAnchor().getX() + this.blockWidth / 2.0D + offset.x, this.getAnchor().getY() + this.blockHeight / 2.0D - this.height / 2.0D + offset.y, this.getAnchor().getZ() + this.blockWidth / 2.0D + offset.z);
+				this.setPosition(this.getAnchor().getX() + this.getBlockWidth() / 2.0D + offset.x, this.getAnchor().getY() + this.getBlockHeight() / 2.0D - this.height / 2.0D + offset.y, this.getAnchor().getZ() + this.getBlockWidth() / 2.0D + offset.z);
 			} else {
 				this.dataManager.set(ANCHOR, this.dataManager.get(MOVE_ANCHOR));
 				this.dataManager.set(FACING, this.dataManager.get(MOVE_FACING));
@@ -284,7 +280,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 				double px = this.posX;
 				double py = this.posY;
 				double pz = this.posZ;
-				this.setPosition(this.getAnchor().getX() + this.blockWidth / 2.0D + offset.x, this.getAnchor().getY() + this.blockHeight / 2.0D - this.height / 2.0D + offset.y, this.getAnchor().getZ() + this.blockWidth / 2.0D + offset.z);
+				this.setPosition(this.getAnchor().getX() + this.getBlockWidth() / 2.0D + offset.x, this.getAnchor().getY() + this.getBlockHeight() / 2.0D - this.height / 2.0D + offset.y, this.getAnchor().getZ() + this.getBlockWidth() / 2.0D + offset.z);
 				if((this.posX - px) * (this.posX - px) + (this.posY - py) * (this.posY - py) + (this.posZ - pz) * (this.posZ - pz) >= 1.0D) {
 					this.setPositionAndUpdate(this.posX, this.posY, this.posZ);
 				}
@@ -317,7 +313,15 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 
 	public Vec3d getOffset(float movementProgress) {
 		float offsetLength = this.getHalfMovementProgress(1);
-		return new Vec3d(this.getFacing().getDirectionVec()).scale(this.peek + (this.getFacing().getAxis().isHorizontal() ? (this.blockWidth - this.width) : (this.blockHeight - this.height)) / 2.0D).scale(offsetLength);
+		return new Vec3d(this.getFacing().getDirectionVec()).scale(this.peek + (this.getFacing().getAxis().isHorizontal() ? (this.getBlockWidth() - this.width) : (this.getBlockHeight() - this.height)) / 2.0D).scale(offsetLength);
+	}
+
+	public int getBlockWidth() {
+		return MathHelper.ceil(this.width);
+	}
+
+	public int getBlockHeight() {
+		return MathHelper.ceil(this.height);
 	}
 
 	public boolean isActive() {
@@ -345,9 +349,9 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 			return false;
 		}
 		MutableBlockPos pos = new MutableBlockPos();
-		for(int xo = 0; xo < this.blockWidth; xo++) {
-			for(int yo = 0; yo < this.blockHeight; yo++) {
-				for(int zo = 0; zo < this.blockWidth; zo++) {
+		for(int xo = 0; xo < this.getBlockWidth(); xo++) {
+			for(int yo = 0; yo < this.getBlockHeight(); yo++) {
+				for(int zo = 0; zo < this.getBlockWidth(); zo++) {
 					pos.setPos(anchor.getX() + xo, anchor.getY() + yo, anchor.getZ() + zo);
 					if(!this.canResideInBlock(pos)) {
 						return false;
@@ -356,9 +360,9 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 			}
 		}
 		if(facing == EnumFacing.UP || facing == EnumFacing.DOWN) {
-			int y = facing == EnumFacing.UP ? this.blockHeight : -1;
-			for(int xo = 0; xo < this.blockWidth; xo++) {
-				for(int zo = 0; zo < this.blockWidth; zo++) {
+			int y = facing == EnumFacing.UP ? this.getBlockHeight() : -1;
+			for(int xo = 0; xo < this.getBlockWidth(); xo++) {
+				for(int zo = 0; zo < this.getBlockWidth(); zo++) {
 					for(int yo = 0; yo < MathHelper.ceil(this.peek); yo++) {
 						pos.setPos(anchor.getX() + xo, anchor.getY() + y + facing.getFrontOffsetY() * yo, anchor.getZ() + zo);
 						if(!this.canMoveFaceInto(pos)) {
@@ -368,9 +372,9 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 				}
 			}
 		} else if(facing == EnumFacing.NORTH || facing == EnumFacing.SOUTH) {
-			int z = facing == EnumFacing.NORTH ? -1 : this.blockWidth;
-			for(int xo = 0; xo < this.blockWidth; xo++) {
-				for(int yo = 0; yo < this.blockHeight; yo++) {
+			int z = facing == EnumFacing.NORTH ? -1 : this.getBlockWidth();
+			for(int xo = 0; xo < this.getBlockWidth(); xo++) {
+				for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 					for(int zo = 0; zo < MathHelper.ceil(this.peek); zo++) {
 						pos.setPos(anchor.getX() + xo, anchor.getY() + yo, anchor.getZ() + z + facing.getFrontOffsetZ() * zo);
 						if(!this.canMoveFaceInto(pos)) {
@@ -380,9 +384,9 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 				}
 			}
 		} else if(facing == EnumFacing.WEST || facing == EnumFacing.EAST) {
-			int x = facing == EnumFacing.WEST ? -1 : this.blockWidth;
-			for(int zo = 0; zo < this.blockWidth; zo++) {
-				for(int yo = 0; yo < this.blockHeight; yo++) {
+			int x = facing == EnumFacing.WEST ? -1 : this.getBlockWidth();
+			for(int zo = 0; zo < this.getBlockWidth(); zo++) {
+				for(int yo = 0; yo < this.getBlockHeight(); yo++) {
 					for(int xo = 0; xo < MathHelper.ceil(this.peek); xo++) {
 						pos.setPos(anchor.getX() + x + facing.getFrontOffsetX() * xo, anchor.getY() + yo, anchor.getZ() + zo);
 						if(!this.canMoveFaceInto(pos)) {
@@ -464,7 +468,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 		public void onUpdateLook() {
 			if(this.isLooking) {
 				this.isLooking = false;
-				Vec3d center = new Vec3d(this.face.getAnchor()).addVector(this.face.blockWidth / 2.0D, this.face.blockHeight / 2.0D, this.face.blockWidth / 2.0D);
+				Vec3d center = new Vec3d(this.face.getAnchor()).addVector(this.face.getBlockWidth() / 2.0D, this.face.getBlockHeight() / 2.0D, this.face.getBlockWidth() / 2.0D);
 				this.face.targetFacing = EnumFacing.getFacingFromVector((float)(this.posX - center.x), (float)(this.posY - center.y), (float)(this.posZ - center.z));
 				if(this.face.targetFacing == EnumFacing.DOWN || this.face.targetFacing == EnumFacing.UP) {
 					this.face.targetFacingUp = EnumFacing.getFacingFromVector((float)(this.posX - this.face.posX), 0, (float)(this.posZ - this.face.posZ));
@@ -491,7 +495,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 				this.face.targetAnchor = this.face.getAnchor().add(horDir.getX() * strafeDir, horDir.getY() * strafeDir, horDir.getZ() * strafeDir);
 				this.face.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 			} else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
-				this.face.targetAnchor = new BlockPos(this.posX, this.posY, this.posZ);
+				this.face.targetAnchor = new BlockPos(this.posX - (this.face.getBlockWidth() / 2.0D), this.posY - (this.face.getBlockHeight() / 2.0D), this.posZ - (this.face.getBlockWidth() / 2.0D));
 				this.face.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 			}
 			this.action = EntityMoveHelper.Action.WAIT;
