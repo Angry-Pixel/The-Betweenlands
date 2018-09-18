@@ -72,55 +72,57 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 
-		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
-		if(!locations.isEmpty()) {
-			LocationSpiritTree location = locations.get(0);
-
-			List<EntitySpiritTreeFaceSmall> smallFaces = this.world.getEntitiesWithinAABB(EntitySpiritTreeFaceSmall.class, location.getEnclosingBounds());
-			for(EntitySpiritTreeFaceSmall face : smallFaces) {
-				face.setDropItemsWhenDead(false);
-				face.onKillCommand();
-			}
-
-			List<BlockPos> positions = location.getLargeFacePositions();
-			BlockPos lowest = null;
-			for(BlockPos pos : positions) {
-				if(lowest == null || lowest.getY() > pos.getY()) {
-					lowest = pos;
+		if(!this.world.isRemote) {
+			List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+			if(!locations.isEmpty()) {
+				LocationSpiritTree location = locations.get(0);
+	
+				List<EntitySpiritTreeFaceSmall> smallFaces = this.world.getEntitiesWithinAABB(EntitySpiritTreeFaceSmall.class, location.getEnclosingBounds());
+				for(EntitySpiritTreeFaceSmall face : smallFaces) {
+					face.setDropItemsWhenDead(false);
+					face.onKillCommand();
 				}
-			}
-			if(lowest != null) {
-				int radius = 5;
-				for(int xo = -radius; xo <= radius; xo++) {
-					for(int yo = -radius; yo <= radius; yo++) {
-						for(int zo = -radius; zo <= radius; zo++) {
-							if(xo*xo + yo*yo + zo*zo <= radius*radius) {
-								BlockPos pos = lowest.add(xo, yo, zo);
-								IBlockState state = this.world.getBlockState(pos);
-
-								if(SurfaceType.GRASS_AND_DIRT.matches(state) && !this.world.getBlockState(pos.up()).isNormalCube() && this.world.rand.nextInt(3) == 0) {
-									this.world.setBlockState(pos, BlockRegistry.SPREADING_SLUDGY_DIRT.getDefaultState());
-								}
-
-								if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE && this.world.rand.nextInt(6) == 0) {
-									this.world.setBlockState(pos, BlockRegistry.LOG_SPREADING_ROTTEN_BARK.getDefaultState());
+	
+				List<BlockPos> positions = location.getLargeFacePositions();
+				BlockPos lowest = null;
+				for(BlockPos pos : positions) {
+					if(lowest == null || lowest.getY() > pos.getY()) {
+						lowest = pos;
+					}
+				}
+				if(lowest != null) {
+					int radius = 5;
+					for(int xo = -radius; xo <= radius; xo++) {
+						for(int yo = -radius; yo <= radius; yo++) {
+							for(int zo = -radius; zo <= radius; zo++) {
+								if(xo*xo + yo*yo + zo*zo <= radius*radius) {
+									BlockPos pos = lowest.add(xo, yo, zo);
+									IBlockState state = this.world.getBlockState(pos);
+	
+									if(SurfaceType.GRASS_AND_DIRT.matches(state) && !this.world.getBlockState(pos.up()).isNormalCube() && this.world.rand.nextInt(3) == 0) {
+										this.world.setBlockState(pos, BlockRegistry.SPREADING_SLUDGY_DIRT.getDefaultState());
+									}
+	
+									if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE && this.world.rand.nextInt(5) == 0) {
+										this.world.setBlockState(pos, BlockRegistry.LOG_SPREADING_ROTTEN_BARK.getDefaultState());
+									}
 								}
 							}
 						}
 					}
 				}
-			}
-
-			for(BlockPos pos : location.getSmallFacePositions()) {
-				IBlockState state = this.world.getBlockState(pos);
-				if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE && this.world.rand.nextInt(10) == 0) {
-					this.world.setBlockState(pos, BlockRegistry.LOG_SPREADING_ROTTEN_BARK.getDefaultState());
+	
+				for(BlockPos pos : location.getSmallFacePositions()) {
+					IBlockState state = this.world.getBlockState(pos);
+					if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE && this.world.rand.nextInt(10) == 0) {
+						this.world.setBlockState(pos, BlockRegistry.LOG_SPREADING_ROTTEN_BARK.getDefaultState());
+					}
 				}
+	
+				location.getGuard().clear(this.world);
+				location.setVisible(false);
+				location.setDirty(true);
 			}
-
-			location.getGuard().clear(this.world);
-			location.setVisible(false);
-			location.setDirty(true);
 		}
 	}
 

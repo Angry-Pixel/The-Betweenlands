@@ -49,6 +49,15 @@ public abstract class BlockSpreadingDeath extends Block {
 	}
 
 	@Override
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(worldIn, pos, state);
+		int spreadTime = this.getSpreadTime(worldIn, pos, state);
+		if(spreadTime > 0) {
+			worldIn.scheduleUpdate(pos, this, spreadTime);
+		}
+	}
+
+	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if(!world.isRemote) {
 			if(!state.getValue(INACTIVE)) {
@@ -85,6 +94,11 @@ public abstract class BlockSpreadingDeath extends Block {
 						}
 					}
 				}
+
+				int spreadTime = this.getSpreadTime(world, pos, state);
+				if(spreadTime > 0) {
+					world.scheduleUpdate(pos, this, spreadTime);
+				}
 			}
 
 			if(world.rand.nextInt(6) == 0) {
@@ -103,6 +117,10 @@ public abstract class BlockSpreadingDeath extends Block {
 	}
 
 	public abstract void spreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState);
+
+	protected int getSpreadTime(World world, BlockPos pos, IBlockState state) {
+		return -1;
+	}
 
 	@Nullable
 	public Biome getSpreadingBiome() {
