@@ -25,9 +25,10 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIAttackOnCollide;
 
-public abstract class EntityWallFace extends EntityCreature implements IMob {
+public abstract class EntityWallFace extends EntityCreature implements IMob, IEntityBL {
 	private static final DataParameter<EnumFacing> FACING = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.FACING);
 	private static final DataParameter<EnumFacing> FACING_UP = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.FACING);
 	private static final DataParameter<BlockPos> ANCHOR = EntityDataManager.createKey(EntityWallFace.class, DataSerializers.BLOCK_POS);
@@ -366,7 +367,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 	public Vec3d getCenter() {
 		return new Vec3d(this.getAnchor()).addVector(this.getBlockWidth() / 2.0D, this.getBlockHeight() / 2.0D, this.getBlockWidth() / 2.0D);
 	}
-	
+
 	public Vec3d getFrontCenter() {
 		EnumFacing facing = this.getFacing();
 		Vec3d center = this.getCenter();
@@ -389,10 +390,10 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 		this.dataManager.set(ANCHOR, anchor);
 		this.dataManager.set(FACING, facing);
 		this.dataManager.set(FACING_UP, facingUp);
-		
+
 		this.dataManager.set(MOVING, false);
 		this.lastMoveTicks = this.moveTicks = 0;
-		
+
 		this.updatePositioning();
 	}
 
