@@ -202,7 +202,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 					for(int i = 0; i < 6; i++) {
 						BlockPos pos = this.woodBlocks.get(this.entity.rand.nextInt(this.woodBlocks.size()));
-						if(this.entity.getAttackTarget().getDistanceSqToCenter(pos) <= this.maxRangeSq) {
+						if(!this.stayInRange || this.entity.getAttackTarget().getDistanceSqToCenter(pos) <= this.maxRangeSq) {
 							Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
 							Vec3d lookPos = this.entity.getAttackTarget().getPositionEyes(1);
 
