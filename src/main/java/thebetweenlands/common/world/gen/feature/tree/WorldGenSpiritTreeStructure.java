@@ -1,6 +1,8 @@
 package thebetweenlands.common.world.gen.feature.tree;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Random;
@@ -9,6 +11,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -16,6 +19,9 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.IPlantable;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceLarge;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFaceSmall;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -73,6 +79,12 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 				}
 			}
 
+			this.trySpawnFace(world, rand, new EntitySpiritTreeFaceLarge(world), location.getLargeFacePositions());
+
+			for(int i = 0; i < 8; i++) {
+				this.trySpawnFace(world, rand, new EntitySpiritTreeFaceSmall(world), location.getSmallFacePositions());
+			}
+
 			location.linkChunks();
 			location.setDirty(true);
 			worldStorage.getLocalStorageHandler().addLocalStorage(location);
@@ -81,6 +93,33 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 		}
 
 		return false;
+	}
+
+	private void trySpawnFace(World world, Random rand, EntitySpiritTreeFace face, List<BlockPos> locations) {
+		BlockPos faceAnchor = null;
+		EnumFacing faceFacing = null;
+
+		List<BlockPos> largeFacePositions = new ArrayList<>();
+		largeFacePositions.addAll(locations);
+		Collections.shuffle(largeFacePositions, rand);
+		largeFaceLoop: for(BlockPos anchor : largeFacePositions) {
+			List<EnumFacing> facings = new ArrayList<>();
+			facings.addAll(Arrays.asList(EnumFacing.HORIZONTALS));
+			Collections.shuffle(facings, rand);
+			for(EnumFacing facing : facings) {
+				if(face.canAnchorAt(anchor, facing, EnumFacing.UP)) {
+					faceAnchor = anchor;
+					faceFacing = facing;
+					break largeFaceLoop;
+				}
+			}
+		}
+
+		if(faceAnchor != null && faceFacing != null) {
+			face.onInitialSpawn(world.getDifficultyForLocation(faceAnchor), null);
+			face.setPositionToAnchor(faceAnchor, faceFacing, EnumFacing.UP);
+			world.spawnEntity(face);
+		}
 	}
 
 	@Nullable

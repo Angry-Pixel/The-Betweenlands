@@ -18,15 +18,12 @@ public class GenLayerMask extends GenLayerBetweenlands {
 		int[] currentInts = this.parent.getInts(areaX, areaZ, sizeX, sizeZ);
 		int[] maskInts = IntCache.getIntCache(sizeX * sizeZ);
 
-		for (int zz = 0; zz < sizeZ; ++zz) {
-			for (int xx = 0; xx < sizeX; ++xx) {
-				int index = xx + zz * sizeX;
-				int id = currentInts[index];
-				if(id == this.from) {
-					maskInts[index] = this.to;
-				} else {
-					maskInts[index] = -1;
-				}
+		for(int i = 0; i < sizeX * sizeZ; ++i) {
+			int id = currentInts[i];
+			if(id == this.from) {
+				maskInts[i] = this.to;
+			} else {
+				maskInts[i] = -1;
 			}
 		}
 

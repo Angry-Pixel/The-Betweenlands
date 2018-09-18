@@ -379,6 +379,17 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 		return facing;
 	}
 
+	public void setPositionToAnchor(BlockPos anchor, EnumFacing facing, EnumFacing facingUp) {
+		this.dataManager.set(ANCHOR, anchor);
+		this.dataManager.set(FACING, facing);
+		this.dataManager.set(FACING_UP, facingUp);
+		
+		this.dataManager.set(MOVING, false);
+		this.lastMoveTicks = this.moveTicks = 0;
+		
+		this.updatePositioning();
+	}
+
 	public boolean canAnchorAt(Vec3d pos, Vec3d lookPos) {
 		EnumFacing[] facing = this.getFacingForLookDir(lookPos.subtract(this.getCenter()));
 		BlockPos anchor = new BlockPos(pos.x - (this.getBlockWidth() / 2), pos.y - (this.getBlockHeight() / 2), pos.z - (this.getBlockWidth() / 2));
