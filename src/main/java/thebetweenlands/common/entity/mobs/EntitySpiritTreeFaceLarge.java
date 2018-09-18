@@ -25,6 +25,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	protected void initEntityAI() {
 		super.initEntityAI();
 
+		this.tasks.addTask(0, new AITrackTarget(this));
 		this.tasks.addTask(3, new AIRespawnSmallFaces(this));
 	}
 

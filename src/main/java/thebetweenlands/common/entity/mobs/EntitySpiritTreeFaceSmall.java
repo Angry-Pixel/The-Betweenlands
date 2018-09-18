@@ -24,6 +24,13 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace {
 	}
 
 	@Override
+	protected void initEntityAI() {
+		super.initEntityAI();
+
+		this.tasks.addTask(0, new AITrackTarget(this, true, 24.0D));
+	}
+
+	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(2.0D);

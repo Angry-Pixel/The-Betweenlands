@@ -42,7 +42,6 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
 
-		this.tasks.addTask(0, new AITrackTarget(this));
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
 		this.tasks.addTask(2, new AISpit(this));
 	}
@@ -160,14 +159,27 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		protected int checkCooldown = 0;
 
+		protected boolean stayInRange;
+		protected double maxRangeSq;
+
 		public AITrackTarget(EntitySpiritTreeFace entity) {
+			this(entity, false, 0);
+		}
+
+		public AITrackTarget(EntitySpiritTreeFace entity, boolean stayInRange, double maxRange) {
 			this.entity = entity;
+			this.stayInRange = stayInRange;
+			this.maxRangeSq = maxRange * maxRange;
 			this.setMutexBits(1);
+		}
+
+		protected boolean isTargetVisibleAndInRange() {
+			return this.entity.getEntitySenses().canSee(this.entity.getAttackTarget()) && (!this.stayInRange || this.entity.getAttackTarget().getDistanceSq(this.entity) <= this.maxRangeSq);
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			return !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.isTargetVisibleAndInRange();
 		}
 
 		@Override
@@ -190,15 +202,17 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 					for(int i = 0; i < 6; i++) {
 						BlockPos pos = this.woodBlocks.get(this.entity.rand.nextInt(this.woodBlocks.size()));
-						Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
-						Vec3d lookPos = this.entity.getAttackTarget().getPositionEyes(1);
+						if(this.entity.getAttackTarget().getDistanceSqToCenter(pos) <= this.maxRangeSq) {
+							Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
+							Vec3d lookPos = this.entity.getAttackTarget().getPositionEyes(1);
 
-						EnumFacing facing = EnumFacing.getFacingFromVector((float)(lookPos.x - center.x), (float)(lookPos.y - center.y), (float)(lookPos.z - center.z));
+							EnumFacing facing = EnumFacing.getFacingFromVector((float)(lookPos.x - center.x), (float)(lookPos.y - center.y), (float)(lookPos.z - center.z));
 
-						if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookPos)) {
-							this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
-							this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
-							break;
+							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookPos)) {
+								this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
+								this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
+								break;
+							}
 						}
 					}
 				}
@@ -214,7 +228,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.isTargetVisibleAndInRange();
 		}
 	}
 
