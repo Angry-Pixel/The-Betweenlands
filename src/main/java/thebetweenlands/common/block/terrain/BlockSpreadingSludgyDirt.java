@@ -14,16 +14,19 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.BiomeRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 
-public class BlockSludgyDirt extends Block {
+public class BlockSpreadingSludgyDirt extends BlockSpreadingDeath {
 	private static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0, 0, 0, 1, 1 - 0.125F, 1);
 
-	public BlockSludgyDirt() {
+	public BlockSpreadingSludgyDirt() {
 		super(Material.GRASS);
 		setHardness(0.5F);
 		setSoundType(SoundType.GROUND);
@@ -33,13 +36,41 @@ public class BlockSludgyDirt extends Block {
 	}
 
 	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if (!worldIn.isRemote) {
-			IBlockState blockStateAbove = worldIn.getBlockState(pos.up());
-			if(blockStateAbove.getLightOpacity(worldIn, pos.up()) > 2 || blockStateAbove.getBlock() == this) {
-				worldIn.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+		if(world.getLight(pos.up()) < 4 && world.getBlockLightOpacity(pos.up()) > 2) {
+			world.setBlockState(pos, BlockRegistry.SWAMP_DIRT.getDefaultState());
+			this.checkAndRevertBiome(world, pos);
+		} else {
+			super.updateTick(world, pos, state, rand);
+		}
+	}
+
+	@Override
+	public boolean canSpreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
+		return super.canSpreadInto(world, pos, offsetPos, offsetState) && SurfaceType.GRASS_AND_DIRT.matches(offsetState);
+	}
+
+	@Override
+	public void spreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
+		world.setBlockState(offsetPos, this.getDefaultState());
+		for(int yo = 1; yo < 6; yo++) {
+			if(this.canSpreadInto(world, pos, offsetPos.down(yo), world.getBlockState(offsetPos.down(yo)))) {
+				world.setBlockState(offsetPos.down(yo), BlockRegistry.MUD.getDefaultState());
 			}
 		}
+		if(world.rand.nextInt(3) == 0 && world.isAirBlock(offsetPos.up())) {
+			world.setBlockState(offsetPos.up(), BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
+		}
+	}
+
+	@Override
+	public Biome getSpreadingBiome() {
+		return BiomeRegistry.SLUDGE_PLAINS;
+	}
+
+	@Override
+	public Biome getPreviousBiome() {
+		return BiomeRegistry.SWAMPLANDS_CLEARING;
 	}
 
 	@Override

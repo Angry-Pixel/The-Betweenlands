@@ -167,6 +167,9 @@ import thebetweenlands.common.block.terrain.BlockSilt;
 import thebetweenlands.common.block.terrain.BlockSlimyGrass;
 import thebetweenlands.common.block.terrain.BlockSludgyDirt;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
+import thebetweenlands.common.block.terrain.BlockSpreadingRottenLog;
+import thebetweenlands.common.block.terrain.BlockSpreadingSludgyDirt;
+import thebetweenlands.common.block.terrain.BlockSpreadingDeath;
 import thebetweenlands.common.block.terrain.BlockStagnantWater;
 import thebetweenlands.common.block.terrain.BlockStalactite;
 import thebetweenlands.common.block.terrain.BlockSwampDirt;
@@ -208,6 +211,7 @@ public class BlockRegistry {
     public static final Block MUD = new BlockMud();
     public static final Block PEAT = new BlockPeat();
     public static final Block SLUDGY_DIRT = new BlockSludgyDirt();
+    public static final Block SPREADING_SLUDGY_DIRT = new BlockSpreadingSludgyDirt();
     public static final Block SLIMY_DIRT = new BasicBlock(Material.GROUND)
             .setDefaultCreativeTab()
             .setHarvestLevel2("shovel", 0)
@@ -279,6 +283,7 @@ public class BlockRegistry {
     //TREES
     public static final Block LOG_WEEDWOOD = new BlockLogBetweenlands();
     public static final Block LOG_ROTTEN_BARK = new BlockRottenLog();
+    public static final Block LOG_SPREADING_ROTTEN_BARK = new BlockSpreadingRottenLog();
     public static final Block LOG_RUBBER = new BlockRubberLog();
     public static final Block LOG_HEARTHGROVE = new BlockHearthgroveLog();
     public static final Block LOG_NIBBLETWIG = new BlockLogBetweenlands();

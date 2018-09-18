@@ -5,13 +5,17 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 
@@ -62,6 +66,56 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 			}
 		}
 		return super.findNearbyWoodBlocks();
+	}
+
+	@Override
+	public void onDeath(DamageSource cause) {
+		super.onDeath(cause);
+
+		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+		if(!locations.isEmpty()) {
+			LocationSpiritTree location = locations.get(0);
+
+			List<BlockPos> positions = location.getLargeFacePositions();
+			BlockPos lowest = null;
+			for(BlockPos pos : positions) {
+				if(lowest == null || lowest.getY() > pos.getY()) {
+					lowest = pos;
+				}
+			}
+			if(lowest != null) {
+				int radius = 5;
+				for(int xo = -radius; xo <= radius; xo++) {
+					for(int yo = -radius; yo <= radius; yo++) {
+						for(int zo = -radius; zo <= radius; zo++) {
+							if(xo*xo + yo*yo + zo*zo <= radius*radius) {
+								BlockPos pos = lowest.add(xo, yo, zo);
+								IBlockState state = this.world.getBlockState(pos);
+
+								if(SurfaceType.GRASS_AND_DIRT.matches(state) && !this.world.getBlockState(pos.up()).isNormalCube() && this.world.rand.nextInt(3) == 0) {
+									this.world.setBlockState(pos, BlockRegistry.SPREADING_SLUDGY_DIRT.getDefaultState());
+								}
+
+								if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE && this.world.rand.nextInt(6) == 0) {
+									this.world.setBlockState(pos, BlockRegistry.LOG_SPREADING_ROTTEN_BARK.getDefaultState());
+								}
+							}
+						}
+					}
+				}
+			}
+
+			for(BlockPos pos : location.getSmallFacePositions()) {
+				IBlockState state = this.world.getBlockState(pos);
+				if(state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE && this.world.rand.nextInt(10) == 0) {
+					this.world.setBlockState(pos, BlockRegistry.LOG_SPREADING_ROTTEN_BARK.getDefaultState());
+				}
+			}
+
+			location.getGuard().clear(this.world);
+			location.setVisible(false);
+			location.setDirty(true);
+		}
 	}
 
 	public static class AIRespawnSmallFaces extends EntityAIBase {
