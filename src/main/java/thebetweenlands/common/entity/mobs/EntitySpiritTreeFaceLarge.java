@@ -76,6 +76,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		if(!locations.isEmpty()) {
 			LocationSpiritTree location = locations.get(0);
 
+			List<EntitySpiritTreeFaceSmall> smallFaces = this.world.getEntitiesWithinAABB(EntitySpiritTreeFaceSmall.class, location.getEnclosingBounds());
+			for(EntitySpiritTreeFaceSmall face : smallFaces) {
+				face.setDropItemsWhenDead(false);
+				face.onKillCommand();
+			}
+
 			List<BlockPos> positions = location.getLargeFacePositions();
 			BlockPos lowest = null;
 			for(BlockPos pos : positions) {
