@@ -34,7 +34,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(38.0D);
 	}
-	
+
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
@@ -132,6 +132,26 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		return blocks;
 	}
 
+	public boolean isAttacking() {
+		return false;
+	}
+
+	public void spit() {
+		Entity target = this.getAttackTarget();
+		EnumFacing facing = this.getFacing();
+
+		EntitySapSpit spit = new EntitySapSpit(this.world, this);
+		spit.setPosition(this.posX + facing.getFrontOffsetX() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getFrontOffsetY() * (this.height / 2 + 0.1F), this.posZ + facing.getFrontOffsetZ() * (this.width / 2 + 0.1F));
+
+		double dx = target.posX - spit.posX;
+		double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
+		double dz = target.posZ - spit.posZ;
+		double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
+		spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);
+
+		this.world.spawnEntity(spit);
+	}
+
 	public static class AITrackTarget extends EntityAIBase {
 		protected final EntitySpiritTreeFace entity;
 
@@ -147,43 +167,45 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldExecute() {
-			return !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
+			return !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.entity.getEntitySenses().canSee(this.entity.getAttackTarget());
 		}
 
 		@Override
 		public void startExecuting() {
 			this.checkCooldown = 0;
-			this.findWoodCooldown = 0;
+			this.findWoodCooldown = 20 + this.entity.rand.nextInt(30);
 			this.woodBlocks = null;
 		}
 
 		@Override
 		public void updateTask() {
-			if(this.findWoodCooldown == 0) {
-				this.findWoodCooldown = 20 + this.entity.rand.nextInt(40);
-				this.woodBlocks = this.entity.findNearbyWoodBlocks();
-			}
+			if(!this.entity.isAttacking()) {
+				if(this.findWoodCooldown <= 0) {
+					this.findWoodCooldown = 20 + this.entity.rand.nextInt(40);
+					this.woodBlocks = this.entity.findNearbyWoodBlocks();
+				}
 
-			if(this.woodBlocks != null && this.checkCooldown == 0) {
-				this.checkCooldown = 5 + this.entity.rand.nextInt(15);
+				if(this.woodBlocks != null && this.checkCooldown <= 0) {
+					this.checkCooldown = 5 + this.entity.rand.nextInt(15);
 
-				for(int i = 0; i < 6; i++) {
-					BlockPos pos = this.woodBlocks.get(this.entity.rand.nextInt(this.woodBlocks.size()));
-					Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
-					Vec3d lookPos = this.entity.getAttackTarget().getPositionEyes(1);
+					for(int i = 0; i < 6; i++) {
+						BlockPos pos = this.woodBlocks.get(this.entity.rand.nextInt(this.woodBlocks.size()));
+						Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
+						Vec3d lookPos = this.entity.getAttackTarget().getPositionEyes(1);
 
-					EnumFacing facing = EnumFacing.getFacingFromVector((float)(lookPos.x - center.x), (float)(lookPos.y - center.y), (float)(lookPos.z - center.z));
+						EnumFacing facing = EnumFacing.getFacingFromVector((float)(lookPos.x - center.x), (float)(lookPos.y - center.y), (float)(lookPos.z - center.z));
 
-					if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookPos)) {
-						this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
-						this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
-						break;
+						if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookPos)) {
+							this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
+							this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
+							break;
+						}
 					}
 				}
-			}
 
-			this.checkCooldown--;
-			this.findWoodCooldown--;
+				this.checkCooldown--;
+				this.findWoodCooldown--;
+			}
 		}
 
 		protected boolean canSeeFrom(BlockPos pos, EnumFacing facing, Entity entity) {
@@ -219,7 +241,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldExecute() {
-			return !this.entity.isMoving() && this.entity.getAttackTarget() != null;
+			return !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null;
 		}
 
 		@Override
@@ -229,24 +251,13 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public void updateTask() {
-			if(this.cooldown <= 0 && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget())) {
-				this.cooldown = 50 + this.entity.rand.nextInt(120);
-
-				Entity target = this.entity.getAttackTarget();
-				EnumFacing facing = this.entity.getFacing();
-
-				EntitySapSpit spit = new EntitySapSpit(this.entity.world, this.entity);
-				spit.setPosition(this.entity.posX + facing.getFrontOffsetX() * (this.entity.width / 2 + 0.1F), this.entity.posY + this.entity.height / 2.0F + facing.getFrontOffsetY() * (this.entity.height / 2 + 0.1F), this.entity.posZ + facing.getFrontOffsetZ() * (this.entity.width / 2 + 0.1F));
-
-				double dx = target.posX - spit.posX;
-				double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
-				double dz = target.posZ - spit.posZ;
-				double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
-				spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);
-
-				this.entity.world.spawnEntity(spit);
+			if(!this.entity.isAttacking()) {
+				if(this.cooldown <= 0 && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget())) {
+					this.cooldown = 50 + this.entity.rand.nextInt(120);
+					this.entity.spit();
+				}
+				this.cooldown--;
 			}
-			this.cooldown--;
 		}
 
 		@Override
