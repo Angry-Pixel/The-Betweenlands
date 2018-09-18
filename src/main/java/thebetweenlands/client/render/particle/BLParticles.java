@@ -26,6 +26,7 @@ import thebetweenlands.client.render.particle.entity.ParticleFish;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
 import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.client.render.particle.entity.ParticleSimple;
 import thebetweenlands.client.render.particle.entity.ParticleSpiritButterfly;
 import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
@@ -98,6 +99,7 @@ public enum BLParticles {
 			.getBaseArgsBuilder()
 			.withColor(0, 0, 0, 1.0F)
 			.buildBaseArgs()),
+	MOTION_ITEM_BREAKING(new ParticleBreakingBL.MotionFactory()),
 	TAR_BEAST_DRIP(new ParticleTarBeastDrip.Factory().getBaseArgsBuilder().withColor(0, 0, 0, 1).buildBaseArgs()),
 	CAVE_WATER_DRIP(new ParticleCaveWaterDrip.Factory()),
 	STEAM_PURIFIER(VanillaParticleFactory.create(ParticleSmokeNormal.class, new ParticleSmokeNormal.Factory())),
@@ -114,7 +116,8 @@ public enum BLParticles {
 	EMBER_2(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_2"))),
 	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3"))),
 	XP_PIECES(new ParticleXPPieces.Factory()),
-	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory());
+	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory()),
+	ROOT_SPIKE(new ParticleRootSpike.Factory());
 
 
 

@@ -11,6 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace.AISpit;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
@@ -27,6 +28,7 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 		super.initEntityAI();
 
 		this.tasks.addTask(0, new AITrackTarget(this, true, 24.0D));
+		this.tasks.addTask(2, new AISpit(this));
 	}
 
 	@Override

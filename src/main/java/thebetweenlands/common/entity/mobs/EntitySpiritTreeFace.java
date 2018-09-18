@@ -43,7 +43,6 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
 
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
-		this.tasks.addTask(2, new AISpit(this));
 	}
 
 	@Override
@@ -197,7 +196,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 					this.woodBlocks = this.entity.findNearbyWoodBlocks();
 				}
 
-				if(this.woodBlocks != null && this.checkCooldown <= 0) {
+				if(this.woodBlocks != null && !this.woodBlocks.isEmpty() && this.checkCooldown <= 0) {
 					this.checkCooldown = 5 + this.entity.rand.nextInt(15);
 
 					for(int i = 0; i < 6; i++) {

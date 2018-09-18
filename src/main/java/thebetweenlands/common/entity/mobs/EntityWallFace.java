@@ -366,6 +366,12 @@ public abstract class EntityWallFace extends EntityCreature implements IMob {
 	public Vec3d getCenter() {
 		return new Vec3d(this.getAnchor()).addVector(this.getBlockWidth() / 2.0D, this.getBlockHeight() / 2.0D, this.getBlockWidth() / 2.0D);
 	}
+	
+	public Vec3d getFrontCenter() {
+		EnumFacing facing = this.getFacing();
+		Vec3d center = this.getCenter();
+		return center.add(this.getOffset(this.getMovementProgress(1))).addVector(facing.getFrontOffsetX() * this.width / 2.0F, facing.getFrontOffsetY() * this.height / 2.0F, facing.getFrontOffsetZ() * this.width / 2.0F);
+	}
 
 	public EnumFacing[] getFacingForLookDir(Vec3d lookDir) {
 		EnumFacing[] facing = new EnumFacing[2];
