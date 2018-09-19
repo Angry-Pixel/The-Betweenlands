@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemSpiritFruit extends ItemBLFood {
 	public ItemSpiritFruit() {
 		super(4, 1.2F, false);
+		this.setAlwaysEdible();
 	}
 
 	@Override

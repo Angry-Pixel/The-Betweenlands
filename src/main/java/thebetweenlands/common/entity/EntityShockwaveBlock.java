@@ -134,7 +134,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 							entity.motionX = dir.x * knockback;
 							entity.motionY = 0.5D;
 							entity.motionZ = dir.z * knockback;
-							if (entity.getHealth() <= 0) {
+							if (entity.getHealth() <= 0 && owner instanceof EntityPlayerMP) {
 								AdvancementCriterionRegistry.SHOCKWAVE_KILL.trigger((EntityPlayerMP) owner, entity);
 							}
 						}

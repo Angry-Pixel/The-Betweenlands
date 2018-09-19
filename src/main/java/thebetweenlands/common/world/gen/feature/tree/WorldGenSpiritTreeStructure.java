@@ -28,6 +28,9 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 
 public class WorldGenSpiritTreeStructure extends WorldGenerator {
+	public static final int RADIUS_INNER_CIRLCE = 6;
+	public static final int RADIUS_OUTER_CIRCLE = 14;
+	
 	public WorldGenSpiritTreeStructure() {
 		super(true);
 	}
@@ -43,8 +46,8 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 
 		WorldGenSpiritTree genSpiritTree = new WorldGenSpiritTree(location.getGuard(), location);
 		if(genSpiritTree.generate(world, rand, position)) {
-			this.generateWispCircle(world, rand, position, 6, 1, 2, location);
-			this.generateWispCircle(world, rand, position, 14, 1, 1, location);
+			this.generateWispCircle(world, rand, position, RADIUS_INNER_CIRLCE, 1, 2, location);
+			this.generateWispCircle(world, rand, position, RADIUS_OUTER_CIRCLE, 1, 1, location);
 
 			int rootsGenerated = 0;
 			for(int i = 0; i < 80; i++) {

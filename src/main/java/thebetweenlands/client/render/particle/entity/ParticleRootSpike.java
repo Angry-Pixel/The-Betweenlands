@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
@@ -32,6 +33,8 @@ import thebetweenlands.util.StalactiteHelper;
 
 @SideOnly(Side.CLIENT)
 public class ParticleRootSpike extends Particle {
+	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "blocks/log_spirit_tree");
+
 	private RootRenderer renderer;
 
 	private int length;
@@ -76,7 +79,7 @@ public class ParticleRootSpike extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.renderer == null) {
-			this.renderer = new RootRenderer(this.length, this.width, this.seed).build(DefaultVertexFormats.POSITION_TEX_COLOR);
+			this.renderer = new RootRenderer(this.length, this.width, this.seed).build(DefaultVertexFormats.POSITION_TEX_COLOR, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(TEXTURE.toString()));
 		}
 
 		int i = this.getBrightnessForRender(partialTicks);
@@ -151,8 +154,6 @@ public class ParticleRootSpike extends Particle {
 
 	@SideOnly(Side.CLIENT)
 	public static class RootRenderer {
-		public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "blocks/log_spirit_tree");
-
 		private List<BakedQuad> quads = new ArrayList<>();
 
 		private int length;
@@ -171,7 +172,7 @@ public class ParticleRootSpike extends Particle {
 			this.z = rand.nextInt();
 		}
 
-		public RootRenderer build(VertexFormat format) {
+		public RootRenderer build(VertexFormat format, TextureAtlasSprite sprite) {
 			this.format = format;
 			QuadBuilder builder = new QuadBuilder(format);
 
@@ -229,7 +230,7 @@ public class ParticleRootSpike extends Particle {
 					core.tZ = 0.5D;
 				}
 
-				builder.setSprite(Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(TEXTURE.toString()));
+				builder.setSprite(sprite);
 
 				// front
 				builder.addVertex(core.bX - halfSize, y, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);

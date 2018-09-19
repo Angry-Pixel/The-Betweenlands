@@ -20,23 +20,32 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 
 public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
+	public static final byte EVENT_ATTACKED = 2;
+	public static final byte EVENT_BLOW_ATTACK = 40;
+
 	private static final DataParameter<Integer> BLOW_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 
 	private int blowTicks = 0;
+
+	private int waveTicks = 0;
 
 	public EntitySpiritTreeFaceLarge(World world) {
 		super(world);
@@ -50,7 +59,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		this.tasks.addTask(0, new AITrackTarget(this));
 		this.tasks.addTask(2, new AISpit(this));
 		this.tasks.addTask(3, new AIBlowAttack(this));
-		this.tasks.addTask(4, new AIRespawnSmallFaces(this));
+		this.tasks.addTask(4, new AIWaveAttack(this));
+		this.tasks.addTask(5, new AIRespawnSmallFaces(this));
 	}
 
 	@Override
@@ -102,7 +112,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
 
-		if(id == 2) {
+		if(id == EVENT_ATTACKED) {
 			Vec3d frontCenter = this.getFrontCenter();
 			for(int i = 0; i < 16; i++) {
 				float rx = this.world.rand.nextFloat() * 2.0F - 1.0F;
@@ -112,7 +122,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 				vec = vec.normalize();
 				this.world.spawnParticle(EnumParticleTypes.BLOCK_CRACK, frontCenter.x + rx, frontCenter.y + ry, frontCenter.z + rz, vec.x * 1.5F, vec.y * 1.5F, vec.z * 1.5F, Block.getIdFromBlock(BlockRegistry.LOG_SPIRIT_TREE));
 			}
-		} else if(id == 40) {
+		} else if(id == EVENT_BLOW_ATTACK) {
 			Vec3d frontCenter = this.getFrontCenter();
 			for(int i = 0; i < 64; i++) {
 				Random rnd = world.rand;
@@ -196,7 +206,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	@Override
 	public boolean isAttacking() {
-		return super.isAttacking() || this.blowTicks > 0;
+		return super.isAttacking() || this.blowTicks > 0 || this.waveTicks > 0;
 	}
 
 	@Override
@@ -205,20 +215,65 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		if(!this.world.isRemote) {
 			if(this.blowTicks > 0) {
-				this.dataManager.set(BLOW_STATE, 1);
-				this.blowTicks++;
-
-				if(this.blowTicks > 30) {
+				if(this.blowTicks > 20) {
 					this.dataManager.set(BLOW_STATE, 2);
-					if(this.ticksExisted % 20 == 0) {
+
+					if((this.ticksExisted - 1) % 15 == 0) {
 						this.doBlowAttack();
-						this.world.setEntityState(this, (byte)40);
+						this.world.setEntityState(this, EVENT_BLOW_ATTACK);
 					}
+				} else {
+					this.dataManager.set(BLOW_STATE, 1);
 				}
 
 				if(this.blowTicks > 160) {
 					this.dataManager.set(BLOW_STATE, 0);
 					this.blowTicks = 0;
+				} else {
+					this.blowTicks++;
+				}
+			}
+
+			if(this.waveTicks > 0) {
+				if((this.waveTicks - 1) % 2 == 0) {
+					double increment = Math.PI * 2 / 30;
+					double a1 = this.waveTicks / 2 * increment;
+					double a2 = (this.waveTicks / 2 + 1) * increment;
+
+					List<BlockPos> blocks = this.getSegment(this.getAnchor(), a1, a2, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 1, false, new ArrayList<>());
+
+					MutableBlockPos checkPos = new MutableBlockPos();
+
+					for(BlockPos pos : blocks) {
+						BlockPos spawnPos = null;
+
+						for(int yo = 0; yo < 8; yo++) {
+							checkPos.setPos(pos.getX(), pos.getY() - yo, pos.getZ());
+
+							IBlockState state = this.world.getBlockState(checkPos);
+
+							if(state.getCollisionBoundingBox(world, checkPos) != null) {
+								if(state.isSideSolid(world, checkPos, EnumFacing.UP)) {
+									spawnPos = checkPos.toImmutable();
+								}
+								break;
+							}
+						}
+
+						if(spawnPos != null) {
+							EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
+							shockwaveBlock.setOrigin(spawnPos, 1, pos.getX() + 0.5D, pos.getZ() + 0.5D, this);
+							shockwaveBlock.setLocationAndAngles(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, 0.0F, 0.0F);
+							shockwaveBlock.setBlock(this.world.getBlockState(spawnPos).getBlock(), this.world.getBlockState(spawnPos).getBlock().getMetaFromState(this.world.getBlockState(spawnPos)));
+							this.world.spawnEntity(shockwaveBlock);
+						}
+					}
+				}
+
+				if(this.waveTicks > 2 * 30 * 3) {
+					this.waveTicks = 0;
+				} else {
+					this.waveTicks++;
 				}
 			}
 		} else {
@@ -262,6 +317,122 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	public void startBlowAttack() {
 		this.blowTicks = 1;
+	}
+
+	public boolean isTargetInWaveAttackRange(EntityLivingBase target) {
+		double dx = this.posX - target.posX;
+		double dz = this.posZ - target.posZ;
+		double dstSq = dx*dx + dz*dz;
+		int innerSq = WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE * WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE;
+		int outerSq = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE * WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE;
+		return dstSq >= innerSq && dstSq <= outerSq;
+	}
+
+	public void startWaveAttack() {
+		this.waveTicks = 1;
+	}
+
+	protected List<BlockPos> getSegment(BlockPos pos, double a1, double a2, double innerRadius, double outerRadius, boolean includeCenter, List<BlockPos> list) {
+		final double twoPi = Math.PI * 2;
+		final double halfPi = Math.PI / 2;
+
+		a1 %= twoPi;
+		if(a1 < 0) a1 += twoPi;
+
+		a2 %= twoPi;
+		if(a2 < 0) a2 += twoPi;
+
+		int qa1 = MathHelper.floor(a1 / halfPi);
+
+		a1 -= qa1 * halfPi;
+		a2 -= qa1 * halfPi;
+
+		double radiusSq = outerRadius * outerRadius;
+
+		int rotation = (4 - qa1) % 4;
+		int maxRot = MathHelper.floor(a2 / halfPi);
+
+		for(int rot = 0; rot <= maxRot; rot++) {
+			double ca1 = rot == 0 ? a1 : 0;
+			double ca2 = rot == maxRot ? (a2 % halfPi) : halfPi;
+
+			double cos1 = Math.cos(ca1);
+			double tan1 = Math.tan(ca1);
+			double tan2 = Math.tan(ca2);
+
+			int minX = 0;
+			int maxX = MathHelper.ceil(cos1 * outerRadius);
+
+			for(int xo = minX; xo <= maxX; xo++) {
+				double dxSq = (xo - 0.5D) * (xo - 0.5D);
+
+				int minZ = MathHelper.floor(tan1 * xo);
+				int maxZ = MathHelper.floor(Math.min(tan2 * xo, outerRadius));
+
+				if(xo <= innerRadius) {
+					minZ += MathHelper.ceil(innerRadius - Math.sqrt(xo * xo + minZ * minZ));
+				}
+
+				for(int zo = minZ; zo < maxZ; zo++) {
+					double dstSq = dxSq + (zo + 0.5D) * (zo + 0.5D);
+
+					if(dstSq >= radiusSq) {
+						break;
+					}
+
+					if(dstSq <= innerRadius*innerRadius) {
+						continue;
+					}
+
+					int nx;
+					switch(rotation) {
+					default:
+					case 0:
+						nx = xo - 1;
+						break;
+					case 1:
+						nx = zo;
+						break;
+					case 2:
+						nx = -xo + 1;
+						break;
+					case 3:
+						nx = -zo;
+						break;
+					}
+
+					int nz;
+					switch(rotation) {
+					default:
+					case 0:
+						nz = zo;
+						break;
+					case 1:
+						nz = -xo + 1;
+						break;
+					case 2:
+						nz = -zo;
+						break;
+					case 3:
+						nz = xo - 1;
+						break;
+					}
+
+					if(!includeCenter && nx == 0 && nz == 0) {
+						continue;
+					}
+
+					list.add(pos.add(nx, 0, nz));
+				}
+			}
+
+			rotation = rotation - 1;
+			if(rotation < 0) {
+				rotation += 4;
+			}
+		}
+
+		return list;
 	}
 
 	public static class AIRespawnSmallFaces extends EntityAIBase {
@@ -365,6 +536,38 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		@Override
 		public void startExecuting() {
 			this.entity.startBlowAttack();
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
+		}
+	}
+
+	public static class AIWaveAttack extends EntityAIBase {
+		protected final EntitySpiritTreeFaceLarge entity;
+
+		protected int cooldown = 30;
+
+		public AIWaveAttack(EntitySpiritTreeFaceLarge entity) {
+			this.entity = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(!this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInWaveAttackRange(this.entity.getAttackTarget())) {
+				if(this.cooldown <= 0) {
+					this.cooldown = 60 + this.entity.rand.nextInt(80);
+					return true;
+				}
+				this.cooldown--;
+			}
+			return false;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.entity.startWaveAttack();
 		}
 
 		@Override
