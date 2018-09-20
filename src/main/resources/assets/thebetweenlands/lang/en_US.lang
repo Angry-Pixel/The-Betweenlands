@@ -1493,3 +1493,4 @@ config.thebetweenlands.debug_recipe_overrides=Recipe overrides debug
 
 # Damage sources
 death.attack.bl.shockwave=%1$s was killed by a shockwave
+death.attack.bl.spikewave=%1$s was impaled by roots
