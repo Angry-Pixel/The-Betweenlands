@@ -28,7 +28,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.entity.EntityShockwaveBlock;
+import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -45,6 +45,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	private int blowTicks = 0;
 
+	private float waveStart = 0;
 	private int waveTicks = 0;
 
 	public EntitySpiritTreeFaceLarge(World world) {
@@ -74,9 +75,9 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(12.0D);
 		//this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(200.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(600.0D);
 	}
 
 	@Override
@@ -206,7 +207,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	@Override
 	public boolean isAttacking() {
-		return super.isAttacking() || this.blowTicks > 0 || this.waveTicks > 0;
+		return super.isAttacking() || this.blowTicks > 0;
 	}
 
 	@Override
@@ -235,42 +236,55 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 			}
 
 			if(this.waveTicks > 0) {
-				if((this.waveTicks - 1) % 2 == 0) {
-					double increment = Math.PI * 2 / 30;
-					double a1 = this.waveTicks / 2 * increment;
-					double a2 = (this.waveTicks / 2 + 1) * increment;
-
-					List<BlockPos> blocks = this.getSegment(this.getAnchor(), a1, a2, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 1, false, new ArrayList<>());
-
-					MutableBlockPos checkPos = new MutableBlockPos();
-
-					for(BlockPos pos : blocks) {
-						BlockPos spawnPos = null;
-
-						for(int yo = 0; yo < 8; yo++) {
-							checkPos.setPos(pos.getX(), pos.getY() - yo, pos.getZ());
-
-							IBlockState state = this.world.getBlockState(checkPos);
-
-							if(state.getCollisionBoundingBox(world, checkPos) != null) {
-								if(state.isSideSolid(world, checkPos, EnumFacing.UP)) {
-									spawnPos = checkPos.toImmutable();
+				if((this.waveTicks - 1) % 3 == 0) {
+					for(int i = 0; i < 2; i++) {
+						double increment = Math.PI * 2 / 20;
+						
+						double a1 = (this.waveStart + this.waveTicks / 3 * increment) * (i == 0 ? 1 : -1);
+						double a2 = (this.waveStart + (this.waveTicks / 3 + 1) * increment) * (i == 0 ? 1 : -1);
+						
+						double start = Math.min(a1, a2);
+						double end = Math.max(a1, a2);
+	
+						List<BlockPos> blocks = this.getSegment(this.getAnchor(), start, end, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE + 0.5D, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 0.5D, false, new ArrayList<>());
+	
+						MutableBlockPos checkPos = new MutableBlockPos();
+	
+						List<BlockPos> spawnBlocks = new ArrayList<>();
+	
+						for(BlockPos pos : blocks) {
+							BlockPos spawnPos = null;
+	
+							for(int yo = 0; yo < 8; yo++) {
+								checkPos.setPos(pos.getX(), pos.getY() - yo, pos.getZ());
+	
+								IBlockState state = this.world.getBlockState(checkPos);
+	
+								if(state.getCollisionBoundingBox(world, checkPos) != null) {
+									if(state.isSideSolid(world, checkPos, EnumFacing.UP)) {
+										spawnPos = checkPos.toImmutable();
+									}
+									break;
 								}
-								break;
+							}
+	
+							if(spawnPos != null) {
+								spawnBlocks.add(spawnPos);
 							}
 						}
-
-						if(spawnPos != null) {
-							EntityShockwaveBlock shockwaveBlock = new EntityShockwaveBlock(world);
-							shockwaveBlock.setOrigin(spawnPos, 1, pos.getX() + 0.5D, pos.getZ() + 0.5D, this);
-							shockwaveBlock.setLocationAndAngles(spawnPos.getX() + 0.5D, spawnPos.getY(), spawnPos.getZ() + 0.5D, 0.0F, 0.0F);
-							shockwaveBlock.setBlock(this.world.getBlockState(spawnPos).getBlock(), this.world.getBlockState(spawnPos).getBlock().getMetaFromState(this.world.getBlockState(spawnPos)));
-							this.world.spawnEntity(shockwaveBlock);
+	
+						if(!spawnBlocks.isEmpty()) {
+							EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
+							spikeWave.delay = 2;
+							for(BlockPos pos : spawnBlocks) {
+								spikeWave.addPosition(pos);
+							}
+							this.world.spawnEntity(spikeWave);
 						}
 					}
 				}
 
-				if(this.waveTicks > 2 * 30 * 3) {
+				if(this.waveTicks > 3 * 20 * 3) {
 					this.waveTicks = 0;
 				} else {
 					this.waveTicks++;
@@ -330,6 +344,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	public void startWaveAttack() {
 		this.waveTicks = 1;
+		this.waveStart = this.rand.nextFloat() * (float)Math.PI * 2;
 	}
 
 	protected List<BlockPos> getSegment(BlockPos pos, double a1, double a2, double innerRadius, double outerRadius, boolean includeCenter, List<BlockPos> list) {
@@ -555,7 +570,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		@Override
 		public boolean shouldExecute() {
-			if(!this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInWaveAttackRange(this.entity.getAttackTarget())) {
+			if(this.entity.waveTicks == 0 && this.entity.getAttackTarget() != null && this.entity.isTargetInWaveAttackRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
 					this.cooldown = 60 + this.entity.rand.nextInt(80);
 					return true;

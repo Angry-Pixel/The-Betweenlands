@@ -23,6 +23,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -79,7 +80,7 @@ public class ParticleRootSpike extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(this.renderer == null) {
-			this.renderer = new RootRenderer(this.length, this.width, this.seed).build(DefaultVertexFormats.POSITION_TEX_COLOR, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(TEXTURE.toString()));
+			this.renderer = new RootRenderer(this.length, this.width, 1.0F, this.seed).build(DefaultVertexFormats.OLDMODEL_POSITION_TEX_NORMAL, Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(TEXTURE.toString()));
 		}
 
 		int i = this.getBrightnessForRender(partialTicks);
@@ -157,19 +158,29 @@ public class ParticleRootSpike extends Particle {
 		private List<BakedQuad> quads = new ArrayList<>();
 
 		private int length;
-		private float scale;
-		private int x, y, z;
+		private float widthScale;
+		private float heightScale;
+		private int bx, by, bz;
+		private double x, y, z;
 
 		private VertexFormat format;
 
-		public RootRenderer(int length, float scale, long seed) {
+		public RootRenderer(int length, float widthScale, float heightScale, long seed) {
+			this(length, widthScale, heightScale, seed, 0, 0, 0);
+		}
+
+		public RootRenderer(int length, float widthScale, float heightScale, long seed, double x, double y, double z) {
 			this.length = length;
-			this.scale = scale;
+			this.widthScale = widthScale;
+			this.heightScale = heightScale;
 			Random rand = new Random();
 			rand.setSeed(seed);
-			this.x = rand.nextInt();
-			this.y = rand.nextInt(128);
-			this.z = rand.nextInt();
+			this.bx = rand.nextInt();
+			this.by = rand.nextInt(128);
+			this.bz = rand.nextInt();
+			this.x = x;
+			this.y = y;
+			this.z = z;
 		}
 
 		public RootRenderer build(VertexFormat format, TextureAtlasSprite sprite) {
@@ -214,12 +225,12 @@ public class ParticleRootSpike extends Particle {
 				float vmin = 0;
 				float vmax = 16;
 
-				float halfSize = (float) scaledValBottom / 16 * this.scale;
+				float halfSize = (float) scaledValBottom / 16 * this.widthScale;
 				float halfSizeTexW = halfSize * (umax - umin);
-				float halfSize1 = (float) (scaledValTop) / 16 * this.scale;
+				float halfSize1 = (float) (scaledValTop) / 16 * this.widthScale;
 				float halfSizeTex1 = halfSize1 * (umax - umin);
 
-				StalactiteHelper core = StalactiteHelper.getValsFor(this.x, this.y + y, this.z);
+				StalactiteHelper core = StalactiteHelper.getValsFor(this.bx, this.by + y, this.bz);
 
 				if(distDown == 0 && !noBottom) {
 					core.bX = 0.5D;
@@ -230,43 +241,48 @@ public class ParticleRootSpike extends Particle {
 					core.tZ = 0.5D;
 				}
 
+				core.bX += this.x;
+				core.tX += this.x;
+				core.bZ += this.z;
+				core.tZ += this.z;
+
 				builder.setSprite(sprite);
 
 				// front
-				builder.addVertex(core.bX - halfSize, y, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX - halfSize, y, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, y + height, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, y + height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.bX - halfSize, this.y + (y) * this.heightScale, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX - halfSize, this.y + (y) * this.heightScale, core.bZ + halfSize, umin, vmax);
+				builder.addVertex(core.tX - halfSize1, this.y + (y + height) * this.heightScale, core.tZ + halfSize1, umin, vmin);
+				builder.addVertex(core.tX - halfSize1, this.y + (y + height) * this.heightScale, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
 				// back
-				builder.addVertex(core.bX + halfSize, y, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX + halfSize, y, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, y + height, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, y + height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.bX + halfSize, this.y + (y) * this.heightScale, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX + halfSize, this.y + (y) * this.heightScale, core.bZ - halfSize, umin, vmax);
+				builder.addVertex(core.tX + halfSize1, this.y + (y + height) * this.heightScale, core.tZ - halfSize1, umin, vmin);
+				builder.addVertex(core.tX + halfSize1, this.y + (y + height) * this.heightScale, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
 				// left
-				builder.addVertex(core.bX + halfSize, y, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX - halfSize, y, core.bZ - halfSize, umin, vmax);
-				builder.addVertex(core.tX - halfSize1, y + height, core.tZ - halfSize1, umin, vmin);
-				builder.addVertex(core.tX + halfSize1, y + height, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.bX + halfSize, this.y + (y) * this.heightScale, core.bZ - halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX - halfSize, this.y + (y) * this.heightScale, core.bZ - halfSize, umin, vmax);
+				builder.addVertex(core.tX - halfSize1, this.y + (y + height) * this.heightScale, core.tZ - halfSize1, umin, vmin);
+				builder.addVertex(core.tX + halfSize1, this.y + (y + height) * this.heightScale, core.tZ - halfSize1, umin + halfSizeTex1 * 2, vmin);
 				// right
-				builder.addVertex(core.bX - halfSize, y, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
-				builder.addVertex(core.bX + halfSize, y, core.bZ + halfSize, umin, vmax);
-				builder.addVertex(core.tX + halfSize1, y + height, core.tZ + halfSize1, umin, vmin);
-				builder.addVertex(core.tX - halfSize1, y + height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+				builder.addVertex(core.bX - halfSize, this.y + (y) * this.heightScale, core.bZ + halfSize, umin + halfSizeTexW * 2, vmax);
+				builder.addVertex(core.bX + halfSize, this.y + (y) * this.heightScale, core.bZ + halfSize, umin, vmax);
+				builder.addVertex(core.tX + halfSize1, this.y + (y + height) * this.heightScale, core.tZ + halfSize1, umin, vmin);
+				builder.addVertex(core.tX - halfSize1, this.y + (y + height) * this.heightScale, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
 
 				// top
 				if(distUp == 0) {
-					builder.addVertex(core.tX - halfSize1, y + height, core.tZ - halfSize1, umin, vmin);
-					builder.addVertex(core.tX - halfSize1, y + height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
-					builder.addVertex(core.tX + halfSize1, y + height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
-					builder.addVertex(core.tX + halfSize1, y + height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
+					builder.addVertex(core.tX - halfSize1, this.y + y + height, core.tZ - halfSize1, umin, vmin);
+					builder.addVertex(core.tX - halfSize1, this.y + y + height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin);
+					builder.addVertex(core.tX + halfSize1, this.y + y + height, core.tZ + halfSize1, umin + halfSizeTex1 * 2, vmin + halfSizeTex1 * 2);
+					builder.addVertex(core.tX + halfSize1, this.y + y + height, core.tZ - halfSize1, umin, vmin + halfSizeTex1 * 2);
 				}
 
 				// bottom
 				if(distDown == 0) {
-					builder.addVertex(core.bX - halfSize, y, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
-					builder.addVertex(core.bX - halfSize, y, core.bZ - halfSize, umin, vmin);
-					builder.addVertex(core.bX + halfSize, y, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
-					builder.addVertex(core.bX + halfSize, y, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
+					builder.addVertex(core.bX - halfSize, this.y + y, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin);
+					builder.addVertex(core.bX - halfSize, this.y + y, core.bZ - halfSize, umin, vmin);
+					builder.addVertex(core.bX + halfSize, this.y + y, core.bZ - halfSize, umin, vmin + halfSizeTexW * 2);
+					builder.addVertex(core.bX + halfSize, this.y + y, core.bZ + halfSize, umin + halfSizeTexW * 2, vmin + halfSizeTexW * 2);
 				}
 			}
 

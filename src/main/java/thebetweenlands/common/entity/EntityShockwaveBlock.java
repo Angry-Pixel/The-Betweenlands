@@ -97,7 +97,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 				this.motionY -= 0.05D;
 
 				if(!this.world.isRemote && (this.posY <= this.origin.getY() || this.onGround)) {
-					this.onKillCommand();
+					this.setDead();
 				}
 			}
 		} else {
@@ -105,7 +105,7 @@ public class EntityShockwaveBlock extends Entity implements IEntityAdditionalSpa
 		}
 
 		if(this.posY < -64.0D) {
-			this.onKillCommand();
+			this.setDead();
 		}
 
 		if(this.posY + this.motionY <= this.origin.getY()) {

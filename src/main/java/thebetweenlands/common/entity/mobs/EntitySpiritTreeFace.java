@@ -13,6 +13,9 @@ import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -64,6 +67,18 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	@Override
 	public boolean canMoveFaceInto(BlockPos pos) {
 		return this.world.isAirBlock(pos);
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
+		if(attacker != null && attacker.getActiveHand() != null) {
+			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
+			if(!item.isEmpty() && item.getItem() instanceof ItemAxe) {
+				amount *= 2.0F;
+			}
+		}
+		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override
