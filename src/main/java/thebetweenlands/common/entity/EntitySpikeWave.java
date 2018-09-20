@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -16,6 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -40,12 +43,16 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	public int delay;
 
 	@SideOnly(Side.CLIENT)
-	public Map<BlockPos, List<RootRenderer>> modelParts = new HashMap<>();
+	public Map<BlockPos, List<RootRenderer>> modelParts;
 
 	public EntitySpikeWave(World world) {
 		super(world);
 		this.setSize(1, 1);
 		this.noClip = true;
+
+		if(world.isRemote) {
+			this.modelParts = new HashMap<>();
+		}
 	}
 
 	public void addPosition(BlockPos pos) {
@@ -168,13 +175,34 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 			int particles = 8 + this.rand.nextInt(8);
 			for(int i = 0; i < particles; i++) {
 				BlockPos pos = this.positions.get(this.rand.nextInt(this.positions.size()));
+
 				double x = pos.getX() + this.rand.nextDouble();
 				double y = pos.getY() + 1;
 				double z = pos.getZ() + this.rand.nextDouble();
 				double mx = (this.rand.nextDouble() - 0.5D) * 0.8F;
 				double my = 0.1D + this.rand.nextDouble() * 0.4F;
 				double mz = (this.rand.nextDouble() - 0.5D) * 0.8F;
-				BLParticles.ROOT_SPIKE.spawn(world, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
+
+				BLParticles.ROOT_SPIKE.spawn(this.world, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
+			}
+
+			for(BlockPos pos : this.positions) {
+				IBlockState state = this.world.getBlockState(pos);
+
+				if(!state.getBlock().isAir(state, this.world, pos)) {
+					int dustParticles = 1 + this.rand.nextInt(3);
+
+					for(int i = 0; i < dustParticles; i++) {
+						double x = pos.getX() + this.rand.nextDouble();
+						double y = pos.getY() + 1;
+						double z = pos.getZ() + this.rand.nextDouble();
+						double mx = (this.rand.nextDouble() - 0.5D) * 0.3F;
+						double my = 0.1D + this.rand.nextDouble() * 0.2F;
+						double mz = (this.rand.nextDouble() - 0.5D) * 0.3F;
+
+						this.world.spawnParticle(EnumParticleTypes.BLOCK_DUST, x, y, z, mx, my, mz, Block.getStateId(state));
+					}
+				}
 			}
 		}
 	}
