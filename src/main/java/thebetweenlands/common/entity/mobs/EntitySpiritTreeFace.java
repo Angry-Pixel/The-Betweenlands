@@ -55,7 +55,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 	@Override
 	protected boolean isMovementBlocked() {
-		return !this.isActive() || super.isMovementBlocked();
+		return !this.isActive() || this.isAttacking() || super.isMovementBlocked();
 	}
 
 	@Override
