@@ -1,18 +1,22 @@
 package thebetweenlands.common.entity.mobs;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-import thebetweenlands.common.entity.mobs.EntitySpiritTreeFace.AISpit;
+import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 
@@ -27,7 +31,11 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	protected void initEntityAI() {
 		super.initEntityAI();
 
-		this.tasks.addTask(0, new AITrackTarget(this, true, 24.0D));
+		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+
+		this.tasks.addTask(0, new AITrackTarget(this));
+		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
 		this.tasks.addTask(2, new AISpit(this));
 	}
 
@@ -53,7 +61,8 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	public List<BlockPos> findNearbyWoodBlocks() {
 		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
-			List<BlockPos> positions = locations.get(0).getSmallFacePositions();
+			List<BlockPos> positions = new ArrayList<>();
+			positions.addAll(locations.get(0).getSmallFacePositions());
 			if(!positions.isEmpty()) {
 				return positions;
 			}
@@ -89,5 +98,15 @@ public class EntitySpiritTreeFaceSmall extends EntitySpiritTreeFace implements I
 	@Override
 	public void readSpawnData(ByteBuf additionalData) {
 		this.variant = additionalData.readInt();
+	}
+
+	@Override
+	protected void playSpitSound() {
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+	}
+
+	@Override
+	protected void playEmergeSound() {
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SMALL_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 }

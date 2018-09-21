@@ -558,6 +558,26 @@
       "thebetweenlands:gas_cloud_death"
     ]
   },
+  "spirit_tree_face_large_spit": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_spit"
+    ]
+  },
+  "spirit_tree_face_small_spit": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_spit"
+    ]
+  },
+  "spirit_tree_face_large_emerge": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_large_emerge"
+    ]
+  },
+  "spirit_tree_face_small_emerge": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_small_emerge"
+    ]
+  },
   "sorry": {
     "sounds": [
       "thebetweenlands:sorry"

@@ -13,6 +13,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
+import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -30,9 +32,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntitySpikeWave;
+import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
@@ -64,7 +68,11 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	protected void initEntityAI() {
 		super.initEntityAI();
 
+		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+
 		this.tasks.addTask(0, new AITrackTarget(this));
+		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
 		this.tasks.addTask(2, new AISpit(this));
 		this.tasks.addTask(3, new AIBlowAttack(this));
 		this.tasks.addTask(4, new AIRotatingWaveAttack(this));
@@ -83,6 +91,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.15D);		
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(12.0D);
 		//this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(600.0D);
@@ -97,7 +106,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	public List<BlockPos> findNearbyWoodBlocks() {
 		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
 		if(!locations.isEmpty()) {
-			List<BlockPos> positions = locations.get(0).getLargeFacePositions();
+			List<BlockPos> positions = new ArrayList<>();
+			positions.addAll(locations.get(0).getLargeFacePositions());
 			if(!positions.isEmpty()) {
 				return positions;
 			}
@@ -216,6 +226,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	@Override
 	public boolean isAttacking() {
 		return super.isAttacking() || this.blowTicks > 0;
+	}
+
+	@Override
+	protected void playSpitSound() {
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_LARGE_SPIT, 1, 0.8F + this.rand.nextFloat() * 0.3F);
+	}
+
+	@Override
+	protected void playEmergeSound() {
+		this.playSound(SoundRegistry.SPIRIT_TREE_FACE_LARGE_EMERGE, 1, 0.8F + this.rand.nextFloat() * 0.3F);
 	}
 
 	@Override

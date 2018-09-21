@@ -11,8 +11,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
@@ -23,11 +21,17 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public abstract class EntitySpiritTreeFace extends EntityWallFace {
+	public static final byte EVENT_EMERGE_SOUND = 81;
+	public static final byte EVENT_SPIT_SOUND = 83;
+
+	protected int spitTicks = 0;
+
+	private boolean emergeSound = false;
+
 	public EntitySpiritTreeFace(World world) {
 		super(world);
 	}
@@ -38,14 +42,12 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(48.0D);
 	}
 
-	@Override
-	protected void initEntityAI() {
-		super.initEntityAI();
+	protected void playSpitSound() {
 
-		this.targetTasks.addTask(0, new EntityAIHurtByTargetImproved(this, true));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<>(this, EntityPlayer.class, false));
+	}
 
-		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
+	protected void playEmergeSound() {
+
 	}
 
 	public boolean isActive() {
@@ -96,6 +98,33 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		}
 
 		super.onUpdate();
+
+		if(!this.world.isRemote) {
+			float moveProgress = this.getMovementProgress(1);
+			if(moveProgress < 0.6F) {
+				this.emergeSound = false;
+			} else {
+				if(!this.emergeSound) {
+					this.world.setEntityState(this, EVENT_EMERGE_SOUND);
+					this.playEmergeSound();
+				}
+				this.emergeSound = true;
+			}
+
+			if(this.spitTicks > 0) {
+				if(this.spitTicks == 1) {
+					this.world.setEntityState(this, EVENT_SPIT_SOUND);
+					this.playSpitSound();
+				}
+
+				if(this.spitTicks > 6) {
+					this.doSpitAttack();
+					this.spitTicks = 0;
+				} else {
+					this.spitTicks++;
+				}
+			}
+		}
 
 		if(this.isMoving() && this.world.isRemote) {
 			if(this.ticksExisted % 3 == 0) {
@@ -158,23 +187,29 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	}
 
 	public boolean isAttacking() {
-		return false;
+		return this.spitTicks > 0;
 	}
 
-	public void spit() {
+	public void startSpit() {
+		this.spitTicks = 1;
+	}
+
+	public void doSpitAttack() {
 		Entity target = this.getAttackTarget();
-		EnumFacing facing = this.getFacing();
+		if(target != null) {
+			EnumFacing facing = this.getFacing();
 
-		EntitySapSpit spit = new EntitySapSpit(this.world, this);
-		spit.setPosition(this.posX + facing.getFrontOffsetX() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getFrontOffsetY() * (this.height / 2 + 0.1F), this.posZ + facing.getFrontOffsetZ() * (this.width / 2 + 0.1F));
+			EntitySapSpit spit = new EntitySapSpit(this.world, this);
+			spit.setPosition(this.posX + facing.getFrontOffsetX() * (this.width / 2 + 0.1F), this.posY + this.height / 2.0F + facing.getFrontOffsetY() * (this.height / 2 + 0.1F), this.posZ + facing.getFrontOffsetZ() * (this.width / 2 + 0.1F));
 
-		double dx = target.posX - spit.posX;
-		double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
-		double dz = target.posZ - spit.posZ;
-		double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
-		spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);
+			double dx = target.posX - spit.posX;
+			double dy = target.getEntityBoundingBox().minY + (double)(target.height / 3.0F) - spit.posY;
+			double dz = target.posZ - spit.posZ;
+			double dist = (double)MathHelper.sqrt(dx * dx + dz * dz);
+			spit.shoot(dx, dy + dist * 0.20000000298023224D, dz, 1, 1);
 
-		this.world.spawnEntity(spit);
+			this.world.spawnEntity(spit);
+		}
 	}
 
 	public static class AITrackTarget extends EntityAIBase {
@@ -196,7 +231,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 			this.entity = entity;
 			this.stayInRange = stayInRange;
 			this.maxRangeSq = maxRange * maxRange;
-			this.setMutexBits(1);
+			this.setMutexBits(3);
 		}
 
 		protected boolean isTargetVisibleAndInRange() {
@@ -218,7 +253,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		@Override
 		public void updateTask() {
 			if(!this.entity.isAttacking()) {
-				if(this.findWoodCooldown <= 0) {
+				if(this.findWoodCooldown <= 0 && (this.woodBlocks == null || this.woodBlocks.isEmpty())) {
 					this.findWoodCooldown = 20 + this.entity.rand.nextInt(40);
 					this.woodBlocks = this.entity.findNearbyWoodBlocks();
 				}
@@ -226,18 +261,35 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 				if(this.woodBlocks != null && !this.woodBlocks.isEmpty() && this.checkCooldown <= 0) {
 					this.checkCooldown = 5 + this.entity.rand.nextInt(15);
 
-					for(int i = 0; i < 6; i++) {
-						BlockPos pos = this.woodBlocks.get(this.entity.rand.nextInt(this.woodBlocks.size()));
+					for(int i = 0; i < 16; i++) {
+						if(this.woodBlocks.isEmpty()) {
+							break;
+						}
+
+						BlockPos pos = this.woodBlocks.remove(this.entity.rand.nextInt(this.woodBlocks.size()));
+
 						if(!this.stayInRange || this.entity.getAttackTarget().getDistanceSqToCenter(pos) <= this.maxRangeSq) {
 							Vec3d center = new Vec3d(pos.getX() + this.entity.getBlockWidth() / 2.0D, pos.getY() + this.entity.getBlockHeight() / 2.0D, pos.getZ() + this.entity.getBlockWidth() / 2.0D);
-							Vec3d lookPos = this.entity.getAttackTarget().getPositionEyes(1);
+							Vec3d lookDir = this.entity.getAttackTarget().getPositionVector().addVector(0, this.entity.getAttackTarget().getEyeHeight(), 0).subtract(center);
 
-							EnumFacing facing = EnumFacing.getFacingFromVector((float)(lookPos.x - center.x), (float)(lookPos.y - center.y), (float)(lookPos.z - center.z));
+							EnumFacing facing = EnumFacing.getFacingFromVector((float)lookDir.x, (float)lookDir.y, (float)lookDir.z);
 
-							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookPos)) {
+							if(this.canSeeFrom(pos, facing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookDir)) {
 								this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
 								this.entity.lookHelper.setLookDirection(facing.getFrontOffsetX(), facing.getFrontOffsetY(), facing.getFrontOffsetZ());
 								break;
+							} else {
+								for(EnumFacing otherFacing : EnumFacing.HORIZONTALS) {
+									if(otherFacing != facing) {
+										lookDir = new Vec3d(otherFacing.getFrontOffsetX(), 0, otherFacing.getFrontOffsetZ());
+
+										if(this.canSeeFrom(pos, otherFacing, this.entity.getAttackTarget()) && this.entity.canAnchorAt(center, lookDir)) {
+											this.entity.moveHelper.setMoveTo(center.x, center.y, center.z, 1);
+											this.entity.lookHelper.setLookDirection(otherFacing.getFrontOffsetX(), otherFacing.getFrontOffsetY(), otherFacing.getFrontOffsetZ());
+											break;
+										} 
+									}
+								}
 							}
 						}
 					}
@@ -294,7 +346,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 			if(!this.entity.isAttacking()) {
 				if(this.cooldown <= 0 && this.entity.getEntitySenses().canSee(this.entity.getAttackTarget())) {
 					this.cooldown = 50 + this.entity.rand.nextInt(120);
-					this.entity.spit();
+					this.entity.startSpit();
 				}
 				this.cooldown--;
 			}

@@ -79,7 +79,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		int height = 8 + rand.nextInt(4);
 
 		for(int yo = 0; yo < height; yo++) {
-			this.generateTrunkCrossSection(world, rand, trunkX, trunkY + yo, trunkZ, this.log);
+			this.generateTrunkCrossSection(world, rand, trunkX, trunkY + yo, trunkZ, this.log, trunkX, trunkY, trunkZ);
 			if(this.location != null) {
 				this.location.addLargeFacePosition(new BlockPos(trunkX, trunkY + yo, trunkZ));
 			}
@@ -92,16 +92,16 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		//Generate 4 main branches in the cardinal directions
 
 		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY + height - 3, trunkZ);
-		branches.put(this.generateSideBranch(world, rand, sideBranch, 0), sideBranch);
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 0, trunkX, trunkY, trunkZ), sideBranch);
 
 		sideBranch = new BlockPos(trunkX, trunkY + height - 3, trunkZ + rand.nextInt(2));
-		branches.put(this.generateSideBranch(world, rand, sideBranch, 2), sideBranch);
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 2, trunkX, trunkY, trunkZ), sideBranch);
 
 		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY + height - 3, trunkZ + 1);
-		branches.put(this.generateSideBranch(world, rand, sideBranch, 4), sideBranch);
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 4, trunkX, trunkY, trunkZ), sideBranch);
 
 		sideBranch = new BlockPos(trunkX + 1, trunkY + height - 3, trunkZ + rand.nextInt(2));
-		branches.put(this.generateSideBranch(world, rand, sideBranch, 6), sideBranch);
+		branches.put(this.generateSideBranch(world, rand, sideBranch, 6, trunkX, trunkY, trunkZ), sideBranch);
 
 		//Generate 1-3 diagonal branches
 		List<Integer> diagonals = new ArrayList<>(Arrays.asList(1, 3, 5, 7));
@@ -112,26 +112,26 @@ public class WorldGenSpiritTree extends WorldGenerator {
 			int bx = trunkX + (offset[0] > 0 ? offset[0] * 2 : offset[0]);
 			int bz = trunkZ + (offset[1] > 0 ? offset[1] * 2 : offset[1]);
 			sideBranch = new BlockPos(bx, trunkY + height, bz);
-			branches.put(this.generateSideBranch(world, rand, sideBranch, dir), sideBranch);
+			branches.put(this.generateSideBranch(world, rand, sideBranch, dir, trunkX, trunkY, trunkZ), sideBranch);
 		}
 
 		//Generate two tall branches at top of trunk
 		if(rand.nextBoolean()) {
 			sideBranch = new BlockPos(trunkX, trunkY + height, trunkZ);
-			branches.put(this.generateTopBranch(world, rand, sideBranch, 1), sideBranch);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 1, trunkX, trunkY, trunkZ), sideBranch);
 
 			sideBranch = new BlockPos(trunkX + 1, trunkY + height, trunkZ + 1);
-			branches.put(this.generateTopBranch(world, rand, sideBranch, 5), sideBranch);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 5, trunkX, trunkY, trunkZ), sideBranch);
 		} else {
 			sideBranch = new BlockPos(trunkX, trunkY + height, trunkZ + 1);
-			branches.put(this.generateTopBranch(world, rand, sideBranch, 3), sideBranch);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 3, trunkX, trunkY, trunkZ), sideBranch);
 
 			sideBranch = new BlockPos(trunkX + 1, trunkY + height, trunkZ);
-			branches.put(this.generateTopBranch(world, rand, sideBranch, 7), sideBranch);
+			branches.put(this.generateTopBranch(world, rand, sideBranch, 7, trunkX, trunkY, trunkZ), sideBranch);
 		}
 
 		for(Entry<List<BlockPos>, BlockPos> branch : branches.entrySet()) {
-			this.generateBranchLeaves(world, rand, branch.getValue(), branch.getKey());
+			this.generateBranchLeaves(world, rand, branch.getValue(), branch.getKey(), trunkX, trunkY, trunkZ);
 		}
 
 		//Generate roots
@@ -139,16 +139,16 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		List<BlockPos> rootBlocks = new ArrayList<>();
 
 		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY, trunkZ);
-		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 0));
+		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 0, trunkX, trunkY, trunkZ));
 
 		sideBranch = new BlockPos(trunkX, trunkY, trunkZ + rand.nextInt(2));
-		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 2));
+		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 2, trunkX, trunkY, trunkZ));
 
 		sideBranch = new BlockPos(trunkX + rand.nextInt(2), trunkY, trunkZ + 1);
-		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 4));
+		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 4, trunkX, trunkY, trunkZ));
 
 		sideBranch = new BlockPos(trunkX + 1, trunkY, trunkZ + rand.nextInt(2));
-		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 6));
+		rootBlocks.addAll(this.generateRoot(world, rand, sideBranch, 6, trunkX, trunkY, trunkZ));
 
 		for(BlockPos rootBlock : rootBlocks) {
 			if(rand.nextInt(4) == 0 && new Vec3d(rootBlock.getX() + 0.5D, 0, rootBlock.getZ() + 0.5D).squareDistanceTo(trunkX + 1.0D, 0, trunkZ + 1.0D) >= 9 && world.isAirBlock(rootBlock.up())) {
@@ -156,7 +156,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 				for(int yo = 0; yo < rootHeight; yo++) {
 					BlockPos pos = rootBlock.up(1 + yo);
 					if(world.isAirBlock(pos)) {
-						this.setBlock(world, pos, this.roots, true);
+						this.setBlock(world, pos, this.roots, true, trunkX, trunkY, trunkZ);
 					} else {
 						break;
 					}
@@ -167,10 +167,10 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		return true;
 	}
 
-	private void generateTrunkCrossSection(World world, Random rand, int x, int y, int z, IBlockState log) {
+	private void generateTrunkCrossSection(World world, Random rand, int x, int y, int z, IBlockState log, int trunkX, int trunkY, int trunkZ) {
 		for(int xo = 0; xo < 2; xo++) {
 			for(int zo = 0; zo < 2; zo++) {
-				this.setBlock(world, new BlockPos(x + xo, y, z + zo), log, false);
+				this.setBlock(world, new BlockPos(x + xo, y, z + zo), log, false, trunkX, trunkY, trunkZ);
 			}
 		}
 	}
@@ -255,7 +255,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		return this.generateBranch(world, rand, start, dir, 4 + rand.nextInt(3), 0.3D, 0.6D, (i, length) -> i < length / 2 ? 1 : (i >= length - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
 	}*/
 
-	private List<BlockPos> generateRoot(World world, Random rand, BlockPos start, int dir) {
+	private List<BlockPos> generateRoot(World world, Random rand, BlockPos start, int dir, int trunkX, int trunkY, int trunkZ) {
 		List<BlockPos> root = this.generateBranchPositions(rand, start, dir, 2 + rand.nextInt(2), 0.9D, 0.8D, (i, remainingBlocks) -> i < 2 ? 0 : rand.nextInt((i - 2) * 2 + 2) == 0 ? 0 : -1, (i, length) -> true);
 		for(BlockPos pos : root) {
 			BlockPos rel = pos.subtract(start);
@@ -300,7 +300,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 			break;
 		}
 		for(BlockPos pos : root) {
-			this.setBlock(world, pos, this.log, true);
+			this.setBlock(world, pos, this.log, true, trunkX, trunkY, trunkZ);
 		}
 		return root;
 	}
@@ -309,7 +309,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		return this.generateBranchPositions(rand, start, dir, 1 + rand.nextInt(4), 0.5D, 1, (i, remainingBlocks) -> rand.nextInt(i * 2 + 1) == 0 ? 0 : -1, (i, length) -> true);
 	}
 
-	private List<BlockPos> generateSideBranch(World world, Random rand, BlockPos start, int dir) {
+	private List<BlockPos> generateSideBranch(World world, Random rand, BlockPos start, int dir, int trunkX, int trunkY, int trunkZ) {
 		List<BlockPos> branch = this.generateSideBranchPositions(rand, start, dir);
 		if(branch.size() > 3) {
 			BlockPos end = branch.get(3);
@@ -349,7 +349,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 			}
 		}
 		for(BlockPos pos : branch) {
-			this.setBlock(world, pos, this.log, true);
+			this.setBlock(world, pos, this.log, true, trunkX, trunkY, trunkZ);
 		}
 		return branch;
 	}
@@ -358,10 +358,10 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		return this.generateBranchPositions(rand, start, dir, 6 + rand.nextInt(5), 0.3D, 0.6D, (i, remainingBlocks) -> i < remainingBlocks / 2 ? 1 : (i >= remainingBlocks - 1 && rand.nextInt(2) == 0 ? -1  : 0), (i, length) -> true);
 	}
 
-	private List<BlockPos> generateTopBranch(World world, Random rand, BlockPos start, int dir) {
+	private List<BlockPos> generateTopBranch(World world, Random rand, BlockPos start, int dir, int trunkX, int trunkY, int trunkZ) {
 		List<BlockPos> branch = this.generateBranchPositions(rand, start, dir, 5 + rand.nextInt(5), 0.1D, 0.2D, (i, remainingBlocks) -> i < remainingBlocks - 1 ? 1 : 0, (i, length) -> i >= length - 1);
 		for(BlockPos pos : branch) {
-			this.setBlock(world, pos, this.log, true);
+			this.setBlock(world, pos, this.log, true, trunkX, trunkY, trunkZ);
 		}
 		return branch;
 	}
@@ -410,7 +410,7 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		return branchBlocks;
 	}
 
-	private void generateBranchLeaves(World world, Random rand, BlockPos start, List<BlockPos> branchBlocks) {
+	private void generateBranchLeaves(World world, Random rand, BlockPos start, List<BlockPos> branchBlocks, int trunkX, int trunkY, int trunkZ) {
 		for(BlockPos branchBlock : branchBlocks) {
 			int dist = (int) branchBlock.getDistance(start.getX(), start.getY(), start.getZ());
 			if(dist >= 2) {
@@ -427,10 +427,10 @@ public class WorldGenSpiritTree extends WorldGenerator {
 						if(world.isAirBlock(leafPos)) {
 							if(yo == -leavesLength + 1 || (yo < -1 && !world.isAirBlock(leafPos.down()))) {
 								state = this.leavesBottom;
-								this.setBlock(world, leafPos, state, true);
+								this.setBlock(world, leafPos, state, true, trunkX, trunkY, trunkZ);
 								break;
 							} else {
-								this.setBlock(world, leafPos, state, true);
+								this.setBlock(world, leafPos, state, true, trunkX, trunkY, trunkZ);
 							}
 						} else {
 							break;
@@ -441,14 +441,14 @@ public class WorldGenSpiritTree extends WorldGenerator {
 		}
 	}
 
-	protected void setBlock(World world, BlockPos pos, IBlockState state, boolean registerSmallFacePositions) {
+	protected void setBlock(World world, BlockPos pos, IBlockState state, boolean registerSmallFacePositions, int trunkX, int trunkY, int trunkZ) {
 		this.setBlockAndNotifyAdequately(world, pos, state);
 
 		if(this.guard != null) {
 			this.guard.setGuarded(world, pos, true);
 		}
 
-		if(registerSmallFacePositions && this.location != null && state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE) {
+		if(!(pos.getX() >= trunkX && pos.getZ() >= trunkZ && pos.getX() <= trunkX + 1 && pos.getZ() <= trunkZ + 1) && registerSmallFacePositions && this.location != null && state.getBlock() == BlockRegistry.LOG_SPIRIT_TREE) {
 			this.location.addSmallFacePosition(pos);
 		}
 	}

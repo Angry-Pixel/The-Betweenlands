@@ -385,8 +385,8 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 		this.updatePositioning();
 	}
 
-	public boolean canAnchorAt(Vec3d pos, Vec3d lookPos) {
-		EnumFacing[] facing = this.getFacingForLookDir(lookPos.subtract(this.getCenter()));
+	public boolean canAnchorAt(Vec3d pos, Vec3d lookDir) {
+		EnumFacing[] facing = this.getFacingForLookDir(lookDir);
 		BlockPos anchor = new BlockPos(pos.x - (this.getBlockWidth() / 2), pos.y - (this.getBlockHeight() / 2), pos.z - (this.getBlockWidth() / 2));
 		return this.canAnchorAt(anchor, facing[0], facing[1]);
 	}
@@ -551,7 +551,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 				this.face.targetAnchor = this.face.getAnchor().add(horDir.getX() * strafeDir, horDir.getY() * strafeDir, horDir.getZ() * strafeDir);
 				this.face.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 			} else if(this.action == EntityMoveHelper.Action.MOVE_TO) {
-				this.face.targetAnchor = new BlockPos(this.posX, this.posY, this.posZ).add(-(this.face.getBlockWidth() / 2),  -(this.face.getBlockHeight() / 2),  -(this.face.getBlockWidth() / 2));
+				this.face.targetAnchor = new BlockPos(this.posX - this.face.getBlockWidth() / 2.0D, this.posY - this.face.getBlockHeight() / 2.0D, this.posZ - this.face.getBlockWidth() / 2.0D);
 				this.face.setAIMoveSpeed((float)(this.speed * this.entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getAttributeValue()));
 			}
 			this.action = EntityMoveHelper.Action.WAIT;
