@@ -50,11 +50,11 @@ public class RenderSpikeWave extends Render<EntitySpikeWave> {
 	}
 
 	public void renderSpikes(EntitySpikeWave entity, double x, double y, double z, float yaw, float partialTicks) {
-
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+		this.bindEntityTexture(entity);
 
 		GlStateManager.pushMatrix();
 
+		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -78,6 +78,6 @@ public class RenderSpikeWave extends Render<EntitySpikeWave> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntitySpikeWave entity) {
-		return null;
+		return TextureMap.LOCATION_BLOCKS_TEXTURE;
 	}
 }

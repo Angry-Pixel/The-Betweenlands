@@ -35,7 +35,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	@Override
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(38.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(48.0D);
 	}
 
 	@Override
@@ -48,10 +48,14 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		this.tasks.addTask(1, new AIAttackMelee(this, 1, true));
 	}
 
-	@Override
 	public boolean isActive() {
 		//return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 		return true;
+	}
+
+	@Override
+	protected boolean isMovementBlocked() {
+		return !this.isActive() || super.isMovementBlocked();
 	}
 
 	@Override
@@ -83,6 +87,14 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 	@Override
 	public void onUpdate() {
+		if(!this.world.isRemote) {
+			if(!this.isActive()) {
+				this.setEntityInvulnerable(true);
+			} else {
+				this.setEntityInvulnerable(false);
+			}
+		}
+
 		super.onUpdate();
 
 		if(this.isMoving() && this.world.isRemote) {
@@ -193,7 +205,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldExecute() {
-			return !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.isTargetVisibleAndInRange();
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null && !this.isTargetVisibleAndInRange();
 		}
 
 		@Override
@@ -269,7 +281,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 		@Override
 		public boolean shouldExecute() {
-			return !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null;
+			return this.entity.isActive() && !this.entity.isAttacking() && !this.entity.isMoving() && this.entity.getAttackTarget() != null;
 		}
 
 		@Override

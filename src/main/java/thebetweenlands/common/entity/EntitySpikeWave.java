@@ -152,7 +152,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		if(this.motionY > 0.1D && !this.world.isRemote) {
 			DamageSource damageSource = new EntityDamageSource("bl.spikewave", this);
 			for(BlockPos pos : this.positions) {
-				AxisAlignedBB aabb = new AxisAlignedBB(pos).offset(this.posX - (this.origin.getX() + 0.5D), this.posY - this.origin.getY(), this.posZ - (this.origin.getZ() + 0.5D));
+				AxisAlignedBB aabb = new AxisAlignedBB(pos).offset(this.posX - (this.origin.getX() + 0.5D), this.posY - this.origin.getY(), this.posZ - (this.origin.getZ() + 0.5D)).shrink(0.1D).offset(0, 0.2D, 0);
 				List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 				for(EntityLivingBase entity : entities) {      
 					if (entity instanceof EntityLivingBase) {    

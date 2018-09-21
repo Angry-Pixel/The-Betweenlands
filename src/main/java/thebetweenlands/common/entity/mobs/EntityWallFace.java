@@ -208,14 +208,6 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 
 	@Override
 	public void onUpdate() {
-		if(!this.world.isRemote) {
-			if(!this.isActive()) {
-				this.setEntityInvulnerable(true);
-			} else {
-				this.setEntityInvulnerable(false);
-			}
-		}
-
 		this.fallDistance = 0;
 		this.onGround = true;
 		this.setNoGravity(true);
@@ -249,7 +241,7 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 
 		if(!this.isMoving()) {
 			if(!this.world.isRemote) {
-				if(this.isActive() && (this.targetFacing != null || this.targetAnchor != null)) {
+				if(!this.isMovementBlocked() && !this.isMoving() && (this.targetFacing != null || this.targetAnchor != null)) {
 					EnumFacing targetFacing = this.targetFacing != null ? this.targetFacing : facing;
 					EnumFacing targetFacingUp = this.targetFacingUp != null ? this.targetFacingUp : facingUp;
 					BlockPos targetAnchor = this.targetAnchor != null ? this.targetAnchor : this.getAnchor();
@@ -342,10 +334,6 @@ public abstract class EntityWallFace extends EntityCreature implements IMob, IEn
 
 	public int getBlockHeight() {
 		return MathHelper.ceil(this.height);
-	}
-
-	public boolean isActive() {
-		return true;
 	}
 
 	public EnumFacing getFacing() {

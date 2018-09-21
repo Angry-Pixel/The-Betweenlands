@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Random;
 import java.util.UUID;
 
@@ -26,6 +25,7 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
+import thebetweenlands.util.BlockShapeUtils;
 
 public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	public static final int RADIUS_INNER_CIRLCE = 6;
@@ -142,7 +142,7 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 	}
 
 	private void generateWispCircle(World world, Random rand, BlockPos center, int radius, int minHeight, int heightVar, LocationSpiritTree location) {
-		List<BlockPos> circle = this.generateCircle(world, center, radius);
+		List<BlockPos> circle = BlockShapeUtils.getCircle(center, radius, new ArrayList<>());
 		for(int i = 0; i < circle.size(); i += 2 + rand.nextInt(2)) {
 			if(i == circle.size() - 1) {
 				break;
@@ -206,59 +206,6 @@ public class WorldGenSpiritTreeStructure extends WorldGenerator {
 			this.setBlock(world, block, BlockRegistry.LOG_SPIRIT_TREE.getDefaultState(), location);
 			prevPos = block;
 		}
-	}
-
-	private List<BlockPos> generateCircle(World world, BlockPos pos, int radius) {
-		int xo = radius;
-		int zo = 0;
-		int err = 1 - radius;
-
-		List<BlockPos> s1 = new ArrayList<>();
-		List<BlockPos> s2 = new ArrayList<>();
-		List<BlockPos> s3 = new ArrayList<>();
-		List<BlockPos> s4 = new ArrayList<>();
-		List<BlockPos> s5 = new ArrayList<>();
-		List<BlockPos> s6 = new ArrayList<>();
-		List<BlockPos> s7 = new ArrayList<>();
-		List<BlockPos> s8 = new ArrayList<>();
-
-		while (xo >= zo) {
-			s1.add(pos.add(xo, 0, zo));
-			if(xo != zo) s2.add(pos.add(zo, 0, xo));
-			if(zo != 0) s3.add(pos.add(-zo, 0, xo));
-			if(xo != zo) s4.add(pos.add(-xo, 0, zo));
-			if(zo != 0) s5.add(pos.add(-xo, 0, -zo));
-			if(xo != zo) s6.add(pos.add(-zo, 0, -xo));
-			if(zo != 0) s7.add(pos.add(zo, 0, -xo));
-			if(xo != zo && zo != 0) s8.add(pos.add(xo, 0, -zo));
-
-			if(err < 0) {
-				zo++;
-				err = err + 2 * zo + 1;
-			} else {
-				zo++;
-				xo--;
-				err = err + 2 * (zo - xo) + 1;
-			}
-		}
-
-		for(ListIterator<BlockPos> it = s2.listIterator(s2.size()); it.hasPrevious();) {
-			s1.add(it.previous());
-		}
-		s1.addAll(s3);
-		for(ListIterator<BlockPos> it = s4.listIterator(s4.size()); it.hasPrevious();) {
-			s1.add(it.previous());
-		}
-		s1.addAll(s5);
-		for(ListIterator<BlockPos> it = s6.listIterator(s6.size()); it.hasPrevious();) {
-			s1.add(it.previous());
-		}
-		s1.addAll(s7);
-		for(ListIterator<BlockPos> it = s8.listIterator(s8.size()); it.hasPrevious();) {
-			s1.add(it.previous());
-		}
-
-		return s1;
 	}
 
 	protected void setBlock(World world, BlockPos pos, IBlockState state, LocationSpiritTree location) {

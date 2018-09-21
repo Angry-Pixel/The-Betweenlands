@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,7 +23,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -36,6 +37,7 @@ import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
 import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
+import thebetweenlands.util.BlockShapeUtils;
 
 public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	public static final byte EVENT_ATTACKED = 2;
@@ -45,8 +47,13 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	private int blowTicks = 0;
 
-	private float waveStart = 0;
-	private int waveTicks = 0;
+	private float rotatingWaveStart = 0;
+	private int rotatingWaveTicks = 0;
+
+	protected static final int CRAWLING_WAVE_RANGE = 36;
+
+	private float crawlingWaveAngle = 0;
+	private int crawlingWaveTicks = 0;
 
 	public EntitySpiritTreeFaceLarge(World world) {
 		super(world);
@@ -60,8 +67,9 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		this.tasks.addTask(0, new AITrackTarget(this));
 		this.tasks.addTask(2, new AISpit(this));
 		this.tasks.addTask(3, new AIBlowAttack(this));
-		this.tasks.addTask(4, new AIWaveAttack(this));
-		this.tasks.addTask(5, new AIRespawnSmallFaces(this));
+		this.tasks.addTask(4, new AIRotatingWaveAttack(this));
+		this.tasks.addTask(5, new AICrawlingWaveAttack(this));
+		this.tasks.addTask(6, new AIRespawnSmallFaces(this));
 	}
 
 	@Override
@@ -235,44 +243,29 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 				}
 			}
 
-			if(this.waveTicks > 0) {
-				if((this.waveTicks - 1) % 3 == 0) {
+			if(this.rotatingWaveTicks > 0) {
+				if((this.rotatingWaveTicks - 1) % 3 == 0) {
 					for(int i = 0; i < 2; i++) {
 						double increment = Math.PI * 2 / 20;
-						
-						double a1 = (this.waveStart + this.waveTicks / 3 * increment) * (i == 0 ? 1 : -1);
-						double a2 = (this.waveStart + (this.waveTicks / 3 + 1) * increment) * (i == 0 ? 1 : -1);
-						
+
+						double a1 = (this.rotatingWaveStart + this.rotatingWaveTicks / 3 * increment) * (i == 0 ? 1 : -1);
+						double a2 = (this.rotatingWaveStart + (this.rotatingWaveTicks / 3 + 1) * increment) * (i == 0 ? 1 : -1);
+
 						double start = Math.min(a1, a2);
 						double end = Math.max(a1, a2);
-	
-						List<BlockPos> blocks = this.getSegment(this.getAnchor(), start, end, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE + 0.5D, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 0.5D, false, new ArrayList<>());
-	
-						MutableBlockPos checkPos = new MutableBlockPos();
-	
+
+						List<BlockPos> blocks = BlockShapeUtils.getRingSegment(this.getAnchor(), start, end, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE + 0.5D, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 0.5D, false, new ArrayList<>());
+
 						List<BlockPos> spawnBlocks = new ArrayList<>();
-	
+
 						for(BlockPos pos : blocks) {
-							BlockPos spawnPos = null;
-	
-							for(int yo = 0; yo < 8; yo++) {
-								checkPos.setPos(pos.getX(), pos.getY() - yo, pos.getZ());
-	
-								IBlockState state = this.world.getBlockState(checkPos);
-	
-								if(state.getCollisionBoundingBox(world, checkPos) != null) {
-									if(state.isSideSolid(world, checkPos, EnumFacing.UP)) {
-										spawnPos = checkPos.toImmutable();
-									}
-									break;
-								}
-							}
-	
+							BlockPos spawnPos = this.getWaveGroundPos(pos, 0);
+
 							if(spawnPos != null) {
 								spawnBlocks.add(spawnPos);
 							}
 						}
-	
+
 						if(!spawnBlocks.isEmpty()) {
 							EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
 							spikeWave.delay = 2;
@@ -284,10 +277,54 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 					}
 				}
 
-				if(this.waveTicks > 3 * 20 * 3) {
-					this.waveTicks = 0;
+				if(this.rotatingWaveTicks >= 3 * 20 * 3) {
+					this.rotatingWaveTicks = 0;
 				} else {
-					this.waveTicks++;
+					this.rotatingWaveTicks++;
+				}
+			}
+
+			if(this.crawlingWaveTicks > 0) {
+				final int ticksPerWave = CRAWLING_WAVE_RANGE / 3 * 4;
+
+				if(this.getAttackTarget() != null) {
+					if((this.crawlingWaveTicks - 1) % ticksPerWave == 0) {
+						this.crawlingWaveAngle = (float) Math.atan2(this.getAttackTarget().posZ - this.posZ, this.getAttackTarget().posX - this.posX);
+					}
+
+					if((this.crawlingWaveTicks - 1) % 4 == 0) {
+						int dist = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + ((this.crawlingWaveTicks - 1) / 4 * 3) % CRAWLING_WAVE_RANGE;
+
+						double a1 = this.crawlingWaveAngle - Math.PI / 16;
+						double a2 = this.crawlingWaveAngle + Math.PI / 16;
+
+						List<BlockPos> blocks = BlockShapeUtils.getRingSegment(this.getAnchor(), a1, a2, dist, dist + 3, false, new ArrayList<>());
+
+						List<BlockPos> spawnBlocks = new ArrayList<>();
+
+						for(BlockPos pos : blocks) {
+							BlockPos spawnPos = this.getWaveGroundPos(pos, 4);
+
+							if(spawnPos != null) {
+								spawnBlocks.add(spawnPos);
+							}
+						}
+
+						if(!spawnBlocks.isEmpty()) {
+							EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
+							spikeWave.delay = 2;
+							for(BlockPos pos : spawnBlocks) {
+								spikeWave.addPosition(pos);
+							}
+							this.world.spawnEntity(spikeWave);
+						}
+					}
+				}
+
+				if(this.crawlingWaveTicks >= ticksPerWave * 3) {
+					this.crawlingWaveTicks = 0;
+				} else {
+					this.crawlingWaveTicks++;
 				}
 			}
 		} else {
@@ -305,6 +342,26 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 				}
 			}
 		}
+	}
+
+	@Nullable
+	protected BlockPos getWaveGroundPos(BlockPos pos, int yOff) {
+		MutableBlockPos checkPos = new MutableBlockPos();
+
+		for(int yo = 0; yo < 16; yo++) {
+			checkPos.setPos(pos.getX(), pos.getY() - yo + yOff, pos.getZ());
+
+			IBlockState state = this.world.getBlockState(checkPos);
+
+			if(state.getCollisionBoundingBox(world, checkPos) != null) {
+				if(state.isSideSolid(world, checkPos, EnumFacing.UP)) {
+					return checkPos.toImmutable();
+				}
+				break;
+			}
+		}
+
+		return null;
 	}
 
 	public boolean isTargetInBlowRange(EntityLivingBase target) {
@@ -333,7 +390,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		this.blowTicks = 1;
 	}
 
-	public boolean isTargetInWaveAttackRange(EntityLivingBase target) {
+	public boolean isTargetInRotatingWaveAttackRange(EntityLivingBase target) {
 		double dx = this.posX - target.posX;
 		double dz = this.posZ - target.posZ;
 		double dstSq = dx*dx + dz*dz;
@@ -342,112 +399,22 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		return dstSq >= innerSq && dstSq <= outerSq;
 	}
 
-	public void startWaveAttack() {
-		this.waveTicks = 1;
-		this.waveStart = this.rand.nextFloat() * (float)Math.PI * 2;
+	public void startRotatingWaveAttack() {
+		this.rotatingWaveTicks = 1;
+		this.rotatingWaveStart = this.rand.nextFloat() * (float)Math.PI * 2;
 	}
 
-	protected List<BlockPos> getSegment(BlockPos pos, double a1, double a2, double innerRadius, double outerRadius, boolean includeCenter, List<BlockPos> list) {
-		final double twoPi = Math.PI * 2;
-		final double halfPi = Math.PI / 2;
+	public boolean isTargetInCrawlingWaveAttackRange(EntityLivingBase target) {
+		double dx = this.posX - target.posX;
+		double dz = this.posZ - target.posZ;
+		double dstSq = dx*dx + dz*dz;
+		int innerSq = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE * WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE;
+		int outerSq = (WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + CRAWLING_WAVE_RANGE) * (WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + CRAWLING_WAVE_RANGE);
+		return dstSq >= innerSq && dstSq <= outerSq;
+	}
 
-		a1 %= twoPi;
-		if(a1 < 0) a1 += twoPi;
-
-		a2 %= twoPi;
-		if(a2 < 0) a2 += twoPi;
-
-		int qa1 = MathHelper.floor(a1 / halfPi);
-
-		a1 -= qa1 * halfPi;
-		a2 -= qa1 * halfPi;
-
-		double radiusSq = outerRadius * outerRadius;
-
-		int rotation = (4 - qa1) % 4;
-		int maxRot = MathHelper.floor(a2 / halfPi);
-
-		for(int rot = 0; rot <= maxRot; rot++) {
-			double ca1 = rot == 0 ? a1 : 0;
-			double ca2 = rot == maxRot ? (a2 % halfPi) : halfPi;
-
-			double cos1 = Math.cos(ca1);
-			double tan1 = Math.tan(ca1);
-			double tan2 = Math.tan(ca2);
-
-			int minX = 0;
-			int maxX = MathHelper.ceil(cos1 * outerRadius);
-
-			for(int xo = minX; xo <= maxX; xo++) {
-				double dxSq = (xo - 0.5D) * (xo - 0.5D);
-
-				int minZ = MathHelper.floor(tan1 * xo);
-				int maxZ = MathHelper.floor(Math.min(tan2 * xo, outerRadius));
-
-				if(xo <= innerRadius) {
-					minZ += MathHelper.ceil(innerRadius - Math.sqrt(xo * xo + minZ * minZ));
-				}
-
-				for(int zo = minZ; zo < maxZ; zo++) {
-					double dstSq = dxSq + (zo + 0.5D) * (zo + 0.5D);
-
-					if(dstSq >= radiusSq) {
-						break;
-					}
-
-					if(dstSq <= innerRadius*innerRadius) {
-						continue;
-					}
-
-					int nx;
-					switch(rotation) {
-					default:
-					case 0:
-						nx = xo - 1;
-						break;
-					case 1:
-						nx = zo;
-						break;
-					case 2:
-						nx = -xo + 1;
-						break;
-					case 3:
-						nx = -zo;
-						break;
-					}
-
-					int nz;
-					switch(rotation) {
-					default:
-					case 0:
-						nz = zo;
-						break;
-					case 1:
-						nz = -xo + 1;
-						break;
-					case 2:
-						nz = -zo;
-						break;
-					case 3:
-						nz = xo - 1;
-						break;
-					}
-
-					if(!includeCenter && nx == 0 && nz == 0) {
-						continue;
-					}
-
-					list.add(pos.add(nx, 0, nz));
-				}
-			}
-
-			rotation = rotation - 1;
-			if(rotation < 0) {
-				rotation += 4;
-			}
-		}
-
-		return list;
+	public void startCrawlingWaveAttack() {
+		this.crawlingWaveTicks = 1;
 	}
 
 	public static class AIRespawnSmallFaces extends EntityAIBase {
@@ -473,11 +440,13 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.executeCheckCooldown <= 0) {
-				this.executeCheckCooldown = 20 + this.entity.rand.nextInt(20);
-				return !this.hasEnoughSmallFaces();
+			if(this.entity.isActive()) {
+				if(this.executeCheckCooldown <= 0) {
+					this.executeCheckCooldown = 20 + this.entity.rand.nextInt(20);
+					return !this.hasEnoughSmallFaces();
+				}
+				this.executeCheckCooldown--;
 			}
-			this.executeCheckCooldown--;
 			return false;
 		}
 
@@ -523,7 +492,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		@Override
 		public boolean shouldContinueExecuting() {
-			return this.shouldContinue;
+			return this.entity.isActive() && this.shouldContinue;
 		}
 	}
 
@@ -538,7 +507,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		@Override
 		public boolean shouldExecute() {
-			if(!this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInBlowRange(this.entity.getAttackTarget())) {
+			if(this.entity.isActive() && !this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInBlowRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
 					this.cooldown = 30 + this.entity.rand.nextInt(30);
 					return true;
@@ -559,18 +528,18 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		}
 	}
 
-	public static class AIWaveAttack extends EntityAIBase {
+	public static class AIRotatingWaveAttack extends EntityAIBase {
 		protected final EntitySpiritTreeFaceLarge entity;
 
 		protected int cooldown = 30;
 
-		public AIWaveAttack(EntitySpiritTreeFaceLarge entity) {
+		public AIRotatingWaveAttack(EntitySpiritTreeFaceLarge entity) {
 			this.entity = entity;
 		}
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.waveTicks == 0 && this.entity.getAttackTarget() != null && this.entity.isTargetInWaveAttackRange(this.entity.getAttackTarget())) {
+			if(this.entity.isActive() && this.entity.rotatingWaveTicks == 0 && this.entity.getAttackTarget() != null && this.entity.isTargetInRotatingWaveAttackRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
 					this.cooldown = 60 + this.entity.rand.nextInt(80);
 					return true;
@@ -582,7 +551,39 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		@Override
 		public void startExecuting() {
-			this.entity.startWaveAttack();
+			this.entity.startRotatingWaveAttack();
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
+		}
+	}
+
+	public static class AICrawlingWaveAttack extends EntityAIBase {
+		protected final EntitySpiritTreeFaceLarge entity;
+
+		protected int cooldown = 30;
+
+		public AICrawlingWaveAttack(EntitySpiritTreeFaceLarge entity) {
+			this.entity = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(this.entity.isActive() && this.entity.crawlingWaveTicks == 0 && this.entity.getAttackTarget() != null && this.entity.isTargetInCrawlingWaveAttackRange(this.entity.getAttackTarget())) {
+				if(this.cooldown <= 0) {
+					this.cooldown = 60 + this.entity.rand.nextInt(80);
+					return true;
+				}
+				this.cooldown--;
+			}
+			return false;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.entity.startCrawlingWaveAttack();
 		}
 
 		@Override
