@@ -1,20 +1,16 @@
 package thebetweenlands.client.render.entity;
 
-import java.nio.FloatBuffer;
 import java.util.List;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
@@ -25,19 +21,6 @@ import thebetweenlands.common.entity.EntitySpikeWave;
 
 @SideOnly(Side.CLIENT)
 public class RenderSpikeWave extends Render<EntitySpikeWave> {
-	private static final DynamicTexture TEXTURE_BRIGHTNESS = new DynamicTexture(16, 16);
-	protected FloatBuffer brightnessBuffer = GLAllocation.createDirectFloatBuffer(4);
-
-	static {
-		int[] pixel = TEXTURE_BRIGHTNESS.getTextureData();
-
-		for (int i = 0; i < 256; ++i) {
-			pixel[i] = -1;
-		}
-
-		TEXTURE_BRIGHTNESS.updateDynamicTexture();
-	}
-
 	public RenderSpikeWave(RenderManager rendermanagerIn) {
 		super(rendermanagerIn);
 	}

@@ -5,6 +5,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.EntityAngryPebble;
+import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
@@ -78,6 +79,7 @@ public class EntityRegistry {
 		registerEntity(EntitySpiritTreeFaceLarge.class, "spirit_tree_face_large", 0x3A2F0B, 0x5F4C0B);
 		registerEntity(EntitySapSpit.class, "sap_spit", 64, 20, true);
 		registerEntity(EntitySpikeWave.class, "spike_wave");
+		registerEntity(EntityRootGrabber.class, "root_grabber");
 	}
 
 	private static int id = 0;

@@ -983,6 +983,8 @@ bl.elixir.duration.7=VII
 bl.elixir.duration.8=VIII
 bl.elixir.duration.n=%s
 
+bl.potion.rootBound=Root Bound
+
 # Entities
 entity.thebetweenlands.dark_druid.name=Dark Druid
 entity.thebetweenlands.angler.name=Angler

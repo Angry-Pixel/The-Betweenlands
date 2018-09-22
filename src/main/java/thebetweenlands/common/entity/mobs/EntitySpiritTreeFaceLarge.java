@@ -31,6 +31,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
 import thebetweenlands.common.registries.BlockRegistry;
@@ -77,7 +78,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		this.tasks.addTask(3, new AIBlowAttack(this));
 		this.tasks.addTask(4, new AIRotatingWaveAttack(this));
 		this.tasks.addTask(5, new AICrawlingWaveAttack(this));
-		this.tasks.addTask(6, new AIRespawnSmallFaces(this));
+		this.tasks.addTask(6, new AIGrabAttack(this));
+		this.tasks.addTask(7, new AIRespawnSmallFaces(this));
 	}
 
 	@Override
@@ -437,6 +439,44 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		this.crawlingWaveTicks = 1;
 	}
 
+	public boolean isTargetInGrabAttackRange(EntityLivingBase target) {
+		double dx = this.posX - target.posX;
+		double dz = this.posZ - target.posZ;
+		double dstSq = dx*dx + dz*dz;
+		int outerSq = (WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + CRAWLING_WAVE_RANGE) * (WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + CRAWLING_WAVE_RANGE);
+		return dstSq <= outerSq;
+	}
+
+	public boolean startGrabAttack() {
+		if(this.getAttackTarget() != null) {
+			EntityLivingBase target = this.getAttackTarget();
+
+			for(int i = 0; i < 6; i++) {
+				BlockPos pos = new BlockPos(target.posX + this.rand.nextInt(3) - 1, target.posY - 1, target.posZ + this.rand.nextInt(3) - 1);
+
+				if(this.world.isAirBlock(pos.up())) {
+					boolean validPos = true;
+					for(int xo = -1; xo <= 1; xo++) {
+						for(int zo = -1; zo <= 1; zo++) {
+							if(!this.world.isBlockNormalCube(pos, false)) {
+								validPos = false;
+							}
+						}
+					}
+
+					if(validPos) {
+						EntityRootGrabber grabber = new EntityRootGrabber(this.world);
+						grabber.setPosition(pos, 60);
+						this.world.spawnEntity(grabber);
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
 	public static class AIRespawnSmallFaces extends EntityAIBase {
 		protected final EntitySpiritTreeFaceLarge entity;
 
@@ -604,6 +644,38 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		@Override
 		public void startExecuting() {
 			this.entity.startCrawlingWaveAttack();
+		}
+
+		@Override
+		public boolean shouldContinueExecuting() {
+			return false;
+		}
+	}
+
+	public static class AIGrabAttack extends EntityAIBase {
+		protected final EntitySpiritTreeFaceLarge entity;
+
+		protected int cooldown = 30;
+
+		public AIGrabAttack(EntitySpiritTreeFaceLarge entity) {
+			this.entity = entity;
+		}
+
+		@Override
+		public boolean shouldExecute() {
+			if(this.entity.isActive() && !this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInGrabAttackRange(this.entity.getAttackTarget())) {
+				if(this.cooldown <= 0) {
+					this.cooldown = 60 + this.entity.rand.nextInt(80);
+					return true;
+				}
+				this.cooldown--;
+			}
+			return false;
+		}
+
+		@Override
+		public void startExecuting() {
+			this.entity.startGrabAttack();
 		}
 
 		@Override

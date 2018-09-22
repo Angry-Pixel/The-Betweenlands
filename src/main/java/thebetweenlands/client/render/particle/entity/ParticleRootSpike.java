@@ -23,7 +23,6 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -124,6 +123,8 @@ public class ParticleRootSpike extends Particle {
 
 		GlStateManager.scale(this.scale, this.scale, this.scale);
 
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+
 		this.renderer.render();
 
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
@@ -157,13 +158,15 @@ public class ParticleRootSpike extends Particle {
 	public static class RootRenderer {
 		private List<BakedQuad> quads = new ArrayList<>();
 
-		private int length;
-		private float widthScale;
-		private float heightScale;
-		private int bx, by, bz;
-		private double x, y, z;
+		public final int length;
+		public final float widthScale;
+		public final float heightScale;
+		public final int bx, by, bz;
+		public final double x, y, z;
 
 		private VertexFormat format;
+
+		private TextureAtlasSprite sprite;
 
 		public RootRenderer(int length, float widthScale, float heightScale, long seed) {
 			this(length, widthScale, heightScale, seed, 0, 0, 0);
@@ -183,8 +186,18 @@ public class ParticleRootSpike extends Particle {
 			this.z = z;
 		}
 
+		public TextureAtlasSprite getSprite() {
+			return this.sprite;
+		}
+
+		public VertexFormat getFormat() {
+			return this.format;
+		}
+
 		public RootRenderer build(VertexFormat format, TextureAtlasSprite sprite) {
+			this.sprite = sprite;
 			this.format = format;
+
 			QuadBuilder builder = new QuadBuilder(format);
 
 			for(int y = 0; y < this.length; y++) {
@@ -298,8 +311,6 @@ public class ParticleRootSpike extends Particle {
 		}
 
 		public void render() {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buffer = tessellator.getBuffer();
 

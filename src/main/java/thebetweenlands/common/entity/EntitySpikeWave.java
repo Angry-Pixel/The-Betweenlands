@@ -58,9 +58,10 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	public void addPosition(BlockPos pos) {
 		if(this.origin == null) {
 			this.origin = pos;
-			this.lastTickPosX = this.prevPosX = this.posX = pos.getX() + 0.5D;
-			this.lastTickPosY = this.prevPosY = this.posY = pos.getY();
-			this.lastTickPosZ = this.prevPosZ = this.posZ = pos.getZ() + 0.5D;
+			this.setPosition(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D);
+			this.lastTickPosX = this.prevPosX = this.posX;
+			this.lastTickPosY = this.prevPosY = this.posY;
+			this.lastTickPosZ = this.prevPosZ = this.posZ;
 		}
 
 		this.positions.add(pos);
