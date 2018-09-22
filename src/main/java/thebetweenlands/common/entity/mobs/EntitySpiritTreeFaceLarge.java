@@ -454,11 +454,11 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 			for(int i = 0; i < 6; i++) {
 				BlockPos pos = new BlockPos(target.posX + this.rand.nextInt(3) - 1, target.posY - 1, target.posZ + this.rand.nextInt(3) - 1);
 
-				if(this.world.isAirBlock(pos.up())) {
+				if(this.world.isAirBlock(pos.up()) && this.world.isAirBlock(pos.up(2))) {
 					boolean validPos = true;
 					for(int xo = -1; xo <= 1; xo++) {
 						for(int zo = -1; zo <= 1; zo++) {
-							if(!this.world.isBlockNormalCube(pos, false)) {
+							if(!this.world.isBlockNormalCube(pos.add(xo, 0, zo), false)) {
 								validPos = false;
 							}
 						}
@@ -663,7 +663,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 		@Override
 		public boolean shouldExecute() {
-			if(this.entity.isActive() && !this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInGrabAttackRange(this.entity.getAttackTarget())) {
+			if(this.entity.isActive() && !this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().onGround && this.entity.isTargetInGrabAttackRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
 					this.cooldown = 60 + this.entity.rand.nextInt(80);
 					return true;
