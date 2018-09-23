@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import javax.annotation.Nullable;
+
+import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
@@ -27,8 +30,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.storage.loot.LootContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.IEntityWithLootModifier;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.entity.EntityRootGrabber;
@@ -44,13 +49,13 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.util.BlockShapeUtils;
 
-public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
+public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements IEntityWithLootModifier {
 	public static final byte EVENT_BLOW_ATTACK = 40;
 
 	private static final DataParameter<Integer> BLOW_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> ROTATING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> CRAWLING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
-	
+
 	private int blowTicks = 0;
 
 	private float rotatingWaveStart = 0;
@@ -105,6 +110,15 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.SPIRIT_TREE_FACE_LARGE;
+	}
+
+	@Nullable
+	@Override
+	public Map<String, Float> getLootModifiers(@Nullable LootContext context, boolean isEntityProperty) {
+		ImmutableMap.Builder<String, Float> builder = ImmutableMap.builder();
+		builder.put("strength", 1.0F); //TODO Implement loot modifier
+		builder.put("wisps", 0.0F);
+		return builder.build();
 	}
 
 	@Override
@@ -250,7 +264,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		if(this.dataManager.get(BLOW_STATE) != 0 || this.dataManager.get(ROTATING_WAVE_STATE) != 0 || this.dataManager.get(CRAWLING_WAVE_STATE) != 0) {
 			this.setGlowTicks(20);
 		}
-		
+
 		if(!this.world.isRemote) {
 			if(this.blowTicks > 0) {
 				if(this.blowTicks > 20) {
