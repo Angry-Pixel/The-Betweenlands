@@ -33,6 +33,7 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.EnumLocationType;
 import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationGuarded;
+import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
@@ -54,8 +55,10 @@ public class BlockWisp extends BlockContainer implements IStateMappedBlock {
 		if(worldStorage.getEnvironmentEventRegistry().auroras.isActive()) {
 			return true;
 		}
-		List<LocationCragrockTower> storages = worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
-		if(!storages.isEmpty()) {
+		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
+			return true;
+		}
+		if(!worldStorage.getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, pos.getX(), pos.getZ(), location -> location.isInside(pos)).isEmpty()) {
 			return true;
 		}
 		return false;

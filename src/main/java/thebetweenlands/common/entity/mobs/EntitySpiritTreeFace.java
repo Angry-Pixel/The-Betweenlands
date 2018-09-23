@@ -158,6 +158,11 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	}
 
 	@Override
+	public void onKillCommand() {
+		this.setDead();
+	}
+
+	@Override
 	public void onUpdate() {
 		super.onUpdate();
 
@@ -177,21 +182,10 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 				}
 				this.emergeSound = true;
 			}
+		}
 
-			if(this.spitTicks > 0) {
-				if(this.spitTicks == 1) {
-					this.world.setEntityState(this, EVENT_SPIT);
-					this.setGlowTicks(10);
-					this.playSpitSound();
-				}
-
-				if(this.spitTicks > 6) {
-					this.doSpitAttack();
-					this.spitTicks = 0;
-				} else {
-					this.spitTicks++;
-				}
-			}
+		if(this.spitTicks > 0) {
+			this.updateSpitAttack();
 		}
 
 		if(this.isMoving() && this.world.isRemote) {
@@ -214,6 +208,21 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 					}
 				}
 			}
+		}
+	}
+
+	protected void updateSpitAttack() {
+		if(this.spitTicks == 1) {
+			this.world.setEntityState(this, EVENT_SPIT);
+			this.setGlowTicks(10);
+			this.playSpitSound();
+		}
+
+		if(this.spitTicks > 6) {
+			this.doSpitAttack();
+			this.spitTicks = 0;
+		} else {
+			this.spitTicks++;
 		}
 	}
 

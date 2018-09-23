@@ -18,6 +18,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -53,6 +54,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public static final byte EVENT_BLOW_ATTACK = 40;
 
 	private static final DataParameter<Integer> BLOW_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> SPIT_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> ROTATING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> CRAWLING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 
@@ -65,6 +67,13 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	private float crawlingWaveAngle = 0;
 	private int crawlingWaveTicks = 0;
+
+	protected float wispStrengthModifier = 1.0F; //TODO Implement in attacks etc
+
+	protected static final int SPIT_DELAY = 10;
+	protected static final int BLOW_DELAY = 30;
+	protected static final int ROTATING_WAVE_DELAY = 40;
+	protected static final int CRAWLING_WAVE_DELAY = 40;
 
 	public EntitySpiritTreeFaceLarge(World world) {
 		super(world);
@@ -93,6 +102,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		super.entityInit();
 
 		this.dataManager.register(BLOW_STATE, 0);
+		this.dataManager.register(SPIT_STATE, 0);
 		this.dataManager.register(ROTATING_WAVE_STATE, 0);
 		this.dataManager.register(CRAWLING_WAVE_STATE, 0);
 	}
@@ -116,8 +126,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	@Override
 	public Map<String, Float> getLootModifiers(@Nullable LootContext context, boolean isEntityProperty) {
 		ImmutableMap.Builder<String, Float> builder = ImmutableMap.builder();
-		builder.put("strength", 1.0F); //TODO Implement loot modifier
-		builder.put("wisps", 0.0F);
+		builder.put("strength", this.wispStrengthModifier);
 		return builder.build();
 	}
 
@@ -261,24 +270,32 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public void onUpdate() {
 		super.onUpdate();
 
-		if(this.dataManager.get(BLOW_STATE) != 0 || this.dataManager.get(ROTATING_WAVE_STATE) != 0 || this.dataManager.get(CRAWLING_WAVE_STATE) != 0) {
+		if(this.dataManager.get(BLOW_STATE) != 0 || this.dataManager.get(ROTATING_WAVE_STATE) != 0 || this.dataManager.get(CRAWLING_WAVE_STATE) != 0 || this.dataManager.get(SPIT_STATE) != 0) {
 			this.setGlowTicks(20);
 		}
 
 		if(!this.world.isRemote) {
-			if(this.blowTicks > 0) {
-				if(this.blowTicks > 20) {
-					this.dataManager.set(BLOW_STATE, 2);
+			if(this.isActive() && this.getAttackTarget() != null && this.ticksExisted % 20 == 0) {
+				this.updateWispStrengthModifier();
+			}
 
-					if((this.blowTicks - 21) % 15 == 0) {
+			if(this.blowTicks > 0) {
+				if(this.blowTicks > 20 + BLOW_DELAY) {
+					this.dataManager.set(BLOW_STATE, 3);
+
+					if((this.blowTicks - (21 + BLOW_DELAY)) % 15 == 0) {
 						this.doBlowAttack();
 						this.world.setEntityState(this, EVENT_BLOW_ATTACK);
 					}
 				} else {
-					this.dataManager.set(BLOW_STATE, 1);
+					if(this.blowTicks > BLOW_DELAY) {
+						this.dataManager.set(BLOW_STATE, 2);
+					} else {
+						this.dataManager.set(BLOW_STATE, 1);
+					}
 				}
 
-				if(this.blowTicks > 160) {
+				if(this.blowTicks > 160 + BLOW_DELAY) {
 					this.dataManager.set(BLOW_STATE, 0);
 					this.blowTicks = 0;
 				} else {
@@ -287,40 +304,46 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			}
 
 			if(this.rotatingWaveTicks > 0) {
-				if((this.rotatingWaveTicks - 1) % 3 == 0) {
-					for(int i = 0; i < 2; i++) {
-						double increment = Math.PI * 2 / 20;
+				if(this.rotatingWaveTicks > ROTATING_WAVE_DELAY) {
+					this.dataManager.set(ROTATING_WAVE_STATE, 2);
 
-						double a1 = (this.rotatingWaveStart + this.rotatingWaveTicks / 3 * increment) * (i == 0 ? 1 : -1);
-						double a2 = (this.rotatingWaveStart + (this.rotatingWaveTicks / 3 + 1) * increment) * (i == 0 ? 1 : -1);
+					if((this.rotatingWaveTicks - 1 - ROTATING_WAVE_DELAY) % 3 == 0) {
+						for(int i = 0; i < 2; i++) {
+							double increment = Math.PI * 2 / 20;
 
-						double start = Math.min(a1, a2);
-						double end = Math.max(a1, a2);
+							double a1 = (this.rotatingWaveStart + (this.rotatingWaveTicks - ROTATING_WAVE_DELAY) / 3 * increment) * (i == 0 ? 1 : -1);
+							double a2 = (this.rotatingWaveStart + ((this.rotatingWaveTicks - ROTATING_WAVE_DELAY) / 3 + 1) * increment) * (i == 0 ? 1 : -1);
 
-						List<BlockPos> blocks = BlockShapeUtils.getRingSegment(this.getAnchor(), start, end, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE + 0.5D, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 0.5D, false, new ArrayList<>());
+							double start = Math.min(a1, a2);
+							double end = Math.max(a1, a2);
 
-						List<BlockPos> spawnBlocks = new ArrayList<>();
+							List<BlockPos> blocks = BlockShapeUtils.getRingSegment(this.getAnchor(), start, end, WorldGenSpiritTreeStructure.RADIUS_INNER_CIRLCE + 0.5D, WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 0.5D, false, new ArrayList<>());
 
-						for(BlockPos pos : blocks) {
-							BlockPos spawnPos = this.getWaveGroundPos(pos, 0);
+							List<BlockPos> spawnBlocks = new ArrayList<>();
 
-							if(spawnPos != null) {
-								spawnBlocks.add(spawnPos);
+							for(BlockPos pos : blocks) {
+								BlockPos spawnPos = this.getWaveGroundPos(pos, 0);
+
+								if(spawnPos != null) {
+									spawnBlocks.add(spawnPos);
+								}
 							}
-						}
 
-						if(!spawnBlocks.isEmpty()) {
-							EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
-							spikeWave.delay = 2;
-							for(BlockPos pos : spawnBlocks) {
-								spikeWave.addPosition(pos);
+							if(!spawnBlocks.isEmpty()) {
+								EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
+								spikeWave.delay = 2;
+								for(BlockPos pos : spawnBlocks) {
+									spikeWave.addPosition(pos);
+								}
+								this.world.spawnEntity(spikeWave);
 							}
-							this.world.spawnEntity(spikeWave);
 						}
 					}
+				} else {
+					this.dataManager.set(ROTATING_WAVE_STATE, 1);
 				}
 
-				if(this.rotatingWaveTicks >= 3 * 20 * 3) {
+				if(this.rotatingWaveTicks >= 3 * 20 * 3 + ROTATING_WAVE_DELAY) {
 					this.rotatingWaveTicks = 0;
 					this.dataManager.set(ROTATING_WAVE_STATE, 0);
 				} else {
@@ -331,41 +354,47 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			if(this.crawlingWaveTicks > 0) {
 				final int ticksPerWave = CRAWLING_WAVE_RANGE / 3 * 4;
 
-				if(this.getAttackTarget() != null) {
-					if((this.crawlingWaveTicks - 1) % ticksPerWave == 0) {
-						this.crawlingWaveAngle = (float) Math.atan2(this.getAttackTarget().posZ - this.posZ, this.getAttackTarget().posX - this.posX);
-					}
+				if(this.crawlingWaveTicks > CRAWLING_WAVE_DELAY) {
+					this.dataManager.set(CRAWLING_WAVE_STATE, 2);
 
-					if((this.crawlingWaveTicks - 1) % 4 == 0) {
-						int dist = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + ((this.crawlingWaveTicks - 1) / 4 * 3) % CRAWLING_WAVE_RANGE;
-
-						double a1 = this.crawlingWaveAngle - Math.PI / 16;
-						double a2 = this.crawlingWaveAngle + Math.PI / 16;
-
-						List<BlockPos> blocks = BlockShapeUtils.getRingSegment(this.getAnchor(), a1, a2, dist, dist + 3, false, new ArrayList<>());
-
-						List<BlockPos> spawnBlocks = new ArrayList<>();
-
-						for(BlockPos pos : blocks) {
-							BlockPos spawnPos = this.getWaveGroundPos(pos, 4);
-
-							if(spawnPos != null) {
-								spawnBlocks.add(spawnPos);
-							}
+					if(this.getAttackTarget() != null) {
+						if((this.crawlingWaveTicks - 1 - CRAWLING_WAVE_DELAY) % ticksPerWave == 0) {
+							this.crawlingWaveAngle = (float) Math.atan2(this.getAttackTarget().posZ - this.posZ, this.getAttackTarget().posX - this.posX);
 						}
 
-						if(!spawnBlocks.isEmpty()) {
-							EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
-							spikeWave.delay = 2;
-							for(BlockPos pos : spawnBlocks) {
-								spikeWave.addPosition(pos);
+						if((this.crawlingWaveTicks - 1 - CRAWLING_WAVE_DELAY) % 4 == 0) {
+							int dist = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + ((this.crawlingWaveTicks - 1 - CRAWLING_WAVE_DELAY) / 4 * 3) % CRAWLING_WAVE_RANGE;
+
+							double a1 = this.crawlingWaveAngle - Math.PI / 16;
+							double a2 = this.crawlingWaveAngle + Math.PI / 16;
+
+							List<BlockPos> blocks = BlockShapeUtils.getRingSegment(this.getAnchor(), a1, a2, dist, dist + 3, false, new ArrayList<>());
+
+							List<BlockPos> spawnBlocks = new ArrayList<>();
+
+							for(BlockPos pos : blocks) {
+								BlockPos spawnPos = this.getWaveGroundPos(pos, 4);
+
+								if(spawnPos != null) {
+									spawnBlocks.add(spawnPos);
+								}
 							}
-							this.world.spawnEntity(spikeWave);
+
+							if(!spawnBlocks.isEmpty()) {
+								EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
+								spikeWave.delay = 2;
+								for(BlockPos pos : spawnBlocks) {
+									spikeWave.addPosition(pos);
+								}
+								this.world.spawnEntity(spikeWave);
+							}
 						}
 					}
+				} else {
+					this.dataManager.set(CRAWLING_WAVE_STATE, 1);
 				}
 
-				if(this.crawlingWaveTicks >= ticksPerWave * 3) {
+				if(this.crawlingWaveTicks >= ticksPerWave * 3 + CRAWLING_WAVE_DELAY) {
 					this.crawlingWaveTicks = 0;
 					this.dataManager.set(CRAWLING_WAVE_STATE, 0);
 				} else {
@@ -374,7 +403,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			}
 		} else {
 			int blowState = this.dataManager.get(BLOW_STATE);
-			if(blowState == 1) {
+			if(blowState == 2) {
 				Vec3d frontCenter = this.getFrontCenter();
 				for(int i = 0; i < 4; i++) {
 					Random rnd = world.rand;
@@ -387,6 +416,20 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				}
 			}
 		}
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+
+		nbt.setFloat("wispStrengthModifier", this.wispStrengthModifier);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+
+		this.wispStrengthModifier = nbt.getFloat("wispStrengthModifier");
 	}
 
 	@Nullable
@@ -500,6 +543,54 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		}
 
 		return false;
+	}
+
+	@Override
+	public void startSpit() {
+		super.startSpit();
+		this.dataManager.set(SPIT_STATE, 1);
+	}
+
+	@Override
+	protected void updateSpitAttack() {
+		if(this.spitTicks == SPIT_DELAY) {
+			this.world.setEntityState(this, EVENT_SPIT);
+			this.setGlowTicks(10);
+			this.playSpitSound();
+		}
+
+		if(this.spitTicks > 6 + SPIT_DELAY) {
+			this.doSpitAttack();
+			this.dataManager.set(SPIT_STATE, 0);
+			this.spitTicks = 0;
+		} else {
+			this.spitTicks++;
+		}
+	}
+
+	protected void updateWispStrengthModifier() {
+		List<LocationSpiritTree> locations = BetweenlandsWorldStorage.forWorld(this.world).getLocalStorageHandler().getLocalStorages(LocationSpiritTree.class, this.getEntityBoundingBox(), loc -> loc.isInside(this));
+		if(!locations.isEmpty()) {
+			LocationSpiritTree location = locations.get(0);
+
+			int activeWisps = location.getActiveWisps();
+			int generatedWisps = location.getGeneratedWispPositions().size();
+
+			float newModifier;
+			if(activeWisps < generatedWisps) {
+				newModifier = 0.5F + activeWisps / (float)generatedWisps * 0.5F;
+			} else {
+				newModifier = Math.min(1.0F + (activeWisps - generatedWisps) / 6.0F, 2.0F);
+			}
+
+			float decay = (float) Math.pow(this.getHealth() / this.getMaxHealth(), 6) * 0.33F;
+
+			this.wispStrengthModifier = decay * newModifier + (1 - decay) * this.wispStrengthModifier;
+		}
+	}
+
+	public float getWispStrengthModifier() {
+		return this.wispStrengthModifier;
 	}
 
 	public static class AIRespawnSmallFaces extends EntityAIBase {

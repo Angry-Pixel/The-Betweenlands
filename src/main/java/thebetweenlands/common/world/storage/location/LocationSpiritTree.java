@@ -15,8 +15,8 @@ import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class LocationSpiritTree extends LocationGuarded {
-	private List<BlockPos> wispPosts = new ArrayList<>();
-	private List<BlockPos> generatedWisps = new ArrayList<>();
+	private List<BlockPos> wispPositions = new ArrayList<>();
+	private List<BlockPos> generatedWispPositions = new ArrayList<>();
 
 	private List<BlockPos> largeFacePositions = new ArrayList<>();
 	private List<BlockPos> smallFacePositions = new ArrayList<>();
@@ -43,27 +43,27 @@ public class LocationSpiritTree extends LocationGuarded {
 		return Collections.unmodifiableList(this.smallFacePositions);
 	}
 	
-	public void addGeneratedWisp(BlockPos pos) {
-		this.generatedWisps.add(pos);
+	public void addGeneratedWispPosition(BlockPos pos) {
+		this.generatedWispPositions.add(pos);
 		this.setDirty(true);
 	}
 
-	public List<BlockPos> getGeneratedWisps() {
-		return Collections.unmodifiableList(this.generatedWisps);
+	public List<BlockPos> getGeneratedWispPositions() {
+		return Collections.unmodifiableList(this.generatedWispPositions);
 	}
 
-	public void addWispPost(BlockPos pos) {
-		this.wispPosts.add(pos);
+	public void addWispPosition(BlockPos pos) {
+		this.wispPositions.add(pos);
 		this.setDirty(true);
 	}
 
-	public List<BlockPos> getWispPosts() {
-		return Collections.unmodifiableList(this.wispPosts);
+	public List<BlockPos> getWispPositions() {
+		return Collections.unmodifiableList(this.wispPositions);
 	}
 
 	public int getActiveWisps() {
 		int i = 0;
-		for(BlockPos pos : this.wispPosts) {
+		for(BlockPos pos : this.wispPositions) {
 			if(this.getWorldStorage().getWorld().getBlockState(pos).getBlock() == BlockRegistry.WISP) {
 				i++;
 			}
@@ -74,8 +74,8 @@ public class LocationSpiritTree extends LocationGuarded {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt = super.writeToNBT(nbt);
-		this.saveBlockList(nbt, "generatedWisps", this.generatedWisps);
-		this.saveBlockList(nbt, "wispPosts", this.wispPosts);
+		this.saveBlockList(nbt, "generatedWispPositions", this.generatedWispPositions);
+		this.saveBlockList(nbt, "wispPositions", this.wispPositions);
 		this.saveBlockList(nbt, "largeFacePositions", this.largeFacePositions);
 		this.saveBlockList(nbt, "smallFacePositions", this.smallFacePositions);
 		return nbt;
@@ -84,8 +84,8 @@ public class LocationSpiritTree extends LocationGuarded {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.readBlockList(nbt, "generatedWisps", this.generatedWisps);
-		this.readBlockList(nbt, "wispPosts", this.wispPosts);
+		this.readBlockList(nbt, "generatedWispPositions", this.generatedWispPositions);
+		this.readBlockList(nbt, "wispPositions", this.wispPositions);
 		this.readBlockList(nbt, "largeFacePositions", this.largeFacePositions);
 		this.readBlockList(nbt, "smallFacePositions", this.smallFacePositions);
 	}
