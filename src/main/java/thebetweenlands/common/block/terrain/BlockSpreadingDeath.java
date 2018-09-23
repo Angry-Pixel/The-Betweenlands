@@ -51,7 +51,7 @@ public abstract class BlockSpreadingDeath extends Block {
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
 		super.onBlockAdded(worldIn, pos, state);
-		int spreadTime = this.getSpreadTime(worldIn, pos, state);
+		int spreadTime = this.getScheduledSpreadTime(worldIn, pos, state);
 		if(spreadTime > 0) {
 			worldIn.scheduleUpdate(pos, this, spreadTime);
 		}
@@ -60,7 +60,7 @@ public abstract class BlockSpreadingDeath extends Block {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		if(!world.isRemote) {
-			if(!state.getValue(INACTIVE)) {
+			if(!state.getValue(INACTIVE) && this.shouldSpread(world, pos, state)) {
 				boolean spread = false;
 				for(int i = 0; i < 16; ++i) {
 					BlockPos target = pos.add(rand.nextInt(3) - 1, rand.nextInt(3) - 1, rand.nextInt(3) - 1);
@@ -68,8 +68,8 @@ public abstract class BlockSpreadingDeath extends Block {
 					if(world.isBlockLoaded(target)) {
 						IBlockState offsetState = world.getBlockState(target);
 
-						if(offsetState.getBlock() != this && this.canSpreadInto(world, pos, target, offsetState)) {
-							this.spreadInto(world, pos, target, offsetState);
+						if(offsetState.getBlock() != this && this.canSpreadInto(world, pos, state, target, offsetState)) {
+							this.spreadInto(world, pos, state, target, offsetState);
 							if(this.getSpreadingBiome() != null) {
 								this.convertBiome(world, target, this.getSpreadingBiome());
 							}
@@ -84,8 +84,8 @@ public abstract class BlockSpreadingDeath extends Block {
 						if(world.isBlockLoaded(target)) {
 							IBlockState offsetState = world.getBlockState(target);
 
-							if(offsetState.getBlock() != this && this.canSpreadInto(world, pos, target, offsetState)) {
-								this.spreadInto(world, pos, target, offsetState);
+							if(offsetState.getBlock() != this && this.canSpreadInto(world, pos, state, target, offsetState)) {
+								this.spreadInto(world, pos, state, target, offsetState);
 								if(this.getSpreadingBiome() != null) {
 									this.convertBiome(world, target, this.getSpreadingBiome());
 								}
@@ -95,7 +95,7 @@ public abstract class BlockSpreadingDeath extends Block {
 					}
 				}
 
-				int spreadTime = this.getSpreadTime(world, pos, state);
+				int spreadTime = this.getScheduledSpreadTime(world, pos, state);
 				if(spreadTime > 0) {
 					world.scheduleUpdate(pos, this, spreadTime);
 				}
@@ -111,14 +111,18 @@ public abstract class BlockSpreadingDeath extends Block {
 		}
 	}
 
-	public boolean canSpreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
+	protected boolean shouldSpread(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+	
+	public boolean canSpreadInto(World world, BlockPos pos, IBlockState state, BlockPos offsetPos, IBlockState offsetState) {
 		IBlockState offsetStateUp = world.getBlockState(offsetPos.up());
 		return offsetStateUp.getBlock() != this && !offsetStateUp.isNormalCube() && (this.getPreviousBiome() == null || world.getBiomeForCoordsBody(offsetPos) == this.getPreviousBiome());
 	}
 
-	public abstract void spreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState);
+	public abstract void spreadInto(World world, BlockPos pos, IBlockState state, BlockPos offsetPos, IBlockState offsetState);
 
-	protected int getSpreadTime(World world, BlockPos pos, IBlockState state) {
+	protected int getScheduledSpreadTime(World world, BlockPos pos, IBlockState state) {
 		return -1;
 	}
 

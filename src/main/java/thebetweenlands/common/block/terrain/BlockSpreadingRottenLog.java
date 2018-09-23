@@ -30,13 +30,18 @@ public class BlockSpreadingRottenLog extends BlockSpreadingDeath {
 	}
 
 	@Override
-	public boolean canSpreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
+	public boolean canSpreadInto(World world, BlockPos pos, IBlockState state, BlockPos offsetPos, IBlockState offsetState) {
 		return offsetState.getBlock() == BlockRegistry.LOG_SPIRIT_TREE;
 	}
 
 	@Override
-	public void spreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
+	public void spreadInto(World world, BlockPos pos, IBlockState state, BlockPos offsetPos, IBlockState offsetState) {
 		world.setBlockState(offsetPos, this.getDefaultState());
+	}
+	
+	@Override
+	protected boolean shouldSpread(World world, BlockPos pos, IBlockState state) {
+		return world.rand.nextInt(4) == 0;
 	}
 
 	@Override

@@ -46,21 +46,26 @@ public class BlockSpreadingSludgyDirt extends BlockSpreadingDeath {
 	}
 
 	@Override
-	public boolean canSpreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
-		return super.canSpreadInto(world, pos, offsetPos, offsetState) && SurfaceType.GRASS_AND_DIRT.matches(offsetState);
+	public boolean canSpreadInto(World world, BlockPos pos, IBlockState state, BlockPos offsetPos, IBlockState offsetState) {
+		return super.canSpreadInto(world, pos, state, offsetPos, offsetState) && SurfaceType.GRASS_AND_DIRT.matches(offsetState);
 	}
 
 	@Override
-	public void spreadInto(World world, BlockPos pos, BlockPos offsetPos, IBlockState offsetState) {
+	public void spreadInto(World world, BlockPos pos, IBlockState state, BlockPos offsetPos, IBlockState offsetState) {
 		world.setBlockState(offsetPos, this.getDefaultState());
 		for(int yo = 1; yo < 6; yo++) {
-			if(this.canSpreadInto(world, pos, offsetPos.down(yo), world.getBlockState(offsetPos.down(yo)))) {
+			if(this.canSpreadInto(world, pos, state, offsetPos.down(yo), world.getBlockState(offsetPos.down(yo)))) {
 				world.setBlockState(offsetPos.down(yo), BlockRegistry.MUD.getDefaultState());
 			}
 		}
 		if(world.rand.nextInt(3) == 0 && world.isAirBlock(offsetPos.up())) {
 			world.setBlockState(offsetPos.up(), BlockRegistry.DEAD_WEEDWOOD_BUSH.getDefaultState());
 		}
+	}
+	
+	@Override
+	protected boolean shouldSpread(World world, BlockPos pos, IBlockState state) {
+		return world.rand.nextInt(2) == 0;
 	}
 
 	@Override
