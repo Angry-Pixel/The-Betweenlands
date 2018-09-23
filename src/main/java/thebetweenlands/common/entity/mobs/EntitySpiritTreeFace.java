@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -16,16 +17,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public abstract class EntitySpiritTreeFace extends EntityWallFace {
+	public static final byte EVENT_DEATH = 3;
 	public static final byte EVENT_EMERGE_SOUND = 81;
+	public static final byte EVENT_HURT_SOUND = 82;
 	public static final byte EVENT_SPIT_SOUND = 83;
 
 	protected int spitTicks = 0;
@@ -50,9 +56,29 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 	}
 
+	@Override
+	protected SoundEvent getDeathSound() {
+		return null;
+	}
+
+	@Override
+	protected void playHurtSound(DamageSource source) {
+		this.world.setEntityState(this, EVENT_HURT_SOUND);
+	}
+
+	@Override
+	public void handleStatusUpdate(byte id) {
+		super.handleStatusUpdate(id);
+
+		if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
+			SoundType soundType = SoundType.WOOD;
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
+			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
+		}
+	}
+
 	public boolean isActive() {
-		//return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
-		return true;
+		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL;
 	}
 
 	@Override
@@ -76,27 +102,35 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	}
 
 	@Override
+	public boolean hitByEntity(Entity entity) {
+		if(this.getIsInvulnerable()) {
+			return true;
+		}
+		return super.hitByEntity(entity);
+	}
+
+	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(this.getIsInvulnerable()) {
+			return false;
+		}
 		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
 		if(attacker != null && attacker.getActiveHand() != null) {
 			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
 			if(!item.isEmpty() && item.getItem() instanceof ItemAxe) {
-				amount *= 2.0F;
+				amount *= 3.0F;
 			}
 		}
 		return super.attackEntityFrom(source, amount);
 	}
 
 	@Override
-	public void onUpdate() {
-		if(!this.world.isRemote) {
-			if(!this.isActive()) {
-				this.setEntityInvulnerable(true);
-			} else {
-				this.setEntityInvulnerable(false);
-			}
-		}
+	public boolean getIsInvulnerable() {
+		return super.getIsInvulnerable() || !this.isActive();
+	}
 
+	@Override
+	public void onUpdate() {
 		super.onUpdate();
 
 		if(!this.world.isRemote) {
