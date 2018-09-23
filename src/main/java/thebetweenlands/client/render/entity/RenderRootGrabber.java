@@ -32,12 +32,12 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 	public void renderRoots(EntityRootGrabber entity, double x, double y, double z, float yaw, float partialTicks) {
 		GlStateManager.pushMatrix();
 
+		GlStateManager.disableCull();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		GlStateManager.translate(x, y + 1, z);
-
 
 		for(RootPart part : entity.modelParts) {
 			GlStateManager.pushMatrix();
@@ -50,6 +50,10 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 			GlStateManager.rotate(part.pitch, 1, 0, 0);
 
 			GlStateManager.translate(0, entity.getRootYOffset(partialTicks), 0);
+
+			float animationTicks = entity.ticksExisted + partialTicks;
+			GlStateManager.rotate((float)Math.cos(animationTicks / 4) * 0.5F, 0, 0, 1);
+			GlStateManager.rotate((float)Math.sin(animationTicks / 5) * 0.8F, 1, 0, 0);
 
 			part.renderer.render();
 
@@ -80,6 +84,7 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 			GlStateManager.popMatrix();
 		}
 
+		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 	}
 
@@ -89,7 +94,7 @@ public class RenderRootGrabber extends Render<EntityRootGrabber> {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
 		GlStateManager.doPolygonOffset(-3.0F, -3.0F);
 		GlStateManager.enablePolygonOffset();
-		GlStateManager.alphaFunc(516, 0.1F);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.enableAlpha();
 	}
 
