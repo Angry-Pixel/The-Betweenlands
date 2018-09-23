@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -27,6 +28,7 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.world.gen.feature.tree.WorldGenSpiritTreeStructure;
 
 public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	public static final byte EVENT_ATTACKED = 2;
@@ -135,6 +137,9 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 		if(this.getIsInvulnerable()) {
+			return false;
+		}
+		if(source.getImmediateSource() instanceof IProjectile && source.getTrueSource() != null && source.getTrueSource().getDistance(this) >= WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + 12) {
 			return false;
 		}
 		EntityLivingBase attacker = source.getImmediateSource() instanceof EntityLivingBase ? (EntityLivingBase)source.getImmediateSource() : null;
