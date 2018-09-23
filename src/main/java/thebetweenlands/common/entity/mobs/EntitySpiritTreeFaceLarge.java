@@ -45,11 +45,12 @@ import thebetweenlands.common.world.storage.location.LocationSpiritTree;
 import thebetweenlands.util.BlockShapeUtils;
 
 public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
-	public static final byte EVENT_ATTACKED = 2;
 	public static final byte EVENT_BLOW_ATTACK = 40;
 
 	private static final DataParameter<Integer> BLOW_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
-
+	private static final DataParameter<Integer> ROTATING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> CRAWLING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
+	
 	private int blowTicks = 0;
 
 	private float rotatingWaveStart = 0;
@@ -87,6 +88,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 		super.entityInit();
 
 		this.dataManager.register(BLOW_STATE, 0);
+		this.dataManager.register(ROTATING_WAVE_STATE, 0);
+		this.dataManager.register(CRAWLING_WAVE_STATE, 0);
 	}
 
 	@Override
@@ -244,12 +247,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	public void onUpdate() {
 		super.onUpdate();
 
+		if(this.dataManager.get(BLOW_STATE) != 0 || this.dataManager.get(ROTATING_WAVE_STATE) != 0 || this.dataManager.get(CRAWLING_WAVE_STATE) != 0) {
+			this.setGlowTicks(20);
+		}
+		
 		if(!this.world.isRemote) {
 			if(this.blowTicks > 0) {
 				if(this.blowTicks > 20) {
 					this.dataManager.set(BLOW_STATE, 2);
 
-					if((this.ticksExisted - 1) % 15 == 0) {
+					if((this.blowTicks - 21) % 15 == 0) {
 						this.doBlowAttack();
 						this.world.setEntityState(this, EVENT_BLOW_ATTACK);
 					}
@@ -301,6 +308,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 				if(this.rotatingWaveTicks >= 3 * 20 * 3) {
 					this.rotatingWaveTicks = 0;
+					this.dataManager.set(ROTATING_WAVE_STATE, 0);
 				} else {
 					this.rotatingWaveTicks++;
 				}
@@ -345,6 +353,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 				if(this.crawlingWaveTicks >= ticksPerWave * 3) {
 					this.crawlingWaveTicks = 0;
+					this.dataManager.set(CRAWLING_WAVE_STATE, 0);
 				} else {
 					this.crawlingWaveTicks++;
 				}
@@ -424,6 +433,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 	public void startRotatingWaveAttack() {
 		this.rotatingWaveTicks = 1;
 		this.rotatingWaveStart = this.rand.nextFloat() * (float)Math.PI * 2;
+		this.dataManager.set(ROTATING_WAVE_STATE, 1);
 	}
 
 	public boolean isTargetInCrawlingWaveAttackRange(EntityLivingBase target) {
@@ -437,6 +447,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace {
 
 	public void startCrawlingWaveAttack() {
 		this.crawlingWaveTicks = 1;
+		this.dataManager.set(CRAWLING_WAVE_STATE, 1);
 	}
 
 	public boolean isTargetInGrabAttackRange(EntityLivingBase target) {

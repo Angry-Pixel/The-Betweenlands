@@ -29,14 +29,19 @@ import thebetweenlands.common.entity.projectiles.EntitySapSpit;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public abstract class EntitySpiritTreeFace extends EntityWallFace {
+	public static final byte EVENT_ATTACKED = 2;
 	public static final byte EVENT_DEATH = 3;
 	public static final byte EVENT_EMERGE_SOUND = 81;
 	public static final byte EVENT_HURT_SOUND = 82;
-	public static final byte EVENT_SPIT_SOUND = 83;
+	public static final byte EVENT_SPIT = 83;
 
 	protected int spitTicks = 0;
 
 	private boolean emergeSound = false;
+
+	protected int prevGlowTicks = 0;
+	protected int glowTicks = 0;
+	protected int glowDuration = 0;
 
 	public EntitySpiritTreeFace(World world) {
 		super(world);
@@ -46,6 +51,16 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(48.0D);
+	}
+
+	public void setGlowTicks(int duration) {
+		duration = Math.max(duration, 1);
+		this.glowTicks = duration;
+		this.glowDuration = duration;
+	}
+
+	public float getGlow(float partialTicks) {
+		return (this.prevGlowTicks + (this.glowTicks - this.prevGlowTicks) * partialTicks) / (float)this.glowDuration;
 	}
 
 	protected void playSpitSound() {
@@ -70,7 +85,15 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	public void handleStatusUpdate(byte id) {
 		super.handleStatusUpdate(id);
 
-		if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
+		if(id == EVENT_SPIT) {
+			if(this.glowTicks < 10) {
+				this.setGlowTicks(10);
+			}
+		} else if(id == EVENT_ATTACKED) {
+			if(this.glowTicks < 10) {
+				this.setGlowTicks(10);
+			}
+		} else if(id == EVENT_HURT_SOUND || id == EVENT_DEATH) {
 			SoundType soundType = SoundType.WOOD;
 			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getBreakSound(), SoundCategory.BLOCKS, (soundType.getVolume() + 1.0F) / 1.3F, soundType.getPitch() * 0.8F, false);
 			this.world.playSound(this.posX, this.posY, this.posZ, soundType.getHitSound(), SoundCategory.NEUTRAL, (soundType.getVolume() + 1.0F) / 4.0F, soundType.getPitch() * 0.5F, false);
@@ -133,6 +156,11 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 	public void onUpdate() {
 		super.onUpdate();
 
+		this.prevGlowTicks = this.glowTicks;
+		if(this.glowTicks > 0) {
+			this.glowTicks--;
+		}
+
 		if(!this.world.isRemote) {
 			float moveProgress = this.getMovementProgress(1);
 			if(moveProgress < 0.6F) {
@@ -147,7 +175,8 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 
 			if(this.spitTicks > 0) {
 				if(this.spitTicks == 1) {
-					this.world.setEntityState(this, EVENT_SPIT_SOUND);
+					this.world.setEntityState(this, EVENT_SPIT);
+					this.setGlowTicks(10);
 					this.playSpitSound();
 				}
 

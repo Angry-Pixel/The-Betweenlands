@@ -1,5 +1,7 @@
 package thebetweenlands.client.render.entity.layer;
 
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -31,9 +33,12 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 
 		float alpha = this.getAlpha();
 
+		GlStateManager.doPolygonOffset(0, -3.0F);
+		GlStateManager.enablePolygonOffset();
+		
 		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
-		GlStateManager.depthMask(!entity.isInvisible());
+		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
 
@@ -41,6 +46,7 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
+		GlStateManager.depthMask(!entity.isInvisible());
 		GlStateManager.color(alpha, alpha, alpha, alpha);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		int i = 61680;
@@ -56,6 +62,9 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		this.setLightmap(entity, partialTicks);
 		GlStateManager.depthMask(true);
 		GlStateManager.disableBlend();
+		
+		GlStateManager.doPolygonOffset(0.0F, 0.0F);
+		GlStateManager.disablePolygonOffset();
 	}
 
 	@Override

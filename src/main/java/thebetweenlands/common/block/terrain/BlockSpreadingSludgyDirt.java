@@ -102,6 +102,6 @@ public class BlockSpreadingSludgyDirt extends BlockSpreadingDeath {
 	@Override
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess iblockaccess, BlockPos pos, EnumFacing side) {
 		Block block = iblockaccess.getBlockState(pos.offset(side)).getBlock();
-		return block instanceof BlockSludgyDirt == false;
+		return block instanceof BlockSludgyDirt == false && block instanceof BlockSpreadingSludgyDirt == false;
 	}
 }
