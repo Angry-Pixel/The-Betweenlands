@@ -3,7 +3,8 @@
   "defaults": {
     "model": "thebetweenlands:thick_pane_post",
     "textures": {
-      "pane": "thebetweenlands:blocks/weedwood_planks"
+      "pane": "thebetweenlands:blocks/weedwood_planks",
+      "particle": "thebetweenlands:blocks/amate_paper_pane_1_ct_0"
     }
   },
   "variants": {
