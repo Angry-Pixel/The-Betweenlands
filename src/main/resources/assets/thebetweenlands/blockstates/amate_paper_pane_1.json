@@ -1,0 +1,435 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:thick_pane_post",
+    "textures": {
+      "pane": "thebetweenlands:blocks/weedwood_planks"
+    }
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": {
+          "post_north": {
+            "model": "thebetweenlands:thick_pane_post_north",
+            "textures": {
+              "pane": "thebetweenlands:blocks/weedwood_planks"
+             }
+          },
+          "side_north_east": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "east_up_south_index",
+                    "east_down_south_index",
+                    "east_down_north_index",
+                    "east_up_north_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.75, "y": 1.0, "z": 0.25, "u": 0.75, "v": 0 },
+                    { "x": 0.75, "y": 0.0, "z": 0.25, "u": 0.75, "v": 1 },
+                    { "x": 0.75, "y": 0.0, "z": 0.0, "u": 1, "v": 1 },
+                    { "x": 0.75, "y": 1.0, "z": 0.0, "u": 1, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          },
+          "side_north_south": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "west_up_north_index",
+                    "west_down_north_index",
+                    "west_down_south_index",
+                    "west_up_south_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.25, "y": 1.0, "z": 0.0, "u": 0, "v": 0 },
+                    { "x": 0.25, "y": 0.0, "z": 0.0, "u": 0, "v": 1 },
+                    { "x": 0.25, "y": 0.0, "z": 0.25, "u": 0.25, "v": 1 },
+                    { "x": 0.25, "y": 1.0, "z": 0.25, "u": 0.25, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_north": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "north_up_east_index",
+                    "north_down_east_index",
+                    "north_down_west_index",
+                    "north_up_west_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.75, "y": 1.0, "z": 0.25, "u": 0.25, "v": 0 },
+                    { "x": 0.75, "y": 0.0, "z": 0.25, "u": 0.25, "v": 1 },
+                    { "x": 0.25, "y": 0.0, "z": 0.25, "u": 0.75, "v": 1 },
+                    { "x": 0.25, "y": 1.0, "z": 0.25, "u": 0.75, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": {
+          "post_east": {
+            "model": "thebetweenlands:thick_pane_post_east",
+            "textures": {
+              "pane": "thebetweenlands:blocks/weedwood_planks"
+             }
+          },
+          "side_east_south": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "south_up_west_index",
+                    "south_down_west_index",
+                    "south_down_east_index",
+                    "south_up_east_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.75, "y": 1.0, "z": 0.75, "u": 0.75, "v": 0 },
+                    { "x": 0.75, "y": 0.0, "z": 0.75, "u": 0.75, "v": 1 },
+                    { "x": 1.0, "y": 0.0, "z": 0.75, "u": 1, "v": 1 },
+                    { "x": 1.0, "y": 1.0, "z": 0.75, "u": 1, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          },
+          "side_east_north": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "north_up_east_index",
+                    "north_down_east_index",
+                    "north_down_west_index",
+                    "north_up_west_index"
+                  ],
+                  "vertices": [
+                    { "x": 1.0, "y": 1.0, "z": 0.25, "u": 0.0, "v": 0 },
+                    { "x": 1.0, "y": 0.0, "z": 0.25, "u": 0.0, "v": 1 },
+                    { "x": 0.75, "y": 0.0, "z": 0.25, "u": 0.25, "v": 1 },
+                    { "x": 0.75, "y": 1.0, "z": 0.25, "u": 0.25, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_east": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "east_up_south_index",
+                    "east_down_south_index",
+                    "east_down_north_index",
+                    "east_up_north_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.75, "y": 1.0, "z": 0.75, "u": 0.25, "v": 0 },
+                    { "x": 0.75, "y": 0.0, "z": 0.75, "u": 0.25, "v": 1 },
+                    { "x": 0.75, "y": 0.0, "z": 0.25, "u": 0.75, "v": 1 },
+                    { "x": 0.75, "y": 1.0, "z": 0.25, "u": 0.75, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": {
+          "post_south": {
+            "model": "thebetweenlands:thick_pane_post_south",
+            "textures": {
+              "pane": "thebetweenlands:blocks/weedwood_planks"
+             }
+          },
+          "side_south_west": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "west_up_north_index",
+                    "west_down_north_index",
+                    "west_down_south_index",
+                    "west_up_south_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.25, "y": 1.0, "z": 0.75, "u": 0.75, "v": 0 },
+                    { "x": 0.25, "y": 0.0, "z": 0.75, "u": 0.75, "v": 1 },
+                    { "x": 0.25, "y": 0.0, "z": 1.0, "u": 1, "v": 1 },
+                    { "x": 0.25, "y": 1.0, "z": 1.0, "u": 1, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          },
+          "side_south_east": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "east_up_south_index",
+                    "east_down_south_index",
+                    "east_down_north_index",
+                    "east_up_north_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.75, "y": 1.0, "z": 1.0, "u": 0.0, "v": 0 },
+                    { "x": 0.75, "y": 0.0, "z": 1.0, "u": 0.0, "v": 1 },
+                    { "x": 0.75, "y": 0.0, "z": 0.75, "u": 0.25, "v": 1 },
+                    { "x": 0.75, "y": 1.0, "z": 0.75, "u": 0.25, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_south": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "south_up_west_index",
+                    "south_down_west_index",
+                    "south_down_east_index",
+                    "south_up_east_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.25, "y": 1.0, "z": 0.75, "u": 0.25, "v": 0 },
+                    { "x": 0.25, "y": 0.0, "z": 0.75, "u": 0.25, "v": 1 },
+                    { "x": 0.75, "y": 0.0, "z": 0.75, "u": 0.75, "v": 1 },
+                    { "x": 0.75, "y": 1.0, "z": 0.75, "u": 0.75, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": {
+          "post_west": {
+            "model": "thebetweenlands:thick_pane_post_west",
+            "textures": {
+              "pane": "thebetweenlands:blocks/weedwood_planks"
+             }
+          },
+          "side_west_north": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "north_up_east_index",
+                    "north_down_east_index",
+                    "north_down_west_index",
+                    "north_up_west_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.25, "y": 1.0, "z": 0.25, "u": 0.75, "v": 0 },
+                    { "x": 0.25, "y": 0.0, "z": 0.25, "u": 0.75, "v": 1 },
+                    { "x": 0.0, "y": 0.0, "z": 0.25, "u": 1.0, "v": 1 },
+                    { "x": 0.0, "y": 1.0, "z": 0.25, "u": 1.0, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          },
+          "side_west_south": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "south_up_west_index",
+                    "south_down_west_index",
+                    "south_down_east_index",
+                    "south_up_east_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.0, "y": 1.0, "z": 0.75, "u": 0.0, "v": 0 },
+                    { "x": 0.0, "y": 0.0, "z": 0.75, "u": 0.0, "v": 1 },
+                    { "x": 0.25, "y": 0.0, "z": 0.75, "u": 0.25, "v": 1 },
+                    { "x": 0.25, "y": 1.0, "z": 0.75, "u": 0.25, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "no_side_west": {
+            "model": "thebetweenlands:internal/connected_texture",
+            "custom": {
+              "particle_texture": "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+              "ambient_occlusion": true,
+              "connected_texture_faces": [
+                {
+                  "connected_textures": [
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_0",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_1",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_2",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_3",
+                    "thebetweenlands:blocks/amate_paper_pane_1_ct_4"
+                  ],
+                  "indices": [
+                    "west_up_north_index",
+                    "west_down_north_index",
+                    "west_down_south_index",
+                    "west_up_south_index"
+                  ],
+                  "vertices": [
+                    { "x": 0.25, "y": 1.0, "z": 0.25, "u": 0.25, "v": 0 },
+                    { "x": 0.25, "y": 0.0, "z": 0.25, "u": 0.25, "v": 1 },
+                    { "x": 0.25, "y": 0.0, "z": 0.75, "u": 0.75, "v": 1 },
+                    { "x": 0.25, "y": 1.0, "z": 0.75, "u": 0.75, "v": 0 }
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

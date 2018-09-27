@@ -31,6 +31,8 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.PerspectiveMapWrapper;
@@ -41,27 +43,41 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.util.QuadBuilder;
 
 public class ModelConnectedTexture implements IModel {
+	protected static class Vertex {
+		protected final Vec3d pos;
+		protected final Vec2f uv;
+
+		protected Vertex(double x, double y, double z, float u, float v) {
+			this.pos = new Vec3d(x, y, z);
+			this.uv = new Vec2f(u, v);
+		}
+
+		protected Vertex add(Vertex vertex) {
+			return new Vertex(this.pos.x + vertex.pos.x, this.pos.y + vertex.pos.y, this.pos.z + vertex.pos.z, this.uv.x + vertex.uv.x, this.uv.y + vertex.uv.y);
+		}
+
+		protected Vertex subtract(Vertex vertex) {
+			return new Vertex(this.pos.x - vertex.pos.x, this.pos.y - vertex.pos.y, this.pos.z - vertex.pos.z, this.uv.x - vertex.uv.x, this.uv.y - vertex.uv.y);
+		}
+
+		protected Vertex scale(float scale) {
+			return new Vertex(this.pos.x * scale, this.pos.y * scale, this.pos.z * scale, this.uv.x * scale, this.uv.y * scale);
+		}
+	}
+
 	protected static class ConnectedTextureQuad {
 		protected final ResourceLocation[] textures;
-		protected final String index0, index1, index2, index3;
-		protected final Vec3d p1, p2, p3, p4;
+		protected final String[] indices;
+		protected final Vertex[] verts;
 		protected final EnumFacing cullFace;
 		protected final int tintIndex;
+
 		protected final BakedQuad[][] quads;
 
-		protected ConnectedTextureQuad(ResourceLocation[] textures,
-				String index0, String index1, String index2, String index3,
-				Vec3d p1, Vec3d p2, Vec3d p3, Vec3d p4, EnumFacing cullFace,
-				int tintIndex) {
+		protected ConnectedTextureQuad(ResourceLocation[] textures, String[] indices, Vertex[] verts, EnumFacing cullFace, int tintIndex) {
 			this.textures = textures;
-			this.index0 = index0;
-			this.index1 = index1;
-			this.index2 = index2;
-			this.index3 = index3;
-			this.p1 = p1;
-			this.p2 = p2;
-			this.p3 = p3;
-			this.p4 = p4;
+			this.indices = indices;
+			this.verts = verts;
 			this.cullFace = cullFace;
 			this.tintIndex = tintIndex;
 			this.quads = new BakedQuad[4][this.textures.length];
@@ -72,54 +88,57 @@ public class ModelConnectedTexture implements IModel {
 		}
 
 		public void bake(Function<ResourceLocation, TextureAtlasSprite> bakedTextureGetter,
-						 Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms,
-						 VertexFormat format) {
-			Vec3d p12 = this.p1.add(this.p2).scale(0.5D);
-			Vec3d p23 = this.p2.add(this.p3).scale(0.5D);
-			Vec3d p34 = this.p3.add(this.p4).scale(0.5D);
-			Vec3d p14 = this.p4.add(this.p1).scale(0.5D);
-			Vec3d cp = p12.add(p34).scale(0.5D);
+				Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms,
+				VertexFormat format) {
+			Vertex d01 = this.verts[1].subtract(this.verts[0]);
+			Vertex d12 = this.verts[2].subtract(this.verts[1]);
+			Vertex d23 = this.verts[3].subtract(this.verts[2]);
+			Vertex d30 = this.verts[0].subtract(this.verts[3]);
+
+			float e01 = this.extrapolateClamp(this.verts[0].uv.y, this.verts[1].uv.y, 0.5F);
+			float e12 = this.extrapolateClamp(this.verts[1].uv.x, this.verts[2].uv.x, 0.5F);
+			float e23 = this.extrapolateClamp(this.verts[2].uv.y, this.verts[3].uv.y, 0.5F);
+			float e30 = this.extrapolateClamp(this.verts[3].uv.x, this.verts[0].uv.x, 0.5F);
+
+			Vertex p01 = this.verts[0].add(d01.scale(e01));
+			Vertex p12 = this.verts[1].add(d12.scale(e12));
+			Vertex p23 = this.verts[2].add(d23.scale(e23));
+			Vertex p30 = this.verts[3].add(d30.scale(e30));
+
+			Vertex d0123 = p23.subtract(p01);
+
+			float ecp = this.extrapolateClamp(this.verts[0].uv.x + (this.verts[1].uv.x - this.verts[0].uv.x) * e01, this.verts[2].uv.x + (this.verts[3].uv.x - this.verts[2].uv.x) * e23, 0.5F);
+
+			Vertex cp = p01.add(d0123.scale(ecp));
 
 			TextureAtlasSprite[] sprites = new TextureAtlasSprite[this.textures.length];
 			for(int i = 0; i < sprites.length; i++) {
 				sprites[i] = bakedTextureGetter.apply(this.textures[i]);
 			}
 
-			this.quads[0] = this.bakeTextureVariants(format, transformation, sprites, this.p1, p12, cp, p14, 0);
-			this.quads[1] = this.bakeTextureVariants(format, transformation, sprites, p12, this.p2, p23, cp, 2);
-			this.quads[2] = this.bakeTextureVariants(format, transformation, sprites, cp, p23, this.p3, p34, 3);
-			this.quads[3] = this.bakeTextureVariants(format, transformation, sprites, p14, cp, p34, this.p4, 1);
+			this.quads[0] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {this.verts[0], p01, cp, p30});
+			this.quads[1] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {p01, this.verts[1], p12, cp});
+			this.quads[2] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {cp, p12, this.verts[2], p23});
+			this.quads[3] = this.bakeTextureVariants(format, transformation, sprites, new Vertex[] {p30, cp, p23, this.verts[3]});
+		}
+
+		protected float extrapolateClamp(float v1, float v2, float v) {
+			float extrapolant = (v - v1) / (v2 - v1);
+			return MathHelper.clamp(extrapolant, 0, 1);
 		}
 
 		protected BakedQuad[] bakeTextureVariants(VertexFormat format, Optional<TRSRTransformation> transformation,
-				TextureAtlasSprite[] sprites, Vec3d p1, Vec3d p2, Vec3d p3, Vec3d p4, int quadrant) {
-			float umin = 0;
-			float vmin = 0;
-			float umax = 16;
-			float vmax = 16;
-			if(quadrant == 0) {
-				umin = 0; umax = 8;
-				vmin = 0; vmax = 8;
-			} else if(quadrant == 1) {
-				umin = 8; umax = 16;
-				vmin = 0; vmax = 8;
-			} else if(quadrant == 2) {
-				umin = 0; umax = 8;
-				vmin = 8; vmax = 16;
-			} else if(quadrant == 3) {
-				umin = 8; umax = 16;
-				vmin = 8; vmax = 16;
-			}
+				TextureAtlasSprite[] sprites, Vertex[] verts) {
 			QuadBuilder builder = new QuadBuilder(4 * this.textures.length, format);
 			if(transformation.isPresent()) {
 				builder.setTransformation(transformation.get());
 			}
 			for(int i = 0; i < sprites.length; i++) {
 				builder.setSprite(sprites[i]);
-				builder.addVertex(p1, umin, vmin);
-				builder.addVertex(p2, umin, vmax);
-				builder.addVertex(p3, umax, vmax);
-				builder.addVertex(p4, umax, vmin);
+				builder.addVertex(verts[0].pos, verts[0].uv.x * 16.0F, verts[0].uv.y * 16.0F);
+				builder.addVertex(verts[1].pos, verts[1].uv.x * 16.0F, verts[1].uv.y * 16.0F);
+				builder.addVertex(verts[2].pos, verts[2].uv.x * 16.0F, verts[2].uv.y * 16.0F);
+				builder.addVertex(verts[3].pos, verts[3].uv.x * 16.0F, verts[3].uv.y * 16.0F);
 			}
 			return builder.build(b -> b.setQuadTint(this.tintIndex)).nonCulledQuads.toArray(new BakedQuad[0]);
 		}
@@ -218,13 +237,13 @@ public class ModelConnectedTexture implements IModel {
 					for(Entry<IUnlistedProperty<?>, Optional<?>> entry : properties.entrySet()) {
 						String property = entry.getKey().getName();
 
-						if(tex.index0.equals(property)) {
+						if(tex.indices[0].equals(property)) {
 							indices[0] = (Integer) entry.getValue().get();
-						} else if(tex.index1.equals(property)) {
+						} else if(tex.indices[1].equals(property)) {
 							indices[1] = (Integer) entry.getValue().get();
-						} else if(tex.index2.equals(property)) {
+						} else if(tex.indices[2].equals(property)) {
 							indices[2] = (Integer) entry.getValue().get();
-						} else if(tex.index3.equals(property)) {
+						} else if(tex.indices[3].equals(property)) {
 							indices[3] = (Integer) entry.getValue().get();
 						}
 					}
@@ -302,11 +321,11 @@ public class ModelConnectedTexture implements IModel {
 				}
 
 				Preconditions.checkState(ctJson.has("vertices") && ctJson.get("vertices").isJsonArray() && ctJson.get("vertices").getAsJsonArray().size() == 4, "Connected texture face must provide 4 vertices");
-				Vec3d[] vertices = new Vec3d[4];
+				Vertex[] vertices = new Vertex[4];
 				JsonArray verticesArray = ctJson.get("vertices").getAsJsonArray();
 				for(int i = 0; i < 4; i++) {
 					JsonObject vertexJson = verticesArray.get(i).getAsJsonObject();
-					vertices[i] = new Vec3d(vertexJson.get("x").getAsDouble(), vertexJson.get("y").getAsDouble(), vertexJson.get("z").getAsDouble());
+					vertices[i] = new Vertex(vertexJson.get("x").getAsDouble(), vertexJson.get("y").getAsDouble(), vertexJson.get("z").getAsDouble(), vertexJson.get("u").getAsFloat(), vertexJson.get("v").getAsFloat());
 				}
 
 				Preconditions.checkState(ctJson.has("connected_textures") && ctJson.get("connected_textures").isJsonArray() && ctJson.get("connected_textures").getAsJsonArray().size() == 5, "Connected texture face must provide 5 textures");
@@ -326,8 +345,7 @@ public class ModelConnectedTexture implements IModel {
 					cullFace = EnumFacing.byName(ctJson.get("cullface").getAsString());
 				}
 
-				connectedTextures.add(new ConnectedTextureQuad(textures, indices[0], indices[1], indices[2], indices[3],
-						vertices[0], vertices[1], vertices[2], vertices[3], cullFace, tintIndex));
+				connectedTextures.add(new ConnectedTextureQuad(textures, indices, vertices, cullFace, tintIndex));
 			}
 		}
 

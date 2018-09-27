@@ -61,6 +61,7 @@ import thebetweenlands.common.block.farming.BlockDugDirt;
 import thebetweenlands.common.block.farming.BlockDugGrass;
 import thebetweenlands.common.block.farming.BlockFungusCrop;
 import thebetweenlands.common.block.farming.BlockMiddleFruitBush;
+import thebetweenlands.common.block.misc.BlockAmatePaperPane;
 import thebetweenlands.common.block.misc.BlockBouncyBetweenlands;
 import thebetweenlands.common.block.misc.BlockButtonBetweenlands;
 import thebetweenlands.common.block.misc.BlockDampTorch;
@@ -399,6 +400,7 @@ public class BlockRegistry {
     public static final Block SILT_GLASS = new BlockGlassBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block SILT_GLASS_PANE = new BlockPaneBetweenlands(Material.GLASS).setHardness(0.3F);
     public static final Block POLISHED_DENTROTHYST_PANE = new BlockDentrothystPane().setHardness(0.3F);
+    public static final Block AMATE_PAPER_PANE_1 = new BlockAmatePaperPane().setHardness(0.3F);
     public static final Block SMOOTH_PITSTONE_STAIRS = new BlockStairsBetweenlands(SMOOTH_PITSTONE.getDefaultState());
     public static final Block TAR_SOLID_STAIRS = new BlockStairsBetweenlands(TAR_SOLID.getDefaultState());
     public static final Block TEMPLE_BRICK_STAIRS = new BlockStairsBetweenlands(TEMPLE_BRICKS.getDefaultState());
