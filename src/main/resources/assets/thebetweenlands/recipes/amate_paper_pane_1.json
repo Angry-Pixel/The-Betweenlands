@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " s ",
+    "s#s",
+    " s "
+  ],
+  "key": {
+    "s": {
+      "item": "thebetweenlands:items_misc",
+      "data": 20
+    },
+    "#": {
+      "item": "thebetweenlands:items_misc",
+      "data": 32
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:amate_paper_pane_1"
+  }
+}

@@ -19,7 +19,17 @@ import net.minecraftforge.common.property.IUnlistedProperty;
 import thebetweenlands.common.block.property.PropertyIntegerUnlisted;
 
 public interface IConnectedTextureBlock {
-	public static interface IConnectionState {
+	public static interface IConnectionRules {
+		/**
+		 * Can be used to create a block access cache to speed up lookups
+		 * @param world
+		 * @param pos The position of the connected texture block
+		 * @return same as input world or some kind of cached block access
+		 */
+		public default IBlockAccess getBlockAccessCache(IBlockAccess world, BlockPos pos) {
+			return world;
+		}
+
 		/**
 		 * Returns whether the face can connect to the specified block pos
 		 * @param world
@@ -150,7 +160,7 @@ public interface IConnectedTextureBlock {
 	 * @return
 	 */
 	public default ExtendedBlockState getConnectedTextureBlockStateContainer(ExtendedBlockState container) {
-		List<IUnlistedProperty> props = new ArrayList<>();
+		List<IUnlistedProperty<?>> props = new ArrayList<>();
 		if(this.isFaceConnectedTexture(EnumFacing.UP)) {
 			props.add(TOP_NORTH_WEST_INDEX);
 			props.add(TOP_NORTH_EAST_INDEX);
@@ -198,7 +208,7 @@ public interface IConnectedTextureBlock {
 	public default boolean isFaceConnectedTexture(EnumFacing face) {
 		return true;
 	}
-	
+
 	/**
 	 * Updates and sets the state of the connected texture properties
 	 * @param state
@@ -209,7 +219,7 @@ public interface IConnectedTextureBlock {
 	 * @return
 	 */
 	public default IBlockState getExtendedConnectedTextureState(IExtendedBlockState state, IBlockAccess world, BlockPos pos, Predicate<MutableBlockPos> canConnectTo, boolean connectToSelf) {
-		IConnectionState connectionState = new IConnectionState() {
+		IConnectionRules connectionRules = new IConnectionRules() {
 			@Override
 			public boolean canConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
 				return canConnectTo.apply(to);
@@ -218,7 +228,7 @@ public interface IConnectedTextureBlock {
 			@Override
 			public boolean canConnectThrough(IBlockAccess world, BlockPos pos, EnumFacing face, MutableBlockPos to) {
 				if(connectToSelf) {
-					return IConnectionState.super.canConnectThrough(world, pos, face, to);
+					return IConnectionRules.super.canConnectThrough(world, pos, face, to);
 				}
 				Axis axis = face.getAxis();
 				if((axis == Axis.X && to.getX() - pos.getX() != 0) || (axis == Axis.Y && to.getY() - pos.getY() != 0) || (axis == Axis.Z && to.getZ() - pos.getZ() != 0)) {
@@ -229,7 +239,7 @@ public interface IConnectedTextureBlock {
 				return false;
 			}
 		};
-		return this.getExtendedConnectedTextureState(state, world, pos, connectionState);
+		return this.getExtendedConnectedTextureState(state, world, pos, connectionRules);
 	}
 
 	/**
@@ -237,12 +247,14 @@ public interface IConnectedTextureBlock {
 	 * @param oldState
 	 * @param world
 	 * @param pos
-	 * @param connectionState The connection state determines which blocks this block can connect to and which blocks let a connection through
+	 * @param connectionRules The connection rules determines which blocks this block can connect to and which blocks let a connection through
 	 * @return
 	 */
-	public default IBlockState getExtendedConnectedTextureState(IExtendedBlockState state, IBlockAccess world, BlockPos pos, IConnectionState connectionState) {
+	public default IBlockState getExtendedConnectedTextureState(IExtendedBlockState state, IBlockAccess world, BlockPos pos, IConnectionRules connectionRules) {
+		world = connectionRules.getBlockAccessCache(world, pos);
+
 		if(this.isFaceConnectedTexture(EnumFacing.UP)) {
-			int[] quadrantIndicesUp = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.UP, connectionState), false);
+			int[] quadrantIndicesUp = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.UP, connectionRules), false);
 			state = state.withProperty(TOP_NORTH_WEST_INDEX, quadrantIndicesUp[0]);
 			state = state.withProperty(TOP_NORTH_EAST_INDEX, quadrantIndicesUp[1]);
 			state = state.withProperty(TOP_SOUTH_WEST_INDEX, quadrantIndicesUp[2]);
@@ -250,7 +262,7 @@ public interface IConnectedTextureBlock {
 		}
 
 		if(this.isFaceConnectedTexture(EnumFacing.DOWN)) {
-			int[] quadrantIndicesDown = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.DOWN, connectionState), true);
+			int[] quadrantIndicesDown = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.DOWN, connectionRules), true);
 			state = state.withProperty(BOTTOM_NORTH_EAST_INDEX, quadrantIndicesDown[0]);
 			state = state.withProperty(BOTTOM_NORTH_WEST_INDEX, quadrantIndicesDown[1]);
 			state = state.withProperty(BOTTOM_SOUTH_EAST_INDEX, quadrantIndicesDown[2]);
@@ -258,7 +270,7 @@ public interface IConnectedTextureBlock {
 		}
 
 		if(this.isFaceConnectedTexture(EnumFacing.NORTH)) {
-			int[] quadrantIndicesNorth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.NORTH, connectionState), false);
+			int[] quadrantIndicesNorth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.NORTH, connectionRules), false);
 			state = state.withProperty(NORTH_UP_WEST_INDEX, quadrantIndicesNorth[0]);
 			state = state.withProperty(NORTH_UP_EAST_INDEX, quadrantIndicesNorth[1]);
 			state = state.withProperty(NORTH_DOWN_WEST_INDEX, quadrantIndicesNorth[2]);
@@ -266,7 +278,7 @@ public interface IConnectedTextureBlock {
 		}
 
 		if(this.isFaceConnectedTexture(EnumFacing.SOUTH)) {
-			int[] quadrantIndicesSouth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.SOUTH, connectionState), false);
+			int[] quadrantIndicesSouth = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.SOUTH, connectionRules), false);
 			state = state.withProperty(SOUTH_DOWN_WEST_INDEX, quadrantIndicesSouth[0]);
 			state = state.withProperty(SOUTH_DOWN_EAST_INDEX, quadrantIndicesSouth[1]);
 			state = state.withProperty(SOUTH_UP_WEST_INDEX, quadrantIndicesSouth[2]);
@@ -274,19 +286,19 @@ public interface IConnectedTextureBlock {
 		}
 
 		if(this.isFaceConnectedTexture(EnumFacing.WEST)) {
-			int[] quadrantIndicesWest = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.WEST, connectionState), false);
+			int[] quadrantIndicesWest = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.WEST, connectionRules), true);
 			state = state.withProperty(WEST_DOWN_NORTH_INDEX, quadrantIndicesWest[0]);
-			state = state.withProperty(WEST_DOWN_SOUTH_INDEX, quadrantIndicesWest[1]);
-			state = state.withProperty(WEST_UP_NORTH_INDEX, quadrantIndicesWest[2]);
+			state = state.withProperty(WEST_UP_NORTH_INDEX, quadrantIndicesWest[1]);
+			state = state.withProperty(WEST_DOWN_SOUTH_INDEX, quadrantIndicesWest[2]);
 			state = state.withProperty(WEST_UP_SOUTH_INDEX, quadrantIndicesWest[3]);
 		}
 
 		if(this.isFaceConnectedTexture(EnumFacing.EAST)) {
-			int[] quadrantIndicesEast = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.EAST, connectionState), false);
-			state = state.withProperty(EAST_DOWN_SOUTH_INDEX, quadrantIndicesEast[0]);
+			int[] quadrantIndicesEast = getQuadrantIndices(getConnectionArray(world, pos, EnumFacing.EAST, connectionRules), true);
+			state = state.withProperty(EAST_UP_NORTH_INDEX, quadrantIndicesEast[0]);
 			state = state.withProperty(EAST_DOWN_NORTH_INDEX, quadrantIndicesEast[1]);
 			state = state.withProperty(EAST_UP_SOUTH_INDEX, quadrantIndicesEast[2]);
-			state = state.withProperty(EAST_UP_NORTH_INDEX, quadrantIndicesEast[3]);
+			state = state.withProperty(EAST_DOWN_SOUTH_INDEX, quadrantIndicesEast[3]);
 		}
 
 		return state;
@@ -303,7 +315,7 @@ public interface IConnectedTextureBlock {
 	 *                                               | 3 4 5 |
 	 *                                               | 6 7 8 |
 	 *                                                ------- </pre>
-	 * @param flipXZ Flips the X and Z axis, used for DOWN face
+	 * @param flipXZ Flips the X and Z axis, used for EAST, WEST and DOWN face
 	 * @return <p>Returned index positions:
 	 * <pre>
 	 *  -------> 
@@ -396,7 +408,7 @@ public interface IConnectedTextureBlock {
 	 * @param canConnectThrough Returns whether this block can connect through the specified block pos;
 	 * @return Connection array
 	 */
-	public static boolean[] getConnectionArray(IBlockAccess world, BlockPos pos, EnumFacing dir, IConnectionState connectionState) {
+	public static boolean[] getConnectionArray(IBlockAccess world, BlockPos pos, EnumFacing dir, IConnectionRules connectionRules) {
 		int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
@@ -436,17 +448,17 @@ public interface IConnectedTextureBlock {
 					int my = (zr ? zo : (xr ? yo : zo)) + 1;
 					int blockIndex = getIndex(xp ? mx : 2 - mx, yp ? my : 2 - my, 3);
 
-					if(connectionState.canConnectThrough(world, pos, dir, checkPos.setPos(x + dir.getFrontOffsetX(), y + dir.getFrontOffsetY(), z + dir.getFrontOffsetZ()))) {
+					if(connectionRules.canConnectThrough(world, pos, dir, checkPos.setPos(x + dir.getFrontOffsetX(), y + dir.getFrontOffsetY(), z + dir.getFrontOffsetZ()))) {
 						Axis axis = dir.getAxis();
 						if((axis == Axis.X && (yo != 0 || zo != 0)) || (axis == Axis.Y && (xo != 0 || zo != 0)) || (axis == Axis.Z && (xo != 0 || yo != 0))) {
 							MutableBlockPos diagPos = checkPos.setPos(axis == Axis.X ? (x + dir.getFrontOffsetX()) : (x + xo), axis == Axis.Y ? (y + dir.getFrontOffsetY()) : (y + yo), axis == Axis.Z ? (z + dir.getFrontOffsetZ()) : (z + zo));
-							boolean isDiagConnectable = connectionState.canConnectTo(world, pos, dir, diagPos);
-							if(connectionState.canConnectThrough(world, pos, dir, diagPos) || isDiagConnectable) {
+							boolean isDiagConnectable = connectionRules.canConnectTo(world, pos, dir, diagPos);
+							if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, diagPos)) {
 								MutableBlockPos obstructionPos = checkPos.setPos(axis == Axis.X ? x : (x + xo), axis == Axis.Y ? y : (y + yo), axis == Axis.Z ? z : (z + zo));
-								if(isDiagConnectable || connectionState.canConnectThrough(world, pos, dir, obstructionPos)) {
+								if(isDiagConnectable || connectionRules.canConnectThrough(world, pos, dir, obstructionPos)) {
 									connectionArray[blockIndex] = true;
 								} else {
-									connectionArray[blockIndex] = connectionState.canConnectTo(world, pos, dir, checkPos.setPos(x + xo, y + yo, z + zo));
+									connectionArray[blockIndex] = connectionRules.canConnectTo(world, pos, dir, checkPos.setPos(x + xo, y + yo, z + zo));
 								}
 							}
 						}
