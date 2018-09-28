@@ -58,6 +58,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public static final byte EVENT_BLOW_ATTACK = 40;
 
 	protected static final UUID STRENGTH_MULTIPLIER_ATTRIBUTE_UUID = UUID.fromString("8a8dccae-273d-445d-b581-81d4a8a979a5");
+	protected static final UUID HEALTH_MULTIPLIER_ATTRIBUTE_UUID = UUID.fromString("e29b66a3-2ed2-4598-a44c-ed82a8f03eb2");
 
 	private static final DataParameter<Integer> BLOW_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> SPIT_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
@@ -75,10 +76,15 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	private float crawlingWaveAngle = 0;
 	private int crawlingWaveTicks = 0;
 
-	protected static final int SPIT_DELAY = 10;
-	protected static final int BLOW_DELAY = 30;
-	protected static final int ROTATING_WAVE_DELAY = 40;
-	protected static final int CRAWLING_WAVE_DELAY = 40;
+	protected static final int DEFAULT_SPIT_DELAY = 10;
+	protected static final int DEFAULT_BLOW_DELAY = 30;
+	protected static final int DEFAULT_ROTATING_WAVE_DELAY = 40;
+	protected static final int DEFAULT_CRAWLING_WAVE_DELAY = 40;
+
+	protected int spitDelay = DEFAULT_SPIT_DELAY;
+	protected int blowDelay = DEFAULT_BLOW_DELAY;
+	protected int rotatingWaveDelay = DEFAULT_ROTATING_WAVE_DELAY;
+	protected int crawlingWaveDelay = DEFAULT_CRAWLING_WAVE_DELAY;
 
 	public EntitySpiritTreeFaceLarge(World world) {
 		super(world);
@@ -201,6 +207,14 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	}
 
 	@Override
+	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(this.getWispStrengthModifier() > 1.0F) {
+			amount /= 1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F;
+		}
+		return super.attackEntityFrom(source, amount);
+	}
+
+	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 
@@ -291,18 +305,18 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			attackAttribute.applyModifier(new AttributeModifier(STRENGTH_MULTIPLIER_ATTRIBUTE_UUID, "Wisp strength modifier", this.getWispStrengthModifier() - 1.0F, 2));
 
 			if(this.blowTicks > 0) {
-				if(this.blowTicks > 20 + BLOW_DELAY) {
+				if(this.blowTicks > 20 + this.blowDelay) {
 					this.dataManager.set(BLOW_STATE, 3);
 
-					if((this.blowTicks - (21 + BLOW_DELAY)) % 15 == 0) {
+					if((this.blowTicks - (21 + this.blowDelay)) % 15 == 0) {
 						this.doBlowAttack();
 						this.world.setEntityState(this, EVENT_BLOW_ATTACK);
 						this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES, 1, 0.9F + this.rand.nextFloat() * 0.2F);
 					}
 				} else {
-					if(this.blowTicks > BLOW_DELAY) {
+					if(this.blowTicks > this.blowDelay) {
 						this.dataManager.set(BLOW_STATE, 2);
-						if(this.blowTicks == BLOW_DELAY + 1) {
+						if(this.blowTicks == this.blowDelay + 1) {
 							this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SUCK, 1, 1);
 						}
 					} else {
@@ -310,7 +324,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 					}
 				}
 
-				if(this.blowTicks > 160 + BLOW_DELAY) {
+				if(this.blowTicks > 160 + this.blowDelay) {
 					this.dataManager.set(BLOW_STATE, 0);
 					this.blowTicks = 0;
 				} else {
@@ -319,15 +333,15 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			}
 
 			if(this.rotatingWaveTicks > 0) {
-				if(this.rotatingWaveTicks > ROTATING_WAVE_DELAY) {
+				if(this.rotatingWaveTicks > this.rotatingWaveDelay) {
 					this.dataManager.set(ROTATING_WAVE_STATE, 2);
 
-					if((this.rotatingWaveTicks - 1 - ROTATING_WAVE_DELAY) % 3 == 0) {
+					if((this.rotatingWaveTicks - 1 - this.rotatingWaveDelay) % 3 == 0) {
 						for(int i = 0; i < 2; i++) {
 							double increment = Math.PI * 2 / 20;
 
-							double a1 = (this.rotatingWaveStart + (this.rotatingWaveTicks - ROTATING_WAVE_DELAY) / 3 * increment) * (i == 0 ? 1 : -1);
-							double a2 = (this.rotatingWaveStart + ((this.rotatingWaveTicks - ROTATING_WAVE_DELAY) / 3 + 1) * increment) * (i == 0 ? 1 : -1);
+							double a1 = (this.rotatingWaveStart + (this.rotatingWaveTicks - this.rotatingWaveDelay) / 3 * increment) * (i == 0 ? 1 : -1);
+							double a2 = (this.rotatingWaveStart + ((this.rotatingWaveTicks - this.rotatingWaveDelay) / 3 + 1) * increment) * (i == 0 ? 1 : -1);
 
 							double start = Math.min(a1, a2);
 							double end = Math.max(a1, a2);
@@ -359,7 +373,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 					this.dataManager.set(ROTATING_WAVE_STATE, 1);
 				}
 
-				if(this.rotatingWaveTicks >= 3 * 20 * 3 + ROTATING_WAVE_DELAY) {
+				if(this.rotatingWaveTicks >= 3 * 20 * 3 + this.rotatingWaveDelay) {
 					this.rotatingWaveTicks = 0;
 					this.dataManager.set(ROTATING_WAVE_STATE, 0);
 				} else {
@@ -370,16 +384,16 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 			if(this.crawlingWaveTicks > 0) {
 				final int ticksPerWave = CRAWLING_WAVE_RANGE / 3 * 4;
 
-				if(this.crawlingWaveTicks > CRAWLING_WAVE_DELAY) {
+				if(this.crawlingWaveTicks > this.crawlingWaveDelay) {
 					this.dataManager.set(CRAWLING_WAVE_STATE, 2);
 
 					if(this.getAttackTarget() != null) {
-						if((this.crawlingWaveTicks - 1 - CRAWLING_WAVE_DELAY) % ticksPerWave == 0) {
+						if((this.crawlingWaveTicks - 1 - this.crawlingWaveDelay) % ticksPerWave == 0) {
 							this.crawlingWaveAngle = (float) Math.atan2(this.getAttackTarget().posZ - this.posZ, this.getAttackTarget().posX - this.posX);
 						}
 
-						if((this.crawlingWaveTicks - 1 - CRAWLING_WAVE_DELAY) % 4 == 0) {
-							int dist = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + ((this.crawlingWaveTicks - 1 - CRAWLING_WAVE_DELAY) / 4 * 3) % CRAWLING_WAVE_RANGE;
+						if((this.crawlingWaveTicks - 1 - this.crawlingWaveDelay) % 4 == 0) {
+							int dist = WorldGenSpiritTreeStructure.RADIUS_OUTER_CIRCLE + ((this.crawlingWaveTicks - 1 - this.crawlingWaveDelay) / 4 * 3) % CRAWLING_WAVE_RANGE;
 
 							double a1 = this.crawlingWaveAngle - Math.PI / 16;
 							double a2 = this.crawlingWaveAngle + Math.PI / 16;
@@ -411,7 +425,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 					this.dataManager.set(CRAWLING_WAVE_STATE, 1);
 				}
 
-				if(this.crawlingWaveTicks >= ticksPerWave * 3 + CRAWLING_WAVE_DELAY) {
+				if(this.crawlingWaveTicks >= ticksPerWave * 3 + this.crawlingWaveDelay) {
 					this.crawlingWaveTicks = 0;
 					this.dataManager.set(CRAWLING_WAVE_STATE, 0);
 				} else {
@@ -493,6 +507,11 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	public void startBlowAttack() {
 		this.blowTicks = 1;
+		if(this.getWispStrengthModifier() > 1.0F) {
+			this.blowDelay = (int)(DEFAULT_BLOW_DELAY / (1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F));
+		} else {
+			this.blowDelay = DEFAULT_BLOW_DELAY;
+		}
 	}
 
 	public boolean isTargetInRotatingWaveAttackRange(EntityLivingBase target) {
@@ -507,6 +526,11 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public void startRotatingWaveAttack() {
 		this.rotatingWaveTicks = 1;
 		this.rotatingWaveStart = this.rand.nextFloat() * (float)Math.PI * 2;
+		if(this.getWispStrengthModifier() > 1.0F) {
+			this.rotatingWaveDelay = (int)(DEFAULT_ROTATING_WAVE_DELAY / (1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F));
+		} else {
+			this.rotatingWaveDelay = DEFAULT_ROTATING_WAVE_DELAY;
+		}
 		this.dataManager.set(ROTATING_WAVE_STATE, 1);
 	}
 
@@ -521,6 +545,11 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	public void startCrawlingWaveAttack() {
 		this.crawlingWaveTicks = 1;
+		if(this.getWispStrengthModifier() > 1.0F) {
+			this.crawlingWaveDelay = (int)(DEFAULT_CRAWLING_WAVE_DELAY / (1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F));
+		} else {
+			this.crawlingWaveDelay = DEFAULT_CRAWLING_WAVE_DELAY;
+		}
 		this.dataManager.set(CRAWLING_WAVE_STATE, 1);
 	}
 
@@ -565,18 +594,23 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	@Override
 	public void startSpit() {
 		super.startSpit();
+		if(this.getWispStrengthModifier() > 1.0F) {
+			this.spitDelay = (int)(DEFAULT_SPIT_DELAY / (1.0F + (this.getWispStrengthModifier() - 1.0F) * 2.0F));
+		} else {
+			this.spitDelay = DEFAULT_SPIT_DELAY;
+		}
 		this.dataManager.set(SPIT_STATE, 1);
 	}
 
 	@Override
 	protected void updateSpitAttack() {
-		if(this.spitTicks == SPIT_DELAY) {
+		if(this.spitTicks == this.spitDelay) {
 			this.world.setEntityState(this, EVENT_SPIT);
 			this.setGlowTicks(10);
 			this.playSpitSound();
 		}
 
-		if(this.spitTicks > 6 + SPIT_DELAY) {
+		if(this.spitTicks > 6 + this.spitDelay) {
 			this.doSpitAttack();
 			this.dataManager.set(SPIT_STATE, 0);
 			this.spitTicks = 0;
