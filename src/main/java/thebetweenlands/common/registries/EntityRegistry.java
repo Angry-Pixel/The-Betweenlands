@@ -10,6 +10,7 @@ import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySpikeWave;
+import thebetweenlands.common.entity.EntitySpiritTreeFaceMask;
 import thebetweenlands.common.entity.EntitySwordEnergy;
 import thebetweenlands.common.entity.mobs.*;
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
@@ -80,6 +81,7 @@ public class EntityRegistry {
 		registerEntity(EntitySapSpit.class, "sap_spit", 64, 20, true);
 		registerEntity(EntitySpikeWave.class, "spike_wave");
 		registerEntity(EntityRootGrabber.class, "root_grabber");
+		registerEntity(EntitySpiritTreeFaceMask.class, "spirit_tree_face_mask", 64, 20, false);
 	}
 
 	private static int id = 0;

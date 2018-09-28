@@ -1,10 +1,8 @@
-package thebetweenlands.client.render.model.entity;
+package thebetweenlands.client.render.model.armor;
 
-import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 
-public class ModelExplorersHat extends ModelBiped {
+public class ModelExplorersHat extends ModelBodyAttachment {
 	public ModelRenderer hatrim;
 
 	public ModelExplorersHat() {
@@ -39,23 +37,13 @@ public class ModelExplorersHat extends ModelBiped {
 		hatrim.addChild(rimjobfront);
 		hatrim.addChild(rimjobleft);
 		hatrim.addChild(rimjobright);
+
+		this.addAttachment(this.bipedHead, this.hatrim);
 	}
 
 	public void setRotateAngle(ModelRenderer modelRenderer, float x, float y, float z) {
 		modelRenderer.rotateAngleX = x;
 		modelRenderer.rotateAngleY = y;
 		modelRenderer.rotateAngleZ = z;
-	}
-
-	@Override
-	public void render(Entity entity, float speed, float swing, float ticksExisted, float yaw, float pitch, float scale) {
-		isSneak = entity.isSneaking();
-		setRotationAngles(speed, swing, ticksExisted, yaw, pitch, scale, entity);
-		hatrim.rotateAngleX = bipedHead.rotateAngleX;
-		hatrim.rotateAngleY = bipedHead.rotateAngleY;
-		hatrim.rotationPointX = bipedHead.rotationPointX;
-		hatrim.rotationPointY = bipedHead.rotationPointY;
-		hatrim.rotationPointZ = bipedHead.rotationPointZ;
-		hatrim.render(scale);
 	}
 }
