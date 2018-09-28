@@ -342,6 +342,8 @@ tile.thebetweenlands.nibbletwig_plank_slab.name=Nibbletwig Plank Slab
 tile.thebetweenlands.nibbletwig_plank_fence.name=Nibbletwig Plank Fence
 tile.thebetweenlands.nibbletwig_plank_fence_gate.name=Nibbletwig Plank Fence Gate
 tile.thebetweenlands.amate_paper_pane_1.name=Connected Amate Paper Pane
+tile.thebetweenlands.amate_paper_pane_2.name=Squared Amate Paper Pane
+tile.thebetweenlands.amate_paper_pane_3.name=Rounded Amate Paper Pane
 
 # Items
 

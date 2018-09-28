@@ -4,11 +4,11 @@
         "particle": "#pane"
     },
     "elements": [
-        {   "from": [ 0, 0, 4 ],
-            "to": [ 4, 16, 12 ],
+        {   "from": [ 0, 0, 6 ],
+            "to": [ 6, 16, 10 ],
             "faces": {
-                "down":  { "uv": [  0, 4,  4,  12 ], "texture": "#pane" },
-                "up":    { "uv": [  0, 4,  4,  12 ], "texture": "#pane" }
+                "down":  { "uv": [  0, 6,  6,  10 ], "texture": "#pane" },
+                "up":    { "uv": [  0, 6,  6,  10 ], "texture": "#pane" }
             }
         }
     ]
