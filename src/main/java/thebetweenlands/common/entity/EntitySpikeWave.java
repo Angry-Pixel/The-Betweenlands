@@ -45,6 +45,8 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 	@SideOnly(Side.CLIENT)
 	public Map<BlockPos, List<RootRenderer>> modelParts;
 
+	protected float attackDamage = 10.0F;
+	
 	public EntitySpikeWave(World world) {
 		super(world);
 		this.setSize(1, 1);
@@ -53,6 +55,10 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		if(world.isRemote) {
 			this.modelParts = new HashMap<>();
 		}
+	}
+	
+	public void setAttackDamage(float damage) {
+		this.attackDamage = damage;
 	}
 
 	public void addPosition(BlockPos pos) {
@@ -157,8 +163,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 				List<EntityLivingBase> entities = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 				for(EntityLivingBase entity : entities) {      
 					if (entity instanceof EntityLivingBase) {    
-						//TODO
-						entity.attackEntityFrom(damageSource, 10F);
+						entity.attackEntityFrom(damageSource, this.attackDamage);
 					}
 				}
 			}
@@ -268,6 +273,8 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		if(this.positions.isEmpty()) {
 			this.addPosition(this.origin);
 		}
+		
+		this.attackDamage = nbt.getFloat("attackDamage");
 	}
 
 	@Override
@@ -280,6 +287,8 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 			blocks.appendTag(new NBTTagLong(pos.toLong()));
 		}
 		nbt.setTag("positions", blocks);
+		
+		nbt.setFloat("attackDamage", this.attackDamage);
 	}
 
 	@Override

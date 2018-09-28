@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -17,6 +18,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -52,6 +55,8 @@ import thebetweenlands.util.BlockShapeUtils;
 
 public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements IEntityWithLootModifier {
 	public static final byte EVENT_BLOW_ATTACK = 40;
+
+	protected static final UUID STRENGTH_MULTIPLIER_ATTRIBUTE_UUID = UUID.fromString("8a8dccae-273d-445d-b581-81d4a8a979a5");
 
 	private static final DataParameter<Integer> BLOW_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> SPIT_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
@@ -279,6 +284,10 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				this.updateWispStrengthModifier();
 			}
 
+			IAttributeInstance attackAttribute = this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+			attackAttribute.removeModifier(STRENGTH_MULTIPLIER_ATTRIBUTE_UUID);
+			attackAttribute.applyModifier(new AttributeModifier(STRENGTH_MULTIPLIER_ATTRIBUTE_UUID, "Wisp strength modifier", this.getWispStrengthModifier() - 1.0F, 2));
+
 			if(this.blowTicks > 0) {
 				if(this.blowTicks > 20 + BLOW_DELAY) {
 					this.dataManager.set(BLOW_STATE, 3);
@@ -332,6 +341,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 							if(!spawnBlocks.isEmpty()) {
 								EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
 								spikeWave.delay = 2;
+								spikeWave.setAttackDamage(10.0F * this.getWispStrengthModifier());
 								for(BlockPos pos : spawnBlocks) {
 									spikeWave.addPosition(pos);
 								}
@@ -383,6 +393,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 							if(!spawnBlocks.isEmpty()) {
 								EntitySpikeWave spikeWave = new EntitySpikeWave(this.world);
 								spikeWave.delay = 2;
+								spikeWave.setAttackDamage(10.0F * this.getWispStrengthModifier());
 								for(BlockPos pos : spawnBlocks) {
 									spikeWave.addPosition(pos);
 								}
@@ -634,7 +645,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		@Override
 		public void updateTask() {
 			if(this.spawnCooldown <= 0) {
-				this.spawnCooldown = 180 + this.entity.rand.nextInt(100);
+				this.spawnCooldown = (int)((180 + this.entity.rand.nextInt(100)) / this.entity.getWispStrengthModifier());
 				List<BlockPos> blocks = this.entity.findSmallFacesBlocks();
 
 				if(!blocks.isEmpty()) {
@@ -685,7 +696,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		public boolean shouldExecute() {
 			if(this.entity.isActive() && !this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.isTargetInBlowRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
-					this.cooldown = 30 + this.entity.rand.nextInt(30);
+					this.cooldown = (int)((30 + this.entity.rand.nextInt(30)) / this.entity.getWispStrengthModifier());
 					return true;
 				}
 				this.cooldown--;
@@ -717,7 +728,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		public boolean shouldExecute() {
 			if(this.entity.isActive() && this.entity.rotatingWaveTicks == 0 && this.entity.getAttackTarget() != null && this.entity.isTargetInRotatingWaveAttackRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
-					this.cooldown = 60 + this.entity.rand.nextInt(80);
+					this.cooldown = (int)((60 + this.entity.rand.nextInt(80)) / this.entity.getWispStrengthModifier());
 					return true;
 				}
 				this.cooldown--;
@@ -749,7 +760,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		public boolean shouldExecute() {
 			if(this.entity.isActive() && this.entity.crawlingWaveTicks == 0 && this.entity.getAttackTarget() != null && this.entity.isTargetInCrawlingWaveAttackRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
-					this.cooldown = 60 + this.entity.rand.nextInt(80);
+					this.cooldown = (int)((60 + this.entity.rand.nextInt(80)) / this.entity.getWispStrengthModifier());
 					return true;
 				}
 				this.cooldown--;
@@ -781,7 +792,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		public boolean shouldExecute() {
 			if(this.entity.isActive() && !this.entity.isAttacking() && this.entity.getAttackTarget() != null && this.entity.getAttackTarget().onGround && this.entity.isTargetInGrabAttackRange(this.entity.getAttackTarget())) {
 				if(this.cooldown <= 0) {
-					this.cooldown = 60 + this.entity.rand.nextInt(80);
+					this.cooldown = (int)((60 + this.entity.rand.nextInt(80)) / this.entity.getWispStrengthModifier());
 					return true;
 				}
 				this.cooldown--;
