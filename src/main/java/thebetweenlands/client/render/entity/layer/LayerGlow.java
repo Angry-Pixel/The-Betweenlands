@@ -19,6 +19,7 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	public final RenderLivingBase<T> renderer;
 	public final ResourceLocation glowTexture;
 
+	private float r = 1.0F, g = 1.0F, b = 1.0F;
 	private float alpha = 1.0F;
 
 	public LayerGlow(RenderLivingBase<T> renderer, ResourceLocation glowTexture) {
@@ -40,14 +41,14 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, alpha);
+		GlStateManager.color(this.getRed(), this.getGreen(), this.getBlue(), alpha);
 
 		mainModel.setLivingAnimations(entity, limbSwing, limbSwingAmount, partialTicks);
 		mainModel.setRotationAngles(limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale, entity);
 		mainModel.render(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch, scale);
 
 		GlStateManager.depthMask(!entity.isInvisible());
-		GlStateManager.color(alpha, alpha, alpha, alpha);
+		GlStateManager.color(this.getRed() * alpha, this.getGreen() * alpha, this.getBlue() * alpha, alpha);
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 		int i = 61680;
 		int j = i % 65536;
@@ -62,6 +63,7 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 		this.setLightmap(entity, partialTicks);
 		GlStateManager.depthMask(true);
 		GlStateManager.disableBlend();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		
 		GlStateManager.doPolygonOffset(0.0F, 0.0F);
 		GlStateManager.disablePolygonOffset();
@@ -100,5 +102,30 @@ public class LayerGlow<T extends EntityLivingBase> implements LayerRenderer<T> {
 	 */
 	public float getAlpha() {
 		return this.alpha;
+	}
+	
+	public LayerGlow<T> setColor(float r, float g, float b) {
+		this.r = r;
+		this.g = g;
+		this.b = b;
+		return this;
+	}
+	
+	public LayerGlow<T> setColor(float r, float g, float b, float a) {
+		this.setColor(r, g, b);
+		this.setAlpha(a);
+		return this;
+	}
+	
+	public float getRed() {
+		return this.r;
+	}
+	
+	public float getGreen() {
+		return this.g;
+	}
+	
+	public float getBlue() {
+		return this.b;
 	}
 }

@@ -63,6 +63,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	private static final DataParameter<Integer> SPIT_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> ROTATING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
 	private static final DataParameter<Integer> CRAWLING_WAVE_STATE = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.VARINT);
+	private static final DataParameter<Float> WISP_STRENGTH_MODIFIER = EntityDataManager.createKey(EntitySpiritTreeFaceLarge.class, DataSerializers.FLOAT);
 
 	private int blowTicks = 0;
 
@@ -73,8 +74,6 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 	private float crawlingWaveAngle = 0;
 	private int crawlingWaveTicks = 0;
-
-	protected float wispStrengthModifier = 1.0F;
 
 	protected static final int SPIT_DELAY = 10;
 	protected static final int BLOW_DELAY = 30;
@@ -111,6 +110,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 		this.dataManager.register(SPIT_STATE, 0);
 		this.dataManager.register(ROTATING_WAVE_STATE, 0);
 		this.dataManager.register(CRAWLING_WAVE_STATE, 0);
+		this.dataManager.register(WISP_STRENGTH_MODIFIER, 1.0F);
 	}
 
 	@Override
@@ -132,7 +132,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	@Override
 	public Map<String, Float> getLootModifiers(@Nullable LootContext context, boolean isEntityProperty) {
 		ImmutableMap.Builder<String, Float> builder = ImmutableMap.builder();
-		builder.put("strength", this.wispStrengthModifier);
+		builder.put("strength", this.dataManager.get(WISP_STRENGTH_MODIFIER));
 		return builder.build();
 	}
 
@@ -439,14 +439,14 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		super.writeEntityToNBT(nbt);
 
-		nbt.setFloat("wispStrengthModifier", this.wispStrengthModifier);
+		nbt.setFloat("wispStrengthModifier", this.dataManager.get(WISP_STRENGTH_MODIFIER));
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		super.readEntityFromNBT(nbt);
 
-		this.wispStrengthModifier = nbt.getFloat("wispStrengthModifier");
+		this.dataManager.set(WISP_STRENGTH_MODIFIER, nbt.getFloat("wispStrengthModifier"));
 	}
 
 	@Nullable
@@ -602,12 +602,12 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 
 			float decay = (float) Math.pow(this.getHealth() / this.getMaxHealth(), 6) * 0.33F;
 
-			this.wispStrengthModifier = decay * newModifier + (1 - decay) * this.wispStrengthModifier;
+			this.dataManager.set(WISP_STRENGTH_MODIFIER, decay * newModifier + (1 - decay) * this.dataManager.get(WISP_STRENGTH_MODIFIER));
 		}
 	}
 
 	public float getWispStrengthModifier() {
-		return this.wispStrengthModifier;
+		return this.dataManager.get(WISP_STRENGTH_MODIFIER);
 	}
 
 	public static class AIRespawnSmallFaces extends EntityAIBase {
