@@ -189,7 +189,8 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 				double my = 0.1D + this.rand.nextDouble() * 0.4F;
 				double mz = (this.rand.nextDouble() - 0.5D) * 0.8F;
 
-				BLParticles.ROOT_SPIKE.spawn(this.world, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
+				ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(this.world, x, y, z, ParticleArgs.get().withMotion(mx, my, mz));
+				particle.setUseSound(this.rand.nextInt(40) == 0);
 			}
 
 			for(BlockPos pos : this.positions) {

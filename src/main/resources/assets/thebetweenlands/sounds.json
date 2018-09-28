@@ -578,6 +578,21 @@
       "thebetweenlands:spirit_tree_face_small_emerge"
     ]
   },
+  "spirit_tree_face_suck": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_suck"
+    ]
+  },
+  "spirit_tree_face_spit_root_spikes": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_face_spit_root_spikes"
+    ]
+  },
+  "root_spike_particle_hit": {
+    "sounds": [
+      "thebetweenlands:root_spike_particle_hit"
+    ]
+  },
   "sorry": {
     "sounds": [
       "thebetweenlands:sorry"

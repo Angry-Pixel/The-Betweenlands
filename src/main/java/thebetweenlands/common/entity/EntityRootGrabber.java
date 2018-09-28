@@ -258,7 +258,8 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			double mx = (this.rand.nextDouble() - 0.5D) * 0.2D;
 			double my = (this.rand.nextDouble() - 0.5D) * 0.2D + 0.4D;
 			double mz = (this.rand.nextDouble() - 0.5D) * 0.2D;
-			BLParticles.ROOT_SPIKE.spawn(this.world, this.posX + dx, this.posY + dy, this.posZ + dz, ParticleArgs.get().withMotion(mx, my, mz).withScale(0.4F));
+			ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(this.world, this.posX + dx, this.posY + dy, this.posZ + dz, ParticleArgs.get().withMotion(mx, my, mz).withScale(0.4F));
+			particle.setUseSound(this.rand.nextInt(3) == 0);
 		}
 	}
 

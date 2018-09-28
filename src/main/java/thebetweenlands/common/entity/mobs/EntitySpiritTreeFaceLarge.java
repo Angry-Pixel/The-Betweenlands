@@ -40,6 +40,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityWithLootModifier;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.common.entity.EntityRootGrabber;
 import thebetweenlands.common.entity.EntitySpikeWave;
 import thebetweenlands.common.entity.ai.EntityAIHurtByTargetImproved;
@@ -73,7 +74,7 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 	private float crawlingWaveAngle = 0;
 	private int crawlingWaveTicks = 0;
 
-	protected float wispStrengthModifier = 1.0F; //TODO Implement in attacks etc
+	protected float wispStrengthModifier = 1.0F;
 
 	protected static final int SPIT_DELAY = 10;
 	protected static final int BLOW_DELAY = 30;
@@ -183,7 +184,8 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 				float rz = rnd.nextFloat() * 6.0F - 3.0F + this.getFacing().getFrontOffsetZ() * 2;
 				Vec3d vec = new Vec3d(rx, ry, rz);
 				vec = vec.normalize();
-				BLParticles.ROOT_SPIKE.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.45F, vec.y * 0.45F + 0.2F, vec.z * 0.45F));
+				ParticleRootSpike particle = (ParticleRootSpike) BLParticles.ROOT_SPIKE.spawn(world, frontCenter.x, frontCenter.y - 0.25D, frontCenter.z, ParticleArgs.get().withMotion(vec.x * 0.45F, vec.y * 0.45F + 0.2F, vec.z * 0.45F));
+				particle.setUseSound(this.rand.nextInt(15) == 0);
 			}
 			frontCenter = this.getFrontCenter();
 			for(int i = 0; i < 32; i++) {
@@ -295,10 +297,14 @@ public class EntitySpiritTreeFaceLarge extends EntitySpiritTreeFace implements I
 					if((this.blowTicks - (21 + BLOW_DELAY)) % 15 == 0) {
 						this.doBlowAttack();
 						this.world.setEntityState(this, EVENT_BLOW_ATTACK);
+						this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES, 1, 0.9F + this.rand.nextFloat() * 0.2F);
 					}
 				} else {
 					if(this.blowTicks > BLOW_DELAY) {
 						this.dataManager.set(BLOW_STATE, 2);
+						if(this.blowTicks == BLOW_DELAY + 1) {
+							this.playSound(SoundRegistry.SPIRIT_TREE_FACE_SUCK, 1, 1);
+						}
 					} else {
 						this.dataManager.set(BLOW_STATE, 1);
 					}

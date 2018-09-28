@@ -23,11 +23,13 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.util.QuadBuilder;
 import thebetweenlands.util.StalactiteHelper;
 
@@ -43,6 +45,8 @@ public class ParticleRootSpike extends Particle {
 
 	private double prevMotionX, prevMotionY, prevMotionZ;
 
+	private boolean sound = false;
+	
 	protected ParticleRootSpike(World worldIn, double posXIn, double posYIn, double posZIn, double xSpeedIn, double ySpeedIn, double zSpeedIn, int length, float width, float scale, long seed) {
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.prevMotionX = this.motionX = xSpeedIn;
@@ -56,6 +60,10 @@ public class ParticleRootSpike extends Particle {
 		this.particleMaxAge = 20 * 3;
 	}
 
+	public void setUseSound(boolean sound) {
+		this.sound = sound;
+	}
+	
 	@Override
 	public int getFXLayer() {
 		return 3;
@@ -73,6 +81,11 @@ public class ParticleRootSpike extends Particle {
 			this.motionX *= 0.01F;
 			this.motionY *= 0.01F;
 			this.motionZ *= 0.01F;
+			
+			if(this.sound) {
+				this.sound = false;
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.ROOT_SPIKE_PARTICLE_HIT, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+			}
 		}
 	}
 
