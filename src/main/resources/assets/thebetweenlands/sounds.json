@@ -588,6 +588,21 @@
       "thebetweenlands:spirit_tree_face_spit_root_spikes"
     ]
   },
+  "spirit_tree_spikes": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_spikes"
+    ]
+  },
+  "spirit_tree_spike_trap": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_spikes"
+    ]
+  },
+  "spirit_tree_spike_trap_emerge": {
+    "sounds": [
+      "thebetweenlands:spirit_tree_spike_trap_emerge"
+    ]
+  },
   "root_spike_particle_hit": {
     "sounds": [
       "thebetweenlands:root_spike_particle_hit"

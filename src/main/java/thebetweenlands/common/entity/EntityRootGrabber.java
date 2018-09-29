@@ -35,6 +35,7 @@ import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike.RootRenderer;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnData {
 	public static final DataParameter<Float> DAMAGE = EntityDataManager.createKey(EntityRootGrabber.class, DataSerializers.FLOAT);
@@ -54,6 +55,9 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 	protected int prevRetractTicks = 0;
 	protected int retractTicks = 0;
 
+	protected boolean emergeSound = true;
+	protected boolean retractSound = true;
+	
 	@Nullable
 	protected EntityLivingBase grabbedEntity = null;
 
@@ -193,6 +197,7 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 					}
 				} else {
 					this.spawnExtendParticles();
+					this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
 				}
 			}
 
@@ -225,8 +230,18 @@ public class EntityRootGrabber extends Entity implements IEntityAdditionalSpawnD
 			}
 		}
 
-		if(this.world.isRemote && (this.attackTicks <= 5 || this.dataManager.get(RETRACT))) {
+		boolean retracting = this.dataManager.get(RETRACT);
+		
+		if(this.world.isRemote && (this.attackTicks <= 5 || retracting)) {
 			this.spawnBlockDust();
+			if(this.emergeSound && !retracting) {
+				this.emergeSound = false;
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+			}
+			if(this.retractSound && retracting) {
+				this.retractSound = false;
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKE_TRAP_EMERGE, SoundCategory.HOSTILE, 1, 0.9F + this.rand.nextFloat() * 0.2F, false);
+			}
 		}
 
 		this.attackTicks++;

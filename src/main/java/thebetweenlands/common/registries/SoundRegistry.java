@@ -132,6 +132,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SPIRIT_TREE_FACE_LARGE_EMERGE = reg("spirit_tree_face_large_emerge");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SUCK = reg("spirit_tree_face_suck");
     public static final BLSoundEvent SPIRIT_TREE_FACE_SPIT_ROOT_SPIKES = reg("spirit_tree_face_spit_root_spikes");
+    public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP = reg("spirit_tree_spike_trap");
+    public static final BLSoundEvent SPIRIT_TREE_SPIKE_TRAP_EMERGE = reg("spirit_tree_spike_trap_emerge");
+    public static final BLSoundEvent SPIRIT_TREE_SPIKES = reg("spirit_tree_spikes");
     public static final BLSoundEvent ROOT_SPIKE_PARTICLE_HIT = reg("root_spike_particle_hit");
     // Passives
     public static final BLSoundEvent DRAGONFLY = reg("dragonfly");

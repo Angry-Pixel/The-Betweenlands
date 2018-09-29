@@ -19,6 +19,7 @@ import net.minecraft.nbt.NBTTagLong;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -32,6 +33,7 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike;
 import thebetweenlands.client.render.particle.entity.ParticleRootSpike.RootRenderer;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnData {
 	protected List<BlockPos> positions = new ArrayList<>();
@@ -131,6 +133,7 @@ public class EntitySpikeWave extends Entity implements IEntityAdditionalSpawnDat
 		if(this.ticksExisted >= this.delay) {
 			if(this.world.isRemote && this.ticksExisted == this.delay) {
 				this.spawnEmergeParticles();
+				this.world.playSound(this.posX, this.posY, this.posZ, SoundRegistry.SPIRIT_TREE_SPIKES, SoundCategory.HOSTILE, 0.7F, 0.9F + this.rand.nextFloat() * 0.2F, false);
 			}
 			if(this.ticksExisted == this.delay && this.motionY <= 0.0D) {
 				this.motionY += 0.25D;
