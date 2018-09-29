@@ -48,7 +48,7 @@ public class PestleAndMortarRecipe implements IPestleAndMortarRecipe {
             if (recipe.matchesOutput(output))
                 return recipe.getInputs();
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     public static List<IPestleAndMortarRecipe> getRecipes() {

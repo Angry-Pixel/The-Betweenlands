@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.item.ItemStack;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.herblore.aspect.AspectManager;
@@ -130,6 +131,9 @@ public class AspectRegistry {
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_GREEN_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.UNCOMMON, AspectGroup.GEM_FERGALAZ, 1.75F, 0.25F);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_CRIMSON_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 	AspectTier.UNCOMMON, AspectGroup.GEM_FIRNALAZ, 1.75F, 0.25F);
 		AspectManager.addStaticAspectsToItem(EnumItemCrushed.GROUND_AQUA_MIDDLE_GEM.create(1), DefaultItemStackMatchers.ITEM_DAMAGE, 		AspectTier.UNCOMMON, AspectGroup.GEM_BYRGINAZ, 1.75F, 0.25F);
+	
+		//Spirit Fruit
+		AspectManager.addStaticAspectsToItem(new ItemStack(ItemRegistry.SPIRIT_FRUIT), DefaultItemStackMatchers.ITEM_DAMAGE, 				AspectTier.UNCOMMON, AspectGroup.SPIRIT_FRUIT, 1.0F, 0.1F, 2);
 	}
 
 	private static void registerAspects() {
@@ -152,5 +156,9 @@ public class AspectRegistry {
 		AspectManager.registerAspect(AspectRegistry.BYRGINAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_BYRGINAZ, Amounts.MEDIUM);
 		AspectManager.registerAspect(AspectRegistry.FERGALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FERGALAZ, Amounts.MEDIUM);
 		AspectManager.registerAspect(AspectRegistry.FIRNALAZ, 	AspectTier.UNCOMMON, 	AspectGroup.GEM_FIRNALAZ, Amounts.MEDIUM);
+		
+		//Spirit Fruit
+		AspectManager.registerAspect(AspectRegistry.YEOWYNN, 	AspectTier.UNCOMMON, 	AspectGroup.SPIRIT_FRUIT, Amounts.HIGH);
+		AspectManager.registerAspect(AspectRegistry.ORDANIIS, 	AspectTier.UNCOMMON, 	AspectGroup.SPIRIT_FRUIT, Amounts.HIGH);
 	}
 }

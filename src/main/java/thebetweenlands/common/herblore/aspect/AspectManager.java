@@ -37,7 +37,7 @@ public class AspectManager {
 	}
 
 	public static enum AspectGroup {
-		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3);
+		HERB(0), GEM_BYRGINAZ(1), GEM_FIRNALAZ(2), GEM_FERGALAZ(3), SPIRIT_FRUIT(4);
 
 		public final int id;
 
@@ -438,8 +438,21 @@ public class AspectManager {
 		possibleAspects.clear();
 		for(AspectItemEntry itemEntry : itemEntries) {
 			for(AspectEntry availableAspect : availableAspects) {
-				if(itemEntry.matchEntry(availableAspect) && !possibleAspects.contains(availableAspect) && (takenAspects == null || !takenAspects.contains(availableAspect))) {
-					possibleAspects.add(availableAspect);
+				if(itemEntry.matchEntry(availableAspect) && !possibleAspects.contains(availableAspect)) {
+					if(takenAspects == null) {
+						possibleAspects.add(availableAspect);
+					} else {
+						boolean isTaken = false;
+						for(Aspect takenAspect : takenAspects) {
+							if(takenAspect.type == availableAspect.aspect) {
+								isTaken = true;
+								break;
+							}
+						}
+						if(!isTaken) {
+							possibleAspects.add(availableAspect);
+						}
+					}
 				}
 			}
 		}
@@ -489,13 +502,13 @@ public class AspectManager {
 	}
 
 	/**
-	 * Returns a list of all discovered aspects on an item. If you specify a player
-	 * this will only return the aspects that the player has discovered.
-	 * If the player is null this will return all aspects on an item.
+	 * Returns a list of all discovered aspects on an item. If you specify a discovery container
+	 * this will only return the discovered aspects in the discovery container.
+	 * If the discovery container is null this will return all static aspects on an item.
 	 * @param item
 	 * @return
 	 */
-	public List<Aspect> getDiscoveredAspects(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
+	public List<Aspect> getDiscoveredStaticAspects(AspectItem item, @Nullable DiscoveryContainer<?> discoveryContainer) {
 		List<Aspect> aspects = new ArrayList<Aspect>();
 		if(discoveryContainer == null) {
 			aspects.addAll(this.getStaticAspects(item));
@@ -506,15 +519,15 @@ public class AspectManager {
 	}
 
 	/**
-	 * Returns a list of all discovered aspect types on an item. If you specify a player
-	 * this will only return the aspect types that the player has discovered.
-	 * If the player is null this will return all aspect types on an item.
+	 * Returns a list of all discovered aspect types on an item. If you specify a discovery container
+	 * this will only return the discovered aspect types in the discovery container.
+	 * If the discovery container is null this will return all static aspect types on an item.
 	 * @param item
 	 * @return
 	 */
 	public List<IAspectType> getDiscoveredAspectTypes(AspectItem item, DiscoveryContainer<?> discoveryContainer) {
 		List<IAspectType> aspects = new ArrayList<IAspectType>();
-		for(Aspect aspect : this.getDiscoveredAspects(item, discoveryContainer)) {
+		for(Aspect aspect : this.getDiscoveredStaticAspects(item, discoveryContainer)) {
 			aspects.add(aspect.type);
 		}
 		return aspects;
