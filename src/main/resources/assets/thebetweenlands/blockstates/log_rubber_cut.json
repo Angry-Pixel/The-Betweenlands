@@ -1,0 +1,113 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:log_rubber_center",
+    "textures": {
+      "particle": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "bark": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "top": "thebetweenlands:blocks/log_rubber_top_cut",
+      "north": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "south": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "east": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "west": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "up": "thebetweenlands:blocks/log_rubber_stump_cut",
+      "down": "thebetweenlands:blocks/log_rubber_stump_cut"
+    }
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": "thebetweenlands:log_rubber_connection",
+        "x": 90,
+        "uvlock": "false"
+      },
+      "false": { }
+    },
+    "east": {
+      "true": {
+        "submodel": "thebetweenlands:log_rubber_connection",
+        "x": 90,
+        "y": 90,
+        "uvlock": "false"
+      },
+      "false": { }
+    },
+    "south": {
+      "true": {
+        "submodel": "thebetweenlands:log_rubber_connection",
+        "x": 90,
+        "y": 180,
+        "uvlock": "false"
+      },
+      "false": { }
+    },
+    "west": {
+      "true": {
+        "submodel": "thebetweenlands:log_rubber_connection",
+        "x": 90,
+        "y": 270,
+        "uvlock": "false"
+      },
+      "false": { }
+    },
+    "up": {
+      "true": {
+        "submodel": "thebetweenlands:log_rubber_connection",
+        "uvlock": "false"
+      },
+      "false": { }
+    },
+    "down": {
+      "true": {
+        "submodel": "thebetweenlands:log_rubber_connection",
+        "x": 180,
+        "uvlock": "false"
+      },
+      "false": { }
+    },
+    "down=false,east=true,north=false,south=false,up=false,west=false": {
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "west": "thebetweenlands:blocks/log_rubber_top_cut"
+      }
+    },
+    "down=false,east=false,north=false,south=false,up=false,west=true": {
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "east": "thebetweenlands:blocks/log_rubber_top_cut"
+      }
+    },
+    "down=false,east=false,north=true,south=false,up=false,west=false": {
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "south": "thebetweenlands:blocks/log_rubber_top_cut"
+      }
+    },
+    "down=false,east=false,north=false,south=true,up=false,west=false": {
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "north": "thebetweenlands:blocks/log_rubber_top_cut"
+      }
+    },
+    "down=true,east=false,north=false,south=false,up=false,west=false": {
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "up": "thebetweenlands:blocks/log_rubber_top_cut"
+      }
+    },
+    "down=false,east=false,north=false,south=false,up=true,west=false": {
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "down": "thebetweenlands:blocks/log_rubber_top_cut"
+      }
+    },
+    "inventory": { 
+      "model": "thebetweenlands:log_rubber_center",
+      "textures": {
+        "up": "thebetweenlands:blocks/log_rubber_top",
+        "down": "thebetweenlands:blocks/log_rubber_top"
+      },
+      "transform": "forge:default-block"
+    }
+  }
+}

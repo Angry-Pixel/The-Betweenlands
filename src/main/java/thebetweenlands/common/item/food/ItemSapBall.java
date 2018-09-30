@@ -1,5 +1,6 @@
 package thebetweenlands.common.item.food;
 
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import thebetweenlands.api.item.IDecayFood;
 
@@ -15,7 +16,7 @@ public class ItemSapBall extends ItemBLFood implements IDecayFood {
 	}
 
 	@Override
-	public boolean canGetSickOf(ItemStack stack) {
+	public boolean canGetSickOf(EntityPlayer player, ItemStack stack) {
 		return false;
 	}
 }

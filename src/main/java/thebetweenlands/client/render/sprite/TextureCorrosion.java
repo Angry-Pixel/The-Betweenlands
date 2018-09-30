@@ -3,7 +3,6 @@ package thebetweenlands.client.render.sprite;
 import java.awt.image.BufferedImage;
 import java.io.Closeable;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -26,7 +25,6 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.data.AnimationFrame;
 import net.minecraft.client.resources.data.AnimationMetadataSection;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.common.lib.ModInfo;
 
@@ -39,9 +37,6 @@ public class TextureCorrosion extends TextureAtlasSprite {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 	private static final Random RANDOM = new Random(0);
-
-	private static final Field f_frameCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "frameCounter", "field_110973_g", "h");
-	private static final Field f_tickCounter = ReflectionHelper.findField(TextureAtlasSprite.class, "tickCounter", "field_110983_h", "i");
 
 	private static int[] corrosionPixels;
 	private static int corrosionWidth;
@@ -304,8 +299,8 @@ public class TextureCorrosion extends TextureAtlasSprite {
 		} else {
 			int prevFrameIndex = this.parentAnimationMetadata.getFrameIndex(this.frameCounter);
 			try {
-				this.tickCounter = f_tickCounter.getInt(this.parentSprite);
-				this.frameCounter = f_frameCounter.getInt(this.parentSprite);
+				this.tickCounter = parentSprite.tickCounter;
+				this.frameCounter = parentSprite.frameCounter;
 			} catch (Exception e) {
 				throw new RuntimeException(e);
 			}

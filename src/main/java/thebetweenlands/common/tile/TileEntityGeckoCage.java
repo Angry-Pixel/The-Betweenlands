@@ -1,11 +1,14 @@
 package thebetweenlands.common.tile;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.common.registries.AspectRegistry;
 
@@ -61,6 +64,8 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		this.recoverTicks = recoverTime;
 		IBlockState state = this.world.getBlockState(this.pos);
 		this.world.notifyBlockUpdate(this.pos, state, state, 3);
+		if (!hasGecko())
+			this.recoverTicks = 0;
 	}
 
 	public boolean hasGecko() {
@@ -71,11 +76,12 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		return this.geckoUsages;
 	}
 
+	@Nullable
 	public String getGeckoName() {
 		return this.geckoName;
 	}
 
-	public void addGecko(int usages, String name) {
+	public void addGecko(int usages, @Nullable String name) {
 		this.geckoUsages = usages;
 		this.geckoName = name;
 		this.ticks = 0;
@@ -88,6 +94,9 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		super.writeToNBT(nbt);
 		nbt.setInteger("RecoverTicks", this.recoverTicks);
 		nbt.setInteger("GeckoUsages", this.geckoUsages);
+		if(this.geckoName != null) {
+			nbt.setString("GeckoName", this.geckoName);
+		}
 		nbt.setString("AspectType", this.aspectType == null ? "" : this.aspectType.getName());
 		nbt.setInteger("Ticks", this.ticks);
 		return nbt;
@@ -98,6 +107,11 @@ public class TileEntityGeckoCage extends TileEntity implements ITickable {
 		super.readFromNBT(nbt);
 		this.recoverTicks = nbt.getInteger("RecoverTicks");
 		this.geckoUsages = nbt.getInteger("GeckoUsages");
+		if(nbt.hasKey("GeckoName", Constants.NBT.TAG_STRING)) {
+			this.geckoName = nbt.getString("GeckoName");
+		} else {
+			this.geckoName = null;
+		}
 		this.aspectType = AspectRegistry.getAspectTypeFromName(nbt.getString("AspectType"));
 		this.ticks = nbt.getInteger("Ticks");
 	}

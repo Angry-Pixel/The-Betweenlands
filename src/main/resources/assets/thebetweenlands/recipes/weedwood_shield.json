@@ -6,9 +6,16 @@
     " # "
   ],
   "key": {
-    "#": {
-      "item": "thebetweenlands:log_weedwood"
-    },
+    "#": [
+      {
+        "item": "thebetweenlands:log_weedwood",
+        "data": 0
+      },
+      {
+        "item": "thebetweenlands:log_weedwood",
+        "data": 12
+      }
+    ],
     "I": {
       "item": "thebetweenlands:items_misc",
       "data": 7

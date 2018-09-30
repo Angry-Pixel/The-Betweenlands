@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 39
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.onions_have_layers.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.onions_have_layers.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/hardware_laundry",
+  "criteria": {
+    "set_fire": {
+      "trigger": "thebetweenlands:coat_tool"
+    }
+  }
+}

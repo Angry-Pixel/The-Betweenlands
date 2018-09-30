@@ -32,7 +32,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 
 	public EntityChiromaw(World world) {
 		super(world);
-		setSize(0.8F, 0.9F);
+		setSize(0.7F, 0.9F);
 		setIsHanging(false);
 
 		this.moveHelper = new FlightMoveHelper(this);
@@ -47,7 +47,7 @@ public class EntityChiromaw extends EntityFlyingMob implements IEntityBL {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIAttackMelee(this, 1.0D, true));
 		this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
-		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, false));
+		this.targetTasks.addTask(1, new EntityAINearestAttackableTarget<EntityPlayer>(this, EntityPlayer.class, true).setUnseenMemoryTicks(160));
 	}
 
 	@Override

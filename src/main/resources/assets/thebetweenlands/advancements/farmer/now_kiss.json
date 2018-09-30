@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 1
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.now_kiss.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.now_kiss.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/root",
+  "criteria": {
+    "bread_snails": {
+      "trigger": "minecraft:bred_animals",
+      "conditions": {
+        "parent": {
+          "type": "thebetweenlands:mire_snail"
+        }
+      }
+    }
+  }
+}

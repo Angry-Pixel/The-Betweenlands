@@ -1,0 +1,30 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:life_crystal",
+      "data": 1
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.miner.rock_bottom.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.miner.rock_bottom.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "thebetweenlands:miner/advanced_darkness",
+  "criteria": {
+    "octine": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "dimension": "betweenlands",
+        "position": {
+          "y": {
+            "min": 0,
+            "max": 45
+          }
+        }
+      }
+    }
+  }
+}

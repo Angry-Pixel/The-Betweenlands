@@ -19,6 +19,7 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,6 +32,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.handler.ItemTooltipHandler;
@@ -51,13 +54,14 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		});
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		super.addInformation(stack, worldIn, tooltip, flagIn);
 		if(stack.getItemDamage() == stack.getMaxDamage()) {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwaveSword.broken"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwave_sword.broken"), 0));
 		} else {
-			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwaveSword.usage"), 0));
+			tooltip.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.shockwave_sword.usage"), 0));
 		}
 	}
 
@@ -99,7 +103,7 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 		if (stack.getTagCompound().getInteger("uses") < 3) {
 			if (!world.isRemote) {
 				stack.damageItem(2, player);
-				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.0F, 2.0F);
+				world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.SHOCKWAVE_SWORD, SoundCategory.BLOCKS, 1.25F, 1.0F + world.rand.nextFloat() * 0.1F);
 				double direction = Math.toRadians(player.rotationYaw);
 				Vec3d diag = new Vec3d(Math.sin(direction + Math.PI / 2.0D), 0, Math.cos(direction + Math.PI / 2.0D)).normalize();
 				List<BlockPos> spawnedPos = new ArrayList<BlockPos>();
@@ -192,5 +196,10 @@ public class ItemShockwaveSword extends ItemBLSword implements ICorrodible {
 	@Override
 	public int getFullRepairLifeCost(ItemStack stack) {
 		return BLMaterialRegistry.getFullRepairLifeCost(BLMaterialRegistry.TOOL_LEGEND);
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.EPIC;
 	}
 }

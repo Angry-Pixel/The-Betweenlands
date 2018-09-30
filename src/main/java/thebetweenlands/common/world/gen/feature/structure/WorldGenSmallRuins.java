@@ -11,6 +11,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.container.BlockLootPot;
@@ -47,6 +48,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 	
 	public WorldGenSmallRuins(){
 		super(BlockRegistry.MUD.getDefaultState(), BlockRegistry.SWAMP_GRASS.getDefaultState());
+		this.replaceable.add(state -> state.getBlock() instanceof IPlantable);
 	}
 
 	@Override
@@ -56,7 +58,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 		int z;
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "translate:ruins", EnumLocationType.RUINS);
+		LocationStorage locationStorage = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(position), "ruins", EnumLocationType.RUINS);
 
 		List<RuinLocation> ruinLocations = new ArrayList<>();
 		int attempts = 40;
@@ -438,7 +440,7 @@ public class WorldGenSmallRuins extends WorldGenHelper {
 				return false;
 		}
 
-		if (rotatedCubeCantReplace(world, x, y, z, 0, 0, 0, width, 13, depth, direction))
+		if (rotatedCubeCantReplace(world, x, y, z, 2, 1, 2, width - 4, 13, depth - 4, direction))
 			return false;
 
 		AxisAlignedBB aabb = this.rotatedAABB(world, x, y, z, 0, 0, 0, width, 13, depth, direction).grow(6, 6, 6);

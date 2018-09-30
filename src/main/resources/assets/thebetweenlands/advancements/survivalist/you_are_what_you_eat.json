@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:rotten_food"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.you_are_what_you_eat.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.you_are_what_you_eat.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "have_sap": {
+      "trigger": "minecraft:consume_item",
+      "conditions": {
+        "item": {
+          "item": "thebetweenlands:rotten_food"
+        }
+      }
+    }
+  }
+}

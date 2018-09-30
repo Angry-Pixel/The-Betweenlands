@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,12 +20,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.IAspectType;
 import thebetweenlands.api.aspect.ItemAspectContainer;
-import thebetweenlands.client.handler.ScreenRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.container.BlockAspectVial;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
@@ -38,17 +41,15 @@ import thebetweenlands.util.TranslationHelper;
 
 public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IMultipleItemModelDefinition {
     public ItemAspectVial() {
-        this.setUnlocalizedName("item.thebetweenlands.aspectVial");
-
         this.setMaxStackSize(1);
         this.setHasSubtypes(true);
         this.setMaxDamage(0);
 
-        setCreativeTab(BLCreativeTabs.HERBLORE);
+        this.setCreativeTab(BLCreativeTabs.HERBLORE);
         this.setContainerItem(ItemRegistry.DENTROTHYST_VIAL);
         addPropertyOverride(new ResourceLocation("aspect"), (stack, worldIn, entityIn) -> {
             List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
-            if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && itemAspects.size() >= 1) {
+            if (GuiScreen.isShiftKeyDown() && itemAspects.size() >= 1) {
                 return AspectRegistry.ASPECT_TYPES.indexOf(itemAspects.get(0).type) + 1;
             }
             return 0;
@@ -61,7 +62,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
 
         if (itemAspects.size() >= 1) {
             Aspect aspect = itemAspects.get(0);
-            return super.getItemStackDisplayName(stack) + " - " + aspect.type.getName() + " (" + ScreenRenderHandler.ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
+            return I18n.translateToLocalFormatted(this.getUnlocalizedNameInefficiently(stack) + ".filled.name", aspect.type.getName(), aspect.getRoundedDisplayAmount()).trim();
         }
         return super.getItemStackDisplayName(stack);
     }
@@ -76,11 +77,11 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
             for (IAspectType aspect : AspectRegistry.ASPECT_TYPES) {
                 ItemStack stackGreen = new ItemStack(this, 1, 0);
                 ItemAspectContainer greenAspectContainer = ItemAspectContainer.fromItem(stackGreen);
-                greenAspectContainer.add(aspect, 400);
+                greenAspectContainer.add(aspect, 2000);
                 list.add(stackGreen);
                 ItemStack stackOrange = new ItemStack(this, 1, 1);
                 ItemAspectContainer orangeAspectContainer = ItemAspectContainer.fromItem(stackOrange);
-                orangeAspectContainer.add(aspect, 400);
+                orangeAspectContainer.add(aspect, 2000);
                 list.add(stackOrange);
             }
         }
@@ -141,6 +142,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
         return 0xFFFFFFFF;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flagIn) {
         if (world != null) {
@@ -174,7 +176,7 @@ public class ItemAspectVial extends Item implements ITintedItem, ItemRegistry.IM
         ItemStack stack = player.getHeldItem(hand);
         List<Aspect> itemAspects = ItemAspectContainer.fromItem(stack).getAspects();
         if(player.isSneaking() && itemAspects.size() == 1 && facing == EnumFacing.UP) {
-            if(world.isAirBlock(pos.up())) {
+            if(world.isAirBlock(pos.up()) && BlockRegistry.ASPECT_VIAL_BLOCK.canPlaceBlockAt(world, pos.up())) {
                 if(!world.isRemote) {
                     ItemAspectVial.placeAspectVial(world, pos.up(), stack.getItemDamage(), itemAspects.get(0));
                     stack.shrink(1);

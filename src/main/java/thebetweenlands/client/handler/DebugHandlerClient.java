@@ -9,6 +9,7 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -29,12 +30,12 @@ import net.minecraftforge.fml.common.gameevent.InputEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.storage.ILocalStorage;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class DebugHandlerClient {
 	@SubscribeEvent
@@ -49,7 +50,7 @@ public class DebugHandlerClient {
 					LocationStorage location = (LocationStorage) sharedStorage;
 
 					GlStateManager.pushMatrix();
-					if (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL)) {
+					if (GuiScreen.isCtrlKeyDown()) {
 						GlStateManager.disableDepth();
 					}
 					GlStateManager.disableTexture2D();
@@ -103,7 +104,7 @@ public class DebugHandlerClient {
 
 						GlStateManager.scale(scale, scale, scale);
 
-						renderTag(Minecraft.getMinecraft().fontRenderer, location.getLocalizedName(), 0, 0, 0, 0,
+						renderTag(Minecraft.getMinecraft().fontRenderer, location.hasLocalizedName() ? location.getLocalizedName() : location.getName(), 0, 0, 0, 0,
 								Minecraft.getMinecraft().getRenderManager().playerViewY,
 								Minecraft.getMinecraft().getRenderManager().playerViewX,
 								Minecraft.getMinecraft().getRenderManager().options.thirdPersonView == 2);
@@ -278,9 +279,9 @@ public class DebugHandlerClient {
 
 	@SubscribeEvent
 	public static void onKey(InputEvent.KeyInputEvent event) {
-		if (ConfigHandler.debug && Keyboard.getEventKeyState()) {
+		if (BetweenlandsConfig.DEBUG.debug && Keyboard.getEventKeyState()) {
 			if (Keyboard.getEventKey() == Keyboard.KEY_Y) {
-				WorldServer world = DimensionManager.getWorld(ConfigHandler.dimensionId);
+				WorldServer world = DimensionManager.getWorld(BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId);
 				if (world != null) {
 					ChunkGeneratorBetweenlands cgb = (ChunkGeneratorBetweenlands) world
 							.getChunkProvider().chunkGenerator;

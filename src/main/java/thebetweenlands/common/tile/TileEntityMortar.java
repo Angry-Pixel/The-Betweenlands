@@ -61,7 +61,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
         if (pestleInstalled() && !outputIsFull()) {
 
             if (isCrystalInstalled() && getStackInSlot(3).getItemDamage() < getStackInSlot(3).getMaxDamage() || manualGrinding) {
-                if (!output.isEmpty() && inventory.get(2).isEmpty() || !output.isEmpty() && inventory.get(2).isItemEqual(output)) {
+                if ((!output.isEmpty() && inventory.get(2).isEmpty()) || (!output.isEmpty() && inventory.get(2).isItemEqual(output) && inventory.get(2).getCount() + output.getCount() <= output.getMaxStackSize())) {
                     progress++;
                     if (progress == 1)
                         world.playSound(null, getPos().getX() + 0.5F, getPos().getY() + 0.5F, getPos().getZ() + 0.5F, SoundRegistry.GRIND, SoundCategory.BLOCKS, 1F, 1F);
@@ -202,7 +202,7 @@ public class TileEntityMortar extends TileEntityBasicInventory implements ITicka
             case EAST:
             case SOUTH:
             case WEST:
-                return new int[]{1, 3};
+                return new int[]{0, 1, 3};
         }
         return new int[]{};
     }

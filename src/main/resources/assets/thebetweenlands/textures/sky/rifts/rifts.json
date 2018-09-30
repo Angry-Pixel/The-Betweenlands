@@ -1,0 +1,77 @@
+[
+  {
+    "texture_mask": "thebetweenlands:sky/rifts/sky_rift_mask_1.png",
+    "texture_overlay": "thebetweenlands:sky/rifts/sky_rift_overlay_1.png",
+    "texture_alt_overlay": "thebetweenlands:sky/rifts/sky_rift_alt_overlay_1.png",
+    "yaw": {
+      "min": 0,
+      "max": 360
+    },
+    "pitch": {
+      "min": -90,
+      "max": 90
+    },
+    "roll": {
+      "min": 0,
+      "max": 360
+    },
+    "scale": {
+      "min": 0.5,
+      "max": 1
+    },
+    "mirror": {
+      "u": true,
+      "v": true
+    }
+  },
+  {
+    "texture_mask": "thebetweenlands:sky/rifts/sky_rift_mask_3.png",
+    "texture_overlay": "thebetweenlands:sky/rifts/sky_rift_overlay_3.png",
+    "texture_alt_overlay": "thebetweenlands:sky/rifts/sky_rift_alt_overlay_3.png",
+    "yaw": {
+      "min": 0,
+      "max": 360
+    },
+    "pitch": {
+      "min": -90,
+      "max": 90
+    },
+    "roll": {
+      "min": 0,
+      "max": 360
+    },
+    "scale": {
+      "min": 0.8,
+      "max": 1.0
+    },
+    "mirror": {
+      "u": true,
+      "v": true
+    }
+  },
+  {
+    "texture_mask": "thebetweenlands:sky/rifts/sky_rift_mask_2.png",
+    "texture_overlay": "thebetweenlands:sky/rifts/sky_rift_overlay_2.png",
+    "texture_alt_overlay": "thebetweenlands:sky/rifts/sky_rift_alt_overlay_2.png",
+    "yaw": {
+      "min": 0,
+      "max": 360
+    },
+    "pitch": {
+      "min": 15,
+      "max": 35
+    },
+    "roll": {
+      "min": 90,
+      "max": 90
+    },
+    "scale": {
+      "min": 0.6,
+      "max": 1
+    },
+    "mirror": {
+      "u": true,
+      "v": false
+    }
+  }
+]

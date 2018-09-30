@@ -3,15 +3,19 @@ package thebetweenlands.common.entity.mobs;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.item.food.ItemMireSnailEgg;
 import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.util.AnimationMathHelper;
@@ -23,7 +27,7 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 
 	public EntityMireSnailEgg(World world) {
 		super(world);
-		setSize(0.35F, 0.35F);
+		setSize(0.45F, 0.35F);
 	}
 
 	@Override
@@ -41,11 +45,11 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 		if (getGrowingAge() < 0 || getGrowingAge() > 0) // stupid hack to stop entity scaling
-		setGrowingAge(0);
+			setGrowingAge(0);
 		if (!world.isRemote) {
-			if (getHatchTime() < 24000)
+			if (getHatchTime() < 12000)
 				setHatchTime(getHatchTime() + 1);
-			if (getHatchTime() >= 24000) //this should be 24000 = 1 day (20 mins)
+			if (getHatchTime() >= 12000) //this should be 12000 = 1/2 day (10 mins)
 				hatch();
 		}
 		pulseFloat = pulse.swing(0.3F, 0.2F, false);
@@ -109,5 +113,17 @@ public class EntityMireSnailEgg extends EntityAnimal implements IEntityBL {
 	@Override
 	protected ResourceLocation getLootTable() {
 		return LootTableRegistry.MIRE_SNAIL_EGG;
+	}
+
+	@Override
+	public boolean processInteract(EntityPlayer player, EnumHand hand) {
+		if(!this.world.isRemote) {
+			ItemStack egg = ItemMireSnailEgg.fromEgg(this);
+			if(!player.inventory.addItemStackToInventory(egg)) {
+				player.entityDropItem(egg, 0);
+			}
+			this.setDead();
+		}
+		return true;
 	}
 }

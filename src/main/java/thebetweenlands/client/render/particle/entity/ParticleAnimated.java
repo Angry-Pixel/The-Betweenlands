@@ -24,12 +24,12 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 		this.motionX = mx;
 		this.motionY = my;
 		this.motionZ = mz;
-		this.particleMaxAge = maxAge;
 		this.particleScale = scale;
 		this.animation = new TextureAnimation();
 		if(randomStart) {
 			this.animation.setRandomStart(this.rand);
 		}
+		this.particleMaxAge = maxAge;
 	}
 
 	@Override
@@ -41,6 +41,9 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 	public void setStitchedSprites(Frame[][] frames) {
 		if (this.animation != null && frames != null) {
 			this.animation.setFrames(frames[0]);
+			if(this.particleMaxAge < 0) {
+				this.particleMaxAge = this.animation.getTotalDuration() - 1;
+			}
 			if (this.particleTexture == null) {
 				this.setParticleTexture(frames[0][0].getSprite());
 			}
@@ -53,6 +56,22 @@ public class ParticleAnimated extends Particle implements IParticleSpriteReceive
 		this.setParticleTexture(this.animation.getCurrentSprite());
 
 		super.onUpdate();
+	}
+
+	public static final class GenericFactory extends ParticleFactory<GenericFactory, ParticleAnimated> {
+		public GenericFactory(ResourceLocation texture) {
+			super(ParticleAnimated.class, ParticleTextureStitcher.create(ParticleAnimated.class, texture).setSplitAnimations(true));
+		}
+
+		@Override
+		public ParticleAnimated createParticle(ImmutableParticleArgs args) {
+			return new ParticleAnimated(args.world, args.x, args.y, args.z, args.motionX, args.motionY, args.motionZ, args.data.getInt(0), args.scale, args.data.getBool(1));
+		}
+
+		@Override
+		protected void setBaseArguments(ParticleArgs<?> args) {
+			args.withData(40, false);
+		}
 	}
 
 	public static final class PortalFactory extends ParticleFactory<PortalFactory, ParticleAnimated> {

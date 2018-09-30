@@ -21,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.property.ExtendedBlockState;
@@ -98,9 +99,14 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
 
 	@Override
 	public int damageDropped(IBlockState state) {
-		return ((EnumLifeCrystalType)state.getValue(VARIANT)).getMetadata();
+		return 0;
 	}
 
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return new ItemStack(Item.getItemFromBlock(this), 1, ((EnumLifeCrystalType)state.getValue(VARIANT)).getMetadata());
+	}
+	
 	public static enum EnumLifeCrystalType implements IStringSerializable {
 		DEFAULT,
 		ORE;
@@ -229,4 +235,9 @@ public class BlockLifeCrystalStalactite extends BlockSwampWater implements Block
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public int getLightValue(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return (int)((state.getValue(VARIANT) == EnumLifeCrystalType.ORE ? 0.4F : 0.0F) * 15.0F);
+	}
 }

@@ -3,7 +3,7 @@ package thebetweenlands.common.capability.recruitment;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.Capability;
@@ -13,7 +13,7 @@ import thebetweenlands.common.capability.base.EntityCapability;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
 
-public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapability, IPuppetCapability, EntityCreature> implements IPuppetCapability, ISerializableCapability {
+public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapability, IPuppetCapability, EntityLiving> implements IPuppetCapability, ISerializableCapability {
 	@Override
 	public ResourceLocation getID() {
 		return new ResourceLocation(ModInfo.ID, "puppet");
@@ -36,7 +36,7 @@ public class EntityPuppetCapability extends EntityCapability<EntityPuppetCapabil
 
 	@Override
 	public boolean isApplicable(Entity entity) {
-		return entity instanceof EntityCreature;
+		return entity instanceof EntityLiving;
 	}
 
 

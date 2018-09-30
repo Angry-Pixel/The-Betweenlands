@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:swamp_grass"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.dank_world.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.dank_world.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/give_me_that",
+  "criteria": {
+    "in_bl": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "dimension": "betweenlands"
+      }
+    }
+  }
+}

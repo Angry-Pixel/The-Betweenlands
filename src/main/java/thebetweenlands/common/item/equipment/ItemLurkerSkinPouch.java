@@ -1,5 +1,18 @@
 package thebetweenlands.common.item.equipment;
 
+import java.util.List;
+
+import javax.annotation.Nullable;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.ITextureObject;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -10,24 +23,33 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderLivingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.ItemHandlerHelper;
 import thebetweenlands.api.capability.IEquipmentCapability;
 import thebetweenlands.api.item.IEquippable;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.registries.KeyBindRegistry;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 public class ItemLurkerSkinPouch extends Item implements IEquippable {
     public ItemLurkerSkinPouch() {
@@ -84,43 +106,68 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
         return false;
     }
 
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
         int slots = 9 + (stack.getItemDamage() * 9);
-        list.add(TextFormatting.GRAY + I18n.format("tooltip.lurkerSkinPouch.size", slots));
-        list.add(I18n.format("tooltip.lurkerSkinPouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
+        list.add(TextFormatting.GRAY + I18n.format("tooltip.lurker_skin_pouch.size", slots));
+        list.add(I18n.format("tooltip.lurker_skin_pouch.usage", KeyBindRegistry.OPEN_POUCH.getDisplayName()));
         if (stack.getItemDamage() < stack.getMaxDamage()) {
-            list.add(I18n.format("tooltip.lurkerSkinPouch.upgrade"));
+            list.add(I18n.format("tooltip.lurker_skin_pouch.upgrade"));
         }
     }
 
+    @Override
+    public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ, EnumHand hand) {
+    	if(player.isSneaking()) {
+    		ItemStack heldItem = player.getHeldItem(hand);
+    		if(!heldItem.isEmpty() && heldItem.getItem() == this) {
+    			if(!world.isRemote) {
+	    			InventoryItem inventory = new InventoryItem(heldItem, 9 + (heldItem.getItemDamage() * 9), "Lurker Skin Pouch");
+	    			TileEntity tile = world.getTileEntity(pos);
+	        		if(tile != null && tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side)) {
+	        			IItemHandler itemHandler = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, side);
+	        			for(int i = 0; i < inventory.getSizeInventory(); i++) {
+	        				ItemStack stack = inventory.getStackInSlot(i);
+	        				if(!stack.isEmpty()) {
+	        					stack = ItemHandlerHelper.insertItemStacked(itemHandler, stack, false);
+	        					inventory.setInventorySlotContents(i, stack);
+	        				}
+	        			}
+	        		}
+    			}
+        		return EnumActionResult.SUCCESS;
+    		}
+    	}
+    	return super.onItemUseFirst(player, world, pos, side, hitX, hitY, hitZ, hand);
+    }
+    
     @Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
         ItemStack stack = player.getHeldItem(hand);
         if (!world.isRemote) {
             if (!player.isSneaking()) {
-                int meta = stack.getItemDamage();
-                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH, world, meta, 0, 0);
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH, world, 0, 0, 0);
             } else {
-                player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+                player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_NAMING, world, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
             }
         }
 
         return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
-	/*@SideOnly(Side.CLIENT)
+	@SideOnly(Side.CLIENT)
     @SubscribeEvent
 	public static void onRenderPlayer(RenderLivingEvent.Specials.Post<EntityLivingBase> event) {
 		if(event.getEntity() instanceof EntityPlayer) {
-			renderPouch(event.getEntity(), event.getX(), event.getY(), event.getZ(), 0.0F);
+			renderPouch((EntityPlayer) event.getEntity(), event.getX(), event.getY(), event.getZ(), WorldRenderHandler.getPartialTicks());
 		}
 	}
 
 	@SideOnly(Side.CLIENT)
-	private static void renderPouch(EntityLivingBase entity, double x, double y, double z, float partialTicks) {
-		if(entity.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
-			IEquipmentCapability cap = entity.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
+	private static void renderPouch(EntityPlayer player, double x, double y, double z, float partialTicks) {
+		if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
+			IEquipmentCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 			IInventory inv = cap.getInventory(EnumEquipmentInventory.POUCH);
 
 			ItemStack pouch = null;
@@ -145,22 +192,27 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(x, y + 1.0D, z);
+				GlStateManager.rotate(90 - (player.prevRenderYawOffset + (player.renderYawOffset - player.prevRenderYawOffset) * partialTicks), 0, 1, 0);
+				GlStateManager.translate(player.isSneaking() ? 0.25D : 0.0D, (player.isSneaking() ? -0.15D : 0) - 0.2D, -0.25D);
+				float limbSwingAmount = player.prevLimbSwingAmount + (player.limbSwingAmount - player.prevLimbSwingAmount) * partialTicks;
+				float swing = (float)Math.sin((player.limbSwing - limbSwingAmount * (1.0F - partialTicks)) / 1.4F) * limbSwingAmount;
+				GlStateManager.rotate(swing * 25.0F, 0, 0, 1);
+				GlStateManager.rotate(swing * 13.0F, 1, 0, 0);
+				GlStateManager.rotate(swing * -10.0F, 0, 0, 1);
+				GlStateManager.translate(0, -0.1D, 0);
 				GlStateManager.enableBlend();
 				GlStateManager.color(1, 1, 1, 1);
 				GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-				GlStateManager.rotate(180, 1, 0, 0);
-				GlStateManager.rotate(entity.isSneaking() ? -28 : 0, 1, 0, 0);
-				GlStateManager.translate(0, entity.isSneaking() ? -0.05D : 0, entity.isSneaking() ? -0.37D : -0.18D);
 				GlStateManager.pushMatrix();
 				GlStateManager.translate(0, 0, 0.02D);
-				GlStateManager.scale(0.33D, 0.33D, 0.5D);
+				GlStateManager.scale(0.4D, 0.4D, 0.5D);
 
 				renderItem.renderItem(pouch, model);
 
 				GlStateManager.popMatrix();
 
 				GlStateManager.pushMatrix();
-				GlStateManager.scale(0.3D, 0.3D, 0.5D);
+				GlStateManager.scale(0.37D, 0.37D, 0.5D);
 
 				renderItem.renderItem(pouch, model);
 
@@ -171,7 +223,7 @@ public class ItemLurkerSkinPouch extends Item implements IEquippable {
 				texture.restoreLastBlurMipmap();
 			}
 		}
-	}*/
+	}
 
     @Override
     public EnumEquipmentInventory getEquipmentCategory(ItemStack stack) {

@@ -1,0 +1,179 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "thebetweenlands:internal/layer_selection",
+    "custom": {
+      "model": "thebetweenlands:block/thick_pane_post_weedwood",
+      "layers": [
+        "cutout_mipped",
+        "none"
+      ]
+    }
+  },
+  "variants": {
+    "north": {
+      "true": {
+        "submodel": {
+          "side_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_side_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "post_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_north_weedwood",
+              "layers": [
+                "cutout_mipped",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "noside_north": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_noside_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "east": {
+      "true": {
+        "submodel": {
+          "side_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_side_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            },
+            "y": 90
+          },
+          "post_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_east_weedwood",
+              "layers": [
+                "cutout_mipped",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "noside_east": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_noside_alt_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "south": {
+      "true": {
+        "submodel": {
+          "side_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_side_alt_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }
+          },
+          "post_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_south_weedwood",
+              "layers": [
+                "cutout_mipped",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "noside_south": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_noside_alt_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            }, 
+            "y": 90
+          }
+        }
+      }
+    },
+    "west": {
+      "true": {
+        "submodel": {
+          "side_west": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_side_alt_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            },
+            "y": 90
+          },
+          "post_west": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_post_west_weedwood",
+              "layers": [
+                "cutout_mipped",
+                "none"
+              ]
+            }
+          }
+        }
+      },
+      "false": {
+        "submodel": {
+          "noside_west": {
+            "model": "thebetweenlands:internal/layer_selection",
+            "custom": {
+              "model": "thebetweenlands:block/thick_pane_noside_amate_paper_2",
+              "layers": [
+                "translucent",
+                "none"
+              ]
+            },
+            "y": 270
+          }
+        } 
+      }
+    }
+  }
+}

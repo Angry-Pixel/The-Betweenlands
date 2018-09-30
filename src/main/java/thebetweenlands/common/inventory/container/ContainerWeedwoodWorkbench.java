@@ -21,6 +21,8 @@ public class ContainerWeedwoodWorkbench extends ContainerWorkbench {
 		this.inventoryItemStacks.clear();
 
 		this.craftMatrix = new InventoryWeedwoodWorkbench(this, tile);
+		this.craftMatrix.openInventory(playerInventory.player);
+
 		this.craftResult = new InventoryWeedwoodWorkbenchResult(tile);
 
 		//Result
@@ -45,12 +47,19 @@ public class ContainerWeedwoodWorkbench extends ContainerWorkbench {
 			this.addSlotToContainer(new Slot(playerInventory, x, 8 + x * 18, 142));
 		}
 
-		this.onCraftMatrixChanged(this.craftMatrix);
+		tile.onCraftMatrixChanged();
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer playerIn) {
 		return this.tile.getWorld().getBlockState(this.tile.getPos()).getBlock() == BlockRegistry.WEEDWOOD_WORKBENCH && 
 				playerIn.getDistanceSq((double)this.tile.getPos().getX() + 0.5D, (double)this.tile.getPos().getY() + 0.5D, (double)this.tile.getPos().getZ() + 0.5D) <= 64.0D;
+	}
+
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn) {
+		super.onContainerClosed(playerIn);
+
+		this.craftMatrix.closeInventory(playerIn);
 	}
 }

@@ -6,6 +6,8 @@ import java.util.Random;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
@@ -18,15 +20,24 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.sky.BLSnowRenderer;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
 import thebetweenlands.common.lib.ModInfo;
+import thebetweenlands.common.network.datamanager.GenericDataManager;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventSnowfall extends TimedEnvironmentEvent {
-	private float snowingStrength = 0.0F;
-	private float targetSnowingStrength = 0.0F;
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "snowfall");
 
-	public EventSnowfall(EnvironmentEventRegistry registry) {
+	private float snowingStrength = 0.0F;
+	protected static final DataParameter<Float> TARGET_SNOWING_STRENGTH = GenericDataManager.createKey(EventSnowfall.class, DataSerializers.FLOAT);
+
+	public EventSnowfall(BLEnvironmentEventRegistry registry) {
 		super(registry);
+	}
+
+	@Override
+	protected void initDataParameters() {
+		super.initDataParameters();
+		this.dataManager.register(TARGET_SNOWING_STRENGTH, 0.0F);
 	}
 
 	public static float getSnowingStrength(World world) {
@@ -54,19 +65,19 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "snowfall");
+		return ID;
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if(!this.getWorld().isRemote) {
 			if (active) {
-				this.targetSnowingStrength = 0.5F + this.getWorld().rand.nextFloat() * 7.5F;
+				this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.5F + this.getWorld().rand.nextFloat() * 7.5F);
 			} else {
-				this.targetSnowingStrength = 0;
+				this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.0F);
 			}
 		}
-		super.setActive(active, markDirty);
+		super.setActive(active);
 	}
 
 	@Override
@@ -75,7 +86,7 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 
 		if (!world.isRemote) {
 			if(this.isActive() && !this.getRegistry().winter.isActive()) {
-				this.setActive(false, true);
+				this.setActive(false);
 			}
 
 			if (this.isActive() && world.provider instanceof WorldProviderBetweenlands && world instanceof WorldServer && world.rand.nextInt(5) == 0) {
@@ -121,18 +132,20 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 		}
 
 		if (!this.isActive()) {
-			this.targetSnowingStrength = 0;
+			this.dataManager.set(TARGET_SNOWING_STRENGTH, 0.0F);
 		}
 
-		if (this.snowingStrength < this.targetSnowingStrength) {
-			this.snowingStrength += 0.01F;
-			if (this.snowingStrength > this.targetSnowingStrength) {
-				this.snowingStrength = this.targetSnowingStrength;
+		float targetSnowingStrength = this.dataManager.get(TARGET_SNOWING_STRENGTH);
+
+		if (this.snowingStrength < targetSnowingStrength) {
+			this.snowingStrength = this.snowingStrength + 0.01F;
+			if (this.snowingStrength > targetSnowingStrength) {
+				this.snowingStrength = targetSnowingStrength;
 			}
-		} else if (this.snowingStrength > this.targetSnowingStrength) {
-			this.snowingStrength -= 0.01F;
-			if (this.snowingStrength < this.targetSnowingStrength) {
-				this.snowingStrength = this.targetSnowingStrength;
+		} else if (this.snowingStrength > targetSnowingStrength) {
+			this.snowingStrength = this.snowingStrength - 0.01F;
+			if (this.snowingStrength < targetSnowingStrength) {
+				this.snowingStrength = targetSnowingStrength;
 			}
 		}
 	}
@@ -146,26 +159,14 @@ public class EventSnowfall extends TimedEnvironmentEvent {
 	public void saveEventData() {
 		super.saveEventData();
 		NBTTagCompound nbt = this.getData();
-		nbt.setFloat("targetSnowingStrength", this.targetSnowingStrength);
+		nbt.setFloat("targetSnowingStrength", this.dataManager.get(TARGET_SNOWING_STRENGTH));
 	}
 
 	@Override
 	public void loadEventData() {
 		super.loadEventData();
 		NBTTagCompound nbt = this.getData();
-		this.targetSnowingStrength = nbt.getFloat("targetSnowingStrength");
-	}
-
-	@Override
-	public void loadEventPacket(NBTTagCompound nbt) {
-		super.loadEventPacket(nbt);
-		this.targetSnowingStrength = nbt.getFloat("targetSnowingStrength");
-	}
-
-	@Override
-	public void sendEventPacket(NBTTagCompound nbt) {
-		super.sendEventPacket(nbt);
-		nbt.setFloat("targetSnowingStrength", this.targetSnowingStrength);
+		this.dataManager.set(TARGET_SNOWING_STRENGTH, nbt.getFloat("targetSnowingStrength"));
 	}
 
 	@Override

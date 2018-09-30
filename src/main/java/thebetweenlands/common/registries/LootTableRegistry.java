@@ -1,25 +1,36 @@
 package thebetweenlands.common.registries;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldServer;
+import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootEntry;
 import net.minecraft.world.storage.loot.LootEntryItem;
+import net.minecraft.world.storage.loot.LootEntryTable;
 import net.minecraft.world.storage.loot.LootPool;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraft.world.storage.loot.LootTableManager;
+import net.minecraft.world.storage.loot.RandomValueRange;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.LootConditionManager;
+import net.minecraft.world.storage.loot.functions.LootFunction;
+import net.minecraft.world.storage.loot.functions.SetCount;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
 import net.minecraft.world.storage.loot.properties.EntityPropertyManager;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.loot.EntityPropertyEventActive;
 import thebetweenlands.common.loot.EntityPropertyFrogType;
@@ -29,6 +40,7 @@ import thebetweenlands.common.loot.EntityPropertyPeatMummyShimmerstone;
 import thebetweenlands.common.loot.EntityPropertyPyradCharging;
 import thebetweenlands.common.loot.LootConditionEventActive;
 import thebetweenlands.common.loot.LootConditionOr;
+import thebetweenlands.util.FakeClientWorld;
 
 public class LootTableRegistry {
 
@@ -84,6 +96,12 @@ public class LootTableRegistry {
     public static final ResourceLocation LOOT_CONDITION_OR = register(new LootConditionOr.Serializer());
     public static final ResourceLocation LOOT_CONDITION_EVENT_ACTIVE = register(new LootConditionEventActive.Serializer());
     
+    public static void preInit() {
+    	if(BetweenlandsConfig.DEBUG.debug) {
+    		TheBetweenlands.logger.info("Loaded loot tables");
+    	}
+    }
+    
     private static ResourceLocation register(String id) {
         return LootTableList.register(new ResourceLocation(ModInfo.ID, id));
     }
@@ -98,11 +116,13 @@ public class LootTableRegistry {
         return serializer.getLootTableLocation();
     }
 
-    public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world) {
+    @SuppressWarnings("unchecked")
+	public static ArrayList<ItemStack> getItemsFromTable(ResourceLocation lootTable, World world, boolean getCountSpan) {
         ArrayList<ItemStack> items = new ArrayList<>();
 
-        LootTable table = world.getLootTableManager().getLootTableFromLocation(lootTable);
-        LootContext.Builder lootBuilder = (new LootContext.Builder((WorldServer) world));
+        LootTableManager manager = getManager(world);
+        LootTable table = manager.getLootTableFromLocation(lootTable);
+        LootContext lootContext = new LootContext(0, null, manager, null, null, null);
         Field f = ReflectionHelper.findField(LootTable.class, "pools", "field_186466_c", "c");
         List<LootPool> pools = null;
         try {
@@ -120,14 +140,52 @@ public class LootTableRegistry {
                     e.printStackTrace();
                 }
                 if (entries != null && entries.size() > 0) {
-                    for (LootEntry entry:entries) {
+                    for (LootEntry entry: entries) {
                         if (entry instanceof LootEntryItem) {
-                            entry.addLoot(items, new Random(), lootBuilder.build());
+                            LootFunction[] functions = ((LootEntryItem) entry).functions;
+                            ArrayList<ItemStack> tmpItems = new ArrayList<>();
+                            entry.addLoot(tmpItems, new Random(), lootContext);
+                            if (getCountSpan && functions != null && functions.length > 0) {
+                                for (LootFunction function: functions) {
+                                    if (function instanceof SetCount) {
+                                        RandomValueRange valueRange = ((SetCount) function).countRange;
+                                        if (valueRange == null)
+                                            continue;
+
+                                        if (!tmpItems.get(0).hasTagCompound()) {
+                                            tmpItems.get(0).setTagCompound(new NBTTagCompound());
+                                        }
+
+                                        NBTTagCompound compound = tmpItems.get(0).getTagCompound();
+                                        compound.setFloat("LootCountMin", valueRange.getMin());
+                                        compound.setFloat("LootCountMax", valueRange.getMax());
+                                        break;
+                                    }
+                                }
+                            }
+                            items.addAll(tmpItems);
+                        } else if (entry instanceof LootEntryTable) {
+                            ResourceLocation location = ((LootEntryTable) entry).table;
+                            if (location != null)
+                                items.addAll(getItemsFromTable(location, world, getCountSpan));
                         }
                     }
                 }
             }
         }
         return items;
+    }
+
+    private static LootTableManager manager;
+
+    public static LootTableManager getManager(@Nullable World world) {
+        if (world == null || world.getLootTableManager() == null) {
+            if (manager == null) {
+                ISaveHandler saveHandler = FakeClientWorld.saveHandler;
+                manager = new LootTableManager(new File(new File(saveHandler.getWorldDirectory(), "data"), "loot_tables"));
+            }
+            return manager;
+        }
+        return world.getLootTableManager();
     }
 }

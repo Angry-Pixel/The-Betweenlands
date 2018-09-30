@@ -10,28 +10,31 @@ import javax.annotation.Nullable;
 
 import gnu.trove.map.TObjectIntMap;
 import gnu.trove.map.hash.TObjectIntHashMap;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.event.world.BlockEvent.BreakEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.network.IGenericDataManagerAccess;
 import thebetweenlands.api.storage.IWorldStorage;
 import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.StorageID;
-import thebetweenlands.common.world.storage.BetweenlandsLocalStorage;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
+import thebetweenlands.common.world.storage.LocalStorageImpl;
 import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
 
-public class LocationStorage extends BetweenlandsLocalStorage {
+public class LocationStorage extends LocalStorageImpl implements ITickable {
 	private List<AxisAlignedBB> boundingBoxes = new ArrayList<>();
 	private AxisAlignedBB enclosingBoundingBox;
 	private String name;
@@ -41,7 +44,7 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	private boolean visible = true;
 	private boolean inheritAmbience = true;
 	private long locationSeed = 0L;
-	
+
 	private TObjectIntMap<Entity> titleDisplayCooldowns = new TObjectIntHashMap<Entity>();
 
 	public LocationStorage(IWorldStorage worldStorage, StorageID id, @Nullable LocalRegion region) {
@@ -232,17 +235,21 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	 * @return
 	 */
 	public String getLocalizedName() {
-		String locationName = this.name;
-		boolean translate = locationName.startsWith("translate:");
-		if(translate)
-			locationName = I18n.format("location." + locationName.replaceFirst("translate:", "") + ".name");
-		return locationName;
+		return I18n.translateToLocal("location." + this.name + ".name");
+	}
+
+	public boolean hasLocalizedName() {
+		return I18n.canTranslate("location." + this.name + ".name");
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.name = nbt.getString("name");
+		if(this.name.startsWith("translate:")) {
+			this.name = this.name.replaceFirst("translate:", "");
+			this.setDirty(true);
+		}
 		this.boundingBoxes.clear();
 		NBTTagList boundingBoxes = nbt.getTagList("bounds", Constants.NBT.TAG_COMPOUND);
 		for(int i = 0; i < boundingBoxes.tagCount(); i++) {
@@ -314,6 +321,16 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 			nbt.setTag("guard", this.getGuard().writeToNBT(new NBTTagCompound()));
 		}
 		return nbt;
+	}
+
+	@Override
+	public void readInitialPacket(NBTTagCompound nbt) {
+		this.readFromNBT(nbt);
+	}
+
+	@Override
+	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
+		return this.writeToNBT(nbt);
 	}
 
 	/**
@@ -401,21 +418,19 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	public boolean isVisible(Entity entity) {
 		return this.visible;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public int getTitleDisplayCooldown(Entity entity) {
 		return this.titleDisplayCooldowns.containsKey(entity) ? this.titleDisplayCooldowns.get(entity) : 0;
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	public void setTitleDisplayCooldown(Entity entity, int cooldown) {
 		this.titleDisplayCooldowns.put(entity, cooldown);
 	}
-	
+
 	@Override
 	public void update() {
-		super.update();
-		
 		if(this.getWorldStorage().getWorld().isRemote) {
 			Iterator<Entity> it = this.titleDisplayCooldowns.keySet().iterator();
 			while(it.hasNext()) {
@@ -561,5 +576,19 @@ public class LocationStorage extends BetweenlandsLocalStorage {
 	@Override
 	public AxisAlignedBB getBoundingBox() {
 		return this.enclosingBoundingBox;
+	}
+
+	/**
+	 * Called when a block is broken inside the location
+	 * @param event
+	 * @return
+	 */
+	public void onBreakBlock(BreakEvent event) {
+
+	}
+
+	@Override
+	public IGenericDataManagerAccess getDataManager() {
+		return null;
 	}
 }

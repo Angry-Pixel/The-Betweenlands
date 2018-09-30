@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import thebetweenlands.common.block.BlockStateContainerHelper;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.block.plant.BlockStackablePlant;
@@ -129,28 +128,36 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 				this.dropBlockAsItem(worldIn, pos, state, i);
 				this.harvesters.set(null);
 			}
-
-			//Remove 10 compost after harvesting fully grown crop
-			if(state.getValue(AGE) >= 15) {
-				this.consumeCompost(worldIn, pos, 10);
-			}
 		}
 
 		super.onBlockHarvested(worldIn, pos, state, player);
 	}
+	
+	@Override
+	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
+		boolean removed = super.removedByPlayer(state, world, pos, player, willHarvest);
+		if(removed && state.getValue(AGE) >= 15) {
+			//Remove 10 compost after harvesting fully grown crop
+			this.harvestAndUpdateSoil(world, pos, 10);
+		}
+		return removed;
+	}
 
 	/**
-	 * Tries to consume compost if the block below is dug soil
+	 * Called when the crop is harvested. Updates the soil and e.g. consumes compost if the block below is dug soil
 	 * @param world
 	 * @param pos
 	 * @param compost
 	 */
-	protected void consumeCompost(World world, BlockPos pos, int compost) {
+	protected void harvestAndUpdateSoil(World world, BlockPos pos, int compost) {
 		IBlockState stateDown = world.getBlockState(pos.down());
 		if(stateDown.getBlock() instanceof BlockGenericDugSoil) {
 			TileEntityDugSoil te = BlockGenericDugSoil.getTile(world, pos.down());
 			if(te != null && te.isComposted()) {
 				te.setCompost(Math.max(te.getCompost() - compost, 0));
+				if(((BlockGenericDugSoil)stateDown.getBlock()).isPurified(world, pos.down(), stateDown)) {
+					te.setPurifiedHarvests(te.getPurifiedHarvests() + 1);
+				}
 			}
 		}
 	}
@@ -175,14 +182,16 @@ public class BlockGenericCrop extends BlockStackablePlant implements IGrowable {
 		ItemStack cropDrop = this.getCropDrop(world, pos, rand);
 
 		if(!seedDrop.isEmpty()) {
-			for(int i = 0; i < this.getSeedDrops(world, pos, rand, fortune); i++) {
-				ret.add(seedDrop);
+			int  drops = this.getSeedDrops(world, pos, rand, fortune);
+			for(int i = 0; i < drops; i++) {
+				ret.add(seedDrop.copy());
 			}
 		}
 
 		if(!cropDrop.isEmpty()) {
-			for(int i = 0; i < this.getCropDrops(world, pos, rand, fortune); i++) {
-				ret.add(cropDrop);
+			int drops = this.getCropDrops(world, pos, rand, fortune);
+			for(int i = 0; i < drops; i++) {
+				ret.add(cropDrop.copy());
 			}
 		}
 

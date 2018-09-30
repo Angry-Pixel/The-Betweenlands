@@ -9,7 +9,9 @@ import net.minecraft.entity.ai.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNavigateSwimmer;
+import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -35,19 +37,17 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
         setSize(0.3F, 0.2F);
         setAir(80);
         this.moveHelper = new EntityBlindCaveFish.BlindFishMoveHelper(this);
-    }
-
-    @Override
-    public boolean isAIDisabled() {
-        return false;
+        setPathPriority(PathNodeType.WALKABLE, -8.0F);
+        setPathPriority(PathNodeType.BLOCKED, -8.0F);
+        setPathPriority(PathNodeType.WATER, 16.0F);
     }
 
     @Override
     protected void initEntityAI() {
-        tasks.addTask(1, new EntityAIMoveTowardsRestriction(this, 0.4D));
-        tasks.addTask(2, new EntityAIWander(this, 0.4D, 80));
-        tasks.addTask(3, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
-        tasks.addTask(4, new EntityAILookIdle(this));
+        tasks.addTask(0, new EntityAIMoveTowardsRestriction(this, 0.4D));
+        tasks.addTask(1, new EntityAIWander(this, 0.4D, 80));
+        tasks.addTask(2, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(3, new EntityAILookIdle(this));
     }
 
     @Override
@@ -58,7 +58,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
     }
 
     @Override
-    public PathNavigate getNavigator() {
+    public PathNavigate createNavigator(World world) {
         return new PathNavigateSwimmer(this, world);
     }
 
@@ -145,7 +145,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
                 rotationYaw = rand.nextFloat() * 360.0F;
                 onGround = false;
                 isAirBorne = true;
-                if (world.getWorldTime() % 5 == 0)
+                if (world.getTotalWorldTime() % 5 == 0)
                     world.playSound((EntityPlayer) null, posX, posY, posZ, SoundEvents.ENTITY_GUARDIAN_FLOP, SoundCategory.HOSTILE, 1F, 1F);
                 this.damageEntity(DamageSource.DROWN, 0.5F);
             }
@@ -171,7 +171,7 @@ public class EntityBlindCaveFish extends EntityCreature implements IEntityBL {
 
     @Override
     public boolean isNotColliding() {
-        return this.world.getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.world.checkNoEntityCollision(this.getEntityBoundingBox(), this);
+        return this.getEntityWorld().getCollisionBoxes(this, this.getEntityBoundingBox()).isEmpty() && this.getEntityWorld().checkNoEntityCollision(this.getEntityBoundingBox(), this);
     }
 
     @Override

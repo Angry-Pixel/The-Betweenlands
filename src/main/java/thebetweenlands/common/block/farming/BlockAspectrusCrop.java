@@ -91,7 +91,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 			for(int i = 0; i < MAX_HEIGHT; i++) {
 				IBlockState offsetState = worldIn.getBlockState(checkPos);
 				if(offsetState.getBlock() instanceof BlockGenericDugSoil) {
-					if(!((BlockGenericDugSoil)offsetState.getBlock()).purified) {
+					if(!((BlockGenericDugSoil)offsetState.getBlock()).isPurified(worldIn, checkPos, offsetState)) {
 						TileEntityDugSoil te = BlockGenericDugSoil.getTile(worldIn, checkPos);
 						if(te != null && !te.isFullyDecayed()) {
 							te.setDecay(te.getDecay() + 5);
@@ -110,8 +110,7 @@ public class BlockAspectrusCrop extends BlockGenericCrop implements ICustomItemB
 	}
 
 	@Override
-	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		this.onBlockHarvested(world, pos, state, player);
+	protected boolean removePlant(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
 		return world.setBlockState(pos, BlockRegistry.RUBBER_TREE_PLANK_FENCE.getDefaultState(), world.isRemote ? 11 : 3);
 	}
 

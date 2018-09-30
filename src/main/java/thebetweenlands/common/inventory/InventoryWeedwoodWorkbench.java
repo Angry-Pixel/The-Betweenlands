@@ -1,22 +1,22 @@
 package thebetweenlands.common.inventory;
 
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.InventoryCrafting;
+import net.minecraft.inventory.ItemStackHelper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import thebetweenlands.common.tile.TileEntityWeedwoodWorkbench;
 
 public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 	private NonNullList<ItemStack> stackList;
-	private Container container;
 	private static final int INV_WIDTH = 3;
 	private final TileEntityWeedwoodWorkbench tile;
 
-	public InventoryWeedwoodWorkbench(Container container, TileEntityWeedwoodWorkbench tile) {
-		super(container, 3, 3);
+	public InventoryWeedwoodWorkbench(Container eventHandler, TileEntityWeedwoodWorkbench tile) {
+		super(eventHandler, 3, 3);
 		this.stackList = tile.craftingSlots;
-		this.container = container;
 		this.tile = tile;
 	}
 
@@ -52,33 +52,19 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 
 	@Override
 	public ItemStack decrStackSize(int slot, int amount) {
-		if (!this.stackList.get(slot).isEmpty()) {
-			ItemStack stack;
+		ItemStack itemstack = ItemStackHelper.getAndSplit(this.stackList, slot, amount);
 
-			if (this.stackList.get(slot).getCount() <= amount) {
-				stack = this.stackList.get(slot);
-				this.stackList.set(slot, ItemStack.EMPTY);
-				this.container.onCraftMatrixChanged(this);
-				return stack;
-			} else {
-				stack = this.stackList.get(slot).splitStack(amount);
-
-				if (this.stackList.get(slot).getCount() == 0) {
-					this.stackList.set(slot, ItemStack.EMPTY);
-				}
-
-				this.container.onCraftMatrixChanged(this);
-				return stack;
-			}
-		} else {
-			return ItemStack.EMPTY;
+		if(!itemstack.isEmpty()) {
+			this.tile.onCraftMatrixChanged();
 		}
+
+		return itemstack;
 	}
 
 	@Override
 	public void setInventorySlotContents(int slot, ItemStack stack) {
 		this.stackList.set(slot, stack);
-		this.container.onCraftMatrixChanged(this);
+		this.tile.onCraftMatrixChanged();
 	}
 
 	@Override
@@ -96,5 +82,19 @@ public class InventoryWeedwoodWorkbench extends InventoryCrafting {
 	@Override
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
 		return true;
+	}
+
+	@Override
+	public void openInventory(EntityPlayer player) {
+		super.openInventory(player);
+
+		this.tile.openInventory(this);
+	}
+
+	@Override
+	public void closeInventory(EntityPlayer player) {
+		super.closeInventory(player);
+
+		this.tile.closeInventory(this);
 	}
 }

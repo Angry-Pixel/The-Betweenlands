@@ -3,10 +3,19 @@
 	"defaults": {
 		"model": "thebetweenlands:internal/winter_event",
 		"custom": {
-			"model_base": "thebetweenlands:block/internal/weedwood_bush",
+			"model_base": "thebetweenlands:block/internal/spook_event",
+			"model_base_data": {
+				"model_base": "thebetweenlands:block/internal/weedwood_bush",
+				"model_active": "thebetweenlands:block/internal/weedwood_bush",
+				"model_active_data": {
+					"texture_leaves": "thebetweenlands:blocks/leaves_weedwood_tree_spook",
+					"tint_index_leaves": -1
+				}
+			},
 			"model_active": "thebetweenlands:block/internal/weedwood_bush",
 			"model_active_data": {
-				"texture_leaves": "thebetweenlands:blocks/leaves_weedwood_tree_frosty"
+				"texture_leaves": "thebetweenlands:blocks/leaves_weedwood_tree_frosty",
+				"tint_index_leaves": -1
 			}
 		}
 	},

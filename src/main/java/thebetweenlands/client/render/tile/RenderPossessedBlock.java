@@ -1,6 +1,8 @@
 package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -21,6 +23,9 @@ public class RenderPossessedBlock extends TileEntitySpecialRenderer<TileEntityPo
 
         EnumFacing facing = TileEntityHelper.getStatePropertySafely(te, BlockPossessedBlock.class, BlockPossessedBlock.FACING, EnumFacing.NORTH);
 
+        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+        
         bindTexture(TEXTURE);
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);

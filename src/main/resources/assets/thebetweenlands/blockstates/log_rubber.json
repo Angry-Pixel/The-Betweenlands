@@ -1,97 +1,203 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "thebetweenlands:log_rubber_center"
+    "model": "thebetweenlands:internal/winter_event",
+    "custom": {
+      "model_base": "thebetweenlands:block/internal/spook_event",
+      "model_base_data": {
+        "model_base": "thebetweenlands:block/log_rubber_center",
+        "model_active": "thebetweenlands:block/log_rubber_center_spook"				
+      },
+      "model_active": "thebetweenlands:block/log_rubber_center_frosty"
+    }
   },
   "variants": {
-    "natural": {
-      "true": { },
-      "false": { }
-    },
     "north": {
       "true": {
-        "submodel": "thebetweenlands:log_rubber_connection",
-        "x": 90,
-        "uvlock": "false"
+        "submodel": {
+          "connection_north": {
+            "model": "thebetweenlands:internal/winter_event",
+            "custom": {
+			  "model_base": "thebetweenlands:block/internal/spook_event",
+              "model_base_data": {
+                "model_base": "thebetweenlands:block/log_rubber_connection",
+                "model_active": "thebetweenlands:block/log_rubber_connection_spook"				
+              },
+              "model_active": "thebetweenlands:block/log_rubber_connection_frosty"
+            },
+            "x": 90,
+            "uvlock": "false"
+          }
+        }
       },
       "false": { }
     },
     "east": {
       "true": {
-        "submodel": "thebetweenlands:log_rubber_connection",
-        "x": 90,
-        "y": 90,
-        "uvlock": "false"
+        "submodel": {
+          "connection_east": {
+            "model": "thebetweenlands:internal/winter_event",
+            "custom": {
+			  "model_base": "thebetweenlands:block/internal/spook_event",
+              "model_base_data": {
+                "model_base": "thebetweenlands:block/log_rubber_connection",
+                "model_active": "thebetweenlands:block/log_rubber_connection_spook"				
+              },
+              "model_active": "thebetweenlands:block/log_rubber_connection_frosty"
+            },
+            "x": 90,
+            "y": 90,
+            "uvlock": "false"
+          }
+        }
       },
       "false": { }
     },
     "south": {
       "true": {
-        "submodel": "thebetweenlands:log_rubber_connection",
-        "x": 90,
-        "y": 180,
-        "uvlock": "false"
+        "submodel": {
+          "connection_south": {
+            "model": "thebetweenlands:internal/winter_event",
+            "custom": {
+			  "model_base": "thebetweenlands:block/internal/spook_event",
+              "model_base_data": {
+                "model_base": "thebetweenlands:block/log_rubber_connection",
+                "model_active": "thebetweenlands:block/log_rubber_connection_spook"				
+              },
+              "model_active": "thebetweenlands:block/log_rubber_connection_frosty"
+            },
+            "x": 90,
+            "y": 180,
+            "uvlock": "false"
+          }
+        }
       },
       "false": { }
     },
     "west": {
       "true": {
-        "submodel": "thebetweenlands:log_rubber_connection",
-        "x": 90,
-        "y": 270,
-        "uvlock": "false"
+        "submodel": {
+          "connection_west": {
+            "model": "thebetweenlands:internal/winter_event",
+            "custom": {
+			  "model_base": "thebetweenlands:block/internal/spook_event",
+              "model_base_data": {
+                "model_base": "thebetweenlands:block/log_rubber_connection",
+                "model_active": "thebetweenlands:block/log_rubber_connection_spook"				
+              },
+              "model_active": "thebetweenlands:block/log_rubber_connection_frosty"
+            },
+            "x": 90,
+            "y": 270,
+            "uvlock": "false"
+          }
+        }
       },
       "false": { }
     },
     "up": {
       "true": {
-        "submodel": "thebetweenlands:log_rubber_connection",
-        "uvlock": "false"
+        "submodel": {
+          "connection_up": {
+            "model": "thebetweenlands:internal/winter_event",
+            "custom": {
+			  "model_base": "thebetweenlands:block/internal/spook_event",
+              "model_base_data": {
+                "model_base": "thebetweenlands:block/log_rubber_connection",
+                "model_active": "thebetweenlands:block/log_rubber_connection_spook"				
+              },
+              "model_active": "thebetweenlands:block/log_rubber_connection_frosty"
+            },
+            "uvlock": "false"
+          }
+        }
       },
       "false": { }
     },
     "down": {
       "true": {
-        "submodel": "thebetweenlands:log_rubber_connection",
-        "x": 180,
-        "uvlock": "false"
+        "submodel": {
+          "connection_down": {
+            "model": "thebetweenlands:internal/winter_event",
+            "custom": {
+			  "model_base": "thebetweenlands:block/internal/spook_event",
+              "model_base_data": {
+                "model_base": "thebetweenlands:block/log_rubber_connection",
+                "model_active": "thebetweenlands:block/log_rubber_connection_spook"				
+              },
+              "model_active": "thebetweenlands:block/log_rubber_connection_frosty"
+            },
+            "x": 180,
+            "uvlock": "false"
+          }
+        }
       },
       "false": { }
     },
-    "down=false,east=true,natural=false,north=false,south=false,up=false,west=false": {
-      "model": "thebetweenlands:log_rubber_center",
-      "textures": {
-        "west": "thebetweenlands:blocks/log_rubber_top"
+    "down=false,east=true,north=false,south=false,up=false,west=false": {
+      "model": "thebetweenlands:internal/winter_event",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/spook_event",
+        "model_base_data": {
+          "model_base": "thebetweenlands:block/log_rubber_center_west",
+          "model_active": "thebetweenlands:block/log_rubber_center_west_spook"				
+        },
+        "model_active": "thebetweenlands:block/log_rubber_center_west_frosty"
       }
     },
-    "down=false,east=false,natural=false,north=false,south=false,up=false,west=true": {
-      "model": "thebetweenlands:log_rubber_center",
-      "textures": {
-        "east": "thebetweenlands:blocks/log_rubber_top"
+    "down=false,east=false,north=false,south=false,up=false,west=true": {
+      "model": "thebetweenlands:internal/winter_event",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/spook_event",
+        "model_base_data": {
+          "model_base": "thebetweenlands:block/log_rubber_center_east",
+          "model_active": "thebetweenlands:block/log_rubber_center_east_spook"				
+        },
+        "model_active": "thebetweenlands:block/log_rubber_center_east_frosty"
       }
     },
-    "down=false,east=false,natural=false,north=true,south=false,up=false,west=false": {
-      "model": "thebetweenlands:log_rubber_center",
-      "textures": {
-        "south": "thebetweenlands:blocks/log_rubber_top"
+    "down=false,east=false,north=true,south=false,up=false,west=false": {
+      "model": "thebetweenlands:internal/winter_event",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/spook_event",
+        "model_base_data": {
+          "model_base": "thebetweenlands:block/log_rubber_center_south",
+          "model_active": "thebetweenlands:block/log_rubber_center_south_spook"				
+        },
+        "model_active": "thebetweenlands:block/log_rubber_center_south_frosty"
       }
     },
-    "down=false,east=false,natural=false,north=false,south=true,up=false,west=false": {
-      "model": "thebetweenlands:log_rubber_center",
-      "textures": {
-        "north": "thebetweenlands:blocks/log_rubber_top"
+    "down=false,east=false,north=false,south=true,up=false,west=false": {
+      "model": "thebetweenlands:internal/winter_event",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/spook_event",
+        "model_base_data": {
+          "model_base": "thebetweenlands:block/log_rubber_center_north",
+          "model_active": "thebetweenlands:block/log_rubber_center_north_spook"				
+        },
+        "model_active": "thebetweenlands:block/log_rubber_center_north_frosty"
       }
     },
-    "down=true,east=false,natural=false,north=false,south=false,up=false,west=false": {
-      "model": "thebetweenlands:log_rubber_center",
-      "textures": {
-        "up": "thebetweenlands:blocks/log_rubber_top"
+    "down=true,east=false,north=false,south=false,up=false,west=false": {
+      "model": "thebetweenlands:internal/winter_event",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/spook_event",
+        "model_base_data": {
+          "model_base": "thebetweenlands:block/log_rubber_center_up",
+          "model_active": "thebetweenlands:block/log_rubber_center_up_spook"				
+        },
+        "model_active": "thebetweenlands:block/log_rubber_center_up_frosty"
       }
     },
-    "down=false,east=false,natural=false,north=false,south=false,up=true,west=false": {
-      "model": "thebetweenlands:log_rubber_center",
-      "textures": {
-        "down": "thebetweenlands:blocks/log_rubber_top"
+    "down=false,east=false,north=false,south=false,up=true,west=false": {
+      "model": "thebetweenlands:internal/winter_event",
+      "custom": {
+        "model_base": "thebetweenlands:block/internal/spook_event",
+        "model_base_data": {
+          "model_base": "thebetweenlands:block/log_rubber_center_down",
+          "model_active": "thebetweenlands:block/log_rubber_center_down_spook"				
+        },
+        "model_active": "thebetweenlands:block/log_rubber_center_down_frosty"
       }
     },
     "inventory": { 

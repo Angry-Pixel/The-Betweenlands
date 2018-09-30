@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:crimson_middle_gem"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.cling_bling.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.cling_bling.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/fashionable_warrior",
+  "criteria": {
+    "amulet": {
+      "trigger": "thebetweenlands:equip_item",
+      "conditions": {
+        "item": {
+          "item": "thebetweenlands:amulet"
+        }
+      }
+    }
+  }
+}

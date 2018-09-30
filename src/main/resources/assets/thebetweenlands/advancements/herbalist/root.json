@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:sickle"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.herbalist.root.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.herbalist.root.description"
+    },
+    "background": "thebetweenlands:textures/blocks/dentrothyst_green.png",
+    "announce_to_chat": false,
+    "show_toast": false
+  },
+  "criteria": {
+    "has_dank_world": {
+      "trigger": "thebetweenlands:has_advancement",
+      "conditions": {
+        "advancement": "thebetweenlands:adventurer/dank_world"
+      }
+    }
+  }
+}

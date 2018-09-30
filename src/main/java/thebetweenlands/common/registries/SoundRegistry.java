@@ -35,6 +35,7 @@ public class SoundRegistry {
     public static final BLSoundEvent AMBIENT_BLOOD_SKY_ROAR = reg("ambient_blood_sky_roar");
     public static final BLSoundEvent AMBIENT_BLOOD_SKY = reg("ambient_blood_sky");
     public static final BLSoundEvent AMBIENT_CAVE = reg("ambient_cave");
+    public static final BLSoundEvent AMBIENT_CAVE_SPOOK = reg("ambient_cave_spook");
     public static final BLSoundEvent AMBIENT_WIGHT_FORTRESS = reg("ambient_wight_fortress");
     public static final BLSoundEvent AMBIENT_SPOOPY = reg("ambient_spoopy");
     public static final BLSoundEvent AMBIENT_SWAMP = reg("ambient_swamp");
@@ -51,6 +52,9 @@ public class SoundRegistry {
     public static final BLSoundEvent SHOCKWAVE_SWORD = reg("shockwave_sword");
     public static final BLSoundEvent SQUISH = reg("squish");
     public static final BLSoundEvent IGNITE = reg("ignite");
+    public static final BLSoundEvent DAMAGE_REDUCTION = reg("damage_reduction");
+    public static final BLSoundEvent RIFT_OPEN = reg("rift_open");
+    public static final BLSoundEvent RIFT_CREAK = reg("rift_creak");
     // Hostiles
     public static final BLSoundEvent ANGLER_ATTACK = reg("angler_attack");
     public static final BLSoundEvent ANGLER_DEATH = reg("angler_death");

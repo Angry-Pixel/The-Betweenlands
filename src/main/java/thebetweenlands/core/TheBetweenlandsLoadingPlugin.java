@@ -13,9 +13,9 @@ public class TheBetweenlandsLoadingPlugin implements IFMLLoadingPlugin {
 	public String[] getASMTransformerClass() {
 		boolean useGLDebug = "true".equals(System.getProperty("bl.glDebug"));
 		if(useGLDebug) {
-			return new String[] { TheBetweenlandsClassTransformer.class.getCanonicalName(), OpenGLDebug.class.getCanonicalName() };
+			return new String[] { "thebetweenlands.core.TheBetweenlandsClassTransformer", "thebetweenlands.core.OpenGLDebug" };
 		}
-		return new String[] { TheBetweenlandsClassTransformer.class.getCanonicalName() };
+		return new String[] { "thebetweenlands.core.TheBetweenlandsClassTransformer" };
 	}
 
 	@Override

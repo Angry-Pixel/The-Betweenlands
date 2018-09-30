@@ -44,12 +44,14 @@ public class MessageClearBlockGuard extends MessageBase {
 	@SideOnly(Side.CLIENT)
 	private void handle() {
 		World world = Minecraft.getMinecraft().world;
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(this.id));
-		if(storage != null && storage instanceof LocationGuarded) {
-			LocationGuarded location = (LocationGuarded) storage;
-			if(location.getGuard() != null) {
-				location.getGuard().clear(world);
+		if(world != null) {
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
+			ILocalStorage storage = worldStorage.getLocalStorageHandler().getLocalStorage(StorageID.fromString(this.id));
+			if(storage != null && storage instanceof LocationGuarded) {
+				LocationGuarded location = (LocationGuarded) storage;
+				if(location.getGuard() != null) {
+					location.getGuard().clear(world);
+				}
 			}
 		}
 	}

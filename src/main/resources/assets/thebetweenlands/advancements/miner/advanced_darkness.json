@@ -1,0 +1,28 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:betweenstone"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.miner.advanced_darkness.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.miner.advanced_darkness.description"
+    }
+  },
+  "parent": "thebetweenlands:miner/root",
+  "criteria": {
+    "caverns": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "dimension": "betweenlands",
+        "position": {
+          "y": {
+            "min": 0,
+            "max": 100
+          }
+        }
+      }
+    }
+  }
+}

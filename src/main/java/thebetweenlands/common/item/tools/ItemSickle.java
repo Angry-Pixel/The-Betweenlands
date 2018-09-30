@@ -11,16 +11,20 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.IAnimatorRepairable;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 import javax.annotation.Nullable;
 
@@ -57,6 +61,8 @@ public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable
 				}
 				itemstack.damageItem(1, player);
 				block.onBlockHarvested(player.world, pos, player.world.getBlockState(pos), player);
+				if (player instanceof EntityPlayerMP)
+					AdvancementCriterionRegistry.SICKLE_USE.trigger((EntityPlayerMP) player);
 				player.world.setBlockToAir(pos);
 				player.addStat(StatList.getBlockStats(block), 1);
 				return true;
@@ -85,6 +91,7 @@ public class ItemSickle extends Item implements ICorrodible, IAnimatorRepairable
 		CorrosionHelper.updateCorrosion(itemStack, world, holder, slot, isHeldItem);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		CorrosionHelper.addCorrosionTooltips(stack, tooltip, flagIn.isAdvanced());

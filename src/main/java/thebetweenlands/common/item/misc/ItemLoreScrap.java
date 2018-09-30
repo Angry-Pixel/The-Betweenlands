@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -104,7 +105,7 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand) {
 		ItemStack itemStackIn = playerIn.getHeldItem(hand);
 		if (getPage(itemStackIn) != -1) {
-			playerIn.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LORE, worldIn, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
+			playerIn.openGui(TheBetweenlands.instance, CommonProxy.GUI_LORE, worldIn, hand == EnumHand.MAIN_HAND ? 0 : 1, 0, 0);
 			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.PASS, itemStackIn);
@@ -117,5 +118,10 @@ public class ItemLoreScrap extends Item implements ItemRegistry.IMultipleItemMod
 			map.put(i, this.getRegistryName());
 		}
 		return map;
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 }

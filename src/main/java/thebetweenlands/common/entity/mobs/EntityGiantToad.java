@@ -60,6 +60,7 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 		this.setPathPriority(PathNodeType.WATER, 0.0F);
 		this.setSize(1.6F, 1.5F);
 		this.stepHeight = 1.0F;
+		this.experienceValue = 8;
 	}
 
 	@Override
@@ -308,15 +309,16 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 
 	@Override
 	protected boolean processInteract(EntityPlayer player, EnumHand hand) {
-		if (!this.world.isRemote) {
-			boolean holdsEquipment = !player.getHeldItem(hand).isEmpty() && (player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IEquippable || player.getHeldItem(EnumHand.OFF_HAND).getItem() == ItemRegistry.AMULET_SLOT);
-			if (holdsEquipment)
-				return false;
-			boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(hand));
-			if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
-				player.startRiding(this);
-			} else if (holdsWings) {
-				if (!this.isTamed()) {
+		boolean holdsEquipment = hand == EnumHand.MAIN_HAND && !player.getHeldItem(hand).isEmpty() && (player.getHeldItem(hand).getItem() instanceof IEquippable || player.getHeldItem(hand).getItem() == ItemRegistry.AMULET_SLOT);
+		if (holdsEquipment)
+			return true;
+		boolean holdsWings = EnumItemMisc.DRAGONFLY_WING.isItemOf(player.getHeldItem(hand));
+		if (!this.isBeingRidden() && this.isTamed() && (!holdsWings || this.getHealth() >= this.getMaxHealth())) {
+			player.startRiding(this);
+			return true;
+		} else if (holdsWings) {
+			if (!this.isTamed()) {
+				if (!this.world.isRemote) {
 					this.temper += this.rand.nextInt(4) + 1;
 					if (this.temper >= 30) {
 						this.world.setEntityState(this, (byte) 7);
@@ -328,16 +330,20 @@ public class EntityGiantToad extends EntityCreature implements IEntityBL {
 					if (!player.capabilities.isCreativeMode) {
 						player.getHeldItem(hand).shrink(1);
 						if (player.getHeldItem(hand).getCount() <= 0)
-							player.setHeldItem(hand, null);
+							player.setHeldItem(hand, ItemStack.EMPTY);
 					}
 				}
-				if (this.getHealth() < this.getMaxHealth()) {
+				return true;
+			}
+			if (this.getHealth() < this.getMaxHealth()) {
+				if (!this.world.isRemote) {
 					this.world.setEntityState(this, (byte) 6);
 					this.heal(4.0F);
 					player.getHeldItem(hand).shrink(1);
 					if (player.getHeldItem(hand).getCount() <= 0)
-						player.setHeldItem(hand, null);
+						player.setHeldItem(hand, ItemStack.EMPTY);
 				}
+				return true;
 			}
 		}
 		return false;

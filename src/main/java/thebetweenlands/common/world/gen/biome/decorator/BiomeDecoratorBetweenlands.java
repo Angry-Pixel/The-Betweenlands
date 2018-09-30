@@ -6,11 +6,11 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.gen.ChunkGeneratorBetweenlands;
 import thebetweenlands.common.world.gen.feature.OreGens;
-import thebetweenlands.util.config.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,7 +96,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
     protected void generateOres() {
 		this.generateOre(22, 12, OreGens.SULFUR, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
 		this.generateOre(6, 12, OreGens.SYRMORITE, WorldProviderBetweenlands.PITSTONE_HEIGHT + 40, WorldProviderBetweenlands.CAVE_START - 5);
-		this.generateOre(10, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
+		this.generateOre(5, 12, OreGens.BONE_ORE, WorldProviderBetweenlands.PITSTONE_HEIGHT, 128);
 		this.generateOre(4.5F, 12, OreGens.OCTINE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 40);
 		this.generateOre(4, 12, OreGens.SWAMP_DIRT, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
 		this.generateOre(0.2F, 12, OreGens.LIMESTONE, WorldProviderBetweenlands.PITSTONE_HEIGHT, WorldProviderBetweenlands.CAVE_START - 15);
@@ -203,7 +203,7 @@ public class BiomeDecoratorBetweenlands extends DecoratorPositionProvider {
      * @return
      */
     public boolean isProfilingEnabled() {
-        return ConfigHandler.debug;
+        return BetweenlandsConfig.DEBUG.debug;
     }
 
     /**

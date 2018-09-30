@@ -132,7 +132,7 @@ public class BlockBLFurnace extends BlockContainer implements IParticleCollidabl
 		else {
 			TileEntityBLFurnace tileentityfurnace = (TileEntityBLFurnace)world.getTileEntity(pos);
             if (tileentityfurnace != null)
-            	player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_BL_FURNACE, world, pos.getX(), pos.getY(), pos.getZ());
+            	player.openGui(TheBetweenlands.instance, CommonProxy.GUI_BL_FURNACE, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
 		}
 	}

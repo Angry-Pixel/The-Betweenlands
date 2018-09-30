@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:mummy_bait"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.beating_dead_meat.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.beating_dead_meat.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:fighter/fearless_fighter",
+  "criteria": {
+    "dreadful_mummy": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:dreadful_mummy"
+        }
+      }
+    }
+  }
+}

@@ -25,29 +25,30 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
 import thebetweenlands.api.misc.FogState;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.container.BlockPresent;
 import thebetweenlands.common.block.terrain.BlockSnowBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.tile.TileEntityPresent;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.util.config.ConfigHandler;
 
-public class EventWinter extends EnvironmentEvent {
+public class EventWinter extends BLEnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "winter");
+
 	private static final long WINTER_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 11, 1, 0, 0).getTime().getTime();
 
 	private World world;
 	private World lastWorld;
 	private boolean chatSent = false;
 
-	public EventWinter(EnvironmentEventRegistry registry) {
+	public EventWinter(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -69,15 +70,15 @@ public class EventWinter extends EnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "winter");
+		return ID;
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			player.sendMessage(new TextComponentTranslation("chat.event.winter"));
+			player.sendStatusMessage(new TextComponentTranslation("chat.event.winter"), true);
 		}
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
@@ -89,7 +90,7 @@ public class EventWinter extends EnvironmentEvent {
 			int pz = MathHelper.floor(player.posZ) - 256;
 			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
-		super.setActive(active, markDirty);
+		super.setActive(active);
 	}
 
 	@Override
@@ -99,16 +100,16 @@ public class EventWinter extends EnvironmentEvent {
 		this.world = world;
 
 		if(!world.isRemote) {
-			if (ConfigHandler.enableSeasonalEvents) {
+			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 				long dayDiff = this.getDayDiff();
 				if (dayDiff >= 0 && dayDiff <= 31) {
 					if (!this.isActive() && !this.wasSet) {
-						this.setActive(true, true);
+						this.setActive(true);
 						this.wasSet = true;
 					}
 				} else if (this.wasSet) {
 					this.wasSet = false;
-					this.setActive(false, true);
+					this.setActive(false);
 				}
 			}
 
@@ -161,6 +162,22 @@ public class EventWinter extends EnvironmentEvent {
 					}
 				}
 			}
+		}
+	}
+
+	@Override
+	public void resetActiveState() {
+		long dayDiff = this.getDayDiff();
+		if (dayDiff >= 0 && dayDiff <= 31 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
+			if (!this.isActive()) {
+				this.setActive(true);
+			}
+			this.wasSet = true;
+		} else {
+			if(this.isActive()) {
+				this.setActive(false);
+			}
+			this.wasSet = false;
 		}
 	}
 

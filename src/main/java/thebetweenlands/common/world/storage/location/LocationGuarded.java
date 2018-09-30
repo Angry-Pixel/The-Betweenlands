@@ -65,13 +65,6 @@ public class LocationGuarded extends LocationStorage {
 	}
 
 	@Override
-	public void readFromPacketNBT(NBTTagCompound nbt) {
-		this.readWriteGuardData = false;
-		this.readFromNBT(nbt);
-		this.readWriteGuardData = true;
-	}
-
-	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		if(this.readWriteGuardData) {
@@ -81,7 +74,14 @@ public class LocationGuarded extends LocationStorage {
 	}
 
 	@Override
-	public NBTTagCompound writeToPacketNBT(NBTTagCompound nbt) {
+	public void readInitialPacket(NBTTagCompound nbt) {
+		this.readWriteGuardData = false;
+		this.readFromNBT(nbt);
+		this.readWriteGuardData = true;
+	}
+
+	@Override
+	public NBTTagCompound writeInitialPacket(NBTTagCompound nbt) {
 		this.readWriteGuardData = false;
 		nbt = this.writeToNBT(nbt);
 		this.readWriteGuardData = true;
@@ -96,8 +96,8 @@ public class LocationGuarded extends LocationStorage {
 	}
 
 	@Override
-	protected void updateTracker() {
-		super.updateTracker();
+	public void update() {
+		super.update();
 
 		if(this.queuedClear) {
 			MessageClearBlockGuard message = new MessageClearBlockGuard(this); 

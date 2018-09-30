@@ -1,0 +1,27 @@
+{
+    "ambientocclusion": true,
+    "textures": {
+        "particle": "thebetweenlands:blocks/log_rubber_stump_frosty",
+        "north": "thebetweenlands:blocks/log_rubber_stump_frosty",
+        "south": "thebetweenlands:blocks/log_rubber_stump_frosty",
+        "east": "thebetweenlands:blocks/log_rubber_stump_frosty",
+        "west": "thebetweenlands:blocks/log_rubber_top_frosty",
+        "up": "thebetweenlands:blocks/log_rubber_stump_frosty",
+        "down": "thebetweenlands:blocks/log_rubber_stump_frosty"
+    },
+    "elements": [
+        {   
+            "from": [ 4, 4, 4 ],
+            "to": [ 12, 12, 12 ],
+            "shade": false,
+            "faces": {
+                "north": { "uv": [ 4, 4, 12, 12 ], "texture": "#north" },
+                "south": { "uv": [ 4, 4, 12, 12 ], "texture": "#south" },
+                "east": { "uv": [ 4, 4, 12, 12 ], "texture": "#east" },
+                "west": { "uv": [ 4, 4, 12, 12 ], "texture": "#west" },
+                "up": { "uv": [ 4, 4, 12, 12 ], "texture": "#up" },
+                "down": { "uv": [ 4, 4, 12, 12 ], "texture": "#down" }
+            }
+        }
+    ]
+}

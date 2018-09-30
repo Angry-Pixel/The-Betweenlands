@@ -3,8 +3,10 @@ package thebetweenlands.common.tile;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -25,19 +27,21 @@ public class TileEntitySpikeTrap extends TileEntity implements ITickable {
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			if (!world.isAirBlock(pos.up())) {
+			IBlockState stateUp = world.getBlockState(pos.up());
+			if (stateUp.getBlock() != Blocks.AIR && stateUp.getBlockHardness(world, pos.up()) >= 0.0F) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = world.getBlockState(pos.up()).getBlock();
-				world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(world.getBlockState(pos.up()).getBlock()));
+				Block block = stateUp.getBlock();
+				world.playEvent(null, 2001, pos.up(), Block.getIdFromBlock(block));
 				block.dropBlockAsItem(world, pos.up(), world.getBlockState(pos.up()), 0);
 				world.setBlockToAir(pos.up());
 			}
-			if (!world.isAirBlock(pos.up(2))) {
+			IBlockState stateUp2 = world.getBlockState(pos.up(2));
+			if (stateUp2.getBlock() != Blocks.AIR && stateUp2.getBlockHardness(world, pos.up(2)) >= 0.0F) {
 				setType((byte) 1);
 				setActive(true);
-				Block block = world.getBlockState(pos.up(2)).getBlock();
-				world.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(world.getBlockState(pos.up(2)).getBlock()));
+				Block block = stateUp2.getBlock();
+				world.playEvent(null, 2001, pos.up(2), Block.getIdFromBlock(block));
 				block.dropBlockAsItem(world, pos.up(2), world.getBlockState(pos.up(2)), 0);
 				world.setBlockToAir(pos.up(2));
 			}

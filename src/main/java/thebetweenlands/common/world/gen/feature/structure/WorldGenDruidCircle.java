@@ -1,7 +1,6 @@
 package thebetweenlands.common.world.gen.feature.structure;
 
 import java.util.Random;
-import java.util.UUID;
 
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.material.Material;
@@ -9,7 +8,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.DimensionType;
@@ -19,17 +17,11 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.IWorldGenerator;
-import thebetweenlands.api.storage.LocalRegion;
-import thebetweenlands.api.storage.StorageUUID;
 import thebetweenlands.common.block.structure.BlockDruidStone;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.tile.spawner.MobSpawnerLogicBetweenlands;
 import thebetweenlands.common.tile.spawner.TileEntityMobSpawnerBetweenlands;
-import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.EnumLocationType;
-import thebetweenlands.common.world.storage.location.LocationGuarded;
-import thebetweenlands.common.world.storage.location.guard.ILocationGuard;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class WorldGenDruidCircle implements IWorldGenerator {
 	private static final IBlockState[] RUNE_STONES = {
@@ -78,7 +70,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 			}
 		}
 
-		if(genPos != null && random.nextInt(ConfigHandler.druidCircleFrequency) == 0) {
+		if(genPos != null && random.nextInt(BetweenlandsConfig.WORLD_AND_DIMENSION.druidCircleFrequency) == 0) {
 			generateStructure(world, random, genPos);
 		}
 	}
@@ -92,19 +84,7 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 		return true;
 	}
 
-	private ILocationGuard guard;
-
 	public void generateStructure(World world, Random rand, BlockPos altar) {
-		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationGuarded location = new LocationGuarded(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(altar), "druidAltar", EnumLocationType.NONE);
-		this.guard = location.getGuard();
-		location.addBounds(new AxisAlignedBB(new BlockPos(altar)).grow(8, 10, 8));
-		location.linkChunks();
-		location.setLayer(0);
-		location.setSeed(rand.nextLong());
-		location.setVisible(false);
-		location.setDirty(true);
-
 		// circle
 		MutableBlockPos pos = new MutableBlockPos();
 		IBlockState ground = world.getBiome(altar).topBlock;
@@ -133,7 +113,6 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 
 					pos.setY(altarY - 1);
 					world.setBlockState(pos.toImmutable(), ground);
-					this.guard.setGuarded(world, pos, true);
 
 					int offset = world.rand.nextInt(2);
 					if(world.isAirBlock(pos.down(2)) || world.getBlockState(pos.down(2)).getMaterial().isLiquid()) {
@@ -143,7 +122,6 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 						if (dSq <= this.baseRadius / 10.0F * (10 - yo) + offset) {
 							pos.setY(altarY - 2 - yo);
 							world.setBlockState(pos.toImmutable(), filler);
-							this.guard.setGuarded(world, pos, true);
 						}
 					}
 				}
@@ -156,10 +134,6 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 			MobSpawnerLogicBetweenlands logic = ((TileEntityMobSpawnerBetweenlands)te).getSpawnerLogic();
 			logic.setNextEntityName("thebetweenlands:dark_druid").setCheckRange(32.0D).setSpawnRange(6).setSpawnInAir(false).setMaxEntities(1 + world.rand.nextInt(3));
 		}
-		this.guard.setGuarded(world, altar, true);
-		this.guard.setGuarded(world, altar.down(), true);
-
-		worldStorage.getLocalStorageHandler().addLocalStorage(location);
 	}
 
 	private void placeAir(World world, MutableBlockPos pos) {
@@ -175,7 +149,6 @@ public class WorldGenDruidCircle implements IWorldGenerator {
 	private void placePillar(World world, MutableBlockPos pos, Random rand) {
 		int height = rand.nextInt(3) + 3;
 		for (int k = 0, y = pos.getY(); k <= height; k++, pos.setY(y + k)) {
-			this.guard.setGuarded(world, pos, true);
 			EnumFacing facing = EnumFacing.HORIZONTALS[rand.nextInt(EnumFacing.HORIZONTALS.length)];
 			if (rand.nextBoolean()) {
 				world.setBlockState(pos.toImmutable(), getRandomRuneBlock(rand).withProperty(BlockDruidStone.FACING, facing), 3);

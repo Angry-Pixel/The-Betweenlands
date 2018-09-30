@@ -67,7 +67,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
 
     public TileEntityPurifier() {
         super(3, "container.purifier");
-        this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 16);
+        this.waterTank = new FluidTank(FluidRegistry.SWAMP_WATER, 0, Fluid.BUCKET_VOLUME * 4);
         this.waterTank.setTileEntity(this);
     }
 
@@ -177,7 +177,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
             if (!output.isEmpty() && getWaterAmount() > 0 && inventory.get(2).isEmpty() || !output.isEmpty() && getWaterAmount() > 0 && !inventory.get(2).isEmpty() && inventory.get(2).isItemEqual(output)) {
                 time++;
                 if (time % 108 == 0)
-                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.0F, 1.0F);
+                    world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundRegistry.PURIFIER, SoundCategory.BLOCKS, 1.5F, 1.0F);
                 if (!lightOn)
                     setIlluminated(true);
                 if (time >= MAX_TIME) {
@@ -187,7 +187,7 @@ public class TileEntityPurifier extends TileEntityBasicInventory implements IFlu
                                 inventory.set(i, ItemStack.EMPTY);
                             else
                                 inventory.get(i).shrink(1);
-                    extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+                    extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME / 4));
                     if (inventory.get(2).isEmpty()) {
                         inventory.set(2, output.copy());
                     } else if (inventory.get(2).isItemEqual(output)) {

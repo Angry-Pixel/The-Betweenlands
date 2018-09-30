@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:shimmer_stone"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.fetch.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.fetch.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/root",
+  "criteria": {
+    "set_fire": {
+      "trigger": "thebetweenlands:drop_shimmerstone"
+    }
+  }
+}

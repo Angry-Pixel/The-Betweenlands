@@ -12,7 +12,7 @@ public class SwampHagCaveSpawnEntry extends CaveSpawnEntry {
 	}
 
 	@Override
-	protected EntityLiving createEntity(World world) {
+	public EntityLiving createEntity(World world) {
 		EntityLiving entity = super.createEntity(world);
 		float multiplier = (float)this.getWeight() / (float)this.getBaseWeight();
 		IAttributeInstance movementAttr = entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED);

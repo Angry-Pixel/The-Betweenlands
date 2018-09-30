@@ -11,16 +11,20 @@ public class BiomeDecoratorPatchyIslands extends BiomeDecoratorBetweenlands {
 	public void decorate() {
 		super.decorate();
 
+		this.startProfilerSection("hearthgroveTree");
+		this.generate(5, DecorationHelper::generateHearthgroveTree);
+		this.endProfilerSection();
+		
 		this.startProfilerSection("weedwoodTree");
 		this.generate(50, DecorationHelper::generateWeedwoodTree);
 		this.endProfilerSection();
-
+		
 		this.startProfilerSection("sapTree");
 		this.generate(10, DecorationHelper::generateSapTree);
 		this.endProfilerSection();
 
 		this.startProfilerSection("sunkenIdolHead");
-		this.generate(0.15F, DecorationHelper::generateSunkenIdolHead);
+		this.generate(0.3F, DecorationHelper::generateSunkenIdolHead);
 		this.endProfilerSection();
 
 		this.startProfilerSection("cattailCluster");

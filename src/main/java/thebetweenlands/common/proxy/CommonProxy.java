@@ -1,7 +1,11 @@
 package thebetweenlands.common.proxy;
 
+import java.net.Proxy;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.FontRenderer;
@@ -15,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.common.entity.rowboat.EntityWeedwoodRowboat;
 import thebetweenlands.common.inventory.InventoryItem;
 import thebetweenlands.common.inventory.container.ContainerAnimator;
@@ -102,7 +107,8 @@ public class CommonProxy implements IGuiHandler {
 				item = player.getHeldItemOffhand();
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), "container.lurkerSkinPouch"));
+				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
+				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 			break;
 		}
@@ -110,7 +116,8 @@ public class CommonProxy implements IGuiHandler {
 		case GUI_LURKER_POUCH_KEYBIND: {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(item != null) {
-				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), "container.lurkerSkinPouch"));
+				String name = item.hasDisplayName() ? item.getDisplayName() : "container.lurker_skin_pouch";
+				return new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name));
 			}
 		}
 
@@ -189,8 +196,24 @@ public class CommonProxy implements IGuiHandler {
     public void onPilotExitWeedwoodRowboat(EntityWeedwoodRowboat rowboat, Entity pilot) {
 
     }
+<<<<<<< HEAD
 
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
 		
 	}
+=======
+    
+    public boolean isSingleplayer() {
+    	return false;
+    }
+    
+    @Nullable
+    public Proxy getNetProxy() {
+    	return null;
+    }
+    
+    public List<RiftVariant> getRiftVariants() {
+    	return Collections.emptyList();
+    }
+>>>>>>> 1.12-dev
 }

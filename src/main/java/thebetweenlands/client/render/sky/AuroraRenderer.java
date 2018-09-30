@@ -30,13 +30,21 @@ public class AuroraRenderer {
 	private Vector2d currDirection;
 	private int tiles = 14;
 
-	public AuroraRenderer(double x, double y, double z, Vector2d direction, int tiles) {
+	private final List<Vector4f> colorGradients;
+	
+	private int fadeTicks;
+	private int lastFadeTicks;
+	private boolean active = true;
+	private boolean removed;
+	
+	public AuroraRenderer(double x, double y, double z, Vector2d direction, int tiles, List<Vector4f> colorGradients) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		direction.normalize();
 		this.direction = direction;
 		this.tiles = tiles;
+		this.colorGradients = colorGradients;
 	}
 
 	private Vector2d getRotatedVec(double offset, Vector2d direction) {
@@ -85,9 +93,44 @@ public class AuroraRenderer {
 		return this.z;
 	}
 
-	public void render(float alphaMultiplier, List<Vector4f> colorGradients) {
+	public void update() {
+		this.lastFadeTicks = this.fadeTicks;
+		if(this.active && this.fadeTicks < 500) {
+			this.fadeTicks++;
+		} else if(!this.active && this.fadeTicks > 0) {
+			this.fadeTicks--;
+		}
+		
+		if(!this.active && this.fadeTicks <= 0) {
+			this.remove();
+		}
+	}
+	
+	public boolean isActive() {
+		return this.active;
+	}
+	
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+	
+	public void remove() {
+		this.removed = true;
+	}
+	
+	public boolean isRemoved() {
+		return this.removed;
+	}
+	
+	public float getAlpha(float partialTicks) {
+		return (this.lastFadeTicks + (this.fadeTicks - this.lastFadeTicks) * partialTicks) / 500.0F;
+	}
+	
+	public void render(float partialTicks, float alphaMultiplier) {
 		//TODO: Only generate vertices once per tick and then interpolate
 
+		alphaMultiplier *= this.getAlpha(partialTicks);
+		
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder vertexBuffer = tessellator.getBuffer();
 
@@ -95,7 +138,7 @@ public class AuroraRenderer {
 		int subSegments = 5;
 		double segmentWidth = 15.0D;
 		double segmentHeight = 25.0D;
-		int cGradients = colorGradients.size();
+		int cGradients = this.colorGradients.size();
 
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 		GlStateManager.disableCull();
@@ -117,10 +160,6 @@ public class AuroraRenderer {
 		Vector2d prevDirection = this.currDirection;
 
 		Minecraft.getMinecraft().renderEngine.bindTexture(AURORA_TEXTURE);
-		
-		ITextureObject texture = Minecraft.getMinecraft().renderEngine.getTexture(AURORA_TEXTURE);
-
-		texture.setBlurMipmap(true, false);
 
 		vertexBuffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_LMAP_COLOR);
 
@@ -173,8 +212,8 @@ public class AuroraRenderer {
 					float umin = interpolatedUVs[0][0];
 					float umax = interpolatedUVs[1][0];
 
-					Vector4f bottomGradient = colorGradients.get(gi);
-					Vector4f topGradient = colorGradients.get(gi+1);
+					Vector4f bottomGradient = this.colorGradients.get(gi);
+					Vector4f topGradient = this.colorGradients.get(gi+1);
 
 					Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
 					
@@ -209,8 +248,6 @@ public class AuroraRenderer {
 		tessellator.draw();
 
 		//GL11.glPolygonMode(GL11.GL_FRONT_AND_BACK, GL11.GL_FILL);
-
-		texture.restoreLastBlurMipmap();
 		
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.disableBlend();

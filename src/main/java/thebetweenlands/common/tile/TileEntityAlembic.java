@@ -30,7 +30,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
 
     public static final int AMOUNT_PER_VIAL = Amounts.VIAL;
 
-    public static final float ISOLATION_LOSS_MULTIPLIER = 0.18F;
+    public static final float ISOLATION_LOSS_MULTIPLIER = 0.15F;
 
     private boolean running = false;
     private int progress = 0;
@@ -230,11 +230,11 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
         this.producableElixir = isPositive ? recipe.positiveElixir : recipe.negativeElixir;
         float relStrengthAmount = strengthAspectAmount / (float)Amounts.MAX_ASPECT_AMOUNT;
         float relDurationAmount = durationAspectAmount / (float)Amounts.MAX_ASPECT_AMOUNT;
-        this.producableStrength = MathHelper.floor(relStrengthAmount * 4.0F);
+        this.producableStrength = MathHelper.floor(relStrengthAmount * ElixirEffect.VIAL_INFUSION_MAX_POTENCY);
         if (isPositive) {
-            this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount * 2.0F);
+            this.producableDuration = recipe.baseDuration + MathHelper.floor(recipe.durationModifier * relDurationAmount);
         } else {
-            this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount * 2.0F);
+            this.producableDuration = recipe.negativeBaseDuration + MathHelper.floor(recipe.negativeDurationModifier * relDurationAmount);
         }
     }
 
@@ -253,7 +253,7 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
             }
             List<Aspect> infusionAspects = this.getInfusionItemAspects(infusionIngredients);
             for (Aspect aspect : infusionAspects) {
-                this.producableItemAspects.add(new Aspect(aspect.type, MathHelper.floor(aspect.amount * ISOLATION_LOSS_MULTIPLIER)));
+                this.producableItemAspects.add(new Aspect(aspect.type, MathHelper.floor((aspect.amount * (1.0F - ISOLATION_LOSS_MULTIPLIER)) / 3.0F)));
             }
         }
     }
@@ -320,18 +320,22 @@ public class TileEntityAlembic extends TileEntity implements ITickable {
                 if (this.producableItemAspects.size() >= 1) {
                     Aspect aspect = this.producableItemAspects.get(0);
                     this.producableItemAspects.remove(0);
-                    int totalAmount = aspect.amount;
+                    int removedAmount = aspect.amount;
                     Iterator<Aspect> itemAspectIT = this.producableItemAspects.iterator();
                     while (itemAspectIT.hasNext()) {
                         Aspect currentAspect = itemAspectIT.next();
                         if (currentAspect.type == aspect.type) {
-                            totalAmount += currentAspect.amount;
+                            removedAmount += currentAspect.amount;
                             itemAspectIT.remove();
                         }
                     }
+                    if(removedAmount > Amounts.VIAL) {
+                    	this.producableItemAspects.add(new Aspect(aspect.type, removedAmount - Amounts.VIAL));
+                    	removedAmount = Amounts.VIAL;
+                    }
                     aspectVial = new ItemStack(ItemRegistry.ASPECT_VIAL, 1, vialType);
                     ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(aspectVial);
-                    aspectContainer.add(aspect.type, (int) totalAmount);
+                    aspectContainer.add(aspect.type, (int) removedAmount);
                 }
                 if (this.producableItemAspects.size() == 0) {
                     this.reset();

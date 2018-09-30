@@ -10,6 +10,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -26,6 +27,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class EntityRopeNode extends Entity {
@@ -174,8 +177,8 @@ public class EntityRopeNode extends Entity {
 					}
 				}
 				if(nextNode.getDistance(this) > ROPE_LENGTH_MAX) {
-					if(nextNode instanceof ICommandSender) {
-						((ICommandSender) nextNode).sendMessage(new TextComponentTranslation("chat.rope.disconnected"));
+					if(nextNode instanceof EntityPlayer) {
+						((EntityPlayer) nextNode).sendStatusMessage(new TextComponentTranslation("chat.rope.disconnected"), true);
 					}
 					this.setNextNode(null);
 				}
@@ -268,7 +271,7 @@ public class EntityRopeNode extends Entity {
 					this.onKillCommand();
 				} else {
 					this.despawnTimer++;
-					if(this.despawnTimer >= 12000) {
+					if(this.despawnTimer >= BetweenlandsConfig.GENERAL.cavingRopeDespawnTime * 20) {
 						if(prevNode != null && prevNode instanceof EntityRopeNode) {
 							EntityRopeNode prevRopeNode = (EntityRopeNode) prevNode;
 							prevRopeNode.setNextNode(null);
@@ -303,7 +306,7 @@ public class EntityRopeNode extends Entity {
 						}
 					}
 					if(connectedRopeNode != null) {
-						player.sendMessage(new TextComponentTranslation("chat.rope.alreadyConnected"));
+						player.sendStatusMessage(new TextComponentTranslation("chat.rope.already_connected"), true);
 						return false;
 					}
 
@@ -364,7 +367,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public void despawn() {
-		this.despawnTimer = 12000;
+		this.despawnTimer = BetweenlandsConfig.GENERAL.cavingRopeDespawnTime * 20;
 	}
 
 	public boolean isAttached() {
@@ -378,6 +381,8 @@ public class EntityRopeNode extends Entity {
 		ropeNode.setNextNode(entity);
 		this.setNextNode(ropeNode);
 		this.world.spawnEntity(ropeNode);
+		if (entity instanceof EntityPlayerMP)
+			AdvancementCriterionRegistry.CAVINGROPE_PLACED.trigger((EntityPlayerMP) entity);
 		return ropeNode;
 	}
 
@@ -438,7 +443,7 @@ public class EntityRopeNode extends Entity {
 	}
 
 	public Entity getPreviousNodeByUUID() {
-		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.isEntityAlive() && this.cachedPrevNodeEntity.getUniqueID().equals(this.cachedPrevNodeEntity)) {
+		if(this.cachedPrevNodeEntity != null && this.cachedPrevNodeEntity.isEntityAlive() && this.cachedPrevNodeEntity.getUniqueID().equals(this.prevNodeUUID)) {
 			return this.cachedPrevNodeEntity;
 		} else {
 			UUID uuid = this.prevNodeUUID;

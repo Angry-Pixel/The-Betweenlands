@@ -6,7 +6,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+import net.minecraftforge.event.entity.living.LivingKnockBackEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
@@ -18,16 +23,36 @@ import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
-import thebetweenlands.common.item.tools.ItemBLAxe;
-import thebetweenlands.common.item.tools.ItemBLPickaxe;
-import thebetweenlands.common.item.tools.ItemBLShovel;
-import thebetweenlands.common.item.tools.ItemBLSword;
+import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 
 public class AttackDamageHandler {
 	public static final float DAMAGE_REDUCTION = 0.3F;
+
+	@SubscribeEvent
+	public static void onEntityKilled(LivingDeathEvent event) {
+		if (!(event.getEntityLiving() instanceof EntityPlayer)) {
+
+		}
+	}
+
+	@SubscribeEvent
+	public static void onEntityKnockback(LivingKnockBackEvent event) {
+		EntityLivingBase attackedEntity = event.getEntityLiving();
+		Entity attacker = event.getAttacker();
+
+		if(attackedEntity instanceof IEntityBL && attacker instanceof EntityLivingBase && ((EntityLivingBase) attacker).getActiveHand() != null) {
+			EntityLivingBase entityLiving = (EntityLivingBase) attacker;
+			ItemStack heldItem = entityLiving.getHeldItem(entityLiving.getActiveHand());
+
+			if (!heldItem.isEmpty() && OverworldItemHandler.isToolWeakened(heldItem)) {
+				event.setStrength(event.getStrength() * 0.3F);
+			}
+		}
+	}
 
 	@SubscribeEvent
 	public static void onEntityAttacked(LivingHurtEvent event) {
@@ -35,17 +60,44 @@ public class AttackDamageHandler {
 		DamageSource source = event.getSource();
 		float damage = event.getAmount();
 
-		if(attackedEntity instanceof IEntityBL) {
-			if (source.getTrueSource() instanceof EntityPlayer) {
+		if(attackedEntity instanceof IEntityBL && source.getTrueSource() instanceof EntityLivingBase && ((EntityLivingBase) source.getTrueSource()).getActiveHand() != null) {
+			//BL mobs overworld item resistance
+			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
+			ItemStack heldItem = attacker.getHeldItem(attacker.getActiveHand());
+
+			if (heldItem.isEmpty() || OverworldItemHandler.isToolWeakened(heldItem)) {
 				//Cap damage of overly OP weapons
 				damage = Math.min(damage, 40.0F);
+			}
 
-				//BL mobs overworld item resistance
-				EntityPlayer entityPlayer = (EntityPlayer) source.getTrueSource();
-				ItemStack heldItem = entityPlayer.getHeldItem(entityPlayer.getActiveHand());
-				if (!heldItem.isEmpty()) {
-					if (OverworldItemHandler.isToolWeakened(heldItem)) {
-						damage = damage * DAMAGE_REDUCTION;
+			if (!heldItem.isEmpty()) {
+				if (OverworldItemHandler.isToolWeakened(heldItem)) {
+					damage = damage * DAMAGE_REDUCTION;
+
+					if(!attackedEntity.world.isRemote) {
+						Vec3d center = attackedEntity.getPositionVector().addVector(0, attackedEntity.height / 2.0F, 0);
+
+						Vec3d hitOffset = null;
+
+						Entity immediateAttacker = source.getImmediateSource();
+
+						if(immediateAttacker == null || attacker == immediateAttacker) {
+							RayTraceResult result = attackedEntity.getEntityBoundingBox().calculateIntercept(attacker.getPositionEyes(1), attacker.getPositionEyes(1).add(attacker.getLookVec().scale(10)));
+							if(result != null) {
+								hitOffset = result.hitVec.subtract(center);
+							}
+						}
+						if(immediateAttacker != null && hitOffset == null) {
+							hitOffset = immediateAttacker.getPositionVector().addVector(0, immediateAttacker.height / 2.0F, 0).subtract(center);
+						}
+						if(hitOffset != null) {
+							Vec3d offsetDirXZ = new Vec3d(hitOffset.x, 0, hitOffset.z).normalize();
+							Vec3d offset = offsetDirXZ.scale(attackedEntity.width).addVector(0, hitOffset.y + attackedEntity.height / 2.0F, 0);
+
+							attackedEntity.world.playSound(null, attackedEntity.posX, attackedEntity.posY + 0.5D, attackedEntity.posZ, SoundRegistry.DAMAGE_REDUCTION, SoundCategory.PLAYERS, 0.7F, 0.75F + attackedEntity.world.rand.nextFloat() * 0.3F);
+
+							TheBetweenlands.networkWrapper.sendToAllAround(new MessageDamageReductionParticle(attackedEntity, offset, offsetDirXZ.scale(attackedEntity.width + 0.2F).normalize()), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
+						}
 					}
 				}
 			}
@@ -71,12 +123,17 @@ public class AttackDamageHandler {
 				if(rings > 0) {
 					TheBetweenlands.networkWrapper.sendToAllAround(new MessagePowerRingParticles(attackedEntity), new TargetPoint(attackedEntity.dimension, attackedEntity.posX, attackedEntity.posY, attackedEntity.posZ, 32.0D));
 				}
-				
+
 				damage *= 1.0F + 0.5F * rings;
 			}
 		}
 
 		event.setAmount(damage);
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static void spawnDamageReductionParticle(Entity entity, Vec3d offset, Vec3d dir) {
+		BLParticles.DAMAGE_REDUCTION.spawn(entity.world, 0, 0, 0, ParticleArgs.get().withScale(2F).withData(entity, offset, dir));
 	}
 
 	@SideOnly(Side.CLIENT)

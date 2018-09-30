@@ -48,6 +48,7 @@ public class RenderAspectrusCrop extends TileEntitySpecialRenderer<TileEntityAsp
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
 		GlStateManager.rotate(rndRot * 90.0F, 0, 1, 0);

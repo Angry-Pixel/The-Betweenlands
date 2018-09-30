@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 2
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.root.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.root.description"
+    },
+    "background": "thebetweenlands:textures/blocks/dug_swamp_dirt_composted_3.png",
+    "announce_to_chat": false,
+    "show_toast": false
+  },
+  "criteria": {
+    "has_dank_world": {
+      "trigger": "thebetweenlands:has_advancement",
+      "conditions": {
+        "advancement": "thebetweenlands:adventurer/dank_world"
+      }
+    }
+  }
+}

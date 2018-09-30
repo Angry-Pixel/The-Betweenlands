@@ -16,20 +16,23 @@ import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class BlockMoss extends BlockDirectional implements IShearable, ISickleHarvestable {
+public class BlockMoss extends BlockDirectional implements IShearable, ISickleHarvestable, ITintedBlock {
     protected static final AxisAlignedBB MOSS_UP_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.2D, 1.0D);
     protected static final AxisAlignedBB MOSS_DOWN_AABB = new AxisAlignedBB(0.0D, 0.8D, 0.0D, 1.0D, 1.0D, 1.0D);
     protected static final AxisAlignedBB MOSS_WEST_AABB = new AxisAlignedBB(0.8D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
@@ -234,66 +237,76 @@ public class BlockMoss extends BlockDirectional implements IShearable, ISickleHa
     @Override
     @SideOnly(Side.CLIENT)
     public BlockRenderLayer getBlockLayer() {
-        return BlockRenderLayer.CUTOUT;
+        return BlockRenderLayer.CUTOUT_MIPPED;
     }
 
     @Override
-    public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-        int attempt = 0;
-        if (rand.nextInt(80) == 0) {
-            if (rand.nextInt(6) == 0) {
-                MutableBlockPos checkPos = new MutableBlockPos();
-                byte radius = 2;
-                int maxNearbyMossBlocks = 6;
-                int xx;
-                int yy;
-                int zz;
-                for (xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
-                    for (zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
-                        for (yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {
-                            if (!world.isBlockLoaded(checkPos.setPos(xx, yy, zz)))
-                                return;
-                            if (world.getBlockState(checkPos.setPos(xx, yy, zz)).getBlock() == this) {
-                                --maxNearbyMossBlocks;
-                                if (maxNearbyMossBlocks <= 0)
-                                    return;
-                            }
-                        }
-                    }
-                }
-                for (attempt = 0; attempt < 128; attempt++) {
-                    xx = pos.getX() + rand.nextInt(3) - 1;
-                    yy = pos.getY() + rand.nextInt(3) - 1;
-                    zz = pos.getZ() + rand.nextInt(3) - 1;
-                    int offsetDir = 0;
-                    if (xx != pos.getX()) offsetDir++;
-                    if (yy != pos.getY()) offsetDir++;
-                    if (zz != pos.getZ()) offsetDir++;
-                    if (offsetDir > 1)
-                        continue;
-                    BlockPos offsetPos = new BlockPos(xx, yy, zz);
-                    if (world.isAirBlock(offsetPos)) {
-                        EnumFacing facing = EnumFacing.getFront(rand.nextInt(EnumFacing.VALUES.length));
-                        EnumFacing.Axis axis = facing.getAxis();
-                        EnumFacing oppositeFacing = facing.getOpposite();
-                        boolean isInvalid = false;
-                        if (axis.isHorizontal() && !world.isSideSolid(offsetPos.offset(oppositeFacing), facing, true)) {
-                            isInvalid = true;
-                        } else if (axis.isVertical() && !this.canPlaceOn(world, offsetPos.offset(oppositeFacing))) {
-                            isInvalid = true;
-                        }
-                        if (!isInvalid) {
-                            world.setBlockState(offsetPos, this.getDefaultState().withProperty(BlockMoss.FACING, facing));
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-    }
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+    	MutableBlockPos checkPos = new MutableBlockPos();
+		byte radius = 2;
+    	int attempt = 0;
+		for (int xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
+			for (int zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
+				for (int yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {
+					if (!world.isBlockLoaded(checkPos.setPos(xx, yy, zz))) {
+						return;
+					}
+				}
+			}
+		}
+		if (rand.nextInt(3) == 0) {
+			int maxNearbyMossBlocks = 6;
+			for (int xx = pos.getX() - radius; xx <= pos.getX() + radius; ++xx) {
+				for (int zz = pos.getZ() - radius; zz <= pos.getZ() + radius; ++zz) {
+					for (int yy = pos.getY() - radius; yy <= pos.getY() + radius; ++yy) {
+						if (world.getBlockState(checkPos.setPos(xx, yy, zz)).getBlock() == this) {
+							--maxNearbyMossBlocks;
+							if (maxNearbyMossBlocks <= 0) {
+								return;
+							}
+						}
+					}
+				}
+			}
+			for (attempt = 0; attempt < 30; attempt++) {
+				int xx = pos.getX() + rand.nextInt(3) - 1;
+				int yy = pos.getY() + rand.nextInt(3) - 1;
+				int zz = pos.getZ() + rand.nextInt(3) - 1;
+				int offsetDir = 0;
+				if (xx != pos.getX()) offsetDir++;
+				if (yy != pos.getY()) offsetDir++;
+				if (zz != pos.getZ()) offsetDir++;
+				if (offsetDir > 1)
+					continue;
+				BlockPos offsetPos = new BlockPos(xx, yy, zz);
+				if (world.isAirBlock(offsetPos)) {
+					EnumFacing facing = EnumFacing.getFront(rand.nextInt(EnumFacing.VALUES.length));
+					EnumFacing.Axis axis = facing.getAxis();
+					EnumFacing oppositeFacing = facing.getOpposite();
+					boolean isInvalid = false;
+					if (axis.isHorizontal() && !world.isSideSolid(offsetPos.offset(oppositeFacing), facing, true)) {
+						isInvalid = true;
+					} else if (axis.isVertical() && !this.canPlaceOn(world, offsetPos.offset(oppositeFacing))) {
+						isInvalid = true;
+					}
+					if (!isInvalid) {
+						world.setBlockState(offsetPos, this.getDefaultState().withProperty(BlockMoss.FACING, facing));
+						break;
+					}
+				}
+			}
+		} else if(rand.nextInt(20) == 0) {
+			world.setBlockToAir(pos);
+		}
+	}
     
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+    @Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getFoliageColorAtPos(worldIn, pos) : ColorizerFoliage.getFoliageColorBasic();
+	}
 }

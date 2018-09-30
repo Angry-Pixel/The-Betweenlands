@@ -84,10 +84,9 @@ public abstract class TransformerModule {
 	 * @param method
 	 * @param node
 	 * @param index
-	 * @return Total added instructions (negative for removed instructions)
 	 */
-	public int transformMethodInstruction(MethodNode method, AbstractInsnNode node, int index) {
-		return 0;
+	public void transformMethodInstruction(MethodNode method, AbstractInsnNode node, int index) {
+
 	}
 
 	/**
@@ -142,9 +141,9 @@ public abstract class TransformerModule {
 	 * @param insn
 	 * @param toInsert
 	 */
-	protected final void insertAfter(MethodNode method, AbstractInsnNode insn, Collection<? extends AbstractInsnNode> toInsert) {
-		for(AbstractInsnNode insertedInsn : toInsert) {
-			method.instructions.insert(insn, insertedInsn);
+	protected final void insertAfter(MethodNode method, AbstractInsnNode insn, List<? extends AbstractInsnNode> toInsert) {
+		for(int i = toInsert.size() - 1; i >= 0; i--) {
+			method.instructions.insert(insn, toInsert.get(i));
 		}
 	}
 }

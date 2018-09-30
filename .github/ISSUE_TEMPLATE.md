@@ -1,17 +1,50 @@
-Before you start writing an issue, please read up on the common issues on the main page
+<!--
+If you want to write a suggestion you can remove and ignore this template.
+Before you start writing a bug report, please read up on the common issues on the main page and how to create a proper bug report.
+Once you have done that can use this template to write your bug report.
+-->
 
-For issues:
- * use a descriptive and concise title
- * include the version of Forge and the Betweenlands you are using
- * specify whether it happens in singleplayer or multiplayer (and if so, what server is used, e.g. Vanilla, Thermos, Sponge etc.)
- * provide a detailed and comprehensible description, if possible also include instructions on how to reproduce it
- * upload the full crash log if available and include a link to said crash log
- * not post multiple problems in one issue. Create multiple issues instead
+## Versions
+#### Betweenlands version:
+<!-- Add the Betweenlands version you are using below -->
 
 
-Feel free to include pictures of the problem you are having, if that helps.
-You may also create issues for suggestions. If you have multiple suggestions please post them in one single issue.
+#### Forge version:
+<!-- Add the Forge version you are using below -->
 
-If you do not follow these rules your issues will be closed and ignored.
-  
+
+#### Singleplayer or Multiplayer:
+<!-- Whether the problem happens in Singleplayer or Multiplayer, and if it happens in Multiplayer also include which server is used (Vanilla, Thermos, Sponge etc.) -->
+
+
+#### Installed mods:
+<!-- Include a list of *all* mods you have installed (if it's a big list please upload a text file containing the list somewhere and then add the link below). 
+Additionally if you are using a public mod pack include a link to that mod pack so that we can try to reproduce the problem ourselves. -->
+
+
+## Link to full crash log
+<!-- If the problem isn't about a crash you can remove or ignore this section. 
+Please do not directly copy&paste the crash log here, but instead upload it somewhere and then add the link below. You could for example use https://gist.github.com/ to upload your log. -->
+
+
+
+## Description of the problem
+#### How to reproduce:
+<!-- Describe the steps to reproduce the problem -->
+
+1.
+2.
+3. etc...
+
+
+#### Expected result:
+<!-- Describe what you expected to happen -->
+
+
+#### Actual result:
+<!-- Describe what actually happened -->
+
+
+#### Pictures:
+<!-- If you want to include pictures you can upload them somewhere and then include them by adding "![](http://your-picture-link-goes-here.jpg)" below -->
 

@@ -34,6 +34,10 @@ public class BiomeDecoratorSwamplands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("weedwoodTree");
 		this.generate(80, DecorationHelper::generateWeedwoodTree);
 		this.endProfilerSection();
+		
+		this.startProfilerSection("nibbletwigTree");
+		this.generate(100, DecorationHelper::generateNibbletwigTree);
+		this.endProfilerSection();
 
 		this.startProfilerSection("weedwoodBush");
 		this.generate(35, DecorationHelper::generateWeedwoodBush);

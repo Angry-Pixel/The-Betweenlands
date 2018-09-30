@@ -1,0 +1,81 @@
+//This script checks if there are any dependencies in the core mod to code outside of the
+//core mod package and throws an exception if so
+
+buildscript {
+	repositories {
+		jcenter()
+		maven {
+			name = "forge"
+			url = "http://files.minecraftforge.net/maven"
+		}
+	}
+	dependencies { classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT' }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+import org.objectweb.asm.ClassReader;
+import org.objectweb.asm.Type;
+import org.objectweb.asm.commons.ClassRemapper;
+import org.objectweb.asm.commons.Remapper;
+import org.objectweb.asm.ClassVisitor;
+import org.objectweb.asm.FieldVisitor;
+import org.objectweb.asm.MethodVisitor;
+import org.objectweb.asm.Opcodes;
+
+class ClassValidator extends Remapper {
+	String cls;
+
+	@Override
+	public String map(final String type) {
+		checkClassType(type);
+		return super.map(type);
+	}
+
+	private void checkClassType(final String type) {
+		if(type.startsWith("thebetweenlands") && !type.startsWith("thebetweenlands/core/")) {
+			throw new RuntimeException(String.format("Core mod class %s has illegal dependency to %s!", this.cls, type));
+		}
+	}
+}
+
+class CoreModImportsValidationTask extends DefaultTask {
+	@TaskAction
+	def validate() {
+		def coreJarFiles = project.fileTree(project.sourceSets.main.output.classesDir.path).matching { include 'thebetweenlands/core/**' }
+		coreJarFiles.visit { FileVisitDetails details ->
+			if(details.file.isFile() && details.file.name.endsWith(".class")) {
+				validateClassFile(details.file)
+			}
+		}
+	}
+
+	def validateClassFile(File file) {
+		file.withInputStream { is ->
+			ClassReader classReader = new ClassReader(is);
+			final ClassValidator validator = new ClassValidator();
+			ClassVisitor visitor = new ClassVisitor(Opcodes.ASM5) {
+						@Override
+						public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
+							if(validator.cls == null) {
+								validator.cls = name;
+							}
+							super.visit(version, access, name, signature, superName, interfaces);
+						}
+
+						@Override
+						public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
+							return new MethodVisitor(Opcodes.ASM5) { };
+						}
+
+						@Override
+						public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
+							return new FieldVisitor(Opcodes.ASM5) { };
+						}
+					};
+			classReader.accept(new ClassRemapper(visitor, validator), 0);
+		}
+	}
+}
+
+task validateCoreJar(type: CoreModImportsValidationTask) { }

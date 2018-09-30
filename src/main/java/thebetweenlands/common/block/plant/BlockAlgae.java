@@ -102,4 +102,9 @@ public class BlockAlgae extends BlockPlant implements IConnectedTextureBlock {
 			return p.getY() <= pos.getY() && (worldIn.getBlockState(p).getBlock() == this || worldIn.getBlockState(p.down()).isFullCube());
 		}, false);
 	}
+	
+	@Override
+	public boolean isFaceConnectedTexture(EnumFacing face) {
+		return face == EnumFacing.UP;
+	}
 }

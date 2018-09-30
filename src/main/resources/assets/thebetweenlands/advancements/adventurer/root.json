@@ -1,0 +1,40 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:swamp_talisman"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.root.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.root.description"
+    },
+    "background": "thebetweenlands:textures/blocks/temple_bricks.png",
+    "announce_to_chat": false,
+    "show_toast": false
+  },
+  "criteria": {
+    "talisman": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:swamp_talisman"
+          }
+        ]
+      }
+    },
+    "in_bl": {
+      "trigger": "minecraft:location",
+      "conditions": {
+        "dimension": "betweenlands"
+      }
+    }
+  },
+  "requirements": [
+    [
+      "talisman",
+      "in_bl"
+    ]
+  ]
+}

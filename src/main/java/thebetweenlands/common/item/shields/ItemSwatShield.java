@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -21,6 +22,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.item.tools.ItemBLShield;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
 
 public class ItemSwatShield extends ItemBLShield {
 	public ItemSwatShield(ToolMaterial material) {
@@ -128,6 +130,8 @@ public class ItemSwatShield extends ItemBLShield {
 		enemy.knockBack(user, 6.0F, -rammingDir.x, -rammingDir.z);
 		if(user instanceof EntityPlayer) {
 			enemy.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)user), 10.0F);
+			if (user instanceof EntityPlayerMP)
+				AdvancementCriterionRegistry.SWAT_SHIELD.trigger((EntityPlayerMP) user, enemy);
 		} else {
 			enemy.attackEntityFrom(DamageSource.causeMobDamage(user), 10.0F);
 		}
@@ -202,6 +206,8 @@ public class ItemSwatShield extends ItemBLShield {
 		this.setPreparingChargeTicks(stack, entityLiving, 0);
 		this.setRemainingChargeTicks(stack, entityLiving, 0);
 		this.setPreparingCharge(stack, entityLiving, false);
+		if (entityLiving instanceof EntityPlayerMP)
+			AdvancementCriterionRegistry.SWAT_SHIELD.revert((EntityPlayerMP) entityLiving);
 	}
 
 	@Override

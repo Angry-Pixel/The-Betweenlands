@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -25,26 +24,19 @@ import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.model.IModel;
 import net.minecraftforge.client.model.ModelLoaderRegistry;
 import net.minecraftforge.client.model.ModelLoaderRegistry.LoaderException;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.item.CorrosionHelper;
 import thebetweenlands.api.item.ICorrodible;
 import thebetweenlands.client.render.sprite.TextureCorrosion;
 import thebetweenlands.client.render.sprite.TextureFromData;
-import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
 
 public class TextureStitchHandler {
 	public static final TextureStitchHandler INSTANCE = new TextureStitchHandler();
 
-	private static final Field f_mapRegisteredSprites = ReflectionHelper.findField(TextureMap.class, "mapRegisteredSprites", "field_110574_e", "j");
-
 	private final List<TextureCorrosion> stitchedCorrosionSprites = new ArrayList<TextureCorrosion>();
 
 	private final List<TextureStitcher> stitchers = new ArrayList<TextureStitcher>();
-
-	private final Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<ResourceLocation, Frame[]>();
 
 	/**
 	 * Registers a texture stitcher
@@ -54,7 +46,6 @@ public class TextureStitchHandler {
 		this.stitchers.add(splitter);
 	}
 
-	@SuppressWarnings("unchecked")
 	@SubscribeEvent
 	public void onTextureStitchPre(TextureStitchEvent.Pre e) {
 		if(e.getMap() != Minecraft.getMinecraft().getTextureMapBlocks()) {
@@ -66,7 +57,7 @@ public class TextureStitchHandler {
 		this.stitchedCorrosionSprites.clear();
 		Map<String, TextureAtlasSprite> mapRegisteredSprites;
 		try {
-			mapRegisteredSprites = (Map<String, TextureAtlasSprite>) f_mapRegisteredSprites.get(e.getMap());
+			mapRegisteredSprites = e.getMap().mapRegisteredSprites;
 		} catch (Exception ex) {
 			throw new RuntimeException("Failed to load underlying sprite map", ex);
 		}
@@ -114,7 +105,7 @@ public class TextureStitchHandler {
 		}
 
 		//Stitch textures and split animations if necessary
-		this.animationFramesCache.clear();
+		Map<ResourceLocation, Frame[]> animationFramesCache = new HashMap<>();
 		IResourceManager resourceManager = Minecraft.getMinecraft().getResourceManager();
 		for(TextureStitcher stitcher : this.stitchers) {
 			ResourceLocation[] textures = stitcher.getTextures();
@@ -127,7 +118,7 @@ public class TextureStitchHandler {
 					try {
 						ResourceLocation resourceLocation = this.getResourceLocation(e.getMap().getBasePath(), sprite);
 
-						Frame[] cachedFrames = this.animationFramesCache.get(resourceLocation);
+						Frame[] cachedFrames = animationFramesCache.get(resourceLocation);
 						if(cachedFrames != null) {
 							//Use cached frames
 							frames[i] = cachedFrames;
@@ -166,7 +157,7 @@ public class TextureStitchHandler {
 								}
 							}
 
-							this.animationFramesCache.put(resourceLocation, frames[i]);
+							animationFramesCache.put(resourceLocation, frames[i]);
 						}
 					} catch(Exception ex) {
 						throw new RuntimeException("Failed splitting texture animation", ex);
@@ -200,6 +191,7 @@ public class TextureStitchHandler {
 			if(parentSprite != null)
 				corrosionSprite.setParentSprite(parentSprite);
 		}
+		this.stitchedCorrosionSprites.clear();
 
 		//Frame splitters
 		for(TextureStitcher splitter : this.stitchers) {

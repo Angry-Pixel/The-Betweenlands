@@ -83,4 +83,8 @@ public class ToolRepairAnimatorRecipe implements IAnimatorRecipe {
 	public boolean getCloseOnFinish(ItemStack stack) {
 		return false;
 	}
+
+	public Item getTool() {
+		return tool;
+	}
 }

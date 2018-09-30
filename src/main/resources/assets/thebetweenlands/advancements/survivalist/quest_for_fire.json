@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:peat"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.quest_for_fire.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.quest_for_fire.description"
+    }
+  },
+  "parent": "thebetweenlands:survivalist/pyromaniac",
+  "criteria": {
+    "set_fire": {
+      "trigger": "thebetweenlands:peat_fire"
+    }
+  }
+}

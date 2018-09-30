@@ -1,0 +1,57 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:ring_of_power"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.rule_them_all.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.rule_them_all.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "ring_1": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ring_of_power"
+          }
+        ]
+      }
+    },
+    "ring_2": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ring_of_flight"
+          }
+        ]
+      }
+    },
+    "ring_3": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ring_of_recruitment"
+          }
+        ]
+      }
+    },
+    "ring_4": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:ring_of_summoning"
+          }
+        ]
+      }
+    }
+  }
+}

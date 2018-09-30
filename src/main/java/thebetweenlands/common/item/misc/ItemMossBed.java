@@ -1,10 +1,12 @@
 package thebetweenlands.common.item.misc;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -22,44 +24,50 @@ public class ItemMossBed extends Item {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public EnumActionResult onItemUse( EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack stack = player.getHeldItem(hand);
-		if (world.isRemote) {
+	public EnumActionResult onItemUse(EntityPlayer player, World worldIn, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if (worldIn.isRemote) {
 			return EnumActionResult.SUCCESS;
 		} else if (facing != EnumFacing.UP) {
 			return EnumActionResult.FAIL;
 		} else {
-			IBlockState headBlockState = world.getBlockState(pos);
-			Block headBlock = headBlockState.getBlock();
-			boolean isBlockReplaceable = headBlock.isReplaceable(world, pos);
+			IBlockState state = worldIn.getBlockState(pos);
+			Block block = state.getBlock();
+			boolean isReplaceable = block.isReplaceable(worldIn, pos);
 
-			if (!isBlockReplaceable) {
+			if (!isReplaceable) {
 				pos = pos.up();
 			}
 
-			int rotation = MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-			EnumFacing playerFacing = EnumFacing.getHorizontal(rotation);
-			BlockPos offsetPos = pos.offset(playerFacing);
+			int rot = MathHelper.floor((double)(player.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+			EnumFacing placementFacing = EnumFacing.getHorizontal(rot);
+			BlockPos headPos = pos.offset(placementFacing);
+			ItemStack stack = player.getHeldItem(hand);
 
-			if (player.canPlayerEdit(pos, facing, stack) && player.canPlayerEdit(offsetPos, facing, stack)) {
-				boolean isFootBlockReplaceable = world.getBlockState(offsetPos).getBlock().isReplaceable(world, offsetPos);
-				boolean canPlaceHead = isBlockReplaceable || world.isAirBlock(pos);
-				boolean canPlaceFoot = isFootBlockReplaceable || world.isAirBlock(offsetPos);
-				
-				if (canPlaceHead && canPlaceFoot && world.getBlockState(pos.down()).isBlockNormalCube() && world.getBlockState(offsetPos.down()).isBlockNormalCube()) {
-					IBlockState placedFootBlockState = BlockRegistry.MOSS_BED.getDefaultState().withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockBed.FACING, playerFacing).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
+			if (player.canPlayerEdit(pos, facing, stack) && player.canPlayerEdit(headPos, facing, stack)) {
+				IBlockState headState = worldIn.getBlockState(headPos);
+				boolean isHeadPosReplaceable = headState.getBlock().isReplaceable(worldIn, headPos);
+				boolean isFootPlaceable = isReplaceable || worldIn.isAirBlock(pos);
+				boolean isHeadPlaceable = isHeadPosReplaceable || worldIn.isAirBlock(headPos);
 
-					if (world.setBlockState(pos, placedFootBlockState, 11)) {
-						IBlockState placedHeadBlockState = placedFootBlockState.withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD);
-						world.setBlockState(offsetPos, placedHeadBlockState, 11);
+				if (isFootPlaceable && isHeadPlaceable && worldIn.getBlockState(pos.down()).isTopSolid() && worldIn.getBlockState(headPos.down()).isTopSolid()) {
+					IBlockState bedState = BlockRegistry.MOSS_BED.getDefaultState().withProperty(BlockBed.OCCUPIED, Boolean.valueOf(false)).withProperty(BlockBed.FACING, placementFacing).withProperty(BlockBed.PART, BlockBed.EnumPartType.FOOT);
+
+					if(worldIn.setBlockState(pos, bedState, 10)) {
+						worldIn.setBlockState(headPos, bedState.withProperty(BlockBed.PART, BlockBed.EnumPartType.HEAD), 10);
 					}
 
-					SoundType sound = placedFootBlockState.getBlock().getSoundType(placedFootBlockState, world, pos, player);
-					world.playSound((EntityPlayer)null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-					stack.shrink(1);
+					SoundType sound = bedState.getBlock().getSoundType(bedState, worldIn, pos, player);
+					worldIn.playSound((EntityPlayer)null, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
 
+					worldIn.notifyNeighborsRespectDebug(pos, block, false);
+					worldIn.notifyNeighborsRespectDebug(headPos, headState.getBlock(), false);
+
+					if (player instanceof EntityPlayerMP) {
+						CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)player, pos, stack);
+					}
+
+					stack.shrink(1);
 					return EnumActionResult.SUCCESS;
 				} else {
 					return EnumActionResult.FAIL;

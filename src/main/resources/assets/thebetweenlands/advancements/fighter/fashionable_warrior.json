@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:valonite_helmet",
+      "nbt": "{\"Gem\":1}"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.fashionable_warrior.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.fashionable_warrior.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/serious_business",
+  "criteria": {
+    "hurt_mob_default": {
+      "trigger": "thebetweenlands:middle_gem_upgrade"
+    }
+  }
+}

@@ -17,6 +17,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -25,6 +27,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -32,8 +36,12 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
+import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.aspect.AspectManager;
+import thebetweenlands.common.item.tools.ItemBLBucket;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
 
@@ -72,8 +80,9 @@ public class BlockInfuser extends BlockContainer {
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
 		ItemStack heldItem = player.getHeldItem(hand);
-		if (!world.isRemote && world.getTileEntity(pos) instanceof TileEntityInfuser) {
-			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
+		TileEntity tileEntity = world.getTileEntity(pos);
+		if (!world.isRemote && tileEntity instanceof TileEntityInfuser) {
+			TileEntityInfuser tile = (TileEntityInfuser) tileEntity;
 
 			final IFluidHandler fluidHandler = getFluidHandler(world, pos);
 			if (fluidHandler != null && FluidUtil.interactWithFluidHandler(player, hand, fluidHandler)) {
@@ -81,7 +90,7 @@ public class BlockInfuser extends BlockContainer {
 			}
 
 			if (!player.isSneaking()) {
-				if (tile != null && heldItem.isEmpty() && tile.getStirProgress() >= 90) {
+				if (heldItem.isEmpty() && tile.getStirProgress() >= 90) {
 					tile.setStirProgress(0);
 					return true;
 				}
@@ -98,6 +107,11 @@ public class BlockInfuser extends BlockContainer {
 								if (!player.capabilities.isCreativeMode) 
 									heldItem.shrink(1);
 								world.notifyBlockUpdate(pos, state, state, 2);
+								if(tile.getWaterAmount() > 0) {
+									world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_SPLASH, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+								} else {
+									world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_ADD_ITEM, SoundCategory.BLOCKS, 0.3f, 0.9f + world.rand.nextFloat() * 0.3f);
+								}
 								return true;
 							}
 						}
@@ -128,6 +142,32 @@ public class BlockInfuser extends BlockContainer {
 			}
 
 			if(player.isSneaking()) {
+				if (heldItem.getItem() instanceof ItemBLBucket && ((ItemBLBucket) heldItem.getItem()).getFluid(heldItem) == null && tile.hasInfusion() && tile.getWaterAmount() >= Fluid.BUCKET_VOLUME) {
+					ItemStack infusionBucket = new ItemStack(ItemRegistry.BL_BUCKET_INFUSION, 1, heldItem.getMetadata());
+					NBTTagCompound nbtCompound = new NBTTagCompound();
+					infusionBucket.setTagCompound(nbtCompound);
+					nbtCompound.setString("infused", "Infused");
+					NBTTagList nbtList = new NBTTagList();
+					for (int i = 0; i < tile.getSizeInventory() - 1; i++) {
+						ItemStack stackInSlot = tile.getStackInSlot(i);
+						if (!stackInSlot.isEmpty()) {
+							nbtList.appendTag(stackInSlot.writeToNBT(new NBTTagCompound()));
+						}
+					}
+					nbtCompound.setTag("ingredients", nbtList);
+					nbtCompound.setInteger("infusionTime", tile.getInfusionTime());
+					tile.extractFluids(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME));
+					if (heldItem.getCount() == 1) {
+						player.setHeldItem(hand, infusionBucket.copy());
+						return true;
+					} else {
+						if (!player.addItemStackToInventory(infusionBucket.copy()))
+							player.dropItem(infusionBucket.copy(), false);
+						heldItem.shrink(1);
+						return true;
+					}
+				}
+
 				if(!tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).isEmpty()) {
 					EntityItem itemEntity = player.dropItem(tile.getStackInSlot(TileEntityInfuser.MAX_INGREDIENTS + 1).copy(), false);
 					if(itemEntity != null) itemEntity.setPickupDelay(0);
@@ -203,7 +243,8 @@ public class BlockInfuser extends BlockContainer {
 				float fixedOffset = 0.25F;
 				float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
 				if(rand.nextInt((101 - infuser.getTemperature()))/4 == 0) {
-					BLParticles.BUBBLE_INFUSION.spawn(world, xx, yy, zz);
+					float colors[] = infuser.currentInfusionColor;
+					BLParticles.BUBBLE_INFUSION.spawn(world, xx + 0.3F - rand.nextFloat() * 0.6F, yy, zz + 0.3F - rand.nextFloat() * 0.6F, ParticleArgs.get().withScale(0.3F).withColor(colors[0], colors[1], colors[2], 1));
 					if (rand.nextInt(10) == 0 && infuser.getTemperature() > 70)
 						world.playSound(xx, yy, zz, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 1.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.5F, false);
 				}
@@ -236,4 +277,15 @@ public class BlockInfuser extends BlockContainer {
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+	
+	@Override
+	public void fillWithRain(World world, BlockPos pos) {
+		if (world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && world.getTileEntity(pos) instanceof TileEntityInfuser) {
+			TileEntityInfuser tile = (TileEntityInfuser) world.getTileEntity(pos);
+			
+			if(tile != null) {
+				tile.fill(new FluidStack(FluidRegistry.SWAMP_WATER, Fluid.BUCKET_VOLUME), true);
+			}
+		}
+	}
 }

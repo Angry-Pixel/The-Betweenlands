@@ -9,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.pathfinding.PathNavigateGround;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -34,10 +33,6 @@ public class EntityAIFollowTarget extends EntityAIBase {
 		this.navigator = taskOwner.getNavigator();
 		this.minDist = minDist;
 		this.maxDist = maxDist;
-
-		if (!(taskOwner.getNavigator() instanceof PathNavigateGround)) {
-			throw new IllegalArgumentException("Unsupported mob type for FollowOwnerGoal");
-		}
 	}
 
 	@Override
@@ -80,7 +75,6 @@ public class EntityAIFollowTarget extends EntityAIBase {
 	}
 
 	@Override
-	@SuppressWarnings("deprecation")
 	public void updateTask() {
 		EntityLivingBase target = this.target.get();
 

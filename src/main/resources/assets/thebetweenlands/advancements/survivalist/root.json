@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:sap_ball"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.survivalist.root.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.survivalist.root.description"
+    },
+    "background": "thebetweenlands:textures/blocks/swamp_dirt.png",
+    "announce_to_chat": false,
+    "show_toast": false
+  },
+  "criteria": {
+    "has_dank_world": {
+      "trigger": "thebetweenlands:has_advancement",
+      "conditions": {
+        "advancement": "thebetweenlands:adventurer/dank_world"
+      }
+    }
+  }
+}

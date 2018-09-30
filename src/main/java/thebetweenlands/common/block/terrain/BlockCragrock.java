@@ -15,10 +15,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.EnumPlantType;
+import net.minecraftforge.common.IPlantable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -138,5 +142,30 @@ public class BlockCragrock extends BasicBlock implements BlockRegistry.ICustomIt
 	@Override
 	public String getSubtypeName(int meta) {
 		return "%s_" + EnumCragrockType.values()[meta].getName();
+	}
+	
+	@Override
+	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, IPlantable plantable) {
+		if(super.canSustainPlant(state, world, pos, direction, plantable)) {
+			return true;
+		}
+
+		if(state.getValue(VARIANT) != EnumCragrockType.DEFAULT) {
+			EnumPlantType plantType = plantable.getPlantType(world, pos.offset(direction));
+	
+			switch(plantType) {
+			case Beach:
+				boolean hasWater = (world.getBlockState(pos.east()).getMaterial() == Material.WATER ||
+				world.getBlockState(pos.west()).getMaterial() == Material.WATER ||
+				world.getBlockState(pos.north()).getMaterial() == Material.WATER ||
+				world.getBlockState(pos.south()).getMaterial() == Material.WATER);
+				return hasWater;
+			case Plains:
+				return true;
+			default:
+				return false;
+			}
+		}
+		return false;
 	}
 }

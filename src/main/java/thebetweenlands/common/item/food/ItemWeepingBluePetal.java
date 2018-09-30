@@ -9,7 +9,7 @@ import thebetweenlands.common.registries.CapabilityRegistry;
 
 public class ItemWeepingBluePetal extends ItemBLFood {
     public ItemWeepingBluePetal() {
-        super(4, 1.2F, false);
+        super(1, 1.0F, false);
         this.setAlwaysEdible();
     }
 

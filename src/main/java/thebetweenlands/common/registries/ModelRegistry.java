@@ -21,7 +21,7 @@ import thebetweenlands.client.render.model.baked.ModelRoot;
 import thebetweenlands.client.render.model.baked.ModelRubberTapCombined;
 import thebetweenlands.client.render.model.baked.ModelRubberTapLiquid;
 import thebetweenlands.client.render.model.baked.ModelStalactite;
-import thebetweenlands.client.render.model.baked.ModelThatchRoof;
+import thebetweenlands.client.render.model.baked.ModelSlant;
 import thebetweenlands.client.render.model.baked.ModelWalkway;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodBush;
 import thebetweenlands.client.render.model.baked.ModelWeedwoodShieldBurning;
@@ -60,6 +60,7 @@ import thebetweenlands.client.render.model.baked.modelbase.shields.ModelOctineSh
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelSyrmoriteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelValoniteShield;
 import thebetweenlands.client.render.model.baked.modelbase.shields.ModelWeedwoodShield;
+import thebetweenlands.client.render.model.entity.ModelMireSnailEgg;
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.ModelConverter.Box;
@@ -136,6 +137,7 @@ public class ModelRegistry {
 			return new Vec3UV(vertexIn.x - 0.5D, vertexIn.y + 0.5D, -vertexIn.z + 0.5D, vertexIn.u, vertexIn.v, vertexIn.uw, vertexIn.vw);
 		}
 	});
+	public static final IModel MIRE_SNAIL_EGG = new ModelFromModelBase(new ModelMireSnailEgg(), new ResourceLocation("thebetweenlands:items/mire_snail_egg"), 16, 16);
 
 	//Misc
 	public static final IModel LIFE_CRYSTAL_STALACTITE = new ModelLifeCrystalStalactite();
@@ -150,7 +152,8 @@ public class ModelRegistry {
 	public static final IModel MOSS_BED = new ModelFromModelBase(new ModelMossBed(), new ResourceLocation("thebetweenlands:blocks/moss_bed"), 128, 128);
 	public static final IModel WALKWAY = new ModelWalkway(true);
 	public static final IModel WALKWAY_NO_STANDS = new ModelWalkway(false);
-	public static final IModel THATCH_ROOF = new ModelThatchRoof();
+	public static final IModel THATCH_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/thatch"));
+	public static final IModel MUD_BRICK_ROOF = new ModelSlant(new ResourceLocation(ModInfo.ID, "blocks/mud_brick_roof"));
 	public static final IModel PRESENT = new ModelFromModelBase(new ModelPresent(), new ResourceLocation("thebetweenlands:blocks/present"), 64, 64, new IVertexProcessor() {
 		@Override
 		public Vec3UV process(Vec3UV vertexIn, Quad quad, Box box, QuadBuilder builder) {

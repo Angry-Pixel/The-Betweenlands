@@ -1,0 +1,10 @@
+{
+  "source": "thebetweenlands:bl_bucket_rubber_weedwood",
+  "inherit_overrides": false,
+  "custom": {
+    "default_fluid": "rubber",
+    "base_texture": "thebetweenlands:items/weedwood_bucket_base",
+    "liquid_template": "thebetweenlands:items/weedwood_bucket_base",
+    "cover_texture": "thebetweenlands:items/weedwood_bucket_cover"
+  }
+}

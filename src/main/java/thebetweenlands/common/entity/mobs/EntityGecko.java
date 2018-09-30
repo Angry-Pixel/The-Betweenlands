@@ -26,7 +26,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.entity.WeedWoodBushUncollidableEntity;
-import thebetweenlands.common.entity.ai.EntityAIBLAvoidEntityGecko;
+import thebetweenlands.common.entity.ai.EntityAISeekRainShelter;
+import thebetweenlands.common.entity.ai.gecko.EntityAIAvoidEntityGecko;
+import thebetweenlands.common.entity.ai.gecko.EntityAIGeckoHideFromRain;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
@@ -55,12 +57,19 @@ public class EntityGecko extends EntityCreature implements IEntityBL, WeedWoodBu
 	protected void initEntityAI() {
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityAIPanic(this, 1.0D));
-		this.tasks.addTask(2, new EntityAIBLAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.3, 0.5));
-		this.tasks.addTask(3, new EntityAIWander(this, 0.6D));
-		this.tasks.addTask(4, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
-		this.tasks.addTask(5, new EntityAILookIdle(this));
+		this.tasks.addTask(2, new EntityAIAvoidEntityGecko(this, EntityPlayer.class, PLAYER_MIN_DISTANCE, 0.65, 1));
+		this.tasks.addTask(3, new EntityAIGeckoHideFromRain(this, 0.65));
+		this.tasks.addTask(4, new EntityAISeekRainShelter(this, 0.65));
+		this.tasks.addTask(5, new EntityAIWander(this, 0.6D));
+		this.tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6));
+		this.tasks.addTask(7, new EntityAILookIdle(this));
 	}
 
+	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return this.world.isRainingAt(pos) ? -1.0F : 0.0F;
+	}
+	
 	@Override
 	protected void entityInit() {
 		super.entityInit();

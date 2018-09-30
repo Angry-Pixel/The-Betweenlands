@@ -70,6 +70,40 @@
                 {
                     "conditions": [],
                     "type": "item",
+                    "name": "thebetweenlands:dentrothyst_shard_green",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 10,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
+                    "name": "thebetweenlands:dentrothyst_shard_orange",
+                    "functions": [
+                        {
+                            "conditions": [],
+                            "function": "set_count",
+                            "count": {
+                                "min": 1,
+                                "max": 3
+                            }
+                        }
+                    ],
+                    "weight": 4,
+                    "quality": 0
+                },
+                {
+                    "conditions": [],
+                    "type": "item",
                     "entryName": "lurker_skin",
                     "name": "thebetweenlands:items_misc",
                     "functions": [

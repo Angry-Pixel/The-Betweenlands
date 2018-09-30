@@ -1,6 +1,7 @@
 package thebetweenlands.common.entity.mobs;
 
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.RangedAttribute;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,11 +11,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.common.entity.ai.EntityAIFlyingWander;
+import thebetweenlands.common.entity.ai.EntityAISeekRainShelter;
 import thebetweenlands.common.entity.movement.FlightMoveHelper;
 import thebetweenlands.common.registries.LootTableRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 
 public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	public static final IAttribute GLOW_STRENGTH_ATTRIB = (new RangedAttribute(null, "bl.fireflyGlowStrength", 1, 0, 8)).setDescription("Firefly glow strength").setShouldWatch(true);
@@ -22,8 +26,6 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	public static final IAttribute GLOW_STOP_CHANCE = (new RangedAttribute(null, "bl.fireflyGlowStopChance", 0.00083D, 0, 1)).setDescription("Firefly glow stop chance per tick");
 
 	private static final DataParameter<Float> GLOW_STRENGTH = EntityDataManager.<Float>createKey(EntityFirefly.class, DataSerializers.FLOAT);
-
-	protected double aboveLayer = 6.0D;
 
 	protected int glowTicks = 0;
 	protected int prevGlowTicks = 0;
@@ -39,8 +41,15 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	}
 
 	@Override
+	public float getBlockPathWeight(BlockPos pos) {
+		return this.world.isRainingAt(pos) ? -1.0F : 0.0F;
+	}
+	
+	@Override
 	protected void initEntityAI() {
-		tasks.addTask(0, new EntityAIFlyingWander(this, 0.5D));
+		this.tasks.addTask(0, new EntityAISeekRainShelter(this, 0.8D));
+		this.tasks.addTask(1, new EntityAISwimming(this));
+		this.tasks.addTask(2, new EntityAIFlyingWander(this, 0.5D));
 	}
 
 	@Override
@@ -73,10 +82,6 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	public void onUpdate() {
 		super.onUpdate();
 
-		if (this.isInWater()) {
-			this.moveHelper.setMoveTo(this.posX, this.posY + 1.0D, this.posZ, 1.0D);
-		}
-
 		if(getEntityWorld().getBlockState(getPosition().down()).isSideSolid(getEntityWorld(), getPosition().down(), EnumFacing.UP))
 			getMoveHelper().setMoveTo(this.posX, this.posY + 1, this.posZ, 0.32D);
 
@@ -105,6 +110,12 @@ public class EntityFirefly extends EntityFlyingCreature implements IEntityBL {
 	@Override
 	protected boolean canDespawn() {
 		return true;
+	}
+	
+	@Override
+	public boolean getCanSpawnHere() {
+		float brightness = this.world.provider.getSunBrightnessFactor(1);
+		return (brightness <= 0.3F || BetweenlandsWorldStorage.forWorld(this.world).getEnvironmentEventRegistry().bloodSky.isActive()) && super.getCanSpawnHere();
 	}
 
 	@Override

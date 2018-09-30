@@ -147,7 +147,7 @@ public class ElixirCommonHandler {
         }
 
         if(ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.isActive(entityLivingBase) && !entityLivingBase.isInWater()) {
-            IBlockState state = entityLivingBase.world.getBlockState(new BlockPos(entityLivingBase.posX, entityLivingBase.getEntityBoundingBox().minY - 0.1D, entityLivingBase.posZ));
+            IBlockState state = entityLivingBase.world.getBlockState(new BlockPos(entityLivingBase.posX, entityLivingBase.getEntityBoundingBox().minY + Math.min(-0.1D, entityLivingBase.motionY), entityLivingBase.posZ));
             if(state.getMaterial().isLiquid()) {
                 float relStrength = Math.min((ElixirEffectRegistry.EFFECT_LIGHTWEIGHT.getStrength(entityLivingBase)) / 4.0F, 1.0F);
                 entityLivingBase.motionX *= 0.1F + relStrength * 0.9F;
@@ -159,48 +159,50 @@ public class ElixirCommonHandler {
         }
 
         if(entityLivingBase.isInWater() && ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.isActive(entityLivingBase)) {
-            if(entityLivingBase.motionY > -0.1F) entityLivingBase.motionY -= 0.04F;
+            if(entityLivingBase.motionY > -0.1F) {
+            	entityLivingBase.motionY -= 0.005F + 0.035F / 5.0F *  (1 + ElixirEffectRegistry.EFFECT_HEAVYWEIGHT.getStrength(entityLivingBase));
+            }
         }
 
-        if(ElixirEffectRegistry.EFFECT_CATSEYES.isActive(entityLivingBase)) {
-            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, ElixirEffectRegistry.EFFECT_CATSEYES.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_CATSEYES.getStrength(entityLivingBase)));
-            ElixirEffectRegistry.EFFECT_CATSEYES.removeElixir(entityLivingBase);
-        }
-
-        if(ElixirEffectRegistry.EFFECT_POISONSTING.isActive(entityLivingBase)) {
-            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.POISON, ElixirEffectRegistry.EFFECT_POISONSTING.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_POISONSTING.getStrength(entityLivingBase)));
-            ElixirEffectRegistry.EFFECT_POISONSTING.removeElixir(entityLivingBase);
-        }
-
-        if(ElixirEffectRegistry.EFFECT_DRUNKARD.isActive(entityLivingBase)) {
-            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, ElixirEffectRegistry.EFFECT_DRUNKARD.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_DRUNKARD.getStrength(entityLivingBase)));
-            ElixirEffectRegistry.EFFECT_DRUNKARD.removeElixir(entityLivingBase);
-        }
-
-        if(ElixirEffectRegistry.EFFECT_BLINDMAN.isActive(entityLivingBase)) {
-            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, ElixirEffectRegistry.EFFECT_BLINDMAN.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_BLINDMAN.getStrength(entityLivingBase)));
-            ElixirEffectRegistry.EFFECT_BLINDMAN.removeElixir(entityLivingBase);
-        }
-
-        //Stenching
-        if(!(entityLivingBase instanceof EntityPlayer) && entityLivingBase instanceof EntityMob) {
-            EntityLiving entityLiving = (EntityLiving) entityLivingBase;
-            IAttributeInstance followRangeAttrib = entityLiving.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-            if(followRangeAttrib != null) {
-                List<EntityPlayer> stenchingPlayers = this.getStenchingPlayersInRange(entityLiving);
-                if(stenchingPlayers.isEmpty()) {
-                    if(followRangeAttrib.getModifier(FOLLOW_RANGE_MODIFIER.getID()) != null) {
-                        followRangeAttrib.removeModifier(FOLLOW_RANGE_MODIFIER);
-                    }
-                } else {
-                    AttributeModifier currentModifier = followRangeAttrib.getModifier(FOLLOW_RANGE_MODIFIER.getID());
-                    if(entityLiving.getAttackTarget() == null || entityLiving.getRevengeTarget() == null) {
-                        EntityPlayer closestPlayer = null;
-                        for(EntityPlayer player : stenchingPlayers) {
-                            if(closestPlayer == null || player.getDistanceSq(entityLiving) < closestPlayer.getDistanceSq(entityLiving))
-                                closestPlayer = player;
-                        }
-                        if(entityLiving.ticksExisted % 20 == 0) {
+        if(!entityLivingBase.world.isRemote) {
+	        if(ElixirEffectRegistry.EFFECT_CATSEYES.isActive(entityLivingBase)) {
+	            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, ElixirEffectRegistry.EFFECT_CATSEYES.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_CATSEYES.getStrength(entityLivingBase)));
+	            ElixirEffectRegistry.EFFECT_CATSEYES.removeElixir(entityLivingBase);
+	        }
+	
+	        if(ElixirEffectRegistry.EFFECT_POISONSTING.isActive(entityLivingBase)) {
+	            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.POISON, ElixirEffectRegistry.EFFECT_POISONSTING.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_POISONSTING.getStrength(entityLivingBase)));
+	            ElixirEffectRegistry.EFFECT_POISONSTING.removeElixir(entityLivingBase);
+	        }
+	
+	        if(ElixirEffectRegistry.EFFECT_DRUNKARD.isActive(entityLivingBase)) {
+	            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, ElixirEffectRegistry.EFFECT_DRUNKARD.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_DRUNKARD.getStrength(entityLivingBase)));
+	            ElixirEffectRegistry.EFFECT_DRUNKARD.removeElixir(entityLivingBase);
+	        }
+	
+	        if(ElixirEffectRegistry.EFFECT_BLINDMAN.isActive(entityLivingBase)) {
+	            entityLivingBase.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, ElixirEffectRegistry.EFFECT_BLINDMAN.getDuration(entityLivingBase), ElixirEffectRegistry.EFFECT_BLINDMAN.getStrength(entityLivingBase)));
+	            ElixirEffectRegistry.EFFECT_BLINDMAN.removeElixir(entityLivingBase);
+	        }
+	
+	        //Stenching
+	        if(!(entityLivingBase instanceof EntityPlayer) && entityLivingBase instanceof EntityMob && entityLivingBase.ticksExisted % 20 == 0) {
+	            EntityLiving entityLiving = (EntityLiving) entityLivingBase;
+	            IAttributeInstance followRangeAttrib = entityLiving.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+	            if(followRangeAttrib != null) {
+	                List<EntityPlayer> stenchingPlayers = this.getStenchingPlayersInRange(entityLiving);
+	                if(stenchingPlayers.isEmpty()) {
+	                    if(followRangeAttrib.getModifier(FOLLOW_RANGE_MODIFIER.getID()) != null) {
+	                        followRangeAttrib.removeModifier(FOLLOW_RANGE_MODIFIER);
+	                    }
+	                } else {
+	                    AttributeModifier currentModifier = followRangeAttrib.getModifier(FOLLOW_RANGE_MODIFIER.getID());
+	                    if(entityLiving.getAttackTarget() == null || entityLiving.getRevengeTarget() == null) {
+	                        EntityPlayer closestPlayer = null;
+	                        for(EntityPlayer player : stenchingPlayers) {
+	                            if(closestPlayer == null || player.getDistanceSq(entityLiving) < closestPlayer.getDistanceSq(entityLiving))
+	                                closestPlayer = player;
+	                        }
                             int strength = ElixirEffectRegistry.EFFECT_STENCHING.getStrength(closestPlayer);
                             AttributeModifier stenchModifier = this.getFollowRangeModifier(strength);
                             boolean shouldApplyModifier = currentModifier == null || currentModifier.getAmount() < stenchModifier.getAmount();
@@ -212,10 +214,10 @@ public class ElixirCommonHandler {
                             }
                             entityLiving.setAttackTarget(closestPlayer);
                             entityLiving.setRevengeTarget(closestPlayer);
-                        }
-                    }
-                }
-            }
+	                    }
+	                }
+	            }
+	        }
         }
     }
     private AttributeModifier getFollowRangeModifier(int strength) {

@@ -83,7 +83,7 @@ public class BlockRope extends Block {
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		return super.canPlaceBlockAt(worldIn, pos) && (worldIn.getBlockState(pos.up()).isSideSolid(worldIn, pos, EnumFacing.DOWN) || worldIn.getBlockState(pos.up()).getBlock() == this);
+		return !worldIn.getBlockState(pos).getMaterial().isLiquid() && super.canPlaceBlockAt(worldIn, pos) && (worldIn.getBlockState(pos.up()).isSideSolid(worldIn, pos, EnumFacing.DOWN) || worldIn.getBlockState(pos.up()).getBlock() == this);
 	}
 
 	@Override

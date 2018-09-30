@@ -31,13 +31,13 @@ public class AmbienceRegistry {
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, SoundRegistry.AMBIENT_WIGHT_FORTRESS) {
 			@Override
 			public boolean isActive() {
-				return super.isActive() && !this.getAmbience().getLocation().getName().equals("translate:wightTowerBoss");
+				return super.isActive() && !this.getAmbience().getLocation().getName().equals("wight_tower_boss");
 			}
 		});
 		AmbienceManager.INSTANCE.registerAmbience(new LocationAmbienceType(EnumLocationAmbience.WIGHT_TOWER, SoundRegistry.AMBIENT_WIGHT_FORTRESS) { //Silences the other ambient tracks
 			@Override
 			public boolean isActive() {
-				return super.isActive() && this.getAmbience().getLocation().getName().equals("translate:wightTowerBoss");
+				return super.isActive() && this.getAmbience().getLocation().getName().equals("wight_tower_boss");
 			}
 
 			@Override

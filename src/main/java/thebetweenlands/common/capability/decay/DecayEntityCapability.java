@@ -9,9 +9,9 @@ import net.minecraftforge.common.capabilities.Capability;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class DecayEntityCapability extends EntityCapability<DecayEntityCapability, IDecayCapability, EntityPlayer> implements IDecayCapability, ISerializableCapability {
 	@Override
@@ -70,7 +70,7 @@ public class DecayEntityCapability extends EntityCapability<DecayEntityCapabilit
 	@Override
 	public boolean isDecayEnabled() {
 		return this.getEntity().getEntityWorld().getDifficulty() != EnumDifficulty.PEACEFUL && 
-				this.getEntity().dimension == ConfigHandler.dimensionId && 
+				this.getEntity().dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId && 
 				!this.getEntity().capabilities.isCreativeMode && 
 				!this.getEntity().capabilities.disableDamage;
 	}

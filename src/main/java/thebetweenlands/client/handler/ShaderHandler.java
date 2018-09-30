@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import java.lang.reflect.Method;
 import java.nio.IntBuffer;
 
 import org.lwjgl.opengl.ARBTextureFloat;
@@ -8,29 +7,25 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent;
 import net.minecraftforge.client.event.RenderBlockOverlayEvent.OverlayType;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import thebetweenlands.api.event.PreRenderShadersEvent;
 import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.util.config.ConfigHandler;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class ShaderHandler {
 	public static final ShaderHandler INSTANCE = new ShaderHandler();
 
-	private final Method methodRenderHand = ReflectionHelper.findMethod(EntityRenderer.class,  "renderHand", "func_78476_b", float.class, int.class);
-	private final Method methodSetupCameraTransform = ReflectionHelper.findMethod(EntityRenderer.class, "setupCameraTransform","func_78479_a", float.class, int.class);
-
-	private boolean cancelOverlays = false;
+	private boolean cancelTransparentOverlays = false;
 
 	@SubscribeEvent
 	public void onPreRenderShaders(PreRenderShadersEvent event) {
@@ -44,7 +39,14 @@ public class ShaderHandler {
 		if(event.phase == Phase.START) {
 			Minecraft mc = Minecraft.getMinecraft();
 
-			if(ShaderHelper.INSTANCE.isShaderSupported() && ConfigHandler.useShader) {
+			boolean canUseInWorld = true;
+			if(BetweenlandsConfig.RENDERING.dimensionShaderOnly) {
+				canUseInWorld = mc.world != null && mc.world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId;
+			}
+			
+			if(ShaderHelper.INSTANCE.isShaderSupported() && BetweenlandsConfig.RENDERING.useShader && canUseInWorld) {
+				ShaderHelper.INSTANCE.initShaders();
+				
 				Framebuffer framebuffer = mc.getFramebuffer();
 
 				if(!mc.gameSettings.fboEnable) {
@@ -73,14 +75,10 @@ public class ShaderHandler {
 			GlStateManager.pushMatrix();
 			GlStateManager.colorMask(false, false, false, false);
 			//Don't render water overlays so they don't write to the depth buffer
-			this.cancelOverlays = true;
-			try {
-				this.methodRenderHand.invoke(Minecraft.getMinecraft().entityRenderer, event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-				this.methodSetupCameraTransform.invoke(Minecraft.getMinecraft().entityRenderer, event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
-			} catch(Exception ex) {
-				throw new RuntimeException(ex);
-			}
-			this.cancelOverlays = false;
+			this.cancelTransparentOverlays = true;
+			Minecraft.getMinecraft().entityRenderer.renderHand(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
+			Minecraft.getMinecraft().entityRenderer.setupCameraTransform(event.getPartialTicks(), MinecraftForgeClient.getRenderPass());
+			this.cancelTransparentOverlays = false;
 			GlStateManager.colorMask(true, true, true, true);
 			GlStateManager.popMatrix();
 
@@ -89,10 +87,10 @@ public class ShaderHandler {
 		}
 	}
 
-	@SubscribeEvent(priority = EventPriority.LOWEST)
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
 	public void onRenderBlockOverlay(RenderBlockOverlayEvent event) {
-		if(this.cancelOverlays && event.getOverlayType() == OverlayType.WATER) {
-			event.setCanceled(this.cancelOverlays);
+		if(this.cancelTransparentOverlays && event.getOverlayType() == OverlayType.WATER) {
+			event.setCanceled(true);
 		}
 	}
 

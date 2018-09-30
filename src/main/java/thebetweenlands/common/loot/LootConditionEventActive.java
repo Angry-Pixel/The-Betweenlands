@@ -10,7 +10,7 @@ import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -27,7 +27,7 @@ public class LootConditionEventActive implements LootCondition {
 	public boolean testCondition(Random rand, LootContext context) {
 		boolean isEventOn = false;
 		if(context.getWorld().provider instanceof WorldProviderBetweenlands) {
-			EnvironmentEvent event = ((WorldProviderBetweenlands)context.getWorld().provider).getEnvironmentEventRegistry().forName(this.event);
+			IEnvironmentEvent event = ((WorldProviderBetweenlands)context.getWorld().provider).getEnvironmentEventRegistry().forName(this.event);
 			if(event != null && event.isActive()) {
 				isEventOn = true;
 			}

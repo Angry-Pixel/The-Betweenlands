@@ -56,6 +56,7 @@ public class BlockMudFlowerPot extends BlockContainer {
 		this.setCreativeTab(BLCreativeTabs.BLOCKS);
 		this.setHardness(0.3F);
 		this.setSoundType(SoundType.STONE);
+		this.useNeighborBrightness = true;
 	}
 
 	/**

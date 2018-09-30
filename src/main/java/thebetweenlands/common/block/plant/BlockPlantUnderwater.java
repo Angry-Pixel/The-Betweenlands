@@ -21,10 +21,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.IFluidBlock;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.block.SoilHelper;
@@ -35,7 +38,7 @@ import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable {
+public class BlockPlantUnderwater extends BlockSwampWater implements net.minecraftforge.common.IPlantable, IStateMappedBlock, IShearable, ISickleHarvestable, IFarmablePlant {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
 
 	protected ItemStack sickleHarvestableDrop;
@@ -65,9 +68,17 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 		this.isReplaceable = replaceable;
 		return this;
 	}
-
-	protected IBlockState getReplacementBlock(IBlockAccess world, BlockPos pos, IBlockState state) {
-		return BlockRegistry.SWAMP_WATER.getDefaultState();
+	
+	/**
+	 * Removes the plant. Usually sets the block to water
+	 * @param world
+	 * @param pos
+	 * @param player
+	 * @param canHarvest
+	 * @return
+	 */
+	protected boolean removePlant(World world, BlockPos pos, @Nullable EntityPlayer player, boolean canHarvest) {
+		return world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState(), world.isRemote ? 11 : 3);
 	}
 
 	@Override
@@ -142,7 +153,7 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if (!this.canBlockStay(worldIn, pos, state)) {
 			this.dropBlockAsItem(worldIn, pos, state, 0);
-			worldIn.setBlockState(pos, this.getReplacementBlock(worldIn, pos, state), 3);
+			this.removePlant(worldIn, pos, null, false);
 		}
 	}
 
@@ -163,19 +174,23 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		this.onBlockHarvested(world, pos, state, player);
-		return world.setBlockState(pos, this.getReplacementBlock(world, pos, state), world.isRemote ? 11 : 3);
+		return this.removePlant(world, pos, player, willHarvest);
 	}
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
 		IBlockState soil = worldIn.getBlockState(pos.down());
-		return super.canPlaceBlockAt(worldIn, pos) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && 
-				(soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) || this.canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
+		IBlockState state = worldIn.getBlockState(pos);
+		if(state.getBlock() instanceof IFluidBlock && ((IFluidBlock)state.getBlock()).getFluid() == this.getFluid()) {
+			return super.canPlaceBlockAt(worldIn, pos) && 
+					(soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this) || this.canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this));
+		}
+		return false;
 	}
 
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing direction, net.minecraftforge.common.IPlantable plantable) {
-		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockPlantUnderwater && ((BlockPlantUnderwater)plantable).canSustainPlant(state));
+		return super.canSustainPlant(state, world, pos, direction, plantable) || (plantable instanceof BlockPlantUnderwater && ((BlockPlantUnderwater)plantable).canSustainPlant(state)) || SoilHelper.canSustainUnderwaterPlant(state);
 	}
 
 	@Override
@@ -213,5 +228,44 @@ public class BlockPlantUnderwater extends BlockSwampWater implements net.minecra
 	@Override
 	public boolean canRenderInLayer(IBlockState state, BlockRenderLayer layer) {
 		return layer == BlockRenderLayer.TRANSLUCENT || layer == BlockRenderLayer.CUTOUT;
+	}
+
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		if(tintIndex == 1) {
+			return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : -1;
+		}
+		return super.getColorMultiplier(state, worldIn, pos, tintIndex);
+	}
+
+	@Override
+	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
+		return true;
+	}
+
+	@Override
+	public boolean canSpreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		if(rand.nextFloat() <= 0.25F) {
+			Block block = world.getBlockState(targetPos).getBlock();
+			if(block instanceof BlockSwampWater && ((BlockSwampWater)block).isSourceBlock(world, targetPos)) {
+				return this.canPlaceBlockAt(world, targetPos);
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int getCompostCost(World world, BlockPos pos, IBlockState state, Random rand) {
+		return 4;
+	}
+
+	@Override
+	public void decayPlant(World world, BlockPos pos, IBlockState state, Random rand) {
+		world.setBlockState(pos, BlockRegistry.SWAMP_WATER.getDefaultState());
+	}
+
+	@Override
+	public void spreadTo(World world, BlockPos pos, IBlockState state, BlockPos targetPos, Random rand) {
+		world.setBlockState(targetPos, this.getDefaultState());
 	}
 }

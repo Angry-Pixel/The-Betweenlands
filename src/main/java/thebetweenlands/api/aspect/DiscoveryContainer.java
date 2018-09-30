@@ -71,7 +71,7 @@ public class DiscoveryContainer<T> {
 	/**
 	 * Discovers a new aspect of an item and returns the discovery result
 	 * @param manager
-	 * @param item
+	 * @param aspectItem
 	 * @return
 	 */
 	public AspectDiscovery discover(AspectManager manager, AspectItem aspectItem) {
@@ -92,6 +92,15 @@ public class DiscoveryContainer<T> {
 			this.saveContainer();
 			return new AspectDiscovery(EnumDiscoveryResult.NEW, undiscovered, true);
 		}
+	}
+
+	public boolean haveDiscoveredAll(AspectManager manager) {
+		for(Entry<AspectItem, List<Aspect>> e : manager.getMatchedAspects().entrySet()) {
+			List<Aspect> staticAspects = manager.getStaticAspects(e.getKey());
+			if (getDiscoveryCount(e.getKey()) < staticAspects.size())
+				return false;
+		}
+		return true;
 	}
 
 	/**

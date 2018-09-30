@@ -1,7 +1,5 @@
 package thebetweenlands.common.block.container;
 
-import javax.annotation.Nullable;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.SoundType;
@@ -24,6 +22,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -80,71 +79,92 @@ public class BlockItemShelf extends BlockContainer {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		ItemStack heldItem = player.getHeldItem(hand);
-		if(hand == EnumHand.MAIN_HAND) {
+	public void onBlockClicked(World world, BlockPos pos, EntityPlayer player) {
+		if(!world.isRemote && (!player.isSwingInProgress || player.prevSwingProgress != player.swingProgress)
+				/*Ugly check so that it doesn't give 2 items when clicking with empty hand*/) {
 			TileEntity te = world.getTileEntity(pos);
 
 			if(te instanceof TileEntityItemShelf) {
+				IBlockState state = world.getBlockState(pos);
+
 				TileEntityItemShelf shelf = (TileEntityItemShelf) te;
 
-				float cx, cy;
+				RayTraceResult ray = this.rayTrace(pos, player.getPositionEyes(1), player.getPositionEyes(1).add(player.getLookVec().scale(10)), this.getBoundingBox(state, world, pos));
+				if(ray != null) {
+					InvWrapper wrapper = new InvWrapper(shelf);
 
-				Vec3i up = new Vec3i(0, 1, 0);
-				Vec3i dir = up.crossProduct(state.getValue(FACING).getDirectionVec());
+					int slot = this.getSlot(state.getValue(FACING), (float)(ray.hitVec.x - pos.getX()), (float)(ray.hitVec.y - pos.getY()), (float)(ray.hitVec.z - pos.getZ()));
 
-				cx = dir.getX() * hitX + dir.getZ() * hitZ;
-				cy = hitY;
-
-				if(cx < 0) {
-					cx = cx + 1;
-				}
-
-				int slot = 0;
-
-				if(cx >= 0.0D && cx <= 0.5D) {
-					slot++;
-				}
-
-				if(cy >= 0.0D && cy <= 0.5D) {
-					slot += 2;
-				}
-
-				InvWrapper wrapper = new InvWrapper(shelf);
-
-				if(!player.isSneaking()) {
-					if(!heldItem.isEmpty()) {
-						ItemStack result = wrapper.insertItem(slot, heldItem, true);
-						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
-							if(!world.isRemote) {
-								result = wrapper.insertItem(slot, heldItem.copy(), false);
-								world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
-								if(!player.isCreative()) {
-									player.setHeldItem(hand, result);
-								}
-							}
-							world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 1);
-							return true;
-						}
-					}
-				} else {
-					ItemStack result = wrapper.extractItem(slot, 1, true);
+					ItemStack result = wrapper.extractItem(slot, player.isSneaking() ? 64 : 1, true);
 					if(!result.isEmpty() && result.getCount() > 0) {
-						if(!world.isRemote) {
-							result = wrapper.extractItem(slot, 1, false);
-							world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
-							if(!player.inventory.addItemStackToInventory(result)) {
-								player.entityDropItem(result, 0);
-							}
-							world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 0.8f);
+						result = wrapper.extractItem(slot, result.getCount(), false);
+						world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+						if(!player.inventory.addItemStackToInventory(result)) {
+							player.entityDropItem(result, 0);
 						}
-						return true;
+						world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 0.8f);
 					}
 				}
 			}
 		}
+	}
 
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		if(hand == EnumHand.MAIN_HAND) {
+			if(!world.isRemote) {
+				ItemStack heldItem = player.getHeldItem(hand);
+				TileEntity te = world.getTileEntity(pos);
+
+				if(te instanceof TileEntityItemShelf) {
+					TileEntityItemShelf shelf = (TileEntityItemShelf) te;
+
+					InvWrapper wrapper = new InvWrapper(shelf);
+
+					int slot = this.getSlot(state.getValue(FACING), hitX, hitY, hitZ);
+
+					if(!heldItem.isEmpty()) {
+						ItemStack result = wrapper.insertItem(slot, heldItem, true);
+						if(result.isEmpty() || result.getCount() != heldItem.getCount()) {
+							result = wrapper.insertItem(slot, heldItem.copy(), false);
+							world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 2);
+							if(!player.isCreative()) {
+								player.setHeldItem(hand, result);
+							}
+							world.playSound(null, pos, SoundEvents.ENTITY_ITEMFRAME_PLACE, SoundCategory.BLOCKS, 1, 1);
+						}
+					}
+				}
+			}
+			return true;
+		}
 		return false;
+	}
+
+	protected int getSlot(EnumFacing blockDir, float hitX, float hitY, float hitZ) {
+		float cx, cy;
+
+		Vec3i up = new Vec3i(0, 1, 0);
+		Vec3i dir = up.crossProduct(blockDir.getDirectionVec());
+
+		cx = dir.getX() * hitX + dir.getZ() * hitZ;
+		cy = hitY;
+		
+		if(cx <= 0.0D) {
+			cx = cx + 1;
+		}
+
+		int slot = 0;
+
+		if(cx >= 0.0D && cx <= 0.5D) {
+			slot++;
+		}
+
+		if(cy >= 0.0D && cy <= 0.5D) {
+			slot += 2;
+		}
+
+		return slot;
 	}
 
 	@Override
@@ -200,9 +220,9 @@ public class BlockItemShelf extends BlockContainer {
 
 		super.breakBlock(worldIn, pos, state);
 	}
-	
+
 	@Override
-    public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
-    	return BlockFaceShape.UNDEFINED;
-    }
+	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.UNDEFINED;
+	}
 }

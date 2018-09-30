@@ -10,6 +10,9 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.Vector3d;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
@@ -48,7 +51,10 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 	public void renderTileAsItem(double x, double y, double z) {
 		bindTexture(NORMAL);
-
+		
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		GlStateManager.pushMatrix();
 		renderMainModel(x, y, z);
 		GlStateManager.popMatrix();
@@ -74,8 +80,9 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 		renderStones(x, y, z, 0);
 		GlStateManager.popMatrix();
 
-		GlStateManager.disableBlend();
+		GlStateManager.enableBlend();
 		GlStateManager.enableAlpha();
+		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.popMatrix();
 
 		LightingUtil.INSTANCE.revert();
@@ -326,11 +333,6 @@ public class RenderDruidAltar extends TileEntitySpecialRenderer<TileEntityDruidA
 
 
 	private void renderItem(ItemStack stack){
-		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
-		RenderHelper.disableStandardItemLighting();
-		renderItem.renderItem(stack, renderItem.getItemModelMesher().getItemModel(stack));
-		RenderHelper.enableStandardItemLighting();
-		Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).restoreLastBlurMipmap();
+		this.renderItem.renderItem(stack, TransformType.FIXED);
 	}
 }

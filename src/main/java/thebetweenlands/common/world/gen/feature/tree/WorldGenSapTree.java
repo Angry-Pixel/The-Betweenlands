@@ -7,6 +7,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public class WorldGenSapTree extends WorldGenerator {
@@ -22,7 +23,7 @@ public class WorldGenSapTree extends WorldGenerator {
 		this.logY = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Y);
 		this.logZ = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.Z);
 		this.roots = BlockRegistry.LOG_SAP.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
-		this.leaves = BlockRegistry.LEAVES_SAP_TREE.getDefaultState();
+		this.leaves = BlockRegistry.LEAVES_SAP_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 
 		for (int xx = - maxRadius; xx <= maxRadius; xx++)
 			for (int zz = - maxRadius; zz <= maxRadius; zz++)

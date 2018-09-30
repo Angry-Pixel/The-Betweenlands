@@ -1,7 +1,0 @@
-{
-  "parent": "item/generated",
-  "textures": {
-    "layer0": "thebetweenlands:items/weedwood_bucket_base",
-    "layer1": "thebetweenlands:items/weedwood_bucket_cover"
-  }
-}

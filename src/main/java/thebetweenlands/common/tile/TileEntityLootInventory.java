@@ -18,6 +18,7 @@ import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.loot.ILootContainer;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import thebetweenlands.common.TheBetweenlands;
 
 public class TileEntityLootInventory extends TileEntityBasicInventory implements ILootContainer {
 	protected ResourceLocation lootTable;
@@ -102,7 +103,7 @@ public class TileEntityLootInventory extends TileEntityBasicInventory implements
 			//Fill inventory
 			for (ItemStack itemstack : loot) {
 				if (!itemstack.isEmpty() && emptySlots.isEmpty()) {
-					System.out.println("Tried to over-fill a container");
+					TheBetweenlands.logger.info("Tried to over-fill a container");
 					return;
 				}
 

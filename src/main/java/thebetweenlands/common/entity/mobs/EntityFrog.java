@@ -47,6 +47,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 		this.getNavigator().getNodeProcessor().setCanSwim(true);
 		setSize(0.7F, 0.5F);
 		this.stepHeight = 1.0F;
+		this.experienceValue = 3;
 	}
 
 	@Override
@@ -159,7 +160,7 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 			}
 		}
 
-		if (world.isRemote && getSkin() == 4 && world.getWorldTime() % 10 == 0) {
+		if (world.isRemote && getSkin() == 4 && world.getTotalWorldTime() % 10 == 0) {
 			BLParticles.DIRT_DECAY.spawn(world, posX, posY + 0.5D, posZ);
 		}
 	}
@@ -172,15 +173,26 @@ public class EntityFrog extends EntityCreature implements IEntityBL {
 	@Override
 	public void onCollideWithPlayer(EntityPlayer player) {
 		super.onCollideWithPlayer(player);
-		byte duration = 0;
 		if (getSkin() == 4) {
 			if (!world.isRemote && !player.capabilities.isCreativeMode && player.getEntityBoundingBox().maxY >= getEntityBoundingBox().minY && player.getEntityBoundingBox().minY <= getEntityBoundingBox().maxY && player.getEntityBoundingBox().maxX >= getEntityBoundingBox().minX && player.getEntityBoundingBox().minX <= getEntityBoundingBox().maxX && player.getEntityBoundingBox().maxZ >= getEntityBoundingBox().minZ && player.getEntityBoundingBox().minZ <= getEntityBoundingBox().maxZ) {
-				if (world.getDifficulty() == EnumDifficulty.NORMAL)
-					duration = 5;
-				else if (world.getDifficulty() == EnumDifficulty.HARD)
+				int duration = 0;
+				switch(world.getDifficulty()) {
+				default:
+					duration = 0;
+					break;
+				case EASY:
+					duration = 4;
+					break;
+				case NORMAL:
+					duration = 7;
+					break;
+				case HARD:
 					duration = 10;
-				if (duration > 0)
+					break;
+				}
+				if (duration > 0) {
 					player.addPotionEffect(new PotionEffect(MobEffects.POISON, duration * 20, 0));
+				}
 			}
 		}
 	}

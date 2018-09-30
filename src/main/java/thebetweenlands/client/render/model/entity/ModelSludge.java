@@ -73,9 +73,9 @@ public class ModelSludge extends MowzieModelBase {
 	public void render(Entity entity, float limbSwing, float limbSwingAngle, float entityTickTime, float rotationYaw, float rotationPitch, float unitPixel) {
 		super.render(entity, limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel);
 		setRotationAngles(limbSwing, limbSwingAngle, entityTickTime, rotationYaw, rotationPitch, unitPixel, entity);
+		GlStateManager.pushMatrix();
 		GlStateManager.scale(scale, scale, scale);
 		head2.render(unitPixel);
-		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		slime1.render(unitPixel);

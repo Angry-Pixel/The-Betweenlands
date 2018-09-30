@@ -4,14 +4,19 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockVine;
 import net.minecraft.block.SoundType;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.common.IShearable;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -23,7 +28,18 @@ public class BlockVineBL extends BlockVine implements ISickleHarvestable, IShear
 		this.setHardness(0.2F);
 		this.setCreativeTab(BLCreativeTabs.PLANTS);
 	}
+	
+	@Override
+	public boolean canAttachTo(World world, BlockPos pos, EnumFacing face) {
+		Block block = world.getBlockState(pos.up()).getBlock();
+        return this.isAcceptableNeighbor(world, pos.offset(face.getOpposite()), face) && (block == Blocks.AIR || block == this || this.isAcceptableNeighbor(world, pos.up(), EnumFacing.UP));
+    }
 
+	private boolean isAcceptableNeighbor(World world, BlockPos pos, EnumFacing face) {
+        IBlockState iblockstate = world.getBlockState(pos);
+        return iblockstate.getBlockFaceShape(world, pos, face) == BlockFaceShape.SOLID && !isExceptBlockForAttaching(iblockstate.getBlock());
+    }
+	
 	@Override
 	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity) {
 		return false;

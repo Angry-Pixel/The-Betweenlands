@@ -21,6 +21,7 @@ import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.item.tools.ItemBucketInfusion;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAlembic;
 
@@ -60,11 +61,11 @@ public class BlockAlembic extends BlockContainer {
 
                 if (!player.getHeldItem(hand).isEmpty()) {
                     ItemStack heldStack = player.getHeldItem(hand);
-                    if (heldStack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_INFUSION) {
+                    if (heldStack.getItem() == ItemRegistry.BL_BUCKET_INFUSION) {
                         if (!tile.isFull()) {
                             tile.addInfusion(heldStack);
                             if (!player.capabilities.isCreativeMode)
-                                player.setHeldItem(hand, new ItemStack(ItemRegistry.WEEDWOOD_BUCKET, 1));
+                                player.setHeldItem(hand, ItemBucketInfusion.getEmptyBucket(heldStack));
                         }
                     } else if (heldStack.getItem() == ItemRegistry.DENTROTHYST_VIAL && (heldStack.getItemDamage() == 0 || heldStack.getItemDamage() == 2)) {
                         if (tile.hasFinished()) {
@@ -87,14 +88,14 @@ public class BlockAlembic extends BlockContainer {
             TileEntityAlembic alembic = (TileEntityAlembic) world.getTileEntity(pos);
             if (alembic.isRunning()) {
                 float xx = (float) pos.getX() + 0.5F;
-                float yy = (float) (pos.getY() + 0.35F + rand.nextFloat() * 0.5F);
+                float yy = (float) (pos.getY() + 0.25F + rand.nextFloat() * 0.5F);
                 float zz = (float) pos.getZ() + 0.5F;
                 float fixedOffset = 0.25F;
                 float randomOffset = rand.nextFloat() * 0.6F - 0.3F;
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy + 0.75D, (double) (zz + randomOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) yy + 0.75D, (double) (zz + randomOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.75D, (double) (zz - fixedOffset));
-                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.75D, (double) (zz + fixedOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx - fixedOffset), (double) yy + 0.250D, (double) (zz + randomOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + fixedOffset), (double) yy + 0.250D, (double) (zz + randomOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.250D, (double) (zz - fixedOffset));
+                BLParticles.STEAM_PURIFIER.spawn(world, (double) (xx + randomOffset), (double) yy + 0.250D, (double) (zz + fixedOffset));
                 EnumFacing facing = (EnumFacing) stateIn.getProperties().get(FACING);
                 switch (facing) {
                     case NORTH:
@@ -132,6 +133,11 @@ public class BlockAlembic extends BlockContainer {
     @Override
     protected BlockStateContainer createBlockState() {
         return new BlockStateContainer(this, FACING);
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
     }
 
     @Override

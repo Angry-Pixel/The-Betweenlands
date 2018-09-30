@@ -36,7 +36,7 @@ public class EntityAIWightBuffSwampHag extends EntityAIBase {
 
 	@Override
 	public boolean shouldExecute() {
-		boolean canBuff = !this.wight.isRiding() && this.getTargetSwampHag() != null;
+		boolean canBuff = this.wight.getAttackTarget() != null && !this.wight.isRiding() && this.getTargetSwampHag() != null;
 		if(canBuff) {
 			if(this.cooldown <= 0 && this.world.rand.nextInt(20) == 0) {
 				return true;

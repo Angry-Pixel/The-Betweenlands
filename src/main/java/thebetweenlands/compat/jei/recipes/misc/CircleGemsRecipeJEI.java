@@ -4,18 +4,23 @@ import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.ICraftingGridHelper;
 import mezz.jei.api.gui.IGuiItemStackGroup;
 import mezz.jei.api.gui.IRecipeLayout;
-import mezz.jei.api.ingredients.IIngredientRegistry;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.capability.circlegem.CircleGemHelper;
 import thebetweenlands.common.capability.circlegem.CircleGemType;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.item.misc.ItemGem;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraftingRecipeWrapper {
@@ -27,16 +32,23 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
         craftingGridHelper = guiHelper.createCraftingGridHelper(1, 0);
     }
 
-    public static void setApplicableItems(IIngredientRegistry registry) {
+    public static void updateApplicableItems() {
         applicableItems.clear();
-        for (ItemStack stack: registry.getAllIngredients(ItemStack.class)) {
-            if (!stack.isEmpty() && CircleGemHelper.isApplicable(stack.getItem()))
+        for (ItemStack stack: BetweenlandsJEIPlugin.ingredientRegistry.getAllIngredients(ItemStack.class)) {
+            if (!stack.isEmpty() && CircleGemHelper.isApplicable(stack.getItem()) && (BetweenlandsConfig.COMPATIBILITY.showNonBLGemRecipes || ModInfo.ID.equals(stack.getItem().getRegistryName().getResourceDomain())))
                 applicableItems.add(stack);
         }
     }
 
+    @Nullable
+    @Override
+    public ResourceLocation getRegistryName() {
+        return RecipeRegistry.CIRCLE_GEMS;
+    }
+
     @Override
     public void getIngredients(IIngredients ingredients) {
+        updateApplicableItems();
         List<List<ItemStack>> inputLists = new ArrayList<>();
         List<List<ItemStack>> outputLists = new ArrayList<>();
         ItemStack[] gems = new ItemStack[] {new ItemStack(ItemRegistry.CRIMSON_MIDDLE_GEM), new ItemStack(ItemRegistry.GREEN_MIDDLE_GEM), new ItemStack(ItemRegistry.AQUA_MIDDLE_GEM)};
@@ -101,5 +113,6 @@ public class CircleGemsRecipeJEI implements ICraftingRecipeWrapper, ICustomCraft
         craftingGridHelper.setInputs(guiItemStacks, inputs);
         guiItemStacks.setOverrideDisplayFocus(null);
         guiItemStacks.set(0, outputs.get(0));
+        BetweenlandsJEIPlugin.addRecipeName(getRegistryName(), guiItemStacks, 0);
     }
 }

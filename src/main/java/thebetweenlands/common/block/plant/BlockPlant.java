@@ -17,18 +17,21 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.ItemRegistry;
 
-public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable, IFarmablePlant {
+public class BlockPlant extends BlockBush implements IShearable, ISickleHarvestable, IFarmablePlant, ITintedBlock {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.8D, 0.9D);
 
 	protected ItemStack sickleHarvestableDrop;
@@ -139,5 +142,10 @@ public class BlockPlant extends BlockBush implements IShearable, ISickleHarvesta
 	@Override
 	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
 		return true;
+	}
+	
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : -1;
 	}
 }

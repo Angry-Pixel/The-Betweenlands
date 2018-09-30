@@ -11,7 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.properties.EntityProperty;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
@@ -28,7 +28,7 @@ public class EntityPropertyEventActive implements EntityProperty {
 	public boolean testProperty(Random random, Entity entity) {
 		boolean isEventOn = false;
 		if(entity.world.provider instanceof WorldProviderBetweenlands) {
-			EnvironmentEvent event = ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().forName(this.event);
+			IEnvironmentEvent event = ((WorldProviderBetweenlands)entity.world.provider).getEnvironmentEventRegistry().forName(this.event);
 			if(event != null && event.isActiveAt(entity.posX, entity.posY, entity.posZ)) {
 				isEventOn = true;
 			}

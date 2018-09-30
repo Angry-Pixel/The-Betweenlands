@@ -7,12 +7,10 @@ import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import it.unimi.dsi.fastutil.longs.Long2ObjectOpenHashMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.MobEffects;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.Vec3d;
@@ -31,49 +29,37 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
-import thebetweenlands.common.registries.BlockRegistry;
-import thebetweenlands.common.registries.SoundRegistry;
+import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.registries.AdvancementCriterionRegistry;
+import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
-import thebetweenlands.common.world.storage.location.LocationCragrockTower;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 
 public class LocationHandler {
+
+	public static List<LocationStorage> getLocations(Entity entity) {
+		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
+		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity));
+	}
+
 	@SubscribeEvent
 	public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
 		if(event.phase == Phase.END) {
 			EntityPlayer player = event.player;
 
-			if(player != null && !player.isCreative() && !player.world.isRemote) {
-				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(player.world);
-				List<LocationCragrockTower> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, player.posX, player.posZ, location -> location.isInside(player));
-
-				for(LocationCragrockTower location : locations) {
-					BlockPos structurePos = location.getStructurePos();
-
-					if(!location.wasEntered()) {
-						location.setEntered(true);
+			if(player != null && !player.world.isRemote) {
+				if (player instanceof EntityPlayerMP && ((EntityPlayerMP) player).world.provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+					if (player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
+						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "caverns");
+					} else {
+						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, "wilderness");
 					}
+				}
 
-					if(location.getInnerBoundingBox().contains(player.getPositionVector()) && player.posY - structurePos.getY() >= 45) {
-						if(!location.isTopReached()) {
-							location.setTopReached(true);
-						}
-					} else if(!location.isTopReached() && !location.getInnerBoundingBox().grow(0.5D, 0.5D, 0.5D).contains(player.getPositionVector()) && player.posY - structurePos.getY() > 12) {
-						//Player trying to bypass tower, teleport to entrance
-
-						player.dismountRidingEntity();
-						if(player instanceof EntityPlayerMP) {
-							EntityPlayerMP playerMP = (EntityPlayerMP) player;
-							playerMP.connection.setPlayerLocation(structurePos.getX() + 0.5D, structurePos.getY(), structurePos.getZ() + 0.5D, player.rotationYaw, player.rotationPitch);
-						} else {
-							player.setLocationAndAngles(structurePos.getX() + 0.5D, structurePos.getY(), structurePos.getZ() + 0.5D, player.rotationYaw, player.rotationPitch);
-						}
-						player.fallDistance = 0.0F;
-						player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 60, 2));
-						player.world.playSound(null, player.posX, player.posY, player.posZ, SoundRegistry.FORTRESS_BOSS_TELEPORT, SoundCategory.AMBIENT, 1, 1);
-					} else if(location.isTopReached() && player.posY - structurePos.getY() <= 42 && !location.isCrumbling() && location.getCrumblingTicks() == 0) {
-						location.setCrumbling(true);
-						location.restoreBlockade(4);
+				List<LocationStorage> locations = getLocations(player);
+				for(LocationStorage loc : locations) {
+					if (player instanceof EntityPlayerMP) {
+						AdvancementCriterionRegistry.LOCATION.trigger((EntityPlayerMP) player, loc.getName());
 					}
 				}
 			}
@@ -83,21 +69,13 @@ public class LocationHandler {
 	@SubscribeEvent
 	public static void onBlockBreak(BlockEvent.BreakEvent event) {
 		EntityPlayer player = event.getPlayer();
-		if(player != null && !event.getWorld().isRemote) {
+		if(player != null) {
 			BlockPos pos = event.getPos();
-			IBlockState blockState = event.getState();
+			BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(event.getWorld());
+			List<LocationStorage> locations = worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
 
-			if(blockState.getBlock() == BlockRegistry.MOB_SPAWNER) {
-				BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(event.getWorld());
-				List<LocationCragrockTower> towers = worldStorage.getLocalStorageHandler().getLocalStorages(LocationCragrockTower.class, pos.getX(), pos.getZ(), location -> location.isInside(pos));
-
-				for(LocationCragrockTower tower : towers) {
-					int level = tower.getLevel(pos.getY());
-
-					if(level != -1) {
-						tower.setSpawnerState(level, false);
-					}
-				}
+			for(LocationStorage location : locations) {
+				location.onBreakBlock(event);
 			}
 		}
 	}

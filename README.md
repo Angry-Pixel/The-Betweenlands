@@ -24,6 +24,7 @@ When reporting problems you must...
   <li>include the version of Forge and the Betweenlands you are using</li>
   <li>specify whether it happens in singleplayer or multiplayer (and if so, what server is used, e.g. Vanilla, Thermos, Sponge etc.)</li>
   <li>provide a detailed and comprehensible description, if possible also include instructions on how to reproduce it</li>
+  <li>include a link to your mod pack so we can try to reproduce it, otherwise if no such link is available provide a list of <b>all</b> mods you have installed</li>
   <li>upload <b>the full</b> crash log if available and include a link to said crash log</li>
   <li>not post multiple problems in one issue. Create multiple issues instead</li>
 </ul>
@@ -98,7 +99,19 @@ If you do not follow these rules your issues will be closed and ignored.
   <img src="http://i.imgur.com/5AgEXax.png">
 </p>
 
-<p align="center"><b>Features include</b></p>
+<p align="center"><b>For Developers</b></p>
+<ul>
+  <li>Creating a release build: Tag the last commit on the Minecraft version's main branch to include in the build with <code>v&lt;version&gt;-release</code> (replace <code>&lt;version&gt;</code> with the version to build).</li>
+  <li>Currently unused assets can be found here: https://drive.google.com/drive/folders/1iQpbcuUen6Xa7a06Zor6wYVYuY4mnp4Q.</li>
+</ul>
+
+<br>
+
+<p align="center">
+  <img src="http://i.imgur.com/5AgEXax.png">
+</p>
+
+<p align="center"><b>Features Include</b></p>
 <ul>
   <li>A complete independent survival experience with hours of gameplay</li>
   <li>A whole new dimension to survive in</li>

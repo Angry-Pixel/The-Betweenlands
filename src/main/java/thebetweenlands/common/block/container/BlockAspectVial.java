@@ -1,20 +1,26 @@
 package thebetweenlands.common.block.container;
 
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.*;
+import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -31,39 +37,59 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityAspectVial;
 
-import javax.annotation.Nullable;
-
 public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICustomItemBlock {
-
-    public static PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
-
-    public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.1F, 0.0F, 0.1F, 0.9F, 0.8F, 0.9F);
+    public static final PropertyEnum<BlockDentrothyst.EnumDentrothyst> TYPE = PropertyEnum.create("type", BlockDentrothyst.EnumDentrothyst.class);
+    public static final PropertyBool RANDOM_POSITION = PropertyBool.create("random_position");
+    
+    public static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.95F, 0.45F, 0.95F);
 
     public BlockAspectVial() {
         super(Material.GLASS);
         setSoundType(SoundType.GLASS);
         setHardness(0.4F);
-        setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockDentrothyst.EnumDentrothyst.GREEN));
+        setDefaultState(this.blockState.getBaseState().withProperty(TYPE, BlockDentrothyst.EnumDentrothyst.GREEN).withProperty(RANDOM_POSITION, false));
     }
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return BOUNDING_BOX;
+        return new AxisAlignedBB(0.15F, 0.0F, 0.15F, 0.85F, 0.45F, 0.85F);
     }
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(TYPE, meta == 0 ? BlockDentrothyst.EnumDentrothyst.GREEN : BlockDentrothyst.EnumDentrothyst.ORANGE);
+    	BlockDentrothyst.EnumDentrothyst type;
+    	switch(meta & 0x1) {
+    	default:
+    	case 0:
+    		type = BlockDentrothyst.EnumDentrothyst.GREEN;
+    		break;
+    	case 1:
+    		type = BlockDentrothyst.EnumDentrothyst.ORANGE;
+    		break;
+    	}
+        return this.getDefaultState().withProperty(TYPE, type).withProperty(RANDOM_POSITION, (meta & 0x2) == 0);
     }
 
     @Override
     public int getMetaFromState(IBlockState state) {
-        return state.getValue(TYPE).getMeta();
+    	int meta = 0;
+        switch(state.getValue(TYPE)) {
+        default:
+        case GREEN:
+        	break;
+        case ORANGE:
+        	meta |= 0x1;
+        	break;
+        }
+        if(!state.getValue(RANDOM_POSITION)) {
+        	meta |= 0x2;
+        }
+        return meta;
     }
 
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, TYPE);
+        return new BlockStateContainer(this, TYPE, RANDOM_POSITION);
     }
 
     @Nullable
@@ -88,7 +114,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                             if(!world.isRemote) {
                                 if(tile.getAspect() == null)
                                     tile.setAspect(new Aspect(itemAspect.type, 0));
-                                int added = tile.addAmount(Math.min(itemAspect.amount, 25));
+                                int added = tile.addAmount(Math.min(itemAspect.amount, 100));
                                 if(added > 0) {
                                     int leftAmount = itemAspect.amount - added;
                                     container.set(itemAspect.type, itemAspect.amount - added);
@@ -112,7 +138,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     } else {
                         if(tile.getAspect() != null && tile.getAspect().type == itemAspect.type) {
                             if(!world.isRemote) {
-                                int toRemove = (int) Math.min(25, Amounts.MAX_ASPECT_AMOUNT - itemAspect.amount);
+                                int toRemove = (int) Math.min(100, Amounts.VIAL - itemAspect.amount);
                                 if(toRemove > 0) {
                                     int removedAmount = tile.removeAmount(toRemove);
                                     container.set(itemAspect.type, itemAspect.amount + removedAmount);
@@ -125,7 +151,7 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                 } else if(heldItem.getItem() == ItemRegistry.DENTROTHYST_VIAL && player.isSneaking() && tile.getAspect() != null && heldItem.getItemDamage() != 1) {
                     if(!world.isRemote) {
                         Aspect aspect = tile.getAspect();
-                        int removedAmount = tile.removeAmount(25);
+                        int removedAmount = tile.removeAmount(100);
                         if(removedAmount > 0) {
                             ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
                             switch(heldItem.getItemDamage()) {
@@ -152,6 +178,12 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
                     player.swingArm(hand);
                     return true;
                 }
+            } else if(player.isSneaking()) {
+            	if(!world.isRemote) {
+            		world.setBlockState(pos, state.withProperty(RANDOM_POSITION, !state.getValue(RANDOM_POSITION)));
+            	}
+            	player.swingArm(hand);
+                return true;
             }
         }
         return false;
@@ -186,32 +218,39 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
 
     @Override
-    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-        TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
-        int metadata = getMetaFromState(state);
-        if(tile != null) {
-            if(tile.getAspect() != null) {
-                if(tile.getAspect().amount > 0) {
-                    ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
-                    vial.setItemDamage(metadata);
-                    ItemAspectContainer.fromItem(vial).add(tile.getAspect().type, tile.getAspect().amount);
-                    drops.add(vial);
-                }
-            } else {
-                ItemStack vial = new ItemStack(ItemRegistry.DENTROTHYST_VIAL);
-                switch(metadata) {
-                    default:
-                    case 0:
-                        vial.setItemDamage(0);
-                        break;
-                    case 1:
-                        vial.setItemDamage(2);
-                        break;
-                }
-                drops.add(vial);
-            }
-        }
-    }
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		TileEntityAspectVial tile = (TileEntityAspectVial) world.getTileEntity(pos);
+		if(tile != null) {
+			if(tile.getAspect() != null) {
+				if(tile.getAspect().amount > 0) {
+					ItemStack vial = new ItemStack(ItemRegistry.ASPECT_VIAL);
+					switch(state.getValue(TYPE)) {
+					case ORANGE:
+						vial.setItemDamage(1);
+						break;
+					default:
+					case GREEN:
+						vial.setItemDamage(0);
+						break;
+					}
+					ItemAspectContainer.fromItem(vial).add(tile.getAspect().type, tile.getAspect().amount);
+					drops.add(vial);
+				}
+			} else {
+				ItemStack vial = new ItemStack(ItemRegistry.DENTROTHYST_VIAL);
+				switch(state.getValue(TYPE)) {
+				case ORANGE:
+					vial.setItemDamage(2);
+					break;
+				default:
+				case GREEN:
+					vial.setItemDamage(0);
+					break;
+				}
+				drops.add(vial);
+			}
+		}
+	}
 
     @Override
     public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
@@ -240,7 +279,37 @@ public class BlockAspectVial extends BlockContainer implements BlockRegistry.ICu
     }
     
     @Override
+    public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+    	return false;
+    }
+    
+    @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
+    }
+    
+    @Override
+    public boolean isBlockNormalCube(IBlockState state) {
+    	return false;
+    }
+    
+	@Override
+	public boolean isNormalCube(IBlockState state) {
+		return false;
+	}
+    
+    @Override
+    public boolean isFullBlock(IBlockState state)    {
+    	return false;
+    }
+
+    @Override
+    public boolean isFullCube(IBlockState state) {
+        return false;
+    }
+    
+    @Override
+    public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+    	return super.canPlaceBlockAt(worldIn, pos) && worldIn.isSideSolid(pos.down(), EnumFacing.UP);
     }
 }

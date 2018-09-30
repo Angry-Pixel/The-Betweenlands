@@ -1,0 +1,35 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:middle_fruit"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.a_vine_bush.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.a_vine_bush.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "plant_white_pear": {
+      "trigger": "minecraft:placed_block",
+      "conditions": {
+        "block": "thebetweenlands:middle_fruit_bush",
+        "item": {
+          "item": "thebetweenlands:middle_fruit_bush_seeds"
+        }
+      }
+    },
+    "collect_white_pear": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:middle_fruit_bush_seeds"
+          }
+        ]
+      }
+    }
+  }
+}

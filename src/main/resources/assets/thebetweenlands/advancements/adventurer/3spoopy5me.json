@@ -1,0 +1,24 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:pyrad_flame"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.3spoopy5me.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.3spoopy5me.description"
+    },
+    "hidden": true,
+    "announce_to_chat": false
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "event": {
+      "trigger": "thebetweenlands:event",
+      "conditions": {
+        "name": "thebetweenlands:spook"
+      }
+    }
+  }
+}

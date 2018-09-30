@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:swift_pick"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.miner.get_schwifty.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.miner.get_schwifty.description"
+    }
+  },
+  "parent": "thebetweenlands:miner/root",
+  "criteria": {
+    "swift": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:swift_pick"
+          }
+        ]
+      }
+    }
+  }
+}

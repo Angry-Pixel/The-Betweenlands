@@ -26,20 +26,23 @@ import net.minecraft.util.IStringSerializable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ColorizerGrass;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.IFarmablePlant;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.SoilHelper;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap;
 
-public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable, IFarmablePlant {
+public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, IShearable, ISickleHarvestable, IFarmablePlant, ITintedBlock {
 	protected static final AxisAlignedBB PLANT_AABB = new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 1.0D, 0.9D);
 
 	public static final PropertyEnum<BlockDoublePlantBL.EnumBlockHalf> HALF = PropertyEnum.<BlockDoublePlantBL.EnumBlockHalf>create("half", BlockDoublePlantBL.EnumBlockHalf.class);
@@ -90,7 +93,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 			Block blockAboveOrHere = (Block)(isUpperHalf ? this : worldIn.getBlockState(posAboveOrHere).getBlock());
 			Block blockBelowOrHere = (Block)(isUpperHalf ? worldIn.getBlockState(posBelowOrHere).getBlock() : this);
 
-			if (!isUpperHalf) 
+			if (!isUpperHalf && blockAboveOrHere == this) 
 				this.dropBlockAsItem(worldIn, pos, state, 0); //Forge move above the setting to air.
 
 			if (blockAboveOrHere == this) {
@@ -143,7 +146,7 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 			if (worldIn.getBlockState(pos.down()).getBlock() == this) {
 				if (!player.capabilities.isCreativeMode) {
 					//Stupid workarounds...
-					this.harvestBlock(worldIn, player, pos.down(), state, worldIn.getTileEntity(pos), player.getHeldItemMainhand());
+					this.harvestBlock(worldIn, player, pos.down(), worldIn.getBlockState(pos.down()), worldIn.getTileEntity(pos.down()), player.getHeldItemMainhand());
 				}
 				worldIn.setBlockToAir(pos.down());
 			}
@@ -257,5 +260,10 @@ public class BlockDoublePlantBL extends BlockBush implements IStateMappedBlock, 
 	@Override
 	public boolean isFarmable(World world, BlockPos pos, IBlockState state) {
 		return true;
+	}
+	
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getGrassColorAtPos(worldIn, pos) : ColorizerGrass.getGrassColor(0.5D, 1.0D);
 	}
 }

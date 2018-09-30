@@ -2,6 +2,8 @@ package thebetweenlands.common.block.plant;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
@@ -33,6 +35,8 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	protected boolean harvestAll = false;
 	protected boolean resetAge = true;
 
+	protected final ThreadLocal<Boolean> harvesting = new ThreadLocal<>();
+
 	public BlockStackablePlant() {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
 	}
@@ -61,40 +65,63 @@ public class BlockStackablePlant extends BlockPlant implements IStateMappedBlock
 	}
 
 	@Override
-	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		super.onBlockHarvested(world, pos, state, player);
-
-		int height;
-		for (height = 1; this.isSamePlant(world.getBlockState(pos.up(height))); ++height);
-		for (int offset = height - 1; (this.harvestAll && this.isSamePlant(world.getBlockState(pos.up(offset)))) || (!this.harvestAll && offset >= 0); offset--) {
-			if(offset != 0) {
-				BlockPos offsetPos = pos.up(offset);
-				IBlockState blockState = world.getBlockState(offsetPos);
-				boolean canHarvest = player.isCreative() ? false : blockState.getBlock().canHarvestBlock(world, offsetPos, player);
-				boolean removed = this.removeBlock(world, offsetPos, player, canHarvest);
-				if(removed && canHarvest) {
-					ItemStack stack = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().copy();
-					blockState.getBlock().harvestBlock(world, player, offsetPos, blockState, world.getTileEntity(offsetPos), stack);
-				}
-			} else {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
-			}
+	protected void checkAndDropBlock(World worldIn, BlockPos pos, IBlockState state) {
+		if (!this.canBlockStay(worldIn, pos, state)) {
+			this.dropBlockAsItem(worldIn, pos, state, 0);
+			this.removePlant(worldIn, pos, null, false);
 		}
 	}
 
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		super.removedByPlayer(state, world, pos, player, willHarvest);
-		return true;
+		this.onBlockHarvested(world, pos, state, player);
+		boolean removed = false;
+		Boolean harvesting = this.harvesting.get(); //I'm sorry
+		if(harvesting == null || !harvesting) {
+			this.harvesting.set(true);
+			int height;
+			for (height = 1; this.isSamePlant(world.getBlockState(pos.up(height))); ++height);
+			for (int offset = height - 1; (this.harvestAll && this.isSamePlant(world.getBlockState(pos.up(offset)))) || (!this.harvestAll && offset >= 0); offset--) {
+				if(offset != 0) {
+					BlockPos offsetPos = pos.up(offset);
+					IBlockState blockState = world.getBlockState(offsetPos);
+					boolean canHarvest = player.isCreative() ? false : blockState.getBlock().canHarvestBlock(world, offsetPos, player);
+					boolean otherRemoved = this.removeOtherBlockAsPlayer(world, offsetPos, player, canHarvest);
+					if(otherRemoved && canHarvest) {
+						ItemStack stack = player.getHeldItemMainhand() == null ? null : player.getHeldItemMainhand().copy();
+						blockState.getBlock().harvestBlock(world, player, offsetPos, blockState, world.getTileEntity(offsetPos), stack);
+					}
+				} else {
+					removed = this.removePlant(world, pos, null, false);
+				}
+			}
+			this.harvesting.set(false);
+		}
+		if(removed) {
+			return true;
+		}
+		return this.removePlant(world, pos, player, willHarvest);
 	}
 
-	protected boolean removeBlock(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
+	protected boolean removeOtherBlockAsPlayer(World world, BlockPos pos, EntityPlayer player, boolean canHarvest) {
 		IBlockState blockState = world.getBlockState(pos);
 		boolean removed = blockState.getBlock().removedByPlayer(blockState, world, pos, player, canHarvest);
 		if (removed) {
 			blockState.getBlock().onBlockDestroyedByPlayer(world, pos, blockState);
 		}
 		return removed;
+	}
+
+	/**
+	 * Removes the plant. Usually sets the block to air
+	 * @param world
+	 * @param pos
+	 * @param player
+	 * @param canHarvest
+	 * @return
+	 */
+	protected boolean removePlant(World world, BlockPos pos, @Nullable EntityPlayer player, boolean canHarvest) {
+		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), world.isRemote ? 11 : 3);
 	}
 
 	/**

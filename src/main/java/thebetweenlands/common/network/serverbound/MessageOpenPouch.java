@@ -24,7 +24,7 @@ public class MessageOpenPouch extends MessageBase {
 			ItemStack stack = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(!stack.isEmpty()) {
 				int meta = stack.getItemDamage();
-				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_LURKER_POUCH_KEYBIND, player.world, meta, 0, 0);
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_LURKER_POUCH_KEYBIND, player.world, meta, 0, 0);
 			}
 		}
 		return null;

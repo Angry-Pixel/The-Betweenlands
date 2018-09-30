@@ -29,7 +29,7 @@ public class ItemBlackHatMushroom extends ItemPlantableFood {
 	}
 
 	@Override
-	public boolean canGetSickOf(ItemStack stack) {
+	public boolean canGetSickOf(EntityPlayer player, ItemStack stack) {
 		return false;
 	}
 }

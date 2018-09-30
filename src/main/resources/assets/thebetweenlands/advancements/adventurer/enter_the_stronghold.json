@@ -1,0 +1,22 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:glowing_betweenstone_tile"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.enter_the_stronghold.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.enter_the_stronghold.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "stronghold": {
+      "trigger": "thebetweenlands:location",
+      "conditions": {
+        "name": "wight_tower"
+      }
+    }
+  }
+}

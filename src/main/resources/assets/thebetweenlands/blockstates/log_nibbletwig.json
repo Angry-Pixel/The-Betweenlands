@@ -1,0 +1,109 @@
+{
+	"forge_marker": 1,
+	"variants": {
+		"axis=y": [
+			{
+				"model": "thebetweenlands:log_nibbletwig"
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_2"
+				}
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_3"
+				}
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_4"
+				}
+			}
+		],
+		"axis=z": [
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"x": 90
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_2"
+				},
+				"x": 90
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_3"
+				},
+				"x": 90
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_4"
+				},
+				"x": 90
+			}
+		],
+		"axis=x": [
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"x": 90,
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_2"
+				},
+				"x": 90,
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_3"
+				},
+				"x": 90,
+				"y": 90
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig",
+				"textures": {
+					"side": "thebetweenlands:blocks/log_nibbletwig_4"
+				},
+				"x": 90,
+				"y": 90
+			}
+		],
+		"axis=none": [
+			{
+				"model": "thebetweenlands:log_nibbletwig_bark"
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig_bark",
+				"textures": {
+					"all": "thebetweenlands:blocks/log_nibbletwig_2"
+				}
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig_bark",
+				"textures": {
+					"all": "thebetweenlands:blocks/log_nibbletwig_3"
+				}
+			},
+			{
+				"model": "thebetweenlands:log_nibbletwig_bark",
+				"textures": {
+					"all": "thebetweenlands:blocks/log_nibbletwig_4"
+				}
+			}
+		]
+	}
+}

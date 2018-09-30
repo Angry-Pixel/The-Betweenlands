@@ -18,6 +18,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -28,25 +30,28 @@ import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
 import thebetweenlands.common.world.gen.biome.decorator.SurfaceType;
+import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShearable {
+public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShearable, IStateMappedBlock {
+	public static final PropertyBool CAN_GROW = PropertyBool.create("can_grow");
 	public static final PropertyBool IS_TOP = PropertyBool.create("is_top");
 	public static final PropertyBool IS_BOTTOM = PropertyBool.create("is_bottom");
 	public static final AxisAlignedBB CAVE_MOSS_AABB = new AxisAlignedBB(0.25F, 0, 0.25F, 0.75F, 1, 0.75F);
 
 	public BlockCaveMoss() {
 		super(Material.PLANTS);
-		setTickRandomly(false);
+		setTickRandomly(true);
 		setHardness(0);
 		setCreativeTab(BLCreativeTabs.PLANTS);
 		setSoundType(SoundType.PLANT);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(IS_TOP, true).withProperty(IS_BOTTOM, false).withProperty(CAN_GROW, true));
 	}
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[]{IS_TOP, IS_BOTTOM});
+		return new BlockStateContainer(this, new IProperty[]{IS_TOP, IS_BOTTOM, CAN_GROW});
 	}
 
 	@Override
@@ -134,6 +139,28 @@ public class BlockCaveMoss extends BlockBush implements ISickleHarvestable, IShe
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return 0;
+		return state.getValue(CAN_GROW) ? 1 : 0;
+	}
+	
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		return this.getDefaultState().withProperty(CAN_GROW, true);
+	}
+	
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(CAN_GROW, meta == 1);
+	}
+
+	@Override
+	public void setStateMapper(Builder builder) {
+		builder.ignore(CAN_GROW);
+	}
+	
+	@Override
+	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+		if(rand.nextInt(16) == 0 && state.getValue(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
+			worldIn.setBlockState(pos.down(), this.getDefaultState());
+		}
 	}
 }

@@ -1,8 +1,10 @@
 package thebetweenlands.compat.jei.recipes.animator;
 
 import mezz.jei.api.gui.IDrawable;
+import mezz.jei.api.gui.IGuiIngredientGroup;
 import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
+import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategory;
 import mezz.jei.api.recipe.IRecipeWrapper;
 import net.minecraft.client.Minecraft;
@@ -60,12 +62,26 @@ public class AnimatorRecipeCategory implements IRecipeCategory {
 
         recipeLayout.getItemStacks().init(3, false, 45, 15);
 
+        IGuiIngredientGroup<ItemStack> ingredientsGroup = recipeLayout.getIngredientsGroup(ItemStack.class);
+        if (recipeLayout.getFocus() != null && recipeLayout.getFocus().getMode() == IFocus.Mode.INPUT)
+            ingredientsGroup.setOverrideDisplayFocus(null);
+
         recipeLayout.getItemStacks().set(0, ingredients.getInputs(ItemStack.class).get(0));
         recipeLayout.getItemStacks().set(1, ingredients.getInputs(ItemStack.class).get(1));
         recipeLayout.getItemStacks().set(2, ingredients.getInputs(ItemStack.class).get(2));
         if (ingredients.getOutputs(ItemStack.class).size() > 0) {
             recipeLayout.getItemStacks().set(3, ingredients.getOutputs(ItemStack.class).get (0));
         }
+
+        if (recipeWrapper instanceof AnimatorRecipeJEI)
+            ((AnimatorRecipeJEI) recipeWrapper).setGuiIngredient(ingredientsGroup.getGuiIngredients().get(0));
+        ingredientsGroup.addTooltipCallback((slotIndex, input, ingredient, tooltip) -> {
+            if (!input && ingredient.hasTagCompound() && ingredient.getTagCompound().hasKey("LootCountMin")) {
+                int min = (int) ingredient.getTagCompound().getFloat("LootCountMin");
+                int max = (int) ingredient.getTagCompound().getFloat("LootCountMax");
+                tooltip.add("Output amount: " + min + " -> " + max);
+            }
+        });
     }
 
     @Override

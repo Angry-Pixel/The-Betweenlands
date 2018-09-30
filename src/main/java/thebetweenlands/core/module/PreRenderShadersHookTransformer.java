@@ -27,7 +27,7 @@ public class PreRenderShadersHookTransformer extends TransformerModule {
 	}
 
 	@Override
-	public int transformMethodInstruction(MethodNode method, AbstractInsnNode node, int index) {
+	public void transformMethodInstruction(MethodNode method, AbstractInsnNode node, int index) {
 		if(node instanceof MethodInsnNode) {
 			MethodInsnNode methodCallNode = (MethodInsnNode) node;
 			if(methodCallNode.name.equals(this.getMappedName("c", "renderEntityOutlineFramebuffer")) && methodCallNode.desc.equals("()V")
@@ -41,10 +41,7 @@ public class PreRenderShadersHookTransformer extends TransformerModule {
 				this.insertBefore(method, node, insertions);
 
 				this.setSuccessful();
-
-				return 2;
 			}
 		}
-		return 0;
 	}
 }

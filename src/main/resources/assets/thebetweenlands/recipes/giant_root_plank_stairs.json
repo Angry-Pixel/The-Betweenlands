@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "x  ",
+    "xx ",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:giant_root_planks"
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:giant_root_plank_stairs",
+    "count": 4
+  }
+}

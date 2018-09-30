@@ -5,9 +5,11 @@ import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemSeeds;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -40,12 +42,16 @@ public class ItemPlantableSeeds extends ItemSeeds {
 		ItemStack stack = playerIn.getHeldItem(hand);
 		IBlockState state = worldIn.getBlockState(pos);
 		BlockBush bush = this.crops.get().getBlock() instanceof BlockBush ? (BlockBush) this.crops.get().getBlock() : null;
+		BlockPos up = pos.up();
 		if (facing == EnumFacing.UP && playerIn.canPlayerEdit(pos.offset(facing), facing, stack) && 
 				(bush == null ? state.getBlock().canSustainPlant(state, worldIn, pos, EnumFacing.UP, this) : bush.canSustainPlant(state, worldIn, pos, EnumFacing.UP, bush)) 
-				&& worldIn.isAirBlock(pos.up())
+				&& worldIn.isAirBlock(up)
 				&& (this.soilMatcher == null || this.soilMatcher.test(state))) {
 			IBlockState plantState = this.crops.get();
-			worldIn.setBlockState(pos.up(), plantState);
+			worldIn.setBlockState(up, plantState);
+			if (playerIn instanceof EntityPlayerMP) {
+				CriteriaTriggers.PLACED_BLOCK.trigger((EntityPlayerMP)playerIn, up, stack);
+			}
 			this.onPlant(playerIn, worldIn, pos, hand, facing, hitX, hitY, hitZ, plantState);
 			stack.shrink(1);
 			return EnumActionResult.SUCCESS;

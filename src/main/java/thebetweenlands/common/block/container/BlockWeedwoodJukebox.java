@@ -1,6 +1,7 @@
 package thebetweenlands.common.block.container;
 
 import net.minecraft.block.BlockJukebox;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,6 +14,9 @@ import thebetweenlands.common.registries.ItemRegistry;
 public class BlockWeedwoodJukebox extends BlockJukebox {
     public BlockWeedwoodJukebox() {
         setCreativeTab(BLCreativeTabs.BLOCKS);
+        setHardness(2.0F);
+        setResistance(10.0F);
+        setSoundType(SoundType.WOOD);
     }
 
     @Override

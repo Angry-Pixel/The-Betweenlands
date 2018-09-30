@@ -10,8 +10,8 @@ import com.google.common.base.Predicate;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
-import thebetweenlands.common.world.storage.BetweenlandsLocalStorage;
 
 public interface ILocalStorageHandler {
 	/**
@@ -50,8 +50,8 @@ public interface ILocalStorageHandler {
 	 * @param z
 	 * @return
 	 */
-	public <T extends BetweenlandsLocalStorage> List<T> getLocalStorages(Class<T> type, double x, double z, @Nullable Predicate<T> filter);
-	
+	public <T extends ILocalStorage> List<T> getLocalStorages(Class<T> type, double x, double z, @Nullable Predicate<T> filter);
+
 	/**
 	 * Returns a list of all local storages of the specified type that intersect with the specified AABB
 	 * @param aabb
@@ -59,7 +59,7 @@ public interface ILocalStorageHandler {
 	 * @return
 	 */
 	public <T extends ILocalStorage> List<T> getLocalStorages(Class<T> type, AxisAlignedBB aabb, @Nullable Predicate<T> filter);
-	
+
 	/**
 	 * Deletes the file (or entry if in a region) of
 	 * the specified local storage
@@ -96,9 +96,9 @@ public interface ILocalStorageHandler {
 	public Collection<ILocalStorage> getLoadedStorages();
 
 	/**
-	 * Ticks all local storages that implement {@link ITickable}
+	 * Updates all local storages that implement {@link ITickable}
 	 */
-	public void tick();
+	public void update();
 
 	/**
 	 * Returns the directory where the data of all local storages are saved
@@ -107,21 +107,23 @@ public interface ILocalStorageHandler {
 	public File getLocalStorageDirectory();
 
 	/**
-	 * Creates a local storage instance from the specified NBT
+	 * Creates a local storage instance from the specified NBT, saved by {@link #saveLocalStorageToNBT(NBTTagCompound, ILocalStorage)}
 	 * @param nbt
 	 * @param region
 	 * @param packet
 	 * @return
 	 */
-	public ILocalStorage createLocalStorageFromNBT(NBTTagCompound nbt, LocalRegion region, boolean packet);
+	public ILocalStorage createLocalStorageFromNBT(NBTTagCompound nbt, LocalRegion region);
 
 	/**
-	 * Returns the data NBT of the specified full local storage NBT
-	 * @param nbt
+	 * Creates a new local storage
+	 * @param type
+	 * @param id
+	 * @param region
 	 * @return
 	 */
-	public NBTTagCompound getLocalStorageDataNBT(NBTTagCompound nbt);
-	
+	public ILocalStorage createLocalStorage(ResourceLocation type, StorageID id, @Nullable LocalRegion region);
+
 	/**
 	 * Saves a local storage instance to NBT
 	 * @param nbt
@@ -129,11 +131,10 @@ public interface ILocalStorageHandler {
 	 * @param packet
 	 * @return
 	 */
-	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage, boolean packet);
+	public NBTTagCompound saveLocalStorageToNBT(NBTTagCompound nbt, ILocalStorage storage);
 
 	/**
-	 * Returns the local region cache
-	 * @return
+	 * Saves all local storages and regions
 	 */
-	public LocalRegionCache getLocalRegionCache();
+	public void saveAll();
 }

@@ -68,7 +68,7 @@ public class BlockDruidAltar extends BasicBlock implements ITileEntityProvider {
 		if (tile instanceof TileEntityDruidAltar) {
 			TileEntityDruidAltar altar = (TileEntityDruidAltar) tile;
 			if (altar.craftingProgress == 0) {
-				player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_DRUID_ALTAR, world, pos.getX(), pos.getY(), pos.getZ());
+				player.openGui(TheBetweenlands.instance, CommonProxy.GUI_DRUID_ALTAR, world, pos.getX(), pos.getY(), pos.getZ());
 				return true;
 			}
 		}

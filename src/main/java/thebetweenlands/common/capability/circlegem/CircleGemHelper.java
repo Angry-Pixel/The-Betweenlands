@@ -322,7 +322,9 @@ public class CircleGemHelper {
 			if(!living.getActiveItemStack().isEmpty()) {
 				return living.getActiveItemStack();
 			}
-			return living.getHeldItem(living.getActiveHand());
+			if(living.getActiveHand() != null) {
+				return living.getHeldItem(living.getActiveHand());
+			}
 		}
 		return ItemStack.EMPTY;
 	}

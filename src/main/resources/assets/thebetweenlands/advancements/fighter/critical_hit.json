@@ -1,0 +1,118 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:critter_cruncher"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.critical_hit.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.critical_hit.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/chopping_boy",
+  "criteria": {
+    "blood_snail": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:blood_snail"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    },
+    "dragonfly": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:dragonfly"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    },
+    "firefly": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:firefly"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    },
+    "leech": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:leech"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    },
+    "mire_snail": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:mire_snail"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    },
+    "sporeling": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:sporeling"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    },
+    "termite": {
+      "trigger": "minecraft:player_killed_entity",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:termite"
+        },
+        "killing_blow": {
+          "source_entity": {
+            "nbt": "{\"SelectedItem\": {\"id\": \"thebetweenlands:critter_cruncher\"}}"
+          }
+        }
+      }
+    }
+  },
+  "requirements": [
+    [
+      "blood_snail",
+      "dragonfly",
+      "firefly",
+      "leech",
+      "mire_snail",
+      "sporeling",
+      "termite"
+    ]
+  ]
+}

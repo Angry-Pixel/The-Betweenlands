@@ -38,6 +38,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.*;
 import net.minecraftforge.event.ForgeEventFactory;
+import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
 import thebetweenlands.common.world.biome.spawning.MobSpawnHandler;
 import thebetweenlands.common.world.gen.biome.BiomeWeights;
@@ -45,6 +46,7 @@ import thebetweenlands.common.world.gen.biome.decorator.BiomeDecoratorBetweenlan
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator;
 import thebetweenlands.common.world.gen.biome.generator.BiomeGenerator.EnumGeneratorPass;
 import thebetweenlands.common.world.gen.feature.MapGenCavesBetweenlands;
+import thebetweenlands.common.world.gen.feature.MapGenGiantRoots;
 import thebetweenlands.common.world.gen.feature.MapGenRavineBetweenlands;
 
 public class ChunkGeneratorBetweenlands implements IChunkGenerator {
@@ -90,6 +92,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 
 	private MapGenCavesBetweenlands caveGenerator;
 	private MapGenBase ravineGenerator;
+	private MapGenBase giantRootGenerator;
 
 	private NoiseGeneratorSimplex treeNoise;
 	private NoiseGeneratorSimplex speleothemDensityNoise;
@@ -132,6 +135,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		world.setSeaLevel(layerHeight);
 		this.caveGenerator = new MapGenCavesBetweenlands(seed);
 		this.ravineGenerator = new MapGenRavineBetweenlands();
+		this.giantRootGenerator = new MapGenGiantRoots(seed);
 	}
 
 
@@ -191,6 +195,9 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 				}
 			}
 		}
+		
+		//Generate giant roots
+		this.giantRootGenerator.generate(this.worldObj, chunkX, chunkZ, chunkprimer);
 
 		Chunk chunk = new Chunk(this.worldObj, chunkprimer, chunkX, chunkZ);
 		byte[] biomeArray = chunk.getBiomeArray();
@@ -707,7 +714,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
     				g.setColor(new Color(color));
     				g.fillRect(px + half + i % half, pz + i / half, 1, 1);
     				if (printed.add(p.cause[i])) {
-    				    System.out.printf("#%s:%n%s%n", Integer.toHexString(color | 0xFF000000).substring(2), p.cause[i]);
+    					TheBetweenlands.logger.debug("#%s:%n%s%n", Integer.toHexString(color | 0xFF000000).substring(2), p.cause[i]);
     				}
     			}
     		}
@@ -717,7 +724,7 @@ public class ChunkGeneratorBetweenlands implements IChunkGenerator {
 		for (String cause : sortedCauses) {
 		    int c = byCause.get(cause).size();
 		    if (c > 2) {
-	            System.out.printf("%d caused by:%n%s%n", c, cause);   
+		    	TheBetweenlands.logger.debug("%d caused by:%n%s%n", c, cause);   
 		    }
 		}
 		g.dispose();

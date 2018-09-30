@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:yellow_dotted_fungus"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.lively_crops.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.lively_crops.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/sporadically_radical",
+  "criteria": {
+    "hatch": {
+      "trigger": "thebetweenlands:sporeling_hatch"
+    }
+  }
+}

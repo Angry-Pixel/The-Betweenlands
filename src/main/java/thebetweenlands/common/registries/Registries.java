@@ -2,7 +2,7 @@ package thebetweenlands.common.registries;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import thebetweenlands.common.entity.serializer.Serializers;
+import thebetweenlands.common.network.datamanager.CustomDataSerializers;
 
 public class Registries {
 	public static final Registries INSTANCE = new Registries();
@@ -12,12 +12,13 @@ public class Registries {
 		BlockRegistry.preInit();
 		ItemRegistry.preInit();
 		EntityRegistry.preInit();
-//		BiomeRegistry.preInit();
 		SoundRegistry.preInit();
 		CapabilityRegistry.preInit();
 		StorageRegistry.preInit();
-		Serializers.register();
+		CustomDataSerializers.register();
 		CustomRecipeRegistry.preInit();
+		AdvancementCriterionRegistry.preInit();
+		LootTableRegistry.preInit();
 
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT) {
 			ModelRegistry.preInit();
@@ -27,8 +28,6 @@ public class Registries {
 
 	public void init() {
 		//this.blockRegistry.init();
-		ItemRegistry.init();
-		RecipeRegistry.init();
 		TileEntityRegistry.init();
 		AspectRegistry.init();
 		FluidRegistry.init();

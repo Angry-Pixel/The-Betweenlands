@@ -14,7 +14,11 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 		this.startProfilerSection("giantTree");
 		this.generate(0.1F, DecorationHelper::generateGiantTree);
 		this.endProfilerSection();
-
+		
+		this.startProfilerSection("cragrockTower");
+		this.generate(0.8F, DecorationHelper::generateCragrockTower);
+		this.endProfilerSection();
+		
 		this.startProfilerSection("weedwoodTree");
 		this.generate(25, DecorationHelper::generateWeedwoodTree);
 		this.endProfilerSection();
@@ -69,10 +73,6 @@ public class BiomeDecoratorCoarseIslands extends BiomeDecoratorBetweenlands {
 
 		this.startProfilerSection("swampKelpCluster");
 		this.generate(4, DecorationHelper::generateSwampKelpCluster);
-		this.endProfilerSection();
-
-		this.startProfilerSection("cragrockTower");
-		this.generate(0.15F, DecorationHelper::generateCragrockTower);
 		this.endProfilerSection();
 	}
 }

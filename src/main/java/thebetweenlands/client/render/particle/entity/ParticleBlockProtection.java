@@ -100,7 +100,7 @@ public class ParticleBlockProtection extends ParticleAnimated implements IPartic
 
 		@Override
 		protected void setBaseArguments(ParticleArgs<?> args) {
-			args.withData(EnumFacing.UP, 5);
+			args.withData(EnumFacing.UP, -1);
 		}
 	}
 }

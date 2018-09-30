@@ -9,9 +9,13 @@ import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -22,6 +26,12 @@ public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper, ICustomCraf
 
     public LifeCrystalRecipeJEI(IGuiHelper guiHelper) {
         craftingGridHelper = guiHelper.createCraftingGridHelper(1, 0);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getRegistryName() {
+        return RecipeRegistry.LIFE_CRYSTAL;
     }
 
     @Override
@@ -70,5 +80,6 @@ public class LifeCrystalRecipeJEI implements ICraftingRecipeWrapper, ICustomCraf
         guiItemStacks.setOverrideDisplayFocus(null);
         craftingGridHelper.setInputs(guiItemStacks, inputs);
         guiItemStacks.set(0, outputs.get(0));
+        BetweenlandsJEIPlugin.addRecipeName(getRegistryName(), guiItemStacks, 0);
     }
 }

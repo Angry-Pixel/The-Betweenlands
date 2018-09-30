@@ -294,7 +294,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 			}
 		}
 
-		if(!getEntityWorld().isRemote && isEntityAlive()) {
+		if(!getEntityWorld().isRemote && isEntityAlive() && this.getSpawningProgress() >= 1) {
 			if (getAttackTarget() != null) {
 				AxisAlignedBB checkAABB = getEntityBoundingBox().expand(64, 64, 64);
 				List<EntityPeatMummy> peatMummies = getEntityWorld().getEntitiesWithinAABB(EntityPeatMummy.class, checkAABB);
@@ -414,6 +414,8 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 	public boolean attackEntityFrom(DamageSource source, float damage) {
 		if (source.getTrueSource() == currentEatPrey) 
 			return false;
+		if(getSpawningProgress() < 1.0F)
+			return false;
 		return super.attackEntityFrom(source, damage);
 	}
 
@@ -500,7 +502,7 @@ public class EntityDreadfulMummy extends EntityMob implements IEntityBL, IBLBoss
 
 	@Override
 	public boolean canBePushed() {
-		return isEntityAlive() && super.canBePushed();
+		return isEntityAlive() && this.getSpawningProgress() >= 1 && super.canBePushed();
 	}
 
 	@Override

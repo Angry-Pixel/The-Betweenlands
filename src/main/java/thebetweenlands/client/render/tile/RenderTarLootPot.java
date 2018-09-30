@@ -1,6 +1,8 @@
 package thebetweenlands.client.render.tile;
 
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -30,6 +32,9 @@ public abstract class RenderTarLootPot extends TileEntitySpecialRenderer<TileEnt
 		EnumFacing rotation = TileEntityHelper.getStatePropertySafely(te, BlockTarLootPot.class, BlockLootPot.FACING, EnumFacing.NORTH);
 		int offset = 0;
 
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		switch (type){
 		default:
 		case POT_1: {

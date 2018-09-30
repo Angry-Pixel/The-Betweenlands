@@ -27,6 +27,8 @@ import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import thebetweenlands.api.storage.ILocalStorageHandler;
 import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 
 public abstract class WorldStorageImpl implements IWorldStorage {
@@ -88,9 +90,9 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	 * Called after the world is set
 	 */
 	protected void init() {
-		
+
 	}
-	
+
 	/**
 	 * Registers the capability and event handler
 	 */
@@ -161,56 +163,72 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 	@Override
 	public void loadChunk(Chunk chunk) {
 		if(!this.storageMap.containsKey(chunk.getPos())) {
-			ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
-			storage.init();
-			storage.setDefaults();
-			this.storageMap.put(chunk.getPos(), storage);
-			
-			if(storage instanceof ITickable) {
-				this.tickableStorages.add((ITickable) storage);
-			}
+			try {
+				ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
+				storage.init();
+				storage.setDefaults();
+				this.storageMap.put(chunk.getPos(), storage);
 
-			//Makes sure that the default values are saved
-			chunk.setModified(true);
+				if(storage instanceof ITickable) {
+					this.tickableStorages.add((ITickable) storage);
+				}
+
+				//Makes sure that the default values are saved
+				chunk.setModified(true);
+			} catch(Exception ex) {
+				TheBetweenlands.logger.error(String.format("Failed creating chunk storage at %s", "[x=" + chunk.x + ", z=" + chunk.z + "]"), ex);
+			}
 		}
 	}
 
 	@Override
 	public void readAndLoadChunk(Chunk chunk, NBTTagCompound nbt) {
 		if(this.storageMap.containsKey(chunk.getPos())) {
-			throw new RuntimeException("Reading chunk storage, but chunk storage is already loaded!");
-		}
-		ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
-		storage.init();
-		storage.readFromNBT(nbt);
-		this.storageMap.put(chunk.getPos(), storage);
-		
-		if(storage instanceof ITickable) {
-			this.tickableStorages.add((ITickable) storage);
+			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.warn(String.format("Reading chunk storage at %s, but chunk storage is already loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
+		} else {
+			try {
+				ChunkStorageImpl storage = new BetweenlandsChunkStorage(this, chunk);
+				storage.init();
+				storage.readFromNBT(nbt);
+				this.storageMap.put(chunk.getPos(), storage);
+
+				if(storage instanceof ITickable) {
+					this.tickableStorages.add((ITickable) storage);
+				}
+			} catch(Exception ex) {
+				TheBetweenlands.logger.error(String.format("Failed reading chunk storage at %s", "[x=" + chunk.x + ", z=" + chunk.z + "]"), ex);
+			}
 		}
 	}
 
 	@Override
 	public void unloadChunk(Chunk chunk) {
 		if(!this.storageMap.containsKey(chunk.getPos())) {
-			throw new RuntimeException("Unloading chunk storage, but chunk storage is not loaded!");
+			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.warn(String.format("Unloading chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
+		} else {
+			ChunkStorageImpl storage = this.storageMap.remove(chunk.getPos());
+			if(storage instanceof ITickable) {
+				this.tickableStorages.remove((ITickable) storage);
+			}
+			storage.onUnload();
 		}
-		ChunkStorageImpl storage = this.storageMap.remove(chunk.getPos());
-		if(storage instanceof ITickable) {
-			this.tickableStorages.remove((ITickable) storage);
-		}
-		storage.onUnload();
 	}
 
 	@Override
 	public NBTTagCompound saveChunk(Chunk chunk) {
 		if(!this.storageMap.containsKey(chunk.getPos())) {
-			throw new RuntimeException("Saving chunk storage, but chunk storage is not loaded!");
+			if(BetweenlandsConfig.DEBUG.debug) TheBetweenlands.logger.warn(String.format("Saving chunk storage at %s, but chunk storage is not loaded!", "[x=" + chunk.x + ", z=" + chunk.z + "]"));
+		} else {
+			try {
+				ChunkStorageImpl storage = this.storageMap.get(chunk.getPos());
+				NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound());
+				storage.setDirty(false);
+				return nbt;
+			} catch(Exception ex) {
+				TheBetweenlands.logger.error(String.format("Failed saving chunk storage at %s", "[x=" + chunk.x + ", z=" + chunk.z + "]"), ex);
+			}
 		}
-		ChunkStorageImpl storage = this.storageMap.get(chunk.getPos());
-		NBTTagCompound nbt = storage.writeToNBT(new NBTTagCompound());
-		storage.setDirty(false);
-		return nbt;
+		return null;
 	}
 
 	@Override
@@ -241,9 +259,10 @@ public abstract class WorldStorageImpl implements IWorldStorage {
 
 	@Override
 	public void tick() {
-		this.localStorageHandler.tick();
-		
-		for(ITickable tickable : this.tickableStorages) {
+		this.localStorageHandler.update();
+
+		for(int i = 0; i < this.tickableStorages.size(); i++) {
+			ITickable tickable = this.tickableStorages.get(i);
 			tickable.update();
 		}
 	}

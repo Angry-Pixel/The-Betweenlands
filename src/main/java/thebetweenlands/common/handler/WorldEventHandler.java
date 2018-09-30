@@ -59,6 +59,8 @@ public final class WorldEventHandler {
 				//Unload immediately on client side
 				cap.unloadChunk(event.getChunk());
 			} else {
+				//Queue chunk to be unloaded later because there's no way to know
+				//whether chunk will be saved to disk or not
 				UNLOAD_QUEUE.put(event.getChunk(), cap);
 			}
 		}
@@ -82,17 +84,17 @@ public final class WorldEventHandler {
 
 	@SubscribeEvent
 	public static void onWatchChunk(ChunkWatchEvent.Watch event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getPlayer().getEntityWorld());
+		IWorldStorage cap = WorldStorageImpl.getCapability(event.getChunkInstance().getWorld());
 		if(cap != null) {
-			cap.watchChunk(event.getChunk(), event.getPlayer());
+			cap.watchChunk(event.getChunkInstance().getPos(), event.getPlayer());
 		}
 	}
 
 	@SubscribeEvent
 	public static void onUnwatchChunk(ChunkWatchEvent.UnWatch event) {
-		IWorldStorage cap = WorldStorageImpl.getCapability(event.getPlayer().getEntityWorld());
+		IWorldStorage cap = WorldStorageImpl.getCapability(event.getChunkInstance().getWorld());
 		if(cap != null) {
-			cap.unwatchChunk(event.getChunk(), event.getPlayer());
+			cap.unwatchChunk(event.getChunkInstance().getPos(), event.getPlayer());
 		}
 	}
 
@@ -100,32 +102,20 @@ public final class WorldEventHandler {
 	public static void onWorldSave(WorldEvent.Save event) {
 		IWorldStorage worldStorage = WorldStorageImpl.getCapability(event.getWorld());
 		
-		//Save loaded storages
-		List<ILocalStorage> localStorages = new ArrayList<>();
-		localStorages.addAll(worldStorage.getLocalStorageHandler().getLoadedStorages());
-		for(ILocalStorage localStorage : localStorages) {
-			//Only save if dirty
-			if(localStorage.isDirty()) {
-				worldStorage.getLocalStorageHandler().saveLocalStorageFile(localStorage);
-				localStorage.setDirty(false);
-			}
-		}
-		
-		//Save regional cache
-		worldStorage.getLocalStorageHandler().getLocalRegionCache().saveAllRegions();
+		worldStorage.getLocalStorageHandler().saveAll();
 	}
 
 	@SubscribeEvent
 	public static void onServerTick(ServerTickEvent event) {
 		if(event.phase == Phase.END) {
-			Iterator<Entry<Chunk, IWorldStorage>> entryIT = UNLOAD_QUEUE.entrySet().iterator();
-			while(entryIT.hasNext()) {
-				Entry<Chunk, IWorldStorage> entry = entryIT.next();
+			//Unload queued chunks that weren't saved to disk
+			for(Entry<Chunk, IWorldStorage> entry : UNLOAD_QUEUE.entrySet()) {
 				Chunk chunk = entry.getKey();
 				if(!chunk.isLoaded()) {
 					entry.getValue().unloadChunk(chunk);
 				}
 			}
+			UNLOAD_QUEUE.clear();
 		}
 	}
 

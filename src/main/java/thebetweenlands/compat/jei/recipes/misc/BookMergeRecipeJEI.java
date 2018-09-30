@@ -7,13 +7,14 @@ import mezz.jei.api.gui.IRecipeLayout;
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.recipe.wrapper.ICraftingRecipeWrapper;
 import mezz.jei.api.recipe.wrapper.ICustomCraftingRecipeWrapper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.ResourceLocation;
 import thebetweenlands.common.registries.ItemRegistry;
+import thebetweenlands.common.registries.RecipeRegistry;
+import thebetweenlands.compat.jei.BetweenlandsJEIPlugin;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,12 @@ public class BookMergeRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafti
 
     public BookMergeRecipeJEI(IGuiHelper guiHelper) {
         craftingGridHelper = guiHelper.createCraftingGridHelper(1, 0);
+    }
+
+    @Nullable
+    @Override
+    public ResourceLocation getRegistryName() {
+        return RecipeRegistry.BOOK_MERGE;
     }
 
     @Override
@@ -72,5 +79,6 @@ public class BookMergeRecipeJEI implements ICraftingRecipeWrapper, ICustomCrafti
         guiItemStacks.setOverrideDisplayFocus(null);
         craftingGridHelper.setInputs(guiItemStacks, inputs);
         guiItemStacks.set(0, outputs.get(0));
+        BetweenlandsJEIPlugin.addRecipeName(getRegistryName(), guiItemStacks, 0);
     }
 }

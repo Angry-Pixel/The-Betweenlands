@@ -22,7 +22,7 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
 			if(!stack.isEmpty()) {
-				if(stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED) {
+				if(stack.getItem() == ItemRegistry.BL_BUCKET) {
 					if(!bucket.isEmpty())
 						return false;
 					bucket = stack;
@@ -52,17 +52,13 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 		for (int i = 0; i < crafter.getSizeInventory(); ++i) {
 			ItemStack stack = crafter.getStackInSlot(i);
 			if(!stack.isEmpty()) {
-				if(stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED) {
+				if(stack.getItem() == ItemRegistry.BL_BUCKET) {
 					bucket = stack;
 					break;
 				}
 			}
 		}
-		if(bucket.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED) {
-			return new ItemStack(ItemRegistry.SYRMORITE_BUCKET_PLANT_TONIC);
-		} else {
-			return new ItemStack(ItemRegistry.WEEDWOOD_BUCKET_PLANT_TONIC);
-		}
+		return new ItemStack(ItemRegistry.BL_BUCKET_PLANT_TONIC, 1, bucket.getMetadata());
 	}
 
 	@Override
@@ -86,7 +82,7 @@ public class RecipesPlantTonic extends IForgeRegistryEntry.Impl<IRecipe> impleme
 
 		for (int i = 0; i < remaining.size(); ++i) {
 			ItemStack stack = inv.getStackInSlot(i);
-			if(!stack.isEmpty() && (stack.getItem() == ItemRegistry.SYRMORITE_BUCKET_FILLED || stack.getItem() == ItemRegistry.WEEDWOOD_BUCKET_FILLED)) {
+			if(!stack.isEmpty() && (stack.getItem() == ItemRegistry.BL_BUCKET)) {
 				remaining.set(i, ItemStack.EMPTY);
 			} else {
 				remaining.set(i, ForgeHooks.getContainerItem(stack));

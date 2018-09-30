@@ -1,26 +1,22 @@
 package thebetweenlands.common.tile;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.ISidedInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.container.BlockBLFurnace;
-import thebetweenlands.common.item.misc.ItemMisc;
 import thebetweenlands.common.item.misc.ItemMisc.EnumItemMisc;
 import thebetweenlands.common.registries.ItemRegistry;
-
-import javax.annotation.Nonnull;
 
 public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISidedInventory, ITickable {
     private static final int[] slotsTop = new int[]{0};
@@ -34,51 +30,6 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
 
     public TileEntityBLFurnace() {
         super(4, "sulfur_furnace");
-    }
-
-    public static int getItemBurnTime(ItemStack stack) {
-        if (stack.isEmpty()) {
-            return 0;
-        } else {
-            Item item = stack.getItem();
-
-            if (item instanceof ItemBlock && Block.getBlockFromItem(item) != Blocks.AIR) {
-                Block block = Block.getBlockFromItem(item);
-
-                if (block == Blocks.WOODEN_SLAB)
-                    return 150;
-
-                if (block.getDefaultState().getMaterial() == Material.WOOD)
-                    return 300;
-
-                if (block == Blocks.COAL_BLOCK)
-                    return 16000;
-            }
-
-            if (item instanceof ItemTool && "WOOD".equals(((ItemTool) item).getToolMaterialName()))
-                return 200;
-            if (item instanceof ItemSword && "WOOD".equals(((ItemSword) item).getToolMaterialName()))
-                return 200;
-            if (item instanceof ItemHoe && "WOOD".equals(((ItemHoe) item).getMaterialName()))
-                return 200;
-            if (item == Items.STICK)
-                return 100;
-            if (item == Items.COAL)
-                return 1600;
-            if (item instanceof ItemMisc && stack.getItemDamage() == EnumItemMisc.SULFUR.getID())
-                return 1600;
-            if (item == Items.LAVA_BUCKET)
-                return 20000;
-            if (item == Item.getItemFromBlock(Blocks.SAPLING))
-                return 100;
-            if (item == Items.BLAZE_ROD)
-                return 2400;
-            return GameRegistry.getFuelValue(stack);
-        }
-    }
-
-    public static boolean isItemFuel(ItemStack itemstack) {
-        return getItemBurnTime(itemstack) > 0;
     }
 
     public static boolean isItemFlux(ItemStack itemstack) {
@@ -139,7 +90,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
 
     @Override
     public String getName() {
-        return hasCustomName() ? customName : "container.furnaceBL";
+        return hasCustomName() ? customName : "container.furnace_bl";
     }
 
     @Override
@@ -156,7 +107,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         super.readFromNBT(nbt);
         furnaceBurnTime = nbt.getShort("BurnTime");
         furnaceCookTime = nbt.getShort("CookTime");
-        currentItemBurnTime = getItemBurnTime(inventory.get(1));
+        currentItemBurnTime = TileEntityFurnace.getItemBurnTime(inventory.get(1));
         if (nbt.hasKey("CustomName", 8))
             customName = nbt.getString("CustomName");
     }
@@ -211,8 +162,8 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
         if (!world.isRemote) {
             if (furnaceBurnTime != 0 || !inventory.get(1).isEmpty()&& !inventory.get(0).isEmpty()) {
                 if (furnaceBurnTime == 0 && canSmelt()) {
-                    currentItemBurnTime = furnaceBurnTime = getItemBurnTime(inventory.get(1));
-
+                    currentItemBurnTime = furnaceBurnTime = TileEntityFurnace.getItemBurnTime(inventory.get(1));
+                    
                     if (furnaceBurnTime > 0) {
                         isDirty = true;
 
@@ -293,7 +244,7 @@ public class TileEntityBLFurnace extends TileEntityBasicInventory implements ISi
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-        return slot != 2 && (slot == 1 ? isItemFuel(itemstack) : slot != 3 || isItemFlux(itemstack));
+        return slot != 2 && (slot == 1 ? TileEntityFurnace.isItemFuel(itemstack) : slot != 3 || isItemFlux(itemstack));
     }
 
     @Override

@@ -10,13 +10,13 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.client.audio.ambience.AmbienceManager;
 import thebetweenlands.common.TheBetweenlands;
-import thebetweenlands.util.config.ConfigHandler;
+import thebetweenlands.common.config.BetweenlandsConfig;
 
 public class AmbienceSoundPlayHandler {
 	@SubscribeEvent
 	public static void onPlayerCltTick(PlayerTickEvent event) {
 		if(event.phase == Phase.START && event.side == Side.CLIENT && event.player == TheBetweenlands.proxy.getClientPlayer()) {
-			if(event.player.dimension == ConfigHandler.dimensionId) {
+			if(event.player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				AmbienceManager.INSTANCE.update();
 			}
 		}

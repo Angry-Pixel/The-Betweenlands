@@ -8,6 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -21,11 +23,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.client.render.model.tile.ModelInfuser;
 import thebetweenlands.common.block.container.BlockInfuser;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.elixir.ElixirRecipe;
 import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityInfuser;
 import thebetweenlands.util.TileEntityHelper;
-import thebetweenlands.util.config.ConfigHandler;
 
 @SideOnly(Side.CLIENT)
 public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> {
@@ -36,6 +38,9 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 	public void render(TileEntityInfuser infuser, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		bindTexture(TEXTURE);
 
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		if(infuser == null || !infuser.hasWorld()) {
 			GlStateManager.pushMatrix();
 			GlStateManager.translate((float) 0.5F, (float) 1.5F, (float) 0.5F);
@@ -74,7 +79,7 @@ public class RenderInfuser extends TileEntitySpecialRenderer<TileEntityInfuser> 
 
 		ElixirRecipe recipe = infuser.getInfusingRecipe();
 
-		if(ConfigHandler.debug) {
+		if(BetweenlandsConfig.DEBUG.debug) {
 			String elixirName = recipe != null ? recipe.name : " N/A";
 			renderStirCount("Evap: " + infuser.getEvaporation() + " Temp: "+ infuser.getTemperature() + " Time: " + infuser.getInfusionTime() + " Recipe: " + elixirName, x, y, z);
 		}

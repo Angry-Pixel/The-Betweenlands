@@ -9,9 +9,33 @@ import net.minecraft.client.particle.ParticleRedstone;
 import net.minecraft.client.particle.ParticleSmokeNormal;
 import net.minecraft.client.particle.ParticleSpell;
 import net.minecraft.client.particle.ParticleSplash;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+<<<<<<< HEAD
 import thebetweenlands.client.render.particle.entity.*;
+=======
+import thebetweenlands.client.render.particle.entity.ParticleAltarCrafting;
+import thebetweenlands.client.render.particle.entity.ParticleAnimated;
+import thebetweenlands.client.render.particle.entity.ParticleAnimator;
+import thebetweenlands.client.render.particle.entity.ParticleBlockProtection;
+import thebetweenlands.client.render.particle.entity.ParticleBreakingBL;
+import thebetweenlands.client.render.particle.entity.ParticleBubbleBL;
+import thebetweenlands.client.render.particle.entity.ParticleBug;
+import thebetweenlands.client.render.particle.entity.ParticleCaveWaterDrip;
+import thebetweenlands.client.render.particle.entity.ParticleDamageReduction;
+import thebetweenlands.client.render.particle.entity.ParticleDruidCasting;
+import thebetweenlands.client.render.particle.entity.ParticleFish;
+import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
+import thebetweenlands.client.render.particle.entity.ParticleLeafSwirl;
+import thebetweenlands.client.render.particle.entity.ParticleMoth;
+import thebetweenlands.client.render.particle.entity.ParticleSimple;
+import thebetweenlands.client.render.particle.entity.ParticleTarBeastDrip;
+import thebetweenlands.client.render.particle.entity.ParticleThem;
+import thebetweenlands.client.render.particle.entity.ParticleWeedwoodLeaf;
+import thebetweenlands.client.render.particle.entity.ParticleWisp;
+import thebetweenlands.client.render.particle.entity.ParticleXPPieces;
+>>>>>>> 1.12-dev
 
 public enum BLParticles {
 
@@ -91,7 +115,12 @@ public enum BLParticles {
 	GEM_PROC(VanillaParticleFactory.create(ParticleCrit.class, new ParticleCrit.MagicFactory())),
 	ANIMATOR(new ParticleAnimator.Factory()),
 	SPLASH(VanillaParticleFactory.create(ParticleSplash.class, new ParticleSplash.Factory())),
-	BLOCK_PROTECTION(new ParticleBlockProtection.Factory());
+	BLOCK_PROTECTION(new ParticleBlockProtection.Factory()),
+	EMBER_1(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_1"))),
+	EMBER_2(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_2"))),
+	EMBER_3(new ParticleSimple.GenericFactory(new ResourceLocation("thebetweenlands:particle/ember_3"))),
+	XP_PIECES(new ParticleXPPieces.Factory()),
+	DAMAGE_REDUCTION(new ParticleDamageReduction.Factory());
 
 
 

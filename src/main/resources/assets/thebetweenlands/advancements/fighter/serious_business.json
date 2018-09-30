@@ -1,0 +1,64 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bone_sword"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.serious_business.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.serious_business.description"
+    }
+  },
+  "parent": "thebetweenlands:fighter/root",
+  "criteria": {
+    "weedwood_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:weedwood_sword"
+          }
+        ]
+      }
+    },
+    "bone_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:bone_sword"
+          }
+        ]
+      }
+    },
+    "octine_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:octine_sword"
+          }
+        ]
+      }
+    },
+    "valonite_sword": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:valonite_sword"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "weedwood_sword",
+      "bone_sword",
+      "octine_sword",
+      "valonite_sword"
+    ]
+  ]
+}

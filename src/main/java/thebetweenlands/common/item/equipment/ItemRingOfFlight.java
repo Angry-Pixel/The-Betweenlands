@@ -8,6 +8,7 @@ import org.lwjgl.input.Keyboard;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +18,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
@@ -45,8 +47,8 @@ public class ItemRingOfFlight extends ItemRing {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.add(I18n.format("tooltip.ring.flight.bonus"));
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.ring.flight.bonus"), 0));
+		if (GuiScreen.isShiftKeyDown()) {
 			String toolTip = I18n.format("tooltip.ring.flight", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindJump.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
@@ -61,17 +63,16 @@ public class ItemRingOfFlight extends ItemRing {
 			if(player.hasCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null)) {
 				IFlightCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_FLIGHT, null);
 				cap.setFlightRing(true);
-				if(!player.capabilities.isCreativeMode && this.canFly(player, stack)) {
+				if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, stack)) {
 					double flightHeight = 3.5D;
-					if(player.world.isRemote || cap.isFlying())
+					if(player.world.isRemote || cap.isFlying()) {
 						player.capabilities.allowFlying = true;
+					}
 					boolean isFlying = cap.isFlying();
 					NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
 					if(!entity.onGround) {
 						if(isFlying) {
-							if(!entity.world.isRemote && entity.ticksExisted % 20 == 0) {
-								this.removeXp((EntityPlayer)entity, 2);
-							}
+							cap.onFlightTick(player, stack, !nbt.getBoolean("ringActive"));
 
 							nbt.setBoolean("ringActive", true);
 
@@ -125,12 +126,21 @@ public class ItemRingOfFlight extends ItemRing {
 						cap.setFlying(false);
 						nbt.setBoolean("ringActive", false);
 					}
-				} else if(cap.isFlying() && !player.onGround && player.world.isRemote) {
-					if(cap.getFlightTime() > 40) {
-						BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
-					} else {
-						for(int i = 0; i < 5; i++) {
-							BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
+				} else {
+					if(!player.world.isRemote) {
+						NBTTagCompound nbt = NBTHelper.getStackNBTSafe(stack);
+						nbt.setBoolean("ringActive", false);
+						if(cap.isFlying()) {
+							cap.setFlying(false);
+						}
+					}
+					if(cap.isFlying() && !player.onGround && player.world.isRemote) {
+						if(cap.getFlightTime() > 40) {
+							BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 0.0F, entity));
+						} else {
+							for(int i = 0; i < 5; i++) {
+								BLParticles.LEAF_SWIRL.spawn(entity.world, entity.posX, entity.posY, entity.posZ, ParticleArgs.get().withData(400, 1.0F - (cap.getFlightTime() + i / 5.0F) / 40.0F, entity));
+							}
 						}
 					}
 				}
@@ -146,10 +156,6 @@ public class ItemRingOfFlight extends ItemRing {
 		return -512.0D;
 	}
 
-	private boolean canFly(EntityPlayer player, ItemStack stack) {
-		return player.capabilities.isCreativeMode || player.experienceTotal > 0;
-	}
-
 	@SubscribeEvent
 	public static void onPlayerTick(PlayerTickEvent event) {
 		if(event.player != null) {
@@ -162,7 +168,7 @@ public class ItemRingOfFlight extends ItemRing {
 						cap.setFlightTime(cap.getFlightTime() + 1);
 					}
 
-					boolean canPlayerFly = false;
+					ItemStack flightRing = ItemStack.EMPTY;
 
 					if(player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 						IEquipmentCapability equipmentCap = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
@@ -170,21 +176,28 @@ public class ItemRingOfFlight extends ItemRing {
 						for(int i = 0; i < inv.getSizeInventory(); i++) {
 							ItemStack stack = inv.getStackInSlot(i);
 							if(!stack.isEmpty() && stack.getItem() == ItemRegistry.RING_OF_FLIGHT) {
-								canPlayerFly = true;
+								flightRing = stack;
 								break;
 							}
 						}
 					}
 
-					if(canPlayerFly && player.world.isRemote) {
-						if(event.phase == Phase.START) {
-							player.capabilities.isFlying = false;
-						} else {
-							if(player.capabilities.isFlying) {
-								cap.setFlying(!cap.isFlying());
-								if(player == TheBetweenlands.proxy.getClientPlayer()) {
-									TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+					if(!flightRing.isEmpty() && player.world.isRemote) {
+						if(!cap.canFlyWithoutRing(player) && cap.canFlyWithRing(player, flightRing)) {
+							if(event.phase == Phase.START) {
+								player.capabilities.isFlying = false;
+							} else {
+								if(player.capabilities.isFlying) {
+									cap.setFlying(!cap.isFlying());
+									if(player == TheBetweenlands.proxy.getClientPlayer()) {
+										TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
+									}
 								}
+							}
+						} else if(cap.isFlying()) {
+							cap.setFlying(false);
+							if(player == TheBetweenlands.proxy.getClientPlayer()) {
+								TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
 							}
 						}
 					}
@@ -192,9 +205,9 @@ public class ItemRingOfFlight extends ItemRing {
 						TheBetweenlands.networkWrapper.sendToServer(new MessageFlightState(cap.isFlying()));
 					}
 					if(event.phase == Phase.END) {
-						if(!canPlayerFly || !cap.isFlying()) {
+						if(flightRing.isEmpty() || !cap.isFlying()) {
 							if(cap.getFlightRing()) {
-								if(!player.capabilities.isCreativeMode) {
+								if(!cap.canFlyWithoutRing(player)) {
 									player.capabilities.isFlying = false;
 									player.capabilities.allowFlying = false;
 									if(player.world.isRemote) {

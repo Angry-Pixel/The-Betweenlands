@@ -126,7 +126,8 @@ public class TileEntityAnimator extends TileEntityBasicInventory implements ITic
     @Override
     public void markDirty() {
         super.markDirty();
-        world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
+        if (world != null)
+            world.notifyBlockUpdate(getPos(), world.getBlockState(pos), world.getBlockState(pos), 3);
     }
 
     @Override

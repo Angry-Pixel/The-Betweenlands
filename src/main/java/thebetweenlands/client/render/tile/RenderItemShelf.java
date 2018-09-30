@@ -4,6 +4,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemSkull;
@@ -30,6 +32,9 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 		double offSetZZ = 0;
 		float rotation = 0;
 
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		this.bindTexture(TEXTURE);
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
@@ -44,12 +49,12 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 			isItem = false;
 			facing = TileEntityHelper.getStatePropertySafely(te, BlockItemShelf.class, BlockItemShelf.FACING, EnumFacing.NORTH);
 		}
-
+		
 		switch (facing) {
 		default:
 		case NORTH:
 			GlStateManager.rotate(0F, 0.0F, 1F, 0F);
-			rotation = 180F;
+			rotation = 0F;
 			offSetX = unitPixel * 3.75;
 			offSetZ = unitPixel * 3.75;
 			offSetXX = unitPixel * 12;
@@ -57,7 +62,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 			break;
 		case SOUTH:
 			GlStateManager.rotate(180F, 0.0F, 1F, 0F);
-			rotation = 0F;
+			rotation = 180F;
 			offSetX = unitPixel * 12;
 			offSetZ = unitPixel * 12;
 			offSetXX = unitPixel * 3.75;
@@ -65,7 +70,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 			break;
 		case EAST:
 			GlStateManager.rotate(90F, 0.0F, 1F, 0F);
-			rotation = 90F;
+			rotation = -90F;
 			offSetX = unitPixel * 12;
 			offSetZ = unitPixel * 3.75;
 			offSetXX = unitPixel * 12;
@@ -73,7 +78,7 @@ public class RenderItemShelf extends TileEntitySpecialRenderer<TileEntityItemShe
 			break;
 		case WEST:
 			GlStateManager.rotate(-90F, 0.0F, 1F, 0F);
-			rotation = -90F;
+			rotation = 90F;
 			offSetX = unitPixel * 3.75;
 			offSetZ = unitPixel * 12;
 			offSetXX = unitPixel * 3.75;

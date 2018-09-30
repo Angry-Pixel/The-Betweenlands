@@ -10,9 +10,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.network.MessageBase;
+import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardData;
 import thebetweenlands.common.network.clientbound.MessageBlockGuardSectionChange;
 import thebetweenlands.common.network.clientbound.MessageClearBlockGuard;
+import thebetweenlands.common.network.clientbound.MessageDamageReductionParticle;
 import thebetweenlands.common.network.clientbound.MessageDruidAltarProgress;
 import thebetweenlands.common.network.clientbound.MessageDruidTeleportParticles;
 import thebetweenlands.common.network.clientbound.MessageGemProc;
@@ -20,15 +22,18 @@ import thebetweenlands.common.network.clientbound.MessageMireSnailEggHatching;
 import thebetweenlands.common.network.clientbound.MessagePlayEntityIdle;
 import thebetweenlands.common.network.clientbound.MessagePowerRingParticles;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
+import thebetweenlands.common.network.clientbound.MessageRiftSound;
+import thebetweenlands.common.network.clientbound.MessageShowFoodSicknessLine;
 import thebetweenlands.common.network.clientbound.MessageSummonPeatMummyParticles;
 import thebetweenlands.common.network.clientbound.MessageSyncChunkStorage;
 import thebetweenlands.common.network.clientbound.MessageSyncEntityCapabilities;
-import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEvent;
-import thebetweenlands.common.network.clientbound.MessageSyncLocalStorage;
+import thebetweenlands.common.network.clientbound.MessageSyncEnvironmentEventData;
+import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageData;
 import thebetweenlands.common.network.clientbound.MessageSyncLocalStorageReferences;
 import thebetweenlands.common.network.clientbound.MessageSyncStaticAspects;
 import thebetweenlands.common.network.clientbound.MessageWeedwoodBushRustle;
 import thebetweenlands.common.network.clientbound.MessageWightVolatileParticles;
+import thebetweenlands.common.network.serverbound.MessageConnectCavingRope;
 import thebetweenlands.common.network.serverbound.MessageEquipItem;
 import thebetweenlands.common.network.serverbound.MessageFlightState;
 import thebetweenlands.common.network.serverbound.MessageOpenPouch;
@@ -44,7 +49,7 @@ public class MessageRegistry {
 
 	public static void preInit() {
 		registerMessage(MessageDruidAltarProgress.class, Side.CLIENT);
-		registerMessage(MessageSyncEnvironmentEvent.class, Side.CLIENT);
+		registerMessage(MessageSyncEnvironmentEventData.class, Side.CLIENT);
 		registerMessage(MessageWeedwoodBushRustle.class, Side.CLIENT);
 		registerMessage(MessageSyncEntityCapabilities.class, Side.CLIENT);
 		registerMessage(MessageSyncStaticAspects.class, Side.CLIENT);
@@ -58,10 +63,14 @@ public class MessageRegistry {
 		registerMessage(MessagePlayEntityIdle.class, Side.CLIENT);
 		registerMessage(MessagePowerRingParticles.class, Side.CLIENT);
 		registerMessage(MessageRemoveLocalStorage.class, Side.CLIENT);
+		registerMessage(MessageAddLocalStorage.class, Side.CLIENT);
+		registerMessage(MessageSyncLocalStorageData.class, Side.CLIENT);
 		registerMessage(MessageSyncChunkStorage.class, Side.CLIENT);
-		registerMessage(MessageSyncLocalStorage.class, Side.CLIENT);
 		registerMessage(MessageSyncLocalStorageReferences.class, Side.CLIENT);
 		registerMessage(MessageSummonPeatMummyParticles.class, Side.CLIENT);
+		registerMessage(MessageShowFoodSicknessLine.class, Side.CLIENT);
+		registerMessage(MessageDamageReductionParticle.class, Side.CLIENT);
+		registerMessage(MessageRiftSound.class, Side.CLIENT);
 		
 		registerMessage(MessageEquipItem.class, Side.SERVER);
 		registerMessage(MessageOpenPouch.class, Side.SERVER);
@@ -70,6 +79,7 @@ public class MessageRegistry {
 		registerMessage(MessageUpdatePuppeteerState.class, Side.SERVER);
 		registerMessage(MessageUpdateSummoningState.class, Side.SERVER);
 		registerMessage(MessageRow.class, Side.SERVER);
+		registerMessage(MessageConnectCavingRope.class, Side.SERVER);
 	}
 
 	private static void registerMessage(Class<? extends MessageBase> messageType, Side toSide) {

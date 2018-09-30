@@ -7,7 +7,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemShield;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -83,6 +82,11 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 		return EnumAction.BLOCK;
 	}
 
+	@Override
+	public boolean isShield(ItemStack stack, EntityLivingBase entity) {
+		return true;
+	}
+	
 	/**
 	 * Returns the blocking cooldown
 	 * @param stack
@@ -103,8 +107,8 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 	public void onAttackBlocked(ItemStack stack, EntityLivingBase attacked, float damage, DamageSource source) {
 		if(!attacked.world.isRemote && source.getTrueSource() instanceof EntityLivingBase) {
 			EntityLivingBase attacker = (EntityLivingBase) source.getTrueSource();
-			ItemStack activeItem = attacker.getActiveItemStack();
-			if(!activeItem.isEmpty() && activeItem.getItem() instanceof ItemAxe) {
+			ItemStack attackerItem = attacker.getHeldItemMainhand();
+			if(!attackerItem.isEmpty() && attackerItem.getItem().canDisableShield(attackerItem, stack, attacked, attacker)) {
 				float attackStrength = attacker instanceof EntityPlayer ? ((EntityPlayer)attacker).getCooledAttackStrength(0.5F) : 1.0F;
 				float criticalChance = 0.25F + (float)EnchantmentHelper.getEfficiencyModifier(attacker) * 0.05F;
 				if(attacker.isSprinting() && attackStrength > 0.9F) {
@@ -191,6 +195,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 			if(this.ignoreEvent) {
 				return;
 			}
+			this.ignoreEvent = true;
 			EntityLivingBase attacked = event.getEntityLiving();
 			DamageSource source = event.getSource();
 			for(EnumHand hand : EnumHand.values()) {
@@ -212,7 +217,6 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 								double prevMotionX = attacked.motionX;
 								double prevMotionY = attacked.motionY;
 								double prevMotionZ = attacked.motionZ;
-								this.ignoreEvent = true;
 								DamageSource newSource;
 								//getDamageLocation() == null so that vanilla shield blocking does not happen
 								if(source instanceof EntityDamageSourceIndirect) {
@@ -259,7 +263,6 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 									newSource.setProjectile();
 								}
 								attacked.attackEntityFrom(newSource, newDamage);
-								this.ignoreEvent = false;
 								attacked.motionX = prevMotionX;
 								attacked.motionY = prevMotionY;
 								attacked.motionZ = prevMotionZ;
@@ -317,6 +320,7 @@ public class ItemBLShield extends ItemShield implements IAnimatorRepairable {
 					}
 				}
 			}
+			this.ignoreEvent = false;
 		}
 	}
 	

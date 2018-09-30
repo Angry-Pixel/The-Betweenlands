@@ -1,0 +1,25 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:items_misc",
+      "data": 13
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.root.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.root.description"
+    },
+    "background": "thebetweenlands:textures/blocks/weedwood.png",
+    "announce_to_chat": false,
+    "show_toast": false
+  },
+  "criteria": {
+    "has_dank_world": {
+      "trigger": "thebetweenlands:has_advancement",
+      "conditions": {
+        "advancement": "thebetweenlands:adventurer/dank_world"
+      }
+    }
+  }
+}

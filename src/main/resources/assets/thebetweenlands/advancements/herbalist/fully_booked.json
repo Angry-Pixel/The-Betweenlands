@@ -1,0 +1,20 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:manual_hl"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.herbalist.fully_booked.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.herbalist.fully_booked.description"
+    },
+    "frame": "challenge"
+  },
+  "parent": "thebetweenlands:herbalist/bookworms",
+  "criteria": {
+    "herblore_find_all": {
+      "trigger": "thebetweenlands:herblore_find_all"
+    }
+  }
+}

@@ -4,7 +4,7 @@ import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemArmor;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
@@ -14,14 +14,14 @@ import thebetweenlands.client.tab.BLCreativeTabs;
 import thebetweenlands.common.item.BLMaterialRegistry;
 import thebetweenlands.common.lib.ModInfo;
 
-public class ItemExplorersHat extends ItemArmor {
+public class ItemExplorersHat extends ItemBLArmor {
 	public static final ResourceLocation TEXTURE = new ResourceLocation(ModInfo.ID, "textures/armor/explorers_hat.png");
 
 	@SideOnly(Side.CLIENT)
 	private static ModelBiped model;
 
 	public ItemExplorersHat() {
-		super(BLMaterialRegistry.ARMOR_BL_CLOTH, 2, EntityEquipmentSlot.HEAD);
+		super(BLMaterialRegistry.ARMOR_BL_CLOTH, 2, EntityEquipmentSlot.HEAD, "explorers_hat");
 		this.setCreativeTab(BLCreativeTabs.SPECIALS);
 	}
 
@@ -47,5 +47,10 @@ public class ItemExplorersHat extends ItemArmor {
 			model = new ModelExplorersHat();
 		}
 		return model;
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
 	}
 }

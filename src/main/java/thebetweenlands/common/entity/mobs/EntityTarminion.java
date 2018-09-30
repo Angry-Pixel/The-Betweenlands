@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.entity.IEntityBL;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.LootTableRegistry;
 import thebetweenlands.common.registries.SoundRegistry;
 
@@ -45,6 +46,8 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	private int despawnTicks = 0;
 
+	protected boolean dropContentsWhenDead = true;
+	
 	public EntityTarminion(World world) {
 		super(world);
 		this.setSize(0.3F, 0.5F);
@@ -132,7 +135,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	@Override
 	public void setDead() {
-		if(!this.isDead) {
+		if(!this.isDead && this.dropContentsWhenDead) {
 			if(this.getAttackTarget() != null) {
 				if(this.world.isRemote) {
 					for(int i = 0; i < 200; i++) {
@@ -176,6 +179,7 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 				}
 			}
 		}
+		
 		super.setDead();
 	}
 
@@ -187,6 +191,9 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if(source == DamageSource.DROWN && this.world.getBlockState(new BlockPos(this.posX, this.posY + this.height, this.posZ)).getBlock() == BlockRegistry.TAR) {
+			return false;
+		}
 		if(source.getTrueSource() instanceof EntityCreature) {
 			this.attack(source.getTrueSource());
 		}
@@ -247,5 +254,15 @@ public class EntityTarminion extends EntityTameable implements IEntityBL {
 	public boolean isAIDisabled() {
 		return false;
 	}
+	
+	@Override
+	public void setDropItemsWhenDead(boolean dropWhenDead) {
+		this.dropContentsWhenDead = dropWhenDead;
+	}
 
+	@Override
+	public Entity changeDimension(int dimensionIn) {
+		this.dropContentsWhenDead = false;
+		return super.changeDimension(dimensionIn);
+	}
 }

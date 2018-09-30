@@ -8,10 +8,10 @@ import org.lwjgl.util.vector.Quaternion;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.model.ModelRenderer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -217,7 +217,7 @@ public class RenderWeedwoodRowboat extends Render<EntityWeedwoodRowboat> {
     public void onLivingRender(RenderPlayerEvent.Pre event) {
         EntityPlayer e = event.getEntityPlayer();
         Entity riding = e.getRidingEntity();
-        if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e && !(((Render<?>) event.getRenderer()) instanceof RenderPlayerRower)) {
+        if (riding instanceof EntityWeedwoodRowboat && riding.getControllingPassenger() == e) {
             event.setCanceled(true);
             EntityWeedwoodRowboat rowboat = (EntityWeedwoodRowboat) riding;
             float delta = isRenderingWorld ? Minecraft.getMinecraft().getRenderPartialTicks() : 1;

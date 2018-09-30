@@ -16,6 +16,7 @@
     }
   },
   "result": {
-    "item": "thebetweenlands:syrmorite_bucket"
+    "item": "thebetweenlands:bl_bucket",
+    "data": 1
   }
 }

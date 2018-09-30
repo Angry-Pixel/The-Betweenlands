@@ -26,6 +26,8 @@ import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.TranslationHelper;
 
 public class ElixirEffect {
+	public static final int VIAL_INFUSION_MAX_POTENCY = 5;
+	
 	private final String effectName;
 	private final int effectID;
 	private final ResourceLocation icon;

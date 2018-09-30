@@ -14,6 +14,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import thebetweenlands.common.block.terrain.BlockDentrothyst;
+import thebetweenlands.common.block.terrain.BlockLeavesBetweenlands;
 import thebetweenlands.common.block.terrain.BlockDentrothyst.EnumDentrothyst;
 import thebetweenlands.common.registries.BlockRegistry;
 
@@ -29,7 +30,7 @@ public abstract class WorldGenGiantTreeTrunk extends WorldGenerator {
 
 	public static IBlockState BARK = BlockRegistry.LOG_WEEDWOOD.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 	public static IBlockState WOOD = BlockRegistry.WEEDWOOD.getDefaultState();
-	public static IBlockState LEAVES = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
+	public static IBlockState LEAVES = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState().withProperty(BlockLeavesBetweenlands.CHECK_DECAY, false);
 	public static IBlockState IVY = BlockRegistry.POISON_IVY.getDefaultState();
 	public static IBlockState HANGER = BlockRegistry.HANGER.getDefaultState();
 

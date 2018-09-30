@@ -1,5 +1,5 @@
 {
-	"parent": "block/cross",
+	"parent": "thebetweenlands:block/tinted_cross_1",
 	"textures": {
 		"cross": "thebetweenlands:blocks/swamp_reed_top"
 	}

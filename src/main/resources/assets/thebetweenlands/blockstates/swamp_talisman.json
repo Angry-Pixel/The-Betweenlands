@@ -31,6 +31,12 @@
       "textures": {
         "layer0": "thebetweenlands:items/swamp_talisman_4"
       }
+    },
+    "swamp_talisman_5":{
+      "model": "forge:item-layer",
+      "textures": {
+        "layer0": "thebetweenlands:items/swamp_talisman_5"
+      }
     }
   }
 }

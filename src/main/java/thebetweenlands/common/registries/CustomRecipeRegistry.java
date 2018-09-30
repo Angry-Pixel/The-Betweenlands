@@ -16,14 +16,16 @@ import thebetweenlands.api.recipes.ICompostBinRecipe;
 import thebetweenlands.api.recipes.IDruidAltarRecipe;
 import thebetweenlands.api.recipes.IPestleAndMortarRecipe;
 import thebetweenlands.api.recipes.IPurifierRecipe;
+import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.recipe.custom.CustomAnimatorRecipes;
+import thebetweenlands.common.recipe.custom.CustomAnimatorRepairableRecipes;
 import thebetweenlands.common.recipe.custom.CustomCompostBinRecipes;
 import thebetweenlands.common.recipe.custom.CustomDruidAltarRecipes;
 import thebetweenlands.common.recipe.custom.CustomPestleAndMortarRecipes;
 import thebetweenlands.common.recipe.custom.CustomPurifierRecipes;
 import thebetweenlands.common.recipe.custom.CustomRecipes;
 import thebetweenlands.common.recipe.custom.CustomRecipes.InvalidRecipeException;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class CustomRecipeRegistry {
 	private CustomRecipeRegistry() { }
@@ -31,6 +33,7 @@ public class CustomRecipeRegistry {
 	private static final List<CustomRecipes<?>> RECIPE_TYPES = new ArrayList<>();
 
 	public static CustomRecipes<IAnimatorRecipe> animatorRecipes;
+	public static CustomRecipes<IAnimatorRecipe> animatorRepairableRecipes;
 	public static CustomRecipes<IPurifierRecipe> purifiedRecipes;
 	public static CustomRecipes<ICompostBinRecipe> compostBinRecipes;
 	public static CustomRecipes<IDruidAltarRecipe> druidAltarRecipes;
@@ -38,21 +41,22 @@ public class CustomRecipeRegistry {
 
 	public static void preInit() {
 		RECIPE_TYPES.add(animatorRecipes = new CustomAnimatorRecipes());
+		RECIPE_TYPES.add(animatorRepairableRecipes = new CustomAnimatorRepairableRecipes());
 		RECIPE_TYPES.add(purifiedRecipes = new CustomPurifierRecipes());
 		RECIPE_TYPES.add(compostBinRecipes = new CustomCompostBinRecipes());
 		RECIPE_TYPES.add(druidAltarRecipes = new CustomDruidAltarRecipes());
 		RECIPE_TYPES.add(pestleAndMortarRecipes = new CustomPestleAndMortarRecipes());
 	}
 
-	public static void loadCustomRecipes() {
+	public static boolean loadCustomRecipes() {
 		unregisterCustomRecipes();
 
 		for(CustomRecipes<?> recipe : RECIPE_TYPES) {
 			recipe.clear();
 		}
 
-		File cfgFile = new File(ConfigHandler.path);
-		File customRecipesFile = new File(cfgFile.getParentFile(), "thebetweenlands" + File.separator + "recipes.json");
+		File customRecipesFile = new File(BetweenlandsConfig.configDir, "recipes.json");
+		boolean noError = true;
 		if(customRecipesFile.exists()) {
 			try(JsonReader jsonReader = new JsonReader(new FileReader(customRecipesFile))) {
 				JsonObject jsonObj = new JsonParser().parse(jsonReader).getAsJsonObject();
@@ -62,7 +66,8 @@ public class CustomRecipeRegistry {
 							JsonArray arr = jsonObj.get(recipes.getName()).getAsJsonArray();
 							recipes.parse(arr);
 						} catch(InvalidRecipeException ex) {
-							ex.printStackTrace();
+							TheBetweenlands.logger.throwing(ex);
+							noError = false;
 						}
 					}
 				}
@@ -73,6 +78,7 @@ public class CustomRecipeRegistry {
 		}
 
 		registerCustomRecipes();
+		return noError;
 	}
 
 	public static void registerCustomRecipes() {

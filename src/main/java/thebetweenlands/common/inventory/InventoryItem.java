@@ -28,6 +28,10 @@ public class InventoryItem implements IInventory {
 		}
 		this.readFromNBT(stack.getTagCompound());
 	}
+	
+	public ItemStack getInventoryItemStack() {
+		return this.invItem;
+	}
 
 	@Override
 	public int getSizeInventory() {

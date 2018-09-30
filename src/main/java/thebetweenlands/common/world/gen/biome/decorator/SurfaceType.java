@@ -12,6 +12,7 @@ import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.terrain.BlockCragrock;
 import thebetweenlands.common.registries.BlockRegistry;
 
 public enum SurfaceType implements Predicate<IBlockState> {
@@ -55,7 +56,11 @@ public enum SurfaceType implements Predicate<IBlockState> {
 			)),
 	GRASS_AND_DIRT(GRASS, DIRT),
 	MIXED_GROUND_AND_UNDERGROUND(MIXED_GROUND, UNDERGROUND),
-	MIXED_GROUND_OR_REPLACEABLE(ImmutableList.of(state -> state.getMaterial().isReplaceable()), MIXED_GROUND);
+	MIXED_GROUND_OR_REPLACEABLE(ImmutableList.of(state -> state.getMaterial().isReplaceable()), MIXED_GROUND),
+	CRAGROCK_MOSSY(ImmutableList.of(state -> state.getBlock() == BlockRegistry.CRAGROCK && state.getValue(BlockCragrock.VARIANT) != BlockCragrock.EnumCragrockType.DEFAULT)),
+	PLANT_DECORATION_SOIL(ImmutableList.of(
+			BlockMatcher.forBlock(BlockRegistry.GIANT_ROOT)),
+			GRASS_AND_DIRT, CRAGROCK_MOSSY);
 
 	private final List<Predicate<IBlockState>> matchers;
 	private final SurfaceType types[];

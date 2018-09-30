@@ -1,0 +1,19 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:sickle"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.herbalist.im_a_druid.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.herbalist.im_a_druid.description"
+    }
+  },
+  "parent": "thebetweenlands:herbalist/root",
+  "criteria": {
+    "use_sickle": {
+      "trigger": "thebetweenlands:sickle_use"
+    }
+  }
+}

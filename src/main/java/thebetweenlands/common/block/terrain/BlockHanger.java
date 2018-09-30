@@ -16,23 +16,28 @@ import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.world.ColorizerFoliage;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeColorHelper;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.block.ISickleHarvestable;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.item.herblore.ItemPlantDrop.EnumItemPlantDrop;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
@@ -40,7 +45,7 @@ import thebetweenlands.common.registries.BlockRegistry.ISubtypeItemBlockModelDef
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.util.AdvancedStateMap.Builder;
 
-public class BlockHanger extends Block implements IShearable, ISickleHarvestable, IStateMappedBlock, ISubtypeItemBlockModelDefinition, ICustomItemBlock {
+public class BlockHanger extends Block implements IShearable, ISickleHarvestable, IStateMappedBlock, ISubtypeItemBlockModelDefinition, ICustomItemBlock, ITintedBlock {
 	protected static final AxisAlignedBB AABB = new AxisAlignedBB(0.25F, 0.0F, 0.25F, 0.75F, 1.0F, 0.75F);
 
 	public static final PropertyBool CAN_GROW = PropertyBool.create("can_grow");
@@ -49,8 +54,8 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 	public BlockHanger() {
 		super(Material.PLANTS);
 		this.setSoundType(SoundType.PLANT);
-		this.setHardness(0.5F);
-		this.setCreativeTab(BLCreativeTabs.BLOCKS);
+		this.setHardness(0.1F);
+		this.setCreativeTab(BLCreativeTabs.PLANTS);
 		this.setTickRandomly(true);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(CAN_GROW, true).withProperty(SEEDED, false));
 	}
@@ -88,7 +93,6 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 		return false;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		super.neighborChanged(state, worldIn, pos, blockIn, fromPos);
@@ -102,7 +106,7 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		if(rand.nextInt(16) == 0 && worldIn.isAirBlock(pos.down())) {
+		if(rand.nextInt(16) == 0 && state.getValue(CAN_GROW) && worldIn.isAirBlock(pos.down())) {
 			worldIn.setBlockState(pos.down(), this.getDefaultState());
 		}
 	}
@@ -226,5 +230,15 @@ public class BlockHanger extends Block implements IShearable, ISickleHarvestable
 			return;
 		}
 		super.getDrops(drops, world, pos, state, fortune);
+	}
+	
+	@Override
+	public int getColorMultiplier(IBlockState state, IBlockAccess worldIn, BlockPos pos, int tintIndex) {
+		return worldIn != null && pos != null ? BiomeColorHelper.getFoliageColorAtPos(worldIn, pos) : -1;
+	}
+	
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
+		return super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer, hand).withProperty(CAN_GROW, true);
 	}
 }

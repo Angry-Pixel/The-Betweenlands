@@ -6,6 +6,8 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -30,11 +32,12 @@ public class ItemRingOfRecruitment extends ItemRing {
 		this.setMaxDamage(450);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> list, ITooltipFlag flagIn) {
-		list.add(I18n.format("tooltip.ring.recruitment.bonus"));
-		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			String toolTip = I18n.format("tooltip.ring.recruitment", KeyBindRegistry.RADIAL_MENU.getDisplayName());
+		list.addAll(ItemTooltipHandler.splitTooltip(I18n.format("tooltip.ring.recruitment.bonus"), 0));
+		if (GuiScreen.isShiftKeyDown()) {
+			String toolTip = I18n.format("tooltip.ring.recruitment", KeyBindRegistry.RADIAL_MENU.getDisplayName(), Minecraft.getMinecraft().gameSettings.keyBindUseItem.getDisplayName());
 			list.addAll(ItemTooltipHandler.splitTooltip(toolTip, 1));
 		} else {
 			list.add(I18n.format("tooltip.press.shift"));

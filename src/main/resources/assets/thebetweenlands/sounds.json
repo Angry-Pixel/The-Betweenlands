@@ -579,6 +579,13 @@
       }
     ]
   },
+  "ambient_cave_spook": {
+    "sounds": [
+      "thebetweenlands:ambience/ambient_cave_spook_1",
+      "thebetweenlands:ambience/ambient_cave_spook_2",
+      "thebetweenlands:ambience/ambient_cave_spook_3"
+    ]
+  },
   "portal": {
     "sounds": [
       "thebetweenlands:portal"
@@ -667,6 +674,18 @@
   "shockwave_sword": {
     "sounds": [
       "thebetweenlands:shockwave_sword"
+    ]
+  },
+  "rift_open": {
+    "sounds": [
+      "thebetweenlands:rift_open"
+    ]
+  },
+  "rift_creak": {
+    "sounds": [
+      "thebetweenlands:rift_creak_1",
+      "thebetweenlands:rift_creak_2",
+      "thebetweenlands:rift_creak_3"
     ]
   },
   "fortress_boss_loop": {
@@ -909,6 +928,11 @@
   "ignite": {
     "sounds": [
       "thebetweenlands:ignite"
+    ]
+  },
+  "damage_reduction": {
+    "sounds": [
+      "thebetweenlands:damage_reduction"
     ]
   }
 }

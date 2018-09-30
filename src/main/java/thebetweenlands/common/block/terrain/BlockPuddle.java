@@ -1,5 +1,9 @@
 package thebetweenlands.common.block.terrain;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -20,12 +24,8 @@ import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.farming.BlockGenericCrop;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
-import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.util.AdvancedStateMap;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBlock {
 
@@ -64,19 +64,12 @@ public class BlockPuddle extends Block implements ITintedBlock, IStateMappedBloc
     public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
         if(!world.isRemote) {
             int amount = state.getValue(AMOUNT);
-            if(world.provider instanceof WorldProviderBetweenlands) {
-                WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-                EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-                if(!eeRegistry.heavyRain.isActive()) {
-                    world.setBlockToAir(pos);
-                    amount = 0;
-                } else if(world.canBlockSeeSky(pos)) {
-                    amount = Math.min(amount + rand.nextInt(6), 15);
-                    world.setBlockState(pos, state.withProperty(AMOUNT, amount), 2);
-                }
-            } else {
+            if(!BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry().heavyRain.isActive()) {
                 world.setBlockToAir(pos);
                 amount = 0;
+            } else if(world.canBlockSeeSky(pos)) {
+                amount = Math.min(amount + rand.nextInt(6), 15);
+                world.setBlockState(pos, state.withProperty(AMOUNT, amount), 2);
             }
             if(amount > 2) {
                 amount = Math.max(0, amount - 3);

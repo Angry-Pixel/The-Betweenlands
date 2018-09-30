@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "thebetweenlands:items_misc",
+      "data": 22
+    },
+    {
+      "item": "thebetweenlands:mire_snail_egg_cooked"
+    },
+    {
+      "item": "thebetweenlands:yellow_dotted_fungus"
+    }
+  ],
+  "result": {
+    "item": "thebetweenlands:mire_scramble"
+  }
+}

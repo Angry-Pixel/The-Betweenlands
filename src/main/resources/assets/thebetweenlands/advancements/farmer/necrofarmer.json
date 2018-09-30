@@ -1,0 +1,52 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bl_bucket_plant_tonic"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.necrofarmer.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.necrofarmer.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/mr_compost",
+  "criteria": {
+    "use_compost": {
+      "trigger": "thebetweenlands:right_click_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:dug_swamp_dirt",
+            "state": {
+              "decayed": "true"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_purified_swamp_dirt",
+            "state": {
+              "decayed": "true"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_swamp_grass",
+            "state": {
+              "decayed": "true"
+            }
+          },
+          {
+            "block": "thebetweenlands:dug_purified_swamp_grass",
+            "state": {
+              "decayed": "true"
+            }
+          }
+        ],
+        "items": [
+          {
+            "item": "thebetweenlands:bl_bucket_plant_tonic"
+          }
+        ]
+      }
+    }
+  }
+}

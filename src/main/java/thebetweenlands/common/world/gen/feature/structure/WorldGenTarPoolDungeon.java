@@ -92,7 +92,7 @@ public class WorldGenTarPoolDungeon extends WorldGenHelper {
 		world.setBlockState(new BlockPos(x + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2), y, z + rand.nextInt(halfSize - 2) - rand.nextInt(halfSize - 2)), BlockRegistry.TAR_BEAST_SPAWNER.getDefaultState());
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
-		LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "translate:tar_pool_dungeon", EnumLocationType.DUNGEON);
+		LocationStorage location = new LocationStorage(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), "tar_pool_dungeon", EnumLocationType.DUNGEON);
 		location.addBounds(new AxisAlignedBB(x - halfSize, y - 1, z - halfSize, x + halfSize, y + height, z + halfSize).grow(1, 1, 1));
 		location.linkChunks();
 		location.setLayer(0);

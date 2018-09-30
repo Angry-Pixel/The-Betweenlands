@@ -30,7 +30,7 @@ public class ItemWightHeart extends ItemBLFood {
 	}
 
 	@Override
-	public boolean canGetSickOf(ItemStack stack) {
+	public boolean canGetSickOf(EntityPlayer player, ItemStack stack) {
 		return false;
 	}
 }

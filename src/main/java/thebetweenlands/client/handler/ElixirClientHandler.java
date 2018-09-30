@@ -2,6 +2,7 @@ package thebetweenlands.client.handler;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -11,14 +12,13 @@ import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.event.ArmSwingSpeedEvent;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class ElixirClientHandler {
@@ -87,9 +87,15 @@ public class ElixirClientHandler {
                 return 0;
         }
     };
-
-    private final Method f_swingHand = ReflectionHelper.findMethod(Minecraft.class, "clickMouse", "func_147116_af");
-    private final Method f_damageBlock = ReflectionHelper.findMethod(Minecraft.class, "sendClickBlockToController", "func_147115_a", boolean.class);
+    
+    @SubscribeEvent
+    public void onArmSwingSpeed(ArmSwingSpeedEvent event) {
+    	EntityLivingBase living = event.getEntityLiving();
+    	if(ElixirEffectRegistry.EFFECT_SLUGARM.isActive(living)) {
+            int strength = ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(living);
+            event.setSpeed(event.getSpeed() / (float)(2 << strength));
+        }
+    }
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
@@ -137,14 +143,14 @@ public class ElixirClientHandler {
                                         double tpxi = tpx + (tpx2 - tpx) / (double)subSegments * s;
                                         double tpyi = tpy + (tpy2 - tpy) / (double)subSegments * s;
                                         double tpzi = tpz + (tpz2 - tpz) / (double)subSegments * s;
-                                        BLParticles.BUBBLE_PURIFIER.spawn(world, tpxi, tpyi, tpzi, ParticleFactory.ParticleArgs.get().withScale(0));
+                                        BLParticles.PORTAL.spawn(world, tpxi, tpyi, tpzi, ParticleFactory.ParticleArgs.get().withScale(0.3F));
                                     }
                                 }
                             } else {
                                 double tpx = pos.x + 0.5F;
                                 double tpy = pos.y + 0.05F;
                                 double tpz = pos.z + 0.5F;
-                                BLParticles.BUBBLE_PURIFIER.spawn(world, tpx, tpy, tpz, ParticleFactory.ParticleArgs.get().withScale(0));
+                                BLParticles.PORTAL.spawn(world, tpx, tpy, tpz, ParticleFactory.ParticleArgs.get().withScale(0.3F));
                             }
                         }
                     }
@@ -165,35 +171,14 @@ public class ElixirClientHandler {
                         try {
                             RayTraceResult target = Minecraft.getMinecraft().objectMouseOver;
                             if(target == null || target.entityHit != null || target.typeOfHit == RayTraceResult.Type.MISS) {
-                                f_swingHand.invoke(Minecraft.getMinecraft());
+                                Minecraft.getMinecraft().clickMouse();
                             } else if(target != null) {
                                 if(!player.isSwingInProgress) {
-                                    f_damageBlock.invoke(Minecraft.getMinecraft(), true);
+                                    Minecraft.getMinecraft().sendClickBlockToController(true);
                                 }
                             }
                         } catch (Exception e) {
                             e.printStackTrace();
-                        }
-                    }
-                }
-
-                if(ElixirEffectRegistry.EFFECT_SLUGARM.isActive(player)) {
-                    if(player.isSwingInProgress) {
-                        int strength = ElixirEffectRegistry.EFFECT_SLUGARM.getStrength(player);
-                        if(player.swingProgressInt != 0) {
-                            player.swingProgressInt--;
-                            if(player.ticksExisted % (2 << strength) == 0) {
-                                player.swingProgressInt++;
-                            }
-                            if(player.prevSwingProgress < player.swingProgress) {
-                                player.swingProgress -= (player.swingProgress - player.prevSwingProgress);
-                                player.prevSwingProgress = player.swingProgress;
-                                player.swingProgress += (1.0F / 6.0F) / (2 << strength);
-                            }
-                            if(player.swingProgressInt < 0 || player.swingProgress < 0) {
-                                player.swingProgressInt = 0;
-                                player.swingProgress = 0;
-                            }
                         }
                     }
                 }

@@ -11,7 +11,7 @@ public class ElixirMasking extends ElixirEffect {
 	public boolean canEntityBeSeenBy(EntityLivingBase target, EntityLivingBase watcher) {
 		if(this.isActive(target)) {
 			int strength = this.getStrength(target);
-			double minDist = 6.0D - 4.0D / 4.0D * strength;
+			double minDist = 28.0D - Math.min(20.0D / 4.0D * strength, 21.0D);
 			if(target.getDistance(watcher) < minDist) {
 				return true;
 			} else {

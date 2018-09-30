@@ -119,7 +119,7 @@ public class BlockBLDualFurnace extends BlockContainer {
 		else {
 			TileEntityBLDualFurnace tileentityfurnace = (TileEntityBLDualFurnace)world.getTileEntity(pos);
             if (tileentityfurnace != null)
-            	player.openGui(TheBetweenlands.INSTANCE, CommonProxy.GUI_BL_DUAL_FURNACE, world, pos.getX(), pos.getY(), pos.getZ());
+            	player.openGui(TheBetweenlands.instance, CommonProxy.GUI_BL_DUAL_FURNACE, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
 		}
 	}

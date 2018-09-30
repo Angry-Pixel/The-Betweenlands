@@ -1,6 +1,7 @@
 package thebetweenlands.common.item.tools;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import thebetweenlands.client.tab.BLCreativeTabs;
@@ -26,7 +27,10 @@ public class ItemLootSword extends ItemBLSword {
     @Override
     public boolean hitEntity(ItemStack stack, EntityLivingBase attacked, EntityLivingBase attacker) {
         if (!this.instantKills.isEmpty() && this.instantKills.contains(attacked.getClass())) {
-            attacked.attackEntityFrom(DamageSource.MAGIC, attacked.getMaxHealth());
+        	int maxCorrosion = this.getMaxCorrosion(stack);
+        	int corrosion = this.getCorrosion(stack);
+        	float corrosionMultiplier = 1.0F - (corrosion > maxCorrosion / 2.0F ? ((corrosion - maxCorrosion / 2.0F) / (float)(maxCorrosion / 2.0F)) : 0);
+            attacked.attackEntityFrom(DamageSource.causeIndirectMagicDamage(attacker, attacker), attacked.getMaxHealth() * corrosionMultiplier);
         }
         return super.hitEntity(stack, attacked, attacker);
     }
@@ -35,4 +39,9 @@ public class ItemLootSword extends ItemBLSword {
     public boolean isRepairableByAnimator(ItemStack stack) {
     	return false;
     }
+    
+    @Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
+	}
 }

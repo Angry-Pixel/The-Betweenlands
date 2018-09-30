@@ -30,6 +30,11 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/tiles/repeller.png");
 
 	@Override
+	public boolean isGlobalRenderer(TileEntityRepeller te) {
+		return true;
+	}
+	
+	@Override
 	public void render(TileEntityRepeller tile, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		EnumFacing facing = TileEntityHelper.getStatePropertySafely(tile, BlockRepeller.class, BlockRepeller.FACING, EnumFacing.NORTH);
 
@@ -39,15 +44,14 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		GlStateManager.translate((float) x + 0.5F, (float) y + 1.5F, (float) z + 0.5F);
 		GlStateManager.scale(1F, -1F, -1F);
 		GlStateManager.rotate(facing.getHorizontalAngle() + 180.0F, 0, 1, 0);
-		GlStateManager.disableCull();
 
 		this.bindTexture(TEXTURE);
-		MODEL.render();
+		MODEL.render(tile != null ? tile.getFuel() / (float)tile.getMaxFuel() : 0.0F);
 
-		GlStateManager.enableCull();
 		GlStateManager.popMatrix();
 
 		if(tile != null && tile.hasShimmerstone()) {
@@ -58,6 +62,7 @@ public class RenderRepeller extends TileEntitySpecialRenderer<TileEntityRepeller
 					1.0F, 0.8F, 0.0F, 0.0F,
 					1.0F, 0.8F, 0.0F, 1.0F);
 			GlStateManager.color(1, 1, 1, 1);
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			GlStateManager.popMatrix();
 		}
 

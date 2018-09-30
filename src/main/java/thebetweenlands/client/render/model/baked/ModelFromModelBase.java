@@ -8,8 +8,6 @@ import java.util.Optional;
 import javax.annotation.Nullable;
 import javax.vecmath.Matrix4f;
 
-import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.collect.ImmutableMap;
@@ -29,6 +27,8 @@ import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.client.model.IModel;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.util.ModelConverter;
@@ -119,8 +119,8 @@ public class ModelFromModelBase implements IModel {
 		protected final VertexFormat format;
 		protected final TextureAtlasSprite texture;
 		protected final TextureAtlasSprite particleTexture;
-		protected final List<BakedQuad> quads;
 		protected final boolean ambientOcclusion;
+		protected List<BakedQuad> quads;
 
 		protected ModelBakedModelBase(IVertexProcessor vertexProcessor, Optional<TRSRTransformation> transformation, ImmutableMap<TransformType, TRSRTransformation> transforms, VertexFormat format, ModelBase model, TextureAtlasSprite texture, TextureAtlasSprite particleTexture, int width, int height, boolean ambientOcclusion) {
 			this.transformation = transformation.orElse(null);
@@ -142,7 +142,7 @@ public class ModelFromModelBase implements IModel {
 					}
 				}
 			}
-			this.quads = builder.build();
+			this.quads = builder.build().nonCulledQuads;
 			this.ambientOcclusion = ambientOcclusion;
 		}
 

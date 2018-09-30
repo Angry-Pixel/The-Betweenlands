@@ -8,10 +8,16 @@ public class ModInfo {
 	public static final String CHANNEL = ID;
 	public static final String CLIENTPROXY_LOCATION = "thebetweenlands.client.proxy.ClientProxy";
 	public static final String COMMONPROXY_LOCATION = "thebetweenlands.common.proxy.CommonProxy";
-	public static final String CONFIG_GUI = "thebetweenlands.util.config.ConfigGuiFactory";
 	public static final String API_NAME = "BetweenlandsAPI";
 
-	public static final String MC_VERSIONS = "1.12.1";
-	public static final String VERSION = "3.2.1-alpha-snapshot";
-	public static final String API_VERSION = "1.7.0";
+	public static final String DEPENDENCIES = "required-after:forge@[14.23.2.2643,);after:tombmanygraves2api@[1.12-4.1.0,);after:tombmanygraves@[1.12-4.1.0,)";
+	public static final String MC_VERSIONS = "[1.12.2]";
+	public static final String VERSION = "3.3.12";
+	public static final String API_VERSION = "1.11.2";
+	public static final String CONFIG_VERSION = "1.0.0"; //Increment and add updater if properties are moved/renamed or removed
+	
+	//Values are replaced by build script
+	public static final boolean IDE = /*!ide*/true/*ide!*/;
+	public static final boolean SERVER_ONLY = /*!server_only*/false/*server_only!*/;
+	
 }

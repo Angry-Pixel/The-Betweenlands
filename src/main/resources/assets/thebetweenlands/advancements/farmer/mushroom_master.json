@@ -1,0 +1,56 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:bulb_capped_mushroom_item"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.farmer.mushroom_master.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.farmer.mushroom_master.description"
+    }
+  },
+  "parent": "thebetweenlands:farmer/sporadically_radical",
+  "criteria": {
+    "fungus": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:yellow_dotted_fungus"
+          }
+        ]
+      }
+    },
+    "bulb": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:bulb_capped_mushroom_item"
+          }
+        ]
+      }
+    },
+    "black": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:black_hat_mushroom_item"
+          }
+        ]
+      }
+    },
+    "flathead": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:flat_head_mushroom_item"
+          }
+        ]
+      }
+    }
+  }
+}

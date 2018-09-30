@@ -43,8 +43,7 @@ public class BlockGoldenClubFlower extends BlockStackablePlant {
 
 	@Override
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		IBlockState soil = worldIn.getBlockState(pos.down());
-		return worldIn.isAirBlock(pos.up()) && worldIn.getBlockState(pos).getMaterial() == Material.WATER && SoilHelper.canSustainUnderwaterPlant(soil);
+		return BlockRegistry.GOLDEN_CLUB_STALK.canPlaceBlockAt(worldIn, pos);
 	}
 
 	@Override

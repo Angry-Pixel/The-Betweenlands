@@ -1,28 +1,54 @@
 package thebetweenlands.common.world.storage;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
-import gnu.trove.map.TIntLongMap;
-import gnu.trove.map.hash.TIntLongHashMap;
+import javax.annotation.Nullable;
+
+import gnu.trove.map.TObjectLongMap;
+import gnu.trove.map.hash.TObjectLongHashMap;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.Constants;
-import thebetweenlands.api.environment.EnvironmentEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.api.entity.spawning.IBiomeSpawnEntriesData;
+import thebetweenlands.api.entity.spawning.ICustomSpawnEntry;
+import thebetweenlands.api.environment.IEnvironmentEvent;
 import thebetweenlands.api.storage.IWorldStorage;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.registries.BiomeRegistry;
+import thebetweenlands.common.registries.SoundRegistry;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.biome.spawning.MobSpawnHandler.BLSpawnEntry;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
 
 public class BetweenlandsWorldStorage extends WorldStorageImpl {
-	private EnvironmentEventRegistry environmentEventRegistry;
+	private BLEnvironmentEventRegistry environmentEventRegistry;
 	private AspectManager aspectManager = new AspectManager();
 
 	private Map<BiomeBetweenlands, BiomeSpawnEntriesData> biomeSpawnEntriesData = new HashMap<>();
 
-	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+	protected final Set<ChunkPos> previousCheckedAmbientChunks = new HashSet<>();
+	protected int ambienceTicks;
+	protected int updateLCG = (new Random()).nextInt();
+
+	public BLEnvironmentEventRegistry getEnvironmentEventRegistry() {
 		return this.environmentEventRegistry;
 	}
 
@@ -30,32 +56,39 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return this.aspectManager;
 	}
 
-	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(BiomeBetweenlands biome) {
-		BiomeSpawnEntriesData data = this.biomeSpawnEntriesData.get(biome);
-		if(data == null) {
-			this.biomeSpawnEntriesData.put(biome, data = new BiomeSpawnEntriesData(biome));
+	@Override
+	public BiomeSpawnEntriesData getBiomeSpawnEntriesData(Biome biome) {
+		if(biome instanceof BiomeBetweenlands) {
+			BiomeBetweenlands biomeBL = (BiomeBetweenlands) biome;
+			BiomeSpawnEntriesData data = this.biomeSpawnEntriesData.get(biomeBL);
+			if(data == null) {
+				this.biomeSpawnEntriesData.put(biomeBL, data = new BiomeSpawnEntriesData(biomeBL));
+			}
+			return data;
 		}
-		return data;
+		return null;
 	}
 
 	@Override
 	protected void init() {
-		this.environmentEventRegistry = new EnvironmentEventRegistry(this.getWorld());
+		this.environmentEventRegistry = new BLEnvironmentEventRegistry(this.getWorld());
 		this.environmentEventRegistry.init();
 
 		if(!this.getWorld().isRemote) {
-			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.setDefaults();
 				event.setLoaded();
 			}
 			this.aspectManager.loadAndPopulateStaticAspects(null, AspectManager.getAspectsSeed(this.getWorld().getWorldInfo().getSeed()));
 		}
+
+		this.ambienceTicks = this.getWorld().rand.nextInt(7000);
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		if(!this.getWorld().isRemote) {
-			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.readFromNBT(nbt);
 			}
 			this.environmentEventRegistry.setDisabled(nbt.getBoolean("eventsDisabled"));
@@ -67,14 +100,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 				for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
 					if(biomesNbt.hasKey(biome.getRegistryName().toString(), Constants.NBT.TAG_COMPOUND)) {
 						NBTTagCompound biomeSpawnEntriesNbt = biomesNbt.getCompoundTag(biome.getRegistryName().toString());
-						for(BLSpawnEntry spawnEntry : biome.getSpawnEntries()) {
-							if(spawnEntry.isSaved()) {
-								if(biomeSpawnEntriesNbt.hasKey(String.valueOf(spawnEntry.id), Constants.NBT.TAG_COMPOUND)) {
-									NBTTagCompound spawnEntryNbt = biomeSpawnEntriesNbt.getCompoundTag(String.valueOf(spawnEntry.id));
-									this.getBiomeSpawnEntriesData(biome).readFromNbt(spawnEntryNbt);
-								}
-							}
-						}
+						this.getBiomeSpawnEntriesData(biome).readFromNbt(biomeSpawnEntriesNbt);
 					}
 				}
 			}
@@ -84,7 +110,7 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 		if(!this.getWorld().isRemote) {
-			for(EnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
+			for(IEnvironmentEvent event : this.environmentEventRegistry.getEvents().values()) {
 				event.writeToNBT(nbt);
 			}
 			nbt.setBoolean("eventsDisabled", this.environmentEventRegistry.isDisabled());
@@ -95,20 +121,109 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 			NBTTagCompound biomesNbt = new NBTTagCompound();
 			for(BiomeBetweenlands biome : BiomeRegistry.REGISTERED_BIOMES) {
 				NBTTagCompound biomeSpawnEntriesNbt = new NBTTagCompound();
-				for(BLSpawnEntry spawnEntry : biome.getSpawnEntries()) {
-					if(spawnEntry.isSaved()) {
-						NBTTagCompound spawnEntryNbt = new NBTTagCompound();
-						this.getBiomeSpawnEntriesData(biome).writeToNbt(spawnEntryNbt);
-						biomeSpawnEntriesNbt.setTag(String.valueOf(spawnEntry.id), spawnEntryNbt);
-					}
-				}
+				this.getBiomeSpawnEntriesData(biome).writeToNbt(biomeSpawnEntriesNbt);
 				biomesNbt.setTag(biome.getRegistryName().toString(), biomeSpawnEntriesNbt);
 			}
 			nbt.setTag("biomeData", biomesNbt);
 		}
 	}
 
+	@Override
+	public void tick() {
+		super.tick();
+
+		if(this.getWorld().isRemote && this.getWorld().provider.getDimension() == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
+			this.updateAmbientCaveSounds();
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected void updateAmbientCaveSounds() {
+		Minecraft mc = Minecraft.getMinecraft();
+		EntityPlayer player = mc.player;
+
+		if(player != null) {
+			Set<ChunkPos> closeChunks = new HashSet<>();
+
+			int cx = MathHelper.floor(player.posX / 16.0D);
+			int cz = MathHelper.floor(player.posZ / 16.0D);
+
+			int chunkRadius = 3;
+
+			for(int ox = -chunkRadius; ox <= chunkRadius; ++ox) {
+				for(int oz = -chunkRadius; oz <= chunkRadius; ++oz) {
+					closeChunks.add(new ChunkPos(ox + cx, oz + cz));
+				}
+			}
+
+			if(this.ambienceTicks > 0) {
+				--this.ambienceTicks;
+			} else {
+				this.previousCheckedAmbientChunks.retainAll(closeChunks);
+
+				if(this.previousCheckedAmbientChunks.size() >= closeChunks.size()) {
+					this.previousCheckedAmbientChunks.clear();
+				}
+
+				int checkedChunks = 0;
+
+				for(ChunkPos chunkpos : closeChunks) {
+					if(!this.previousCheckedAmbientChunks.contains(chunkpos)) {
+						int bx = chunkpos.x * 16;
+						int bz = chunkpos.z * 16;
+
+						Chunk chunk = this.getWorld().getChunkFromChunkCoords(chunkpos.x, chunkpos.z);
+
+						if(this.playAmbientCaveSounds(player, bx, bz, chunk)) {
+							break;
+						}
+
+						this.previousCheckedAmbientChunks.add(chunkpos);
+						++checkedChunks;
+
+						if (checkedChunks >= 6) {
+							break;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected boolean playAmbientCaveSounds(EntityPlayer player, int x, int z, Chunk chunk) {
+		World world = this.getWorld();
+
+		this.updateLCG = this.updateLCG * 3 + 1013904223;
+		int rnd = this.updateLCG >> 2;
+		int xo = rnd & 15;
+		int zo = rnd >> 8 & 15;
+		int y = rnd >> 16 & 255;
+		BlockPos pos = new BlockPos(xo + x, y, zo + z);
+		IBlockState state = chunk.getBlockState(pos);
+
+		if(state.getMaterial() == Material.AIR && world.getLight(pos) <= world.rand.nextInt(8) && world.getLightFor(EnumSkyBlock.SKY, pos) <= 0) {
+			double dst = player.getDistanceSq((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D);
+
+			if(dst > 4.0D && dst < 256.0D) {
+				world.playSound((double)pos.getX() + 0.5D, (double)pos.getY() + 0.5D, (double)pos.getZ() + 0.5D, SoundRegistry.AMBIENT_CAVE_SPOOK, SoundCategory.AMBIENT, 0.85F, 0.8F + world.rand.nextFloat() * 0.2F, false);
+				this.ambienceTicks = world.rand.nextInt(7000) + 3000;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public static BetweenlandsWorldStorage forWorld(World world) {
+		BetweenlandsWorldStorage storage = forWorldNullable(world);
+		if(storage == null) {
+			throw new RuntimeException(String.format("World %s (%s) does not have BetweenlandsWorldStorage capability", world.getWorldInfo().getWorldName(), world.provider.getClass().getName()));
+		}
+		return storage;
+	}
+	
+	@Nullable
+	public static BetweenlandsWorldStorage forWorldNullable(World world) {
 		if(world.hasCapability(CAPABILITY_INSTANCE, null)) {
 			IWorldStorage storage = world.getCapability(CAPABILITY_INSTANCE, null);
 			if(storage instanceof BetweenlandsWorldStorage) {
@@ -118,36 +233,47 @@ public class BetweenlandsWorldStorage extends WorldStorageImpl {
 		return null;
 	}
 
-	public static class BiomeSpawnEntriesData {
+	public static class BiomeSpawnEntriesData implements IBiomeSpawnEntriesData {
 		public final BiomeBetweenlands biome;
 
-		private final TIntLongMap lastSpawnMap = new TIntLongHashMap();
+		private final TObjectLongMap<ResourceLocation> lastSpawnMap = new TObjectLongHashMap<>();
 
 		protected BiomeSpawnEntriesData(BiomeBetweenlands biome) {
 			this.biome = biome;
 		}
 
-		public long getLastSpawn(int id) {
-			return this.lastSpawnMap.containsKey(id) ? this.lastSpawnMap.get(id) : -1;
+		@Override
+		public long getLastSpawn(ICustomSpawnEntry spawnEntry) {
+			return this.lastSpawnMap.containsKey(spawnEntry.getID()) ? this.lastSpawnMap.get(spawnEntry.getID()) : -1;
 		}
 
-		public void setLastSpawn(int id, long lastSpawn) {
-			this.lastSpawnMap.put(id, lastSpawn);
+		@Override
+		public void setLastSpawn(ICustomSpawnEntry spawnEntry, long lastSpawn) {
+			this.lastSpawnMap.put(spawnEntry.getID(), lastSpawn);
+		}
+
+		@Override
+		public long removeLastSpawn(ICustomSpawnEntry spawnEntry) {
+			return this.lastSpawnMap.remove(spawnEntry.getID());
 		}
 
 		public void readFromNbt(NBTTagCompound nbt) {
 			this.lastSpawnMap.clear();
-			for(BLSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
-				if(nbt.hasKey(String.valueOf(spawnEntry.id), Constants.NBT.TAG_LONG)) {
-					this.lastSpawnMap.put(spawnEntry.id, nbt.getLong(String.valueOf(spawnEntry.id)));
+			for(ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
+				if(spawnEntry.isSaved()) {
+					if(nbt.hasKey(spawnEntry.getID().toString(), Constants.NBT.TAG_LONG)) {
+						this.lastSpawnMap.put(spawnEntry.getID(), nbt.getLong(spawnEntry.getID().toString()));
+					}
 				}
 			}
 		}
 
 		public void writeToNbt(NBTTagCompound nbt) {
-			for(BLSpawnEntry spawnEntry : this.biome.getSpawnEntries()) {
-				if(this.lastSpawnMap.containsKey(spawnEntry.id)) {
-					nbt.setLong(String.valueOf(spawnEntry.id), this.lastSpawnMap.get(spawnEntry.id));
+			for(ICustomSpawnEntry spawnEntry : this.biome.getCustomSpawnEntries()) {
+				if(spawnEntry.isSaved()) {
+					if(this.lastSpawnMap.containsKey(spawnEntry.getID())) {
+						nbt.setLong(spawnEntry.getID().toString(), this.lastSpawnMap.get(spawnEntry.getID()));
+					}
 				}
 			}
 		}

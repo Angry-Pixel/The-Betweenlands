@@ -1,9 +1,18 @@
 package thebetweenlands.client.proxy;
 
+import java.io.InputStreamReader;
+import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -16,6 +25,9 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IReloadableResourceManager;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.client.resources.IResourceManager;
+import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -24,7 +36,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+<<<<<<< HEAD
 import net.minecraft.util.EnumParticleTypes;
+=======
+import net.minecraft.util.JsonUtils;
+>>>>>>> 1.12-dev
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -33,8 +49,6 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import thebetweenlands.client.gui.GuiBLMainMenu;
-import thebetweenlands.client.gui.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.gui.GuiLorePage;
 import thebetweenlands.client.gui.GuiPouchNaming;
 import thebetweenlands.client.gui.inventory.GuiAnimator;
@@ -45,7 +59,10 @@ import thebetweenlands.client.gui.inventory.GuiMortar;
 import thebetweenlands.client.gui.inventory.GuiPouch;
 import thebetweenlands.client.gui.inventory.GuiPurifier;
 import thebetweenlands.client.gui.inventory.GuiWeedwoodWorkbench;
+import thebetweenlands.client.gui.menu.GuiBLMainMenu;
+import thebetweenlands.client.gui.menu.GuiDownloadTerrainBetweenlands;
 import thebetweenlands.client.handler.AmbienceSoundPlayHandler;
+import thebetweenlands.client.handler.ArmSwingSpeedHandler;
 import thebetweenlands.client.handler.BrightnessHandler;
 import thebetweenlands.client.handler.CameraPositionHandler;
 import thebetweenlands.client.handler.DebugHandlerClient;
@@ -64,6 +81,7 @@ import thebetweenlands.client.handler.ThemHandler;
 import thebetweenlands.client.handler.WeedwoodRowboatHandler;
 import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.handler.equipment.RadialMenuHandler;
+<<<<<<< HEAD
 import thebetweenlands.client.render.entity.RenderAngler;
 import thebetweenlands.client.render.entity.RenderAngryPebble;
 import thebetweenlands.client.render.entity.RenderBLArrow;
@@ -112,11 +130,16 @@ import thebetweenlands.client.render.entity.RenderThrownTarminion;
 import thebetweenlands.client.render.entity.RenderVolatileSoul;
 import thebetweenlands.client.render.entity.RenderWeedwoodRowboat;
 import thebetweenlands.client.render.entity.RenderWight;
+=======
+import thebetweenlands.client.render.entity.*;
+>>>>>>> 1.12-dev
 import thebetweenlands.client.render.model.loader.CustomModelManager;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleTextureStitcher;
 import thebetweenlands.client.render.particle.entity.ParticleWisp;
 import thebetweenlands.client.render.shader.ShaderHelper;
+import thebetweenlands.client.render.sky.BLSkyRenderer;
+import thebetweenlands.client.render.sky.RiftVariant;
 import thebetweenlands.client.render.tile.RenderAlembic;
 import thebetweenlands.client.render.tile.RenderAnimator;
 import thebetweenlands.client.render.tile.RenderAspectVial;
@@ -142,8 +165,12 @@ import thebetweenlands.client.render.tile.RenderTarLootPot3;
 import thebetweenlands.client.render.tile.RenderWeedwoodSign;
 import thebetweenlands.client.render.tile.RenderWeedwoodWorkbench;
 import thebetweenlands.client.render.tile.RenderWisp;
+<<<<<<< HEAD
 import thebetweenlands.client.render.tile.RenderWormDungeonDoorWood;
 import thebetweenlands.client.render.tile.TileEntityPuffshroomRenderer;
+=======
+import thebetweenlands.common.TheBetweenlands;
+>>>>>>> 1.12-dev
 import thebetweenlands.common.block.ITintedBlock;
 import thebetweenlands.common.block.container.BlockLootPot.EnumLootPot;
 import thebetweenlands.common.capability.foodsickness.FoodSickness;
@@ -152,6 +179,7 @@ import thebetweenlands.common.entity.EntityRopeNode;
 import thebetweenlands.common.entity.EntityShockwaveBlock;
 import thebetweenlands.common.entity.EntityShockwaveSwordItem;
 import thebetweenlands.common.entity.EntitySwordEnergy;
+<<<<<<< HEAD
 import thebetweenlands.common.entity.mobs.EntityAngler;
 import thebetweenlands.common.entity.mobs.EntityBlindCaveFish;
 import thebetweenlands.common.entity.mobs.EntityBloodSnail;
@@ -189,6 +217,9 @@ import thebetweenlands.common.entity.mobs.EntityTarminion;
 import thebetweenlands.common.entity.mobs.EntityTermite;
 import thebetweenlands.common.entity.mobs.EntityVolatileSoul;
 import thebetweenlands.common.entity.mobs.EntityWight;
+=======
+import thebetweenlands.common.entity.mobs.*;
+>>>>>>> 1.12-dev
 import thebetweenlands.common.entity.projectiles.EntityBLArrow;
 import thebetweenlands.common.entity.projectiles.EntityElixir;
 import thebetweenlands.common.entity.projectiles.EntitySludgeBall;
@@ -204,6 +235,7 @@ import thebetweenlands.common.item.equipment.ItemAmulet;
 import thebetweenlands.common.item.equipment.ItemLurkerSkinPouch;
 import thebetweenlands.common.item.shields.ItemSwatShield;
 import thebetweenlands.common.item.tools.bow.ItemBLBow;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.proxy.CommonProxy;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -241,9 +273,11 @@ import thebetweenlands.common.world.event.EventSpoopy;
 import thebetweenlands.common.world.event.EventWinter;
 import thebetweenlands.util.GLUProjection;
 
-public class ClientProxy extends CommonProxy {
+public class ClientProxy extends CommonProxy implements IResourceManagerReloadListener {
 	public static Render<EntityDragonFly> dragonFlyRenderer;
 
+	private final List<RiftVariant> riftVariants = new ArrayList<>();
+	
 	@Override
 	public Object getClientGuiElement(int id, EntityPlayer player, World world, int x, int y, int z) {
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
@@ -267,7 +301,12 @@ public class ClientProxy extends CommonProxy {
 			break;
 
 		case GUI_HL:
-			return new GuiManualHerblore(player);
+			EnumHand hand = x == 0 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+			ItemStack manual = player.getHeldItem(hand);
+			if(!manual.isEmpty() && manual.getItem() == ItemRegistry.MANUAL_HL) {
+				return new GuiManualHerblore(player, manual, hand);
+			}
+			break;
 
 		case GUI_BL_FURNACE:
 			if (tile instanceof TileEntityBLFurnace) {
@@ -299,7 +338,8 @@ public class ClientProxy extends CommonProxy {
 				item = player.getHeldItemOffhand();
 			}
 			if(!item.isEmpty() && item.getItem() instanceof ItemLurkerSkinPouch) {
-				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), I18n.format("container.lurkerSkinPouch"))));
+				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.lurker_skin_pouch");
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 			break;
 		}
@@ -307,7 +347,8 @@ public class ClientProxy extends CommonProxy {
 		case GUI_LURKER_POUCH_KEYBIND: {
 			ItemStack item = ItemLurkerSkinPouch.getFirstPouch(player);
 			if(!item.isEmpty()) {
-				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (x * 9), I18n.format("container.lurkerSkinPouch"))));
+				String name = item.hasDisplayName() ? item.getDisplayName(): I18n.format("container.lurker_skin_pouch");
+				return new GuiPouch(new ContainerPouch(player, player.inventory, new InventoryItem(item, 9 + (item.getItemDamage() * 9), name)));
 			}
 		}
 
@@ -356,13 +397,13 @@ public class ClientProxy extends CommonProxy {
                     ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 4, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(1), "inventory"));
                 } else
                     for (int i = 0; i < models.size(); i++) {
-                        if (ConfigHandler.debug && createJSONFile)
+                        if (ConfigHandler.DEBUG.debug && createJSONFile)
                             JsonRenderGenerator.createJSONForBlock(block, models.get(i));
                         ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), i, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + models.get(i), "inventory"));
                     }
             } else {
                 String name = block.getRegistryName().toString().replace("thebetweenlands:", "");
-                if (ConfigHandler.debug && createJSONFile)
+                if (ConfigHandler.DEBUG.debug && createJSONFile)
                     JsonRenderGenerator.createJSONForBlock(block, name);
                 ModelLoader.setCustomModelResourceLocation(Item.getItemFromBlock(block), 0, new ModelResourceLocation(ModInfo.ASSETS_PREFIX + name, "inventory"));
             }
@@ -442,11 +483,21 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntityDreadfulMummy.class, RenderDreadfulMummy::new);
         RenderingRegistry.registerEntityRenderingHandler(EntitySludgeBall.class, RenderSludgeBall::new);
         RenderingRegistry.registerEntityRenderingHandler(EntityDarkLight.class, RenderDarkLight::new);
+<<<<<<< HEAD
         RenderingRegistry.registerEntityRenderingHandler(EntitySporeJet.class, RenderSporeJet::new);
  
+=======
+		RenderingRegistry.registerEntityRenderingHandler(EntitySmollSludge.class, RenderSmollSludge::new);
+		RenderingRegistry.registerEntityRenderingHandler(EntityGreebling.class, RenderGreebling::new);
+
+>>>>>>> 1.12-dev
 		IReloadableResourceManager resourceManager = ((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager());
 		resourceManager.registerReloadListener(ShaderHelper.INSTANCE);
 		resourceManager.registerReloadListener(new FoodSickness.ResourceReloadListener());
+		resourceManager.registerReloadListener(r -> {
+			if (HLEntryRegistry.CATEGORIES.size() > 0) HLEntryRegistry.init();
+		});
+		resourceManager.registerReloadListener(this);
 
 		//Register particle stitchers
 		BLParticles[] particles = BLParticles.values();
@@ -555,7 +606,14 @@ public class ClientProxy extends CommonProxy {
 		((IReloadableResourceManager) Minecraft.getMinecraft().getResourceManager()).registerReloadListener(pixelLove);
 		HLEntryRegistry.init();
 
+<<<<<<< HEAD
 		//WeedwoodRowboatHandler.INSTANCE.init();
+=======
+		WeedwoodRowboatHandler.INSTANCE.init();
+		
+		this.loadRiftVariants();
+		
+>>>>>>> 1.12-dev
 		//Turn dirt background in menus into temple bricks
 		//Disabled for now as it was test, could be used if it's suitable
 		/*
@@ -610,6 +668,8 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ItemSwatShield.class);
         MinecraftForge.EVENT_BUS.register(EventWinter.class);
         MinecraftForge.EVENT_BUS.register(EventSpoopy.class);
+        MinecraftForge.EVENT_BUS.register(ArmSwingSpeedHandler.class);
+        MinecraftForge.EVENT_BUS.register(BLSkyRenderer.class);
 	}
 
 	@Override
@@ -642,6 +702,7 @@ public class ClientProxy extends CommonProxy {
         WeedwoodRowboatHandler.INSTANCE.onPilotExitWeedwoodRowboat(rowboat, pilot);
     }
     
+<<<<<<< HEAD
 	@Override
 	public void spawnCustomParticle(String particleName, World world, double x, double y, double z, double vecX, double vecY, double vecZ) {
 		Particle fx = null;
@@ -651,5 +712,67 @@ public class ClientProxy extends CommonProxy {
 
 		if (fx != null)
 			Minecraft.getMinecraft().effectRenderer.addEffect(fx);
+=======
+    @Override
+    public Proxy getNetProxy() {
+    	return Minecraft.getMinecraft().getProxy();
+    }
+    
+    @Override
+    public boolean isSingleplayer() {
+    	return Minecraft.getMinecraft().isSingleplayer();
+    }
+
+	@Override
+	public void onResourceManagerReload(IResourceManager resourceManager) {
+		this.loadRiftVariants();
+	}
+	
+	private void loadRiftVariants() {
+		this.riftVariants.clear();
+		
+		try {
+			IResource riftsFile = Minecraft.getMinecraft().getResourceManager().getResource(new ResourceLocation(ModInfo.ID, "textures/sky/rifts/rifts.json"));
+			JsonParser parser = new JsonParser();
+			try(InputStreamReader reader = new InputStreamReader(riftsFile.getInputStream())) {
+				JsonArray array = parser.parse(reader).getAsJsonArray();
+				for(int i = 0; i < array.size(); i++) {
+					JsonObject jsonObj = array.get(i).getAsJsonObject();
+					
+					ResourceLocation textureMask = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_mask"));
+					textureMask = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureMask.getResourcePath());
+					
+					ResourceLocation textureOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_overlay"));
+					textureOverlay = new ResourceLocation(textureMask.getResourceDomain(), "textures/" + textureOverlay.getResourcePath());
+					
+					ResourceLocation textureAltOverlay = null;
+					if(jsonObj.has("texture_alt_overlay")) {
+						textureAltOverlay = new ResourceLocation(JsonUtils.getString(jsonObj, "texture_alt_overlay"));
+						textureAltOverlay = new ResourceLocation(textureAltOverlay.getResourceDomain(), "textures/" + textureAltOverlay.getResourcePath());
+					}
+					
+					JsonObject yawJson = JsonUtils.getJsonObject(jsonObj, "yaw");
+					JsonObject pitchJson = JsonUtils.getJsonObject(jsonObj, "pitch");
+					JsonObject rollJson = JsonUtils.getJsonObject(jsonObj, "roll");
+					JsonObject scaleJson = JsonUtils.getJsonObject(jsonObj, "scale");
+					JsonObject mirrorJson = JsonUtils.getJsonObject(jsonObj, "mirror");
+					
+					this.riftVariants.add(new RiftVariant(textureMask, textureOverlay, textureAltOverlay,
+							JsonUtils.getFloat(yawJson, "min"), JsonUtils.getFloat(yawJson, "max"),
+							JsonUtils.getFloat(pitchJson, "min"), JsonUtils.getFloat(pitchJson, "max"),
+							JsonUtils.getFloat(rollJson, "min"), JsonUtils.getFloat(rollJson, "max"),
+							JsonUtils.getFloat(scaleJson, "min"), JsonUtils.getFloat(scaleJson, "max"),
+							JsonUtils.getBoolean(mirrorJson, "u"), JsonUtils.getBoolean(mirrorJson, "v")));
+				}
+			}
+		} catch(Exception ex) {
+			TheBetweenlands.logger.error("Failed loading sky rift variants", ex);
+		}
+	}
+	
+	@Override
+	public List<RiftVariant> getRiftVariants() {
+		return Collections.unmodifiableList(this.riftVariants);
+>>>>>>> 1.12-dev
 	}
 }

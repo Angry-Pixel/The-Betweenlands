@@ -7,6 +7,8 @@ import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiUtilRenderComponents;
 import net.minecraft.client.model.ModelSign;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.ITextComponent;
@@ -28,6 +30,9 @@ public class RenderWeedwoodSign extends TileEntitySpecialRenderer<TileEntityWeed
 		Block block = te.getBlockType();
 		GlStateManager.pushMatrix();
 
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		if (block == BlockRegistry.STANDING_WEEDWOOD_SIGN) {
 			GlStateManager.translate((float)x + 0.5F, (float)y + 0.5F, (float)z + 0.5F);
 			float f1 = (float)(te.getBlockMetadata() * 360) / 16.0F;

@@ -2,14 +2,12 @@ package thebetweenlands.client.render.model.baked;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import javax.vecmath.Matrix4f;
 
-import java.util.Optional;
-import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import org.apache.commons.lang3.tuple.Pair;
 
-import com.google.common.base.Function;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -28,7 +26,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.IModel;
-import net.minecraftforge.common.model.IModelPart;
+import net.minecraftforge.client.model.PerspectiveMapWrapper;
 import net.minecraftforge.common.model.IModelState;
 import net.minecraftforge.common.model.TRSRTransformation;
 import thebetweenlands.util.QuadBuilder;
@@ -105,12 +103,13 @@ public class ModelRubberTapLiquid implements IModel {
 
 				double liquidHeight = 0.1D + 0.65D / 15.0D * height;
 
+				builder.setCullFace(EnumFacing.UP);
 				builder.addVertexInferUV(0.225D, liquidHeight, 0.485D);
 				builder.addVertexInferUV(0.225D, liquidHeight, 1.18D);
 				builder.addVertexInferUV(0.775D, liquidHeight, 1.18D);
 				builder.addVertexInferUV(0.775D, liquidHeight, 0.485D);
 
-				this.quads = builder.build();
+				this.quads = builder.build().culledQuads.get(EnumFacing.UP);
 			} else {
 				this.quads = ImmutableList.of();
 			}
@@ -118,7 +117,10 @@ public class ModelRubberTapLiquid implements IModel {
 
 		@Override
 		public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-			return this.quads;
+			if(side == EnumFacing.UP) {
+				return this.quads;
+			}
+			return ImmutableList.of();
 		}
 
 		@Override

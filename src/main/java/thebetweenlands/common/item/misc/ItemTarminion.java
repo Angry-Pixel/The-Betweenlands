@@ -2,6 +2,7 @@ package thebetweenlands.common.item.misc;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
@@ -36,5 +37,10 @@ public class ItemTarminion extends Item {
 			}
 		}
 		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStack);
+	}
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.UNCOMMON;
 	}
 }

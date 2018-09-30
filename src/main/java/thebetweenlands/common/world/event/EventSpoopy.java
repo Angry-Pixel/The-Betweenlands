@@ -14,14 +14,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.api.environment.EnvironmentEvent;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.ModelRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
-import thebetweenlands.util.config.ConfigHandler;
 
-public class EventSpoopy extends EnvironmentEvent {
+public class EventSpoopy extends BLEnvironmentEvent {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "spook");
+
 	private static final long SPOOPY_DATE = new GregorianCalendar(Calendar.getInstance().get(Calendar.YEAR), 9, 23, 0, 0).getTime().getTime();
 
 	private World world;
@@ -39,7 +40,7 @@ public class EventSpoopy extends EnvironmentEvent {
 		return (this.skyTransparency + (this.skyTransparency - this.lastSkyTransparency) * partialTicks) / 2.0F;
 	}
 
-	public EventSpoopy(EnvironmentEventRegistry registry) {
+	public EventSpoopy(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
 
@@ -61,27 +62,27 @@ public class EventSpoopy extends EnvironmentEvent {
 
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "spook");
+		return ID;
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if(active && TheBetweenlands.proxy.getClientWorld() != null && (!this.isActive() || this.lastWorld != TheBetweenlands.proxy.getClientWorld()) && TheBetweenlands.proxy.getClientPlayer() != null && this.world != null && this.world.isRemote) {
 			this.lastWorld = TheBetweenlands.proxy.getClientWorld();
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
-			player.sendMessage(new TextComponentTranslation("chat.event.spook"));
+			player.sendStatusMessage(new TextComponentTranslation("chat.event.spook"), true);
 		}
 		//Mark blocks in range for render update to update block textures
 		if(active != this.isActive() && TheBetweenlands.proxy.getClientWorld() != null && TheBetweenlands.proxy.getClientPlayer() != null) {
 			updateModelActiveState(active);
-			
+
 			EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 			int px = MathHelper.floor(player.posX) - 256;
 			int py = MathHelper.floor(player.posY) - 256;
 			int pz = MathHelper.floor(player.posZ) - 256;
 			TheBetweenlands.proxy.getClientWorld().markBlockRangeForRenderUpdate(px, py, pz, px + 512, py + 512, pz + 512);
 		}
-		super.setActive(active, markDirty);
+		super.setActive(active);
 	}
 
 	@Override
@@ -89,16 +90,16 @@ public class EventSpoopy extends EnvironmentEvent {
 		super.update(world);
 		this.world = world;
 		if(!world.isRemote) {
-			if (ConfigHandler.enableSeasonalEvents) {
+			if (BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 				long dayDiff = this.getDayDiff();
-				if (dayDiff >= 0 && dayDiff <= 8 && ConfigHandler.enableSeasonalEvents) {
+				if (dayDiff >= 0 && dayDiff <= 8 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
 					if (!this.isActive() && !this.wasSet) {
-						this.setActive(true, true);
+						this.setActive(true);
 						this.wasSet = true;
 					}
 				} else if (this.wasSet) {
 					this.wasSet = false;
-					this.setActive(false, true);
+					this.setActive(false);
 				}
 			}
 		} else {
@@ -117,6 +118,22 @@ public class EventSpoopy extends EnvironmentEvent {
 					this.setSkyTransparency(0.0F);
 				}
 			}
+		}
+	}
+
+	@Override
+	public void resetActiveState() {
+		long dayDiff = this.getDayDiff();
+		if (dayDiff >= 0 && dayDiff <= 8 && BetweenlandsConfig.WORLD_AND_DIMENSION.enableSeasonalEvents) {
+			if (!this.isActive()) {
+				this.setActive(true);
+			}
+			this.wasSet = true;
+		} else {
+			if(this.isActive()) {
+				this.setActive(false);
+			}
+			this.wasSet = false;
 		}
 	}
 
@@ -142,7 +159,7 @@ public class EventSpoopy extends EnvironmentEvent {
 			updateModelActiveState(false);
 		}
 	}
-	
+
 	@SideOnly(Side.CLIENT)
 	private static void updateModelActiveState(boolean active) {
 		ModelRegistry.SPOOK_EVENT.setActive(active);

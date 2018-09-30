@@ -2,9 +2,11 @@ package thebetweenlands.client.render.entity;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.culling.Frustum;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -12,12 +14,20 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import thebetweenlands.client.render.model.entity.ModelRopeNode;
+import thebetweenlands.client.render.shader.LightSource;
+import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.entity.EntityRopeNode;
+import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.util.LightingUtil;
 
 public class RenderRopeNode extends Render<EntityRopeNode> {
 	private Frustum frustum;
 
+	protected static final ResourceLocation TEXTURE = new ResourceLocation("thebetweenlands:textures/blocks/bulb_capped_mushroom.png");
+	
+	protected static final ModelRopeNode nodeModel = new ModelRopeNode();
+	
 	public RenderRopeNode(RenderManager renderManager) {
 		super(renderManager);
 		this.frustum = new Frustum();
@@ -25,51 +35,46 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 
 	@Override
 	public void doRender(EntityRopeNode ropeNode, double x, double y, double z, float yaw, float partialTicks) {
+		this.bindEntityTexture(ropeNode);
+		
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
 
 		GlStateManager.pushMatrix();
 
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableLighting();
-		GlStateManager.color(1, 0.3F, 0.1F, 1.0F);
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableLighting();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.35F);
 		LightingUtil.INSTANCE.setLighting(255);
 
 		AxisAlignedBB boundingBox = ropeNode.getEntityBoundingBox().offset(-ropeNode.posX, -ropeNode.posY, -ropeNode.posZ);
 
 		if(ropeNode.getNextNode() == null) {
 			boundingBox = boundingBox.grow(0.025D, 0.025D, 0.025D);
-			GlStateManager.color(1, 0.8F, 0.05F, 1.0F);
+			GlStateManager.color(0.25F, 1.0F, 0.25F, 0.35F);
 		}
 		
-		buffer.setTranslation(x, y, z);
-		buffer.begin(7, DefaultVertexFormats.POSITION_NORMAL);
-		buffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).normal(0.0F, 0.0F, -1.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 0.0F, 1.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).normal(0.0F, -1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).normal(0.0F, 1.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.maxZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.maxZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.maxY, boundingBox.minZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.minX, boundingBox.minY, boundingBox.minZ).normal(-1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.minZ).normal(1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.minZ).normal(1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.maxY, boundingBox.maxZ).normal(1.0F, 0.0F, 0.0F).endVertex();
-		buffer.pos(boundingBox.maxX, boundingBox.minY, boundingBox.maxZ).normal(1.0F, 0.0F, 0.0F).endVertex();
-		tessellator.draw();
-		buffer.setTranslation(0.0D, 0.0D, 0.0D);
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			double dstSq = x*x + y*y + z*z;
+			
+			if(dstSq <= 256.0D) {
+				ShaderHelper.INSTANCE.require();
+	        	double rx = ropeNode.lastTickPosX + (ropeNode.posX - ropeNode.lastTickPosX) * partialTicks;
+				double ry = ropeNode.lastTickPosY + (ropeNode.posY - ropeNode.lastTickPosY) * partialTicks;
+				double rz = ropeNode.lastTickPosZ + (ropeNode.posZ - ropeNode.lastTickPosZ) * partialTicks;
+				float brightness = 1.0F - (float)Math.sqrt(dstSq) / 16.0F;
+				ShaderHelper.INSTANCE.getWorldShader().addLight(new LightSource(rx, ry, rz, 1.25F, 1.5F * brightness, 2.0F * brightness, 4.0F * brightness));
+			}
+		}
+		
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x, y, z);
+		nodeModel.render(ropeNode, 0, 0, 0, 0, 0, 0.0625F);
+		GlStateManager.popMatrix();
+		
+		GlStateManager.color(1, 1, 1, 1);
 
 		LightingUtil.INSTANCE.revert();
 		GlStateManager.enableTexture2D();
@@ -86,7 +91,13 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 		if(prevNode != null) {
 			if(!this.renderManager.getEntityRenderObject(prevNode).shouldRender(prevNode, this.frustum, camPosX, camPosY, camPosZ)) {
 				//Previous node not rendered, render rope
-				this.renderConnection(ropeNode, prevNode, tessellator, buffer, x, y, z, partialTicks);
+				GlStateManager.pushMatrix();
+				double renderOffsetX = this.interpolate(prevNode.lastTickPosX - ropeNode.lastTickPosX, prevNode.posX - ropeNode.posX, partialTicks);
+				double renderOffsetY = this.interpolate(prevNode.lastTickPosY - ropeNode.lastTickPosY, prevNode.posY - ropeNode.posY, partialTicks);
+				double renderOffsetZ = this.interpolate(prevNode.lastTickPosZ - ropeNode.lastTickPosZ, prevNode.posZ - ropeNode.posZ, partialTicks);
+				GlStateManager.translate(renderOffsetX, renderOffsetY, renderOffsetZ);
+				this.renderConnection(prevNode, ropeNode, tessellator, buffer, x, y, z, partialTicks);
+				GlStateManager.popMatrix();
 			}
 		}
 
@@ -183,6 +194,6 @@ public class RenderRopeNode extends Render<EntityRopeNode> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntityRopeNode entity) {
-		return null;
+		return TEXTURE;
 	}
 }

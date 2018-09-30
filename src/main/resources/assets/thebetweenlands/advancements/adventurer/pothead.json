@@ -1,0 +1,146 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:loot_pot"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.adventurer.pothead.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.adventurer.pothead.description"
+    }
+  },
+  "parent": "thebetweenlands:adventurer/dank_world",
+  "criteria": {
+    "pot1": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot2": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot3": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot4": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot5": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot6": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot7": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot8": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot9": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    },
+    "pot10": {
+      "trigger": "thebetweenlands:break_block",
+      "conditions": {
+        "blocks": [
+          {
+            "block": "thebetweenlands:loot_pot"
+          },
+          {
+            "block": "thebetweenlands:tar_loot_pot"
+          }
+        ]
+      }
+    }
+  }
+}

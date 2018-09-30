@@ -1,5 +1,5 @@
 {
-	"parent": "block/cube_all",
+	"parent": "block/leaves",
 	"textures": {
 		"all": "thebetweenlands:blocks/leaves_rubber_tree"
 	}

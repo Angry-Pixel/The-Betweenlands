@@ -14,39 +14,41 @@ import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 
 public class EventHeavyRain extends TimedEnvironmentEvent {
-	public EventHeavyRain(EnvironmentEventRegistry registry) {
+	public static final ResourceLocation ID = new ResourceLocation(ModInfo.ID, "heavy_rain");
+
+	public EventHeavyRain(BLEnvironmentEventRegistry registry) {
 		super(registry);
 	}
-	
+
 	@Override
 	public ResourceLocation getEventName() {
-		return new ResourceLocation(ModInfo.ID, "heavy_rain");
+		return ID;
 	}
 
 	@Override
 	public int getOffTime(Random rnd) {
-		return rnd.nextInt(60000) + 150000;
+		return rnd.nextInt(50000) + 60000;
 	}
 	@Override
 	public int getOnTime(Random rnd) {
-		return rnd.nextInt(4000) + 8000;
+		return rnd.nextInt(5000) + 8000;
 	}
 
 	@Override
-	public void setActive(boolean active, boolean markDirty) {
+	public void setActive(boolean active) {
 		if((active && !this.getRegistry().winter.isActive()) || !active) {
-			super.setActive(active, markDirty);
+			super.setActive(active);
 		}
 	}
-	
+
 	@Override
 	public void update(World world) {
 		super.update(world);
 
 		if(!world.isRemote && this.getRegistry().winter.isActive()) {
-			this.setActive(false, true);
+			this.setActive(false);
 		}
-		
+
 		if(this.isActive() && world.provider instanceof WorldProviderBetweenlands && world.rand.nextInt(20) == 0) {
 			if(!world.isRemote && world instanceof WorldServer) {
 				WorldServer worldServer = (WorldServer)world;

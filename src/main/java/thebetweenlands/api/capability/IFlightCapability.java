@@ -1,5 +1,9 @@
 package thebetweenlands.api.capability;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import thebetweenlands.common.item.equipment.ItemRing;
+
 public interface IFlightCapability {
 	/**
 	 * Returns whether the entity is flying
@@ -36,4 +40,35 @@ public interface IFlightCapability {
 	 * @return
 	 */
 	public boolean getFlightRing();
+	
+	/**
+	 * Returns whether the player can fly using the ring
+	 * @param player
+	 * @param ring
+	 * @return
+	 */
+	public default boolean canFlyWithRing(EntityPlayer player, ItemStack ring) {
+		return player.experienceTotal > 0 && !player.isRiding();
+	}
+	
+	/**
+	 * Returns whether the player can fly without a ring
+	 * @param player
+	 * @param stack
+	 * @return
+	 */
+	public default boolean canFlyWithoutRing(EntityPlayer player) {
+		return player.capabilities.isCreativeMode || player.isSpectator();
+	}
+	
+	/**
+	 * Called every tick when the player is flying with the ring
+	 * @param player
+	 * @param ring
+	 */
+	public default void onFlightTick(EntityPlayer player, ItemStack ring, boolean firstTick) {
+		if(!player.world.isRemote && (firstTick || player.ticksExisted % 20 == 0)) {
+			ItemRing.removeXp(player, 2);
+		}
+	}
 }

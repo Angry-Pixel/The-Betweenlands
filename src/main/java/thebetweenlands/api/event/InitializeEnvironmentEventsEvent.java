@@ -1,16 +1,20 @@
 package thebetweenlands.api.event;
 
 import net.minecraftforge.fml.common.eventhandler.Event;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.api.environment.IEnvironmentEventRegistry;
 
 public class InitializeEnvironmentEventsEvent extends Event {
-	private final EnvironmentEventRegistry registry;
+	private final IEnvironmentEventRegistry registry;
 
-	public InitializeEnvironmentEventsEvent(EnvironmentEventRegistry registry) {
+	public InitializeEnvironmentEventsEvent(IEnvironmentEventRegistry registry) {
 		this.registry = registry;
 	}
 
-	public EnvironmentEventRegistry getEnvironmentEventRegistry() {
+	/**
+	 * Returns the environment event registry
+	 * @return
+	 */
+	public IEnvironmentEventRegistry getRegistry() {
 		return this.registry;
 	}
 }

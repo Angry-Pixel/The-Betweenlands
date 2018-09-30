@@ -7,7 +7,6 @@ import com.google.common.collect.Maps;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
@@ -16,9 +15,10 @@ import net.minecraftforge.common.util.Constants;
 import thebetweenlands.api.capability.IFoodSicknessCapability;
 import thebetweenlands.api.capability.ISerializableCapability;
 import thebetweenlands.common.capability.base.EntityCapability;
+import thebetweenlands.common.config.BetweenlandsConfig;
+import thebetweenlands.common.handler.FoodSicknessHandler;
 import thebetweenlands.common.lib.ModInfo;
 import thebetweenlands.common.registries.CapabilityRegistry;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessEntityCapability, IFoodSicknessCapability, EntityPlayer> implements IFoodSicknessCapability, ISerializableCapability {
 	@Override
@@ -54,20 +54,25 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 
 
 	private Map<Item, Integer> hatredMap = Maps.newHashMap();
-	private int lastHatred = 0;
+	private FoodSickness lastSickness = FoodSickness.FINE;
 
 	@Override
 	public FoodSickness getLastSickness() {
-		return FoodSickness.getSicknessForHatred(this.lastHatred);
+		return this.lastSickness;
 	}
 
 	@Override
-	public FoodSickness getSickness(ItemFood food) {
+	public void setLastSickness(FoodSickness sickness) {
+		this.lastSickness = sickness;
+	}
+
+	@Override
+	public FoodSickness getSickness(Item food) {
 		return FoodSickness.getSicknessForHatred(this.getFoodHatred(food));
 	}
 
 	@Override
-	public void decreaseHatredForAllExcept(ItemFood food, int decrease) {
+	public void decreaseHatredForAllExcept(Item food, int decrease) {
 		if(decrease > 0) {
 			Map<Item, Integer> newHatredMap = Maps.newHashMap();
 			for (Item key : this.hatredMap.keySet()) {
@@ -83,8 +88,8 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 	}
 
 	@Override
-	public void increaseFoodHatred(ItemFood food, int amount, int decreaseForOthers) {
-		if (!ConfigHandler.useFoodSickness)
+	public void increaseFoodHatred(Item food, int amount, int decreaseForOthers) {
+		if (!FoodSicknessHandler.isFoodSicknessEnabled())
 			return;
 		int finalMaxHatred = FoodSickness.VALUES[Math.max(FoodSickness.VALUES.length - 1, 0)].maxHatred;
 		if (this.hatredMap.containsKey(food)) {
@@ -93,13 +98,12 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 		} else {
 			this.hatredMap.put(food, Math.max(Math.min(amount, finalMaxHatred), 0));
 		}
-		this.lastHatred = this.hatredMap.get(food);
 		this.decreaseHatredForAllExcept(food, decreaseForOthers);
 		this.markDirty();
 	}
 
 	@Override
-	public int getFoodHatred(ItemFood food) {
+	public int getFoodHatred(Item food) {
 		if (this.hatredMap.containsKey(food)) {
 			return this.hatredMap.get(food);
 		}
@@ -116,7 +120,6 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 			list.appendTag(listCompound);
 		}
 		nbt.setTag("HatredMap", list);
-		nbt.setInteger("LastHatred", this.lastHatred);
 	}
 
 	@Override
@@ -131,7 +134,6 @@ public class FoodSicknessEntityCapability extends EntityCapability<FoodSicknessE
 				this.hatredMap.put(food, level);
 			}
 		}
-		this.lastHatred = nbt.getInteger("LastHatred");
 	}
 
 	@Override

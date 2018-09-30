@@ -1,7 +1,7 @@
 package thebetweenlands.common.world.storage.location;
 
 public enum EnumLocationType {
-	NONE("none"), RUINS("ruins"), HUT("hut"), SHACK("shack"), WIGHT_TOWER("wightTower"), DUNGEON("dungeon"), GIANT_TREE("giantTree");
+	NONE("none"), RUINS("ruins"), HUT("hut"), SHACK("shack"), WIGHT_TOWER("wightTower"), DUNGEON("dungeon"), GIANT_TREE("giantTree"), IDOL_HEAD("idolHead");
 
 	public static EnumLocationType[] TYPES = EnumLocationType.values();
 

@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.MinecraftForge;
@@ -20,6 +19,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.CapabilityDispatcher;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.AttachLocalStorageCapabilitiesEvent;
 import thebetweenlands.api.storage.IChunkStorage;
 import thebetweenlands.api.storage.ILocalStorage;
@@ -28,10 +29,10 @@ import thebetweenlands.api.storage.LocalRegion;
 import thebetweenlands.api.storage.LocalStorageReference;
 import thebetweenlands.api.storage.StorageID;
 import thebetweenlands.common.TheBetweenlands;
+import thebetweenlands.common.network.clientbound.MessageAddLocalStorage;
 import thebetweenlands.common.network.clientbound.MessageRemoveLocalStorage;
-import thebetweenlands.common.network.clientbound.MessageSyncLocalStorage;
 
-public abstract class LocalStorageImpl implements ILocalStorage, ITickable {
+public abstract class LocalStorageImpl implements ILocalStorage {
 	private final IWorldStorage worldStorage;
 	private final LocalRegion region;
 	private final StorageID id;
@@ -149,26 +150,15 @@ public abstract class LocalStorageImpl implements ILocalStorage, ITickable {
 	}
 
 	@Override
-	public void readFromPacketNBT(NBTTagCompound nbt) {
-		this.readReferenceChunks(nbt);
-		
-		//TODO Remove this and make seperate implementations
-		this.readFromNBT(nbt);
-	}
-
-	@Override
-	public NBTTagCompound writeToPacketNBT(NBTTagCompound nbt) {
-		this.writeReferenceChunks(nbt);
-		
-		//TODO Remove this and make seperate implementations
-		this.writeToNBT(nbt);
-		
-		return nbt;
-	}
-
-	@Override
 	public List<ChunkPos> getLinkedChunks() {
 		return Collections.unmodifiableList(this.linkedChunks);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void setLinkedChunks(List<ChunkPos> linkedChunks) {
+		this.linkedChunks.clear();
+		this.linkedChunks.addAll(linkedChunks);
 	}
 
 	@Override
@@ -186,7 +176,7 @@ public abstract class LocalStorageImpl implements ILocalStorage, ITickable {
 		//Notify clients if shared storage is removed
 		if(!this.getWorldStorage().getWorld().isRemote) {
 			if (!this.getWatchers().isEmpty()) {
-				this.sendDataToAllWatchers(new MessageRemoveLocalStorage(this.getID()));
+				this.sendMessageToAllWatchers(new MessageRemoveLocalStorage(this.getID()));
 			}
 		}
 	}
@@ -225,7 +215,7 @@ public abstract class LocalStorageImpl implements ILocalStorage, ITickable {
 	 * @param player
 	 */
 	protected void onWatched(EntityPlayerMP player) {
-		this.sendDataToPlayer(new MessageSyncLocalStorage(this.getWorldStorage().getLocalStorageHandler().saveLocalStorageToNBT(new NBTTagCompound(), this, true)), player);
+		this.sendDataToPlayer(new MessageAddLocalStorage(this), player);
 	}
 
 	@Override
@@ -309,15 +299,10 @@ public abstract class LocalStorageImpl implements ILocalStorage, ITickable {
 		return false;
 	}
 
-	@Override
-	public void update() {
-
-	}
-
 	/**
 	 * Sends the message to all watching players
 	 */
-	protected void sendDataToAllWatchers(IMessage message) {
+	protected void sendMessageToAllWatchers(IMessage message) {
 		for (EntityPlayerMP watcher : this.getWatchers()) {
 			this.sendDataToPlayer(message, watcher);
 		}

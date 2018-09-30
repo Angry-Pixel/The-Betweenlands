@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "xxx",
+    "xxx",
+    "xxx"
+  ],
+  "key": {
+    "x": {
+      "item": "thebetweenlands:items_misc",
+      "data": 10
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:mud_brick_shingles",
+    "count": 2
+  }
+}

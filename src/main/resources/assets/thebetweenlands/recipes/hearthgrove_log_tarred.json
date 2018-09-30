@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "##",
+    "##"
+  ],
+  "key": {
+    "#": {
+      "item": "thebetweenlands:log_hearthgrove",
+      "data": 5
+    }
+  },
+  "result": {
+    "item": "thebetweenlands:log_hearthgrove",
+    "data": 7,
+    "count": 4
+  }
+}

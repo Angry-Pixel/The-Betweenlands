@@ -13,7 +13,6 @@ public class EntityAIHurtByTargetImproved extends EntityAITarget {
     public EntityAIHurtByTargetImproved(EntityCreature entity, boolean callsHelp) {
         super(entity, false);
         this.entityCallsForHelp = callsHelp;
-        this.setMutexBits(1);
     }
 
     /**

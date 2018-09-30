@@ -6,12 +6,9 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.audio.Sound;
-import net.minecraft.client.audio.SoundEventAccessor;
-import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.audio.SoundManager;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
-import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -48,10 +45,9 @@ public class SafeStreamSound extends MovingSound {
     protected void updateSafeStreamSound() {
     	if (this.isSoundStreamed(false) && donePlaying && !isDone) {
             if (pauseTicks == 0) {
-                SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
-                SoundManager manager = ReflectionHelper.getPrivateValue(SoundHandler.class, handler, "field_147694_f", "sndManager");
-                SoundSystem sys = ReflectionHelper.getPrivateValue(SoundManager.class, manager, "field_148620_e", "sndSystem");
-                Map<ISound, String> sounds = ReflectionHelper.getPrivateValue(SoundManager.class, manager, "field_148630_i", "invPlayingSounds");
+                SoundManager manager = Minecraft.getMinecraft().getSoundHandler().sndManager;
+                SoundSystem sys = manager.sndSystem;
+                Map<ISound, String> sounds = manager.invPlayingSounds;
                 sys.pause(sounds.get(this));
             }
             pauseTicks++;

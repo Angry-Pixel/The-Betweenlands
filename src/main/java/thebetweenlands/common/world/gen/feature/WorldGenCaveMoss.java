@@ -9,6 +9,7 @@ import java.util.Stack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import thebetweenlands.common.block.plant.BlockCaveMoss;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.util.CubicBezier;
 
@@ -74,7 +75,7 @@ public class WorldGenCaveMoss extends WorldGenCave {
 			}
 			height = (int) (heights[i] * (height - 1) + 1);
 			for (int dy = 0; dy < height; dy++) {
-				this.setBlockAndNotifyAdequately(world, pos.add(0, -dy, 0), BlockRegistry.CAVE_MOSS.getDefaultState());
+				this.setBlockAndNotifyAdequately(world, pos.add(0, -dy, 0), BlockRegistry.CAVE_MOSS.getDefaultState().withProperty(BlockCaveMoss.CAN_GROW, false));
 			}
 		}
 		return true;

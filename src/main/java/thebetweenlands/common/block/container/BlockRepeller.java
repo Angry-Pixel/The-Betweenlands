@@ -34,6 +34,7 @@ import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.client.render.particle.BLParticles;
 import thebetweenlands.client.render.particle.ParticleFactory.ParticleArgs;
 import thebetweenlands.client.tab.BLCreativeTabs;
+import thebetweenlands.common.herblore.Amounts;
 import thebetweenlands.common.registries.AspectRegistry;
 import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
@@ -100,26 +101,29 @@ public class BlockRepeller extends BlockContainer {
 					return true;
 				} else if(held.getItem() == ItemRegistry.ASPECT_VIAL) {
 					if(tile.hasShimmerstone()) {
-						ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(held);
-						int amount = aspectContainer.get(AspectRegistry.BYARIIS);
-						if(amount > 0) {
-							if(!world.isRemote) {
-								int added = tile.addFuel(amount);
-								if(!player.capabilities.isCreativeMode) {
-									int leftAmount = amount - added;
-									if(leftAmount > 0) {
-										aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
-									} else {
-										player.setHeldItem(hand, held.getItem().getContainerItem(held));
+						if(tile.getFuel() < tile.getMaxFuel()) {
+							ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(held);
+							int amount = aspectContainer.get(AspectRegistry.BYARIIS);
+							int loss = 10; //Loss when adding
+							if(amount >= loss) {
+								if(!world.isRemote) {
+									int added = tile.addFuel(amount - loss);
+									if(!player.capabilities.isCreativeMode) {
+										int leftAmount = amount - added - loss;
+										if(leftAmount > 0) {
+											aspectContainer.set(AspectRegistry.BYARIIS, leftAmount);
+										} else {
+											player.setHeldItem(hand, held.getItem().getContainerItem(held));
+										}
 									}
 								}
+								player.swingArm(hand);
+								return true;
 							}
-							player.swingArm(hand);
-							return true;
 						}
 					} else {
 						if(!world.isRemote) {
-							player.sendMessage(new TextComponentTranslation("chat.repeller.shimmerstone_missing"));
+							player.sendStatusMessage(new TextComponentTranslation("chat.repeller.shimmerstone_missing"), true);
 						}
 					}
 				} else if(held.getItem() == ItemRegistry.DENTROTHYST_VIAL && tile.getFuel() > 0) {
@@ -127,8 +131,7 @@ public class BlockRepeller extends BlockContainer {
 						ItemStack newStack = new ItemStack(ItemRegistry.ASPECT_VIAL, 1, held.getItemDamage() == 0 ? 0 : 1);
 						if(!world.isRemote) {
 							ItemAspectContainer aspectContainer = ItemAspectContainer.fromItem(newStack);
-							aspectContainer.set(AspectRegistry.BYARIIS, tile.getFuel());
-							tile.emptyFuel();
+							aspectContainer.set(AspectRegistry.BYARIIS, tile.removeFuel(Amounts.VIAL));
 						}
 						held.shrink(1);
 						if(held.getCount() <= 0) {
@@ -257,7 +260,7 @@ public class BlockRepeller extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int facing = (meta >> 1) & 4;
+		int facing = (meta >> 1) & 0b11;
 		boolean isUpper = (meta & 1) == 1;
 		return this.getDefaultState().withProperty(HALF, isUpper ? EnumBlockHalf.TOP : EnumBlockHalf.BOTTOM).withProperty(FACING, EnumFacing.getHorizontal(facing));
 	}

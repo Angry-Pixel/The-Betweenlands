@@ -21,6 +21,7 @@ public class InventoryEquipment implements IInventory, ITickable {
     protected final NonNullList<ItemStack> inventory;
     protected final NonNullList<ItemStack> prevTickStacks;
     protected final EquipmentEntityCapability capability;
+    private int lastChangeCheck = 0;
 
     public InventoryEquipment(EquipmentEntityCapability capability, NonNullList<ItemStack> inventory) {
         this.capability = capability;
@@ -164,7 +165,10 @@ public class InventoryEquipment implements IInventory, ITickable {
             }
         }
 
-        this.detectChangesAndMarkDirty();
+        if(this.lastChangeCheck++ > 10) {
+        	this.detectChangesAndMarkDirty();
+        	this.lastChangeCheck = 0;
+        }
     }
 
     protected void detectChangesAndMarkDirty() {

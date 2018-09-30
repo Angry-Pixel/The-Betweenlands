@@ -1,5 +1,7 @@
 package thebetweenlands.common.herblore;
 
+import thebetweenlands.common.tile.TileEntityInfuser;
+
 public class Amounts {
 	public static final int VERY_LOW = 500;
 	public static final int LOW = 1000;
@@ -9,7 +11,6 @@ public class Amounts {
 	public static final int HIGH = 3000;
 	public static final int VERY_HIGH = 3500;
 
-	//TODO: Adjust amounts
-	public static final int MAX_ASPECT_AMOUNT = VERY_HIGH * /*TileEntityInfuser.MAX_INGREDIENTS*/6;
-	public static final int VIAL = MAX_ASPECT_AMOUNT / /*TileEntityInfuser.MAX_INGREDIENTS*/6 * MEDIUM;
+	public static final int VIAL = 5000;
+	public static final int MAX_ASPECT_AMOUNT = VIAL * TileEntityInfuser.MAX_INGREDIENTS;
 }

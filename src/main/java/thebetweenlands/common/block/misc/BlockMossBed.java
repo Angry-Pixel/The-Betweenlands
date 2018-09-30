@@ -22,10 +22,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.registries.BlockRegistry.ICustomItemBlock;
 import thebetweenlands.common.registries.BlockRegistry.IStateMappedBlock;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.tile.TileEntityMossBed;
 import thebetweenlands.util.AdvancedStateMap.Builder;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustomItemBlock {
 	public BlockMossBed() { 
@@ -79,10 +79,10 @@ public class BlockMossBed extends BlockBed implements IStateMappedBlock, ICustom
 
 	@Override
 	public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(playerIn.dimension == ConfigHandler.dimensionId) {
+		if(playerIn.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			if(!worldIn.isRemote) {
 				playerIn.setSpawnPoint(pos, false);
-				playerIn.sendMessage(new TextComponentTranslation("chat.bedSpawnSet"));
+				playerIn.sendStatusMessage(new TextComponentTranslation("chat.bed_spawn_set"), true);
 			}
 			return true;
 		} else {

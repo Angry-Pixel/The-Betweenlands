@@ -19,12 +19,14 @@ public class CommandReloadRecipes extends CommandBase {
 
 	@Override
 	public String getUsage(ICommandSender sender) {
-		return "/blReloadRecipes";
+		return "command.blreloadrecipes.usage";
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
-		CustomRecipeRegistry.loadCustomRecipes();
-		notifyCommandListener(sender, this, "command.blreloadrecipes.success");
+	public void execute(MinecraftServer server, ICommandSender sender, String[] args) {
+		if (CustomRecipeRegistry.loadCustomRecipes())
+			notifyCommandListener(sender, this, "command.blreloadrecipes.success");
+		else
+			notifyCommandListener(sender, this, "command.blreloadrecipes.failed");
 	}
 }

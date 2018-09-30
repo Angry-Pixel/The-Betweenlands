@@ -1,6 +1,6 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "thebetweenlands:blocks/hanger_seeded"
+		"layer0": "thebetweenlands:items/hanger_seeded"
 	}
 }

@@ -4,6 +4,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import net.minecraft.block.BlockLog;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -22,29 +23,46 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 	private IBlockState wood;
 	private IBlockState leaves;
 
+	private boolean targetDimSet = false;
+	private int targetDim;
+	
 	public WorldGenWeedwoodPortalTree() {
 		super(true);
+	}
+	
+	public WorldGenWeedwoodPortalTree(int targetDim) {
+		this.targetDimSet = true;
+		this.targetDim = targetDim;
 	}
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
+		if(pos.getY() > world.getActualHeight() - 20) {
+			return false;
+		}
+		
 		int radius = 4;
 		int height = 16;
 		int maxRadius = 9;
 
-		int checkRadius = 4;
-		int checkHeight = 6;
+		int checkHeight = 20;
 
 		this.bark = BlockRegistry.LOG_PORTAL.getDefaultState().withProperty(BlockLog.LOG_AXIS, BlockLog.EnumAxis.NONE);
 		this.wood = BlockRegistry.WEEDWOOD.getDefaultState();
 		this.leaves = BlockRegistry.LEAVES_WEEDWOOD_TREE.getDefaultState();
 
-		for (int xx = -checkRadius; xx <= checkRadius; xx++) {
-			for (int zz = -checkRadius; zz <= checkRadius; zz++) {
-				if(xx*xx + zz*zz <= checkRadius*checkRadius) {
-					for (int yy = 2; yy < 2 + checkHeight; yy++) {
+		for (int yy = 1; yy < 1 + checkHeight; yy++) {
+			int checkRadius = 6;
+			if(yy > 11) {
+				checkRadius = 10;
+			}
+			for (int xx = -checkRadius; xx <= checkRadius; xx++) {
+				for (int zz = -checkRadius; zz <= checkRadius; zz++) {
+					if(xx*xx + zz*zz <= checkRadius*checkRadius) {
 						IBlockState blockState = world.getBlockState(pos.add(xx, yy, zz));
-						if (blockState.getBlock() != Blocks.AIR && !blockState.isNormalCube() && !blockState.getBlock().isReplaceable(world, pos.add(xx, yy, zz))) {
+						boolean isReplaceable = blockState.getBlock() == Blocks.AIR || blockState.getMaterial() == Material.LEAVES || blockState.getMaterial() == Material.PLANTS || 
+								blockState.getMaterial() == Material.VINE || blockState.getBlock().isReplaceable(world, pos.add(xx, yy, zz));
+						if (!isReplaceable) {
 							return false;
 						}
 					}
@@ -62,9 +80,11 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 				for (int j = radius * -1; j <= radius; ++j) {
 					double dSq = i * i + j * j;
 					if (Math.round(Math.sqrt(dSq)) < radius && yy <= 1)
-						this.setBlockAndNotifyAdequately(world, pos.add(i, yy, j), wood);
+						this.setBlockIfValid(world, pos.add(i, yy, j), wood);
 					if (Math.round(Math.sqrt(dSq)) == radius && yy == 0 || Math.round(Math.sqrt(dSq)) == radius && yy <= height - 1)
-						this.setBlockAndNotifyAdequately(world, pos.add(i, yy, j), bark);
+						this.setBlockIfValid(world, pos.add(i, yy, j), bark);
+					if (Math.round(Math.sqrt(dSq)) < radius && yy <= height - 1 && yy > 1 && yy <= 10)
+						this.setBlockIfValid(world, pos.add(i, yy, j), Blocks.AIR.getDefaultState());
 				}
 
 			if(yy == 4) {
@@ -125,8 +145,11 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(world);
 		LocationPortal location = new LocationPortal(worldStorage, new StorageUUID(UUID.randomUUID()), LocalRegion.getFromBlockPos(pos), pos);
-		location.addBounds(new AxisAlignedBB(pos).grow(8, 10, 8).offset(0, 8, 0));
+		location.addBounds(new AxisAlignedBB(pos).grow(8, 7, 8).offset(0, 7, 0));
 		location.setSeed(rand.nextLong());
+		if(this.targetDimSet) {
+			location.setTargetDimension(this.targetDim);
+		}
 		location.setDirty(true);
 		location.setVisible(false);
 		location.linkChunks();
@@ -144,35 +167,35 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 
 			switch (dir) {
 			case 1:
-				this.setBlockAndNotifyAdequately(world, pos.east(i).up(y), bark);
+				this.setBlockIfValid(world, pos.east(i).up(y), bark);
 				break;
 
 			case 2:
-				this.setBlockAndNotifyAdequately(world, pos.west(i).up(y), bark);
+				this.setBlockIfValid(world, pos.west(i).up(y), bark);
 				break;
 
 			case 3:
-				this.setBlockAndNotifyAdequately(world, pos.south(i).up(y), bark);
+				this.setBlockIfValid(world, pos.south(i).up(y), bark);
 				break;
 
 			case 4:
-				this.setBlockAndNotifyAdequately(world, pos.north(i).up(y), bark);
+				this.setBlockIfValid(world, pos.north(i).up(y), bark);
 				break;
 
 			case 5:
-				this.setBlockAndNotifyAdequately(world, pos.east(i).up(y).south(i), bark);
+				this.setBlockIfValid(world, pos.east(i).up(y).south(i), bark);
 				break;
 
 			case 6:
-				this.setBlockAndNotifyAdequately(world, pos.west(i).up(y).north(i), bark);
+				this.setBlockIfValid(world, pos.west(i).up(y).north(i), bark);
 				break;
 
 			case 7:
-				this.setBlockAndNotifyAdequately(world, pos.west(i).up(y).south(i), bark);
+				this.setBlockIfValid(world, pos.west(i).up(y).south(i), bark);
 				break;
 
 			case 8:
-				this.setBlockAndNotifyAdequately(world, pos.east(i).up(y).north(i), bark);
+				this.setBlockIfValid(world, pos.east(i).up(y).north(i), bark);
 				break;
 			}
 		}
@@ -185,14 +208,14 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 					double dSq = Math.pow(x1, 2.0D) + Math.pow(z1, 2.0D) + Math.pow(y1, 2.5D);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius)
 						if (world.getBlockState(pos.add(x1, y1, z1)) != bark && rand.nextInt(5) != 0)
-							this.setBlockAndNotifyAdequately(world, pos.add(x1, y1, z1), leaves);
+							this.setBlockIfValid(world, pos.add(x1, y1, z1), leaves);
 					if (Math.round(Math.sqrt(dSq)) < maxRadius - 1 && rand.nextInt(5) == 0 && y1 > 0)
 						if (world.getBlockState(pos.add(x1, y1, z1)) != bark)
-							this.setBlockAndNotifyAdequately(world, pos.add(x1, y1, z1), bark);
+							this.setBlockIfValid(world, pos.add(x1, y1, z1), bark);
 					if (Math.round(Math.sqrt(dSq)) <= maxRadius && rand.nextInt(3) == 0 && y1 == 0)
 						if (world.getBlockState(pos.add(x1, y1, z1)) != bark)
 							for (int i = 1; i < 1 + rand.nextInt(3); i++)
-								this.setBlockAndNotifyAdequately(world, pos.add(x1, y1 - i, z1), leaves);
+								this.setBlockIfValid(world, pos.add(x1, y1 - i, z1), leaves);
 				}
 	}
 
@@ -206,77 +229,92 @@ public class WorldGenWeedwoodPortalTree extends WorldGenerator {
 			switch (dir) {
 			case 1:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.east(i).up(y), bark);
+					this.setBlockIfValid(world, pos.east(i).up(y), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.east(i).down(y), bark);
-					this.setBlockAndNotifyAdequately(world, pos.east(i).down(y - 1), bark);
+					this.setBlockIfValid(world, pos.east(i).down(y), bark);
+					this.setBlockIfValid(world, pos.east(i).down(y - 1), bark);
 				}
 				break;
 
 			case 2:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.west(i).up(y), bark);
+					this.setBlockIfValid(world, pos.west(i).up(y), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.west(i).down(y), bark);
-					this.setBlockAndNotifyAdequately(world, pos.west(i).down(y - 1), bark);
+					this.setBlockIfValid(world, pos.west(i).down(y), bark);
+					this.setBlockIfValid(world, pos.west(i).down(y - 1), bark);
 				}
 				break;
 
 			case 3:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.south(i).up(y), bark);
+					this.setBlockIfValid(world, pos.south(i).up(y), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.south(i).down(y), bark);
-					this.setBlockAndNotifyAdequately(world, pos.south(i).down(y - 1), bark);
+					this.setBlockIfValid(world, pos.south(i).down(y), bark);
+					this.setBlockIfValid(world, pos.south(i).down(y - 1), bark);
 				}
 				break;
 
 			case 4:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.north(i).up(y), bark);
+					this.setBlockIfValid(world, pos.north(i).up(y), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.north(i).down(y), bark);
-					this.setBlockAndNotifyAdequately(world, pos.north(i).down(y - 1), bark);
+					this.setBlockIfValid(world, pos.north(i).down(y), bark);
+					this.setBlockIfValid(world, pos.north(i).down(y - 1), bark);
 				}
 				break;
 
 			case 5:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.east(i - 1).up(y).south(i - 1),
+					this.setBlockIfValid(world, pos.east(i - 1).up(y).south(i - 1),
 							bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.east(i - 1).down(y).south(i - 1), bark);
-					this.setBlockAndNotifyAdequately(world, pos.east(i - 1).down(y - 1).south(i - 1), bark);
+					this.setBlockIfValid(world, pos.east(i - 1).down(y).south(i - 1), bark);
+					this.setBlockIfValid(world, pos.east(i - 1).down(y - 1).south(i - 1), bark);
 				}
 				break;
 
 			case 6:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.west(i - 1).up(y).north(i - 1), bark);
+					this.setBlockIfValid(world, pos.west(i - 1).up(y).north(i - 1), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.west(i - 1).down(y).north(i - 1), bark);
-					this.setBlockAndNotifyAdequately(world, pos.west(i - 1).down(y - 1).north(i - 1), bark);
+					this.setBlockIfValid(world, pos.west(i - 1).down(y).north(i - 1), bark);
+					this.setBlockIfValid(world, pos.west(i - 1).down(y - 1).north(i - 1), bark);
 				}
 				break;
 
 			case 7:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.west(i - 1).up(y).south(i - 1), bark);
+					this.setBlockIfValid(world, pos.west(i - 1).up(y).south(i - 1), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.west(i - 1).down(y).south(i - 1), bark);
-					this.setBlockAndNotifyAdequately(world, pos.west(i - 1).down(y - 1).south(i - 1), bark);
+					this.setBlockIfValid(world, pos.west(i - 1).down(y).south(i - 1), bark);
+					this.setBlockIfValid(world, pos.west(i - 1).down(y - 1).south(i - 1), bark);
 				}
 				break;
 
 			case 8:
 				if (!root)
-					this.setBlockAndNotifyAdequately(world, pos.east(i - 1).up(y).north(i - 1), bark);
+					this.setBlockIfValid(world, pos.east(i - 1).up(y).north(i - 1), bark);
 				else {
-					this.setBlockAndNotifyAdequately(world, pos.east(i - 1).down(y).north(i - 1), bark);
-					this.setBlockAndNotifyAdequately(world, pos.east(i - 1).down(y - 1).north(i - 1), bark);
+					this.setBlockIfValid(world, pos.east(i - 1).down(y).north(i - 1), bark);
+					this.setBlockIfValid(world, pos.east(i - 1).down(y - 1).north(i - 1), bark);
 				}
 				break;
 			}
 		}
+	}
+	
+	/**
+	 * Sets the block if the block at the specified position is not unbreakable
+	 * @param world
+	 * @param pos
+	 * @param state
+	 * @return
+	 */
+	protected boolean setBlockIfValid(World world, BlockPos pos, IBlockState state) {
+		if(world.getBlockState(pos).getBlockHardness(world, pos) >= 0) {
+			this.setBlockAndNotifyAdequately(world, pos, state);
+			return true;
+		}
+		return false;
 	}
 }

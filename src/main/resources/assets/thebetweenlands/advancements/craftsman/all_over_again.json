@@ -1,0 +1,26 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:weedwood_workbench"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.craftsman.all_over_again.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.craftsman.all_over_again.description"
+    }
+  },
+  "parent": "thebetweenlands:craftsman/getting_harder_wood",
+  "criteria": {
+    "weedwood_workbench": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "item": "thebetweenlands:weedwood_workbench"
+          }
+        ]
+      }
+    }
+  }
+}

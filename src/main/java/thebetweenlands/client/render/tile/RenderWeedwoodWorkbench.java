@@ -5,6 +5,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.GlStateManager.DestFactor;
+import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
@@ -21,7 +23,9 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 		GlStateManager.scale(0.25F, 0.25F, 0.25F);
 		GlStateManager.rotate(90.0F * (-table.rotation + 3), 0.0F, 1.0F, 0.0F);
 		GlStateManager.translate(-1.5F, -0.0F, -1.0F);
-
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		
 		Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		float prevLGTX = OpenGlHelper.lastBrightnessX;
 		float prevLGTY = OpenGlHelper.lastBrightnessY;
@@ -37,10 +41,9 @@ public class RenderWeedwoodWorkbench extends TileEntitySpecialRenderer<TileEntit
 					GlStateManager.translate(row * 0.75F, 0.0D, column * 0.75F);
 					GlStateManager.translate(0.75F, 0.52F, 0.25F);
 					GlStateManager.scale(0.5F, 0.5F, 0.5F);
-					GlStateManager.rotate(90.0F, 1.0F, 0.0F, 0.0F);
-					GlStateManager.rotate(180.0F, 0.0F, 0.0F, 1.0F);
+					GlStateManager.rotate(-90.0F, 1.0F, 0.0F, 0.0F);
 					RenderHelper.disableStandardItemLighting();
-					this.renderItem.renderItem(stack, this.renderItem.getItemModelMesher().getItemModel(stack));
+					this.renderItem.renderItem(stack, this.renderItem.getItemModelWithOverrides(stack, null, null));
 					GlStateManager.popMatrix();
 				}
 			}

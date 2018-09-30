@@ -1,0 +1,41 @@
+{
+  "display": {
+    "icon": {
+      "item": "thebetweenlands:syrmorite_shield"
+    },
+    "title": {
+      "translate": "advancements.thebetweenlands.fighter.crowd_control.title"
+    },
+    "description": {
+      "translate": "advancements.thebetweenlands.fighter.crowd_control.description"
+    },
+    "frame": "goal"
+  },
+  "parent": "thebetweenlands:fighter/shield_wall",
+  "criteria": {
+    "hag_1": {
+      "trigger": "thebetweenlands:swat_shield",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:swamp_hag"
+        }
+      }
+    },
+    "hag_2": {
+      "trigger": "thebetweenlands:swat_shield",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:swamp_hag"
+        }
+      }
+    },
+    "hag_3": {
+      "trigger": "thebetweenlands:swat_shield",
+      "conditions": {
+        "entity": {
+          "type": "thebetweenlands:swamp_hag"
+        }
+      }
+    }
+  }
+}

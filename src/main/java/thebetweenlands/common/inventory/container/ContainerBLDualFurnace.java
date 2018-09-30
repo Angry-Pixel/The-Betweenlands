@@ -2,9 +2,13 @@ package thebetweenlands.common.inventory.container;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.*;
+import net.minecraft.inventory.Container;
+import net.minecraft.inventory.IContainerListener;
+import net.minecraft.inventory.Slot;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
+import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.inventory.slot.SlotBLFurnaceFuel;
@@ -28,13 +32,13 @@ public class ContainerBLDualFurnace extends Container {
 		addSlotToContainer(new Slot(tile, 0, 56, 21));
 		addSlotToContainer(new SlotBLFurnaceFuel(tile, 1, 56, 57));
 		addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 2, 116, 39));
-		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, EnumItemMisc.LIMESTONE_FLUX.create(1), 64);
+		Slot fluxSlot1 = new SlotRestriction(tile, 3, 26, 39, EnumItemMisc.LIMESTONE_FLUX.create(1), 64, this);
 		addSlotToContainer(fluxSlot1);
 
 		addSlotToContainer(new Slot(tile, 4, 56, 92));
 		addSlotToContainer(new SlotBLFurnaceFuel(tile, 5, 56, 128));
 		addSlotToContainer(new SlotFurnaceOutput(inventory.player, tile, 6, 116, 110));
-		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, EnumItemMisc.LIMESTONE_FLUX.create(1), 64);
+		Slot fluxSlot2 = new SlotRestriction(tile, 7, 26, 110, EnumItemMisc.LIMESTONE_FLUX.create(1), 64, this);
 		addSlotToContainer(fluxSlot2);
 
 		int i;
@@ -140,7 +144,7 @@ public class ContainerBLDualFurnace extends Container {
 					if (!mergeItemStack(itemstack1, 0, 1, false) && !mergeItemStack(itemstack1, 4, 5, false))
 						return ItemStack.EMPTY;
 				}
-				else if (TileEntityBLDualFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemMisc && itemstack.getItemDamage() == EnumItemMisc.SULFUR.getID()) {
+				else if (TileEntityFurnace.isItemFuel(itemstack1) || itemstack1.getItem() instanceof ItemMisc && itemstack.getItemDamage() == EnumItemMisc.SULFUR.getID()) {
 					if (!mergeItemStack(itemstack1, 1, 2, false) && !mergeItemStack(itemstack1, 5, 6, false))
 						return ItemStack.EMPTY;
 				}

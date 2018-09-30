@@ -1,6 +1,8 @@
 package thebetweenlands.client.render.entity;
 
 import net.minecraft.client.renderer.BufferBuilder;
+
+import org.apache.commons.lang3.tuple.Pair;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -12,8 +14,10 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import thebetweenlands.client.handler.WorldRenderHandler;
 import thebetweenlands.client.render.particle.entity.ParticleGasCloud;
 import thebetweenlands.client.render.shader.GeometryBuffer;
 import thebetweenlands.client.render.shader.ShaderHelper;
@@ -53,32 +57,15 @@ public class RenderGasCloud extends Render<EntityGasCloud> {
 		this.renderGasParticles(buffer, entity, partialTicks);
 		tessellator.draw();
 
-		GlStateManager.depthMask(true);
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
-		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
-			GeometryBuffer fbo = ShaderHelper.INSTANCE.getWorldShader().getGasParticleBuffer();
-			if(fbo != null && fbo.isInitialized()) {
-				//Render particles to gas fbo
-				fbo.bind();
-	
-				//GlStateManager.disableBlend();
-	
-				buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-				this.renderGasParticles(buffer, entity, partialTicks);
-				tessellator.draw();
-	
-				//GlStateManager.enableBlend();
-	
-				Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
-			}
-		}
-
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 		GlStateManager.enableLighting();
+		
+		if(ShaderHelper.INSTANCE.isWorldShaderActive()) {
+			WorldRenderHandler.GAS_CLOUDS.add(Pair.of(Pair.of(this, entity), new Vec3d(x, y, z)));
+		}
 	}
 
-	private void renderGasParticles(BufferBuilder buffer, EntityGasCloud entity, float partialTicks) {
+	public void renderGasParticles(BufferBuilder buffer, EntityGasCloud entity, float partialTicks) {
 		for (Object obj: entity.gasParticles) {
 			ParticleGasCloud particle = (ParticleGasCloud) obj;
 

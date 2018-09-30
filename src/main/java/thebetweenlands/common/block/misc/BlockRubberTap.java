@@ -13,6 +13,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -25,11 +26,13 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.common.block.terrain.BlockRubberLog;
+import thebetweenlands.common.item.tools.ItemBLBucket;
 import thebetweenlands.common.registries.BlockRegistry;
+import thebetweenlands.common.registries.FluidRegistry;
 import thebetweenlands.common.tile.TileEntityRubberTap;
 import thebetweenlands.util.TileEntityHelper;
 
-public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvider {
+public abstract class BlockRubberTap extends BlockHorizontal implements ITileEntityProvider {
 	public static final PropertyInteger AMOUNT = PropertyInteger.create("amount", 0, 15);
 
 	protected static final AxisAlignedBB TAP_WEST_AABB = new AxisAlignedBB(0.4D, 0.0D, 0.15D, 1.0D, 1.0D, 0.85D);
@@ -56,7 +59,25 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
 	public float getPlayerRelativeBlockHardness(IBlockState state, EntityPlayer player, World worldIn, BlockPos pos) {
 		return 0.075F; //breaking speed shouldn't depend on tool
     }
-	
+
+	@Override
+	public void harvestBlock(World worldIn, EntityPlayer player, BlockPos pos, IBlockState state, @Nullable TileEntity te, @Nullable ItemStack stack) {
+		if(!worldIn.isRemote && te instanceof TileEntityRubberTap) {
+			player.addStat(StatList.getBlockStats(this));
+			player.addExhaustion(0.025F);
+
+			TileEntityRubberTap tap = (TileEntityRubberTap) te;
+
+			FluidStack drained = tap.drain(Fluid.BUCKET_VOLUME, false);
+
+			if(drained != null && drained.amount == Fluid.BUCKET_VOLUME) {
+				spawnAsEntity(worldIn, pos, getBucket(true));
+			} else {
+				spawnAsEntity(worldIn, pos, getBucket(false));
+			}
+		}
+	}
+
 	@Override
 	public boolean canHarvestBlock(IBlockAccess world, BlockPos pos, EntityPlayer player) {
 		return true; //shouldn't depend on tool
@@ -212,4 +233,16 @@ public class BlockRubberTap extends BlockHorizontal implements ITileEntityProvid
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
     	return BlockFaceShape.UNDEFINED;
     }
+
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		drops.add(getBucket(false));
+	}
+
+	@Override
+	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
+		return getBucket(false);
+	}
+
+	protected abstract ItemStack getBucket(boolean withRubber);
 }

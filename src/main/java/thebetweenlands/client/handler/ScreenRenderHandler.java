@@ -1,40 +1,42 @@
 package thebetweenlands.client.handler;
 
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.client.gui.BossInfoClient;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.shader.Framebuffer;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.BossInfoClient;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexBuffer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHandSide;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.GuiScreenEvent.DrawScreenEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
@@ -46,18 +48,20 @@ import thebetweenlands.api.aspect.Aspect;
 import thebetweenlands.api.aspect.ItemAspectContainer;
 import thebetweenlands.api.capability.IDecayCapability;
 import thebetweenlands.api.capability.IEquipmentCapability;
+import thebetweenlands.api.capability.IPortalCapability;
 import thebetweenlands.api.entity.IBLBoss;
-import thebetweenlands.client.render.shader.ShaderHelper;
-import thebetweenlands.client.render.shader.postprocessing.PostProcessingEffect;
-import thebetweenlands.client.render.shader.postprocessing.Starfield;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.capability.equipment.EnumEquipmentInventory;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.entity.EntityRopeNode;
+import thebetweenlands.common.handler.PlayerDecayHandler;
+import thebetweenlands.common.handler.PlayerPortalHandler;
 import thebetweenlands.common.herblore.aspect.AspectManager;
 import thebetweenlands.common.herblore.book.widgets.text.FormatTags;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextPage;
 import thebetweenlands.common.herblore.book.widgets.text.TextContainer.TextSegment;
+import thebetweenlands.common.registries.BlockRegistry;
 import thebetweenlands.common.registries.CapabilityRegistry;
 import thebetweenlands.common.registries.ItemRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
@@ -65,8 +69,6 @@ import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.AspectIconRenderer;
 import thebetweenlands.util.ColorUtils;
-import thebetweenlands.util.GLUProjection;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class ScreenRenderHandler extends Gui {
 	private ScreenRenderHandler() { }
@@ -92,12 +94,6 @@ public class ScreenRenderHandler extends Gui {
 	public static final ResourceLocation CAVING_ROPE_CONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_connected.png");
 	public static final ResourceLocation CAVING_ROPE_DISCONNECTED = new ResourceLocation("thebetweenlands:textures/gui/caving_rope_disconnected.png");
 	
-	public static final DecimalFormat ASPECT_AMOUNT_FORMAT = new DecimalFormat("#.##");
-
-	static {
-		ASPECT_AMOUNT_FORMAT.setRoundingMode(RoundingMode.CEILING);
-	}
-
 	public static List<LocationStorage> getVisibleLocations(Entity entity) {
 		BetweenlandsWorldStorage worldStorage = BetweenlandsWorldStorage.forWorld(entity.world);
 		return worldStorage.getLocalStorageHandler().getLocalStorages(LocationStorage.class, entity.posX, entity.posZ, location -> location.isInside(entity.getPositionEyes(1)) && location.isVisible(entity));
@@ -120,7 +116,7 @@ public class ScreenRenderHandler extends Gui {
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			
 			if(player != null) {
-				if(ConfigHandler.cavingRopeIndicator) {
+				if(BetweenlandsConfig.GENERAL.cavingRopeIndicator) {
 					for(ItemStack stack : player.inventory.mainInventory) {
 						if(!stack.isEmpty() && stack.getItem() == ItemRegistry.CAVING_ROPE) {
 							this.cavingRopeCount += stack.getCount();
@@ -128,29 +124,21 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 				
-				if(player.dimension == ConfigHandler.dimensionId) {
+				if(player.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					String prevLocation = this.currentLocation;
 	
 					List<LocationStorage> locations = getVisibleLocations(player);
 					if(locations.isEmpty()) {
 						String location;
 						if(player.posY < WorldProviderBetweenlands.CAVE_START - 10) {
-							String strippedName = I18n.format("location.wilderness.name");
-							if(strippedName.startsWith("translate:")) {
-								int startIndex = strippedName.indexOf("translate:");
-								strippedName = strippedName.substring(startIndex+1, strippedName.length());
-							}
-							if(this.currentLocation.equals(strippedName)) {
+							String wildernessName = I18n.format("location.wilderness.name");
+							if(this.currentLocation.equals(wildernessName)) {
 								prevLocation = "";
 							}
 							location = I18n.format("location.caverns.name");
 						} else {
-							String strippedName = I18n.format("location.caverns.name");
-							if(strippedName.startsWith("translate:")) {
-								int startIndex = strippedName.indexOf("translate:");
-								strippedName = strippedName.substring(startIndex+1, strippedName.length());
-							}
-							if(this.currentLocation.equals(strippedName)) {
+							String cavernsName = I18n.format("location.caverns.name");
+							if(this.currentLocation.equals(cavernsName)) {
 								prevLocation = "";
 							}
 							location = I18n.format("location.wilderness.name");
@@ -165,7 +153,11 @@ public class ScreenRenderHandler extends Gui {
 						int displayCooldown = 60*20; //1 minute cooldown for title
 						if(highestLocation.getTitleDisplayCooldown(player) == 0) {
 							highestLocation.setTitleDisplayCooldown(player, displayCooldown);
-							this.currentLocation = highestLocation.getLocalizedName();
+							if(highestLocation.hasLocalizedName()) {
+								this.currentLocation = highestLocation.getLocalizedName();
+							} else {
+								this.currentLocation = highestLocation.getName();
+							}
 						} else if(highestLocation.getTitleDisplayCooldown(player) > 0) {
 							highestLocation.setTitleDisplayCooldown(player, displayCooldown); //Keep cooldown up until player leaves location
 						}
@@ -214,7 +206,34 @@ public class ScreenRenderHandler extends Gui {
 		int height = event.getResolution().getScaledHeight();
 		
 		if (event.getType() == RenderGameOverlayEvent.ElementType.CROSSHAIRS) {
-			if(ConfigHandler.cavingRopeIndicator && player != null) {
+			/*GlStateManager.pushMatrix();
+
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+			
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+			
+			GlStateManager.enableTexture2D();
+			WorldProviderBetweenlands.getBLSkyRenderer().overworldSkyFbo.getFramebuffer(mc.getFramebuffer().framebufferWidth, mc.getFramebuffer().framebufferHeight).bindFramebufferTexture();
+			
+			Tessellator t = Tessellator.getInstance();
+			BufferBuilder b = t.getBuffer();
+			b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+			
+			b.pos(0, 0, 0).tex(0, 1).endVertex();
+			b.pos(0, event.getResolution().getScaledHeight(), 0).tex(0, 0).endVertex();
+			b.pos(event.getResolution().getScaledWidth(), event.getResolution().getScaledHeight(), 0).tex(1, 0).endVertex();
+			b.pos(event.getResolution().getScaledWidth(), 0, 0).tex(1, 1).endVertex();
+			
+			t.draw();
+			
+			GlStateManager.enableBlend();
+			
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			
+			GlStateManager.popMatrix();*/
+			
+			if(BetweenlandsConfig.GENERAL.cavingRopeIndicator && player != null) {
 				boolean connected = false;
 				List<EntityRopeNode> ropeNodes = player.world.getEntitiesWithinAABB(EntityRopeNode.class, player.getEntityBoundingBox().grow(32, 32, 32));
 				for(EntityRopeNode rope : ropeNodes) {
@@ -268,16 +287,23 @@ public class ScreenRenderHandler extends Gui {
 				}
 			}
 		} else if (event.getType() == RenderGameOverlayEvent.ElementType.HOTBAR) {
-			if(player != null) {
+			if(player != null && !player.isSpectator()) {
 				if (player.hasCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null)) {
 					IEquipmentCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_EQUIPMENT, null);
 
+					EnumHandSide offhand = player.getPrimaryHand().opposite();
+					
 					int yOffset = 0;
 
 					for(EnumEquipmentInventory type : EnumEquipmentInventory.values()) {
 						IInventory inv = capability.getInventory(type);
 
-						int posX = width / 2 + 93;
+						int posX;
+						if(offhand == EnumHandSide.LEFT) {
+							posX = width / 2 + 93;
+						} else {
+							posX = width / 2 - 93 - 16;
+						}
 						int posY = height + yOffset - 19;
 
 						boolean hadItem = false;
@@ -308,7 +334,11 @@ public class ScreenRenderHandler extends Gui {
 								GlStateManager.color(1, 1, 1, 1);
 								GlStateManager.popMatrix();
 
-								posX += 8;
+								if(offhand == EnumHandSide.LEFT) {
+									posX += 8;
+								} else {
+									posX -= 8;
+								}
 
 								hadItem = true;
 							}
@@ -320,7 +350,7 @@ public class ScreenRenderHandler extends Gui {
 					}
 				}
 
-				if (player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
+				if (PlayerDecayHandler.isDecayEnabled() && player.hasCapability(CapabilityRegistry.CAPABILITY_DECAY, null)) {
 					IDecayCapability capability = player.getCapability(CapabilityRegistry.CAPABILITY_DECAY, null);
 
 					if(capability.isDecayEnabled()) {
@@ -424,9 +454,49 @@ public class ScreenRenderHandler extends Gui {
 				tessellator.draw();
 				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			}
+		} else if(event.getType() == ElementType.PORTAL) {
+			if(player != null && player.hasCapability(CapabilityRegistry.CAPABILITY_PORTAL, null)) {
+				IPortalCapability cap = player.getCapability(CapabilityRegistry.CAPABILITY_PORTAL, null);
+				
+				if(cap.isInPortal()) {
+					this.renderPortal(mc, MathHelper.clamp((1.0F - cap.getTicksUntilTeleport() / (float)PlayerPortalHandler.MAX_PORTAL_TIME), 0, 1), event.getResolution());
+				}
+			}
 		}
 	}
 
+	protected void renderPortal(Minecraft mc, float timeInPortal, ScaledResolution scaledRes)
+    {
+        if (timeInPortal < 1.0F) {
+            timeInPortal = timeInPortal * timeInPortal;
+            timeInPortal = timeInPortal * 0.8F + 0.2F;
+        }
+
+        GlStateManager.disableAlpha();
+        GlStateManager.disableDepth();
+        GlStateManager.depthMask(false);
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, timeInPortal);
+        mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+        TextureAtlasSprite textureatlassprite = mc.getBlockRendererDispatcher().getBlockModelShapes().getTexture(BlockRegistry.TREE_PORTAL.getDefaultState());
+        float f = textureatlassprite.getMinU();
+        float f1 = textureatlassprite.getMinV();
+        float f2 = textureatlassprite.getMaxU();
+        float f3 = textureatlassprite.getMaxV();
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
+        bufferbuilder.pos(0.0D, (double)scaledRes.getScaledHeight(), -90.0D).tex((double)f, (double)f3).endVertex();
+        bufferbuilder.pos((double)scaledRes.getScaledWidth(), (double)scaledRes.getScaledHeight(), -90.0D).tex((double)f2, (double)f3).endVertex();
+        bufferbuilder.pos((double)scaledRes.getScaledWidth(), 0.0D, -90.0D).tex((double)f2, (double)f1).endVertex();
+        bufferbuilder.pos(0.0D, 0.0D, -90.0D).tex((double)f, (double)f1).endVertex();
+        tessellator.draw();
+        GlStateManager.depthMask(true);
+        GlStateManager.enableDepth();
+        GlStateManager.enableAlpha();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+    }
+	
 	@SubscribeEvent
 	public void onBossBarRender(RenderGameOverlayEvent.BossInfo event) {
 		boolean foundBoss = false;
@@ -502,7 +572,7 @@ public class ScreenRenderHandler extends Gui {
 	@SubscribeEvent
 	public void onRenderScreen(DrawScreenEvent.Post event) {
 		Minecraft mc = Minecraft.getMinecraft();
-		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && mc.currentScreen instanceof GuiContainer && mc.player != null) {
+		if(GuiScreen.isShiftKeyDown() && mc.currentScreen instanceof GuiContainer && mc.player != null) {
 			GuiContainer container = (GuiContainer) mc.currentScreen;
 
 			//Render aspects tooltip
@@ -522,7 +592,7 @@ public class ScreenRenderHandler extends Gui {
 				RenderHelper.disableStandardItemLighting();
 				if(aspects != null && aspects.size() > 0) {
 					for(Aspect aspect : aspects) {
-						String aspectText = aspect.type.getName() + " (" + ASPECT_AMOUNT_FORMAT.format(aspect.getDisplayAmount()) + ")";
+						String aspectText = aspect.type.getName() + " (" + aspect.getRoundedDisplayAmount() + ")";
 						String aspectTypeText = aspect.type.getType();
 						GlStateManager.color(1, 1, 1, 1);
 						fontRenderer.drawString(aspectText, 2 + 17, 2 + yOffset, 0xFFFFFFFF);

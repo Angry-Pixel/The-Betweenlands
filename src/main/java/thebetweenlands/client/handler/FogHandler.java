@@ -1,6 +1,5 @@
 package thebetweenlands.client.handler;
 
-import net.minecraft.init.MobEffects;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.block.Block;
@@ -12,6 +11,7 @@ import net.minecraft.client.renderer.GlStateManager.FogMode;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
@@ -25,19 +25,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import thebetweenlands.api.event.UpdateFogEvent;
 import thebetweenlands.api.misc.Fog;
-import thebetweenlands.api.misc.FogState;
 import thebetweenlands.api.misc.Fog.MutableFog;
+import thebetweenlands.api.misc.FogState;
 import thebetweenlands.client.render.shader.ShaderHelper;
 import thebetweenlands.common.TheBetweenlands;
 import thebetweenlands.common.block.terrain.BlockSwampWater;
+import thebetweenlands.common.config.BetweenlandsConfig;
 import thebetweenlands.common.herblore.elixir.ElixirEffectRegistry;
 import thebetweenlands.common.world.WorldProviderBetweenlands;
 import thebetweenlands.common.world.biome.BiomeBetweenlands;
-import thebetweenlands.common.world.event.EnvironmentEventRegistry;
+import thebetweenlands.common.world.event.BLEnvironmentEventRegistry;
+import thebetweenlands.common.world.storage.BetweenlandsWorldStorage;
 import thebetweenlands.common.world.storage.location.LocationAmbience;
 import thebetweenlands.common.world.storage.location.LocationStorage;
 import thebetweenlands.util.FogGenerator;
-import thebetweenlands.util.config.ConfigHandler;
 
 public class FogHandler {
 	private FogHandler() { }
@@ -86,16 +87,9 @@ public class FogHandler {
 	 * Returns whether the "Dense Fog" event is active
 	 * @return
 	 */
-	public static boolean hasDenseFog() {
-		World world = Minecraft.getMinecraft().world;
-		if(world.provider instanceof WorldProviderBetweenlands && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START) {
-			WorldProviderBetweenlands provider = (WorldProviderBetweenlands)world.provider;
-			EnvironmentEventRegistry eeRegistry = provider.getWorldData().getEnvironmentEventRegistry();
-			if(eeRegistry.denseFog.isActive()) {
-				return true;
-			}
-		}
-		return false;
+	public static boolean hasDenseFog(World world) {
+		BLEnvironmentEventRegistry eeRegistry = BetweenlandsWorldStorage.forWorld(world).getEnvironmentEventRegistry();
+		return eeRegistry.denseFog.isActive() && Minecraft.getMinecraft().player.posY > WorldProviderBetweenlands.CAVE_START;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -103,7 +97,7 @@ public class FogHandler {
 	public static void onFogRenderEvent(RenderFogEvent event) {
 		farPlaneDistance = event.getFarPlaneDistance();
 		Entity renderView = Minecraft.getMinecraft().getRenderViewEntity();
-		if(renderView != null && renderView.dimension == ConfigHandler.dimensionId) {
+		if(renderView != null && renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 			float partialTicks = (float) event.getRenderPartialTicks();
 			Fog fog = state.getFog(partialTicks);
 			Fog currentFog = state.getFog(1.0F);
@@ -142,7 +136,7 @@ public class FogHandler {
 		EntityPlayer player = TheBetweenlands.proxy.getClientPlayer();
 
 		if(world != null && player != null) {
-			if(farPlaneDistance != 0.0F && player.dimension == ConfigHandler.dimensionId) {
+			if(farPlaneDistance != 0.0F && world.provider instanceof WorldProviderBetweenlands) {
 				state.update(world, player.getPositionVector().addVector(0, player.getEyeHeight(), 0), farPlaneDistance, 0);
 			}
 
@@ -165,7 +159,7 @@ public class FogHandler {
 			if(blockState.getBlock() instanceof BlockSwampWater) {
 				BlockPos pos = new BlockPos(ActiveRenderInfo.projectViewFromEntity(renderView, (float) event.getRenderPartialTicks()));
 				int colorMultiplier = Minecraft.getMinecraft().getBlockColors().colorMultiplier(blockState, renderView.world, pos, 0);
-				if(renderView.dimension == ConfigHandler.dimensionId) {
+				if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 					double waterFogColorMultiplier = fogColorMultiplier / 2.0F;
 					event.setRed((float)(colorMultiplier >> 16 & 255) / 255.0F * (float)waterFogColorMultiplier);
 					event.setGreen((float)(colorMultiplier >> 8 & 255) / 255.0F * (float)waterFogColorMultiplier);
@@ -175,7 +169,7 @@ public class FogHandler {
 					event.setGreen((float)(colorMultiplier >> 8 & 255) / 255.0F);
 					event.setBlue((float)(colorMultiplier & 255) / 255.0F);
 				}
-			} else if(renderView.dimension == ConfigHandler.dimensionId) {
+			} else if(renderView.dimension == BetweenlandsConfig.WORLD_AND_DIMENSION.dimensionId) {
 				WorldProviderBetweenlands provider = (WorldProviderBetweenlands) renderView.getEntityWorld().provider;
 				Vec3d fogColor = provider.getFogColor(renderView.getEntityWorld().getCelestialAngle((float)event.getRenderPartialTicks()), (float)event.getRenderPartialTicks());
 				event.setRed((float)fogColor.x);
@@ -227,7 +221,7 @@ public class FogHandler {
 			fog.setEnd((fog.getEnd() / additionalFogStrength));
 		}
 
-		if(hasDenseFog()) {
+		if(hasDenseFog(world)) {
 			if(fogGenerator == null || fogGenerator.getSeed() != Minecraft.getMinecraft().world.getSeed()) {
 				fogGenerator = new FogGenerator(Minecraft.getMinecraft().world.getSeed());
 			}
@@ -279,13 +273,16 @@ public class FogHandler {
 			}
 		}
 
-		if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().bloodSky.isActive()) {
+		WorldProviderBetweenlands provider = WorldProviderBetweenlands.getProvider(world);
+		BLEnvironmentEventRegistry reg = provider.getEnvironmentEventRegistry();
+
+		if(reg.bloodSky.isActive()) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.74F).setGreen(0.18F).setBlue(0.08F);
 			} else {
 				fogBrightness = 0;
 			}
-		} else if(WorldProviderBetweenlands.getProvider(world).getEnvironmentEventRegistry().spoopy.isActive()) {
+		} else if(reg.spoopy.isActive()) {
 			if(!ShaderHelper.INSTANCE.isWorldShaderActive()) {
 				fog.setRed(0.4F).setGreen(0.22F).setBlue(0.08F);
 			} else {
