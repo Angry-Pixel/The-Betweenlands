@@ -146,7 +146,7 @@ public abstract class EntitySpiritTreeFace extends EntityWallFace {
 		if(attacker != null && attacker.getActiveHand() != null) {
 			ItemStack item = attacker.getHeldItem(attacker.getActiveHand());
 			if(!item.isEmpty() && item.getItem() instanceof ItemAxe) {
-				amount *= 3.0F;
+				amount *= 2.0F;
 			}
 		}
 		return super.attackEntityFrom(source, amount);

@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import thebetweenlands.client.render.entity.layer.LayerGlow;
+import thebetweenlands.client.render.entity.layer.LayerOverlay;
 import thebetweenlands.client.render.entity.layer.LayerTarBeastEffects;
 import thebetweenlands.client.render.model.entity.ModelTarBeast;
 import thebetweenlands.common.entity.mobs.EntityTarBeast;
@@ -18,7 +18,7 @@ public class RenderTarBeast extends RenderLiving<EntityTarBeast> {
 
 	public RenderTarBeast(RenderManager manager) {
 		super(manager, new ModelTarBeast(), 0.7F);
-		this.addLayer(new LayerGlow<EntityTarBeast>(this, EYE_TEXTURE));
+		this.addLayer(new LayerOverlay<EntityTarBeast>(this, EYE_TEXTURE).setGlow(true));
 		this.addLayer(new LayerTarBeastEffects(this));
 	}
 
